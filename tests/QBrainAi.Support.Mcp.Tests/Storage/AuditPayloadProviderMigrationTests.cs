@@ -7,15 +7,20 @@ using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Storage;
 
+/// <summary>
+/// SQL Server migration binding over a uniquely owned database. Integration: opens the lane's
+/// provider connection. FR-MCP-TESTRESOURCE-001 ac-5 preserves first and later EF failures.
+/// </summary>
 [Trait("Category", "Integration")]
+[Collection(SqlServerLocalDbCollection.Name)]
 public sealed class SqlServerAuditPayloadMigrationTests : IDisposable
 {
-    private readonly string _serverConnectionString =
-        Environment.GetEnvironmentVariable("MCP_TEST_SQLSERVER_CONNECTION")
-        ?? "Server=(localdb)\\MSSQLLocalDB;Integrated Security=True;TrustServerCertificate=True";
+    private readonly string _serverConnectionString = SqlServerTestConnection.Server;
     private readonly string _databaseName = $"mcp_audit_{Guid.NewGuid():N}";
+    private readonly SqlServerMigrationFailureReporter _failures = new();
     private bool _databaseCreated;
 
+    /// <summary>Applies real SQL Server migrations and proves audit payload and permission behavior.</summary>
     [Fact]
     public async Task Migration_PersistsCompressedPayloads_AndDeniesAuditMutation()
     {
@@ -39,11 +44,12 @@ public sealed class SqlServerAuditPayloadMigrationTests : IDisposable
                 sql.MigrationsAssembly("QBrainAi.Storage.SqlServerMigrations");
                 sql.CommandTimeout(120);
             })
+            .LogTo(SqlServerMigrationFailureReporter.ShouldCapture, _failures.Observe)
             .Options;
 
         await using (var db = new McpDbContext(options))
         {
-            await db.Database.MigrateAsync(cancellationToken);
+            await _failures.RunAsync(() => db.Database.MigrateAsync(cancellationToken));
             await AuditPayloadProviderAssertions.AssertRoundTripAsync(db, cancellationToken);
         }
 
@@ -67,6 +73,7 @@ public sealed class SqlServerAuditPayloadMigrationTests : IDisposable
         Assert.Equal(7, Convert.ToInt32(await permissions.ExecuteScalarAsync(cancellationToken)));
     }
 
+    /// <summary>Drops only the database this test created.</summary>
     public void Dispose()
     {
         if (!_databaseCreated)

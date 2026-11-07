@@ -417,6 +417,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: each mapping item carries the mapping's stored creation time (MappingItemAdapter's createdAtUtc) instead of the time of the read. 2026-11-05, FR-MCP-040 ac-1: this dated entry was added because the syntax-parse documentation sweep run after the tenth holistic read before hostile validation round 13 (MEMORY-FACT-008) found the 2026-11-02 change with no dated entry on the method or its type. 2026-11-05, FR-MCP-040 ac-1: the first entry said "instead of the time of the read"; before the change each item's CreatedAt returned the clock every time it was read, so the wording was corrected, as the twelfth holistic read (finding g3) asked. 2026-11-05, FR-MCP-040 ac-1: the 2026-11-02 entry is back in its first wording, because MEMORY-FACT-008 keeps earlier entries and slice Z10 had corrected it in place (thirteenth holistic read, finding g1); its accurate wording is: each mapping item carries the mapping's stored creation time (MappingItemAdapter's createdAtUtc) instead of the time its CreatedAt was read.</remarks>
     public async Task<IMappingQueryResult> ListMappingsAsync(string? frId = null, string? trId = null, string? testId = null, CancellationToken cancellationToken = default)
     {
         var mappings = await _client.ListMappingsAsync(cancellationToken);
@@ -449,18 +450,19 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
             if (!string.IsNullOrEmpty(trId) && !string.IsNullOrEmpty(testId))
             {
-                items.AddRange(matchingTrIds.SelectMany(tr => matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, tr, test, null))));
+                items.AddRange(matchingTrIds.SelectMany(tr => matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, tr, test, null, mapping.CreatedAtUtc))));
                 continue;
             }
 
-            items.AddRange(matchingTrIds.Select(tr => new MappingItemAdapter(mapping.FrId, tr, null, null)));
-            items.AddRange(matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, null, test, null)));
+            items.AddRange(matchingTrIds.Select(tr => new MappingItemAdapter(mapping.FrId, tr, null, null, mapping.CreatedAtUtc)));
+            items.AddRange(matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, null, test, null, mapping.CreatedAtUtc)));
         }
 
         return new MappingQueryResultAdapter(items);
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: the returned mapping item carries the created mapping's stored creation time instead of the time of the call. 2026-11-05, FR-MCP-040 ac-1: this dated entry was added because the syntax-parse documentation sweep run after the tenth holistic read before hostile validation round 13 (MEMORY-FACT-008) found the 2026-11-02 change with no dated entry on the method or its type. 2026-11-05, FR-MCP-040 ac-1: the first entry said "the created mapping's stored creation time instead of the time of the call"; the method upserts into an existing mapping and before the change the item's CreatedAt returned the clock every time it was read, so the wording was corrected, as the eleventh holistic read (finding g2) asked. 2026-11-05, FR-MCP-040 ac-1: the 2026-11-02 entry is back in its first wording, because MEMORY-FACT-008 keeps earlier entries and slice Z9 had corrected it in place (thirteenth holistic read, finding g1); its accurate wording is: the returned mapping item carries the stored creation time the upsert returns for the FR's mapping, new or extended, instead of the time its CreatedAt was read.</remarks>
     public async Task<IMappingMutationResult> CreateMappingAsync(IMappingCreateRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -537,7 +539,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             mapping.FrId,
             trIds.FirstOrDefault(),
             testIds.FirstOrDefault(),
-            request.Notes);
+            request.Notes,
+            mapping.CreatedAtUtc);
         return new MappingMutationResultAdapter(true, item);
     }
 
@@ -938,6 +941,13 @@ internal sealed class RequirementsSelectionState : IRequirementsSelectionState
     public DateTimeOffset SelectedAt { get; set; } = DateTimeOffset.UtcNow;
 }
 
+/// <summary>Presents a client <see cref="FrEntry"/> as an <see cref="IFrItem"/>.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>
+/// </list>
+/// </remarks>
 internal sealed class FrItemAdapter : IFrItem
 {
     private readonly FrEntry _entry;
@@ -960,8 +970,10 @@ internal sealed class FrItemAdapter : IFrItem
     public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
     /// <inheritdoc />
     public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
-    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
+    /// <inheritdoc />
+    public string? CreatedAt => RequirementTimestampText.Format(_entry.CreatedAtUtc);
+    /// <inheritdoc />
+    public string? UpdatedAt => RequirementTimestampText.Format(_entry.UpdatedAtUtc);
 
     private static string ExtractArea(string id)
     {
@@ -995,6 +1007,13 @@ internal sealed class FrMutationResultAdapter : IFrMutationResult
     public IFrItem Item { get; }
 }
 
+/// <summary>Presents a client <see cref="TrEntry"/> as an <see cref="ITrItem"/>.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>
+/// </list>
+/// </remarks>
 internal sealed class TrItemAdapter : ITrItem
 {
     private readonly TrEntry _entry;
@@ -1018,8 +1037,10 @@ internal sealed class TrItemAdapter : ITrItem
     public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
     /// <inheritdoc />
     public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
-    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
+    /// <inheritdoc />
+    public string? CreatedAt => RequirementTimestampText.Format(_entry.CreatedAtUtc);
+    /// <inheritdoc />
+    public string? UpdatedAt => RequirementTimestampText.Format(_entry.UpdatedAtUtc);
 
     private static string ExtractArea(string id)
     {
@@ -1059,6 +1080,13 @@ internal sealed class TrMutationResultAdapter : ITrMutationResult
     public ITrItem Item { get; }
 }
 
+/// <summary>Presents a client <see cref="TestEntry"/> as an <see cref="ITestItem"/>.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>
+/// </list>
+/// </remarks>
 internal sealed class TestItemAdapter : ITestItem
 {
     private readonly TestEntry _entry;
@@ -1082,8 +1110,10 @@ internal sealed class TestItemAdapter : ITestItem
     public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
     /// <inheritdoc />
     public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
-    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
+    /// <inheritdoc />
+    public string? CreatedAt => RequirementTimestampText.Format(_entry.CreatedAtUtc);
+    /// <inheritdoc />
+    public string? UpdatedAt => RequirementTimestampText.Format(_entry.UpdatedAtUtc);
 
     private static string ExtractArea(string id)
     {
@@ -1117,20 +1147,36 @@ internal sealed class TestMutationResultAdapter : ITestMutationResult
     public ITestItem Item { get; }
 }
 
+/// <summary>Presents one FR-to-TR or FR-to-TEST pair of a client mapping as an <see cref="IMappingItem"/>.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: takes the mapping's stored creation time and reports it as CreatedAt instead of DateTimeOffset.UtcNow.</description></item>
+/// </list>
+/// </remarks>
 internal sealed class MappingItemAdapter : IMappingItem
 {
-    public MappingItemAdapter(string? frId, string? trId, string? testId, string? notes)
+    /// <summary>FR-MCP-040 ac-1: presents one mapping pair with its stored creation time.</summary>
+    /// <param name="frId">The FR id.</param>
+    /// <param name="trId">The TR id, or null for an FR-to-TEST pair.</param>
+    /// <param name="testId">The TEST id, or null for an FR-to-TR pair.</param>
+    /// <param name="notes">The mapping notes, or null.</param>
+    /// <param name="createdAtUtc">The mapping's stored creation time, or null when none is stored.</param>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
+    public MappingItemAdapter(string? frId, string? trId, string? testId, string? notes, DateTimeOffset? createdAtUtc)
     {
         FrId = frId;
         TrId = trId;
         TestId = testId;
         Notes = notes;
+        CreatedAt = RequirementTimestampText.Format(createdAtUtc);
     }
 
     public string? FrId { get; }
     public string? TrId { get; }
     public string? TestId { get; }
-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
+    /// <inheritdoc />
+    public string? CreatedAt { get; }
     public string? Notes { get; }
 }
 

@@ -1,0 +1,89 @@
+{
+  "TimestampLocal": "2026-10-21T11:59:57",
+  "Head": "780b6513b4004da0b17c2359d9cb65f6a69de67e",
+  "LocalDevelopMergeBase": "5f5f328d0caffceb199965e0244569482b480c81",
+  "OriginDevelopMergeBase": "3da2db93b3912b6301509f11aedcd59cb004274b",
+  "LivePrBaseSha": "3da2db93b3912b6301509f11aedcd59cb004274b",
+  "LivePrHeadSha": "780b6513b4004da0b17c2359d9cb65f6a69de67e",
+  "LivePrMergeBase": "3da2db93b3912b6301509f11aedcd59cb004274b",
+  "PinnedBaseline": "3da2db93b3912b6301509f11aedcd59cb004274b",
+  "TrackedDirty": [],
+  "StagedDirty": [],
+  "DocsOnlyPaths": [
+    "docs/plans/2026-10-19-unit-suite-green.md",
+    "docs/receipts/hv/unitgreen-r5-prelaunch.brief.md",
+    "docs/receipts/hv/unitgreen-r5-prelaunch.projected-problems.md",
+    "docs/receipts/hv/unitgreen-r5-prelaunch.selfreview.md",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-build-tests-3.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-build-tests-3.tempdir.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-build-tests-3.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-compare-lane2-precommit3.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-compare-linuxtest-2-3.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-compare-precommit3-lane3.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-compare-wide2-wide3.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-hostile-wide-1.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-hostile-wide-1.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-hostile-wide-2.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-hostile-wide-2.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-hostile-wide-3.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-hostile-wide-3.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-hostile-wide-4.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-hostile-wide-4.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-linux-lane-3.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-linux-lane-3.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-linux-test-3.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-linux-test-3.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-precommit-lane-3.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-precommit-lane-3.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-traceability-2.exit.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-traceability-2.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-traceability-2.out.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-win-lane-3.start.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-win-lane-3.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-win-lane-3.whatif.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-win-lane-compare-2-3.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-win-test-ssh-3.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r5-win-test-ssh-3.whatif.txt"
+  ],
+  "Round4OriginalRequestBlob": "e4ddc56adea100cb53c647a48c12d277fe0f465f",
+  "Round4CurrentRequestBlob": "e4ddc56adea100cb53c647a48c12d277fe0f465f",
+  "Logs": [
+    {
+      "Run": "ug-r5-linux-test-3",
+      "Path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-linux-test-3.out.log",
+      "Sha256": "21BBB97C19B6B7EB42AABE52A31B385BBA1BDA2695832CC1DA47C393842CE8ED",
+      "Nu190Count": 0,
+      "OverrideCount": 0
+    },
+    {
+      "Run": "ug-r5-hostile-wide-4",
+      "Path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-hostile-wide-4.out.log",
+      "Sha256": "9A477A8E1C9C39EAF4AF4068E1ECF1F5DB174ED9ADABB31AED9CF5B85917AFC1",
+      "Nu190Count": 0,
+      "OverrideCount": 0
+    },
+    {
+      "Run": "ug-r5-linux-lane-3",
+      "Path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-linux-lane-3.out.log",
+      "Sha256": "4700297945F5DDE0C5FE514B78B8D4D8D5C7973B8F1E6D479CDDB0ED4BC5EFAD",
+      "Nu190Count": 0,
+      "OverrideCount": 0
+    },
+    {
+      "Run": "ug-r5-build-tests-3",
+      "Path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-build-tests-3.out.log",
+      "Sha256": "D5956F7B102EA94EE29DE489305B4497BE56626C5AD7050EBC18D14AE5AA2234",
+      "Nu190Count": 0,
+      "OverrideCount": 0
+    },
+    {
+      "Run": "ug-r5-traceability-2",
+      "Path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-traceability-2.out.log",
+      "Sha256": "D8005A4349C0094DA7169789415D9E1ECB74D82563B03E4F5C7847D49A4E8D87",
+      "Nu190Count": 0,
+      "OverrideCount": 0
+    }
+  ],
+  "RequestExists": true,
+  "ResponseExists": true
+}

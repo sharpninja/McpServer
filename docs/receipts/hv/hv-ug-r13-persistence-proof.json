@@ -1,0 +1,25 @@
+{
+  "timestampUtc": "2026-11-06T07:57:20.9856041+00:00",
+  "timestampLocal": "2026-11-06T01:57:20",
+  "mode": "Persistence",
+  "data": {
+    "sessionId": "Codex-20261106T055000Z-plugin-session",
+    "requestId": "req-20261106T055026Z-unitgreen-r13",
+    "status": "completed",
+    "sourceType": "Codex",
+    "threadId": "01a1af63-aebb-7152-bde2-3316931e7a3b",
+    "exactFullResponseMatch": true,
+    "responseCharacters": 217719,
+    "persistedResponseSha256": "8212D3B3A93A31D6302C886AAE18679AE97306DEFB04AF2A7B120F0F441F310B",
+    "proseReceiptSha256": "8212D3B3A93A31D6302C886AAE18679AE97306DEFB04AF2A7B120F0F441F310B",
+    "fullReadbackPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r13-store-readown-final.json",
+    "historyPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r13-store-history-final.json",
+    "designDecisionCount": 1,
+    "actionCount": 5,
+    "dialogCount": 14,
+    "includesEveryClaim": true,
+    "includesEveryFinding": true,
+    "includesCompleteVerdictJson": true,
+    "includesCommandLedger": true
+  }
+}

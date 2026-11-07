@@ -1,0 +1,33 @@
+{
+  "timestampUtc": "2026-11-06T06:04:49.7881311+00:00",
+  "timestampLocal": "2026-11-06T00:04:52",
+  "method": "workflow.requirements.getTest",
+  "recordId": "TEST-MCP-PATHNORM-001",
+  "response": {
+    "payload": {
+      "deprecated": true,
+      "requestId": "req-20261106T060450Z-798b",
+      "result": {
+        "createdAt": "2026-11-06T06:04:52.2139687+00:00",
+        "updatedAt": "2026-11-06T06:04:52.2140876+00:00",
+        "title": "Test TEST-MCP-PATHNORM-001",
+        "description": "Per BDP v4 (MockData fixture green before production code, then Real fixture). Storage-key equivalence: C:\\Users\\example, C:/Users/example, c:/users/EXAMPLE -> one key windows:C:/USERS/EXAMPLE; \\\\srv\\share\\x and //srv/share/x -> one key keeping leading //; \\\\?\\C:\\x -> C:/x. Remote-path detection treats //srv/share as remote. ToNativePath returns backslash paths on Windows. Rekey: value mapping f(x) touches only Windows-shaped values and is idempotent; planner builds the mapping and statement plan from a scripted snapshot; executors per provider (SQLite in-memory; SQL Server and PostgreSQL provider fixtures) rewrite all workspace columns and recompute hashed values with FK validation; report counts unchanged per table and per workspace; startup guard rejects an unconverted store; rehearsal on a restored copy of the Windows lab host's store recorded as receipts. GlobalWorkspaceId for (EXAMPLE-HOST, C:/Repos/Example) is stable across both input separators.",
+        "acceptanceCriteria": [
+          {
+            "id": "unitgreen-native-host",
+            "isSatisfied": false,
+            "text": "The native-boundary (ToNativePath) behavior for a non-Windows host is proven against a simulated host, on Windows as well, without a host-conditional skip; the Windows-host cases keep running on a Windows host."
+          }
+        ],
+        "notes": "P1.5 2026-10-16: WorkspacePathRekeyTests cover literal Policy A normalization, collision preflight, no-backup/failed-backup refusal, read-only dry-run on explicit separate copies, transaction rollback and FK graph validation, repeat no-op, derived triage/handoff/federation identities, unchanged manual triage hashes, and startup guard. Command parser rejects missing/same copy database. Reports contain only keys/counts and retained-manual-key notice. Disposable fixtures only; no live apply.",
+        "scopeStartLayerKey": "layer-1",
+        "area": "MCP",
+        "priority": "medium",
+        "id": "TEST-MCP-PATHNORM-001",
+        "status": "pending",
+        "testType": "unit"
+      }
+    },
+    "type": "result"
+  }
+}

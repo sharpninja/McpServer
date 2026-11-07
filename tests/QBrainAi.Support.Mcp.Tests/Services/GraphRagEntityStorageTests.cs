@@ -35,10 +35,11 @@ public sealed class GraphRagEntityStorageTests : IDisposable
     /// FR-MCP-079: Verifies that a GraphEntityEntity with all fields populated
     /// is persisted and retrievable from the database.
     /// </summary>
+    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended "This covers every recorded time a unit test checks"): the stored creation and update times are a fixed scripted instant instead of DateTime.UtcNow, so the exact round-trip assertion takes no value from the live clock (sibling sweep before round 11 of hostile validation round 10 finding R10-F3; operator 2026-11-03: "don't gate on me between rounds").</remarks>
     [Fact]
     public async Task PersistsEntityWithAllFields()
     {
-        var now = DateTime.UtcNow;
+        var now = new DateTime(2026, 1, 15, 9, 0, 0, DateTimeKind.Utc);
         var entity = new GraphEntityEntity
         {
             Id = $"ge-{Guid.NewGuid():N}",

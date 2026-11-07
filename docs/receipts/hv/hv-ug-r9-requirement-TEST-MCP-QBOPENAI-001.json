@@ -1,0 +1,37 @@
+{
+  "TimestampLocal": "2026-11-02T19:30:56",
+  "TimestampUtc": "2026-11-03T01:30:56.7534562Z",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-MCP-QBOPENAI-001"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "An inbound OpenAI ChatCompletion request maps to QuadBrain orchestration and returns an OpenAI-shaped response with the Arbiter output as the assistant message; later slices assert tool definitions flow through and assistant tool_calls are emitted, and that QBAgent executes them via the Agent Framework loop.",
+          "updatedAt": "2026-11-03T01:30:59.1506118+00:00",
+          "status": "pending",
+          "id": "TEST-MCP-QBOPENAI-001",
+          "createdAt": "2026-11-03T01:30:59.1504863+00:00",
+          "title": "Test TEST-MCP-QBOPENAI-001",
+          "priority": "medium",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "testType": "unit",
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "text": "FR-MCP-QBOPENAI-001 ac-5 and ac-6: the mock gate ChatRoundOutcomeAssertion_AcceptsFinalAnswerAndRejectsEmptyOrExtraRounds (recorded outcomes: one round returning the reply, and the last reply after the budget, are accepted; empty content, an extra round and a reply other than the last are rejected), then QuadBrainOpenAiChatServiceTests CompleteAsync_NoToolsNonEnvelopeReply_ReturnsItAfterOneRound, CompleteAsync_NoToolsContinueEnvelope_StillRePrompts and CompleteAsync_RoundsExhaustedWithoutFinal_ReturnsLastArbiterOutput over scripted orchestration; QuadBrainOllamaEndpointIntegrationTests (TEST-MCP-QBOLLAMA-001) then run green against gemma4:e4b (PLAN-SESSIONTRIAGEFIX-001 B13; operator decision 2026-10-15 \"Both rules (Recommended)\").",
+              "id": "AC-001"
+            }
+          ]
+        },
+        "requestId": "req-20261103T013057Z-d62a",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

@@ -1,0 +1,882 @@
+HV_R14_RELAUNCH_FINAL json part 2/12 SHA256 DF6EE236AC2927CA737A3CED9E1AF5B8FB4A3F4C04016B69CE7DF58637A6ED47
+   {
+        "number": 21,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-077",
+          "TR-MCP-CFG-007",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 21",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 18",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "FE4E96F85F2B197DA43B00BB1B83144B565E76A3B0AEC3C6BF1579260C289B22"
+      },
+      {
+        "number": 22,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-018",
+          "FR-MCP-SESSIONLOGCTX-001",
+          "TEST-MCP-177",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-QBRAIN-004",
+          "TR-MCP-QBRAIN-005",
+          "TR-MCP-SESSIONLOG-006",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019",
+          "TR-MCP-WS-005"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 22",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 19",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "9856FC9EAB4DE61C5BE7FA190467EA34F47C58B40CAE360F7A1FF0656E47186A"
+      },
+      {
+        "number": 23,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-TRIAGE-003",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019",
+          "TR-MCP-WS-005"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 23",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 20",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "C034B6BF252E9C891EE0C86B56FE915E7B26D438A02EAD4A510D738624D25B8C"
+      },
+      {
+        "number": 24,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-REPL-001",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-REPL-001",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 24",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 21",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "D13DBC66000B559F456F1321FD249D619643681C1B7CD7FFEFD5BD4CE2B912F4"
+      },
+      {
+        "number": 25,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-REPL-005",
+          "FR-MCP-REPL-007",
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-QBOLLAMA-001",
+          "TR-MCP-NUKE-016",
+          "TR-MCP-NUKE-018",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-REPL-008",
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 25",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 22",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "4518820187E32FBED6DEA643DA89D9DDB471D74CC2D6AF969752C57DC6334B62"
+      },
+      {
+        "number": 26,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-018",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019",
+          "TR-MCP-WS-005"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 26",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 23",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "69EA9F544D36E8EC0CE25851910D0F253329DAC509A828A35E6310B436FF69D3"
+      },
+      {
+        "number": 27,
+        "state": "open",
+        "requirementIds": [
+          "TEST-MCP-PATHNORM-001",
+          "TEST-MCP-QBOLLAMA-001",
+          "TR-MCP-NUKE-018",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-QUALITY-001",
+          "TR-MCP-USECASE-019"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 27",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 24",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "20F9334D278B3CCA9C47D52207214AA1249D727F2BF3BDB309AAF0B969731041"
+      },
+      {
+        "number": 28,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-018",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-WS-005"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 28",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 25",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "EF4FCCEF9E946CD81A32DA0F99FB064AE4E1D1684BD9B3586B6D65FF06495095"
+      },
+      {
+        "number": 29,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-047",
+          "FR-MCP-REPL-008",
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-QBOLLAMA-001",
+          "TEST-MCP-TRANSCRIPT-008",
+          "TEST-MCP-TRIAGE-003",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 29",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 26",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "B7CC959EDDDACF4DCF8D60FAFCC0D2B56F2FED89F16EC43183254BD759A7EF3C"
+      },
+      {
+        "number": 30,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-018",
+          "FR-MCP-047",
+          "FR-MCP-083",
+          "FR-MCP-103",
+          "FR-MCP-FED-PATH-001",
+          "FR-MCP-QBOPENAI-001",
+          "FR-MCP-REPL-001",
+          "FR-MCP-REPL-007",
+          "FR-MCP-REPL-008",
+          "FR-MCP-SESSIONLOGCTX-001",
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-PATHNORM-001",
+          "TEST-MCP-QBOPENAI-001",
+          "TEST-MCP-WIKIEXPORT-001",
+          "TR-MCP-FED-PATH-001",
+          "TR-MCP-GH-003",
+          "TR-MCP-GH-004",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-PATHNORM-001",
+          "TR-MCP-SESSIONLOG-006",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019",
+          "TR-MCP-WS-005"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 30",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.1-27.18",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "7D6BF7DA9DDD44EC4172DBAFAF3F9138BE2B821F286ADC489AE73D065DBBC3FF"
+      },
+      {
+        "number": 31,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-BUILD-001",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-NUKE-020"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 31",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.20",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "FF368DBC70E3AC954C4F5A8FCFF87214FF203C12E5DDD36E862006A4FE3925C3"
+      },
+      {
+        "number": 32,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-FED-PATH-001",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-FED-PATH-001",
+          "TR-MCP-NUKE-019"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 32",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.20",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "C67CD85ABE4330AC47B5652F43CE6C98E1DA14090D17A9EB9D7811E9ED33BDEC"
+      },
+      {
+        "number": 33,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-040"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 33",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.20",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "6FBEF4BD4004C66A336B1B225FDE9DAA994F9AB94DB30EC19E22F5730EB8A9EB"
+      },
+      {
+        "number": 34,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-074",
+          "FR-MCP-FED-BACKFILL-001",
+          "FR-MCP-FED-ROUTE-001",
+          "FR-MCP-FED-WSSYNC-001",
+          "FR-MCP-PLUGINCORE-002",
+          "FR-MCP-SERVICEUPDATE-001",
+          "FR-MCP-USECASE-016",
+          "FR-MCP-USECASE-017",
+          "FR-MCP-USECASE-018",
+          "FR-TIMER-001",
+          "FR-WF-005",
+          "TEST-MCP-PLUGINCORE-002",
+          "TEST-MCP-SERVICEUPDATE-001",
+          "TEST-MCP-USECASE-021",
+          "TEST-TIMER-001",
+          "TR-MCP-CI-001",
+          "TR-MCP-FED-BACKFILL-001",
+          "TR-MCP-FED-ROUTE-001",
+          "TR-MCP-FED-WSSYNC-001",
+          "TR-MCP-PLUGINCORE-002",
+          "TR-MCP-SERVICEUPDATE-001",
+          "TR-MCP-USECASE-020",
+          "TR-TIMER-LIFECYCLE-001"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 34",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.19-27.21",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "E58206CB833366FC51E5DBA8BD535EA3477F833C10FF2F106BA8DE225DDFC18A"
+      },
+      {
+        "number": 35,
+        "state": "open",
+        "requirementIds": [],
+        "scope": "outOfScope",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 35",
+          "docs/plans/2026-10-19-unit-suite-green.md sections operational child branch",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "C3816B11A24DADAD542056B60231A5299DAD8E40FF0F609B9B336065ACD26D73"
+      },
+      {
+        "number": 36,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-040",
+          "FR-MCP-BUILD-001",
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-QBOLLAMA-001",
+          "TR-MCP-NUKE-016",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-NUKE-020"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 36",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.22",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "F3D9E5002701B23937D9D563A6054BC7D6D189B3C785F09276D737934161DA54"
+      },
+      {
+        "number": 37,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-040",
+          "FR-MCP-BUILD-001",
+          "FR-MCP-FED-PATH-001",
+          "FR-MCP-QBOPENAI-001",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-FED-PATH-001",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-NUKE-020",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 37",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.20-27.21",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "A41F3403CECFF17FED55202E95CC37C50D2D3EC73CD3DC495D53A3B6662D1DEC"
+      },
+      {
+        "number": 38,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-040",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 38",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.23 U",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "D6DC050F0C69FF6AE484E3DA1B236D12988FBF8A55C5967CB65D7F0251362FDA"
+      },
+      {
+        "number": 39,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-079",
+          "FR-MCP-MEMORY-001",
+          "FR-MCP-MEMORY-002",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 39",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.23 V",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "0DD8B6BF42CDA5D6D3BFC2000B8117A4E727AF463A84BC45C4AEB27609E5905F"
+      },
+      {
+        "number": 40,
+        "state": "open",
+        "requirementIds": [
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 40",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.23 W",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "36392FB9DCD2BA7454155F2AFB9B90F23536342CF728C8DE64096C5D9A8C32C7"
+      },
+      {
+        "number": 41,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 41",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.24",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "7BD18AB28845F8A61AAD0EFD7C5BB3304F95E8EB73454ED38D4A12AAA35D4D13"
+      },
+      {
+        "number": 42,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-089",
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 42",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.25",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "488023AED861D8B4AE99E754E0B7B82DB3164CEBF783F5E293BB5AA75AB8C7E4"
+      },
+      {
+        "number": 43,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 43",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.26",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "3DEE04C9F782D197A20D31FF8F3298594B31294633B64F34E7DE4F52C89D492A"
+      },
+      {
+        "number": 44,
+        "state": "open",
+        "requirementIds": [
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 44",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.27",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "1C73DF964714C9E26E3FE52A15E35A28F3E941F0A0C30AA1167B86EC55D2FF93"
+      },
+      {
+        "number": 45,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-SERVICEUPDATE-001",
+          "TEST-MCP-089",
+          "TEST-MCP-SERVICEUPDATE-001",
+          "TR-MCP-SERVICEUPDATE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 45",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.28",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "9D0EE7E65887C0EB655DE4CAF8E7DB053F81214F696B914FD3129B5D902F8830"
+      },
+      {
+        "number": 46,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-SERVICEUPDATE-001",
+          "TEST-MCP-SERVICEUPDATE-001",
+          "TR-MCP-SERVICEUPDATE-001"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 46",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.29",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "F68B2770E5F03F7B459A13495646941FB31F85A909C3ABDC4474E6C8B2606DD6"
+      },
+      {
+        "number": 47,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-103",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-SERVICEUPDATE-001",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 47",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.30",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "01C95863423A3C105A6BCA6D03C6E3CD8441C05B3CEF939E2FE2FD7B0F4FA0D4"
+      },
+      {
+        "number": 48,
+        "state": "open",
+        "requirementIds": [
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 48",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.30 Z4 part 2",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "2F52B3FE278151693406BE1A21A3AB409426220ED4B9BEFB6F3C10E56BB757E4"
+      },
+      {
+        "number": 49,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-103",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 49",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.31 Z4 parts 3/4",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "1A93F2E7FA4B3BF9ADA014638E3CBB63E808F08F2E3269AFD62FBBD1E562DD06"
+      },
+      {
+        "number": 50,
+        "state": "open",
+        "requirementIds": [
+          "TEST-MCP-TRIAGE-003",
+          "TEST-MCP-TRIAGE-005",
+          "TEST-MCP-TRIAGESTORE-007",
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 50",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.31 Z5",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "E068D7B4082F92582DC86B5AB028C5E2AB0C70A30E033CD02BBD6B32E1B608DB"
+      },
+      {
+        "number": 51,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-TRIAGESTORE-007",
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 51",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.32",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "3313A2AE51A7F9EED55B3412C1E4B71226E1430AA54F291F26B4FEDD8CFEC488"
+      },
+      {
+        "number": 52,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-040",
+          "FR-MCP-079",
+          "FR-MCP-103",
+          "FR-MCP-MEMORY-001",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 52",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.33",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "75A64CFF9AB12C6087D10053044E688FFA2E1597FC8AF3BD36D4867A152D219F"
+      },
+      {
+        "number": 53,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-040",
+          "FR-MCP-103",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 53",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.34",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "AB4D776AD1765A14084061E5544C8C5FD5CAA3F473ED442FE3E58CCFA31E4E8F"
+      },
+      {
+        "number": 54,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-040",
+          "FR-MCP-077",
+          "FR-MCP-103",
+          "FR-MCP-MEMORY-008",
+          "TEST-MCP-MEMORY-FED-001",
+          "TR-MCP-FED-MEMORY-001"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 54",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.35",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "F3748742AC3D0234D398A3831074AF72EB1A1303F5DD057AAAB1C2733E112CD9"
+      },
+      {
+        "number": 55,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-040",
+          "TR-MCP-HOSTILEREVIEW-003"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 55",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.36",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "72566E461C2CD3CFD8B8E3A5AA6E11698CFB9FBE3F7F7712939D30F8FA1F5DAC"
+      },
+      {
+        "number": 56,
+        "state": "open",
+        "requirementIds": [
+          "FR-MCP-040",
+          "TEST-MCP-QBOLLAMA-001",
+          "TR-MCP-HOSTILEREVIEW-003",
+          "TR-MCP-NUKE-016"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 56",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.37",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "4AD4D640278F2551A422CA18996953A4A141CAAB44EC25C40D5954AA21D0C432"
+      },
+      {
+        "number": 57,
+        "state": "open",
+        "requirementIds": [
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 57",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.38",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "41AD4CD58429BDDF8B88ED84C77174E7BB9C73E67D6077E09BE8D49725BA6AB6"
+      },
+      {
+        "number": 58,
+        "state": "open",
+        "requirementIds": [
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 58",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.39",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "C9DA67ECBFD26CDFE461EBA26A752BDE561C9B88C4224AE7D6F4C740CEFB1501"
+      },
+      {
+        "number": 59,
+        "state": "open",
+        "requirementIds": [
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 59",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.40",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "392E8F03884A2C504D7750DD92C5AFFE0D11431BA5148BD645DC4D0C31C65CDD"
+      },
+      {
+        "number": 60,
+        "state": "open",
+        "requirementIds": [
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 60",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.41",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "F77D99FB89B5B73F276111E7AB1ECD468479096F56FDC547509E59DC21884DD9"
+      },
+      {
+        "number": 61,
+        "state": "open",
+        "requirementIds": [
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "scope": "adjudicated",
+        "sources": [
+          "unitgreen-r14-tasks-da11faa2.json task 61",
+          "docs/plans/2026-10-19-unit-suite-green.md sections 27.42",
+          "hv-ug-r14-relaunch-matrix-audit.json and inspected source/requirement records"
+        ],
+        "taskTextSha256": "B3784DBCB185B2FB58CBFEAA8645FFA9CD9E3E74AA116C1CC09A265917B13783"
+      }
+    ],
+    "changeRequirements": [
+      {
+        "change": "Initial A-F: cbc74e82,28bf0b22,de581353,b2319488 and requirement writes",
+        "requirementIds": [
+          "FR-MCP-PATHNORM-001",
+          "TEST-HANDOFF-006",
+          "TEST-MCP-083",
+          "TEST-MCP-PATHNORM-001",
+          "TEST-MCP-TRIAGE-004",
+          "TR-MCP-HOSTILEREVIEW-003",
+          "TR-MCP-MT-002",
+          "TR-MCP-PATHNORM-001",
+          "TR-MCP-QUALITY-001",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "source": "Plan 7-10; commit diffs and original receipts"
+      },
+      {
+        "change": "Takeover and G: 11681680,8c2b83ab",
+        "requirementIds": [
+          "FR-MCP-BUILD-001",
+          "FR-MCP-FED-PATH-001",
+          "TEST-MCP-PATHNORM-001",
+          "TR-MCP-DB-001",
+          "TR-MCP-FED-PATH-001",
+          "TR-MCP-GH-003",
+          "TR-MCP-GH-004",
+          "TR-MCP-NUKE-018",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-PATHNORM-001",
+          "TR-MCP-QUALITY-001"
+        ],
+        "taskNumbers": [
+          7,
+          8
+        ],
+        "source": "Plan 8-10; 16-file blob comparison and filter contracts"
+      },
+      {
+        "change": "Classification and rounds 1-2: b2bd50b3,49cfec92,b4ad42aa,27c43bcc; scanner parts overridden",
+        "requirementIds": [
+          "FR-MCP-FED-PATH-001",
+          "FR-MCP-PATHNORM-001",
+          "FR-MCP-QBSKILLS-003",
+          "FR-MCP-USECASE-001",
+          "FR-MCP-USECASE-016",
+          "FR-MCP-USECASE-017",
+          "TEST-MCP-FED-PATH-001",
+          "TEST-MCP-TRIAGE-003",
+          "TEST-MCP-USECASE-019",
+          "TEST-MCP-USECASE-020",
+          "TR-MCP-FED-PATH-001",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-QBRAIN-005",
+          "TR-MCP-QUALITY-001",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          9,
+          10,
+          14
+        ],
+        "source": "Plan 9,14-15; changed tests and retirement records"
+      },
+      {
+        "change": "Round 3 scans/version and lane repairs: 538d0ccf,6042dbb3,0210244d,68fa7b39,6ea425ab,e0b078c8",
+        "requirementIds": [
+          "FR-MCP-018",
+          "FR-MCP-SESSIONLOGCTX-001",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-SESSIONLOG-006",
+          "TR-MCP-WS-005"
+        ],
+        "taskNumbers": [
+          15,
+          16,
+          17
+        ],
+        "source": "Plan 16 and associated contracts/receipts"
+      },
+      {
+        "change": "Round 4 source seam and concurrency harnesses: 801e6862,26fc8348,97b78114",
+        "requirementIds": [
+          "FR-MCP-018",
+          "FR-MCP-MEMORY-002",
+          "TEST-HANDOFF-004",
+          "TEST-HANDOFF-005",
+          "TEST-HANDOFF-006",
+          "TEST-HANDOFF-007",
+          "TEST-MCP-MEMORY-002",
+          "TR-MCP-MEMORY-002",
+          "TR-MCP-WS-005"
+        ],
+        "taskNumbers": [
+          18,
+          19
+        ],
+        "source": "Plan 17; source seams and database harnesses"
+      },
+      {
+        "change": "Round 5 citations/classification: 8c254695,810ee8aa; scanner documentation overridden",
+        "requirementIds": [
+          "FR-MCP-077",
+          "FR-MCP-MEMORY-002",
+          "TEST-MCP-MEMORY-002",
+          "TR-MCP-CFG-007",
+          "TR-MCP-MEMORY-002",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          20,
+          21
+        ],
+        "source": "Plan 18; retained original corrections"
+      },
+      {
+        "change": "Round 6 reachability/environment ownership: 9933796c,c8418301",
+        "requirementIds": [
+          "FR-MCP-018",
+          "FR-MCP-SESSIONLOGCTX-001",
+          "TEST-MCP-177",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-QBRAIN-004",
+          "TR-MCP-QBRAIN-005",
+          "TR-MCP-SESSIONLOG-006",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019",
+          "TR-MCP-WS-005"
+        ],
+        "taskNumbers": [
+          22
+        ],
+        "source": "Plan 19 and amended requirement records"
+      },
+      {
+        "change": "Round 7 C

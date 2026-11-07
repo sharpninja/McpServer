@@ -1,0 +1,22 @@
+RECEIPT 2026-10-26T14:11:56 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Compare-WinTrxRuns.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-26T14:11:56 project=QBrainAi.Support.Mcp.Tests
+A ug-r7-win-lane-2 results=397 start=2026-10-26T11:08:13.0662615-05:00 finish=2026-10-26T11:15:34.5815132-05:00
+B ug-r8-win-lane-2 results=397 start=2026-10-26T14:05:47.0239354-05:00 finish=2026-10-26T14:10:52.9356803-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject outcome=Passed duration=00:00:00.5484767 start=2026-10-26T11:15:15.2972318-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_PerFileByteLimit_Throws outcome=Passed duration=00:00:00.0166398 start=2026-10-26T11:15:15.8465984-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_AggregateByteLimit_Throws outcome=Passed duration=00:00:00.0150689 start=2026-10-26T11:15:15.8637597-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_RecursionDepthLimit_Throws outcome=Passed duration=00:00:00.0142966 start=2026-10-26T11:15:15.2824703-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject outcome=Passed duration=00:00:02.0809549 start=2026-10-26T11:15:13.1801741-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_FileCountLimit_Throws outcome=Passed duration=00:00:00.0148080 start=2026-10-26T11:15:15.8794092-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_CancelledAfterFirstYield_StopsWithoutMaterializingAllPaths outcome=Passed duration=00:00:00.0190080 start=2026-10-26T11:15:15.2628321-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject outcome=Passed duration=00:00:00.6003758 start=2026-10-26T14:10:04.2143068-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_CancelledAfterFirstYield_StopsWithoutMaterializingAllPaths outcome=Passed duration=00:00:00.0128415 start=2026-10-26T14:10:04.1851555-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_AggregateByteLimit_Throws outcome=Passed duration=00:00:00.0121121 start=2026-10-26T14:10:04.8252862-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_RecursionDepthLimit_Throws outcome=Passed duration=00:00:00.0150610 start=2026-10-26T14:10:04.1988200-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_FileCountLimit_Throws outcome=Passed duration=00:00:00.0114667 start=2026-10-26T14:10:04.8379941-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_PerFileByteLimit_Throws outcome=Passed duration=00:00:00.0081207 start=2026-10-26T14:10:04.8162738-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject outcome=Passed duration=00:00:00.6808819 start=2026-10-26T14:10:03.5028938-05:00
+END 2026-10-26T14:11:56

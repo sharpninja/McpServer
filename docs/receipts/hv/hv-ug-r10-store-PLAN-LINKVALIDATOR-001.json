@@ -1,0 +1,39 @@
+{
+  "payload": {
+    "deprecated": true,
+    "result": {
+      "note": "Created 2026-11-02 by ClaudeCode at the operator's request during PR 87 (IMPL-UNITGREEN-001); not part of PR 87's scope.",
+      "implementationTasks": [
+        {
+          "done": false,
+          "task": "Capture the FR, TR and acceptance criteria for the link validator through the requirements plugin route (deleted target, missing target, report shape, which link kinds are in scope)"
+        },
+        {
+          "done": false,
+          "task": "Write the BDPv4 plan (contracts with scripted stores and wrong validators rejected, mock gate, implementation, bindings, gates) and get the operator's approval"
+        },
+        {
+          "done": false,
+          "task": "Implement and validate per the approved plan, including its hostile validation"
+        }
+      ],
+      "description": [
+        "Operator 2026-11-02, verbatim: \"add medium todo: Create a validator for FR/TR/AC/UC/TODO links, identifying links to deleted items or simply missing items.\"",
+        "Scope: every link between functional requirements, technical requirements, acceptance criteria, use cases and TODOs (for example a TODO's functionalRequirements and technicalRequirements, FR to TR and TEST mappings, use case to FR links, AC ids cited by other records); the validator reports each link whose target is deleted (soft-deleted) or does not exist at all, naming the source record, the field and the target id.",
+        "Why: on 2026-11-02 TODO BUG-TRIAGE-139 still linked FR-MCP-USECASE-017 seven times after that FR was converted into TR-MCP-USECASE-019 and deleted on 2026-10-19; a requirement delete is a soft delete that any create with the same id revives, and the FR was restored and deleted again three times (triage-report-8928fd021e6b47c1945387935f0765d9; Workspace memory MEMORY-PROCESS-014). The same TODO held 71 link entries for 3 distinct ids.",
+        "Requirements first (profile 4.3): this is a new capability, so its FR, TR and acceptance criteria are captured through the plugin and a BDPv4 plan is approved before any implementation."
+      ],
+      "id": "PLAN-LINKVALIDATOR-001",
+      "functionalRequirements": [],
+      "technicalRequirements": [],
+      "dependsOn": [],
+      "priority": "medium",
+      "title": "Validator for FR, TR, AC, UC and TODO links to deleted or missing items",
+      "technicalDetails": [],
+      "section": "Backlog",
+      "done": false
+    },
+    "requestId": "req-20261103T123823Z-070a"
+  },
+  "type": "result"
+}

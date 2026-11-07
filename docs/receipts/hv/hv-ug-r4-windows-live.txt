@@ -1,0 +1,1 @@
+Bad owner or permissions on /etc/ssh/ssh_config.d/20-omarchy-keepalive.conf

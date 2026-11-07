@@ -1,0 +1,870 @@
+{
+  "signatures": [
+    {
+      "commit": "11326d42fbb9a430b80ac22a4f8637be2adc713c",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 94%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "53a210ca4e521474685f2e3e1558b5cf88a5d535",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "baff082f23c87fdbbec0cd20dbc41569f7b1cf3a",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "94dc5b69078f746ea6cffc3bb11c73ecb74811be",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "becb0742693de240dce596a8eec4eb41c99a7c1d",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "b21c21ecdee4b2658830f998b45efcd0491f1d36",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 94%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "1d77a79c4e1e78a4c8e164a49779393721a95061",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 94%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "88c5abccee5f92b785f1368fdaace50dc0d4e2c2",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "a3caa21d67e85f464cc4e6b62b04e2b3bb9ca708",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "ff7dcf517bb788654442cc546012172f07b60b84",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "b79fd51f1638cea821e912abcea8838b7e20bf3c",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "1bb0d61f52302e8f4f9051ea2d3a4a834bf2c92b",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "4398cffc06878dfb1d3defad3cfb67465863fe67",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 94%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "2103243cfb4155e201b0fe1fd257ebc093800d86",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "3fe29d1fd8ffc4ba993782ab810bf9d16f4f42e6",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 94%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "52e6d627b78df808bb469269f0093d8fc1815701",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "b3f26862801cbf2d96ed4a3cdea7473fc653580b",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 94%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "142a93f0d5246f3224f601499073c96eeac072f3",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "cb174ac807c8e60b7a38a30bc216a651ed72c6c7",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "2e1210150ae009162b047c604b56b75426c4d428",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "4e4a227ad63ab789aad4b4c5eb977bc9319e83f2",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "03df5a6a1aec4627d0cd6847fdaab6f2462ec014",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "a98250179d67af8712ad8eb032e333440ba11fd9",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "e3eb8369481cbe2f49cb95798d9138193a18c1be",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "462709315de8609ce9b8b2b1f14dc4df2e092e82",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "23955af0b330ec1fe167138edac1ef5ef8ff3bfd",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "62c5882d87f3d0b5019827b1f803140cbf79ca0d",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "611a5dc556b5d0b6ce22b98c3103a9f873e34ac5",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 92%, accuracy 95%, completeness 85%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "679eb7881d0342a58ef446be5084b703c0cee7c4",
+      "signLine": [
+        "Signed: gpt-6.1-sol-ultra@Codex | Confidence: correctness 99%, accuracy 99%, completeness 99%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "765490a9035878c7888c911776289880493dacab",
+      "signLine": [
+        "Signed: gpt-6.1-sol-high@Codex | Confidence: correctness 95%, accuracy 99%, completeness 80%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "0dd224daec46eb3e7c2d0766c6cd2c2ee9ac6a07",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 90%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "332e0d31dbcb823418c3db30c409bc44df655de8",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "a9d6a8d7e259803e438b7125701a186bae8db26d",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "366238a2dfdbbc65991605db19b9b8b2192c3aa9",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "2b0f65d87f1948afcdcab6b0aa7c7afd3edd42cd",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "a69edb612a8f9994b2a1108f5096160332afca9e",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "fbc2da860e83c095433c51f8c7bec3c6038bdba6",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "d43c1d125cc6129940f21f439b5b3982dc1e61c3",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "4634c73c4b97f759177df0057c6142f5339e5027",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "433ce1919d04bb6c5bb3c95a60c6b5df656d59fb",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "751e34e42151dedddca2ce31b5a12c768f3d2876",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "3e487b6b9e520bd8bd7cba836cdb0bea8716fd48",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "4fab4424c0ebcd961e5135e393eace47771dd62c",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 96%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "2f67921357bff28a636fc5824d70422dbb1f168d",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "6667c405fe4e38a651773782809f355f087ac935",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 92%, accuracy 97%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "8c651f13036db0aa2b90413770377cc66cb419d6",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 97%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "868bbb575052a39e763280a42c4fbca01c9c9fdd",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "43cb62a78951ee71d27c8fd49f0fc0c153d42f50",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "845f323b6b6ae13bc01b6165d6f987238c631dea",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "7ab3c1c40bc226056f7c20f1db6963e12311a313",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "f5cda3c15455b8f42f97bb35768c142757323378",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "8b97aa4bee778273688e53a64a737c3170a41823",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "55c1400c58df1e03cb9a0cc2c3926b02534ab75a",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "c31f36d81dc87509b605175c5ced0d3b0f08180c",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "0484114872c09cf5afab5e019748dfabbda294bc",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "6a87791d9363bb972feb6a4539339fac0c1a1915",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "3a607fb17dba72c6c7f920a6067b1ca191ec86fb",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "44e9d810d88c0e34239ae31eef2683a614d392f7",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "c84183016a032bd522f5ae085a90d7c912bef810",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "9933796c53433a55d11cf14a96be97438a087b0f",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "c3625a64222c558b16c564e62ec2b5d600801e77",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "780b6513b4004da0b17c2359d9cb65f6a69de67e",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "8b7a49eaa3e8d4872b33d66af517acc8ad7e21ea",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "810ee8aa0fbdcc6cf64a3d9575693068d261a97c",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 98%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "5b818847b4e598b4e85ac6567041b847b0385950",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "3a9f8ff46690c4e35781bab444deac0d4345bbbd",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "ccc78b7a7624e0367725af585a5fd7c4f38b3661",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "8c254695d886d6ff87d5caaa42b0fa6b421c9c6b",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "094e47f4e0e8074c027e68f25d26482ce68b331e",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "97b7811491ccb3e338804a01d0bf28e4ecfe273a",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "50b58ce515cba89dab9b479b5e3eceb9fbb7c0a8",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "26fc83486be252e63579cca9d53f3132672555c7",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "c31c2918c15d4085e463e00f6a4977fd67913b76",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "801e6862d49d669808c9315a7ad43d0272b1d1f1",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "0996a1164fa84dd6288403e5161f337581fc21cb",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "64fc4b1400ac5bc7526c472f8efeacb91980f2a6",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "6b89998f4f0257b967bba12e2434135964cf135b",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "e0b078c802d6456d106e6ec681d1aa93d6c4d055",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "395b4cd89726e921af481d4c8c056bf8fa535ae6",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "68fa7b393d007c0d0c466c29ae4da5738bf54af2",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "6ea425ab943ebdd8aad1de1c84896de92d0270d8",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "0210244d27bf2b5e731e4ee40350504934e812a4",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "6042dbb3551c38a740e13de28f44fe9a814e6f0a",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "56d14d7cd7e72975b1cbf0ddcd2cc17c16763249",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "538d0ccf957c041f1e3886864bdf5e4ca693e9ec",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "27c43bccd19a591e4ca30560b52d4c5a9e8b81c9",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 90%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "45a3197c9afda2f7c7d87e7d986908f885c20b02",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "49cfec920349f17ace1b287b18d1b0fe2d956b03",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "127468345afcc7a24e6a254f712d6b75a54713e8",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "5924926051f84720c110ab1421430499fadf918a",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "4f668b76d26b26e7162d8654fb946c484fd42539",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "8a6173342dcd7683b9d9549005a5af819b8abc90",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "11681680d316bee7c8c184e45b699af7c1bd2188",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 97%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "a4c358efd91131e7fb714370726997b5c2d076cb",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "de5813532adb51b964b222644ae0519bd814f8ef",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 93%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 92%"
+      ],
+      "hasGpgSignature": false
+    },
+    {
+      "commit": "cbc74e823e7af96f8df1a1320498998e5de2b328",
+      "signLine": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 90%"
+      ],
+      "hasGpgSignature": false
+    }
+  ],
+  "formatting": [],
+  "mergeBase": "9b099716e3f4b773787a1caef44353e112bda556",
+  "mergeTreeExitCode": 0,
+  "mergeTreeOutput": [],
+  "scannerHistory": [
+    "ccc78b7a7624e0367725af585a5fd7c4f38b3661 2026-10-21T05:55:57-05:00 test(scanner): the scanner documentation states the declared alias limit (R4-F1, IMPL-UNITGREEN-001)",
+    "801e6862d49d669808c9315a7ad43d0272b1d1f1 2026-10-20T18:50:56-05:00 fix(marker,tests): one source seam for plugin-version inputs; scanner aliases in lexical scope (IMPL-UNITGREEN-001)",
+    "27c43bccd19a591e4ca30560b52d4c5a9e8b81c9 2026-10-20T09:33:13-05:00 test(guards): one repository-root locator, refused outside Integration; classify by dependency (IMPL-UNITGREEN-001, R2-F1)",
+    "45a3197c9afda2f7c7d87e7d986908f885c20b02 2026-10-20T08:46:39-05:00 test(guards): Roslyn syntax-tree platform scanner, Roslyn pins to 5.9.0 (IMPL-UNITGREEN-001, R2-F2)",
+    "49cfec920349f17ace1b287b18d1b0fe2d956b03 2026-10-19T21:08:53-05:00 test: one skip definition for both guards; multiline, qualified and listed skip attributes; interpolation holes kept as code (IMPL-UNITGREEN-001)",
+    "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6 2026-10-19T17:50:34-05:00 test: classify platform-dependent tests as integration tests and guard the unit suite (IMPL-UNITGREEN-001)"
+  ]
+}

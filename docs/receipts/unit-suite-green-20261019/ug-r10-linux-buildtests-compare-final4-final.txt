@@ -1,0 +1,11 @@
+Now: 2026-11-02T23:10:34 key=test name only before=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-buildtests-1 (522) after=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r10-final-linux-buildtests-1 (529)
+onlyBefore=0 onlyAfter=7 common=522
+--- only in before ---
+--- only in after ---
+NukeBuild.Tests.QuadBrainOllamaModelBindingTests.BothConsumers_UseTheSharedRule
+NukeBuild.Tests.QuadBrainOllamaModelBindingTests.SharedRule_SatisfiesMockGatedContract
+NukeBuild.Tests.QuadBrainOllamaModelContractTests.ScriptedSelection_SatisfiesEveryRow
+NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: "legacy first")
+NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: "legacy only")
+NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: "no trim")
+NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: "skips only an unset canonical value")

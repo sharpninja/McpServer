@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "order": 2,
+      "type": "review",
+      "status": "completed",
+      "description": "Verified all 30 supplied TRX hashes and committed blobs, all counters, zero failures/skips, identical 4739 unit names on both hosts. Live stores read and retained. Profile reload read 1 file, 12 Global and 3 Workspace memories, excluding PROCESS-007. Investigating a source-level isolation gap: colon-delimited environment keys survive the prefix scrub; no product code or tests executed.",
+      "filePath": "docs/receipts/hv/hv-ug-r12-trx-audit.json"
+    }
+  ]
+}

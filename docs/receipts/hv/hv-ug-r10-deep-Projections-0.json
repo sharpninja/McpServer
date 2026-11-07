@@ -1,0 +1,32 @@
+[
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Functional-Requirements.md",
+    "CurrentHash": "DA7F8CAB66915CE4A36F1A7F6067A533950681F02DE915FA0F607A3B7A1D4885",
+    "CurrentMatches": true,
+    "OriginalMatches": true
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Technical-Requirements.md",
+    "CurrentHash": "5D3140981D9A22D54CEBD45F7C6368C187DA76862A7B15282CBFF870738BEC6D",
+    "CurrentMatches": true,
+    "OriginalMatches": true
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Testing-Requirements.md",
+    "CurrentHash": "62B125645F152453DA2A3E9ADB24A7AA3F5930A4B61E7D4370E6FB3682DF8C05",
+    "CurrentMatches": true,
+    "OriginalMatches": true
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/TR-per-FR-Mapping.md",
+    "CurrentHash": "F43D751587C91F1633788A500E6218EFF16243DB177A828EE26761B19FF3E1D2",
+    "CurrentMatches": true,
+    "OriginalMatches": true
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Requirements-Matrix.md",
+    "CurrentHash": "BE09AE9D1488B45DDECF35007301FA85B1DF4585468A3933C7E5464D3CE1898E",
+    "CurrentMatches": true,
+    "OriginalMatches": true
+  }
+]

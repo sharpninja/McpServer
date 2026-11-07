@@ -172,6 +172,8 @@ public sealed class TransactionGatedSessionLogServiceTests
     /// TR-MCP-DB-003: rollback code must not bypass tracked soft-delete protection with
     /// bulk physical delete operations.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void TransactionGatedSessionLogServiceSource_DoesNotUseBulkPhysicalDeletes()
     {
@@ -536,8 +538,7 @@ public sealed class TransactionGatedSessionLogServiceTests
         return total;
     }
 
-    private static string FindRepositoryRoot()
-        => Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
+    private static string FindRepositoryRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
 
     private static int ScalarCount(SqliteConnection connection, string sql, params (string Name, object Value)[] args)
     {

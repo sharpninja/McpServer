@@ -1,0 +1,45 @@
+RECEIPT 2026-10-20T14:54:12 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Read-WinVstestDiag.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-20T14:54:08 directory=C:\Users\kingd\AppData\Local\Temp\vstest-diag-ug-r3-win-lane-diag-3
+FILE log.host.26-10-20_14-48-40_35449_5.txt bytes=5568028 written=2026-10-20T14:53:04
+  COUNTS lines=12399 recordStart=361 recordResult=361 recordEnd=361
+  E 5910: TpTrace Information: 0 : 31788, 11, 2026/10/20, 14:48:42.990, 3353924714752, testhost.dll, [xUnit.net 00:00:02.15] QBrainAi.Support.Mcp.Tests: Discovered [execution] test case 'QBrainAi.Support.Mcp.Tests.Services.TriageFallbackClassifierTests.ShouldFallback_WhenRetryableSignalInStderr_ReturnsTrue(st
+  E 5911: TpTrace Verbose: 0 : 31788, 11, 2026/10/20, 14:48:42.990, 3353924715068, testhost.dll, TestRequestHandler.SendData: sending data from testhost: {"Version":7,"MessageType":"TestSession.Message","Payload":{"MessageLevel":0,"Message":"[xUnit.net 00:00:02.15] QBrainAi.Support.Mcp.Tests: Discovered [exec
+  E 5913: TpTrace Information: 0 : 31788, 11, 2026/10/20, 14:48:42.990, 3353924715893, testhost.dll, [xUnit.net 00:00:02.15] QBrainAi.Support.Mcp.Tests: Discovered [execution] test case 'QBrainAi.Support.Mcp.Tests.Services.TriageFallbackClassifierTests.ShouldFallback_WhenRetryableSignalInStderr_ReturnsTrue(st
+  E 5914: TpTrace Verbose: 0 : 31788, 11, 2026/10/20, 14:48:42.990, 3353924716252, testhost.dll, TestRequestHandler.SendData: sending data from testhost: {"Version":7,"MessageType":"TestSession.Message","Payload":{"MessageLevel":0,"Message":"[xUnit.net 00:00:02.15] QBrainAi.Support.Mcp.Tests: Discovered [exec
+  E 7356: TpTrace Information: 0 : 31788, 11, 2026/10/20, 14:48:43.105, 3353925859898, testhost.dll, [xUnit.net 00:00:02.27] QBrainAi.Support.Mcp.Tests: Discovered [execution] test case 'QBrainAi.Support.Mcp.Tests.Options.SessionLogSanitizationOptionsValidatorTests.Validate_Fails_WhenTimeoutIsOutsideBounds(ti
+FILE log.host.26-10-20_14-53-08_61913_5.txt bytes=117461 written=2026-10-20T14:53:10
+  COUNTS lines=364 recordStart=1 recordResult=1 recordEnd=1
+  E 342: TpTrace Warning: 0 : 28484, 16, 2026/10/20, 14:53:09.944, 3356594247916, testhost.dll, TestRunCache: InProgressTests is null
+  E 348: TpTrace Verbose: 0 : 28484, 4, 2026/10/20, 14:53:10.003, 3356594845197, testhost.dll, TestRequestHandler.SendData: sending data from testhost: {"Version":7,"MessageType":"TestExecution.Completed","Payload":{"TestRunCompleteArgs":{"TestRunStatistics":{"ExecutedTests":1,"Stats":{"Passed":1}},"IsCancel
+  E 362: TpTrace Information: 0 : 28484, 10, 2026/10/20, 14:53:10.005, 3356594862465, testhost.dll, SocketClient.PrivateStop: Stop communication from server endpoint: 127.0.0.1:064593, error:
+FILE log.host.26-10-20_14-53-12_94569_5.txt bytes=1026017 written=2026-10-20T14:53:15
+  COUNTS lines=2689 recordStart=3 recordResult=3 recordEnd=3
+  E 319: TpTrace Information: 0 : 42072, 11, 2026/10/20, 14:53:14.252, 3356637335355, testhost.dll, [xUnit.net 00:00:00.82] QBrainAi.Repl.Core.Tests: Discovered [execution] test case 'QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clie
+  E 320: TpTrace Verbose: 0 : 42072, 11, 2026/10/20, 14:53:14.252, 3356637335884, testhost.dll, TestRequestHandler.SendData: sending data from testhost: {"Version":7,"MessageType":"TestSession.Message","Payload":{"MessageLevel":0,"Message":"[xUnit.net 00:00:00.82] QBrainAi.Repl.Core.Tests: Discovered [execut
+  E 646: TpTrace Information: 0 : 42072, 11, 2026/10/20, 14:53:14.272, 3356637533565, testhost.dll, [xUnit.net 00:00:00.84] QBrainAi.Repl.Core.Tests: Discovered [execution] test case 'QBrainAi.Repl.Core.Tests.GenericClientPassthroughTests.ErrorHandling_UnknownClient_ThrowsInvalidOperationException' (ID = '8e
+  E 647: TpTrace Verbose: 0 : 42072, 11, 2026/10/20, 14:53:14.272, 3356637534693, testhost.dll, TestRequestHandler.SendData: sending data from testhost: {"Version":7,"MessageType":"TestSession.Message","Payload":{"MessageLevel":0,"Message":"[xUnit.net 00:00:00.84] QBrainAi.Repl.Core.Tests: Discovered [execut
+  E 649: TpTrace Information: 0 : 42072, 11, 2026/10/20, 14:53:14.272, 3356637536538, testhost.dll, [xUnit.net 00:00:00.84] QBrainAi.Repl.Core.Tests: Discovered [execution] test case 'QBrainAi.Repl.Core.Tests.GenericClientPassthroughTests.ErrorHandling_UnknownMethod_ThrowsInvalidOperationException' (ID = 'fc
+FILE log.txt bytes=12091572 written=2026-10-20T14:53:15
+  COUNTS lines=41956 recordStart=0 recordResult=0 recordEnd=0
+  E 52: TpTrace Information: 0 : 33676, 2, 2026/10/20, 14:48:40.242, 3353897235491, vstest.console.dll, AssemblyResolver.OnResolve: Microsoft.Bcl.AsyncInterfaces: Failed to load assembly.
+  E 57: TpTrace Verbose: 0 : 33676, 2, 2026/10/20, 14:48:40.242, 3353897236922, vstest.console.dll, CurrentDomainAssemblyResolve: Failed to resolve assembly 'Microsoft.Bcl.AsyncInterfaces'.
+  E 58: TpTrace Verbose: 0 : 33676, 2, 2026/10/20, 14:48:40.243, 3353897242553, vstest.console.dll, CurrentDomainAssemblyResolve: Failed to resolve assembly 'Microsoft.Bcl.AsyncInterfaces'.
+  E 62: TpTrace Verbose: 0 : 33676, 2, 2026/10/20, 14:48:40.245, 3353897262977, vstest.console.dll, CurrentDomainAssemblyResolve: Failed to resolve assembly 'Microsoft.Bcl.AsyncInterfaces'.
+  E 66: TpTrace Verbose: 0 : 33676, 2, 2026/10/20, 14:48:40.246, 3353897272339, vstest.console.dll, CurrentDomainAssemblyResolve: Failed to resolve assembly 'Microsoft.Bcl.AsyncInterfaces'.
+FILE log.host.26-10-20_14-53-19_56705_5.txt bytes=151825 written=2026-10-20T14:53:20
+  COUNTS lines=461 recordStart=2 recordResult=2 recordEnd=2
+  E 435: TpTrace Warning: 0 : 49620, 16, 2026/10/20, 14:53:20.910, 3356703914648, testhost.dll, TestRunCache: InProgressTests is null
+  E 439: TpTrace Warning: 0 : 49620, 14, 2026/10/20, 14:53:20.912, 3356703932899, testhost.dll, TestRunCache: InProgressTests is null
+  E 445: TpTrace Verbose: 0 : 49620, 4, 2026/10/20, 14:53:20.974, 3356704552606, testhost.dll, TestRequestHandler.SendData: sending data from testhost: {"Version":7,"MessageType":"TestExecution.Completed","Payload":{"TestRunCompleteArgs":{"TestRunStatistics":{"ExecutedTests":2,"Stats":{"Passed":2}},"IsCancel
+  E 459: TpTrace Information: 0 : 49620, 8, 2026/10/20, 14:53:20.976, 3356704570309, testhost.dll, SocketClient.PrivateStop: Stop communication from server endpoint: 127.0.0.1:064603, error:
+FILE log.host.26-10-20_14-53-23_09605_5.txt bytes=537891 written=2026-10-20T14:53:26
+  COUNTS lines=1457 recordStart=6 recordResult=6 recordEnd=6
+  E 1314: TpTrace Information: 0 : 42412, 11, 2026/10/20, 14:53:24.177, 3356736581201, testhost.dll, [xUnit.net 00:00:00.66] Build.Tests: Discovered [execution] test case 'NukeBuild.Tests.WarningSuppressionApprovalValidatorTests.Validate_MissingRequiredFields_ReportsEachMissingContractField' (ID = '2d203648c9
+  E 1315: TpTrace Verbose: 0 : 42412, 11, 2026/10/20, 14:53:24.177, 3356736581677, testhost.dll, TestRequestHandler.SendData: sending data from testhost: {"Version":7,"MessageType":"TestSession.Message","Payload":{"MessageLevel":0,"Message":"[xUnit.net 00:00:00.66] Build.Tests: Discovered [execution] test cas
+  E 1317: TpTrace Information: 0 : 42412, 11, 2026/10/20, 14:53:24.177, 3356736582534, testhost.dll, [xUnit.net 00:00:00.66] Build.Tests: Discovered [execution] test case 'NukeBuild.Tests.WarningSuppressionApprovalValidatorTests.Validate_DuplicateAndBroadApprovals_ReportErrors' (ID = '81ee3b646215d492e1736fc7
+  E 1318: TpTrace Verbose: 0 : 42412, 11, 2026/10/20, 14:53:24.177, 3356736582878, testhost.dll, TestRequestHandler.SendData: sending data from testhost: {"Version":7,"MessageType":"TestSession.Message","Payload":{"MessageLevel":0,"Message":"[xUnit.net 00:00:00.66] Build.Tests: Discovered [execution] test cas
+  E 1320: TpTrace Information: 0 : 42412, 11, 2026/10/20, 14:53:24.177, 3356736584645, testhost.dll, [xUnit.net 00:00:00.66] Build.Tests: Discovered [execution] test case 'NukeBuild.Tests.WarningSuppressionApprovalValidatorTests.Validate_StaleApprovalAndChangedMechanism_ReportErrors' (ID = '73f1a27e254bcd43da
+END 2026-10-20T14:54:11

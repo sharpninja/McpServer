@@ -1,0 +1,15 @@
+RECEIPT started=2026-11-05T04:23:18 ended=2026-11-05T04:23:19 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Compare-DurationReceipts.ps1 sha256=E090BDECE11511F4C41348F303EC50D72E0DBDAB8FEE0C89BF690D8F489EB22A
+ARGUMENTS -OldReceipt | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r12z3-configured-durations.txt | -NewReceipt | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z4-configured-durations.txt
+HEAD 4398cffc06878dfb1d3defad3cfb67465863fe67
+Now: 2026-11-05T04:23:19
+OLD /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r12z3-configured-durations.txt END hits=302 (UNIT=134, HELPER=65, NOT-UNIT=103) listed=249 longerThanMax=53
+NEW /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z4-configured-durations.txt END hits=314 (UNIT=138, HELPER=73, NOT-UNIT=103) listed=255 longerThanMax=59
+OLD hits=249 NEW hits=255 onlyOld=0 onlyNew=6
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs:118 TransactionSecurityControllerTests.GetManifestReport_AfterSign_ReturnsFilteredTraceReport [1000ms] | services.Clock.Advance(TimeSpan.FromSeconds(1));
+ONLY-NEW HELPER tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs:35 .helper [1000ms] | internal static readonly TimeSpan Step = TimeSpan.FromSeconds(1);
+ONLY-NEW HELPER tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs:63 .helper [30000ms] | new("D7 consolidation lock takeover", TimeSpan.FromSeconds(30), AgeDirection.Older, AtThreshold: false),
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs:230 AgeBoundaryContractTests.Rows_SitAtTheThresholdAndOneStepEitherSide [1000ms] | Assert.Equal(TimeSpan.FromSeconds(1), Step);
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs:26 SettableTimeProviderTests.Reads_ReturnTheSetInstantUntilChanged [31000ms] | clock.Advance(TimeSpan.FromSeconds(31));
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs:53 SettableTimeProviderTests.StopwatchAndTimers_AreRefused [1000ms] | Assert.Throws<NotSupportedException>(() => clock.CreateTimer(_ => { }, null, TimeSpan.FromSeconds(1), Timeout.InfiniteTimeSpan));
+END

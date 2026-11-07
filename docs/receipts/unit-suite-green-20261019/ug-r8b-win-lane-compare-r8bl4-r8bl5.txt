@@ -1,0 +1,4 @@
+Now: 2026-10-28T21:02:08 before=/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r8b-win-lane-4 (589) after=/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r8b-win-lane-5 (589)
+onlyBefore=0 onlyAfter=0 common=589
+--- only in before ---
+--- only in after ---

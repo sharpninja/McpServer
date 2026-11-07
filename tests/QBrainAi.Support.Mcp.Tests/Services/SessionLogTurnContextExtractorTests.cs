@@ -10,7 +10,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// </summary>
 public sealed class SessionLogTurnContextExtractorTests
 {
-    private readonly SessionLogTurnContextExtractor _sut = new();
+    private readonly SessionLogTurnContextExtractor _sut = new(new DirectoryTreeWalker(_ => []));
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-006: no signals yield None/None.</summary>
     [Fact]
@@ -53,6 +53,8 @@ public sealed class SessionLogTurnContextExtractorTests
     }
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-006: ~ history supplies a TODO when the turn text has none.</summary>
+    /// <remarks>Integration: writes and reads an owned physical agent-history tree (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Extract_ExactPathUnderUserProfileHistory_UsedWhenTurnHasNoPlan()
     {
@@ -63,7 +65,7 @@ public sealed class SessionLogTurnContextExtractorTests
         {
             File.WriteAllText(Path.Combine(histDir, "chat.jsonl"), "working MCP-HISTORY-001 on docs/plans/from-home.md");
             var turn = new SessionLogTurnEntity();
-            var result = _sut.Extract(turn, @"F:\ws", home, agentSessionId: "agent-abc");
+            var result = new SessionLogTurnContextExtractor().Extract(turn, @"F:\ws", home, agentSessionId: "agent-abc");
             Assert.Equal("MCP-HISTORY-001", result.TodoId);
             Assert.Equal("docs/plans/from-home.md", result.PlanFile);
         }
@@ -77,20 +79,12 @@ public sealed class SessionLogTurnContextExtractorTests
     [Fact]
     public void Extract_HomeRelativeHistoryHit_ExpandsAndReturnsExactPath()
     {
-        var home = Path.Combine(Path.GetTempPath(), "sesslog-home-" + Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(home);
-        try
-        {
-            var turn = new SessionLogTurnEntity();
-            turn.ContextItems.Add(new SessionLogTurnContextEntity { ContextItem = "~/plans/live.md", Ordinal = 0 });
-            var result = _sut.Extract(turn, @"F:\ws", home);
-            Assert.Contains("plans/live.md", result.PlanFile.Replace('\\', '/'), StringComparison.Ordinal);
-            Assert.DoesNotContain("~", result.PlanFile, StringComparison.Ordinal);
-        }
-        finally
-        {
-            Directory.Delete(home, recursive: true);
-        }
+        const string home = "/fixture/home";
+        var turn = new SessionLogTurnEntity();
+        turn.ContextItems.Add(new SessionLogTurnContextEntity { ContextItem = "~/plans/live.md", Ordinal = 0 });
+        var result = _sut.Extract(turn, @"F:\ws", home);
+        Assert.Contains("plans/live.md", result.PlanFile.Replace('\\', '/'), StringComparison.Ordinal);
+        Assert.DoesNotContain("~", result.PlanFile, StringComparison.Ordinal);
     }
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-003: tied TODO ids stay None.</summary>
@@ -132,6 +126,5 @@ public sealed class SessionLogTurnContextExtractorTests
         Assert.Equal("None", result.TodoId);
     }
 
-    private static string IsolatedHome() =>
-        Path.Combine(Path.GetTempPath(), "sesslog-isolated-home-missing");
+    private static string IsolatedHome() => "/fixture/no-history";
 }

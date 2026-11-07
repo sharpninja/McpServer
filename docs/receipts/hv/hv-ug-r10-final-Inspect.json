@@ -1,0 +1,413 @@
+[
+  {
+    "Line": 3,
+    "Type": "response_item",
+    "PayloadType": "additional_tools",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "role",
+      "tools"
+    ]
+  },
+  {
+    "Line": 4,
+    "Type": "response_item",
+    "PayloadType": "message",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "role",
+      "content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 5,
+    "Type": "response_item",
+    "PayloadType": "message",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "role",
+      "content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 6,
+    "Type": "response_item",
+    "PayloadType": "message",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "role",
+      "content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 7,
+    "Type": "response_item",
+    "PayloadType": "message",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "role",
+      "content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 8,
+    "Type": "response_item",
+    "PayloadType": "message",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "role",
+      "content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 12,
+    "Type": "response_item",
+    "PayloadType": "message",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "role",
+      "content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 15,
+    "Type": "response_item",
+    "PayloadType": "message",
+    "Name": null,
+    "Keys": [
+      "type",
+      "status",
+      "id",
+      "role",
+      "content",
+      "phase",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 16,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call",
+    "Name": "exec",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 18,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call_output",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 21,
+    "Type": "response_item",
+    "PayloadType": "reasoning",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "summary",
+      "encrypted_content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 23,
+    "Type": "response_item",
+    "PayloadType": "message",
+    "Name": null,
+    "Keys": [
+      "type",
+      "status",
+      "id",
+      "role",
+      "content",
+      "phase",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 24,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call",
+    "Name": "exec",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 27,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call_output",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 29,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call",
+    "Name": "exec",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 32,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call_output",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 35,
+    "Type": "response_item",
+    "PayloadType": "reasoning",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "summary",
+      "encrypted_content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 36,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call",
+    "Name": "exec",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 39,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call_output",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 42,
+    "Type": "response_item",
+    "PayloadType": "reasoning",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "summary",
+      "encrypted_content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 43,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call",
+    "Name": "exec",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 47,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call_output",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 50,
+    "Type": "response_item",
+    "PayloadType": "reasoning",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "summary",
+      "encrypted_content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 51,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call",
+    "Name": "exec",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 55,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call_output",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 57,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call",
+    "Name": "exec",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 60,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call_output",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 63,
+    "Type": "response_item",
+    "PayloadType": "reasoning",
+    "Name": null,
+    "Keys": [
+      "type",
+      "id",
+      "summary",
+      "encrypted_content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 65,
+    "Type": "response_item",
+    "PayloadType": "message",
+    "Name": null,
+    "Keys": [
+      "type",
+      "status",
+      "id",
+      "role",
+      "content",
+      "phase",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "Line": 66,
+    "Type": "response_item",
+    "PayloadType": "custom_tool_call",
+    "Name": "exec",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  }
+]

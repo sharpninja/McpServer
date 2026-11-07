@@ -13,6 +13,8 @@ public sealed class BuildProjectSetTests
     /// <c>Build.GetBuildProjectFiles</c> returns every <c>*.csproj</c> under <c>src/</c> and <c>tests/</c> except
     /// <c>Build.Tests</c>, the Compatibility alias projects included (TR-MCP-NUKE-002 AC-002; BUG-BUILD-002).
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void GetBuildProjectFiles_CoversEverySourceAndTestProject_ExceptBuildTests()
     {
@@ -36,6 +38,8 @@ public sealed class BuildProjectSetTests
     /// The Restore and Compile targets both draw their projects from <c>GetBuildProjectFiles</c>, so Restore covers every project
     /// Compile builds (TR-MCP-NUKE-002 AC-002 and AC-003; BUG-BUILD-002).
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void RestoreAndCompile_UseTheSharedProjectSet()
     {

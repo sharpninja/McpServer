@@ -1,0 +1,71 @@
+{
+  "name": "ug-r13z4b-compile-1",
+  "kind": "compile",
+  "retrospective": false,
+  "note": "Written when the run ended, from its own meta, exit and log files (Save-CompileReceipt.ps1).",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "runHead": "4398cffc06878dfb1d3defad3cfb67465863fe67",
+  "runDirtyPaths": [
+    " M src/QBrainAi.Services/Memory/Commands/RunConsolidateJobCommandHandler.cs",
+    " M src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs",
+    " M src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryConsolidateJobTests.cs",
+    "?? docs/receipts/hv/unitgreen-r13-prelaunch.clock-sweep.md",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-b-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-b-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-citation-sweep-all-1.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-citation-sweep-all-2.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-citation-sweep-all-3.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-citation-sweep.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-configured-durations-compare-z3-z4.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-configured-durations.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-final-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-final-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-b-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-b-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-serviceupdate-chain-1.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-timing-sweep.txt"
+  ],
+  "command": [
+    "./build.ps1",
+    "Compile"
+  ],
+  "startedLocal": "2026-11-05T04:34:41",
+  "endedLocal": "2026-11-05T04:36:56",
+  "exitCode": 0,
+  "status": "passed",
+  "buildSucceededLine": "Build succeeded on 11/5/2026 4:36:56 AM. ＼（＾ᴗ＾）／",
+  "errorDiagnostics": 0,
+  "warningDiagnostics": 0,
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r13z4b-compile-1.out.log",
+  "logSha256": "C5494BA1CA55FE2F5E228F51ABBC884E2BE0DC7500EC5A6A72FA9ABA627CC998",
+  "sources": [
+    {
+      "path": "src/QBrainAi.Services/Memory/Commands/RunConsolidateJobCommandHandler.cs",
+      "sha256": "488F3AB41EAD4BFEF63FB8A4F89B35BC5598C99619AB63955B654C498141FF86"
+    },
+    {
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+      "sha256": "BC03276DE8AA57FC8DAD55A58FC814A59AE40F8C20DE918E5C4F2329DB7E8D64"
+    },
+    {
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs",
+      "sha256": "178E4A05D71A3924A5380BD4975ECF98E9163E876F515ABB8438602DCD499D76"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryConsolidateJobTests.cs",
+      "sha256": "6EC2520961BCC2F3A64844D5A3D0D914B343220F4D23DE4B51A84B19554412C7"
+    }
+  ],
+  "metaFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r13z4b-compile-1.meta.json",
+  "metaSha256": "4E1ABAAA007958BCFABB664538C16419F2DD51B7EF3A383946135D5DC78D4AA5",
+  "writtenLocal": "2026-11-05T04:37:37",
+  "minutesAfterRunEnd": 0.69,
+  "writtenBy": "ClaudeCode"
+}

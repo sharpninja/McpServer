@@ -1,0 +1,23 @@
+RECEIPT 2026-10-21T14:07:05 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Compare-WinTrxRuns.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-21T14:07:04 project=QBrainAi.Support.Mcp.Tests
+A ug-r5-win-lane-3 results=362 start=2026-10-21T07:59:56.6079897-05:00 finish=2026-10-21T08:04:20.5508708-05:00
+B ug-r6-win-lane-1 results=376 start=2026-10-21T14:00:22.1030549-05:00 finish=2026-10-21T14:06:16.8610074-05:00
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedOutputPath outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests.GetRequestedInstanceName_PrefersQBrainAiEnvironmentVariable outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_UsesIsolatedCwdNotConfiguredRepoRoot outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Codex_PrefersJsonlAssistantTextOverOutputFileToolCallJson outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Memory.MemoryIndexerTests.OnnxLocal_NoCloudRequired outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewWorker_InvalidOptions_FailStartup outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_WritesPromptFileUnderConfiguredTempAndSetsTempEnv outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.FileSystemReach_RealRootAndAncestorLinks_AreNotReachable outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests.GetRequestedInstanceName_FallsBackToLegacyEnvironmentVariable outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.ResolveTempDirectory_HonorsConfiguredEnvVar_WithoutWindowsServiceAcl outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.BrainSlotCredentialResolverTests.ResolveAsync_WithEnvironmentReference_ReturnsTrimmedSecret outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Codex_ReturnsAssistantTextFromJsonlNotRawEvents outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Codex_WritesOutputFileUnderConfiguredTemp outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Options.ProductAliasCompatibilityTests.ProjectCanonicalSection_EnvironmentAndCommandLineBeatFileQBrainAi outcome=Passed
+NAMED B QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.FileSystemReach_RealRootAndAncestorLinks_AreNotReachable outcome=Passed duration=00:00:00.0346435 start=2026-10-21T14:00:26.1802405-05:00
+END 2026-10-21T14:07:04

@@ -1,0 +1,471 @@
+{
+  "overallVerdict": "DISAGREE",
+  "accuracy": 95,
+  "completeness": 94,
+  "confidence": 99,
+  "passCount": 23,
+  "failCount": 11,
+  "unknownCount": 0,
+  "failList": [
+    {
+      "claim": "UG1",
+      "findings": [
+        "R9-F7"
+      ],
+      "defect": "All 30 supplied TRX, four selections, hashes, tested code head, stated totals and zero non-passing results reconcile. Every post-code path is docs/. Nuke and Build.Tests routes and filters reconcile, with no NU190x/audit suppression found. FAIL only the explicit empty-dirtyPaths subclaim: retained local metadata lists untracked receipts."
+    },
+    {
+      "claim": "UG3",
+      "findings": [
+        "R9-F5"
+      ],
+      "defect": "Explicit-baseline environment deltas, controlled original writers, CLI fallback ownership, no-skip lane results and process-free junction fixtures are supported. The in-scope Ollama cases retain an unowned dependent model variable and inconsistent canonical/legacy selection. No score deduction is made for scanner coverage, hostile runs or the excluded 417-candidate physical-I/O audit."
+    },
+    {
+      "claim": "UG7",
+      "findings": [
+        "R9-F6"
+      ],
+      "defect": "Current criterion text, moved/removed IDs, unsatisfied states, replacement mappings, retirement notices and dedicated/effective absences reconcile. Changed citations resolve or are labeled historical. Six TODOs have the declared states and 35 implementation tasks remain unchecked. Task 32 nevertheless misidentifies the failed slice R binding as its real binding."
+    },
+    {
+      "claim": "UG8",
+      "findings": [
+        "R9-F6"
+      ],
+      "defect": "The full plan records the amendments, failed runs, supersession chain, counts and operator rulings, including H and retrospective receipts. The current completion instructions are not reconciled across the plan, current handoff and TODO. New source/contract findings also prevent the built-as-complete interpretation of the exit definition."
+    },
+    {
+      "claim": "UG11",
+      "findings": [
+        "R9-F6"
+      ],
+      "defect": "The self-review propagation assertion is contradicted by the current handoff D-B and stale TODO binding. The disclosed out-of-scope issues and final run facts are otherwise accurate, but the new substantive findings were not disclosed as unresolved. The explicit correction in projected-problems item 28 is acknowledged rather than treating its earlier item 23 alone as a new defect."
+    },
+    {
+      "claim": "UG12",
+      "findings": [
+        "R9-F1",
+        "R9-F2",
+        "R9-F3",
+        "R9-F4",
+        "R9-F5",
+        "R9-F6"
+      ],
+      "defect": "D-B cannot yet satisfy TR-MCP-NUKE-020 AC-5, FR-MCP-TESTRESOURCE-001 ac-12 and its generated-artifact criterion, or the AC-006/008 environment ownership claim. FR-MCP-040 ac-1 also needs the timestamp boundary correction before its deferred deployment acceptance. Current handoff instructions conflict. The four follow-up TODOs correctly remain open, but checking all 35 implementation tasks is unsupported until remediation and a new AGREE."
+    },
+    {
+      "claim": "UG30",
+      "findings": [
+        "R9-F2"
+      ],
+      "defect": "The I to O chronology, most contracts/bindings, SQL failure-chain correction, criterion moves, citation scrub and four retained identifier exceptions reconcile. The claim that all stated criteria are proved fails for exact health-nonce comparison. The 417-candidate inventory and SQL 1223 root cause remain excluded."
+    },
+    {
+      "claim": "UG31",
+      "findings": [
+        "R9-F1"
+      ],
+      "defect": "Composition, merged per-project runs, platform exclusion, unknown/empty group refusal, mandatory receipts, positive bindings and the real negative run are supported. AC-5 is incomplete because CheckClasses can accept a class without an executed result. The approved Build.Tests-inside-Nuke declaration is accurate and is not failed as an operator-rule conflict."
+    },
+    {
+      "claim": "UG33",
+      "findings": [
+        "R9-F4"
+      ],
+      "defect": "REST/client/REPL additive fields, nullable annotations, null behavior, earliest-link mapping and the UTC sentence have mock/binding evidence and the declared post-merge deployment sequence. However the general parser can synthesize a date from the read clock for incomplete stored timestamps, which the contract does not cover. Current deployed read-time getters are a declared deployment state, not the reason for this FAIL."
+    },
+    {
+      "claim": "UG35",
+      "findings": [
+        "R9-F3"
+      ],
+      "defect": "The two memory-bench stub cases now write to checked disposable locations, retain their assertions, and the final lane receipts show no tracked benchmark changes. Mock order, twelve rows and seven wrong checks are accurate. The check still accepts Windows case aliases of checkout paths, so the universal containment behavior is unproved and incorrect."
+    },
+    {
+      "claim": "UG36",
+      "findings": [
+        "R9-F8"
+      ],
+      "defect": "The Q/R/P/S retrofit adds many accurate dated requirement/criterion comments, but newly added Slice S helper declarations still lack XML documentation. Therefore the every-member completion claim does not hold. No deduction is made for earlier PR code excluded from the retrofit."
+    }
+  ],
+  "unknownList": [],
+  "implementerFixes": [
+    {
+      "id": "R9-F1",
+      "title": "TestGroups can accept a class that executed no case",
+      "classification": "implementer edit",
+      "severity": "material",
+      "claims": [
+        "UG12",
+        "UG31"
+      ],
+      "location": [
+        "build/TestGroupExecution.cs:132",
+        "build/TestGroupExecution.cs:141",
+        "build/TestGroupExecution.cs:154",
+        "tests/Build.Tests/TestGroupExecutionContractTests.cs:82"
+      ],
+      "defect": "CheckClasses combines result display names with every TestMethod definition, without joining a result to its definition by testId. It then accepts any dot-bounded occurrence of the requested class name. An unexecuted Alpha definition plus an executed Beta result satisfies an Alpha request. A Beta display name whose argument contains .Alpha. also satisfies it. Neither proves an Alpha case ran.",
+      "evidence": "Static deduction from the complete function, not an independently executed test. The five ClassRows contain no TestDefinitions, no result/definition identity mismatch and no misleading display name. The genuine negative run ug-r9-negative-q-1 proves the ordinary zero-selected case, not these false positives. TR-MCP-NUKE-020 AC-5 requires an executed case for every named class.",
+      "changeToPass": "Determine executed class membership from result-linked test definitions and exact class identity. Add discriminating contract rows before the correction, bind the same rows, and supply the new gate evidence. Keep AC-5 unsatisfied until that evidence exists.",
+      "proposedAcceptanceCriteria": [
+        {
+          "name": "ExecutedClassIdentity",
+          "requirement": "TR-MCP-NUKE-020 AC-5, clarification",
+          "behavior": "A named class counts only when an executed result identifies a test of that class. A definition without a result, another class namespace or a display-name argument does not count; a custom display name still counts when its executed test identity belongs to the class."
+        }
+      ],
+      "proposedTests": [
+        "CheckClasses_DefinitionWithoutResult_IsRejected",
+        "CheckClasses_DisplayNameMentionsAbsentClass_IsRejected",
+        "CheckClasses_NamespaceSegmentIsNotDeclaringClass",
+        "CheckClasses_CustomDisplayName_UsesExecutedTestIdentity"
+      ]
+    },
+    {
+      "id": "R9-F2",
+      "title": "Health proof compares a nonce substring rather than the echoed nonce",
+      "classification": "implementer edit",
+      "severity": "material",
+      "claims": [
+        "UG12",
+        "UG30"
+      ],
+      "location": [
+        "tests/TestSupport.Shared/TemporaryInstanceChecks.cs:78",
+        "tests/TestSupport.Shared/TemporaryInstanceChecks.cs:86",
+        "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:50",
+        "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:226",
+        "src/QBrainAi.ServiceDefaults/Extensions.cs:230"
+      ],
+      "defect": "CheckHealthAnswer accepts any body containing the requested nonce. For request nonce-owned, a response whose nonce value is nonce-owned-suffix passes; so does a different nonce with the requested text in another field. The server returns a structured HealthCheckResponse nonce value, but the checker does not compare that value.",
+      "evidence": "FR-MCP-TESTRESOURCE-001 ac-12 requires exact comparison and rejection of a different nonce. Both the reference checker and the real checker use Contains. The six original HealthRows use plain Healthy text, and the later no-nonce control does not discriminate a prefix/suffix or wrong-field echo. This is a source-derived counterexample; the supplied lane results themselves passed.",
+      "changeToPass": "Compare the response nonce value exactly with the request nonce and reject missing, malformed or different values. Extend the independent mock contract and bind it to the consumer check. Do not mark ac-12 satisfied before the strengthened evidence passes.",
+      "proposedAcceptanceCriteria": [
+        {
+          "name": "ExactHealthNonceEcho",
+          "requirement": "FR-MCP-TESTRESOURCE-001 ac-12, clarification",
+          "behavior": "A successful health response proves the request only when its nonce field equals the entire requested nonce ordinally. A longer or shorter nonce, or the requested text in another field, is refused."
+        }
+      ],
+      "proposedTests": [
+        "HealthAnswer_NoncePrefixOrSuffix_IsRejected",
+        "HealthAnswer_RequestedTextOutsideNonceField_IsRejected",
+        "HealthAnswer_ExactNonceField_IsAccepted",
+        "HealthAnswer_MalformedOrMissingNonceField_IsRejected"
+      ]
+    },
+    {
+      "id": "R9-F3",
+      "title": "The artifact-folder check permits a Windows case alias of the checkout",
+      "classification": "implementer edit",
+      "severity": "material",
+      "claims": [
+        "UG12",
+        "UG35"
+      ],
+      "location": [
+        "tests/TestSupport.Shared/TemporaryInstanceChecks.cs:250",
+        "tests/TestSupport.Shared/TemporaryInstanceChecks.cs:265",
+        "tests/TestSupport.Shared/TemporaryInstanceChecks.cs:312",
+        "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:30"
+      ],
+      "defect": "Containment and equality compare every path segment ordinally. With checkout C:/GitHub/repo, candidate c:/github/repo/docs/out is accepted even though it denotes a directory inside the same checkout on the ordinary Windows filesystem. A lower-case drive letter alone also defeats the comparison.",
+      "evidence": "The twelve rows cover separators but not case aliases. The shared check is the guard used by the two memory-bench output paths. Microsoft documents default Windows case-insensitive names and case-insensitive drive letters. This is a static counterexample, not a claim that either retained final lane changed a tracked benchmark file.",
+      "changeToPass": "Make the pure containment decision respect the supplied path semantics, including Windows drive-letter and case aliases, while retaining case-sensitive semantics where applicable. Add the missing contract rows and negative control before binding the fix. Preserve the successful final4 evidence as history.",
+      "proposedAcceptanceCriteria": [
+        {
+          "name": "RejectCheckoutCaseAliases",
+          "requirement": "FR-MCP-TESTRESOURCE-001 second, unnumbered generated-artifact criterion, clarification",
+          "behavior": "An output path denoting the checkout or one of its descendants is refused under the explicitly supplied path-comparison semantics, including Windows case aliases; an actual external sibling remains accepted."
+        }
+      ],
+      "proposedTests": [
+        "OutputFolder_WindowsDriveCaseAlias_IsRejected",
+        "OutputFolder_WindowsDirectoryCaseAlias_IsRejected",
+        "OutputFolder_CaseSensitiveDistinctSibling_IsAccepted",
+        "OutputFolder_OrdinalOnlyWrongChecker_IsRejected"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file"
+      ]
+    },
+    {
+      "id": "R9-F4",
+      "title": "Stored timestamp parsing can invent a date from the read clock",
+      "classification": "implementer edit",
+      "severity": "material",
+      "claims": [
+        "UG12",
+        "UG33"
+      ],
+      "location": [
+        "src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs:21",
+        "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs:23",
+        "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs:34"
+      ],
+      "defect": "Read uses unrestricted DateTimeOffset.TryParse with AssumeUniversal. A stored time-only value such as 12:34:56 is accepted with the current date, although that date was never stored. Earliest inherits the same behavior. Thus the same stored input can report different creation dates on different read days.",
+      "evidence": "The framework documentation specifies that an omitted date defaults to the current day; AssumeUniversal supplies an offset, not a missing date. The contract covers complete dates, blank text and not a time, but no parseable incomplete timestamp. This is a static boundary defect, not an assertion that a current live record contains such a value and not a reviewer test run.",
+      "changeToPass": "Accept only stored timestamp representations with a complete date, preserving the approved offset-less-as-UTC behavior; otherwise return null rather than synthesize missing components. Add independent incomplete-input rows and a clock-filling wrong reader before the implementation correction. The post-merge deployment still remains required by the approved done sequence.",
+      "proposedAcceptanceCriteria": [
+        {
+          "name": "NoInferredTimestampDate",
+          "requirement": "FR-MCP-040 ac-1, clarification",
+          "behavior": "Reading a stored timestamp never fills missing date components from the clock. A time-only or incomplete-date value yields null and is ignored when choosing a mapping creation time; a complete date-time without an offset is UTC."
+        }
+      ],
+      "proposedTests": [
+        "StoredTimestamp_TimeOnly_ReturnsNull",
+        "StoredTimestamp_MissingDateComponent_ReturnsNull",
+        "MappingTimestamp_IncompleteLinkTime_IsIgnored",
+        "StoredTimestamp_ClockFillingWrongReader_IsRejected"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tryparse?view=net-10.0"
+      ]
+    },
+    {
+      "id": "R9-F5",
+      "title": "The in-scope Ollama cases do not own their model environment input",
+      "classification": "implementer edit",
+      "severity": "material",
+      "claims": [
+        "UG3",
+        "UG12"
+      ],
+      "location": [
+        "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs:28",
+        "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs:62",
+        "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs:109",
+        "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs:732",
+        "build/Build.TestDependencies.cs:30"
+      ],
+      "defect": "ResolveDefaultOllamaModelAsync reads MCP_QUADBRAIN_OLLAMA_MODEL and returns it without ownership/restoration. Provisioning instead prefers QBRAINAI_QUADBRAIN_OLLAMA_MODEL. If the canonical input names available model A and the legacy input names unavailable model B, provisioning prepares A while these cases request B. The model variable is not one of AC-006 permitted lane-input exceptions.",
+      "evidence": "The complete class has no process-environment ownership for either name. Three model-using result rows are present and Passed in each final4 lane, which establishes those runs but not the claimed environment ownership. The sibling sweep acknowledges the model choice without correcting this mismatch. TR-MCP-USECASE-018 AC-006 and the referenced TR-MCP-USECASE-019 AC-008 require other dependent variables to be owned and restored.",
+      "changeToPass": "Use one explicit model-selection input consistently for provisioning and the integration cases, and meet the existing ownership/restoration and serialized-writer rule for any environment variables retained. Preserve the real model assertions. Add pure selection contracts; no environment-setup acceptance criterion or hostile-environment run is requested.",
+      "proposedAcceptanceCriteria": [
+        {
+          "name": "ExplicitModelSelection",
+          "requirement": "Clarify the model-selection behavior supporting FR-MCP-TESTRESOURCE-001 and existing AC-006 ownership; do not create an environment-setup criterion",
+          "behavior": "Given explicit canonical, legacy and default model inputs, selection is deterministic, prefers a nonblank canonical value, otherwise the nonblank legacy value, otherwise the stated default, and all consumers receive that selected value."
+        }
+      ],
+      "proposedTests": [
+        "ModelSelection_CanonicalWinsOverLegacy",
+        "ModelSelection_BlankCanonicalUsesLegacy",
+        "ModelSelection_NoOverrideUsesDefault",
+        "ModelSelection_ProvisionerAndConsumerReceiveSameSelection"
+      ]
+    },
+    {
+      "id": "R9-F6",
+      "title": "Completion instructions and binding metadata contradict the canonical record",
+      "classification": "implementer edit",
+      "severity": "material",
+      "claims": [
+        "UG7",
+        "UG8",
+        "UG11",
+        "UG12"
+      ],
+      "location": [
+        "docs/plans/2026-10-30-unit-suite-green-handoff.md:12",
+        "docs/plans/2026-10-19-unit-suite-green.md:1465",
+        "docs/plans/2026-10-19-unit-suite-green.md:1468",
+        "docs/receipts/hv/20261102T190831-unitgreen-r9.selfreview.md:7",
+        "TODO IMPL-UNITGREEN-001 implementationTasks[31], task 32, Slice R"
+      ],
+      "defect": "The current handoff says not to satisfy QuadBrain ac-5/ac-6 or the named TEST criteria; the current plan says to satisfy them, with only QBOLLAMA AC-004 held out. This is not marked as historical in the handoff top section. The self-review says D-B is stated once. Separately, live TODO task 32 calls ug-r9-binding-r-1 the real binding even though it failed 99 Passed / 1 Failed; the successful corrected run is ug-r9-binding-r-2.",
+      "evidence": "Dedicated live TODO read, full current handoff, plan 27.21, self-review and both retained slice R receipts. The projected-problems item 28 explicitly corrects its own earlier item 23, but that does not correct the active handoff or live TODO.",
+      "changeToPass": "Replace the handoff duplicate list with an accurate reference to canonical D-B, correct the TODO through the plugin to label r-1 failed and cite r-2, and repeat the propagation audit. Keep the new substantive findings from being marked satisfied. No product test or new acceptance criterion is needed for these record corrections.",
+      "proposedAcceptanceCriteria": [],
+      "proposedTests": []
+    },
+    {
+      "id": "R9-F7",
+      "title": "The claim that every local gate has an empty dirty-path list is false",
+      "classification": "implementer edit",
+      "severity": "material accuracy",
+      "claims": [
+        "UG1"
+      ],
+      "location": [
+        "docs/receipts/unit-suite-green-20261019/ug-r9-final4-linux-lane-1.json:7",
+        "docs/receipts/unit-suite-green-20261019/ug-r9-final4-linux-buildtests-1.json:7",
+        "docs/receipts/unit-suite-green-20261019/ug-r9-final4-linux-traceability-1.meta.json:7",
+        "Round 9 request UG1 and D-A"
+      ],
+      "defect": "The lane metadata lists two dirty paths, Build.Tests four, and ValidateTraceability six. All are untracked documentation receipts from preceding runs. Therefore the specific no-dirty-path assertion fails, although the tracked code was clean and the tested SHA and green counts reconcile.",
+      "evidence": "The original committed metadata explicitly contains those arrays. Hash and Git checks confirm docs-only descendants from 878c366f and genuine final4 TRX. This finding does not invalidate those passing runs or allege dirty product code.",
+      "changeToPass": "Correct the request and any matching clean-tree assertions to say no tracked/code changes, with the untracked receipt paths disclosed. Preserve the original metadata. No rerun, acceptance criterion or product test is required solely for this factual correction.",
+      "proposedAcceptanceCriteria": [],
+      "proposedTests": []
+    },
+    {
+      "id": "R9-F8",
+      "title": "The dated XML-documentation completion claim omits newly added members",
+      "classification": "implementer edit",
+      "severity": "explicit directive",
+      "claims": [
+        "UG36"
+      ],
+      "location": [
+        "tests/TestSupport.Shared/TemporaryInstanceChecks.cs:265",
+        "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:87",
+        "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:90",
+        "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:93",
+        "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:96",
+        "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:99",
+        "MEMORY-FACT-008"
+      ],
+      "defect": "Slice S adds SameSegments and the contract helpers ScriptedCheck, Refusal, IsInsideOrEqual, IsAbsolute and Segments without XML documentation. The file/class and neighboring method change logs do not supply XML purpose, parameters, returns and dated traceability for those declarations. UG36 explicitly claims every changed member and test class is documented.",
+      "evidence": "The 878c366f diff introduces these members; the current source has no XML comments on them. The operator approved a retrofit of every declaration changed that day, and MEMORY-FACT-008 requires proper affected-code documentation. This is the explicit documentation directive, not a request for wording polish or an earlier-code sweep.",
+      "changeToPass": "Document the missing Q/R/P/S declarations with purpose and applicable parameters/returns plus a dated change entry naming the canonical existing requirement/criterion. Audit those slices only and correct the completion claim. No unrelated retrofit, new acceptance criterion or new test is requested.",
+      "proposedAcceptanceCriteria": [],
+      "proposedTests": []
+    }
+  ],
+  "operatorDecisionFails": [],
+  "operatorOverriddenObservations": [
+    {
+      "id": "OO-1",
+      "observation": "Scanner coverage, C# syntax support, tests, documentation and descriptions were not scored. Git history shows its last edit ccc78b7a before the operator override. No scanner change is requested."
+    }
+  ],
+  "closure": [
+    {
+      "id": "R8B-F1",
+      "verdict": "PASS",
+      "evidence": "Explicit-baseline delta contract and corrected owned/restored GH_TOKEN integration case; current unit and lane results on both hosts."
+    },
+    {
+      "id": "R8B-F2",
+      "verdict": "PASS",
+      "evidence": "AC-2 seven-project selector and six Passed results for exactly the two Support integration classes in each supplied lane TRX."
+    },
+    {
+      "id": "R8B-F3",
+      "verdict": "PASS",
+      "evidence": "OwnedInstanceProcess, stripped/owned environment, pre-use database guards, both identified siblings and supplied refusal/lane results."
+    },
+    {
+      "id": "R7-F1",
+      "verdict": "PASS",
+      "evidence": "Shared bounded timeout parser, explicit call-site reads, scripted controls and nineteen retained final unit cases."
+    },
+    {
+      "id": "R6-F1",
+      "verdict": "PASS",
+      "evidence": "Four CLI resolver paths under CliTempVariables with all fallback names owned/restored; moved cases and contracts present."
+    },
+    {
+      "id": "R6-F2",
+      "verdict": "PASS",
+      "evidence": "Historical labels on changed absent-ID citations, current mapped replacements and corrected requirement-scope label retained."
+    },
+    {
+      "id": "R5-F1",
+      "verdict": "PASS",
+      "evidence": "Root/ancestor reachability, positive and rejection controls, preserved real-link lane assertions and moved current criteria."
+    },
+    {
+      "id": "R5-F2",
+      "verdict": "PASS",
+      "evidence": "The originally named ProductAliasCompatibility canonical/legacy probe cases remain controlled and serialized. New model-input ownership is R9-F5, not a regression of those corrected cases."
+    },
+    {
+      "id": "R4-F1",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner alias-resolution scope is explicitly overridden; no deduction or remediation."
+    },
+    {
+      "id": "R4-F2",
+      "verdict": "PASS",
+      "evidence": "Old task/head/count corrections remain in tasks 9, 15 and 18. Current code SHA and test totals reconcile; the new dirty-path wording issue is R9-F7."
+    },
+    {
+      "id": "R4-F3",
+      "verdict": "PASS",
+      "evidence": "Memory binding cites present and mapped FR/TR/TEST-MCP-MEMORY-002."
+    },
+    {
+      "id": "R3-F1",
+      "verdict": "PASS",
+      "evidence": "Version-resolution explicit source seam and real filesystem integration binding remain intact."
+    },
+    {
+      "id": "R3-F2",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner-mediated part is overridden; its documentation is also outside scoring."
+    },
+    {
+      "id": "R3-F3",
+      "verdict": "PASS",
+      "evidence": "Retired FR-MCP-USECASE-016/017 absent through dedicated/effective getters; replacement mappings, repointed TODO and retirement notices present."
+    },
+    {
+      "id": "R3-F4",
+      "verdict": "PASS",
+      "evidence": "The original self-review/head correction remains. Current head 878c366f and docs-only descendants are proven; new completion propagation defects are R9-F6."
+    },
+    {
+      "id": "R2-F1",
+      "verdict": "PASS",
+      "evidence": "Originally named native/environment dependencies retain classification or explicit seams and applicable passing assertions."
+    },
+    {
+      "id": "R2-F2",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner-mediated closure is excluded by the operator override."
+    },
+    {
+      "id": "R2-F3",
+      "verdict": "PASS",
+      "evidence": "Earlier scripting/audit exceptions remain disclosed and retained; no inference of perfect historical conduct is required."
+    },
+    {
+      "id": "F1",
+      "verdict": "PASS",
+      "evidence": "Original guard mock run remains disclosed as 4692 total, 4675 Passed, 1 Failed and 16 NotExecuted, not green. Scanner correction portions remain overridden."
+    },
+    {
+      "id": "F2",
+      "verdict": "PASS",
+      "evidence": "Original native filesystem/SQLite cases retain their moved integration assertions or deterministic seams; current lane evidence contains their applicable results."
+    },
+    {
+      "id": "F3",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner syntax/skip-guard coverage and its coverage claims are overridden."
+    },
+    {
+      "id": "F4",
+      "verdict": "PASS",
+      "evidence": "Current complete interactive Windows lane has 715 Passed results, correct filter/head/session proof and retained name inventory."
+    },
+    {
+      "id": "F5",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner project-selection detection and coverage descriptions are overridden."
+    },
+    {
+      "id": "F6",
+      "verdict": "PASS",
+      "evidence": "The historical Bash ls exception is retained as a disclosure, not erased."
+    },
+    {
+      "id": "F7",
+      "verdict": "PASS",
+      "evidence": "The original missing Windows lane and unconditional done wording are corrected; live tasks/criteria remain false. New D-B insufficiencies are explicitly failed in UG12 and do not change the closure of the original omissions."
+    }
+  ],
+  "headSha": "e3eb8369481cbe2f49cb95798d9138193a18c1be",
+  "receiptPaths": [
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r9-20261102T190831.md",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r9-20261102T190831.json"
+  ],
+  "reviewerSessionId": "Codex-20261103T011224Z-unitgreen-r9-hv",
+  "reviewerRequestId": "req-20261103T011329Z-unitgreen-r9"
+}

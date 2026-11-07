@@ -1,0 +1,156 @@
+{
+  "projectCount": 23,
+  "projects": [
+    "tests/QBrainAi.Workspace.Validation/QBrainAi.Workspace.Validation.csproj",
+    "tests/Build.Tests/Build.Tests.csproj",
+    "tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj",
+    "tests/QBrainAi.ToolRegistry.Validation/QBrainAi.ToolRegistry.Validation.csproj",
+    "tests/QBrainAi.Context.Validation/QBrainAi.Context.Validation.csproj",
+    "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+    "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+    "tests/QBrainAi.Todo.Validation/QBrainAi.Todo.Validation.csproj",
+    "tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj",
+    "tests/QBrainAi.ProcessTree.TestHelper/QBrainAi.ProcessTree.TestHelper.csproj",
+    "tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj",
+    "tests/QBrainAi.GitHub.Validation/QBrainAi.GitHub.Validation.csproj",
+    "tests/QBrainAi.PlanReview.Tests/QBrainAi.PlanReview.Tests.csproj",
+    "tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj",
+    "tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj",
+    "tests/QBrainAi.Review.Tests/QBrainAi.Review.Tests.csproj",
+    "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+    "tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj",
+    "tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+    "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+    "tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj",
+    "tests/QBrainAi.SessionLog.Validation/QBrainAi.SessionLog.Validation.csproj",
+    "tests/QBrainAi.Repo.Validation/QBrainAi.Repo.Validation.csproj"
+  ],
+  "manifestOtherFields": {
+    "schema": "unitgreen-hv-trx-evidence.v1",
+    "createdLocal": "2026-11-04T20:25:14",
+    "todo": "IMPL-UNITGREEN-001",
+    "pullRequest": "sharpninja/McpServer#87",
+    "codeHead": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "policy": "Profile section 7.9 (operator 2026-10-27T04:35, typos fixed at the operator's request at 04:40): HV requests supply TRX files for all unit tests in the repo and for the integration tests specific to the scope of the review; the reviewer does not build code or run tests.",
+    "approvedRunSet": "Plan sections 23, 27.10 and 27.20 to 27.29 exit gate set at the last code head: unit projects of ug-r12z3c-final-linux-unit-1 and ug-r12z3c-final-win-unit-1, the lanes ug-r12z3c-final-linux-lane-1 and ug-r12z3c-final-win-lane-1 (seven projects; two classes of QBrainAi.Support.Mcp.IntegrationTests), and Build.Tests ug-r12z3c-final-linux-buildtests-1 and ug-r12z3c-final-win-buildtests-1. No hostile-environment run (operator 2026-10-27: \"Get ride of the hostile runs enforcing integration test separation.  I have already stated this once.\" and \"Which I sated last night were out of scope.\").",
+    "trxCount": 30,
+    "totalBytes": 18255271,
+    "testProjects": [
+      {
+        "project": "Build.Tests",
+        "path": "tests/Build.Tests/Build.Tests.csproj",
+        "classification": "infrastructure (Nuke build, accountable through TR only; not run by Nuke Test; its Category=Integration cases run in the MigrationIntegrationTests lane and named classes in TestGroups, declared in plan 27.20): TRX in ug-r12z3c-final-linux-buildtests-1 (both categories, Platform!=Windows) and ug-r12z3c-final-win-buildtests-1 (Category!=Integration, Platform!=Linux); its Category=Integration cases are also in both MigrationIntegrationTests lanes; excluded from Test by build/Build.Test.cs"
+      },
+      {
+        "project": "QBrainAi.Acid.IntegrationTests",
+        "path": "tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj",
+        "classification": "integration project held out of the lane by TR-MCP-NUKE-019 AC-2 until PLAN-SESSIONTRIAGEFIX-001 merges and its failing cases are resolved (TODO IMPL-TXNINTEGRATION-001; build/IntegrationLaneProjects.cs); excluded from Test by build/Build.Test.cs; no TRX in this set"
+      },
+      {
+        "project": "QBrainAi.Client.Tests",
+        "path": "tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj",
+        "classification": "unit: run by Nuke Test; TRX in ug-r12z3c-final-linux-unit-1 and ug-r12z3c-final-win-unit-1; not a MigrationIntegrationTests lane project (the lanes' selected-projects.json do not list it)"
+      },
+      {
+        "project": "QBrainAi.Context.Validation",
+        "path": "tests/QBrainAi.Context.Validation/QBrainAi.Context.Validation.csproj",
+        "classification": "Reqnroll validation against a live server: excluded from Test by build/Build.Test.cs; no Nuke target runs it; no TRX in this set"
+      },
+      {
+        "project": "QBrainAi.Cqrs.Tests",
+        "path": "tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj",
+        "classification": "unit: run by Nuke Test; TRX in ug-r12z3c-final-linux-unit-1 and ug-r12z3c-final-win-unit-1; not a MigrationIntegrationTests lane project (the lanes' selected-projects.json do not list it)"
+      },
+      {
+        "project": "QBrainAi.GitHub.Validation",
+        "path": "tests/QBrainAi.GitHub.Validation/QBrainAi.GitHub.Validation.csproj",
+        "classification": "Reqnroll validation against a live server: excluded from Test by build/Build.Test.cs; no Nuke target runs it; no TRX in this set"
+      },
+      {
+        "project": "QBrainAi.Launcher.Tests",
+        "path": "tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj",
+        "classification": "unit: run by Nuke Test; TRX in ug-r12z3c-final-linux-unit-1 and ug-r12z3c-final-win-unit-1; not a MigrationIntegrationTests lane project (the lanes' selected-projects.json do not list it)"
+      },
+      {
+        "project": "QBrainAi.McpAgent.Tests",
+        "path": "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+        "classification": "unit: run by Nuke Test; TRX in ug-r12z3c-final-linux-unit-1 and ug-r12z3c-final-win-unit-1; also a MigrationIntegrationTests lane project, whose Category=Integration cases run in ug-r12z3c-final-linux-lane-1 and ug-r12z3c-final-win-lane-1"
+      },
+      {
+        "project": "QBrainAi.PlanReview.Tests",
+        "path": "tests/QBrainAi.PlanReview.Tests/QBrainAi.PlanReview.Tests.csproj",
+        "classification": "AI review gate (Category=AiReview cases run under the AI review targets; QBrainAi.PlanReview.Tests asserts on a committed aiUnit plan-review run log, TEST-MCP-164): excluded from Test by the Review.Tests name rule in build/Build.Test.cs; no TRX in this set"
+      },
+      {
+        "project": "QBrainAi.PluginIntegration.Tests",
+        "path": "tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj",
+        "classification": "plugin integration, run by the PluginSessionLogIntegration target (not a lane project, TR-MCP-NUKE-019 AC-2): excluded from Test by build/Build.Test.cs; no TRX in this set"
+      },
+      {
+        "project": "QBrainAi.ProcessTree.TestHelper",
+        "path": "tests/QBrainAi.ProcessTree.TestHelper/QBrainAi.ProcessTree.TestHelper.csproj",
+        "classification": "test helper executable (OutputType Exe, no tests), not a test project"
+      },
+      {
+        "project": "QBrainAi.QBAgent.Tests",
+        "path": "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+        "classification": "unit: run by Nuke Test; TRX in ug-r12z3c-final-linux-unit-1 and ug-r12z3c-final-win-unit-1; also a MigrationIntegrationTests lane project, whose Category=Integration cases run in ug-r12z3c-final-linux-lane-1 and ug-r12z3c-final-win-lane-1"
+      },
+      {
+        "project": "QBrainAi.Repl.Core.Tests",
+        "path": "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+        "classification": "unit: run by Nuke Test; TRX in ug-r12z3c-final-linux-unit-1 and ug-r12z3c-final-win-unit-1; also a MigrationIntegrationTests lane project, whose Category=Integration cases run in ug-r12z3c-final-linux-lane-1 and ug-r12z3c-final-win-lane-1"
+      },
+      {
+        "project": "QBrainAi.Repl.IntegrationTests",
+        "path": "tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+        "classification": "integration lane project (TR-MCP-NUKE-019 AC-2, build/IntegrationLaneProjects.cs): TRX in ug-r12z3c-final-linux-lane-1 and ug-r12z3c-final-win-lane-1; excluded from Test by build/Build.Test.cs"
+      },
+      {
+        "project": "QBrainAi.Repo.Validation",
+        "path": "tests/QBrainAi.Repo.Validation/QBrainAi.Repo.Validation.csproj",
+        "classification": "Reqnroll validation against a live server: excluded from Test by build/Build.Test.cs; no Nuke target runs it; no TRX in this set"
+      },
+      {
+        "project": "QBrainAi.Review.Tests",
+        "path": "tests/QBrainAi.Review.Tests/QBrainAi.Review.Tests.csproj",
+        "classification": "AI review gate (Category=AiReview cases run under the AI review targets; QBrainAi.PlanReview.Tests asserts on a committed aiUnit plan-review run log, TEST-MCP-164): excluded from Test by the Review.Tests name rule in build/Build.Test.cs; no TRX in this set"
+      },
+      {
+        "project": "QBrainAi.SessionLog.Validation",
+        "path": "tests/QBrainAi.SessionLog.Validation/QBrainAi.SessionLog.Validation.csproj",
+        "classification": "Reqnroll validation against a live server: excluded from Test by build/Build.Test.cs; no Nuke target runs it; no TRX in this set"
+      },
+      {
+        "project": "QBrainAi.Support.Mcp.IntegrationTests",
+        "path": "tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj",
+        "classification": "integration lane project, partly (TR-MCP-NUKE-019 AC-2 as replaced 2026-10-29, build/IntegrationLaneProjects.cs): only the Category=Integration cases of RequirementScopeLayerReplIntegrationTests and QuadBrainOllamaEndpointIntegrationTests, selected by class name; TRX in ug-r12z3c-final-linux-lane-1 and ug-r12z3c-final-win-lane-1; its other cases stay held out until PLAN-SESSIONTRIAGEFIX-001 merges and its failing cases are resolved (TODO IMPL-TXNINTEGRATION-001); excluded from Test by build/Build.Test.cs"
+      },
+      {
+        "project": "QBrainAi.Support.Mcp.Tests",
+        "path": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+        "classification": "unit: run by Nuke Test; TRX in ug-r12z3c-final-linux-unit-1 and ug-r12z3c-final-win-unit-1; also a MigrationIntegrationTests lane project, whose Category=Integration cases run in ug-r12z3c-final-linux-lane-1 and ug-r12z3c-final-win-lane-1"
+      },
+      {
+        "project": "QBrainAi.Todo.Validation",
+        "path": "tests/QBrainAi.Todo.Validation/QBrainAi.Todo.Validation.csproj",
+        "classification": "Reqnroll validation against a live server: excluded from Test by build/Build.Test.cs; no Nuke target runs it; no TRX in this set"
+      },
+      {
+        "project": "QBrainAi.ToolRegistry.Validation",
+        "path": "tests/QBrainAi.ToolRegistry.Validation/QBrainAi.ToolRegistry.Validation.csproj",
+        "classification": "Reqnroll validation against a live server: excluded from Test by build/Build.Test.cs; no Nuke target runs it; no TRX in this set"
+      },
+      {
+        "project": "QBrainAi.TransactionSecurity.IntegrationTests",
+        "path": "tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj",
+        "classification": "integration project held out of the lane by TR-MCP-NUKE-019 AC-2 until PLAN-SESSIONTRIAGEFIX-001 merges and its failing cases are resolved (TODO IMPL-TXNINTEGRATION-001; build/IntegrationLaneProjects.cs); excluded from Test by build/Build.Test.cs; no TRX in this set"
+      },
+      {
+        "project": "QBrainAi.Workspace.Validation",
+        "path": "tests/QBrainAi.Workspace.Validation/QBrainAi.Workspace.Validation.csproj",
+        "classification": "Reqnroll validation against a live server: excluded from Test by build/Build.Test.cs; no Nuke target runs it; no TRX in this set"
+      }
+    ]
+  }
+}

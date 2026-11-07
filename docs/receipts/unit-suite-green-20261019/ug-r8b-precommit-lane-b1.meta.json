@@ -1,0 +1,24 @@
+{
+  "name": "ug-r8b-precommit-lane-b1",
+  "target": "MigrationIntegrationTests",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r8b-precommit-lane-b1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "8c651f13036db0aa2b90413770377cc66cb419d6",
+  "dirtyPaths": [
+    " M build/Build.TestDependencies.cs",
+    " M tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/OllamaServerFixture.cs",
+    "?? build/OllamaInstallLayout.cs",
+    "?? build/OllamaInstallLayoutContracts.cs",
+    "?? tests/Build.Tests/OllamaInstallLayoutContract.cs",
+    "?? tests/Build.Tests/OllamaInstallLayoutMockGateTests.cs",
+    "?? tests/Build.Tests/OllamaInstallLayoutTests.cs"
+  ],
+  "startedLocal": "2026-10-27T06:11:07",
+  "startedUtc": "2026-10-27T11:11:07.2158111Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-precommit-lane-b1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-precommit-lane-b1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-precommit-lane-b1.exit.txt"
+}

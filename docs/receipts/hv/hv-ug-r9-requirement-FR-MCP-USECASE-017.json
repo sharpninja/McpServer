@@ -1,0 +1,9 @@
+{
+  "TimestampLocal": "2026-11-02T19:17:11",
+  "Method": "workflow.requirements.getFr",
+  "Params": {
+    "id": "FR-MCP-USECASE-017"
+  },
+  "ExitCode": 1,
+  "Error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T011712Z-38b7\n  code: not_found\n  message: FR 'FR-MCP-USECASE-017' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+}

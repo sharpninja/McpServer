@@ -1,0 +1,32 @@
+{
+  "name": "ug-r8b-expanded-lane-2",
+  "target": "MigrationIntegrationTests",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r8b-expanded-lane-2"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+  "dirtyPaths": [
+    " M build/Build.TestDependencies.cs",
+    " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+    " M tests/Directory.Build.targets",
+    " M tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    " M tests/QBrainAi.Repl.IntegrationTests/AuthKeyAndWorkspaceTests.cs",
+    " M tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs",
+    " M tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+    " M tests/TestSupport.Shared/ScratchQBrainAi.cs",
+    " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "?? build/IntegrationLaneProjects.cs",
+    "?? build/IntegrationLaneProjectsContracts.cs",
+    "?? tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    "?? tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    "?? tests/Build.Tests/IntegrationLaneProjectsTests.cs"
+  ],
+  "startedLocal": "2026-10-27T17:25:49",
+  "startedUtc": "2026-10-27T22:25:49.1352920Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-expanded-lane-2.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-expanded-lane-2.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-expanded-lane-2.exit.txt"
+}

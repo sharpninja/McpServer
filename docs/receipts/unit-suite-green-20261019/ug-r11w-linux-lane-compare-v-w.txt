@@ -1,0 +1,6 @@
+Now: 2026-11-03T11:09:49 key=test name only before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11v-final-linux-lane-1 (737) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11w-final-linux-lane-1 (739)
+onlyBefore=0 onlyAfter=2 common=737
+--- only in before ---
+--- only in after ---
+QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines
+QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport

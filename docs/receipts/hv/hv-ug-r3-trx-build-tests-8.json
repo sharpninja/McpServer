@@ -1,0 +1,11 @@
+{
+  "Path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-build-tests-8/ug-r3-build-tests-8.trx",
+  "Sha256": "9F6F46E83D55DD226044AEDF31BA33B777A38300351D0D7EB13919D6AF894F7A",
+  "Counters": "<Counters total=\"436\" executed=\"436\" passed=\"436\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+  "Rows": 436,
+  "Passed": 436,
+  "Failed": 0,
+  "Other": 0,
+  "Started": "2026-10-20T16:54:37.7725493-05:00",
+  "Ended": "2026-10-20T16:59:04.5891908-05:00"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "ug-r8-traceability-2",
+  "target": "ValidateTraceability",
+  "extraArgs": [],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+  "dirtyPaths": [],
+  "startedLocal": "2026-10-26T16:25:18",
+  "startedUtc": "2026-10-26T21:25:18.8036446Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-traceability-2.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-traceability-2.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-traceability-2.exit.txt"
+}

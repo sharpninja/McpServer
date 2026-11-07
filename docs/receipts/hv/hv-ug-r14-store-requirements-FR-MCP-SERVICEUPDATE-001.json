@@ -1,0 +1,46 @@
+{
+  "timestampUtc": "2026-11-06T22:22:45.2465663+00:00",
+  "timestampLocal": "2026-11-06T16:22:47",
+  "method": "workflow.requirements.getFr",
+  "recordId": "FR-MCP-SERVICEUPDATE-001",
+  "response": {
+    "payload": {
+      "result": {
+        "area": "MCP",
+        "status": "pending",
+        "updatedAt": "2026-11-06T22:22:47.7794262+00:00",
+        "createdAt": "2026-11-06T22:22:47.7793013+00:00",
+        "description": "The existing Nuke UpdateService target detects Windows or Linux and updates the selected service while preserving the live configuration and file data strategy. Linux updates an existing systemd service without rewriting its operator configuration.",
+        "id": "FR-MCP-SERVICEUPDATE-001",
+        "priority": "medium",
+        "acceptanceCriteria": [
+          {
+            "text": "UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.",
+            "isSatisfied": false,
+            "id": ""
+          },
+          {
+            "text": "Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.",
+            "isSatisfied": false,
+            "id": ""
+          },
+          {
+            "text": "Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.",
+            "isSatisfied": false,
+            "id": ""
+          },
+          {
+            "text": "Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.",
+            "isSatisfied": false,
+            "id": ""
+          }
+        ],
+        "scopeStartLayerKey": "layer-1",
+        "title": "Cross-platform service update preserving live state"
+      },
+      "requestId": "req-20261106T222246Z-eaa4",
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

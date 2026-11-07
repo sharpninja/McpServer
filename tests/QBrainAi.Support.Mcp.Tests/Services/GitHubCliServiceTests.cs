@@ -11,7 +11,7 @@ using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
-/// <summary>TR-PLANNED-CORE-013, TR-GH-013-001: Unit tests for GitHubCliService with mocked IProcessRunner.</summary>
+/// <summary>TR-PLANNED-CORE-013 (historical), TR-GH-013-001 (historical): Unit tests for GitHubCliService with mocked IProcessRunner.</summary>
 public sealed class GitHubCliServiceTests
 {
     private readonly IProcessRunner _processRunner = Substitute.For<IProcessRunner>();
@@ -101,7 +101,7 @@ public sealed class GitHubCliServiceTests
     }
 
     /// <summary>
-    /// TEST-MCP-GH-006: Verifies that issue comment targets are emitted after an explicit end-of-options
+    /// TEST-MCP-GH-006 (historical): Verifies that issue comment targets are emitted after an explicit end-of-options
     /// marker so a flag-shaped identifier cannot be reinterpreted as an injected gh CLI option.
     /// </summary>
     [Fact]
@@ -224,7 +224,7 @@ public sealed class GitHubCliServiceTests
     }
 
     /// <summary>
-    /// TEST-MCP-GH-006: Verifies that invalid close reasons are rejected before launching the GitHub CLI so
+    /// TEST-MCP-GH-006 (historical): Verifies that invalid close reasons are rejected before launching the GitHub CLI so
     /// attacker-controlled query strings cannot append extra flags through the close-issue reason parameter.
     /// </summary>
     [Fact]
@@ -267,7 +267,7 @@ public sealed class GitHubCliServiceTests
     }
 
     /// <summary>
-    /// TEST-MCP-GH-006: Verifies that invalid list-state values are rejected before process launch so state
+    /// TEST-MCP-GH-006 (historical): Verifies that invalid list-state values are rejected before process launch so state
     /// query parameters cannot smuggle additional GitHub CLI flags into the issue-list command line.
     /// </summary>
     [Fact]
@@ -396,60 +396,141 @@ public sealed class GitHubCliServiceTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TR-MCP-GH-003 with TR-MCP-FED-PATH-001: a stored workspace token is passed as the process-run override, and the
+    /// host-native workspace (a temporary directory, so the case holds on every host OS) is the gh working directory.
+    /// </summary>
     [Fact]
     public async Task ListIssuesAsync_WithStoredWorkspaceToken_UsesProcessRunRequestOverride()
     {
-        var tokenStore = Substitute.For<IGitHubWorkspaceTokenStore>();
-        tokenStore.GetAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(new GitHubWorkspaceTokenRecord("C:\\workspace", "gho_stored", DateTimeOffset.UtcNow, null));
-
-        var options = Substitute.For<IOptionsMonitor<GitHubIntegrationOptions>>();
-        options.CurrentValue.Returns(new GitHubIntegrationOptions
+        var workspacePath = CreateHostWorkspace();
+        try
         {
-            PreferStoredToken = true,
-            AllowCliFallback = true,
-        });
+            var tokenStore = Substitute.For<IGitHubWorkspaceTokenStore>();
+            tokenStore.GetAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+                .Returns(new GitHubWorkspaceTokenRecord(workspacePath, "gho_stored", DateTimeOffset.UtcNow, null));
 
-        var services = new ServiceCollection();
-        services.AddScoped(_ => new WorkspaceContext { WorkspacePath = "C:\\workspace" });
-        using var provider = services.BuildServiceProvider();
-        using var scope = provider.CreateScope();
-        var accessor = Substitute.For<IHttpContextAccessor>();
-        accessor.HttpContext.Returns(new DefaultHttpContext { RequestServices = scope.ServiceProvider });
+            var options = Substitute.For<IOptionsMonitor<GitHubIntegrationOptions>>();
+            options.CurrentValue.Returns(new GitHubIntegrationOptions
+            {
+                PreferStoredToken = true,
+                AllowCliFallback = true,
+            });
 
-        _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
-            .Returns(new ProcessRunResult(0, "[]", null));
+            var services = new ServiceCollection();
+            services.AddScoped(_ => new WorkspaceContext { WorkspacePath = workspacePath });
+            using var provider = services.BuildServiceProvider();
+            using var scope = provider.CreateScope();
+            var accessor = Substitute.For<IHttpContextAccessor>();
+            accessor.HttpContext.Returns(new DefaultHttpContext { RequestServices = scope.ServiceProvider });
 
-        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\workspace");
-        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, tokenStore, accessor, options, workspaceAccessor);
-        var result = await sut.ListIssuesAsync("open", 10, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
+                .Returns(new ProcessRunResult(0, "[]", null));
 
-        Assert.True(result.Success);
-        await _processRunner.Received(1).RunAsync(
-            Arg.Is<ProcessRunRequest>(r => r != null
-                && r.FileName == "gh"
-                && r.GitHubTokenOverride == "gho_stored"
-                && r.WorkingDirectory == Path.GetFullPath("C:\\workspace")),
-            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+            var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: workspacePath);
+            var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, tokenStore, accessor, options, workspaceAccessor);
+            var result = await sut.ListIssuesAsync("open", 10, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.True(result.Success);
+            await _processRunner.Received(1).RunAsync(
+                Arg.Is<ProcessRunRequest>(r => UsesHostWorkspace(r, workspacePath) && r!.GitHubTokenOverride == "gho_stored"),
+                Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        }
+        finally
+        {
+            Directory.Delete(workspacePath, true);
+        }
     }
 
+    /// <summary>
+    /// TR-MCP-GH-003 with TR-MCP-FED-PATH-001: the host-native workspace from the accessor (a temporary directory, so
+    /// the case holds on every host OS) is the gh working directory.
+    /// </summary>
     [Fact]
     public async Task ListIssuesAsync_WithWorkspaceAccessor_UsesWorkspaceWorkingDirectory()
     {
-        _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
-            .Returns(new ProcessRunResult(0, "[]", null));
+        var workspacePath = CreateHostWorkspace();
+        try
+        {
+            _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
+                .Returns(new ProcessRunResult(0, "[]", null));
 
-        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\repo\\workspace");
-        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
+            var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: workspacePath);
+            var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
+
+            var result = await sut.ListIssuesAsync("open", 5, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.True(result.Success);
+            await _processRunner.Received(1).RunAsync(
+                Arg.Is<ProcessRunRequest>(request => UsesHostWorkspace(request, workspacePath)),
+                Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        }
+        finally
+        {
+            Directory.Delete(workspacePath, true);
+        }
+    }
+
+    /// <summary>
+    /// FR-MCP-FED-PATH-001 AC5 real-host binding (operator 2026-10-29: "gh foreign-workspace AC (Recommended)"; holistic review
+    /// findings SRC-1 and SRC-4): on the running host, through the process path normalizer, a foreign-platform workspace (a Windows
+    /// path on a POSIX host, a POSIX path on Windows) with no configured repository never starts gh, and the failure names the
+    /// workspace and Mcp:GitHub:Repository. Which path is foreign depends on the running host, so the cases live in the Windows and
+    /// Linux integration classes below; the unit contract is GitHubCliInvocationPlanContractTests over simulated hosts.
+    /// </summary>
+    /// <param name="foreignWorkspacePath">A workspace path of the other platform than the running host.</param>
+    internal static async Task AssertForeignWorkspaceWithoutRepositoryIsRefusedAsync(string foreignWorkspacePath)
+    {
+        var processRunner = Substitute.For<IProcessRunner>();
+        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: foreignWorkspacePath);
+        var sut = new GitHubCliService(processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
 
         var result = await sut.ListIssuesAsync("open", 5, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.True(result.Success);
-        await _processRunner.Received(1).RunAsync(
-            Arg.Is<ProcessRunRequest>(request => request != null
-                && request.FileName == "gh"
-                && request.WorkingDirectory == Path.GetFullPath("C:\\repo\\workspace")),
-            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        Assert.False(result.Success);
+        Assert.Contains(workspaceAccessor.GetWorkspacePath()!, result.Error, StringComparison.Ordinal);
+        Assert.Contains(GitHubCliInvocationPlanContractTests.RepositorySetting, result.Error, StringComparison.Ordinal);
+        Assert.Empty(processRunner.ReceivedCalls());
+    }
+
+    /// <summary>
+    /// TR-MCP-FED-PATH-001, BDPv4 mock gate for the working-directory predicates used above: they accept the
+    /// specified requests and reject a missing directory, a different executable, a re-rooted foreign path (the
+    /// defect: the foreign path joined under the process directory) and a foreign safe.directory, using synthetic
+    /// requests only.
+    /// </summary>
+    [Fact]
+    public void WorkingDirectoryPredicates_DiscriminateSpecifiedRequests()
+    {
+        var host = Path.Combine(Path.GetTempPath(), "mcp-gh-gate");
+        Assert.True(UsesHostWorkspace(new ProcessRunRequest("gh", "issue list", WorkingDirectory: Path.GetFullPath(host)), host));
+        Assert.False(UsesHostWorkspace(new ProcessRunRequest("gh", "issue list"), host));
+        Assert.False(UsesHostWorkspace(new ProcessRunRequest("git", "status", WorkingDirectory: Path.GetFullPath(host)), host));
+
+        var reRooted = Path.Combine(AppContext.BaseDirectory, "C:/foreign/workspace");
+        Assert.True(OpensWorkspaceOnHost(new ProcessRunRequest("gh", "issue list", WorkingDirectory: reRooted)));
+        Assert.True(OpensWorkspaceOnHost(new ProcessRunRequest(
+            "gh",
+            "issue list",
+            EnvironmentVariables: new Dictionary<string, string?> { ["GIT_CONFIG_COUNT"] = "1" })));
+        Assert.False(OpensWorkspaceOnHost(new ProcessRunRequest("gh", "issue list")));
+    }
+
+    private static bool UsesHostWorkspace(ProcessRunRequest? request, string workspacePath)
+        => request != null
+           && request.FileName == "gh"
+           && request.WorkingDirectory == Path.GetFullPath(workspacePath);
+
+    private static bool OpensWorkspaceOnHost(ProcessRunRequest? request)
+        => request != null
+           && (request.WorkingDirectory is not null
+               || (request.EnvironmentVariables?.ContainsKey("GIT_CONFIG_COUNT") ?? false));
+
+    private static string CreateHostWorkspace()
+    {
+        var workspacePath = Path.Combine(Path.GetTempPath(), $"mcp-gh-ws-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(workspacePath);
+        return workspacePath;
     }
 
     /// <summary>
@@ -491,12 +572,12 @@ public sealed class GitHubCliServiceTests
     public async Task CreateIssueAsync_WithConfiguredRepository_AddsRepoOptionAndAvoidsWorkspaceCwd()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(new ProcessRunResult(0, "https://github.com/sharpninja/McpServer/issues/123\n", null));
+            .Returns(new ProcessRunResult(0, "https://github.com/example-org/example-repo/issues/123\n", null));
 
         var options = Substitute.For<IOptionsMonitor<GitHubIntegrationOptions>>();
         options.CurrentValue.Returns(new GitHubIntegrationOptions
         {
-            Repository = "https://github.com/sharpninja/McpServer.git"
+            Repository = "https://github.com/example-org/example-repo.git"
         });
         var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\repo\\workspace");
         var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, githubOptions: options, workspaceAccessor: workspaceAccessor);
@@ -509,7 +590,7 @@ public sealed class GitHubCliServiceTests
             "gh",
             Arg.Is<string>(arguments => arguments != null
                 && arguments.Contains("issue create", StringComparison.Ordinal)
-                && arguments.Contains("--repo sharpninja/McpServer", StringComparison.Ordinal)),
+                && arguments.Contains("--repo example-org/example-repo", StringComparison.Ordinal)),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
@@ -523,4 +604,32 @@ public sealed class GitHubCliServiceTests
            && key == "safe.directory"
            && request.EnvironmentVariables.TryGetValue("GIT_CONFIG_VALUE_0", out var value)
            && value == Path.GetFullPath(workspacePath);
+}
+
+/// <summary>
+/// FR-MCP-FED-PATH-001 AC5 real-host binding on a Windows host: a POSIX workspace path is foreign there (TR-MCP-USECASE-018
+/// AC-006, TR-MCP-NUKE-019).
+/// </summary>
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
+public sealed class GitHubCliServiceWindowsTests
+{
+    /// <summary>gh is not started for a POSIX workspace with no configured repository, and the failure names the setting.</summary>
+    [Fact]
+    public Task ListIssuesAsync_WithForeignWorkspaceAndNoRepository_IsRefused() =>
+        GitHubCliServiceTests.AssertForeignWorkspaceWithoutRepositoryIsRefusedAsync("/srv/foreign/workspace");
+}
+
+/// <summary>
+/// FR-MCP-FED-PATH-001 AC5 real-host binding on a Linux host: a Windows drive workspace path is foreign there
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
+/// </summary>
+[Trait("Category", "Integration")]
+[Trait("Platform", "Linux")]
+public sealed class GitHubCliServiceLinuxTests
+{
+    /// <summary>gh is not started for a Windows drive workspace with no configured repository, and the failure names the setting.</summary>
+    [Fact]
+    public Task ListIssuesAsync_WithForeignWorkspaceAndNoRepository_IsRefused() =>
+        GitHubCliServiceTests.AssertForeignWorkspaceWithoutRepositoryIsRefusedAsync(@"C:\foreign\workspace");
 }

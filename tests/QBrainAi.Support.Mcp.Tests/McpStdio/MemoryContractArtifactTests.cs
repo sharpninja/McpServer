@@ -1,4 +1,5 @@
 using System.Text.Json;
+using QBrainAi.Tests.Shared;
 
 namespace QBrainAi.Support.Mcp.Tests.McpStdio;
 
@@ -9,6 +10,8 @@ namespace QBrainAi.Support.Mcp.Tests.McpStdio;
 public sealed class MemoryContractArtifactTests
 {
     /// <summary>The STDIO contract manifest includes all memory tools and their scope values.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void StdioToolContract_IncludesMemoryToolsAndScopes()
     {
@@ -43,6 +46,8 @@ public sealed class MemoryContractArtifactTests
     }
 
     /// <summary>The default marker prompt documents required memory injection and tool surfaces.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void DefaultMarkerPrompt_IncludesMcpMemoryGuidance()
     {
@@ -65,6 +70,8 @@ public sealed class MemoryContractArtifactTests
     }
 
     /// <summary>Memory context documentation includes import safeguards and audit attribution rules.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MemoryContextDocumentation_IncludesImportAndAttributionRules()
     {
@@ -86,19 +93,5 @@ public sealed class MemoryContractArtifactTests
     private static string? GetString(JsonElement element, string propertyName)
         => element.TryGetProperty(propertyName, out var property) ? property.GetString() : null;
 
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "docs", "stdio-tool-contract.json")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
+    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
 }

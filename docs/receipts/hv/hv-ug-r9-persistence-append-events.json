@@ -1,0 +1,408 @@
+[
+  {
+    "TimestampUtc": "2026-11-03T02:56:34.7742645Z",
+    "Method": "workflow.sessionlog.updateTurn",
+    "ReceiptName": "update",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:56:38.8502137Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "markdown-001",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:56:42.2662741Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "markdown-002",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:56:45.4983650Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "markdown-003",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:56:48.7076325Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "markdown-004",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:56:51.9224001Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "markdown-005",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:56:55.1299912Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "markdown-006",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:56:58.2830311Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "markdown-007",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:01.4748432Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "markdown-008",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:04.6920727Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "markdown-009",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:07.9174697Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "markdown-010",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:11.0254696Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-001",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:14.1801671Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-002",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:17.4700842Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-003",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:20.6608771Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-004",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:23.8132704Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-005",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:27.0824365Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-006",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:30.1689299Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-007",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:33.2532838Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-008",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:36.3758026Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-009",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:39.5151002Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-010",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:42.5586185Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-011",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:45.6871972Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-012",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:48.7702716Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-013",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:51.7894362Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-014",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:54.8715878Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-015",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:57:57.9221308Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-016",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:58:00.9530762Z",
+    "Method": "workflow.sessionlog.appendDialog",
+    "ReceiptName": "json-017",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:58:04.0529851Z",
+    "Method": "workflow.sessionlog.appendActions",
+    "ReceiptName": "actions",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  }
+]

@@ -16,6 +16,8 @@ public sealed class NukeParametersTests
     /// (TR-MCP-NUKE-002 AC-001; BUG-BUILD-001: the QBrainAi rename left it pointing at the removed <c>McpServer.sln</c>, so
     /// Restore threw a NullReferenceException).
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NukeParameters_Solution_NamesExistingSolutionFile()
     {

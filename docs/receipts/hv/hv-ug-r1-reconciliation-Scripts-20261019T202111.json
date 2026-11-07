@@ -1,0 +1,15 @@
+{
+  "ToolCommandCount": 677,
+  "NonPowerShellLaunchCount": 1,
+  "Offenders": [
+    {
+      "Line": 10980,
+      "TimestampLocal": "2026-10-19T19:22:47",
+      "Name": "Bash",
+      "Input": {
+        "command": "ls -la /home/sharpninja/.claude/profile/",
+        "description": "List the global profile files"
+      }
+    }
+  ]
+}

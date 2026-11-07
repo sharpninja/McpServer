@@ -1,0 +1,16 @@
+{
+  "name": "ug-r8b-linux-test-2",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r8b-linux-test-2"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "4fab4424c0ebcd961e5135e393eace47771dd62c",
+  "dirtyPaths": [],
+  "startedLocal": "2026-10-27T20:10:40",
+  "startedUtc": "2026-10-28T01:10:40.3088413Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-linux-test-2.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-linux-test-2.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-linux-test-2.exit.txt"
+}

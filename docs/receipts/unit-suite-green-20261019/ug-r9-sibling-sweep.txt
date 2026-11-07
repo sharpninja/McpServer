@@ -1,0 +1,177 @@
+ug-r9 sibling sweep (plan section 26.5): the classes of hostile validation round 8b findings R8B-F1 (a delta compared with an ambient process environment) and R8B-F3 (inherited configuration selects a temporary instance's database). Written 2026-11-02 at 878c366f by ClaudeCode: plan 26.5 cited this receipt on 2026-10-29, but it was never written (found by the round 9 pre-HV check); this run uses the 2026-10-29 search set and classification unchanged, plus one classification line for a hit added after it (OwnedReplStart, slice I).
+Written: 2026-11-02T15:51:24 worktree=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 head=878c366faadc955d79d7e8e3f6b39f063107bb5b (tracked files of the working tree; files this round adds are untracked and are its own changes)
+
+== R8B-F3 class: temporary QBrain.AI instances and child processes started by tests (scope: tests)
+CLASSIFICATION: Lane temporary instances (TR-MCP-NUKE-019 AC-2 lane: the Category=Integration cases of the six whole projects and the two Support classes): ScratchQBrainAi (consumers ReplChildProcessHelper and RequirementScopeLayerReplIntegrationTests), the in-process CustomWebApplicationFactory of QuadBrainOllamaEndpointIntegrationTests, and the stdio host of TranscriptMcpStdioHostTests (QBrainAi.Support.Mcp.Tests, Category=Integration). All three are fixed this round: OwnedInstanceProcess.ApplyOwnedEnvironment for the two process starts and the REPL children, OwnedDatabaseGuard for the factory.
+CLASSIFICATION: Not lane: every other CustomWebApplicationFactory and WebApplicationFactory use (QBrainAi.Support.Mcp.IntegrationTests classes outside AC-2, QBrainAi.Acid.IntegrationTests, QBrainAi.TransactionSecurity.IntegrationTests) and QBrainAi.PluginIntegration.Tests, which has its own target.
+CLASSIFICATION: Added 2026-11-02: tests/TestSupport.Shared/OwnedReplStart.cs (slice I, plan 27.12) starts the REPL child processes of the lane temporary instance's consumers through the one owned start plan, so it is part of the lane fix above, not a new sibling.
+CLASSIFICATION: Not a QBrain.AI instance: the remaining process starts run git, pwsh, cmd, dotnet build tools, sqllocaldb, Postgres (EphemeralPostgresFixture), Ollama (OllamaServerFixture), the process-tree helper and the tunnel or agent CLIs under test.
+Now: 2026-11-02T15:51:24 ref=worktree patterns=6
+PATTERN 'WebApplicationFactory<' matches=20
+  tests/QBrainAi.Acid.IntegrationTests/AcidTransactionHarness.cs:137:            var keyFactory = new WebApplicationFactory<KeyServerEntryPoint>();
+  tests/QBrainAi.Acid.IntegrationTests/AcidTransactionHarness.cs:165:            var subscriberFactory = new WebApplicationFactory<SubscriberEntryPoint>()
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/Http500ErrorContractTests.cs:100:    public sealed class ErrorContractWebFactory : WebApplicationFactory<McpApiEntryPoint>, IDisposable
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/IssueTodoGitHubRoundTripIntegrationTests.cs:184:    public sealed class RoundTripWebFactory : WebApplicationFactory<McpApiEntryPoint>, IDisposable
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/MarkerRegenerationIntegrationTests.cs:354:    private sealed class MarkerRegenerationFactory : WebApplicationFactory<McpApiEntryPoint>
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/PairingEndpointTests.cs:163:public sealed class PairingWebApplicationFactory : WebApplicationFactory<McpApiEntryPoint>
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/RequirementsControllerTests.cs:562:    public sealed class RequirementsWebFactory : WebApplicationFactory<McpApiEntryPoint>, IDisposable
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/TodoControllerTests.cs:675:    public sealed class TodoWebFactory : WebApplicationFactory<McpApiEntryPoint>, IDisposable
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/TodoLifecycleIntegrationTests.cs:674:    public sealed class LifecycleWebFactory : WebApplicationFactory<McpApiEntryPoint>, IDisposable
+  tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs:26:public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEntryPoint>
+  tests/QBrainAi.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs:35:    internal static WebApplicationFactory<McpApiEntryPoint> CreateFactory(
+  tests/QBrainAi.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs:101:        WebApplicationFactory<McpApiEntryPoint> factory,
+  tests/QBrainAi.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs:149:    internal static async Task AssertHandoffIngestionStorageAsync(WebApplicationFactory<McpApiEntryPoint> factory)
+  tests/QBrainAi.TransactionSecurity.IntegrationTests/SeparateTransactionServiceIntegrationTests.cs:319:        using var subscriberFactory = new WebApplicationFactory<SubscriberEntryPoint>()
+  tests/QBrainAi.TransactionSecurity.IntegrationTests/SeparateTransactionServiceIntegrationTests.cs:392:        using var subscriberFactory = new WebApplicationFactory<SubscriberEntryPoint>()
+  tests/QBrainAi.TransactionSecurity.IntegrationTests/SeparateTransactionServiceIntegrationTests.cs:479:        using var subscriberFactory = new WebApplicationFactory<SubscriberEntryPoint>()
+  tests/QBrainAi.TransactionSecurity.IntegrationTests/SeparateTransactionServiceIntegrationTests.cs:550:        var keyServerFactory = new WebApplicationFactory<KeyServerEntryPoint>()
+  tests/QBrainAi.TransactionSecurity.IntegrationTests/SeparateTransactionServiceIntegrationTests.cs:560:        var subscriberFactory = new WebApplicationFactory<SubscriberEntryPoint>()
+  tests/QBrainAi.TransactionSecurity.IntegrationTests/SeparateTransactionServiceIntegrationTests.cs:667:        WebApplicationFactory<KeyServerEntryPoint> KeyServerFactory,
+  tests/QBrainAi.TransactionSecurity.IntegrationTests/SeparateTransactionServiceIntegrationTests.cs:668:        WebApplicationFactory<SubscriberEntryPoint> SubscriberFactory,
+PATTERN 'new CustomWebApplicationFactory' matches=11
+  tests/QBrainAi.Support.Mcp.IntegrationTests/AgentHelpEndpointTests.cs:28:        _factory = new CustomWebApplicationFactory(ConfigureAgentHelpStrategy);
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/DesktopControllerTests.cs:45:        using var factory = new CustomWebApplicationFactory(
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/DesktopControllerTests.cs:103:        using var factory = new CustomWebApplicationFactory();
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/DesktopControllerTests.cs:125:        using var factory = new CustomWebApplicationFactory(
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/ProductsLaunchTests.cs:22:        _factory = new CustomWebApplicationFactory();
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/ProductsLaunchTests.cs:70:        using var factory = new CustomWebApplicationFactory();
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs:250:            using var app = new CustomWebApplicationFactory(services =>
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOpenAiEndpointIntegrationTests.cs:182:            using var factory = new CustomWebApplicationFactory(
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/SessionLogControllerTests.cs:501:            using var factory = new CustomWebApplicationFactory(null, overrides);
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/TodoControllerTests.cs:541:            using var factory = new CustomWebApplicationFactory(null, overrides);
+  tests/QBrainAi.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs:57:        return new CustomWebApplicationFactory(
+PATTERN 'ScratchQBrainAi.StartAsync' matches=2
+  tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs:109:        _instance ??= await ScratchQBrainAi.StartAsync().ConfigureAwait(false);
+  tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs:29:        await using var scratch = await ScratchQBrainAi.StartAsync().ConfigureAwait(true);
+PATTERN 'new ProcessStartInfo' matches=38
+  tests/Build.Tests/BoundedProcess.cs:27:        var startInfo = new ProcessStartInfo("dotnet") { WorkingDirectory = workingDirectory };
+  tests/Build.Tests/BoundedProcessTests.cs:158:        var startInfo = new ProcessStartInfo("pwsh");
+  tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs:89:        var info = new ProcessStartInfo("pwsh.exe");
+  tests/Build.Tests/OfficialPluginCoreSyncTestSupport.cs:53:            var startInfo = new ProcessStartInfo("pwsh")
+  tests/Build.Tests/PowerShellInvocationTests.cs:39:        Assert.Contains("new ProcessStartInfo(\"pwsh.exe\")", testSource, StringComparison.Ordinal);
+  tests/Build.Tests/RequirementsWikiPublishScriptTests.cs:115:        var psi = new ProcessStartInfo("pwsh.exe")
+  tests/Build.Tests/ServiceUpdateTests.cs:667:        var info = new ProcessStartInfo(command);
+  tests/Build.Tests/ServiceUpdateTests.cs:804:            var info = new ProcessStartInfo(command);
+  tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs:207:            var start = new ProcessStartInfo("cmd.exe")
+  tests/Build.Tests/YamlObjectMutationTests.cs:115:        var startInfo = new ProcessStartInfo("pwsh");
+  tests/QBrainAi.PluginIntegration.Tests/NodeMcpStdioSession.cs:44:        var startInfo = new ProcessStartInfo
+  tests/QBrainAi.PluginIntegration.Tests/PluginGitHistory.cs:61:        var psi = new ProcessStartInfo
+  tests/QBrainAi.PluginIntegration.Tests/PluginIntegrationServerFixture.cs:184:        var startInfo = new ProcessStartInfo
+  tests/QBrainAi.PluginIntegration.Tests/RealPluginProcessRunner.cs:17:        var startInfo = new ProcessStartInfo
+  tests/QBrainAi.ProcessTree.TestHelper/Program.cs:28:        var startInfo = new ProcessStartInfo(
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/OllamaServerFixture.cs:84:        var process = Process.Start(new ProcessStartInfo
+  tests/QBrainAi.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs:384:        var psi = new ProcessStartInfo("SqlLocalDB.exe")
+  tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:180:        var startInfo = new ProcessStartInfo(setSid ?? fileName)
+  tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:139:        var startInfo = new ProcessStartInfo
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:788:            var copy = new ProcessStartInfo
+  tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:37:            var startInfo = new ProcessStartInfo
+  tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:85:        var startInfo = new ProcessStartInfo
+  tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs:298:        var startInfo = new ProcessStartInfo
+  tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:41:            var startInfo = new ProcessStartInfo
+  tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:73:            var startInfo = new ProcessStartInfo
+  tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:115:            var startInfo = new ProcessStartInfo { FileName = "ngrok", UseShellExecute = false };
+  tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:149:            var startInfo = new ProcessStartInfo { FileName = "ngrok", UseShellExecute = false };
+  tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs:260:        var startInfo = new ProcessStartInfo
+  tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:559:            var startInfo = new ProcessStartInfo(executablePath)
+  tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:659:            var startInfo = new ProcessStartInfo(fileName)
+  tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:406:                var startInfo = new ProcessStartInfo("/bin/sh")
+  tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:786:        var startInfo = new ProcessStartInfo(executablePath)
+  tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:949:        var startInfo = new ProcessStartInfo(fileName)
+  tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:140:        var startInfo = new ProcessStartInfo
+  tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs:484:        using var process = Process.Start(new ProcessStartInfo
+  tests/TestSupport.Shared/OwnedReplStart.cs:57:        var startInfo = new ProcessStartInfo
+  tests/TestSupport.Shared/ScratchQBrainAi.cs:245:        var startInfo = new ProcessStartInfo
+  tests/Validation.Shared/ValidationAuth.cs:290:            process.StartInfo = new ProcessStartInfo
+PATTERN '"--transport"' matches=1
+  tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:148:        startInfo.ArgumentList.Add("--transport");
+PATTERN 'QBrainAi.Support.Mcp.dll' matches=2
+  tests/QBrainAi.PluginIntegration.Tests/PluginIntegrationServerFixture.cs:465:        var copied = Path.Combine(AppContext.BaseDirectory, "QBrainAi.Support.Mcp.dll");
+  tests/QBrainAi.PluginIntegration.Tests/PluginIntegrationServerFixture.cs:470:            "Compiled QBrainAi.Support.Mcp.dll was not found. Build the PluginIntegration test project first.",
+
+== R8B-F1 class: production code that reads the whole process environment or writes a child environment (scope: src)
+CLASSIFICATION: DesktopProcessSpawner.ExtractEnvironment compares a requested environment with the process environment: fixed this round (explicit-baseline overload; TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 as appended 2026-10-29).
+CLASSIFICATION: ProcessLauncher.BuildEnvironmentBlock and DesktopProcessLauncher.ReadCurrentEnvironment overlay explicit values on the inherited environment and compare nothing; no test asserts on their output. Not siblings.
+CLASSIFICATION: The psi.Environment and StartInfo.Environment writes set or remove explicit child variables; none compares with the ambient value. Not siblings.
+Now: 2026-11-02T15:51:25 ref=worktree patterns=3
+PATTERN 'GetEnvironmentVariables()' matches=3
+  src/QBrainAi.Launcher/Services/ProcessLauncher.cs:148:        foreach (var entry in Environment.GetEnvironmentVariables())
+  src/QBrainAi.Services/Native/DesktopProcessLauncher.cs:617:        foreach (var entry in Environment.GetEnvironmentVariables())
+  src/QBrainAi.Services/Services/DesktopProcessSpawner.cs:93:        var currentEnvironment = Environment.GetEnvironmentVariables();
+PATTERN 'psi.Environment' matches=21
+  src/QBrainAi.Common.AgentCli/AgentCliClient.cs:322:                psi.Environment[key] = value;
+  src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs:26:            psi.Environment["GH_TOKEN"] = effective;
+  src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs:53:        psi.Environment["USERPROFILE"] = userProfile;
+  src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs:54:        psi.Environment["HOME"] = userProfile;
+  src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs:55:        psi.Environment["APPDATA"] = appData;
+  src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs:56:        psi.Environment["LOCALAPPDATA"] = localAppData;
+  src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs:61:            var currentPath = psi.Environment.TryGetValue("PATH", out var existing)
+  src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs:64:            psi.Environment["PATH"] = $"{userPath};{currentPath}";
+  src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs:84:        var path = psi.Environment.TryGetValue("PATH", out var p) ? p : null;
+  src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:280:                psi.Environment[key] = value;
+  src/QBrainAi.Services/Services/DesktopProcessSpawner.cs:90:        if (psi.Environment.Count == 0)
+  src/QBrainAi.Services/Services/DesktopProcessSpawner.cs:94:        return ExtractEnvironment(psi.Environment, key => currentEnvironment[key] as string);
+  src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs:348:                psi.Environment[key] = value;
+  src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:270:                psi.Environment[key] = value;
+  src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:473:        psi.Environment["TEMP"] = tempDirectory;
+  src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:474:        psi.Environment["TMP"] = tempDirectory;
+  src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:510:        psi.Environment.Remove("GROK_PLUGIN_ROOT");
+  src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:511:        psi.Environment.Remove("GROK_HOME");
+  src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:512:        psi.Environment["GROK_AGENT_DASHBOARD"] = "0";
+  src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:513:        psi.Environment["GROK_MEMORY"] = "0";
+  src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:514:        psi.Environment["GROK_SUBAGENTS"] = "0";
+PATTERN 'StartInfo.Environment' matches=3
+  src/QBrainAi.Common.AgentCli/IProcessEnvironmentService.cs:38:    /// child's <c>ProcessStartInfo.Environment["PATH"]</c>.
+  src/QBrainAi.Common.AgentCli/Processes/ProcessRunner.cs:69:                        process.StartInfo.Environment.Remove(variable.Key);
+  src/QBrainAi.Common.AgentCli/Processes/ProcessRunner.cs:73:                        process.StartInfo.Environment[variable.Key] = variable.Value;
+
+== R8B-F1 class: tests that read the ambient process environment (scope: tests)
+CLASSIFICATION: Owned (save, set, restore) in a serialized collection: McpDatabaseEncryptionTransitionCommandTests, MemoryBenchHarnessTests, MemoryIndexerTests, McpInstanceResolverTests, CliBrainSlotStrategyTests, DesktopProcessSpawnerTests (now in the Process environment collection), ProcessEnvironmentServiceTests, CliTempVariables, BugTriage139FourteenthHarnessTests and TestRepositoryRoot (repository-root collection).
+CLASSIFICATION: Not lane or not unit: the .Validation fixtures and ValidationAuth, QBrainAi.PluginIntegration.Tests, ProductsLaunchTests.
+CLASSIFICATION: Provisioning-owned connection overrides (TR-MCP-NUKE-018): MCP_TEST_POSTGRES_CONNECTION, MCP_TEST_SQLSERVER_CONNECTION and the SqlServerTestConnection override. Path lookups: OllamaServerFixture (PATH), DesktopProcessSpawnerTests (PATH and TEMP as the child's starting values). A model choice the QuadBrain case reads for itself: MCP_QUADBRAIN_OLLAMA_MODEL. None compares a requested environment with the ambient one. No further siblings.
+Now: 2026-11-02T15:51:25 ref=worktree patterns=1
+PATTERN 'Environment.GetEnvironmentVariable(' matches=45
+  tests/QBrainAi.Context.Validation/ContextEndpointFixture.cs:31:    public static string BaseUrl { get; } = Environment.GetEnvironmentVariable("MCPSERVER_BASEURL") ?? "http://localhost:7147";
+  tests/QBrainAi.Context.Validation/ContextEndpointFixture.cs:57:        var explicitKey = Environment.GetEnvironmentVariable("MCPSERVER_APIKEY");
+  tests/QBrainAi.GitHub.Validation/GitHubEndpointFixture.cs:31:    public static string BaseUrl { get; } = Environment.GetEnvironmentVariable("MCPSERVER_BASEURL") ?? "http://localhost:7147";
+  tests/QBrainAi.GitHub.Validation/GitHubEndpointFixture.cs:57:        var explicitKey = Environment.GetEnvironmentVariable("MCPSERVER_APIKEY");
+  tests/QBrainAi.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs:54:        var pluginRootOverride = Environment.GetEnvironmentVariable("PLUGIN_ROOT_OVERRIDE");
+  tests/QBrainAi.PluginIntegration.Tests/PluginSessionLogWorkflowAdapterTests.cs:194:        var previousOverride = Environment.GetEnvironmentVariable("PLUGIN_ROOT_OVERRIDE");
+  tests/QBrainAi.Repo.Validation/RepoEndpointFixture.cs:31:    public static string BaseUrl { get; } = Environment.GetEnvironmentVariable("MCPSERVER_BASEURL") ?? "http://localhost:7147";
+  tests/QBrainAi.Repo.Validation/RepoEndpointFixture.cs:57:        var explicitKey = Environment.GetEnvironmentVariable("MCPSERVER_APIKEY");
+  tests/QBrainAi.SessionLog.Validation/SessionLogEndpointFixture.cs:16:    public static string BaseUrl { get; } = Environment.GetEnvironmentVariable("MCPSERVER_BASEURL") ?? "http://localhost:7147";
+  tests/QBrainAi.SessionLog.Validation/SessionLogEndpointFixture.cs:48:        var explicitKey = Environment.GetEnvironmentVariable("MCPSERVER_APIKEY");
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/OllamaServerFixture.cs:59:        var pathVariable = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/ProductsLaunchTests.cs:61:            Environment.GetEnvironmentVariable("MCP_PRODUCTS_LAUNCH_RECEIPT"),
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/ProductsLaunchTests.cs:97:            Environment.GetEnvironmentVariable("MCP_PRODUCTS_LAUNCH_RECEIPT_2"),
+  tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs:734:        var configured = Environment.GetEnvironmentVariable("MCP_QUADBRAIN_OLLAMA_MODEL");
+  tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs:76:        var previous = Environment.GetEnvironmentVariable("MCP_INSTANCE");
+  tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs:77:        var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
+  tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:22:        var previousRoot = Environment.GetEnvironmentVariable("MCP_REPOSITORY_ROOT");
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:114:        var previous = Environment.GetEnvironmentVariable("XAI_API_KEY");
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:143:        var previous = Environment.GetEnvironmentVariable("XAI_API_KEY");
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:164:        var previousOpenAi = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:165:        var previousAzure = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY");
+  tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:204:        var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
+  tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:205:        var previousLegacy = Environment.GetEnvironmentVariable("MCP_INSTANCE");
+  tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:231:        var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
+  tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:232:        var previousLegacy = Environment.GetEnvironmentVariable("MCP_INSTANCE");
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:139:            var previousPluginRoot = Environment.GetEnvironmentVariable("GROK_PLUGIN_ROOT");
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:140:            var previousGrokHome = Environment.GetEnvironmentVariable("GROK_HOME");
+  tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:31:        var previousToken = Environment.GetEnvironmentVariable("GH_TOKEN");
+  tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:32:        var previousTemp = Environment.GetEnvironmentVariable("TEMP");
+  tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:44:                : Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+  tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:26:        var originalPublic = Environment.GetEnvironmentVariable("PUBLIC");
+  tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:27:        var external = Environment.GetEnvironmentVariable("MCP_TEST_POSTGRES_CONNECTION");
+  tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs:21:        var previous = Environment.GetEnvironmentVariable("MCP_TEST_POSTGRES_CONNECTION");
+  tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs:223:        if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(SqlServerTestConnection.OverrideVariable)))
+  tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs:30:    internal static string Server => Resolve(Environment.GetEnvironmentVariable(OverrideVariable));
+  tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs:88:        Names.ToDictionary(name => name, name => Environment.GetEnvironmentVariable(name), StringComparer.Ordinal);
+  tests/QBrainAi.Todo.Validation/TodoEndpointFixture.cs:17:    public static string BaseUrl { get; } = Environment.GetEnvironmentVariable("MCPSERVER_BASEURL") ?? "http://localhost:7147";
+  tests/QBrainAi.Todo.Validation/TodoEndpointFixture.cs:41:        var explicitKey = Environment.GetEnvironmentVariable("MCPSERVER_APIKEY");
+  tests/QBrainAi.ToolRegistry.Validation/ToolRegistryFixture.cs:13:    public static string BaseUrl { get; } = Environment.GetEnvironmentVariable("MCPSERVER_BASEURL") ?? "http://localhost:7147";
+  tests/QBrainAi.ToolRegistry.Validation/ToolRegistryFixture.cs:44:        var explicitKey = Environment.GetEnvironmentVariable("MCPSERVER_APIKEY");
+  tests/QBrainAi.Workspace.Validation/WorkspaceEndpointFixture.cs:15:    public static string BaseUrl { get; } = Environment.GetEnvironmentVariable("MCPSERVER_BASEURL") ?? "http://localhost:7147";
+  tests/QBrainAi.Workspace.Validation/WorkspaceEndpointFixture.cs:36:        var explicitKey = Environment.GetEnvironmentVariable("MCPSERVER_APIKEY");
+  tests/Shared/TestRepositoryRoot.cs:73:        return Locate(Environment.GetEnvironmentVariable("MCP_REPOSITORY_ROOT"), ReadBuildMetadata(),
+  tests/Validation.Shared/ValidationAuth.cs:28:        var explicitKey = Environment.GetEnvironmentVariable("MCPSERVER_APIKEY");
+  tests/Validation.Shared/ValidationAuth.cs:114:            var workspacePath = Environment.GetEnvironmentVariable(variableName);

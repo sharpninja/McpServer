@@ -1,0 +1,28 @@
+{
+  "timestampUtc": "2026-11-06T22:30:19.0640185+00:00",
+  "timestampLocal": "2026-11-06T16:30:21",
+  "method": "workflow.requirements.listMappings",
+  "recordId": "FR-MCP-SERVICEUPDATE-001",
+  "response": {
+    "payload": {
+      "requestId": "req-20261106T223020Z-8183",
+      "deprecated": true,
+      "result": {
+        "items": [
+          {
+            "createdAt": "2026-11-06T22:30:21.5306975+00:00",
+            "frId": "FR-MCP-SERVICEUPDATE-001",
+            "trId": "TR-MCP-SERVICEUPDATE-001"
+          },
+          {
+            "testId": "TEST-MCP-SERVICEUPDATE-001",
+            "frId": "FR-MCP-SERVICEUPDATE-001",
+            "createdAt": "2026-11-06T22:30:21.5314180+00:00"
+          }
+        ],
+        "totalCount": 2
+      }
+    },
+    "type": "result"
+  }
+}

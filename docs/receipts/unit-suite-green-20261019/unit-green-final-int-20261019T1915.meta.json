@@ -1,0 +1,19 @@
+{
+  "name": "unit-green-final-int-20261019T1915",
+  "target": "MigrationIntegrationTests",
+  "extraArgs": [
+    "--test-run-id",
+    "unit-green-final-int-20261019T1915"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "127468345afcc7a24e6a254f712d6b75a54713e8",
+  "dirtyPaths": [
+    " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+  ],
+  "startedLocal": "2026-10-19T19:15:49",
+  "startedUtc": "2026-10-20T00:15:49.3047738Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-final-int-20261019T1915.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-final-int-20261019T1915.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-final-int-20261019T1915.exit.txt"
+}

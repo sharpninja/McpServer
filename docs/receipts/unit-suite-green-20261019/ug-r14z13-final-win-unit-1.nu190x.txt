@@ -1,0 +1,8 @@
+RECEIPT 2026-11-06T05:59:48 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Test-WinLogNu190x.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-11-06T05:59:50 host=PAYTON-LEGION2 user=kingd folder=C:\Users\kingd\AppData\Local\Temp\unit-suite-green-windows-20261102 runId=ug-r14z13-final-win-unit-1
+LOG Test-ug-r14z13-final-win-unit-1.log lines=5650 nu190x=0
+LOG ValidateTraceability-ug-r14z13-final-win-unit-1.log lines=27 nu190x=0
+TOTAL nu190x=0 logs=2

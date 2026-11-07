@@ -1,0 +1,859 @@
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs
+index 7876836a..79b2377a 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs
+@@ -5,32 +5,27 @@ namespace QBrainAi.Support.Mcp.Tests.Documentation;
+ 
+ /// <summary>
+ /// TEST-MCP-USECASE-019: Fifteenth-review consumer and deterministic-build contract tests.
+ /// </summary>
+ [Collection(RepositoryRootProcessStateCollection.Name)]
++[Trait("Category", "Integration")]
+ public sealed class BugTriage139FifteenthHarnessTests
+ {
+ 
+     /// <summary>
+     /// TEST-MCP-USECASE-019-AC005: Deterministic builds must retain an explicit checkout anchor and
+     /// copy Agent Help fixtures beside the external test assembly without an environment override.
+     /// </summary>
+     [Fact]
+     public void DeterministicBuild_EmbedsRepositoryRootAndCopiesAgentHelpFixtures()
+     {
+-        var metadata = typeof(BugTriage139FifteenthHarnessTests).Assembly
+-            .GetCustomAttributes<AssemblyMetadataAttribute>()
+-            .SingleOrDefault(attribute =>
+-                string.Equals(
+-                    attribute.Key,
+-                    "McpRepositoryRoot",
+-                    StringComparison.Ordinal));
+-        Assert.NotNull(metadata);
+-        Assert.False(string.IsNullOrWhiteSpace(metadata!.Value));
++        // The build metadata is read once, in the shared locator (DRY).
++        var metadataRoot = QBrainAi.Tests.Shared.TestRepositoryRoot.BuildMetadataRoot;
++        Assert.False(string.IsNullOrWhiteSpace(metadataRoot));
+         Assert.True(
+-            File.Exists(Path.Combine(metadata.Value!, "QBrainAi.sln")),
+-            metadata.Value);
++            File.Exists(Path.Combine(metadataRoot!, "QBrainAi.sln")),
++            metadataRoot);
+ 
+         var fixture = Path.Combine(
+             AppContext.BaseDirectory,
+             "Fixtures",
+             "AgentHelp",
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs
+index 9e2036b3..3c1e48e6 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs
+@@ -1,53 +1,69 @@
+ using System.Diagnostics;
+ using System.Text;
+ using System.Text.RegularExpressions;
+ using QBrainAi.Common.AgentCli;
+ using QBrainAi.Support.Mcp.Services;
++using QBrainAi.Support.Mcp.Tests.TestSupport;
+ using Microsoft.Extensions.Logging.Abstractions;
+ using Xunit;
+ 
+ namespace QBrainAi.Support.Mcp.Tests.Services;
+ 
+ /// <summary>
+ /// TEST-MCP-TRIAGE-003: Verifies the Codex CLI execution strategy used by
+-/// background triage invokes <c>codex exec</c> non-interactively.
++/// background triage invokes <c>codex exec</c> non-interactively. The class runs in
++/// <see cref="ProcessEnvironmentCollection"/> because every test that starts a session writes the process environment:
++/// the strategy's temp-folder lookup reads the CLI temp variables, so those tests set and restore them through
++/// <see cref="CliTempVariables"/> and are integration tests (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008;
++/// hostile validation finding R6-F1).
+ /// </summary>
++[Collection(ProcessEnvironmentCollection.Name)]
+ public sealed class CodexCliAgentExecutionStrategyTests
+ {
+     /// <summary>
+-    /// TEST-MCP-TRIAGE-003: Codex uses reusable one-shot <c>exec -C ... -o ... -</c>
+-    /// invocation and never uses Copilot interactive flags or prompt arguments.
++    /// The CLI temp variable the Codex strategy reads first; tests point it at the test folder and every other CLI temp
++    /// variable at a fallback folder, so an output path under the test folder proves it won.
+     /// </summary>
+-    [Fact]
+-    public async Task ReadInitialResponseAsync_UsesCodexExecWithoutCopilotInteractiveFlags()
++    internal const string PrimaryTempName = "MCPSERVER_CODEX_ONESHOT_TEMP";
++
++    /// <summary>
++    /// TEST-MCP-TRIAGE-003: launches the strategy against the capturing spawner with the default request, with every
++    /// CLI temp variable at a test-owned folder. Shared by the Windows and Linux launch cases, which live in
++    /// integration classes because the strategy chooses its launcher by the running OS (TR-MCP-USECASE-018 AC-006).
++    /// </summary>
++    /// <returns>The spawner holding the captured launch.</returns>
++    internal static async Task<CapturingProcessSpawner> LaunchDefaultAsync()
+     {
+         var spawner = new CapturingProcessSpawner(exitCode: 0, outputBody: """{"title":"triage result"}""");
+-        var strategy = new CodexCliAgentExecutionStrategy(
+-            new CapturingProcessEnvironmentService(),
+-            spawner,
+-            NullLogger<CodexCliAgentExecutionStrategy>.Instance);
++        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
++        {
++            var strategy = new CodexCliAgentExecutionStrategy(
++                new CapturingProcessEnvironmentService(),
++                spawner,
++                NullLogger<CodexCliAgentExecutionStrategy>.Instance);
+ 
+-        await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
++            await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+ 
+-        var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
++            var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+ 
+-        Assert.Equal(AgentCliResultState.Success, result.State);
+-        Assert.Equal("""{"title":"triage result"}""", result.Body);
++            Assert.Equal(AgentCliResultState.Success, result.State);
++            Assert.Equal("""{"title":"triage result"}""", result.Body);
++        }).ConfigureAwait(true);
+         Assert.NotNull(spawner.StartInfo);
+-        if (OperatingSystem.IsWindows())
+-        {
+-            Assert.EndsWith("cmd.exe", spawner.StartInfo.FileName, StringComparison.OrdinalIgnoreCase);
+-            Assert.Contains("/c", spawner.StartInfo.ArgumentList);
+-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("codex.cmd", StringComparison.OrdinalIgnoreCase));
+-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("exec", StringComparison.Ordinal));
+-        }
+-        else
+-        {
+-            Assert.Equal("codex.cmd", spawner.StartInfo.FileName);
+-        }
++        return spawner;
++    }
+ 
++    /// <summary>
++    /// TEST-MCP-TRIAGE-003: Codex uses reusable one-shot <c>exec -C ... -o ... -</c> invocation and never
++    /// uses Copilot interactive flags or prompt arguments, on every host.
++    /// </summary>
++    /// <param name="spawner">Spawner holding the captured launch.</param>
++    internal static void AssertCodexExecWithoutCopilotInteractiveFlags(CapturingProcessSpawner spawner)
++    {
++        ArgumentNullException.ThrowIfNull(spawner);
++        Assert.NotNull(spawner.StartInfo);
+         Assert.Equal("Q:\\__mcp_unit_test__\\QBrainAi", spawner.StartInfo.WorkingDirectory);
+         var serializedArguments = string.Join(" ", spawner.StartInfo.ArgumentList);
+         Assert.Contains("exec", serializedArguments, StringComparison.Ordinal);
+         Assert.Contains("-C", serializedArguments, StringComparison.Ordinal);
+         Assert.Contains("Q:\\__mcp_unit_test__\\QBrainAi", serializedArguments, StringComparison.Ordinal);
+@@ -56,20 +72,10 @@ public sealed class CodexCliAgentExecutionStrategyTests
+         Assert.DoesNotContain("--output-schema", serializedArguments, StringComparison.Ordinal);
+         Assert.DoesNotContain("--output-last-message", serializedArguments, StringComparison.Ordinal);
+         Assert.Contains("--model", serializedArguments, StringComparison.Ordinal);
+         Assert.Contains("model-triage", serializedArguments, StringComparison.Ordinal);
+         Assert.Contains("-c", serializedArguments, StringComparison.Ordinal);
+-        if (OperatingSystem.IsWindows())
+-        {
+-            // The Windows launch goes through cmd.exe /c, which needs the TOML quotes escaped.
+-            Assert.Contains("model_reasoning_effort=\\\"xhigh\\\"", serializedArguments, StringComparison.Ordinal);
+-        }
+-        else
+-        {
+-            // Elsewhere codex receives the TOML literal as one argv element (BUG-BASELINE-004).
+-            Assert.Contains("model_reasoning_effort=\"xhigh\"", spawner.StartInfo.ArgumentList);
+-        }
+         Assert.Contains("--sandbox", serializedArguments, StringComparison.Ordinal);
+         Assert.Contains("read-only", serializedArguments, StringComparison.Ordinal);
+         Assert.Contains("--skip-git-repo-check", serializedArguments, StringComparison.Ordinal);
+         Assert.DoesNotContain("rendered prompt", serializedArguments, StringComparison.Ordinal);
+         Assert.True(spawner.StartInfo.RedirectStandardInput);
+@@ -80,154 +86,126 @@ public sealed class CodexCliAgentExecutionStrategyTests
+         Assert.Equal("rendered prompt", spawner.CapturedStandardInput);
+     }
+ 
+     /// <summary>
+     /// TEST-MCP-TRIAGE-005: A failed Codex CLI run preserves stderr as the
+-    /// inspectable research-run failure reason.
++    /// inspectable research-run failure reason. The strategy's temp-folder lookup reads the CLI temp variables, so the
++    /// test sets and restores them through <see cref="CliTempVariables"/> and is an integration test
++    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
+     /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult()
+     {
+-        var spawner = new CapturingProcessSpawner(exitCode: 2, stderr: "not authenticated");
+-        var strategy = new CodexCliAgentExecutionStrategy(
+-            new CapturingProcessEnvironmentService(),
+-            spawner,
+-            NullLogger<CodexCliAgentExecutionStrategy>.Instance);
+-
+-        await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+-
+-        var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+-
+-        Assert.Equal(AgentCliResultState.Error, result.State);
+-        Assert.Contains("not authenticated", result.Stderr, StringComparison.OrdinalIgnoreCase);
+-    }
+-
+-    /// <summary>
+-    /// TEST-MCP-TRIAGE-005: Timed-out Codex CLI triage runs preserve partial
+-    /// stdout and stderr instead of returning only the timeout message.
+-    /// </summary>
+-    [Fact]
+-    public async Task ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams()
+-    {
+-        var spawner = new CapturingProcessSpawner(
+-            exitCode: 0,
+-            stdout: "analysis started",
+-            stderr: "loading context",
+-            waitForCancellation: true);
+-        var strategy = new CodexCliAgentExecutionStrategy(
+-            new CapturingProcessEnvironmentService(),
+-            spawner,
+-            NullLogger<CodexCliAgentExecutionStrategy>.Instance);
+-
+-        await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+-        using var timeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(10));
+-
+-        var result = await session.ReadInitialResponseAsync(timeout.Token).ConfigureAwait(true);
+-
+-        Assert.Equal(AgentCliResultState.Error, result.State);
+-        Assert.Contains("analysis started", result.Stdout, StringComparison.OrdinalIgnoreCase);
+-        Assert.Contains("loading context", result.Stderr, StringComparison.OrdinalIgnoreCase);
+-        Assert.Contains("cancelled or timed out", result.Stderr, StringComparison.OrdinalIgnoreCase);
+-    }
+-
+-    /// <summary>
+-    /// TEST-MCP-TRIAGE-005: Codex CLI triage runs stream stdout and stderr
+-    /// chunks to the configured output callback while the process is running.
+-    /// </summary>
+-    [Fact]
+-    public async Task ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput()
+-    {
+-        var streamed = new List<string>();
+-        var spawner = new CapturingProcessSpawner(
+-            exitCode: 0,
+-            outputBody: """{"title":"triage result"}""",
+-            stdout: "analysis started" + Environment.NewLine + "analysis done",
+-            stderr: "loading context");
+-        var strategy = new CodexCliAgentExecutionStrategy(
+-            new CapturingProcessEnvironmentService(),
+-            spawner,
+-            NullLogger<CodexCliAgentExecutionStrategy>.Instance);
+-        var request = CreateRequest(outputReceivedAsync: (streamName, text) =>
++        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+         {
+-            streamed.Add($"{streamName}:{text}");
+-            return Task.CompletedTask;
+-        });
+-
+-        await using var session = await strategy.CreateSessionAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+-
+-        var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+-
+-        Assert.Equal(AgentCliResultState.Success, result.State);
+-        Assert.Contains("stdout:analysis started", streamed);
+-        Assert.Contains("stdout:analysis done", streamed);
+-        Assert.Contains("stderr:loading context", streamed);
+-    }
+-
+-    /// <summary>
+-    /// TEST-MCP-TRIAGE-003: Windows npm command shims are wrapped through
+-    /// <c>cmd.exe</c> so desktop spawning does not execute <c>.cmd</c> directly.
+-    /// </summary>
+-    [Fact]
+-    public async Task ReadInitialResponseAsync_WithWindowsNpmShim_UsesCmdWrapperAndStdinPrompt()
+-    {
+-        if (!OperatingSystem.IsWindows())
+-            return;
+-
+-        var shimDirectory = Path.Combine(Path.GetTempPath(), $"codex-shim-{Guid.NewGuid():N}");
+-        Directory.CreateDirectory(shimDirectory);
+-        var cmdPath = Path.Combine(shimDirectory, "codex.cmd");
+-        File.WriteAllText(cmdPath, "@echo off", Encoding.UTF8);
+-        try
+-        {
+-            var spawner = new CapturingProcessSpawner(
+-                exitCode: 0,
+-                outputBody: """{"title":"triage result"}""",
+-                stdout: "codex stdout",
+-                stderr: "codex stderr");
++            var spawner = new CapturingProcessSpawner(exitCode: 2, stderr: "not authenticated");
+             var strategy = new CodexCliAgentExecutionStrategy(
+                 new CapturingProcessEnvironmentService(),
+                 spawner,
+                 NullLogger<CodexCliAgentExecutionStrategy>.Instance);
+ 
+-            await using var session = await strategy.CreateSessionAsync(CreateRequest(cmdPath), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
++            await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
++
++            var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
++
++            Assert.Equal(AgentCliResultState.Error, result.State);
++            Assert.Contains("not authenticated", result.Stderr, StringComparison.OrdinalIgnoreCase);
++        }).ConfigureAwait(true);
++    }
++
++    /// <summary>
++    /// TEST-MCP-TRIAGE-005: Timed-out Codex CLI triage runs preserve partial
++    /// stdout and stderr instead of returning only the timeout message. The strategy's temp-folder lookup reads the
++    /// CLI temp variables, so the test sets and restores them through <see cref="CliTempVariables"/> and is an
++    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
++    [Fact]
++    [Trait("Category", "Integration")]
++    public async Task ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams()
++    {
++        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
++        {
++            var spawner = new CapturingProcessSpawner(
++                exitCode: 0,
++                stdout: "analysis started",
++                stderr: "loading context",
++                waitForCancellation: true);
++            var strategy = new CodexCliAgentExecutionStrategy(
++                new CapturingProcessEnvironmentService(),
++                spawner,
++                NullLogger<CodexCliAgentExecutionStrategy>.Instance);
++
++            await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
++            using var timeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(10));
++
++            var result = await session.ReadInitialResponseAsync(timeout.Token).ConfigureAwait(true);
++
++            Assert.Equal(AgentCliResultState.Error, result.State);
++            Assert.Contains("analysis started", result.Stdout, StringComparison.OrdinalIgnoreCase);
++            Assert.Contains("loading context", result.Stderr, StringComparison.OrdinalIgnoreCase);
++            Assert.Contains("cancelled or timed out", result.Stderr, StringComparison.OrdinalIgnoreCase);
++        }).ConfigureAwait(true);
++    }
++
++    /// <summary>
++    /// TEST-MCP-TRIAGE-005: Codex CLI triage runs stream stdout and stderr
++    /// chunks to the configured output callback while the process is running. The strategy's temp-folder lookup reads
++    /// the CLI temp variables, so the test sets and restores them through <see cref="CliTempVariables"/> and is an
++    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
++    [Fact]
++    [Trait("Category", "Integration")]
++    public async Task ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput()
++    {
++        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
++        {
++            var streamed = new List<string>();
++            var spawner = new CapturingProcessSpawner(
++                exitCode: 0,
++                outputBody: """{"title":"triage result"}""",
++                stdout: "analysis started" + Environment.NewLine + "analysis done",
++                stderr: "loading context");
++            var strategy = new CodexCliAgentExecutionStrategy(
++                new CapturingProcessEnvironmentService(),
++                spawner,
++                NullLogger<CodexCliAgentExecutionStrategy>.Instance);
++            var request = CreateRequest(outputReceivedAsync: (streamName, text) =>
++            {
++                streamed.Add($"{streamName}:{text}");
++                return Task.CompletedTask;
++            });
++
++            await using var session = await strategy.CreateSessionAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+ 
+             var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+ 
+             Assert.Equal(AgentCliResultState.Success, result.State);
+-            Assert.Equal("codex stdout", result.Stdout);
+-            Assert.Equal("codex stderr", result.Stderr);
+-            Assert.Equal(0, result.ExitCode);
+-            Assert.NotNull(spawner.StartInfo);
+-            Assert.EndsWith("cmd.exe", spawner.StartInfo.FileName, StringComparison.OrdinalIgnoreCase);
+-            Assert.Contains("/c", spawner.StartInfo.ArgumentList);
+-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(cmdPath, StringComparison.OrdinalIgnoreCase));
+-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("exec", StringComparison.Ordinal));
+-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("-o", StringComparison.Ordinal));
+-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.EndsWith(" -", StringComparison.Ordinal));
+-            Assert.True(spawner.StartInfo.RedirectStandardInput);
+-            Assert.DoesNotContain(spawner.StartInfo.ArgumentList, argument => argument.Contains("rendered prompt", StringComparison.Ordinal));
+-            Assert.Equal("rendered prompt", spawner.CapturedStandardInput);
+-        }
+-        finally
+-        {
+-            Directory.Delete(shimDirectory, recursive: true);
+-        }
++            Assert.Contains("stdout:analysis started", streamed);
++            Assert.Contains("stdout:analysis done", streamed);
++            Assert.Contains("stderr:loading context", streamed);
++        }).ConfigureAwait(true);
+     }
+ 
+     /// <summary>
+     /// TEST-MCP-TRIAGE-003: The Codex CLI strategy writes one-shot output
+     /// files under the configured shared temp root so a service-spawned
+-    /// interactive-user codex process can write the final response file.
++    /// interactive-user codex process can write the final response file. The test points
++    /// <c>MCPSERVER_CODEX_ONESHOT_TEMP</c>, which the strategy reads first, at a test-owned folder and every other CLI
++    /// temp variable, its fallback <c>MCPSERVER_CODEX_TRIAGE_TEMP</c> included, at a separate fallback folder, and
++    /// restores them through <see cref="CliTempVariables"/>, so the output path proves the primary name won; it writes
++    /// the process environment and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+     /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedOutputPath()
+     {
+-        var tempRoot = Path.Combine(Path.GetTempPath(), $"codex-oneshot-shared-{Guid.NewGuid():N}");
+-        Directory.CreateDirectory(tempRoot);
+-        var previous = Environment.GetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP");
+-        Environment.SetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP", tempRoot);
+-        try
++        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async tempRoot =>
+         {
+             var spawner = new CapturingProcessSpawner(exitCode: 0, outputBody: """{"title":"triage result"}""");
+             var strategy = new CodexCliAgentExecutionStrategy(
+                 new CapturingProcessEnvironmentService(),
+                 spawner,
+@@ -240,16 +218,11 @@ public sealed class CodexCliAgentExecutionStrategyTests
+             Assert.Equal(AgentCliResultState.Success, result.State);
+             Assert.NotNull(spawner.OutputLastMessagePath);
+             Assert.StartsWith(tempRoot, spawner.OutputLastMessagePath, StringComparison.OrdinalIgnoreCase);
+             Assert.Null(spawner.OutputSchemaPath);
+             Assert.Null(spawner.OutputSchemaJson);
+-        }
+-        finally
+-        {
+-            Environment.SetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP", previous);
+-            Directory.Delete(tempRoot, recursive: true);
+-        }
++        }).ConfigureAwait(true);
+     }
+ 
+     /// <summary>
+     /// TEST-MCP-TRIAGE-003: The strategy resolver recognizes the configured
+     /// <c>codex-cli</c> strategy name.
+@@ -259,11 +232,11 @@ public sealed class CodexCliAgentExecutionStrategyTests
+     {
+         Assert.True(AgentExecutionStrategyNames.IsSupported("codex-cli"));
+         Assert.Contains("codex-cli", AgentExecutionStrategyNames.SupportedNames);
+     }
+ 
+-    private static AgentExecutionSessionRequest CreateRequest(
++    internal static AgentExecutionSessionRequest CreateRequest(
+         string agentPath = "codex.cmd",
+         Func<string, string, Task>? outputReceivedAsync = null) =>
+         new(
+             "rendered prompt",
+             "Q:\\__mcp_unit_test__\\QBrainAi",
+@@ -276,11 +249,11 @@ public sealed class CodexCliAgentExecutionStrategyTests
+                 WorkingDirectory = "Q:\\__mcp_unit_test__\\QBrainAi",
+                 Timeout = TimeSpan.FromSeconds(30),
+                 AgentOutputReceivedAsync = outputReceivedAsync,
+             });
+ 
+-    private sealed class CapturingProcessEnvironmentService : IProcessEnvironmentService
++    internal sealed class CapturingProcessEnvironmentService : IProcessEnvironmentService
+     {
+         public void ApplyGitHubToken(ProcessStartInfo psi, string? token)
+         {
+         }
+ 
+@@ -293,11 +266,11 @@ public sealed class CodexCliAgentExecutionStrategyTests
+         }
+ 
+         public string ResolveExecutable(ProcessStartInfo psi, string fileName) => fileName;
+     }
+ 
+-    private sealed class CapturingProcessSpawner(
++    internal sealed class CapturingProcessSpawner(
+         int exitCode,
+         string outputBody = "",
+         string stdout = "",
+         string stderr = "",
+         bool waitForCancellation = false) : IProcessSpawner
+@@ -414,5 +387,114 @@ public sealed class CodexCliAgentExecutionStrategyTests
+ 
+         private static StreamReader CreateReader(string value) =>
+             new(new MemoryStream(Encoding.UTF8.GetBytes(value)), Encoding.UTF8);
+     }
+ }
++
++/// <summary>
++/// TEST-MCP-TRIAGE-003: the Codex CLI strategy on a Windows host launches through <c>cmd.exe /c</c>.
++/// The strategy chooses its launcher by the running OS, so these are integration tests on Windows hosts
++/// (operator 2026-10-19: "Integration + Platform (Recommended)"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). Each
++/// launch sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so the class runs in the
++/// serialized <see cref="ProcessEnvironmentCollection"/> (TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
++/// </summary>
++[Trait("Category", "Integration")]
++[Trait("Platform", "Windows")]
++[Collection(ProcessEnvironmentCollection.Name)]
++public sealed class CodexCliAgentExecutionStrategyWindowsTests
++{
++    /// <summary>
++    /// TEST-MCP-TRIAGE-003: the one-shot exec launch goes through cmd.exe, which needs the TOML quotes escaped.
++    /// </summary>
++    [Fact]
++    public async Task ReadInitialResponseAsync_OnWindows_WrapsCodexExecThroughCmd()
++    {
++        var spawner = await CodexCliAgentExecutionStrategyTests.LaunchDefaultAsync().ConfigureAwait(true);
++
++        CodexCliAgentExecutionStrategyTests.AssertCodexExecWithoutCopilotInteractiveFlags(spawner);
++        Assert.EndsWith("cmd.exe", spawner.StartInfo!.FileName, StringComparison.OrdinalIgnoreCase);
++        Assert.Contains("/c", spawner.StartInfo.ArgumentList);
++        Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("codex.cmd", StringComparison.OrdinalIgnoreCase));
++        Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("exec", StringComparison.Ordinal));
++        Assert.Contains("model_reasoning_effort=\\\"xhigh\\\"", string.Join(" ", spawner.StartInfo.ArgumentList), StringComparison.Ordinal);
++    }
++
++    /// <summary>
++    /// TEST-MCP-TRIAGE-003: Windows npm command shims are wrapped through
++    /// <c>cmd.exe</c> so desktop spawning does not execute <c>.cmd</c> directly.
++    /// </summary>
++    [Fact]
++    public async Task ReadInitialResponseAsync_WithWindowsNpmShim_UsesCmdWrapperAndStdinPrompt()
++    {
++        var shimDirectory = Path.Combine(Path.GetTempPath(), $"codex-shim-{Guid.NewGuid():N}");
++        Directory.CreateDirectory(shimDirectory);
++        var cmdPath = Path.Combine(shimDirectory, "codex.cmd");
++        File.WriteAllText(cmdPath, "@echo off", Encoding.UTF8);
++        try
++        {
++            var spawner = new CodexCliAgentExecutionStrategyTests.CapturingProcessSpawner(
++                exitCode: 0,
++                outputBody: """{"title":"triage result"}""",
++                stdout: "codex stdout",
++                stderr: "codex stderr");
++            AgentCliResult? launched = null;
++            await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
++            {
++                var strategy = new CodexCliAgentExecutionStrategy(
++                    new CodexCliAgentExecutionStrategyTests.CapturingProcessEnvironmentService(),
++                    spawner,
++                    NullLogger<CodexCliAgentExecutionStrategy>.Instance);
++
++                await using var session = await strategy.CreateSessionAsync(CodexCliAgentExecutionStrategyTests.CreateRequest(cmdPath), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
++
++                launched = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
++            }).ConfigureAwait(true);
++
++            var result = Assert.IsType<AgentCliResult>(launched);
++            Assert.Equal(AgentCliResultState.Success, result.State);
++            Assert.Equal("codex stdout", result.Stdout);
++            Assert.Equal("codex stderr", result.Stderr);
++            Assert.Equal(0, result.ExitCode);
++            Assert.NotNull(spawner.StartInfo);
++            Assert.EndsWith("cmd.exe", spawner.StartInfo.FileName, StringComparison.OrdinalIgnoreCase);
++            Assert.Contains("/c", spawner.StartInfo.ArgumentList);
++            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(cmdPath, StringComparison.OrdinalIgnoreCase));
++            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("exec", StringComparison.Ordinal));
++            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("-o", StringComparison.Ordinal));
++            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.EndsWith(" -", StringComparison.Ordinal));
++            Assert.True(spawner.StartInfo.RedirectStandardInput);
++            Assert.DoesNotContain(spawner.StartInfo.ArgumentList, argument => argument.Contains("rendered prompt", StringComparison.Ordinal));
++            Assert.Equal("rendered prompt", spawner.CapturedStandardInput);
++        }
++        finally
++        {
++            Directory.Delete(shimDirectory, recursive: true);
++        }
++    }
++}
++
++/// <summary>
++/// TEST-MCP-TRIAGE-003: the Codex CLI strategy off Windows launches the agent directly. The strategy
++/// chooses its launcher by the running OS, so this is an integration test on Linux hosts (operator
++/// 2026-10-19: "Integration + Platform (Recommended)"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The launch sets
++/// and restores every CLI temp variable through <see cref="CliTempVariables"/>, so the class runs in the serialized
++/// <see cref="ProcessEnvironmentCollection"/> (TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
++/// </summary>
++[Trait("Category", "Integration")]
++[Trait("Platform", "Linux")]
++[Collection(ProcessEnvironmentCollection.Name)]
++public sealed class CodexCliAgentExecutionStrategyLinuxTests
++{
++    /// <summary>
++    /// TEST-MCP-TRIAGE-003, BUG-BASELINE-004: codex is started directly and receives the TOML literal as
++    /// one argv element.
++    /// </summary>
++    [Fact]
++    public async Task ReadInitialResponseAsync_OffWindows_RunsCodexExecDirectly()
++    {
++        var spawner = await CodexCliAgentExecutionStrategyTests.LaunchDefaultAsync().ConfigureAwait(true);
++
++        CodexCliAgentExecutionStrategyTests.AssertCodexExecWithoutCopilotInteractiveFlags(spawner);
++        Assert.Equal("codex.cmd", spawner.StartInfo!.FileName);
++        Assert.Contains("model_reasoning_effort=\"xhigh\"", spawner.StartInfo.ArgumentList);
++    }
++}
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs
+index 1410a9e9..5778e455 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs
+@@ -26,46 +26,61 @@ public sealed class FederationTopologyServiceTests : IDisposable
+     public void Dispose()
+     {
+         if (Directory.Exists(_workspacePath))
+             Directory.Delete(_workspacePath, recursive: true);
+     }
+-    /// <summary>Enrollment persists the proxy and hosted workspaces for hub inventory.</summary>
+-    [Fact]
+-    public async Task EnrollAsync_PersistsProxyAndWorkspaceInventory()
++    /// <summary>
++    /// Enrollment persists the proxy and hosted workspaces for hub inventory. The stored workspace key of a
++    /// real host directory is compared with the host's path comparison, so the cases live in the Windows
++    /// and Linux integration classes below (operator 2026-10-19: "Integration + Platform (Recommended)";
++    /// TR-MCP-USECASE-018 AC-006).
++    /// </summary>
++    /// <param name="workspaceComparison">The running host's path comparison.</param>
++    internal static async Task AssertEnrollmentPersistsInventoryAsync(StringComparison workspaceComparison)
+     {
+-        using var provider = CreateProvider();
+-        var sut = provider.GetRequiredService<IFederationTopologyService>();
+-
+-        var response = await sut.EnrollAsync(new FederationEnrollmentRequest
++        var workspacePath = Path.Combine(
++            Path.GetTempPath(), "QBrainAi.Tests", nameof(FederationTopologyServiceTests), Guid.NewGuid().ToString("N"));
++        Directory.CreateDirectory(workspacePath);
++        try
+         {
+-            ProxyId = "PAYTON-LEGION2",
+-            DisplayName = "PAYTON-LEGION2",
+-            BaseUrl = "http://payton-legion2:7147/",
+-            Workspaces =
+-            [
+-                new FederationWorkspaceRegistrationRequest
+-                {
+-                    WorkspaceName = "QBrainAi",
+-                    WorkspacePath = _workspacePath,
+-                },
+-            ],
+-        }, CancellationToken.None).ConfigureAwait(true);
++            using var provider = CreateProvider();
++            var sut = provider.GetRequiredService<IFederationTopologyService>();
+ 
+-        Assert.True(response.Accepted);
+-        Assert.Equal("PAYTON-LEGION2", response.ProxyId);
+-        Assert.Equal(5, response.HeartbeatSeconds);
++            var response = await sut.EnrollAsync(new FederationEnrollmentRequest
++            {
++                ProxyId = "PAYTON-LEGION2",
++                DisplayName = "PAYTON-LEGION2",
++                BaseUrl = "http://payton-legion2:7147/",
++                Workspaces =
++                [
++                    new FederationWorkspaceRegistrationRequest
++                    {
++                        WorkspaceName = "QBrainAi",
++                        WorkspacePath = workspacePath,
++                    },
++                ],
++            }, CancellationToken.None).ConfigureAwait(true);
+ 
+-        var proxies = await sut.ListProxiesAsync(CancellationToken.None).ConfigureAwait(true);
+-        var proxy = Assert.Single(proxies);
+-        Assert.Equal("PAYTON-LEGION2", proxy.ProxyId);
+-        Assert.Equal(1, proxy.WorkspaceCount);
++            Assert.True(response.Accepted);
++            Assert.Equal("PAYTON-LEGION2", response.ProxyId);
++            Assert.Equal(5, response.HeartbeatSeconds);
+ 
+-        var workspaces = await sut.ListWorkspacesAsync("PAYTON-LEGION2", CancellationToken.None).ConfigureAwait(true);
+-        var workspace = Assert.Single(workspaces);
+-        Assert.True(string.Equals(ExpectedWorkspaceKey.Of(_workspacePath), workspace.WorkspacePath,
+-            OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
+-        Assert.NotEmpty(workspace.GlobalWorkspaceId);
++            var proxies = await sut.ListProxiesAsync(CancellationToken.None).ConfigureAwait(true);
++            var proxy = Assert.Single(proxies);
++            Assert.Equal("PAYTON-LEGION2", proxy.ProxyId);
++            Assert.Equal(1, proxy.WorkspaceCount);
++
++            var workspaces = await sut.ListWorkspacesAsync("PAYTON-LEGION2", CancellationToken.None).ConfigureAwait(true);
++            var workspace = Assert.Single(workspaces);
++            Assert.True(string.Equals(ExpectedWorkspaceKey.Of(workspacePath), workspace.WorkspacePath, workspaceComparison));
++            Assert.NotEmpty(workspace.GlobalWorkspaceId);
++        }
++        finally
++        {
++            if (Directory.Exists(workspacePath))
++                Directory.Delete(workspacePath, recursive: true);
++        }
+     }
+ 
+     /// <summary>Cached topology status is refreshed from durable storage when status is requested.</summary>
+     [Fact]
+     public async Task GetSnapshot_RefreshesFromDurableStorage()
+@@ -313,11 +328,11 @@ public sealed class FederationTopologyServiceTests : IDisposable
+         var queued = await sut.GetQueueStatusAsync("PAYTON-LEGION2", CancellationToken.None).ConfigureAwait(true);
+         Assert.Equal(0, queued.FanoutDepth);
+         Assert.Equal(1, queued.ConflictCount);
+     }
+ 
+-    private static ServiceProvider CreateProvider(params IFederationStateAdapter[] adapters)
++    internal static ServiceProvider CreateProvider(params IFederationStateAdapter[] adapters)
+     {
+         var services = new ServiceCollection();
+         services.AddOptions();
+         services.Configure<FederationOptions>(options => options.Sync.HeartbeatSeconds = 5);
+         var databaseRoot = new InMemoryDatabaseRoot();
+@@ -376,5 +391,33 @@ public sealed class FederationTopologyServiceTests : IDisposable
+ 
+         public bool IsEcho(FederationStateOperation operation)
+             => false;
+     }
+ }
++
++/// <summary>
++/// Hub-and-spoke enrollment on a Windows host: the stored key of a real host directory matches with the
++/// Windows path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
++/// </summary>
++[Trait("Category", "Integration")]
++[Trait("Platform", "Windows")]
++public sealed class FederationTopologyServiceWindowsTests
++{
++    /// <summary>Enrollment persists the proxy and hosted workspaces for hub inventory.</summary>
++    [Fact]
++    public Task EnrollAsync_PersistsProxyAndWorkspaceInventory() =>
++        FederationTopologyServiceTests.AssertEnrollmentPersistsInventoryAsync(StringComparison.OrdinalIgnoreCase);
++}
++
++/// <summary>
++/// Hub-and-spoke enrollment on a Linux host: the stored key of a real host directory matches with the
++/// case-sensitive path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
++/// </summary>
++[Trait("Category", "Integration")]
++[Trait("Platform", "Linux")]
++public sealed class FederationTopologyServiceLinuxTests
++{
++    /// <summary>Enrollment persists the proxy and hosted workspaces for hub inventory.</summary>
++    [Fact]
++    public Task EnrollAsync_PersistsProxyAndWorkspaceInventory() =>
++        FederationTopologyServiceTests.AssertEnrollmentPersistsInventoryAsync(StringComparison.Ordinal);
++}
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs
+index ae96d23c..699727ae 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs
+@@ -35,17 +35,22 @@ public sealed class GrokCliAgentExecutionStrategyTests
+     public void ResolveGrokExecutable_NonGrokAgentPath_ReturnsGrok()
+     {
+         Assert.Equal("grok", GrokCliAgentExecutionStrategy.ResolveGrokExecutable("cline"));
+     }
+ 
+-    /// <summary>An explicit grok binary path (bare name or full path) is preserved.</summary>
++    /// <summary>
++    /// An explicit grok binary path (bare name or full path, with or without the <c>.exe</c> extension)
++    /// is preserved. Fixed data for both spellings on every host (TR-MCP-USECASE-018 AC-006).
++    /// </summary>
+     [Fact]
+     public void ResolveGrokExecutable_ExplicitGrokPath_IsPreserved()
+     {
+-        var explicitPath = UnitTestPaths.Combine("home", ".grok", "bin", OperatingSystem.IsWindows() ? "grok.exe" : "grok");
++        var withExtension = UnitTestPaths.Combine("home", ".grok", "bin", "grok.exe");
++        var withoutExtension = UnitTestPaths.Combine("home", ".grok", "bin", "grok");
+         Assert.Equal("grok", GrokCliAgentExecutionStrategy.ResolveGrokExecutable("grok"));
+-        Assert.Equal(explicitPath, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(explicitPath));
++        Assert.Equal(withExtension, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(withExtension));
++        Assert.Equal(withoutExtension, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(withoutExtension));
+     }
+ 
+     /// <summary>TEST-MCP-BUGTRIAGE-042: Grok one-shot forwards the configured model argument.</summary>
+     [Fact]
+     public void BuildGrokArgumentList_ConfiguredModel_IncludesModelFlag()
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs
+index a739e567..122de3a9 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs
+@@ -15,10 +15,11 @@ using QBrainAi.Support.Mcp.Storage.Entities;
+ using Microsoft.Data.Sqlite;
+ using Microsoft.EntityFrameworkCore;
+ using Microsoft.Extensions.Configuration;
+ using Microsoft.Extensions.DependencyInjection;
+ using Microsoft.Extensions.Hosting;
++using Microsoft.Extensions.Logging;
+ using ModelContextProtocol.Server;
+ using NSubstitute;
+ using Xunit;
+ 
+ namespace QBrainAi.Support.Mcp.Tests.Services;
+@@ -286,10 +287,11 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
+         var after = await File.ReadAllTextAsync(marker, TestContext.Current.CancellationToken);
+         Assert.Equal(before, after);
+     }
+ 
+     /// <summary>TEST-MCP-HOSTILEREVIEW-006: REST, REPL, Director, and plugin expose submit/status/get/query only.</summary>
++    [Trait("Category", "Integration")]
+     [Fact]
+     public async Task HostileReview_SurfaceParity_RestReplDirectorPlugin()
+     {
+         var rest = typeof(HostileReviewController).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+             .Select(method => method.Name)
+@@ -454,15 +456,30 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
+         Assert.Null(service.PeekExecutionPrompt(enqueue.JobId!));
+         var queue = await service.GetQueueItemsAsync(cancellationToken: TestContext.Current.CancellationToken);
+         Assert.All(queue, item => Assert.DoesNotContain(raw, item.RenderedPrompt ?? string.Empty, StringComparison.Ordinal));
+     }
+ 
+-    /// <summary>TR-MCP-HOSTILEREVIEW-003: invalid worker options fail host startup validation.</summary>
++    /// <summary>
++    /// TR-MCP-HOSTILEREVIEW-003: invalid worker options fail host startup validation. The failure
++    /// message carries the whole exception text so a different startup failure is diagnosable.
++    /// The default logging providers are cleared: on Windows the host adds the Event Log provider,
++    /// and an account without Event Log write access (PAYTON-LEGION2 lab-wsman) failed startup with
++    /// "Cannot open log for source '.NET Runtime'" before options validation could report.
++    /// </summary>
++    /// <remarks>
++    /// The default host builder imports the whole process environment, so this is an integration test
++    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; the sweep of plan section 19.3). Its assertion depends on
++    /// no environment variable: the in-memory source, added after the environment, sets the five worker keys, and the
++    /// renewal interval equal to the lease duration fails validation whatever else the environment holds. It writes no
++    /// variable, so it stays outside <c>ProcessEnvironmentCollection</c>.
++    /// </remarks>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task HostileReviewWorker_InvalidOptions_FailStartup()
+     {
+         var builder = Host.CreateApplicationBuilder();
++        builder.Logging.ClearProviders();
+         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
+         {
+             ["Mcp:HostileReviewWorker:LeaseDuration"] = "00:01:00",
+             ["Mcp:HostileReviewWorker:RenewalInterval"] = "00:01:00",
+             ["Mcp:HostileReviewWorker:AgentName"] = "Astra",
+@@ -470,11 +487,13 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
+             ["Mcp:HostileReviewWorker:RequiredEffort"] = "xhigh",
+         });
+         builder.Services.AddHostileReviewServices();
+         using var host = builder.Build();
+         var ex = await Assert.ThrowsAnyAsync<Exception>(() => host.StartAsync(TestContext.Current.CancellationToken));
+-        Assert.Contains("HostileReviewWorker", ex.ToString(), StringComparison.Ordinal);
++        var text = ex.ToString();
++        if (!text.Contains("HostileReviewWorker", StringComparison.Ordinal))
++            Assert.Fail("Startup failed without naming HostileReviewWorker: " + text);
+     }
+ 
+     private HostileReviewService CreateService()
+         => new(CreateDb(), new HostileReviewWorkerOptions());
+ 
+@@ -529,26 +548,11 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
+                 Method = method,
+                 Params = args,
+             },
+         };
+ 
+-    private static string FindRepoRoot()
+-    {
+-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+-        while (directory is not null)
+-        {
+-            if (File.Exists(Path.Combine(directory.FullName, "AGENTS.md"))
+-                && Directory.Exists(Path.Combine(directory.FullName, "docs", "Project")))
+-            {
+-                return directory.FullName;
+-            }
+-
+-            directory = directory.Parent;
+-        }
+-
+-        throw new InvalidOperationException("Repository root could not be located.");
+-    }
++    private static string FindRepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
+ 
+     /// <summary>Records hostile-review HTTP paths for shipped workflow proof.</summary>
+     private sealed class RecordingHostileReviewHandler : HttpMessageHandler
+     {
+         public List<string> Paths { get; } = [];

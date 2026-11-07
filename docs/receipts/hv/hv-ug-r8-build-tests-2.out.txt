@@ -1,0 +1,21 @@
+  Determining projects to restore...
+  Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj (in 698 ms).
+  Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/_build.csproj (in 698 ms).
+  _build -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/bin/Debug/_build.dll
+  Build.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:13.56]     NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands [FAIL]
+  Failed NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands [22 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 0
+Actual:   1
+  Stack Trace:
+     at NukeBuild.Tests.ServiceUpdateTests.Native(String command, String[] arguments) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/ServiceUpdateTests.cs:line 670
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/ServiceUpdateTests.cs:line 428
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+Results File: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-build-tests-2/Build.Tests.trx
+
+Failed!  - Failed:     1, Passed:   435, Skipped:     0, Total:   436, Duration: 5 m 31 s - Build.Tests.dll (net10.0)

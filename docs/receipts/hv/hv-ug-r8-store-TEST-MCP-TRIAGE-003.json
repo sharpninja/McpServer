@@ -1,0 +1,27 @@
+{
+  "TimestampLocal": "2026-10-27T03:47:38",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-MCP-TRIAGE-003"
+  },
+  "Response": {
+    "payload": {
+      "requestId": "req-20261027T084739Z-fe52",
+      "deprecated": true,
+      "result": {
+        "scopeStartLayerKey": "layer-1",
+        "acceptanceCriteria": [],
+        "title": "Test TEST-MCP-TRIAGE-003",
+        "status": "pending",
+        "id": "TEST-MCP-TRIAGE-003",
+        "testType": "unit",
+        "description": "Research worker invokes configured direct agent with group JSON and prompt.",
+        "area": "MCP",
+        "priority": "medium",
+        "updatedAt": "2026-10-27T08:47:40.9750183+00:00",
+        "createdAt": "2026-10-27T08:47:40.9749078+00:00"
+      }
+    },
+    "type": "result"
+  }
+}

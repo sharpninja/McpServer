@@ -1,0 +1,14 @@
+[
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r3-ssh-read.ps1",
+    "Sha256": "1D324E56C2385F0E8E6F4EBC94D17298C2C0249C7FD489CA10BDB03EB95E3C93",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r3-win-read.ps1",
+    "Sha256": "61C4AF8AB6548A39C03B173219C66E18C365E96ACB05D7C87C689924C6089B23",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  }
+]

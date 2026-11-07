@@ -1,9 +1,16 @@
 using QBrainAi.Support.Mcp.Options;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Options;
 
+/// <summary>
+/// Tests instance-name resolution and instance validation. The class runs in <see cref="ProcessEnvironmentCollection"/>
+/// because two of its tests write the process environment; those two are integration tests (TR-MCP-USECASE-018
+/// AC-006, TR-MCP-USECASE-019 AC-008; hostile validation round 5 finding R5-F2 and the sweep of plan section 19.3).
+/// </summary>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class McpInstanceResolverTests
 {
     [Fact]
@@ -187,9 +194,11 @@ public sealed class McpInstanceResolverTests
 
     /// <summary>
     /// TEST-MCP-QBRAIN-005: QBRAINAI_INSTANCE wins over MCP_INSTANCE when both are set.
-    /// Restores both variables after the assertion.
+    /// Restores both variables after the assertion. It writes the process environment, so it is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
     /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public void GetRequestedInstanceName_PrefersQBrainAiEnvironmentVariable()
     {
         var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
@@ -212,9 +221,11 @@ public sealed class McpInstanceResolverTests
 
     /// <summary>
     /// TEST-MCP-QBRAIN-005: MCP_INSTANCE still selects the instance when QBRAINAI_INSTANCE is unset.
-    /// Restores both variables after the assertion.
+    /// Restores both variables after the assertion. It writes the process environment, so it is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
     /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public void GetRequestedInstanceName_FallsBackToLegacyEnvironmentVariable()
     {
         var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");

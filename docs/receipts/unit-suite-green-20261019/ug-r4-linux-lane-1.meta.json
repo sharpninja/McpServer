@@ -1,0 +1,19 @@
+{
+  "name": "ug-r4-linux-lane-1",
+  "target": "MigrationIntegrationTests",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r4-linux-lane-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "801e6862d49d669808c9315a7ad43d0272b1d1f1",
+  "dirtyPaths": [
+    " M docs/receipts/hv/20261020T170824-unitgreen-r3.selfreview.md",
+    " M docs/receipts/hv/unitgreen-r3-prelaunch.selfreview.md"
+  ],
+  "startedLocal": "2026-10-20T19:04:05",
+  "startedUtc": "2026-10-21T00:04:05.8333639Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-lane-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-lane-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-lane-1.exit.txt"
+}

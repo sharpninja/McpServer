@@ -1,0 +1,258 @@
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs:47:        AssertHermetic(_fixture.Profile, Path.GetTempPath());
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs:62:        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcp-hermetic-controls-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs:26:        Profile = Path.Combine(Path.GetTempPath(), $"mcp-hermetic-profile-{Guid.NewGuid():N}");
+tests/QBrainAi.QBAgent.Tests/Skills/SkillRegistryTests.cs:15:        _root = Path.Combine(Path.GetTempPath(), $"skills_test_{Guid.NewGuid():N}");
+tests/QBrainAi.QBAgent.Tests/QBAgentSessionLogTests.cs:83:        var root = Path.Combine(Path.GetTempPath(), "qbagent-sessions-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.QBAgent.Tests/QBAgentRunLoopTests.cs:18:        var root = Path.Combine(Path.GetTempPath(), "qbagent-loop-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:62:        var missingRoot = Path.Combine(Path.GetTempPath(), $"mcp-missing-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:32:        var dataRoot = Path.Combine(Path.GetTempPath(), "mcp-stdio-transcript-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/TestWorkspacePaths.cs:8:        Path.GetTempPath(), "QBrainAi.Tests", "unused-repo-root");
+tests/QBrainAi.QBAgent.Tests/QBAgentBootstrapperTests.cs:82:            Path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "qbagent-tests", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:200:        var root = Path.Combine(Path.GetTempPath(), "qbrain-workspaces-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Repl.Core.Tests/TranscriptIngestionWorkflowTests.cs:103:        var path = Path.Combine(Path.GetTempPath(), "mcp-repl-transcript", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Repl.Core.Tests/TodoWorkflowSelectionStoreTests.cs:16:    private readonly string _tempDirectory = Path.Combine(Path.GetTempPath(), "mcpserver-todo-selection-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Options/TemplateStorageOptionsPostConfigureTests.cs:159:        var path = Path.Combine(Path.GetTempPath(), $"mcp-template-config-{Guid.NewGuid():N}");
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceStrategyTests.cs:53:        var path = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "turn-failsafe.yaml"));
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceStrategyTests.cs:130:        var workspace = Path.Combine(Path.GetTempPath(), "mcp-repl-failsafe-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceDispatcherTests.cs:20:        var path = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "degraded-turn.yaml"));
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs:54:        var path = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "coord-complete-failsafe.yaml"));
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs:76:        var path = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "coord-should-not-write.yaml"));
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs:93:        var path = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "coord-nonterminal.yaml"));
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs:136:        var root = Path.Combine(Path.GetTempPath(), "mcp-junction-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs:53:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs:71:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs:95:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs:124:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs:154:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs:177:        var workspace = Path.GetTempPath();
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs:188:        var workspaceContext = new WorkspaceContext { WorkspacePath = Path.GetTempPath() };
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs:21:        var root = Path.Combine(Path.GetTempPath(), "import-envelope-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/McpToolBackendUnavailableErrorTests.cs:64:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/McpToolBackendUnavailableErrorTests.cs:95:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/McpToolBackendUnavailableErrorTests.cs:128:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/McpToolBackendUnavailableErrorTests.cs:143:        var workspaceContext = new WorkspaceContext { WorkspacePath = Path.GetTempPath() };
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:105:        var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-normalize", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:148:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-codex-diagnostics", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:184:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-claude-diagnostics", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:219:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-grok-diagnostics", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:253:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-copilot-diagnostics", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:287:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-cline-diagnostics", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:318:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-opencode-diagnostics", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:352:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-opencode-incomplete-step", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:402:        var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-workspace", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:455:        var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-workspace", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:491:        var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-workspace", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:521:        var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-workspace", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:553:        var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-workspace", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:554:        var providerRoot = Path.Combine(Path.GetTempPath(), "mcp-transcript-provider", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:588:        var tempParent = Path.Combine(Path.GetTempPath(), "mcp-transcript-security", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:628:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-tests", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:664:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-tests", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/LegacyTodoSqliteMigratorTests.cs:33:        _tempRoot = Path.Combine(Path.GetTempPath(), $"legacy_todo_mig_{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/McpToolErrorEnvelopeTests.cs:58:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/McpToolErrorEnvelopeTests.cs:83:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/McpToolErrorEnvelopeTests.cs:105:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/McpToolErrorEnvelopeTests.cs:121:        var workspaceContext = new WorkspaceContext { WorkspacePath = Path.GetTempPath() };
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/SessionLogStdioSanitizationTests.cs:72:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/SessionLogStdioSanitizationTests.cs:84:        var workspaceContext = new WorkspaceContext { WorkspacePath = Path.GetTempPath() };
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpToolTests.cs:64:        var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-tool", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpToolTests.cs:101:        var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-tool", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpToolTests.cs:162:        var workspaceContext = new WorkspaceContext { WorkspacePath = Path.GetTempPath() };
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs:132:        var directory = Path.Combine(Path.GetTempPath(), "memory-bench-multiturn-stub-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs:156:        var directory = Path.Combine(Path.GetTempPath(), "memory-bench-mt-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:80:        var directory = Path.Combine(Path.GetTempPath(), "memory-bench-stub-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs:29:        _tempDir = Path.Combine(Path.GetTempPath(), $"fwh-ingestor-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs:209:        var workspace = Path.Combine(Path.GetTempPath(), "fed-omit");
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpTestPaths.cs:19:        var path = Path.Combine(Path.GetTempPath(), "mcpserver-agenthelp-tests", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TransactionGatedStdioRoutingTests.cs:59:            Path.Combine(Path.GetTempPath(), "QBrainAi.Tests", nameof(TransactionGatedStdioRoutingTests)))
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TransactionGatedStdioRoutingTests.cs:69:            Path.GetTempPath(), "QBrainAi.Tests", nameof(TransactionGatedStdioRoutingTests),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TransactionGatedStdioRoutingTests.cs:474:        var temporaryRoot = Path.GetFullPath(Path.GetTempPath());
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorChunkingTests.cs:27:        _tempDir = Path.Combine(Path.GetTempPath(), $"fwh-chunking-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:505:        var host = Path.Combine(Path.GetTempPath(), "mcp-gh-gate");
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:531:        var workspacePath = Path.Combine(Path.GetTempPath(), $"mcp-gh-ws-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:547:        var workspacePath = Path.Combine(Path.GetTempPath(), $"mcp-gh-safe-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:22:        _tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-config-tests", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/EventPublishingServiceTests.cs:21:        _tempRoot = Path.Combine(Path.GetTempPath(), $"mcp-evt-tests-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs:24:        _tempDir = Path.Combine(Path.GetTempPath(), $"fwh-watcher-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:93:        var directory = Path.Combine(Path.GetTempPath(), "memory-bench-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoService_WorkspaceIsolationTests.cs:46:        _tempRoot = Path.Combine(Path.GetTempPath(), $"ef_todo_workspace_{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs:74:        var workspaceRoot = Path.Combine(Path.GetTempPath(), "usecase-owned-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentServiceRuntimeTests.cs:63:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-launch"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentServiceRuntimeTests.cs:89:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-banned"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentServiceRuntimeTests.cs:121:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-stop"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsFourteenthLinuxNativeTests.cs:29:        var root = Path.Combine(Path.GetTempPath(), "requirements-fourteenth-fifo", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:16:        _tempDir = Path.Combine(Path.GetTempPath(), $"repo_ingest_{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:148:            var temp = Path.GetFullPath(Path.GetTempPath());
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs:57:        var stem = Path.Combine(Path.GetTempPath(), "qbt-cli-temp-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceTests.cs:41:        _tempRoot = Path.Combine(Path.GetTempPath(), $"ef_todo_test_{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/AuditedAgentCliClientTests.cs:24:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), $"audit-ws-{Guid.NewGuid():N}"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AuditedAgentCliClientTests.cs:61:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), $"audit-stream-ws-{Guid.NewGuid():N}"));
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceRequirementLinkTests.cs:28:        _workspacePath = Path.Combine(Path.GetTempPath(), $"todo-link-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceRequirementLinkTests.cs:64:        var workspacePath = Path.Combine(Path.GetTempPath(), $"todo-fixed-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/OpenCodeSqliteTranscriptTests.cs:14:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-opencode-sqlite", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/OpenCodeSqliteTranscriptTests.cs:40:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-opencode-sqlite", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/OpenCodeSqliteTranscriptTests.cs:90:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-opencode-sqlite-orphan-tool", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/OpenCodeSqliteTranscriptTests.cs:131:        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-opencode-sqlite-wal", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityCrudTests.cs:37:        _tempWorkspacePath = Path.Combine(Path.GetTempPath(), $"graphrag-entity-crud-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:21:        _tempDir = Path.Combine(Path.GetTempPath(), $"repo_test_{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:71:        var outsideDir = Path.Combine(Path.GetTempPath(), $"repo_external_{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:518:        var outsideDir = Path.Combine(Path.GetTempPath(), $"repo_escape_{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Indexing/VectorIndexServiceTests.cs:84:        var tempDir = Path.Combine(Path.GetTempPath(), $"hnsw_test_{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingServiceTests.cs:63:        var vocabPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.vocab.txt");
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs:29:    private readonly string _databaseFolder = Path.Combine(Path.GetTempPath(), "mcp-s1-db-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs:33:    public string WorkspaceA { get; } = Path.Combine(Path.GetTempPath(), "mcp-s1-a-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs:36:    public string WorkspaceB { get; } = Path.Combine(Path.GetTempPath(), "mcp-s1-b-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagDocumentManagementTests.cs:42:        _tempWorkspacePath = Path.Combine(Path.GetTempPath(), $"graphrag-docmgmt-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/MemoryServiceTests.cs:18:    private readonly string _workspaceA = Path.Combine(Path.GetTempPath(), "mcp-memory-a");
+tests/QBrainAi.Support.Mcp.Tests/Services/MemoryServiceTests.cs:19:    private readonly string _workspaceB = Path.Combine(Path.GetTempPath(), "mcp-memory-b");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs:14:        var dir = Path.Combine(Path.GetTempPath(), "import-recovery-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs:246:        var tempConfigPath = Path.Combine(Path.GetTempPath(), $"frpc-test-{Guid.NewGuid():N}.toml");
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:32:        _workspace = Path.Combine(Path.GetTempPath(), "handoff-tests", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:88:        var external = await sut.IngestAsync(new HandoffIngestionRequest { SourceKind = HandoffSourceKind.Path, Path = Path.Combine(Path.GetTempPath(), "outside.md") }, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:472:        var outsideRoot = Path.Combine(Path.GetTempPath(), "handoff-outside-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:505:        var otherWorkspace = Path.Combine(Path.GetTempPath(), "handoff-tests", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs:18:        var root = Path.Combine(Path.GetTempPath(), "import-ingest-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffBoundedSourceTests.cs:21:        _workspace = Path.Combine(Path.GetTempPath(), "handoff-bound", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:282:        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-test-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:350:        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-gitignore-test-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:397:        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-wiki-test-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:455:        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-wiki-preserve-test-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:518:        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-remove-test-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:557:        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-legacy-test-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:598:        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-absent-test-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:756:        var root = Path.Combine(Path.GetTempPath(), $"mcp-marker-version-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:782:        var root = Path.Combine(Path.GetTempPath(), $"mcp-marker-digest-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:1135:        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-signature-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/PromptTemplateServiceTests.cs:17:        _tempFilePath = Path.Combine(Path.GetTempPath(), $"prompt-template-{Guid.NewGuid():N}.yaml");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ExternalDocsIngestorTests.cs:17:        _tempDir = Path.Combine(Path.GetTempPath(), $"ext_ingest_{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:23:        _workspacePath = Path.Combine(Path.GetTempPath(), $"graphrag-tests-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/CodexTranscriptAdapterCoverageTests.cs:261:        var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-codex-search", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/CodexTranscriptAdapterCoverageTests.cs:344:            : Path.Combine(Path.GetTempPath(), "mcp-transcript-codex-coverage", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:13:    private readonly string _tempRoot = Path.Combine(Path.GetTempPath(), "mcp-reqdocs-tests-" + Guid.NewGuid().ToString("N")[..8]);
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs:16:        Path.GetTempPath(), "QBrainAi.Tests", nameof(FederationTopologyServiceTests),
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs:41:            Path.GetTempPath(), "QBrainAi.Tests", nameof(FederationTopologyServiceTests), Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementScopeLayerServiceTests.cs:195:        private readonly string _root = Path.Combine(Path.GetTempPath(), "mcp-reqscope-tests-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagRelationshipCrudTests.cs:37:        _tempWorkspacePath = Path.Combine(Path.GetTempPath(), $"graphrag-rel-crud-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagIngestTextTests.cs:46:        _tempWorkspacePath = Path.Combine(Path.GetTempPath(), $"graphrag-ingest-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:245:            Path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "mcp-docfx-runner-tests-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:18:    private readonly string _workspaceRoot = Path.Combine(Path.GetTempPath(), "mcp-wikiexport-tests-" + Guid.NewGuid().ToString("N")[..8]);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:278:        var outsideRoot = Path.Combine(Path.GetTempPath(), "mcp-docfx-outside-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:619:        private readonly string _root = Path.Combine(Path.GetTempPath(), "mcp-reqdb-tests-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:326:            Path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "mcp-wiki-orchestrator-tests-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:529:        private readonly string _root = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "mcp-wiki-db-orchestrator-tests-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:948:                Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseExpandedScopeTests.cs:25:    private readonly string _workspace = Path.Combine(Path.GetTempPath(), "mcp-uc-expanded-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:68:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:166:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:61:        var home = Path.Combine(Path.GetTempPath(), "sesslog-extract-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:92:        var home = Path.Combine(Path.GetTempPath(), "sesslog-bf-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseCqrsTests.cs:23:    private readonly string _workspace = Path.Combine(Path.GetTempPath(), "mcp-uc-cqrs-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseCqrsTests.cs:51:        var isolated = Path.Combine(Path.GetTempPath(), "mcp-uc-noseed-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceWindowsProcess.cs:55:                Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoYamlContractTests.cs:48:        var root = Path.Combine(Path.GetTempPath(), $"mcpserver-todo-yaml-contract-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:644:            Path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "mcp-req-export-tests-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:272:            Root = Path.Combine(Path.GetTempPath(), $"bug-triage-139-traversal-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:274:            ExternalRoot = Path.Combine(Path.GetTempPath(), $"bug-triage-139-external-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSupersessionTests.cs:218:        var path = Path.Combine(Path.GetTempPath(), $"sessionack-race-{Guid.NewGuid():N}.db");
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:39:        _dataDir = Path.Combine(Path.GetTempPath(), $"mcp-test-pgdata-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:43:        var passwordFile = Path.Combine(Path.GetTempPath(), $"mcp-test-pgpw-{Guid.NewGuid():N}.txt");
+tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateContractTests.cs:302:                Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Services/TriagePromptTemplateTests.cs:23:            Path.GetTempPath(), "QBrainAi.Tests", nameof(TriagePromptTemplateTests),
+tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseAuditEmissionTests.cs:22:    private readonly string _workspace = Path.Combine(Path.GetTempPath(), "mcp-uc-audit-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs:36:        _workspacePath = Path.Combine(Path.GetTempPath(), "TodoExecutionServiceTests", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:375:                Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:407:                Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:410:                Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceProcessManagerStartupTests.cs:23:        _tempRoot = Path.Combine(Path.GetTempPath(), $"wpm_startup_{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:54:        var missingRoot = Path.Combine(Path.GetTempPath(), "triage-missing-owned-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceSqliteTests.cs:39:        _workspacePath = Path.Combine(Path.GetTempPath(), "TodoExecutionServiceSqliteTests", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs:29:        var sourcePath = Path.Combine(Path.GetTempPath(), "session.jsonl");
+tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs:30:        var yamlPath = Path.Combine(Path.GetTempPath(), "session.hash.sessionlog.yaml");
+tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs:31:        var recoveryPath = Path.Combine(Path.GetTempPath(), "native-1.hash.importRecovery.yaml");
+tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs:103:        var workspace = Path.Combine(Path.GetTempPath(), "import-omit-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs:107:        var sourcePath = Path.Combine(Path.GetTempPath(), "omit.jsonl");
+tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs:108:        var yamlPath = Path.Combine(Path.GetTempPath(), "omit.hash.sessionlog.yaml");
+tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs:139:            Path.Combine(Path.GetTempPath(), "omit.recovery.yaml"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WindowsServiceDeploymentGuardTests.cs:14:        _tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-service-guard-tests", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePolicyServiceTests.cs:41:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), $"policy-ws-{Guid.NewGuid():N}"));
+tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs:19:    private readonly string _tempRoot = Path.Combine(Path.GetTempPath(), "g8-wiki-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:44:        var directory = Path.Combine(Path.GetTempPath(), "memory-bench-schema-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs:27:        _root = Path.Combine(Path.GetTempPath(), $"todo_bootstrap_{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs:216:        // value we feed back into OverrideWorkspaceId for probe queries. Path.GetTempPath()
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:428:        var shimDirectory = Path.Combine(Path.GetTempPath(), $"codex-shim-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/StorageConnectivityHealthCheckTests.cs:34:        var missingPath = Path.Combine(Path.GetTempPath(), $"missing-{Guid.NewGuid():N}", "mcp.db");
+tests/QBrainAi.Support.Mcp.Tests/Services/StorageConnectivityHealthCheckTests.cs:46:        var path = Path.Combine(Path.GetTempPath(), $"storage-health-{Guid.NewGuid():N}.db");
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG7OverlayTests.cs:29:        _workspace = Path.Combine(Path.GetTempPath(), "wiki-g7", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseDiagramGraphCqrsTests.cs:24:    private readonly string _workspace = Path.Combine(Path.GetTempPath(), "mcp-uc-graph-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:39:        _workspace = Path.Combine(Path.GetTempPath(), "wiki-g6", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:215:        var dest = Path.Combine(Path.GetTempPath(), "wiki-g6-dest", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:238:        var dest = Path.Combine(Path.GetTempPath(), "wiki-g6-remap", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:285:        var createDest = Path.Combine(Path.GetTempPath(), "wiki-g6-reject", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:307:        var dest = Path.Combine(Path.GetTempPath(), "wiki-g6-idem", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:328:        var dest = Path.Combine(Path.GetTempPath(), "wiki-g6-yaml", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:352:        var dest = Path.Combine(Path.GetTempPath(), "wiki-g6-archive", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:378:        var dest = Path.Combine(Path.GetTempPath(), "wiki-g6-conflict", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:424:        environment.ContentRootPath.Returns(Path.GetTempPath());
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs:177:            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Path.GetTempPath() }),
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs:70:        var root = Path.Combine(Path.GetTempPath(), "handoff-reader", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs:102:        var root = Path.Combine(Path.GetTempPath(), "handoff-long", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceGitRemoteTests.cs:28:        _tempRoot = Path.Combine(Path.GetTempPath(), $"mcp-workspace-git-remote-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:42:        _workspace = Path.Combine(Path.GetTempPath(), "hr-g4", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:105:        request.WorkspacePath = Path.Combine(Path.GetTempPath(), "other-workspace");
+tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:131:            SeedTodo(db, "MCP-OTHER-WORKSPACE-001", workspaceId: Path.Combine(Path.GetTempPath(), "other-ws"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceDatabaseAuthorityBehaviorTests.cs:30:        var workspacePath = Path.Combine(Path.GetTempPath(), $"dbfk-create-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceDatabaseAuthorityBehaviorTests.cs:55:        var workspacePath = Path.Combine(Path.GetTempPath(), $"dbfk-delete-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceDatabaseAuthorityBehaviorTests.cs:91:        var workspacePath = Path.Combine(Path.GetTempPath(), $"dbfk-banned-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceDatabaseAuthorityBehaviorTests.cs:143:        environment.ContentRootPath.Returns(Path.GetTempPath());
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs:125:        environment.ContentRootPath.Returns(Path.GetTempPath());
+tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs:23:        _tempRoot = Path.Combine(Path.GetTempPath(), "mcp-github-token-store-tests", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1842:        var databasePath = Path.Combine(Path.GetTempPath(), "sessionlog-unique-" + Guid.NewGuid().ToString("N") + ".db");
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs:29:    private readonly string _root = Path.Combine(Path.GetTempPath(), $"mcp-handoff-harness-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:27:        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-process-env-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:63:        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-grok-bin-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:101:        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-winapps-alias-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:139:        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-msix-root-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Controllers/TranscriptIngestionControllerTests.cs:21:        var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-controller", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Controllers/TranscriptIngestionControllerTests.cs:83:        var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-controller", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Controllers/TranscriptIngestionControllerTests.cs:174:        var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-upload", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Controllers/TranscriptIngestionControllerTests.cs:237:        var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-upload", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Controllers/TranscriptIngestionControllerTests.cs:290:        var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-upload", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs:37:        _workspace = Path.Combine(Path.GetTempPath(), "hy-g5", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:31:    private readonly string _root = Path.Combine(Path.GetTempPath(), $"mcp-plugin-sources-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:231:        Assert.Null(sources.SiblingRoot(Path.Combine(Path.GetTempPath(), "workspace"), "mcpserver-claude-code-plugin"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:236:        Assert.StartsWith(Path.GetFullPath(Path.GetTempPath()), Path.GetFullPath(sources.UserProfile!), StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:18:        Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:294:        var boundary = Path.Combine(Path.GetTempPath(), $"mcp-reach-links-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:339:        var root = Path.Combine(Path.GetTempPath(), $"mcp-walk-links-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs:34:        _workspace = Path.Combine(Path.GetTempPath(), "handoff-audit", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs:39:        _workspace = Path.Combine(Path.GetTempPath(), "handoff-durability", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseStorageTests.cs:18:    private readonly string _workspaceA = Path.Combine(Path.GetTempPath(), "mcp-uc-a");
+tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseStorageTests.cs:19:    private readonly string _workspaceB = Path.Combine(Path.GetTempPath(), "mcp-uc-b");
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigratedSchemaOperationsTests.cs:37:        _workspace = Path.Combine(Path.GetTempPath(), "mcp-mem-mig-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryGlobalDefaultWorkspaceTests.cs:207:            Path.Combine(Path.GetTempPath(), "mcp-default-workspace"));
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:34:    private readonly string _root = Path.Combine(Path.GetTempPath(), $"mcp-scan-binding-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs:110:        var root = Path.Combine(Path.GetTempPath(), "mcp-sqlite-preflight-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs:339:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:73:                WorkspaceId = Path.Combine(Path.GetTempPath(), "fourteenth-pre-cancel"),
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:74:                WorkspacePath = Path.Combine(Path.GetTempPath(), "fourteenth-pre-cancel"),
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:108:                    Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:135:                Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:172:                        Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:54:                Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:147:                Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Controllers/ConfigurationControllerTests.cs:27:        _tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-config-controller-tests", Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs:58:                new WorkspaceContext { WorkspacePath = Path.GetTempPath() },
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs:140:            var root = Path.Combine(Path.GetTempPath(), "bug139-sync-identity");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs:171:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs:244:                new WorkspaceContext { WorkspacePath = Path.GetTempPath() });
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs:247:                    new ListUseCasesQuery(Path.GetTempPath()),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthSqliteConsumerTests.cs:190:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Controllers/RequirementsControllerGenerateTests.cs:58:        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcp-wiki-generate-{Guid.NewGuid():N}");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:22:        var root = Path.Combine(Path.GetTempPath(), "mcp-fifteenth-restore-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:23:        var external = Path.Combine(Path.GetTempPath(), "mcp-fifteenth-external-" + Guid.NewGuid().ToString("N"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:237:                Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:541:                Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:428:                Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:511:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:730:            Path.GetTempPath(),
+tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs:113:        var dir = Path.Combine(Path.GetTempPath(), $"fwh_mcp_cfg_{Guid.NewGuid():N}");

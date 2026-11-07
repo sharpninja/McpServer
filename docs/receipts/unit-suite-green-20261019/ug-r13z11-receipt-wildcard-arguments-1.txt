@@ -1,0 +1,31 @@
+RECEIPT started=2026-11-05T22:12:17 ended=2026-11-05T22:12:18 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-ReceiptWildcardArguments.ps1 sha256=17EBDA1802084B4CC9F5740BB584FD8382B4012CC2C6A72F9AEB4004B0000C78
+ARGUMENTS -Root | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019
+HEAD 53a210ca4e521474685f2e3e1558b5cf88a5d535
+Now: 2026-11-05T22:12:17 root=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019
+ug-r13z10-citation-sweep-all-1.txt:3: ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Pathspecs | src/*.cs,build/*.cs,tests/*.cs
+ug-r13z10-citation-sweep-all-1.txt:5: Now: 2026-11-05T19:38:12 base=9b099716 pathspecs=src/*.cs | build/*.cs | tests/*.cs count=3
+ug-r13z11-citation-sweep-all-1.txt:3: ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Pathspecs | src/*.cs,build/*.cs,tests/*.cs
+ug-r13z11-citation-sweep-all-1.txt:5: Now: 2026-11-05T21:52:37 base=9b099716 pathspecs=src/*.cs | build/*.cs | tests/*.cs count=3
+ug-r13z4-citation-sweep-all-1.txt:3: ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Pathspecs | src/*.cs,build/*.cs,tests/*.cs
+ug-r13z4-citation-sweep-all-1.txt:5: Now: 2026-11-05T04:30:25 base=9b099716 pathspecs=src/*.cs,build/*.cs,tests/*.cs
+ug-r13z4-citation-sweep-all-2.txt:3: ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Pathspecs | src/*.cs,build/*.cs,tests/*.cs
+ug-r13z4-citation-sweep-all-2.txt:5: Now: 2026-11-05T04:31:28 base=9b099716 pathspecs=src/*.cs | build/*.cs | tests/*.cs count=3
+ug-r13z4-citation-sweep-all-3.txt:3: ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Pathspecs | src/*.cs,build/*.cs,tests/*.cs
+ug-r13z4-citation-sweep-all-3.txt:5: Now: 2026-11-05T04:33:49 base=9b099716 pathspecs=src/*.cs | build/*.cs | tests/*.cs count=3
+ug-r13z4c-citation-sweep-all-1.txt:3: ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Pathspecs | src/*.cs,build/*.cs,tests/*.cs
+ug-r13z4c-citation-sweep-all-1.txt:5: Now: 2026-11-05T06:46:12 base=9b099716 pathspecs=src/*.cs | build/*.cs | tests/*.cs count=3
+ug-r13z5-citation-sweep-all-1.txt:3: ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Pathspecs | src/*.cs,build/*.cs,tests/*.cs
+ug-r13z5-citation-sweep-all-1.txt:5: Now: 2026-11-05T08:23:07 base=9b099716 pathspecs=src/*.cs | build/*.cs | tests/*.cs count=3
+ug-r13z5-elapsed-bound-sweep-1.txt:5: Now: 2026-11-05T08:03:13 roots=tests pattern=Assert\.InRange\([^;]*Elapsed|Assert\.[A-Za-z]+\([^;]*Elapsed[^;]*(<|>)|Elapsed\s*(<|<=|>|>=)\s*TimeSpan|ElapsedMilliseconds\s*(<|<=|>|>=)
+ug-r13z6-citation-sweep-all-1.txt:3: ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Pathspecs | src/*.cs,build/*.cs,tests/*.cs
+ug-r13z6-citation-sweep-all-1.txt:5: Now: 2026-11-05T12:19:36 base=9b099716 pathspecs=src/*.cs | build/*.cs | tests/*.cs count=3
+ug-r13z6-g1-sibling-sweep-1.txt:5: Now: 2026-11-05T12:26:17 roots=tests pattern=\["(DOTNET|ASPNETCORE)_[A-Za-z0-9_]+"\]\s*=
+ug-r13z7-citation-sweep-all-1.txt:3: ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Pathspecs | src/*.cs,build/*.cs,tests/*.cs
+ug-r13z7-citation-sweep-all-1.txt:5: Now: 2026-11-05T14:30:03 base=9b099716 pathspecs=src/*.cs | build/*.cs | tests/*.cs count=3
+ug-r13z8b-citation-sweep-all-1.txt:3: ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Pathspecs | src/*.cs,build/*.cs,tests/*.cs
+ug-r13z8b-citation-sweep-all-1.txt:5: Now: 2026-11-05T16:34:16 base=9b099716 pathspecs=src/*.cs | build/*.cs | tests/*.cs count=3
+ug-r13z9-citation-sweep-all-1.txt:3: ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Pathspecs | src/*.cs,build/*.cs,tests/*.cs
+ug-r13z9-citation-sweep-all-1.txt:5: Now: 2026-11-05T18:16:31 base=9b099716 pathspecs=src/*.cs | build/*.cs | tests/*.cs count=3
+ug-r7-env-search.txt:4: Now: 2026-10-26T10:25:46 root=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src pattern=GetEnvironmentVariable\s*\((?!\s*")|GetEnvironmentVariable\s*,|GetEnvironmentVariable\)
+END files=916 hits=25

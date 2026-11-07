@@ -1,0 +1,24 @@
+RECEIPT 2026-10-20T14:54:32 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveLane.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-20T14:54:29 host=PAYTON-LEGION2 user=kingd
+WORKTREE HEAD 6ea425ab943ebdd8aad1de1c84896de92d0270d8
+PROOF START 2026-10-20T14:48:27 user=kingd session=1 interactive=True head=6ea425ab943ebdd8aad1de1c84896de92d0270d8 runsettings=C:\Users\kingd\AppData\Local\Temp\diag-lane-ug-r3-win-lane-diag-3.runsettings exists=True vstestdiag=C:\Users\kingd\AppData\Local\Temp\vstest-diag-ug-r3-win-lane-diag-3\log.txt
+EXIT 0 2026-10-20T14:53:26
+TASK state=Ready lastRun=10/20/2026 14:48:26 result=0
+LOG lines=118
+  LOG 14:48:31 [INF] Integration lane filter: Category=Integration&Platform!=Linux
+  LOG 14:53:04 [DBG] Passed!  - Failed:     0, Passed:   361, Skipped:     0, Total:   361, Duration: 4 m 20 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+  LOG 14:53:10 [DBG] Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 88 ms - QBrainAi.McpAgent.Tests.dll (net10.0)
+  LOG 14:53:15 [DBG] Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 285 ms - QBrainAi.Repl.Core.Tests.dll (net10.0)
+  LOG 14:53:21 [DBG] Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 41 ms - QBrainAi.QBAgent.Tests.dll (net10.0)
+  LOG 14:53:26 [DBG] Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 1 s - Build.Tests.dll (net10.0)
+  LOG Build succeeded on 10/20/2026 2:53:26 PM. ＼（＾ᴗ＾）／
+TRX \provider\Build.Tests\Build.Tests.trx total=6 executed=6 passed=6 failed=0 notExecuted=0
+TRX \provider\QBrainAi.McpAgent.Tests\QBrainAi.McpAgent.Tests.trx total=1 executed=1 passed=1 failed=0 notExecuted=0
+TRX \provider\QBrainAi.QBAgent.Tests\QBrainAi.QBAgent.Tests.trx total=2 executed=2 passed=2 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Repl.Core.Tests\QBrainAi.Repl.Core.Tests.trx total=3 executed=3 passed=3 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx total=361 executed=361 passed=361 failed=0 notExecuted=0
+TASK REMOVED McpUnitGreenLane-ug-r3-win-lane-diag-3 present-after=False
+END 2026-10-20T14:54:32

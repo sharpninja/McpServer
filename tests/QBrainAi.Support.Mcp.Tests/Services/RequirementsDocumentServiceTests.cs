@@ -64,6 +64,8 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Contains("| TEST-MCP-001 | Tracked | Testing-Requirements.md |", matrixDoc.Content);
     }
 
+    /// <remarks>Integration: writes and reads physical requirement or wiki exports and their native file attributes (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task GenerateAllAsync_WritesCanonicalFilesToWorkspace()
     {
@@ -97,6 +99,8 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     /// MCP-REQEXPORT-READONLY-001: Requirements markdown exports are projections and are
     /// marked read-only so agents do not accidentally edit them as the source of truth.
     /// </summary>
+    /// <remarks>Integration: writes and reads physical requirement or wiki exports and their native file attributes (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task GenerateAllAsync_MarksExportedMarkdownFilesReadOnly()
     {
@@ -115,6 +119,8 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         });
     }
 
+    /// <remarks>Integration: writes and reads physical requirement or wiki exports and their native file attributes (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds()
     {
@@ -140,6 +146,8 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Contains("| TEST-MCP-001 | Tracked | Testing-Requirements.md |", matrix);
     }
 
+    /// <remarks>Integration: writes and reads physical requirement or wiki exports and their native file attributes (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata()
     {
@@ -189,6 +197,8 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     /// TEST-MCP-106: Wiki export temporarily clears read-only files for replacement/deletion,
     /// then leaves exported files read-only after generation completes.
     /// </summary>
+    /// <remarks>Integration: writes and reads physical requirement or wiki exports and their native file attributes (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly()
     {
@@ -214,6 +224,8 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
             $"{file.RelativePath} should be read-only after export."));
     }
 
+    /// <remarks>Integration: writes and reads physical requirement or wiki exports and their native file attributes (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria()
     {

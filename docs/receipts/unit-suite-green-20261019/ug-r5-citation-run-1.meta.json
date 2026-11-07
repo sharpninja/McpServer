@@ -1,0 +1,18 @@
+{
+  "name": "ug-r5-citation-run-1",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r5-citation-run-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "094e47f4e0e8074c027e68f25d26482ce68b331e",
+  "dirtyPaths": [
+    " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs"
+  ],
+  "startedLocal": "2026-10-21T05:15:56",
+  "startedUtc": "2026-10-21T10:15:56.2628236Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-citation-run-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-citation-run-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-citation-run-1.exit.txt"
+}

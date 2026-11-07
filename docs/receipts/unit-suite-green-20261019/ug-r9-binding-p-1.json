@@ -1,0 +1,160 @@
+{
+  "name": "ug-r9-binding-p-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "679eb7881d0342a58ef446be5084b703c0cee7c4",
+  "dirtyPaths": [
+    " M .nuke/build.schema.json",
+    " M build/IntegrationLaneClassFilter.cs",
+    " M build/IntegrationLaneFilter.cs",
+    " M docs/plans/2026-10-19-unit-suite-green.md",
+    " M src/QBrainAi.Client/Models/RequirementsModels.cs",
+    " M src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs",
+    " M src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+    " M src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs",
+    " M src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+    " M src/QBrainAi.Services/Services/GitHubCliService.cs",
+    " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "?? build/Build.TestGroups.cs",
+    "?? build/TestGroupExecution.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-r-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-r-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-r-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-r-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-p-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-p-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-r-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-r-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-negative-q-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-negative-q-1/",
+    "?? src/QBrainAi.Repl.Core/RequirementTimestampText.cs",
+    "?? src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs",
+    "?? tests/Build.Tests/TestGroupExecutionBindingTests.cs",
+    "?? tests/Build.Tests/TestGroupExecutionContractTests.cs",
+    "?? tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs",
+    "?? tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterContractTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Repl.Core.Tests:RequirementTimestampAdapterContractTests,RequirementTimestampAdapterBindingTests,RequirementsWorkflowTests,RequirementsWorkflowMetadataTests",
+    "QBrainAi.Client.Tests:RequirementTimestampJsonContractTests,RequirementTimestampJsonBindingTests,RequirementsClientTests",
+    "QBrainAi.Support.Mcp.Tests:RequirementStoredTimestampContractTests,RequirementStoredTimestampBindingTests,RequirementsDatabaseDocumentServiceTests,RequirementsServiceTests,RequirementsControllerGenerateTests,RequirementsDocumentRendererTests,RequirementsRecoveryTests",
+    "--test-run-id",
+    "ug-r9-binding-p-1"
+  ],
+  "startedLocal": "2026-11-02T11:12:16",
+  "endedLocal": "2026-11-02T11:13:20",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 162,
+  "passed": 162,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Client.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-p-1/groups/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-binding-p-1/QBrainAi.Client.Tests.trx",
+      "sha256": "7636A4ED10A138D1219E5197128F8C156C3BECEE18E704C08038D21763EEA815",
+      "total": 28,
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-p-1/groups/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-binding-p-1/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "21BCF2CF15C9A03D937A6779A65CB0DCE46C5FF165F8F01E4A090C57E5CEB369",
+      "total": 77,
+      "passed": 77,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-p-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-binding-p-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "70A430691D3B35022D11E03357754E2E84602538E01886AC14EC8153B7B41ECA",
+      "total": 57,
+      "passed": 57,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterContractTests.cs",
+      "sha256": "38856A33BEA0867EB5173716476512C111C44E4D69996DAF17A0C91C29587364"
+    },
+    {
+      "path": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+      "sha256": "09A9F0C1B42E7B0F95DDA8E57DD2D541E82EECC08DD46E91EC3D88EC35236427"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+      "sha256": "EBBCD8E8083EDE2F178DF945E7B729FE752D99691CF80AFFE327A3AB427B66DE"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs",
+      "sha256": "40D5750C9A38F917720276EA575487C16A325715FC93697E8A0B4570294E5F20"
+    },
+    {
+      "path": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs",
+      "sha256": "DBE2900C91F11AED9725181802C62D5A538C4E99FBB3EC185E0A8313D52D0420"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+      "sha256": "B8F52DA580C957BDD8F730A1555DDDDCB4ECDF2F15A52B275F2CA8622F35610D"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+      "sha256": "8A6B24DC1264690909D4BD1E5A7B252885F3938A8D64DB372BDD2783462CE242"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/RequirementTimestampText.cs",
+      "sha256": "F04EBA3AE5ACDAB7C2226F69E80C9C9704E61669391624ACC7E5ED89D01B9770"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs",
+      "sha256": "FFA3AEA9D41B8C89E5ABE8C48A6F2A6FE5896A99727D1985282F3AE8D6B64AA1"
+    },
+    {
+      "path": "src/QBrainAi.Client/Models/RequirementsModels.cs",
+      "sha256": "74300E0DA76A4C47A099B07ABC4F457D52553926530AE01B3E5528153DD5465A"
+    },
+    {
+      "path": "src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs",
+      "sha256": "16A8FB2D2B2D85269A9A55C3C13EA586F376A5C5AEEC1E86616A6F6461B3617F"
+    },
+    {
+      "path": "src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs",
+      "sha256": "59F83C79F4B0DC86CB882543B867C17BED6842BD31FB9438A3E08360CF95278A"
+    },
+    {
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "sha256": "2C0094B059C94FB4C9A455A57953F01E856E239F86690232FD351B703B21E615"
+    }
+  ],
+  "writtenLocal": "2026-11-02T11:13:40",
+  "writtenBy": "ClaudeCode"
+}

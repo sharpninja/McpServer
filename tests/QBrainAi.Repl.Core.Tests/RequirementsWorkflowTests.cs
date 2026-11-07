@@ -848,8 +848,13 @@ public class RequirementsWorkflowTests
         Assert.Equal("TEST-MCP-001", selection.TestId);
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 (appended 2026-11-03): the current selection carries the scripted selection time exactly
+    /// (hostile validation round 10 finding R10-F3: the case, formerly CurrentSelection_HasTimestamp_ReturnsRecentTimestamp,
+    /// required a time within the last minute of the live clock).
+    /// </summary>
     [Fact]
-    public void CurrentSelection_HasTimestamp_ReturnsRecentTimestamp()
+    public void CurrentSelection_HasTimestamp_ReturnsScriptedTimestamp()
     {
         var mockSelectionState = CreateMockSelectionState("FR-MCP-001", null, null);
 
@@ -858,9 +863,11 @@ public class RequirementsWorkflowTests
         var selection = _workflow.CurrentSelection();
 
         Assert.NotNull(selection);
-        Assert.True(selection!.SelectedAt <= DateTimeOffset.UtcNow);
-        Assert.True(selection.SelectedAt >= DateTimeOffset.UtcNow.AddMinutes(-1));
+        QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.AssertRecordedTimes([SelectionTime], [selection!.SelectedAt], "requirement selection");
     }
+
+    /// <summary>The scripted selection time of the mock selection state (2026-11-03, TR-MCP-USECASE-018 AC-006; finding R10-F3).</summary>
+    private static readonly DateTimeOffset SelectionTime = new(2026, 1, 15, 9, 30, 0, TimeSpan.Zero);
 
     #endregion
 
@@ -1264,13 +1271,19 @@ public class RequirementsWorkflowTests
         return conflict;
     }
 
+    /// <summary>TR-MCP-USECASE-018 AC-006: a substitute requirement selection holding the given ids and the scripted selection time <see cref="SelectionTime"/>.</summary>
+    /// <param name="frId">The selected FR id, or null.</param>
+    /// <param name="trId">The selected TR id, or null.</param>
+    /// <param name="testId">The selected TEST id, or null.</param>
+    /// <returns>The substitute selection state.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed on 2026-11-03 to return the scripted selection time instead of the live clock (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static IRequirementsSelectionState CreateMockSelectionState(string? frId, string? trId, string? testId)
     {
         var state = Substitute.For<IRequirementsSelectionState>();
         state.FrId.Returns(frId);
         state.TrId.Returns(trId);
         state.TestId.Returns(testId);
-        state.SelectedAt.Returns(DateTimeOffset.UtcNow);
+        state.SelectedAt.Returns(SelectionTime);
         return state;
     }
 

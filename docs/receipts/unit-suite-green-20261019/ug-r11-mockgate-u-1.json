@@ -1,0 +1,101 @@
+{
+  "name": "ug-r11-mockgate-u-1",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "4e4a227ad63ab789aad4b4c5eb977bc9319e83f2",
+  "dirtyPaths": [
+    " M tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-criteria-u-readback-1.json",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/RecordedTimeContractTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedPathIdentity.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Support.Mcp.Tests:RequirementStoredTimestampContractTests",
+    "QBrainAi.Repl.Core.Tests:TestOutputFolderContractTests,TemporaryInstanceChecksTests,OwnedInstanceIsolationContractTests,RecordedTimeContractTests",
+    "--test-run-id",
+    "ug-r11-mockgate-u-1"
+  ],
+  "startedLocal": "2026-11-03T08:26:15",
+  "endedLocal": "2026-11-03T08:27:09",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 56,
+  "passed": 56,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11-mockgate-u-1/groups/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-u-1/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "747C5CA90103177F4DBC97358EE8295C3148914AD783381743B5464378C2C9EC",
+      "total": 48,
+      "passed": 48,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11-mockgate-u-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-u-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "F49C80E3DF9B28150D75AB765DFB34621CF22622944854828742B5B916D24F26",
+      "total": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+      "sha256": "FD8081AC576A464870463561C6FB2F8D6755614AC73F86AB4D4448B7AA65463E"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+      "sha256": "9500C7C40993277541A976D3B44C62ABECEBD4C8C5F1C081291ECB9B0F347F7C"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+      "sha256": "FA70787483AC19BAAF62D40EEF7488F334D34CD769B6846297FBDA631321ACC2"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+      "sha256": "A8FE01B22A047AAF9F50A178667C38C33325552CDABCF5AFF7C410B1A2795151"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/RecordedTimeContractTests.cs",
+      "sha256": "87925DFD817B408FE9CADE85CFA1CAF49F3C8F9F03D3C044AC6C46715D4D2035"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedPathIdentity.cs",
+      "sha256": "B0AEC49BAC441CD89562D16213B84FB90F88853CDC926FCE9010B74404B125E2"
+    },
+    {
+      "path": "src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs",
+      "sha256": "7F92E651E046DC9FC37BDC5F90711F17A3BE961250AF794A01286733FA9ACAEE"
+    },
+    {
+      "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+      "sha256": "9EDC453CA39ECF7F49AEDEB0EB7B34028C0BB7BED79C1F387B9DF834BAC74E1B"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs",
+      "sha256": "6F27057641C18A5DDE3C57C7D95314FC840010F642F2D3C19E4DA605C7C07B94"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs",
+      "sha256": "CB43EE5312F7EDE64BEB314F73A6F664ED475228034DAC3E12BD7CCDB1DA8A84"
+    }
+  ],
+  "writtenLocal": "2026-11-03T08:27:39",
+  "writtenBy": "ClaudeCode"
+}

@@ -1,0 +1,10 @@
+Now: 2026-11-05T12:17:42 key=test name only before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z5-final-linux-unit-1/unit (4832) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z6-final-linux-unit-1/unit (4838)
+onlyBefore=0 onlyAfter=6 common=4832
+--- only in before ---
+--- only in after ---
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "owned settings matched without host prefixes", failingRow: "a host-prefixed spelling of an owned setting is re"···)
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "owned settings matched without host prefixes", failingRow: "an unprefixed spelling of an owned host-prefixed s"···)
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "removes every host-prefixed name", failingRow: "unrelated host-prefixed names are kept")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "two-name rule on owned keys without host prefixes", failingRow: "two cases of an unprefixed spelling of an owned ho"···)
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "two-name rule strips host prefixes", failingRow: "owned settings under both host prefixes")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongReplStarts_AreRejectedInsidePassingHarness(wrong: "matches the REPL's own keys without host prefixes", failingRow: "an unprefixed spelling of the REPL's host setting "···)

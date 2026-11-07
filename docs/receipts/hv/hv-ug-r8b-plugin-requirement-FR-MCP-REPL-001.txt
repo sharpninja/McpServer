@@ -1,0 +1,25 @@
+type: result
+payload:
+  requestId: req-20261029T024600Z-db93
+  result:
+    id: FR-MCP-REPL-001
+    title: YAML Protocol STDIO REPL Host
+    description: >-
+      The server shall provide a YAML-envelope STDIO REPL host that accepts structured commands over standard input, executes operations against workspace services, and returns structured YAML responses over standard output. The REPL host shall support the same trust bootstrap, authentication, and workspace resolution semantics as the HTTP and MCP STDIO transports.
+
+
+
+      **Technical Implementation:** [TR-MCP-REPL-001](./Technical-Requirements.md#tr-mcp-repl-001) | [TR-MCP-REPL-002](./Technical-Requirements.md#tr-mcp-repl-002) | [Mapping](./TR-per-FR-Mapping.md)
+
+
+      **Covered by:** `QBrainAi.Repl.Core` (`IReplProtocol`, `IYamlEnvelope`, `IYamlSerializer`, `IMarkerFileReader`, `ITrustBootstrapService`, `IAuthRotationHandler`, `IWorkspaceSelector`), `QBrainAi.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`, `ServiceCollectionExtensions`)
+    status: ✅ complete
+    priority: medium
+    area: MCP
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-29T02:46:01.9574726+00:00
+    updatedAt: 2026-10-29T02:46:01.9576271+00:00
+  deprecated: true
+
+---

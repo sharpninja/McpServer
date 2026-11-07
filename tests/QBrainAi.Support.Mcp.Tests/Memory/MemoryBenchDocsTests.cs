@@ -1,11 +1,13 @@
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Benchmark docs contracts.
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Benchmark docs contracts.
 /// </summary>
 public sealed class MemoryBenchDocsTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-32: README documents one-plugin and all-eight runs.</summary>
+    /// <remarks>Integration: loads the benchmark README from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Readme_RunInstructions()
     {
@@ -18,6 +20,8 @@ public sealed class MemoryBenchDocsTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-33: USER-GUIDE or MCP-SERVER links the pack.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void UserGuide_LinksPack()
     {
@@ -29,6 +33,8 @@ public sealed class MemoryBenchDocsTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-45: README states tokens are primary; pass/fail is correctness/safety.</summary>
+    /// <remarks>Integration: loads the benchmark README from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Readme_TokensArePrimaryMetric()
     {
@@ -38,6 +44,8 @@ public sealed class MemoryBenchDocsTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-14: README documents Grok as the pilot validation path.</summary>
+    /// <remarks>Integration: loads the benchmark README from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Readme_GrokIsPilot()
     {

@@ -1,0 +1,903 @@
+[
+  {
+    "set": "unitgreen-r9-trx-878c366f",
+    "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r9-final4-linux-buildtests-1"
+    ],
+    "total": 522,
+    "unique": 522,
+    "previousSet": null,
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r9-trx-878c366f",
+    "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r9-final4-linux-lane-1"
+    ],
+    "total": 738,
+    "unique": 736,
+    "previousSet": null,
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r9-trx-878c366f",
+    "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r9-final4-linux-unit-1"
+    ],
+    "total": 4704,
+    "unique": 4704,
+    "previousSet": null,
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r9-trx-878c366f",
+    "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r9-final4-win-buildtests-1"
+    ],
+    "total": 427,
+    "unique": 427,
+    "previousSet": null,
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r9-trx-878c366f",
+    "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r9-final4-win-lane-1"
+    ],
+    "total": 715,
+    "unique": 713,
+    "previousSet": null,
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r9-trx-878c366f",
+    "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r9-final4-win-unit-1"
+    ],
+    "total": 4704,
+    "unique": 4704,
+    "previousSet": null,
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r10-trx-6082b116",
+    "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r10-final-linux-buildtests-1"
+    ],
+    "total": 529,
+    "unique": 529,
+    "previousSet": "unitgreen-r9-trx-878c366f",
+    "added": [
+      "NukeBuild.Tests.QuadBrainOllamaModelBindingTests.BothConsumers_UseTheSharedRule",
+      "NukeBuild.Tests.QuadBrainOllamaModelBindingTests.SharedRule_SatisfiesMockGatedContract",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.ScriptedSelection_SatisfiesEveryRow",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"legacy first\")",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"legacy only\")",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"no trim\")",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"skips only an unset canonical value\")"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r10-trx-6082b116",
+    "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r10-final-linux-lane-1"
+    ],
+    "total": 739,
+    "unique": 737,
+    "previousSet": "unitgreen-r9-trx-878c366f",
+    "added": [
+      "NukeBuild.Tests.QuadBrainOllamaModelBindingTests.BothConsumers_UseTheSharedRule"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r10-trx-6082b116",
+    "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r10-final-linux-unit-1"
+    ],
+    "total": 4711,
+    "unique": 4711,
+    "previousSet": "unitgreen-r9-trx-878c366f",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksBindingTests.SharedChecks_SatisfyTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksBindingTests.TemporaryInstanceConsumer_UsesExplicitOwnedWorkspaceAndMarker",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongHealthChecks_AreRejectedInsidePassingHarness(wrong: \"any field\", failingRow: \"200 with the nonce in another field\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongHealthChecks_AreRejectedInsidePassingHarness(wrong: \"nonce substring\", failingRow: \"200 with a longer nonce\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"ignores case everywhere\", failingRow: \"a POSIX marker differing only in case is another r\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"ordinal only\", failingRow: \"owned layout in another case on Windows\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores case everywhere\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ordinal only\")",
+      "QBrainAi.Support.Mcp.Tests.Requirements.RequirementStoredTimestampContractTests.WrongReaders_AreRejected(fault: \"date filled from the clock\")"
+    ],
+    "removed": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.SharedChecks_SatisfyTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.TemporaryInstanceConsumer_UsesExplicitOwnedWorkspaceAndMarker"
+    ]
+  },
+  {
+    "set": "unitgreen-r10-trx-6082b116",
+    "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r10-final-win-buildtests-1"
+    ],
+    "total": 433,
+    "unique": 433,
+    "previousSet": "unitgreen-r9-trx-878c366f",
+    "added": [
+      "NukeBuild.Tests.QuadBrainOllamaModelBindingTests.SharedRule_SatisfiesMockGatedContract",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.ScriptedSelection_SatisfiesEveryRow",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"legacy first\")",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"legacy only\")",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"no trim\")",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"skips only an unset canonical value\")"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r10-trx-6082b116",
+    "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r10-final-win-lane-1"
+    ],
+    "total": 716,
+    "unique": 714,
+    "previousSet": "unitgreen-r9-trx-878c366f",
+    "added": [
+      "NukeBuild.Tests.QuadBrainOllamaModelBindingTests.BothConsumers_UseTheSharedRule"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r10-trx-6082b116",
+    "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r10-final-win-unit-1"
+    ],
+    "total": 4711,
+    "unique": 4711,
+    "previousSet": "unitgreen-r9-trx-878c366f",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksBindingTests.SharedChecks_SatisfyTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksBindingTests.TemporaryInstanceConsumer_UsesExplicitOwnedWorkspaceAndMarker",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongHealthChecks_AreRejectedInsidePassingHarness(wrong: \"any field\", failingRow: \"200 with the nonce in another field\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongHealthChecks_AreRejectedInsidePassingHarness(wrong: \"nonce substring\", failingRow: \"200 with a longer nonce\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"ignores case everywhere\", failingRow: \"a POSIX marker differing only in case is another r\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"ordinal only\", failingRow: \"owned layout in another case on Windows\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores case everywhere\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ordinal only\")",
+      "QBrainAi.Support.Mcp.Tests.Requirements.RequirementStoredTimestampContractTests.WrongReaders_AreRejected(fault: \"date filled from the clock\")"
+    ],
+    "removed": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.SharedChecks_SatisfyTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.TemporaryInstanceConsumer_UsesExplicitOwnedWorkspaceAndMarker"
+    ]
+  },
+  {
+    "set": "unitgreen-r11-trx-1f51d4b2",
+    "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r11w-final-linux-buildtests-1"
+    ],
+    "total": 529,
+    "unique": 529,
+    "previousSet": "unitgreen-r10-trx-6082b116",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r11-trx-1f51d4b2",
+    "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r11w-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r10-trx-6082b116",
+    "added": [
+      "QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines",
+      "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r11-trx-1f51d4b2",
+    "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r11w-final-linux-unit-1"
+    ],
+    "total": 4733,
+    "unique": 4733,
+    "previousSet": "unitgreen-r10-trx-6082b116",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.RequirementsWorkflowTests.CurrentSelection_HasTimestamp_ReturnsScriptedTimestamp",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.ScriptedClock_RefusesAReadPastItsScript",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.ScriptedClock_SatisfiesTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.SteppingClock_YieldsExactSteps",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.ScriptedReferenceClock_SatisfiesEveryRow",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"read time\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"shifted\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"stale\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"swapped\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"ignores the root\", failingRow: \"a single-rooted marker under a UNC root is another\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"UNC compared ordinally\", failingRow: \"owned UNC layout in another case and separators\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores the root\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"UNC compared ordinally\")",
+      "QBrainAi.Support.Mcp.Tests.Requirements.RequirementStoredTimestampContractTests.WrongReaders_AreRejected(fault: \"year in the text\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.Constructor_EmptyScript_IsRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.Constructor_NonUtcTime_IsRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.GetUtcNow_PastTheScript_IsRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.GetUtcNow_ReturnsTheScriptInOrder",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.LocalTimeZone_IsUtc",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.TimestampAndTimers_AreRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.ScriptedReferenceStamper_SatisfiesEveryRow",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"swapped\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"system clock\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"update keeps the old update time\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"update rewrites the creation time\")"
+    ],
+    "removed": [
+      "QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines",
+      "QBrainAi.Repl.Core.Tests.RequirementsWorkflowTests.CurrentSelection_HasTimestamp_ReturnsRecentTimestamp",
+      "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport"
+    ]
+  },
+  {
+    "set": "unitgreen-r11-trx-1f51d4b2",
+    "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r11w-final-win-buildtests-1"
+    ],
+    "total": 433,
+    "unique": 433,
+    "previousSet": "unitgreen-r10-trx-6082b116",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r11-trx-1f51d4b2",
+    "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r11w-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r10-trx-6082b116",
+    "added": [
+      "QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines",
+      "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r11-trx-1f51d4b2",
+    "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r11w-final-win-unit-1"
+    ],
+    "total": 4733,
+    "unique": 4733,
+    "previousSet": "unitgreen-r10-trx-6082b116",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.RequirementsWorkflowTests.CurrentSelection_HasTimestamp_ReturnsScriptedTimestamp",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.ScriptedClock_RefusesAReadPastItsScript",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.ScriptedClock_SatisfiesTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.SteppingClock_YieldsExactSteps",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.ScriptedReferenceClock_SatisfiesEveryRow",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"read time\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"shifted\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"stale\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"swapped\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"ignores the root\", failingRow: \"a single-rooted marker under a UNC root is another\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"UNC compared ordinally\", failingRow: \"owned UNC layout in another case and separators\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores the root\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"UNC compared ordinally\")",
+      "QBrainAi.Support.Mcp.Tests.Requirements.RequirementStoredTimestampContractTests.WrongReaders_AreRejected(fault: \"year in the text\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.Constructor_EmptyScript_IsRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.Constructor_NonUtcTime_IsRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.GetUtcNow_PastTheScript_IsRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.GetUtcNow_ReturnsTheScriptInOrder",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.LocalTimeZone_IsUtc",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.TimestampAndTimers_AreRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.ScriptedReferenceStamper_SatisfiesEveryRow",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"swapped\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"system clock\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"update keeps the old update time\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"update rewrites the creation time\")"
+    ],
+    "removed": [
+      "QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines",
+      "QBrainAi.Repl.Core.Tests.RequirementsWorkflowTests.CurrentSelection_HasTimestamp_ReturnsRecentTimestamp",
+      "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport"
+    ]
+  },
+  {
+    "set": "unitgreen-r12-trx-11406fdf",
+    "head": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r11x-final-linux-buildtests-1"
+    ],
+    "total": 529,
+    "unique": 529,
+    "previousSet": "unitgreen-r11-trx-1f51d4b2",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-11406fdf",
+    "head": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r11x-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r11-trx-1f51d4b2",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-11406fdf",
+    "head": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r11x-final-linux-unit-1"
+    ],
+    "total": 4738,
+    "unique": 4738,
+    "previousSet": "unitgreen-r11-trx-1f51d4b2",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.StatedSyntaxRule_SatisfiesEveryRow",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"accepts device paths\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"compares across path syntaxes\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores Windows segment aliases\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"Windows segment rules on POSIX paths\")"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-11406fdf",
+    "head": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r11x-final-win-buildtests-1"
+    ],
+    "total": 433,
+    "unique": 433,
+    "previousSet": "unitgreen-r11-trx-1f51d4b2",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-11406fdf",
+    "head": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r11x-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r11-trx-1f51d4b2",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-11406fdf",
+    "head": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r11x-final-win-unit-1"
+    ],
+    "total": 4738,
+    "unique": 4738,
+    "previousSet": "unitgreen-r11-trx-1f51d4b2",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.StatedSyntaxRule_SatisfiesEveryRow",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"accepts device paths\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"compares across path syntaxes\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores Windows segment aliases\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"Windows segment rules on POSIX paths\")"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-ec58cf4a",
+    "head": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r12y-final-linux-buildtests-1"
+    ],
+    "total": 529,
+    "unique": 529,
+    "previousSet": "unitgreen-r12-trx-11406fdf",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-ec58cf4a",
+    "head": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r12y-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r12-trx-11406fdf",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-ec58cf4a",
+    "head": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r12y-final-linux-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-11406fdf",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores UNC server and share aliases\")"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-ec58cf4a",
+    "head": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r12y-final-win-buildtests-1"
+    ],
+    "total": 433,
+    "unique": 433,
+    "previousSet": "unitgreen-r12-trx-11406fdf",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-ec58cf4a",
+    "head": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r12y-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r12-trx-11406fdf",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-ec58cf4a",
+    "head": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r12y-final-win-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-11406fdf",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores UNC server and share aliases\")"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-a4e8d45f",
+    "head": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r12z-final-linux-buildtests-1"
+    ],
+    "total": 529,
+    "unique": 529,
+    "previousSet": "unitgreen-r12-trx-ec58cf4a",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-a4e8d45f",
+    "head": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r12z-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r12-trx-ec58cf4a",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-a4e8d45f",
+    "head": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r12z-final-linux-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-ec58cf4a",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-a4e8d45f",
+    "head": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r12z-final-win-buildtests-1"
+    ],
+    "total": 433,
+    "unique": 433,
+    "previousSet": "unitgreen-r12-trx-ec58cf4a",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-a4e8d45f",
+    "head": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r12z-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r12-trx-ec58cf4a",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-a4e8d45f",
+    "head": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r12z-final-win-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-ec58cf4a",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-121992b3",
+    "head": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r12z2-final-linux-buildtests-1"
+    ],
+    "total": 529,
+    "unique": 529,
+    "previousSet": "unitgreen-r12-trx-a4e8d45f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-121992b3",
+    "head": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r12z2-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r12-trx-a4e8d45f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-121992b3",
+    "head": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r12z2-final-linux-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-a4e8d45f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-121992b3",
+    "head": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r12z2-final-win-buildtests-1"
+    ],
+    "total": 433,
+    "unique": 433,
+    "previousSet": "unitgreen-r12-trx-a4e8d45f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-121992b3",
+    "head": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r12z2-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r12-trx-a4e8d45f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-121992b3",
+    "head": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r12z2-final-win-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-a4e8d45f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-4920a8ea",
+    "head": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r12z3b-final-linux-buildtests-1"
+    ],
+    "total": 549,
+    "unique": 549,
+    "previousSet": "unitgreen-r12-trx-121992b3",
+    "added": [
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.OldWindow_FailsOnlyTheSlowStartRow",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.ReferenceWait_MeetsEveryRow",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 0)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 1)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 2)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 3)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 4)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.DefectReader_FailsOnlyTheRepeatedRows",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.ReferenceReader_MeetsEveryRow",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 0)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 1)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 2)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 3)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 4)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 5)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RequiresTheEnvironmentFileOfTheSecondShowLine",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxStartupHealth_StopsAtOnceForAnInactiveUnit",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxStartupHealth_WaitsAsTheContractRows",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_ReadsRepeatedShowLinesAsTheContractRows",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_PreservesEveryEnvironmentFileOfRepeatedShowLines"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-4920a8ea",
+    "head": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r12z3b-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r12-trx-121992b3",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-4920a8ea",
+    "head": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r12z3b-final-linux-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-121992b3",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-4920a8ea",
+    "head": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r12z3b-final-win-buildtests-1"
+    ],
+    "total": 453,
+    "unique": 453,
+    "previousSet": "unitgreen-r12-trx-121992b3",
+    "added": [
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.OldWindow_FailsOnlyTheSlowStartRow",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.ReferenceWait_MeetsEveryRow",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 0)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 1)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 2)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 3)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 4)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.DefectReader_FailsOnlyTheRepeatedRows",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.ReferenceReader_MeetsEveryRow",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 0)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 1)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 2)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 3)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 4)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 5)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RequiresTheEnvironmentFileOfTheSecondShowLine",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxStartupHealth_StopsAtOnceForAnInactiveUnit",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxStartupHealth_WaitsAsTheContractRows",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_ReadsRepeatedShowLinesAsTheContractRows",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_PreservesEveryEnvironmentFileOfRepeatedShowLines"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-4920a8ea",
+    "head": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r12z3b-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r12-trx-121992b3",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-4920a8ea",
+    "head": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r12z3b-final-win-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-121992b3",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-52e6d627",
+    "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r12z3c-final-linux-buildtests-1"
+    ],
+    "total": 563,
+    "unique": 563,
+    "previousSet": "unitgreen-r12-trx-4920a8ea",
+    "added": [
+      "NukeBuild.Tests.ServiceRecoveryContractTests.OldRecovery_FailsOnlyTheLegacyRows",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.ReferenceRecovery_MeetsEveryRow",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 0)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 1)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 2)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 3)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 4)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 5)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 0)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 1)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 2)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 3)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 4)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 5)"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-52e6d627",
+    "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r12z3c-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r12-trx-4920a8ea",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-52e6d627",
+    "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r12z3c-final-linux-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-4920a8ea",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-52e6d627",
+    "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r12z3c-final-win-buildtests-1"
+    ],
+    "total": 467,
+    "unique": 467,
+    "previousSet": "unitgreen-r12-trx-4920a8ea",
+    "added": [
+      "NukeBuild.Tests.ServiceRecoveryContractTests.OldRecovery_FailsOnlyTheLegacyRows",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.ReferenceRecovery_MeetsEveryRow",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 0)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 1)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 2)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 3)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 4)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 5)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 0)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 1)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 2)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 3)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 4)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 5)"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-52e6d627",
+    "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r12z3c-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r12-trx-4920a8ea",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-52e6d627",
+    "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r12z3c-final-win-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-4920a8ea",
+    "added": [],
+    "removed": []
+  }
+]

@@ -1,0 +1,83 @@
+{
+  "timestampUtc": "2026-11-06T05:55:00.1843587+00:00",
+  "timestampLocal": "2026-11-05T23:55:02",
+  "method": "workflow.requirements.getTr",
+  "recordId": "TR-MCP-USECASE-019",
+  "response": {
+    "type": "result",
+    "payload": {
+      "requestId": "req-20261106T055501Z-359e",
+      "deprecated": true,
+      "result": {
+        "subarea": "USECASE",
+        "status": "pending",
+        "id": "TR-MCP-USECASE-019",
+        "updatedAt": "2026-11-06T05:55:02.5950135+00:00",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-001",
+            "text": "Linux preflight classifies each path prefix with statx(AT_SYMLINK_NOFOLLOW) and reads link targets with readlink, so a symbolic link to any path inside a userspace or network mount (not only its root) is rejected from the mount table without sending that mount a request (BUG-BASELINE-009 C1; BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkBelowFuseRoot_IsRejectedWithoutEnteringTheMount).",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-002",
+            "text": "The SQLite caller-side data-source preflight runs off the caller's thread under the open's single finite deadline and the caller's cancellation: OpenAsync returns its task at once, a preflight that does not return fails the open with TimeoutException at the bound, no open worker starts, and the preflight stays counted (ActivePreflightCount) until it actually returns (BUG-BASELINE-009 C2; SqliteBoundedOpenFourteenthTests.OpenAsync_PreflightHeldAtBoundary_TimesOutWithoutBlockingTheCaller).",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-003",
+            "text": "Linux workspace identity resolution resolves symbolic-link prefixes through the mount table before its anchored RESOLVE_NO_XDEV lookup, so an absolute alias within a nested approved mount (for example /tmp) resolves like the data-file and SQLite opens instead of failing with a mount transition (BUG-BASELINE-009 C3; WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers).",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-004",
+            "text": "A bounded traversal or file worker that uses the export root descriptor holds a reference on it from before it starts until it actually exits, so disposing the root at the public deadline defers the close: on Linux the root descriptor stays open while the worker runs and closes after it exits; on Windows the open root still blocks rename (BUG-BASELINE-009, operator decision 2026-10-11 \"Fix it now\"; BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting).",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-005",
+            "text": "Physical workspace identity rejects safe lexical paths whose physical target is on an unsafe mount, remains safe across symlink or mount replacement timing, completes publicly within its deadline, and reports any unstoppable worker as active until it actually exits.",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-006",
+            "text": "SQLite data-source validation and pre-handle opening resist safe-link and check-to-open replacement, use no ineffective Thread.Interrupt dependency for native Linux I/O, finish cleanup within a finite deadline, and preserve exact lifecycle, handle, worker, and exception state.",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-007",
+            "text": "PostgreSQL SQLSTATE 57014 is translated to caller cancellation only with causal evidence produced by the caller-triggered cancellation mechanism; statement timeout and administrative cancellation remain PostgresException even during concurrent token cancellation.",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-008",
+            "text": "A platform-specific test (TR-MCP-USECASE-018 AC-006) proves real execution and inventory counts and never passes through source inspection, skip, silent return, abort, inconclusive outcome, or a below-minimum count (operator 2026-10-30: \"D3: dedupe lane rules (Recommended)\"). A test fixture that needs a directory junction or link creates it with an operating-system call made in the test process, so no test outcome depends on how long a helper process takes to start (operator 2026-10-26: \"Fix flake, strengthen AC (Recommended)\"; at f5cda3c1 two Windows lane cases failed when a 5-second budget for starting pwsh.exe ran out under load; triage-report-8c2c30ef63d442bdb29fd785ec91e7d7). The rules this criterion shares with TR-MCP-USECASE-018 AC-006 (unit tests independent of the platform and the process environment, the lane inputs, the hostile-environment scope, no wall-clock bound in a unit test) are stated there once, and the environment-delta rule is FR-MCP-047 ac-1 (operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\").",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-009",
+            "text": "Containment race coverage requires at least one successful contained read and write while proving no escape or corruption, and deterministic total-rejection tests prove that rejecting every attempt cannot satisfy the success gate.",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-010",
+            "text": "Windows descendant cleanup establishes containment at process creation or proves an equivalent race-free boundary before descendants can escape, and timeout or cancellation terminates immediate descendants finitely without regressing non-Windows process-group cleanup.",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-011",
+            "text": "Historical rejected receipts remain intact but are explicitly superseded; final evidence identifies the exact immutable tested SHA, contains executable commands or a mechanically complete ledger, independently reconciles hashes, mappings and totals, and limits conclusions to the proven local and retained-evidence boundary.",
+            "isSatisfied": false
+          }
+        ],
+        "createdAt": "2026-11-06T05:55:02.5948903+00:00",
+        "priority": "medium",
+        "area": "MCP",
+        "notes": "Retired FR, operator 2026-11-02: FR-MCP-USECASE-017 was converted into this TR on 2026-10-19 and deleted. It must not be recreated, restored or recommended for restoration; its criteria are this TR's. Any reference to it is repointed to FR-MCP-USECASE-001 (the FR this TR maps to) and to this TR. Restoring it caused a delete-and-restore loop that recurred three times (plan sections 9, 17 and 27; triage-report-8928fd021e6b47c1945387935f0765d9); the last dangling reference, TODO BUG-TRIAGE-139's functional link, was repointed on 2026-11-02.",
+        "description": "Resolve and validate physical filesystem identity through interruptible native handles or isolated workers whose public deadlines and accounting remain truthful; bind SQLite opening to the validated object without lexical races; attribute PostgreSQL cancellation to the actual caller cancel request; compose platform-native tests and process containment without pass-through fallbacks; and generate exact-final-HEAD evidence through a mechanically verified immutable workflow.\nConverted from FR-MCP-USECASE-017 on 2026-10-19 (operator: \"If it is in a FR, then that FR needs to be converted to a TR\"; answers \"Merge into its TR (Recommended)\" and \"FR-001, delete FRs (Recommended)\"). FR-MCP-USECASE-017 stated: Use-case persistence and its filesystem, provider, process, platform-test, and evidence boundaries shall close physical alias and replacement races, complete publicly within finite contracts, preserve truthful worker and provider causality, execute applicable native contracts, and report only exact immutable evidence while retaining every previously approved control.\n**Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-020",
+        "scopeStartLayerKey": "layer-1",
+        "title": "Race-safe physical I/O, causal cancellation, and immutable evidence"
+      }
+    }
+  }
+}

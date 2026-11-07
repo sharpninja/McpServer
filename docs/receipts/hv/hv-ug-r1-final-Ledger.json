@@ -1,0 +1,1979 @@
+[
+  {
+    "TimestampUtc": "2026-10-20T00:51:41.33Z",
+    "Tool": "exec",
+    "Commands": [
+      "Get-Content -Raw /home/sharpninja/.claude/skills/add-profile/SKILL.md; Get-ChildItem -LiteralPath /home/sharpninja/.claude/profile -File -Filter *.md | Where-Object { $_.Name -ne 'SKILL.md' } | Sort-Object Name | ForEach-Object { Write-Output ('PROFILE_FILE: ' + $_.FullName); Get-Content -Raw -LiteralPath $_.FullName }; Write-Output ('PROFILE_FILE_COUNT: ' + @(Get-ChildItem -LiteralPath /home/sharpninja/.claude/profile -File -Filter *.md | Where-Object { $_.Name -ne 'SKILL.md' }).Count)"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 40927,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:51:57.241Z",
+    "Tool": "exec",
+    "Commands": [
+      "$profileLines = Get-Content -LiteralPath /home/sharpninja/.claude/profile/PROFILE-MERGED.md; Write-Output ('PROFILE_LINES: ' + $profileLines.Count); $profileLines | Select-Object -Skip 110 -First 155; Get-Content -Raw /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/enforcement/SKILL.md; Get-Content -Raw /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/session/SKILL.md; Get-Date -Format s"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": true,
+    "ResultLength": 40982,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:52:22.562Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-bootstrap.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-bootstrap.ps1 -Severity Warning,Error"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 267,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:52:27.233Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-bootstrap.ps1 -Mode Profile -Offset 80 -Count 40"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 3973,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:52:30.483Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-bootstrap.ps1 -Mode Profile -Offset 235 -Count 80"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 15873,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:52:36.678Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-bootstrap.ps1 -Mode Marker"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 34781,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:52:42.89Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-bootstrap.ps1 -Mode Plugin"
+    ],
+    "ExitCodes": [],
+    "Running": true,
+    "ResultLength": 28609,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:52:58.045Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-ug-r1-bootstrap.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r1-bootstrap.ps1 -Severity Warning,Error",
+      "& ./docs/receipts/hv/hv-ug-r1-bootstrap.ps1 -Mode Read -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/resolve-cache-dir.ps1 -Count 210"
+    ],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": true,
+    "ResultLength": 9885,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:53:06.261Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-bootstrap.ps1 -Mode Read -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/session-start.ps1 -Count 145",
+      "& ./docs/receipts/hv/hv-ug-r1-bootstrap.ps1 -Mode Identity"
+    ],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": true,
+    "ResultLength": 7789,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:53:53.651Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-ug-r1-session.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r1-session.ps1 -Severity Warning,Error"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 267,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:53:58.863Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-session.ps1 -Mode Start -WhatIf",
+      "& ./docs/receipts/hv/hv-ug-r1-session.ps1 -Mode Start"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": true,
+    "ResultLength": 1380,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:54:06.375Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 9373,
+    "Invocation": "text(await tools.write_stdin({session_id:82295,chars:\"\",\"yield_time_ms\":1000,\"max_output_tokens\":5000}));\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:54:40.355Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-ug-r1-inspect.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Severity Warning,Error; & ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments AGENTS.md -WhatIf"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 382,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:54:49.056Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('AGENTS.md','CLAUDE.md','.github/copilot-instructions.md') -Count 350 -Label rules",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments docs/plans/2026-10-19-unit-suite-green.md -Count 145 -Label plan1",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/requirements/SKILL.md','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/todo/SKILL.md') -Count 350 -Label plugin-skills"
+    ],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 41136,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:54:54.625Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 30232,
+    "Invocation": "text(load(\"initial-read-1\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:55:04.082Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments docs/plans/2026-10-19-unit-suite-green.md -Offset 145 -Count 100 -Label plan2",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments /home/sharpninja/.claude/scratch/pr82-review-20261019/pre-hv-projected-problems-20261019-r2.md -Count 250 -Label problems"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 8900,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:55:08.792Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 12250,
+    "Invocation": "text(load(\"plan-more-1\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:55:22.001Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments CLAUDE.md -Offset 75 -Count 185 -Label claude-rest",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/requirements/SKILL.md -Offset 340 -Count 320 -Label requirement-skill-rest",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Git -Arguments @('log','--first-parent','--format=%H%n%aI%n%B','3da2db93..6b4295b790e0e2cde7113f3be4bb83bc66343016') -Label commits",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Gh -Arguments @('pr','view','87','--repo','sharpninja/McpServer','--json','number,title,body,headRefOid,baseRefName,headRefName,isDraft,url,commits,statusCheckRollup') -Label pr"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 8997,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:55:26.428Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      1,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 20158,
+    "Invocation": "text(load(\"second-read-3\").value.output);\ntext(load(\"second-read-0\").value.output);\ntext(load(\"initial-read-2\").value.output.slice(0,6000));\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:55:44.728Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Search -Arguments @('-n','MCP_.*MODEL|CODEX_MODEL|AGENT_MODEL|Model =|model =','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/McpPluginShim.psm1') -Label model-env",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('.github/copilot-instructions.md','docs/Development-Process-draft-v4.md') -Count 300 -Label build-process",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Files -Arguments @('/home/sharpninja/.local/share/mise/installs','/usr/bin','/home/sharpninja/.local/bin','-g','gh') -Label gh-location",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Git -Arguments @('diff','--name-status','3da2db93...6b4295b790e0e2cde7113f3be4bb83bc66343016') -Label changed-files"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 8050,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:56:10.604Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-ug-r1-session.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r1-session.ps1 -Severity Warning,Error; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-ug-r1-inspect.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Severity Warning,Error",
+      "& ./docs/receipts/hv/hv-ug-r1-session.ps1 -Mode Fetch -Method workflow.todo.get -Id IMPL-UNITGREEN-001",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Gh -Arguments @('pr','view','87','--repo','sharpninja/McpServer','--json','number,title,body,headRefOid,baseRefName,headRefName,isDraft,url,statusCheckRollup') -Label pr-retry"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 7994,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:56:48.189Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-ug-r1-session.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r1-session.ps1 -Severity Warning,Error; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-ug-r1-inspect.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Severity Warning,Error",
+      "& ./docs/receipts/hv/hv-ug-r1-session.ps1 -Mode Records"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": true,
+    "ResultLength": 421,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:57:08.319Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('build/IntegrationLaneFilter.cs','build/IntegrationLaneFilterContracts.cs','build/InteractiveSessionPrecondition.cs','build/IntegrationLanePreconditionContracts.cs','build/Build.Test.cs') -Count 200 -Label lane-code",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments build/Build.TestDependencies.cs -Count 230 -Label target-code",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-store-IMPL-UNITGREEN-001.txt','docs/receipts/hv/hv-ug-r1-store-TR-MCP-NUKE-019.txt','docs/receipts/hv/hv-ug-r1-store-TR-MCP-USECASE-018.txt','docs/receipts/hv/hv-ug-r1-store-TR-MCP-USECASE-019.txt') -Count 260 -Label live-core",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionScript.ps1','/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveRunState.ps1') -Count 220 -Label windows-probe-code"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 19467,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:57:12.093Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 14642,
+    "Invocation": "text(load(\"code-read-0\").value.output);text(load(\"code-read-3\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:57:15.064Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0
+    ],
+    "Running": true,
+    "ResultLength": 14423,
+    "Invocation": "text(load(\"code-read-1\").value.output);\ntext(await tools.write_stdin({session_id:90761,chars:\"\",\"yield_time_ms\":1000,\"max_output_tokens\":1500}));\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:57:39.999Z",
+    "Tool": "exec",
+    "Commands": [
+      "Invoke-ScriptAnalyzer -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveRunState.ps1 -Severity Warning,Error; pwsh.exe -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionScript.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveRunState.ps1 -OutFile /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-windows-interactive-first.txt",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Files -Arguments @('TestResults','/home/sharpninja/.claude/scratch/pr82-review-20261019/runs','-g','*unit-green-d1*','-g','*unit-green-win-d1*','-g','*mock*','-g','*unit-green-linux-a*','-g','*unit-green-win-a*') -Label gate-files",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs','tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs','tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs') -Count 300 -Label scanner",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('tests/Build.Tests/IntegrationLaneFilterContract.cs','tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs','tests/Build.Tests/IntegrationLaneFilterTests.cs','tests/Build.Tests/IntegrationLanePreconditionContract.cs','tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs','tests/Build.Tests/IntegrationLanePreconditionTests.cs') -Count 200 -Label lane-tests"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": true,
+    "ResultLength": 6790,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:57:45.238Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 16122,
+    "Invocation": "text(load(\"gate-read-1\").value.output.slice(0,15500));\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:58:04.091Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 15079,
+    "Invocation": "text(load(\"gate-read-1\").value.output.slice(15500));\ntext(await tools.write_stdin({session_id:17418,chars:\"\",\"yield_time_ms\":1000,\"max_output_tokens\":2000}));\ntext(await tools.write_stdin({session_id:90761,chars:\"\",\"yield_time_ms\":1000,\"max_output_tokens\":1000}));\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:58:37.9Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-ug-r1-run.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r1-run.ps1 -Severity Warning,Error; & ./docs/receipts/hv/hv-ug-r1-run.ps1 -Gate Test -WhatIf",
+      "& ./docs/receipts/hv/hv-ug-r1-run.ps1 -Gate Test"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": true,
+    "ResultLength": 622,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:58:54.887Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 21799,
+    "Invocation": "text(load(\"gate-read-2\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T00:59:48.623Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-ug-r1-analyze.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Severity Warning,Error; & ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Mode GitState -WhatIf"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 387,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:00:05.829Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Mode GitState -Count 210",
+      "& ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Mode Transcript -Pattern 'BDPv4 requires|Gotta use|Plan first|Full suite|Tag them|Leave merged|approve the change|Copy from|Narrow mine|Host.scoped|C4 should|ZERO platform|clarification of the rules|Platform-specific tests|Make it so|Integration \\+ Platform|Host-neutral|converted to a TR|Merge into its TR|FR-001|Only 016|C4 splits|Platform=Windows, fail|Uncheck them|Restate for BDPv4|Lane runs|Approve H1|^skip$|guidelines to make|goal for this PR|Set a goal|Done when|Stop conditions' -Count 100",
+      "& ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Mode Runs -Pattern 'd1-|g-mock|guard-mock|h-mock|linux-a|mock-20261019|real-20261019' -Count 100",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Trx -Arguments @('TestResults/unit-green-d1-test-20261019T1927','TestResults/unit-green-d1-int-20261019T1932','/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-d1-buildtests-20261019T1935','/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-g-mockgate-20261019T1633','/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-h-mockgate-20261019T1849','TestResults/unit-green-guard-mock-20261019T1720') -Label gate-trx"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 18683,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:00:28.551Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-session.ps1 -Mode Call -Text 'Observed: own session persisted as Codex-20261020T005400Z-unitgreen-r1, request req-20261020T005403Z-unitgreen-r1. Live PR head matches 6b4295b7; all 13 TODO tasks false; TR-MCP-NUKE-019 AC-1..5 and TR-MCP-USECASE-018/019 criteria false. Windows interactive probe 19:57 found no worktree or TestResults. Potential material discrepancy under investigation: guard mock run unit-green-guard-mock-20261019T1720 exit receipt is 255 although plan and PR describe a 17/17 mock gate. Independent Nuke Test started at reviewed head. No implementation or external records changed.'"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": true,
+    "ResultLength": 17666,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:00:37.215Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 26007,
+    "Invocation": "text(load(\"audit-read-1\").value.output.slice(0,18000));\ntext(load(\"audit-read-0\").value.output.slice(0,7000));\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:01:03.256Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-ug-r1-analyze.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Severity Warning,Error",
+      "& ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Mode Transcript -Pattern 'BDPv4 requires|Gotta use|Plan first|Full suite|Tag them|Leave merged|approve the change|Copy from|Narrow mine|Host.scoped|C4 should|ZERO platform|clarification of the rules|Platform-specific tests|Make it so|Integration \\+ Platform|Host-neutral|converted to a TR|Merge into its TR|FR-001|Only 016|C4 splits|Platform=Windows, fail|Uncheck them|Restate for BDPv4|Lane runs|Approve H1|^skip$|guidelines to make|goal for this PR|Set a goal|Done when|Stop conditions' -Count 100",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-store-TEST-MCP-USECASE-019.txt','docs/receipts/hv/hv-ug-r1-store-TEST-MCP-USECASE-020.txt','docs/receipts/hv/hv-ug-r1-store-TR-MCP-NUKE-018.txt','docs/receipts/hv/hv-ug-r1-store-TEST-MCP-PATHNORM-001.txt') -Count 170 -Label live-tests",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Git -Arguments @('diff','3da2db93...6b4295b790e0e2cde7113f3be4bb83bc66343016','--','Directory.Packages.props','src/QBrainAi.Client/WorkspaceIdentityPath.cs','src/QBrainAi.Services/Services/GitHubCliService.cs','tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs') -Count 300 -Label production-diff"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 7654,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:01:47.652Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-ug-r1-analyze.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Severity Warning,Error",
+      "& ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Mode Transcript -OnlyOperator -Pattern 'BDPv4 requires|Gotta use|Plan first|Full suite|Tag them|Leave merged|approve the change|Copy from|Narrow mine|Host.scoped|C4 should|ZERO platform|clarification of the rules|Platform-specific tests|Make it so|Integration \\+ Platform|Host-neutral|converted to a TR|Merge into its TR|FR-001|Only 016|C4 splits|Platform=Windows, fail|Uncheck them|Restate for BDPv4|Lane runs|Approve H1|^skip$|guidelines to make|goal|Stop conditions' -Count 100",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Search -Arguments @('-n','Process\\.Start|new Process\\b|TcpListener|Socket\\(|UserInteractive|Environment\\.UserName|Environment\\.GetEnvironmentVariable|GetUnixFileMode|DirectorySeparatorChar','tests/QBrainAi.Client.Tests','tests/QBrainAi.Cqrs.Tests','tests/QBrainAi.Launcher.Tests','tests/QBrainAi.McpAgent.Tests','tests/QBrainAi.QBAgent.Tests','tests/QBrainAi.Repl.Core.Tests','tests/QBrainAi.Support.Mcp.Tests','-g','*.cs','-g','!obj/**','-g','!bin/**') -Count 160 -Label environment-inventory",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Gh -Arguments @('api','repos/sharpninja/McpServer/activity?ref=refs/heads/fix/unit-suite-green-20261019&per_page=100') -Count 25 -Label branch-activity"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 21138,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:02:14.73Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": true,
+    "ResultLength": 17442,
+    "Invocation": "text(load(\"check5-1\").value.output);\ntext(load(\"inspect4-1\").value.output);\ntext(await tools.write_stdin({session_id:49412,chars:\"\",\"yield_time_ms\":1000,\"max_output_tokens\":2000}));\ntext(await tools.write_stdin({session_id:1926,chars:\"\",\"yield_time_ms\":1000,\"max_output_tokens\":1000}));\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:02:31.819Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs','tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs') -Count 340 -Label residual-process-tests",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs','tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs','tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostRealTests.cs') -Count 230 -Label contract-details",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Search -Arguments @('-n','Failed|Error|NotExecuted|Skip|Summary|Integration lane|dotnet test|NU190[1-4]|WarningsNotAsErrors|NoWarn|NuGetAudit','/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-win-d1-20261019T1927.txt','/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-d1-traceability-20261019T1934.out.log','/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-guard-mock-20261019T1720.out.log') -Count 130 -Label gate-log-points"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 27828,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:02:53.423Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Git -Arguments @('diff','3da2db93...6b4295b790e0e2cde7113f3be4bb83bc66343016','--','tests/QBrainAi.Support.Mcp.Tests','tests/QBrainAi.McpAgent.Tests') -Count 250 -Label tests-diff",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('build/LinuxProviderTestProvisioner.cs','build/ProviderTestProvisioningContracts.cs') -Count 450 -Label provisioning",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-store-FR-MCP-PATHNORM-001.txt','docs/receipts/hv/hv-ug-r1-store-TR-MCP-PATHNORM-001.txt','docs/receipts/hv/hv-ug-r1-store-TR-MCP-QUALITY-001.txt','docs/receipts/hv/hv-ug-r1-store-mapping-FR-MCP-BUILD-001.txt','docs/receipts/hv/hv-ug-r1-store-mapping-FR-MCP-USECASE-001.txt') -Count 155 -Label store-remaining"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": true,
+    "ResultLength": 14791,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:03:07.774Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 26526,
+    "Invocation": "text(load(\"detail6-0\").value.output.slice(0,14400));\ntext(load(\"detail6-1\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:03:21.732Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Mode ReadEvidence -Path docs/receipts/hv/hv-ug-r1-tests-diff-20261019T200254-ac60e1.json -Offset 805 -Count 430"
+    ],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": true,
+    "ResultLength": 26387,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:03:45.242Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Mode ReadEvidence -Path docs/receipts/hv/hv-ug-r1-tests-diff-20261019T200254-ac60e1.json -Offset 1235 -Count 430",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Search -Arguments @('-n','\\[ERR\\]|\\[WRN\\]|Restore|Starting|Compile|Error|Exception','docs/receipts/hv/hv-ug-r1-test-20261019T195839.out.log','docs/receipts/hv/hv-ug-r1-test-20261019T195839.err.log') -Count 50 -Label own-run-progress",
+      "& ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Mode Hygiene -Count 30"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 31591,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:04:13.948Z",
+    "Tool": "exec",
+    "Commands": [
+      "& ./docs/receipts/hv/hv-ug-r1-analyze.ps1 -Mode ReadEvidence -Path docs/receipts/hv/hv-ug-r1-tests-diff-20261019T200254-ac60e1.json -Offset 1665 -Count 440",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-store-effective.txt','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/usecase/SKILL.md') -Count 170 -Label effective-and-usecases",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Gh -Arguments @('api','advisories/GHSA-2fmv-rv2c-59x7','--jq','{ghsa_id,html_url,published_at,updated_at,vulnerabilities}') -Label advisory1",
+      "& ./docs/receipts/hv/hv-ug-r1-inspect.ps1 -Mode Gh -Arguments @('api','advisories/GHSA-846f-f764-76mx','--jq','{ghsa_id,html_url,published_at,updated_at,vulnerabilities}') -Label advisory2"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 28955,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:04:36.638Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 24294,
+    "Invocation": "text(load(\"audit9-1\").value.output.slice(-6500));\ntext(load(\"diff7-1\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:08:02Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Read -Path '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Count 500"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 5163,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:08:08.381Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Profile -Offset 0 -Count 190"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 28911,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:08:11.364Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Profile -Offset 190 -Count 300"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 35541,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:08:18.136Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-session.ps1' -Mode Call -Text 'Context recovery: re-executed add-profile skill and reread the one non-skill profile Markdown file in full. Continuing review-only claim audit and independent Test gate; no implementation or store status mutations.'"
+    ],
+    "ExitCodes": [
+      1,
+      255,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 3973,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:08:33.681Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','-A','10','-B','2','Error Message:|Failed QBrainAi|Exception|denied|constraint failed','docs/receipts/hv/hv-ug-r1-test-20261019T195839.out.log') -Label independent-failures -Count 360",
+      "& './docs/receipts/hv/hv-ug-r1-analyze.ps1' -Mode ReadEvidence -Path './docs/receipts/hv/hv-ug-r1-tests-diff-20261019T200254-ac60e1.json' -Offset 2105 -Count 750"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 242,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:08:47.903Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 40457,
+    "Invocation": "text(load(\"resume-0\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:08:55.084Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-analyze.ps1','docs/receipts/hv/hv-ug-r1-session.ps1','docs/receipts/hv/hv-ug-r1-run.ps1') -Count 700 -Label helper-context"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": true,
+    "ResultLength": 19770,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:09:31.774Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 117,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:09:37.778Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-ug-r1-deep.ps1'), [ref]$null, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-deep.ps1' -Severity Warning,Error; if ($parseErrors) { exit 1 }"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 233,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:09:46.627Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-deep.ps1' -Mode Failures -Path './TestResults/hv-ug-r1-test-20261019T195839' -Count 90",
+      "& './docs/receipts/hv/hv-ug-r1-analyze.ps1' -Mode ReadEvidence -Path './docs/receipts/hv/hv-ug-r1-tests-diff-20261019T200254-ac60e1.json' -Offset 2105 -Count 330",
+      "& './docs/receipts/hv/hv-ug-r1-deep.ps1' -Mode GitHub -Count 350",
+      "& './docs/receipts/hv/hv-ug-r1-run.ps1' -Gate BuildTests"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 306,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:09:50.866Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 29259,
+    "Invocation": "text(load(\"deep-0\").value.output);\ntext(load(\"deep-2\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:09:55.638Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 17999,
+    "Invocation": "text(load(\"deep-1\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:10:07.9Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-ug-r1-deep.ps1'), [ref]$null, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-deep.ps1' -Severity Warning,Error; if ($parseErrors) { exit 1 }"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 267,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:10:18.85Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-analyze.ps1' -Mode ReadEvidence -Path './docs/receipts/hv/hv-ug-r1-tests-diff-20261019T200254-ac60e1.json' -Offset 2435 -Count 500",
+      "& './docs/receipts/hv/hv-ug-r1-deep.ps1' -Mode Failures -Path './TestResults/hv-ug-r1-test-20261019T195839' -Count 500",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-win-d1-20261019T1927.txt','/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveRunState.ps1') -Count 250 -Label win-source"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 306,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:10:25.772Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 34255,
+    "Invocation": "text(load(\"next-0\").value.output);text(load(\"next-2\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:10:52.156Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-ug-r1-windows-read.ps1'), [ref]$null, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-windows-read.ps1' -Severity Warning,Error; if ($parseErrors) { exit 1 }"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 267,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:11:01.248Z",
+    "Tool": "exec",
+    "Commands": [
+      "& '/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionScript.ps1' -ScriptPath './docs/receipts/hv/hv-ug-r1-windows-read.ps1' -OutFile './docs/receipts/hv/hv-ug-r1-windows-live.txt'",
+      "& './docs/receipts/hv/hv-ug-r1-analyze.ps1' -Mode Transcript -Pattern 'guard-mock|17/17|skip guard|green mock' -Count 250",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('tests/Build.Tests/ProviderTestProvisioningContract.cs','tests/Build.Tests/ProviderTestProvisioningMockTests.cs','tests/Build.Tests/ProviderTestProvisioningTests.cs') -Count 800 -Label provisioning-tests",
+      "& './docs/receipts/hv/hv-ug-r1-deep.ps1' -Mode Guard -Count 200"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 307,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:11:10.4Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 4577,
+    "Invocation": "text(load(\"batch-1\").value.output);text(load(\"batch-2\").value.output);text(load(\"batch-3\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:11:24.487Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Files -Arguments @('tests/Build.Tests') -Label provision-files -Count 200",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Files -Arguments @('--no-ignore','tests/QBrainAi.Support.Mcp.Tests/bin') -Label assembly-files -Count 15",
+      "& './docs/receipts/hv/hv-ug-r1-deep.ps1' -Mode Scripts -Count 1",
+      "& './docs/receipts/hv/hv-ug-r1-session.ps1' -Mode Call -Text 'Independent Nuke Test hv-ug-r1-test-20261019T195839 at exact review head exited 255: Support.Mcp 3224 total with 34 failed, 3190 passed, no skipped; six other unit projects continued. Errors pinning real Linux /tmp mounts demonstrate residual environment-dependent unit cases. This does not falsify the earlier native-host passing TRX; recording environment separately. Historical guard-mock run exited 255 with old skip scanner finding mock fixture syntax; investigating green mock claim chronology.'"
+    ],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 4987,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:11:43.538Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('tests/Build.Tests/ProviderTestProvisioningContract.cs','tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs','tests/Build.Tests/ProviderTestProvisioningTests.cs') -Count 800 -Label provisioning-tests-corrected"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 360,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:11:56.519Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-ug-r1-deep.ps1'), [ref]$null, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-deep.ps1' -Severity Warning,Error; if ($parseErrors) { exit 1 }"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 4631,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:12:03.279Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 23914,
+    "Invocation": "text(load(\"check-1\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:12:27.808Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/plans/2026-10-19-unit-suite-green.md') -Offset 128 -Count 70 -Label plan-gates",
+      "& './docs/receipts/hv/hv-ug-r1-deep.ps1' -Mode Guard -Count 200",
+      "& './docs/receipts/hv/hv-ug-r1-deep.ps1' -Mode Store -Count 400",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','unit-green-guard|python|node|powershell.exe','docs/receipts/hv/hv-ug-r1-deep-Scripts-20261019T201131.json') -Label script-search -Count 200"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 351,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:12:41.123Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0,
+      1,
+      0
+    ],
+    "Running": true,
+    "ResultLength": 15265,
+    "Invocation": "text(load(\"attack-0\").value.output);text(load(\"attack-1\").value);text(load(\"attack-2\").value);text(load(\"attack-3\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:12:49.497Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('tests/QBrainAi.Support.Mcp.Tests/Ingestion/UnitSuitePlatformScanner.cs','tests/QBrainAi.Support.Mcp.Tests/Ingestion/IngestionAllowlistContractTests.cs') -Count 70 -Label guard-signatures",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-deep-Scripts-20261019T201131.json') -Offset 3870 -Count 85 -Label guard-script-chronology",
+      "& './docs/receipts/hv/hv-ug-r1-analyze.ps1' -Mode ReadEvidence -Path './docs/receipts/hv/hv-ug-r1-build-process-20261019T195545-4b3940.json' -Offset 0 -Count 180",
+      "& './docs/receipts/hv/hv-ug-r1-analyze.ps1' -Mode Transcript -OnlyOperator -Pattern 'ZERO|skip' -Count 100"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 300,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:12:57.251Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 40635,
+    "Invocation": "text(load(\"focus-1\").value.output);text(load(\"focus-2\").value.output);text(load(\"focus-3\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:13:15.755Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','class UnitSuitePlatformScanner|namespace','tests/QBrainAi.Support.Mcp.Tests/UnitSuitePlatformScanner.cs') -Count 20 -Label scanner-namespace",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Files -Arguments @('tests/QBrainAi.Support.Mcp.Tests','-g','*UnitSuite*') -Count 30 -Label scanner-paths",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','UseCases\\.|getSession|queryHistory|requirements\\.','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-core.ps1') -Count 100 -Label plugin-methods",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Files -Arguments @('/home/sharpninja/.claude/scratch/pr82-review-20261019','-g','*requirement*','-g','*fr*','-g','*tr-*','-g','*convert*') -Count 150 -Label prior-record-files"
+    ],
+    "ExitCodes": [
+      2,
+      0,
+      2,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 21935,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:13:31.813Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs') -Count 110 -Label guard-signature-correct",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','queryHistory|UseCases\\.|workflow.requirements|sessionlog.get','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib') -Count 100 -Label plugin-route-discovery",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/legion2-requirements-20261019T1459.txt','docs/receipts/hv/20261019T195131-unitgreen-r1.selfreview.md') -Count 250 -Label preconversion-and-selfreview"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 33031,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:13:44.825Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-ug-r1-deep.ps1'), [ref]$null, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-deep.ps1' -Severity Warning,Error; if ($parseErrors) { exit 1 }",
+      "& './docs/receipts/hv/hv-ug-r1-deep.ps1' -Mode Guard -Count 100"
+    ],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 2036,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:14:02.133Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Files -Arguments @('tests','-g','*IngestionAllowlist*') -Label skipguard-path -Count 20",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','workflow.usecase|workflow.sessionlog.queryHistory|UseCases.ListAsync|UseCases.GetCoverageAsync','src') -Label workflow-methods -Count 100",
+      "& './docs/receipts/hv/hv-ug-r1-analyze.ps1' -Mode ReadEvidence -Path './docs/receipts/hv/hv-ug-r1-build-process-20261019T195545-4b3940.json' -Offset 180 -Count 40",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-buildtests-20261019T200947.out.log') -Offset 0 -Count 80 -Label independent-buildtest-status",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-windows-live.txt') -Offset 110 -Count 140 -Label windows-live-detail"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 17849,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:14:25.633Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/usecase/SKILL.md','src/QBrainAi.Repl.Core/SessionLogCommandShapes.cs') -Offset 820 -Count 90 -Label history-schema",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/usecase/SKILL.md','tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs') -Count 280 -Label usecase-and-skipguard",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-buildtests-20261019T200947.meta.json','docs/receipts/hv/hv-ug-r1-buildtests-20261019T200947.err.log') -Count 100 -Label buildtest-process-meta",
+      "& './docs/receipts/hv/hv-ug-r1-analyze.ps1' -Mode GitState -Offset 45 -Count 80"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 300,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:14:31.536Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 17519,
+    "Invocation": "text(load(\"schema-0\").value.output);text(load(\"schema-2\").value.output);text(load(\"schema-3\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:14:39.815Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 20574,
+    "Invocation": "text(load(\"schema-1\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:15:03.197Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-ug-r1-deep.ps1'), [ref]$null, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-deep.ps1' -Severity Warning,Error; if ($parseErrors) { exit 1 }"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 267,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:15:13.243Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-deep.ps1' -Mode State -Count 200",
+      "& './docs/receipts/hv/hv-ug-r1-deep.ps1' -Mode Guard -Count 200",
+      "& './docs/receipts/hv/hv-ug-r1-deep.ps1' -Mode Commits -Count 300"
+    ],
+    "ExitCodes": [
+      1,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 9193,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:15:35.648Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-session.ps1' -Mode Fetch -Method client.UseCases.ListAsync",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Git -Arguments @('diff','c2125c42','11681680','--','.nuke/build.schema.json') -Count 120 -Label takeover-schema",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('/home/sharpninja/.local/bin/dotnet') -Count 100 -Label dotnet-wrapper",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('/home/sharpninja/.claude/scratch/pr82-review-20261019/pre-hv-projected-problems-20261019-r2.md') -Count 90 -Label problems-recheck",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('src/QBrainAi.Repl.Core/SessionLogCommandShapes.cs') -Count 150 -Label session-lifecycle-methods"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 346,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:15:40.711Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 64058,
+    "Invocation": "text(load(\"verify-1\").value.output);text(load(\"verify-2\").value.output);text(load(\"verify-3\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:16:02.773Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-session.ps1' -Mode Fetch -Method client.UseCases.GetCoverageAsync",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','GetByIdAsync|QueryAsync|GetSession','src/QBrainAi.Client/SessionLogClient.cs') -Label session-client-methods -Count 80",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','[Cc]onvert.*[Ff][Rr]|[Ff][Rr].*[Tt][Rr]|USECASE-016','docs/receipts/hv/hv-ug-r1-deep-Scripts-20261019T201131.json') -Label conversion-commands -Count 80",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-store-client-UseCases-ListAsync.txt') -Count 60 -Label usecase-list"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 12534,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:16:15.306Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-ug-r1-deep.ps1'), [ref]$null, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-deep.ps1' -Severity Warning,Error; if ($parseErrors) { exit 1 }",
+      "& './docs/receipts/hv/hv-ug-r1-deep.ps1' -Mode State -Count 200"
+    ],
+    "ExitCodes": [
+      0,
+      1
+    ],
+    "Running": false,
+    "ResultLength": 659,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:16:31.356Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-run.ps1' -Gate Test"
+    ],
+    "ExitCodes": [],
+    "Running": true,
+    "ResultLength": 323,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:16:52.447Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('/home/sharpninja/.claude/scratch/pr82-review-20261019/Convert-FrToTr.ps1','src/QBrainAi.Client/SessionLogClient.cs') -Count 220 -Label conversion-and-session-api",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-store-client-UseCases-GetCoverageAsync.txt') -Count 20 -Label usecase-coverage",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Git -Arguments @('diff','3da2db93...6b4295b7','--','docs/handoffs/pr82-review-handoff-20261019T104723.md') -Count 100 -Label handoff-correction"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 300,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:16:57.16Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      1,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 28197,
+    "Invocation": "text(load(\"finalevidence-0\").value.output);text(load(\"finalevidence-1\").value.output);text(load(\"finalevidence-2\").value.output);text(load(\"finalevidence-3\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:17:33.211Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-ug-r1-transcript-evidence.ps1'), [ref]$null, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-transcript-evidence.ps1' -Severity Warning,Error; if ($parseErrors) { exit 1 }",
+      "& './docs/receipts/hv/hv-ug-r1-transcript-evidence.ps1' -Pattern 'Get-Requirement.ps1|Convert-FrToTr.ps1|guard-mock' -Count 1"
+    ],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 577,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:18:16.191Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-transcript-tool-receipts-20261019T201741.json') -Count 90 -Label historical-plugin-outputs",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','AC-1|ac-21|NU190','docs/receipts/hv/hv-ug-r1-store-TR-MCP-QUALITY-001.txt','Directory.Build.props','Directory.Packages.props') -Count 50 -Label quality-scope",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','Read-only|ReadOnly|ReadAllText|Mount|SqliteBounded|class RequirementsDocumentServiceTests|Trait','tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs','tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs') -Count 110 -Label residual-anchors",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-deep-Failures-20261019T201020.json') -Offset 177 -Count 12 -Label failure-other-outcomes"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 300,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:18:19.48Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 39076,
+    "Invocation": "text(load(\"historical-0\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:18:24.488Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 35766,
+    "Invocation": "text(load(\"check-0\").value);\ntext(load(\"historical-1\").value.output);\ntext(load(\"historical-2\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:18:47.871Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-session.ps1' -Mode Call -Category decision -Text 'Material findings established by evidence: the source guards miss multiline and qualified Skip attributes, and interpolated-string executable OS calls; compiled scanner/skip-regex probes reproduce misses. The seven-project comparison duplicates directory selection instead of observing Build.Test.cs, so the problems-list guarantee that target-list changes fail the pin is unsupported. Residual actual /tmp native I/O unit cases fail under the reviewer sandbox; native-host rerun is in progress. These are implementer fixes within the existing day-one rule, not new requirements. Windows interactive lane absence is honestly declared but cannot support the ready-to-merge goal or unconditional satisfaction of platform execution criteria. Alternative of accepting declarations as passing evidence rejected under profile 4.5 and current goal item 2.'"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 14610,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:19:18.709Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs') -Offset 322 -Count 80 -Label native-sqlite-unit",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs','tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs') -Count 100 -Label unit-fixtures-and-inventory",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('tests/Build.Tests/ServiceUpdateTests.cs') -Offset 411 -Count 45 -Label sandbox-native-buildtest"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 307,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:19:57.228Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 18003,
+    "Invocation": "text(load(\"final-sources-0\").value.output);text(load(\"final-sources-1\").value.output);text(load(\"final-sources-2\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:20:42.278Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-ug-r1-reconcile.ps1'), [ref]$null, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-reconcile.ps1' -Severity Warning,Error; if ($parseErrors) { exit 1 }",
+      "& './docs/receipts/hv/hv-ug-r1-reconcile.ps1' -Mode SessionParams -WhatIf",
+      "& './docs/receipts/hv/hv-ug-r1-reconcile.ps1' -Mode SessionParams"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 905,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:21:08.437Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-ug-r1-session.ps1'), [ref]$null, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-session.ps1' -Severity Warning,Error; if ($parseErrors) { exit 1 }",
+      "& './docs/receipts/hv/hv-ug-r1-reconcile.ps1' -Mode Records",
+      "& './docs/receipts/hv/hv-ug-r1-reconcile.ps1' -Mode Scripts",
+      "& './docs/receipts/hv/hv-ug-r1-reconcile.ps1' -Mode Receipts",
+      "& './docs/receipts/hv/hv-ug-r1-session.ps1' -Mode Fetch -Method client.SessionLog.GetAsync -ParamsFile './docs/receipts/hv/hv-ug-r1-implementer-session-params.json' -RecordName implementer-session"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 9052,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:22:55.638Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-test-20261019T201636.meta.json') -Offset 160 -Count 35 -Label native-run-check"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 2800,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:23:06.089Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-run.ps1' -Gate BuildTests",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Trx -Arguments @('TestResults/hv-ug-r1-test-20261019T201636') -Count 150 -Label native-trx",
+      "& './docs/receipts/hv/hv-ug-r1-session.ps1' -Mode Call -Method client.SessionLog.OpenSessionAsync -ParamsFile './docs/receipts/hv/hv-ug-r1-own-model-params.json' -WhatIf",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-store-implementer-session.txt') -Count 50 -Label implementer-session-head"
+    ],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": true,
+    "ResultLength": 9327,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:23:34.67Z",
+    "Tool": "exec",
+    "Commands": [
+      "$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-ug-r1-reconcile.ps1'), [ref]$null, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-reconcile.ps1' -Severity Warning,Error; if ($parseErrors) { exit 1 }",
+      "& './docs/receipts/hv/hv-ug-r1-reconcile.ps1' -Mode SessionParams",
+      "& './docs/receipts/hv/hv-ug-r1-session.ps1' -Mode Fetch -Method client.SessionLog.QueryAsync -ParamsFile './docs/receipts/hv/hv-ug-r1-own-session-params.json' -RecordName own-session-readback",
+      "& './docs/receipts/hv/hv-ug-r1-session.ps1' -Mode Fetch -Method client.SessionLog.QueryAsync -ParamsFile './docs/receipts/hv/hv-ug-r1-implementer-session-params.json' -RecordName implementer-session-query"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 1265,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:23:53.307Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-store-own-session-readback.txt','docs/receipts/hv/hv-ug-r1-store-implementer-session-query.txt') -Count 60 -Label full-session-readback-shape",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','Scanner|SkipGuard|1720|exit=255|FAILED','/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-guard-mock-20261019T1720.out.log') -Count 70 -Label guard-green-evidence",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/unit-suite-green-20261019/unit-green-final-buildtests-20261019T1918.trx-summary.txt','docs/receipts/unit-suite-green-20261019/unit-green-final-int-20261019T1915.trx-summary.txt','docs/receipts/unit-suite-green-20261019/unit-green-handoff-20261019T1909.trx-summary.txt') -Count 50 -Label committed-trx-summaries"
+    ],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 254,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:23:59.526Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 21613,
+    "Invocation": "text(load(\"closingproof-0\").value.output);text(load(\"closingproof-1\").value.output);text(load(\"closingproof-2\").value.output);\n",
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:27:19.56Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Read -Path '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Count 500"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 5164,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:27:23.12Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Profile -Offset 0 -Count 190"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 28911,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:27:28.443Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Profile -Offset 190 -Count 300"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 35542,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:27:32.706Z",
+    "Tool": "exec",
+    "Commands": [
+      "Get-Date -Format s"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": true,
+    "ResultLength": 410,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:27:47.272Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Path './docs/receipts/hv/hv-ug-r1-session.ps1' -Count 500",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Path './docs/receipts/hv/hv-ug-r1-reconcile.ps1' -Count 500",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Path './docs/plans/2026-10-19-unit-suite-green.md' -Offset 125 -Count 100"
+    ],
+    "ExitCodes": [
+      1,
+      1,
+      1
+    ],
+    "Running": false,
+    "ResultLength": 1427,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:27:53.672Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Read -Path './docs/receipts/hv/hv-ug-r1-session.ps1' -Count 500",
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Read -Path './docs/receipts/hv/hv-ug-r1-reconcile.ps1' -Count 500",
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Read -Path './docs/plans/2026-10-19-unit-suite-green.md' -Offset 125 -Count 100"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": true,
+    "ResultLength": 27748,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:28:18.71Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Read -Path './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Count 240",
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Read -Path './docs/receipts/hv/hv-ug-r1-store-TR-MCP-USECASE-018.txt' -Count 150",
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Read -Path './docs/receipts/hv/hv-ug-r1-store-TR-MCP-USECASE-019.txt' -Count 160"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 16025,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:28:32.17Z",
+    "Tool": "exec",
+    "Commands": [
+      "& '/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionScript.ps1' -ScriptPath './docs/receipts/hv/hv-ug-r1-windows-read.ps1' -OutFile './docs/receipts/hv/hv-ug-r1-windows-final.txt'",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','appendAction|CompleteTurn|updateTurn|designDecisions','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib') -Label session-schema -Count 80",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('./docs/receipts/hv/hv-ug-r1-store-implementer-session-query.txt') -Count 45 -Label session-shape",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Trx -Arguments @('./docs/receipts/hv/hv-ug-r1-buildtests-20261019T202308') -Label native-build-trx"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": true,
+    "ResultLength": 11166,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:28:43.188Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1') -Offset 2379 -Count 100 -Label session-actions",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1') -Offset 2614 -Count 200 -Label session-update",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('./docs/receipts/hv/hv-ug-r1-deep-Guard-20261019T201514.json','./docs/receipts/hv/hv-ug-r1-identity.json','./docs/receipts/hv/hv-ug-r1-reconciliation-Scripts-20261019T202111.json') -Count 180 -Label proof-final",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Files -Arguments @('docs/receipts/hv') -Label inventory-final -Count 270"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 42921,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:29:35.392Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 117,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:29:44.08Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Files -Arguments @('docs/receipts/hv','-g','hv-ug-r1-*.ps1') -Label own-scripts -Count 100",
+      "& './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Mode Read -Path './docs/receipts/hv/hv-ug-r1-bootstrap.ps1' -Count 190"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": true,
+    "ResultLength": 3391,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:29:53.338Z",
+    "Tool": "exec",
+    "Commands": [
+      "$hvTokens = $null; $hvErrors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r1-final-checks.ps1'), [ref]$hvTokens, [ref]$hvErrors); $hvErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-final-checks.ps1' -Severity Warning,Error"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 233,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:29:59.985Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-final-checks.ps1' -Mode Inspect -WhatIf",
+      "& './docs/receipts/hv/hv-ug-r1-final-checks.ps1' -Mode Inspect"
+    ],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 41657,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:30:29.494Z",
+    "Tool": "exec",
+    "Commands": [
+      "$hvTokens = $null; $hvErrors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r1-final-checks.ps1'), [ref]$hvTokens, [ref]$hvErrors); $hvErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-final-checks.ps1' -Severity Warning,Error"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 267,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:30:39.534Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-final-checks.ps1' -Mode Ledger",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('/home/sharpninja/.claude/scratch/pr82-review-20261019/pre-hv-projected-problems-20261019-r2.md') -Count 150 -Label problems-final",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('./docs/receipts/hv/hv-ug-r1-store-IMPL-UNITGREEN-001.txt') -Count 200 -Label todo-final",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','model|designDecisions|filesModified|OpenSessionAsync|PatchTurnAsync','src/QBrainAi.McpAgent/SessionLogWorkflow.cs','src/QBrainAi.Client/SessionLog') -Count 80 -Label session-client-shapes"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      2
+    ],
+    "Running": false,
+    "ResultLength": 19472,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:30:53.111Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Files -Arguments @('src','-g','*SessionLog*.cs') -Label session-files -Count 120",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs','tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs') -Count 260 -Label guards-final",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs') -Offset 310 -Count 90 -Label environment-final",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('./docs/receipts/hv/hv-ug-r1-store-TR-MCP-NUKE-019.txt') -Count 150 -Label nuke-record-final"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 34483,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:31:21.788Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-session.ps1' -Mode Call -Category decision -Text 'Native reruns at the exact reviewed head confirm Linux Test 4611/4611/0/0 and full Build.Tests 436/436/0/0. The sandbox failures are evidence of environment-dependent unit tests, not evidence that the implementer native-host gate counts were false. The latest Windows read-only probe at 20:28:35 still finds no interactive worktree or run. Existing H1 authorizes obtaining that evidence; no new requirement or operator decision is needed to correct the guard, unit classification, or satisfaction claims. Guard mock run 17 passing scanner cases coexisted with an overall Nuke exit 255, one failing skip-guard test and 16 NotExecuted results, so it must not be presented as an entirely green gate. Preserve that distinction in the verdict.'",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('src/QBrainAi.Client/SessionLogClient.cs') -Count 220 -Label own-session-schema"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 13711,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:31:38.1Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('src/QBrainAi.Client/SessionLogClient.cs') -Offset 208 -Count 100 -Label own-complete-schema",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('src/QBrainAi.Client/Models/SessionLogModels.cs') -Offset 100 -Count 220 -Label own-dto-schema",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-final-Ledger.json') -Count 35 -Label ledger-shape",
+      "& './docs/receipts/hv/hv-ug-r1-session.ps1' -Mode Call -Method client.SessionLog.OpenSessionAsync -ParamsFile './docs/receipts/hv/hv-ug-r1-own-model-params.json'"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 19822,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:31:51.796Z",
+    "Tool": "exec",
+    "Commands": [
+      "$hvTokens = $null; $hvErrors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r1-final-checks.ps1'), [ref]$hvTokens, [ref]$hvErrors); $hvErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-final-checks.ps1' -Severity Warning,Error",
+      "& './docs/receipts/hv/hv-ug-r1-final-checks.ps1' -Mode Ledger"
+    ],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 580,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:33:04.855Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Files -Arguments @('tests','-g','*IngestionAllowlist*') -Count 20 -Label skip-path",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','Failed|NotExecuted|Skipped|UnitSuitePlatform|skip|Skip','/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-guard-mock-20261019T1720.out.log') -Count 100 -Label mock-red-final",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-final-Ledger.json') -Count 20 -Label ledger-check",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Search -Arguments @('-n','processingDialog|^        dialog:|^      model:|^    - sourceType','docs/receipts/hv/hv-ug-r1-store-own-session-readback.txt') -Count 20 -Label own-readback-shape"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 24614,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:37:19.376Z",
+    "Tool": "exec",
+    "Commands": [],
+    "ExitCodes": [],
+    "Running": false,
+    "ResultLength": 117,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:37:38.648Z",
+    "Tool": "exec",
+    "Commands": [
+      "$hvTokens = $null; $hvErrors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r1-write-verdict.ps1'), [ref]$hvTokens, [ref]$hvErrors); $hvErrors; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-write-verdict.ps1' -Severity Warning,Error"
+    ],
+    "ExitCodes": [
+      0
+    ],
+    "Running": false,
+    "ResultLength": 715,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:37:48.132Z",
+    "Tool": "exec",
+    "Commands": [
+      "$hvTokens = $null; $hvErrors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r1-write-verdict.ps1'), [ref]$hvTokens, [ref]$hvErrors); $hvErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-write-verdict.ps1' -Severity Warning,Error | ConvertTo-Json",
+      "& './docs/receipts/hv/hv-ug-r1-write-verdict.ps1' -WhatIf",
+      "& './docs/receipts/hv/hv-ug-r1-write-verdict.ps1'"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 1282,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:38:08.845Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-test-20261019T201636.meta.json','docs/receipts/hv/hv-ug-r1-buildtests-20261019T202308.meta.json','docs/receipts/hv/hv-ug-r1-reconciliation-Scripts-20261019T202111.json') -Count 100 -Label final-exact-commands",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hostile-validator-unitgreen-r1-20261019T195131.md') -Count 135 -Label verdict-proofread-a",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hostile-validator-unitgreen-r1-20261019T195131.md') -Offset 135 -Count 160 -Label verdict-proofread-b"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 41967,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:38:29.014Z",
+    "Tool": "exec",
+    "Commands": [
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-test-20261019T201636.meta.json') -Offset 130 -Count 30 -Label test-exact-command",
+      "& './docs/receipts/hv/hv-ug-r1-inspect.ps1' -Mode Read -Arguments @('docs/receipts/hv/hv-ug-r1-buildtests-20261019T202308.meta.json') -Offset 153 -Count 30 -Label infrastructure-exact-command",
+      "& './docs/receipts/hv/hv-ug-r1-final-checks.ps1' -Mode Lint"
+    ],
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 5936,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:39:28.457Z",
+    "Tool": "exec",
+    "Commands": [
+      "& '/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionScript.ps1' -ScriptPath '/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveRunState.ps1' -OutFile './docs/receipts/hv/hv-ug-r1-windows-latest.txt'"
+    ],
+    "ExitCodes": [],
+    "Running": true,
+    "ResultLength": 406,
+    "Invocation": null,
+    "Error": null
+  },
+  {
+    "TimestampUtc": "2026-10-20T01:40:42.793Z",
+    "Tool": "exec",
+    "Commands": [
+      "$hvTokens = $null; $hvErrors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r1-persist-verdict.ps1'), [ref]$hvTokens, [ref]$hvErrors); $hvErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-persist-verdict.ps1' -Severity Warning,Error | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-ug-r1-write-verdict.ps1' -Severity Warning,Error | ConvertTo-Json"
+    ],
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "Running": false,
+    "ResultLength": 668,
+    "Invocation": null,
+    "Error": null
+  }
+]

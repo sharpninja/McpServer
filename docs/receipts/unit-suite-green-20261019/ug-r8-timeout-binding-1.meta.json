@@ -1,0 +1,21 @@
+{
+  "name": "ug-r8-timeout-binding-1",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r8-timeout-binding-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/ug-r8-prep-20261026",
+  "head": "8b97aa4bee778273688e53a64a737c3170a41823",
+  "dirtyPaths": [
+    " M src/QBrainAi.Repl.Core/AgentStdioProtocol.cs",
+    " M src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs",
+    "?? src/QBrainAi.Repl.Core/ReplCommandTimeout.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs"
+  ],
+  "startedLocal": "2026-10-26T13:08:22",
+  "startedUtc": "2026-10-26T18:08:22.2492454Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-timeout-binding-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-timeout-binding-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-timeout-binding-1.exit.txt"
+}

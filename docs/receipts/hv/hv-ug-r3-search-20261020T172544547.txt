@@ -1,0 +1,10 @@
+89:    public async Task OpenSessionAsync(string agent, string sessionId, string title, string model, CancellationToken cancellationToken = default)
+94:        ArgumentException.ThrowIfNullOrWhiteSpace(model, nameof(model));
+112:                Model = model,
+122:            _state = new SessionLogState(agent, sessionId, title, model, now);
+812:    public SessionLogState(string agent, string sessionId, string title, string model, DateTimeOffset started)
+817:        Model = model;
+1130:        string? model = null,
+1174:        string? model = null,
+1182:        return _client.QueryAsync(agent, model, text, from, to, limit, offset, cancellationToken);
+

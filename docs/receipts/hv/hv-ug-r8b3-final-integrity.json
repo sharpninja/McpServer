@@ -1,0 +1,23 @@
+{
+  "TimestampLocal": "2026-10-29T00:06:15",
+  "Head": "332e0d31dbcb823418c3db30c409bc44df655de8",
+  "CodeHead": "a78640baacb867cdea182f316ef06ee019d489d9",
+  "TrackedChanges": [],
+  "FilesInspected": 161,
+  "ExactMarkerKeyOccurrences": 0,
+  "ExactMarkerKeyFiles": [],
+  "CredentialPatternCandidates": [],
+  "TurnStatus": "completed",
+  "FullResultMatches": true,
+  "HistoryExists": true,
+  "ReceiptHashes": [
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r8b-20261028T222504.md",
+      "Sha256": "2DFF0714FA268BF1264DFA0DA875CAC1C1FE73DEBA885C0E9166571942FA94B8"
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r8b-20261028T222504.json",
+      "Sha256": "A95275F34A95BD0DED75D9546EED57CB423DCAA4123ABE6C7D8C94127E6C4C12"
+    }
+  ]
+}

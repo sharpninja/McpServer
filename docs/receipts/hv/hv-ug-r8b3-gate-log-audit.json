@@ -1,0 +1,730 @@
+[
+  {
+    "Run": "ug-r8b-linux-test-6",
+    "Log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-linux-test-6.out.log",
+    "Lines": 5380,
+    "Sha256": "0F1CBC3EC5AC637D89A743D148DA0DD126B6680FCAC4D21985A79CF33492271D",
+    "Commands": [
+      {
+        "Line": 9,
+        "Text": "NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)"
+      },
+      {
+        "Line": 16,
+        "Text": "20:27:19 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/QBrainAi.sln"
+      },
+      {
+        "Line": 19,
+        "Text": "20:27:26 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj"
+      },
+      {
+        "Line": 22,
+        "Text": "20:27:28 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/SharpNinja.McpServer.Cqrs.Mvvm.csproj"
+      },
+      {
+        "Line": 25,
+        "Text": "20:27:30 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs/SharpNinja.McpServer.Cqrs.csproj"
+      },
+      {
+        "Line": 28,
+        "Text": "20:27:31 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.McpAgent/SharpNinja.McpServer.McpAgent.csproj"
+      },
+      {
+        "Line": 31,
+        "Text": "20:27:33 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.QBAgent/SharpNinja.McpServer.QBAgent.csproj"
+      },
+      {
+        "Line": 34,
+        "Text": "20:27:35 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Repl.Core/SharpNinja.McpServer.Repl.Core.csproj"
+      },
+      {
+        "Line": 37,
+        "Text": "20:27:37 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Repl/SharpNinja.McpServer.Repl.csproj"
+      },
+      {
+        "Line": 45,
+        "Text": "20:27:39 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 54,
+        "Text": "20:27:40 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/SharpNinja.McpServer.Cqrs.Mvvm.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 64,
+        "Text": "20:27:42 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs/SharpNinja.McpServer.Cqrs.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 73,
+        "Text": "20:27:43 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.McpAgent/SharpNinja.McpServer.McpAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 85,
+        "Text": "20:27:46 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.QBAgent/SharpNinja.McpServer.QBAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 99,
+        "Text": "20:27:49 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Repl.Core/SharpNinja.McpServer.Repl.Core.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 110,
+        "Text": "20:27:51 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Repl/SharpNinja.McpServer.Repl.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 122,
+        "Text": "20:27:53 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/QBrainAi.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 130,
+        "Text": "20:27:54 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/QBrainAi.Common.AgentCli.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 138,
+        "Text": "20:27:56 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/QBrainAi.Cqrs.Mvvm.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 147,
+        "Text": "20:27:57 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/QBrainAi.Cqrs.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 155,
+        "Text": "20:27:59 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.GraphRag/QBrainAi.GraphRag.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 172,
+        "Text": "20:28:03 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.KeyServer/QBrainAi.KeyServer.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 182,
+        "Text": "20:28:06 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Launcher/QBrainAi.Launcher.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 190,
+        "Text": "20:28:07 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent.SampleHost/QBrainAi.McpAgent.SampleHost.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 202,
+        "Text": "20:28:09 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/QBrainAi.McpAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 213,
+        "Text": "20:28:10 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Skills/QBrainAi.QBAgent.Skills.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 221,
+        "Text": "20:28:11 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Tools/QBrainAi.QBAgent.Tools.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 234,
+        "Text": "20:28:13 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent/QBrainAi.QBAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 248,
+        "Text": "20:28:15 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/QBrainAi.Repl.Core.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 258,
+        "Text": "20:28:17 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 270,
+        "Text": "20:28:18 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/QBrainAi.ServiceDefaults.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 278,
+        "Text": "20:28:20 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/QBrainAi.Services.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 294,
+        "Text": "20:28:22 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.SessionLog.Transcripts/QBrainAi.SessionLog.Transcripts.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 302,
+        "Text": "20:28:23 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/QBrainAi.Storage.PostgreSqlMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 314,
+        "Text": "20:28:25 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqliteMigrations/QBrainAi.Storage.SqliteMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 326,
+        "Text": "20:28:27 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqlServerMigrations/QBrainAi.Storage.SqlServerMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 338,
+        "Text": "20:28:29 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/QBrainAi.Storage.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 349,
+        "Text": "20:28:31 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Subscriber/QBrainAi.Subscriber.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 359,
+        "Text": "20:28:32 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 382,
+        "Text": "20:28:37 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/QBrainAi.TransactionSecurity.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 390,
+        "Text": "20:28:38 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 403,
+        "Text": "20:28:41 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 412,
+        "Text": "20:28:42 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Context.Validation/QBrainAi.Context.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 420,
+        "Text": "20:28:43 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 430,
+        "Text": "20:28:45 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.GitHub.Validation/QBrainAi.GitHub.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 438,
+        "Text": "20:28:46 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 447,
+        "Text": "20:28:48 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 459,
+        "Text": "20:28:50 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.PlanReview.Tests/QBrainAi.PlanReview.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 467,
+        "Text": "20:28:51 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 491,
+        "Text": "20:28:56 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.ProcessTree.TestHelper/QBrainAi.ProcessTree.TestHelper.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 499,
+        "Text": "20:28:57 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 514,
+        "Text": "20:28:59 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 528,
+        "Text": "20:29:01 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 553,
+        "Text": "20:29:05 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repo.Validation/QBrainAi.Repo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 561,
+        "Text": "20:29:06 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Review.Tests/QBrainAi.Review.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 569,
+        "Text": "20:29:07 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.SessionLog.Validation/QBrainAi.SessionLog.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 577,
+        "Text": "20:29:08 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 605,
+        "Text": "20:29:11 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 630,
+        "Text": "20:29:15 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Todo.Validation/QBrainAi.Todo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 638,
+        "Text": "20:29:16 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.ToolRegistry.Validation/QBrainAi.ToolRegistry.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 646,
+        "Text": "20:29:18 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 659,
+        "Text": "20:29:19 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Workspace.Validation/QBrainAi.Workspace.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40"
+      },
+      {
+        "Line": 672,
+        "Text": "20:29:21 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx --logger console;verbosity=detailed"
+      },
+      {
+        "Line": 3859,
+        "Text": "20:31:54 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Client.Tests --logger trx;LogFileName=QBrainAi.Client.Tests.trx --logger console;verbosity=detailed"
+      },
+      {
+        "Line": 4180,
+        "Text": "20:31:58 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Cqrs.Tests --logger trx;LogFileName=QBrainAi.Cqrs.Tests.trx --logger console;verbosity=detailed"
+      },
+      {
+        "Line": 4228,
+        "Text": "20:32:01 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Launcher.Tests --logger trx;LogFileName=QBrainAi.Launcher.Tests.trx --logger console;verbosity=detailed"
+      },
+      {
+        "Line": 4263,
+        "Text": "20:32:04 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.McpAgent.Tests --logger trx;LogFileName=QBrainAi.McpAgent.Tests.trx --logger console;verbosity=detailed"
+      },
+      {
+        "Line": 4342,
+        "Text": "20:32:08 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Repl.Core.Tests --logger trx;LogFileName=QBrainAi.Repl.Core.Tests.trx --logger console;verbosity=detailed"
+      },
+      {
+        "Line": 5260,
+        "Text": "20:32:17 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.QBAgent.Tests --logger trx;LogFileName=QBrainAi.QBAgent.Tests.trx --logger console;verbosity=detailed"
+      }
+    ],
+    "Selection": [
+      {
+        "Line": 672,
+        "Text": "20:29:21 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx --logger console;verbosity=detailed"
+      },
+      {
+        "Line": 3859,
+        "Text": "20:31:54 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Client.Tests --logger trx;LogFileName=QBrainAi.Client.Tests.trx --logger console;verbosity=detailed"
+      },
+      {
+        "Line": 4180,
+        "Text": "20:31:58 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Cqrs.Tests --logger trx;LogFileName=QBrainAi.Cqrs.Tests.trx --logger console;verbosity=detailed"
+      },
+      {
+        "Line": 4228,
+        "Text": "20:32:01 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Launcher.Tests --logger trx;LogFileName=QBrainAi.Launcher.Tests.trx --logger console;verbosity=detailed"
+      },
+      {
+        "Line": 4263,
+        "Text": "20:32:04 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.McpAgent.Tests --logger trx;LogFileName=QBrainAi.McpAgent.Tests.trx --logger console;verbosity=detailed"
+      },
+      {
+        "Line": 4342,
+        "Text": "20:32:08 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Repl.Core.Tests --logger trx;LogFileName=QBrainAi.Repl.Core.Tests.trx --logger console;verbosity=detailed"
+      },
+      {
+        "Line": 5260,
+        "Text": "20:32:17 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.QBAgent.Tests --logger trx;LogFileName=QBrainAi.QBAgent.Tests.trx --logger console;verbosity=detailed"
+      }
+    ],
+    "Warnings": [],
+    "Result": [
+      {
+        "Line": 49,
+        "Text": "20:27:40 [DBG] Build succeeded."
+      },
+      {
+        "Line": 59,
+        "Text": "20:27:42 [DBG] Build succeeded."
+      },
+      {
+        "Line": 68,
+        "Text": "20:27:43 [DBG] Build succeeded."
+      },
+      {
+        "Line": 80,
+        "Text": "20:27:46 [DBG] Build succeeded."
+      },
+      {
+        "Line": 94,
+        "Text": "20:27:49 [DBG] Build succeeded."
+      },
+      {
+        "Line": 105,
+        "Text": "20:27:51 [DBG] Build succeeded."
+      },
+      {
+        "Line": 117,
+        "Text": "20:27:53 [DBG] Build succeeded."
+      },
+      {
+        "Line": 125,
+        "Text": "20:27:54 [DBG] Build succeeded."
+      },
+      {
+        "Line": 133,
+        "Text": "20:27:56 [DBG] Build succeeded."
+      },
+      {
+        "Line": 142,
+        "Text": "20:27:57 [DBG] Build succeeded."
+      },
+      {
+        "Line": 150,
+        "Text": "20:27:59 [DBG] Build succeeded."
+      },
+      {
+        "Line": 167,
+        "Text": "20:28:03 [DBG] Build succeeded."
+      },
+      {
+        "Line": 177,
+        "Text": "20:28:05 [DBG] Build succeeded."
+      },
+      {
+        "Line": 185,
+        "Text": "20:28:07 [DBG] Build succeeded."
+      },
+      {
+        "Line": 197,
+        "Text": "20:28:08 [DBG] Build succeeded."
+      },
+      {
+        "Line": 208,
+        "Text": "20:28:10 [DBG] Build succeeded."
+      },
+      {
+        "Line": 216,
+        "Text": "20:28:11 [DBG] Build succeeded."
+      },
+      {
+        "Line": 229,
+        "Text": "20:28:13 [DBG] Build succeeded."
+      },
+      {
+        "Line": 243,
+        "Text": "20:28:15 [DBG] Build succeeded."
+      },
+      {
+        "Line": 253,
+        "Text": "20:28:17 [DBG] Build succeeded."
+      },
+      {
+        "Line": 265,
+        "Text": "20:28:18 [DBG] Build succeeded."
+      },
+      {
+        "Line": 273,
+        "Text": "20:28:19 [DBG] Build succeeded."
+      },
+      {
+        "Line": 289,
+        "Text": "20:28:22 [DBG] Build succeeded."
+      },
+      {
+        "Line": 297,
+        "Text": "20:28:23 [DBG] Build succeeded."
+      },
+      {
+        "Line": 309,
+        "Text": "20:28:25 [DBG] Build succeeded."
+      },
+      {
+        "Line": 321,
+        "Text": "20:28:27 [DBG] Build succeeded."
+      },
+      {
+        "Line": 333,
+        "Text": "20:28:29 [DBG] Build succeeded."
+      },
+      {
+        "Line": 344,
+        "Text": "20:28:30 [DBG] Build succeeded."
+      },
+      {
+        "Line": 354,
+        "Text": "20:28:32 [DBG] Build succeeded."
+      },
+      {
+        "Line": 377,
+        "Text": "20:28:37 [DBG] Build succeeded."
+      },
+      {
+        "Line": 385,
+        "Text": "20:28:38 [DBG] Build succeeded."
+      },
+      {
+        "Line": 398,
+        "Text": "20:28:41 [DBG] Build succeeded."
+      },
+      {
+        "Line": 407,
+        "Text": "20:28:42 [DBG] Build succeeded."
+      },
+      {
+        "Line": 415,
+        "Text": "20:28:43 [DBG] Build succeeded."
+      },
+      {
+        "Line": 425,
+        "Text": "20:28:45 [DBG] Build succeeded."
+      },
+      {
+        "Line": 433,
+        "Text": "20:28:46 [DBG] Build succeeded."
+      },
+      {
+        "Line": 442,
+        "Text": "20:28:48 [DBG] Build succeeded."
+      },
+      {
+        "Line": 454,
+        "Text": "20:28:50 [DBG] Build succeeded."
+      },
+      {
+        "Line": 462,
+        "Text": "20:28:51 [DBG] Build succeeded."
+      },
+      {
+        "Line": 486,
+        "Text": "20:28:55 [DBG] Build succeeded."
+      },
+      {
+        "Line": 494,
+        "Text": "20:28:57 [DBG] Build succeeded."
+      },
+      {
+        "Line": 509,
+        "Text": "20:28:59 [DBG] Build succeeded."
+      },
+      {
+        "Line": 523,
+        "Text": "20:29:00 [DBG] Build succeeded."
+      },
+      {
+        "Line": 548,
+        "Text": "20:29:04 [DBG] Build succeeded."
+      },
+      {
+        "Line": 556,
+        "Text": "20:29:06 [DBG] Build succeeded."
+      },
+      {
+        "Line": 564,
+        "Text": "20:29:07 [DBG] Build succeeded."
+      },
+      {
+        "Line": 572,
+        "Text": "20:29:08 [DBG] Build succeeded."
+      },
+      {
+        "Line": 600,
+        "Text": "20:29:11 [DBG] Build succeeded."
+      },
+      {
+        "Line": 625,
+        "Text": "20:29:15 [DBG] Build succeeded."
+      },
+      {
+        "Line": 633,
+        "Text": "20:29:16 [DBG] Build succeeded."
+      },
+      {
+        "Line": 641,
+        "Text": "20:29:18 [DBG] Build succeeded."
+      },
+      {
+        "Line": 654,
+        "Text": "20:29:19 [DBG] Build succeeded."
+      },
+      {
+        "Line": 662,
+        "Text": "20:29:21 [DBG] Build succeeded."
+      },
+      {
+        "Line": 3856,
+        "Text": "20:31:54 [DBG] Total tests: 3172"
+      },
+      {
+        "Line": 3857,
+        "Text": "20:31:54 [DBG]      Passed: 3172"
+      },
+      {
+        "Line": 4177,
+        "Text": "20:31:58 [DBG] Total tests: 306"
+      },
+      {
+        "Line": 4178,
+        "Text": "20:31:58 [DBG]      Passed: 306"
+      },
+      {
+        "Line": 4225,
+        "Text": "20:32:01 [DBG] Total tests: 33"
+      },
+      {
+        "Line": 4226,
+        "Text": "20:32:01 [DBG]      Passed: 33"
+      },
+      {
+        "Line": 4260,
+        "Text": "20:32:03 [DBG] Total tests: 20"
+      },
+      {
+        "Line": 4261,
+        "Text": "20:32:03 [DBG]      Passed: 20"
+      },
+      {
+        "Line": 4339,
+        "Text": "20:32:08 [DBG] Total tests: 64"
+      },
+      {
+        "Line": 4340,
+        "Text": "20:32:08 [DBG]      Passed: 64"
+      },
+      {
+        "Line": 5257,
+        "Text": "20:32:17 [DBG] Total tests: 903"
+      },
+      {
+        "Line": 5258,
+        "Text": "20:32:17 [DBG]      Passed: 903"
+      },
+      {
+        "Line": 5366,
+        "Text": "20:32:20 [DBG] Total tests: 94"
+      },
+      {
+        "Line": 5367,
+        "Text": "20:32:20 [DBG]      Passed: 94"
+      },
+      {
+        "Line": 5380,
+        "Text": "Build succeeded on 10/28/2026 8:32:20 PM. ＼（＾ᴗ＾）／"
+      }
+    ],
+    "Exit": "0 2026-10-28T20:32:21\n"
+  },
+  {
+    "Run": "ug-r8b-linux-lane-4",
+    "Log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-linux-lane-4.out.log",
+    "Lines": 150,
+    "Sha256": "C2BDE544CCE972335D9FF7091C535158C2BA9FB5438B77A1AE68C0D4198002DF",
+    "Commands": [
+      {
+        "Line": 9,
+        "Text": "NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)"
+      },
+      {
+        "Line": 33,
+        "Text": "20:34:03 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx"
+      },
+      {
+        "Line": 59,
+        "Text": "20:36:55 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.McpAgent.Tests --logger trx;LogFileName=QBrainAi.McpAgent.Tests.trx"
+      },
+      {
+        "Line": 72,
+        "Text": "20:37:04 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.Repl.Core.Tests --logger trx;LogFileName=QBrainAi.Repl.Core.Tests.trx"
+      },
+      {
+        "Line": 87,
+        "Text": "20:37:16 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.QBAgent.Tests --logger trx;LogFileName=QBrainAi.QBAgent.Tests.trx"
+      },
+      {
+        "Line": 103,
+        "Text": "20:37:27 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/Build.Tests --logger trx;LogFileName=Build.Tests.trx"
+      },
+      {
+        "Line": 113,
+        "Text": "20:37:40 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.Repl.IntegrationTests --logger trx;LogFileName=QBrainAi.Repl.IntegrationTests.trx"
+      }
+    ],
+    "Selection": [
+      {
+        "Line": 32,
+        "Text": "20:34:03 [INF] Integration lane filter: Category=Integration&Platform!=Windows"
+      },
+      {
+        "Line": 33,
+        "Text": "20:34:03 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx"
+      },
+      {
+        "Line": 59,
+        "Text": "20:36:55 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.McpAgent.Tests --logger trx;LogFileName=QBrainAi.McpAgent.Tests.trx"
+      },
+      {
+        "Line": 72,
+        "Text": "20:37:04 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.Repl.Core.Tests --logger trx;LogFileName=QBrainAi.Repl.Core.Tests.trx"
+      },
+      {
+        "Line": 87,
+        "Text": "20:37:16 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.QBAgent.Tests --logger trx;LogFileName=QBrainAi.QBAgent.Tests.trx"
+      },
+      {
+        "Line": 103,
+        "Text": "20:37:27 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/Build.Tests --logger trx;LogFileName=Build.Tests.trx"
+      },
+      {
+        "Line": 113,
+        "Text": "20:37:40 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.Repl.IntegrationTests --logger trx;LogFileName=QBrainAi.Repl.IntegrationTests.trx"
+      }
+    ],
+    "Warnings": [],
+    "Result": [
+      {
+        "Line": 58,
+        "Text": "20:36:55 [DBG] Passed!  - Failed:     0, Passed:   411, Skipped:     0, Total:   411, Duration: 1 m 40 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)"
+      },
+      {
+        "Line": 71,
+        "Text": "20:37:04 [DBG] Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 318 ms - QBrainAi.McpAgent.Tests.dll (net10.0)"
+      },
+      {
+        "Line": 86,
+        "Text": "20:37:16 [DBG] Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 430 ms - QBrainAi.Repl.Core.Tests.dll (net10.0)"
+      },
+      {
+        "Line": 102,
+        "Text": "20:37:27 [DBG] Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 646 ms - QBrainAi.QBAgent.Tests.dll (net10.0)"
+      },
+      {
+        "Line": 112,
+        "Text": "20:37:40 [DBG] Passed!  - Failed:     0, Passed:    16, Skipped:     0, Total:    16, Duration: 5 s - Build.Tests.dll (net10.0)"
+      },
+      {
+        "Line": 138,
+        "Text": "21:00:46 [DBG] Passed!  - Failed:     0, Passed:   179, Skipped:     0, Total:   179, Duration: 22 m 52 s - QBrainAi.Repl.IntegrationTests.dll (net10.0)"
+      },
+      {
+        "Line": 150,
+        "Text": "Build succeeded on 10/28/2026 9:00:46 PM. ＼（＾ᴗ＾）／"
+      }
+    ],
+    "Exit": "0 2026-10-28T21:00:47\n"
+  },
+  {
+    "Run": "ug-r8b-build-tests-3",
+    "Log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-build-tests-3.out.log",
+    "Lines": 9,
+    "Sha256": "1514ECDDABAEBDDDA7F8141FD6D826E51B634D14DBB312556318B5936A609938",
+    "Commands": [],
+    "Selection": [],
+    "Warnings": [],
+    "Result": [
+      {
+        "Line": 9,
+        "Text": "Passed!  - Failed:     0, Passed:   470, Skipped:     0, Total:   470, Duration: 6 m 6 s - Build.Tests.dll (net10.0)"
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-traceability-3",
+    "Log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-traceability-3.out.log",
+    "Lines": 27,
+    "Sha256": "A10E83C1DA35DF40A750F73033C2B4E68D1C2578556746AD46C42B564CFBB5A4",
+    "Commands": [
+      {
+        "Line": 9,
+        "Text": "NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)"
+      }
+    ],
+    "Selection": [],
+    "Warnings": [],
+    "Result": [
+      {
+        "Line": 17,
+        "Text": "21:08:24 [INF] Traceability validation passed."
+      },
+      {
+        "Line": 27,
+        "Text": "Build succeeded on 10/28/2026 9:08:24 PM. ＼（＾ᴗ＾）／"
+      }
+    ],
+    "Exit": "0 2026-10-28T21:08:25\n"
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "timestampUtc": "2026-11-06T07:33:20.3510791+00:00",
+  "timestampLocal": "2026-11-06T01:33:20",
+  "mode": "Projections",
+  "data": [
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Functional-Requirements.md",
+      "currentHashMatches": true,
+      "originalExists": true,
+      "originalHashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Technical-Requirements.md",
+      "currentHashMatches": true,
+      "originalExists": true,
+      "originalHashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Testing-Requirements.md",
+      "currentHashMatches": true,
+      "originalExists": true,
+      "originalHashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/TR-per-FR-Mapping.md",
+      "currentHashMatches": true,
+      "originalExists": true,
+      "originalHashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Requirements-Matrix.md",
+      "currentHashMatches": true,
+      "originalExists": true,
+      "originalHashMatches": true
+    }
+  ]
+}

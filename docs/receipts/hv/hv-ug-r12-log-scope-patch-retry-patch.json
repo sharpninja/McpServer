@@ -1,0 +1,14 @@
+{
+  "agent": "Codex",
+  "sessionId": "Codex-20261105T064457Z-plugin-session",
+  "requestId": "req-20261105T064500Z-unitgreen-r12",
+  "turn": {
+    "requestId": "req-20261105T064500Z-unitgreen-r12",
+    "contextList": [
+      "docs/receipts/hv/hv-ug-r12-store-current-comparison.json"
+    ],
+    "designDecisions": [
+      "Honor the settled operator exclusions and keep the colon-key isolation defect as an implementer finding under ac-4 and AC-6. The installed older REPL has no SessionLog.GetAsync, so the own-turn readback uses its supported QueryAsync before the additive PatchTurnAsync. This adapter limitation is an operational issue and does not affect product scores."
+    ]
+  }
+}

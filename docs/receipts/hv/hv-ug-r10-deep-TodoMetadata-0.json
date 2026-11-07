@@ -1,0 +1,112 @@
+[
+  {
+    "Id": "IMPL-UNITGREEN-001",
+    "Done": false,
+    "Tasks": 37,
+    "DoneTasks": 0,
+    "DependsOn": [],
+    "FR": [
+      "FR-MCP-PATHNORM-001",
+      "FR-MCP-139",
+      "FR-MCP-BUILD-001",
+      "FR-MCP-USECASE-001",
+      "FR-MCP-018",
+      "FR-MCP-SESSIONLOGCTX-001",
+      "FR-MCP-QBOPENAI-001",
+      "FR-MCP-FED-PATH-001",
+      "FR-MCP-TESTRESOURCE-001",
+      "FR-MCP-047",
+      "FR-MCP-REPL-001",
+      "FR-MCP-REPL-007",
+      "FR-MCP-REPL-008",
+      "FR-MCP-040"
+    ],
+    "TR": [
+      "TR-MCP-QUALITY-001",
+      "TR-MCP-PATHNORM-001",
+      "TR-MCP-NUKE-018",
+      "TR-MCP-NUKE-019",
+      "TR-MCP-USECASE-018",
+      "TR-MCP-USECASE-019",
+      "TR-MCP-WS-005",
+      "TR-MCP-SESSIONLOG-006",
+      "TR-MCP-REPL-001",
+      "TR-MCP-REPL-008",
+      "TR-MCP-NUKE-020",
+      "TR-MCP-NUKE-016"
+    ]
+  },
+  {
+    "Id": "IMPL-SCANNERALIAS-001",
+    "Done": false,
+    "Tasks": 3,
+    "DoneTasks": 0,
+    "DependsOn": [
+      "IMPL-UNITGREEN-001"
+    ],
+    "FR": [
+      "FR-MCP-USECASE-001"
+    ],
+    "TR": [
+      "TR-MCP-USECASE-018",
+      "TR-MCP-USECASE-019"
+    ]
+  },
+  {
+    "Id": "IMPL-TXNINTEGRATION-001",
+    "Done": false,
+    "Tasks": 4,
+    "DoneTasks": 0,
+    "DependsOn": [
+      "IMPL-UNITGREEN-001",
+      "PLAN-SESSIONTRIAGEFIX-001"
+    ],
+    "FR": [
+      "FR-MCP-BUILD-001",
+      "FR-MCP-173",
+      "FR-MCP-QBOPENAI-001"
+    ],
+    "TR": [
+      "TR-MCP-NUKE-019"
+    ]
+  },
+  {
+    "Id": "BUG-TRIAGE-139",
+    "Done": true,
+    "Tasks": 189,
+    "DoneTasks": 131,
+    "DependsOn": [],
+    "FR": [
+      "FR-MCP-TRIAGE-002",
+      "FR-MCP-USECASE-015",
+      "FR-MCP-USECASE-001"
+    ],
+    "TR": [
+      "TR-MCP-TRIAGE-004",
+      "TR-MCP-USECASE-017",
+      "TR-MCP-USECASE-019"
+    ]
+  },
+  {
+    "Id": "PLAN-AZURERETIRE-001",
+    "Done": false,
+    "Tasks": 2,
+    "DoneTasks": 0,
+    "DependsOn": [],
+    "FR": [
+      "FR-MCP-074"
+    ],
+    "TR": [
+      "TR-MCP-CI-001"
+    ]
+  },
+  {
+    "Id": "PLAN-LINKVALIDATOR-001",
+    "Done": false,
+    "Tasks": 3,
+    "DoneTasks": 0,
+    "DependsOn": [],
+    "FR": [],
+    "TR": []
+  }
+]

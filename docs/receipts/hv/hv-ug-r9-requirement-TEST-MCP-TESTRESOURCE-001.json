@@ -1,0 +1,52 @@
+{
+  "TimestampLocal": "2026-11-02T19:30:59",
+  "TimestampUtc": "2026-11-03T01:30:59.5574285Z",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-MCP-TESTRESOURCE-001"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "Tests prove packaged fixture inputs and isolated generated artifacts work without repository-root lookup, while source-contract tests retain live-source validation. Run independent mocks with rejection controls before implementation, bind the same assertions to real helpers, and run the applicable full suites.\n\nPR87 coverage for approved FR-MCP-TESTRESOURCE-001 ac-4 through ac-12: independent contract tests and rejection controls cover owned configuration/database selection and consumer start plans; per-operation SQL first/later failure reporting and cancellation; pg_ctl arguments; LocalDB and process-environment collection membership; blank shared SQL connection fallback; CLI temp-variable ownership; junction buffers; and health nonce refusal. Bind the same assertions to the real helpers; the required host lanes supply physical consumer/provider evidence. Named fixtures include OwnedInstanceIsolationContractTests, SqlServerMigrationFailureContractTests and SqlServerMigrationFailureBindingTests. Mock and binding receipts remain distinct from runtime-lane evidence.",
+          "updatedAt": "2026-11-03T01:31:01.9736620+00:00",
+          "status": "pending",
+          "id": "TEST-MCP-TESTRESOURCE-001",
+          "createdAt": "2026-11-03T01:31:01.9735536+00:00",
+          "title": "Test TEST-MCP-TESTRESOURCE-001",
+          "priority": "medium",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "testType": "unit",
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "text": "Focused fixture tests run from test output with the checkout root unavailable and still load exact packaged bytes.",
+              "id": ""
+            },
+            {
+              "isSatisfied": false,
+              "text": "Writer tests use an injected disposable output directory and prove no generated file appears under repository docs/reviews or fixture source paths.",
+              "id": ""
+            },
+            {
+              "isSatisfied": false,
+              "text": "A source inventory finds no remaining fixture-input or generated-output path that walks to the repository root in applicable test code.",
+              "id": ""
+            },
+            {
+              "isSatisfied": false,
+              "text": "Focused build/source-contract tests still validate current repository and sibling plugin source, including checksum drift when present.",
+              "id": ""
+            }
+          ]
+        },
+        "requestId": "req-20261103T013100Z-6fee",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

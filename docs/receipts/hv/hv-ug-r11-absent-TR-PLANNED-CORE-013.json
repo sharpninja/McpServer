@@ -1,0 +1,11 @@
+{
+  "timestampUtc": "2026-11-03T18:18:55.1630952Z",
+  "timestampLocal": "2026-11-03T12:18:55",
+  "action": "Read",
+  "method": "workflow.requirements.getTr",
+  "id": "TR-PLANNED-CORE-013",
+  "scope": "",
+  "cacheRoot": "/tmp/hv-ug-r11-codex-plugin-20261103T113108",
+  "readFailed": true,
+  "output": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T181853Z-bf27\n  code: not_found\n  message: TR 'TR-PLANNED-CORE-013' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+}

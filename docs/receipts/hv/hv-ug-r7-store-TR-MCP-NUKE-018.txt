@@ -1,0 +1,38 @@
+type: result
+payload:
+  requestId: req-20261026T171724Z-9542
+  result:
+    id: TR-MCP-NUKE-018
+    title: InstallTestDependencies provisions provider test servers on Linux
+    description: On Linux, InstallTestDependencies supplies the PostgreSQL and SQL Server endpoints of the Category=Integration provider tests from the host test-database env file and the dedicated qbrain-test containers (operator decision 2026-10-11, BUG-BASELINE-005), and exports them to the test processes the build starts; Windows provisioning is unchanged.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: NUKE
+    notes: 'PLAN-C4MODEL-001. Operator answers 2026-10-19: "Fix all 14 in this plan", "Fix 10 here; 4 via PR 82/83", "Trait + Linux provisioning (Recommended)". Host facts 2026-10-19: env file /home/sharpninja/.config/qbrain-test/test-db.env (mode 600) defines MCP_TEST_POSTGRES_CONNECTION and MCP_TEST_SQLSERVER_CONNECTION; containers qbrain-test-postgres (55432) and qbrain-test-sqlserver (51433) run on LAB-OMARCHY.'
+    acceptanceCriteria:
+    - id: AC-1
+      text: On Linux, when MCP_TEST_POSTGRES_CONNECTION or MCP_TEST_SQLSERVER_CONNECTION is not already set, InstallTestDependencies loads it from the test-database env file (default ~/.config/qbrain-test/test-db.env, overridable by the --test-db-env-file parameter) and exports it to the test processes the build starts; a variable already set is adopted unchanged.
+      isSatisfied: false
+    - id: AC-2
+      text: It starts the containers qbrain-test-postgres and qbrain-test-sqlserver when they exist but are stopped, and never creates, stops, removes, or reconfigures any other container.
+      isSatisfied: false
+    - id: AC-3
+      text: Before tests run it verifies that each endpoint named by a connection string accepts TCP connections, and fails with a clear message (no skip) when the env file, a variable, a container, or an endpoint is missing or unreachable.
+      isSatisfied: false
+    - id: AC-4
+      text: Connection-string values never appear in logs, exception messages, or committed files; only variable names, file paths, container names and host:port endpoints are reported.
+      isSatisfied: false
+    - id: AC-5
+      text: On Windows, the existing LocalDB and PostgreSQL binaries provisioning is unchanged.
+      isSatisfied: false
+    - id: AC-6
+      text: MigrationIntegrationTests on Linux runs the Category=Integration provider tests against those endpoints and fails, never skips, when provisioning fails.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-26T17:17:25.7208206+00:00
+    updatedAt: 2026-10-26T17:17:25.7209342+00:00
+  deprecated: true
+
+---
+

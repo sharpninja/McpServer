@@ -1,0 +1,112 @@
+{
+  "name": "ug-r9-traceability-d3g8-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "679eb7881d0342a58ef446be5084b703c0cee7c4",
+  "dirtyPaths": [
+    " M .nuke/build.schema.json",
+    " M build/IntegrationLaneClassFilter.cs",
+    " M build/IntegrationLaneFilter.cs",
+    " M docs/Project/Functional-Requirements.md",
+    " M docs/Project/Requirements-Matrix.md",
+    " M docs/Project/TR-per-FR-Mapping.md",
+    " M docs/Project/Technical-Requirements.md",
+    " M docs/plans/2026-10-19-unit-suite-green.md",
+    " M src/QBrainAi.Client/Models/RequirementsModels.cs",
+    " M src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs",
+    " M src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+    " M src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs",
+    " M src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+    " M src/QBrainAi.Services/Services/GitHubCliService.cs",
+    " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "?? build/Build.TestGroups.cs",
+    "?? build/TestGroupExecution.cs",
+    "?? docs/receipts/unit-suite-green-20261019/requirement-projection-export-20261102.json",
+    "?? docs/receipts/unit-suite-green-20261019/traceability-reconcile-20261102T111536.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-p-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-p-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-r-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-r-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-r-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-r-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-p-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-p-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-r-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-r-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-negative-q-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-negative-q-1/",
+    "?? src/QBrainAi.Repl.Core/RequirementTimestampText.cs",
+    "?? src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs",
+    "?? tests/Build.Tests/TestGroupExecutionBindingTests.cs",
+    "?? tests/Build.Tests/TestGroupExecutionContractTests.cs",
+    "?? tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs",
+    "?? tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterContractTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "Build.Tests:HandoffD3D5OverlayTests,DocsSyncG8OverlayTests",
+    "--test-run-id",
+    "ug-r9-traceability-d3g8-1"
+  ],
+  "startedLocal": "2026-11-02T11:35:13",
+  "endedLocal": "2026-11-02T11:35:23",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-traceability-d3g8-1/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-traceability-d3g8-1/Build.Tests.trx",
+      "sha256": "4029D864ED858515C60D941EFBDA4247AAE7EE31B71849AA9EA53DCA63DF2D8C",
+      "total": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "docs/Project/Functional-Requirements.md",
+      "sha256": "DA7F8CAB66915CE4A36F1A7F6067A533950681F02DE915FA0F607A3B7A1D4885"
+    },
+    {
+      "path": "docs/Project/Technical-Requirements.md",
+      "sha256": "5D3140981D9A22D54CEBD45F7C6368C187DA76862A7B15282CBFF870738BEC6D"
+    },
+    {
+      "path": "docs/Project/Testing-Requirements.md",
+      "sha256": "62B125645F152453DA2A3E9ADB24A7AA3F5930A4B61E7D4370E6FB3682DF8C05"
+    },
+    {
+      "path": "docs/Project/TR-per-FR-Mapping.md",
+      "sha256": "F43D751587C91F1633788A500E6218EFF16243DB177A828EE26761B19FF3E1D2"
+    },
+    {
+      "path": "docs/Project/Requirements-Matrix.md",
+      "sha256": "BE09AE9D1488B45DDECF35007301FA85B1DF4585468A3933C7E5464D3CE1898E"
+    }
+  ],
+  "writtenLocal": "2026-11-02T11:35:46",
+  "writtenBy": "ClaudeCode"
+}

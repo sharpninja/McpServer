@@ -1,0 +1,5 @@
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs
+tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs
+tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs
+src/QBrainAi.Repl.Core/ReplCommandTimeout.cs

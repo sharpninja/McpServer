@@ -1,0 +1,41 @@
+type: result
+payload:
+  requestId: req-20261029T024524Z-c8b0
+  result:
+    id: IMPL-TXNINTEGRATION-001
+    title: Bring the Support.Mcp, Acid and TransactionSecurity integration projects into the integration lane after PLAN-SESSIONTRIAGEFIX-001 merges
+    section: Build
+    priority: medium
+    done: false
+    note: Created from session ClaudeCode-20261019T134748Z-plugin-session, turn req-20261027T093552Z-hv-test-evidence-policy; parent TODO IMPL-UNITGREEN-001, PR sharpninja/McpServer#87.
+    description:
+    - 'The first run of the four *.IntegrationTests projects in MigrationIntegrationTests (IMPL-UNITGREEN-001 plan section 22, run ug-r8b-expanded-lane-1, 2026-10-27 08:56 to 09:30 on LAB-OMARCHY) failed 14 Acid and TransactionSecurity cases: 12 get status "bypassed" where they expect committed, aborted, rejected or degraded, because TurnTransactionCoordinator.ExecuteAsync bypasses every request that TurnTransactionKeyserverScope.RequiresKeyserver rejects (FR-MCP-173: keyserver signing is limited to QuadBrain transactions); 2 SeparateSubscriberHost cases fail with a 404 and a timeout, inferred to share the cause. Triage: triage-report-d375ccf4bc9b46c693db16270fc008cf.'
+    - 'Operator 2026-10-27 (asked about 09:35, answered by 11:50:36 local), options "Fix all, ACs first (Recommended)", "Lane adds Repl + Support.Mcp" and "Lane adds Repl only": "Lane adds Repl + Support.Mcp", whose option text keeps Acid and TransactionSecurity (the 14 FR-MCP-173 cases) out of the lane under a new TODO with their triage. TR-MCP-NUKE-019 AC-2 names this TODO.'
+    - 'Operator 2026-10-27, after the corrected classification of the Support.Mcp failures: "Repl only; rest waits (Recommended)". TR-MCP-NUKE-019 AC-2 was narrowed again at 13:58:53 local to the five unit projects plus QBrainAi.Repl.IntegrationTests; QBrainAi.Support.Mcp.IntegrationTests, QBrainAi.Acid.IntegrationTests and QBrainAi.TransactionSecurity.IntegrationTests stay out of the integration lane until PLAN-SESSIONTRIAGEFIX-001 merges. This TODO now covers all three projects and depends on that plan; no paused-plan work is done under IMPL-UNITGREEN-001.'
+    - 'Run ug-r8b-expanded-lane-1 also failed 15 QBrainAi.Support.Mcp.IntegrationTests cases: 7 deterministic cases on scripted doubles (QBAgentSendingIntegrationTests 4, QBAgentToolsIntegrationTests 1, QuadBrainLiveEndpointIntegrationTests 2), whose orchestration call counts follow the FR-MCP-QBOPENAI-001 ac-5 and ac-6 continue rounds and whose missing sessionlog.dialog transaction follows FR-MCP-173 first-party routing (triage-report-e129648d2ed84779886a865909470f64); 3 live-model QuadBrainOllamaEndpointIntegrationTests rows (triage-report-6a9ed7c5187b43f3b841b357488cad34); 3 SQL Server cases that start SqlLocalDB.exe on Linux; and 2 downgrade-and-reupgrade cases (SQLite, PostgreSQL) that the forward-only 20260929140000_VersionedAuditPayloads migration rejects.'
+    technicalDetails:
+    - 'Failing cases: Acid AcidFullLifecycleTests (3), AcidRunningInstanceTests (1), CoordinatorOutcomeMatrixTests (5); TransactionSecurity DurableTransactionSecurityStorageTests (2), SeparateTransactionServiceIntegrationTests (3). Source: src/QBrainAi.TransactionSecurity/Services/TurnTransactionCoordinator.cs:311-328, src/QBrainAi.TransactionSecurity/TurnTransactionKeyserverScope.cs:3-7.'
+    - Both projects pass their other cases (Acid 25/34, TransactionSecurity 43/48) and are excluded from MigrationIntegrationTests by TR-MCP-NUKE-019 AC-2 until this TODO is done.
+    - 'Support.Mcp failing cases (run ug-r8b-expanded-lane-1, LAB-OMARCHY): QBAgentSendingIntegrationTests.cs:43, :66, :115, :216; QBAgentToolsIntegrationTests.cs:65; QuadBrainLiveEndpointIntegrationTests.cs:44, :106; QuadBrainOllamaEndpointIntegrationTests.cs:75, :76, :138; ProviderDatabaseIntegrationTests.SqlServer_LocalDb_CleanDatabase_AppliesMigrationsAndPersistsEntity, HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade and HostileReviewG4OverlayTests.HostileReviewEntity_RoundTrip_SqlitePgSqlServer (SqlLocalDB.exe, ProviderIntegrationTestSupport.cs:394); HandoffIngestionStorageMigrationTests.Sqlite_ and PostgreSql_HandoffMigration_DowngradeAndReupgrade (NotSupportedException, 20260929140000_VersionedAuditPayloads.cs:36 in both migration projects).'
+    - The paused branch origin/fix/session-triage-20261013 (f66c39f9) already changes QuadBrainLiveEndpointIntegrationTests and QBAgentSendingIntegrationTests and aligns the Acid cases with FR-MCP-173, so the classification is repeated after that plan merges.
+    implementationTasks:
+    - task: After PLAN-SESSIONTRIAGEFIX-001 merges into develop, run MigrationIntegrationTests on both hosts with the three projects added and classify every remaining failure against its requirement.
+      done: false
+    - task: 'Operator chooses the approach for each remaining class (for example: QuadBrain operation names where a case tests the keyserver protocol, a bypass assertion where it tests a first-party mutation, Platform=Windows for the LocalDB cases, an expected refusal for the forward-only migration, the live-model rows out of the lane).'
+      done: false
+    - task: 'Decision-complete BDPv4 plan, approved by the operator before any change: the cases, the requirement updates (TR-MCP-NUKE-019 AC-2 adds all three projects), the gates.'
+      done: false
+    - task: Implement per the approved plan; MigrationIntegrationTests runs all three projects at 0 failed and 0 not executed on both hosts; hostile validation at 98/98.
+      done: false
+    dependsOn:
+    - IMPL-UNITGREEN-001
+    - PLAN-SESSIONTRIAGEFIX-001
+    functionalRequirements:
+    - FR-MCP-BUILD-001
+    - FR-MCP-173
+    - FR-MCP-QBOPENAI-001
+    technicalRequirements:
+    - TR-MCP-NUKE-019
+  deprecated: true
+
+---

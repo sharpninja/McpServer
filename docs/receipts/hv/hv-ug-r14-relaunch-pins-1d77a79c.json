@@ -1,0 +1,135 @@
+[
+  {
+    "receipt": "docs/receipts/unit-suite-green-20261019/ug-r13z7-compile-1.json",
+    "name": "ug-r13z7-compile-1",
+    "start": "2026-11-05T14:15:57",
+    "end": "2026-11-05T14:18:02",
+    "written": "2026-11-05T14:18:48",
+    "passed": null,
+    "failed": null,
+    "skipped": null,
+    "commit": "1d77a79c",
+    "pins": [
+      {
+        "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+        "expectedHash": "BB7F784FC5F7BAD9D05E4B0A1F18302E6D374CDCF53957CF9F16D091A5901DF6",
+        "blobHash": "BB7F784FC5F7BAD9D05E4B0A1F18302E6D374CDCF53957CF9F16D091A5901DF6",
+        "matches": true
+      },
+      {
+        "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+        "expectedHash": "D24532A5D9C932B9ACC253BED44977D29185C52758B2660C8F0C9EF9A47143D2",
+        "blobHash": "D24532A5D9C932B9ACC253BED44977D29185C52758B2660C8F0C9EF9A47143D2",
+        "matches": true
+      },
+      {
+        "path": "src/QBrainAi.Services/Services/FederationEnvelopeSigner.cs",
+        "expectedHash": "5FAC84E37CC0541546238384144420B7062C2303AB3F90C342A9DE09272BEA07",
+        "blobHash": "5FAC84E37CC0541546238384144420B7062C2303AB3F90C342A9DE09272BEA07",
+        "matches": true
+      },
+      {
+        "path": "src/QBrainAi.Services/Services/MemoryService.cs",
+        "expectedHash": "467F63CA29593B60DEB632D0ACCA6DD8C6483BB6C500D41201A666C07CB00450",
+        "blobHash": "467F63CA29593B60DEB632D0ACCA6DD8C6483BB6C500D41201A666C07CB00450",
+        "matches": true
+      },
+      {
+        "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+        "expectedHash": "A6BBAEE7ADBF14FDE961BEB64D04A7A66EA52BDCB964CE708AF5939532E7B84D",
+        "blobHash": "A6BBAEE7ADBF14FDE961BEB64D04A7A66EA52BDCB964CE708AF5939532E7B84D",
+        "matches": true
+      },
+      {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs",
+        "expectedHash": "25B1E3E77BEC3EECD1378D1E44B2CAFE3CBA93BE44475BAA9D512B3BA430FFB1",
+        "blobHash": "25B1E3E77BEC3EECD1378D1E44B2CAFE3CBA93BE44475BAA9D512B3BA430FFB1",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs",
+        "expectedHash": "2369E3E8334EB7C5B6A532FE44A0513C428C6D5DF3C1CFCBBFFB90162DD4A609",
+        "blobHash": "2369E3E8334EB7C5B6A532FE44A0513C428C6D5DF3C1CFCBBFFB90162DD4A609",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs",
+        "expectedHash": "CD7784DD37A051C95C181EAD4AF92CF4D9467E2CD6427F07F48DAB63B433AEFE",
+        "blobHash": "CD7784DD37A051C95C181EAD4AF92CF4D9467E2CD6427F07F48DAB63B433AEFE",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs",
+        "expectedHash": "A60BACFE3F3B4E858E17757A7271FA009FA8AA2A1F4B2C3749113C06171E17CC",
+        "blobHash": "A60BACFE3F3B4E858E17757A7271FA009FA8AA2A1F4B2C3749113C06171E17CC",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs",
+        "expectedHash": "6E4309A5CD4ACCE3C664C52EDFFA90940DFA6B2EA12A6EC3B961D0EA62E6911A",
+        "blobHash": "6E4309A5CD4ACCE3C664C52EDFFA90940DFA6B2EA12A6EC3B961D0EA62E6911A",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs",
+        "expectedHash": "59DA46D7B291C7238DBF000D55F75F534244A60562A47A2590272427292F5BB4",
+        "blobHash": "59DA46D7B291C7238DBF000D55F75F534244A60562A47A2590272427292F5BB4",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedClock.cs",
+        "expectedHash": "CDB8CAFDB9AE086C6639899540D1369C00F6477591530E07196FFC6DE16A89AC",
+        "blobHash": "CDB8CAFDB9AE086C6639899540D1369C00F6477591530E07196FFC6DE16A89AC",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+        "expectedHash": "C1A47FCC68A83435CADFA33E7D1B658F573834BCFC619FADB1E3E90D0826BB8A",
+        "blobHash": "C1A47FCC68A83435CADFA33E7D1B658F573834BCFC619FADB1E3E90D0826BB8A",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs",
+        "expectedHash": "48532F47C2F0E8A7BAC8048774E0F59B911D03B6E353CF7B6B18C3EA6E526ACD",
+        "blobHash": "48532F47C2F0E8A7BAC8048774E0F59B911D03B6E353CF7B6B18C3EA6E526ACD",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs",
+        "expectedHash": "48BEF7E5C9FAEF4663B03AF567B52696D8BEF0669129E73D19760A7EBB677D52",
+        "blobHash": "48BEF7E5C9FAEF4663B03AF567B52696D8BEF0669129E73D19760A7EBB677D52",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs",
+        "expectedHash": "CB5EEB801F2FC2BE47910FF9C403F81231A9B92720B6FA0B9FE7300A3B22DEAD",
+        "blobHash": "CB5EEB801F2FC2BE47910FF9C403F81231A9B92720B6FA0B9FE7300A3B22DEAD",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs",
+        "expectedHash": "C8BA04862A0CDC9B5190084F48D9DD808F45D2D0BCBDC95FD59EBC7C6428A965",
+        "blobHash": "C8BA04862A0CDC9B5190084F48D9DD808F45D2D0BCBDC95FD59EBC7C6428A965",
+        "matches": true
+      },
+      {
+        "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+        "expectedHash": "5A37EF108A156312625263543D02AC92C7CD0E112304E6A7D907DF7FB3BC1AE2",
+        "blobHash": "5A37EF108A156312625263543D02AC92C7CD0E112304E6A7D907DF7FB3BC1AE2",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "receipt": "docs/receipts/unit-suite-green-20261019/ug-r13z7-binding-1.json",
+    "name": "ug-r13z7-binding-1",
+    "start": "2026-11-05T14:19:04",
+    "end": "2026-11-05T14:19:59",
+    "written": "2026-11-05T14:20:56",
+    "passed": 160,
+    "failed": 0,
+    "skipped": 0,
+    "commit": "1d77a79c",
+    "pins": []
+  }
+]

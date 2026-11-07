@@ -3,7 +3,7 @@ using QBrainAi.Support.Mcp.Services;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-46 / FR-MCP-MEMORY-018-49:
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-46 (historical) / FR-MCP-MEMORY-018-49 (historical):
 /// Grok-lane integration using recorded fixtures (no live XAI key required).
 /// </summary>
 public sealed class MemoryIntegrationTests : IDisposable
@@ -14,6 +14,8 @@ public sealed class MemoryIntegrationTests : IDisposable
     public void Dispose() => _harness.Dispose();
 
     /// <summary>AC-FR-MCP-MEMORY-018-46: Integration tests use the Grok lane as the pilot host.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void UseGrokLane_AsPilot()
     {
@@ -27,6 +29,8 @@ public sealed class MemoryIntegrationTests : IDisposable
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-49: Grok remember→recall/injection path records tokens as primary.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Grok_RememberRecall_EndToEnd()
     {

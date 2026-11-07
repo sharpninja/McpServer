@@ -1,0 +1,16 @@
+type: result
+payload:
+  result:
+    code: queued
+    retryable: true
+    persisted: false
+    degraded: true
+    queued: true
+    method: workflow.sessionlog.appendDialog
+    agent: Codex
+    sessionId: Codex-20261029T032954Z-plugin-session
+    requestId: req-20261029T032957Z-unitgreen-r8b
+    failsafePath: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/.mcpServer/failsafe/Codex/workspaces/L2hvbWUvc2hhcnBuaW5qYS9naXRodWIvTWNwU2VydmVyLy53b3JrdHJlZXMvdW5pdC1zdWl0ZS1ncmVlbi0yMDI2MTAxOQ/pending/20261029T040833Z-session_dialog-643f.yaml
+    message: appendDialog persist timed out or returned HTTP 503; dialog failsafe retained requestId=req-20261029T032957Z-unitgreen-r8b
+    childStderr: ' qbrain-ai-repl timed out after 30s'
+

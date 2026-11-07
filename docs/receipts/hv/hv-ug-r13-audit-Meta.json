@@ -1,0 +1,100 @@
+[
+  {
+    "file": "ug-r13z11-final-linux-buildtests-1.json",
+    "name": "ug-r13z11-final-linux-buildtests-1",
+    "head": "53a210ca4e521474685f2e3e1558b5cf88a5d535",
+    "start": "2026-11-05T22:02:30",
+    "end": "2026-11-05T22:07:23",
+    "target": null,
+    "command": [
+      "dotnet",
+      "test",
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+      "-c",
+      "Debug",
+      "--logger",
+      "trx;LogFileName=ug-r13z11-final-linux-buildtests-1.trx",
+      "--results-directory",
+      "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r13z11-final-linux-buildtests-1",
+      "--filter",
+      "Platform!=Windows"
+    ],
+    "extraArgs": null,
+    "exitCode": 0,
+    "dirtyCount": 371,
+    "nonDocs": [],
+    "tracked": [],
+    "counts": [
+      563,
+      0,
+      0
+    ]
+  },
+  {
+    "file": "ug-r13z11-final-linux-lane-1.json",
+    "name": "ug-r13z11-final-linux-lane-1",
+    "head": "53a210ca4e521474685f2e3e1558b5cf88a5d535",
+    "start": "2026-11-05T21:29:26",
+    "end": "2026-11-05T22:00:10",
+    "target": null,
+    "command": [
+      "./build.ps1",
+      "MigrationIntegrationTests",
+      "--test-run-id",
+      "ug-r13z11-final-linux-lane-1"
+    ],
+    "extraArgs": null,
+    "exitCode": 0,
+    "dirtyCount": 364,
+    "nonDocs": [],
+    "tracked": [],
+    "counts": [
+      741,
+      0,
+      0
+    ]
+  },
+  {
+    "file": "ug-r13z11-final-linux-traceability-1.meta.json",
+    "name": "ug-r13z11-final-linux-traceability-1",
+    "head": "53a210ca4e521474685f2e3e1558b5cf88a5d535",
+    "start": "2026-11-05T22:08:00",
+    "end": null,
+    "target": "ValidateTraceability",
+    "command": null,
+    "extraArgs": [],
+    "exitCode": null,
+    "dirtyCount": 374,
+    "nonDocs": [],
+    "tracked": [],
+    "counts": [
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "file": "ug-r13z11-final-linux-unit-1.json",
+    "name": "ug-r13z11-final-linux-unit-1",
+    "head": "53a210ca4e521474685f2e3e1558b5cf88a5d535",
+    "start": "2026-11-05T21:20:02",
+    "end": "2026-11-05T21:24:24",
+    "target": null,
+    "command": [
+      "./build.ps1",
+      "Test",
+      "--test-run-id",
+      "ug-r13z11-final-linux-unit-1"
+    ],
+    "extraArgs": null,
+    "exitCode": 0,
+    "dirtyCount": 346,
+    "nonDocs": [],
+    "tracked": [],
+    "counts": [
+      4838,
+      0,
+      0
+    ]
+  }
+]

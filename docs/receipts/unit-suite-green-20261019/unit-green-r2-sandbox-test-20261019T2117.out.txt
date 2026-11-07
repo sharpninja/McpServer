@@ -1,0 +1,70 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)
+​
+​
+╬════════════
+║ Compile
+╬═══
+​
+21:17:15 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+21:17:16 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+21:17:16 [DBG]   SharpNinja.McpServer.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Client/bin/Debug/net10.0/SharpNinja.McpServer.Client.dll
+21:17:16 [DBG] 
+21:17:16 [DBG] Build succeeded.
+21:17:16 [DBG]     0 Warning(s)
+21:17:16 [DBG]     0 Error(s)
+21:17:16 [DBG] 
+21:17:16 [DBG] Time Elapsed 00:00:00.85
+21:17:16 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/SharpNinja.McpServer.Cqrs.Mvvm.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+21:17:17 [DBG] 
+21:17:17 [DBG] Build FAILED.
+21:17:17 [DBG]     0 Warning(s)
+21:17:17 [DBG]     0 Error(s)
+21:17:17 [DBG] 
+21:17:17 [DBG] Time Elapsed 00:00:00.54
+21:17:17 [ERR] Target Compile has thrown an exception
+Nuke.Common.Tooling.ProcessException: Process 'dotnet' exited with code 1.
+   > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/SharpNinja.McpServer.Cqrs.Mvvm.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+   @ /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019
+Standard output:
+   
+   Build FAILED.
+       0 Warning(s)
+       0 Error(s)
+   
+   Time Elapsed 00:00:00.54
+
+   at Nuke.Common.Tooling.ProcessExtensions.AssertZeroExitCode(IProcess process) in /_/source/Nuke.Tooling/ProcessExtensions.cs:line 38
+   at Nuke.Common.Tooling.ToolTasks.<>c.<GetExitHandler>b__4_0(ToolOptions _, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 27
+   at Nuke.Common.Tooling.ToolTasks.<>c__DisplayClass8_0.<GetExitHandlerInternal>b__3(ToolOptions o, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 22
+   at Nuke.Common.Tooling.ToolTasks.Run[T](T options) in /_/source/Nuke.Tooling/ToolTasks.Run.cs:line 36
+   at Nuke.Common.Tools.DotNet.DotNetTasks.DotNetBuild(Configure`1 configurator) in /_/source/Nuke.Common/Tools/DotNet/DotNet.Generated.cs:line 62
+   at Build.<get_Compile>b__17_1() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.Compile.cs:line 17
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[ERR] Compile: Target Compile has thrown an exception
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            Skipped                // Skipped: via parameter
+Compile            Failed          0:02   // ProcessException: Process 'dotnet' exited with code 1.
+Test               NotRun              
+───────────────────────────────────────
+Total                              0:02
+═══════════════════════════════════════
+​
+Build failed on 10/19/2026 9:17:17 PM. (╯°□°）╯︵ ┻━┻

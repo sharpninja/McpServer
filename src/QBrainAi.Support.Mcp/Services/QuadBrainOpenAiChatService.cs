@@ -96,10 +96,21 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
         QuadBrainOrchestrationResponse? orchestration = null;
         string? lastInternalSignature = null;
         string? lastDeferred = null;
+        string? lastArbiterOutput = null;
+        // FR-MCP-QBOPENAI-001 ac-7: the internal tool results of the last round when that round ran internal tools, else null.
+        string? lastInternalToolResults = null;
+        // FR-MCP-QBOPENAI-001 ac-5: a request with no tools and no tool_choice takes an Arbiter reply that is not an envelope as its answer;
+        // a tool_choice of auto with no tools counts as no tool_choice.
+        var noToolsOffered = request.Tools is not { Count: > 0 }
+            && (request.ToolChoice is null
+                || request.ToolChoice.Value.ValueKind is JsonValueKind.Undefined or JsonValueKind.Null
+                || (request.ToolChoice.Value.ValueKind == JsonValueKind.String
+                    && string.Equals(request.ToolChoice.Value.GetString(), "auto", StringComparison.OrdinalIgnoreCase)));
         OpenAiChatResponseMessage message = new() { Role = "assistant" };
         var finishReason = "stop";
 
-        for (var round = 0; round < MaxProcessingRounds; round++)
+        var round = 0;
+        for (; round < MaxProcessingRounds; round++)
         {
             orchestrationInput = BuildPrompt(workingMessages, promptTools, toolChoice);
             orchestration = await _orchestration.ExecuteFullOrchestrationAsync(
@@ -150,6 +161,8 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
                     }
 
                     lastInternalSignature = signature;
+                    lastArbiterOutput = orchestration.Output;
+                    lastInternalToolResults = internalContent;
                     workingMessages.Add(new OpenAiChatMessage { Role = "assistant", Content = orchestration.Output });
                     workingMessages.Add(new OpenAiChatMessage { Role = "tool", Content = internalContent });
                     continue;
@@ -163,33 +176,41 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
             var output = string.IsNullOrWhiteSpace(orchestration.Output)
                 ? BuildNoDecisionMessage(orchestration)
                 : orchestration.Output;
+            lastArbiterOutput = output;
             ValidateToolChoiceResult(toolChoice, [], [], orchestration.Output);
             var envelope = QuadBrainArbiterEnvelope.TryParse(output);
 
-            if (toolChoice.Kind != ToolChoiceKind.None && QuadBrainArbiterEnvelope.RequiresAnotherRound(envelope))
+            if (toolChoice.Kind != ToolChoiceKind.None
+                && !(noToolsOffered && envelope is null)
+                && QuadBrainArbiterEnvelope.RequiresAnotherRound(envelope))
             {
                 if (string.Equals(output.Trim(), lastDeferred, StringComparison.Ordinal))
                 {
-                    message.Content = QuadBrainArbiterEnvelope.FormatForDisplay(output, showIntent: false);
-                    if (string.IsNullOrWhiteSpace(message.Content))
-                        message.Content = output;
+                    message.Content = ResolveDisplayContent(output, round + 1, BuildNoDecisionMessage(orchestration));
                     finishReason = "stop";
                     break;
                 }
 
                 lastDeferred = output.Trim();
+                lastInternalToolResults = null;
                 workingMessages.Add(new OpenAiChatMessage { Role = "assistant", Content = output });
                 workingMessages.Add(new OpenAiChatMessage { Role = "user", Content = ContinueDirective });
                 continue;
             }
 
-            message.Content = envelope is { IsFinal: true }
-                ? envelope.Content ?? string.Empty
-                : QuadBrainArbiterEnvelope.FormatForDisplay(output, showIntent: false);
-            if (string.IsNullOrWhiteSpace(message.Content))
-                message.Content = output;
+            message.Content = ResolveDisplayContent(output, round + 1, BuildNoDecisionMessage(orchestration));
             finishReason = "stop";
             break;
+        }
+
+        // FR-MCP-QBOPENAI-001 ac-6 and ac-7: every exit above sets the content or the tool calls, so only a spent round budget arrives here
+        // without them. After an internal-tool round the content is that round's tool results; otherwise it is the last Arbiter output
+        // formatted for display, never empty content and never an envelope without displayable content.
+        if (round == MaxProcessingRounds)
+        {
+            message.Content = lastInternalToolResults
+                ?? ResolveDisplayContent(lastArbiterOutput, MaxProcessingRounds, BuildNoDecisionMessage(orchestration!));
+            finishReason = "stop";
         }
 
         var response = CreateResponse(
@@ -278,6 +299,29 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
     /// <summary>Best-effort token estimate (~4 characters per token); 0 for empty text.</summary>
     private static int EstimateTokens(string? text)
         => string.IsNullOrEmpty(text) ? 0 : (text.Length + 3) / 4;
+
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 ac-6 and ac-7: the assistant content for an Arbiter output. It is the output's display text when it has
+    /// some, the no-decision message when the output is empty, and otherwise (an Arbiter envelope without displayable content) a
+    /// plain message that names the rounds used, the round budget and the envelope's intent, so the content is never empty and never
+    /// an envelope without displayable content.
+    /// </summary>
+    /// <param name="output">The Arbiter output.</param>
+    /// <param name="roundsUsed">The orchestration rounds used so far.</param>
+    /// <param name="noDecisionMessage">The message for an empty output.</param>
+    /// <returns>The assistant content.</returns>
+    internal static string ResolveDisplayContent(string? output, int roundsUsed, string noDecisionMessage)
+    {
+        if (string.IsNullOrWhiteSpace(output))
+            return noDecisionMessage;
+        var shown = QuadBrainArbiterEnvelope.FormatForDisplay(output, showIntent: false);
+        if (!string.IsNullOrWhiteSpace(shown))
+            return shown;
+        var intent = QuadBrainArbiterEnvelope.TryParse(output)?.Intent ?? "none";
+        return string.Create(
+            CultureInfo.InvariantCulture,
+            $"QuadBrain gave no displayable answer after {roundsUsed} of {MaxProcessingRounds} orchestration rounds (last Arbiter intent: {intent}).");
+    }
 
     private static string BuildNoDecisionMessage(QuadBrainOrchestrationResponse orchestration)
     {

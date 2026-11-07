@@ -1,0 +1,57 @@
+[
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-analyze.ps1",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-bootstrap.ps1",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-deep.ps1",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-final-checks.ps1",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-inspect.ps1",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-reconcile.ps1",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-run.ps1",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-session.ps1",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-transcript-evidence.ps1",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-windows-read.ps1",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-write-verdict.ps1",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  }
+]

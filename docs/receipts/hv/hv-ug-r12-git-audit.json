@@ -1,0 +1,15 @@
+{
+  "timestampLocal": "2026-11-05T01:03:28",
+  "head": "3fe29d1fd8ffc4ba993782ab810bf9d16f4f42e6",
+  "branch": "fix/unit-suite-green-20261019",
+  "postCodePaths": 625,
+  "postCodeNonDocs": [],
+  "mergeCount": 99,
+  "mergeNonDocs": [],
+  "mergeBase": "9b099716e3f4b773787a1caef44353e112bda556",
+  "mergeTreeExit": 0,
+  "mergeTreeOutput": [],
+  "commitCount": 108,
+  "unsigned": [],
+  "codePathCount": 362
+}

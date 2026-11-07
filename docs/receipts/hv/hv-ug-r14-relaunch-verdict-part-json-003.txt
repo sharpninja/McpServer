@@ -1,0 +1,1328 @@
+HV_R14_RELAUNCH_FINAL json part 3/12 SHA256 C1B3C52BAD557092F66F3A16111D330053F7C7C44255849BC911D3996B6C6277
+LI fallback ownership: 6a87791d,04841148",
+        "requirementIds": [
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-TRIAGE-003",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019",
+          "TR-MCP-WS-005"
+        ],
+        "taskNumbers": [
+          23
+        ],
+        "source": "Plan 20; CliTempVariables and callers"
+      },
+      {
+        "change": "Round 8 bounded timeout and junction: f5cda3c1,7ab3c1c4,845f323b,ccd9e91f",
+        "requirementIds": [
+          "FR-MCP-REPL-001",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-REPL-001",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          24
+        ],
+        "source": "Plan 21; timeout/junction contracts"
+      },
+      {
+        "change": "Round 8b owned instances/lane/provisioning/marker: 8c651f13,d5a23364,6667c405,2f679213,4fab4424,3e487b6b",
+        "requirementIds": [
+          "FR-MCP-REPL-005",
+          "FR-MCP-REPL-007",
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-QBOLLAMA-001",
+          "TR-MCP-NUKE-016",
+          "TR-MCP-NUKE-018",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-REPL-008",
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          25
+        ],
+        "source": "Plan 22 and retained mock/binding receipts"
+      },
+      {
+        "change": "Scope/criterion narrowing and citation labels: 433ce191,a78640ba",
+        "requirementIds": [
+          "FR-MCP-018",
+          "TEST-MCP-PATHNORM-001",
+          "TEST-MCP-QBOLLAMA-001",
+          "TR-MCP-NUKE-018",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-QUALITY-001",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019",
+          "TR-MCP-WS-005"
+        ],
+        "taskNumbers": [
+          26,
+          27,
+          28
+        ],
+        "source": "Plan 23-25; explicit operator rulings"
+      },
+      {
+        "change": "Develop docs-only merge d43c1d12",
+        "requirementIds": [],
+        "taskNumbers": [],
+        "source": "Plan 25; 99 docs-only paths; no imported develop requirement is inferred as implementation flux"
+      },
+      {
+        "change": "Slices D-G at 765490a9 with pre-commit evidence",
+        "requirementIds": [
+          "FR-MCP-047",
+          "FR-MCP-REPL-008",
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-QBOLLAMA-001",
+          "TEST-MCP-TRANSCRIPT-008",
+          "TEST-MCP-TRIAGE-003",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          29
+        ],
+        "source": "Plan 26; explicit-baseline, owned-start and lane-class contracts"
+      },
+      {
+        "change": "Slices I-O at 765490a9 and associated criterion placement writes",
+        "requirementIds": [
+          "FR-MCP-018",
+          "FR-MCP-047",
+          "FR-MCP-083",
+          "FR-MCP-103",
+          "FR-MCP-FED-PATH-001",
+          "FR-MCP-QBOPENAI-001",
+          "FR-MCP-REPL-001",
+          "FR-MCP-REPL-007",
+          "FR-MCP-REPL-008",
+          "FR-MCP-SESSIONLOGCTX-001",
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-PATHNORM-001",
+          "TEST-MCP-QBOPENAI-001",
+          "TEST-MCP-WIKIEXPORT-001",
+          "TR-MCP-FED-PATH-001",
+          "TR-MCP-GH-003",
+          "TR-MCP-GH-004",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-PATHNORM-001",
+          "TR-MCP-SESSIONLOG-006",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019",
+          "TR-MCP-WS-005"
+        ],
+        "taskNumbers": [
+          30
+        ],
+        "source": "Plan 27.1-27.18; records and bindings"
+      },
+      {
+        "change": "Slice Q at 611a5dc5",
+        "requirementIds": [
+          "FR-MCP-BUILD-001",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-NUKE-020"
+        ],
+        "taskNumbers": [
+          31
+        ],
+        "source": "Plan 27.20; TestGroups contracts and negative gate"
+      },
+      {
+        "change": "Slice R at 611a5dc5",
+        "requirementIds": [
+          "FR-MCP-FED-PATH-001",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-FED-PATH-001",
+          "TR-MCP-NUKE-019"
+        ],
+        "taskNumbers": [
+          32
+        ],
+        "source": "Plan 27.20; provider rows and foreign-path source"
+      },
+      {
+        "change": "Slice P at 611a5dc5",
+        "requirementIds": [
+          "FR-MCP-040"
+        ],
+        "taskNumbers": [
+          33
+        ],
+        "source": "Plan 27.20; timestamp contracts and adapters"
+      },
+      {
+        "change": "Traceability reconciliation and retired-reference remedy, 611a5dc5 and store writes",
+        "requirementIds": [
+          "FR-MCP-074",
+          "FR-MCP-FED-BACKFILL-001",
+          "FR-MCP-FED-ROUTE-001",
+          "FR-MCP-FED-WSSYNC-001",
+          "FR-MCP-PLUGINCORE-002",
+          "FR-MCP-SERVICEUPDATE-001",
+          "FR-MCP-USECASE-001",
+          "FR-MCP-USECASE-016",
+          "FR-MCP-USECASE-017",
+          "FR-MCP-USECASE-018",
+          "FR-TIMER-001",
+          "FR-WF-005",
+          "TEST-MCP-PLUGINCORE-002",
+          "TEST-MCP-SERVICEUPDATE-001",
+          "TEST-MCP-USECASE-021",
+          "TEST-TIMER-001",
+          "TR-MCP-CI-001",
+          "TR-MCP-FED-BACKFILL-001",
+          "TR-MCP-FED-ROUTE-001",
+          "TR-MCP-FED-WSSYNC-001",
+          "TR-MCP-PLUGINCORE-002",
+          "TR-MCP-SERVICEUPDATE-001",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019",
+          "TR-MCP-USECASE-020",
+          "TR-TIMER-LIFECYCLE-001"
+        ],
+        "taskNumbers": [
+          34,
+          9
+        ],
+        "source": "Plan 27.19-27.21; traceability-reconcile-20261102T111536.json"
+      },
+      {
+        "change": "Retrofit, slice S and ac-5/ac-6 port records: 62c5882d,878c366f",
+        "requirementIds": [
+          "FR-MCP-040",
+          "FR-MCP-BUILD-001",
+          "FR-MCP-FED-PATH-001",
+          "FR-MCP-QBOPENAI-001",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-FED-PATH-001",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-NUKE-020",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          37
+        ],
+        "source": "Plan 27.20-27.21; source and retrospective receipts"
+      },
+      {
+        "change": "Slice T 6082b116",
+        "requirementIds": [
+          "FR-MCP-040",
+          "FR-MCP-BUILD-001",
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-QBOLLAMA-001",
+          "TR-MCP-NUKE-016",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-NUKE-020"
+        ],
+        "taskNumbers": [
+          36
+        ],
+        "source": "Plan 27.22; six criterion writes and contract/binding pins"
+      },
+      {
+        "change": "Slice U 2e121015",
+        "requirementIds": [
+          "FR-MCP-040",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          38
+        ],
+        "source": "Plan 27.23 U"
+      },
+      {
+        "change": "Slice V cb174ac8",
+        "requirementIds": [
+          "FR-MCP-079",
+          "FR-MCP-MEMORY-001",
+          "FR-MCP-MEMORY-002",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          39
+        ],
+        "source": "Plan 27.23 V"
+      },
+      {
+        "change": "Slice W 1f51d4b2",
+        "requirementIds": [
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          40
+        ],
+        "source": "Plan 27.23 W"
+      },
+      {
+        "change": "Slice X 11406fdf",
+        "requirementIds": [
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          41
+        ],
+        "source": "Plan 27.24"
+      },
+      {
+        "change": "Slice Y ec58cf4a",
+        "requirementIds": [
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-089",
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          42
+        ],
+        "source": "Plan 27.25"
+      },
+      {
+        "change": "Slice Z a4e8d45f",
+        "requirementIds": [
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          43
+        ],
+        "source": "Plan 27.26"
+      },
+      {
+        "change": "Slice Z2 121992b3",
+        "requirementIds": [
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          44
+        ],
+        "source": "Plan 27.27"
+      },
+      {
+        "change": "Slice Z3 b3f26862,4920a8ea",
+        "requirementIds": [
+          "FR-MCP-SERVICEUPDATE-001",
+          "TEST-MCP-089",
+          "TEST-MCP-SERVICEUPDATE-001",
+          "TR-MCP-SERVICEUPDATE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          45
+        ],
+        "source": "Plan 27.28"
+      },
+      {
+        "change": "Slice Z3 part 3 52e6d627",
+        "requirementIds": [
+          "FR-MCP-SERVICEUPDATE-001",
+          "TEST-MCP-SERVICEUPDATE-001",
+          "TR-MCP-SERVICEUPDATE-001"
+        ],
+        "taskNumbers": [
+          46
+        ],
+        "source": "Plan 27.29"
+      },
+      {
+        "change": "Slice Z4 4398cffc",
+        "requirementIds": [
+          "FR-MCP-103",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-SERVICEUPDATE-001",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          47
+        ],
+        "source": "Plan 27.30"
+      },
+      {
+        "change": "Slice Z4 part 2 1bb0d61f",
+        "requirementIds": [
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          48
+        ],
+        "source": "Plan 27.30"
+      },
+      {
+        "change": "Slice Z4 parts 3/4 b79fd51f,ff7dcf51",
+        "requirementIds": [
+          "FR-MCP-103",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          49
+        ],
+        "source": "Plan 27.31"
+      },
+      {
+        "change": "Slice Z5 a3caa21d",
+        "requirementIds": [
+          "TEST-MCP-TRIAGE-003",
+          "TEST-MCP-TRIAGE-005",
+          "TEST-MCP-TRIAGESTORE-007",
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          50
+        ],
+        "source": "Plan 27.31"
+      },
+      {
+        "change": "Slice Z6 88c5abcc",
+        "requirementIds": [
+          "FR-MCP-TESTRESOURCE-001",
+          "TEST-MCP-TRIAGESTORE-007",
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          51
+        ],
+        "source": "Plan 27.32"
+      },
+      {
+        "change": "Slice Z7 1d77a79c",
+        "requirementIds": [
+          "FR-MCP-040",
+          "FR-MCP-079",
+          "FR-MCP-103",
+          "FR-MCP-MEMORY-001",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          52
+        ],
+        "source": "Plan 27.33"
+      },
+      {
+        "change": "Slice Z8 b21c21ec,becb0742",
+        "requirementIds": [
+          "FR-MCP-040",
+          "FR-MCP-103",
+          "FR-MCP-TESTRESOURCE-001",
+          "TR-MCP-USECASE-018"
+        ],
+        "taskNumbers": [
+          53
+        ],
+        "source": "Plan 27.34"
+      },
+      {
+        "change": "Slice Z9 94dc5b69",
+        "requirementIds": [
+          "FR-MCP-040",
+          "FR-MCP-077",
+          "FR-MCP-103",
+          "FR-MCP-MEMORY-008",
+          "TEST-MCP-MEMORY-FED-001",
+          "TR-MCP-FED-MEMORY-001"
+        ],
+        "taskNumbers": [
+          54
+        ],
+        "source": "Plan 27.35"
+      },
+      {
+        "change": "Slice Z10 baff082f",
+        "requirementIds": [
+          "FR-MCP-040",
+          "TR-MCP-HOSTILEREVIEW-003"
+        ],
+        "taskNumbers": [
+          55
+        ],
+        "source": "Plan 27.36"
+      },
+      {
+        "change": "Slice Z11 53a210ca and generic store-text writes",
+        "requirementIds": [
+          "FR-MCP-040",
+          "TEST-MCP-QBOLLAMA-001",
+          "TR-MCP-HOSTILEREVIEW-003",
+          "TR-MCP-NUKE-016"
+        ],
+        "taskNumbers": [
+          56
+        ],
+        "source": "Plan 27.37"
+      },
+      {
+        "change": "Slice Z12 8c944541",
+        "requirementIds": [
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          57
+        ],
+        "source": "Plan 27.38"
+      },
+      {
+        "change": "Slice Z13 f9b6bde8",
+        "requirementIds": [
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          58
+        ],
+        "source": "Plan 27.39"
+      },
+      {
+        "change": "Slice Z14 288b03c3",
+        "requirementIds": [
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          59
+        ],
+        "source": "Plan 27.40"
+      },
+      {
+        "change": "Slice Z15 548b1a28",
+        "requirementIds": [
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          60
+        ],
+        "source": "Plan 27.41; original transcript, with R14-F1/F2/F3 corrections required"
+      },
+      {
+        "change": "Slice Z16 da11faa2",
+        "requirementIds": [
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          61
+        ],
+        "source": "Plan 27.42; eight-case mock contract, 108-case binding, final gates"
+      },
+      {
+        "change": "Documentation/receipts between slices, including 9a261993,aedee994,0980a52b",
+        "requirementIds": [
+          "TR-MCP-NUKE-019",
+          "TR-MCP-QUALITY-001",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "taskNumbers": [
+          11,
+          60,
+          61
+        ],
+        "source": "First-parent inventory; docs-only tail. These evidence existing flux, not new unrelated implementation requirements."
+      }
+    ],
+    "inFluxRequirements": [
+      {
+        "requirementId": "FR-MCP-018",
+        "taskNumbers": [
+          15,
+          17,
+          18,
+          22,
+          26,
+          28,
+          30
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-040",
+        "taskNumbers": [
+          33,
+          36,
+          37,
+          38,
+          52,
+          53,
+          54,
+          55,
+          56
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-047",
+        "taskNumbers": [
+          29,
+          30
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-074",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-077",
+        "taskNumbers": [
+          21,
+          54
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-079",
+        "taskNumbers": [
+          39,
+          52
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-083",
+        "taskNumbers": [
+          30
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-103",
+        "taskNumbers": [
+          30,
+          47,
+          49,
+          52,
+          53,
+          54
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-BUILD-001",
+        "taskNumbers": [
+          8,
+          31,
+          36,
+          37
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-FED-BACKFILL-001",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-FED-PATH-001",
+        "taskNumbers": [
+          7,
+          10,
+          30,
+          32,
+          37
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-FED-ROUTE-001",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-FED-WSSYNC-001",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-MEMORY-001",
+        "taskNumbers": [
+          39,
+          52
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-MEMORY-002",
+        "taskNumbers": [
+          19,
+          20,
+          39
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-MEMORY-008",
+        "taskNumbers": [
+          54
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-PATHNORM-001",
+        "taskNumbers": [
+          1,
+          3,
+          5,
+          10
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-PLUGINCORE-002",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-QBOPENAI-001",
+        "taskNumbers": [
+          30,
+          37
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-QBSKILLS-003",
+        "taskNumbers": [
+          14
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-REPL-001",
+        "taskNumbers": [
+          24,
+          30
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-REPL-005",
+        "taskNumbers": [
+          25
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-REPL-007",
+        "taskNumbers": [
+          25,
+          30
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-REPL-008",
+        "taskNumbers": [
+          29,
+          30
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-SERVICEUPDATE-001",
+        "taskNumbers": [
+          34,
+          45,
+          46
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-SESSIONLOGCTX-001",
+        "taskNumbers": [
+          15,
+          22,
+          30
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-TESTRESOURCE-001",
+        "taskNumbers": [
+          23,
+          25,
+          29,
+          30,
+          32,
+          36,
+          37,
+          38,
+          39,
+          41,
+          42,
+          43,
+          47,
+          49,
+          51,
+          52,
+          53
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-USECASE-001",
+        "taskNumbers": [
+          9
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-USECASE-016",
+        "taskNumbers": [
+          9,
+          34
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-USECASE-017",
+        "taskNumbers": [
+          9,
+          34
+        ]
+      },
+      {
+        "requirementId": "FR-MCP-USECASE-018",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "FR-TIMER-001",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "FR-WF-005",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "TEST-HANDOFF-004",
+        "taskNumbers": [
+          18,
+          19
+        ]
+      },
+      {
+        "requirementId": "TEST-HANDOFF-005",
+        "taskNumbers": [
+          18,
+          19
+        ]
+      },
+      {
+        "requirementId": "TEST-HANDOFF-006",
+        "taskNumbers": [
+          3,
+          18,
+          19
+        ]
+      },
+      {
+        "requirementId": "TEST-HANDOFF-007",
+        "taskNumbers": [
+          18,
+          19
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-083",
+        "taskNumbers": [
+          3
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-089",
+        "taskNumbers": [
+          42,
+          45
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-177",
+        "taskNumbers": [
+          22
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-FED-PATH-001",
+        "taskNumbers": [
+          10
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-MEMORY-002",
+        "taskNumbers": [
+          19,
+          20
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-MEMORY-FED-001",
+        "taskNumbers": [
+          54
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-PATHNORM-001",
+        "taskNumbers": [
+          1,
+          3,
+          5,
+          7,
+          27,
+          30
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-PLUGINCORE-002",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-QBOLLAMA-001",
+        "taskNumbers": [
+          25,
+          27,
+          29,
+          36,
+          56
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-QBOPENAI-001",
+        "taskNumbers": [
+          30
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-SERVICEUPDATE-001",
+        "taskNumbers": [
+          34,
+          45,
+          46
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-TRANSCRIPT-008",
+        "taskNumbers": [
+          29
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-TRIAGE-003",
+        "taskNumbers": [
+          10,
+          23,
+          29,
+          50
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-TRIAGE-004",
+        "taskNumbers": [
+          3
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-TRIAGE-005",
+        "taskNumbers": [
+          50
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-TRIAGESTORE-007",
+        "taskNumbers": [
+          50,
+          51
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-USECASE-019",
+        "taskNumbers": [
+          10
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-USECASE-020",
+        "taskNumbers": [
+          10
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-USECASE-021",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "TEST-MCP-WIKIEXPORT-001",
+        "taskNumbers": [
+          30
+        ]
+      },
+      {
+        "requirementId": "TEST-TIMER-001",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-CFG-007",
+        "taskNumbers": [
+          21
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-CI-001",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-DB-001",
+        "taskNumbers": [
+          7
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-FED-BACKFILL-001",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-FED-MEMORY-001",
+        "taskNumbers": [
+          54
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-FED-PATH-001",
+        "taskNumbers": [
+          7,
+          10,
+          30,
+          32,
+          37
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-FED-ROUTE-001",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-FED-WSSYNC-001",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-GH-003",
+        "taskNumbers": [
+          7,
+          30
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-GH-004",
+        "taskNumbers": [
+          7,
+          30
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-HOSTILEREVIEW-003",
+        "taskNumbers": [
+          6,
+          55,
+          56
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-MEMORY-002",
+        "taskNumbers": [
+          19,
+          20
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-MT-002",
+        "taskNumbers": [
+          3
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-NUKE-016",
+        "taskNumbers": [
+          25,
+          36,
+          56
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-NUKE-018",
+        "taskNumbers": [
+          7,
+          25,
+          27
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-NUKE-019",
+        "taskNumbers": [
+          8,
+          10,
+          11,
+          14,
+          16,
+          22,
+          23,
+          24,
+          25,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          36,
+          37,
+          47
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-NUKE-020",
+        "taskNumbers": [
+          31,
+          36,
+          37
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-PATHNORM-001",
+        "taskNumbers": [
+          1,
+          3,
+          5,
+          7,
+          30
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-PLUGINCORE-002",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-QBRAIN-004",
+        "taskNumbers": [
+          22
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-QBRAIN-005",
+        "taskNumbers": [
+          10,
+          22
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-QUALITY-001",
+        "taskNumbers": [
+          1,
+          2,
+          7,
+          11,
+          14,
+          27
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-REPL-001",
+        "taskNumbers": [
+          24
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-REPL-008",
+        "taskNumbers": [
+          25
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-SERVICEUPDATE-001",
+        "taskNumbers": [
+          34,
+          45,
+          46,
+          47
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-SESSIONLOG-006",
+        "taskNumbers": [
+          15,
+          22,
+          30
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-USECASE-018",
+        "taskNumbers": [
+          3,
+          4,
+          5,
+          6,
+          9,
+          10,
+          11,
+          14,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          29,
+          30,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          57,
+          58,
+          59,
+          60,
+          61
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-USECASE-019",
+        "taskNumbers": [
+          3,
+          4,
+          9,
+          10,
+          11,
+          14,
+          21,
+          22,
+          23,
+          24,
+          26,
+          27,
+          29,
+          30,
+          37,
+          47,
+          57,
+          58,
+          59,
+          60,
+          61
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-USECASE-020",
+        "taskNumbers": [
+          34
+        ]
+      },
+      {
+        "requirementId": "TR-MCP-WS-005",
+        "taskNumbers": [
+          15,
+          17,
+          18,
+          22,
+          23,
+          26,
+          28,
+          30
+        ]
+      },
+      {
+        "requirementId": "TR-TIMER-LIFECYCLE-001",
+        "taskNumbers": [
+          34
+        ]
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "number": 1,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Requirement records and unitgreen-native-host are present with the approved narrowing; task text describes the historical write accurately.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 2,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Central cryptography pins and both retained build receipts agree; current gates have zero NU190x.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 3,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Scripted expected results and negative controls precede the explicit-host binding; current cases retain assertions.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 4,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "The 4666/0/16 historical result is explicitly not the zero-skip exit gate; current whole unit suites have zero skips.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 5,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Explicit-host overload and real binding preserve the independent contract; the historical skips are disclosed.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 6,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Startup test removes Event Log provider dependence; supplied unit evidence includes the corrected startup cases.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 7,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Takeover blobs match their source and later modifications are represented in this branch history.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are app

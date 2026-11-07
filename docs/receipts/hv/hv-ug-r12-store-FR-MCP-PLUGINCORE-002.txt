@@ -1,0 +1,18 @@
+type: result
+payload:
+  requestId: req-20261105T075253Z-8cee
+  result:
+    id: FR-MCP-PLUGINCORE-002
+    title: No-duplication CI guard for plugin lib files
+    description: Plugin CI SHALL fail when a lib file is neither covered by the core manifest nor declared as plugin residual.
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T07:52:54.7428200+00:00
+    updatedAt: 2026-11-05T07:52:54.7429300+00:00
+  deprecated: true
+
+---
+

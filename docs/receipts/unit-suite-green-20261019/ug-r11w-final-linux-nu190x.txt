@@ -1,0 +1,13 @@
+SCAN 2026-11-03T11:18:33 host=LAB-OMARCHY pattern=NU190[1-4]
+LOG /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r11w-final-linux-unit-1.out.log lines=5521 nu190x=0 restoreLines=9
+  RESTORE 10:32:11 [DBG]   All projects are up-to-date for restore.
+  RESTORE 10:32:12 [DBG]   All projects are up-to-date for restore.
+  RESTORE 10:32:13 [DBG]   All projects are up-to-date for restore.
+LOG /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r11w-final-linux-lane-1.out.log lines=192 nu190x=0 restoreLines=7
+  RESTORE 10:37:45 [DBG]   All projects are up-to-date for restore.
+  RESTORE 10:40:02 [DBG]   All projects are up-to-date for restore.
+  RESTORE 10:40:08 [DBG]   All projects are up-to-date for restore.
+LOG /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r11w-final-linux-buildtests-1.out.log lines=9 nu190x=0 restoreLines=1
+  RESTORE All projects are up-to-date for restore.
+LOG /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r11w-final-linux-traceability-1.out.log lines=27 nu190x=0 restoreLines=0
+TOTAL nu190x=0

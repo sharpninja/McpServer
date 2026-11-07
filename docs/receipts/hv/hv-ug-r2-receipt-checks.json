@@ -1,0 +1,33 @@
+{
+  "TimestampLocal": "2026-10-19T22:24:21",
+  "ScriptCount": 20,
+  "ScriptIssues": [],
+  "ClaimCount": 13,
+  "Pass": 7,
+  "Fail": 6,
+  "Unknown": 0,
+  "ClosureCount": 7,
+  "FindingCount": 3,
+  "FullFinalJsonPresent": true,
+  "NoForbiddenDash": true,
+  "NoMarkdownTable": true,
+  "Head": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+  "HeadExitCode": 0,
+  "TrackedChanges": [],
+  "StatusExitCode": 0,
+  "ReceiptFilesScanned": 118,
+  "SecretHits": [],
+  "OriginalProtectReceipt": [
+    {
+      "Line": 13016,
+      "Timestamp": "2026-10-20T02:14:10.53Z",
+      "Text": "Files to scan: 217"
+    },
+    {
+      "Line": 13016,
+      "Timestamp": "2026-10-20T02:14:10.53Z",
+      "Text": "Total redactions: 0 in 217 files"
+    }
+  ],
+  "Valid": true
+}

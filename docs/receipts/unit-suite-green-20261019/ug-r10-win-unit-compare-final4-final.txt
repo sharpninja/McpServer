@@ -1,0 +1,18 @@
+Now: 2026-11-02T22:45:38 before=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r9-final4-win-unit-1/unit (4704) after=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r10-final-win-unit-1/unit (4711)
+onlyBefore=2 onlyAfter=9 common=4702
+onlyBefore QBrainAi.Repl.Core.Tests=2
+onlyAfter QBrainAi.Repl.Core.Tests=8
+onlyAfter QBrainAi.Support.Mcp.Tests=1
+--- only in before ---
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.SharedChecks_SatisfyTheContract
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.TemporaryInstanceConsumer_UsesExplicitOwnedWorkspaceAndMarker
+--- only in after ---
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksBindingTests.SharedChecks_SatisfyTheContract
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksBindingTests.TemporaryInstanceConsumer_UsesExplicitOwnedWorkspaceAndMarker
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongHealthChecks_AreRejectedInsidePassingHarness(wrong: "any field", failingRow: "200 with the nonce in another field")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongHealthChecks_AreRejectedInsidePassingHarness(wrong: "nonce substring", failingRow: "200 with a longer nonce")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: "ignores case everywhere", failingRow: "a POSIX marker differing only in case is another r"···)
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: "ordinal only", failingRow: "owned layout in another case on Windows")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "ignores case everywhere")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "ordinal only")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Requirements.RequirementStoredTimestampContractTests.WrongReaders_AreRejected(fault: "date filled from the clock")

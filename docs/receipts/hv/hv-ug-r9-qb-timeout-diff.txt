@@ -1,0 +1,480 @@
+diff --git a/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs b/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs
+index 19644b6e..bc661b1a 100644
+--- a/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs
++++ b/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs
+@@ -27,36 +27,41 @@ public interface IAgentStdioProtocol
+ /// <summary>
+ /// Default <see cref="IAgentStdioProtocol"/> implementation. Accumulates inbound lines into
+ /// YAML documents using the blank-line and <c>---</c> conventions, delegates parsing to
+ /// <see cref="IYamlSerializer"/>, and routes each envelope through
+ /// <see cref="IReplCommandDispatcher"/>. Malformed documents are reported as
+ /// <c>invalid_envelope</c> errors and the loop continues.
+ /// </summary>
+ public sealed class AgentStdioProtocol : IAgentStdioProtocol
+ {
+     private const string CommandTimeoutEnvVar = "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS";
+-    private static readonly TimeSpan DefaultCommandTimeout = TimeSpan.FromMinutes(2);
+ 
+     private readonly IYamlSerializer _serializer;
+     private readonly IReplCommandDispatcher _dispatcher;
+ 
+     /// <summary>
+     /// Initializes a new <see cref="AgentStdioProtocol"/>.
+     /// </summary>
+     /// <param name="serializer">YAML serializer used to parse and emit envelopes.</param>
+     /// <param name="dispatcher">Command dispatcher invoked once per complete inbound envelope.</param>
+     public AgentStdioProtocol(IYamlSerializer serializer, IReplCommandDispatcher dispatcher)
+     {
+         _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+         _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
+     }
+ 
++    /// <summary>
++    /// FR-MCP-REPL-001 ac-1: reads one environment variable by name for the command timeout. The default reads the
++    /// process environment; tests give a scripted reader so the call site is bound without the process environment.
++    /// </summary>
++    internal Func<string, string?> ReadVariable { get; init; } = Environment.GetEnvironmentVariable;
++
+     /// <inheritdoc />
+     public async Task RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken)
+     {
+         ArgumentNullException.ThrowIfNull(reader);
+         ArgumentNullException.ThrowIfNull(writer);
+ 
+         var buffer = new StringBuilder();
+ 
+         while (!cancellationToken.IsCancellationRequested)
+         {
+@@ -152,22 +157,25 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
+                     RequestId = TryExtractRequestId(document),
+                     Code = "invalid_envelope",
+                     Message = ex.Message,
+                 },
+             };
+             await WriteEnvelopeAsync(errorEnvelope, writer, cancellationToken).ConfigureAwait(false);
+             return;
+         }
+ 
+         IYamlEnvelope response;
++        // FR-MCP-REPL-001 ac-1: the configured timeout is read once and only a valid value is used, so the
++        // timeout message names the timeout that applied and a misconfigured value never fails the request.
++        var commandTimeout = ReplCommandTimeout.Read(ReadVariable, CommandTimeoutEnvVar);
+         using var commandCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+-        commandCts.CancelAfter(ResolveCommandTimeout());
++        commandCts.CancelAfter(commandTimeout);
+ 
+         try
+         {
+             if (_dispatcher is IStreamingReplCommandDispatcher streamingDispatcher)
+             {
+                 response = await streamingDispatcher.DispatchAsync(
+                     envelope,
+                     async evt => await WriteEnvelopeAsync(evt, writer, cancellationToken).ConfigureAwait(false),
+                     commandCts.Token).ConfigureAwait(false);
+             }
+@@ -182,21 +190,21 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
+         }
+         catch (OperationCanceledException)
+         {
+             response = new YamlEnvelope
+             {
+                 Type = "error",
+                 Payload = new ErrorPayload
+                 {
+                     RequestId = (envelope.Payload as IRequestPayload)?.RequestId ?? "unknown",
+                     Code = "command_timeout",
+-                    Message = $"Command timed out after {ResolveCommandTimeout().TotalSeconds:0} seconds.",
++                    Message = $"Command timed out after {commandTimeout.TotalSeconds:0} seconds.",
+                     Retryable = true,
+                 },
+             };
+         }
+         catch (Exception ex)
+         {
+             var classified = ReplMcpErrorClassifier.FromException(ex);
+             response = new YamlEnvelope
+             {
+                 Type = "error",
+@@ -207,31 +215,20 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
+                     Message = classified.Message,
+                     Retryable = classified.Retryable,
+                     Details = classified.Details,
+                 },
+             };
+         }
+ 
+         await WriteEnvelopeAsync(response, writer, cancellationToken).ConfigureAwait(false);
+     }
+ 
+-    private static TimeSpan ResolveCommandTimeout()
+-    {
+-        var configured = Environment.GetEnvironmentVariable(CommandTimeoutEnvVar);
+-        if (int.TryParse(configured, out var seconds) && seconds > 0)
+-        {
+-            return TimeSpan.FromSeconds(seconds);
+-        }
+-
+-        return DefaultCommandTimeout;
+-    }
+-
+     private async Task WriteEnvelopeAsync(IYamlEnvelope envelope, TextWriter writer, CancellationToken cancellationToken)
+     {
+         var yaml = _serializer.Serialize(envelope);
+         // FR-MCP-REPL-005: envelopes are framed by a blank line (legacy shell
+         // contract) AND a '---' document separator (the framing persistent bridge
+         // clients parse) so one process can serve many requests for both styles.
+         await writer.WriteAsync(yaml.AsMemory(), cancellationToken).ConfigureAwait(false);
+         if (!yaml.EndsWith('\n'))
+         {
+             await writer.WriteLineAsync().ConfigureAwait(false);
+diff --git a/src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs b/src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs
+index 628719d8..c3a9aee1 100644
+--- a/src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs
++++ b/src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs
+@@ -55,21 +55,20 @@ public interface IStreamingReplCommandDispatcher : IReplCommandDispatcher
+ /// <summary>
+ /// Default <see cref="IReplCommandDispatcher"/> implementation. Routes <c>hello</c> envelopes
+ /// to a handshake response and <c>request</c> envelopes with the <c>client.&lt;clientName&gt;.&lt;methodName&gt;</c>
+ /// method shape to <see cref="IGenericClientPassthrough.InvokeAsync"/>. All other method
+ /// namespaces produce a <c>method_not_found</c> error envelope.
+ /// </summary>
+ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
+ {
+     private const string StreamCommandTimeoutEnvVar = "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS";
+     private const string ServerProtocolVersion = "1.0";
+-    private static readonly TimeSpan DefaultStreamCommandTimeout = TimeSpan.FromMinutes(2);
+     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
+     {
+         PropertyNameCaseInsensitive = true,
+         Converters = { new FlexibleBooleanJsonConverter() },
+         TypeInfoResolver = JsonTypeInfoResolver.Combine(ReplCoreJsonContext.Default, McpClientJsonContext.Default),
+     };
+ 
+     private readonly IGenericClientPassthrough _passthrough;
+     private readonly ISessionLogWorkflow? _sessionLogWorkflow;
+     private readonly ISessionLogPersistenceStrategy? _sessionLogPersistenceStrategy;
+@@ -127,20 +126,26 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
+         _graphRagWorkflow = graphRagWorkflow;
+         _triageWorkflow = triageWorkflow;
+         _agentHelpWorkflow = agentHelpWorkflow;
+         _transcriptIngestionWorkflow = transcriptIngestionWorkflow;
+         _handoffWorkflow = handoffWorkflow;
+         _hostileReviewWorkflow = hostileReviewWorkflow;
+         _workspaceValidationWorkflow = workspaceValidationWorkflow;
+         _clientMutationPolicy = clientMutationPolicy;
+     }
+ 
++    /// <summary>
++    /// FR-MCP-REPL-001 ac-1: reads one environment variable by name for the stream command timeout. The default reads
++    /// the process environment; tests give a scripted reader so the call site is bound without the process environment.
++    /// </summary>
++    internal Func<string, string?> ReadVariable { get; init; } = Environment.GetEnvironmentVariable;
++
+     /// <inheritdoc />
+     public Task<IYamlEnvelope> DispatchAsync(IYamlEnvelope envelope, CancellationToken cancellationToken)
+         => DispatchAsync(envelope, emitEnvelopeAsync: null, cancellationToken);
+ 
+     /// <inheritdoc />
+     /// <inheritdoc />
+     public async Task<IYamlEnvelope> DispatchAsync(
+         IYamlEnvelope envelope,
+         Func<IYamlEnvelope, Task>? emitEnvelopeAsync,
+         CancellationToken cancellationToken)
+@@ -2990,30 +2995,33 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
+                 : new TodoSubtaskAdapter { Task = fallbackText, Done = false };
+         }
+ 
+         return new TodoSubtaskAdapter
+         {
+             Task = RequireString(fields, "task"),
+             Done = GetBool(fields, "done") ?? false,
+         };
+     }
+ 
+-    private static async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(
++    private async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(
+         string requestId,
+         string method,
+         Func<Func<IStreamingEvent, Task>, CancellationToken, Task> stream,
+         Func<IYamlEnvelope, Task>? emitEnvelopeAsync,
+         CancellationToken cancellationToken)
+     {
+         var events = new List<IStreamingEvent>();
++        // FR-MCP-REPL-001 ac-1: the configured stream timeout is read once and only a valid value is used, so the
++        // timeout event names the timeout that applied and a misconfigured value never fails the stream.
++        var streamTimeout = ReplCommandTimeout.Read(ReadVariable, StreamCommandTimeoutEnvVar);
+         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+-        timeoutCts.CancelAfter(ResolveStreamCommandTimeout());
++        timeoutCts.CancelAfter(streamTimeout);
+ 
+         try
+         {
+             await stream(async evt =>
+             {
+                 events.Add(evt);
+                 if (emitEnvelopeAsync is not null)
+                 {
+                     await emitEnvelopeAsync(BuildTodoStreamEventEnvelope(requestId, method, evt)).ConfigureAwait(false);
+                 }
+@@ -3021,46 +3029,35 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
+         }
+         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+         {
+             if (events.Count == 0 || !events[^1].EventType.EndsWith(".cancelled", StringComparison.OrdinalIgnoreCase))
+             {
+                 var timeoutEvent = new DispatcherStreamingEvent(
+                     "stream.timeout",
+                     new Dictionary<string, object?>
+                     {
+                         ["requestId"] = requestId,
+-                        ["message"] = $"Stream command timed out after {ResolveStreamCommandTimeout().TotalSeconds:0} seconds.",
++                        ["message"] = $"Stream command timed out after {streamTimeout.TotalSeconds:0} seconds.",
+                     },
+                     DateTimeOffset.UtcNow,
+                     events.Count + 1);
+                 events.Add(timeoutEvent);
+                 if (emitEnvelopeAsync is not null)
+                 {
+                     await emitEnvelopeAsync(BuildTodoStreamEventEnvelope(requestId, method, timeoutEvent)).ConfigureAwait(false);
+                 }
+             }
+         }
+ 
+         return events;
+     }
+ 
+-    private static TimeSpan ResolveStreamCommandTimeout()
+-    {
+-        var configured = Environment.GetEnvironmentVariable(StreamCommandTimeoutEnvVar);
+-        if (int.TryParse(configured, out var seconds) && seconds > 0)
+-        {
+-            return TimeSpan.FromSeconds(seconds);
+-        }
+-
+-        return DefaultStreamCommandTimeout;
+-    }
+-
+     private static IYamlEnvelope BuildTodoStreamEventEnvelope(string requestId, string method, IStreamingEvent evt)
+         => new YamlEnvelope
+         {
+             Type = "event",
+             Payload = new EventPayload
+             {
+                 Event = method,
+                 Data = new Dictionary<string, object?>
+                 {
+                     ["requestId"] = requestId,
+diff --git a/src/QBrainAi.Repl.Core/ReplCommandTimeout.cs b/src/QBrainAi.Repl.Core/ReplCommandTimeout.cs
+new file mode 100644
+index 00000000..ddf21dab
+--- /dev/null
++++ b/src/QBrainAi.Repl.Core/ReplCommandTimeout.cs
+@@ -0,0 +1,41 @@
++// FR-MCP-REPL-001 ac-1: one parse rule for the REPL command timeouts configured through
++// MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS (agent stdio requests) and MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS
++// (stream commands), so a misconfigured value never fails a request.
++
++using System.Globalization;
++
++namespace QBrainAi.Repl.Core;
++
++/// <summary>
++/// FR-MCP-REPL-001 ac-1: parses a configured REPL command timeout. A whole number of seconds from 1 to
++/// <see cref="LargestSeconds"/>, the largest delay <see cref="CancellationTokenSource.CancelAfter(TimeSpan)"/> accepts,
++/// is used; any other value (unset, empty, not a number, zero, negative or larger) gives <see cref="Default"/>.
++/// </summary>
++internal static class ReplCommandTimeout
++{
++    /// <summary>The timeout that applies when no valid value is configured.</summary>
++    internal static readonly TimeSpan Default = TimeSpan.FromMinutes(2);
++
++    /// <summary>
++    /// The largest whole number of seconds the cancellation timer accepts: its limit is 4294967294 milliseconds.
++    /// </summary>
++    internal const long LargestSeconds = 4294967;
++
++    /// <summary>Parses a configured value into the timeout that applies.</summary>
++    /// <param name="configured">The configured value, or null when the variable is unset.</param>
++    /// <returns>The configured timeout when it is valid; otherwise <see cref="Default"/>.</returns>
++    internal static TimeSpan Parse(string? configured) =>
++        long.TryParse(configured, NumberStyles.Integer, CultureInfo.InvariantCulture, out var seconds) && seconds is >= 1 and <= LargestSeconds
++            ? TimeSpan.FromSeconds(seconds)
++            : Default;
++
++    /// <summary>Reads the variable that configures a timeout once and parses it; both call sites use this.</summary>
++    /// <param name="readVariable">Reads one environment variable by name; the call sites default to the process environment.</param>
++    /// <param name="variableName">The variable that configures the timeout.</param>
++    /// <returns>The timeout that applies.</returns>
++    internal static TimeSpan Read(Func<string, string?> readVariable, string variableName)
++    {
++        ArgumentNullException.ThrowIfNull(readVariable);
++        return Parse(readVariable(variableName));
++    }
++}
+diff --git a/src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs b/src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs
+index c74fdb31..170c78bc 100644
+--- a/src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs
++++ b/src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs
+@@ -89,24 +89,35 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
+         if (!string.IsNullOrWhiteSpace(turnId))
+             metadata["turnId"] = turnId.Trim();
+ 
+         var promptTools = toolChoice.Kind == ToolChoiceKind.None ? null : request.Tools;
+         var seedInput = BuildPrompt(request.Messages, promptTools, toolChoice);
+         var workingMessages = request.Messages.ToList();
+         var orchestrationInput = seedInput;
+         QuadBrainOrchestrationResponse? orchestration = null;
+         string? lastInternalSignature = null;
+         string? lastDeferred = null;
++        string? lastArbiterOutput = null;
++        // FR-MCP-QBOPENAI-001 ac-7: the internal tool results of the last round when that round ran internal tools, else null.
++        string? lastInternalToolResults = null;
++        // FR-MCP-QBOPENAI-001 ac-5: a request with no tools and no tool_choice takes an Arbiter reply that is not an envelope as its answer;
++        // a tool_choice of auto with no tools counts as no tool_choice.
++        var noToolsOffered = request.Tools is not { Count: > 0 }
++            && (request.ToolChoice is null
++                || request.ToolChoice.Value.ValueKind is JsonValueKind.Undefined or JsonValueKind.Null
++                || (request.ToolChoice.Value.ValueKind == JsonValueKind.String
++                    && string.Equals(request.ToolChoice.Value.GetString(), "auto", StringComparison.OrdinalIgnoreCase)));
+         OpenAiChatResponseMessage message = new() { Role = "assistant" };
+         var finishReason = "stop";
+ 
+-        for (var round = 0; round < MaxProcessingRounds; round++)
++        var round = 0;
++        for (; round < MaxProcessingRounds; round++)
+         {
+             orchestrationInput = BuildPrompt(workingMessages, promptTools, toolChoice);
+             orchestration = await _orchestration.ExecuteFullOrchestrationAsync(
+                 new QuadBrainOrchestrationRequest
+                 {
+                     Input = orchestrationInput,
+                     TurnId = string.IsNullOrWhiteSpace(turnId) ? null : turnId.Trim(),
+                     Metadata = metadata,
+                     Progress = request.Progress,
+                 },
+@@ -143,62 +154,72 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
+                 {
+                     var signature = string.Join(",", interception.Executed.Select(static item => item.ToolCall.Function.Name));
+                     if (string.Equals(signature, lastInternalSignature, StringComparison.Ordinal))
+                     {
+                         message.Content = internalContent;
+                         finishReason = "stop";
+                         break;
+                     }
+ 
+                     lastInternalSignature = signature;
++                    lastArbiterOutput = orchestration.Output;
++                    lastInternalToolResults = internalContent;
+                     workingMessages.Add(new OpenAiChatMessage { Role = "assistant", Content = orchestration.Output });
+                     workingMessages.Add(new OpenAiChatMessage { Role = "tool", Content = internalContent });
+                     continue;
+                 }
+ 
+                 message.Content = internalContent;
+                 finishReason = "stop";
+                 break;
+             }
+ 
+             var output = string.IsNullOrWhiteSpace(orchestration.Output)
+                 ? BuildNoDecisionMessage(orchestration)
+                 : orchestration.Output;
++            lastArbiterOutput = output;
+             ValidateToolChoiceResult(toolChoice, [], [], orchestration.Output);
+             var envelope = QuadBrainArbiterEnvelope.TryParse(output);
+ 
+-            if (toolChoice.Kind != ToolChoiceKind.None && QuadBrainArbiterEnvelope.RequiresAnotherRound(envelope))
++            if (toolChoice.Kind != ToolChoiceKind.None
++                && !(noToolsOffered && envelope is null)
++                && QuadBrainArbiterEnvelope.RequiresAnotherRound(envelope))
+             {
+                 if (string.Equals(output.Trim(), lastDeferred, StringComparison.Ordinal))
+                 {
+-                    message.Content = QuadBrainArbiterEnvelope.FormatForDisplay(output, showIntent: false);
+-                    if (string.IsNullOrWhiteSpace(message.Content))
+-                        message.Content = output;
++                    message.Content = ResolveDisplayContent(output, round + 1, BuildNoDecisionMessage(orchestration));
+                     finishReason = "stop";
+                     break;
+                 }
+ 
+                 lastDeferred = output.Trim();
++                lastInternalToolResults = null;
+                 workingMessages.Add(new OpenAiChatMessage { Role = "assistant", Content = output });
+                 workingMessages.Add(new OpenAiChatMessage { Role = "user", Content = ContinueDirective });
+                 continue;
+             }
+ 
+-            message.Content = envelope is { IsFinal: true }
+-                ? envelope.Content ?? string.Empty
+-                : QuadBrainArbiterEnvelope.FormatForDisplay(output, showIntent: false);
+-            if (string.IsNullOrWhiteSpace(message.Content))
+-                message.Content = output;
++            message.Content = ResolveDisplayContent(output, round + 1, BuildNoDecisionMessage(orchestration));
+             finishReason = "stop";
+             break;
+         }
+ 
++        // FR-MCP-QBOPENAI-001 ac-6 and ac-7: every exit above sets the content or the tool calls, so only a spent round budget arrives here
++        // without them. After an internal-tool round the content is that round's tool results; otherwise it is the last Arbiter output
++        // formatted for display, never empty content and never an envelope without displayable content.
++        if (round == MaxProcessingRounds)
++        {
++            message.Content = lastInternalToolResults
++                ?? ResolveDisplayContent(lastArbiterOutput, MaxProcessingRounds, BuildNoDecisionMessage(orchestration!));
++            finishReason = "stop";
++        }
++
+         var response = CreateResponse(
+             request,
+             message,
+             finishReason,
+             orchestrationInput,
+             orchestration?.TransactionId);
+         await CompleteSessionTurnAsync(sessionId, turnId, response, cancellationToken).ConfigureAwait(false);
+         return response;
+     }
+ 
+@@ -272,20 +293,43 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
+                     },
+                 ],
+             },
+             cancellationToken).ConfigureAwait(false);
+     }
+ 
+     /// <summary>Best-effort token estimate (~4 characters per token); 0 for empty text.</summary>
+     private static int EstimateTokens(string? text)
+         => string.IsNullOrEmpty(text) ? 0 : (text.Length + 3) / 4;
+ 
++    /// <summary>
++    /// FR-MCP-QBOPENAI-001 ac-6 and ac-7: the assistant content for an Arbiter output. It is the output's display text when it has
++    /// some, the no-decision message when the output is empty, and otherwise (an Arbiter envelope without displayable content) a
++    /// plain message that names the rounds used, the round budget and the envelope's intent, so the content is never empty and never
++    /// an envelope without displayable content.
++    /// </summary>
++    /// <param name="output">The Arbiter output.</param>
++    /// <param name="roundsUsed">The orchestration rounds used so far.</param>
++    /// <param name="noDecisionMessage">The message for an empty output.</param>
++    /// <returns>The assistant content.</returns>
++    internal static string ResolveDisplayContent(string? output, int roundsUsed, string noDecisionMessage)
++    {
++        if (string.IsNullOrWhiteSpace(output))
++            return noDecisionMessage;
++        var shown = QuadBrainArbiterEnvelope.FormatForDisplay(output, showIntent: false);
++        if (!string.IsNullOrWhiteSpace(shown))
++            return shown;
++        var intent = QuadBrainArbiterEnvelope.TryParse(output)?.Intent ?? "none";
++        return string.Create(
++            CultureInfo.InvariantCulture,
++            $"QuadBrain gave no displayable answer after {roundsUsed} of {MaxProcessingRounds} orchestration rounds (last Arbiter intent: {intent}).");
++    }
++
+     private static string BuildNoDecisionMessage(QuadBrainOrchestrationResponse orchestration)
+     {
+         var reason = string.IsNullOrWhiteSpace(orchestration.Reason)
+             ? (string.IsNullOrWhiteSpace(orchestration.Status) ? "empty" : orchestration.Status.Trim())
+             : orchestration.Reason.Trim();
+         return $"QuadBrain returned no decision ({reason}).";
+     }
+ 
+     private static string? SerializeToolCalls(List<OpenAiToolCall>? toolCalls)
+         => toolCalls is { Count: > 0 }

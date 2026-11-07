@@ -1,0 +1,136 @@
+type: result
+payload:
+  requestId: req-20261020T230123Z-742e
+  result:
+    totalCount: 1
+    limit: 10
+    offset: 0
+    items:
+    - sourceType: Codex
+      sessionId: Codex-20261020T221031Z-plugin-session
+      agentSessionId: 01a15b5b-ceab-7e90-a42c-0fa7defcb1e3
+      agentExecutablePath: /home/sharpninja/.local/bin/codex
+      agentExecutableVersion: codex-cli 0.160.1
+      title: Independently validate IMPL-UNITGREEN-001 round 3
+      model: codex
+      started: 2026-10-20T22:10:57.0000000+00:00
+      lastUpdated: 2026-10-20T22:55:00.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20261020T221024Z-unitgreen-r3
+        timestamp: 2026-10-20T22:10:57.0000000+00:00
+        queryText: 'Review PR 87 at 64fc4b1400ac5bc7526c472f8efeacb91980f2a6 against UG1 through UG17, workspace rules, BDPv4 requirements and the complete plan. Read only except reviewer receipts and this own session. Full request: docs/receipts/hv/20261020T170824-unitgreen-r3.request.jsonl.'
+        queryTitle: Independently validate IMPL-UNITGREEN-001 round 3
+        response: Actions appended.
+        interpretation: 'One independent hostile review, Codex CLI gpt-6-astra effort max, no changes to implementation or store records. Mandatory profile loaded in full: one non-skill Markdown file. Root marker read fully with API key redacted from all output. Own rollout turn_context line 8 proves model and effort.'
+        status: in_progress
+        planFile: None
+        todoId: None
+        actions:
+        - order: 62866
+          description: 'Decision: do not accept the claimed absence of FR-MCP-USECASE-017. Both the dedicated workflow.requirements.getFr read and the effective requirement view return an active pending eight-criterion record. FR-MCP-USECASE-016 is absent and the old mappings are empty. The store-drift root cause is outside scope, but its effect on the claimed conversion, TODO task 9 and post-AGREE completion is in scope. Alternative rejected: trust the earlier deletion receipt or treat out-of-scope cause as proof of current absence. No record has been changed. Independent sandbox Nuke Test completed with 4479 passing and zero failed/unexecuted; full raw Build.Tests artifact has 436 passing.'
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-017.json
+        - order: 62985
+          description: 'Source observation: HermeticUserProfileFixture changes AgentPluginUserProfileOverride only; MarkerFileService.BuildTemplateContext calls BuildDefaultAgentPlugins, which reads CODEX_PLUGIN_ROOT before the overridden profile. Many marker tests call MakeContext without WithClearedPluginVersionEnvironment. Hypothesis, not yet a finding: the remaining external plugin-root boundary can fail unit tests. Started a full sandbox Nuke Test probe with process-local CODEX_PLUGIN_ROOT set to an isolated reviewer fixture containing plugin.json as an empty array, native serialized. No code or tests changed, no filter or audit override. The normal independent run remains 4479/0/0.'
+          type: validation
+          status: completed
+          filePath: ''
+        - order: 63437
+          description: 'Confirmed material environment-isolation defect: the ordinary full sandbox Nuke Test passed 4479/0/0. With only a process-local CODEX_PLUGIN_ROOT pointing to a scripted plugin.json array, the same full target ran all 4479 cases and failed 19, with 4460 passed and 0 other outcomes. The assembly fixture isolates the profile but does not isolate environment plugin roots; MarkerFileServiceTests, TriagePromptTemplateTests and WorkspaceProcessManagerStartupTests reach that external root. This violates the day-one unit rule and prevents UG3 and the broad hermetic claims from passing. Correct the test boundary without swallowing unexpected product errors or weakening assertions. Alternative of treating the ordinary green run as sufficient is rejected because the controlled negative probe proves the dependency. No code or store state changed.'
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hv/hv-ug-r3-trx-env-probe.json
+        - order: 63487
+          description: 'Confirmed scanner false negative with the compiled production scanner: two sibling namespaces declare OS aliases to System.OperatingSystem and System.String respectively; a Fact in the first calls OS.IsWindows, but Scan reports zero findings. Removing the second namespace alias reports one os-check. Nine other direct-syntax and exclusion controls pass. CollectAliases folds all namespace scopes into one dictionary, letting a later unrelated alias hide the first. This is within the claimed same-file direct alias coverage, not the declared other-file/helper/reflection limitation. Implementer fix: preserve C# alias scope with scripted positive and negative controls and the required mock/binding gates. Do not infer a need for whole-program analysis. No tracked source edited.'
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hv/hv-ug-r3-scanner-probe.json
+        - order: 64183
+          description: 'Decision: the self-review assertion Every gate reran at each new head is false. The prelaunch projected-problems record R3-P11 explicitly discloses Windows Test was not rerun at 6042dbb3 or 0210244d; the plan lists their five actual gates. The complete final e0b078c8 gates do pass. Classify this as an implementer correction to the self-review, not missing final evidence or an undisclosed scope departure. Alternative rejected: treating this exact run misstatement as harmless polish, because the operator explicitly makes misstated runs material.'
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hv/20261020T170824-unitgreen-r3.selfreview.md
+        - order: 64495
+          description: 'Decision: UG2 is assessed against the explicit before-binding chronology in this request, as the prior round assessed the scanner as test assertion logic exercised with scripted source data before repository binding and reclassification. Scanner and locator guards are test infrastructure, and locator authorship in the same pass as its policy tests is expressly disclosed. I do not assert that the locator source was first written after the mock gate. The source-editing slices for DirectoryTreeWalker, version reads, LocalDB defaults, collection membership and flag, and pg_ctl arguments each have a green mock gate before their corresponding behavior change. Alternative rejected: invent an undisclosed chronology defect from filesystem timestamps or recast the acknowledged guard authorship as a new production slice.'
+          type: design_decision
+          status: completed
+          filePath: ''
+        - order: 70000
+          description: NuGet Gallery Microsoft.CodeAnalysis.CSharp 5.9.0; URL=https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp/5.9.0; Usage=Official package listing independently confirms 5.9.0 latest stable; compare five central Roslyn pins and full unsuppressed restores.
+          type: web_reference
+          status: completed
+        - order: 70000
+          description: Microsoft Security Advisory CVE-2026-70162 - .NET Denial of Service Vulnerability; URL=https://github.com/advisories/GHSA-2fmv-rv2c-59x7; Usage=Official advisory independently confirms patched System.Security.Cryptography package version 10.0.13 for UG5.
+          type: web_reference
+          status: completed
+        - order: 70000
+          description: Microsoft Security Advisory CVE-2026-96960 - .NET and Visual Studio Denial of Service Vulnerability; URL=https://github.com/advisories/GHSA-7hqp-7c5m-4vq6; Usage=Official advisory independently confirms patched System.Security.Cryptography package version 10.0.13 for UG5.
+          type: web_reference
+          status: completed
+        - order: 70000
+          description: Microsoft Security Advisory CVE-2026-84008 - .NET Denial of Service Vulnerability; URL=https://github.com/advisories/GHSA-846f-f764-76mx; Usage=Official advisory independently confirms patched System.Security.Cryptography package version 10.0.13 for UG5.
+          type: web_reference
+          status: completed
+        - order: 70000
+          description: Microsoft Security Advisory CVE-2026-96959 - .NET and Visual Studio Denial of Service Vulnerability; URL=https://github.com/advisories/GHSA-c399-9853-6jmj; Usage=Official advisory independently confirms patched System.Security.Cryptography package version 10.0.13 for UG5.
+          type: web_reference
+          status: completed
+        - order: 70000
+          description: Microsoft Security Advisory CVE-2026-96958 - .NET and Visual Studio Denial of Service Vulnerability; URL=https://github.com/advisories/GHSA-r955-8q5j-3h83; Usage=Official advisory independently confirms patched System.Security.Cryptography package version 10.0.13 for UG5.
+          type: web_reference
+          status: completed
+        model: codex
+        tokenCount: 0
+        tags:
+        - unitgreen-r3
+        - IMPL-UNITGREEN-001
+        contextList:
+        - docs/receipts/hv/20261020T170824-unitgreen-r3.request.jsonl
+        - docs/receipts/hv/20261020T170824-unitgreen-r3.response.jsonl
+        - https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp/5.9.0
+        - https://github.com/advisories/GHSA-2fmv-rv2c-59x7
+        - https://github.com/advisories/GHSA-7hqp-7c5m-4vq6
+        - https://github.com/advisories/GHSA-846f-f764-76mx
+        - https://github.com/advisories/GHSA-c399-9853-6jmj
+        - https://github.com/advisories/GHSA-r955-8q5j-3h83
+        processingDialog:
+        - timestamp: 2026-10-20T22:19:24.8883051+00:00
+          role: model
+          content: 'Progress at approximately 17:19 local: mandatory setup completed and own model/effort verified from rollout turn_context. Entire plan and self-review read; GitHub PR 87 is draft at requested HEAD. Independent XML accounting matches claimed final Linux and Windows unit totals (4479) and lanes (397 Linux, 373 Windows), with zero failed or other outcomes. By-name comparisons and provenance checks are continuing. Live getFr and effective queries both return FR-MCP-USECASE-017 despite deletion claims; FR-MCP-USECASE-016 is not_found, and both old mappings are absent. Treating the resurrected FR as a material store-state discrepancy to verify, not asserting a cause. Own sandboxed Nuke Test is still running. No implementation or store-record edits.'
+          category: observation
+        - timestamp: 2026-10-20T22:27:45.5544029+00:00
+          role: model
+          content: 'Decision: do not accept the claimed absence of FR-MCP-USECASE-017. Both the dedicated workflow.requirements.getFr read and the effective requirement view return an active pending eight-criterion record. FR-MCP-USECASE-016 is absent and the old mappings are empty. The store-drift root cause is outside scope, but its effect on the claimed conversion, TODO task 9 and post-AGREE completion is in scope. Alternative rejected: trust the earlier deletion receipt or treat out-of-scope cause as proof of current absence. No record has been changed. Independent sandbox Nuke Test completed with 4479 passing and zero failed/unexecuted; full raw Build.Tests artifact has 436 passing.'
+          category: decision
+        - timestamp: 2026-10-20T22:29:45.0781791+00:00
+          role: model
+          content: 'Source observation: HermeticUserProfileFixture changes AgentPluginUserProfileOverride only; MarkerFileService.BuildTemplateContext calls BuildDefaultAgentPlugins, which reads CODEX_PLUGIN_ROOT before the overridden profile. Many marker tests call MakeContext without WithClearedPluginVersionEnvironment. Hypothesis, not yet a finding: the remaining external plugin-root boundary can fail unit tests. Started a full sandbox Nuke Test probe with process-local CODEX_PLUGIN_ROOT set to an isolated reviewer fixture containing plugin.json as an empty array, native serialized. No code or tests changed, no filter or audit override. The normal independent run remains 4479/0/0.'
+          category: observation
+        - timestamp: 2026-10-20T22:37:17.3044359+00:00
+          role: model
+          content: 'Confirmed material environment-isolation defect: the ordinary full sandbox Nuke Test passed 4479/0/0. With only a process-local CODEX_PLUGIN_ROOT pointing to a scripted plugin.json array, the same full target ran all 4479 cases and failed 19, with 4460 passed and 0 other outcomes. The assembly fixture isolates the profile but does not isolate environment plugin roots; MarkerFileServiceTests, TriagePromptTemplateTests and WorkspaceProcessManagerStartupTests reach that external root. This violates the day-one unit rule and prevents UG3 and the broad hermetic claims from passing. Correct the test boundary without swallowing unexpected product errors or weakening assertions. Alternative of treating the ordinary green run as sufficient is rejected because the controlled negative probe proves the dependency. No code or store state changed.'
+          category: decision
+        - timestamp: 2026-10-20T22:38:07.4965866+00:00
+          role: model
+          content: 'Confirmed scanner false negative with the compiled production scanner: two sibling namespaces declare OS aliases to System.OperatingSystem and System.String respectively; a Fact in the first calls OS.IsWindows, but Scan reports zero findings. Removing the second namespace alias reports one os-check. Nine other direct-syntax and exclusion controls pass. CollectAliases folds all namespace scopes into one dictionary, letting a later unrelated alias hide the first. This is within the claimed same-file direct alias coverage, not the declared other-file/helper/reflection limitation. Implementer fix: preserve C# alias scope with scripted positive and negative controls and the required mock/binding gates. Do not infer a need for whole-program analysis. No tracked source edited.'
+          category: decision
+        - timestamp: 2026-10-20T22:49:43.3938386+00:00
+          role: model
+          content: 'Decision: the self-review assertion Every gate reran at each new head is false. The prelaunch projected-problems record R3-P11 explicitly discloses Windows Test was not rerun at 6042dbb3 or 0210244d; the plan lists their five actual gates. The complete final e0b078c8 gates do pass. Classify this as an implementer correction to the self-review, not missing final evidence or an undisclosed scope departure. Alternative rejected: treating this exact run misstatement as harmless polish, because the operator explicitly makes misstated runs material.'
+          category: decision
+        - timestamp: 2026-10-20T22:54:54.6682939+00:00
+          role: model
+          content: 'Decision: UG2 is assessed against the explicit before-binding chronology in this request, as the prior round assessed the scanner as test assertion logic exercised with scripted source data before repository binding and reclassification. Scanner and locator guards are test infrastructure, and locator authorship in the same pass as its policy tests is expressly disclosed. I do not assert that the locator source was first written after the mock gate. The source-editing slices for DirectoryTreeWalker, version reads, LocalDB defaults, collection membership and flag, and pg_ctl arguments each have a green mock gate before their corresponding behavior change. Alternative rejected: invent an undisclosed chronology defect from filesystem timestamps or recast the acknowledged guard authorship as a new production slice.'
+          category: decision
+        designDecisions:
+        - 'Decision: do not accept the claimed absence of FR-MCP-USECASE-017. Both the dedicated workflow.requirements.getFr read and the effective requirement view return an active pending eight-criterion record. FR-MCP-USECASE-016 is absent and the old mappings are empty. The store-drift root cause is outside scope, but its effect on the claimed conversion, TODO task 9 and post-AGREE completion is in scope. Alternative rejected: trust the earlier deletion receipt or treat out-of-scope cause as proof of current absence. No record has been changed. Independent sandbox Nuke Test completed with 4479 passing and zero failed/unexecuted; full raw Build.Tests artifact has 436 passing.'
+        - 'Confirmed material environment-isolation defect: the ordinary full sandbox Nuke Test passed 4479/0/0. With only a process-local CODEX_PLUGIN_ROOT pointing to a scripted plugin.json array, the same full target ran all 4479 cases and failed 19, with 4460 passed and 0 other outcomes. The assembly fixture isolates the profile but does not isolate environment plugin roots; MarkerFileServiceTests, TriagePromptTemplateTests and WorkspaceProcessManagerStartupTests reach that external root. This violates the day-one unit rule and prevents UG3 and the broad hermetic claims from passing. Correct the test boundary without swallowing unexpected product errors or weakening assertions. Alternative of treating the ordinary green run as sufficient is rejected because the controlled negative probe proves the dependency. No code or store state changed.'
+        - 'Confirmed scanner false negative with the compiled production scanner: two sibling namespaces declare OS aliases to System.OperatingSystem and System.String respectively; a Fact in the first calls OS.IsWindows, but Scan reports zero findings. Removing the second namespace alias reports one os-check. Nine other direct-syntax and exclusion controls pass. CollectAliases folds all namespace scopes into one dictionary, letting a later unrelated alias hide the first. This is within the claimed same-file direct alias coverage, not the declared other-file/helper/reflection limitation. Implementer fix: preserve C# alias scope with scripted positive and negative controls and the required mock/binding gates. Do not infer a need for whole-program analysis. No tracked source edited.'
+        - 'Decision: the self-review assertion Every gate reran at each new head is false. The prelaunch projected-problems record R3-P11 explicitly discloses Windows Test was not rerun at 6042dbb3 or 0210244d; the plan lists their five actual gates. The complete final e0b078c8 gates do pass. Classify this as an implementer correction to the self-review, not missing final evidence or an undisclosed scope departure. Alternative rejected: treating this exact run misstatement as harmless polish, because the operator explicitly makes misstated runs material.'
+        - 'Decision: UG2 is assessed against the explicit before-binding chronology in this request, as the prior round assessed the scanner as test assertion logic exercised with scripted source data before repository binding and reclassification. Scanner and locator guards are test infrastructure, and locator authorship in the same pass as its policy tests is expressly disclosed. I do not assert that the locator source was first written after the mock gate. The source-editing slices for DirectoryTreeWalker, version reads, LocalDB defaults, collection membership and flag, and pg_ctl arguments each have a green mock gate before their corresponding behavior change. Alternative rejected: invent an undisclosed chronology defect from filesystem timestamps or recast the acknowledged guard authorship as a new production slice.'
+
+---
+

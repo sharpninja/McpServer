@@ -1,0 +1,15 @@
+{
+  "TimestampUtc": "2026-10-20T01:04:14.7607848Z",
+  "TimestampLocal": "2026-10-19T20:04:14",
+  "Mode": "Gh",
+  "Arguments": [
+    "api",
+    "advisories/GHSA-846f-f764-76mx",
+    "--jq",
+    "{ghsa_id,html_url,published_at,updated_at,vulnerabilities}"
+  ],
+  "Offset": 0,
+  "Count": 250,
+  "ExitCode": 0,
+  "Output": "{\"ghsa_id\":\"GHSA-846f-f764-76mx\",\"html_url\":\"https://github.com/advisories/GHSA-846f-f764-76mx\",\"published_at\":\"2026-10-13T20:03:30Z\",\"updated_at\":\"2026-10-19T19:17:43Z\",\"vulnerabilities\":[{\"first_patched_version\":\"10.0.13\",\"package\":{\"ecosystem\":\"nuget\",\"name\":\"System.Security.Cryptography.Pkcs\"},\"vulnerable_functions\":[],\"vulnerable_version_range\":\"\\u003e= 10.0.0, \\u003c= 10.0.12\"},{\"first_patched_version\":\"11.0.0-rc.2\",\"package\":{\"ecosystem\":\"nuget\",\"name\":\"System.Security.Cryptography.Pkcs\"},\"vulnerable_functions\":[],\"vulnerable_version_range\":\"\\u003e= 11.0.0-preview.1, \\u003c= 11.0.0-rc.1\"},{\"first_patched_version\":\"8.0.2\",\"package\":{\"ecosystem\":\"nuget\",\"name\":\"System.Security.Cryptography.Pkcs\"},\"vulnerable_functions\":[],\"vulnerable_version_range\":\"\\u003e= 8.0.0, \\u003c= 8.0.1\"},{\"first_patched_version\":\"9.0.21\",\"package\":{\"ecosystem\":\"nuget\",\"name\":\"System.Security.Cryptography.Pkcs\"},\"vulnerable_functions\":[],\"vulnerable_version_range\":\"\\u003e= 9.0.0, \\u003c= 9.0.20\"}]}"
+}

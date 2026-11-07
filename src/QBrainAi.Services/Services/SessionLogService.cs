@@ -18,7 +18,7 @@ using Microsoft.Extensions.Options;
 namespace QBrainAi.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-CORE-013: Implements session log submit (upsert) and query with pagination (MVP-SUPPORT-011).
+/// TR-PLANNED-CORE-013 (historical): Implements session log submit (upsert) and query with pagination (MVP-SUPPORT-011).
 /// FR-SUPPORT-010: Persists session logs in 4NF-normalized SQLite tables via <see cref="McpDbContext"/>.
 /// </summary>
 public sealed class SessionLogService : ISessionLogService
@@ -34,7 +34,18 @@ public sealed class SessionLogService : ISessionLogService
     private readonly SessionLogTurnContextExtractor _turnContextExtractor;
     private readonly TimeSpan _submitCommandBudget;
 
-    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
+    /// <summary>TR-MCP-USECASE-018 AC-006: the clock the stale-turn query's cutoff is read from.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the field, added in slice Z4 with the optional constructor clock (hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
+    private readonly TimeProvider _time;
+    private readonly Func<string, string> _normalizePlanFilter = static path => SessionLogTurnContextValidator.NormalizePlanFile(path);
+
+    /// <summary>TR-PLANNED-CORE-013 (historical): Constructor.</summary>
+    /// <param name="db">Session storage.</param>
+    /// <param name="logger">Service logger.</param>
+    /// <param name="eventBus">Optional change publisher.</param>
+    /// <param name="workspaceContext">Active workspace.</param>
+    /// <param name="submitOptions">Optional submit budget.</param>
+    /// <param name="time">The clock the stale-turn query's cutoff is read from; null uses <see cref="TimeProvider.System"/>.</param>
     /// <remarks>
     /// TR-MCP-MT-004: <paramref name="workspaceContext"/> is optional so the
     /// ingestion / batch import paths (which run without an HTTP scope) keep
@@ -42,13 +53,18 @@ public sealed class SessionLogService : ISessionLogService
     /// TR-MCP-TRIAGESTORE-002: <paramref name="submitOptions"/> sets the Submit SaveChanges
     /// and session-graph materialization budget. Null uses the 30 second default.
     /// Triage intake and replace/section SaveChanges stay at 5 seconds.
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added the optional <paramref name="time"/> clock, read for the stale-turn cutoff instead of DateTimeOffset.UtcNow, because hostile validation round 12 finding R12-F2 showed that the stale-turn unit case compared live-clock seeds with a live-clock cutoff (mock gate ug-r13z4-mockgate-b-1).</description></item>
+    /// </list>
     /// </remarks>
     public SessionLogService(
         McpDbContext db,
         ILogger<SessionLogService> logger,
         IChangeEventBus? eventBus = null,
         WorkspaceContext? workspaceContext = null,
-        IOptions<SessionLogSubmitOptions>? submitOptions = null)
+        IOptions<SessionLogSubmitOptions>? submitOptions = null,
+        TimeProvider? time = null)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -56,6 +72,24 @@ public sealed class SessionLogService : ISessionLogService
         _workspaceContext = workspaceContext;
         _turnContextExtractor = new SessionLogTurnContextExtractor();
         _submitCommandBudget = (submitOptions?.Value ?? new SessionLogSubmitOptions()).GetSubmitCommandBudget();
+        _time = time ?? TimeProvider.System;
+    }
+
+    /// <summary>
+    /// AC-FR-MCP-SESSIONLOGCTX-001-005, TR-MCP-USECASE-018 AC-006: binds plan filtering to an explicit normalizer,
+    /// allowing owned profile data without changing the public constructor's native normalization behavior.
+    /// </summary>
+    /// <param name="db">Session storage.</param>
+    /// <param name="logger">Service logger.</param>
+    /// <param name="eventBus">Optional change publisher.</param>
+    /// <param name="workspaceContext">Active workspace.</param>
+    /// <param name="submitOptions">Optional submit budget.</param>
+    /// <param name="normalizePlanFilter">Normalizes the query's explicit plan filter.</param>
+    internal SessionLogService(McpDbContext db, ILogger<SessionLogService> logger, IChangeEventBus? eventBus,
+        WorkspaceContext? workspaceContext, IOptions<SessionLogSubmitOptions>? submitOptions, Func<string, string> normalizePlanFilter)
+        : this(db, logger, eventBus, workspaceContext, submitOptions)
+    {
+        _normalizePlanFilter = normalizePlanFilter ?? throw new ArgumentNullException(nameof(normalizePlanFilter));
     }
 
     private string ResolveWorkspaceId() => WorkspaceIdentity.CanonicalizeWorkspaceId(_workspaceContext?.WorkspacePath);
@@ -467,6 +501,7 @@ public sealed class SessionLogService : ISessionLogService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): takes the stale-turn cutoff from the injected clock instead of DateTimeOffset.UtcNow (hostile validation round 12 finding R12-F2; mock gate ug-r13z4-mockgate-b-1). This member's own entry was added after the seventh holistic read before hostile validation round 13 (finding c5); until then the change was logged on the constructor and in an inline comment.</remarks>
     public async Task<SessionLogQueryResult> QueryAsync(SessionLogQueryRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -535,7 +570,7 @@ public sealed class SessionLogService : ISessionLogService
 
         if (!string.IsNullOrWhiteSpace(request.PlanFile))
         {
-            var planFilter = SessionLogTurnContextValidator.NormalizePlanFile(request.PlanFile);
+            var planFilter = _normalizePlanFilter(request.PlanFile);
             filtered = filtered.Where(s => s.Turns.Any(e => string.Equals(e.PlanFile, planFilter, StringComparison.Ordinal)));
         }
 
@@ -548,8 +583,10 @@ public sealed class SessionLogService : ISessionLogService
         if (!string.IsNullOrWhiteSpace(request.TurnStatus) || request.StaleOlderThanHours is > 0)
         {
             var statusFilter = string.IsNullOrWhiteSpace(request.TurnStatus) ? null : request.TurnStatus.Trim();
+            // TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): the cutoff comes from the service's clock, so a unit test
+            // supplies the reference time (hostile validation round 12 finding R12-F2).
             DateTimeOffset? cutoff = request.StaleOlderThanHours is > 0
-                ? DateTimeOffset.UtcNow.AddHours(-request.StaleOlderThanHours.Value)
+                ? _time.GetUtcNow().AddHours(-request.StaleOlderThanHours.Value)
                 : null;
             filtered = filtered.Where(s => s.Turns.Any(e => TurnMatchesStaleQuery(e, statusFilter, cutoff)));
         }

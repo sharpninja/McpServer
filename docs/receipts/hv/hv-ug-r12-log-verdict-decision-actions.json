@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "order": 9,
+      "type": "design_decision",
+      "status": "completed",
+      "description": "Substantive review decision: DISAGREE, accuracy 96, completeness 95, confidence 99. Three implementer findings: R12-F1 normalized environment aliases escape owned-instance isolation; R12-F2 four stale-age unit cases retain live-clock dependence; R12-F3 the first TR-MCP-SERVICEUPDATE-001 readback is misidentified. Claims UG3, UG4, UG8, UG11, UG12, UG13, UG17, UG28, UG30 and UG45 fail; 34 pass; zero unknown; UG18 overridden and UG20 out of scope. Actual gate results and supplied hashes pass. Operator-approved startup-health and recovery limitations remain accepted as scoped. No infrastructure failure lowers a score. The complete claim and closure text is being assembled for the mandatory final receipts and complete own-turn persistence.",
+      "filePath": "docs/receipts/hv/hv-ug-r12-chronology-Criteria.json"
+    }
+  ]
+}

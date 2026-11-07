@@ -1,0 +1,544 @@
+RECEIPT started=2026-11-06T06:02:22 ended=2026-11-06T06:02:50 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-AddedLineCitations-v3.ps1 sha256=409FD3F9DADAEE49BCCBAFF95DA11BD2F47415E8F8A4C72F400E25E5B7408D42
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Roots | src,build,tests
+HEAD f9b6bde8f08dc56e8fd40d9a22ce70657b7711bf
+Now: 2026-11-06T06:02:23 base=9b099716 roots=src | build | tests extension=.cs
+store ids=1453
+added lines=25001 files=374 untracked=0
+added-line citations: ids=101 absent=39 [FR-MCP-MEMORY-010, FR-MCP-MEMORY-011, FR-MCP-MEMORY-016, FR-MCP-MEMORY-017, FR-MCP-MEMORY-018, FR-X-001, TEST-MCP-FED-002, TEST-MCP-GH-006, TEST-MCP-MEMORY-010, TEST-MCP-MEMORY-011, TEST-MCP-MEMORY-012, TEST-MCP-MEMORY-014, TEST-MCP-MEMORY-016, TEST-MCP-MEMORY-017, TEST-MCP-MEMORY-018, TEST-MCP-MEMORY-019, TEST-MCP-PLUGIN-PSONLY-001, TEST-MCP-QBAGENTTOOL-001, TEST-MCP-QBCLI-001, TEST-MCP-QBSURFACE-004, TEST-MCP-REQSCOPE-005, TEST-MCP-REQSCOPE-REPL-001, TEST-MCP-TRIAGE-007, TEST-MCP-WARNREMEDIATION-001, TEST-NUKE-001, TEST-NUKE-002, TEST-NUKE-POWERSHELL-001, TEST-TRIAGE-003, TEST-X-001, TR-GH-013-001, TR-MCP-FEDERATION-001, TR-MCP-MEMORY-API-002, TR-MCP-MEMORY-BENCH-002, TR-MCP-MEMORY-JOBS-002, TR-MCP-MEMORY-MODEL-002, TR-MCP-MEMORY-SEARCH-002, TR-MCP-MEMORY-UI-002, TR-PLANNED-CORE-013, TR-X-001]
+  src/QBrainAi.Services/Memory/Commands/RunConsolidateJobCommandHandler.cs:12: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Memory/Commands/RunConsolidateJobCommandHandler.cs:12: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs:56: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs:65: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs:65: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs:91: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs:93: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs:18: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs:25: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs:25: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Services/GitHubCliService.cs:13: TR-PLANNED-CORE-013 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Services/GitHubCliService.cs:37: TR-PLANNED-CORE-013 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Services/SessionLogService.cs:21: TR-PLANNED-CORE-013 labeledHistoricalInFile=True
+  src/QBrainAi.Services/Services/SessionLogService.cs:42: TR-PLANNED-CORE-013 labeledHistoricalInFile=True
+  tests/Build.Tests/BuildTargetTests.cs:7: TEST-NUKE-001 labeledHistoricalInFile=True
+  tests/Build.Tests/BuildTargetTests.cs:139: TEST-MCP-PLUGIN-PSONLY-001 labeledHistoricalInFile=True
+  tests/Build.Tests/BuildTargetTests.cs:175: TEST-MCP-REQSCOPE-005 labeledHistoricalInFile=True
+  tests/Build.Tests/BuildTargetTests.cs:279: TEST-MCP-QBAGENTTOOL-001 labeledHistoricalInFile=True
+  tests/Build.Tests/BuildTargetTests.cs:287: TEST-MCP-QBAGENTTOOL-001 labeledHistoricalInFile=True
+  tests/Build.Tests/BuildTargetTests.cs:779: TEST-NUKE-002 labeledHistoricalInFile=True
+  tests/Build.Tests/MigrationAssemblyObsoleteWarningTests.cs:7: TEST-MCP-WARNREMEDIATION-001 labeledHistoricalInFile=True
+  tests/Build.Tests/PowerShellInvocationTests.cs:4: TEST-NUKE-POWERSHELL-001 labeledHistoricalInFile=True
+  tests/Build.Tests/PowerShellInvocationTests.cs:10: TEST-NUKE-POWERSHELL-001 labeledHistoricalInFile=True
+  tests/Build.Tests/PowerShellInvocationTests.cs:28: TEST-NUKE-POWERSHELL-001 labeledHistoricalInFile=True
+  tests/Build.Tests/PowerShellInvocationTests.cs:46: TEST-NUKE-POWERSHELL-001 labeledHistoricalInFile=True
+  tests/Build.Tests/QuadBrainDescriptorAbsenceTests.cs:4: TEST-MCP-QBSURFACE-004 labeledHistoricalInFile=True
+  tests/Build.Tests/QuadBrainDescriptorAbsenceTests.cs:13: TEST-MCP-QBSURFACE-004 labeledHistoricalInFile=True
+  tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs:64: FR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs:65: TR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs:66: TEST-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs:67: FR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs:67: TR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs:23: FR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs:24: TR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs:25: TEST-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs:26: FR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs:26: TR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs:25: TR-PLANNED-CORE-013 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs:8: TEST-MCP-REQSCOPE-REPL-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs:12: TEST-MCP-REQSCOPE-REPL-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:165: TR-MCP-FEDERATION-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs:57: TR-PLANNED-CORE-013 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs:62: TR-PLANNED-CORE-013 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs:14: TR-PLANNED-CORE-013 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryApiIdempotencyTests.cs:6: TEST-MCP-MEMORY-016 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryApiIdempotencyTests.cs:6: TR-MCP-MEMORY-API-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs:6: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs:6: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchConflictTests.cs:4: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchConflictTests.cs:4: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs:4: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs:4: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:7: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:7: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:12: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:12: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:12: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchInjectionTests.cs:4: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchInjectionTests.cs:4: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchIsolationTests.cs:6: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchIsolationTests.cs:6: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnDocsTests.cs:4: TEST-MCP-MEMORY-019 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs:7: TEST-MCP-MEMORY-019 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnPackTests.cs:6: TEST-MCP-MEMORY-019 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnScoringTests.cs:6: TEST-MCP-MEMORY-019 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs:6: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs:6: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:7: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:7: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs:4: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs:4: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchSafetyTests.cs:4: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchSafetyTests.cs:4: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchScoringTests.cs:6: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchScoringTests.cs:6: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:6: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:6: TR-MCP-MEMORY-BENCH-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:6: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:6: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchToolUseTests.cs:4: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchToolUseTests.cs:4: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs:6: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs:6: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryConsolidateJobTests.cs:20: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryConsolidateJobTests.cs:20: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryConsolidateJobTests.cs:52: TR-MCP-MEMORY-JOBS-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:7: TEST-MCP-MEMORY-011 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:7: TR-MCP-MEMORY-SEARCH-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:7: FR-MCP-MEMORY-011 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:13: TEST-MCP-MEMORY-011 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:13: TR-MCP-MEMORY-SEARCH-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:13: FR-MCP-MEMORY-011 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:14: TR-MCP-MEMORY-SEARCH-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:156: TR-MCP-MEMORY-SEARCH-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs:6: TEST-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs:6: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs:6: FR-MCP-MEMORY-018 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMcpSchemaTests.cs:6: TEST-MCP-MEMORY-016 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMcpSchemaTests.cs:6: TR-MCP-MEMORY-API-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs:9: TEST-MCP-MEMORY-010 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs:9: TR-MCP-MEMORY-MODEL-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs:13: TEST-MCP-MEMORY-010 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs:13: FR-MCP-MEMORY-010 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs:13: FR-MCP-MEMORY-010 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs:4: TEST-MCP-MEMORY-016 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs:4: FR-MCP-MEMORY-017 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs:7: TEST-MCP-MEMORY-016 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs:7: FR-MCP-MEMORY-017 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs:17: TEST-MCP-MEMORY-010 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs:17: TEST-MCP-MEMORY-011 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs:17: TEST-MCP-MEMORY-012 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs:17: TEST-MCP-MEMORY-014 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs:17: TEST-MCP-MEMORY-016 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs:14: TEST-MCP-MEMORY-010 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs:8: TEST-MCP-MEMORY-016 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs:12: FR-MCP-MEMORY-017 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs:12: TR-MCP-MEMORY-API-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs:8: TEST-MCP-MEMORY-016 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs:8: FR-MCP-MEMORY-010 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryToolsDiscoveryTests.cs:8: TEST-MCP-MEMORY-016 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryToolsDiscoveryTests.cs:8: FR-MCP-MEMORY-017 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs:4: TEST-MCP-MEMORY-017 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs:4: TR-MCP-MEMORY-UI-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs:4: TEST-MCP-MEMORY-017 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs:4: TR-MCP-MEMORY-UI-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiTests.cs:4: TEST-MCP-MEMORY-017 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiTests.cs:4: FR-MCP-MEMORY-016 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs:30: FR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs:33: FR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs:36: TR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs:39: TEST-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs:49: FR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs:53: FR-X-001 labeledHistoricalInFile=False
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:15: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:22: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:128: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:184: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:215: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:243: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:272: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:388: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:427: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:463: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:481: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:520: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:557: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:599: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:636: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:856: TEST-MCP-QBCLI-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs:16: TEST-MCP-FED-002 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:14: TR-PLANNED-CORE-013 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:14: TR-GH-013-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:104: TEST-MCP-GH-006 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:227: TEST-MCP-GH-006 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:270: TEST-MCP-GH-006 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:735: TEST-MCP-PLUGIN-PSONLY-001 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:10: TR-PLANNED-CORE-013 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:176: TEST-MCP-TRIAGE-007 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:202: TEST-MCP-TRIAGE-007 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:1140: TEST-TRIAGE-003 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:1179: TEST-TRIAGE-003 labeledHistoricalInFile=True
+  tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:1212: TEST-TRIAGE-003 labeledHistoricalInFile=True
+  FILE build/Build.TestDependencies.cs
+  FILE build/Build.TestGroups.cs
+  FILE build/Build.UpdateService.cs
+  FILE build/IntegrationLaneClassFilter.cs
+  FILE build/IntegrationLaneClassFilterContracts.cs
+  FILE build/IntegrationLaneExecution.cs
+  FILE build/IntegrationLaneFilter.cs
+  FILE build/IntegrationLaneFilterContracts.cs
+  FILE build/IntegrationLanePreconditionContracts.cs
+  FILE build/IntegrationLaneProjects.cs
+  FILE build/IntegrationLaneProjectsContracts.cs
+  FILE build/InteractiveSessionPrecondition.cs
+  FILE build/LinuxProviderTestProvisioner.cs
+  FILE build/LinuxServiceHelper.cs
+  FILE build/OllamaDetachedLaunch.cs
+  FILE build/OllamaInstallLayout.cs
+  FILE build/OllamaInstallLayoutContracts.cs
+  FILE build/ProviderTestProvisioningContracts.cs
+  FILE build/ProvisioningDownload.cs
+  FILE build/ProvisioningDownloadContracts.cs
+  FILE build/QuadBrainOllamaModel.cs
+  FILE build/TestGroupExecution.cs
+  FILE src/QBrainAi.Client/Models/RequirementsModels.cs
+  FILE src/QBrainAi.Client/WorkspaceIdentityPath.cs
+  FILE src/QBrainAi.GraphRag/Services/GraphRagService.cs
+  FILE src/QBrainAi.Repl.Core/AgentStdioProtocol.cs
+  FILE src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs
+  FILE src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs
+  FILE src/QBrainAi.Repl.Core/ReplCommandTimeout.cs
+  FILE src/QBrainAi.Repl.Core/RequirementTimestampText.cs
+  FILE src/QBrainAi.Repl.Core/RequirementsWorkflow.cs
+  FILE src/QBrainAi.Repl.Host/IMarkerFileSystem.cs
+  FILE src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs
+  FILE src/QBrainAi.Repl.Host/PhysicalMarkerFileSystem.cs
+  FILE src/QBrainAi.Services/Memory/Commands/RunConsolidateJobCommandHandler.cs
+  FILE src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs
+  FILE src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs
+  FILE src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs
+  FILE src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs
+  FILE src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs
+  FILE src/QBrainAi.Services/Services/AgentPluginVersionSources.cs
+  FILE src/QBrainAi.Services/Services/DesktopProcessSpawner.cs
+  FILE src/QBrainAi.Services/Services/DirectoryListingEntry.cs
+  FILE src/QBrainAi.Services/Services/DirectoryTreeWalker.cs
+  FILE src/QBrainAi.Services/Services/FederationEnvelopeSigner.cs
+  FILE src/QBrainAi.Services/Services/GitHubCliService.cs
+  FILE src/QBrainAi.Services/Services/MarkerFileService.cs
+  FILE src/QBrainAi.Services/Services/MemoryService.cs
+  FILE src/QBrainAi.Services/Services/SessionLogService.cs
+  FILE src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs
+  FILE src/QBrainAi.Services/Services/VoiceConversationService.cs
+  FILE src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs
+  FILE src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs
+  FILE tests/Build.Tests/BoundedProcessTests.cs
+  FILE tests/Build.Tests/BuildProjectSetTests.cs
+  FILE tests/Build.Tests/BuildTargetTests.cs
+  FILE tests/Build.Tests/DocsSyncG8OverlayTests.cs
+  FILE tests/Build.Tests/HandoffD3D5OverlayTests.cs
+  FILE tests/Build.Tests/InlineTheoryCoverage.cs
+  FILE tests/Build.Tests/IntegrationLaneClassFilterContract.cs
+  FILE tests/Build.Tests/IntegrationLaneClassFilterMockGateTests.cs
+  FILE tests/Build.Tests/IntegrationLaneClassFilterTests.cs
+  FILE tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs
+  FILE tests/Build.Tests/IntegrationLaneExecutionBindingTests.cs
+  FILE tests/Build.Tests/IntegrationLaneExecutionContractTests.cs
+  FILE tests/Build.Tests/IntegrationLaneFilterContract.cs
+  FILE tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs
+  FILE tests/Build.Tests/IntegrationLaneFilterTests.cs
+  FILE tests/Build.Tests/IntegrationLanePreconditionContract.cs
+  FILE tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs
+  FILE tests/Build.Tests/IntegrationLanePreconditionTests.cs
+  FILE tests/Build.Tests/IntegrationLaneProjectsContract.cs
+  FILE tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs
+  FILE tests/Build.Tests/IntegrationLaneProjectsTests.cs
+  FILE tests/Build.Tests/MigrationAssemblyObsoleteWarningTests.cs
+  FILE tests/Build.Tests/NukeParametersTests.cs
+  FILE tests/Build.Tests/OllamaInstallLayoutContract.cs
+  FILE tests/Build.Tests/OllamaInstallLayoutMockGateTests.cs
+  FILE tests/Build.Tests/OllamaInstallLayoutTests.cs
+  FILE tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs
+  FILE tests/Build.Tests/PowerShellInvocationTests.cs
+  FILE tests/Build.Tests/ProviderTestProvisioningContract.cs
+  FILE tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs
+  FILE tests/Build.Tests/ProviderTestProvisioningTests.cs
+  FILE tests/Build.Tests/ProvisioningDownloadContract.cs
+  FILE tests/Build.Tests/ProvisioningDownloadMockGateTests.cs
+  FILE tests/Build.Tests/ProvisioningDownloadTests.cs
+  FILE tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs
+  FILE tests/Build.Tests/QuadBrainDescriptorAbsenceTests.cs
+  FILE tests/Build.Tests/QuadBrainOllamaModelBindingTests.cs
+  FILE tests/Build.Tests/QuadBrainOllamaModelContractTests.cs
+  FILE tests/Build.Tests/ServiceRecoveryContractTests.cs
+  FILE tests/Build.Tests/ServiceStartupHealthContractTests.cs
+  FILE tests/Build.Tests/ServiceUnitPropertiesContractTests.cs
+  FILE tests/Build.Tests/ServiceUpdateTests.cs
+  FILE tests/Build.Tests/SyncAgentPluginsChecksumTests.cs
+  FILE tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs
+  FILE tests/Build.Tests/TestGroupExecutionBindingTests.cs
+  FILE tests/Build.Tests/TestGroupExecutionContractTests.cs
+  FILE tests/Build.Tests/TrCoverageConsistencyTests.cs
+  FILE tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs
+  FILE tests/Build.Tests/WarningSuppressionApprovalValidatorTests.cs
+  FILE tests/Build.Tests/WarningSuppressionValidationTargetTests.cs
+  FILE tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs
+  FILE tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs
+  FILE tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs
+  FILE tests/QBrainAi.McpAgent.Tests/TodoWorkflowTests.cs
+  FILE tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs
+  FILE tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/AuthRotationTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationBindingTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkContract.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterContractTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowIntegration2Tests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowMockValidationTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/StubMarkerFileReaderTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationBindingTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/RecordedTimeBindingTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/RecordedTimeContractTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedClock.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedPathIdentity.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksBindingTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderBindingTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs
+  FILE tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs
+  FILE tests/QBrainAi.Repl.IntegrationTests/AuthKeyAndWorkspaceTests.cs
+  FILE tests/QBrainAi.Repl.IntegrationTests/EndToEndFlowTests.cs
+  FILE tests/QBrainAi.Repl.IntegrationTests/Iteration1IntegrationTests.cs
+  FILE tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs
+  FILE tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs
+  FILE tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs
+  FILE tests/QBrainAi.Repl.IntegrationTests/TrustBootstrapFlowTests.cs
+  FILE tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/OllamaServerFixture.cs
+  FILE tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs
+  FILE tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Configuration/TriageConfigurationContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Controllers/FederationControllerTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139EighteenthEvidenceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationBindingTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/McpStdio/BrainSlotToolAbsenceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryApiIdempotencyTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchConflictTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchInjectionTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchIsolationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnDocsTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnPackTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnScoringTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchSafetyTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchScoringTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchToolUseTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryConsolidateJobTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMcpSchemaTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreB.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryToolsDiscoveryTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryMigrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpTestPaths.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/AgentPoolServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotAdoptedPartyKeySigningTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/FederationFanoutSyncServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityCrudTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/HandoffWorkspacePathsTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsFourteenthLinuxNativeTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogDenseGraphTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogOwnedHomeFilterContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogReplaceSectionRetryableTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizerRegistrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceSqliteTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseCqrsTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseDiagramGraphCqrsTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseExpandedScopeTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/AddSessionLogTurnPlanFileAndTodoIdMigrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthSqliteTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthLinuxNativeTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthSharedTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthWindowsNativeTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthSqliteConsumerTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/ProductMigrationApplyTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/ScriptedWorkspacePathNormalizer.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogTurnPlanFileTodoIdMigrationApplyTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureBindingTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseMigrationApplyTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathFacadeTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostRealTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollection.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProviderTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/StampedTimeContractTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProvider.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProviderTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/UnitTestPaths.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseCanvasUiAssetTests.cs
+  FILE tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs
+  FILE tests/Shared/TestRepositoryRoot.cs
+  FILE tests/TestSupport.Shared/OwnedInstanceProcess.cs
+  FILE tests/TestSupport.Shared/OwnedReplStart.cs
+  FILE tests/TestSupport.Shared/ScratchQBrainAi.cs
+  FILE tests/TestSupport.Shared/TemporaryInstanceChecks.cs

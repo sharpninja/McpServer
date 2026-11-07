@@ -1,0 +1,11 @@
+Now: 2026-11-02T23:09:53 before=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r9-final4-win-buildtests-1/build-tests (427) after=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r10-final-win-buildtests-1/build-tests (433)
+onlyBefore=0 onlyAfter=6 common=427
+onlyAfter Build.Tests=6
+--- only in before ---
+--- only in after ---
+Build.Tests | NukeBuild.Tests.QuadBrainOllamaModelBindingTests.SharedRule_SatisfiesMockGatedContract
+Build.Tests | NukeBuild.Tests.QuadBrainOllamaModelContractTests.ScriptedSelection_SatisfiesEveryRow
+Build.Tests | NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: "legacy first")
+Build.Tests | NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: "legacy only")
+Build.Tests | NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: "no trim")
+Build.Tests | NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: "skips only an unset canonical value")

@@ -13,6 +13,8 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// Windows. Uses a temporary root holding a named pipe; no mocks.
 /// </summary>
 [SupportedOSPlatform("linux")]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Linux")]
 public sealed class RequirementsFourteenthLinuxNativeTests
 {
     /// <summary>
@@ -20,6 +22,7 @@ public sealed class RequirementsFourteenthLinuxNativeTests
     /// WorkspaceContainedFileSystem opens with O_NONBLOCK and then requires an ordinary regular file. The open runs on a worker with a
     /// 5 s limit so a regression fails the test instead of hanging it; on that path a writer is opened to release the blocked reader.
     /// </summary>
+    /// <remarks>Integration: exercises native FIFO opening and worker deadlines on Linux (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task OpenFileForRead_LinuxFifoWithoutWriter_IsRejectedWithinBound()
     {

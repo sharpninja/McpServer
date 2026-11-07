@@ -3,11 +3,13 @@ using QBrainAi.Support.Mcp.Services;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-10: Deterministic or locked auto-rubric scoring.
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-10 (historical): Deterministic or locked auto-rubric scoring.
 /// </summary>
 public sealed class MemoryBenchScoringTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-10: exact/contains are deterministic; rubric uses a locked checklist.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void DeterministicOrDocumentedRubric()
     {

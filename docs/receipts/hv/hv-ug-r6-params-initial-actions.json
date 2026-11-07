@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "status": "completed",
+      "type": "design_decision",
+      "filePath": "docs/receipts/hv/hv-ug-r6-identity.json",
+      "order": 1,
+      "description": "Honor review-only scope and scanner override; verify every non-overridden claim against primary evidence. No edits to implementation, TODOs, requirements, triage, memories, or others turns."
+    }
+  ]
+}

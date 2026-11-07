@@ -1,0 +1,86 @@
+[
+  {
+    "id": "FR-MCP-074",
+    "type": "result",
+    "present": true,
+    "criterionCount": 0,
+    "path": "./docs/receipts/hv/hv-ug-r12-store-FR-MCP-074.txt"
+  },
+  {
+    "id": "TR-MCP-CI-001",
+    "type": "result",
+    "present": true,
+    "criterionCount": 0,
+    "path": "./docs/receipts/hv/hv-ug-r12-store-TR-MCP-CI-001.txt"
+  },
+  {
+    "id": "FR-MCP-PLUGINCORE-002",
+    "type": "result",
+    "present": true,
+    "criterionCount": 0,
+    "path": "./docs/receipts/hv/hv-ug-r12-store-FR-MCP-PLUGINCORE-002.txt"
+  },
+  {
+    "id": "TR-MCP-PLUGINCORE-002",
+    "type": "result",
+    "present": true,
+    "criterionCount": 0,
+    "path": "./docs/receipts/hv/hv-ug-r12-store-TR-MCP-PLUGINCORE-002.txt"
+  },
+  {
+    "id": "TEST-MCP-PLUGINCORE-002",
+    "type": "result",
+    "present": true,
+    "criterionCount": 0,
+    "path": "./docs/receipts/hv/hv-ug-r12-store-TEST-MCP-PLUGINCORE-002.txt"
+  },
+  {
+    "id": "FR-MCP-USECASE-018",
+    "type": "result",
+    "present": true,
+    "criterionCount": 5,
+    "path": "./docs/receipts/hv/hv-ug-r12-store-FR-MCP-USECASE-018.txt"
+  },
+  {
+    "id": "TR-MCP-USECASE-020",
+    "type": "result",
+    "present": true,
+    "criterionCount": 4,
+    "path": "./docs/receipts/hv/hv-ug-r12-store-TR-MCP-USECASE-020.txt"
+  },
+  {
+    "id": "TEST-MCP-USECASE-021",
+    "type": "result",
+    "present": true,
+    "criterionCount": 5,
+    "path": "./docs/receipts/hv/hv-ug-r12-store-TEST-MCP-USECASE-021.txt"
+  },
+  {
+    "id": "FR-TIMER-001",
+    "type": "result",
+    "present": true,
+    "criterionCount": 3,
+    "path": "./docs/receipts/hv/hv-ug-r12-store-FR-TIMER-001.txt"
+  },
+  {
+    "id": "TR-TIMER-LIFECYCLE-001",
+    "type": "result",
+    "present": true,
+    "criterionCount": 3,
+    "path": "./docs/receipts/hv/hv-ug-r12-store-TR-TIMER-LIFECYCLE-001.txt"
+  },
+  {
+    "id": "TEST-TIMER-001",
+    "type": "result",
+    "present": true,
+    "criterionCount": 3,
+    "path": "./docs/receipts/hv/hv-ug-r12-store-TEST-TIMER-001.txt"
+  },
+  {
+    "id": "TEST-MCP-SERVICEUPDATE-001",
+    "type": "result",
+    "present": true,
+    "criterionCount": 4,
+    "path": "./docs/receipts/hv/hv-ug-r12-store-TEST-MCP-SERVICEUPDATE-001.txt"
+  }
+]

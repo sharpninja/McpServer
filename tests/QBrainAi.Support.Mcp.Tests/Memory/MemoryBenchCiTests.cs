@@ -3,11 +3,13 @@ using QBrainAi.Support.Mcp.Services;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: CI gate and non-Grok optionality.
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): CI gate and non-Grok optionality.
 /// </summary>
 public sealed class MemoryBenchCiTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-29: Gate mode is off by default and fails when enabled on a miss.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void GateMode_Configurable()
     {
@@ -42,6 +44,8 @@ public sealed class MemoryBenchCiTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-48: Non-Grok bench cells are optional until H7a AGREE.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NonGrok_OptionalUntilH7a()
     {

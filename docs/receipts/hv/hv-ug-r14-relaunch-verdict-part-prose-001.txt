@@ -1,0 +1,218 @@
+HV_R14_RELAUNCH_FINAL prose part 1/4 SHA256 9D0D6A00A7974C51B962C3E4D9D760EA7F3ED92171C7B14669C24CDA83D53845
+2026-11-06T20:01:31 - DISAGREE. Accuracy 96; completeness 96; confidence 99.
+
+DISAGREE. No completed-task regression was found: all 61 tasks are open and the plan has no checked task entry. Supplied final gates are green and the original R13 findings are closed. Four record-correction findings and one operator policy decision prevent merge readiness. No build, restore or test was run by this reviewer.
+
+Claims: 53 PASS, 5 FAIL, 0 UNKNOWN, UG18 OVERRIDDEN and UG20 OUT OF SCOPE. Tasks: 45 AGREE, 13 DISAGREE, 3 out of scope. No task selected for regression.
+
+Class 1 project implementation review. Records head 0980a52b016386cfa6e131bd3efe9fc32e1c6e78; code head da11faa24a3b10400770dd9e6865c9606e294602; base 9b099716. Current gates are the da11faa2 set. The stopped first launch is not a verdict or evidence of acceptance.
+
+Validator: Codex CLI 0.167.0, gpt-6-astra, effort max. Own rollout /home/sharpninja/.codex/sessions/2026/11/06/rollout-2026-11-06T18-16-01-01a1b35c-ba09-7e80-9cba-06848c138e69.jsonl, turn_context line 10, timestamp 2026-11-07T00:16:02.4170000Z. Thread 01a1b35c-ba09-7e80-9cba-06848c138e69; turn 01a1b35c-bb3b-75b0-8a31-0d96d26b4266.
+
+Mandatory first actions: read add-profile skill and the one discovered non-skill profile Markdown file in full; read all 397 marker lines with credentials withheld; opened this independent session through the installed Codex wrapper with cache outside the worktree. Repeated profile loads include eight Global and three Workspace memories, excluding MEMORY-PROCESS-007. No Claude wrapper or raw REST was used.
+
+Every failure follows, with its location, evidence, remedy and responsibility. The four record defects require factual correction, not new product tests. R14-F4 proposes behavior-only acceptance/test coverage if structural project separation is selected.
+
+R14-F1 - Z15 binding chronology is understated (implementer edit).
+Location: docs/plans/2026-10-19-unit-suite-green.md:2425,2428,2444; docs/receipts/hv/unitgreen-r14-prelaunch.pr-description.md:228; brief UG59; relaunch self-review PHASE-BOUNDARIES
+Defect: The slip names only AnyRemovalCanAwait as binding code written before the mock gates, and the later binding step places the counting decorator after production. The sessionCounter parameter, resolver registration, pool wiring and all three counting types were already written before the red gate.
+Evidence: Original implementer transcript lines 164203-164206: 2026-11-06 10:15:19-10:15:37 local. Red gate began 10:16:30; green gate began 10:20:24. Both receipts pin VoiceConversationServiceTests.cs at E7CEE77D. The service file remained at its Z14 hash. Independently read in this reviewer turn; first-launch candidates were not adopted as verdict evidence.
+To pass: Correct every current chronology and slip disclosure to name the complete early binding block and its order. Preserve immutable receipts and commit messages, adding a dated correction where a current record relies on them.
+Affected claims: UG8, UG11, UG59. Affected tasks: 60.
+
+R14-F2 - The criterion is credited with a source-code fact it does not state (implementer edit).
+Location: docs/plans/2026-10-19-unit-suite-green.md:2423; docs/receipts/hv/unitgreen-r14-prelaunch.pr-description.md:488; docs/plans/2026-10-30-unit-suite-green-handoff.md:20; relaunch self-review:29; brief UG59
+Defect: These records say AC-006 states that the resolver is the only source of an interactive session. Its example states only the generic condition that no dependency handed the code a resource whose release awaits.
+Evidence: Live TR-MCP-USECASE-018 AC-006, 10818 characters, and the retained Z15 readback. The specific resolver fact appears in the source/test documentation, not in the criterion. Z16 separately supplies direct completion evidence.
+To pass: Attribute the resolver fact to the inspected code and test documentation, and attribute the generic resource check to AC-006. Do not rewrite the criterion merely to make this historical attribution true.
+Affected claims: UG8, UG11, UG59. Affected tasks: 60.
+
+R14-F3 - A claimed document-validation receipt does not exist (implementer edit).
+Location: Brief UG1 and UG59; docs/receipts/hv/unitgreen-r14-prelaunch.pr-description.md; docs/plans/2026-10-19-unit-suite-green.md:2479
+Defect: The current gate-assurance narrative cites ug-r14z15-doc-claim-checks-1.txt as a completed retained check. That file is absent. Declaring outstanding record defects in the addendum does not make the asserted check evidence.
+Evidence: Direct file inspection returned ItemNotFound; repository/file inventory contains no such receipt. Plan 27.43:2479 also explicitly says it does not exist. The current 30 TRX files and their counters/hashes were independently verified and remain valid.
+To pass: Remove the false assertion that the Z15 check is retained or ran as claimed. Either retain a new read-only audit of the final records with its real date/head, or explicitly state that no Z15 document-check receipt is evidence. Never backdate a replacement.
+Affected claims: UG1, UG8, UG11, UG59. Affected tasks: 60.
+
+R14-F4 - Approved mixed-project layout conflicts with the current project-separation rule (operator decision).
+Location: Global MEMORY-BESTPRACTICE-001 v2 rules 4.1 and 4.4; TR-MCP-NUKE-019 AC-2; build/Build.Test.cs; build/Build.TestDependencies.cs; tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:43; tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs
+Defect: The live rule requires unit and integration tests in separate projects across workspaces. This PR deliberately keeps both categories in projects selected by Test and MigrationIntegrationTests. Category filtering satisfies the approved lane contract but does not satisfy separate project ownership. No explicit exception to the newer rule was supplied or found.
+Evidence: Full live memory text was read through the Codex plugin. QBAgentHeartbeatOverlayTests has unit facts and an Integration-tagged heartbeat case in one project; CliTempVariablesTests has scripted unit cases and environment-writing Integration cases in Support.Mcp.Tests. Project sources and selectors were inspected, and the corresponding unit/lane TRX selections agree with the category filters. This is not evidence that an Integration case ran as a unit case.
+To pass: The operator must resolve the rule conflict. If separation applies to this PR, reconcile the affected requirements and project ownership, implement the structural move under BDPv4 without losing cases/assertions, and supply the replacement full gate evidence. Alternatively, explicitly approve a PR87 workspace exception retaining category separation. No scanner change is requested.
+Affected claims: WS1. Affected tasks: 8, 10, 14, 15, 21, 22, 23, 24, 25, 29, 30, 40.
+Proposed AC test-project-ownership: If project separation is selected: given a declared project role and a supplied case inventory, unit selection accepts only unit-owned projects containing unit cases, integration selection accepts only integration-owned projects containing integration cases, and valid selections preserve every intended case exactly once.
+Proposed test UnitProject_WithIntegrationCase_IsRejected: A scripted unit-project inventory containing an Integration case is rejected.
+Proposed test IntegrationProject_WithUnitCase_IsRejected: A scripted integration-project inventory containing a unit case is rejected.
+Proposed test SeparatedProjects_PreserveSelectedCases: Independent scripted valid inventories preserve all selected case identities, and wrong selectors that omit or duplicate cases are rejected.
+Operator option: Apply separate project ownership in PR87, reconcile requirements, implement and supply new gates.
+Operator option: Explicitly retain PR87 category-filtered mixed projects as a workspace exception. The existing functional evidence can then be assessed without this conflict.
+
+R14-F5 - Current prelaunch records misstate checks and historical run/commit attribution (implementer edit).
+Location: docs/receipts/hv/20261106T181559-unitgreen-r14.selfreview.md:79; docs/receipts/hv/unitgreen-r14-prelaunch.projected-problems.md:64,71,74
+Defect: The self-review says the launcher checks all three policy 7.9 sentences, but it checks only sentences two and three plus the manifest. Projected problems 130 and 137 attribute the hung-save case Integration move to slice W, but commit 765490a9 made it. Item 140 calls eight comparison lanes passing even though one had a failed hung-save case; their SQL Server cases passed.
+Evidence: Invoke-HvRound.ps1:92 and :104-133, read only. git log -G Category.*Integration over SessionLogTriageStoreTests.cs returns 765490a9035878c7888c911776289880493dacab. ug-r13z5-win-lane-elapsed-bound-durations-1.txt:25 records Failed=1 Passed=8 across nine runs, with ug-r13z4c-final-win-lane-1 the failed case; the corresponding failed lane is retained and declared elsewhere. These independently confirm eighteenth-read C5, C19 and C21.
+To pass: Correct the current assertions to the actual launcher checks, commit and successful-case scope. Propagate those factual corrections to every current copy; retain previous review artifacts as history. This requires record edits, not a product-code change or another test run.
+Affected claims: UG8, UG11. Affected tasks: none individually; current overall records.
+
+UNKNOWN list: empty. Operator-overridden observations: empty. Scanner coverage was not adjudicated or used to reduce any score. Hostile-environment runs remain out of scope.
+
+Current gate evidence: manifest 0EB859C9934D88F8FD3C992FB42992816CF1FF7920052CF9773E1719F355C6E2; 34 retained files, including 30 TRX files and four selected-projects files, hashed against both the manifest and committed blobs. Executed results join their definitions. Unit result multisets match across hosts; repeated theory display names are counted with multiplicity.
+
+- ug-r14z16-final-linux-buildtests-1: 563 passed, 0 failed, 0 skipped; 1 TRX; 563 distinct display names.
+- ug-r14z16-final-linux-lane-1: 741 passed, 0 failed, 0 skipped; 7 TRX; 739 distinct display names.
+- ug-r14z16-final-linux-unit-1: 4866 passed, 0 failed, 0 skipped; 7 TRX; 4852 distinct display names.
+- ug-r14z16-final-win-buildtests-1: 467 passed, 0 failed, 0 skipped; 1 TRX; 467 distinct display names.
+- ug-r14z16-final-win-lane-1: 718 passed, 0 failed, 0 skipped; 7 TRX; 716 distinct display names.
+- ug-r14z16-final-win-unit-1: 4866 passed, 0 failed, 0 skipped; 7 TRX; 4852 distinct display names.
+
+All claims, including the mandatory workspace-rule surface:
+
+UG1 FAIL: The current da11faa2 gates, 34 evidence-file hashes, 30 TRX counters/result-definition joins, seven-project selections and docs-only tail pass. Unit 4866/4866, lanes 741/718, Build.Tests 563/467, zero failures/skips. The additional assertion of a retained Z15 document-check receipt fails R14-F3.
+
+UG2 PASS: Reviewed requirements, mock-gate, binding and commit chronology for the implementation slices, including Z16 red control, green mock gate with unchanged production, then service/binding. Retrospective receipts identify their provenance; failed attempts are not used as green gates. Z15 early binding accounting is separately R14-F1; its production still followed the green mock gate.
+
+UG3 PASS: Inspected unit callers and clock/environment seams, timing and background sweeps and their exclusions. Z16 observes the actual triggered cleanup task before decisions; D8/D9 use scripted boundaries. Unit multisets agree on both hosts. No remaining environment-, platform- or elapsed-time-dependent unit outcome was established. Project ownership is separately WS1.
+
+UG4 PASS: TR-MCP-NUKE-019 AC-1/2/3/6 match the seven-project selection, two Support integration classes, logged filters and owned-instance checks. All selected lane results pass. The newer separate-project policy conflict is WS1, not a false statement that these ACs or lane counts failed.
+
+UG5 PASS: Directory.Packages.props pins and retained Compile/Test logs support QUALITY ac-21, including Roslyn 5.9.0 and repaired cryptography versions. Current gate logs report zero NU190x without an audit-disable override; no-op restore limitations remain disclosed.
+
+UG6 PASS: PATHNORM FR/TR/TEST records and mappings are present. Explicit host inputs, the independent path contract and real binding preserve native/foreign path decisions without choosing expected results from the executing host. Current unit results include the cases.
+
+UG7 PASS: Live effective requirements, selected dedicated getters, criterion chains and all 61 task text hashes/states match the supplied snapshot and amendments. Retired FR-USECASE-016/017 are absent through both routes. Independent changed-line citation inspection found 101 IDs, 39 absent, all historical labels or three fixture-data IDs. Follow-up TODO states and BUG-139 links agree.
+
+UG8 FAIL: The full plan and amendments were read. The revised history rule resolves superseded current values and explicit historical corrections. It cannot cure inaccurate Z15 chronology, attribution, a nonexistent check or false current assurance copies. See R14-F1, F2, F3 and F5.
+
+UG9 PASS: Takeover commit 11681680 and its recorded source c2125c42 preserve the 16 transferred files; the separate C4 reversal and ownership ruling are retained. Subsequent modifications belong to this branch and are represented in its history.
+
+UG10 PASS: 131 first-parent commits carry the required author/model signing line; this is not a cryptographic signature claim. Current plan/full PR have no prohibited tables or en/em dashes. Changed blobs contain no current marker key. Historical scripting exceptions remain disclosed; TRX committed bytes match hashes. No reviewer tracked edit or push occurred.
+
+UG11 FAIL: Self-review, projected problems, PR summary/full description and handoff were read in full. R13 fixes are disclosed, but R14-F1/F2/F3/F5 leave false current factual statements. The launch addendum honestly declares open defects; it does not waive their correction.
+
+UG12 PASS: Latest D-B at plan 27.42-27.43 and the addendum conditions criterion satisfaction on overall AGREE, task completion on each task AGREE, and records both TODO and plan updates. FR-040 waits for post-merge server plus REPL deployment/live read; startup-health-wait remains excluded. No current task/criterion was prematurely set.
+
+UG13 PASS: Reattacked original findings and repaired siblings against current source, records and supplied evidence. R13-F1 is closed through Z12-Z16; R13-F2 is independently confirmed by 18 matching compile pins and no binding pins. The detailed closure list separates original repairs from new record and policy findings.
+
+UG14 PASS: DirectoryTreeWalker, AgentPluginVersionSources, marker resolution and injected read errors preserve the owned source seam and fallback behavior. Real-profile/native boundaries are Integration and their selected lane cases pass; scripted unit resolution is independent of ambient plugin caches.
+
+UG15 PASS: LocalDB default timeout and the four-class nonparallel collection remain. Windows lane selected SQL Server cases are present and passed. Historical command-timeout failures and the operator-selected rerun are not recast as successful first runs.
+
+UG16 PASS: The pg_ctl quiet start remains. Current Windows lane result identities/multiplicities match the previous complete lane, with all 718 results. No lost result or definition-only substitute is counted.
+
+UG17 PASS: Operator choices were compared with the plan, code, store and transcript. Declared departures, counts and later rulings are retained. No additional scanner work is required or scored. The newer project-ownership conflict is separately exposed for an operator decision in WS1.
+
+UG18 OVERRIDDEN: UnitSuitePlatformScanner implementation, tests and coverage descriptions are wholly excluded by the explicit operator override.
+
+UG19 PASS: Handoff and memory harnesses give concurrent contexts separate connections to owned SQLite files and preserve assertions. Memory binding cites the present mapped FR/TR/TEST-MCP-MEMORY-002. Current unit evidence contains the cases.
+
+UG20 OUT OF SCOPE: Hostile-environment runs are excluded by the explicit operator rulings. Their absence is neither a failure nor an evidence gap for this review.
+
+UG21 PASS: DirectoryTreeWalker checks linked scan roots and ancestors before traversal and skips linked descendants. Scripted reachability controls and native integration bindings remain; the supplied lane evidence covers the approved native cases.
+
+UG22 PASS: CliTempVariables owns all five resolver/fallback names, separates primary from fallback folders and restores exact prior values, including exceptions. Caller inspection and Process environment serialization checks cover the four CLI resolver families. Current unit/lane evidence contains the relevant cases.
+
+UG23 PASS: ReplCommandTimeout accepts only bounded positive whole seconds and otherwise defaults; both call sites use the injected read seam. Scripted wrong parsers/call sites are rejected and current unit TRX includes their bindings.
+
+UG24 PASS: WindowsJunction uses native in-process creation; the buffer contract and controls remain. The sibling traversal fixture uses the same helper. Native cases are correctly selected by the Windows lane, with no process-launch timing substituted for the fixture outcome.
+
+UG25 PASS: Moved marker-walk criteria are present on FR-MCP-REPL-007; TR-MCP-REPL-008 no longer duplicates them. Scripted filesystem walk cases and production binding preserve precedence and refusal behavior. Historical AC IDs are interpreted through the recorded move.
+
+UG26 PASS: Develop is an ancestor of the reviewed head; legacy read-only merge-tree of develop into HEAD is empty, exit 0. d43c1d12 is docs-only. The manifest inventories 23 projects and supplies every selected unit/lane project; held-out integration scope is explicit. Citation labels were independently checked.
+
+UG27 PASS: DesktopProcessSpawner compares explicitly supplied maps; equal values are omitted and changed values retained. The ambient overload delegates. The GH_TOKEN integration case owns/restores its baseline and is serialized with environment writers. Scripted positive/negative contracts and both-host results remain.
+
+UG28 PASS: Inspected TemporaryInstanceChecks, OwnedInstanceProcess, OwnedReplStart, ScratchQBrainAi, the factory and stdio starts. Canonical/legacy sections, configuration-key aliases and host-prefixed owned aliases cannot select an outside database. The factory guard runs before opening the connection. Current contracts and lane cases pass.
+
+UG29 PASS: Lane selector returns seven projects and only the two approved Support integration class names; filters compose the host predicate and validated class identifiers. The Support integration TRX has exactly those two classes and six cases on each host. The project-layout policy is separate WS1.
+
+UG30 PASS: Slices I-O and their contract/binding receipts match the final source. Owned starts, retry/port handling, QuadBrain rounds, foreign workspace handling, test changes and scrub are traceable. Lab identifiers in touched files are generic, approved exceptions or published identities; held-out work remains held out. Current policy conflict is WS1.
+
+UG31 PASS: TestGroups composes named groups from lane pieces, joins executed results to definitions and rejects missing classes, empty/unknown groups, failures and skips. Contracts and retained negative gate discriminate the failures. Build.Tests execution through this target follows the specific approved TRs.
+
+UG32 PASS: Engine-setting selection, 22-row provider contract, exact path handling and four reviewed GetFullPath uses match the source. Failed binding r-1 is declared and task 32 cites r-2. No absent direct-GetFullPath criterion is claimed satisfied.
+
+UG33 PASS: Stored timestamp conversion, earliest mapping link and REST/client/REPL adapters match the independent contracts. Exact complete-date parsing preserves UTC/null semantics. Live deployment remains unverified because the plugin REPL predates the fix; task 33 proves implementation, not live deployment or criterion satisfaction.
+
+UG34 PASS: Restored mapping edges are backed by record references; deleted records are retained in the reconciliation receipt and absent from the effective view. BUG-139 now links the replacement FR/TRs. Projections are a declared historical generated snapshot; current ValidateTraceability passes.
+
+UG35 PASS: Generated artifacts use owned external output folders. The 39-row contract and wrong checks cover relative/dot/device/cross-syntax/UNC alias cases. Memory benchmark stubs retain their assertions. Benchmark tracked files are unchanged by current lanes; accepted host event-log disclosure is outside this criterion review.
+
+UG36 PASS: Changed-member documentation and dated-entry retrofits were checked against changed files and canonical citations. Later field/member supplements and type-level logging limits are accurately disclosed. No unrelated retrospective retrofit is required by the live rule.
+
+UG37 PASS: Slice T retains executed-class identity, exact JSON nonce, syntax-aware paths, complete stored dates and one Ollama model rule. Mock and binding pins/negative controls discriminate the original failures. Strengthened criteria and the sixth approved sibling write are recorded.
+
+UG38 PASS: Slice U exact date formats, explicit path-root identity and six recorded-time cases on ScriptedClock hold. Mock/binding contract pins and the failed compile history are retained. No missing date component is filled from the read clock.
+
+UG39 PASS: GraphRagService and MemoryService stamp through supplied clocks; changed tests assert exact scripted instants. Auth/storage fixtures use fixed dates. The older incomplete sweep is explicitly historical; subsequent sweep exclusions were independently examined.
+
+UG40 PASS: Lease renewal is observed and compared to exact scripted expiry. The heartbeat and watcher cases retain assertions and are Integration-tagged; historical by-name transfers agree. This functional classification repair holds; its project ownership remains subject to R14-F4.
+
+UG41 PASS: Slice X output guard refuses device paths and syntax aliases; marker callback cancellation is explicit rather than a 100 ms race. Watcher historical citation is labeled. The stopped R11 review has no fabricated verdict, and later ready/draft history is disclosed.
+
+UG42 PASS: Slice Y applies Windows alias rules to UNC roots and preserves containment behavior. The 39-row contract and rejected checks remain. Its margin review limitation and later Z/Z2/Z3 corrections are declared; constructor/docs fixes are evaluated at the final head.
+
+UG43 PASS: Slice Z assertions remain, timeout increases and one separator source match the diff. No new criterion was falsely claimed. Later sum-based corrections supersede the original largest-delay measure. The final timing inventory and current TRX support the repaired scope.
+
+UG44 PASS: Z2 uses the sum of delays; Z3 later covers conditional SQLite retries. The 30 s and 15 s bounds remain above the stated summed paths, with the overcount and cleanup-only swallowed timeout disclosed. Binding and historical by-name results agree.
+
+UG45 PASS: Repeated unit properties are joined in order and bound to the same contract rows. Health wait uses scripted probes; its known failure to prove a full elapsed ten minutes remains explicitly outside D-B by operator choice. Conditional-wait changes and deployment outage/recovery history are retained.
+
+UG46 PASS: Failed-update recovery restores then retargets/reloads after replacement; six contract rows and wrong recoveries bind the production path. The operator accepted the declared broader replacement/start-limit gaps in D-B. No build code changed after 52e6d627; later changes are elsewhere.
+
+UG47 PASS: Z4 key identity and age decisions bind independent contracts; the original raw-prefix and live-clock defects are fixed. D8/D9 and Z16 close the previously missed background sibling. R12-F3 receipt chain and historical-label correction hold; failed lane/compile attempts remain failed history.
+
+UG48 PASS: Ordinal inherited names, owned-key replacement and read-only REPL start are in place. Four storage-budget Integration cases assert the exact budget and preserve persistence/classification checks; their reduced promptness claim is disclosed and paired with budget timing cases. Incorrect projected-history attribution is separately R14-F5.
+
+UG49 PASS: Z6 compares both host-prefixed and unprefixed owned settings without collapsing unrelated inherited names or rejecting the intended two host prefixes. Rows and wrong implementations discriminate the sibling defect. Event-log writes are declared under the explicit out-of-scope ruling.
+
+UG50 PASS: Z7 is documentation-only for 34 members. Independent raw-blob hashing confirms all 18 compile pins match 1d77a79c and the binding has no pins; timestamps prove only post-run pinning, not compile-time bytes. Committed-head gates provide the final compilation evidence.
+
+UG51 PASS: Z8 generic proxy identifiers preserve relations and assertions, and Z8b documents the two mapping methods. The syntax-aware documentation audit and retained diff/pins support the declared counts and limits. R13-F2 descriptions are corrected with post-run pin limits.
+
+UG52 PASS: Z9 replaces corresponding lab IDs consistently in four touched federation files. The assertion literal retains the same relationship after renaming. Earlier limited-pattern sweep is not credited with the later classified sweep coverage. Mapping-entry history is preserved after Z11.
+
+UG53 PASS: Z10 removes the lab-account summary and corrects documentation; the fifth shipped-config exception has the cited operator ruling and QBRAIN-006 backing. The v3 citation audit covers added build files; independent current audit reproduces the 101/39 ID result.
+
+UG54 PASS: Z11 keeps original dated entries beside explicit corrections and adds the later accurate wording. Store scrub preserves criterion outcomes/flags; the two lab-bound criteria remain unset. Published-identity exceptions and generated-projection limits are disclosed.
+
+UG55 PASS: Z12 adds the optional production clock, manual test timers and D8/D9/lifecycle contracts before binding. Rechecked sweep exclusions do not establish another uncontrolled lifecycle outcome. Current Z16 assertions strengthen completion observation beyond the original sentinel evidence.
+
+UG56 PASS: R13-F2 pin correction is independently verified. Task 57 timing and late draft transition remain declared. The 8c944541 gates are historical and their supplied file/hash/count claims are distinct from current da11faa2 evidence. Current task count resolves to 61.
+
+UG57 PASS: Z13 deferred-pass negative control and sentinel trace match retained red/green evidence. Its XML-only production change and early sentinel binding declaration are accurate. Later Z14-Z16 changes supersede the original completion inference and constructor exception wording.
+
+UG58 PASS: Z14 changed documentation and two assertion messages only. The NullReferenceException claim is explicitly corrected by Z15 and the no-await condition is ultimately enforced by Z16 direct completion. Historical Z14 is not treated as proof of those later fixes.
+
+UG59 FAIL: The Z15 counter/controls and constructor correction are present and pass current evidence; Z16 fixes their completion-observation limitation. However this compound claim retains the false early-binding chronology, criterion attribution and nonexistent document-check citation. See R14-F1/F2/F3.
+
+WS1 FAIL: Mandatory workspace-rule surface: the current separate-project rule conflicts with the approved mixed-project selectors and category moves. The operator must choose structural separation or an explicit workspace exception. This is outside the scanner override and does not impugn the passing gate counts.
+
+Original finding closure and regression reattack:
+
+R13-F1 PASS: The real cleanup timer/clock is replaced in unit fixtures by TriggeredTimerTimeProvider; Z16 observes the actual pass completion and rejects unreported awaits. D8/D9 boundaries and all named siblings are covered.
+
+R13-F2 PASS: Independent raw-blob audit confirms 18 Z7 compile pins match 1d77a79c, written after the compile; binding pins none. Corrected current descriptions preserve that limit.
+
+R12-F1 PASS: Configuration-key aliases, exact unrelated names and host-prefix owned aliases are covered by Z4/Z6 contracts and the actual owned starts.
+
+R12-F2 PASS: Named age decisions and the previously missed voice background sibling now use scripted clocks/triggers and direct completion observation.
+
+R12-F3 PASS: The retained five/six/seven/eight-criterion service-update chain identifies the first receipt correctly.
+
+R11-F1 PASS: Device paths, cross-syntax roots and Windows segment/UNC aliases are refused by the 39-row bound output contract.
+
+R11-F2 PASS: Marker-stub cancellation follows the asserted callback instead of racing it against a 100 ms timer.
+
+R11-F3 PASS: Watcher citation is explicitly historical; current changed-line citation audit found no unclassified absent ID.
+
+R10-F1 PASS: Exact complete-date formats reject year/month-only text and incidental year digits.
+
+R10-F2 PASS: Root kind and identity are retained; drive/UNC compare case-insensitively and POSIX ordinally.
+
+R10-F3 PASS: Original recorded/stamped times and later age/background siblings use independent scripted inputs; no remaining sibling was established.
+
+R9-F1 PASS: A named class counts only through an executed result joined to its definition by test ID.
+
+R9-F2 PASS: Health check compares the entire JSON nonce field and rejects longer/other-field/malformed responses.
+
+R9-F3 PASS: Output identity follows syntax, roots and Windows alias rules, with independent rejected 

@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="f11c7a1e-dbec-441d-baa4-ef051d69ea8d" name="@LAB-OMARCHY 2026-11-02 10:56:34" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-02T10:56:34.4714425-06:00" queuing="2026-11-02T10:56:34.4714426-06:00" start="2026-11-02T10:56:32.5062083-06:00" finish="2026-11-02T10:56:34.4767420-06:00" />
+  <TestSettings name="default" id="fc6acc56-b1c9-4d1e-b909-6d9d065e16c7">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-02_10_56_34" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="2c05632e-0d5f-4000-bcb2-a513280b790a" testId="e5dcb7bb-b096-f755-fcac-a1074f4d2bee" testName="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests.WrongProcessAdapters_AreRejected" computerName="LAB-OMARCHY" duration="00:00:00.0249680" startTime="2026-11-02T10:56:34.2529055-06:00" endTime="2026-11-02T10:56:34.2889471-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2c05632e-0d5f-4000-bcb2-a513280b790a" />
+    <UnitTestResult executionId="2d32b41d-bb71-4469-a2fa-b3bf7cbeb2ec" testId="984a99a2-7db9-0d6a-2dd2-6011cbd6046e" testName="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests.RealProcessAdapter_SatisfiesMockGatedRowsAndAtomicity" computerName="LAB-OMARCHY" duration="00:00:00.0092773" startTime="2026-11-02T10:56:34.2968682-06:00" endTime="2026-11-02T10:56:34.3062324-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2d32b41d-bb71-4469-a2fa-b3bf7cbeb2ec" />
+    <UnitTestResult executionId="f2489bca-8762-4950-badf-e23e9ebf1497" testId="26e0e889-7ae7-7510-54fb-13b63a06879d" testName="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests.ScriptedProcessAdapter_SatisfiesEveryRowAndAtomicity" computerName="LAB-OMARCHY" duration="00:00:00.0003022" startTime="2026-11-02T10:56:34.3104670-06:00" endTime="2026-11-02T10:56:34.3108067-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f2489bca-8762-4950-badf-e23e9ebf1497" />
+    <UnitTestResult executionId="fae24645-70bc-4f8c-bebb-7af6a6d82110" testId="593cac9d-b059-f12e-a858-67ca1441db72" testName="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests.RealProviderCheck_SatisfiesMockGatedRows" computerName="LAB-OMARCHY" duration="00:00:00.0011392" startTime="2026-11-02T10:56:34.3067126-06:00" endTime="2026-11-02T10:56:34.3079017-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fae24645-70bc-4f8c-bebb-7af6a6d82110" />
+    <UnitTestResult executionId="8f1b08db-6ff9-4deb-922a-a33dd741ec8b" testId="940c6e3d-0ce5-ef34-5a8c-b58b12329680" testName="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests.ScriptedProviderCheck_SatisfiesEveryRow" computerName="LAB-OMARCHY" duration="00:00:00.0001008" startTime="2026-11-02T10:56:34.3099339-06:00" endTime="2026-11-02T10:56:34.3100584-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8f1b08db-6ff9-4deb-922a-a33dd741ec8b" />
+    <UnitTestResult executionId="acfeacd4-b52c-4695-9a67-35f511bef979" testId="f6f0c452-2632-ced8-c29d-82b8f69406e6" testName="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests.WrongProviderChecks_AreRejectedForEveryRow" computerName="LAB-OMARCHY" duration="00:00:00.0009332" startTime="2026-11-02T10:56:34.3086173-06:00" endTime="2026-11-02T10:56:34.3095873-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="acfeacd4-b52c-4695-9a67-35f511bef979" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests.WrongProcessAdapters_AreRejected" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="e5dcb7bb-b096-f755-fcac-a1074f4d2bee">
+      <Execution id="2c05632e-0d5f-4000-bcb2-a513280b790a" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests" name="WrongProcessAdapters_AreRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests.RealProcessAdapter_SatisfiesMockGatedRowsAndAtomicity" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="984a99a2-7db9-0d6a-2dd2-6011cbd6046e">
+      <Execution id="2d32b41d-bb71-4469-a2fa-b3bf7cbeb2ec" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests" name="RealProcessAdapter_SatisfiesMockGatedRowsAndAtomicity" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests.RealProviderCheck_SatisfiesMockGatedRows" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="593cac9d-b059-f12e-a858-67ca1441db72">
+      <Execution id="fae24645-70bc-4f8c-bebb-7af6a6d82110" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests" name="RealProviderCheck_SatisfiesMockGatedRows" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests.WrongProviderChecks_AreRejectedForEveryRow" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="f6f0c452-2632-ced8-c29d-82b8f69406e6">
+      <Execution id="acfeacd4-b52c-4695-9a67-35f511bef979" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests" name="WrongProviderChecks_AreRejectedForEveryRow" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests.ScriptedProcessAdapter_SatisfiesEveryRowAndAtomicity" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="26e0e889-7ae7-7510-54fb-13b63a06879d">
+      <Execution id="f2489bca-8762-4950-badf-e23e9ebf1497" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests" name="ScriptedProcessAdapter_SatisfiesEveryRowAndAtomicity" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests.ScriptedProviderCheck_SatisfiesEveryRow" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="940c6e3d-0ce5-ef34-5a8c-b58b12329680">
+      <Execution id="8f1b08db-6ff9-4deb-922a-a33dd741ec8b" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceProviderSettingContractTests" name="ScriptedProviderCheck_SatisfiesEveryRow" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="e5dcb7bb-b096-f755-fcac-a1074f4d2bee" executionId="2c05632e-0d5f-4000-bcb2-a513280b790a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="984a99a2-7db9-0d6a-2dd2-6011cbd6046e" executionId="2d32b41d-bb71-4469-a2fa-b3bf7cbeb2ec" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="26e0e889-7ae7-7510-54fb-13b63a06879d" executionId="f2489bca-8762-4950-badf-e23e9ebf1497" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="593cac9d-b059-f12e-a858-67ca1441db72" executionId="fae24645-70bc-4f8c-bebb-7af6a6d82110" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="940c6e3d-0ce5-ef34-5a8c-b58b12329680" executionId="8f1b08db-6ff9-4deb-922a-a33dd741ec8b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f6f0c452-2632-ced8-c29d-82b8f69406e6" executionId="acfeacd4-b52c-4695-9a67-35f511bef979" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="6" executed="6" passed="6" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.24]   Discovering: QBrainAi.Repl.Core.Tests
+[xUnit.net 00:00:00.94]   Discovered:  QBrainAi.Repl.Core.Tests
+[xUnit.net 00:00:01.19]   Starting:    QBrainAi.Repl.Core.Tests
+[xUnit.net 00:00:01.32]   Finished:    QBrainAi.Repl.Core.Tests (ID = '9ec79100a80453498340eecd008c974fb7e3f26dc7852d8f593b2110a3aa358a')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

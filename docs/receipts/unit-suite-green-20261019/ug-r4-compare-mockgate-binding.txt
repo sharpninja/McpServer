@@ -1,0 +1,21 @@
+Now: 2026-10-20T18:48:02 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r4-mockgate-1 (4498) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r4-binding-1 (4511)
+onlyBefore=1 onlyAfter=14 common=4497
+onlyBefore QBrainAi.Support.Mcp.Tests=1
+onlyAfter QBrainAi.Support.Mcp.Tests=14
+--- only in before ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.HermeticUserProfileFixtureTests.AgentPluginUserProfileOverride_IsAnEmptyTemporaryProfile
+--- only in after ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerAliasScopeTests.ScriptedCase_Scanner_ReportsTheRequiredFindings(name: "file-scoped-namespace-alias")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerAliasScopeTests.ScriptedCase_Scanner_ReportsTheRequiredFindings(name: "namespace-static-import")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerAliasScopeTests.ScriptedCase_Scanner_ReportsTheRequiredFindings(name: "nested-namespace-override")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerAliasScopeTests.ScriptedCase_Scanner_ReportsTheRequiredFindings(name: "non-platform-alias-named-like-os")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerAliasScopeTests.ScriptedCase_Scanner_ReportsTheRequiredFindings(name: "reverse-order-alias")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerAliasScopeTests.ScriptedCase_Scanner_ReportsTheRequiredFindings(name: "sibling-namespace-alias")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.HermeticUserProfileFixtureTests.AgentPluginVersionSourcesOverride_IsTheHermeticAssemblySources
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.AgentPluginVersionSourcesTests.AssemblySources_AreHermetic
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.AgentPluginVersionSourcesTests.BuildDefaultAgentPlugins_GivenSources_ResolvesEveryAgentFromThem
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.AgentPluginVersionSourcesTests.ScriptedCase_ProductionResolution_YieldsTheRequiredVersion(name: "environment-root-first")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.AgentPluginVersionSourcesTests.ScriptedCase_ProductionResolution_YieldsTheRequiredVersion(name: "no-profile")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.AgentPluginVersionSourcesTests.ScriptedCase_ProductionResolution_YieldsTheRequiredVersion(name: "nothing-falls-back")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.AgentPluginVersionSourcesTests.ScriptedCase_ProductionResolution_YieldsTheRequiredVersion(name: "profile-cache-next")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.AgentPluginVersionSourcesTests.ScriptedCase_ProductionResolution_YieldsTheRequiredVersion(name: "sibling-root-next")

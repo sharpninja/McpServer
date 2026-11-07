@@ -1,0 +1,43 @@
+RECEIPT 2026-10-20T21:35:01 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-10-20T21:31:10 host=PAYTON-LEGION2 user=kingd session=0 interactive=False
+REF origin/fix/unit-suite-green-20261019=97b7811491ccb3e338804a01d0bf28e4ecfe273a expected=97b7811491ccb3e338804a01d0bf28e4ecfe273a match=True
+RESTORE generated .nuke/build.schema.json
+HEAD 97b7811491ccb3e338804a01d0bf28e4ecfe273a expected=97b7811491ccb3e338804a01d0bf28e4ecfe273a match=True
+TARGET Test begin 2026-10-20T21:31:11
+TARGET Test exit=0 end 2026-10-20T21:35:01 log=C:\Users\kingd\AppData\Local\Temp\unit-green-r3-ssh\Test-ug-r4-win-test-ssh-3.log
+  LOG 21:35:01 [DBG]   Passed QBrainAi.QBAgent.Tests.QBAgentChatClientFactoryTests.BuildEndpoint_AlreadyV1_NotDoubled [< 1 ms]
+  LOG 21:35:01 [DBG]   Passed QBrainAi.QBAgent.Tests.QBAgentChatClientFactoryTests.BuildEndpoint_AppendsV1 [< 1 ms]
+  LOG 21:35:01 [DBG]   Passed QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_RunnerThrows_HidesGlyph [83 ms]
+  LOG 21:35:01 [DBG]   Passed QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.Paint_DoesNotContainNewline [< 1 ms]
+  LOG 21:35:01 [DBG] [xUnit.net 00:00:00.96]   Finished:    QBrainAi.QBAgent.Tests (ID = 'ea9a373ba2f28ce215543719b30c9a215c3b49e9b7800d4e660e021af982a2d4')
+  LOG 21:35:01 [DBG]   Passed QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.Frames_Rotate [1 ms]
+  LOG 21:35:01 [DBG]   Passed QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines [92 ms]
+  LOG 21:35:01 [DBG] Results File: F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\TestResults\ug-r4-win-test-ssh-3\unit\QBrainAi.QBAgent.Tests\QBrainAi.QBAgent.Tests.trx
+  LOG 21:35:01 [DBG] 
+  LOG 21:35:01 [DBG] Test Run Successful.
+  LOG 21:35:01 [DBG] Total tests: 94
+  LOG 21:35:01 [DBG]      Passed: 94
+  LOG 21:35:01 [DBG]  Total time: 1.4268 Seconds
+  LOG ​
+  LOG ═══════════════════════════════════════
+  LOG Target             Status      Duration
+  LOG ───────────────────────────────────────
+  LOG Restore            Succeeded       0:11
+  LOG Compile            Succeeded       2:00
+  LOG Test               Succeeded       1:32
+  LOG ───────────────────────────────────────
+  LOG Total                              3:44
+  LOG ═══════════════════════════════════════
+  LOG ​
+  LOG Build succeeded on 10/20/2026 9:35:01 PM. ＼（＾ᴗ＾）／
+TRX \unit\QBrainAi.Client.Tests\QBrainAi.Client.Tests.trx total=306 executed=306 passed=306 failed=0 notExecuted=0
+TRX \unit\QBrainAi.Cqrs.Tests\QBrainAi.Cqrs.Tests.trx total=33 executed=33 passed=33 failed=0 notExecuted=0
+TRX \unit\QBrainAi.Launcher.Tests\QBrainAi.Launcher.Tests.trx total=20 executed=20 passed=20 failed=0 notExecuted=0
+TRX \unit\QBrainAi.McpAgent.Tests\QBrainAi.McpAgent.Tests.trx total=64 executed=64 passed=64 failed=0 notExecuted=0
+TRX \unit\QBrainAi.QBAgent.Tests\QBrainAi.QBAgent.Tests.trx total=94 executed=94 passed=94 failed=0 notExecuted=0
+TRX \unit\QBrainAi.Repl.Core.Tests\QBrainAi.Repl.Core.Tests.trx total=865 executed=865 passed=865 failed=0 notExecuted=0
+TRX \unit\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx total=3136 executed=3136 passed=3136 failed=0 notExecuted=0
+END 2026-10-20T21:35:02

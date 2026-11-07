@@ -1,0 +1,26 @@
+{
+  "timestampUtc": "2026-11-06T22:21:38.1028694+00:00",
+  "timestampLocal": "2026-11-06T16:21:40",
+  "method": "workflow.requirements.getTest",
+  "recordId": "TEST-HANDOFF-004",
+  "response": {
+    "payload": {
+      "result": {
+        "area": "HANDOFF",
+        "status": "pending",
+        "testType": "unit",
+        "updatedAt": "2026-11-06T22:21:40.5028777+00:00",
+        "createdAt": "2026-11-06T22:21:40.5027545+00:00",
+        "description": "Cover draft validation, field-specific diagnostics, DraftOnly, RequireReview, CreateWhenConfident, low confidence, and ambiguous handoffs.",
+        "id": "TEST-HANDOFF-004",
+        "priority": "medium",
+        "acceptanceCriteria": [],
+        "scopeStartLayerKey": "layer-1",
+        "title": "Test TEST-HANDOFF-004"
+      },
+      "requestId": "req-20261106T222139Z-5035",
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

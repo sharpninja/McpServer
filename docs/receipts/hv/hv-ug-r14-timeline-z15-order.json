@@ -1,0 +1,819 @@
+{
+  "source": "/home/sharpninja/.claude/projects/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532.jsonl",
+  "inspectedAt": "2026-11-06T23:19:18.3373236+00:00",
+  "fromUtc": "2026-11-06T16:12:00.0000000+00:00",
+  "toUtc": "2026-11-06T16:24:00.0000000+00:00",
+  "pattern": "VoiceConversationServiceTests|mockgate|counting decorator",
+  "records": [
+    {
+      "line": 164115,
+      "timestampUtc": "2026-11-06T16:12:51.8740000+00:00",
+      "timestampLocal": "2026-11-06T10:12:51.8740000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01QhnfqajmScGcrhMpv28yX8",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs",
+          "old_string": "    /// <summary>Mock gate negative control: a pool that never reuses a session is rejected.</summary>",
+          "new_string": "    /// <summary>\n    /// Mock gate negative control: a pool whose removals await, so its triggered pass removes the sentinel, suspends, and\n    /// leaves the rest of the pass for later, with an inclusive comparison that the unfinished pass hides, is rejected by\n    /// the trace's run-time no-await check (the rejection's message carries <see cref=\"NoAwaitCheck\"/>).\n    /// </summary>\n    /// <returns>A task that completes when the rejection is observed.</returns>\n    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): added because the seventeenth holistic read before hostile validation round 14 (finding g2) found that the trace accepted the sentinel observation without checking at run time that no removal could await; the trace without that check accepts this pool (red mock gate ug-r14z15-mockgate-red-1).</remarks>\n    [Fact]\n    public async Task PoolWhoseRemovalsAwait_IsRejected()\n    {\n        var exception = await Assert.ThrowsAnyAsync<XunitException>(() =>\n            AssertLifecycleAsync(reference => new ScriptedPool(reference, ScriptedPool.CleanupClock.Scripted, selfScheduling: false, inclusive: true, awaitingRemovals: true))).ConfigureAwait(true);\n        Assert.Contains(NoAwaitCheck, exception.Message, StringComparison.Ordinal);\n    }\n\n    /// <summary>Mock gate negative control: a pool that never reuses a session is rejected.</summary>"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164203,
+      "timestampUtc": "2026-11-06T16:15:19.8880000+00:00",
+      "timestampLocal": "2026-11-06T10:15:19.8880000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_013MrnsvJoBMaA7dVd4pkxfy",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "    /// <param name=\"time\">The service's clock, or null for a <see cref=\"TriggeredTimerTimeProvider\"/> at <see cref=\"FixtureStart\"/>.</param>\n    /// <returns>The service.</returns>\n    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added the <paramref name=\"time\"/> parameter, defaulting to a scripted clock whose timers fire only when a test fires them, and the idle timeout now comes from <see cref=\"IdleSessionLifecycleContractTests.IdleTimeout\"/> (15 minutes, unchanged), because hostile validation round 13 finding R13-F1 found that every service here armed a real cleanup timer; documented in the same change (MEMORY-FACT-008).</remarks>\n    private static VoiceConversationService CreateService(\n        string defaultExecutionStrategy = AgentExecutionStrategyNames.OneShotCli,\n        string? modelApiKey = null,\n        string modelApiKeyEnvironmentVariableName = \"OPENAI_API_KEY\",\n        IAgentExecutionStrategy? hostedStrategy = null,\n        IAgentExecutionStrategy? oneShotStrategy = null,\n        TimeProvider? time = null)\n    {",
+          "new_string": "    /// <param name=\"time\">The service's clock, or null for a <see cref=\"TriggeredTimerTimeProvider\"/> at <see cref=\"FixtureStart\"/>.</param>\n    /// <param name=\"sessionCounter\">When given, records every agent execution session the service creates, through a counting decorator of the strategy resolver; when null the resolver is registered undecorated, as before.</param>\n    /// <returns>The service.</returns>\n    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added the <paramref name=\"time\"/> parameter, defaulting to a scripted clock whose timers fire only when a test fires them, and the idle timeout now comes from <see cref=\"IdleSessionLifecycleContractTests.IdleTimeout\"/> (15 minutes, unchanged), because hostile validation round 13 finding R13-F1 found that every service here armed a real cleanup timer; documented in the same change (MEMORY-FACT-008). 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): added the optional <paramref name=\"sessionCounter\"/> parameter, because the seventeenth holistic read before hostile validation round 14 (finding g2) found the idle bindings' no-await condition stated but not checked at run time.</remarks>\n    private static VoiceConversationService CreateService(\n        string defaultExecutionStrategy = AgentExecutionStrategyNames.OneShotCli,\n        string? modelApiKey = null,\n        string modelApiKeyEnvironmentVariableName = \"OPENAI_API_KEY\",\n        IAgentExecutionStrategy? hostedStrategy = null,\n        IAgentExecutionStrategy? oneShotStrategy = null,\n        TimeProvider? time = null,\n        ExecutionSessionCounter? sessionCounter = null)\n    {"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164204,
+      "timestampUtc": "2026-11-06T16:15:21.7890000+00:00",
+      "timestampLocal": "2026-11-06T10:15:21.7890000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01HHNcKq1XfYy9vAUtxirX27",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "        var services = new ServiceCollection();\n        services.AddSingleton<IAgentExecutionStrategyResolver>(strategyResolver);",
+          "new_string": "        var services = new ServiceCollection();\n        services.AddSingleton<IAgentExecutionStrategyResolver>(\n            sessionCounter is null ? strategyResolver : new CountingStrategyResolver(strategyResolver, sessionCounter));"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164205,
+      "timestampUtc": "2026-11-06T16:15:26.8890000+00:00",
+      "timestampLocal": "2026-11-06T10:15:26.8890000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01BnfY6mQZv7LbZ74vwnCRs2",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "        /// <summary>The service under test.</summary>\n        private readonly VoiceConversationService _service;\n\n        /// <summary>Creates the service with its clock at <paramref name=\"start\"/>.</summary>\n        /// <param name=\"start\">The scripted start instant.</param>\n        internal ServiceSessionPool(DateTimeOffset start)\n        {\n            _clock = new TriggeredTimerTimeProvider(start);\n            _service = CreateService(time: _clock);\n        }",
+          "new_string": "        /// <summary>The service under test.</summary>\n        private readonly VoiceConversationService _service;\n\n        /// <summary>Records every agent execution session the service creates.</summary>\n        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): added for the seventeenth holistic read before hostile validation round 14, finding g2.</remarks>\n        private readonly ExecutionSessionCounter _sessionCounter = new();\n\n        /// <summary>Creates the service with its clock at <paramref name=\"start\"/>.</summary>\n        /// <param name=\"start\">The scripted start instant.</param>\n        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the service now records its agent execution sessions in <see cref=\"_sessionCounter\"/> (seventeenth holistic read before hostile validation round 14, finding g2).</remarks>\n        internal ServiceSessionPool(DateTimeOffset start)\n        {\n            _clock = new TriggeredTimerTimeProvider(start);\n            _service = CreateService(time: _clock, sessionCounter: _sessionCounter);\n        }"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164206,
+      "timestampUtc": "2026-11-06T16:15:37.9800000+00:00",
+      "timestampLocal": "2026-11-06T10:15:37.9800000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01Gj6JbTVtjCcqbDuqtkadRP",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "        /// <inheritdoc />\n        public void TriggerCleanup() => Assert.Single(_clock.Timers).Fire();\n\n        /// <inheritdoc />\n        public void Dispose() => _service.Dispose();\n    }",
+          "new_string": "        /// <inheritdoc />\n        public void TriggerCleanup() => Assert.Single(_clock.Timers).Fire();\n\n        /// <inheritdoc />\n        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): added; the service sets a session's interactive session only from an agent execution session its strategy resolver creates, so a count of zero means no session holds one and no removal awaits (seventeenth holistic read before hostile validation round 14, finding g2).</remarks>\n        public bool AnyRemovalCanAwait() => _sessionCounter.Created > 0;\n\n        /// <inheritdoc />\n        public void Dispose() => _service.Dispose();\n    }\n\n    /// <summary>\n    /// TR-MCP-USECASE-018 AC-006: counts the agent execution sessions a service under test creates, read by the idle\n    /// bindings' run-time no-await check.\n    /// </summary>\n    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): added for the seventeenth holistic read before hostile validation round 14, finding g2.</remarks>\n    private sealed class ExecutionSessionCounter\n    {\n        /// <summary>The number of sessions recorded.</summary>\n        private int _created;\n\n        /// <summary>Gets the number of agent execution sessions the service has asked a strategy to create.</summary>\n        internal int Created => Volatile.Read(ref _created);\n\n        /// <summary>Records one session request.</summary>\n        internal void Record() => Interlocked.Increment(ref _created);\n    }\n\n    /// <summary>\n    /// TR-MCP-USECASE-018 AC-006: a strategy resolver that resolves through <paramref name=\"inner\"/> and wraps each\n    /// strategy so every session it is asked to create is recorded in <paramref name=\"counter\"/>.\n    /// </summary>\n    /// <param name=\"inner\">The resolver the service would otherwise use.</param>\n    /// <param name=\"counter\">The counter.</param>\n    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): added for the seventeenth holistic read before hostile validation round 14, finding g2.</remarks>\n    private sealed class CountingStrategyResolver(IAgentExecutionStrategyResolver inner, ExecutionSessionCounter counter) : IAgentExecutionStrategyResolver\n    {\n        /// <inheritdoc />\n        public IAgentExecutionStrategy Resolve(string? strategyName) => new CountingStrategy(inner.Resolve(strategyName), counter);\n    }\n\n    /// <summary>\n    /// TR-MCP-USECASE-018 AC-006: a strategy that records each session request in <paramref name=\"counter\"/> and then\n    /// delegates to <paramref name=\"inner\"/>.\n    /// </summary>\n    /// <param name=\"inner\">The resolved strategy.</param>\n    /// <param name=\"counter\">The counter.</param>\n    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): added for the seventeenth holistic read before hostile validation round 14, finding g2.</remarks>\n    private sealed class CountingStrategy(IAgentExecutionStrategy inner, ExecutionSessionCounter counter) : IAgentExecutionStrategy\n    {\n        /// <inheritdoc />\n        public string Name => inner.Name;\n\n        /// <inheritdoc />\n        public ValueTask<IAgentExecutionSession> CreateSessionAsync(\n            AgentExecutionSessionRequest request,\n            CancellationToken cancellationToken = default)\n        {\n            counter.Record();\n            return inner.CreateSessionAsync(request, cancellationToken);\n        }\n    }"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164214,
+      "timestampUtc": "2026-11-06T16:15:44.2910000+00:00",
+      "timestampLocal": "2026-11-06T10:15:44.2910000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_013MrnsvJoBMaA7dVd4pkxfy",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    },
+    {
+      "line": 164218,
+      "timestampUtc": "2026-11-06T16:15:50.5080000+00:00",
+      "timestampLocal": "2026-11-06T10:15:50.5080000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01HHNcKq1XfYy9vAUtxirX27",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    },
+    {
+      "line": 164222,
+      "timestampUtc": "2026-11-06T16:15:57.0220000+00:00",
+      "timestampLocal": "2026-11-06T10:15:57.0220000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01BnfY6mQZv7LbZ74vwnCRs2",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    },
+    {
+      "line": 164226,
+      "timestampUtc": "2026-11-06T16:16:10.8120000+00:00",
+      "timestampLocal": "2026-11-06T10:16:10.8120000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01Gj6JbTVtjCcqbDuqtkadRP",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    },
+    {
+      "line": 164241,
+      "timestampUtc": "2026-11-06T16:16:24.7520000+00:00",
+      "timestampLocal": "2026-11-06T10:16:24.7520000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_016MDZKUyymZn3YwjpnRXH99",
+        "name": "Bash",
+        "input": {
+          "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target TestGroups \"-ExtraArgs:--test-groups;QBrainAi.Support.Mcp.Tests:IdleSessionLifecycleContractTests;--test-run-id;ug-r14z15-mockgate-red-1\" -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9 -Name ug-r14z15-mockgate-red-1 -WhatIf",
+          "description": "Dry-run starting the Z15 red mock gate"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164243,
+      "timestampUtc": "2026-11-06T16:16:25.5410000+00:00",
+      "timestampLocal": "2026-11-06T10:16:25.5410000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_016MDZKUyymZn3YwjpnRXH99",
+        "type": "tool_result",
+        "content": "What if: Performing the operation \"Create Directory\" on target \"Destination: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9\".\nWhat if: Performing the operation \"Start detached Nuke run\" on target \"TestGroups in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\".\nMeta: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-red-1.meta.json\nStdout: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-red-1.out.log\nExit file: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-red-1.exit.txt",
+        "is_error": false
+      }
+    },
+    {
+      "line": 164247,
+      "timestampUtc": "2026-11-06T16:16:29.9220000+00:00",
+      "timestampLocal": "2026-11-06T10:16:29.9220000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01FaRhEgBMJngD87Tdf2CJmZ",
+        "name": "Bash",
+        "input": {
+          "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target TestGroups \"-ExtraArgs:--test-groups;QBrainAi.Support.Mcp.Tests:IdleSessionLifecycleContractTests;--test-run-id;ug-r14z15-mockgate-red-1\" -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9 -Name ug-r14z15-mockgate-red-1",
+          "description": "Start the Z15 red mock gate"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164255,
+      "timestampUtc": "2026-11-06T16:16:30.9190000+00:00",
+      "timestampLocal": "2026-11-06T10:16:30.9190000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01FaRhEgBMJngD87Tdf2CJmZ",
+        "type": "tool_result",
+        "content": "Started ug-r14z15-mockgate-red-1 pid=307279 at 2026-11-06T10:16:30\nMeta: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-red-1.meta.json\nStdout: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-red-1.out.log\nExit file: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-red-1.exit.txt",
+        "is_error": false
+      }
+    },
+    {
+      "line": 164341,
+      "timestampUtc": "2026-11-06T16:17:40.3090000+00:00",
+      "timestampLocal": "2026-11-06T10:17:40.3090000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01FXpn81SAoSdkwTmq8U6pd9",
+        "name": "Read",
+        "input": {
+          "file_path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-red-1.exit.txt"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164347,
+      "timestampUtc": "2026-11-06T16:17:49.0210000+00:00",
+      "timestampLocal": "2026-11-06T10:17:49.0210000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01Ux3SCNYnEge38bWNYSksCe",
+        "name": "Bash",
+        "input": {
+          "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Save-GateReceipt.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Name ug-r14z15-mockgate-red-1 -TrxRoot /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14z15-mockgate-red-1 -MetaFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-red-1.meta.json \"-SourcePaths:tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs;src/QBrainAi.Services/Services/VoiceConversationService.cs\" -Kind mock-gate -WhatIf",
+          "description": "Dry-run the red mock gate receipt"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164355,
+      "timestampUtc": "2026-11-06T16:17:50.3980000+00:00",
+      "timestampLocal": "2026-11-06T10:17:50.3980000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01Ux3SCNYnEge38bWNYSksCe",
+        "type": "tool_result",
+        "content": "[2026-11-06T10:17:49] Phase 1/4: reading meta and TRX for ug-r14z15-mockgate-red-1\n  TRX QBrainAi.Support.Mcp.Tests total=7 passed=6 failed=1 skipped=0\n[2026-11-06T10:17:50] Phase 2/4: hashing pinned sources\n  SOURCE tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs DA3DB3EA6D41611BA822129BF78C4697BDA1D96D1DD99D170E418CA5F2EBA192\n  SOURCE tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs E7CEE77D51A843D2E438FD1199C4A7EEBACB92E3623B5A2A5B8225453AD9D300\n  SOURCE src/QBrainAi.Services/Services/VoiceConversationService.cs 1F60C762F9FEEE53E85FBC8BF28D87A98315317F6B035030792C127115AFCBA5\nWhat if: Performing the operation \"write the receipt and copy 1 TRX\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z15-mockgate-red-1.json\".\n[2026-11-06T10:17:50] VERDICT DRY_RUN status=not_passed total=7 failed=1 skipped=0 failures=0",
+        "is_error": false
+      }
+    },
+    {
+      "line": 164359,
+      "timestampUtc": "2026-11-06T16:17:55.7270000+00:00",
+      "timestampLocal": "2026-11-06T10:17:55.7270000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_0163TL6EL5MqtQj8fySD9tjZ",
+        "name": "Bash",
+        "input": {
+          "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Save-GateReceipt.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Name ug-r14z15-mockgate-red-1 -TrxRoot /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14z15-mockgate-red-1 -MetaFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-red-1.meta.json \"-SourcePaths:tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs;src/QBrainAi.Services/Services/VoiceConversationService.cs\" -Kind mock-gate",
+          "description": "Write the red mock gate receipt"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164361,
+      "timestampUtc": "2026-11-06T16:17:57.8770000+00:00",
+      "timestampLocal": "2026-11-06T10:17:57.8770000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_0163TL6EL5MqtQj8fySD9tjZ",
+        "type": "tool_result",
+        "content": "[2026-11-06T10:17:57] Phase 1/4: reading meta and TRX for ug-r14z15-mockgate-red-1\n  TRX QBrainAi.Support.Mcp.Tests total=7 passed=6 failed=1 skipped=0\n[2026-11-06T10:17:57] Phase 2/4: hashing pinned sources\n  SOURCE tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs DA3DB3EA6D41611BA822129BF78C4697BDA1D96D1DD99D170E418CA5F2EBA192\n  SOURCE tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs E7CEE77D51A843D2E438FD1199C4A7EEBACB92E3623B5A2A5B8225453AD9D300\n  SOURCE src/QBrainAi.Services/Services/VoiceConversationService.cs 1F60C762F9FEEE53E85FBC8BF28D87A98315317F6B035030792C127115AFCBA5\n[2026-11-06T10:17:57] Phase 3/4: copying TRX and verifying hashes\n[2026-11-06T10:17:57] Phase 4/4: writing the receipt\nRECEIPT /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z15-mockgate-red-1.json sha256=91C68A3E91998024C3D2E7B2EBA855BF0A3C3405C2A4D96B3A8A36C35D716BFC\n[2026-11-06T10:17:57] VERDICT NOT_PASSED total=7 passed=6 failed=1 skipped=0 failures=0",
+        "is_error": false
+      }
+    },
+    {
+      "line": 164366,
+      "timestampUtc": "2026-11-06T16:18:02.0870000+00:00",
+      "timestampLocal": "2026-11-06T10:18:02.0870000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_015RR7bhD9KNotYHNqoh5kP5",
+        "name": "Bash",
+        "input": {
+          "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-FileText.ps1 -Path /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z15-mockgate-red-1.json -Pattern \"IsRejected|outcome\"",
+          "description": "Show which test failed in the red gate"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164368,
+      "timestampUtc": "2026-11-06T16:18:03.8620000+00:00",
+      "timestampLocal": "2026-11-06T10:18:03.8620000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_015RR7bhD9KNotYHNqoh5kP5",
+        "type": "tool_result",
+        "content": "161:           \"name\": \"QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWhoseRemovalsAwait_IsRejected\",\n162:           \"outcome\": \"Failed\"\n[2026-11-06T10:18:03] MATCHES 2 in 183 lines of /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z15-mockgate-red-1.json",
+        "is_error": false
+      }
+    },
+    {
+      "line": 164376,
+      "timestampUtc": "2026-11-06T16:18:20.2380000+00:00",
+      "timestampLocal": "2026-11-06T10:18:20.2380000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01PB7b6N2nG86quiEuRQyeMy",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs",
+          "old_string": "    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end\"): the trace creates the sentinel first and, after the trigger at the threshold, asserts it removed before it reads the keep decision, because the fifteenth holistic read before hostile validation round 14 (finding d7) found that a pass still running or running later could make that keep assertion pass. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"Such an observation shows a finished pass only when no removal of that pass can suspend before the decision is read\"): the sentinel assertion's message names the condition it rests on, that no removal in the trace can await, for the sixteenth holistic read before hostile validation round 14, finding e1; the removal decision after the second trigger is read directly, as the criterion allows (finding g2). No assertion changed.</remarks>",
+          "new_string": "    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end\"): the trace creates the sentinel first and, after the trigger at the threshold, asserts it removed before it reads the keep decision, because the fifteenth holistic read before hostile validation round 14 (finding d7) found that a pass still running or running later could make that keep assertion pass. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"Such an observation shows a finished pass only when no removal of that pass can suspend before the decision is read\"): the sentinel assertion's message names the condition it rests on, that no removal in the trace can await, for the sixteenth holistic read before hostile validation round 14, finding e1; the removal decision after the second trigger is read directly, as the criterion allows (finding g2). No assertion changed. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): before each trigger the trace now asserts through <see cref=\"IIdleSessionPool.AnyRemovalCanAwait\"/> that no removal of the triggered pass can await, because the seventeenth holistic read before hostile validation round 14 (finding g2) found that condition stated but not checked, so a change that let a removal await would have left the trace green (red mock gate ug-r14z15-mockgate-red-1 accepted such a pool).</remarks>"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164378,
+      "timestampUtc": "2026-11-06T16:18:28.1900000+00:00",
+      "timestampLocal": "2026-11-06T10:18:28.1900000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01PctJBXJ526wEqSTABS7cAg",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs",
+          "old_string": "/// time passes (uncontrolled scheduling), a pool whose cleanup compares inclusively where the contract is strict, a pool\n/// that never reuses, and a pool whose triggered pass runs only at the next trigger with an inclusive comparison (a pass\n/// that finishes later). VoiceConversationServiceTests then binds the same trace to the production service through\n/// <see cref=\"AssertLifecycleAsync\"/>. No case reads the system clock or waits.",
+          "new_string": "/// time passes (uncontrolled scheduling), a pool whose cleanup compares inclusively where the contract is strict, a pool\n/// that never reuses, a pool whose triggered pass runs only at the next trigger with an inclusive comparison (a pass\n/// that finishes later), and a pool whose removals await, so its pass removes the sentinel and leaves its rest for later,\n/// with an inclusive comparison (rejected by the run-time no-await check). VoiceConversationServiceTests then binds the\n/// same trace to the production service through <see cref=\"AssertLifecycleAsync\"/>. No case reads the system clock or\n/// waits."
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164379,
+      "timestampUtc": "2026-11-06T16:18:32.1070000+00:00",
+      "timestampLocal": "2026-11-06T10:18:32.1070000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01LSPRqFn9fRL1sFXRfZWgqg",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs",
+          "old_string": "found that a removed sentinel shows only that a pass reached it when removals can await, and that those statements were wider than the code. No assertion and no pool changed.</description></item>\n/// </list>",
+          "new_string": "found that a removed sentinel shows only that a pass reached it when removals can await, and that those statements were wider than the code. No assertion and no pool changed.</description></item>\n/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): the pool gains <see cref=\"IIdleSessionPool.AnyRemovalCanAwait\"/>, the trace asserts before each trigger that no removal of the triggered pass can await, the scripted pool gains an awaiting-removal mode, and a negative control rejects a pool whose removals await, because the seventeenth holistic read before hostile validation round 14 (finding g2) found the condition stated only in documentation and assertion messages, so a change that let a removal await would have left the trace green; the trace without the check accepted that pool (red mock gate ug-r14z15-mockgate-red-1). The earlier assertions are unchanged.</description></item>\n/// </list>"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164441,
+      "timestampUtc": "2026-11-06T16:20:17.7540000+00:00",
+      "timestampLocal": "2026-11-06T10:20:17.7540000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "thinking",
+        "thinking": "I'm checking the pairing the Z14 trace accepted, which the red gate confirmed by running the Z14 trace with the new member. That holds. The interface summary about a bound pool and AnyRemovalCanAwait reads fine as it is, so I'll leave it alone. Next up is the green mock gate.\n\nNext I'm running the green mock gate, which is tagged ug-r14z15-mockgate-1.\n\n",
+        "signature": "CAQSmQgKEAgTGAI4AUIIdGhpbmtpbmcSDL+WiSaq0sodJLPyeRoMLpu7852kyCYRyYb/IjDIsfaB0eDMEYHRItTXyR5A8k/jUQnNUcD+Ikqc3Y9RkuRZQbrcDLfRqOb6jsG5kXUqtgfkZuxqzeNJdWA0P0SlH7x498i2nQvQY2utF6x2i32UrtDRePib8P7SsimHPavGFMmMEJ8OAeWgCKdDttddmo0OyuDBM+b527z8yGtpH6eFB5jhAL2EXt6jHZyRAEh0bLX8WO0j3g00PD8OH10i1zTYExFjcJ02IY4Jjp9VoLcSehCQfADkksVlL0cjXQYKT/UlHOdxiivhymk9nIuVn9AJ9IfsR0s1Gp0VfXjL/pYGQrS1txd0pl1EtSlFR0zI22O5IUWv4/hSvLA30dc8htRBbyLwGsotv770Aa9j8agRl+fg/bvCfueADis2V8PrnI4rmNepgPQdyOXVe7R58/s+iYIsPQEajC6EFNPCCr16W+1O7BKNQ4YxwpmimG1Vl7jK1/mmnA6RUldnOXOpZcYXkf4wLGpHk88E4LfcVqwthxwQFLhHCXFYWbW3YVAgnsaFLxlda7fQsfO3/8n/cggPmDS+BW5zKv4eR0WRFVWDuPj+EtEPARwHSC3uaT2W4SpewU4rbZGZQh/f01WGhelPe/roXI+wm0u+Hbu/YDGh+okXsDeIv4gnisl7SarPhzrKfERPrz3ZYphYMNcUan6F1uISDHyN4/U3jSNmdyTL8Bg7dHIiumDlCr9WD+6GVHlOzvgb/egS7AqzNxYv54XRrLhK/kug966gCMYolBZZZR92BMC7zceN8hkmmkyT5eBTUCZlplodCzoGqjF3ysHiqBHDx0cJwDJnMGbw9tNi+FYC7aNNr+hqGqkquhCQqggf2M+47teDUaz0cOFNGfvLzq4koPdALM4IF1qu1O42e/U07CCGgr6uRbgejxPfiY4JdCeB/8y/9XmEWOOzxWn508hDO3L+J+e17D4mF6YcZfiRgJ7qNZLS9U5OIAVMGj0VjrUm22T6+x6ukR7vLM5B0r7Gou5X/cfY1uR43UXmjHurgXq4WCNsOcLi3YcFhV5VnlN2geyLv4Euyha/JzOBfcSOBOTZFWqVeaN1GvGfVRLbPtXRNxX5xoN5CG+zdGnnvuedQ3DNImWBzCZMcdG8r6QKTvZtg+UYXS5ksUZdLFCI5UIp0h2aG3Gvp2FIl9E5DFKHc+bRUJ8T3LX6lm0X0ioNwHdj9f7svye0XsrMHry/b8apMmQZvSbDhEr2oiuw2BBryuM40v2SjMGmiRXAucuhNdwcPGI5nGT23D+SNVE6LZESQTipb2YDrMV3IxtNwTQRPRMp2wE5AMlevNBh+Zh52gk1wOAdiPXiHEld+e3zjfULyBgB"
+      }
+    },
+    {
+      "line": 164443,
+      "timestampUtc": "2026-11-06T16:20:18.2550000+00:00",
+      "timestampLocal": "2026-11-06T10:20:18.2550000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01Xs3pnqQippAjdNHQjxgNZe",
+        "name": "Bash",
+        "input": {
+          "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target TestGroups \"-ExtraArgs:--test-groups;QBrainAi.Support.Mcp.Tests:IdleSessionLifecycleContractTests;--test-run-id;ug-r14z15-mockgate-1\" -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9 -Name ug-r14z15-mockgate-1 -WhatIf",
+          "description": "Dry-run starting the Z15 green mock gate"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164445,
+      "timestampUtc": "2026-11-06T16:20:20.0120000+00:00",
+      "timestampLocal": "2026-11-06T10:20:20.0120000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01Xs3pnqQippAjdNHQjxgNZe",
+        "type": "tool_result",
+        "content": "What if: Performing the operation \"Create Directory\" on target \"Destination: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9\".\nWhat if: Performing the operation \"Start detached Nuke run\" on target \"TestGroups in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\".\nMeta: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-1.meta.json\nStdout: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-1.out.log\nExit file: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-1.exit.txt",
+        "is_error": false
+      }
+    },
+    {
+      "line": 164455,
+      "timestampUtc": "2026-11-06T16:20:24.2130000+00:00",
+      "timestampLocal": "2026-11-06T10:20:24.2130000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01BRDXPuoncpV4C9zEhjf1vH",
+        "name": "Bash",
+        "input": {
+          "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target TestGroups \"-ExtraArgs:--test-groups;QBrainAi.Support.Mcp.Tests:IdleSessionLifecycleContractTests;--test-run-id;ug-r14z15-mockgate-1\" -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9 -Name ug-r14z15-mockgate-1",
+          "description": "Start the Z15 green mock gate"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164457,
+      "timestampUtc": "2026-11-06T16:20:25.1960000+00:00",
+      "timestampLocal": "2026-11-06T10:20:25.1960000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01BRDXPuoncpV4C9zEhjf1vH",
+        "type": "tool_result",
+        "content": "Started ug-r14z15-mockgate-1 pid=321328 at 2026-11-06T10:20:24\nMeta: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-1.meta.json\nStdout: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-1.out.log\nExit file: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-1.exit.txt",
+        "is_error": false
+      }
+    },
+    {
+      "line": 164462,
+      "timestampUtc": "2026-11-06T16:20:34.2950000+00:00",
+      "timestampLocal": "2026-11-06T10:20:34.2950000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_018GqPPPQL8TgNuDhNwQazyF",
+        "name": "Read",
+        "input": {
+          "file_path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-1.exit.txt"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164487,
+      "timestampUtc": "2026-11-06T16:20:50.0350000+00:00",
+      "timestampLocal": "2026-11-06T10:20:50.0350000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01ABVm4ihDbHADuMeqLF3Kt2",
+        "name": "Bash",
+        "input": {
+          "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Wait-NukeRun.ps1 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9 -Name ug-r14z15-mockgate-1 -TrxRoot /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14z15-mockgate-1 -PollSeconds 5",
+          "description": "Wait for the green mock gate to finish",
+          "timeout": 600000
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164489,
+      "timestampUtc": "2026-11-06T16:20:51.0210000+00:00",
+      "timestampLocal": "2026-11-06T10:20:51.0210000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01ABVm4ihDbHADuMeqLF3Kt2",
+        "type": "tool_result",
+        "content": "Watching ug-r14z15-mockgate-1 from 2026-11-06T10:20:50\nExit: 0 2026-11-06T10:20:45 seen 2026-11-06T10:20:50\nNow: 2026-11-06T10:20:50 root=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14z15-mockgate-1\nQBrainAi.Support.Mcp.Tests: outcome=Completed total=7 executed=7 passed=7 failed=0 notExecuted=0\nTOTAL total=7 executed=7 passed=7 failed=0 notExecuted=0",
+        "is_error": false
+      }
+    },
+    {
+      "line": 164494,
+      "timestampUtc": "2026-11-06T16:20:56.1140000+00:00",
+      "timestampLocal": "2026-11-06T10:20:56.1140000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01GDdUXWZY6DmrdF56EkKDb2",
+        "name": "Bash",
+        "input": {
+          "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Save-GateReceipt.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Name ug-r14z15-mockgate-1 -TrxRoot /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14z15-mockgate-1 -MetaFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14z15-mockgate-1.meta.json \"-SourcePaths:tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs;src/QBrainAi.Services/Services/VoiceConversationService.cs\" -Kind mock-gate",
+          "description": "Write the green mock gate receipt"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164496,
+      "timestampUtc": "2026-11-06T16:20:57.1180000+00:00",
+      "timestampLocal": "2026-11-06T10:20:57.1180000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01GDdUXWZY6DmrdF56EkKDb2",
+        "type": "tool_result",
+        "content": "[2026-11-06T10:20:56] Phase 1/4: reading meta and TRX for ug-r14z15-mockgate-1\n  TRX QBrainAi.Support.Mcp.Tests total=7 passed=7 failed=0 skipped=0\n[2026-11-06T10:20:56] Phase 2/4: hashing pinned sources\n  SOURCE tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs E15B3903546153BF33F1B3ED41220867D10A658F61C9332BE61C1338F5B58E84\n  SOURCE tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs E7CEE77D51A843D2E438FD1199C4A7EEBACB92E3623B5A2A5B8225453AD9D300\n  SOURCE src/QBrainAi.Services/Services/VoiceConversationService.cs 1F60C762F9FEEE53E85FBC8BF28D87A98315317F6B035030792C127115AFCBA5\n[2026-11-06T10:20:56] Phase 3/4: copying TRX and verifying hashes\n[2026-11-06T10:20:56] Phase 4/4: writing the receipt\nRECEIPT /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z15-mockgate-1.json sha256=4AA1EE28E87DB860EE0CB15EFDE3748BB01561A1C312BE72A83144EBF773C926\n[2026-11-06T10:20:56] VERDICT PASSED total=7 passed=7 failed=0 skipped=0 failures=0",
+        "is_error": false
+      }
+    },
+    {
+      "line": 164521,
+      "timestampUtc": "2026-11-06T16:21:31.8730000+00:00",
+      "timestampLocal": "2026-11-06T10:21:31.8730000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "thinking",
+        "thinking": "Next I'm working through the bindings in VoiceConversationServiceTests. For D8 I'm adding a session counter, passing it into CreateService along with the clock, and asserting on it before the Fire call, then updating that test's summary and remarks. I'll also revise the lifecycle binding summary for the VoiceSessionReuse tests, and add a new binding control test called ServiceTraceHoldingAnInteractiveSession_IsRejected. After that comes the service side.\n\nNext I'm moving through the rest of the list: a `submitTurnOnCreate` parameter and summary update on the session pool, then the summary for SentinelRequest, and finally a change-log entry for the class.\n\n",
+        "signature": "CAQSqggKEAgTGAI4AUIIdGhpbmtpbmcSDIfGAPmMFCWRlAVGaxoM7vQxYW02LRtUXNqJIjCsaKwi9MOaPgXfDIg+KFLNOe28+Etb1jzTak+Chqt4vEai4dQ+0Zo0hrPQu7nY0EkqxwcJbqTOJSLZE4L+AvzhRXgJeQiQcg+iwFF4fdFBVl4z+e6uDj7maLjvCUOeo4jbQWckJiEi2xfAZ5p4PKzDY9XsMSE8olrSqUb/Ma1eqzDJgWt5z5sFLbbwcI3Ip28NBpdXHgwfeH/mhHoXFNSHFmymkd9ba0Fzk7DacqYKkHmNir29oU89WNNf8krwf5cJttftCWoFABo314t8STiLuQ55vpSW7cLq8ccnLuwXh7/WajEHnFpvNnvCexYbgN7PWHzDdFO8bu/WOlWqlpdWXBSBI4VthYVtohEKnymoQKt5b5ChgPzpdLYHr0NfpMiMzDtDBvFDgI/aVR/C2aDGUWPu/nM5yWIoXwRxlNJaNftw5L+ZDsyupuEu49G4nGw2rkGpWIecmXPtPB4I2ZJfqfD/rreQ4apHvreullxvsn5OEIkFRIc1htyEa540fLhggMxERlwf1Iu/Tthcuqn8M8J2xbsCoIrAQ/eh/+TriNGlYrANVHdj4OHZN6BUKPhdIU+oEeakE7kitgg3OXrSVJDd8U2tk99mP7XBBVgaNVEBfL5/QiWnEFtGJA2kKdpXX4M5naadNJjSt+YT0k5DK5A2cWBlhrg9NITU/hzkrkLlWqegpYOf6eJ2VL7hakndSq7G9VE9ExPIj/i5U9JM1s8F7k2Pkwd39oGSeY+VNPchkbLql5t+sABXCnKKw565S1DqdiY7MmYdxngIBcr3owPAtlfpJwww/XLMrHfW2KPE97rLDv3W527edIQZK+Q9oV/SnQ2B2esrsBPs6uYo9SZzAxyjpj1GPNo+RRjfzAyvg1rQWr/lyzXOkxyE7rGty9z06wMfwCzQdlfpxJatiT0GpG8pj6zpv0yAoKJkmb3Eib9gpBUS76t2p6jXUZ/o4I57JkBjQPW8PFvKqg42EN09MzHxDwzK1RbD35+Zat9uYYQpv7oZAJGAm7Zf+p562b4ahCUk3i/JfW53gbRMUUDVeVpTi0MpuRoIJWcJe+rcjB/4KBnRSOz19R2hiD+R7gAsF3m8q2LNL+qNc1U0UAY7Zl1DFS77d1TUGvM+LxdZ1wLdj2tcDFOPKOFzTWbdCRCgs6vyNehrM0waqDVhqsajD3i+c538IdaKjGpl1Ban8EzZ7Bmfjawh9B+0UrTrXuYC4BfW6pIPxU1MMvRuHY7XsDJCUPPvNGpK9tM6QBr1vFjlt0EcNcYQlvu5vim32ngJpbV5wuFt9YaBLza09a1dkUNbc+6nebZ00yuRt4zpejQql5ViCimExPmobAcNO8qNwYSLzVlkGAE="
+      }
+    },
+    {
+      "line": 164523,
+      "timestampUtc": "2026-11-06T16:21:32.4400000+00:00",
+      "timestampLocal": "2026-11-06T10:21:32.4400000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01MaTJTLx3n9wDhD8tMwkaCk",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "    /// the same fired pass is seen to have removed the trace's sentinel, a session in a second workspace one second\n    /// older; that shows a finished pass because no session in the trace holds an interactive session, so no removal\n    /// awaits. Run at a reference in 2001 and one in 2041.\n    /// </summary>",
+          "new_string": "    /// the same fired pass is seen to have removed the trace's sentinel, a session in a second workspace one second\n    /// older; that shows a finished pass because no session in the trace holds an interactive session, so no removal\n    /// awaits, which the trace checks at run time before each fire (the service has created no agent execution session).\n    /// Run at a reference in 2001 and one in 2041.\n    /// </summary>"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164524,
+      "timestampUtc": "2026-11-06T16:21:39.7830000+00:00",
+      "timestampLocal": "2026-11-06T10:21:39.7830000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01MBH9MfQXkJA1R7kzC1cqoT",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "the summary states the no-await condition the sentinel observation rests on (sixteenth holistic read before hostile validation round 14, finding e1).</remarks>\n    [Fact]\n    public Task VoiceSessionReuse_DoesNotDependOnWallClockOrCleanupScheduling() =>\n        IdleSessionLifecycleContractTests.AssertLifecycleAsync(reference => new ServiceSessionPool(reference));",
+          "new_string": "the summary states the no-await condition the sentinel observation rests on (sixteenth holistic read before hostile validation round 14, finding e1). 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): the bound trace now checks that condition at run time before each fire, through the pool's count of agent execution sessions (seventeenth holistic read before hostile validation round 14, finding g2).</remarks>\n    [Fact]\n    public Task VoiceSessionReuse_DoesNotDependOnWallClockOrCleanupScheduling() =>\n        IdleSessionLifecycleContractTests.AssertLifecycleAsync(reference => new ServiceSessionPool(reference));\n\n    /// <summary>\n    /// TR-MCP-USECASE-018 AC-006 negative control of the lifecycle binding: when every create also submits a turn, the\n    /// service creates an agent execution session that the session then holds as its interactive session, so a removal of\n    /// a fired cleanup would await; the bound trace rejects that trace through its run-time no-await check, and the\n    /// rejection's message carries <see cref=\"IdleSessionLifecycleContractTests.NoAwaitCheck\"/>. This shows the binding's\n    /// check is not vacuous.\n    /// </summary>\n    /// <returns>A task that completes when the rejection is observed.</returns>\n    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): added for the seventeenth holistic read before hostile validation round 14, finding g2.</remarks>\n    [Fact]\n    public async Task VoiceSessionReuse_TraceHoldingAnInteractiveSession_IsRejected()\n    {\n        var exception = await Assert.ThrowsAnyAsync<Xunit.Sdk.XunitException>(() =>\n            IdleSessionLifecycleContractTests.AssertLifecycleAsync(reference => new ServiceSessionPool(reference, submitTurnOnCreate: true))).ConfigureAwait(true);\n        Assert.Contains(IdleSessionLifecycleContractTests.NoAwaitCheck, exception.Message, StringComparison.Ordinal);\n    }"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164525,
+      "timestampUtc": "2026-11-06T16:21:42.2330000+00:00",
+      "timestampLocal": "2026-11-06T10:21:42.2330000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01TsqvedKJxTnY1gezGCkppm",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "    /// in a row can await: no create carries an agent prompt and no turn is submitted, so no session holds an interactive\n    /// session, and the fired pass runs to its end inside the fire.\n    /// </summary>",
+          "new_string": "    /// in a row can await: no create carries an agent prompt and no turn is submitted, so no session holds an interactive\n    /// session, and the fired pass runs to its end inside the fire. Each row checks that at run time before the fire: the\n    /// service has created no agent execution session, the only source of an interactive session.\n    /// </summary>"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164526,
+      "timestampUtc": "2026-11-06T16:21:50.3340000+00:00",
+      "timestampLocal": "2026-11-06T10:21:50.3340000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01FKqUEub4UsDNjBgbUJ3yhf",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "found that a removed sentinel alone shows only that the pass reached it. No assertion changed.</remarks>\n    [Fact]\n    public Task IdleCleanup_UsesScriptedAgeBoundary() =>\n        AgeBoundaryContractTests.AssertDecisionAsync(\"D8 voice idle-session cleanup\", async (reference, recorded) =>\n        {\n            var sentinelRecorded = reference - IdleSessionLifecycleContractTests.IdleTimeout - AgeBoundaryContractTests.Step - AgeBoundaryContractTests.Step;\n            var clock = new TriggeredTimerTimeProvider(sentinelRecorded);\n            using var service = CreateService(time: clock);\n            var sentinel = await service.CreateSessionAsync(SentinelRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);\n            clock.Set(recorded);\n            var created = await service.CreateSessionAsync(ReuseRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);\n            clock.Set(reference);\n            Assert.Single(clock.Timers).Fire();",
+          "new_string": "found that a removed sentinel alone shows only that the pass reached it. No assertion changed. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): each row now counts the agent execution sessions the service creates and asserts none before the fire, because the seventeenth holistic read before hostile validation round 14 (finding g2) found the condition stated but not checked; the earlier assertions are unchanged.</remarks>\n    [Fact]\n    public Task IdleCleanup_UsesScriptedAgeBoundary() =>\n        AgeBoundaryContractTests.AssertDecisionAsync(\"D8 voice idle-session cleanup\", async (reference, recorded) =>\n        {\n            var sentinelRecorded = reference - IdleSessionLifecycleContractTests.IdleTimeout - AgeBoundaryContractTests.Step - AgeBoundaryContractTests.Step;\n            var clock = new TriggeredTimerTimeProvider(sentinelRecorded);\n            var sessionCounter = new ExecutionSessionCounter();\n            using var service = CreateService(time: clock, sessionCounter: sessionCounter);\n            var sentinel = await service.CreateSessionAsync(SentinelRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);\n            clock.Set(recorded);\n            var created = await service.CreateSessionAsync(ReuseRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);\n            clock.Set(reference);\n            Assert.True(sessionCounter.Created == 0, $\"At {reference:O}: before the fire, {IdleSessionLifecycleContractTests.NoAwaitCheck}, checked at run time: the service created no agent execution session in this row, so no session holds an interactive session.\");\n            Assert.Single(clock.Timers).Fire();"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164527,
+      "timestampUtc": "2026-11-06T16:21:55.5770000+00:00",
+      "timestampLocal": "2026-11-06T10:21:55.5770000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01PdpV2TCdMQRidBDSntdVZc",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "    /// <summary>\n    /// TR-MCP-USECASE-018 AC-006: the create request of the sentinel session, the reuse agent in a second workspace, so no\n    /// reuse case reuses it and a fired cleanup pass that removed it has run to its end.\n    /// </summary>\n    /// <returns>The request.</returns>\n    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end\"): added for the fifteenth holistic read before hostile validation round 14, finding d7.</remarks>",
+          "new_string": "    /// <summary>\n    /// TR-MCP-USECASE-018 AC-006: the create request of the sentinel session, the reuse agent in a second workspace, so no\n    /// reuse case reuses it; a fired cleanup pass that removed it has run to its end only while no removal of that pass can\n    /// await, which each binding checks at run time before the fire (no session holds an interactive session).\n    /// </summary>\n    /// <returns>The request.</returns>\n    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end\"): added for the fifteenth holistic read before hostile validation round 14, finding d7. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): the summary states the no-await condition and its run-time check, because the seventeenth holistic read before hostile validation round 14 (finding f1, on the sixteenth read's e1) found it still claimed a finished pass from the removal alone.</remarks>"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164535,
+      "timestampUtc": "2026-11-06T16:22:06.1430000+00:00",
+      "timestampLocal": "2026-11-06T10:22:06.1430000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01MaTJTLx3n9wDhD8tMwkaCk",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    },
+    {
+      "line": 164539,
+      "timestampUtc": "2026-11-06T16:22:16.4970000+00:00",
+      "timestampLocal": "2026-11-06T10:22:16.4970000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01MBH9MfQXkJA1R7kzC1cqoT",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    },
+    {
+      "line": 164543,
+      "timestampUtc": "2026-11-06T16:22:26.1110000+00:00",
+      "timestampLocal": "2026-11-06T10:22:26.1110000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01TsqvedKJxTnY1gezGCkppm",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    },
+    {
+      "line": 164547,
+      "timestampUtc": "2026-11-06T16:22:35.9880000+00:00",
+      "timestampLocal": "2026-11-06T10:22:35.9880000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01FKqUEub4UsDNjBgbUJ3yhf",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    },
+    {
+      "line": 164557,
+      "timestampUtc": "2026-11-06T16:22:45.1160000+00:00",
+      "timestampLocal": "2026-11-06T10:22:45.1160000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01PdpV2TCdMQRidBDSntdVZc",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    },
+    {
+      "line": 164565,
+      "timestampUtc": "2026-11-06T16:22:57.5790000+00:00",
+      "timestampLocal": "2026-11-06T10:22:57.5790000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_016d7dpVJFteK5ExUuZ6f5A3",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "        /// <summary>Creates the service with its clock at <paramref name=\"start\"/>.</summary>\n        /// <param name=\"start\">The scripted start instant.</param>\n        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the service now records its agent execution sessions in <see cref=\"_sessionCounter\"/> (seventeenth holistic read before hostile validation round 14, finding g2).</remarks>\n        internal ServiceSessionPool(DateTimeOffset start)\n        {\n            _clock = new TriggeredTimerTimeProvider(start);\n            _service = CreateService(time: _clock, sessionCounter: _sessionCounter);\n        }\n\n        /// <inheritdoc />\n        public void SetClock(DateTimeOffset utcNow) => _clock.Set(utcNow);\n\n        /// <inheritdoc />\n        public async Task<string> CreateAsync() =>\n            (await _service.CreateSessionAsync(ReuseRequest(), TestContext.Current.CancellationToken).ConfigureAwait(true)).SessionId;",
+          "new_string": "        /// <summary>Whether each create also submits a turn, for the negative control of the lifecycle binding.</summary>\n        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): added for the seventeenth holistic read before hostile validation round 14, finding g2.</remarks>\n        private readonly bool _submitTurnOnCreate;\n\n        /// <summary>Creates the service with its clock at <paramref name=\"start\"/>.</summary>\n        /// <param name=\"start\">The scripted start instant.</param>\n        /// <param name=\"submitTurnOnCreate\">Whether each create also submits a turn, so the session holds an interactive session; only the negative control sets it.</param>\n        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): the service now records its agent execution sessions in <see cref=\"_sessionCounter\"/>, and the optional <paramref name=\"submitTurnOnCreate\"/> parameter was added for the binding's negative control (seventeenth holistic read before hostile validation round 14, finding g2).</remarks>\n        internal ServiceSessionPool(DateTimeOffset start, bool submitTurnOnCreate = false)\n        {\n            _clock = new TriggeredTimerTimeProvider(start);\n            _service = CreateService(time: _clock, sessionCounter: _sessionCounter);\n            _submitTurnOnCreate = submitTurnOnCreate;\n        }\n\n        /// <inheritdoc />\n        public void SetClock(DateTimeOffset utcNow) => _clock.Set(utcNow);\n\n        /// <inheritdoc />\n        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: when the pool submits a turn on create, the create then submits one turn to the session (seventeenth holistic read before hostile validation round 14, finding g2); otherwise unchanged.</remarks>\n        public async Task<string> CreateAsync()\n        {\n            var sessionId = (await _service.CreateSessionAsync(ReuseRequest(), TestContext.Current.CancellationToken).ConfigureAwait(true)).SessionId;\n            if (_submitTurnOnCreate)\n            {\n                var response = await _service.SubmitTurnAsync(sessionId, new VoiceTurnRequest { UserTranscriptText = \"hello\" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);\n                Assert.NotNull(response);\n            }\n\n            return sessionId;\n        }"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164566,
+      "timestampUtc": "2026-11-06T16:23:00.4270000+00:00",
+      "timestampLocal": "2026-11-06T10:23:00.4270000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_01X7EAXRy24TogUm8BrEFfSr",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "    /// cleanup fires the service's one cleanup timer. No create carries an agent prompt and the trace submits no turn, so\n    /// no session holds an interactive session, no removal of a fired cleanup awaits, and the fired pass runs to its end\n    /// inside the fire.\n    /// </summary>",
+          "new_string": "    /// cleanup fires the service's one cleanup timer. No create carries an agent prompt and the trace submits no turn, so\n    /// no session holds an interactive session, no removal of a fired cleanup awaits, and the fired pass runs to its end\n    /// inside the fire; the pool reports that at run time from a count of the agent execution sessions the service\n    /// creates, the only source of an interactive session. Only the binding's negative control submits a turn on create.\n    /// </summary>"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164567,
+      "timestampUtc": "2026-11-06T16:23:03.4290000+00:00",
+      "timestampLocal": "2026-11-06T10:23:03.4290000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_019T2LMpJgaVAsZBT3SjGSNc",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "the summary states the no-await condition the sentinel observation rests on (sixteenth holistic read before hostile validation round 14, finding e1).</remarks>\n    private sealed class ServiceSessionPool",
+          "new_string": "the summary states the no-await condition the sentinel observation rests on (sixteenth holistic read before hostile validation round 14, finding e1). 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): the pool counts the service's agent execution sessions, reports through AnyRemovalCanAwait whether any exists, and can submit a turn on create for the binding's negative control (seventeenth holistic read before hostile validation round 14, finding g2).</remarks>\n    private sealed class ServiceSessionPool"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164568,
+      "timestampUtc": "2026-11-06T16:23:06.9180000+00:00",
+      "timestampLocal": "2026-11-06T10:23:06.9180000-06:00",
+      "entryType": "assistant",
+      "block": {
+        "type": "tool_use",
+        "id": "toolu_017HyhmdkzsaRz6iShXCR9zP",
+        "name": "Edit",
+        "input": {
+          "replace_all": false,
+          "file_path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+          "old_string": "found that a removed sentinel alone shows only that the pass reached it. No assertion changed.</description></item>\n/// </list>",
+          "new_string": "found that a removed sentinel alone shows only that the pass reached it. No assertion changed.</description></item>\n/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, \"To show that no removal in its trace can await, the test checks it at run time\"): the fixture can decorate the strategy resolver with a counter of the agent execution sessions the service creates, the lifecycle pool and decision D8's binding assert before each fire that the service created none, a negative control rejects a lifecycle trace whose creates submit a turn, and the sentinel request's summary states the condition, because the seventeenth holistic read before hostile validation round 14 (findings g2 and f1) found the condition stated but not checked at run time and the sentinel summary still claiming a finished pass from the removal alone. The earlier assertions are unchanged.</description></item>\n/// </list>"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    },
+    {
+      "line": 164576,
+      "timestampUtc": "2026-11-06T16:23:17.7710000+00:00",
+      "timestampLocal": "2026-11-06T10:23:17.7710000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_016d7dpVJFteK5ExUuZ6f5A3",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    },
+    {
+      "line": 164580,
+      "timestampUtc": "2026-11-06T16:23:28.2760000+00:00",
+      "timestampLocal": "2026-11-06T10:23:28.2760000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_01X7EAXRy24TogUm8BrEFfSr",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    },
+    {
+      "line": 164584,
+      "timestampUtc": "2026-11-06T16:23:38.2930000+00:00",
+      "timestampLocal": "2026-11-06T10:23:38.2930000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_019T2LMpJgaVAsZBT3SjGSNc",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    },
+    {
+      "line": 164588,
+      "timestampUtc": "2026-11-06T16:23:49.1540000+00:00",
+      "timestampLocal": "2026-11-06T10:23:49.1540000-06:00",
+      "entryType": "user",
+      "block": {
+        "tool_use_id": "toolu_017HyhmdkzsaRz6iShXCR9zP",
+        "type": "tool_result",
+        "content": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs has been updated successfully."
+      }
+    }
+  ]
+}

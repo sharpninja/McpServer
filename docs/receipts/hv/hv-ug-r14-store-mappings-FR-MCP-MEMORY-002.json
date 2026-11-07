@@ -1,0 +1,28 @@
+{
+  "timestampUtc": "2026-11-06T22:30:16.4527680+00:00",
+  "timestampLocal": "2026-11-06T16:30:19",
+  "method": "workflow.requirements.listMappings",
+  "recordId": "FR-MCP-MEMORY-002",
+  "response": {
+    "payload": {
+      "requestId": "req-20261106T223017Z-c677",
+      "deprecated": true,
+      "result": {
+        "items": [
+          {
+            "createdAt": "2026-11-06T22:30:18.9330028+00:00",
+            "frId": "FR-MCP-MEMORY-002",
+            "trId": "TR-MCP-MEMORY-002"
+          },
+          {
+            "testId": "TEST-MCP-MEMORY-002",
+            "frId": "FR-MCP-MEMORY-002",
+            "createdAt": "2026-11-06T22:30:18.9335483+00:00"
+          }
+        ],
+        "totalCount": 2
+      }
+    },
+    "type": "result"
+  }
+}

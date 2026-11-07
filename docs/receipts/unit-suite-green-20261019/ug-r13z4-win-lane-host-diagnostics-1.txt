@@ -1,0 +1,97 @@
+RECEIPT 2026-11-05T10:24:11 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinHostWindowDiagnostics.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-11-05T10:24:09 host=PAYTON-LEGION2 user=kingd window=2026-11-05T04:02:00..2026-11-05T04:16:00
+SECTION System critical-error-warning count=0
+SECTION System information count=0
+SECTION Application critical-error-warning count=0
+SECTION Application information count=0
+SECTION Microsoft-Windows-Windows Defender/Operational count=0
+SECTION Microsoft-Windows-WindowsUpdateClient/Operational count=0
+SECTION Microsoft-Windows-TaskScheduler/Operational started-or-completed count=12
+  2026-11-05T04:02:19 id=129 task=\McpUnitGreenLane-r13z4-final
+  2026-11-05T04:02:19 id=100 task=\McpUnitGreenLane-r13z4-final
+  2026-11-05T04:09:21 id=129 task=\Microsoft\Windows\Flighting\OneSettings\RefreshCache
+  2026-11-05T04:09:21 id=100 task=\Microsoft\Windows\Flighting\OneSettings\RefreshCache
+  2026-11-05T04:09:23 id=201 task=\Microsoft\Windows\Flighting\OneSettings\RefreshCache
+  2026-11-05T04:09:23 id=102 task=\Microsoft\Windows\Flighting\OneSettings\RefreshCache
+  2026-11-05T04:10:37 id=129 task=\Lab\TailscaleLabMode
+  2026-11-05T04:10:37 id=100 task=\Lab\TailscaleLabMode
+  2026-11-05T04:10:47 id=201 task=\Lab\TailscaleLabMode
+  2026-11-05T04:10:47 id=102 task=\Lab\TailscaleLabMode
+  2026-11-05T04:11:59 id=201 task=\Microsoft\Windows\Defrag\ScheduledDefrag
+  2026-11-05T04:11:59 id=102 task=\Microsoft\Windows\Defrag\ScheduledDefrag
+SECTION LocalDB instances root=C:\Users\kingd\AppData\Local\Microsoft\Microsoft SQL Server Local DB\Instances exists=True
+  INSTANCE mcp-provider-00cdc599a8ca4eac9d153e58f2fd1f48 error.log lines=77 lastWrite=2026-07-20T07:45:32 inWindow=0
+  INSTANCE mcp-provider-0601e2e0145e414ab047248280c93997 error.log lines=77 lastWrite=2026-07-20T07:43:33 inWindow=0
+  INSTANCE mcp-provider-09c2bc1178ee48ac98000f1f86076e12 error.log lines=75 lastWrite=2026-09-09T22:33:36 inWindow=0
+  INSTANCE mcp-provider-11c866e141cd46b2a322e081f5444ba5 error.log lines=75 lastWrite=2026-08-16T20:28:58 inWindow=0
+  INSTANCE mcp-provider-14667c395695430d8d7035b01ba6354f error.log lines=75 lastWrite=2026-08-16T21:05:08 inWindow=0
+  INSTANCE mcp-provider-1dee452479b64e628cc4caa5941a8f1d error.log lines=83 lastWrite=2026-08-16T23:37:18 inWindow=0
+  INSTANCE mcp-provider-1f5d000618e64584b0bf2ab7b4c61f63 error.log lines=75 lastWrite=2026-08-16T23:48:34 inWindow=0
+  INSTANCE mcp-provider-22b7db1708ba4abe8d40ec3c73f725d0 error.log lines=77 lastWrite=2026-08-16T15:36:03 inWindow=0
+  INSTANCE mcp-provider-25779ad44054456f94984dd4d54eafad error.log lines=83 lastWrite=2026-08-16T23:51:57 inWindow=0
+  INSTANCE mcp-provider-2737a61ff15741e89f4009d9c1722223 error.log lines=75 lastWrite=2026-08-16T23:43:40 inWindow=0
+  INSTANCE mcp-provider-2f3bd1b303a84ee2a6ff087399661d4f error.log lines=77 lastWrite=2026-08-16T19:20:19 inWindow=0
+  INSTANCE mcp-provider-2f460724a8054bd98c06a0d90c4509ba error.log lines=77 lastWrite=2026-08-16T20:26:28 inWindow=0
+  INSTANCE mcp-provider-2fa812775ab84825ab8af7a906eee4b1 error.log lines=80 lastWrite=2026-07-02T18:04:30 inWindow=0
+  INSTANCE mcp-provider-43efe1180d964162ba3f08efec7f304e error.log lines=75 lastWrite=2026-09-09T21:54:38 inWindow=0
+  INSTANCE mcp-provider-449391e463be49029443a2d63d8179bd error.log lines=82 lastWrite=2026-08-22T08:51:22 inWindow=0
+  INSTANCE mcp-provider-464b0cba0de14b8bb9de825979819840 error.log lines=80 lastWrite=2026-08-16T22:30:43 inWindow=0
+  INSTANCE mcp-provider-4751526967b94932877e1a05cbf579d6 error.log lines=79 lastWrite=2026-08-16T22:25:35 inWindow=0
+  INSTANCE mcp-provider-478c7cc127e444a59032d4bbed85dab6 error.log lines=75 lastWrite=2026-08-21T21:39:51 inWindow=0
+  INSTANCE mcp-provider-483b944246a54b65bd18efeefe2be1e7 error.log lines=77 lastWrite=2026-09-12T22:57:26 inWindow=0
+  INSTANCE mcp-provider-523ab6395d1d4e6a9a8dc44f380e84c7 error.log lines=81 lastWrite=2026-07-02T19:07:48 inWindow=0
+  INSTANCE mcp-provider-52d8cadfbb8147f7b189dba69671ed87 error.log lines=77 lastWrite=2026-08-16T15:34:54 inWindow=0
+  INSTANCE mcp-provider-54785fd02a3f4804b962a999939e94a1 error.log lines=75 lastWrite=2026-08-16T23:38:28 inWindow=0
+  INSTANCE mcp-provider-5df73bde6f794361bec0b6927f0ae27d error.log lines=77 lastWrite=2026-08-16T15:23:04 inWindow=0
+  INSTANCE mcp-provider-5ea6a14b88534a21b98f462fe557fe77 error.log lines=79 lastWrite=2026-08-16T22:26:37 inWindow=0
+  INSTANCE mcp-provider-667cf7a603264364ba79d8af5f26be9c error.log lines=75 lastWrite=2026-08-22T08:52:02 inWindow=0
+  INSTANCE mcp-provider-66ddb5bf493e46c982daeb192c35c588 error.log lines=75 lastWrite=2026-08-22T09:47:18 inWindow=0
+  INSTANCE mcp-provider-66f1834f083e4564926798a102df3ca0 error.log lines=77 lastWrite=2026-09-16T05:31:48 inWindow=0
+  INSTANCE mcp-provider-66faf2d1e83a450985edda3f24970c1c error.log lines=80 lastWrite=2026-08-16T23:47:21 inWindow=0
+  INSTANCE mcp-provider-678c289914f54f389d986245dde253c5 error.log lines=80 lastWrite=2026-08-16T21:04:55 inWindow=0
+  INSTANCE mcp-provider-6908ba634457457c9acf37d76b117263 error.log lines=80 lastWrite=2026-08-16T13:35:10 inWindow=0
+  INSTANCE mcp-provider-69c60901cb6640ab8318f7f18751d75a error.log lines=75 lastWrite=2026-08-22T09:53:35 inWindow=0
+  INSTANCE mcp-provider-6a72055ae5254329b9ea54b984bdf8a4 error.log lines=77 lastWrite=2026-07-20T07:44:17 inWindow=0
+  INSTANCE mcp-provider-6ac11ccbcca04372a76a9c47eed474f7 error.log lines=77 lastWrite=2026-08-16T16:08:48 inWindow=0
+  INSTANCE mcp-provider-6c9ff820773549398e8cfc224406638d error.log lines=77 lastWrite=2026-09-09T21:14:31 inWindow=0
+  INSTANCE mcp-provider-70ba5e63ea0845d5acba74454eaf38d5 error.log lines=84 lastWrite=2026-08-16T21:16:27 inWindow=0
+  INSTANCE mcp-provider-7139ed49ae234eb6988e5633bc02f059 error.log lines=77 lastWrite=2026-07-20T07:41:45 inWindow=0
+  INSTANCE mcp-provider-754e9dad2d9f49a78fd095f0ec1faa7b error.log lines=83 lastWrite=2026-08-16T14:00:06 inWindow=0
+  INSTANCE mcp-provider-787dd21cebfc4ba6bac8dda4fa47ec58 error.log lines=75 lastWrite=2026-08-21T22:30:28 inWindow=0
+  INSTANCE mcp-provider-79731e82b22a424ea7ea84c5855b6d96 error.log lines=78 lastWrite=2026-08-21T22:34:57 inWindow=0
+  INSTANCE mcp-provider-7f1ecd6c750e4efeb5fb322d3a591067 error.log lines=75 lastWrite=2026-09-09T21:13:57 inWindow=0
+  INSTANCE mcp-provider-866c86f02c5249d89aaf37638a717a6a error.log lines=80 lastWrite=2026-07-02T17:06:06 inWindow=0
+  INSTANCE mcp-provider-87c8e210d7894f34b41702b38cc01af9 error.log lines=77 lastWrite=2026-09-06T14:47:26 inWindow=0
+  INSTANCE mcp-provider-8a264fea9c2f4e6696dcf3e155958f3b error.log lines=77 lastWrite=2026-09-09T21:55:03 inWindow=0
+  INSTANCE mcp-provider-951993bdcdd744dbacecf528ff438042 error.log lines=75 lastWrite=2026-08-22T10:28:43 inWindow=0
+  INSTANCE mcp-provider-9dd246b65c34422ab2be6d86be5eb037 error.log lines=80 lastWrite=2026-08-22T10:28:33 inWindow=0
+  INSTANCE mcp-provider-a56e7293d2e74f8393f1f7a2f0d0c11e error.log lines=80 lastWrite=2026-08-22T09:45:38 inWindow=0
+  INSTANCE mcp-provider-b53199cb5f7e4e158dbe2264b0c4ae27 error.log lines=75 lastWrite=2026-08-16T21:13:13 inWindow=0
+  INSTANCE mcp-provider-b5fc0caa91cf40a0b58d6e85b4ad976b error.log lines=75 lastWrite=2026-08-16T20:26:31 inWindow=0
+  INSTANCE mcp-provider-c6a7f9c3afbe4e3c823e59b3012996fd error.log lines=80 lastWrite=2026-08-16T23:41:05 inWindow=0
+  INSTANCE mcp-provider-c8858714bd804a2daf3aef8402d8e2c5 error.log lines=80 lastWrite=2026-08-22T09:29:45 inWindow=0
+  INSTANCE mcp-provider-ca45ad35818a43fab0630b7a444de393 error.log lines=75 lastWrite=2026-08-22T09:37:46 inWindow=0
+  INSTANCE mcp-provider-cdfbae32d9e1473a907723fc98765e3a error.log lines=75 lastWrite=2026-08-16T23:52:20 inWindow=0
+  INSTANCE mcp-provider-ce53a2ed519c47588248615fd0e1bedd error.log lines=77 lastWrite=2026-09-13T01:10:55 inWindow=0
+  INSTANCE mcp-provider-cea286ab935f424a976c4d6f9c1f40c3 error.log lines=77 lastWrite=2026-08-16T20:28:52 inWindow=0
+  INSTANCE mcp-provider-d16377418a2e4239be76e0db31a8dd69 error.log lines=78 lastWrite=2026-08-22T09:32:26 inWindow=0
+  INSTANCE mcp-provider-d5bae4739ae14e19a98ad76004d1fe66 error.log lines=75 lastWrite=2026-08-16T22:45:31 inWindow=0
+  INSTANCE mcp-provider-d78c583520f744a9a9ec7ecaa5fcd6e6 error.log lines=87 lastWrite=2026-07-02T17:07:15 inWindow=0
+  INSTANCE mcp-provider-d7d1b9e72e91446484b1564d71d5c072 error.log lines=80 lastWrite=2026-08-22T09:52:41 inWindow=0
+  INSTANCE mcp-provider-da4cbdbd5dfd4ef39803c83c943db4cd error.log lines=75 lastWrite=2026-08-16T20:21:32 inWindow=0
+  INSTANCE mcp-provider-dfc6ab4f9ba04ee99a5076c0f119f1b0 error.log lines=78 lastWrite=2026-08-21T21:36:00 inWindow=0
+  INSTANCE mcp-provider-e7bdbb5f09494371b054d05308c40e99 error.log lines=75 lastWrite=2026-08-16T23:56:11 inWindow=0
+  INSTANCE mcp-provider-ec50e45cab254395a20f98444e3c2d67 error.log lines=75 lastWrite=2026-09-09T23:15:27 inWindow=0
+  INSTANCE mcp-provider-f08276893e95407c96a075356f1a1332 error.log lines=77 lastWrite=2026-08-16T20:33:23 inWindow=0
+  INSTANCE mcp-provider-f2326b6742984900a1aaecb79eabb722 error.log lines=75 lastWrite=2026-08-16T20:34:15 inWindow=0
+  INSTANCE mcp-provider-f319d29fd7d4446ea9f8417ea6cc1eed error.log lines=77 lastWrite=2026-08-16T20:21:25 inWindow=0
+  INSTANCE mcp-provider-f39105ce077c49d38694d5adc5a53bea error.log lines=80 lastWrite=2026-08-22T09:36:54 inWindow=0
+  INSTANCE mcp-provider-f39750c4c7a74513b299e2cc1eadfa05 error.log lines=77 lastWrite=2026-09-13T01:17:54 inWindow=0
+  INSTANCE mcp-provider-fe34a0c7e6dd4980baa7b0f68e12068f error.log lines=78 lastWrite=2026-08-16T22:32:01 inWindow=0
+  INSTANCE mcp-ut-1085f7a2d629 error.log lines=78 lastWrite=2026-08-16T17:42:01 inWindow=0
+  INSTANCE McpSessionAck_20261001_1522 error.log lines=78 lastWrite=2026-10-01T20:28:30 inWindow=0
+  INSTANCE MSSQLLocalDB error.log lines=131 lastWrite=2026-11-05T08:38:50 inWindow=0
+END 2026-11-05T10:24:10

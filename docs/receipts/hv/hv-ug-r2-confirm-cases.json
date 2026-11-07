@@ -1,0 +1,123 @@
+{
+  "TimestampLocal": "2026-10-19T21:57:55",
+  "Mode": "Cases",
+  "LinuxUnit": [
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.WindowsHost_WindowsPath_UsesBackslashes(path: \"C:/Users/kingd/repo\", expected: \"C:\\\\Users\\\\kingd\\\\repo\")",
+      "outcome": "Passed",
+      "computerName": "LAB-OMARCHY"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.WindowsHost_WindowsPath_UsesBackslashes(path: \"C:\\\\already\\\\native\", expected: \"C:\\\\already\\\\native\")",
+      "outcome": "Passed",
+      "computerName": "LAB-OMARCHY"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.NonWindowsHost_IsUnchanged(path: \"/home/x/repo\", platform: CaseSensitive)",
+      "outcome": "Passed",
+      "computerName": "LAB-OMARCHY"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_DocFxWorkflowThroughReparsePoint_ThrowsActionableValidation",
+      "outcome": "Passed",
+      "computerName": "LAB-OMARCHY"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.WindowsHost_WindowsPath_UsesBackslashes(path: \"//srv/share/x\", expected: \"\\\\\\\\srv\\\\share\\\\x\")",
+      "outcome": "Passed",
+      "computerName": "LAB-OMARCHY"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.NonWindowsHost_IsUnchanged(path: \"C:/Users/kingd/repo\", platform: Windows)",
+      "outcome": "Passed",
+      "computerName": "LAB-OMARCHY"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.NonWindowsHost_IsUnchanged(path: \"//srv/share/x\", platform: Windows)",
+      "outcome": "Passed",
+      "computerName": "LAB-OMARCHY"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.WindowsHost_WindowsPath_UsesBackslashes(path: \"C:/\", expected: \"C:\\\\\")",
+      "outcome": "Passed",
+      "computerName": "LAB-OMARCHY"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Services.RequirementsDocFxWorkflowRunnerTests.RunAsync_WhenOutputContainsReparsePointEscape_Throws",
+      "outcome": "Passed",
+      "computerName": "LAB-OMARCHY"
+    },
+    {
+      "testName": "QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient",
+      "outcome": "Passed",
+      "computerName": "LAB-OMARCHY"
+    },
+    {
+      "testName": "QBrainAi.Repl.Core.Tests.MemorySchemaContractTests.CanonicalYamlSchema_ContainsMemoryWorkflowRules",
+      "outcome": "Passed",
+      "computerName": "LAB-OMARCHY"
+    }
+  ],
+  "WindowsUnit": [
+    {
+      "testName": "QBrainAi.Repl.Core.Tests.MemorySchemaContractTests.CanonicalYamlSchema_ContainsMemoryWorkflowRules",
+      "outcome": "Passed",
+      "computerName": "PAYTON-LEGION2"
+    },
+    {
+      "testName": "QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient",
+      "outcome": "Passed",
+      "computerName": "PAYTON-LEGION2"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.WindowsHost_WindowsPath_UsesBackslashes(path: \"C:\\\\already\\\\native\", expected: \"C:\\\\already\\\\native\")",
+      "outcome": "Passed",
+      "computerName": "PAYTON-LEGION2"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.NonWindowsHost_IsUnchanged(path: \"/home/x/repo\", platform: CaseSensitive)",
+      "outcome": "Passed",
+      "computerName": "PAYTON-LEGION2"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Services.RequirementsDocFxWorkflowRunnerTests.RunAsync_WhenOutputContainsReparsePointEscape_Throws",
+      "outcome": "Passed",
+      "computerName": "PAYTON-LEGION2"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.WindowsHost_WindowsPath_UsesBackslashes(path: \"C:/\", expected: \"C:\\\\\")",
+      "outcome": "Passed",
+      "computerName": "PAYTON-LEGION2"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.WindowsHost_WindowsPath_UsesBackslashes(path: \"C:/Users/kingd/repo\", expected: \"C:\\\\Users\\\\kingd\\\\repo\")",
+      "outcome": "Passed",
+      "computerName": "PAYTON-LEGION2"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.WindowsHost_WindowsPath_UsesBackslashes(path: \"//srv/share/x\", expected: \"\\\\\\\\srv\\\\share\\\\x\")",
+      "outcome": "Passed",
+      "computerName": "PAYTON-LEGION2"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.NonWindowsHost_IsUnchanged(path: \"C:/Users/kingd/repo\", platform: Windows)",
+      "outcome": "Passed",
+      "computerName": "PAYTON-LEGION2"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.NonWindowsHost_IsUnchanged(path: \"//srv/share/x\", platform: Windows)",
+      "outcome": "Passed",
+      "computerName": "PAYTON-LEGION2"
+    },
+    {
+      "testName": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_DocFxWorkflowThroughReparsePoint_ThrowsActionableValidation",
+      "outcome": "Passed",
+      "computerName": "PAYTON-LEGION2"
+    }
+  ],
+  "WindowsIntegration": [],
+  "NativeBoundarySource": [
+    "src/QBrainAi.Services/Requirements/RequirementsDocFxWorkflowRunner.cs:169:            if (attributes.HasFlag(FileAttributes.ReparsePoint))",
+    "src/QBrainAi.Services/Requirements/RequirementsDocFxWorkflowRunner.cs:227:        if (directory.Attributes.HasFlag(FileAttributes.ReparsePoint))"
+  ]
+}

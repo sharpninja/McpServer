@@ -1,0 +1,28 @@
+RECEIPT 2026-11-05T10:24:54 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinMemorySnapshot.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-11-05T10:24:52 host=PAYTON-LEGION2 user=kingd
+LOG System records=29823 sizeMB=17.1 maxMB=20.0 mode=Circular oldest=2026-07-01T02:44:57 newest=2026-11-05T10:18:01
+LOG Application records=9889 sizeMB=20.0 maxMB=20.0 mode=Circular oldest=2026-11-05T05:21:21 newest=2026-11-05T10:24:32
+MEMORY totalMB=23,926 freeMB=4,075 usedPercent=83.0 lastBoot=2026-11-04T12:00:16
+PAGEFILE C:\pagefile.sys allocatedMB=21853 currentMB=3340 peakMB=4696
+  TOP Code pid=37116 workingSetMB=1,647 privateMB=2,328 started=2026-11-04T17:08:22
+  TOP pwsh pid=36940 workingSetMB=1,437 privateMB=1,370 started=2026-11-05T09:55:10
+  TOP qemu-system-x86_64 pid=8908 workingSetMB=1,360 privateMB=5,896 started=2026-11-04T19:16:20
+  TOP devenv pid=1540 workingSetMB=758 privateMB=1,714 started=2026-11-04T14:32:14
+  TOP sqlservr pid=7824 workingSetMB=723 privateMB=1,282 started=2026-11-04T12:00:45
+  TOP ChatGPT pid=21312 workingSetMB=648 privateMB=880 started=2026-11-04T12:01:38
+  TOP studio64 pid=26116 workingSetMB=645 privateMB=1,240 started=2026-11-04T18:52:46
+  TOP pwsh pid=31728 workingSetMB=517 privateMB=477 started=2026-11-04T19:39:38
+  TOP pwsh pid=15644 workingSetMB=443 privateMB=390 started=2026-11-04T20:03:12
+  TOP codex pid=21840 workingSetMB=334 privateMB=398 started=2026-11-04T12:01:39
+  TOP pwsh pid=42304 workingSetMB=312 privateMB=232 started=2026-11-05T07:04:36
+  TOP pwsh pid=34220 workingSetMB=311 privateMB=187 started=2026-11-05T09:06:51
+  TOP pwsh pid=21976 workingSetMB=300 privateMB=174 started=2026-11-05T09:04:32
+  TOP ChatGPT pid=20980 workingSetMB=295 privateMB=418 started=2026-11-04T12:01:32
+  TOP MsMpEng pid=6900 workingSetMB=279 privateMB=400 started=2026-11-04T12:00:45
+COUNT sqlservr processes=1 workingSetMB=723
+COUNT dotnet processes=1 workingSetMB=20
+COUNT testhost processes=0 workingSetMB=0
+END 2026-11-05T10:24:53

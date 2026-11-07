@@ -37,13 +37,18 @@ public sealed class GrokCliAgentExecutionStrategyTests
         Assert.Equal("grok", GrokCliAgentExecutionStrategy.ResolveGrokExecutable("cline"));
     }
 
-    /// <summary>An explicit grok binary path (bare name or full path) is preserved.</summary>
+    /// <summary>
+    /// An explicit grok binary path (bare name or full path, with or without the <c>.exe</c> extension)
+    /// is preserved. Fixed data for both spellings on every host (TR-MCP-USECASE-018 AC-006).
+    /// </summary>
     [Fact]
     public void ResolveGrokExecutable_ExplicitGrokPath_IsPreserved()
     {
-        var explicitPath = UnitTestPaths.Combine("home", ".grok", "bin", OperatingSystem.IsWindows() ? "grok.exe" : "grok");
+        var withExtension = UnitTestPaths.Combine("home", ".grok", "bin", "grok.exe");
+        var withoutExtension = UnitTestPaths.Combine("home", ".grok", "bin", "grok");
         Assert.Equal("grok", GrokCliAgentExecutionStrategy.ResolveGrokExecutable("grok"));
-        Assert.Equal(explicitPath, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(explicitPath));
+        Assert.Equal(withExtension, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(withExtension));
+        Assert.Equal(withoutExtension, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(withoutExtension));
     }
 
     /// <summary>TEST-MCP-BUGTRIAGE-042: Grok one-shot forwards the configured model argument.</summary>

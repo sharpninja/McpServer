@@ -3,99 +3,153 @@ using System.Text;
 
 using QBrainAi.Common.AgentCli;
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
+/// <summary>
+/// Tests the one-shot CLI execution strategy's command shapes for Codex, Claude, Grok and Cline, and the strategy
+/// name. The class runs in <see cref="ProcessEnvironmentCollection"/> because every test that starts a session writes
+/// the process environment: the strategy's temp-folder lookup reads the CLI temp variables, so those tests set and
+/// restore them through <see cref="CliTempVariables"/> and are integration tests (TR-MCP-USECASE-018 AC-006,
+/// TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
+/// </summary>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class OneShotCliAgentExecutionStrategyTests
 {
+    // The CLI temp variable the one-shot strategy reads first; it points at the test folder and every other CLI temp
+    // variable at a fallback folder.
+    private const string PrimaryTempName = "MCPSERVER_ONESHOT_TEMP";
+
+    /// <summary>
+    /// The Codex one-shot command runs <c>codex exec</c> with the effort, working folder, output file and stdin
+    /// prompt. The test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it is an
+    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape()
     {
-        CapturingProcessSpawner spawner = new(outputBody: "codex final");
-        OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
+        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+        {
+            CapturingProcessSpawner spawner = new(outputBody: "codex final");
+            OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
 
-        await using IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("codex"), cancellationToken: TestContext.Current.CancellationToken);
-        AgentCliResult result = await session.ReadInitialResponseAsync(CancellationToken.None);
+            await using IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("codex"), cancellationToken: TestContext.Current.CancellationToken);
+            AgentCliResult result = await session.ReadInitialResponseAsync(CancellationToken.None);
 
-        Assert.Equal(AgentCliResultState.Success, result.State);
-        Assert.Equal("codex final", result.Body);
-        Assert.NotNull(spawner.StartInfo);
-        Assert.Equal("codex", spawner.StartInfo!.FileName);
-        Assert.Contains("exec", spawner.StartInfo.ArgumentList);
-        Assert.Equal("model_reasoning_effort=\"xhigh\"", GetArgumentAfter(spawner.StartInfo, "-c"));
-        Assert.Equal("Q:\\__mcp_unit_test__\\QBrainAi", GetArgumentAfter(spawner.StartInfo, "-C"));
-        Assert.NotNull(GetArgumentAfter(spawner.StartInfo, "-o"));
-        Assert.Contains("-", spawner.StartInfo.ArgumentList);
-        Assert.DoesNotContain("--output-schema", spawner.StartInfo.ArgumentList);
-        Assert.Equal("rendered prompt", spawner.Process!.StandardInputText);
+            Assert.Equal(AgentCliResultState.Success, result.State);
+            Assert.Equal("codex final", result.Body);
+            Assert.NotNull(spawner.StartInfo);
+            Assert.Equal("codex", spawner.StartInfo!.FileName);
+            Assert.Contains("exec", spawner.StartInfo.ArgumentList);
+            Assert.Equal("model_reasoning_effort=\"xhigh\"", GetArgumentAfter(spawner.StartInfo, "-c"));
+            Assert.Equal("Q:\\__mcp_unit_test__\\QBrainAi", GetArgumentAfter(spawner.StartInfo, "-C"));
+            Assert.NotNull(GetArgumentAfter(spawner.StartInfo, "-o"));
+            Assert.Contains("-", spawner.StartInfo.ArgumentList);
+            Assert.DoesNotContain("--output-schema", spawner.StartInfo.ArgumentList);
+            Assert.Equal("rendered prompt", spawner.Process!.StandardInputText);
+        });
     }
 
+    /// <summary>
+    /// The Claude one-shot command runs <c>claude -p</c> in plan mode with the model, effort and working folder and a
+    /// stdin prompt. The test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it
+    /// is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape()
     {
-        CapturingProcessSpawner spawner = new(stdout: "claude final");
-        OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
+        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+        {
+            CapturingProcessSpawner spawner = new(stdout: "claude final");
+            OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
 
-        await using IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("claude"), cancellationToken: TestContext.Current.CancellationToken);
-        AgentCliResult result = await session.ReadInitialResponseAsync(CancellationToken.None);
+            await using IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("claude"), cancellationToken: TestContext.Current.CancellationToken);
+            AgentCliResult result = await session.ReadInitialResponseAsync(CancellationToken.None);
 
-        Assert.Equal(AgentCliResultState.Success, result.State);
-        Assert.Equal("claude final", result.Body);
-        Assert.NotNull(spawner.StartInfo);
-        Assert.Equal("claude", spawner.StartInfo!.FileName);
-        Assert.Contains("-p", spawner.StartInfo.ArgumentList);
-        Assert.Equal("plan", GetArgumentAfter(spawner.StartInfo, "--permission-mode"));
-        Assert.Equal("Q:\\__mcp_unit_test__\\QBrainAi", GetArgumentAfter(spawner.StartInfo, "--add-dir"));
-        Assert.Equal("opus", GetArgumentAfter(spawner.StartInfo, "--model"));
-        Assert.Equal("max", GetArgumentAfter(spawner.StartInfo, "--effort"));
-        Assert.Equal("rendered prompt", spawner.Process!.StandardInputText);
+            Assert.Equal(AgentCliResultState.Success, result.State);
+            Assert.Equal("claude final", result.Body);
+            Assert.NotNull(spawner.StartInfo);
+            Assert.Equal("claude", spawner.StartInfo!.FileName);
+            Assert.Contains("-p", spawner.StartInfo.ArgumentList);
+            Assert.Equal("plan", GetArgumentAfter(spawner.StartInfo, "--permission-mode"));
+            Assert.Equal("Q:\\__mcp_unit_test__\\QBrainAi", GetArgumentAfter(spawner.StartInfo, "--add-dir"));
+            Assert.Equal("opus", GetArgumentAfter(spawner.StartInfo, "--model"));
+            Assert.Equal("max", GetArgumentAfter(spawner.StartInfo, "--effort"));
+            Assert.Equal("rendered prompt", spawner.Process!.StandardInputText);
+        });
     }
 
+    /// <summary>
+    /// The Grok one-shot command runs <c>grok</c> in plan mode with a prompt file, plain output and max effort. The
+    /// test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it is an integration
+    /// test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape()
     {
-        CapturingProcessSpawner spawner = new(stdout: "grok final");
-        OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
+        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+        {
+            CapturingProcessSpawner spawner = new(stdout: "grok final");
+            OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
 
-        await using IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("grok"), cancellationToken: TestContext.Current.CancellationToken);
-        AgentCliResult result = await session.ReadInitialResponseAsync(CancellationToken.None);
+            await using IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("grok"), cancellationToken: TestContext.Current.CancellationToken);
+            AgentCliResult result = await session.ReadInitialResponseAsync(CancellationToken.None);
 
-        Assert.Equal(AgentCliResultState.Success, result.State);
-        Assert.Equal("grok final", result.Body);
-        Assert.NotNull(spawner.StartInfo);
-        Assert.Equal("grok", spawner.StartInfo!.FileName);
-        Assert.Equal("Q:\\__mcp_unit_test__\\QBrainAi", GetArgumentAfter(spawner.StartInfo, "--cwd"));
-        Assert.Equal("plan", GetArgumentAfter(spawner.StartInfo, "--permission-mode"));
-        Assert.Equal("plain", GetArgumentAfter(spawner.StartInfo, "--output-format"));
-        Assert.Equal("max", GetArgumentAfter(spawner.StartInfo, "--effort"));
-        Assert.Equal("max", GetArgumentAfter(spawner.StartInfo, "--reasoning-effort"));
-        Assert.NotNull(GetArgumentAfter(spawner.StartInfo, "--prompt-file"));
-        Assert.Equal("rendered prompt", spawner.PromptFileText);
-        Assert.Equal(string.Empty, spawner.Process!.StandardInputText);
+            Assert.Equal(AgentCliResultState.Success, result.State);
+            Assert.Equal("grok final", result.Body);
+            Assert.NotNull(spawner.StartInfo);
+            Assert.Equal("grok", spawner.StartInfo!.FileName);
+            Assert.Equal("Q:\\__mcp_unit_test__\\QBrainAi", GetArgumentAfter(spawner.StartInfo, "--cwd"));
+            Assert.Equal("plan", GetArgumentAfter(spawner.StartInfo, "--permission-mode"));
+            Assert.Equal("plain", GetArgumentAfter(spawner.StartInfo, "--output-format"));
+            Assert.Equal("max", GetArgumentAfter(spawner.StartInfo, "--effort"));
+            Assert.Equal("max", GetArgumentAfter(spawner.StartInfo, "--reasoning-effort"));
+            Assert.NotNull(GetArgumentAfter(spawner.StartInfo, "--prompt-file"));
+            Assert.Equal("rendered prompt", spawner.PromptFileText);
+            Assert.Equal(string.Empty, spawner.Process!.StandardInputText);
+        });
     }
 
+    /// <summary>
+    /// The Cline one-shot command runs <c>cline -p</c> with the prompt as an argument, the working folder and xhigh
+    /// thinking. The test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it is
+    /// an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape()
     {
-        CapturingProcessSpawner spawner = new(stdout: "cline final");
-        OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
+        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+        {
+            CapturingProcessSpawner spawner = new(stdout: "cline final");
+            OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
 
-        await using IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("cline"), cancellationToken: TestContext.Current.CancellationToken);
-        AgentCliResult result = await session.ReadInitialResponseAsync(CancellationToken.None);
+            await using IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("cline"), cancellationToken: TestContext.Current.CancellationToken);
+            AgentCliResult result = await session.ReadInitialResponseAsync(CancellationToken.None);
 
-        Assert.Equal(AgentCliResultState.Success, result.State);
-        Assert.Equal("cline final", result.Body);
-        Assert.NotNull(spawner.StartInfo);
-        Assert.Equal("cline", spawner.StartInfo!.FileName);
-        Assert.Contains("-p", spawner.StartInfo.ArgumentList);
-        Assert.Equal("Q:\\__mcp_unit_test__\\QBrainAi", GetArgumentAfter(spawner.StartInfo, "-c"));
-        Assert.Equal("xhigh", GetArgumentAfter(spawner.StartInfo, "--thinking"));
-        Assert.Contains("rendered prompt", spawner.StartInfo.ArgumentList);
-        Assert.Equal(string.Empty, spawner.Process!.StandardInputText);
+            Assert.Equal(AgentCliResultState.Success, result.State);
+            Assert.Equal("cline final", result.Body);
+            Assert.NotNull(spawner.StartInfo);
+            Assert.Equal("cline", spawner.StartInfo!.FileName);
+            Assert.Contains("-p", spawner.StartInfo.ArgumentList);
+            Assert.Equal("Q:\\__mcp_unit_test__\\QBrainAi", GetArgumentAfter(spawner.StartInfo, "-c"));
+            Assert.Equal("xhigh", GetArgumentAfter(spawner.StartInfo, "--thinking"));
+            Assert.Contains("rendered prompt", spawner.StartInfo.ArgumentList);
+            Assert.Equal(string.Empty, spawner.Process!.StandardInputText);
+        });
     }
 
+    /// <summary>The one-shot strategy name is supported and is the default instead of Copilot.</summary>
     [Fact]
     public void AgentExecutionStrategyNames_SupportsOneShotCliAndDefaultsAwayFromCopilot()
     {

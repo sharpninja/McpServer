@@ -1,0 +1,50 @@
+{
+  "timestampLocal": "2026-11-03T11:42:56",
+  "method": "workflow.requirements.getFr",
+  "id": "FR-MCP-MEMORY-001",
+  "result": {
+    "type": "result",
+    "payload": {
+      "requestId": "req-20261103T174257Z-5ce0",
+      "result": {
+        "id": "FR-MCP-MEMORY-001",
+        "title": "Global and workspace memory storage",
+        "description": "The QBrain.AI SHALL store raw-text memories with a stable memory ID, explicit scope, and exact text round-trip semantics. Supported scopes are Global and Workspace. Global memories are visible to every workspace, while Workspace memories are visible only to their owning workspace.",
+        "status": "pending",
+        "priority": "medium",
+        "area": "MCP",
+        "acceptanceCriteria": [
+          {
+            "id": "",
+            "text": "A memory record has a stable ID, scope, category, raw text, version, author metadata, and created/updated timestamps.",
+            "isSatisfied": true
+          },
+          {
+            "id": "",
+            "text": "Global memories are returned for every workspace and are not stamped with a workspace owner.",
+            "isSatisfied": true
+          },
+          {
+            "id": "",
+            "text": "Workspace memories require an owning workspace and are not returned for any other workspace.",
+            "isSatisfied": true
+          },
+          {
+            "id": "",
+            "text": "Removed memories are hidden from normal reads and lists without physically deleting the row.",
+            "isSatisfied": true
+          },
+          {
+            "id": "",
+            "text": "Memory text round-trips exactly, including internal newlines and punctuation.",
+            "isSatisfied": true
+          }
+        ],
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-11-03T17:42:59.3041305+00:00",
+        "updatedAt": "2026-11-03T17:42:59.3042493+00:00"
+      },
+      "deprecated": true
+    }
+  }
+}

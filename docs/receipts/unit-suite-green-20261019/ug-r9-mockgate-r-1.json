@@ -1,0 +1,78 @@
+{
+  "name": "ug-r9-mockgate-r-1",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "679eb7881d0342a58ef446be5084b703c0cee7c4",
+  "dirtyPaths": [
+    " M .nuke/build.schema.json",
+    " M build/IntegrationLaneClassFilter.cs",
+    " M docs/plans/2026-10-19-unit-suite-green.md",
+    "?? build/Build.TestGroups.cs",
+    "?? build/TestGroupExecution.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-1/",
+    "?? tests/Build.Tests/TestGroupExecutionBindingTests.cs",
+    "?? tests/Build.Tests/TestGroupExecutionContractTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Repl.Core.Tests:OwnedInstanceProviderSettingContractTests",
+    "QBrainAi.Support.Mcp.Tests:WorkspacePathGetFullPathRatchetMockDataTests,GitHubCliInvocationPlanContractTests",
+    "--test-run-id",
+    "ug-r9-mockgate-r-1"
+  ],
+  "startedLocal": "2026-11-02T10:34:31",
+  "endedLocal": "2026-11-02T10:35:21",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 17,
+  "passed": 17,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-r-1/groups/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-r-1/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "4977037F6DACC5CA8FC173EA18528097DCD513D4B4FE52683F717A772804667F",
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-r-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-r-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "7FD91DB2C31C215FDEA04ED5F034512037F376ECEC1F2B11E22C27E46715AE63",
+      "total": 13,
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs",
+      "sha256": "66EF0B20DB3289CE66678BFCF7E652A7C01086B245A9C3C0E77BAFEC520DA966"
+    },
+    {
+      "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+      "sha256": "CB7E117C014179EDF6C77CCA5F1324968B621F133B71EAA8898E28503A6C6042"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+      "sha256": "93B98131FF9BB88FEFFC9469CDBAC43F484A59D9DEFBDC014789F5C7BB2F6599"
+    }
+  ],
+  "writtenLocal": "2026-11-02T10:35:34",
+  "writtenBy": "ClaudeCode"
+}

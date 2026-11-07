@@ -1,0 +1,133 @@
+[
+  {
+    "Name": "head",
+    "Program": "git",
+    "Arguments": [
+      "rev-parse",
+      "HEAD"
+    ],
+    "ExitCode": 0,
+    "TimestampLocal": "2026-10-20T21:57:43"
+  },
+  {
+    "Name": "initial-status",
+    "Program": "git",
+    "Arguments": [
+      "status",
+      "--short"
+    ],
+    "ExitCode": 0,
+    "TimestampLocal": "2026-10-20T21:57:43"
+  },
+  {
+    "Name": "commits",
+    "Program": "git",
+    "Arguments": [
+      "log",
+      "--first-parent",
+      "--format=%H%n%P%n%aI%n%cI%n%B%nEND-COMMIT",
+      "3da2db93..b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a"
+    ],
+    "ExitCode": 0,
+    "TimestampLocal": "2026-10-20T21:57:43"
+  },
+  {
+    "Name": "changed-files",
+    "Program": "git",
+    "Arguments": [
+      "diff",
+      "--name-status",
+      "3da2db93...b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a"
+    ],
+    "ExitCode": 0,
+    "TimestampLocal": "2026-10-20T21:57:43"
+  },
+  {
+    "Name": "docs-only-97",
+    "Program": "git",
+    "Arguments": [
+      "diff",
+      "--name-only",
+      "97b78114..b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a"
+    ],
+    "ExitCode": 0,
+    "TimestampLocal": "2026-10-20T21:57:43"
+  },
+  {
+    "Name": "docs-only-26",
+    "Program": "git",
+    "Arguments": [
+      "diff",
+      "--name-only",
+      "26fc8348..b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a"
+    ],
+    "ExitCode": 0,
+    "TimestampLocal": "2026-10-20T21:57:43"
+  },
+  {
+    "Name": "merge-base",
+    "Program": "git",
+    "Arguments": [
+      "merge-base",
+      "develop",
+      "HEAD"
+    ],
+    "ExitCode": 0,
+    "TimestampLocal": "2026-10-20T21:57:43"
+  },
+  {
+    "Name": "pr",
+    "Program": "gh",
+    "Arguments": [
+      "pr",
+      "view",
+      "87",
+      "--repo",
+      "sharpninja/McpServer",
+      "--json",
+      "number,title,body,baseRefName,headRefName,headRefOid,isDraft,url,state,commits"
+    ],
+    "ExitCode": 1,
+    "TimestampLocal": "2026-10-20T21:57:44"
+  },
+  {
+    "Name": "code-diff",
+    "Program": "git",
+    "Arguments": [
+      "diff",
+      "3da2db93...b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a",
+      "--",
+      "src",
+      "build",
+      "tests",
+      "Directory.Packages.props",
+      ".nuke/build.schema.json"
+    ],
+    "ExitCode": 0,
+    "TimestampLocal": "2026-10-20T21:57:44"
+  },
+  {
+    "Name": "r4-diff",
+    "Program": "git",
+    "Arguments": [
+      "diff",
+      "e0b078c8..97b78114",
+      "--",
+      "src",
+      "tests"
+    ],
+    "ExitCode": 0,
+    "TimestampLocal": "2026-10-20T21:57:44"
+  },
+  {
+    "Name": "receipt-files",
+    "Program": "rg",
+    "Arguments": [
+      "--files",
+      "docs/receipts/unit-suite-green-20261019",
+      "docs/receipts/hv"
+    ],
+    "ExitCode": 0,
+    "TimestampLocal": "2026-10-20T21:57:44"
+  }
+]

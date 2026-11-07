@@ -1,0 +1,15 @@
+{
+  "Agent": "Codex",
+  "ThreadId": "01a156ca-c72e-7cf2-ba0f-13d47d18be50",
+  "Model": "gpt-6-astra",
+  "Effort": "max",
+  "ProofType": "own rollout turn_context",
+  "RolloutPath": "/home/sharpninja/.codex/sessions/2026/10/19/rollout-2026-10-19T19-51-32-01a156ca-c72e-7cf2-ba0f-13d47d18be50.jsonl",
+  "ContextTimestamp": "2026-10-20T00:51:34.094Z",
+  "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "ProfileFileCount": 1,
+  "MarkerReadInFull": true,
+  "PluginRoot": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0",
+  "PluginCache": "/tmp/hv-ug-r1-20261019T195131-codex-cache",
+  "TimestampLocal": "2026-10-19T19:54:00"
+}

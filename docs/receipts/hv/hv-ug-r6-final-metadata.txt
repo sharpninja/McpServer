@@ -1,0 +1,10 @@
+type: result
+payload:
+  requestId: req-20261026T135058Z-5e60
+  result:
+    turnId: 2650
+    agent: Codex
+    sessionId: Codex-20261026T122926Z-unitgreen-r6
+    requestId: req-20261026T123039Z-unitgreen-r6
+
+---

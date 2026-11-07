@@ -1,0 +1,30 @@
+{
+  "TimestampLocal": "2026-11-02T19:31:09",
+  "TimestampUtc": "2026-11-03T01:31:09.5589972Z",
+  "Method": "workflow.requirements.getFr",
+  "Params": {
+    "id": "FR-MCP-PLUGINCORE-002"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "Plugin CI SHALL fail when a lib file is neither covered by the core manifest nor declared as plugin residual.",
+          "updatedAt": "2026-11-03T01:31:11.8450787+00:00",
+          "status": "pending",
+          "id": "FR-MCP-PLUGINCORE-002",
+          "createdAt": "2026-11-03T01:31:11.8449545+00:00",
+          "title": "No-duplication CI guard for plugin lib files",
+          "priority": "medium",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "acceptanceCriteria": []
+        },
+        "requestId": "req-20261103T013110Z-b270",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

@@ -1,0 +1,55 @@
+type: result
+payload:
+  requestId: req-20261026T123539Z-6fcd
+  result:
+    items:
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-001
+      createdAt: 2026-10-26T12:35:41.1826016+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-002
+      createdAt: 2026-10-26T12:35:41.1831215+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-005
+      createdAt: 2026-10-26T12:35:41.1832215+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-006
+      createdAt: 2026-10-26T12:35:41.1832870+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-007
+      createdAt: 2026-10-26T12:35:41.1833476+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-008
+      createdAt: 2026-10-26T12:35:41.1834078+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-009
+      createdAt: 2026-10-26T12:35:41.1834657+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-010
+      createdAt: 2026-10-26T12:35:41.1835247+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-011
+      createdAt: 2026-10-26T12:35:41.1835811+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-012
+      createdAt: 2026-10-26T12:35:41.1836456+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-015
+      createdAt: 2026-10-26T12:35:41.1837031+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-016
+      createdAt: 2026-10-26T12:35:41.1837595+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-017
+      createdAt: 2026-10-26T12:35:41.1838163+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-018
+      createdAt: 2026-10-26T12:35:41.1838741+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-019
+      createdAt: 2026-10-26T12:35:41.1839302+00:00
+    totalCount: 15
+  deprecated: true
+
+---
+

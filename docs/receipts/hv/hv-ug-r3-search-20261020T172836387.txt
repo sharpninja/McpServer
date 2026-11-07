@@ -1,0 +1,11 @@
+96:    internal static string? AgentPluginUserProfileOverride { get; set; }
+144:        var templateContext = BuildTemplateContext(baseUrl, apiKey, workspace, workspacePath, workspaceName, agentAdditions);
+392:    internal static Dictionary<string, object?> BuildTemplateContext(
+537:            ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName);
+613:    internal static string ResolveAgentPluginVersion(
+617:        ResolveAgentPluginVersion(
+621:            AgentPluginUserProfileOverride ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+635:    internal static string ResolveAgentPluginVersion(
+641:        ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName, userProfile, walker, ReadExistingFileText);
+655:    internal static string ResolveAgentPluginVersion(
+

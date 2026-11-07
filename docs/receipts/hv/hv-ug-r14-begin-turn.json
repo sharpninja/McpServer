@@ -1,0 +1,9 @@
+{
+  "startedLocal": "2026-11-06T16:01:14.5560521-06:00",
+  "endedLocal": "2026-11-06T16:01:18.8813230-06:00",
+  "action": "Begin",
+  "method": "workflow.sessionlog.beginTurn",
+  "cachePath": "/tmp/hv-ug-r14-codex-01a1b2d9",
+  "pluginRoot": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0",
+  "output": "type: result\npayload:\n  result:\n    code: persisted\n    retryable: false\n    persisted: true\n    degraded: false\n    queued: false\n    method: workflow.sessionlog.beginTurn\n    agent: Codex\n    sessionId: Codex-20261106T215955Z-plugin-session\n    requestId: req-20261106T220114Z-unitgreen-r14\n    failsafePath: \"\"\n    message: Session log persist confirmed a durable write for request 'req-20261106T220114Z-unitgreen-r14'.\n    childStderr: \"\"\n"
+}

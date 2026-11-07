@@ -10,7 +10,7 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>Unit tests for FRP tunnel provider helper logic and failure paths.</summary>
-[Trait("Category", "Integration")]
+
 public sealed class FrpTunnelProviderTests
 {
     private readonly IProcessRunner _processRunner = Substitute.For<IProcessRunner>();
@@ -180,6 +180,9 @@ public sealed class FrpTunnelProviderTests
         Assert.Equal("http://mcp.frps.example.com", subdomainUrl);
     }
 
+    /// <summary>Verifies GetStatusAsync_WhenTrackedProcessExited_ReturnsExitError using its native fixture.</summary>
+    /// <remarks>Integration: starts and observes a native child process (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task GetStatusAsync_WhenTrackedProcessExited_ReturnsExitError()
     {
@@ -233,6 +236,9 @@ public sealed class FrpTunnelProviderTests
         Assert.Contains("either RemotePort or TcpPortRangeStart/End", status.Error, StringComparison.Ordinal);
     }
 
+    /// <summary>Verifies Dispose_WhenTempConfigExists_DeletesFileAndClearsConfigPath using its native fixture.</summary>
+    /// <remarks>Integration: creates and deletes a physical temporary config file (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Dispose_WhenTempConfigExists_DeletesFileAndClearsConfigPath()
     {

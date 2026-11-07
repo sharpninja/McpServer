@@ -1,0 +1,62 @@
+ug-r6-env-sweep: one-time environment sweep of the seven unit test projects (plan section 19.3)
+Run: 2026-10-21T12:28 to 13:24 local, at code head 9933796c (R5-F1 commit), worktree unit-suite-green-20261019.
+Tools (read-only, analyzed, 0 findings): Search-Text.ps1, Search-UnitProjects.ps1, Get-TestLaneTags.ps1, Get-FileHeads.ps1.
+Not a scanner and not tracked code: a one-time search whose result is this list (operator 2026-10-21: "Fix both, strengthen ACs";
+the scanner override of 06:06:46 stands, no scanner work).
+
+Projects searched: QBrainAi.Support.Mcp.Tests, QBrainAi.Repl.Core.Tests, QBrainAi.Client.Tests, QBrainAi.QBAgent.Tests,
+QBrainAi.McpAgent.Tests, QBrainAi.Cqrs.Tests, QBrainAi.Launcher.Tests (bin and obj excluded).
+
+Reader classes and patterns:
+1. Imports the whole environment into configuration: AddEnvironmentVariables(, WebApplication.CreateBuilder,
+   Host.CreateDefaultBuilder, Host.CreateApplicationBuilder, new HostBuilder(, WebApplicationFactory,
+   EnvironmentVariablesConfiguration, Environment.GetEnvironmentVariables().
+2. Reads or writes a variable directly or through a helper: Environment.GetEnvironmentVariable(, Environment.SetEnvironmentVariable(.
+3. Asserts on a child process environment: ProcessStartInfo (each hit read case by case).
+Hit counts: Support.Mcp.Tests 79 (classes 1 and 3) and 55 (class 2); the other six projects 0 for every class.
+
+Unit tests moved to Category=Integration (13), assertions unchanged:
+- Options/ProductAliasCompatibilityTests.ProjectCanonicalSection_EnvironmentAndCommandLineBeatFileQBrainAi
+  (class 1 and 2; R5-F2). Sets Mcp__ProjectionProbe and QBrainAi__ProjectionCliProbe; now also clears QBrainAi__ProjectionProbe,
+  Mcp__ProjectionCliProbe, Mcp__Port and QBrainAi__Port; restores all six.
+- Services/HostileReviewG4OverlayTests.HostileReviewWorker_InvalidOptions_FailStartup (class 1, default host builder; reads only).
+  Its assertion depends on no variable: the in-memory source, added after the environment, sets the five worker keys, and
+  RenewalInterval equal to LeaseDuration fails HostileReviewWorkerOptions.Validate whatever else the environment holds.
+- Options/McpInstanceResolverTests.GetRequestedInstanceName_PrefersQBrainAiEnvironmentVariable and
+  _FallsBackToLegacyEnvironmentVariable (class 2; both forms already set and restored).
+- Services/BrainSlotCredentialResolverTests.ResolveAsync_WithEnvironmentReference_ReturnsTrimmedSecret (class 2; a uniquely
+  named variable, no canonical or legacy pair).
+- Memory/MemoryIndexerTests.OnnxLocal_NoCloudRequired (class 2; cleared OPENAI_API_KEY and AZURE_OPENAI_API_KEY without
+  restoring them; now restores both).
+- Services/CliBrainSlotStrategyTests, the six users of WithIsolatedQuadbrainTemp (class 2; MCPSERVER_QUADBRAIN_CLI_TEMP set and
+  MCPSERVER_ONESHOT_TEMP cleared, both restored): CompleteAsync_Grok_UsesIsolatedCwdNotConfiguredRepoRoot (now also sets
+  GROK_PLUGIN_ROOT and GROK_HOME to scripted values and restores them, so its absence assertions observe the removal),
+  CompleteAsync_Codex_ReturnsAssistantTextFromJsonlNotRawEvents, CompleteAsync_Codex_PrefersJsonlAssistantTextOverOutputFileToolCallJson,
+  ResolveTempDirectory_HonorsConfiguredEnvVar_WithoutWindowsServiceAcl, CompleteAsync_Grok_WritesPromptFileUnderConfiguredTempAndSetsTempEnv,
+  CompleteAsync_Codex_WritesOutputFileUnderConfiguredTemp.
+- Services/CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedOutputPath
+  (class 2; MCPSERVER_CODEX_ONESHOT_TEMP, which the strategy reads first, set and restored).
+
+Process-environment writers serialized (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008: "the tests that write the process
+environment run one at a time"):
+- New collection "Process environment" (TestSupport/ProcessEnvironmentCollection, DisableParallelization = true) holds:
+  ProductAliasCompatibilityTests, McpInstanceResolverTests, BrainSlotCredentialResolverTests, MemoryIndexerTests,
+  CliBrainSlotStrategyTests, CodexCliAgentExecutionStrategyTests, McpDatabaseEncryptionTransitionCommandTests,
+  ProcessEnvironmentServiceTests, MemoryBenchHarnessTests.
+- Already serialized: Documentation/BugTriage139FourteenthHarnessTests (MCP_REPOSITORY_ROOT) in "Repository root process state"
+  (DisableParallelization = true).
+- Outside the seven unit projects: QBrainAi.PluginIntegration.Tests/PluginSessionLogWorkflowAdapterTests (PLUGIN_ROOT_OVERRIDE,
+  restored) is already in "PluginSessionLog" (DisableParallelization = true); that project runs only under the
+  PluginSessionLogIntegration target, not a gate of this PR, and is unchanged.
+
+Kept as unit tests after reading each case (class 3, child process environment): NgrokTunnelProviderEnvironmentTests (6 cases)
+assert only values the stub environment service or the options set (USERPROFILE, HOME, APPDATA, PATH, NGROK_AUTHTOKEN) or the
+probe requests it records; none asserts an inherited ambient value. The CliBrainSlotStrategyTests recording spawner strips
+inherited keys from its copies; the only absence assertions are in the Grok case above, which now sets both variables.
+Class 3 hits already in integration classes: DesktopProcessSpawnerTests, ProcessEnvironmentServiceTests, FrpTunnelProviderTests,
+TunnelProviderTests, TranscriptMcpStdioHostTests, BugTriage139EighteenthTraversalTests, BugTriage139SixteenthLinuxTests and the
+process starts of RequirementsTwelfthAdversarialReviewTests and SessionLogAgentSessionHeaderMigrationTests (integration methods).
+Process-starting helpers (RepositoryEvidenceTestSupport, EphemeralPostgresFixture, SqlServerTestConnection) serve integration tests only.
+
+Stated limit: the list comes from this search, not from a discovery test; a new class that writes the process environment must be
+added to ProcessEnvironmentCollectionTests.ProcessEnvironmentWriters_AreInASerializedCollection.

@@ -1,0 +1,6 @@
+Now: 2026-11-02T23:03:17 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final4-linux-lane-1 (736) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1 (737)
+onlyBefore=0 onlyAfter=1 common=736
+onlyAfter Build.Tests=1
+--- only in before ---
+--- only in after ---
+Build.Tests | NukeBuild.Tests.QuadBrainOllamaModelBindingTests.BothConsumers_UseTheSharedRule

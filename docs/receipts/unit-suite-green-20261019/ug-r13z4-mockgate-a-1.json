@@ -1,0 +1,55 @@
+{
+  "name": "ug-r13z4-mockgate-a-1",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "2103243cfb4155e201b0fe1fd257ebc093800d86",
+  "dirtyPaths": [
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Repl.Core.Tests:OwnedInstanceKeyIdentityContractTests",
+    "--test-run-id",
+    "ug-r13z4-mockgate-a-1"
+  ],
+  "startedLocal": "2026-11-05T02:59:44",
+  "endedLocal": "2026-11-05T02:59:56",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 18,
+  "passed": 18,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4-mockgate-a-1/groups/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "1DE6FF9A2B38F762C40AC3D2260CA5C0220DB8BEC0344C1D8767847723200A8B",
+      "total": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs",
+      "sha256": "37694B165E80C2A02B72F95379363E287BAFA77C8C893239337F772B3FAADA6E"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs",
+      "sha256": "8420D32AEC291ADDDF087749BE115DFC1DA0163F3B1305FECF2F2431FFA4C5DC"
+    },
+    {
+      "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+      "sha256": "4F237A365454339CC71221EFE80EC6E91A378B50F9EC9813113749E1DF0FC51B"
+    }
+  ],
+  "writtenLocal": "2026-11-05T03:00:39",
+  "writtenBy": "ClaudeCode"
+}

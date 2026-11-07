@@ -1,0 +1,9 @@
+{
+  "sessionId": "Codex-20261029T032954Z-plugin-session",
+  "requestId": "req-20261029T032957Z-unitgreen-r8b",
+  "threadId": "01a185b0-ad99-7510-ab6b-27d47df11d3e",
+  "model": "gpt-6-astra",
+  "effort": "max",
+  "cacheRoot": "/tmp/hv-ug-r8b3-01a185b0-ad99-7510-ab6b-27d47df11d3e",
+  "wrapperPath": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/Invoke-CodexMcpPlugin.ps1"
+}

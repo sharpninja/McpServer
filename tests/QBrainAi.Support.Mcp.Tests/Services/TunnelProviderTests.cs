@@ -10,7 +10,7 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>Unit tests for tunnel provider implementations.</summary>
-[Trait("Category", "Integration")]
+
 public sealed class TunnelProviderTests
 {
     private readonly IProcessRunner _processRunner = Substitute.For<IProcessRunner>();
@@ -65,6 +65,9 @@ public sealed class TunnelProviderTests
         Assert.False(status.IsRunning);
     }
 
+    /// <summary>Verifies NgrokProvider_GetStatusAsync_WhenTrackedProcessExited_ReturnsDetailedExitError using its native fixture.</summary>
+    /// <remarks>Integration: starts and observes a native child process (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task NgrokProvider_GetStatusAsync_WhenTrackedProcessExited_ReturnsDetailedExitError()
     {
@@ -84,6 +87,9 @@ public sealed class TunnelProviderTests
         Assert.Contains("simulated ngrok failure", status.Error, StringComparison.Ordinal);
     }
 
+    /// <summary>Verifies NgrokProvider_GetStatusAsync_WhenRunningWithStartupTimeoutError_PreservesDiagnosticError using its native fixture.</summary>
+    /// <remarks>Integration: binds status to the actual current process (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task NgrokProvider_GetStatusAsync_WhenRunningWithStartupTimeoutError_PreservesDiagnosticError()
     {
@@ -150,6 +156,9 @@ public sealed class TunnelProviderTests
         Assert.False(status.IsRunning);
     }
 
+    /// <summary>Verifies CloudflareProvider_GetStatusAsync_WhenTrackedProcessExited_ReturnsDetailedExitError using its native fixture.</summary>
+    /// <remarks>Integration: starts and observes a native child process (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task CloudflareProvider_GetStatusAsync_WhenTrackedProcessExited_ReturnsDetailedExitError()
     {
@@ -169,6 +178,9 @@ public sealed class TunnelProviderTests
         Assert.Contains("simulated cloudflared failure", status.Error, StringComparison.Ordinal);
     }
 
+    /// <summary>Verifies CloudflareProvider_GetStatusAsync_WhenRunningWithStartupTimeoutError_PreservesDiagnosticError using its native fixture.</summary>
+    /// <remarks>Integration: binds status to the actual current process (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task CloudflareProvider_GetStatusAsync_WhenRunningWithStartupTimeoutError_PreservesDiagnosticError()
     {

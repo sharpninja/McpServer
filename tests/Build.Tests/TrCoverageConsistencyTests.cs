@@ -82,6 +82,8 @@ public sealed class TrCoverageConsistencyTests
         return result;
     }
 
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CfgProviderFactoryTrExists_AndIsComplete()
     {
@@ -91,6 +93,8 @@ public sealed class TrCoverageConsistencyTests
         Assert.Contains(CompleteMarker, cfg007.Status);
     }
 
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CompletedTrs_MustNotNameProviderSpecificTypes_WhenCfg007Complete()
     {
@@ -132,6 +136,8 @@ public sealed class TrCoverageConsistencyTests
         }
     }
 
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void TrsNotMarkedComplete_AreIgnoredByRegression()
     {

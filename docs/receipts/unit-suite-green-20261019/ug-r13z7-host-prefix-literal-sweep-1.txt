@@ -1,0 +1,54 @@
+RECEIPT started=2026-11-05T14:31:35 ended=2026-11-05T14:31:38 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-CodeLines.ps1 sha256=6CB582531536BFCDFC583B99ACED75DD62505EED8C6D053A3FE448FC4EA64E72
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Roots | tests | -PatternFile | /home/sharpninja/.claude/scratch/pr82-review-20261019/pattern-z7-host-prefix-literals.txt
+HEAD 1d77a79c4e1e78a4c8e164a49779393721a95061
+Now: 2026-11-05T14:31:35 roots=tests pattern="(DOTNET|ASPNETCORE)_
+tests/QBrainAi.PluginIntegration.Tests/PluginIntegrationServerFixture.cs:196: startInfo.Environment["ASPNETCORE_ENVIRONMENT"] = "Production";
+tests/QBrainAi.PluginIntegration.Tests/PluginIntegrationServerFixture.cs:197: startInfo.Environment["DOTNET_ENVIRONMENT"] = "Production";
+tests/QBrainAi.PluginIntegration.Tests/PluginIntegrationServerFixture.cs:198: startInfo.Environment["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1";
+tests/QBrainAi.PluginIntegration.Tests/PluginIntegrationServerFixture.cs:199: startInfo.Environment["DOTNET_NOLOGO"] = "1";
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:67: new() { ["PATH"] = "/usr/bin", ["HOME"] = "/home/example", ["DOTNET_ROOT"] = "/usr/share/dotnet" },
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:68: new() { ["PATH"] = "/usr/bin", ["HOME"] = "/home/example", ["DOTNET_ROOT"] = "/usr/share/dotnet" }),
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:25: "DOTNET_Mcp__IdentityServer__Enabled", "ASPNETCORE_QBrainAi__IdentityServer__Enabled",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:26: "DOTNET_ConnectionStrings__Mcp", "ASPNETCORE_Mcp__Database__Provider",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:29: "CONTENTROOT", "DOTNET_CONTENTROOT", "ASPNETCORE_CONTENTROOT",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:30: "ENVIRONMENT", "DOTNET_ENVIRONMENT", "ASPNETCORE_ENVIRONMENT",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:31: "URLS", "DOTNET_URLS", "ASPNETCORE_URLS", "APPLICATIONNAME", "DOTNET_APPLICATIONNAME", "ASPNETCORE_APPLICATIONNAME",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:32: "HOSTINGSTARTUPASSEMBLIES", "DOTNET_HOSTINGSTARTUPASSEMBLIES", "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:38: ["DOTNET_ENVIRONMENT"] = "Production", ["ASPNETCORE_ENVIRONMENT"] = "Production",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:39: ["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1", ["DOTNET_NOLOGO"] = "1",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:87: var inherited = new Dictionary<string, string?> { [key] = "foreign", ["PATH"] = "/tools", ["DOTNET_ROOT"] = "/runtime" };
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:90: ["PATH"] = "/tools", ["DOTNET_ROOT"] = "/runtime",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:134: ScriptedBuilder(inherited, settings).Where(p => !p.Key.StartsWith("DOTNET_", StringComparison.OrdinalIgnoreCase))
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:340: var result = inherited.Where(p => p.Key is "PATH" or "DOTNET_ROOT").ToDictionary(p => p.Key, p => p.Value, StringComparer.OrdinalIgnoreCase);
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:67: private static readonly string[] HostPrefixes = ["DOTNET_", "ASPNETCORE_"];
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:97: ["DOTNET_NOLOGO"] = "1",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:125: new() { ["DOTNET_QBrainAi:Database:Sqlite:ConnectionString"] = "Data Source=" + LiveDatabase, ["ASPNETCORE_Mcp:Database__Provider"] = "sqlserver" },
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:150: new() { ["DOTNET_ROOT"] = "/usr/share/dotnet", ["DOTNET_gcServer"] = "1", ["PATH"] = "/usr/bin" },
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:151: new() { ["DOTNET_ROOT"] = "/usr/share/dotnet", ["DOTNET_gcServer"] = "1", ["PATH"] = "/usr/bin" }),
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:169: OwnedWith(null, ("DOTNET_NOLOGO", "1")),
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:174: new() { ["DOTNET_Logging__LogLevel__Default"] = "Trace", ["DOTNET_port"] = "7147", ["PATH"] = "/usr/bin" },
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:190: Child(Owned, ("DOTNET_Mcp:Database:Sqlite:ConnectionString", "Data Source=" + LiveDatabase)), Owned, false),
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:216: Child(OwnedWith(null, ("DOTNET_ENVIRONMENT", "Production"), ("ASPNETCORE_ENVIRONMENT", "Production"))),
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:217: OwnedWith(null, ("DOTNET_ENVIRONMENT", "Production"), ("ASPNETCORE_ENVIRONMENT", "Production")), true),
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:219: Child(OwnedWith(null, ("DOTNET_NOLOGO", "1")), ("NOLOGO", "0"), ("nologo", "0")),
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:220: OwnedWith(null, ("DOTNET_NOLOGO", "1")), false),
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:395: var hosted = EffectiveConfiguration([new("DOTNET_QBrainAi__Port", "7147")]);
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:397: Assert.Equal("7147", hosted["DOTNET_QBrainAi:Port"]);
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:609: if (key.StartsWith("ASPNETCORE_", IgnoreCase)) return true;
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:610: if (key.StartsWith("DOTNET_", IgnoreCase)) return IsProductKey(key["DOTNET_".Length..]);
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:735: if (key.StartsWith("ASPNETCORE_", IgnoreCase)) return true;
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:736: if (key.StartsWith("DOTNET_", IgnoreCase)) return IsRawProductKey(key["DOTNET_".Length..]);
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs:47: new("DOTNET_Mcp__Database__Provider", "postgresql", false),
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs:48: new("ASPNETCORE_QBrainAi__Database__Provider", "sqlite", true),
+tests/TestSupport.Shared/OwnedReplStart.cs:34: ["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1",
+tests/TestSupport.Shared/OwnedReplStart.cs:35: ["DOTNET_NOLOGO"] = "1",
+tests/TestSupport.Shared/ScratchQBrainAi.cs:263: ["ASPNETCORE_ENVIRONMENT"] = "Production",
+tests/TestSupport.Shared/ScratchQBrainAi.cs:264: ["DOTNET_ENVIRONMENT"] = "Production",
+tests/TestSupport.Shared/ScratchQBrainAi.cs:265: ["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1",
+tests/TestSupport.Shared/ScratchQBrainAi.cs:266: ["DOTNET_NOLOGO"] = "1",
+tests/TestSupport.Shared/TemporaryInstanceChecks.cs:531: if (key.StartsWith("ASPNETCORE_", StringComparison.OrdinalIgnoreCase)) return true;
+tests/TestSupport.Shared/TemporaryInstanceChecks.cs:532: if (key.StartsWith("DOTNET_", StringComparison.OrdinalIgnoreCase))
+tests/TestSupport.Shared/TemporaryInstanceChecks.cs:533: return IsProductVariable(key["DOTNET_".Length..]);
+tests/TestSupport.Shared/TemporaryInstanceChecks.cs:592: private static readonly string[] HostPrefixes = ["DOTNET_", "ASPNETCORE_"];
+END matches=48

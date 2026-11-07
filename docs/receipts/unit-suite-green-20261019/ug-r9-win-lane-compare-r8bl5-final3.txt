@@ -1,0 +1,205 @@
+Now: 2026-11-02T13:31:19 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-lane-5 (589) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/unitgreen-r9-trx-62c5882d/ug-r9-final3-win-lane-1 (713)
+onlyBefore=36 onlyAfter=160 common=553
+onlyBefore QBrainAi.Repl.Core.Tests=1
+onlyBefore QBrainAi.Support.Mcp.Tests=35
+onlyAfter Build.Tests=78
+onlyAfter QBrainAi.Support.Mcp.IntegrationTests=6
+onlyAfter QBrainAi.Support.Mcp.Tests=76
+--- only in before ---
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.BuildPublicUrl_PrefersPublicBaseUrl_ThenCustomDomain_ThenSubdomain
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_IncludesExpectedHttpFieldsAndToken
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpRange_CreatesOneToOneMappings
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpSinglePort_UsesLocalTunnelPortAndConfiguredRemotePort
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_WhenSubdomainConfigured_UsesSubdomainInsteadOfCustomDomain
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenCliMissing_SetsError
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenProxyTypeUnsupported_SetsValidationErrorAndSkipsCliCheck
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenSubdomainAndCustomDomainConfigured_SetsValidationError
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeAndRemotePortBothConfigured_SetsValidationError
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeMissingEnd_SetsValidationError
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.GitHubCliServiceWindowsTests.ListIssuesAsync_WithForeignWorkspace_RunsWithoutWorkingDirectory
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_LocalDevicePrefix_IsStripped
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_UncDevicePrefix_BecomesUncPath
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_LongContainedPath_SucceedsWhenSupported
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_Cancelled_Throws
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_ExactlyAtLimit_ReturnsText
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_GrowingStream_StopsAtLimit
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.QueryAsync_HomeRelativeFilter_ExpandsThenExactMatches
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_BuildStartupTimeoutError_IncludesOutputContext
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_ProviderName_IsCloudflare
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_StartAsync_WhenCliMissing_SetsError
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_ProviderName_IsFrp
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_StartAsync_WhenCliMissing_SetsError
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_BuildStartupTimeoutError_IncludesApiAndOutputContext
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_ProviderName_IsNgrok
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_StartAsync_WhenCliMissing_SetsError
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.CurrentDirectory_IsProcessWorkingDirectory
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.NormalizeNativePath_CollapsesToCanonicalForm
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.Platform_IsRunningPlatform
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.AllOtherFiles_StayWithinReviewedAllowlist
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.IdentityFiles_HaveNoDirectGetFullPath
+--- only in after ---
+Build.Tests | NukeBuild.Tests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess
+Build.Tests | NukeBuild.Tests.BuildProjectSetTests.GetBuildProjectFiles_CoversEverySourceAndTestProject_ExceptBuildTests
+Build.Tests | NukeBuild.Tests.BuildProjectSetTests.RestoreAndCompile_UseTheSharedProjectSet
+Build.Tests | NukeBuild.Tests.BuildTargetTests.Build_SourceProjects_DoNotPinDivergentVersionMetadata
+Build.Tests | NukeBuild.Tests.BuildTargetTests.BuildTargets_UseGitVersionForCompileAndReplTool
+Build.Tests | NukeBuild.Tests.BuildTargetTests.CopyBrainSlotRuntimeConfig_CopiesAssignmentFileToDeploymentConfigPath
+Build.Tests | NukeBuild.Tests.BuildTargetTests.DeployQBAgentTool_DependsOnPackQBAgentTool_NotCompile
+Build.Tests | NukeBuild.Tests.BuildTargetTests.PackQBAgentTool_DoesNotDependOnSolutionCompile
+Build.Tests | NukeBuild.Tests.BuildTargetTests.QBAgentProject_IsConfiguredAsDotNetTool
+Build.Tests | NukeBuild.Tests.BuildTargetTests.ResolveNuGetPackageVersion_ReturnsExplicitParameter
+Build.Tests | NukeBuild.Tests.BuildTargetTests.SyncAgentPlugins_EnsuresNodeCoreNpmCiBeforeNpmRunBuild
+Build.Tests | NukeBuild.Tests.BuildTargetTests.SyncAgentPlugins_RefreshesNodeCoreVendorPackageBeforeCaches
+Build.Tests | NukeBuild.Tests.BuildTargetTests.SyncAgentPlugins_RefreshesWorkspaceStagedPackageBeforeSiblingDiscovery
+Build.Tests | NukeBuild.Tests.BuildTargetTests.UpdateService_StagesBaselineConfigurationBeforeStoppingWindowsService
+Build.Tests | NukeBuild.Tests.DocsSyncG8OverlayTests.G8_NukeSyncAgentPluginsTarget_InvokesCoreSyncScript
+Build.Tests | NukeBuild.Tests.DocsSyncG8OverlayTests.G8_NukeValidateConfigTarget_InvokesShippedValidator
+Build.Tests | NukeBuild.Tests.DocsSyncG8OverlayTests.G8_NukeValidateTraceabilityTarget_InvokesShippedValidator
+Build.Tests | NukeBuild.Tests.DocsSyncG8OverlayTests.G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore
+Build.Tests | NukeBuild.Tests.DocsSyncG8OverlayTests.G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings
+Build.Tests | NukeBuild.Tests.DocsSyncG8OverlayTests.G8_ValidateTraceability_ShippedValidator_PassesOnLiveDocsProject
+Build.Tests | NukeBuild.Tests.HandoffD3D5OverlayTests.D3_NukeValidateTraceabilityTarget_InvokesShippedValidatorOnDocsProject
+Build.Tests | NukeBuild.Tests.HandoffD3D5OverlayTests.D3_ValidateTraceability_ShippedValidator_PassesOnLiveDocsProject
+Build.Tests | NukeBuild.Tests.IntegrationLaneProjectsTests.ProductionSelector_OnTheSolutionFile_SelectsTheLaneProjects
+Build.Tests | NukeBuild.Tests.IntegrationLaneProjectsTests.SolutionRow_IsTheSolutionFile
+Build.Tests | NukeBuild.Tests.IntegrationLaneProjectsTests.SupportIntegrationClasses_AreDeclaredOnceAndTaggedIntegration
+Build.Tests | NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.GeneratedMigrationFiles_DoNotContainObsoleteWarningPragmas(project: PostgreSQL)
+Build.Tests | NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.GeneratedMigrationFiles_DoNotContainObsoleteWarningPragmas(project: SQL Server)
+Build.Tests | NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.GeneratedMigrationFiles_DoNotContainObsoleteWarningPragmas(project: SQLite)
+Build.Tests | NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.GeneratedMigrationFiles_RecordProviderIdentitySymbols(project: PostgreSQL)
+Build.Tests | NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.GeneratedMigrationFiles_RecordProviderIdentitySymbols(project: SQL Server)
+Build.Tests | NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.GeneratedMigrationFiles_RecordProviderIdentitySymbols(project: SQLite)
+Build.Tests | NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(project: PostgreSQL)
+Build.Tests | NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(project: SQL Server)
+Build.Tests | NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(project: SQLite)
+Build.Tests | NukeBuild.Tests.NukeParametersTests.NukeParameters_Solution_NamesExistingSolutionFile
+Build.Tests | NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail
+Build.Tests | NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Catalog_HasExactlyEightEnabledScenarios
+Build.Tests | NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.NukeTarget_SkipIsFailure
+Build.Tests | NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Solution_ContainsQBrainAiPluginIntegrationTestsProject
+Build.Tests | NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.TestTarget_ExcludesPluginIntegrationFromUnitInventory
+Build.Tests | NukeBuild.Tests.PowerShellInvocationTests.BuildBootstrap_RelaunchesWithNonInteractivePowerShellFlags
+Build.Tests | NukeBuild.Tests.PowerShellInvocationTests.BuildTests_PwshProcessStartInfo_UsesNonInteractiveFlags
+Build.Tests | NukeBuild.Tests.PowerShellInvocationTests.DeploymentGuidance_PwshCommandsUseNonInteractiveFlags
+Build.Tests | NukeBuild.Tests.QBrainAiRebrandPhase1Tests.DisplayDockerAndServiceDefaults_UseQBrainNames
+Build.Tests | NukeBuild.Tests.QBrainAiRebrandPhase1Tests.Inventory_EveryRowHasClosedAction
+Build.Tests | NukeBuild.Tests.QBrainAiRebrandPhase1Tests.Packages_NewIdsAndLegacyFacades
+Build.Tests | NukeBuild.Tests.QBrainAiRebrandPhase1Tests.PersistedStateAndHostNames_Stay
+Build.Tests | NukeBuild.Tests.QBrainAiRebrandPhase1Tests.ReplNodeCallers_ResolveLegacyCommand
+Build.Tests | NukeBuild.Tests.QBrainAiRebrandPhase1Tests.RepositoryUrl_KeepsLiveGitHubName
+Build.Tests | NukeBuild.Tests.QBrainAiRebrandPhase1Tests.ReviewAliases_KeepLegacyColumnAndCheckoutPath
+Build.Tests | NukeBuild.Tests.QBrainAiRebrandPhase1Tests.Routes_KeepProtocolEndpointAndAliasProductPrefix
+Build.Tests | NukeBuild.Tests.QBrainAiRebrandPhase1Tests.SolutionAndProjects_UseQBrainAiRoot
+Build.Tests | NukeBuild.Tests.QBrainAiRebrandPhase1Tests.Tokens_KeepNamespaceAndPackageSpellingsApart
+Build.Tests | NukeBuild.Tests.QuadBrainDescriptorAbsenceTests.McpsRegistry_ContainsNoBrainSlotToolDescriptors
+Build.Tests | NukeBuild.Tests.SyncAgentPluginsChecksumTests.SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore
+Build.Tests | NukeBuild.Tests.SyncAgentPluginsVendorNameTests.SyncAgentPlugins_VendorStep_AssertsPackedVersionAgainstPackageJson
+Build.Tests | NukeBuild.Tests.SyncAgentPluginsVendorNameTests.SyncAgentPlugins_VendorStep_HasNoVersionedTarballLiteral
+Build.Tests | NukeBuild.Tests.SyncAgentPluginsVendorNameTests.SyncAgentPlugins_VendorStep_UsesStableVersionlessName
+Build.Tests | NukeBuild.Tests.TrCoverageConsistencyTests.CfgProviderFactoryTrExists_AndIsComplete
+Build.Tests | NukeBuild.Tests.TrCoverageConsistencyTests.CompletedTrs_MustNotNameProviderSpecificTypes_WhenCfg007Complete
+Build.Tests | NukeBuild.Tests.TrCoverageConsistencyTests.TrsNotMarkedComplete_AreIgnoredByRegression
+Build.Tests | NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.Cqrs.Mvvm)
+Build.Tests | NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.Cqrs)
+Build.Tests | NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.Launcher)
+Build.Tests | NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.McpAgent.SampleHost)
+Build.Tests | NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.McpAgent)
+Build.Tests | NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.QBAgent)
+Build.Tests | NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.Repl.Core)
+Build.Tests | NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.Repl.Host)
+Build.Tests | NukeBuild.Tests.WarningSuppressionApprovalValidatorTests.ApprovalRegister_ContainsOnlyScopedCurrentApprovalsAndMatchesCurrentOccurrences
+Build.Tests | NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoCA1031Suppressions
+Build.Tests | NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoCA1054OrCA1056Suppressions
+Build.Tests | NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoCA1515Suppressions
+Build.Tests | NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoCA1849Suppressions
+Build.Tests | NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoCA3003Suppressions
+Build.Tests | NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoCS1591Suppressions
+Build.Tests | NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoGeneratedMigrationObsoleteWarningPragmas
+Build.Tests | NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasOnlySerializerCompatibilityCA2227Suppressions
+QBrainAi.Support.Mcp.IntegrationTests | QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots(prompt: "Create Hello World in C++")
+QBrainAi.Support.Mcp.IntegrationTests | QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots(prompt: "Hello")
+QBrainAi.Support.Mcp.IntegrationTests | QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.ChatCompletions_OpenAiCompatibleFieldVariants_AreLoggedToSessionTurn
+QBrainAi.Support.Mcp.IntegrationTests | QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.QBAgentRunLoop_LocalOllamaDefaultModel_DisplaysQuadBrainResponse(prompt: "Hello")
+QBrainAi.Support.Mcp.IntegrationTests | QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.TemporaryInstance_RefusesDatabaseOutsideOwnedRoot
+QBrainAi.Support.Mcp.IntegrationTests | QBrainAi.Support.Mcp.IntegrationTests.RequirementScopeLayerReplIntegrationTests.RequirementScopeLayer_ReplWorkflow_ExercisesCurrentEffectiveRequirementsBeforeAndAfterLayer
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Requirements.RequirementsRecoveryTests.ApplyAsync_HungSave_IsRetryable503
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.GitHubCliServiceWindowsTests.ListIssuesAsync_WithForeignWorkspaceAndNoRepository_IsRefused
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_LongContainedPath_Succeeds
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffWorkspacePathsTests.Canonicalize_RelativeAndNested_MatchGetFullPath
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.CaptureForWriteAsync_ExistingPath_ReturnsSnapshot
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_Ambiguous_FailsWithoutReplaceAll
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_DisallowedPath_Rejected
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_EmptyOldString_Fails
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_ExpectedOccurrencesMismatch_Fails
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_MissingOldString_Fails
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_NonexistentFile_Fails
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_PathTraversal_Rejected
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_ReplaceAll_ReplacesEvery
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_SameOldAndNew_Fails
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_Success_AuditsAndPublishesUpdated
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_UniqueOccurrence_Replaces
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.LeadingSeparatorPath_IsNotReinterpretedAsRepoRelative
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ListAsync_GlobAllowlist_RootIncludesRelevantAncestorDirectoriesOnly
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ListAsync_NonexistentPath_ReturnsEmpty
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ListAsync_ValidDirectory_ReturnsEntries
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ReadAsync_AllowedPath_ReturnsContent
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ReadAsync_DisallowedPath_ReturnsNull
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ReadAsync_GlobAllowlist_DeniesExtensionMismatchWithinAllowedTree
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ReadAsync_GlobAllowlist_RequiresActualPatternMatch
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ReadAsync_PathTraversal_ReturnsNull
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RestoreWriteAsync_ExistingSnapshot_RestoresPriorContent
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RestoreWriteAsync_NewFileSnapshot_DeletesCreatedFile
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RestoreWriteAsync_WhenFileChangedAfterWrite_RefusesOverwrite
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedPathInsideRoot_AcrossRepoOperations_ResolvesRepoRelative
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedPathWithParentSegment_IsRejected
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.WriteAsync_AllowedPath_WritesAndAudits
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.WriteAsync_DisallowedPath_ReturnsFailure
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_InvalidWikiYaml_FailsBeforeWriting
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "api-a", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···], [["id"] = "api-b", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "duplicate target root")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = " ", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "executable")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", " "], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "arguments")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "../outside", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "workingDirectory")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "/outside/docfx", ···]]]], expectedMessage: "outputRoot")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···], [["id"] = "DOCS", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "duplicates workflow id")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "platform")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "targetRoot")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "timeout")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = [], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "arguments")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "docs/Missing.md", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]]], expectedMessage: "source")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "../Home.md"]], ["navigation"] = [[["document"] = "home"]]], expectedMessage: "target")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md", ["platforms"] = ["mobile"]]], ["navigation"] = [[["document"] = "home"]]], expectedMessage: "platform")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"], [["id"] = "functional", ["title"] = "Functional", ["source"] = "generated:functional", ["target"] = "Functional.md"]], ["navigation"] = [[["document"] = "home"]]], expectedMessage: "does not reference document")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"], [["id"] = "home", ["title"] = "Home Again", ["source"] = "generated:functional", ["target"] = "Home-Again.md"]], ["navigation"] = [[["document"] = "home"]]], expectedMessage: "duplicates")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"], [["document"] = "home"]]], expectedMessage: "references document")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "missing"]]], expectedMessage: "navigation")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:unknown", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]]], expectedMessage: "generated")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [["schema"] = "wrong/v1"], expectedMessage: "schema")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_WithoutDocFxSection_ReturnsEmptyDocFxWorkflows
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_WithValidDocFxWorkflow_ReturnsNormalizedWorkflow
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogDenseGraphTests.UpsertTurnAsync_SlowGraphLoad_FailsRetryableWithoutPersisting
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogReplaceSectionRetryableTests.ReplaceTurnSectionAsync_HungSaveChanges_FailsFastWithRetryableUnavailable
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogSubmitBudgetTests.SubmitAsync_SaveLongerThanFiveSeconds_CompletesUnderDefaultBudget
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogTurnContextBackfillTests.RunAsync_UsesAgentHistoryUnderFakeHome_WhenTurnTextHasNoTodo
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogTurnContextExtractorTests.Extract_ExactPathUnderUserProfileHistory_UsedWhenTurnHasNoPlan
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.StorageCommandBudgetTests.ExecuteAsync_ExplicitBudget_ExpiresAtThatBudget
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.StorageCommandBudgetTests.ExecuteAsync_HungWork_FailsWithinEightSeconds
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UseCaseGetWorkspaceResolutionContractTests.ProductionGate_EquivalentRawPath_UsesCanonicalWorkspace
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthSqliteTests.OpenAsync_Timeout_CallerIsRestoredReusableAndDisposableBeforeWorkerRelease
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthSqliteConsumerTests.OpenAsync_UnstoppablePreHandleWorker_IsBoundedAndTruthfullyCounted
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_ExplicitOverride_IsAdoptedWithoutLocalProvisioning
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqliteBoundedOpenFourteenthTests.OpenAsync_NativeLockAtOpen_TimesOutAndJoinsWorker
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqliteBoundedOpenFourteenthTests.OpenAsync_PreflightHeldAtBoundary_TimesOutWithoutBlockingTheCaller
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathWindowsFacadeTests.ToNativePath_TwoArguments_UsesWindowsHost(path: "//srv/share/x", platform: CaseSensitive, expected: "//srv/share/x")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathWindowsFacadeTests.ToNativePath_TwoArguments_UsesWindowsHost(path: "//srv/share/x", platform: Windows, expected: "\\\\srv\\share\\x")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathWindowsFacadeTests.ToNativePath_TwoArguments_UsesWindowsHost(path: "/fixture/repo", platform: CaseSensitive, expected: "/fixture/repo")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathWindowsFacadeTests.ToNativePath_TwoArguments_UsesWindowsHost(path: "C:/", platform: Windows, expected: "C:\\")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathWindowsFacadeTests.ToNativePath_TwoArguments_UsesWindowsHost(path: "C:/fixture/repo", platform: Windows, expected: "C:\\fixture\\repo")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathWindowsFacadeTests.ToNativePath_TwoArguments_UsesWindowsHost(path: "C:\\already\\native", platform: Windows, expected: "C:\\already\\native")

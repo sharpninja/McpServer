@@ -1,0 +1,25 @@
+{
+  "name": "ug-r4-build-tests-1",
+  "command": [
+    "dotnet",
+    "test",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+    "-c",
+    "Debug",
+    "--logger",
+    "trx;LogFileName=ug-r4-build-tests-1.trx",
+    "--results-directory",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-build-tests-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "26fc83486be252e63579cca9d53f3132672555c7",
+  "dirtyPaths": [
+    " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+  ],
+  "startedLocal": "2026-10-20T20:13:29",
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-build-tests-1.out.log",
+  "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-build-tests-1",
+  "exitCode": 0,
+  "endedLocal": "2026-10-20T20:17:54"
+}

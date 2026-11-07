@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "order": 3,
+      "type": "web_reference",
+      "status": "completed",
+      "description": "Read .NET runtime v10.0.0 EnvironmentVariablesConfigurationProvider source. It normalizes double underscores to colons but accepts existing colon-delimited names, compares configuration keys ignoring case and overwrites duplicate normalized keys during enumeration. This is the authoritative engine behavior used to inspect the owned-instance environment scrub; no standalone experiment or test run performed. Source: https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/Microsoft.Extensions.Configuration.EnvironmentVariables/src/EnvironmentVariablesConfigurationProvider.cs",
+      "filePath": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs"
+    }
+  ]
+}

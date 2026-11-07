@@ -1,0 +1,124 @@
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:123:        var startInfo = new ProcessStartInfo
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:134:        startInfo.Environment["DataFolder"] = dataRoot;
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:135:        startInfo.Environment["Mcp__Database__Provider"] = "sqlite";
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:136:        startInfo.Environment["Mcp__Database__Sqlite__DataSource"] = dbPath;
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:137:        startInfo.Environment["Mcp__Database__Encryption__Enabled"] = "false";
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:138:        startInfo.Environment["Mcp__DatabaseProvider"] = "sqlite";
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:139:        startInfo.Environment["Mcp__DataSource"] = dbPath;
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:140:        startInfo.Environment["Mcp__DataDirectory"] = dataRoot;
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:141:        startInfo.Environment["Mcp__RepoRoot"] = repositoryRoot;
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:142:        startInfo.Environment["Mcp__TodoStorage__Provider"] = "database";
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:143:        startInfo.Environment["Mcp__TodoStorage__SqliteDataSource"] = dbPath;
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:144:        startInfo.Environment["Mcp__SessionsPath"] = Path.Combine(dataRoot, "sessions");
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:145:        startInfo.Environment["Logging__LogLevel__Default"] = "Error";
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:146:        startInfo.Environment["Logging__LogLevel__Microsoft"] = "Error";
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:147:        startInfo.Environment["Serilog__MinimumLevel__Default"] = "Error";
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:149:        return Process.Start(startInfo) ?? throw new InvalidOperationException("Failed to start stdio host.");
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:387:        public void ApplyGitHubToken(ProcessStartInfo psi, string? token)
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:391:        public void ApplyRunAsEnvironment(ProcessStartInfo psi, string? runAsUser)
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:395:        public void ApplyAll(ProcessStartInfo psi, string? runAsUser, string? gitHubToken)
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:399:        public string ResolveExecutable(ProcessStartInfo psi, string fileName) => fileName;
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:106:                "$start = [Diagnostics.ProcessStartInfo]::new()",
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:150:    /// Short-lived real processes may exit between <see cref="System.Diagnostics.Process.Start()"/>
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:117:        var (startInfo, isolatedPosixGroup) = CreateProcessStartInfo(
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:173:    private static (ProcessStartInfo StartInfo, bool IsolatedPosixGroup) CreateProcessStartInfo(
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:180:        var startInfo = new ProcessStartInfo(setSid ?? fileName)
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:140:        var startInfo = new ProcessStartInfo
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:149:        var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs:482:        using var process = Process.Start(new ProcessStartInfo
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:559:            var startInfo = new ProcessStartInfo(executablePath)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:569:            var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:659:            var startInfo = new ProcessStartInfo(fileName)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:668:            using var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentCliClientShapeTests.cs:72:    private static string? GetArgumentAfter(ProcessStartInfo startInfo, string argument)
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentCliClientShapeTests.cs:98:        public void ApplyGitHubToken(ProcessStartInfo psi, string? token)
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentCliClientShapeTests.cs:102:        public void ApplyRunAsEnvironment(ProcessStartInfo psi, string? runAsUser)
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentCliClientShapeTests.cs:106:        public void ApplyAll(ProcessStartInfo psi, string? runAsUser, string? gitHubToken)
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentCliClientShapeTests.cs:110:        public string ResolveExecutable(ProcessStartInfo psi, string fileName) => fileName;
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentCliClientShapeTests.cs:115:        public ProcessStartInfo? StartInfo { get; private set; }
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentCliClientShapeTests.cs:117:        public ISpawnedProcess Spawn(ProcessStartInfo startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:397:            (Func<ProcessStartInfo, Process>)(_ =>
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:399:                var startInfo = new ProcessStartInfo("/bin/sh")
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:408:                helper = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:778:        var startInfo = new ProcessStartInfo(executablePath)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:789:        var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:941:        var startInfo = new ProcessStartInfo(fileName)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:951:        using var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs:292:        var startInfo = new ProcessStartInfo
+tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs:300:        var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:36:    /// TR-MCP-TUN-004: the ngrok child <see cref="ProcessStartInfo"/> carries the interactive user's
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:54:        Assert.Equal(UserProfile, startInfo.Environment["USERPROFILE"]);
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:55:        Assert.Equal(UserProfile, startInfo.Environment["HOME"]);
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:56:        Assert.Equal(Path.Combine(UserProfile, "AppData", "Roaming"), startInfo.Environment["APPDATA"]);
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:57:        Assert.Equal(UserPath, startInfo.Environment["PATH"]);
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:77:        Assert.Equal("token-123", startInfo.Environment["NGROK_AUTHTOKEN"]);
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:199:        public void ApplyGitHubToken(ProcessStartInfo psi, string? token)
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:204:        public void ApplyRunAsEnvironment(ProcessStartInfo psi, string? runAsUser)
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:207:            psi.Environment["USERPROFILE"] = UserProfile;
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:208:            psi.Environment["HOME"] = UserProfile;
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:209:            psi.Environment["APPDATA"] = System.IO.Path.Combine(UserProfile, "AppData", "Roaming");
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:210:            psi.Environment["LOCALAPPDATA"] = System.IO.Path.Combine(UserProfile, "AppData", "Local");
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:211:            psi.Environment["PATH"] = UserPath;
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:215:        public void ApplyAll(ProcessStartInfo psi, string? runAsUser, string? gitHubToken)
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:222:        public string ResolveExecutable(ProcessStartInfo psi, string fileName)
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessRunnerTests.cs:28:        var startInfo = Assert.IsType<ProcessStartInfo>(processEnvironment.ResolvedStartInfo);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessRunnerTests.cs:36:        public ProcessStartInfo? ResolvedStartInfo { get; private set; }
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessRunnerTests.cs:38:        public void ApplyGitHubToken(ProcessStartInfo psi, string? token)
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessRunnerTests.cs:42:        public void ApplyRunAsEnvironment(ProcessStartInfo psi, string? runAsUser)
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessRunnerTests.cs:46:        public void ApplyAll(ProcessStartInfo psi, string? runAsUser, string? gitHubToken)
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessRunnerTests.cs:50:        public string ResolveExecutable(ProcessStartInfo psi, string fileName)
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:126:    private static string? GetArgumentAfter(ProcessStartInfo startInfo, string argument)
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:136:        public void ApplyGitHubToken(ProcessStartInfo psi, string? token)
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:140:        public void ApplyRunAsEnvironment(ProcessStartInfo psi, string? runAsUser)
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:144:        public void ApplyAll(ProcessStartInfo psi, string? runAsUser, string? gitHubToken)
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:148:        public string ResolveExecutable(ProcessStartInfo psi, string fileName) => fileName;
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:153:        public ProcessStartInfo? StartInfo { get; private set; }
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:159:        public ISpawnedProcess Spawn(ProcessStartInfo startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:266:        public void ApplyGitHubToken(ProcessStartInfo psi, string? token)
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:270:        public void ApplyRunAsEnvironment(ProcessStartInfo psi, string? runAsUser)
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:274:        public void ApplyAll(ProcessStartInfo psi, string? runAsUser, string? gitHubToken)
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:278:        public string ResolveExecutable(ProcessStartInfo psi, string fileName) => fileName;
+tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs:26:            .ResolveExecutable(Arg.Any<ProcessStartInfo>(), Arg.Any<string>())
+tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs:248:        var startInfo = new ProcessStartInfo
+tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs:256:        var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:526:            var startInfo = new ProcessStartInfo("pwsh.exe")
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:538:            using var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:332:            var start = new ProcessStartInfo
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:345:            using var process = Process.Start(start)
+tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:200:            .ResolveExecutable(Arg.Any<System.Diagnostics.ProcessStartInfo>(), Arg.Any<string>())
+tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:376:        public ISpawnedProcess Spawn(System.Diagnostics.ProcessStartInfo startInfo) => process;
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:41:            var startInfo = new ProcessStartInfo
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:73:            var startInfo = new ProcessStartInfo
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:78:            startInfo.Environment["PATH"] = grokBin;
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:115:            var startInfo = new ProcessStartInfo { FileName = "ngrok", UseShellExecute = false };
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:116:            startInfo.Environment["PATH"] = $"{aliasDir};{portableDir}";
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:149:            var startInfo = new ProcessStartInfo { FileName = "ngrok", UseShellExecute = false };
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:150:            startInfo.Environment["PATH"] = msixDir;
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:172:        Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_AGENT_DASHBOARD"]);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:173:        Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_MEMORY"]);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:174:        Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_SUBAGENTS"]);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:466:            Assert.Equal(root, spawner.StartInfos[0].Environment["TEMP"]);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:467:            Assert.Equal(root, spawner.StartInfos[0].Environment["TMP"]);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:657:    private static string? ArgumentAfter(ProcessStartInfo startInfo, string name)
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:677:        public void ApplyGitHubToken(ProcessStartInfo psi, string? token)
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:681:        public void ApplyRunAsEnvironment(ProcessStartInfo psi, string? runAsUser)
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:685:        public void ApplyAll(ProcessStartInfo psi, string? runAsUser, string? gitHubToken)
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:689:        public string ResolveExecutable(ProcessStartInfo psi, string fileName) => fileName;
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:698:        public List<ProcessStartInfo> StartInfos { get; } = [];
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:704:        public ISpawnedProcess Spawn(ProcessStartInfo startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:720:        private static string? GetArgumentAfter(ProcessStartInfo startInfo, string name)
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:728:        private static ProcessStartInfo Clone(ProcessStartInfo source)
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:730:            var copy = new ProcessStartInfo
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:738:            // A fresh ProcessStartInfo inherits the current process environment.
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:752:                copy.Environment[key] = value;
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:230:        public void ApplyGitHubToken(ProcessStartInfo psi, string? token)
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:234:        public void ApplyRunAsEnvironment(ProcessStartInfo psi, string? runAsUser)
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:238:        public void ApplyAll(ProcessStartInfo psi, string? runAsUser, string? gitHubToken)
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:242:        public string ResolveExecutable(ProcessStartInfo psi, string fileName) => fileName;
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:252:        public ProcessStartInfo? StartInfo { get; private set; }
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:264:        public ISpawnedProcess Spawn(ProcessStartInfo startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:296:        private static string? GetArgumentValue(ProcessStartInfo startInfo, string name)
+tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:22:        var startInfo = new ProcessStartInfo
+tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:33:        startInfo.Environment["PATH"] = $"C:\\Users\\kingd\\AppData\\Roaming\\npm;{path}";
+tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:34:        startInfo.Environment["GH_TOKEN"] = "test-token";
+tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:70:        var startInfo = new ProcessStartInfo

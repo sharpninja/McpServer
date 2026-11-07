@@ -1,0 +1,11 @@
+?? docs/receipts/hv/20261102T190831-unitgreen-r9.request.jsonl
+?? docs/receipts/hv/20261102T190831-unitgreen-r9.response.jsonl
+?? docs/receipts/hv/20261102T190831-unitgreen-r9.selfreview.md
+?? docs/receipts/hv/hv-ug-r9-commands.jsonl
+?? docs/receipts/hv/hv-ug-r9-memories-global.json
+?? docs/receipts/hv/hv-ug-r9-memories-workspace.json
+?? docs/receipts/hv/hv-ug-r9-plugin-begin.txt
+?? docs/receipts/hv/hv-ug-r9-plugin-bootstrap.txt
+?? docs/receipts/hv/hv-ug-r9-plugin-initial-dialog.txt
+?? docs/receipts/hv/hv-ug-r9-plugin-open.txt
+?? docs/receipts/hv/hv-ug-r9-plugin-status.txt

@@ -1,0 +1,10 @@
+{
+  "dialogItems": [
+    {
+      "timestamp": "2026-11-05T07:00:12.2868695Z",
+      "role": "model",
+      "category": "observation",
+      "content": "Read .NET runtime v10.0.0 EnvironmentVariablesConfigurationProvider source. It normalizes double underscores to colons but accepts existing colon-delimited names, compares configuration keys ignoring case and overwrites duplicate normalized keys during enumeration. This is the authoritative engine behavior used to inspect the owned-instance environment scrub; no standalone experiment or test run performed."
+    }
+  ]
+}

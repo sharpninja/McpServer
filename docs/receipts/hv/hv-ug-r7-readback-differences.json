@@ -1,0 +1,20 @@
+[
+  {
+    "Part": 3,
+    "ExpectedLength": 20000,
+    "ActualLength": 19985,
+    "FirstDifference": 17985,
+    "ExpectedSlice": "er = [regex]::Replace($safeMarker, '(?i)(?:(?<=Bearer )|(?<=api_key=)|(?<=apikey=))[A-Za-z0-9_+/=.-]{20,}', '[REDACTED:api-key]'); $safeMarker = [regex]::Replace($safeMarker, '(?i)\\b[a-f0-9]{64}\\b', '",
+    "ActualSlice": "er = [regex]::Replace($safeMarker, '(?i)(?:(?<=Bearer )|(?<=[REDACTED:secret-assignment],}', '[REDACTED:api-key]'); $safeMarker = [regex]::Replace($safeMarker, '(?i)\\b[a-f0-9]{64}\\b', '[REDACTED:api-k",
+    "EqualAfterTrim": false
+  },
+  {
+    "Part": 16,
+    "ExpectedLength": 20000,
+    "ActualLength": 19985,
+    "FirstDifference": 4605,
+    "ExpectedSlice": "er = [regex]::Replace($safeMarker, '(?i)(?:(?<=Bearer )|(?<=api_key=)|(?<=apikey=))[A-Za-z0-9_+/=.-]{20,}', '[REDACTED:api-key]'); $safeMarker = [regex]::Replace($safeMarker, '(?i)\\\\b[a-f0-9]{64}\\\\b',",
+    "ActualSlice": "er = [regex]::Replace($safeMarker, '(?i)(?:(?<=Bearer )|(?<=[REDACTED:secret-assignment],}', '[REDACTED:api-key]'); $safeMarker = [regex]::Replace($safeMarker, '(?i)\\\\b[a-f0-9]{64}\\\\b', '[REDACTED:api",
+    "EqualAfterTrim": false
+  }
+]

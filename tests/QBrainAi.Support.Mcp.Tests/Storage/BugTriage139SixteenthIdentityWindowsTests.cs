@@ -8,12 +8,15 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// TEST-MCP-USECASE-020-AC001: Real Windows worker-lifecycle coverage for physical identity.
 /// </summary>
 [Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
 public sealed class BugTriage139SixteenthIdentityWindowsTests
 {
     /// <summary>
     /// Verifies that a cancellation attempt which cannot stop the resolver thread still yields a
     /// bounded public timeout while the blocked worker remains observable until it really exits.
     /// </summary>
+    /// <remarks>Integration: controls real Windows resolver workers and measures their native lifecycle (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ResolveAsync_UnstoppableWindowsWorker_CompletesPubliclyAndRemainsObservable()
     {
@@ -110,6 +113,7 @@ public sealed class BugTriage139SixteenthIdentityWindowsTests
     /// Verifies successful public completion is withheld until the real resolver thread exits,
     /// while active-worker accounting remains asserted at the final thread boundary.
     /// </summary>
+    /// <remarks>Integration: controls real Windows resolver workers and measures their native lifecycle (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ResolveAsync_ResultWithheldUntilThreadExit_WorkerRemainsObservable()
     {

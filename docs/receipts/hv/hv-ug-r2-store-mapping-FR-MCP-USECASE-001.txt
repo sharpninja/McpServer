@@ -1,0 +1,43 @@
+type: result
+payload:
+  requestId: req-20261020T023743Z-d40b
+  result:
+    items:
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-001
+      createdAt: 2026-10-20T02:37:46.4874307+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-002
+      createdAt: 2026-10-20T02:37:46.4880326+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-003
+      createdAt: 2026-10-20T02:37:46.4881437+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-005
+      createdAt: 2026-10-20T02:37:46.4882381+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-018
+      createdAt: 2026-10-20T02:37:46.4883169+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-019
+      createdAt: 2026-10-20T02:37:46.4883918+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-001
+      createdAt: 2026-10-20T02:37:46.4884682+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-002
+      createdAt: 2026-10-20T02:37:46.4885475+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-004
+      createdAt: 2026-10-20T02:37:46.4886313+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-019
+      createdAt: 2026-10-20T02:37:46.4887189+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-020
+      createdAt: 2026-10-20T02:37:46.4888020+00:00
+    totalCount: 11
+  deprecated: true
+
+---
+

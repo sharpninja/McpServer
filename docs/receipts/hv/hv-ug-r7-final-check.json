@@ -1,0 +1,34 @@
+{
+  "TimestampLocal": "2026-10-26T13:29:14",
+  "ShaChecks": [
+    {
+      "expected": "8b97aa4bee778273688e53a64a737c3170a41823",
+      "field": "HeadSha"
+    },
+    {
+      "expected": "0484114872c09cf5afab5e019748dfabbda294bc",
+      "field": "LastCodeHead"
+    },
+    {
+      "expected": "c31f36d81dc87509b605175c5ced0d3b0f08180c",
+      "field": "GatesHead"
+    },
+    {
+      "expected": "3da2db93b3912b6301509f11aedcd59cb004274b",
+      "field": "MergeBase"
+    }
+  ],
+  "ClaimCount": 22,
+  "PassCount": 14,
+  "FailCount": 7,
+  "UnknownCount": 0,
+  "OverriddenCount": 1,
+  "ClosureCount": 21,
+  "FailedCaseCount": 19,
+  "FilesAtLeast50Mb": 0,
+  "TrackedDirtyPaths": [],
+  "NonDocsTrackedDirtyPaths": [],
+  "InventoryType": "OrderedHashtable",
+  "JsonSha256": "048B7422C74ED515B4677E281D4883DC1E40F6E91C340F7C51C4BA521901CE80",
+  "MarkdownSha256": "56F121C80555AF49A5186FDFAEC71482C08A66D1CC0A25D02AF43A337AC326BC"
+}

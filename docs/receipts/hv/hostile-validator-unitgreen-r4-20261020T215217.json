@@ -1,0 +1,2832 @@
+{
+  "TimestampUtc": "2026-10-21T03:58:13.5143657Z",
+  "TimestampLocal": "2026-10-20T22:58:13",
+  "ValidatorIdentity": {
+    "Agent": "Codex",
+    "Model": "gpt-6-astra",
+    "Effort": "max",
+    "ThreadId": "01a15c5f-b6f1-7f50-b4e5-fa36f363f939",
+    "Proof": {
+      "RolloutPath": "/home/sharpninja/.codex/sessions/2026/10/20/rollout-2026-10-20T21-52-19-01a15c5f-b6f1-7f50-b4e5-fa36f363f939.jsonl",
+      "Line": 8,
+      "Timestamp": "2026-10-21T02:52:21.302Z",
+      "ThreadId": "01a15c5f-b6f1-7f50-b4e5-fa36f363f939",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+    },
+    "SessionId": "Codex-20261021T025530Z-plugin-session",
+    "RequestId": "req-20261021T025534Z-unitgreen-r4"
+  },
+  "AddProfileFileCount": 1,
+  "MarkerReadInFull": true,
+  "MarkerValuesDisclosed": false,
+  "ScopeClass": 1,
+  "HeadSha": "b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a",
+  "LastCodeHead": "97b7811491ccb3e338804a01d0bf28e4ecfe273a",
+  "MergeBase": "3da2db93",
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 97,
+  "Completeness": 97,
+  "Confidence": 99,
+  "PassCount": 10,
+  "FailCount": 9,
+  "UnknownCount": 0,
+  "Findings": [
+    {
+      "Id": "R4-F1",
+      "Priority": "P2",
+      "Classification": "Implementer edit",
+      "Claims": [
+        "UG3",
+        "UG8",
+        "UG11",
+        "UG12",
+        "UG13",
+        "UG17",
+        "UG18"
+      ],
+      "Location": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:189-212,285-286,349-353; docs/plans/2026-10-19-unit-suite-green.md:239,346; PR body:34; IMPL-UNITGREEN-001 task 18",
+      "Defect": "Lexical import resolution still loses the type behind an enclosing using alias. A file alias OS = System.OperatingSystem followed inside a namespace by using static OS makes the actual scanner miss IsWindows(). The same enclosing alias followed by using Host = OS makes it miss Host.IsWindows(). Both are valid, compiled C# in one file. ScopeFor stores the rightmost token OS rather than the resolved OperatingSystem type, and TypeName follows only one alias edge. Each probe expects one os-check and receives zero. This is within the promised same-file alias/static-import coverage, not a cross-file helper, reflection, or global-using limitation.",
+      "Evidence": [
+        "hv-ug-r4-scanner-probes-2.json: two false negatives, five passing controls",
+        "hv-ug-r4-probe-compile.json: both counterexamples compile successfully, actual test assembly hash recorded",
+        "hv-ug-r4-scanner-probes.ps1: invokes the compiled UnitSuitePlatformScanner.Scan via reflection",
+        "UnitSuitePlatformScannerAliasScopeTests: all six current bound cases pass in both independent full Nuke Test runs"
+      ],
+      "Fix": "Resolve using targets against the applicable enclosing alias scope and preserve the resolved type through nested alias declarations and static imports, or fail closed for a supported scope that cannot be resolved. Add both same-file examples, corresponding non-platform controls, and wrong-output negative controls to the scripted harness; preserve every existing case, establish the full green mock gate, bind the same assertions, and rerun the required gates after the code change. Correct the completion claims and leave the scanner task pending until that evidence exists. Whole-program analysis is not required."
+    },
+    {
+      "Id": "R4-F2",
+      "Priority": "P2",
+      "Classification": "Implementer audit edit",
+      "Claims": [
+        "UG1",
+        "UG7",
+        "UG11"
+      ],
+      "Location": "docs/receipts/hv/unitgreen-r4-prelaunch.brief.md:58,64; docs/receipts/hv/20261020T215217-unitgreen-r4.selfreview.md:7 and committed unitgreen-r4-prelaunch.selfreview.md:7; request claims UG1 and UG7",
+      "Defect": "UG1 asserts that 26fc8348..b0db5b09 changes only docs paths. That range contains the four test files changed in 97b78114, including the new MemoryS1HarnessDatabaseTests. The correct docs-only range begins at 97b78114. UG7 says 18 TODO tasks, but the live TODO has 19, all unchecked. The self-review propagation audit says UG1 was updated and only historical mentions of 26fc8348 remain in the brief; its live docs-only predicate disproves that claim. The actual seven final gates ran at 97b78114 and are accepted; this finding does not relabel those runs as failures.",
+      "Evidence": [
+        "hv-ug-r4-docs-only-26.txt",
+        "hv-ug-r4-docs-only-97.txt",
+        "hv-ug-r4-final-checks.json: Diff26NonDocs has four paths, Diff97 contains only docs paths",
+        "hv-ug-r4-store-todo.txt:19 tasks, none checked",
+        "hv-ug-r4-pr-body.txt:39 correctly uses 97b78114..HEAD"
+      ],
+      "Fix": "Correct the current round 4 brief and propagation-audit record to use 97b78114 for D-A and 19 for the task count, with an explicit correction notice. Preserve the request JSONL and other historical bytes as sent. Regenerate or verify the actual predicates rather than claiming a search removed them. No gate rerun or operator policy choice is needed for these documentation corrections alone."
+    },
+    {
+      "Id": "R4-F3",
+      "Priority": "P2",
+      "Classification": "Implementer requirements/traceability edit",
+      "Claims": [
+        "UG7",
+        "UG11",
+        "UG12"
+      ],
+      "Location": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs:6; live record TEST-MCP-MEMORY-010; round 4 self-review:6,11; IMPL-UNITGREEN-001 task 19",
+      "Defect": "The new memory harness binding test claims TEST-MCP-MEMORY-010 as its requirement, and the pre-HV mapping lint relies on that citation. Two dedicated plugin getters return not_found, and two effective views contain zero occurrences of that ID. The old harness already cited it, but copying an older source comment does not establish a current authoritative TEST record or mapping for newly claimed-complete implementation. The stale-export caveat discloses different record drift and does not identify this missing TEST. The underlying store-drift defect is out of scope; its effect on this PR traceability and completion intent is in scope. No claim is made that the record never existed historically.",
+      "Evidence": [
+        "hv-ug-r4-store-TEST-MCP-MEMORY-010.txt: not_found",
+        "hv-ug-r4-memory010-again.txt: repeated not_found at 2026-10-20T22:38:43 local",
+        "hv-ug-r4-store-effective.txt and hv-ug-r4-effective-again.txt: no TEST-MCP-MEMORY-010",
+        "hv-ug-r4-final-checks.json: EffectiveMemory010Matches=0",
+        "hv-ug-r4-store-TEST-HANDOFF-004.txt through -007.txt: the handoff TEST records do exist"
+      ],
+      "Fix": "Reconcile the new binding test with an existing applicable, authoritative FR/TR/TEST/AC chain through the requirements plugin, or restore the specifically approved missing record and its mappings using retained authoritative evidence. Verify the dedicated getter, effective view, and owning mappings. Correct the source citation and pre-HV mapping disclosure as needed, and leave task 19 unfulfilled if that traceability cannot be established. Do not invent new memory behavior or repair unrelated store drift as part of this fix."
+    }
+  ],
+  "Claims": [
+    {
+      "Id": "UG1",
+      "Status": "FAIL",
+      "Conclusion": "Every final gate count and actual code head is corroborated, including complete Windows names, clean committed-tree Linux Test/hostile metadata, and no override or narrowed test filter. The literal docs-only predicate from 26fc8348 is false; the valid D-A range is 97b78114..b0db5b09. The independent reviewer runs both pass 4518/0/0 at the docs-equivalent review head.",
+      "Evidence": [
+        "hv-ug-r4-gates.json; hv-ug-r4-test-results.json; hv-ug-r4-gate-comparisons.json",
+        "hv-ug-r4-receipt-hashes.json; hv-ug-r4-windows-live-2.txt; hv-ug-r4-final-data.json",
+        "hv-ug-r4-docs-only-26.txt; hv-ug-r4-docs-only-97.txt"
+      ],
+      "FindingIds": [
+        "R4-F2"
+      ],
+      "RequiredChange": "Apply R4-F2 as specified in the findings; no additional operator decision."
+    },
+    {
+      "Id": "UG2",
+      "Status": "PASS",
+      "Conclusion": "Chronological evidence supports the round 4 requirement, scripted cases and negative controls, green full mock gates, and subsequent bindings. The original historical non-green first guard attempt is disclosed, not passed retroactively; corrective rounds supply the green gates. This PASS addresses evidenced order and unchanged bound cases; the newly discovered missing live memory TEST is separately failed under UG7 and surface 3, without inferring historical creation order from read-time record timestamps.",
+      "Evidence": [
+        "hv-ug-r4-transcript-events.json; hv-ug-r4-edit-chronology.json; hv-ug-r4-chronology-results.txt",
+        "Requirement replacement readback 18:23:07; mockgate-1 exits 18:31:56 before first production edit 18:32:37",
+        "race-mockgate-2 exits 19:48:16 before HandoffDurabilityTests edit 19:50:20; ext-mockgate-1 exits 21:14:44 before Audit edit 21:15:10 and Memory edit 21:16:01",
+        "hv-ug-r4-gates.json; plan sections 10 and 14-17; unchanged case/assertion comparisons"
+      ],
+      "FindingIds": [],
+      "RequiredChange": "None for this claim."
+    },
+    {
+      "Id": "UG3",
+      "Status": "FAIL",
+      "Conclusion": "The current seven-project unit inventory, repository-root runtime refusal, moved Integration/Platform traits, source-reading guards and assembly source seam survive inspection and independent normal/hostile runs. No surviving environment-dependent unit failure, assertion weakening, runtime skip, or silent return was demonstrated in the current suite. The claim also promises scanner coverage of same-file aliased names and static imports; two compiled counterexamples falsify that guard coverage.",
+      "Evidence": [
+        "tests/Shared/TestRepositoryRoot.cs; HermeticUserProfileFixture.cs; AgentPluginVersionSourcesTests.cs",
+        "hv-ug-r4-final-data.json: two independent 4518/0/0 runs",
+        "hv-ug-r4-assertion-changes.json; hv-ug-r4-scanner-probes-2.json"
+      ],
+      "FindingIds": [
+        "R4-F1"
+      ],
+      "RequiredChange": "Apply R4-F1 as specified in the findings; no additional operator decision."
+    },
+    {
+      "Id": "UG4",
+      "Status": "PASS",
+      "Conclusion": "TR-MCP-NUKE-019 AC-1 through AC-5 are implemented and evidenced: host-scoped Integration filters, applicable native execution on both hosts, complete Windows inventory, unchanged provider provisioning, and early refusal without an interactive Windows session. The final Windows lane runs in kingd session 1, with its exact filter and pinned runner. Broader scanner completion is separately failed.",
+      "Evidence": [
+        "hv-ug-r4-store-TR-MCP-NUKE-019.txt; hv-ug-r4-store-mapping-FR-MCP-BUILD-001.txt",
+        "build/Build.cs and tests/Build.Tests lane/filter/precondition contracts",
+        "hv-ug-r4-windows-live-2.txt; ug-r4-win-lane-3 and ug-r4-linux-lane-3 raw TRX comparisons",
+        "hv-ug-r4-takeover.json; full Build.Tests 436 passed"
+      ],
+      "FindingIds": [],
+      "RequiredChange": "None for this claim."
+    },
+    {
+      "Id": "UG5",
+      "Status": "PASS",
+      "Conclusion": "The Xml and Pkcs pins are 10.0.13, the five central Roslyn pins are 5.9.0, and the final native Linux and Windows unit logs show no NU1901 through NU1904. No audit override or new warning suppression is used. Read-only GitHub advisory responses identify 10.0.13 as the patched release for all five cited advisories.",
+      "Evidence": [
+        "Directory.Packages.props; hv-ug-r4-store-TR-MCP-QUALITY-001.txt",
+        "hv-ug-r4-final-checks.json: five official advisory responses and patched versions",
+        "hv-ug-r4-final-data.json; hv-ug-r4-windows-live-2.txt; hv-ug-r4-advisory-*.json"
+      ],
+      "FindingIds": [],
+      "RequiredChange": "None for this claim."
+    },
+    {
+      "Id": "UG6",
+      "Status": "PASS",
+      "Conclusion": "Canonical workspace-key expectations and the additive native-path overload retain the approved FR/TR/TEST contract. Explicit host inputs make unit expectations deterministic; seven native-host cases run on both hosts, and physical-boundary cases are Integration. This does not claim the excluded federation rekey or other PATHNORM criteria complete.",
+      "Evidence": [
+        "hv-ug-r4-store-FR-MCP-PATHNORM-001.txt; hv-ug-r4-store-TR-MCP-PATHNORM-001.txt; hv-ug-r4-store-TEST-MCP-PATHNORM-001.txt",
+        "WorkspaceIdentityPath.ToNativePath diff and both native test inventories",
+        "hv-ug-r4-assertion-changes.json; hv-ug-r4-test-results.json"
+      ],
+      "FindingIds": [],
+      "RequiredChange": "None for this claim."
+    },
+    {
+      "Id": "UG7",
+      "Status": "FAIL",
+      "Conclusion": "Required WS and SESSIONLOG criteria match their live readbacks. FR-MCP-USECASE-016 and -017 are absent from both getter and effective view; replacement TR/TEST mappings remain intact. The TODO has 19 unchecked tasks, not the asserted 18. In the newly added memory binding slice, TEST-MCP-MEMORY-010 is absent from the authoritative store.",
+      "Evidence": [
+        "hv-ug-r4-store-manifest.json; hv-ug-r4-audit.json; hv-ug-r4-store-todo.txt",
+        "hv-ug-r4-store-mapping-FR-MCP-USECASE-001.txt; WS-005 and SESSIONLOG-006 getter receipts",
+        "hv-ug-r4-memory010-again.txt; hv-ug-r4-effective-again.txt"
+      ],
+      "FindingIds": [
+        "R4-F2",
+        "R4-F3"
+      ],
+      "RequiredChange": "Apply R4-F2, R4-F3 as specified in the findings; no additional operator decision."
+    },
+    {
+      "Id": "UG8",
+      "Status": "FAIL",
+      "Conclusion": "All 17 plan sections were read end to end. They retain approvals, A-I amendments, superseded profile-only seam and code heads, red/incomplete historical runs, final gates, blast radius, and the known wiki/store caveats. D-A correctly names 97b78114. The plan nevertheless states lexical alias/static-import coverage that the implemented scanner does not provide, so its built-state/closure account is not fully accurate.",
+      "Evidence": [
+        "docs/plans/2026-10-19-unit-suite-green.md:190-195,239-245,255-264,337-390",
+        "hv-ug-r4-scanner-probes-2.json; source scanner:203-212,349-353"
+      ],
+      "FindingIds": [
+        "R4-F1"
+      ],
+      "RequiredChange": "Apply R4-F1 as specified in the findings; no additional operator decision."
+    },
+    {
+      "Id": "UG9",
+      "Status": "PASS",
+      "Conclusion": "The authorized takeover and C4 ownership boundary remain supported. All 15 taken-over source, test and build files match c2125c42 at 11681680. The generated .nuke/build.schema.json is a sixteenth changed path and differs in excluded C4 diagram/Chromium/WhatIf fields; it is not evidence that the 15-file takeover changed. The prior round 3 reviewer sentence saying that generated schema also matches was inaccurate and is not adopted here.",
+      "Evidence": [
+        "hv-ug-r4-takeover.json; hv-ug-r4-final-data.json:TakeoverSchemaDiff",
+        "operator transcript Copy from PAYTON-LEGION2 / C4 docs-only / pause C4 choices",
+        "plan sections 7-9 and PR body:13"
+      ],
+      "FindingIds": [],
+      "RequiredChange": "None for this claim."
+    },
+    {
+      "Id": "UG10",
+      "Status": "PASS",
+      "Conclusion": "All 37 first-parent commits carry the prescribed agent signature trailer; this is trailer signing, not a claim of cryptographic GPG verification. GitHub activity shows normal pushes and no force push in the inspected effort. Current-secret and API-key-pattern scans of every commit patch/message find zero hits; Protect-HvReceipts dry scans find zero in scoped unitgreen receipts. Plan and PR body contain no table rows or en/em dash. The pinned Windows runner was analyzed before execution. Historical/disclosed PowerShell and process exceptions remain accurately described; unrelated implementer conduct is not scored.",
+      "Evidence": [
+        "hv-ug-r4-final-checks.json; hv-ug-r4-github-activity.json; hv-ug-r4-audit.json",
+        "hv-ug-r4-unit-receipts-secret-scan.txt; scoped HV receipt scan",
+        "hv-ug-r4-windows-live-2.txt: runner SHA D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE",
+        "round 4 self-review:14-22; chronological analyzer receipts"
+      ],
+      "FindingIds": [],
+      "RequiredChange": "None for this claim."
+    },
+    {
+      "Id": "UG11",
+      "Status": "FAIL",
+      "Conclusion": "The self-review accurately retains the red 801e6862 gates, failed EF1002 mock attempt, inference-only race cause, shell/process exceptions and R3-P11 Windows Test omissions. R3-F4 is corrected with the original quoted and original request bytes retained. The propagation-audit assertion is false, lexical coverage is overstated, and the mapping lint does not identify the absent live TEST-MCP-MEMORY-010.",
+      "Evidence": [
+        "20261020T215217-unitgreen-r4.selfreview.md:6-11,14-23; committed copy",
+        "hv-ug-r4-final-data.json:Round3Correction and Round3RequestUnchanged",
+        "hv-ug-r4-pr-body.txt:74-83; R4-F1 through R4-F3 evidence"
+      ],
+      "FindingIds": [
+        "R4-F1",
+        "R4-F2",
+        "R4-F3"
+      ],
+      "RequiredChange": "Apply R4-F1, R4-F2, R4-F3 as specified in the findings; no additional operator decision."
+    },
+    {
+      "Id": "UG12",
+      "Status": "FAIL",
+      "Conclusion": "D-B lists a suitably narrowed set of criteria and retains the other 17 USECASE criteria unsatisfied. The individual final gate, native-host, scan and source-seam behaviors have strong evidence. However, the intended completion of all TODO work would also close task 18 as a complete lexical-scope fix and task 19 as a fully traced binding slice, which the new findings do not support. No done-state change is authorized by this DISAGREE. All 19 tasks and inspected target criteria remain pending now.",
+      "Evidence": [
+        "plan:191; PR body:72; hv-ug-r4-store-todo.txt:55-58",
+        "live required criterion readbacks; R4-F1 and R4-F3"
+      ],
+      "FindingIds": [
+        "R4-F1",
+        "R4-F3"
+      ],
+      "RequiredChange": "Apply R4-F1, R4-F3 as specified in the findings; no additional operator decision."
+    },
+    {
+      "Id": "UG13",
+      "Status": "FAIL",
+      "Conclusion": "R3-F1, R3-F3 and R3-F4 are closed. The original R3-F2 sibling-namespace example now passes, but the requested structural lexical resolution still fails on two same-file forms; broader scanner closure is therefore not established. The separate closure list records each earlier finding and preserves the successful closures without reclassifying green runs.",
+      "Evidence": [
+        "hv-ug-r4-scanner-probes-2.json; independent hostile run",
+        "live absent-FR readbacks and corrected c31c2918 self-review copies",
+        "closure entries in this receipt"
+      ],
+      "FindingIds": [
+        "R4-F1"
+      ],
+      "RequiredChange": "Apply R4-F1 as specified in the findings; no additional operator decision."
+    },
+    {
+      "Id": "UG14",
+      "Status": "PASS",
+      "Conclusion": "AgentPluginVersionSources covers the variable, sibling-root files and profile-cache inputs. Default marker construction reads process sources outside tests and the fixture-installed sources within the unit assembly; resolution tests pass explicit sources. No unit test changes plugin-root variables or the shared override at runtime. Reading order, synced fallback, IO/access handling and unexpected-error propagation are retained. RootHints remain computed hints. ProcessAgentPluginVersionSources and SiblingPluginRoot reside in MarkerFileService, preserving its two reviewed Path.GetFullPath calls. Both integration ratchets and both reviewer full unit runs pass.",
+      "Evidence": [
+        "src/QBrainAi.Services/Services/AgentPluginVersionSources.cs; MarkerFileService.cs",
+        "HermeticUserProfileFixture.cs; AgentPluginVersionSourcesTests.cs; UserProfileScanBindingTests.cs",
+        "DirectoryTreeWalker.cs; SessionLogTurnContextExtractor.cs; live WS-005 and SESSIONLOG-006 criteria",
+        "hv-ug-r4-final-data.json; ug-r4-linux-lane-3; ug-r4-win-lane-3"
+      ],
+      "FindingIds": [],
+      "RequiredChange": "None for this claim."
+    },
+    {
+      "Id": "UG15",
+      "Status": "PASS",
+      "Conclusion": "The LocalDB default uses the approved 120-second connect timeout; the four LocalDB classes share the collection whose definition disables parallelization. Existing integration assertions and platform tags remain. Final Windows results contain every SQL Server test from the complete reference inventory; no loss is hidden by totals.",
+      "Evidence": [
+        "SqlServerTestConnection.cs; SqlServerLocalDbCollection.cs and contract tests",
+        "hv-ug-r4-test-results.json; hv-ug-r4-gate-comparisons.json",
+        "plan:281-312; full final Windows lane 373/0/0"
+      ],
+      "FindingIds": [],
+      "RequiredChange": "None for this claim."
+    },
+    {
+      "Id": "UG16",
+      "Status": "PASS",
+      "Conclusion": "pg_ctl start and stop retain waiting and add silent mode while preserving the server log and established execution behavior. The final Windows lane is complete by name against lane 2 and round 3 lane 8, including all 361 Support.Mcp results. Historical incomplete lanes remain disclosed rather than counted as complete.",
+      "Evidence": [
+        "EphemeralPostgresFixture argument builders and binding tests",
+        "hv-ug-r4-gate-comparisons.json; raw Windows TRX; hv-ug-r4-windows-live-2.txt",
+        "plan section 16 and PR body:54-57"
+      ],
+      "FindingIds": [],
+      "RequiredChange": "None for this claim."
+    },
+    {
+      "Id": "UG17",
+      "Status": "FAIL",
+      "Conclusion": "The selected options and their corrections are substantiated by the read-only transcript: latest Roslyn pins, DRY root locator, SSH as kingd by IP, scan fixes, SQL timeout/serialization, loss diagnosis, R3-P3, complete reruns, structural source seam, race fix and sibling extension. The earlier missing DisableParallelization flag and historical gate omissions are disclosed and corrected as specified. The lexical-scope part of Structural fix, round 4 remains incomplete on valid same-file imports. No operator policy ambiguity is needed to correct it.",
+      "Evidence": [
+        "hv-ug-r4-operator-transcript.txt; hv-ug-r4-transcript-events.json",
+        "plan sections 15-17; native code and tests; R4-F1"
+      ],
+      "FindingIds": [
+        "R4-F1"
+      ],
+      "RequiredChange": "Apply R4-F1 as specified in the findings; no additional operator decision."
+    },
+    {
+      "Id": "UG18",
+      "Status": "FAIL",
+      "Conclusion": "The six named cases are bound to the actual Scan implementation and pass, including the original reviewer sibling-namespace example, reverse order, nested override, file-scoped namespace and non-platform controls. Every earlier retained scanner case also passes. Nevertheless, lexical scope resolution fails when a nested alias or static import names an enclosing alias; both actual Scan probes return zero findings for a compilable OS check. Six passing cases do not establish the claimed lexical-resolution coverage.",
+      "Evidence": [
+        "UnitSuitePlatformScannerAliasScopeTests.cs; raw final Test results",
+        "hv-ug-r4-scanner-probes-2.json; hv-ug-r4-probe-compile.json",
+        "UnitSuitePlatformScanner.cs:189-212,285-286,349-353"
+      ],
+      "FindingIds": [
+        "R4-F1"
+      ],
+      "RequiredChange": "Apply R4-F1 as specified in the findings; no additional operator decision."
+    },
+    {
+      "Id": "UG19",
+      "Status": "PASS",
+      "Conclusion": "The three harnesses now give each context its own connection to one test-owned temporary SQLite database file with pooling disabled. Existing assertions are unchanged. The same connection-identity plus cross-context write/read assertion binds to each factory; its own-file positive control and shared-connection/private-memory negative controls precede the changes in full green mock gates. The deterministic check proves the condition and its removal, not a scheduling-race cause. The concurrent shared-connection sweep found no additional qualifying unit harness after these fixes; the apparent HandoffIngestionServiceTests and SessionLogControllerReceiptTests cases do not supply one connection to concurrent independent contexts. The new memory test missing authoritative TEST mapping is separately failed in UG7/surface 3; this PASS is the behavioral/race claim.",
+      "Evidence": [
+        "HandoffDurabilityTests.cs; HandoffAuditDefectTests.cs; MemoryS1Harness.CoreA1.cs",
+        "HandoffTestDatabaseTests.cs; MemoryS1HarnessDatabaseTests.cs",
+        "hv-ug-r4-shared-connection-sweep.json; hv-ug-r4-assertion-changes.json; hv-ug-r4-edit-chronology.json",
+        "ug-r4-race-mockgate-2 4515; race-binding-1 4516; ext-mockgate-1 4516; ext-binding-1 4518; both precommit lanes 397; final native gates"
+      ],
+      "FindingIds": [],
+      "RequiredChange": "None for this claim."
+    }
+  ],
+  "MandatorySurfaces": [
+    {
+      "Completeness": 97,
+      "Id": 1,
+      "Reason": "Final run evidence is strong; lexical coverage and propagation/mapping assertions contain three material contradictions.",
+      "Status": "FAIL",
+      "Accuracy": 97,
+      "Name": "Requested validation and implementer claims"
+    },
+    {
+      "Completeness": 98,
+      "Id": 2,
+      "Reason": "PowerShell, signatures, secrecy and review boundaries are supported; the inaccurate propagation audit violates exact-claim receipt accuracy, and the new TEST mapping is not authoritative.",
+      "Status": "FAIL",
+      "Accuracy": 97,
+      "Name": "Workspace rules"
+    },
+    {
+      "Completeness": 97,
+      "Id": 3,
+      "Reason": "Chronological mock/binding order and named criteria are supported; missing live TEST-MCP-MEMORY-010 leaves the new memory binding incompletely traced. Scanner structural coverage remains incomplete.",
+      "Status": "FAIL",
+      "Accuracy": 97,
+      "Name": "Requirements and BDPv4"
+    },
+    {
+      "Completeness": 97,
+      "Id": 4,
+      "Reason": "All sections, amendments and final gates are accounted for, but lexical-coverage completion is false and proposed task completion exceeds the supported state.",
+      "Status": "FAIL",
+      "Accuracy": 97,
+      "Name": "Plan holistically"
+    }
+  ],
+  "Closure": [
+    {
+      "Status": "PASS",
+      "Id": "R3-F1",
+      "Reason": "Every plugin-version input uses the fixture seam; independent hostile Nuke Test passes 4518 with all five plugin-root variables and HOME scripted."
+    },
+    {
+      "Status": "FAIL",
+      "Id": "R3-F2",
+      "Reason": "Original sibling-namespace reproduction passes, but structural lexical alias/static-import resolution still misses the two compiled same-file forms in R4-F1."
+    },
+    {
+      "Status": "PASS",
+      "Id": "R3-F3",
+      "Reason": "Both deleted FRs are absent through the dedicated getter and effective view, with replacement TR/TEST mappings intact."
+    },
+    {
+      "Status": "PASS",
+      "Id": "R3-F4",
+      "Reason": "Both round 3 self-review copies correct the false sentence, quote the original and preserve the Windows Test omissions at 6042dbb3 and 0210244d; original request bytes unchanged."
+    },
+    {
+      "Status": "PASS",
+      "Id": "R2-F1",
+      "Reason": "Named repository/link cases and source-reading guards are Integration; runtime repository guard and full source seam close the prior demonstrated dependencies."
+    },
+    {
+      "Status": "FAIL",
+      "Id": "R2-F2",
+      "Reason": "Original syntax cases pass, but the structural same-file alias coverage promised by its replacement remains incomplete through R4-F1."
+    },
+    {
+      "Status": "PASS",
+      "Id": "R2-F3",
+      "Reason": "Actual static Windows gate runner analyzed before use, pinned hash matches live Windows and local bytes; old generated-runner omission remains disclosed."
+    },
+    {
+      "Status": "PASS",
+      "Id": "F1",
+      "Reason": "Original red mock gate retains 4692 total, 4675 passed, 1 failed and 16 NotExecuted; corrected rounds provide green mock evidence without relabeling history."
+    },
+    {
+      "Status": "PASS",
+      "Id": "F2",
+      "Reason": "Prior native and tracked-file cases are Integration; no remaining host-dependent unit failure was demonstrated by independent normal/hostile runs or dependency sweep."
+    },
+    {
+      "Status": "FAIL",
+      "Id": "F3",
+      "Reason": "Prior multiline/qualified/interpolation forms pass; the direct-platform guard still misses valid same-file aliased forms, R4-F1."
+    },
+    {
+      "Status": "PASS",
+      "Id": "F4",
+      "Reason": "Complete interactive Windows lane at final code head: 373 passed, session 1 proof, exact filter and every Support.Mcp name."
+    },
+    {
+      "Status": "PASS",
+      "Id": "F5",
+      "Reason": "Seven-project scanner selection matches Test; the declared manual synchronization limit is unchanged."
+    },
+    {
+      "Status": "PASS",
+      "Id": "F6",
+      "Reason": "Historical Bash exception remains disclosed and the current static runner has actual pre-execution parser/analyzer evidence."
+    },
+    {
+      "Status": "PASS",
+      "Id": "F7",
+      "Reason": "The original overbroad satisfaction scope was narrowed, the other 17 criteria remain pending, and required native/interactive/unit evidence now exists. New task-18/task-19 blockers are separately recorded in UG12; this closure does not authorize done state."
+    }
+  ],
+  "Notes": [
+    "Class 1: project implementation, tests, Nuke changes and plan. BDPv4 applies. Review is pinned to b0db5b09; source/build/test content after 97b78114 is unchanged. Excluded C4 documentation/tooling, PR 82/86 themselves, federation rekey, wiki defect and store-drift causes were not scored.",
+    "Mandatory first actions were completed before validation: add-profile skill read in full, all non-skill profile markdown enumerated and read in full (1 file, PROFILE-MERGED.md), root checkout marker read in full with credential values kept out of output, and a dedicated own Codex plugin session/turn opened. The profile was reread after each context recovery. The installed Codex wrapper is version 1.121.0; isolated cache is outside this worktree. No Claude wrapper or raw REST was used.",
+    "Live identity proof is rollout line 8 at 2026-10-21T02:52:21.302Z: model gpt-6-astra, effort max, thread 01a15c5f-b6f1-7f50-b4e5-fa36f363f939. The wrapper initially recorded model codex because my startup variable did not select its model field. I corrected only my own cache/session metadata to gpt-6-astra and verified the correction through history; runtime proof never changed.",
+    "Final gates at 97b78114 independently reconciled: Linux Test 4518, hostile Test 4518, Windows Test 4518, Windows integration 373 (361 Support.Mcp), Linux integration 397 (375 Support.Mcp), full Build.Tests 436, and ValidateTraceability exit 0. All test gates have zero failures and zero NotExecuted. Unit project counts: Support.Mcp 3136, Repl.Core 865, Client 306, QBAgent 94, McpAgent 64, Cqrs 33, Launcher 20. Windows integration remainder: McpAgent 1, Repl.Core 3, QBAgent 2, Build.Tests 6; Linux remainder identical except Build.Tests 16.",
+    "The final Windows runner SHA-256 is D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE on both hosts. Live original Windows Test log SHA-256 is D380C791D71C342AA050B0B22B80748EFB23816090CF7045E406A8AE6754E985; lane log is 6A005F8A5CBCFB13EA50C38719F381711F471EB7680B9E22DD9AA6DCFA236199. Proof identifies 97b78114, session 1, interactive True and exact Category=Integration&Platform!=Linux filter. No Windows build or test was run by this reviewer.",
+    "Previous 26fc8348 gates also reconcile: three unit runs 4516/0/0, lanes 373/0/0 and 397/0/0, Build.Tests 436/0/0 and traceability exit 0. At 801e6862 Linux/hostile Test 4513 pass; Windows Test has one handoff failure and each lane one ratchet failure, retained as red. The hostile negative control has 4479 total, 4460 passed, 19 failed at the e0b078c8 code content (metadata head 64fc4b14 is docs-equivalent). Round 4 mock/binding totals are 4500 then 4513; race mock attempt 1 fails compilation EF1002, attempt 2 has 4515 then binding 4516; extension mock 4516 then binding 4518; both later precommit lanes 397. Original TRX names and hashes, not only copied summaries, support these conclusions.",
+    "Windows complete runs compare by name and outcome across round 3 lane 2, lane 8 and round 4 lanes 2/3. Historical incomplete lanes remain excluded from complete-gate claims. Linux complete comparisons retain 397 names. Metadata for final committed Linux Test and hostile Test lists no dirty path; Build.Tests/traceability list only the two disclosed benchmark files. The reviewer own runs use the unchanged code at the pinned docs head and do not masquerade as clean-tree original runs.",
+    "What-if attacks covered scope inheritance/ordering, non-platform aliases, all plugin root sources, hostile HOME/cache data, source-seam lifecycle/global-state use, inaccessible profile entries and unexpected errors, connection ownership versus database identity, concurrent harness siblings, interactive/noninteractive host boundaries, lost-result denominators, store absence versus mapping presence, stale exports and proposed completion. The missing alias resolution was tested directly rather than inferred from source alone.",
+    "Reviewer execution limits and corrections: no tracked file edit, commit, push, deletion, or non-own store mutation. No triage or requirement repair was attempted. Every authored .ps1 was parsed and analyzed before data use; state-changing own-run/metadata scripts were dry-run. Bootstrap/profile reads and analyzer invocations used inline PowerShell commands rather than separate analyzed script files; this is disclosed as my procedural deviation. No Python, Node, Bash logic, Windows writes or credential output was used. The supplied SSH wrapper stages a remote file, so I inspected it and used the same authorized route with an encoded read-only command instead. Early invalid source-path/read attempts and the unsupported installed-client GetAsync call are retained as unsuccessful attempts; the final history proof uses supported QueryAsync.",
+    "Before issuing the final verdict I caught a PowerShell array-precedence error in my own first receipt version: the two receipt paths had been joined into one string. I corrected the native object to contain two separate absolute paths and persisted the complete corrected receipts as revision 2. The initial dialog parts remain as history, explicitly superseded by revision 2; no project or other agent record was changed.",
+    "Scores assess the merge-readiness claim, not a mathematical percentage of PASS claims: Accuracy 97 because reproduced coverage, range/count and mapping assertions are false; Completeness 97 because the required structural scanner fix and new binding traceability remain incomplete. Confidence 99 because the findings use compiled probes, git predicates and repeated live plugin reads. The many passing gates are accepted without weakening the 98/98 threshold. No operator-decision failure is identified.",
+    "The entire receipt prose and native JSON artifact, including all claims, findings, commands, identities and final VERDICT JSON, are persisted verbatim in ordered parts of this own turn. A supported live history query and exact text/hash comparison are required before the final response; their proof is stored in hv-ug-r4-persistence-proof.json and the final own history receipt. This is a verification procedure, not a claim that a queued write has already persisted."
+  ],
+  "Commands": [
+    {
+      "ExitCode": 255,
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-run.ps1 -Target Test -RunId hv-ug-r4-sandbox-test-1",
+      "Result": "Restore stopped with NU1900 because the sandbox could not write the real NuGet HTTP cache; no test result was claimed. An isolated HTTP cache fixed reviewer infrastructure."
+    },
+    {
+      "ExitCode": 0,
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-run.ps1 -Target Test -RunId hv-ug-r4-sandbox-test-2",
+      "Result": "Full Nuke Test: 4518 passed, 0 failed, 0 not executed."
+    },
+    {
+      "ExitCode": 0,
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-run.ps1 -Target Hostile -RunId hv-ug-r4-hostile-test-1",
+      "Result": "Full Nuke Test under scripted plugin roots/HOME: 4518 passed, 0 failed, 0 not executed."
+    },
+    {
+      "ExitCode": 0,
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-scanner-probes.ps1",
+      "Result": "Actual compiled scanner: two false negatives, five correct controls; both OS examples compile in memory."
+    },
+    {
+      "ExitCode": 0,
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-ssh-read.ps1",
+      "Result": "Read-only encoded remote PowerShell through existing user SSH config as kingd at 10.42.0.143; original logs, exact runner hash and removed task verified. First system-config attempt failed and was retained."
+    },
+    {
+      "ExitCode": 0,
+      "Command": "git log --first-parent 3da2db93..b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a; git diff 3da2db93...b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a; git diff --name-only 97b78114..b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a; git diff --name-only 26fc8348..b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a",
+      "Result": "37 first-parent commits, full change reviewed; final valid docs-only range and false earlier range distinguished."
+    },
+    {
+      "ExitCode": 0,
+      "Command": "gh pr view 87 --repo sharpninja/McpServer --json ... and gh api read-only PR/activity/advisory endpoints, through installed gh 2.102.0 binary",
+      "Result": "Draft PR head/base/body, normal pushes and five advisory records verified. Initial gh shim failure was corrected by using installed binary."
+    },
+    {
+      "ExitCode": 0,
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-final-checks.ps1",
+      "Result": "37 signed trailers, zero current-secret/pattern matches in commit messages/patches; 275 unit-suite receipt files require zero redactions; live effective memory TEST matches zero."
+    }
+  ],
+  "FullCommandLedger": {
+    "Source": "/home/sharpninja/.codex/sessions/2026/10/20/rollout-2026-10-20T21-52-19-01a15c5f-b6f1-7f50-b4e5-fa36f363f939.jsonl",
+    "CapturedThroughLine": 1080,
+    "Groups": [
+      {
+        "CallId": "call_1e568f7677214252914ed4c64424c319",
+        "Line": 13,
+        "Timestamp": "2026-10-21T02:52:26.599Z",
+        "Commands": [
+          "Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_42ff404194e34c0787ebe21386f6925e",
+        "Line": 22,
+        "Timestamp": "2026-10-21T02:52:41.944Z",
+        "Commands": [
+          "Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile' -File -Filter '*.md' | Where-Object { $_.Name -notlike 'add-profile*.md' } | ForEach-Object { $_.FullName; Get-Content -LiteralPath $_.FullName -Raw }; Get-Date -Format 'yyyyMMddTHHmmssK'; Get-Command pwsh.exe, Invoke-ScriptAnalyzer, ConvertFrom-Yaml -ErrorAction SilentlyContinue | Select-Object Name, Source"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_d62f54f875ed41cbb148ef4646f8a82b",
+        "Line": 29,
+        "Timestamp": "2026-10-21T02:52:46.578Z",
+        "Commands": [
+          "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Raw"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [],
+        "Completed": false
+      },
+      {
+        "CallId": "call_677ed1af394e494f8ce6b9d4ded89aa0",
+        "Line": 36,
+        "Timestamp": "2026-10-21T02:53:12.436Z",
+        "Commands": [
+          "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 170 -First 132; Get-Content -LiteralPath '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/enforcement/SKILL.md' -Raw; Get-Content -LiteralPath '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/session/SKILL.md' -Raw"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [],
+        "Completed": false
+      },
+      {
+        "CallId": "call_646987fb10b440ccb12f02ed5d77e275",
+        "Line": 45,
+        "Timestamp": "2026-10-21T02:53:35.619Z",
+        "Commands": [
+          "$hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r4-startup.ps1'),[ref]$hvTokens,[ref]$hvErrors); $hvErrors | ConvertTo-Json -Depth 4; Invoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-ug-r4-startup.ps1' -Severity Warning,Error | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvErrors.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_b4a8525e974148fd8f7e1f2f25ad0f6e",
+        "Line": 51,
+        "Timestamp": "2026-10-21T02:53:39.559Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-startup.ps1'"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [],
+        "Completed": false
+      },
+      {
+        "CallId": "call_e31da0195a7046d1be5127f6b163b6a4",
+        "Line": 58,
+        "Timestamp": "2026-10-21T02:54:08.469Z",
+        "Commands": [
+          "$hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r4-startup.ps1'),[ref]$hvTokens,[ref]$hvErrors); $hvErrors | ConvertTo-Json -Depth 4; Invoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-ug-r4-startup.ps1' -Severity Warning,Error | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvErrors.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_25f574e05016420586995087c743fe54",
+        "Line": 68,
+        "Timestamp": "2026-10-21T02:54:18.12Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-startup.ps1'"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [],
+        "Completed": false
+      },
+      {
+        "CallId": "call_b8dc5f1dc0724af0a133e0edc2128a4d",
+        "Line": 75,
+        "Timestamp": "2026-10-21T02:54:38.015Z",
+        "Commands": [
+          "$hvProblems=@(); foreach($hvFile in @('docs/receipts/hv/hv-ug-r4-inspect.ps1','docs/receipts/hv/hv-ug-r4-identity.ps1')) { $hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $hvFile),[ref]$hvTokens,[ref]$hvErrors); $hvProblems+=@($hvErrors); $hvProblems+=@(Invoke-ScriptAnalyzer -Path $hvFile -Severity Warning,Error) }; $hvProblems | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvProblems.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_4385e563b13942cc9044691573a41fba",
+        "Line": 81,
+        "Timestamp": "2026-10-21T02:54:41.763Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-identity.ps1'"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [],
+        "Completed": false
+      },
+      {
+        "CallId": "call_f028e69599624911a527e0a98d9717a7",
+        "Line": 88,
+        "Timestamp": "2026-10-21T02:55:24.348Z",
+        "Commands": [
+          "$hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r4-plugin.ps1'),[ref]$hvTokens,[ref]$hvErrors); $hvErrors | ConvertTo-Json -Depth 4; Invoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-ug-r4-plugin.ps1' -Severity Warning,Error | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvErrors.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_161cec7315bc4a4aa8593bb956f23049",
+        "Line": 94,
+        "Timestamp": "2026-10-21T02:55:29.038Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-plugin.ps1' -Operation Initialize"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [
+          11454
+        ],
+        "Completed": false
+      },
+      {
+        "CallId": "call_accaf899ddb044a79b8a553ef75e471f",
+        "Line": 119,
+        "Timestamp": "2026-10-21T02:56:15.851Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/requirements/SKILL.md' -Count 150",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/Development-Process-draft-v4.md'"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_1cc71a8d8cbc4dc1a91809dfa3d90c28",
+        "Line": 127,
+        "Timestamp": "2026-10-21T02:56:24.58Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/requirements/SKILL.md' -Skip 150",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/plans/2026-10-19-unit-suite-green.md' -Skip 64 -Count 90"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_415d98de94e04693a53fc9797d8cab3a",
+        "Line": 135,
+        "Timestamp": "2026-10-21T02:56:32.227Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/todo/SKILL.md'",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/plans/2026-10-19-unit-suite-green.md' -Skip 200 -Count 60"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_078bd86ed3bf4207a56cd22bf42ac5a5",
+        "Line": 145,
+        "Timestamp": "2026-10-21T02:57:25.525Z",
+        "Commands": [
+          "$hvProblems=@(); foreach($hvFile in @('docs/receipts/hv/hv-ug-r4-store.ps1','docs/receipts/hv/hv-ug-r4-snapshot.ps1')) { $hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $hvFile),[ref]$hvTokens,[ref]$hvErrors); $hvProblems+=@($hvErrors); $hvProblems+=@(Invoke-ScriptAnalyzer -Path $hvFile -Severity Warning,Error) }; $hvProblems | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvProblems.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          1
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_7e00c959fe864793a99ef5b78e94b18f",
+        "Line": 153,
+        "Timestamp": "2026-10-21T02:57:38.201Z",
+        "Commands": [
+          "$hvProblems=@(); foreach($hvFile in @('docs/receipts/hv/hv-ug-r4-store.ps1','docs/receipts/hv/hv-ug-r4-snapshot.ps1')) { $hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $hvFile),[ref]$hvTokens,[ref]$hvErrors); $hvProblems+=@($hvErrors); $hvProblems+=@(Invoke-ScriptAnalyzer -Path $hvFile -Severity Warning,Error) }; $hvProblems | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvProblems.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_b3fa258784434362984bb9d8c3fb86bf",
+        "Line": 159,
+        "Timestamp": "2026-10-21T02:57:42.823Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-store.ps1'",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-snapshot.ps1'"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [
+          84900,
+          17222
+        ],
+        "Completed": false
+      },
+      {
+        "CallId": "call_a670cd52eabd465bacf351df575500e7",
+        "Line": 168,
+        "Timestamp": "2026-10-21T02:57:51.509Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/plans/2026-10-19-unit-suite-green.md' -Skip 260 -Count 60",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/20261020T215217-unitgreen-r4.selfreview.md'"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_ca9bc4b2061b45468563df9470f66b5c",
+        "Line": 176,
+        "Timestamp": "2026-10-21T02:57:59.622Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/plans/2026-10-19-unit-suite-green.md' -Skip 320"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [
+          84900
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_34b772ecc1f24f118dbf99dc8a9aa5d8",
+        "Line": 183,
+        "Timestamp": "2026-10-21T02:58:22.369Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'build.ps1' -Count 130",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-pr.txt'",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-r4-diff.txt' -Count 290"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_ff147c53976749c68d21d23713a5f31e",
+        "Line": 193,
+        "Timestamp": "2026-10-21T02:59:05.73Z",
+        "Commands": [
+          "$hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r4-run.ps1'),[ref]$hvTokens,[ref]$hvErrors); $hvErrors | ConvertTo-Json -Depth 4; Invoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-ug-r4-run.ps1' -Severity Warning,Error | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvErrors.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_3a3f76e9e0ad4a5ca72861a120f4182d",
+        "Line": 201,
+        "Timestamp": "2026-10-21T02:59:15.207Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-run.ps1' -Target Test -RunId 'hv-ug-r4-sandbox-test-1' -WhatIf",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-run.ps1' -Target Test -RunId 'hv-ug-r4-sandbox-test-1'"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [
+          19435
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_3147de57695d4e149a296cbbda07fce5",
+        "Line": 210,
+        "Timestamp": "2026-10-21T02:59:28.822Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-store-todo.txt'",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-store-TR-MCP-WS-005.txt'"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_1d528fc2c27c4f8d8d2d5a56d97529d6",
+        "Line": 219,
+        "Timestamp": "2026-10-21T02:59:50.408Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-store-TR-MCP-NUKE-019.txt'",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-store-TR-MCP-USECASE-018.txt'",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-store-TR-MCP-USECASE-019.txt'",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-receipt-files.txt' -Pattern 'ug-r4'"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_685f2d8ea5b144f4aba6e5cc6d30973f",
+        "Line": 229,
+        "Timestamp": "2026-10-21T03:00:28.836Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-r4-diff.txt' -Skip 290 -Count 270",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/unit-suite-green-20261019/ug-r4-linux-test-3.meta.json'",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/unit-suite-green-20261019/ug-r4-win-lane-3.txt' -Count 100"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_c17041d5d0c44cd298fedc50aa7467fa",
+        "Line": 242,
+        "Timestamp": "2026-10-21T03:01:19.373Z",
+        "Commands": [
+          "$hvProblems=@(); foreach($hvFile in @('docs/receipts/hv/hv-ug-r4-run.ps1','docs/receipts/hv/hv-ug-r4-environment.ps1')) { $hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $hvFile),[ref]$hvTokens,[ref]$hvErrors); $hvProblems+=@($hvErrors); $hvProblems+=@(Invoke-ScriptAnalyzer -Path $hvFile -Severity Warning,Error) }; $hvProblems | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvProblems.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_b5ebfc28ed6a4e9fb298897ff927b819",
+        "Line": 248,
+        "Timestamp": "2026-10-21T03:01:25.279Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-run.ps1' -Target Test -RunId 'hv-ug-r4-sandbox-test-2'",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-environment.ps1'"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [
+          12330,
+          3235
+        ],
+        "Completed": false
+      },
+      {
+        "CallId": "call_d378e1dd835d4d2f9587dea640fec076",
+        "Line": 255,
+        "Timestamp": "2026-10-21T03:01:53.939Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-r4-diff.txt' -Skip 560 -Count 340"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_81e307a770b54df3abd9c5f49bf4f091",
+        "Line": 262,
+        "Timestamp": "2026-10-21T03:02:32.432Z",
+        "Commands": [
+          "$hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r4-evidence-inventory.ps1'),[ref]$hvTokens,[ref]$hvErrors); $hvErrors | ConvertTo-Json -Depth 4; Invoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-ug-r4-evidence-inventory.ps1' -Severity Warning,Error | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvErrors.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_a47f91908c0546988c0eefc9b49f6273",
+        "Line": 270,
+        "Timestamp": "2026-10-21T03:02:39.074Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-evidence-inventory.ps1'"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [
+          77816
+        ],
+        "Completed": false
+      },
+      {
+        "CallId": "call_c194dfd605a54c1a8b761fd2b0ef845e",
+        "Line": 279,
+        "Timestamp": "2026-10-21T03:02:48.024Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-r4-diff.txt' -Skip 900 -Count 350"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_88f5579865444e3bb858fe040b612342",
+        "Line": 292,
+        "Timestamp": "2026-10-21T03:04:05.918Z",
+        "Commands": [
+          "$hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r4-gates.ps1'),[ref]$hvTokens,[ref]$hvErrors); $hvErrors | ConvertTo-Json -Depth 4; Invoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-ug-r4-gates.ps1' -Severity Warning,Error | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvErrors.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_2a82f7c8327b4480bbe01bec9e6c1cfe",
+        "Line": 300,
+        "Timestamp": "2026-10-21T03:04:29.507Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-gates.ps1'"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [
+          78513,
+          12330
+        ],
+        "Completed": false
+      },
+      {
+        "CallId": "call_0738c7b9a64b44c8b2ab90c5adc85679",
+        "Line": 306,
+        "Timestamp": "2026-10-21T03:04:43.166Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-r4-diff.txt' -Skip 1208 -Count 340",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-sandbox-test-2.out.txt' -Pattern '\\[ERR\\]|NU190|Passed!|Test Run Successful|Starting|Target '",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hostile-validator-unitgreen-r3-20261020T170824.md' -Count 70"
+        ],
+        "ExitCodes": [
+          0,
+          1,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_9b3cdecab6554407ab7aa05bb4503d72",
+        "Line": 315,
+        "Timestamp": "2026-10-21T03:04:53.884Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-sandbox-test-2.out.txt' -Count 80"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [
+          78513
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_86ce81192a8d496db8bcda4551df595e",
+        "Line": 325,
+        "Timestamp": "2026-10-21T03:05:48.56Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs'",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'tests/Shared/TestRepositoryRoot.cs'",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-store-FR-MCP-USECASE-017.txt'"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_1ae538e1023a47b19e0457e145913a60",
+        "Line": 336,
+        "Timestamp": "2026-10-21T03:06:58.366Z",
+        "Commands": [
+          "$hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r4-scanner-probes.ps1'),[ref]$hvTokens,[ref]$hvErrors); $hvErrors | ConvertTo-Json -Depth 4; Invoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-ug-r4-scanner-probes.ps1' -Severity Warning,Error | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvErrors.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_b7113ac4e7a743f08bb95ad987972f0f",
+        "Line": 346,
+        "Timestamp": "2026-10-21T03:07:25.452Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-scanner-probes.ps1'"
+        ],
+        "ExitCodes": [
+          1,
+          0
+        ],
+        "SessionIds": [
+          12330
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_8f80ec73a7c446a48c0ddd223ff956b2",
+        "Line": 355,
+        "Timestamp": "2026-10-21T03:08:32.111Z",
+        "Commands": [
+          "$hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r4-scanner-probes.ps1'),[ref]$hvTokens,[ref]$hvErrors); $hvErrors | ConvertTo-Json -Depth 4; Invoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-ug-r4-scanner-probes.ps1' -Severity Warning,Error | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvErrors.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_91ae30188cb745e3824185b9f8de77ae",
+        "Line": 363,
+        "Timestamp": "2026-10-21T03:08:40.132Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-scanner-probes.ps1'"
+        ],
+        "ExitCodes": [
+          1
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_b00eb48cb73f4dd8916b2579efa06766",
+        "Line": 370,
+        "Timestamp": "2026-10-21T03:09:03.164Z",
+        "Commands": [
+          "$hvTokens=$null; $hvErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'docs/receipts/hv/hv-ug-r4-scanner-probes.ps1'),[ref]$hvTokens,[ref]$hvErrors); $hvErrors | ConvertTo-Json -Depth 4; Invoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-ug-r4-scanner-probes.ps1' -Severity Warning,Error | Select-Object RuleName,Severity,Line,Message | ConvertTo-Json -Depth 4; if($hvErrors.Count){exit 1}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_ecd74cf4b3f64eb181acf33199e91f03",
+        "Line": 381,
+        "Timestamp": "2026-10-21T03:09:14.348Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-scanner-probes.ps1'",
+          "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-sandbox-test-2.out.txt' -Skip 200 -Count 90"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_674be8f3064245ad837ab8a6ff9ee834",
+        "Line": 394,
+        "Timestamp": "2026-10-21T03:13:21.958Z",
+        "Commands": [
+          "Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw; Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile' -Filter '*.md' -File -Recurse | Where-Object Name -ne 'SKILL.md' | Select-Object FullName,Length"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_3a4e6c777a2f4d85815d04153c0005f8",
+        "Line": 401,
+        "Timestamp": "2026-10-21T03:13:27.338Z",
+        "Commands": [
+          "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -First 220"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_5826eed1d1d34f0ab5cbf7193b913819",
+        "Line": 406,
+        "Timestamp": "2026-10-21T03:13:30.975Z",
+        "Commands": [
+          "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 220 -First 160"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_b1567637a29d47c6aab2a0a3fc16085c",
+        "Line": 415,
+        "Timestamp": "2026-10-21T03:13:40.661Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-plugin.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store.ps1"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_ef57750cedc84a25860684735681f425",
+        "Line": 423,
+        "Timestamp": "2026-10-21T03:13:49.437Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/context/session-log-schema.md -Pattern 'dialog|category|content|append' ",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-run.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path AGENTS.md; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/Development-Process-draft-v4.md -Skip 60 -Count 25"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_c4280fdb69dd40149d33828c0b07d344",
+        "Line": 432,
+        "Timestamp": "2026-10-21T03:13:57.297Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0' -Pattern 'workflow.sessionlog.appendDialog|workflow.sessionlog.dialog|designDecisions' "
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_c8b38ca134ee4a2292464764f420b672",
+        "Line": 439,
+        "Timestamp": "2026-10-21T03:14:18.373Z",
+        "Commands": [
+          "$paths=@('docs/receipts/hv/hv-ug-r4-note.ps1','docs/receipts/hv/hv-ug-r4-run.ps1'); foreach($p in $paths){$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){$a|Format-List;throw 'Analyzer failed'};Write-Output ($p+': parser and analyzer clean')}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_9d6d6bc0c8774472a16185c87e10f626",
+        "Line": 445,
+        "Timestamp": "2026-10-21T03:14:32.266Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-note.ps1 -Order 2 -Category decision -Evidence docs/receipts/hv/hv-ug-r4-scanner-probes.json -Text 'After context recovery re-executed add-profile and read one profile file in full. Independent Nuke Test sandbox-test-2 exited 0; first attempt stopped during restore because HTTP cache was read-only, corrected with isolated /tmp cache. Scanner probe confirms original sibling-alias counterexample fixed but valid using OS = System.OperatingSystem followed by scoped using static OS yields zero findings for IsWindows. Treat this as candidate material scanner defect, not an allowed cross-file semantic limit; validate full implications before scoring. Rejected editing production, changing requirements, or triage under review-only instruction. Windows read-only mount is used because supplied SSH wrapper stages a file remotely.'",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-run.ps1 -Target Hostile -RunId hv-ug-r4-hostile-test-1 -WhatIf",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-run.ps1 -Target Hostile -RunId hv-ug-r4-hostile-test-1"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [
+          15014
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_e08883e29b994ac19445acf0ea9aa614",
+        "Line": 453,
+        "Timestamp": "2026-10-21T03:15:28.753Z",
+        "Commands": [
+          "$paths=@('docs/receipts/hv/hv-ug-r4-transcript.ps1','docs/receipts/hv/hv-ug-r4-records.ps1'); foreach($p in $paths){$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){$e|Format-List;continue};Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error}"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_5423aca9f4f94a1abb6203cab5a00315",
+        "Line": 461,
+        "Timestamp": "2026-10-21T03:15:38.675Z",
+        "Commands": [
+          "$paths=@('docs/receipts/hv/hv-ug-r4-transcript.ps1','docs/receipts/hv/hv-ug-r4-records.ps1'); foreach($p in $paths){$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){$a|Format-List;throw 'Analyzer failed'};Write-Output ($p+': parser and analyzer clean')}",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-transcript.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-records.ps1"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [
+          90066
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_57c536bab00d407b8efcbb7c8f485471",
+        "Line": 473,
+        "Timestamp": "2026-10-21T03:16:01.118Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-remaining-records.txt -Count 235",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-pr-body.txt; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-docs-only-26.txt; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/unit-suite-green-20261019/ug-r4-build-tests-2.meta.json"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_56c50f916d2940ac9c5b59a4303fb720",
+        "Line": 481,
+        "Timestamp": "2026-10-21T03:16:13.635Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-operator-transcript.txt -Pattern '^2026|Structural fix|Hostile validation|Use the latest|What would|Please use ssh|Extend fix|race in|Gotta|scope creep|C4|WhatIf' ",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-remaining-records.txt -Skip 234 -Count 200; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-TR-MCP-QUALITY-001.txt",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-changed-files.txt"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_739481946d0c4917a8b8a8731dae3bdd",
+        "Line": 490,
+        "Timestamp": "2026-10-21T03:16:41.882Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-transcript.ps1';$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)};Write-Output 'Parser and analyzer clean'; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-transcript.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-remaining-records.txt -Skip 234 -Count 170; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-TR-MCP-QUALITY-001.txt -Pattern 'ac-21|System.Security|NU190|text:|isSatisfied' "
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [
+          39474
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_7beb997916df4dc69c69af2a4f606197",
+        "Line": 499,
+        "Timestamp": "2026-10-21T03:16:58.085Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-gates.ps1 -Count 200; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hostile-validator-unitgreen-r3-20261020T170824.md -Skip 65 -Count 160"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_b0b6d42d073348a2a98e076fdedc9fc5",
+        "Line": 506,
+        "Timestamp": "2026-10-21T03:17:27.999Z",
+        "Commands": [
+          "$paths=@('docs/receipts/hv/hv-ug-r4-gates.ps1','docs/receipts/hv/hv-ug-r4-audit.ps1'); foreach($p in $paths){$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)};Write-Output ($p+': parser and analyzer clean')}",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-audit.ps1"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [
+          69047
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_a3729210e7214805b9d0c06cd59672fb",
+        "Line": 515,
+        "Timestamp": "2026-10-21T03:17:47.404Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-operator-transcript.txt -Pattern '^2026-10-20|Structural fix, round 4|Fix the race|Extend fix' ",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-chronology.txt -Pattern '^2026|\"file_path\"|\"command\"' "
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_1ca07ad64a614f4ca28cf3d9de6e2c52",
+        "Line": 525,
+        "Timestamp": "2026-10-21T03:17:58.33Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-operator-transcript.txt -Skip 2044 -Count 145; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/20261020T215217-unitgreen-r4.selfreview.md"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_ef3e6c8d253940aeb8ea6c5c6fa220fd",
+        "Line": 532,
+        "Timestamp": "2026-10-21T03:18:20.108Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-audit.json -Pattern 'HashMismatches|ValidSignature.*false|EnEmDashes|TableRows' ",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-gates.ps1"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [
+          15014,
+          84185
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_589354d92b2b4b748e54f51135e5c21c",
+        "Line": 539,
+        "Timestamp": "2026-10-21T03:18:38.14Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-hostile-test-1.out.txt -Pattern 'error |Total tests:|Test Run|[A-Za-z]+ Succeeded|Failed|NU190' ",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path src/QBrainAi.Services/Services/DirectoryTreeWalker.cs; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs -Pattern 'DirectoryTreeWalker|Enumerate|UserProfile|catch' ",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests -Pattern 'UseSqlite\\([^\"\\r\\n]*[Cc]onnection|Task.WhenAll|Task.WhenAny|Task.Run\\(' "
+        ],
+        "ExitCodes": [
+          1,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_1b4a4a7f665f473597e165cf068db1fa",
+        "Line": 548,
+        "Timestamp": "2026-10-21T03:18:45.5Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-hostile-test-1.out.txt -Count 80; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-code-diff.txt -Pattern '^diff --git.*(src/|build/|Directory)' "
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_216a3d75227944449079cd5d878945ca",
+        "Line": 556,
+        "Timestamp": "2026-10-21T03:19:27.501Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-mechanical.ps1';$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)};Write-Output 'Parser and analyzer clean';pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-mechanical.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-code-diff.txt -Skip 15 -Count 267"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [
+          77894
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_91dc51e195854ccab6021aba533370bb",
+        "Line": 565,
+        "Timestamp": "2026-10-21T03:19:41.281Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path '/home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1' -Count 160; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/unit-suite-green-20261019/ug-r4-win-lane-3.start.txt; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/unit-suite-green-20261019/ug-r4-win-test-ssh-3.txt -Count 25"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_93d4203f08a04554865d0a2f1bae5c28",
+        "Line": 572,
+        "Timestamp": "2026-10-21T03:19:56.394Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path '/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1' -Count 130; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-shared-connection-sweep.json"
+        ],
+        "ExitCodes": [
+          1
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_9a12c0870fdd4e50843e39320caf305d",
+        "Line": 585,
+        "Timestamp": "2026-10-21T03:20:28.458Z",
+        "Commands": [
+          "$paths=@('docs/receipts/hv/hv-ug-r4-mechanical.ps1','docs/receipts/hv/hv-ug-r4-windows-read.ps1','docs/receipts/hv/hv-ug-r4-ssh-read.ps1','/home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1');foreach($p in $paths){$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)};Write-Output ($p+': parser and analyzer clean')}",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-mechanical.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-ssh-read.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File '/home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1' -Directory docs/receipts/hv -NameRegex . -MarkerPath '/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml' -BackupDir /tmp/hv-ug-r4-never-created -WhatIf"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [
+          94164,
+          43452,
+          39694
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_abf0ca3406634a94a26e8960cbad4e8a",
+        "Line": 604,
+        "Timestamp": "2026-10-21T03:21:27.97Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-ssh-read.ps1';$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)};Write-Output 'Parser and analyzer clean';pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-ssh-read.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-shared-connection-sweep.json; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-hostile-test-1.out.txt -Skip 270 -Count 30"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [
+          61217
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_64d2ed7e1dfe46f49f5386220d880a56",
+        "Line": 613,
+        "Timestamp": "2026-10-21T03:21:46.798Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs -Skip 515 -Count 70; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Controllers/SessionLogControllerReceiptTests.cs -Count 145"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_fe57b6725ca24190958b7d1f27edf076",
+        "Line": 620,
+        "Timestamp": "2026-10-21T03:21:59.091Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs -Count 175; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path src/QBrainAi.Services/Services/SessionLogService.cs -Pattern 'Extract|Backfill|planFile|ApplyTurnContext' "
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_b482e480307f4af79f0889105872f551",
+        "Line": 625,
+        "Timestamp": "2026-10-21T03:22:06.354Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path src/QBrainAi.Services/Services/SessionLogService.cs -Skip 1420 -Count 80; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-assertion-changes.json -Count 150; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/plans/2026-10-19-unit-suite-green.md -Pattern '15 files|16 files|blob|schema' "
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_b91341b0756f490db20fc69ecb982f8f",
+        "Line": 632,
+        "Timestamp": "2026-10-21T03:22:21.597Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path src/QBrainAi.Services/Services/SessionLogService.cs -Skip 105 -Count 90; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests -Pattern 'isImport: true|SourceFile =|ImportSource|Extractor\\(|\\.Extract\\(' "
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_05e7e4a57cb8483a9ed568f8defe16d5",
+        "Line": 639,
+        "Timestamp": "2026-10-21T03:22:46.758Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-note.ps1 -Order 3 -Category decision -Evidence docs/receipts/hv/hv-ug-r4-audit.json -Text 'Live dedicated getters and effective requirements both show FR-MCP-USECASE-016 and -017 absent; replacement mappings retained. All 19 TODO tasks unchecked. Exact brief UG1 incorrectly claims docs-only after 26fc8348; git proves four test paths changed at 97b78114. UG7 says 18 tasks although live TODO and other current sections say 19. Self-review propagation-audit says no stale nonhistorical 26fc references, contradicted by UG1. Candidate audit finding requires correcting brief and self-review, not another operator policy decision. Raw final Linux/Windows gates, Build.Tests 436, complete Windows lane373, Linux397 validated. Read-only SSH initially failed local system-config permissions; specifying existing user config succeeded without remote writes and proved original logs, no NU1901-4, exact runner hash and interactive session1. Prior r3 receipt overstates takeover by one generated schema file: all15 source/test/build blobs match; generated schema differs. Review final artifacts directly rather than copying that statement.'",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-edit-chronology.json -Pattern 'Local|TranscriptLine|Path' -Skip 0 -Count 70"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_9292dd2271014bed9b871fdf7c3595b4",
+        "Line": 648,
+        "Timestamp": "2026-10-21T03:23:25.413Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-hostile-test-1.out.txt -Skip 500 -Count 15; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs -Count 120"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_e3c286e06e984eed9ec2b7526d1bb21b",
+        "Line": 657,
+        "Timestamp": "2026-10-21T03:24:11.065Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-final-data.ps1';$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)};Write-Output 'Parser and analyzer clean';pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-final-data.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File '/home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1' -Directory docs/receipts/hv -NameRegex '(unitgreen-r[1234]|hv-ug-r[1234]-)' -MarkerPath '/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml' -BackupDir /tmp/hv-ug-r4-never-created -WhatIf"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [
+          45993,
+          50579
+        ],
+        "Completed": false
+      },
+      {
+        "CallId": "call_b69f3727a1f240779045ae400dce96b1",
+        "Line": 666,
+        "Timestamp": "2026-10-21T03:24:40.908Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-scanner-probes.json; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs -Skip 180 -Count 135",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-operator-transcript.txt -Skip 1516 -Count 245"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_b0b9a37bae4e49df943bd1c64ee2c4b7",
+        "Line": 674,
+        "Timestamp": "2026-10-21T03:25:13.132Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-TR-MCP-USECASE-018.txt -Skip 25 -Count 30; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-TR-MCP-USECASE-019.txt -Skip 30 -Count 42; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-operator-transcript.txt -Skip 2044 -Count 29"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_c6e509f299d04183bfd40d7121c0f353",
+        "Line": 683,
+        "Timestamp": "2026-10-21T03:26:11.298Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-scanner-probes.ps1 -Skip 50 -Count 70; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-final-data.json -Pattern 'Round3Correction|Every gate|Windows Test did not|TakeoverSchemaDiff|architecture|test-db-env-file' ",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-operator-transcript.txt -Skip 1757 -Count 118"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_1ee1cbde5d92414994d372df709d25e5",
+        "Line": 691,
+        "Timestamp": "2026-10-21T03:26:47.02Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-scanner-probes.ps1 -Count 65"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_2995f623159d4b00ae8f9f7cb67f8260",
+        "Line": 698,
+        "Timestamp": "2026-10-21T03:27:09.989Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-scanner-probes.ps1';$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)};Write-Output 'Parser and analyzer clean';pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-scanner-probes.ps1"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_2d96e3bad97e474fabc0486ebef87916",
+        "Line": 706,
+        "Timestamp": "2026-10-21T03:27:40.071Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-extra-store.ps1';$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)};Write-Output 'Parser and analyzer clean';pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-extra-store.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-note.ps1 -Order 4 -Category decision -Evidence docs/receipts/hv/hv-ug-r4-scanner-probes-2.json -Text 'Independent sandbox and hostile Nuke Test each prove 4518 passed, zero failed/not-executed at pinned docs-equivalent head. Scanner defect is now proved in two compilable single-file forms: inherited alias used by nested using static, and inherited alias used by nested alias. Both direct IsWindows calls produce zero findings; plain static, original R3 sibling, reversed order and non-platform controls behave as expected. This is within documented lexical single-file coverage, not a demand for cross-file semantic analysis. Require implementer correction and BDPv4 controls before claiming complete scanner closure. Final gate totals remain accepted; no completion state mutated.'"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [
+          90679
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_0b02cb22651b4150be548ab47cb8af66",
+        "Line": 717,
+        "Timestamp": "2026-10-21T03:28:23.068Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-final-data.json -Skip 453 -Count 37; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/unitgreen-r4-prelaunch.projected-problems.md -Count 150; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs -Count 160"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_4d7404c890f248e0983af7ff1e5d298b",
+        "Line": 726,
+        "Timestamp": "2026-10-21T03:29:44.507Z",
+        "Commands": [
+          "$paths=@('docs/receipts/hv/hv-ug-r4-transcript.ps1','docs/receipts/hv/hv-ug-r4-command-ledger.ps1');foreach($p in $paths){$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)};Write-Output ($p+': parser and analyzer clean')}",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-transcript.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-command-ledger.ps1"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [
+          92691
+        ],
+        "Completed": true
+      },
+      {
+        "CallId": "call_67168d209c00470782f63feb18e2b870",
+        "Line": 736,
+        "Timestamp": "2026-10-21T03:30:09.533Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-command-ledger.ps1';$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)};pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-command-ledger.ps1 -Inspect"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_f1b001fc4d55403783dab8e089831ad1",
+        "Line": 744,
+        "Timestamp": "2026-10-21T03:30:28.212Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-TEST-MCP-MEMORY-010.txt; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-effective.txt -Pattern 'TEST-MCP-MEMORY-010|FR-MCP-MEMORY|TR-MCP-MEMORY|TEST-MEMORY|TEST-MCP-MEM-' ; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-TEST-HANDOFF-005.txt -Count 35; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-own-history-interim.txt -Count 35"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_2f79e2f264c54b7daeb631ff767d010d",
+        "Line": 751,
+        "Timestamp": "2026-10-21T03:30:48.194Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv -Files -Pattern 'hv-ug-r3.*(model|session|persist)'",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib' -Pattern 'model =|model:|MCP_AGENT_MODEL|MCP_MODEL|updateSession|setSession' "
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_53509ff4ffec4825b573b0b6a55a2d9b",
+        "Line": 759,
+        "Timestamp": "2026-10-21T03:31:15.503Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs -Count 65; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-effective.txt -Skip 9310 -Count 40; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-effective.txt -Skip 22274 -Count 33"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_d7a7768435f544679d6c071f10db9cd3",
+        "Line": 768,
+        "Timestamp": "2026-10-21T03:32:24.83Z",
+        "Commands": [
+          "$paths=@('docs/receipts/hv/hv-ug-r4-command-ledger.ps1','docs/receipts/hv/hv-ug-r4-inspect.ps1');foreach($p in $paths){$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)}};pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-command-ledger.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv -Files -Pattern 'hv-ug-r3.*(model|session.*params|persist.*ps1)' ; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path plugins/core/lib-ps/yaml-object-mutation.ps1 -Count 90"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [],
+        "Completed": false
+      },
+      {
+        "CallId": "call_753179e3fcd54f5e9f53a30ae1fca293",
+        "Line": 774,
+        "Timestamp": "2026-10-21T03:32:33.102Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-inspect.ps1; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path plugins/core/lib-ps/yaml-object-mutation.ps1 -Count 100"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_2342b4c1abbd4d2793110bd563c62de9",
+        "Line": 781,
+        "Timestamp": "2026-10-21T03:32:48.833Z",
+        "Commands": [
+          "$paths=@('docs/receipts/hv/hv-ug-r4-command-ledger.ps1','docs/receipts/hv/hv-ug-r4-inspect.ps1');foreach($p in $paths){$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)}};pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-command-ledger.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv -Files -Pattern 'hv-ug-r3.*(model|session.*params|persist.*ps1)' ; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path plugins/core/lib-ps/yaml-object-mutation.ps1 -Pattern '^function|param\\(|Mutation|Path|Document' "
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_6f94273c19d245c98cc7e0ac62c76426",
+        "Line": 795,
+        "Timestamp": "2026-10-21T03:37:05.251Z",
+        "Commands": [
+          "Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw; Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile' -Filter '*.md' -File -Recurse | Where-Object { $_.Name -ne 'SKILL.md' } | Select-Object FullName,Length; Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -First 220"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [],
+        "Completed": false
+      },
+      {
+        "CallId": "call_2965eb6fa8a74b0b9c28620f79747972",
+        "Line": 800,
+        "Timestamp": "2026-10-21T03:37:08.538Z",
+        "Commands": [
+          "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 220; Get-Date -Format s"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [],
+        "Completed": false
+      },
+      {
+        "CallId": "call_a86a2653a50a40f9ab9f802343263755",
+        "Line": 809,
+        "Timestamp": "2026-10-21T03:37:20.581Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-extra-store.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-note.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r3-own-model-metadata.txt",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1 -Skip 1310 -Count 75"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_7e38fdd1f5df4411b945aad3d86f4c5c",
+        "Line": 817,
+        "Timestamp": "2026-10-21T03:37:27.347Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1 -Pattern 'ensureSession|updateTurn|completeTurn|SessionLog.'",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store.ps1",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-own-history-interim.txt -Count 55"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_d6626f8c028b423d8cc55f14adb54c33",
+        "Line": 826,
+        "Timestamp": "2026-10-21T03:37:32.023Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1 -Skip 1980 -Count 220"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_767c6095570741d1aeeaef92efc3f864",
+        "Line": 833,
+        "Timestamp": "2026-10-21T03:37:37.658Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-plugin.ps1"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_2c40c0ae99ff46f68192fb30cd9582ee",
+        "Line": 842,
+        "Timestamp": "2026-10-21T03:37:44.985Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/session-start.ps1 -Pattern 'model|bootstrap|Submit|sessionlog'; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-inspect.ps1"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_a1a627d4bf8e48f19f432fb493e64045",
+        "Line": 849,
+        "Timestamp": "2026-10-21T03:37:51.13Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/session-start.ps1; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path src/QBrainAi.Mcp.Repl.Core -Pattern 'EnsureSessionAsync|BootstrapAsync|CreateSessionAsync'"
+        ],
+        "ExitCodes": [
+          1
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_109aa4a05d3c4f3a829b1d68974ec50b",
+        "Line": 856,
+        "Timestamp": "2026-10-21T03:37:59.753Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path src -Pattern 'EnsureSessionAsync|BootstrapAsync|class SessionLogWorkflow|CreateSessionAsync'"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_20ec53e99420436d82eee4d63783e833",
+        "Line": 863,
+        "Timestamp": "2026-10-21T03:38:05.578Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path src/QBrainAi.Repl.Core/SessionLogWorkflow.cs -Skip 65 -Count 100; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path src/QBrainAi.Client/SessionLogClient.cs -Count 135; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1 -Skip 2620 -Count 175"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_868b4e808e874ac298403a4ccbd432d9",
+        "Line": 875,
+        "Timestamp": "2026-10-21T03:38:32.177Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-reconcile.ps1'; $e=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$null,[ref]$e); $a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error); $e; $a; if($e.Count -or $a.Count){exit 1}; 'Parser and analyzer clean'"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_b5dd32eb858e4bde90a421a7e4deb44c",
+        "Line": 880,
+        "Timestamp": "2026-10-21T03:38:35.8Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-reconcile.ps1 -WhatIf"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_f0b59c07425d4bb7af1e0e05ed1379c2",
+        "Line": 885,
+        "Timestamp": "2026-10-21T03:38:39.499Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-reconcile.ps1"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [
+          81493
+        ],
+        "Completed": false
+      },
+      {
+        "CallId": "call_0112915b6bde46168dc8f2d8e099920b",
+        "Line": 891,
+        "Timestamp": "2026-10-21T03:38:49.946Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/20261020T215217-unitgreen-r4.selfreview.md; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/unitgreen-r4-prelaunch.brief.md -Pattern 'UG1\\.|UG7\\.|26fc8348\\.\\.'",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs -Skip 185 -Count 135; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-chronology-results.txt -Pattern '18:23:07|ug-r4-race-mockgate-2|ug-r4-ext-mockgate-1|ug-r4-mockgate-1'"
+        ],
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_24a091bc8392405ebc881d3db904de81",
+        "Line": 905,
+        "Timestamp": "2026-10-21T03:39:02.472Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-own-model-metadata.txt; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-own-history-model.txt -Count 12; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-memory010-again.txt; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-memory-mappings.txt; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-own-full.txt"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_2b7d4dabe27648dea6ecede55e570057",
+        "Line": 912,
+        "Timestamp": "2026-10-21T03:39:19.447Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-note.ps1 -Order 5 -Category decision -Text 'Repeated live getter returns not_found for TEST-MCP-MEMORY-010, cited by the new MemoryS1HarnessDatabaseTests and round 4 mapping lint. The effective view also lacks it. Treat only the missing authoritative mapping for this new binding test as in-scope; do not score the broader store drift or repair it. Runtime model proof remains gpt-6-astra/max; corrected my own wrapper metadata default codex to gpt-6-astra, confirmed by history. No implementation or requirement changes made.' -Evidence docs/receipts/hv/hv-ug-r4-memory010-again.txt"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [
+          77028
+        ],
+        "Completed": false
+      },
+      {
+        "CallId": "call_63caee67e7284e9290459d8d7868e8a4",
+        "Line": 918,
+        "Timestamp": "2026-10-21T03:39:25.912Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-final-data.json -Count 90; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-audit.json -Count 60"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_1983784916f746aaa66f0dbedf066484",
+        "Line": 935,
+        "Timestamp": "2026-10-21T03:40:08.495Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-final-checks.ps1'; $e=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$null,[ref]$e); $a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error); $e; $a; if($e.Count -or $a.Count){exit 1}; 'Parser and analyzer clean'"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_b5622f1b9b6b4d75a715f67d4d68c966",
+        "Line": 940,
+        "Timestamp": "2026-10-21T03:40:12.245Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-final-checks.ps1"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [
+          92231
+        ],
+        "Completed": false
+      },
+      {
+        "CallId": "call_adc504541c23437887afc39390c1b527",
+        "Line": 947,
+        "Timestamp": "2026-10-21T03:40:29.774Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-TR-MCP-USECASE-018.txt; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-TR-MCP-USECASE-019.txt; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-todo.txt -Skip 50 -Count 170",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hostile-validator-unitgreen-r3-20261020T170824.md -Pattern 'R2-F|F[1-7]:|F[1-7] |UG9|takeover' "
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_848a7e82040a4c4c8500f8ed7390782f",
+        "Line": 961,
+        "Timestamp": "2026-10-21T03:41:13.035Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs -Pattern 'QueryAsync|OpenSessionAsync|SubmitAsync|UpsertTurnAsync'; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/context/session-log-schema.md -Count 190; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-command-ledger.json -Count 40"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_d723d286e5e6439b9a81074a220a7667",
+        "Line": 968,
+        "Timestamp": "2026-10-21T03:41:40.573Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-query-own.ps1'; $e=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$null,[ref]$e); $a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error); $e; $a; if($e.Count -or $a.Count){exit 1}; 'Parser and analyzer clean'"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_eb85a9ead2fa4c2790ef2a14f108e1a0",
+        "Line": 974,
+        "Timestamp": "2026-10-21T03:41:44.797Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-query-own.ps1"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [
+          97931
+        ],
+        "Completed": false
+      },
+      {
+        "CallId": "call_ecf56ba7a16d42dd997ed3541e1f65ba",
+        "Line": 981,
+        "Timestamp": "2026-10-21T03:42:01.458Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-gates.json -Count 75; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-identity.json; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-run.ps1 -Count 130; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-scanner-probes-2.json"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_3f2a92499ac641898238f639421ae4db",
+        "Line": 988,
+        "Timestamp": "2026-10-21T03:42:12.983Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-own-query.json -Count 60; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-final-checks.json -Pattern ' M |CommitCount|Diff26NonDocs' "
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_1667188ccbec497788bf13bbc68dc7fd",
+        "Line": 997,
+        "Timestamp": "2026-10-21T03:42:38.862Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-query-own.ps1'; $e=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$null,[ref]$e); $a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error); $e; $a; if($e.Count -or $a.Count){exit 1}; 'Parser and analyzer clean'"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_cacbae707ec648208051e479f963c3a1",
+        "Line": 1003,
+        "Timestamp": "2026-10-21T03:42:43.076Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-query-own.ps1 -Name hv-ug-r4-own-query-2"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [
+          46752
+        ],
+        "Completed": false
+      },
+      {
+        "CallId": "call_250acb298d0b40a9a4b5002ef778ec85",
+        "Line": 1010,
+        "Timestamp": "2026-10-21T03:42:54.862Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/plans/2026-10-19-unit-suite-green.md -Pattern 'D-A|D-B|lexical|same-file|cross-file|mockgate|supersed|Amendment I'; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-pr87-body.txt -Count 100; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs -Skip 320 -Count 65"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_27ae7d15994c483bb8f3f333eb47b66c",
+        "Line": 1017,
+        "Timestamp": "2026-10-21T03:43:01.802Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Files -Path docs/receipts/hv -Pattern 'hv-ug-r4.*(pr87|pr-body|takeover|secret|command|exit)'"
+        ],
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_1b6e80a2fd00485db5ab3c040ebd69e8",
+        "Line": 1024,
+        "Timestamp": "2026-10-21T03:43:10.258Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-own-query-2.json -Count 90; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-pr-body.txt -Count 95"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_0cc6e36f4ae54b6cae988c15df31b1de",
+        "Line": 1044,
+        "Timestamp": "2026-10-21T03:48:44.67Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-verdict.ps1'; $e=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$null,[ref]$e); $a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error); $e; $a; if($e.Count -or $a.Count){exit 1}; 'Parser and analyzer clean'",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Files -Path docs/receipts/hv -Pattern 'hv-ug-r4-(.*diff|.*secret|.*takeover|.*edit|.*operator|.*mechanical|.*comman)'",
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-sandbox-test-1.meta.json -Count 20; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-final-data.ps1 -Skip 50 -Count 100"
+        ],
+        "ExitCodes": [
+          1,
+          0,
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_84217a38923d4621bd4ff44b64d88d2d",
+        "Line": 1053,
+        "Timestamp": "2026-10-21T03:48:55.25Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-final-data.ps1; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-sandbox-test-1.meta.json -Pattern 'ExitCode'; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Files -Path docs/receipts/hv -Pattern 'hv-ug-r4-(.*schema|.*correction|.*scan|.*sweep|.*signature|.*final)'"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_981268698fca42afbefb515a4da54aaa",
+        "Line": 1062,
+        "Timestamp": "2026-10-21T03:49:58.022Z",
+        "Commands": [
+          "$p='docs/receipts/hv/hv-ug-r4-verdict.ps1'; $e=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$null,[ref]$e); $a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error); $e; $a; if($e.Count -or $a.Count){exit 1}; 'Parser and analyzer clean; pure object-factory warning has an explicit no-state-change justification'"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_e158a5370243497b9f46464e37499b42",
+        "Line": 1070,
+        "Timestamp": "2026-10-21T03:50:10.707Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-verdict.ps1 -WhatIf"
+        ],
+        "ExitCodes": [
+          0
+        ],
+        "SessionIds": [],
+        "Completed": true
+      },
+      {
+        "CallId": "call_059280c78d80491b9b8031fc0e3ccfc9",
+        "Line": 1079,
+        "Timestamp": "2026-10-21T03:50:18.421Z",
+        "Commands": [
+          "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-command-ledger.ps1"
+        ],
+        "ExitCodes": [],
+        "SessionIds": [],
+        "Completed": false
+      }
+    ],
+    "Polls": [
+      {
+        "ExitCodes": [
+          0
+        ],
+        "Code": "text(await tools.write_stdin({session_id:11454,chars:\"\",\"max_output_tokens\":6000,\"yield_time_ms\":1000}));\n",
+        "CallId": "call_8bd6f0e8f2f3496787fc1ae50345ae21"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "Code": "// @exec: {\"max_output_tokens\": 11000}\nconst out=await Promise.allSettled([\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/plans/2026-10-19-unit-suite-green.md' -Skip 320\",\"shell\":\"pwsh.exe\",\"login\":false,\"max_output_tokens\":7500}),\ntools.write_stdin({session_id:84900,chars:\"\",\"max_output_tokens\":1500,\"yield_time_ms\":1000}),\ntools.write_stdin({session_id:17222,chars:\"\",\"max_output_tokens\":2000,\"yield_time_ms\":1000})\n]);out.forEach(text);\n",
+        "CallId": "call_ca9bc4b2061b45468563df9470f66b5c"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "Code": "// @exec: {\"max_output_tokens\": 11000}\nconst out=await Promise.allSettled([\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-store-todo.txt'\",\"shell\":\"pwsh.exe\",\"login\":false,\"max_output_tokens\":6200}),\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-store-TR-MCP-WS-005.txt'\",\"shell\":\"pwsh.exe\",\"login\":false,\"max_output_tokens\":2500}),\ntools.write_stdin({session_id:84900,chars:\"\",\"max_output_tokens\":2200,\"yield_time_ms\":1000})\n]);out.forEach(text);\n",
+        "CallId": "call_3147de57695d4e149a296cbbda07fce5"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "Code": "// @exec: {\"max_output_tokens\": 8500}\nconst out=await Promise.allSettled([\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-r4-diff.txt' -Skip 290 -Count 270\",\"shell\":\"pwsh.exe\",\"login\":false,\"max_output_tokens\":5000}),\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/unit-suite-green-20261019/ug-r4-linux-test-3.meta.json'\",\"shell\":\"pwsh.exe\",\"login\":false,\"max_output_tokens\":1500}),\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/unit-suite-green-20261019/ug-r4-win-lane-3.txt' -Count 100\",\"shell\":\"pwsh.exe\",\"login\":false,\"max_output_tokens\":2000}),\ntools.write_stdin({session_id:19435,chars:\"\",\"max_output_tokens\":1500,\"yield_time_ms\":1000})\n]);out.forEach(text);\n",
+        "CallId": "call_685f2d8ea5b144f4aba6e5cc6d30973f"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "Code": "// @exec: {\"max_output_tokens\": 11500}\nconst out=await Promise.allSettled([\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-r4-diff.txt' -Skip 560 -Count 340\",\"shell\":\"pwsh.exe\",\"login\":false,\"max_output_tokens\":6300}),\ntools.write_stdin({session_id:3235,chars:\"\",\"max_output_tokens\":5000,\"yield_time_ms\":1000})\n]);out.forEach(text);\n",
+        "CallId": "call_d378e1dd835d4d2f9587dea640fec076"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "Code": "// @exec: {\"max_output_tokens\": 10000}\nconst out=await Promise.allSettled([\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-r4-diff.txt' -Skip 900 -Count 350\",\"shell\":\"pwsh.exe\",\"login\":false,\"max_output_tokens\":6000}),\ntools.write_stdin({session_id:77816,chars:\"\",\"max_output_tokens\":4500,\"yield_time_ms\":1000})\n]);out.forEach(text);\n",
+        "CallId": "call_c194dfd605a54c1a8b761fd2b0ef845e"
+      },
+      {
+        "ExitCodes": [],
+        "Code": "text(await tools.write_stdin({session_id:12330,chars:\"\",\"max_output_tokens\":2300,\"yield_time_ms\":1000}));\n",
+        "CallId": "call_e15dbdad912444d989276bc2b8e160ec"
+      },
+      {
+        "ExitCodes": [],
+        "Code": "text(await tools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-gates.ps1'\",\"shell\":\"pwsh.exe\",\"login\":false,\"max_output_tokens\":4000,\"yield_time_ms\":1000}));\ntext(await tools.write_stdin({session_id:12330,chars:\"\",\"max_output_tokens\":1200,\"yield_time_ms\":1000}));\n",
+        "CallId": "call_2a82f7c8327b4480bbe01bec9e6c1cfe"
+      },
+      {
+        "ExitCodes": [
+          0
+        ],
+        "Code": "// @exec: {\"max_output_tokens\": 5000}\nconst out=await Promise.allSettled([\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-inspect.ps1' -Path 'docs/receipts/hv/hv-ug-r4-sandbox-test-2.out.txt' -Count 80\",\"shell\":\"pwsh.exe\",\"login\":false,\"max_output_tokens\":2500}),\ntools.write_stdin({session_id:78513,chars:\"\",\"max_output_tokens\":2500,\"yield_time_ms\":1000})\n]);out.forEach(text);\n",
+        "CallId": "call_9b3cdecab6554407ab7aa05bb4503d72"
+      },
+      {
+        "ExitCodes": [
+          1,
+          0
+        ],
+        "Code": "const out=await Promise.allSettled([\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-ug-r4-scanner-probes.ps1'\",\"shell\":\"pwsh.exe\",\"login\":false,\"max_output_tokens\":3000}),\ntools.write_stdin({session_id:78513,chars:\"\",\"max_output_tokens\":6000,\"yield_time_ms\":1000}),\ntools.write_stdin({session_id:12330,chars:\"\",\"max_output_tokens\":1500,\"yield_time_ms\":1000})\n]);out.forEach(text);\n",
+        "CallId": "call_b7113ac4e7a743f08bb95ad987972f0f"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "Code": "const r=await Promise.allSettled([\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-plugin.ps1\",shell:\"pwsh.exe\",login:false,max_output_tokens:6000}),\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store.ps1\",shell:\"pwsh.exe\",login:false,max_output_tokens:6000}),\ntools.write_stdin({session_id:12330,chars:\"\",yield_time_ms:1000,max_output_tokens:3000})\n]);for(let i=0;i<r.length;i++)text({i,...r[i]});\n",
+        "CallId": "call_b1567637a29d47c6aab2a0a3fc16085c"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "Code": "const r=await Promise.allSettled([\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-remaining-records.txt -Count 235\",shell:\"pwsh.exe\",login:false,max_output_tokens:12000}),\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-pr-body.txt; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-docs-only-26.txt; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/unit-suite-green-20261019/ug-r4-build-tests-2.meta.json\",shell:\"pwsh.exe\",login:false,max_output_tokens:10000}),\ntools.write_stdin({session_id:90066,chars:\"\",yield_time_ms:1000,max_output_tokens:1000})\n]);for(let i=0;i<r.length;i++)text({i,...r[i]});\n",
+        "CallId": "call_57c536bab00d407b8efcbb7c8f485471"
+      },
+      {
+        "ExitCodes": [
+          0
+        ],
+        "Code": "const r=await Promise.allSettled([\ntools.write_stdin({session_id:69047,chars:\"\",yield_time_ms:1000,max_output_tokens:6000}),\ntools.write_stdin({session_id:15014,chars:\"\",yield_time_ms:1000,max_output_tokens:2000}),\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-operator-transcript.txt -Skip 2044 -Count 145; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/20261020T215217-unitgreen-r4.selfreview.md\",shell:\"pwsh.exe\",login:false,max_output_tokens:9000})\n]);for(let i=0;i<r.length;i++)text({i,...r[i]});\n",
+        "CallId": "call_1ca07ad64a614f4ca28cf3d9de6e2c52"
+      },
+      {
+        "ExitCodes": [
+          0
+        ],
+        "Code": "text(await tools.write_stdin({session_id:15014,chars:\"\",yield_time_ms:1000,max_output_tokens:2500}));\ntext(await tools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-audit.json -Pattern 'HashMismatches|ValidSignature.*false|EnEmDashes|TableRows' \",shell:\"pwsh.exe\",login:false,max_output_tokens:1000}));\ntext(await tools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-gates.ps1\",shell:\"pwsh.exe\",login:false,max_output_tokens:1000,yield_time_ms:1000}));\n",
+        "CallId": "call_ef3e6c8d253940aeb8ea6c5c6fa220fd"
+      },
+      {
+        "ExitCodes": [
+          1,
+          0
+        ],
+        "Code": "text(await tools.write_stdin({session_id:77894,chars:\"\",yield_time_ms:1000,max_output_tokens:2500}));\ntext(await tools.write_stdin({session_id:84185,chars:\"\",yield_time_ms:1000,max_output_tokens:1000}));\n",
+        "CallId": "call_a625c83436134caa9cdc118de5f0012c"
+      },
+      {
+        "ExitCodes": [
+          1,
+          0
+        ],
+        "Code": "const r=await Promise.allSettled([\ntools.write_stdin({session_id:43452,chars:\"\",yield_time_ms:1000,max_output_tokens:2500}),\ntools.write_stdin({session_id:39694,chars:\"\",yield_time_ms:1000,max_output_tokens:1000}),\ntools.write_stdin({session_id:94164,chars:\"\",yield_time_ms:1000,max_output_tokens:1500}),\ntools.write_stdin({session_id:15014,chars:\"\",yield_time_ms:1000,max_output_tokens:1000})\n]);for(let i=0;i<r.length;i++)text({i,...r[i]});\n",
+        "CallId": "call_4a9707edc4ad4cb6830f4b27b39fdec0"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "Code": "text(await tools.write_stdin({session_id:61217,chars:\"\",yield_time_ms:1000,max_output_tokens:3500}));\ntext(await tools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs -Skip 515 -Count 70; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Controllers/SessionLogControllerReceiptTests.cs -Count 145\",shell:\"pwsh.exe\",login:false,max_output_tokens:5000}));\n",
+        "CallId": "call_64d2ed7e1dfe46f49f5386220d880a56"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "Code": "text(await tools.write_stdin({session_id:15014,chars:\"\",yield_time_ms:1000,max_output_tokens:1000}));\ntext(await tools.write_stdin({session_id:39694,chars:\"\",yield_time_ms:1000,max_output_tokens:1000}));\ntext(await tools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-hostile-test-1.out.txt -Skip 500 -Count 15; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs -Count 120\",shell:\"pwsh.exe\",login:false,max_output_tokens:3500}));\n",
+        "CallId": "call_9292dd2271014bed9b871fdf7c3595b4"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0,
+          0
+        ],
+        "Code": "const r=await Promise.allSettled([\ntools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-TR-MCP-USECASE-018.txt -Skip 25 -Count 30; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-store-TR-MCP-USECASE-019.txt -Skip 30 -Count 42; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-operator-transcript.txt -Skip 2044 -Count 29\",shell:\"pwsh.exe\",login:false,max_output_tokens:3500}),\ntools.write_stdin({session_id:45993,chars:\"\",yield_time_ms:1000,max_output_tokens:2000}),\ntools.write_stdin({session_id:50579,chars:\"\",yield_time_ms:1000,max_output_tokens:1000})\n]);for(let i=0;i<r.length;i++)text({i,...r[i]});\n",
+        "CallId": "call_b0b9a37bae4e49df943bd1c64ee2c4b7"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "Code": "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-command-ledger.ps1\\n@@\\n-param()\\n+param([switch]$Inspect)\\n@@\\n $line=0\\n+$shapes=[Collections.Generic.List[object]]::new()\\n@@\\n     $payload=$item.payload\\n+    if($Inspect -and $payload.type -like '*output*' -and $shapes.Count -lt 3){$preview=$payload|ConvertTo-Json -Depth 6 -Compress;$shapes.Add(@{Type=$payload.type;Keys=@($payload.Keys);Preview=$preview.Substring(0,[Math]::Min(700,$preview.Length))})}\\n@@\\n }\\n+if($Inspect){$shapes|ConvertTo-Json -Depth 8;return}\\n*** End Patch\"));\ntext(await tools.exec_command({cmd:\"$p='docs/receipts/hv/hv-ug-r4-command-ledger.ps1';$e=$null;$t=$null;[void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p),[ref]$t,[ref]$e);if($e){throw ($e|Out-String)};$a=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($a){throw ($a|Out-String)};pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-command-ledger.ps1 -Inspect\",shell:\"pwsh.exe\",login:false,max_output_tokens:2000}));\ntext(await tools.write_stdin({session_id:90679,chars:\"\",yield_time_ms:1000,max_output_tokens:1000}));\n",
+        "CallId": "call_67168d209c00470782f63feb18e2b870"
+      },
+      {
+        "ExitCodes": [
+          0
+        ],
+        "Code": "text(await tools.write_stdin({session_id:81493,chars:\"\",yield_time_ms:1000,max_output_tokens:3000}));\n",
+        "CallId": "call_18401f3e87e34383b73ba1ab6e47aa85"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "Code": "text(await tools.write_stdin({session_id:92231,chars:\"\",yield_time_ms:1000,max_output_tokens:6000}));text(await tools.write_stdin({session_id:77028,chars:\"\",yield_time_ms:1000,max_output_tokens:1500}));\n",
+        "CallId": "call_fa53bd1bfc56425a857ee40d75a0f387"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "Code": "text(await tools.write_stdin({session_id:97931,chars:\"\",yield_time_ms:1000,max_output_tokens:1000}));text(await tools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-own-query.json -Count 60; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Path docs/receipts/hv/hv-ug-r4-final-checks.json -Pattern ' M |CommitCount|Diff26NonDocs' \",shell:\"pwsh.exe\",login:false,max_output_tokens:3500}));\n",
+        "CallId": "call_3f2a92499ac641898238f639421ae4db"
+      },
+      {
+        "ExitCodes": [
+          0,
+          0
+        ],
+        "Code": "text(await tools.exec_command({cmd:\"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r4-inspect.ps1 -Files -Path docs/receipts/hv -Pattern 'hv-ug-r4.*(pr87|pr-body|takeover|secret|command|exit)'\",shell:\"pwsh.exe\",login:false,max_output_tokens:3500}));text(await tools.write_stdin({session_id:46752,chars:\"\",yield_time_ms:1000,max_output_tokens:1000}));\n",
+        "CallId": "call_27ae7d15994c483bb8f3f333eb47b66c"
+      }
+    ]
+  },
+  "IndependentRuns": [
+    {
+      "Run": "hv-ug-r4-sandbox-test-2",
+      "Projects": [
+        {
+          "Project": "QBrainAi.Support.Mcp.Tests",
+          "Total": 3136,
+          "Passed": 3136,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 3136,
+          "Sha256": "54864CCEC8DF99BD93CE1020C7A8FCA8CA937D085DE05B061AC114317228E707"
+        },
+        {
+          "Project": "QBrainAi.Client.Tests",
+          "Total": 306,
+          "Passed": 306,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 306,
+          "Sha256": "731D588CB6FBA70C9D9CB52DB68784645CB42705FC9FC2AE6983CA3312152293"
+        },
+        {
+          "Project": "QBrainAi.Cqrs.Tests",
+          "Total": 33,
+          "Passed": 33,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 33,
+          "Sha256": "1BA6DB8CE80B9835E1A2D8D066690E22EA62497CB54F29CEDA261AE605B75CFB"
+        },
+        {
+          "Project": "QBrainAi.Launcher.Tests",
+          "Total": 20,
+          "Passed": 20,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 20,
+          "Sha256": "5B6298FBB796DD9CDF695B604576ED52AC51BB7504324CB8DA4CC3722B778968"
+        },
+        {
+          "Project": "QBrainAi.McpAgent.Tests",
+          "Total": 64,
+          "Passed": 64,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 64,
+          "Sha256": "7D5C12E7BC2389F159AC5353E593B836C7418FBD75F9AB7F2C604765F194437C"
+        },
+        {
+          "Project": "QBrainAi.Repl.Core.Tests",
+          "Total": 865,
+          "Passed": 865,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 865,
+          "Sha256": "E714249B3B947D1D16911138D7B98B5FEB1B620D14F2B5B78CF8B336548777E8"
+        },
+        {
+          "Project": "QBrainAi.QBAgent.Tests",
+          "Total": 94,
+          "Passed": 94,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 94,
+          "Sha256": "96A1FEAD53ECE4CB228FDE5B63862F09D275F79FBDF6BC8F5A487CF529E596C8"
+        }
+      ],
+      "Total": 4518.0,
+      "Failed": 0.0,
+      "NotExecuted": 0.0
+    },
+    {
+      "Run": "hv-ug-r4-hostile-test-1",
+      "Projects": [
+        {
+          "Project": "QBrainAi.Support.Mcp.Tests",
+          "Total": 3136,
+          "Passed": 3136,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 3136,
+          "Sha256": "11B71513248424A359B9568941771B2D9AE4AA1389958DAFA5E4F72008174B8C"
+        },
+        {
+          "Project": "QBrainAi.Client.Tests",
+          "Total": 306,
+          "Passed": 306,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 306,
+          "Sha256": "DD02A9AB306E5388D160B20CDA1176AA554B81514E2A308DDB7DE1CF2B8427A4"
+        },
+        {
+          "Project": "QBrainAi.Cqrs.Tests",
+          "Total": 33,
+          "Passed": 33,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 33,
+          "Sha256": "D209271D98D4B27EA01DD988B52CE3B4447D1A68A55847110700DBB0AE127E7B"
+        },
+        {
+          "Project": "QBrainAi.Launcher.Tests",
+          "Total": 20,
+          "Passed": 20,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 20,
+          "Sha256": "B2249B97E6E1CFD39442E783FCBB62E6CF3910D404E5682FEA1AEB9D4176C26D"
+        },
+        {
+          "Project": "QBrainAi.McpAgent.Tests",
+          "Total": 64,
+          "Passed": 64,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 64,
+          "Sha256": "1302FE8021FA4D89FEB38E2AA3EC4983814966EF2A7C54DD902593DDB7D96429"
+        },
+        {
+          "Project": "QBrainAi.Repl.Core.Tests",
+          "Total": 865,
+          "Passed": 865,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 865,
+          "Sha256": "47BFC80B04855BDA499E9170BEF20C1E36A7A115E5176CD7929112BA52A35CEE"
+        },
+        {
+          "Project": "QBrainAi.QBAgent.Tests",
+          "Total": 94,
+          "Passed": 94,
+          "Failed": 0,
+          "NotExecuted": 0,
+          "ActualResults": 94,
+          "Sha256": "1C2A6FA602B2E9C19D51E5D74856496AF80FF005BFC1E64867E7BA729789EBDE"
+        }
+      ],
+      "Total": 4518.0,
+      "Failed": 0.0,
+      "NotExecuted": 0.0
+    }
+  ],
+  "ScannerProbes": [
+    {
+      "Name": "r3-sibling-counterexample",
+      "Expected": 1,
+      "Actual": 1,
+      "Pass": true,
+      "Findings": [
+        "r3-sibling-counterexample.cs:1 os-check in AliasTests"
+      ],
+      "Source": "namespace A { using OS = System.OperatingSystem; public class AliasTests { [Fact] public void Check() { _ = OS.IsWindows(); } } }\nnamespace B { using OS = System.String; public class Helper { public OS Name {get;set;} } }"
+    },
+    {
+      "Name": "reverse-sibling-control",
+      "Expected": 1,
+      "Actual": 1,
+      "Pass": true,
+      "Findings": [
+        "reverse-sibling-control.cs:2 os-check in AliasTests"
+      ],
+      "Source": "namespace B { using OS = System.String; public class StringTests { [Fact] public void Check() { _ = OS.IsNullOrEmpty(\"x\"); } } }\nnamespace A { using OS = System.OperatingSystem; public class AliasTests { [Fact] public void Check() { _ = OS.IsWindows(); } } }"
+    },
+    {
+      "Name": "nested-aliased-static-os",
+      "Expected": 1,
+      "Actual": 0,
+      "Pass": false,
+      "Findings": [],
+      "Source": "using OS = System.OperatingSystem;\nnamespace N {\n    using static OS;\n    public class StaticAliasTests {\n        [Fact] public void Check() { _ = IsWindows(); }\n    }\n}"
+    },
+    {
+      "Name": "nested-aliased-static-string-control",
+      "Expected": 0,
+      "Actual": 0,
+      "Pass": true,
+      "Findings": [],
+      "Source": "using OS = System.String;\nnamespace N {\n    using static OS;\n    public class StaticAliasTests {\n        [Fact] public void Check() { _ = IsNullOrEmpty(\"x\"); }\n    }\n}"
+    },
+    {
+      "Name": "plain-static-control",
+      "Expected": 1,
+      "Actual": 1,
+      "Pass": true,
+      "Findings": [
+        "plain-static-control.cs:1 os-check in StaticTests"
+      ],
+      "Source": "namespace N { using static System.OperatingSystem; public class StaticTests { [Fact] public void Check() { _ = IsWindows(); } } }"
+    },
+    {
+      "Name": "nested-alias-chain-os",
+      "Expected": 1,
+      "Actual": 0,
+      "Pass": false,
+      "Findings": [],
+      "Source": "using OS = System.OperatingSystem;\nnamespace AliasChain {\n    using Host = OS;\n    public class ChainedAliasTests {\n        [Fact] public void Check() { _ = Host.IsWindows(); }\n    }\n}"
+    },
+    {
+      "Name": "nested-alias-chain-nonplatform",
+      "Expected": 0,
+      "Actual": 0,
+      "Pass": true,
+      "Findings": [],
+      "Source": "using OS = System.String;\nnamespace AliasChain {\n    using Host = OS;\n    public class ChainedAliasTests {\n        [Fact] public void Check() { _ = Host.IsNullOrEmpty(\"x\"); }\n    }\n}"
+    }
+  ],
+  "RequestJsonl": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261020T215217-unitgreen-r4.request.jsonl",
+  "ResponseJsonl": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261020T215217-unitgreen-r4.response.jsonl",
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r4-20261020T215217.md",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r4-20261020T215217.json"
+  ],
+  "SessionId": "Codex-20261021T025530Z-plugin-session",
+  "RequestId": "req-20261021T025534Z-unitgreen-r4",
+  "Verdict": {
+    "overallVerdict": "DISAGREE",
+    "accuracy": 97,
+    "completeness": 97,
+    "confidence": 99,
+    "passCount": 10,
+    "failCount": 9,
+    "unknownCount": 0,
+    "failList": [
+      {
+        "id": "R4-F1",
+        "claims": [
+          "UG3",
+          "UG8",
+          "UG11",
+          "UG12",
+          "UG13",
+          "UG17",
+          "UG18"
+        ],
+        "location": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:189-212,285-286,349-353; docs/plans/2026-10-19-unit-suite-green.md:239,346; PR body:34; IMPL-UNITGREEN-001 task 18",
+        "defect": "Lexical import resolution still loses the type behind an enclosing using alias. A file alias OS = System.OperatingSystem followed inside a namespace by using static OS makes the actual scanner miss IsWindows(). The same enclosing alias followed by using Host = OS makes it miss Host.IsWindows(). Both are valid, compiled C# in one file. ScopeFor stores the rightmost token OS rather than the resolved OperatingSystem type, and TypeName follows only one alias edge. Each probe expects one os-check and receives zero. This is within the promised same-file alias/static-import coverage, not a cross-file helper, reflection, or global-using limitation.",
+        "evidence": [
+          "hv-ug-r4-scanner-probes-2.json: two false negatives, five passing controls",
+          "hv-ug-r4-probe-compile.json: both counterexamples compile successfully, actual test assembly hash recorded",
+          "hv-ug-r4-scanner-probes.ps1: invokes the compiled UnitSuitePlatformScanner.Scan via reflection",
+          "UnitSuitePlatformScannerAliasScopeTests: all six current bound cases pass in both independent full Nuke Test runs"
+        ],
+        "fix": "Resolve using targets against the applicable enclosing alias scope and preserve the resolved type through nested alias declarations and static imports, or fail closed for a supported scope that cannot be resolved. Add both same-file examples, corresponding non-platform controls, and wrong-output negative controls to the scripted harness; preserve every existing case, establish the full green mock gate, bind the same assertions, and rerun the required gates after the code change. Correct the completion claims and leave the scanner task pending until that evidence exists. Whole-program analysis is not required.",
+        "classification": "Implementer edit"
+      },
+      {
+        "id": "R4-F2",
+        "claims": [
+          "UG1",
+          "UG7",
+          "UG11"
+        ],
+        "location": "docs/receipts/hv/unitgreen-r4-prelaunch.brief.md:58,64; docs/receipts/hv/20261020T215217-unitgreen-r4.selfreview.md:7 and committed unitgreen-r4-prelaunch.selfreview.md:7; request claims UG1 and UG7",
+        "defect": "UG1 asserts that 26fc8348..b0db5b09 changes only docs paths. That range contains the four test files changed in 97b78114, including the new MemoryS1HarnessDatabaseTests. The correct docs-only range begins at 97b78114. UG7 says 18 TODO tasks, but the live TODO has 19, all unchecked. The self-review propagation audit says UG1 was updated and only historical mentions of 26fc8348 remain in the brief; its live docs-only predicate disproves that claim. The actual seven final gates ran at 97b78114 and are accepted; this finding does not relabel those runs as failures.",
+        "evidence": [
+          "hv-ug-r4-docs-only-26.txt",
+          "hv-ug-r4-docs-only-97.txt",
+          "hv-ug-r4-final-checks.json: Diff26NonDocs has four paths, Diff97 contains only docs paths",
+          "hv-ug-r4-store-todo.txt:19 tasks, none checked",
+          "hv-ug-r4-pr-body.txt:39 correctly uses 97b78114..HEAD"
+        ],
+        "fix": "Correct the current round 4 brief and propagation-audit record to use 97b78114 for D-A and 19 for the task count, with an explicit correction notice. Preserve the request JSONL and other historical bytes as sent. Regenerate or verify the actual predicates rather than claiming a search removed them. No gate rerun or operator policy choice is needed for these documentation corrections alone.",
+        "classification": "Implementer audit edit"
+      },
+      {
+        "id": "R4-F3",
+        "claims": [
+          "UG7",
+          "UG11",
+          "UG12"
+        ],
+        "location": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs:6; live record TEST-MCP-MEMORY-010; round 4 self-review:6,11; IMPL-UNITGREEN-001 task 19",
+        "defect": "The new memory harness binding test claims TEST-MCP-MEMORY-010 as its requirement, and the pre-HV mapping lint relies on that citation. Two dedicated plugin getters return not_found, and two effective views contain zero occurrences of that ID. The old harness already cited it, but copying an older source comment does not establish a current authoritative TEST record or mapping for newly claimed-complete implementation. The stale-export caveat discloses different record drift and does not identify this missing TEST. The underlying store-drift defect is out of scope; its effect on this PR traceability and completion intent is in scope. No claim is made that the record never existed historically.",
+        "evidence": [
+          "hv-ug-r4-store-TEST-MCP-MEMORY-010.txt: not_found",
+          "hv-ug-r4-memory010-again.txt: repeated not_found at 2026-10-20T22:38:43 local",
+          "hv-ug-r4-store-effective.txt and hv-ug-r4-effective-again.txt: no TEST-MCP-MEMORY-010",
+          "hv-ug-r4-final-checks.json: EffectiveMemory010Matches=0",
+          "hv-ug-r4-store-TEST-HANDOFF-004.txt through -007.txt: the handoff TEST records do exist"
+        ],
+        "fix": "Reconcile the new binding test with an existing applicable, authoritative FR/TR/TEST/AC chain through the requirements plugin, or restore the specifically approved missing record and its mappings using retained authoritative evidence. Verify the dedicated getter, effective view, and owning mappings. Correct the source citation and pre-HV mapping disclosure as needed, and leave task 19 unfulfilled if that traceability cannot be established. Do not invent new memory behavior or repair unrelated store drift as part of this fix.",
+        "classification": "Implementer requirements/traceability edit"
+      }
+    ],
+    "unknownList": [],
+    "implementerFixes": [
+      "R4-F1: Resolve using targets against the applicable enclosing alias scope and preserve the resolved type through nested alias declarations and static imports, or fail closed for a supported scope that cannot be resolved. Add both same-file examples, corresponding non-platform controls, and wrong-output negative controls to the scripted harness; preserve every existing case, establish the full green mock gate, bind the same assertions, and rerun the required gates after the code change. Correct the completion claims and leave the scanner task pending until that evidence exists. Whole-program analysis is not required.",
+      "R4-F2: Correct the current round 4 brief and propagation-audit record to use 97b78114 for D-A and 19 for the task count, with an explicit correction notice. Preserve the request JSONL and other historical bytes as sent. Regenerate or verify the actual predicates rather than claiming a search removed them. No gate rerun or operator policy choice is needed for these documentation corrections alone.",
+      "R4-F3: Reconcile the new binding test with an existing applicable, authoritative FR/TR/TEST/AC chain through the requirements plugin, or restore the specifically approved missing record and its mappings using retained authoritative evidence. Verify the dedicated getter, effective view, and owning mappings. Correct the source citation and pre-HV mapping disclosure as needed, and leave task 19 unfulfilled if that traceability cannot be established. Do not invent new memory behavior or repair unrelated store drift as part of this fix."
+    ],
+    "operatorDecisionFails": [],
+    "closure": [
+      {
+        "id": "R3-F1",
+        "verdict": "PASS"
+      },
+      {
+        "id": "R3-F2",
+        "verdict": "FAIL"
+      },
+      {
+        "id": "R3-F3",
+        "verdict": "PASS"
+      },
+      {
+        "id": "R3-F4",
+        "verdict": "PASS"
+      },
+      {
+        "id": "R2-F1",
+        "verdict": "PASS"
+      },
+      {
+        "id": "R2-F2",
+        "verdict": "FAIL"
+      },
+      {
+        "id": "R2-F3",
+        "verdict": "PASS"
+      },
+      {
+        "id": "F1",
+        "verdict": "PASS"
+      },
+      {
+        "id": "F2",
+        "verdict": "PASS"
+      },
+      {
+        "id": "F3",
+        "verdict": "FAIL"
+      },
+      {
+        "id": "F4",
+        "verdict": "PASS"
+      },
+      {
+        "id": "F5",
+        "verdict": "PASS"
+      },
+      {
+        "id": "F6",
+        "verdict": "PASS"
+      },
+      {
+        "id": "F7",
+        "verdict": "PASS"
+      }
+    ],
+    "headSha": "b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a",
+    "receiptPaths": [
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r4-20261020T215217.md",
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r4-20261020T215217.json"
+    ],
+    "reviewerSessionId": "Codex-20261021T025530Z-plugin-session",
+    "reviewerRequestId": "req-20261021T025534Z-unitgreen-r4"
+  }
+}

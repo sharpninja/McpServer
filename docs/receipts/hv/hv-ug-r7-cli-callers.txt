@@ -1,0 +1,99 @@
+src/QBrainAi.Support.Mcp/Services/BrainSlotChatClientFactory.cs:62:            return new CliBrainSlotChatClient(
+tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs:409:            OwnedRoot = Path.Combine(ResolveCleanFixtureTempRoot(), "QBrainAi-SessionLifeUnitGate", Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture));
+tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs:503:        private static string ResolveCleanFixtureTempRoot()
+src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:41:        var tempDirectory = ResolveTempDirectory();
+src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:409:    internal static string ResolveTempDirectory()
+src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:416:            : DefaultSharedTempDirectory();
+src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:436:    internal static string DefaultSharedTempDirectory()
+src/QBrainAi.Support.Mcp/Options/TemplateStorageOptionsPostConfigure.cs:30:        options.FilePath = McpInstanceResolver.GetEffectiveMcpValue(_configuration, _instanceName, "TemplateStorage:FilePath") ?? options.FilePath;
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:122:    public async Task RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(string primaryName)
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:134:            await RunWithTestFoldersAsync(primaryName, (folder, fallbackFolder) =>
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:169:    public async Task RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes()
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:179:            await Assert.ThrowsAsync<InvalidOperationException>(() => RunWithTestFoldersAsync("MCPSERVER_CODEX_ONESHOT_TEMP", (folder, fallbackFolder) =>
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:205:    public async Task RunWithTestFolderAsync_UnknownPrimary_IsRefusedWithoutChanges()
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:210:        await Assert.ThrowsAsync<ArgumentException>(() => RunWithTestFolderAsync("MCPSERVER_NOT_A_CHAIN_NAME", _ =>
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs:38:    internal static Task RunWithTestFolderAsync(string primaryName, Func<string, Task> body)
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs:41:        return RunWithTestFoldersAsync(primaryName, (folder, _) => body(folder));
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs:45:    /// The same as <see cref="RunWithTestFolderAsync"/>, with the body receiving the fallback folder too.
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs:50:    internal static async Task RunWithTestFoldersAsync(string primaryName, Func<string, string, Task> body)
+tests/QBrainAi.Support.Mcp.Tests/Options/TemplateStorageOptionsPostConfigureTests.cs:93:    public async Task QueryAsync_WithResolvedTemplatePath_ReturnsTemplatesFromYaml()
+src/QBrainAi.Client/TemplateClient.cs:69:    public async Task<TemplateResolveResult> ResolveAsync(string id, TemplateResolveRequest request, CancellationToken cancellationToken = default)
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:38:        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:40:            var strategy = new CodexCliAgentExecutionStrategy(
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:100:        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:103:            var strategy = new CodexCliAgentExecutionStrategy(
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:128:        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:135:            var strategy = new CodexCliAgentExecutionStrategy(
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:163:        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:171:            var strategy = new CodexCliAgentExecutionStrategy(
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:206:        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async tempRoot =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:209:            var strategy = new CodexCliAgentExecutionStrategy(
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:434:            var spawner = new CodexCliAgentExecutionStrategyTests.CapturingProcessSpawner(
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:440:            await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:442:                var strategy = new CodexCliAgentExecutionStrategy(
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:443:                    new CodexCliAgentExecutionStrategyTests.CapturingProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:36:        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:68:        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:99:        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:132:        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:18:/// <c>WithIsolatedQuadbrainTemp</c>; those tests are integration tests (TR-MCP-USECASE-018 AC-006,
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:137:        await WithIsolatedQuadbrainTemp(async temp =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:158:        var client = new CliBrainSlotChatClient(
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:186:    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:194:        await WithIsolatedQuadbrainTemp(async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:200:            var client = new CliBrainSlotChatClient(
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:217:    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:225:        await WithIsolatedQuadbrainTemp(async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:228:            var client = new CliBrainSlotChatClient(
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:245:    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:253:        await WithIsolatedQuadbrainTemp(async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:256:            var client = new CliBrainSlotChatClient(
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:274:    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:282:        await WithIsolatedQuadbrainTemp(async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:293:            var client = new CliBrainSlotChatClient(
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:389:    /// the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:396:        await WithIsolatedQuadbrainTemp(async temp =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:403:            var client = new CliBrainSlotChatClient(
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:428:    /// writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:435:        await WithIsolatedQuadbrainTemp(async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:441:            var client = new CliBrainSlotChatClient(
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:464:    /// test writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:469:    public async Task ResolveTempDirectory_HonorsConfiguredEnvVar_WithoutWindowsServiceAcl()
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:471:        await WithIsolatedQuadbrainTemp(async temp =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:473:            var directory = Path.GetFullPath(CliBrainSlotChatClient.ResolveTempDirectory());
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:482:    /// The test writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:489:        await WithIsolatedQuadbrainTemp(async temp =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:492:            var client = new CliBrainSlotChatClient(
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:521:    /// environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test (TR-MCP-USECASE-018 AC-006,
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:528:        await WithIsolatedQuadbrainTemp(async temp =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:532:            var client = new CliBrainSlotChatClient(
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:559:    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:567:        await WithIsolatedQuadbrainTemp(async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:571:            var client = new CliBrainSlotChatClient(
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:601:    /// through <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006,
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:609:        await WithIsolatedQuadbrainTemp(async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:613:            var client = new CliBrainSlotChatClient(
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:638:    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:646:        await WithIsolatedQuadbrainTemp(async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:712:    private static Task WithIsolatedQuadbrainTemp(Func<string, Task> body) =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:713:        CliTempVariables.RunWithTestFolderAsync("MCPSERVER_QUADBRAIN_CLI_TEMP", body);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:866:    public void DefaultSharedTempDirectory_Windows_IsUnderCommonApplicationData()
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:868:        var directory = Path.GetFullPath(CliBrainSlotChatClient.DefaultSharedTempDirectory());
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:110:        var result = MarkerFileService.ResolvePrompt(MakeContext(), globalTemplate, workspaceTemplate);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:132:        var result = MarkerFileService.ResolvePrompt(MakeContext(), globalTemplate, workspaceTemplate);
+tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs:17:        var strategy = new GrokCliAgentExecutionStrategy(
+src/QBrainAi.Services/Services/MarkerFileService.cs:225:            Prompt = ResolvePrompt(templateContext, globalPromptTemplate, workspacePromptTemplate),
+src/QBrainAi.Services/Services/WorkspaceProcessManager.cs:125:            ?? McpInstanceResolver.GetEffectiveMcpValue(config, instanceName: null, "MarkerPromptTemplate")
+src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:140:            var tempDirectory = ResolveSharedTempDirectory();
+src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:415:        private static string ResolveSharedTempDirectory()
+src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:422:                : ResolveDefaultSharedTempDirectory();
+src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:438:        private static string ResolveDefaultSharedTempDirectory()
+src/QBrainAi.Services/Requirements/RequirementsWikiExportConfig.cs:398:            homeTemplatePath = ResolveWorkspaceMarkdownPath(workspaceRoot, home.Template, "home.template", errors);
+src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs:206:            var tempDirectory = ResolveSharedTempDirectory();
+src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs:475:        private static string ResolveSharedTempDirectory()
+src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs:482:                : ResolveDefaultSharedTempDirectory();
+src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs:498:        private static string ResolveDefaultSharedTempDirectory()
+src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:102:            var tempDirectory = ResolveSharedTempDirectory();
+src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:492:        private static string ResolveSharedTempDirectory()
+src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:500:                : ResolveDefaultSharedTempDirectory();
+src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:516:        private static string ResolveDefaultSharedTempDirectory()

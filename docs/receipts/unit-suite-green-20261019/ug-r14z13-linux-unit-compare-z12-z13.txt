@@ -1,0 +1,5 @@
+Now: 2026-11-06T06:00:36 key=test name only before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14z12-final-linux-unit-1 (4861) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14z13-final-linux-unit-1 (4862)
+onlyBefore=0 onlyAfter=1 common=4861
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWhoseTriggeredCleanupFinishesLater_IsRejected

@@ -1,0 +1,51 @@
+{
+  "TimestampLocal": "2026-11-02T19:31:17",
+  "TimestampUtc": "2026-11-03T01:31:17.0534751Z",
+  "Method": "workflow.requirements.getFr",
+  "Params": {
+    "id": "FR-MCP-SERVICEUPDATE-001"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "The existing Nuke UpdateService target detects Windows or Linux and updates the selected service while preserving the live configuration and file data strategy. Linux updates an existing systemd service without rewriting its operator configuration.",
+          "updatedAt": "2026-11-03T01:31:19.3356394+00:00",
+          "status": "pending",
+          "id": "FR-MCP-SERVICEUPDATE-001",
+          "createdAt": "2026-11-03T01:31:19.3355235+00:00",
+          "title": "Cross-platform service update preserving live state",
+          "priority": "medium",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "text": "UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.",
+              "id": ""
+            },
+            {
+              "isSatisfied": false,
+              "text": "Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.",
+              "id": ""
+            },
+            {
+              "isSatisfied": false,
+              "text": "Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.",
+              "id": ""
+            },
+            {
+              "isSatisfied": false,
+              "text": "Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.",
+              "id": ""
+            }
+          ]
+        },
+        "requestId": "req-20261103T013117Z-6617",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

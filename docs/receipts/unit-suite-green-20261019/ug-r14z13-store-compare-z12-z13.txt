@@ -1,0 +1,12 @@
+Store readback comparison, written 2026-11-06T06:03:55 local by ClaudeCode (Compare-StoreReadbacks.ps1; read only over the two receipts).
+before /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z12-store-readback-1.json sha256=051B8BBE12D4A32A9EA9E85D05E4FF15ACCCFA86E6D35C8F3F31E6B28AA0026F
+after /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z13-store-readback-1.json sha256=B5A698217851E53ACACD9E38CD34427E77F35FC996DE00B745AD3592E5AA6AD3
+before read 2026-11-06T03:02:24; after read 2026-11-06T06:03:16
+TR-MCP-SERVICEUPDATE-001: criteria before=8 after=8
+TR-MCP-USECASE-018: criteria before=7 after=7
+  position 5 id=AC-006: CHANGED append=True satisfied False->False tail= A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end: a decision that keeps a record is read together with an observation from the same triggered pass that only a finished pass can give (for example a record past the threshold that the same pass has already removed), so a pass that is still running, or that runs later, cannot make a keep assertion pass, and a negative control whose triggered pass finishes later is rejected (fifteenth holistic read before hostile validation round 14, finding d7; added under the operator's "if you surface new AC, add them without waiting for approval" and "Strengthening Acceptance Criteria should always be the recommended option", 2026-11-06).
+FR-MCP-TESTRESOURCE-001: criteria before=12 after=12
+IMPL-UNITGREEN-001: tasks before=57 after=58
+  task 57: CHANGED done False->False
+  task 58: NEW done=False
+IMPL-SERVICEOVERRIDES-001: tasks before=3 after=3

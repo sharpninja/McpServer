@@ -1,0 +1,299 @@
+{
+  "timestampLocal": "2026-10-30T15:49:23",
+  "phase": "Slice I final mock gate before implementation",
+  "runId": "ug-r9-mockgate-i-3",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+  "dirtyPaths": [
+    "build/Build.TestDependencies.cs",
+    "build/IntegrationLaneProjects.cs",
+    "build/IntegrationLaneProjectsContracts.cs",
+    "docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+    "docs/plans/2026-10-19-unit-suite-green.md",
+    "src/QBrainAi.Services/Services/DesktopProcessSpawner.cs",
+    "src/QBrainAi.Services/Services/GitHubCliService.cs",
+    "src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs",
+    "tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    "tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    "tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+    "tests/Directory.Build.targets",
+    "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    "tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+    "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs",
+    "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+    "tests/TestSupport.Shared/ScratchQBrainAi.cs",
+    "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "build/IntegrationLaneClassFilter.cs",
+    "build/IntegrationLaneClassFilterContracts.cs",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-i-1.json",
+    "tests/Build.Tests/IntegrationLaneClassFilterContract.cs",
+    "tests/Build.Tests/IntegrationLaneClassFilterMockGateTests.cs",
+    "tests/Build.Tests/IntegrationLaneClassFilterTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs",
+    "tests/TestSupport.Shared/OwnedInstanceProcess.cs"
+  ],
+  "sourceHashes": [
+    {
+      "path": "build/Build.TestDependencies.cs",
+      "sha256": "CAFF0716EBFAD7FFA9C338F6DFB93E701C133BBE750C73A652AF2BB310AA0727"
+    },
+    {
+      "path": "build/IntegrationLaneClassFilter.cs",
+      "sha256": "3DB560F752C2B3684289958917F01B8E04EB849B068AB6A7C899DC12A7D912C4"
+    },
+    {
+      "path": "build/IntegrationLaneClassFilterContracts.cs",
+      "sha256": "5662AA070A1F963644E8293213AD101B528B0284B825B9BB54C5A333F2A1CBAF"
+    },
+    {
+      "path": "build/IntegrationLaneProjects.cs",
+      "sha256": "C7DAEF18268BB1832993AFC33AC2537D5376A352EEA1AE07010C563C7F4C1D72"
+    },
+    {
+      "path": "build/IntegrationLaneProjectsContracts.cs",
+      "sha256": "538150BB6BB2D9F8388AC120019490BE609D76CEE7CB62353A3FCF7AE8121281"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/DesktopProcessSpawner.cs",
+      "sha256": "57632A35587EE64B0F404A90280CDE95A4263620918C08E03EA47114DB4B082B"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+      "sha256": "58DA43D41F4AD97EE85529FDC32771E1912BE4D7A067838EFBFE8688247BDE7C"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs",
+      "sha256": "67308A3C219791F3607D62ACC471C546E56601E65C40D0198FF122C8524FCC2F"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneClassFilterContract.cs",
+      "sha256": "14B83C1B893FED33D802E057A520D8D9641A299CCA3B11AB071B77A3950A53A5"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneClassFilterMockGateTests.cs",
+      "sha256": "4A86B336E0EAA7ADE6ED0E0B213973C153F0064D8B1F697B6A46D51C1D4255FF"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneClassFilterTests.cs",
+      "sha256": "5D988FE274DC6F14CF7B33D8769D8863100AC2A4C253A6C43C70E806447813FD"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+      "sha256": "1A5B762A62B390BEC59F5A80BA7030E135E5E00F0E01341A512856216B476292"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+      "sha256": "F325355554C5C35A8EF75226C848CAB1B4DE1A8D33C0228ACA36004B0D8BA13C"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+      "sha256": "74D407E59CFCE915D2E054415722C5A9DF5F0FE09758FC54194DA736BF8B24D9"
+    },
+    {
+      "path": "tests/Directory.Build.targets",
+      "sha256": "39E31EECE3C8FEF953D93C9AE926DDE0CD9C1A57AFA644397B51CF195A0CAFFD"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs",
+      "sha256": "D828AE5DCA352712D719FEB876ECAA0CDA1446CC79CD30737FFB9A88F578FAC2"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs",
+      "sha256": "8420D32AEC291ADDDF087749BE115DFC1DA0163F3B1305FECF2F2431FFA4C5DC"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+      "sha256": "F1E7F8B01567FDDDF2992A362936530468383B70B145F79F2FC64C1C1672D7C4"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+      "sha256": "E39143D354C8428E122C727154929B3541C1310E531F4C6AC8E47705761CD5EC"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+      "sha256": "9BF29EC01F4D0B619EC9A3103DAA843DD4380DC1F4E2899A0D857A048D6C92E2"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs",
+      "sha256": "CD2CB3394719CE6460645672E72C0D0567378F39C687E9B0200A7AD0C8F9EB63"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs",
+      "sha256": "C3A9BEB0894658943DD65E9DBD2359C04888D8F5BCC7541CD23E1B2F6B86C76B"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+      "sha256": "772F4C83362917AEAEB950848002DCCF0DEED6440FAAFD66E1FA3952EADE81BA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs",
+      "sha256": "40838B08DF41C68E9BF4048C539F318BED71BF0A3CA2845CD0F7BD63B6AEEEBC"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+      "sha256": "4F5AADEC685AFBB8974EB1338DED8AAE7543AF8E4B538E8E912DE2FB89564099"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs",
+      "sha256": "769CDCC52DB7400EF8F0042203F8E303C515B417A31F907CC3DDF2D8C3C4B17F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs",
+      "sha256": "AB2B438A8D038BBC97668343E8FDABC0A5B3809648252709C96CB5D7F724D149"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "sha256": "4E2EBC96C12049A1838E77FD60870A85D7838AFEA833694A230B42D0F25A5834"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs",
+      "sha256": "BF1827361DD631BCC8F4CC1642B86FFF7BE78C228353FCACE251B98AF4B771B6"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+      "sha256": "B0A603E4B72DCF9FC58955E6443679D1BAB58D3C54EF7A3CB48AB68930731962"
+    },
+    {
+      "path": "tests/TestSupport.Shared/OwnedInstanceProcess.cs",
+      "sha256": "FF1533E392EDF1159EEB1AF18EE1FEEBA4B95672E6076997047616F0F24DB07F"
+    },
+    {
+      "path": "tests/TestSupport.Shared/ScratchQBrainAi.cs",
+      "sha256": "DF1FDF1E18EB506D24AB6C138C54E7A5E3D7E8614588C138FF7532C2E0A15229"
+    },
+    {
+      "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+      "sha256": "35246016C2918C6D11E4A8B60279FDFA82C66F7731BB43D80B001CEBB2938753"
+    }
+  ],
+  "runMetadata": {
+    "name": "ug-r9-mockgate-i-3",
+    "target": "Test",
+    "extraArgs": [
+      "--test-run-id",
+      "ug-r9-mockgate-i-3"
+    ],
+    "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+    "head": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+    "dirtyPaths": [
+      " M build/Build.TestDependencies.cs",
+      " M build/IntegrationLaneProjects.cs",
+      " M build/IntegrationLaneProjectsContracts.cs",
+      " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+      " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+      " M docs/plans/2026-10-19-unit-suite-green.md",
+      " M src/QBrainAi.Services/Services/DesktopProcessSpawner.cs",
+      " M src/QBrainAi.Services/Services/GitHubCliService.cs",
+      " M src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs",
+      " M tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+      " M tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+      " M tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+      " M tests/Directory.Build.targets",
+      " M tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+      " M tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+      " M tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs",
+      " M tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+      " M tests/TestSupport.Shared/ScratchQBrainAi.cs",
+      " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+      "?? build/IntegrationLaneClassFilter.cs",
+      "?? build/IntegrationLaneClassFilterContracts.cs",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-i-1.json",
+      "?? tests/Build.Tests/IntegrationLaneClassFilterContract.cs",
+      "?? tests/Build.Tests/IntegrationLaneClassFilterMockGateTests.cs",
+      "?? tests/Build.Tests/IntegrationLaneClassFilterTests.cs",
+      "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs",
+      "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs",
+      "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+      "?? tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs",
+      "?? tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs",
+      "?? tests/TestSupport.Shared/OwnedInstanceProcess.cs"
+    ],
+    "startedLocal": "2026-10-30T15:44:58",
+    "startedUtc": "2026-10-30T20:44:58.1767265Z",
+    "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-mockgate-i-3.out.log",
+    "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-mockgate-i-3.err.log",
+    "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-mockgate-i-3.exit.txt"
+  },
+  "total": 4654,
+  "passed": 4654,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-3/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "E9994FE7E9F35301458C211990E390533CB6D51BB5B902CF3B8BE6FE7909F21F",
+      "total": 3202,
+      "passed": 3202,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-3/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+      "sha256": "4E9BAD07B5F272B226B57293B0BD70F2E2693AB43BCB813C0ED2B8E48ADE84B1",
+      "total": 306,
+      "passed": 306,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-3/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+      "sha256": "FFFE429B78AF16AA2FE3700289BDE84BA72EDDFFB5D5396AC9085D54ED4E8C89",
+      "total": 33,
+      "passed": 33,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-3/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+      "sha256": "1958B98B2955796A7C1E5350F3850DB899F671FC0B771010054DF48576D711FC",
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-3/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "sha256": "AC341EF0FF3A74BB327E30F7AA4DD7E2246D863FEE3531976FB3EDDAE6146D5F",
+      "total": 64,
+      "passed": 64,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-3/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "C246E7AE54FED15A6D8E43AF35FE24F1E14C43249FE513359FF38C8FA1B299E1",
+      "total": 935,
+      "passed": 935,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-3/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "sha256": "285FA80CAC0D9D14FA5ADACB721E8A1B2EE442930E83601FDC384E7313C36CE4",
+      "total": 94,
+      "passed": 94,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  ],
+  "hostileValidation": "pending; no plan/TODO/requirement completion claimed",
+  "auditSessionId": "Codex-20261030T202533Z-plugin-session",
+  "auditRequestId": "req-20261030T203231Z-turn-00b0"
+}

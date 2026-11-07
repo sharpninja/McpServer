@@ -1,0 +1,14 @@
+{
+  "TimestampUtc": "2026-10-20T01:13:16.5878325Z",
+  "TimestampLocal": "2026-10-19T20:13:16",
+  "Mode": "Files",
+  "Arguments": [
+    "tests/QBrainAi.Support.Mcp.Tests",
+    "-g",
+    "*UnitSuite*"
+  ],
+  "Offset": 0,
+  "Count": 30,
+  "ExitCode": 0,
+  "Output": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs\ntests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs\ntests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs"
+}

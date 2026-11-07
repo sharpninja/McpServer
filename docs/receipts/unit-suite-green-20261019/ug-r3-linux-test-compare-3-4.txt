@@ -1,0 +1,9 @@
+Now: 2026-10-20T12:22:49 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-linux-test-3 (4442) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-linux-test-4 (4446)
+onlyBefore=0 onlyAfter=4 common=4442
+onlyAfter QBrainAi.Support.Mcp.Tests=4
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.DefaultNegativeControls_AreRejectedInsidePassingHarness
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.LocalDbDefault_PassesTheDefaultAssertion
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.RequiredDefault_PassesTheDefaultAssertion
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.Resolve_Override_IsReturnedUnchanged

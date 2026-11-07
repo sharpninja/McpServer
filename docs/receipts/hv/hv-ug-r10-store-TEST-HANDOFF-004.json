@@ -1,0 +1,20 @@
+{
+  "payload": {
+    "requestId": "req-20261103T123134Z-a15f",
+    "result": {
+      "createdAt": "2026-11-03T12:31:35.4445878+00:00",
+      "area": "HANDOFF",
+      "title": "Test TEST-HANDOFF-004",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-11-03T12:31:35.4447136+00:00",
+      "testType": "unit",
+      "status": "pending",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "id": "TEST-HANDOFF-004",
+      "description": "Cover draft validation, field-specific diagnostics, DraftOnly, RequireReview, CreateWhenConfident, low confidence, and ambiguous handoffs."
+    },
+    "deprecated": true
+  },
+  "type": "result"
+}

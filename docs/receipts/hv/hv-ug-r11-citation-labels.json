@@ -1,0 +1,869 @@
+[
+  {
+    "file": "tests/Build.Tests/BuildTargetTests.cs",
+    "ids": [
+      "TEST-MCP-PLUGIN-PSONLY-001",
+      "TEST-MCP-QBAGENTTOOL-001",
+      "TEST-MCP-REQSCOPE-005",
+      "TEST-NUKE-001",
+      "TEST-NUKE-002"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 7,
+        "text": "/// TEST-NUKE-001 (historical): Verifies that the Nuke _build project compiles and the Build class\n/// is defined with the expected targets. Since NukeBuild requires specific runtime\n/// initialization (assembly name = \"_build\"), we verify via reflection rather than\n/// direct instantiation."
+      },
+      {
+        "line": 139,
+        "text": "    /// <summary>TEST-MCP-PLUGIN-PSONLY-001 (historical): Plugin sync refreshes Node core vendor packages before installed caches are refreshed.</summary>\n    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>\n    [Trait(\"Category\", \"Integration\")]\n    [Fact]"
+      },
+      {
+        "line": 175,
+        "text": "    /// <summary>TEST-MCP-REQSCOPE-005 (historical): Plugin validation fails stale Requirements skills that omit layer method shapes.</summary>\n    [Fact]\n    public void ValidateRequirementsSkillLayerGuidance_RequiresLayerMethodDocs()\n    {"
+      },
+      {
+        "line": 279,
+        "text": "    /// <summary>TEST-MCP-QBAGENTTOOL-001 (historical): QBAgent has dedicated pack and deploy targets.</summary>\n    [Fact]\n    public void Build_HasQBAgentToolTargets()\n    {"
+      },
+      {
+        "line": 287,
+        "text": "    /// <summary>TEST-MCP-QBAGENTTOOL-001 (historical): QBAgent is configured as a .NET global tool package.</summary>\n    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>\n    [Trait(\"Category\", \"Integration\")]\n    [Fact]"
+      },
+      {
+        "line": 779,
+        "text": "    /// TEST-NUKE-002 (historical): BackupPreservedState tolerates a first-time install where the\n    /// install root does not yet exist - it creates the root, performs no backup, and\n    /// returns an empty result so the deploy can proceed. Regression for the\n    /// trusted-third-party first-install DirectoryNotFoundException."
+      }
+    ]
+  },
+  {
+    "file": "tests/Build.Tests/MigrationAssemblyObsoleteWarningTests.cs",
+    "ids": [
+      "TEST-MCP-WARNREMEDIATION-001"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 7,
+        "text": "/// TEST-MCP-WARNREMEDIATION-001 (historical): Verifies provider migration assemblies compile and\n/// prevents generated obsolete warning suppressions from returning.\n/// </summary>\npublic sealed partial class MigrationAssemblyObsoleteWarningTests"
+      }
+    ]
+  },
+  {
+    "file": "tests/Build.Tests/PowerShellInvocationTests.cs",
+    "ids": [
+      "TEST-NUKE-POWERSHELL-001"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-NUKE-POWERSHELL-001 (historical): Guards build and deployment automation so child\n/// PowerShell hosts run without user profiles or interactive prompts.\n/// </summary>\npublic sealed class PowerShellInvocationTests"
+      },
+      {
+        "line": 10,
+        "text": "    /// TEST-NUKE-POWERSHELL-001 (historical): Verifies the Nuke PowerShell bootstrap\n    /// relaunches through an explicit non-interactive PowerShell host.\n    /// </summary>\n    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>"
+      },
+      {
+        "line": 28,
+        "text": "    /// TEST-NUKE-POWERSHELL-001 (historical): Verifies Build.Tests helpers that spawn\n    /// <c>pwsh.exe</c> also use the same non-interactive host flags.\n    /// </summary>\n    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>"
+      },
+      {
+        "line": 46,
+        "text": "    /// TEST-NUKE-POWERSHELL-001 (historical): Verifies live deployment guidance does not\n    /// tell operators to run script PowerShell hosts interactively.\n    /// </summary>\n    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>"
+      }
+    ]
+  },
+  {
+    "file": "tests/Build.Tests/QuadBrainDescriptorAbsenceTests.cs",
+    "ids": [
+      "TEST-MCP-QBSURFACE-004"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-MCP-QBSURFACE-004 (historical): Guards the shared MCP descriptor registry under\n/// <c>mcps/</c> against the return of agent-facing QuadBrain brain-slot tool\n/// descriptors. QuadBrain is reachable only through the OpenAI-compatible\n/// endpoint at <c>POST /v1/chat/completions</c>, so no <c>brain_slot_*.json</c>"
+      },
+      {
+        "line": 13,
+        "text": "    /// TEST-MCP-QBSURFACE-004 (historical): Verifies that no file matching\n    /// <c>brain_slot_*.json</c> exists anywhere beneath the repository\n    /// <c>mcps/</c> descriptor registry. Test data is the live repository tree\n    /// located from the test assembly base directory. Fails with the offending"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+    "ids": [
+      "FR-X-001",
+      "TEST-X-001",
+      "TR-X-001"
+    ],
+    "synthetic": true,
+    "labels": []
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs",
+    "ids": [
+      "FR-X-001",
+      "TEST-X-001",
+      "TR-X-001"
+    ],
+    "synthetic": true,
+    "labels": [
+      {
+        "line": 18,
+        "text": "    /// <summary>The production adapters report the stored times, keep the stored offset, and report null when nothing is stored.</summary>\n    [Fact]\n    public void ProductionAdapters_SatisfyMockGatedRows() =>\n        RequirementTimestampAdapterContractTests.AssertAdapters((kind, created, updated) => kind switch"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs",
+    "ids": [
+      "TR-PLANNED-CORE-013"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 25,
+        "text": "/// <summary>TR-PLANNED-CORE-013 (historical): Web application factory for MCP API integration tests.</summary>\npublic sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEntryPoint>\n{\n    private static readonly string[] GuardedRepositoryPaths ="
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+    "ids": [
+      "TEST-MCP-REQSCOPE-REPL-001"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 8,
+        "text": "/// TEST-MCP-REQSCOPE-REPL-001 (historical): REPL-driven integration coverage for requirement scope layers, on the\n/// shared temporary instance (<see cref=\"ScratchQBrainAi\"/>, TR-MCP-NUKE-019 AC-6).\n/// </summary>\n/// <remarks>"
+      },
+      {
+        "line": 12,
+        "text": "/// The TEST-MCP-REQSCOPE-REPL-001 citations in this file are historical: that record is not in the requirements store\n/// (the committed docs/Project exports list it as planned), so they make no active coverage claim (the class of hostile\n/// validation finding R6-F2; plan section 25). The active claim is TR-MCP-NUKE-019 AC-6, the temporary instance.\n/// </remarks>"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "ids": [
+      "TR-MCP-FEDERATION-001"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 165,
+        "text": "    /// Requirement coverage: FR-MCP-103, TR-MCP-FEDERATION-001 (historical).\n    /// Test data: <c>src\\QBrainAi.Support.Mcp\\appsettings.yaml</c>.\n    /// This data is used by service deployment, so the checked-in template must\n    /// expose the role, hub, proxy, queue, sync, signing, and local-execution keys"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs",
+    "ids": [
+      "TR-PLANNED-CORE-013"
+    ],
+    "synthetic": false,
+    "labels": []
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs",
+    "ids": [
+      "TR-PLANNED-CORE-013"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 14,
+        "text": "/// <summary>TR-PLANNED-CORE-013 (historical): Tests for SessionLogIngestor.ImportToSessionLogTablesAsync (MVP-SUPPORT-011).</summary>\npublic sealed class SessionLogIngestorImportTests : IDisposable\n{\n    private readonly McpDbContext _db;"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryApiIdempotencyTests.cs",
+    "ids": [
+      "TEST-MCP-MEMORY-016",
+      "TR-MCP-MEMORY-API-002"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 6,
+        "text": "/// TEST-MCP-MEMORY-016 (historical) / TR-MCP-MEMORY-API-002 (historical):\n/// Idempotency-Key is documented as unsupported; duplicate posts create duplicates.\n/// </summary>\npublic sealed class MemoryApiIdempotencyTests : IDisposable"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 6,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): CI gate and non-Grok optionality.\n/// </summary>\npublic sealed class MemoryBenchCiTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchConflictTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018-13",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-13 (historical): Conflict prompts prefer the newer seeded memory.\n/// </summary>\npublic sealed class MemoryBenchConflictTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Benchmark docs contracts.\n/// </summary>\npublic sealed class MemoryBenchDocsTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 7,
+        "text": "/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class\n/// runs in <see cref=\"ProcessEnvironmentCollection\"/> because two of its integration tests write the process\n/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).\n/// </summary>"
+      },
+      {
+        "line": 13,
+        "text": "/// are historical: those records are not in the requirements store (hostile validation finding R6-F2), so they make\n/// no active coverage claim. The active claims are the TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008\n/// classification of the integration tests.\n/// </remarks>"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchInjectionTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018-14",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-14 (historical): REQUIRED MEMORIES appears only with_memory.\n/// </summary>\npublic sealed class MemoryBenchInjectionTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchIsolationTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018-28",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 6,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-28 (historical): Bench workspace isolation.\n/// </summary>\npublic sealed class MemoryBenchIsolationTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnDocsTests.cs",
+    "ids": [
+      "TEST-MCP-MEMORY-019"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-MCP-MEMORY-019 (historical): v2 is the real efficiency bench; v1 remains smoke/regression.\n/// </summary>\npublic sealed class MemoryBenchMultiTurnDocsTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs",
+    "ids": [
+      "TEST-MCP-MEMORY-019"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 7,
+        "text": "/// TEST-MCP-MEMORY-019 (historical): Multi-turn harness conditions, tokens, and job success gate.\n/// </summary>\npublic sealed class MemoryBenchMultiTurnHarnessTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnPackTests.cs",
+    "ids": [
+      "TEST-MCP-MEMORY-019"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 6,
+        "text": "/// TEST-MCP-MEMORY-019 (historical): Canonical multi-turn pack existence and schema.\n/// </summary>\npublic sealed class MemoryBenchMultiTurnPackTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnScoringTests.cs",
+    "ids": [
+      "TEST-MCP-MEMORY-019"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 6,
+        "text": "/// TEST-MCP-MEMORY-019 (historical): Multi-turn scoring uses the same gold for both conditions.\n/// </summary>\npublic sealed class MemoryBenchMultiTurnScoringTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 6,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Canonical pack existence and schema.\n/// </summary>\npublic sealed class MemoryBenchPackTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018-16",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 7,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-16 (historical)..23: Each plugin completes the full pack after H7a.\n/// </summary>\npublic sealed class MemoryBenchPluginTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Token-first summary tables.\n/// </summary>\npublic sealed class MemoryBenchReportTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchSafetyTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018-12",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-12 (historical): Negative prompts must not hallucinate memory.\n/// </summary>\npublic sealed class MemoryBenchSafetyTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchScoringTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018-10",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 6,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-10 (historical): Deterministic or locked auto-rubric scoring.\n/// </summary>\npublic sealed class MemoryBenchScoringTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs",
+    "ids": [
+      "TEST-MCP-MEMORY-018",
+      "TR-MCP-MEMORY-BENCH-002"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 6,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / TR-MCP-MEMORY-BENCH-002 (historical): Harness technology contracts.\n/// </summary>\npublic sealed class MemoryBenchTechTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 6,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Token accounting is the primary bench metric.\n/// </summary>\npublic sealed class MemoryBenchTokenTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchToolUseTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018-15",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-15 (historical): Recall tools are the with_memory path when injection hosts differ.\n/// </summary>\npublic sealed class MemoryBenchToolUseTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 6,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): H7a value-gate policy.\n/// </summary>\npublic sealed class MemoryBenchValueGateTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-011",
+      "TEST-MCP-MEMORY-011",
+      "TR-MCP-MEMORY-SEARCH-002"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 7,
+        "text": "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):\n/// S2 Green acceptance for the dedicated memory indexer, ANN/FTS fusion,\n/// and EmbeddingStatus transitions. The class runs in <see cref=\"ProcessEnvironmentCollection\"/> because one of its\n/// tests writes the process environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+      },
+      {
+        "line": 14,
+        "text": "/// AC-TR-MCP-MEMORY-SEARCH-002 criteria included, are historical: those records are not in the requirements store\n/// (hostile validation finding R6-F2), so they make no active coverage claim. The active claims are the\n/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration test.\n/// </remarks>"
+      },
+      {
+        "line": 156,
+        "text": "    /// AC-TR-MCP-MEMORY-SEARCH-002-09 (historical): Local ONNX path works without cloud credentials in the test host. The test\n    /// clears both cloud keys, so it writes the process environment and is an integration test; it restores both\n    /// keys afterwards, which it did not do before (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).\n    /// </summary>"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-018-46",
+      "FR-MCP-MEMORY-018-49",
+      "TEST-MCP-MEMORY-018"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 6,
+        "text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-46 (historical) / FR-MCP-MEMORY-018-49 (historical):\n/// Grok-lane integration using recorded fixtures (no live XAI key required).\n/// </summary>\npublic sealed class MemoryIntegrationTests : IDisposable"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMcpSchemaTests.cs",
+    "ids": [
+      "TEST-MCP-MEMORY-016",
+      "TR-MCP-MEMORY-API-002"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 6,
+        "text": "/// TEST-MCP-MEMORY-016 (historical) / TR-MCP-MEMORY-API-002 (historical):\n/// MCP tool input schemas document additionalProperties policy for new verbs.\n/// </summary>\npublic sealed class MemoryMcpSchemaTests"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs",
+    "ids": [
+      "TEST-MCP-MEMORY-010",
+      "TR-MCP-MEMORY-MODEL-002"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 9,
+        "text": "/// TEST-MCP-MEMORY-010 (historical) / TR-MCP-MEMORY-MODEL-002 (historical): S1 Red acceptance for model/migrations.\n/// </summary>\npublic sealed class MemoryMigrationTests : IDisposable\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-010",
+      "TEST-MCP-MEMORY-010"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 13,
+        "text": "/// <item><term>2026-11-03</term><description>FR-MCP-MEMORY-001 (criterion \"A memory record has ... created/updated timestamps\"); FR-MCP-MEMORY-002 (criteria \"Add creates a memory and returns ... timestamps\" and \"Update replaces raw text, increments version\"); TR-MCP-USECASE-018 AC-006 (appended \"This covers every recorded time a unit test checks, including the creation and update times a service stamps on a record it stores\"): Timestamps_CreateAndUpdate gives MemoryService a ScriptedTimeProvider and asserts the exact scripted times through StampedTimeContractTests, instead of sleeping 20 ms between create and update, because the sibling sweep before round 11 of hostile validation round 10 finding R10-F3 found the sleep (operator 2026-11-03: \"don't gate on me between rounds\"). TEST-MCP-MEMORY-010, FR-MCP-MEMORY-010 and AC-FR-MCP-MEMORY-010-35 in this file are historical ids of the memory plan, not records in the requirement store.</description></item>\n/// </list>\n/// </remarks>\npublic sealed class MemoryModelTests : IDisposable"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-017",
+      "TEST-MCP-MEMORY-016"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-017 (historical):\n/// Onboarding docs, examples, and the marker template document new and old verbs.\n/// </summary>\npublic sealed class MemoryOnboardingDocsTests"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-017",
+      "TEST-MCP-MEMORY-016"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 7,
+        "text": "/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-017 (historical):\n/// Grok plugin is the S5 pilot; other plugins are required after H7a;\n/// missing required verbs fail the checklist guard.\n/// </summary>"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+    "ids": [
+      "TEST-MCP-MEMORY-010",
+      "TEST-MCP-MEMORY-011",
+      "TEST-MCP-MEMORY-012",
+      "TEST-MCP-MEMORY-014",
+      "TEST-MCP-MEMORY-016"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 17,
+        "text": "/// TEST-MCP-MEMORY-010 (historical) / TEST-MCP-MEMORY-011 (historical) / TEST-MCP-MEMORY-012 (historical) / TEST-MCP-MEMORY-014 (historical) / TEST-MCP-MEMORY-016 (historical):\n/// Shared SQLite fixture and production-surface probes for MCP-MEMORY-002 S1/S2/S3 tests.\n/// </summary>\n/// <remarks>"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "ids": [
+      "TEST-MCP-MEMORY-010"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 14,
+        "text": "/// TEST-MCP-MEMORY-010 (historical) that the concurrency tests cite is absent from it (hostile validation round 4 finding R4-F3).\n/// Test data: the harness's own temporary\n/// database file. The assertion, its positive control and its negative controls (one shared in-memory connection,\n/// private in-memory databases) are in <see cref=\"HandoffTestDatabaseTests\"/>; this binds the same assertion to the"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs",
+    "ids": [
+      "FR-MCP-MEMORY-017",
+      "TEST-MCP-MEMORY-016",
+      "TR-MCP-MEMORY-API-002"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 8,
+        "text": "/// TEST-MCP-MEMORY-016 (historical): Shared S5 verb/route/method names and production-surface probes.\n/// </summary>\ninternal static class MemoryS5Catalog\n{"
+      },
+      {
+        "line": 12,
+        "text": "    /// <summary>Additive MCP verbs introduced by FR-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-API-002 (historical).</summary>\n    public static readonly string[] NewVerbs =\n    [\n        \"memory_remember\","
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-010",
+      "TEST-MCP-MEMORY-016"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 8,
+        "text": "/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-010 (historical): MCP tool and REST remember store equivalent fields.\n/// </summary>\npublic sealed class MemorySurfaceParityTests : IDisposable\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryToolsDiscoveryTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-017",
+      "TEST-MCP-MEMORY-016"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 8,
+        "text": "/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-017 (historical):\n/// New memory verbs appear in tools search, descriptions are agent-oriented,\n/// compat verbs remain, and STDIO equals HTTP.\n/// </summary>"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs",
+    "ids": [
+      "TEST-MCP-MEMORY-017",
+      "TR-MCP-MEMORY-UI-002-02"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-UI-002-02 (historical):\n/// Deploy docs name Nuke UpdateService as the ship path for /memory/.\n/// </summary>\npublic sealed class MemoryUiDeployDocsTests"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs",
+    "ids": [
+      "TEST-MCP-MEMORY-017",
+      "TR-MCP-MEMORY-UI-002"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-UI-002 (historical):\n/// /memory/ is packaged and hosted like sibling static UIs.\n/// </summary>\npublic sealed class MemoryUiHostingTests"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiTests.cs",
+    "ids": [
+      "FR-MCP-MEMORY-016",
+      "TEST-MCP-MEMORY-017"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 4,
+        "text": "/// TEST-MCP-MEMORY-017 (historical) / FR-MCP-MEMORY-016 (historical):\n/// First-party /memory/ UI lists, edits, and reverts only through public REST\n/// for the active workspace.\n/// </summary>"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+    "ids": [
+      "FR-X-001",
+      "TEST-X-001",
+      "TR-X-001"
+    ],
+    "synthetic": true,
+    "labels": []
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "ids": [
+      "TEST-MCP-QBCLI-001"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 15,
+        "text": "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session\n/// reuse. The class runs in <see cref=\"ProcessEnvironmentCollection\"/> because every test that reaches\n/// <c>CliBrainSlotChatClient.CompleteAsync</c> or its temp-folder lookup writes the process environment through\n/// <c>WithIsolatedQuadbrainTemp</c>; those tests are integration tests (TR-MCP-USECASE-018 AC-006,"
+      },
+      {
+        "line": 22,
+        "text": "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store\n/// (hostile validation finding R6-F2), so they make no active coverage claim. The active claims are the\n/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration tests.\n/// </remarks>"
+      },
+      {
+        "line": 128,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and\n    /// without the inherited <c>GROK_PLUGIN_ROOT</c> and <c>GROK_HOME</c>. The test writes the process environment\n    /// (the temp variables, and both Grok variables set to scripted values so their removal is observed), restores it,\n    /// and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+      },
+      {
+        "line": 184,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The\n    /// client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through\n    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019\n    /// AC-008; hostile validation finding R6-F1)."
+      },
+      {
+        "line": 215,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The\n    /// client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through\n    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019\n    /// AC-008; hostile validation finding R6-F1)."
+      },
+      {
+        "line": 243,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's\n    /// temp-folder lookup reads the CLI temp variables, so the test sets and restores them through\n    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019\n    /// AC-008; hostile validation finding R6-F1)."
+      },
+      {
+        "line": 272,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The\n    /// client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through\n    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019\n    /// AC-008; hostile validation finding R6-F1)."
+      },
+      {
+        "line": 388,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes\n    /// the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test\n    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).\n    /// </summary>"
+      },
+      {
+        "line": 427,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test\n    /// writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test\n    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).\n    /// </summary>"
+      },
+      {
+        "line": 463,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The\n    /// test writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test\n    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).\n    /// </summary>"
+      },
+      {
+        "line": 481,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.\n    /// The test writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test\n    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).\n    /// </summary>"
+      },
+      {
+        "line": 520,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process\n    /// environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test (TR-MCP-USECASE-018 AC-006,\n    /// TR-MCP-USECASE-019 AC-008).\n    /// </summary>"
+      },
+      {
+        "line": 557,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The\n    /// client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through\n    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019\n    /// AC-008; hostile validation finding R6-F1)."
+      },
+      {
+        "line": 599,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call\n    /// reported. The client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them\n    /// through <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006,\n    /// TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+      },
+      {
+        "line": 636,
+        "text": "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.\n    /// The client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through\n    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019\n    /// AC-008; hostile validation finding R6-F1)."
+      },
+      {
+        "line": 856,
+        "text": "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's\n/// common application data folder. Windows-only behavior, so an integration test on Windows hosts\n/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).\n/// </summary>"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs",
+    "ids": [
+      "TEST-MCP-FED-002"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 16,
+        "text": "/// FR-MCP-083, TEST-MCP-FED-002 (historical).\n/// </summary>\npublic sealed class FederatedSessionLogServiceTests\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "ids": [
+      "TEST-MCP-GH-006",
+      "TR-GH-013-001",
+      "TR-PLANNED-CORE-013"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 14,
+        "text": "/// <summary>TR-PLANNED-CORE-013 (historical), TR-GH-013-001 (historical): Unit tests for GitHubCliService with mocked IProcessRunner.</summary>\npublic sealed class GitHubCliServiceTests\n{\n    private readonly IProcessRunner _processRunner = Substitute.For<IProcessRunner>();"
+      },
+      {
+        "line": 104,
+        "text": "    /// TEST-MCP-GH-006 (historical): Verifies that issue comment targets are emitted after an explicit end-of-options\n    /// marker so a flag-shaped identifier cannot be reinterpreted as an injected gh CLI option.\n    /// </summary>\n    [Fact]"
+      },
+      {
+        "line": 227,
+        "text": "    /// TEST-MCP-GH-006 (historical): Verifies that invalid close reasons are rejected before launching the GitHub CLI so\n    /// attacker-controlled query strings cannot append extra flags through the close-issue reason parameter.\n    /// </summary>\n    [Fact]"
+      },
+      {
+        "line": 270,
+        "text": "    /// TEST-MCP-GH-006 (historical): Verifies that invalid list-state values are rejected before process launch so state\n    /// query parameters cannot smuggle additional GitHub CLI flags into the issue-list command line.\n    /// </summary>\n    [Fact]"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "ids": [
+      "TEST-MCP-PLUGIN-PSONLY-001"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 735,
+        "text": "    /// TEST-MCP-PLUGIN-PSONLY-001 (historical; no such record is in the requirements store, hostile validation finding\n    /// R6-F2, so this is not an active coverage claim): marker plugin contracts publish the current synced plugin\n    /// version. Resolution reads the assembly's hermetic sources (<see cref=\"HermeticUserProfileFixture\"/>), so no\n    /// installed plugin is seen (TR-MCP-WS-005 FR-MCP-018 ac-1)."
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs",
+    "ids": [
+      "TR-PLANNED-CORE-013"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 10,
+        "text": "/// <summary>TR-PLANNED-CORE-013 (historical): Physical bindings for RepoFileService path security and audit; every constructor creates an owned repository tree.</summary>\n[Trait(\"Category\", \"Integration\")]\npublic sealed class RepoFileServiceTests : IDisposable\n{"
+      }
+    ]
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs",
+    "ids": [
+      "TEST-MCP-TRIAGE-007",
+      "TEST-TRIAGE-003"
+    ],
+    "synthetic": false,
+    "labels": [
+      {
+        "line": 176,
+        "text": "    /// TEST-MCP-TRIAGE-007 (historical): DeleteGroupAsync soft-deletes the group and its reports so they no\n    /// longer appear in queries, while the underlying rows remain in storage marked deleted.\n    /// </summary>\n    [Fact]"
+      },
+      {
+        "line": 202,
+        "text": "    /// <summary>TEST-MCP-TRIAGE-007 (historical): deleting a missing triage group throws KeyNotFoundException.</summary>\n    [Fact]\n    public async Task DeleteGroupAsync_MissingGroup_ThrowsKeyNotFound()\n    {"
+      },
+      {
+        "line": 1140,
+        "text": "    /// <summary>TEST-TRIAGE-003 (historical): selected reports can be moved into a new editable triage group.</summary>\n    [Fact]\n    public async Task CreateGroupFromSelectionAsync_MovesSelectedReportsToNewGroup()\n    {"
+      },
+      {
+        "line": 1179,
+        "text": "    /// <summary>TEST-TRIAGE-003 (historical): selected groups can be merged into an existing editable target group.</summary>\n    [Fact]\n    public async Task MergeGroupsAsync_MovesSourceGroupReportsIntoTargetGroup()\n    {"
+      },
+      {
+        "line": 1212,
+        "text": "    /// <summary>TEST-TRIAGE-003 (historical): groups with run history cannot be regrouped.</summary>\n    [Fact]\n    public async Task MergeGroupsAsync_WhenSourceGroupHasRunHistory_Throws()\n    {"
+      }
+    ]
+  }
+]

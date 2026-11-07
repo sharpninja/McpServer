@@ -1,0 +1,28 @@
+{
+  "name": "ug-r8b-download-mockgate-2",
+  "command": [
+    "dotnet",
+    "test",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+    "-c",
+    "Debug",
+    "--logger",
+    "trx;LogFileName=ug-r8b-download-mockgate-2.trx",
+    "--results-directory",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-mockgate-2",
+    "--filter",
+    "FullyQualifiedName~ProvisioningDownload"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "2f67921357bff28a636fc5824d70422dbb1f168d",
+  "dirtyPaths": [
+    "?? build/ProvisioningDownloadContracts.cs",
+    "?? tests/Build.Tests/ProvisioningDownloadContract.cs",
+    "?? tests/Build.Tests/ProvisioningDownloadMockGateTests.cs"
+  ],
+  "startedLocal": "2026-10-27T20:07:26",
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-mockgate-2.out.log",
+  "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-mockgate-2",
+  "exitCode": 0,
+  "endedLocal": "2026-10-27T20:07:51"
+}

@@ -1,0 +1,112 @@
+{
+  "name": "ug-r13z4-binding-b-2",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "2103243cfb4155e201b0fe1fd257ebc093800d86",
+  "dirtyPaths": [
+    " M src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+    " M src/QBrainAi.Services/Memory/Commands/RunConsolidateJobCommandHandler.cs",
+    " M src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs",
+    " M src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+    " M src/QBrainAi.Services/Services/FederationEnvelopeSigner.cs",
+    " M src/QBrainAi.Services/Services/SessionLogService.cs",
+    " M src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Controllers/FederationControllerTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryConsolidateJobTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreB.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotAdoptedPartyKeySigningTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/FederationFanoutSyncServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceSqliteTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs",
+    " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-b-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-b-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-serviceupdate-chain-1.txt",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Support.Mcp.Tests:AgeBoundaryContractTests,SettableTimeProviderTests,SessionLogTriageStoreTests,GraphRagServiceTests,WorkspaceHygieneG5OverlayTests,FederationEnvelopeSignerTests,FederationFanoutSyncServiceTests,FederationControllerTests,MemoryFederationStateAdapterTests,TransactionSecurityControllerTests,TurnTransactionCoordinatorTests,BrainSlotAdoptedPartyKeySigningTests,HandoffAuditDefectTests,HandoffDurabilityTests,MemoryConsolidateJobTests,MemoryConsolidateTests,TodoExecutionServiceSqliteTests",
+    "--test-run-id",
+    "ug-r13z4-binding-b-2"
+  ],
+  "startedLocal": "2026-11-05T03:48:50",
+  "endedLocal": "2026-11-05T03:49:20",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 252,
+  "passed": 252,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4-binding-b-2/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-b-2/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "7A331D0142F407871655F53D7DC03BEE7517C1D46DBCD584347935A65D047F81",
+      "total": 252,
+      "passed": 252,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs",
+      "sha256": "31889ACEEEF324389C0433518A854F43A40116BD02FF5AE455921BD22F97FF07"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs",
+      "sha256": "6AFF438D1C56512C7D5B47814C2774CF0DFD6AC84630E636E8031FE9CEABA5E3"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "sha256": "0076947A565D9DCBD59A722779551981F66AFC9426E8AAA6974206F77237AF72"
+    },
+    {
+      "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+      "sha256": "59D83209A7CF913D7FAF8504A3847137E5E53EB0D6E48EEF57DF21D5BB617566"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/FederationEnvelopeSigner.cs",
+      "sha256": "5C917ABD21F777D115DCEEDEEE9C2A382489C4885F7D0B34B45C5FD253530E06"
+    },
+    {
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs",
+      "sha256": "B9A91459B5E4454E8B36189038BE65C70CEEFFF4FF00D6AE6D0D3217DADC8A26"
+    },
+    {
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+      "sha256": "05F2218EF5E2D99C01F81C29C98CCBC71C6EB7837CE0457402946B0E2541A5F0"
+    },
+    {
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs",
+      "sha256": "402CE1D215768169B626F609814657E37E22F442CACF2E0D9CC03DE7323C79DA"
+    },
+    {
+      "path": "src/QBrainAi.Services/Memory/Commands/RunConsolidateJobCommandHandler.cs",
+      "sha256": "B3E5EBCAA222270F3DBDDC1902329898B9DAD1218A837F615AFC32D303F1B73B"
+    }
+  ],
+  "writtenLocal": "2026-11-05T03:50:19",
+  "writtenBy": "ClaudeCode"
+}

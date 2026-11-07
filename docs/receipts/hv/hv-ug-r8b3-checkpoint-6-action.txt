@@ -1,0 +1,16 @@
+type: result
+payload:
+  result:
+    code: queued
+    retryable: true
+    persisted: false
+    degraded: true
+    queued: true
+    method: workflow.sessionlog.appendActions
+    agent: Codex
+    sessionId: Codex-20261029T032954Z-plugin-session
+    requestId: req-20261029T032957Z-unitgreen-r8b
+    failsafePath: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/.mcpServer/failsafe/Codex/workspaces/L2hvbWUvc2hhcnBuaW5qYS9naXRodWIvTWNwU2VydmVyLy53b3JrdHJlZXMvdW5pdC1zdWl0ZS1ncmVlbi0yMDI2MTAxOQ/pending/20261029T040729Z-session_submit-0a80.yaml
+    message: Session log persist timed out or returned HTTP 503 backend_unavailable; failsafe retained and current-turn stays active.
+    childStderr: ' qbrain-ai-repl timed out after 30s'
+

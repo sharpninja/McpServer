@@ -1,0 +1,27 @@
+Now: 2026-11-06T02:52:05 key=test name only before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z11-final-linux-unit-1 (4838) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14z12-final-linux-unit-1 (4861)
+onlyBefore=0 onlyAfter=23 common=4838
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests.Services.VoiceConversationServiceTests.FindSessionByDevice_UsesScriptedAgeBoundary
+QBrainAi.Support.Mcp.Tests.Services.VoiceConversationServiceTests.IdleCleanup_UsesScriptedAgeBoundary
+QBrainAi.Support.Mcp.Tests.Services.VoiceConversationServiceTests.IdleCleanupTimer_IsArmedThroughTheClockWithTheProductionSchedule
+QBrainAi.Support.Mcp.Tests.Services.VoiceConversationServiceTests.VoiceSessionReuse_DoesNotDependOnWallClockOrCleanupScheduling
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: "D8 voice idle-session cleanup")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: "D9 voice device-session idle skip")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: "D8 voice idle-session cleanup")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: "D9 voice device-session idle skip")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: "D8 voice idle-session cleanup")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: "D9 voice device-session idle skip")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: "D8 voice idle-session cleanup")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: "D9 voice device-session idle skip")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: "D8 voice idle-session cleanup")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: "D9 voice device-session idle skip")
+QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolOnAnotherClock_IsRejected
+QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolThatNeverReuses_IsRejected
+QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWithAnInclusiveComparison_IsRejected
+QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWithUncontrolledCleanupScheduling_IsRejected
+QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.ScriptedPool_SatisfiesTheContract
+QBrainAi.Support.Mcp.Tests.TestSupport.TriggeredTimerTimeProviderTests.ChangeAndDispose_AreRecordedAndADisposedTimerCannotFire
+QBrainAi.Support.Mcp.Tests.TestSupport.TriggeredTimerTimeProviderTests.CreatedTimer_KeepsTheScheduleAndNeverFiresOnItsOwn
+QBrainAi.Support.Mcp.Tests.TestSupport.TriggeredTimerTimeProviderTests.FireAll_FiresLiveTimersInCreationOrder
+QBrainAi.Support.Mcp.Tests.TestSupport.TriggeredTimerTimeProviderTests.Reads_ReturnTheSetInstantUntilChanged

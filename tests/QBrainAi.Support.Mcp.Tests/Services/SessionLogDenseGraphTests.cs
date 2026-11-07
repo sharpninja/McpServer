@@ -66,6 +66,14 @@ public sealed class SessionLogDenseGraphTests
     /// TEST-MCP-TRIAGESTORE-007: a graph load that exceeds the command budget fails retryable
     /// and does not insert the turn or clear the existing session.
     /// </summary>
+    /// <remarks>
+    /// Integration: its outcome depends on a real storage-command budget timer firing while the delayed step runs, a wall-clock wait under TR-MCP-USECASE-018 AC-006; its elapsed check is a hang guard only.
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-05</term><description>TEST-MCP-TRIAGESTORE-007; TR-MCP-USECASE-018 AC-006 (a wall-clock bound makes a case an integration case): which budget elapsed is read from the exception message (the configured 1 second storage command budget; the delayed reader would finish after 4 seconds and throw nothing), and the elapsed time keeps a 20 second hang guard instead of the 3 second bound, because the sibling sweep of the Windows integration lane failure at b79fd51f (slice Z5) found this case at up to 6.37 seconds of run time across nine Windows lanes (ug-r13z5-win-lane-elapsed-bound-durations-1.txt): its bound also timed the host. The classification line above was restated after the eighth holistic read before hostile validation round 13 (finding b2), because it still named the elapsed bound this entry removed.</description></item>
+    /// </list>
+    /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task UpsertTurnAsync_SlowGraphLoad_FailsRetryableWithoutPersisting()
     {
@@ -81,7 +89,8 @@ public sealed class SessionLogDenseGraphTests
                 sut.UpsertTurnAsync(Agent, SessionId, NewTurn(), TestContext.Current.CancellationToken)).ConfigureAwait(true);
             clock.Stop();
 
-            Assert.True(clock.Elapsed < TimeSpan.FromSeconds(3), $"Graph load budget took {clock.Elapsed}.");
+            Assert.Contains("within the 1 second storage command budget", ex.Message, StringComparison.Ordinal);
+            Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"The graph load was not cut short by its budget: {clock.Elapsed}.");
             var classified = McpErrorClassifier.Classify(ex);
             Assert.Equal(McpErrorClassifier.BackendUnavailable, classified.Code);
             Assert.True(classified.Retryable);

@@ -1,0 +1,117 @@
+{
+  "timestampUtc": "2026-11-06T07:43:38.6156913+00:00",
+  "timestampLocal": "2026-11-06T01:43:38",
+  "agent": "Codex",
+  "threadId": "01a1af63-aebb-7152-bde2-3316931e7a3b",
+  "rolloutPath": "/home/sharpninja/.codex/sessions/2026/11/05/rollout-2026-11-05T23-45-09-01a1af63-aebb-7152-bde2-3316931e7a3b.jsonl",
+  "sessionMetadata": {
+    "line": 1,
+    "timestamp": "2026-11-06T05:45:09.745Z",
+    "id": "01a1af63-aebb-7152-bde2-3316931e7a3b",
+    "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+    "originator": "codex_exec",
+    "cliVersion": "0.166.0",
+    "source": "exec"
+  },
+  "turnContexts": [
+    {
+      "line": 10,
+      "timestamp": "2026-11-06T05:45:10.714Z",
+      "turnId": "01a1af63-b563-7c43-ac08-b4d773de7f97",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    },
+    {
+      "line": 343,
+      "timestamp": "2026-11-06T06:00:07.183Z",
+      "turnId": "01a1af63-b563-7c43-ac08-b4d773de7f97",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    },
+    {
+      "line": 552,
+      "timestamp": "2026-11-06T06:14:42.065Z",
+      "turnId": "01a1af63-b563-7c43-ac08-b4d773de7f97",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    },
+    {
+      "line": 744,
+      "timestamp": "2026-11-06T06:25:19.934Z",
+      "turnId": "01a1af63-b563-7c43-ac08-b4d773de7f97",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    },
+    {
+      "line": 903,
+      "timestamp": "2026-11-06T06:32:46.288Z",
+      "turnId": "01a1af63-b563-7c43-ac08-b4d773de7f97",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    },
+    {
+      "line": 1062,
+      "timestamp": "2026-11-06T06:39:03.33Z",
+      "turnId": "01a1af63-b563-7c43-ac08-b4d773de7f97",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    },
+    {
+      "line": 1289,
+      "timestamp": "2026-11-06T06:50:24.377Z",
+      "turnId": "01a1af63-b563-7c43-ac08-b4d773de7f97",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    },
+    {
+      "line": 1434,
+      "timestamp": "2026-11-06T06:57:44.652Z",
+      "turnId": "01a1af63-b563-7c43-ac08-b4d773de7f97",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    },
+    {
+      "line": 1603,
+      "timestamp": "2026-11-06T07:04:32.553Z",
+      "turnId": "01a1af63-b563-7c43-ac08-b4d773de7f97",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    },
+    {
+      "line": 1750,
+      "timestamp": "2026-11-06T07:13:46.641Z",
+      "turnId": "01a1af63-b563-7c43-ac08-b4d773de7f97",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    },
+    {
+      "line": 1990,
+      "timestamp": "2026-11-06T07:24:36.007Z",
+      "turnId": "01a1af63-b563-7c43-ac08-b4d773de7f97",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    },
+    {
+      "line": 2289,
+      "timestamp": "2026-11-06T07:40:22.912Z",
+      "turnId": "01a1af63-b563-7c43-ac08-b4d773de7f97",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    }
+  ],
+  "profileFileCount": 1,
+  "markerReadFull": true,
+  "markerKeyValuesRetained": false
+}

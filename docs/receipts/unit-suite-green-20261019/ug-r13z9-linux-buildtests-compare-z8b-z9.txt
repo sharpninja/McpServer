@@ -1,0 +1,4 @@
+Now: 2026-11-05T18:48:07 key=test name only before=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r13z8b-final-linux-buildtests-1 (563) after=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r13z9-final-linux-buildtests-1 (563)
+onlyBefore=0 onlyAfter=0 common=563
+--- only in before ---
+--- only in after ---

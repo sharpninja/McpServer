@@ -1,0 +1,1171 @@
+{
+  "timestampUtc": "2026-11-03T17:39:12.8505277Z",
+  "timestampLocal": "2026-11-03T11:39:12",
+  "manifestSha256": "1AEED77D05407E0CF345F5A85B97C4ECF400B7164F97F6EF0590B5F52351E566",
+  "fileCount": 34,
+  "trxCount": 30,
+  "totals": [
+    {
+      "runId": "ug-r11w-final-linux-buildtests-1",
+      "files": 1,
+      "passed": 529.0,
+      "failed": 0.0,
+      "notExecuted": 0.0,
+      "total": 529.0
+    },
+    {
+      "runId": "ug-r11w-final-linux-lane-1",
+      "files": 7,
+      "passed": 741.0,
+      "failed": 0.0,
+      "notExecuted": 0.0,
+      "total": 741.0
+    },
+    {
+      "runId": "ug-r11w-final-linux-unit-1",
+      "files": 7,
+      "passed": 4733.0,
+      "failed": 0.0,
+      "notExecuted": 0.0,
+      "total": 4733.0
+    },
+    {
+      "runId": "ug-r11w-final-win-buildtests-1",
+      "files": 1,
+      "passed": 433.0,
+      "failed": 0.0,
+      "notExecuted": 0.0,
+      "total": 433.0
+    },
+    {
+      "runId": "ug-r11w-final-win-lane-1",
+      "files": 7,
+      "passed": 718.0,
+      "failed": 0.0,
+      "notExecuted": 0.0,
+      "total": 718.0
+    },
+    {
+      "runId": "ug-r11w-final-win-unit-1",
+      "files": 7,
+      "passed": 4733.0,
+      "failed": 0.0,
+      "notExecuted": 0.0,
+      "total": 4733.0
+    }
+  ],
+  "badChecks": [],
+  "unitNameDifferences": [],
+  "checks": [
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.Client.Tests.trx",
+      "runId": "ug-r11w-final-linux-unit-1",
+      "kind": "unit",
+      "sha256": "94C1BEF95323763AE46E653ACB8AF08171375C6EE60BFFDE1F1008686A3744FA",
+      "hashMatch": true,
+      "blobSha256": "94C1BEF95323763AE46E653ACB8AF08171375C6EE60BFFDE1F1008686A3744FA",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 311,
+        "executed": 311,
+        "passed": 311,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 311,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.Cqrs.Tests.trx",
+      "runId": "ug-r11w-final-linux-unit-1",
+      "kind": "unit",
+      "sha256": "6010D500DB4FC32DF5AC9E5CEF8C2861E6E59A83BC25EE00A1ADFD3A064963A8",
+      "hashMatch": true,
+      "blobSha256": "6010D500DB4FC32DF5AC9E5CEF8C2861E6E59A83BC25EE00A1ADFD3A064963A8",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 33,
+        "executed": 33,
+        "passed": 33,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 33,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.Launcher.Tests.trx",
+      "runId": "ug-r11w-final-linux-unit-1",
+      "kind": "unit",
+      "sha256": "BAD75EA1454B5BE7CAA0830C13103AA108D8544A47B670337038C7AEC44C0590",
+      "hashMatch": true,
+      "blobSha256": "BAD75EA1454B5BE7CAA0830C13103AA108D8544A47B670337038C7AEC44C0590",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 20,
+        "executed": 20,
+        "passed": 20,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 20,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.McpAgent.Tests.trx",
+      "runId": "ug-r11w-final-linux-unit-1",
+      "kind": "unit",
+      "sha256": "44F7AD4D0953E0E63527BF194847CAE83979DA22DA7F2A6637AE0B192113343D",
+      "hashMatch": true,
+      "blobSha256": "44F7AD4D0953E0E63527BF194847CAE83979DA22DA7F2A6637AE0B192113343D",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 64,
+        "executed": 64,
+        "passed": 64,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 64,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.QBAgent.Tests.trx",
+      "runId": "ug-r11w-final-linux-unit-1",
+      "kind": "unit",
+      "sha256": "0855D3E93831B726D807CDB2ACA71DB4433D8636FE14274DD5737CB8A3E1C7ED",
+      "hashMatch": true,
+      "blobSha256": "0855D3E93831B726D807CDB2ACA71DB4433D8636FE14274DD5737CB8A3E1C7ED",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 93,
+        "executed": 93,
+        "passed": 93,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 93,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.Repl.Core.Tests.trx",
+      "runId": "ug-r11w-final-linux-unit-1",
+      "kind": "unit",
+      "sha256": "2DD790B2F53592E1826E3A71373CDD96806FB49B81488E14B6BA3227585B4922",
+      "hashMatch": true,
+      "blobSha256": "2DD790B2F53592E1826E3A71373CDD96806FB49B81488E14B6BA3227585B4922",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 991,
+        "executed": 991,
+        "passed": 991,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 991,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": [
+        {
+          "Name": "QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BrainSlots\")",
+          "Count": 4
+        },
+        {
+          "Name": "QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"searchasync\", expectedAllowed: True)",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"BRAINSLOTS\")",
+          "Count": 3
+        }
+      ]
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.Support.Mcp.Tests.trx",
+      "runId": "ug-r11w-final-linux-unit-1",
+      "kind": "unit",
+      "sha256": "3D9143158261ED84AEE420081ECA8A56D3FD247EE52584DAF5B8CF41B9543FC7",
+      "hashMatch": true,
+      "blobSha256": "3D9143158261ED84AEE420081ECA8A56D3FD247EE52584DAF5B8CF41B9543FC7",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 3221,
+        "executed": 3221,
+        "passed": 3221,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 3221,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": [
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"cli\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"auto\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"C:\\\\Users\\\\kingd\", expected: \"windows:C:/USERS/KINGD\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/selected-projects.json",
+      "runId": "ug-r11w-final-linux-unit-1",
+      "kind": "unit",
+      "sha256": "F169EA074EB706DEC4256BCC92CB0ADEF574BFC22775F55C8C31F1F0B81F59CC",
+      "hashMatch": true,
+      "blobSha256": "F169EA074EB706DEC4256BCC92CB0ADEF574BFC22775F55C8C31F1F0B81F59CC",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "selection": {
+        "schemaVersion": 1,
+        "runId": "ug-r11w-final-linux-unit-1",
+        "scope": "unit",
+        "generatedAtUtc": "2026-11-03T10:34:21.9568605-06:00",
+        "projects": [
+          {
+            "name": "QBrainAi.Support.Mcp.Tests",
+            "projectPath": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Client.Tests",
+            "projectPath": "tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Cqrs.Tests",
+            "projectPath": "tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Launcher.Tests",
+            "projectPath": "tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.McpAgent.Tests",
+            "projectPath": "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+            "reportPath": "unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Repl.Core.Tests",
+            "projectPath": "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.QBAgent.Tests",
+            "projectPath": "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+            "reportPath": "unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.Client.Tests.trx",
+      "runId": "ug-r11w-final-win-unit-1",
+      "kind": "unit",
+      "sha256": "838B474031B2C397603C6E6083584CB0205375993FFE53CDFD10E07EFC4E1AD1",
+      "hashMatch": true,
+      "blobSha256": "838B474031B2C397603C6E6083584CB0205375993FFE53CDFD10E07EFC4E1AD1",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 311,
+        "executed": 311,
+        "passed": 311,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 311,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.Cqrs.Tests.trx",
+      "runId": "ug-r11w-final-win-unit-1",
+      "kind": "unit",
+      "sha256": "1D6C67B657F3292CEDB120C0BB4E9B5395494B5EB719B80D1C82BC568A048D32",
+      "hashMatch": true,
+      "blobSha256": "1D6C67B657F3292CEDB120C0BB4E9B5395494B5EB719B80D1C82BC568A048D32",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 33,
+        "executed": 33,
+        "passed": 33,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 33,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.Launcher.Tests.trx",
+      "runId": "ug-r11w-final-win-unit-1",
+      "kind": "unit",
+      "sha256": "B220638871DC0353E728913133BEF76BDE4017AB0ABD19D9C3F44953852091F9",
+      "hashMatch": true,
+      "blobSha256": "B220638871DC0353E728913133BEF76BDE4017AB0ABD19D9C3F44953852091F9",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 20,
+        "executed": 20,
+        "passed": 20,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 20,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.McpAgent.Tests.trx",
+      "runId": "ug-r11w-final-win-unit-1",
+      "kind": "unit",
+      "sha256": "BB25D3ABC7139BB9D1DAEE4FCBDBA36B0CC4A0B8E4A1957F9042B7D7B213A663",
+      "hashMatch": true,
+      "blobSha256": "BB25D3ABC7139BB9D1DAEE4FCBDBA36B0CC4A0B8E4A1957F9042B7D7B213A663",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 64,
+        "executed": 64,
+        "passed": 64,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 64,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.QBAgent.Tests.trx",
+      "runId": "ug-r11w-final-win-unit-1",
+      "kind": "unit",
+      "sha256": "350C7A42538A6FB067316CFC34CBC6254706B40EA4A2811B0C3E160CB884A7CC",
+      "hashMatch": true,
+      "blobSha256": "350C7A42538A6FB067316CFC34CBC6254706B40EA4A2811B0C3E160CB884A7CC",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 93,
+        "executed": 93,
+        "passed": 93,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 93,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.Repl.Core.Tests.trx",
+      "runId": "ug-r11w-final-win-unit-1",
+      "kind": "unit",
+      "sha256": "2B63B68ADCF62A04CE5BEDBFBCFAC03ECF5A22E09BC33AFAF276B9CA4DF2DF9A",
+      "hashMatch": true,
+      "blobSha256": "2B63B68ADCF62A04CE5BEDBFBCFAC03ECF5A22E09BC33AFAF276B9CA4DF2DF9A",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 991,
+        "executed": 991,
+        "passed": 991,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 991,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": [
+        {
+          "Name": "QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BrAiNsLoTs\")",
+          "Count": 4
+        },
+        {
+          "Name": "QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"searchasync\", expectedAllowed: True)",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"BrainSlots\")",
+          "Count": 3
+        }
+      ]
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.Support.Mcp.Tests.trx",
+      "runId": "ug-r11w-final-win-unit-1",
+      "kind": "unit",
+      "sha256": "DF5CCDFE61B48D91F8DBAA3243C55BD54C5E97BB0863ABE8419C45CE55F19278",
+      "hashMatch": true,
+      "blobSha256": "DF5CCDFE61B48D91F8DBAA3243C55BD54C5E97BB0863ABE8419C45CE55F19278",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 3221,
+        "executed": 3221,
+        "passed": 3221,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 3221,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": [
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"cli\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"auto\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/selected-projects.json",
+      "runId": "ug-r11w-final-win-unit-1",
+      "kind": "unit",
+      "sha256": "02A5492BB7F783D6EDE1B3320DDFA2A9FB0C7FDBB01FFEF3641399DCA86F450F",
+      "hashMatch": true,
+      "blobSha256": "02A5492BB7F783D6EDE1B3320DDFA2A9FB0C7FDBB01FFEF3641399DCA86F450F",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "selection": {
+        "schemaVersion": 1,
+        "runId": "ug-r11w-final-win-unit-1",
+        "scope": "unit",
+        "generatedAtUtc": "2026-11-03T10:35:16.4131775-06:00",
+        "projects": [
+          {
+            "name": "QBrainAi.Support.Mcp.Tests",
+            "projectPath": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Client.Tests",
+            "projectPath": "tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Cqrs.Tests",
+            "projectPath": "tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Launcher.Tests",
+            "projectPath": "tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.McpAgent.Tests",
+            "projectPath": "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+            "reportPath": "unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Repl.Core.Tests",
+            "projectPath": "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.QBAgent.Tests",
+            "projectPath": "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+            "reportPath": "unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/Build.Tests.trx",
+      "runId": "ug-r11w-final-linux-lane-1",
+      "kind": "integration",
+      "sha256": "F57D9B551A3D2C0EAE3A14F9BB36E4502001FC8C3722F8946B432136C3D6F933",
+      "hashMatch": true,
+      "blobSha256": "F57D9B551A3D2C0EAE3A14F9BB36E4502001FC8C3722F8946B432136C3D6F933",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 96,
+        "executed": 96,
+        "passed": 96,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 96,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/QBrainAi.McpAgent.Tests.trx",
+      "runId": "ug-r11w-final-linux-lane-1",
+      "kind": "integration",
+      "sha256": "9DF016077F0B503E2A0EDCE5C54DB694EF30764FED19C22F0EC673B3E299F59E",
+      "hashMatch": true,
+      "blobSha256": "9DF016077F0B503E2A0EDCE5C54DB694EF30764FED19C22F0EC673B3E299F59E",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 1,
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 1,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/QBrainAi.QBAgent.Tests.trx",
+      "runId": "ug-r11w-final-linux-lane-1",
+      "kind": "integration",
+      "sha256": "C0AA129C9550809FC4A06045B20891377ACE36821B6C50C368C0197FF82B6ECE",
+      "hashMatch": true,
+      "blobSha256": "C0AA129C9550809FC4A06045B20891377ACE36821B6C50C368C0197FF82B6ECE",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 3,
+        "executed": 3,
+        "passed": 3,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 3,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/QBrainAi.Repl.Core.Tests.trx",
+      "runId": "ug-r11w-final-linux-lane-1",
+      "kind": "integration",
+      "sha256": "68B83B28F93F842AB78DE324BD94826D07F302C2ACBD91DDA5C55831A4D15922",
+      "hashMatch": true,
+      "blobSha256": "68B83B28F93F842AB78DE324BD94826D07F302C2ACBD91DDA5C55831A4D15922",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 2,
+        "executed": 2,
+        "passed": 2,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 2,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/QBrainAi.Repl.IntegrationTests.trx",
+      "runId": "ug-r11w-final-linux-lane-1",
+      "kind": "integration",
+      "sha256": "E55D7F8C15C74DDF3FE5CB03ACEB3FB356EA767A4D5E86F16AEDAA95AE303200",
+      "hashMatch": true,
+      "blobSha256": "E55D7F8C15C74DDF3FE5CB03ACEB3FB356EA767A4D5E86F16AEDAA95AE303200",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 179,
+        "executed": 179,
+        "passed": 179,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 179,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "runId": "ug-r11w-final-linux-lane-1",
+      "kind": "integration",
+      "sha256": "B124C3CE8F728EE3532B5BF84A725BABE6DAB6C49C114CA155670543767A2634",
+      "hashMatch": true,
+      "blobSha256": "B124C3CE8F728EE3532B5BF84A725BABE6DAB6C49C114CA155670543767A2634",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 6,
+        "executed": 6,
+        "passed": 6,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 6,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/QBrainAi.Support.Mcp.Tests.trx",
+      "runId": "ug-r11w-final-linux-lane-1",
+      "kind": "integration",
+      "sha256": "012C77283B2B934C204A471DEE13510FCF961FCE5F87E04B105599F73E78507A",
+      "hashMatch": true,
+      "blobSha256": "012C77283B2B934C204A471DEE13510FCF961FCE5F87E04B105599F73E78507A",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 454,
+        "executed": 454,
+        "passed": 454,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 454,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": [
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/selected-projects.json",
+      "runId": "ug-r11w-final-linux-lane-1",
+      "kind": "integration",
+      "sha256": "69F840609B0608B4C9C78BD96146848D56A4893D66A4A961B5F0FD3BEC3BF925",
+      "hashMatch": true,
+      "blobSha256": "69F840609B0608B4C9C78BD96146848D56A4893D66A4A961B5F0FD3BEC3BF925",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "selection": {
+        "schemaVersion": 1,
+        "runId": "ug-r11w-final-linux-lane-1",
+        "scope": "provider",
+        "generatedAtUtc": "2026-11-03T10:37:42.4818273-06:00",
+        "projects": [
+          {
+            "name": "QBrainAi.Support.Mcp.Tests",
+            "projectPath": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+            "reportPath": "provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.McpAgent.Tests",
+            "projectPath": "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+            "reportPath": "provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Repl.Core.Tests",
+            "projectPath": "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+            "reportPath": "provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.QBAgent.Tests",
+            "projectPath": "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+            "reportPath": "provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx"
+          },
+          {
+            "name": "Build.Tests",
+            "projectPath": "tests/Build.Tests/Build.Tests.csproj",
+            "reportPath": "provider/Build.Tests/Build.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Repl.IntegrationTests",
+            "projectPath": "tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+            "reportPath": "provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.IntegrationTests",
+            "projectPath": "tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj",
+            "reportPath": "provider/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/Build.Tests.trx",
+      "runId": "ug-r11w-final-win-lane-1",
+      "kind": "integration",
+      "sha256": "044E6AF58D677CC5E8C9173B419A9C087C2F21441185F85B379039254BCEEF0D",
+      "hashMatch": true,
+      "blobSha256": "044E6AF58D677CC5E8C9173B419A9C087C2F21441185F85B379039254BCEEF0D",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 85,
+        "executed": 85,
+        "passed": 85,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 85,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/QBrainAi.McpAgent.Tests.trx",
+      "runId": "ug-r11w-final-win-lane-1",
+      "kind": "integration",
+      "sha256": "78DE10D847530EF8BAE66C83F20BC94E4E95806D1B3C1256B74D3122E25D413E",
+      "hashMatch": true,
+      "blobSha256": "78DE10D847530EF8BAE66C83F20BC94E4E95806D1B3C1256B74D3122E25D413E",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 1,
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 1,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/QBrainAi.QBAgent.Tests.trx",
+      "runId": "ug-r11w-final-win-lane-1",
+      "kind": "integration",
+      "sha256": "01AFE718ABCAFEEF25B14C0E188C58B9B231F4F6D56F1D74183EFB4169573912",
+      "hashMatch": true,
+      "blobSha256": "01AFE718ABCAFEEF25B14C0E188C58B9B231F4F6D56F1D74183EFB4169573912",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 3,
+        "executed": 3,
+        "passed": 3,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 3,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/QBrainAi.Repl.Core.Tests.trx",
+      "runId": "ug-r11w-final-win-lane-1",
+      "kind": "integration",
+      "sha256": "3D2AF5202AB68AEB6AD451F082418AE34E4A540398E3F050016D160BAF7BD048",
+      "hashMatch": true,
+      "blobSha256": "3D2AF5202AB68AEB6AD451F082418AE34E4A540398E3F050016D160BAF7BD048",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 2,
+        "executed": 2,
+        "passed": 2,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 2,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/QBrainAi.Repl.IntegrationTests.trx",
+      "runId": "ug-r11w-final-win-lane-1",
+      "kind": "integration",
+      "sha256": "2781342775B7D94764C4407E3736BB1CC9C3E5F31AC8759D178F39FCCD0C3A47",
+      "hashMatch": true,
+      "blobSha256": "2781342775B7D94764C4407E3736BB1CC9C3E5F31AC8759D178F39FCCD0C3A47",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 179,
+        "executed": 179,
+        "passed": 179,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 179,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "runId": "ug-r11w-final-win-lane-1",
+      "kind": "integration",
+      "sha256": "33D7DA9BD86293467F12A26EADF5A656D332180734DE93B804E40E691885AA13",
+      "hashMatch": true,
+      "blobSha256": "33D7DA9BD86293467F12A26EADF5A656D332180734DE93B804E40E691885AA13",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 6,
+        "executed": 6,
+        "passed": 6,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 6,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/QBrainAi.Support.Mcp.Tests.trx",
+      "runId": "ug-r11w-final-win-lane-1",
+      "kind": "integration",
+      "sha256": "64E152FA88156C4ACAE78CC9E3337BC59D33C2842C7C9C3EA0207B2CB464B531",
+      "hashMatch": true,
+      "blobSha256": "64E152FA88156C4ACAE78CC9E3337BC59D33C2842C7C9C3EA0207B2CB464B531",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 442,
+        "executed": 442,
+        "passed": 442,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 442,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": [
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+          "Count": 2
+        },
+        {
+          "Name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/selected-projects.json",
+      "runId": "ug-r11w-final-win-lane-1",
+      "kind": "integration",
+      "sha256": "D4638E1129A4F2A9150C53B02926280F38DE213578AA0AB72939BD7A6C0F12B0",
+      "hashMatch": true,
+      "blobSha256": "D4638E1129A4F2A9150C53B02926280F38DE213578AA0AB72939BD7A6C0F12B0",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "selection": {
+        "schemaVersion": 1,
+        "runId": "ug-r11w-final-win-lane-1",
+        "scope": "provider",
+        "generatedAtUtc": "2026-11-03T10:38:58.9622884-06:00",
+        "projects": [
+          {
+            "name": "QBrainAi.Support.Mcp.Tests",
+            "projectPath": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+            "reportPath": "provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.McpAgent.Tests",
+            "projectPath": "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+            "reportPath": "provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Repl.Core.Tests",
+            "projectPath": "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+            "reportPath": "provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.QBAgent.Tests",
+            "projectPath": "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+            "reportPath": "provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx"
+          },
+          {
+            "name": "Build.Tests",
+            "projectPath": "tests/Build.Tests/Build.Tests.csproj",
+            "reportPath": "provider/Build.Tests/Build.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Repl.IntegrationTests",
+            "projectPath": "tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+            "reportPath": "provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.IntegrationTests",
+            "projectPath": "tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj",
+            "reportPath": "provider/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-buildtests-1/ug-r11w-final-linux-buildtests-1.trx",
+      "runId": "ug-r11w-final-linux-buildtests-1",
+      "kind": "infrastructure",
+      "sha256": "62A484555E5276A16F3C82DBADB489432A368DAD5B3D9DE8FBED8FAF42E0C91A",
+      "hashMatch": true,
+      "blobSha256": "62A484555E5276A16F3C82DBADB489432A368DAD5B3D9DE8FBED8FAF42E0C91A",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 529,
+        "executed": 529,
+        "passed": 529,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 529,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-buildtests-1/Build.Tests.trx",
+      "runId": "ug-r11w-final-win-buildtests-1",
+      "kind": "infrastructure",
+      "sha256": "781BFC76A27B6D37AF8CF01EC8423C28CAF561FE8064BD019B9F43A27A29C509",
+      "hashMatch": true,
+      "blobSha256": "781BFC76A27B6D37AF8CF01EC8423C28CAF561FE8064BD019B9F43A27A29C509",
+      "blobMatch": true,
+      "bytesMatch": true,
+      "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "receiptExists": true,
+      "counters": {
+        "total": 433,
+        "executed": 433,
+        "passed": 433,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "countersMatch": true,
+      "resultCount": 433,
+      "nonPassedResults": [],
+      "otherBadCounters": [],
+      "startMatch": true,
+      "finishMatch": true,
+      "duplicateNames": []
+    }
+  ]
+}

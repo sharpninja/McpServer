@@ -1,0 +1,203 @@
+[
+  {
+    "Left": "ug-r3-linux-test-7",
+    "Right": "ug-r3-linux-test-8",
+    "LeftCount": 4456,
+    "RightCount": 4479,
+    "NameDifferences": [
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ProductionRead_UnexpectedReadError_Propagates",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"empty-and-malformed-fall-through\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"every-file-unreadable\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"manifest-locked-next-manifest\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"no-version-files\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"version-file-denied-nothing-else\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"version-file-locked-manifest-next\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"version-file-vanished\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"version-file\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"empty-and-malformed-fall-through\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"every-file-unreadable\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"manifest-locked-next-manifest\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"no-version-files\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"version-file-denied-nothing-else\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"version-file-locked-manifest-next\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"version-file-vanished\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"version-file\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedFiles_RecordReadsAndReportUnscriptedFilesAbsent",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedTheory_CoversEveryCase",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.UnexpectedReadError_EscapesTheScriptedFiles",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.WrongReadNegativeControls_AreRejectedInsidePassingHarness",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_EveryVersionFileUnreadable_FallsBackToTheSyncedVersion",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_UnreadableVersionFile_ResolvesTheNextReadableVersion",
+        "SideIndicator": "=>"
+      }
+    ]
+  },
+  {
+    "Left": "ug-r3-linux-lane-7",
+    "Right": "ug-r3-linux-lane-8",
+    "LeftCount": 397,
+    "RightCount": 397,
+    "NameDifferences": null
+  },
+  {
+    "Left": "ug-r3-win-lane-2",
+    "Right": "ug-r3-win-lane-1",
+    "LeftCount": 373,
+    "RightCount": 372,
+    "NameDifferences": {
+      "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors",
+      "SideIndicator": "<="
+    }
+  },
+  {
+    "Left": "ug-r3-win-lane-2",
+    "Right": "ug-r3-win-lane-3",
+    "LeftCount": 373,
+    "RightCount": 371,
+    "NameDifferences": [
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.DesktopProcessSpawnerWindowsInteractiveTests.Spawn_WhenHostIsInteractive_CanRunCmdThroughDefaultSpawner",
+        "SideIndicator": "<="
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetRealTests.IdentityFiles_HaveNoDirectGetFullPath",
+        "SideIndicator": "<="
+      }
+    ]
+  },
+  {
+    "Left": "ug-r3-win-lane-2",
+    "Right": "ug-r3-win-lane-4",
+    "LeftCount": 373,
+    "RightCount": 373,
+    "NameDifferences": null
+  },
+  {
+    "Left": "ug-r3-win-lane-2",
+    "Right": "ug-r3-win-lane-5",
+    "LeftCount": 373,
+    "RightCount": 372,
+    "NameDifferences": {
+      "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace",
+      "SideIndicator": "<="
+    }
+  },
+  {
+    "Left": "ug-r3-win-lane-2",
+    "Right": "ug-r3-win-lane-6",
+    "LeftCount": 373,
+    "RightCount": 373,
+    "NameDifferences": null
+  },
+  {
+    "Left": "ug-r3-win-lane-6",
+    "Right": "ug-r3-win-lane-7",
+    "LeftCount": 373,
+    "RightCount": 373,
+    "NameDifferences": null
+  },
+  {
+    "Left": "ug-r3-win-lane-7",
+    "Right": "ug-r3-win-lane-8",
+    "LeftCount": 373,
+    "RightCount": 373,
+    "NameDifferences": null
+  },
+  {
+    "Left": "ug-r3-win-lane-diag-1",
+    "Right": "ug-r3-win-lane-6",
+    "LeftCount": 373,
+    "RightCount": 373,
+    "NameDifferences": null
+  },
+  {
+    "Left": "ug-r3-win-lane-6",
+    "Right": "ug-r3-win-lane-diag-3",
+    "LeftCount": 373,
+    "RightCount": 373,
+    "NameDifferences": null
+  },
+  {
+    "Left": "ug-r3-linux-test-8",
+    "Right": "ug-r3-win-test-ssh-6",
+    "LeftCount": 4479,
+    "RightCount": 4479,
+    "NameDifferences": [
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"Q:\\\\__mcp_unit_test__\\\\outside\\\\docfx\", ···]]]], expectedMessage: \"outputRoot\")",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"/__mcp_unit_test__/outside/docfx\", ···]]]], expectedMessage: \"outputRoot\")",
+        "SideIndicator": "<="
+      }
+    ]
+  }
+]

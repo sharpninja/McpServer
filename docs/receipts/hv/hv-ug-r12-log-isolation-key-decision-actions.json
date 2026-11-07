@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "order": 4,
+      "type": "design_decision",
+      "status": "completed",
+      "description": "Confirmed a material isolation gap by static source review: IsProductVariable recognizes double-underscore configuration prefixes but not literal colon hierarchical keys. BuildOwnedInstanceEnvironment retains inherited QBrainAi:Database:Sqlite:ConnectionString and the start check ignores it, alongside the owned double-underscore spelling. The .NET 10 environment provider normalizes both to the same key and overwrites by enumeration order. The contracts contain no colon-form rows. Classify as an implementer fix under FR-MCP-TESTRESOURCE-001 ac-4 and TR-MCP-NUKE-019 AC-6, not an operator decision. Reject treating two passing lab lanes as proof of all inherited-map inputs. No product execution or test run was used. Proposed remedy: normalize configuration-key aliases before ownership checks and add independent map-based contract and negative-control rows for both canonical/legacy spellings and both enumeration orders.",
+      "filePath": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+Plugin command failed with exit code 1.
+type: error
+payload:
+  requestId: req-20261020T221617Z-cd98
+  code: not_found
+  message: FR 'FR-MCP-USECASE-016' not found.
+  retryable: false
+  details:
+    methodName: workflow.requirements.getFr
+    exceptionType: McpServer.Client.McpNotFoundException
+    reason: not_found
+
+---
+
+

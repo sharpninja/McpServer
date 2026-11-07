@@ -1,0 +1,12 @@
+{
+  "requestId": "req-20261020T023148Z-unitgreen-r2",
+  "dialogItems": [
+    {
+      "order": 20000,
+      "timestamp": "2026-10-20T03:22:29.6306673Z",
+      "role": "tool",
+      "category": "observation",
+      "content": "ENTIRE RESULT PERSISTENCE PROOF BEFORE TURN COMPLETION: {\n  \"TimestampUtc\": \"2026-10-20T03:22:29.6175267Z\",\n  \"TimestampLocal\": \"2026-10-19T22:22:29\",\n  \"Mode\": \"VerifyContent\",\n  \"SessionId\": \"Codex-20261020T023103Z-unitgreen-r2\",\n  \"RequestId\": \"req-20261020T023148Z-unitgreen-r2\",\n  \"Status\": \"in_progress\",\n  \"SessionModel\": \"gpt-6-astra\",\n  \"TurnModel\": \"gpt-6-astra\",\n  \"PartCount\": 9,\n  \"ExactPartsMatched\": 9,\n  \"BodyCharacters\": 97113,\n  \"BodySha256\": \"6408A14A74D1702A82B2D1775B63AD59273EEC16F9BF7065907834694809E294\",\n  \"ProseSha256\": \"8F8E5A72914EB7D92405657C354CCE34B38B1501337AFAFD2F51814AF24875D5\",\n  \"JsonSha256\": \"0012636D8D8AA51B17A0366F5213D6A0D8A8FFB47165AA2AB908258CADF5C778\",\n  \"WholeJsonPresent\": true,\n  \"ResponseEqualsWholeProse\": false,\n  \"OrderedParts\": true,\n  \"OrderingNote\": \"Integer order submitted; numbered headers and returned dialog sequence verified. DTO does not expose order.\",\n  \"ActionCount\": 16,\n  \"DesignDecisionCount\": 1,\n  \"ReadbackPath\": \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-full-result-readback-VerifyContent.txt\",\n  \"HistoryPath\": \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-final-history-VerifyContent.txt\",\n  \"Verified\": true\n}"
+    }
+  ]
+}

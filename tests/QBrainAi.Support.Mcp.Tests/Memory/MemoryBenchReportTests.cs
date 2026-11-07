@@ -1,11 +1,13 @@
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Token-first summary tables.
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Token-first summary tables.
 /// </summary>
 public sealed class MemoryBenchReportTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-24: Summary compares with_memory vs without_memory pass rates.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SummaryComparesConditions()
     {
@@ -20,6 +22,8 @@ public sealed class MemoryBenchReportTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-38: Summary table includes the required token columns.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SummaryTable_TokenColumns()
     {
@@ -35,6 +39,8 @@ public sealed class MemoryBenchReportTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-40: Headline numbers are macro mean tokens_total.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Headline_MacroMeanTokens()
     {

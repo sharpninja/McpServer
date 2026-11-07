@@ -1,4 +1,5 @@
 using System.Net;
+using QBrainAi.TestSupport.TemporaryInstance;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -53,26 +54,17 @@ public sealed class EndToEndFlowTests : IDisposable
         Assert.True(_replProcess.IsRunning, "Process should remain running after complete flow");
     }
 
+    /// <summary>TR-MCP-NUKE-019 AC-6: the temporary instance's health echoes the nonce, then the trust bootstrap runs.</summary>
     [Fact]
     public async Task CompleteFlow_TrustBootstrapWithHealthCheck()
     {
-        var serverUrl = "http://localhost:5177";
         var testNonce = "e2e-nonce-123";
-        
-        using var httpClient = new HttpClient { BaseAddress = new Uri(serverUrl) };
-        
-        try
-        {
-            var healthResponse = await httpClient.GetAsync($"/health?nonce={testNonce}", cancellationToken: TestContext.Current.CancellationToken);
-            if (healthResponse.StatusCode == HttpStatusCode.OK)
-            {
-                var content = await healthResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
-                Assert.Contains(testNonce, content);
-            }
-        }
-        catch (HttpRequestException)
-        {
-        }
+        await _replProcess.EnsureInstanceAsync(TestContext.Current.CancellationToken);
+
+        using var httpClient = new HttpClient { BaseAddress = _replProcess.InstanceBaseUrl };
+        using var healthResponse = await httpClient.GetAsync($"/health?nonce={testNonce}", cancellationToken: TestContext.Current.CancellationToken);
+        var content = await healthResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Null(TemporaryInstanceChecks.CheckHealthAnswer((int)healthResponse.StatusCode, content, testNonce));
 
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -94,30 +86,34 @@ public sealed class EndToEndFlowTests : IDisposable
         Assert.True(_replProcess.IsRunning);
     }
 
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-6: the temporary instance answers health for two X-Workspace-Path values with an API key, then
+    /// the REPL switches between them.
+    /// </summary>
     [Fact]
     public async Task CompleteFlow_MultipleWorkspaceSwitch_WithAuth()
     {
-        var serverUrl = "http://localhost:5177";
         var apiKey = "e2e-test-key-001";
         var workspace1 = "/test/workspace1";
         var workspace2 = "/test/workspace2";
+        await _replProcess.EnsureInstanceAsync(TestContext.Current.CancellationToken);
 
-        using var httpClient = new HttpClient { BaseAddress = new Uri(serverUrl) };
+        using var httpClient = new HttpClient { BaseAddress = _replProcess.InstanceBaseUrl };
         httpClient.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
 
-        try
-        {
-            httpClient.DefaultRequestHeaders.Remove("X-Workspace-Path");
-            httpClient.DefaultRequestHeaders.Add("X-Workspace-Path", workspace1);
-            var response1 = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
+        httpClient.DefaultRequestHeaders.Remove("X-Workspace-Path");
+        httpClient.DefaultRequestHeaders.Add("X-Workspace-Path", workspace1);
+        using var response1 = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
+        Assert.True(
+            response1.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.NotFound,
+            $"Health with X-Workspace-Path {workspace1} answered {(int)response1.StatusCode}.");
 
-            httpClient.DefaultRequestHeaders.Remove("X-Workspace-Path");
-            httpClient.DefaultRequestHeaders.Add("X-Workspace-Path", workspace2);
-            var response2 = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
-        }
-        catch (HttpRequestException)
-        {
-        }
+        httpClient.DefaultRequestHeaders.Remove("X-Workspace-Path");
+        httpClient.DefaultRequestHeaders.Add("X-Workspace-Path", workspace2);
+        using var response2 = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
+        Assert.True(
+            response2.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.NotFound,
+            $"Health with X-Workspace-Path {workspace2} answered {(int)response2.StatusCode}.");
 
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -202,26 +198,28 @@ public sealed class EndToEndFlowTests : IDisposable
         Assert.True(_replProcess.IsRunning);
     }
 
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-6: an HTTP health call to the temporary instance, interleaved with REPL requests, echoes its
+    /// nonce while the REPL keeps running.
+    /// </summary>
     [Fact]
     public async Task CompleteFlow_HttpAndYaml_InterleavedRequests()
     {
-        var serverUrl = "http://localhost:5177";
         var apiKey = "interleaved-test-key";
-        
+        var httpNonce = "http-nonce";
+
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var yamlRequest1 = YamlEnvelopeBuilder.CreateNonceRequest("inter-1", "/workspace");
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(yamlRequest1), cancellationToken: TestContext.Current.CancellationToken);
 
-        try
+        using (var httpClient = new HttpClient { BaseAddress = _replProcess.InstanceBaseUrl })
         {
-            using var httpClient = new HttpClient { BaseAddress = new Uri(serverUrl) };
             httpClient.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
-            await httpClient.GetAsync("/health?nonce=http-nonce", cancellationToken: TestContext.Current.CancellationToken);
-        }
-        catch (HttpRequestException)
-        {
+            using var healthResponse = await httpClient.GetAsync($"/health?nonce={httpNonce}", cancellationToken: TestContext.Current.CancellationToken);
+            var content = await healthResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.Null(TemporaryInstanceChecks.CheckHealthAnswer((int)healthResponse.StatusCode, content, httpNonce));
         }
 
         var yamlRequest2 = YamlEnvelopeBuilder.CreateWorkspaceSelectRequest("inter-2", "/workspace");

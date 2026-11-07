@@ -1,0 +1,9 @@
+RECEIPT started=2026-11-06T06:03:38 ended=2026-11-06T06:03:38 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Compare-DurationReceipts.ps1 sha256=E090BDECE11511F4C41348F303EC50D72E0DBDAB8FEE0C89BF690D8F489EB22A
+ARGUMENTS -OldReceipt | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z12-configured-durations.txt | -NewReceipt | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z13-configured-durations.txt
+HEAD f9b6bde8f08dc56e8fd40d9a22ce70657b7711bf
+Now: 2026-11-06T06:03:38
+OLD /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z12-configured-durations.txt END hits=330 (UNIT=151, HELPER=76, NOT-UNIT=103) listed=265 longerThanMax=65
+NEW /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z13-configured-durations.txt END hits=330 (UNIT=151, HELPER=76, NOT-UNIT=103) listed=265 longerThanMax=65
+OLD hits=265 NEW hits=265 onlyOld=0 onlyNew=0
+END

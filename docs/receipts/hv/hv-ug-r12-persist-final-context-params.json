@@ -1,0 +1,22 @@
+{
+  "agent": "Codex",
+  "sessionId": "Codex-20261105T064457Z-plugin-session",
+  "requestId": "req-20261105T064500Z-unitgreen-r12",
+  "turn": {
+    "requestId": "req-20261105T064500Z-unitgreen-r12",
+    "contextList": [
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r12-20261105T004043.md",
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r12-20261105T004043.json",
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261105T004043-unitgreen-r12.request.jsonl",
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261105T004043-unitgreen-r12.response.jsonl",
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r12-persistence-proof.json"
+    ],
+    "filesModified": [
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r12-20261105T004043.md",
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r12-20261105T004043.json"
+    ],
+    "designDecisions": [
+      "No post-AGREE change is supported by this DISAGREE. Keep failed isolation and recorded-age criteria/tasks unset until their behavior and proof are corrected; operator-approved exclusions remain untouched."
+    ]
+  }
+}

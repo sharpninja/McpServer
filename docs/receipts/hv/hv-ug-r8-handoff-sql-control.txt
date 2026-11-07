@@ -1,0 +1,37 @@
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs:6:/// TR-MCP-NUKE-019 AC-2: the test classes that open connections to the shared LocalDB instance run one after another
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs:12:[CollectionDefinition(Name, DisableParallelization = true)]
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs:13:public sealed class SqlServerLocalDbCollection
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs:16:    public const string Name = "SQL Server LocalDB";
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs:17:/// private in-memory databases) are in <see cref="HandoffTestDatabaseTests"/>; this binds the same assertion to the
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs:30:        HandoffTestDatabaseTests.AssertOwnConnectionsToOneDatabase(() => _harness.CreateContext(_harness.WorkspaceA));
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs:7:/// LocalDB with a 120 s connect timeout (matching the classes' 120 s command timeout), so a LocalDB instance that is
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs:17:    /// <summary>Seconds a connection may wait for LocalDB to accept it.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs:20:    /// <summary>The built-in LocalDB default: integrated security, a trusted certificate, no database.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs:23:        DataSource = @"(localdb)\MSSQLLocalDB",
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs:29:    /// <summary>The server connection for this process: the override when it is set, otherwise the LocalDB default.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:51:        var frIds = (await service.GetAllFrAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true))
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:55:        var trIds = (await service.GetAllTrAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true))
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:59:        var testIds = (await service.GetAllTestAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true))
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:68:        var functional = await service.GenerateDocumentAsync(RequirementsDocType.Functional, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:69:        var technical = await service.GenerateDocumentAsync(RequirementsDocType.Technical, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:70:        var testing = await service.GenerateDocumentAsync(RequirementsDocType.Testing, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:71:        var mapping = await service.GenerateDocumentAsync(RequirementsDocType.Mapping, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:72:        var matrix = await service.GenerateDocumentAsync(RequirementsDocType.Matrix, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:104:        var frIds = (await service.GetAllFrAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true))
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:114:        var markdown = await service.GenerateAllAsync(markdownRoot, generatedAt, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:115:        var wiki = await service.GenerateWikiAsync(wikiRoot, generatedAt, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:125:            TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:128:            TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:131:            TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs:24:/// <see cref="HandoffTestDatabaseTests"/>).
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs:39:            Pooling = false,
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs:55:    /// (the assertion of <see cref="HandoffTestDatabaseTests"/>, bound to this class's context factory).
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs:59:        HandoffTestDatabaseTests.AssertOwnConnectionsToOneDatabase(CreateDb);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs:27:/// (Recommended)"; the harness assertion and its negative controls are in <see cref="HandoffTestDatabaseTests"/>).
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs:44:            Pooling = false,
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs:63:    /// (the assertion of <see cref="HandoffTestDatabaseTests"/>, bound to <see cref="CreateDb"/>).
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs:67:        HandoffTestDatabaseTests.AssertOwnConnectionsToOneDatabase(CreateDb);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs:829:            await Task.Delay(10, cts.Token).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs:846:            TimeSpan.FromSeconds(5)).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs:974:                await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs:983:                await CreateGate.Task.WaitAsync(cancellationToken).ConfigureAwait(false);

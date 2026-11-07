@@ -1,0 +1,4 @@
+Now: 2026-11-05T08:17:30 key=test name only before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z4d-final-linux-unit-1 (4832) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z5-final-linux-unit-1 (4832)
+onlyBefore=0 onlyAfter=0 common=4832
+--- only in before ---
+--- only in after ---

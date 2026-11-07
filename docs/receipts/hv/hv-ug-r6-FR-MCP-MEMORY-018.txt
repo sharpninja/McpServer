@@ -1,0 +1,13 @@
+type: error
+payload:
+  requestId: req-20261026T131722Z-c642
+  code: not_found
+  message: FR 'FR-MCP-MEMORY-018' not found.
+  retryable: false
+  details:
+    methodName: workflow.requirements.getFr
+    exceptionType: McpServer.Client.McpNotFoundException
+    reason: not_found
+
+---
+

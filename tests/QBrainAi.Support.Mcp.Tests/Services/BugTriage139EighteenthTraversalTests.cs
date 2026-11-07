@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Reflection;
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Tests.Storage;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
@@ -10,12 +11,14 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// contained requirements snapshot traversal.
 /// </summary>
 [Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
 public sealed class BugTriage139EighteenthTraversalTests
 {
     /// <summary>
     /// Proves a metadata stall cannot hold the public caller indefinitely and that the root remains
     /// physically pinned until the isolated traversal worker actually exits.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting()
     {
@@ -114,6 +117,7 @@ public sealed class BugTriage139EighteenthTraversalTests
     /// Proves exact caller cancellation is observed while a metadata operation is blocked, without
     /// treating a detached worker as completed.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem traversal, worker cancellation or directory-link replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EnumerateFilesBoundedAsync_BlockingMetadata_ObservesExactCallerCancellation()
     {
@@ -169,6 +173,7 @@ public sealed class BugTriage139EighteenthTraversalTests
     /// Proves a directory replaced by an external junction after the root is pinned is rejected
     /// before any external file is opened.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem traversal, worker cancellation or directory-link replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EnumerateFilesBoundedAsync_DirectorySwap_DoesNotTraverseExternalJunction()
     {
@@ -328,27 +333,9 @@ public sealed class BugTriage139EighteenthTraversalTests
                 return;
             }
 
-            var start = new ProcessStartInfo
-            {
-                FileName = "cmd.exe",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-            };
-            start.ArgumentList.Add("/d");
-            start.ArgumentList.Add("/c");
-            start.ArgumentList.Add("mklink");
-            start.ArgumentList.Add("/J");
-            start.ArgumentList.Add(aliasPath);
-            start.ArgumentList.Add(targetPath);
-            using var process = Process.Start(start)
-                ?? throw new InvalidOperationException("Unable to start mklink.");
-            process.WaitForExit();
-            if (process.ExitCode != 0)
-            {
-                throw new InvalidOperationException(
-                    $"Unable to create test junction: {process.StandardError.ReadToEnd()}");
-            }
+            // TR-MCP-USECASE-019 AC-008 as replaced 2026-10-26T14:18:23: the junction is created with operating-system
+            // calls in the test process instead of a cmd.exe mklink helper process.
+            WindowsJunction.Create(aliasPath, targetPath);
         }
 
         private static void DeleteAlias(string path)

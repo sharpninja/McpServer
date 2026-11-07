@@ -1,0 +1,25 @@
+{
+  "name": "unit-green-final-buildtests-20261019T1918",
+  "command": [
+    "dotnet",
+    "test",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+    "-c",
+    "Debug",
+    "--logger",
+    "trx;LogFileName=unit-green-final-buildtests-20261019T1918.trx",
+    "--results-directory",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-final-buildtests-20261019T1918"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "127468345afcc7a24e6a254f712d6b75a54713e8",
+  "dirtyPaths": [
+    " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+  ],
+  "startedLocal": "2026-10-19T19:18:23",
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-final-buildtests-20261019T1918.out.log",
+  "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-final-buildtests-20261019T1918",
+  "exitCode": 0,
+  "endedLocal": "2026-10-19T19:23:28"
+}

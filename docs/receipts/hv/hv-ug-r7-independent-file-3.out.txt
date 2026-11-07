@@ -1,0 +1,1 @@
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/_build.csproj : error NU1900: Warning As Error: Error occurred while getting package vulnerability data: Read-only file system : '/home/sharpninja/.local/share/NuGet/http-cache/670c1461c29885f9aa22c281d8b7da90845b38e4$ps:_api.nuget.org_v3_index.json/vuln_index.dat-new'

@@ -1,0 +1,25 @@
+{
+  "timestampUtc": "2026-11-06T23:26:06.8383917+00:00",
+  "timestampLocal": "2026-11-06T17:26:10",
+  "method": "workflow.sessionlog.appendDialog",
+  "recordId": "",
+  "response": {
+    "type": "result",
+    "payload": {
+      "result": {
+        "persisted": true,
+        "queued": false,
+        "sessionId": "Codex-20261106T215955Z-plugin-session",
+        "childStderr": "",
+        "retryable": false,
+        "degraded": false,
+        "requestId": "req-20261106T220114Z-unitgreen-r14",
+        "failsafePath": "",
+        "method": "workflow.sessionlog.appendDialog",
+        "code": "persisted",
+        "agent": "Codex",
+        "message": "appendDialog persisted requestId=req-20261106T220114Z-unitgreen-r14"
+      }
+    }
+  }
+}

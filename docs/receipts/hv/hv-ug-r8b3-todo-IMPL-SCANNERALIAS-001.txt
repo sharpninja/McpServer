@@ -1,0 +1,36 @@
+type: result
+payload:
+  requestId: req-20261029T033850Z-769c
+  result:
+    id: IMPL-SCANNERALIAS-001
+    title: 'Unit-suite platform scanner: resolve alias chains and static imports of an alias'
+    section: Build
+    priority: medium
+    done: false
+    note: Created from session ClaudeCode-20261019T134748Z-plugin-session, turn req-20261021T104348Z-scanner-docs-new-todo; parent TODO IMPL-UNITGREEN-001, PR sharpninja/McpServer#87.
+    description:
+    - 'Hostile validation round 4 of IMPL-UNITGREEN-001 (gate unitgreen-r4, finding R4-F1, the third scanner finding in a row after R2-F2 and R3-F2): UnitSuitePlatformScanner keeps the rightmost name of an alias target and follows one alias step, so an alias whose target is another alias (using OS = System.OperatingSystem; using Host = OS; then Host.IsWindows()) and a using static that names an alias (using static OS; then IsWindows()) are not resolved; both compile.'
+    - 'Operator 2026-10-21T05:10:50 local, asked 2026-10-20T23:08:10 with the options "Compiler semantic model (Recommended)", "Follow alias chains, fail closed" and "Declare the limit, no fix": "Declare the limit, no fix" (no scanner code change; the plan, PR body and brief declare the limit; the scanner task stays open).'
+    - 'Operator 2026-10-21T05:43:12 local (asked 05:42:10): "Correct the doc comments (Recommended)" (the scanner documentation states the limit) and "New TODO for the scanner" (this TODO holds the scanner alias work, so IMPL-UNITGREEN-001 can be marked done after hostile AGREE).'
+    technicalDetails:
+    - Declared limit as stated in tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs (class summary) and UnitSuitePlatformScannerAliasScopeTests.cs on branch fix/unit-suite-green-20261019 (PR 87).
+    - 'At 8c254695 no test file uses either form: the only using static lines in tests/ are scripted scanner sources inside string literals, and the only alias with a single-name target, using Abstractions = Xunit;, names a namespace.'
+    - TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 state the outcome (no unit test depends on the platform), not the scanner.
+    implementationTasks:
+    - task: Operator chooses the approach for alias chains and static imports of an alias (the options of 2026-10-20T23:08:10 or another).
+      done: false
+    - task: Decision-complete BDPv4 plan for the chosen approach, approved by the operator before any code.
+      done: false
+    - task: Implement per the approved plan with its gates and hostile validation at 98/98; then remove the declared limit from the scanner documentation.
+      done: false
+    dependsOn:
+    - IMPL-UNITGREEN-001
+    functionalRequirements:
+    - FR-MCP-USECASE-001
+    technicalRequirements:
+    - TR-MCP-USECASE-018
+    - TR-MCP-USECASE-019
+  deprecated: true
+
+---
+

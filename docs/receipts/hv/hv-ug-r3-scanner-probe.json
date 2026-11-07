@@ -1,0 +1,100 @@
+{
+  "TimestampLocal": "2026-10-20T17:33:41",
+  "AssemblySha256": "673765020B2BDA45B457A39B0DC3F185B3A2D404B8F3E30FBAAFC3C7D746745C",
+  "Cases": [
+    {
+      "Name": "split_after_dot",
+      "Source": "public class SplitTests { [Fact] public void A() { _ = OperatingSystem.\nIsWindows(); } }",
+      "ExpectedFindings": 1,
+      "ActualFindings": 1,
+      "Pass": true,
+      "Findings": [
+        "split_after_dot.cs:1 os-check in SplitTests"
+      ]
+    },
+    {
+      "Name": "qualified_attribute",
+      "Source": "public class QualifiedTests { [global::System.Runtime.Versioning.SupportedOSPlatform(\"windows\"), Fact] public void A() {} }",
+      "ExpectedFindings": 1,
+      "ActualFindings": 1,
+      "Pass": true,
+      "Findings": [
+        "qualified_attribute.cs:1 os-attribute in QualifiedTests"
+      ]
+    },
+    {
+      "Name": "listed_attribute",
+      "Source": "public class ListedTests { [Fact, System.Runtime.Versioning.SupportedOSPlatform(\"windows\")] public void A() {} }",
+      "ExpectedFindings": 1,
+      "ActualFindings": 1,
+      "Pass": true,
+      "Findings": [
+        "listed_attribute.cs:1 os-attribute in ListedTests"
+      ]
+    },
+    {
+      "Name": "alias_control",
+      "Source": "using OS = System.OperatingSystem; namespace A { public class AliasTests { [Fact] public void A() { _ = OS.IsWindows(); } } }",
+      "ExpectedFindings": 1,
+      "ActualFindings": 1,
+      "Pass": true,
+      "Findings": [
+        "alias_control.cs:1 os-check in AliasTests"
+      ]
+    },
+    {
+      "Name": "scoped_alias",
+      "Source": "namespace A { using OS = System.OperatingSystem; public class AliasTests { [Fact] public void A() { _ = OS.IsWindows(); } } } namespace B { using OS = System.String; public class Helper { public OS Name { get; set; } } }",
+      "ExpectedFindings": 1,
+      "ActualFindings": 0,
+      "Pass": false,
+      "Findings": []
+    },
+    {
+      "Name": "static_import",
+      "Source": "using static System.OperatingSystem; public class ImportTests { [Fact] public void A() { _ = IsWindows(); } }",
+      "ExpectedFindings": 1,
+      "ActualFindings": 1,
+      "Pass": true,
+      "Findings": [
+        "static_import.cs:1 os-check in ImportTests"
+      ]
+    },
+    {
+      "Name": "method_group",
+      "Source": "public class GroupTests { [Fact] public void A() { System.Func<bool> value = System.OperatingSystem.IsWindows; } }",
+      "ExpectedFindings": 1,
+      "ActualFindings": 1,
+      "Pass": true,
+      "Findings": [
+        "method_group.cs:1 os-check in GroupTests"
+      ]
+    },
+    {
+      "Name": "literal_control",
+      "Source": "public class LiteralTests { [Fact] public void A() { var s = \"OperatingSystem.IsWindows()\"; _ = nameof(System.OperatingSystem.IsWindows); } }",
+      "ExpectedFindings": 0,
+      "ActualFindings": 0,
+      "Pass": true,
+      "Findings": []
+    },
+    {
+      "Name": "interpolation",
+      "Source": "public class InterpolationTests { [Fact] public void A() { var s = $\"host {OperatingSystem.IsWindows()}\"; } }",
+      "ExpectedFindings": 1,
+      "ActualFindings": 1,
+      "Pass": true,
+      "Findings": [
+        "interpolation.cs:1 os-check in InterpolationTests"
+      ]
+    },
+    {
+      "Name": "method_integration",
+      "Source": "public class IntegrationTests { [Fact, Trait(\"Category\", \"Integration\")] public void A() { _ = OperatingSystem.IsWindows(); } }",
+      "ExpectedFindings": 0,
+      "ActualFindings": 0,
+      "Pass": true,
+      "Findings": []
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "schema": "store-readback.v1",
+  "readLocal": "2026-11-05T21:55:57",
+  "readUtc": "2026-11-06T03:55:57.2076927Z",
+  "writtenBy": "ClaudeCode",
+  "note": "Readback of the seven in-scope records after the store text scrub of finding d2 (plan 27.37); not the output of the writes it follows.",
+  "disclaimer": "A readback of the current store through the plugin; it is not the output of the writes it follows, and requirement getters built from develop return read-time createdAt and updatedAt values.",
+  "failedReads": 0,
+  "records": [
+    {
+      "kind": "requirement",
+      "id": "FR-MCP-PATHNORM-001",
+      "method": "workflow.requirements.getFr",
+      "record": {
+        "title": "Persist workspace paths with forward slashes and platform tag",
+        "status": "pending",
+        "area": "MCP",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "updatedAt": "2026-11-06T03:55:34.3156428+00:00",
+        "description": "Operator directive (PLAN-PATHNORM-001, decision D1 2026-10-07: delivered in P1). Persisted workspace paths, storage keys and identity hashes use '/' as the separator for all platforms; the windows: (case-insensitive) / case-sensitive: tag is kept; Windows-origin paths are detected by drive letter (C:/) or UNC (//server/share), not by separator; the UNC leading '//' is preserved; paths are converted to '\\' only at OS boundaries that require it (\\\\?\\ long-path prefixes, cmd.exe arguments, native APIs). AC1: C:\\Users\\example, C:/Users/example and c:/users/EXAMPLE produce one storage key. AC2: \\\\srv\\share\\x and //srv/share/x produce one storage key that still starts with //. AC3: Existing stores are converted by the --workspace-path-rekey maintenance command (decisions D5-D7 2026-10-07): after it runs no Windows-shaped workspace value contains a backslash, per-table and per-workspace row counts are unchanged, and foreign keys validate; the server refuses to start against an unconverted store (no dual-key lookup). AC4: Native file operations on Windows receive backslash paths where the OS requires them.",
+        "id": "FR-MCP-PATHNORM-001",
+        "createdAt": "2026-11-06T03:55:34.3155084+00:00",
+        "acceptanceCriteria": []
+      }
+    },
+    {
+      "kind": "requirement",
+      "id": "TEST-MCP-PATHNORM-001",
+      "method": "workflow.requirements.getTest",
+      "record": {
+        "title": "Test TEST-MCP-PATHNORM-001",
+        "status": "pending",
+        "area": "MCP",
+        "testType": "unit",
+        "scopeStartLayerKey": "layer-1",
+        "notes": "P1.5 2026-10-16: WorkspacePathRekeyTests cover literal Policy A normalization, collision preflight, no-backup/failed-backup refusal, read-only dry-run on explicit separate copies, transaction rollback and FK graph validation, repeat no-op, derived triage/handoff/federation identities, unchanged manual triage hashes, and startup guard. Command parser rejects missing/same copy database. Reports contain only keys/counts and retained-manual-key notice. Disposable fixtures only; no live apply.",
+        "priority": "medium",
+        "updatedAt": "2026-11-06T03:55:38.1574263+00:00",
+        "description": "Per BDP v4 (MockData fixture green before production code, then Real fixture). Storage-key equivalence: C:\\Users\\example, C:/Users/example, c:/users/EXAMPLE -> one key windows:C:/USERS/EXAMPLE; \\\\srv\\share\\x and //srv/share/x -> one key keeping leading //; \\\\?\\C:\\x -> C:/x. Remote-path detection treats //srv/share as remote. ToNativePath returns backslash paths on Windows. Rekey: value mapping f(x) touches only Windows-shaped values and is idempotent; planner builds the mapping and statement plan from a scripted snapshot; executors per provider (SQLite in-memory; SQL Server and PostgreSQL provider fixtures) rewrite all workspace columns and recompute hashed values with FK validation; report counts unchanged per table and per workspace; startup guard rejects an unconverted store; rehearsal on a restored copy of the Windows lab host's store recorded as receipts. GlobalWorkspaceId for (EXAMPLE-HOST, C:/Repos/Example) is stable across both input separators.",
+        "id": "TEST-MCP-PATHNORM-001",
+        "createdAt": "2026-11-06T03:55:38.1573168+00:00",
+        "acceptanceCriteria": [
+          {
+            "id": "unitgreen-native-host",
+            "text": "The native-boundary (ToNativePath) behavior for a non-Windows host is proven against a simulated host, on Windows as well, without a host-conditional skip; the Windows-host cases keep running on a Windows host.",
+            "isSatisfied": false
+          }
+        ]
+      }
+    },
+    {
+      "kind": "requirement",
+      "id": "TR-MCP-FED-PATH-001",
+      "method": "workflow.requirements.getTr",
+      "record": {
+        "subarea": "FED",
+        "title": "Single request-path normalization entry point",
+        "status": "pending",
+        "area": "MCP",
+        "scopeStartLayerKey": "layer-1",
+        "notes": "Registered in this workspace store 2026-10-19 by operator decision (\"Create the records here now\"). Statement and FR criteria verbatim from docs/plans/2026-10-07-federation-fixes.md:53-59 (approved 2026-10-07; first registered in the Windows lab host's McpServer store). Architecture Amendment 1 H0 import must merge with these records.",
+        "priority": "medium",
+        "updatedAt": "2026-11-06T03:55:41.7865765+00:00",
+        "description": "Introduce a single request-path normalization entry point (IWorkspacePathNormalizer backed by WorkspaceIdentityPath) with an injectable host-platform abstraction; all resolvers listed in section 1.2 use it. No direct Path.GetFullPath on request-supplied workspace paths outside it (enforced by an architecture test).",
+        "id": "TR-MCP-FED-PATH-001",
+        "createdAt": "2026-11-06T03:55:41.7864513+00:00",
+        "acceptanceCriteria": [
+          {
+            "id": "AC1",
+            "evidence": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs (CombineResolvesRootRelativeWindowsSegmentAgainstDrive, CombineResolvesRootRelativeWindowsSegmentAgainstUncShare); WorkspacePathNormalizerMockDataTests.cs (RootRelativeNegativeControls_AreRejectedInsidePassingHarness); PR 82 commits f6768359 and dcd0269a",
+            "text": "IWorkspacePathNormalizer.Combine treats a segment with one leading backslash as root-relative on Windows: it keeps the current root's volume, the drive (C:/) or the UNC server and share (//srv/share/), and replaces the rest of the path, on a Linux hub and a Windows host (PR 81 finding P12, PR 82 review).",
+            "isSatisfied": false
+          }
+        ]
+      }
+    },
+    {
+      "kind": "requirement",
+      "id": "TEST-MCP-FED-PATH-001",
+      "method": "workflow.requirements.getTest",
+      "record": {
+        "title": "Cross-platform workspace path normalizer matrix",
+        "status": "pending",
+        "area": "MCP",
+        "testType": "unit",
+        "scopeStartLayerKey": "layer-1",
+        "notes": "Registered in this workspace store 2026-10-19 by operator decision (\"Create the records here now\"). Statement and FR criteria verbatim from docs/plans/2026-10-07-federation-fixes.md:53-59 (approved 2026-10-07; first registered in the Windows lab host's McpServer store). Architecture Amendment 1 H0 import must merge with these records.",
+        "priority": "medium",
+        "updatedAt": "2026-11-06T03:55:45.4340902+00:00",
+        "description": "Unit matrix {host: Windows, Linux (simulated)} x {input: C:\\, C:/, \\\\srv\\sh, //srv/sh, /home/x, relative, mixed separators} for the normalizer; triage submit/getReport/queryGroups on simulated Linux with Windows paths; architecture test scanning src/ for Path.GetFullPath on request paths outside the allowlist.",
+        "id": "TEST-MCP-FED-PATH-001",
+        "createdAt": "2026-11-06T03:55:45.4339691+00:00",
+        "acceptanceCriteria": [
+          {
+            "id": "AC1",
+            "evidence": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs; WorkspacePathNormalizerMockDataTests.cs; ScriptedWorkspacePathNormalizer.cs; SimulatedWorkspaceHosts.cs",
+            "text": "The root-relative Combine cases of TR-MCP-FED-PATH-001 AC1 run in the normalizer contract base against the scripted MockData fixture and the production normalizer on both simulated hosts, with negative controls that reject an appended segment, a dropped drive, and a dropped UNC share.",
+            "isSatisfied": false
+          }
+        ]
+      }
+    },
+    {
+      "kind": "requirement",
+      "id": "TR-MCP-HOSTILEREVIEW-003",
+      "method": "workflow.requirements.getTr",
+      "record": {
+        "subarea": "HOSTILEREVIEW",
+        "title": "Hostile review execution capture",
+        "status": "pending",
+        "area": "MCP",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "updatedAt": "2026-11-06T03:55:49.3091463+00:00",
+        "description": "ReviewExecution entity stores model string, effort, agent, plugin/source, template id/version, run id, start/end UTC. Token counts are optional and must not be invented.\n**Covered by:** FR: FR-MCP-HOSTILEREVIEW-003; TEST: TEST-MCP-HOSTILEREVIEW-003",
+        "id": "TR-MCP-HOSTILEREVIEW-003",
+        "createdAt": "2026-11-06T03:55:49.3090239+00:00",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-001",
+            "text": "Invalid HostileReviewWorker options fail host startup with an error that names HostileReviewWorker, on Linux and on Windows: RenewalInterval not less than LeaseDuration; MaximumActiveQueue, MaximumConcurrentReviews or MaximumAttempts below 1. AgentName, RequiredModel and RequiredEffort are not startup rules: none is pinned, and an unset one means the default (operator rule 2026-10-15; PLAN-SESSIONTRIAGEFIX-001 B9). The test host owns its logging providers, so an account that cannot write the Windows Application event log cannot turn the startup failure into a logging error (PLAN-SESSIONTRIAGEFIX-001 B4, triage-report-f4d47e1f, measured on the Windows lab host 2026-10-15; HostileReviewStartupAssertion_AcceptsWorkerFailureAndRejectsMaskedOrMissing, HostileReviewWorker_InvalidOptions_FailStartup, HostileReviewWorkerOptions_AnyAgentModelEffort_PassValidation).",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-002",
+            "text": "A reviewer output is accepted with the model and effort it reports, and the execution records them, when HostileReviewWorker RequiredModel and RequiredEffort are not configured; a configured RequiredModel or RequiredEffort is required of the output, and an output reporting a different value fails the request as ModelUnavailable (operator rule 2026-10-15; PLAN-SESSIONTRIAGEFIX-001 B9; tests: WorkerOptionsAndOutputRules_AcceptUnpinnedOrConfiguredAndRejectPinsOrIgnoredConfig, AcceptReviewerOutput_NoConfiguredModel_RecordsReportedModel, AcceptReviewerOutput_ConfiguredModelMismatch_FailsModelUnavailable). An output that omits the reviewer agent, model or effort records them empty (not reported), never a default model (operator decision 2026-10-15 \"Empty defaults, in B9\"; test: AcceptReviewerOutput_NoConfiguredModel_RecordsReportedModel).",
+            "isSatisfied": false
+          }
+        ]
+      }
+    },
+    {
+      "kind": "requirement",
+      "id": "TR-MCP-NUKE-016",
+      "method": "workflow.requirements.getTr",
+      "record": {
+        "subarea": "NUKE",
+        "title": "InstallOllama provisions Ollama on Windows and Linux",
+        "status": "pending",
+        "area": "MCP",
+        "scopeStartLayerKey": "layer-1",
+        "notes": "Nuke behavior is accountable through TR only (operator ruling 2026-10-10); evidence is Build.Tests, run directly as infrastructure, and the live run of the target. Created 2026-10-15 (operator decision \"Approve all three (Recommended)\"; PLAN-SESSIONTRIAGEFIX-001 B13, triage-report-680916ed).",
+        "priority": "medium",
+        "updatedAt": "2026-11-06T03:55:53.0883440+00:00",
+        "description": "The Nuke InstallOllama target provisions the local Ollama service the QuadBrain Ollama integration tests use (FR-MCP-QBOLLAMA-002), on Windows and on Linux, idempotently: when a server already answers on localhost:11434 with the required model it changes nothing; otherwise it uses an installed ollama executable (on PATH, or on Windows in Ollama's install folder LocalAppData/Programs/Ollama) or a previous portable install under the test-tools folder, else downloads that operating system's portable release into the test-tools folder (Windows: the windows-amd64 zip; Linux: the linux-amd64 archive), starts the server detached and waits until it answers, and pulls the required model (default gemma4:e4b; QBRAINAI_QUADBRAIN_OLLAMA_MODEL or MCP_QUADBRAIN_OLLAMA_MODEL overrides) when it is absent.",
+        "id": "TR-MCP-NUKE-016",
+        "createdAt": "2026-11-06T03:55:53.0882175+00:00",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-001",
+            "text": "The target's plan is chosen per operating system: a server that already answers with the required model needs no step; otherwise an installed ollama (on PATH, or on Windows LocalAppData/Programs/Ollama/ollama.exe), else a previous portable install under the test-tools folder (ollama.exe on Windows, bin/ollama on Linux), else a download of that operating system's portable release; the plan then starts the server when it is not answering and pulls the model when it is absent (Build.Tests: OllamaInstallPlanAssertion_AcceptsPerOsPlanAndRejectsWindowsOnlyOrMissingStep, then InstallOllama_Plan_PerOperatingSystem_UsesTheShippedPlanner). The required model is QBRAINAI_QUADBRAIN_OLLAMA_MODEL when it holds a non-blank value, else MCP_QUADBRAIN_OLLAMA_MODEL when it does, else gemma4:e4b, chosen by one rule that InstallOllama and QuadBrainOllamaEndpointIntegrationTests both use, proved by a unit contract over explicit inputs (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F5).",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-002",
+            "text": "Re-running the target when the server already answers with the required model changes nothing (Build.Tests: InstallOllama_Plan_ServerAnswersWithModel_ChangesNothing over the shipped planner).",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-003",
+            "text": "On the Linux lab host the target leaves a portable Ollama that OllamaServerFixture's resolver finds (TR-MCP-QBOLLAMA-002) and the required model installed, and QuadBrainOllamaEndpointIntegrationTests run (TEST-MCP-QBOLLAMA-001).",
+            "isSatisfied": false
+          }
+        ]
+      }
+    },
+    {
+      "kind": "requirement",
+      "id": "TEST-MCP-QBOLLAMA-001",
+      "method": "workflow.requirements.getTest",
+      "record": {
+        "title": "QuadBrain Ollama endpoint integration tests",
+        "status": "pending",
+        "area": "MCP",
+        "testType": "unit",
+        "scopeStartLayerKey": "layer-1",
+        "notes": "Recorded 2026-10-15: the four tests and OllamaServerController cite this id, which the store never held (operator decision \"Approve all three (Recommended)\"; PLAN-SESSIONTRIAGEFIX-001 B13, triage-report-680916ed).",
+        "priority": "medium",
+        "updatedAt": "2026-11-06T03:55:56.8236872+00:00",
+        "description": "QuadBrainOllamaEndpointIntegrationTests exercise the OpenAI-compatible QuadBrain endpoint against a real local Ollama server that OllamaServerFixture adopts or starts (FR-MCP-QBOLLAMA-002), proving FR-MCP-QBOPENAI-001 runs the normal Creativity, Logic and Arbiter workflow without faking the LLM calls, on Windows and on Linux once InstallOllama has provisioned Ollama (TR-MCP-NUKE-016).",
+        "id": "TEST-MCP-QBOLLAMA-001",
+        "createdAt": "2026-11-06T03:55:56.8235630+00:00",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-001",
+            "text": "ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots (prompts \"Hello\" and \"Create Hello World in C++\"): with the local Ollama default model assigned to all four slots, each prompt triggers the normal Creativity, Logic and Arbiter workflow through POST /v1/chat/completions and returns non-empty content; every brain call uses that model at the Ollama endpoint, and the session log captures the brain outputs on the turn.",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-002",
+            "text": "QBAgentRunLoop_LocalOllamaDefaultModel_DisplaysQuadBrainResponse (prompt \"Hello\"): QBAgent displays the QuadBrain response it received, never a placeholder; its transcript names the model QuadBrain and the QBrainAi endpoint and never the Ollama model id or endpoint.",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-003",
+            "text": "ChatCompletions_OpenAiCompatibleFieldVariants_AreLoggedToSessionTurn: content, reasoning and reasoning_content outputs are persisted to the turn's processing dialog.",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC-004",
+            "text": "The class runs against a real local Ollama: OllamaServerFixture adopts a server already answering or starts one from a discovered executable and stops only what it started (FR-MCP-QBOLLAMA-002); on the Linux lab host the executable is the one InstallOllama provisions (TR-MCP-NUKE-016; PLAN-SESSIONTRIAGEFIX-001 B13, triage-report-680916ed).",
+            "isSatisfied": false
+          }
+        ]
+      }
+    }
+  ]
+}

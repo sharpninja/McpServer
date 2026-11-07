@@ -14,6 +14,14 @@ namespace QBrainAi.Support.Mcp.Requirements.Models;
 /// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this FR applies.</param>
 /// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</param>
 /// <param name="LinkedUseCases">FR-MCP-USECASE-003: use cases linked to this FR (including Realizes), for reverse navigation.</param>
+/// <param name="CreatedAtUtc">FR-MCP-040 ac-1: the creation time stored with the row, or null when none is stored.</param>
+/// <param name="UpdatedAtUtc">FR-MCP-040 ac-1: the update time stored with the row, or null when none is stored.</param>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (optional, last) so reads carry the stored times.</description></item>
+/// </list>
+/// </remarks>
 public sealed record FrEntry(
     string Id,
     string Title,
@@ -25,7 +33,9 @@ public sealed record FrEntry(
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null,
     string ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
     string? ScopeEndLayerKey = null,
-    IReadOnlyList<LinkedUseCaseRef>? LinkedUseCases = null);
+    IReadOnlyList<LinkedUseCaseRef>? LinkedUseCases = null,
+    DateTimeOffset? CreatedAtUtc = null,
+    DateTimeOffset? UpdatedAtUtc = null);
 
 /// <summary>
 /// FR-MCP-USECASE-003: Projection of a use case linked to an FR (id, title, link type, order).
@@ -51,6 +61,14 @@ public sealed record LinkedUseCaseRef(
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
 /// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this TR applies.</param>
 /// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</param>
+/// <param name="CreatedAtUtc">FR-MCP-040 ac-1: the creation time stored with the row, or null when none is stored.</param>
+/// <param name="UpdatedAtUtc">FR-MCP-040 ac-1: the update time stored with the row, or null when none is stored.</param>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (optional, last) so reads carry the stored times.</description></item>
+/// </list>
+/// </remarks>
 public sealed record TrEntry(
     string Id,
     string Title,
@@ -61,7 +79,9 @@ public sealed record TrEntry(
     string? Notes = null,
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null,
     string ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
-    string? ScopeEndLayerKey = null);
+    string? ScopeEndLayerKey = null,
+    DateTimeOffset? CreatedAtUtc = null,
+    DateTimeOffset? UpdatedAtUtc = null);
 
 /// <summary>FR-MCP-026: Testing Requirement entry parsed from Testing-Requirements.md.</summary>
 /// <param name="Id">The TEST identifier (e.g. TEST-MCP-001).</param>
@@ -74,6 +94,14 @@ public sealed record TrEntry(
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
 /// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies.</param>
 /// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</param>
+/// <param name="CreatedAtUtc">FR-MCP-040 ac-1: the creation time stored with the row, or null when none is stored.</param>
+/// <param name="UpdatedAtUtc">FR-MCP-040 ac-1: the update time stored with the row, or null when none is stored.</param>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (optional, last) so reads carry the stored times.</description></item>
+/// </list>
+/// </remarks>
 public sealed record TestEntry(
     string Id,
     string Condition,
@@ -84,7 +112,9 @@ public sealed record TestEntry(
     string? Notes = null,
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null,
     string ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
-    string? ScopeEndLayerKey = null);
+    string? ScopeEndLayerKey = null,
+    DateTimeOffset? CreatedAtUtc = null,
+    DateTimeOffset? UpdatedAtUtc = null);
 
 /// <summary>
 /// FR-MCP-026: Grouped FR/TR/TEST requirement entries used by atomic batch mutations.
@@ -195,6 +225,15 @@ public sealed record FrTrMapping
 
     /// <summary>The workspace discriminator that owns the row.</summary>
     public string WorkspaceId { get; init; }
+
+    /// <summary>FR-MCP-040 ac-1: the earliest creation time stored with the mapping's links, or null when none is stored.</summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added; a mapping row aggregates links, so it reports their earliest stored creation time.</description></item>
+    /// </list>
+    /// </remarks>
+    public DateTimeOffset? CreatedAtUtc { get; init; }
 }
 
 /// <summary>FR-MCP-026: Enumeration of requirements document types for generation.</summary>

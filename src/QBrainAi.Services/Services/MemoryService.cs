@@ -16,14 +16,39 @@ public sealed partial class MemoryService : IMemoryService
     private readonly McpDbContext _db;
     private readonly ILogger<MemoryService> _logger;
 
-    /// <summary>Initializes a new instance of the <see cref="MemoryService"/> class.</summary>
+    /// <summary>FR-MCP-MEMORY-001: the clock that stamps a memory's creation, update and removal times.</summary>
+    /// <remarks>2026-11-05, FR-MCP-MEMORY-001; TR-MCP-USECASE-018 AC-006: this entry documents the field, added on 2026-11-03 with the constructor that takes a clock (the sibling sweep of hostile validation round 10 finding R10-F3), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
+    private readonly TimeProvider _timeProvider;
+
+    /// <summary>Initializes a new instance of the <see cref="MemoryService"/> class that stamps times from the system clock.</summary>
+    /// <param name="db">The database context.</param>
+    /// <param name="logger">The logger.</param>
+    /// <remarks>2026-11-03, FR-MCP-MEMORY-001 (criterion "A memory record has ... created/updated timestamps"); TR-MCP-USECASE-018 AC-006 (appended): now delegates to the constructor that takes a clock, passing the system clock, so existing callers keep their behavior.</remarks>
     public MemoryService(McpDbContext db, ILogger<MemoryService> logger)
+        : this(db, logger, TimeProvider.System)
     {
+    }
+
+    /// <summary>Initializes a new instance of the <see cref="MemoryService"/> class that stamps times from <paramref name="timeProvider"/>.</summary>
+    /// <param name="db">The database context.</param>
+    /// <param name="logger">The logger.</param>
+    /// <param name="timeProvider">The clock that stamps a memory's creation, update and removal times.</param>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-03</term><description>FR-MCP-MEMORY-001 (criterion "A memory record has ... created/updated timestamps"); FR-MCP-MEMORY-002 (criteria "Add creates a memory and returns ... timestamps" and "Update replaces raw text, increments version"); TR-MCP-USECASE-018 AC-006 (appended "This covers every recorded time a unit test checks, including the creation and update times a service stamps on a record it stores"): added, so a unit test can supply scripted times instead of sleeping to separate two stamps, because the sibling sweep before round 11 of hostile validation round 10 finding R10-F3 found MemoryModelTests.Timestamps_CreateAndUpdate sleeping (operator 2026-11-03: "don't gate on me between rounds").</description></item>
+    /// </list>
+    /// </remarks>
+    public MemoryService(McpDbContext db, ILogger<MemoryService> logger, TimeProvider timeProvider)
+    {
+        ArgumentNullException.ThrowIfNull(timeProvider);
         _db = db;
         _logger = logger;
+        _timeProvider = timeProvider;
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-03, FR-MCP-MEMORY-002 (criterion "Add creates a memory and returns ... timestamps"); TR-MCP-USECASE-018 AC-006 (appended): the creation and update times come from one reading of the service's clock instead of DateTimeOffset.UtcNow (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     public async Task<MemoryMutationResult> AddAsync(MemoryAddRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -73,7 +98,7 @@ public sealed partial class MemoryService : IMemoryService
         if (duplicate)
             return new MemoryMutationResult(false, $"Memory '{id}' already exists.", FailureKind: MemoryMutationFailureKind.Conflict);
 
-        var now = DateTimeOffset.UtcNow;
+        var now = _timeProvider.GetUtcNow();
         var entity = new MemoryEntity
         {
             Id = id,
@@ -160,6 +185,7 @@ public sealed partial class MemoryService : IMemoryService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-03, FR-MCP-MEMORY-002 (criterion "Update replaces raw text, increments version"); TR-MCP-USECASE-018 AC-006 (appended): the update time comes from the service's clock instead of DateTimeOffset.UtcNow, and the creation time is kept (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     public async Task<MemoryMutationResult> UpdateAsync(string id, MemoryUpdateRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -255,7 +281,7 @@ public sealed partial class MemoryService : IMemoryService
             entity.SourceRef = NormalizeOptional(request.SourceRef);
 
         entity.Version++;
-        entity.UpdatedAtUtc = DateTimeOffset.UtcNow;
+        entity.UpdatedAtUtc = _timeProvider.GetUtcNow();
         if (request.UpdatedBy is not null)
             entity.UpdatedBy = NormalizeOptional(request.UpdatedBy);
         if (contentChanged)
@@ -270,6 +296,7 @@ public sealed partial class MemoryService : IMemoryService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-03, FR-MCP-MEMORY-002 (criterion "Remove soft-deletes a memory by ID"); TR-MCP-USECASE-018 AC-006 (appended): the removal time comes from the service's clock instead of DateTimeOffset.UtcNow, the same clock as the creation and update times (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     public async Task<MemoryMutationResult> RemoveAsync(string id, CancellationToken cancellationToken = default)
     {
         var normalizedId = NormalizeId(id);
@@ -285,7 +312,7 @@ public sealed partial class MemoryService : IMemoryService
         var item = MemoryLayerMapper.ToItem(entity);
         var entry = _db.Entry(entity);
         entry.Property<bool>("IsDeleted").CurrentValue = true;
-        entry.Property<DateTimeOffset?>("DeletedAtUtc").CurrentValue = DateTimeOffset.UtcNow;
+        entry.Property<DateTimeOffset?>("DeletedAtUtc").CurrentValue = _timeProvider.GetUtcNow();
         entry.Property<string?>("DeletedBy").CurrentValue = "MemoryService";
         entry.Property<string?>("DeleteReason").CurrentValue = "memory_remove";
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

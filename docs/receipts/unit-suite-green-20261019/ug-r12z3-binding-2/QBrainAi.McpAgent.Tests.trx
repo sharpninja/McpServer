@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="590126f3-227a-491e-9873-aefb297a43d5" name="@LAB-OMARCHY 2026-11-04 15:54:56" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-04T15:54:56.0337068-06:00" queuing="2026-11-04T15:54:56.0337069-06:00" start="2026-11-04T15:54:54.2068578-06:00" finish="2026-11-04T15:54:56.0445501-06:00" />
+  <TestSettings name="default" id="63f9cef6-a02d-4926-9f64-fb0f40ddbce4">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-04_15_54_56" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="8dd72392-c57d-4453-9c3a-a35d6e916935" testId="6d241fcc-4a15-e444-169a-5857dd871b38" testName="QBrainAi.McpAgent.Tests.TodoWorkflowTests.GetAsync_DelegatesToTodoClient" computerName="LAB-OMARCHY" duration="00:00:00.0006710" startTime="2026-11-04T15:54:55.7045695-06:00" endTime="2026-11-04T15:54:55.7052781-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8dd72392-c57d-4453-9c3a-a35d6e916935" />
+    <UnitTestResult executionId="8c245c51-62d3-4084-985c-90d24659bc5e" testId="8ba8d076-23cb-5d5c-a19e-9a44a616a019" testName="QBrainAi.McpAgent.Tests.TodoWorkflowTests.BufferedPromptHelpers_AggregateStreamedOutput(workflowOperation: &quot;status&quot;, relativePath: &quot;/qbrainai/todo/MCP-AGENT-001/prompt/status&quot;, payload: &quot;data: Healthy\n\ndata: Waiting on review\n\nevent:&quot;···, expectedText: &quot;Healthy\nWaiting on review&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0061046" startTime="2026-11-04T15:54:55.6967288-06:00" endTime="2026-11-04T15:54:55.7028600-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8c245c51-62d3-4084-985c-90d24659bc5e" />
+    <UnitTestResult executionId="5a313b8d-6395-46a6-a3b1-b29b74364211" testId="2c89c133-d1bd-811d-a60d-5651895a6579" testName="QBrainAi.McpAgent.Tests.TodoWorkflowTests.QueryAsync_DelegatesToTodoClient" computerName="LAB-OMARCHY" duration="00:00:00.0086741" startTime="2026-11-04T15:54:55.8161547-06:00" endTime="2026-11-04T15:54:55.8248593-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5a313b8d-6395-46a6-a3b1-b29b74364211" />
+    <UnitTestResult executionId="1bfe7ca2-0ea2-4bee-972b-e64ef6e28a23" testId="0b09f4df-eb8e-85f6-ed60-1ce58deb94f8" testName="QBrainAi.McpAgent.Tests.TodoWorkflowTests.AnalyzeRequirementsAsync_DelegatesToTodoClient" computerName="LAB-OMARCHY" duration="00:00:00.1526748" startTime="2026-11-04T15:54:55.5165408-06:00" endTime="2026-11-04T15:54:55.6776591-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1bfe7ca2-0ea2-4bee-972b-e64ef6e28a23" />
+    <UnitTestResult executionId="0d511534-9a55-4854-b5d7-a3f7d8b602d7" testId="9c4df737-b591-4ac0-c23a-6aae3fa45e5e" testName="QBrainAi.McpAgent.Tests.TodoWorkflowTests.UpdateAsync_DelegatesToTodoClient" computerName="LAB-OMARCHY" duration="00:00:00.0251476" startTime="2026-11-04T15:54:55.8252766-06:00" endTime="2026-11-04T15:54:55.8504699-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0d511534-9a55-4854-b5d7-a3f7d8b602d7" />
+    <UnitTestResult executionId="bb2a2dab-c020-4043-989c-c189e3a955e5" testId="faba5b13-7eeb-bc27-358c-0a351247bd92" testName="QBrainAi.McpAgent.Tests.TodoWorkflowTests.GetAsync_AllowsLegacyTodoIdentifiers" computerName="LAB-OMARCHY" duration="00:00:00.0122015" startTime="2026-11-04T15:54:55.6832981-06:00" endTime="2026-11-04T15:54:55.6955754-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bb2a2dab-c020-4043-989c-c189e3a955e5" />
+    <UnitTestResult executionId="3180e40b-dfd9-4355-8847-78760ab36af3" testId="e502c059-cca9-4792-21fd-0c3e4427b0da" testName="QBrainAi.McpAgent.Tests.TodoWorkflowTests.BufferedPromptHelpers_AggregateStreamedOutput(workflowOperation: &quot;implement&quot;, relativePath: &quot;/qbrainai/todo/MCP-AGENT-001/prompt/implement&quot;, payload: &quot;data: Apply patch\n\nevent: done\ndata: \n\n&quot;, expectedText: &quot;Apply patch&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0002618" startTime="2026-11-04T15:54:55.7039632-06:00" endTime="2026-11-04T15:54:55.7042402-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3180e40b-dfd9-4355-8847-78760ab36af3" />
+    <UnitTestResult executionId="1620c15d-77f6-434d-9be5-9249b8003339" testId="6ea99ba2-557c-03ba-ff93-29cf2eb6bf29" testName="QBrainAi.McpAgent.Tests.TodoWorkflowTests.BufferedPromptHelpers_PreserveCallerCancellation" computerName="LAB-OMARCHY" duration="00:00:00.1055324" startTime="2026-11-04T15:54:55.7056124-06:00" endTime="2026-11-04T15:54:55.8124944-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1620c15d-77f6-434d-9be5-9249b8003339" />
+    <UnitTestResult executionId="9c61630c-6880-4009-9a4c-8c976fbe37dd" testId="cac38f9f-741e-ca32-dafd-7322ba42d176" testName="QBrainAi.McpAgent.Tests.TodoWorkflowTests.BufferedPromptHelpers_AggregateStreamedOutput(workflowOperation: &quot;plan&quot;, relativePath: &quot;/qbrainai/todo/MCP-AGENT-001/prompt/plan&quot;, payload: &quot;data: Step 1\n\ndata: Step 2\n\nevent: done\ndata:&quot;···, expectedText: &quot;Step 1\nStep 2&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0005814" startTime="2026-11-04T15:54:55.7031318-06:00" endTime="2026-11-04T15:54:55.7037405-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9c61630c-6880-4009-9a4c-8c976fbe37dd" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.McpAgent.Tests.TodoWorkflowTests.AnalyzeRequirementsAsync_DelegatesToTodoClient" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.mcpagent.tests/bin/debug/net10.0/qbrainai.mcpagent.tests.dll" id="0b09f4df-eb8e-85f6-ed60-1ce58deb94f8">
+      <Execution id="1bfe7ca2-0ea2-4bee-972b-e64ef6e28a23" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.McpAgent.Tests.TodoWorkflowTests" name="AnalyzeRequirementsAsync_DelegatesToTodoClient" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.McpAgent.Tests.TodoWorkflowTests.QueryAsync_DelegatesToTodoClient" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.mcpagent.tests/bin/debug/net10.0/qbrainai.mcpagent.tests.dll" id="2c89c133-d1bd-811d-a60d-5651895a6579">
+      <Execution id="5a313b8d-6395-46a6-a3b1-b29b74364211" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.McpAgent.Tests.TodoWorkflowTests" name="QueryAsync_DelegatesToTodoClient" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.McpAgent.Tests.TodoWorkflowTests.BufferedPromptHelpers_PreserveCallerCancellation" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.mcpagent.tests/bin/debug/net10.0/qbrainai.mcpagent.tests.dll" id="6ea99ba2-557c-03ba-ff93-29cf2eb6bf29">
+      <Execution id="1620c15d-77f6-434d-9be5-9249b8003339" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.McpAgent.Tests.TodoWorkflowTests" name="BufferedPromptHelpers_PreserveCallerCancellation" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.McpAgent.Tests.TodoWorkflowTests.BufferedPromptHelpers_AggregateStreamedOutput(workflowOperation: &quot;implement&quot;, relativePath: &quot;/qbrainai/todo/MCP-AGENT-001/prompt/implement&quot;, payload: &quot;data: Apply patch\n\nevent: done\ndata: \n\n&quot;, expectedText: &quot;Apply patch&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.mcpagent.tests/bin/debug/net10.0/qbrainai.mcpagent.tests.dll" id="e502c059-cca9-4792-21fd-0c3e4427b0da">
+      <Execution id="3180e40b-dfd9-4355-8847-78760ab36af3" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.McpAgent.Tests.TodoWorkflowTests" name="BufferedPromptHelpers_AggregateStreamedOutput" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.McpAgent.Tests.TodoWorkflowTests.GetAsync_DelegatesToTodoClient" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.mcpagent.tests/bin/debug/net10.0/qbrainai.mcpagent.tests.dll" id="6d241fcc-4a15-e444-169a-5857dd871b38">
+      <Execution id="8dd72392-c57d-4453-9c3a-a35d6e916935" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.McpAgent.Tests.TodoWorkflowTests" name="GetAsync_DelegatesToTodoClient" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.McpAgent.Tests.TodoWorkflowTests.BufferedPromptHelpers_AggregateStreamedOutput(workflowOperation: &quot;plan&quot;, relativePath: &quot;/qbrainai/todo/MCP-AGENT-001/prompt/plan&quot;, payload: &quot;data: Step 1\n\ndata: Step 2\n\nevent: done\ndata:&quot;···, expectedText: &quot;Step 1\nStep 2&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.mcpagent.tests/bin/debug/net10.0/qbrainai.mcpagent.tests.dll" id="cac38f9f-741e-ca32-dafd-7322ba42d176">
+      <Execution id="9c61630c-6880-4009-9a4c-8c976fbe37dd" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.McpAgent.Tests.TodoWorkflowTests" name="BufferedPromptHelpers_AggregateStreamedOutput" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.McpAgent.Tests.TodoWorkflowTests.BufferedPromptHelpers_AggregateStreamedOutput(workflowOperation: &quot;status&quot;, relativePath: &quot;/qbrainai/todo/MCP-AGENT-001/prompt/status&quot;, payload: &quot;data: Healthy\n\ndata: Waiting on review\n\nevent:&quot;···, expectedText: &quot;Healthy\nWaiting on review&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.mcpagent.tests/bin/debug/net10.0/qbrainai.mcpagent.tests.dll" id="8ba8d076-23cb-5d5c-a19e-9a44a616a019">
+      <Execution id="8c245c51-62d3-4084-985c-90d24659bc5e" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.McpAgent.Tests.TodoWorkflowTests" name="BufferedPromptHelpers_AggregateStreamedOutput" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.McpAgent.Tests.TodoWorkflowTests.GetAsync_AllowsLegacyTodoIdentifiers" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.mcpagent.tests/bin/debug/net10.0/qbrainai.mcpagent.tests.dll" id="faba5b13-7eeb-bc27-358c-0a351247bd92">
+      <Execution id="bb2a2dab-c020-4043-989c-c189e3a955e5" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.McpAgent.Tests.TodoWorkflowTests" name="GetAsync_AllowsLegacyTodoIdentifiers" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.McpAgent.Tests.TodoWorkflowTests.UpdateAsync_DelegatesToTodoClient" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.mcpagent.tests/bin/debug/net10.0/qbrainai.mcpagent.tests.dll" id="9c4df737-b591-4ac0-c23a-6aae3fa45e5e">
+      <Execution id="0d511534-9a55-4854-b5d7-a3f7d8b602d7" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.McpAgent.Tests.TodoWorkflowTests" name="UpdateAsync_DelegatesToTodoClient" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="6d241fcc-4a15-e444-169a-5857dd871b38" executionId="8dd72392-c57d-4453-9c3a-a35d6e916935" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8ba8d076-23cb-5d5c-a19e-9a44a616a019" executionId="8c245c51-62d3-4084-985c-90d24659bc5e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2c89c133-d1bd-811d-a60d-5651895a6579" executionId="5a313b8d-6395-46a6-a3b1-b29b74364211" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0b09f4df-eb8e-85f6-ed60-1ce58deb94f8" executionId="1bfe7ca2-0ea2-4bee-972b-e64ef6e28a23" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9c4df737-b591-4ac0-c23a-6aae3fa45e5e" executionId="0d511534-9a55-4854-b5d7-a3f7d8b602d7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="faba5b13-7eeb-bc27-358c-0a351247bd92" executionId="bb2a2dab-c020-4043-989c-c189e3a955e5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e502c059-cca9-4792-21fd-0c3e4427b0da" executionId="3180e40b-dfd9-4355-8847-78760ab36af3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6ea99ba2-557c-03ba-ff93-29cf2eb6bf29" executionId="1620c15d-77f6-434d-9be5-9249b8003339" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cac38f9f-741e-ca32-dafd-7322ba42d176" executionId="9c61630c-6880-4009-9a4c-8c976fbe37dd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="9" executed="9" passed="9" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.21]   Discovering: QBrainAi.McpAgent.Tests
+[xUnit.net 00:00:00.51]   Discovered:  QBrainAi.McpAgent.Tests
+[xUnit.net 00:00:00.75]   Starting:    QBrainAi.McpAgent.Tests
+[xUnit.net 00:00:01.18]   Finished:    QBrainAi.McpAgent.Tests (ID = 'cda1369ae16375c43ed231e08d258e4ace7d7894e8f4ebd07dec69f1935011ed')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

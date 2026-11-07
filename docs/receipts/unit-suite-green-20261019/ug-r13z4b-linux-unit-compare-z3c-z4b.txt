@@ -1,0 +1,85 @@
+Now: 2026-11-05T05:17:06 key=test name only before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r12z3c-final-linux-unit-1 (4739) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4b-final-linux-unit-1 (4820)
+onlyBefore=0 onlyAfter=81 common=4739
+--- only in before ---
+--- only in after ---
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.EveryKeyIdentityRow_RejectsAWrongResponse
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.Oracle_ReadsSpellingsAsOneKeyInEnumerationOrder
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.OwnedEnvironment_NormalizedAliasesCannotOverrideDatabase
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.RawPrefixBuilder_LeavesAnAliasTheCheckRefuses
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.ScriptedKeyIdentity_SatisfiesTheContract
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.StartCheck_RejectsUnownedNormalizedAliases
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "both separators, no host prefixes", failingRow: "host-prefixed colon and mixed spellings")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "drops the owned settings", failingRow: "unrelated colon and mixed keys are kept")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "keeps the endpoint section", failingRow: "spellings of the workspace, port and endpoint sett"···)
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "raw prefixes only", failingRow: "a colon spelling of the canonical connection strin"···)
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "raw prefixes only", failingRow: "a mixed spelling with the colon first")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "raw prefixes only", failingRow: "spellings of an owned key in another case and sepa"···)
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "removes every key with a separator", failingRow: "unrelated colon and mixed keys are kept")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "no rule for two names", failingRow: "two owned names for one key")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "provider rule on double underscores only", failingRow: "an owned colon provider naming another engine")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "raw prefixes only", failingRow: "an owned colon provider naming another engine")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "raw prefixes only", failingRow: "an unowned colon spelling of the database")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "raw prefixes only", failingRow: "an unowned host-prefixed colon spelling")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "refuses every colon key", failingRow: "an owned colon provider naming SQLite")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "refuses every colon key", failingRow: "an unrelated colon key")
+QBrainAi.Support.Mcp.Tests.Controllers.TransactionSecurityControllerTests.ManifestExpiry_UsesScriptedClock
+QBrainAi.Support.Mcp.Tests.Controllers.TransactionSecurityControllerTests.ManifestFutureIssue_UsesScriptedClock
+QBrainAi.Support.Mcp.Tests.Memory.MemoryConsolidateJobTests.ConsolidationLockTakeover_UsesScriptedClock
+QBrainAi.Support.Mcp.Tests.Services.FederationEnvelopeSignerTests.EnvelopeExpiry_UsesScriptedClock
+QBrainAi.Support.Mcp.Tests.Services.FederationEnvelopeSignerTests.EnvelopeFutureIssue_UsesScriptedClock
+QBrainAi.Support.Mcp.Tests.Services.GraphRagServiceTests.ArtifactCleanup_UsesScriptedAgeBoundary
+QBrainAi.Support.Mcp.Tests.Services.HandoffDurabilityTests.ProcessingLeaseTakeover_UsesScriptedClock
+QBrainAi.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.StaleTurnQuery_UsesScriptedAsOfTime
+QBrainAi.Support.Mcp.Tests.Services.WorkspaceHygieneG5OverlayTests.WorkspaceHygiene_UsesScriptedStaleThreshold
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.AsynchronousAssertion_MatchesTheSynchronousOne
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: "D1 stale in-progress turn query")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: "D2 temporary artifact cleanup")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: "D3 hygiene stale turn, default threshold")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: "D3 hygiene stale turn, override threshold")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: "D4 federation envelope future issue")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: "D5 transaction manifest future issue")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: "D7 consolidation lock takeover")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: "D1 stale in-progress turn query")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: "D2 temporary artifact cleanup")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: "D3 hygiene stale turn, default threshold")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: "D3 hygiene stale turn, override threshold")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: "D4 federation envelope expiry")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: "D4 federation envelope future issue")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: "D5 transaction manifest expiry")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: "D5 transaction manifest future issue")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: "D6 handoff processing lease takeover")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: "D7 consolidation lock takeover")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: "D1 stale in-progress turn query")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: "D2 temporary artifact cleanup")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: "D3 hygiene stale turn, default threshold")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: "D3 hygiene stale turn, override threshold")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: "D4 federation envelope expiry")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: "D4 federation envelope future issue")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: "D5 transaction manifest expiry")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: "D5 transaction manifest future issue")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: "D6 handoff processing lease takeover")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: "D7 consolidation lock takeover")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: "D1 stale in-progress turn query")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: "D2 temporary artifact cleanup")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: "D3 hygiene stale turn, default threshold")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: "D3 hygiene stale turn, override threshold")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: "D4 federation envelope expiry")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: "D4 federation envelope future issue")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: "D5 transaction manifest expiry")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: "D5 transaction manifest future issue")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: "D6 handoff processing lease takeover")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: "D7 consolidation lock takeover")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.Rows_SitAtTheThresholdAndOneStepEitherSide
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: "D1 stale in-progress turn query")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: "D2 temporary artifact cleanup")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: "D3 hygiene stale turn, default threshold")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: "D3 hygiene stale turn, override threshold")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: "D4 federation envelope expiry")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: "D4 federation envelope future issue")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: "D5 transaction manifest expiry")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: "D5 transaction manifest future issue")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: "D6 handoff processing lease takeover")
+QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: "D7 consolidation lock takeover")
+QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProviderTests.NonUtcInstants_AreRefused
+QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProviderTests.Reads_ReturnTheSetInstantUntilChanged
+QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProviderTests.StopwatchAndTimers_AreRefused

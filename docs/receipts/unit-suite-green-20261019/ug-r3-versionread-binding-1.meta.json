@@ -1,0 +1,20 @@
+{
+  "name": "ug-r3-versionread-binding-1",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r3-versionread-binding-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "395b4cd89726e921af481d4c8c056bf8fa535ae6",
+  "dirtyPaths": [
+    " M src/QBrainAi.Services/Services/MarkerFileService.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs"
+  ],
+  "startedLocal": "2026-10-20T16:41:45",
+  "startedUtc": "2026-10-20T21:41:45.6408252Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.exit.txt"
+}

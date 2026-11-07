@@ -1,0 +1,144 @@
+{
+  "schema": "store-readback.v1",
+  "readLocal": "2026-11-03T16:38:29",
+  "readUtc": "2026-11-03T22:38:29.6150182Z",
+  "writtenBy": "ClaudeCode",
+  "note": "Slice Y criteria (holistic read before round 12, findings B4 and D3; operator 2026-11-03 Strengthen + margin and Strengthen + fix): TR-MCP-USECASE-018 AC-006 appended at 16:37:35 and the FR-MCP-TESTRESOURCE-001 generated-artifact criterion (position 1) appended at 16:37:48, each read back by Set-RequirementCriterion.ps1 with only that criterion changed",
+  "disclaimer": "A readback of the current store through the plugin; it is not the output of the writes it follows, and requirement getters built from develop return read-time createdAt and updatedAt values.",
+  "failedReads": 0,
+  "records": [
+    {
+      "kind": "requirement",
+      "id": "FR-MCP-TESTRESOURCE-001",
+      "method": "workflow.requirements.getFr",
+      "record": {
+        "updatedAt": "2026-11-03T22:38:24.9874978+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "acceptanceCriteria": [
+          {
+            "id": "",
+            "isSatisfied": false,
+            "text": "Fixture inputs for applicable tests are packaged as resources in their owning test projects and load without using a checkout-root path."
+          },
+          {
+            "id": "",
+            "isSatisfied": false,
+            "text": "Generated test artifacts are written only to test-owned disposable output locations, not to repository fixture or documentation paths. The location is compared with the checkout by path segment under the path's own syntax: a Windows-form path (a drive letter or a backslash) ignores case, drive letter included, and a POSIX path compares ordinally; a case alias of the checkout or of a folder inside it is refused, and a distinct sibling is accepted (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F3). A path's root is part of its identity: a UNC path (two leading separators of either kind, then a server and a share) is in Windows form and compares its server, its share and its segments ignoring case, so a forward-slash, backslash or mixed-separator UNC alias of the checkout or of a folder inside it is refused, and a path under another root kind, server, share or drive letter is a different location (hostile validation round 10 finding R10-F2; strengthened between rounds under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\", 2026-11-03). That holds only within one path syntax: a folder is another location only when it and the checkout are both POSIX paths or both Windows paths (a drive letter or a UNC share), and a folder in the other syntax is refused, because on a POSIX host a path with two leading separators names the POSIX root and on Windows a single-rooted path names the current drive. A Windows device path (beginning \\\\?\\, \\\\.\\ or \\??\\, with either separator) and a Windows folder with a segment that ends in a dot or a space or holds a colon are refused too, because Windows resolves each to a location that may lie inside the checkout (findings of the hostile validation round 11 that stopped without a verdict, 2026-11-03; strengthened under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\"). The UNC server and share names are held to the same segment rule: a UNC folder whose server or share name ends in a dot or a space or holds a colon is refused, because Windows may resolve it to the checkout's server or share (holistic read before hostile validation round 12, finding D3; operator 2026-11-03: \"Strengthen + fix (Recommended)\")."
+          },
+          {
+            "id": "",
+            "isSatisfied": false,
+            "text": "Tests whose subject is the live repository or sibling plugin source retain their real-source integrity checks; the no-repo-path rule does not replace those checks with synthetic fixtures."
+          },
+          {
+            "id": "ac-4",
+            "isSatisfied": false,
+            "text": "A test-owned temporary QBrain.AI instance uses the database inside its owned root: no inherited setting, in configuration or the process environment and in the canonical (QBrainAi, QBRAINAI_), legacy (Mcp, MCP_) or host-prefixed (DOTNET_, ASPNETCORE_) form, nor a connection-string or content-root variable, selects another database for it (a connection string, a data source, a database provider or an instance name), and a database selection outside the owned root is refused. Every consumer of a temporary instance takes its workspace, marker and server address from that instance, and no inherited setting overrides them. These are the unit-proved rules TR-MCP-NUKE-019 AC-6 relies on (operator 2026-10-29: \"Strengthen ACs, fix both (Recommended)\", \"Run the 2 classes, AC first (Recommended)\" and \"Lane ACs (Recommended)\"; operator 2026-10-30: \"FR-MCP-TESTRESOURCE-001 (Recommended)\"; hostile validation findings R8B-F2 and R8B-F3; holistic review findings PLAN-6, PLAN-7, RINT-1, RINT-2 and RINT-3). A REPL host started for a temporary instance names both a workspace and a marker, each strictly inside the instance's owned root, compared by path segment with either separator under the path's own syntax (a Windows-form path ignores case, drive letter included; a POSIX path compares ordinally; operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\", the sibling of hostile validation finding R9-F3) and with no '.' or '..' segment; the checkout's marker, another or sibling root, a parent-segment escape, the root itself as the marker, and a missing argument or value are refused (operator 2026-10-26: \"if you surface new AC, add them without waiting for approval\"; the start-argument rows of TemporaryInstanceChecksTests already prove it). Strict containment in the owned root also requires the same root: the same root kind (UNC, drive letter or POSIX) and the same root identity (server and share, or drive letter, compared ignoring case); a single-rooted path under a UNC owned root, a path on another server, share or drive, and a UNC path under a POSIX owned root are refused for the database, the workspace, the marker and the trust cache (hostile validation round 10 finding R10-F2; strengthened between rounds under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\", 2026-11-03)."
+          },
+          {
+            "id": "ac-5",
+            "isSatisfied": false,
+            "text": "A SQL Server migration test that fails reports the first command or connection failure the migration met, with any later failure (for example the migration-lock release error) attached, never the later failure alone (operator 2026-10-29: \"Diagnose and fix in PR 87 (Recommended)\"; operator 2026-10-30: \"Scope it to SQL Server\"; holistic review finding LANE-1)."
+          },
+          {
+            "id": "ac-6",
+            "isSatisfied": false,
+            "text": "The temporary PostgreSQL cluster a test fixture creates is started and stopped by pg_ctl calls that wait for the operation to finish (-w) and print only errors (-s). Both are options of the pg_ctl call itself, not text inside the server options. The start call keeps the cluster's port, its localhost-only listener and its server log file (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; serves TR-MCP-NUKE-019 AC-2)."
+          },
+          {
+            "id": "ac-7",
+            "isSatisfied": false,
+            "text": "The test classes that open connections to the shared SQL Server LocalDB instance belong to one test collection whose definition disables parallelization, so they run one at a time and never beside another collection (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; serves TR-MCP-NUKE-019 AC-2)."
+          },
+          {
+            "id": "ac-8",
+            "isSatisfied": false,
+            "text": "The default server connection the SQL Server integration test classes share, used when no other server is named, is the default LocalDB instance ((localdb)\\MSSQLLocalDB) with integrated security, a trusted server certificate, no database and a 120 second connect timeout. A server connection named in its place is used unchanged, with no timeout, flag or database added; a blank value counts as no server named (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; operator 2026-10-26: \"if you surface new AC, add them without waiting for approval\" for the blank-value clause; serves TR-MCP-NUKE-019 AC-2)."
+          },
+          {
+            "id": "ac-9",
+            "isSatisfied": false,
+            "text": "Each test class that writes the process environment belongs to a test collection whose definition disables parallelization, so no two of them, and no other test, run while one of them has a variable changed (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; serves TR-MCP-USECASE-018 AC-006)."
+          },
+          {
+            "id": "ac-10",
+            "isSatisfied": false,
+            "text": "The CLI temporary-folder variables the test support sets and restores are the names the CLI strategies' fallback chains read, once each: MCPSERVER_QUADBRAIN_CLI_TEMP, MCPSERVER_ONESHOT_TEMP, MCPSERVER_CODEX_ONESHOT_TEMP, MCPSERVER_CODEX_TRIAGE_TEMP and MCPSERVER_GROK_ONESHOT_TEMP. Its check of a test's variables accepts them only when two things hold. During the test, the name the strategy under test reads first points at the test folder and every other name at a different, test-owned fallback folder. After the test, every name holds the value it held before, an unset name still unset. It refuses a name that is missing, unset or pointed at the wrong folder, a fallback folder equal to the test folder, a first name outside the list, and a name left changed or newly set (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; serves TR-MCP-USECASE-018 AC-006)."
+          },
+          {
+            "id": "ac-11",
+            "isSatisfied": false,
+            "text": "The reparse data a test fixture passes to the operating-system call that makes a directory junction is the documented mount-point reparse buffer for the target. Field by field: the mount-point tag, a data length that excludes the header, the \\??\\ substitute name and the print name, each followed by a null, with the offsets and lengths that locate them. For a pinned target it matches the documented bytes exactly (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; serves TR-MCP-USECASE-019 AC-008)."
+          },
+          {
+            "id": "ac-12",
+            "isSatisfied": false,
+            "text": "An integration case accepts its temporary instance's health answer only when the status is 200 and the answer's nonce field equals the whole nonce the request sent, compared ordinally; a longer or shorter nonce, the requested text in another field, and a missing or malformed nonce field are refused (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F2). It refuses a non-200 status even when the nonce is echoed, a body without the nonce, an empty body, no body, a body that echoes a different nonce, and a request that sent no nonce (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; operator 2026-10-26: \"if you surface new AC, add them without waiting for approval\" for the no-nonce clause; serves TR-MCP-NUKE-019 AC-6)."
+          }
+        ],
+        "priority": "medium",
+        "createdAt": "2026-11-03T22:38:24.9873865+00:00",
+        "description": "Fixture inputs must be packaged as test-project resources and generated test artifacts must use test-owned output locations, without depending on the repository root. Tests that intentionally verify live repository or sibling plugin source may read those sources as their subject.",
+        "area": "MCP",
+        "status": "pending",
+        "id": "FR-MCP-TESTRESOURCE-001",
+        "title": "Repository-independent test fixtures and outputs"
+      }
+    },
+    {
+      "kind": "requirement",
+      "id": "TR-MCP-USECASE-018",
+      "method": "workflow.requirements.getTr",
+      "record": {
+        "acceptanceCriteria": [
+          {
+            "id": "AC-001",
+            "isSatisfied": false,
+            "text": "Linux rollback directories retain owner search and execute permission, nested restoration reproduces file contents and mode, and all mutations remain contained."
+          },
+          {
+            "id": "AC-002",
+            "isSatisfied": false,
+            "text": "Physical workspace identity resolution completes within a finite bound on Windows and non-Windows without caller-thread blocking, cancellation gaps, abandoned workers, or silent platform returns."
+          },
+          {
+            "id": "AC-003",
+            "isSatisfied": false,
+            "text": "SQLite connection opening is finitely bounded before native-handle publication on every supported platform and leaves no worker, handle, callback, interrupt, pool, or lifecycle leak."
+          },
+          {
+            "id": "AC-004",
+            "isSatisfied": false,
+            "text": "Only outcomes precisely attributable to requested cancellation become OperationCanceledException; independent I/O, disposal, and provider failures retain their original type and details."
+          },
+          {
+            "id": "AC-005",
+            "isSatisfied": false,
+            "text": "Repository and Agent Help fixtures discover their root from true external deterministic builds with mapped CallerFilePath and no MCP_REPOSITORY_ROOT override."
+          },
+          {
+            "id": "AC-006",
+            "isSatisfied": false,
+            "text": "Every supported platform executes an applicable native contract assertion: a platform-specific test is a Category=Integration test tagged Platform=Linux or Platform=Windows for the host it applies to, which TR-MCP-NUKE-019 AC-1 and AC-2 route to that host's MigrationIntegrationTests and require to run and pass there, and it passes only as TR-MCP-USECASE-019 AC-008 states (operator 2026-10-30: \"D3: dedupe lane rules (Recommended)\"); no unit test depends on the platform or on the process environment, directly, through a test helper or through the production code it calls: a test whose outcome can change with the value of an environment variable it reads or writes, directly, through a test helper or through the production code it calls (for example a temporary-folder lookup that takes its folder from a variable and creates it), a test that imports the process environment into configuration (AddEnvironmentVariables or a default host builder), and a test that asserts on an environment value a child process inherits are Category=Integration tests that set and restore every variable their assertions or the code they call depend on, every name of a fallback chain the code reads, both forms where a variable has a canonical (QBrainAi, QBRAINAI_) and a legacy (Mcp, MCP_) form, and the tests that write the process environment run one at a time (operator 2026-10-21: \"Fix both, strengthen ACs\", \"Strengthening Acceptance Criteria should always be the recommended option\" and \"Approve, strengthen AC-006/008 (Recommended)\"; operator 2026-10-26: \"Strengthen AC, move 14 (Recommended)\", \"Dependence + proof AC (Recommended)\" and \"Fix source, strengthen AC (Recommended)\"; hostile validation findings R5-F2, R6-F1 and R7-F1). The hostile-environment runs are out of scope: they are not part of this criterion or its evidence (operator 2026-10-27: \"Get ride of the hostile runs enforcing integration test separation.  I have already stated this once.\" and \"Which I sated last night were out of scope.\"). An integration case may read the lane's own inputs without setting them: MCP_REPOSITORY_ROOT, the MCP_TEST_ connection variables the lane provisions, and, for an import that scans agent folders, the user's real profile folder, read only and never asserted on; every other variable its assertions or the code it calls depend on it sets and restores. A unit test asserts no wall-clock bound (operator 2026-10-29: \"Environment ACs (Recommended)\"; holistic review findings MCPT-11, SVC-6 and MCPT-12). These rules are stated here once for TR-MCP-USECASE-019 AC-008 as well; the environment-delta rule moved to FR-MCP-047 ac-1 (operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\"). A unit test that checks a recorded time (an auth rotation, a selection or a session transition) takes the clock values from test-owned scripted inputs and asserts them exactly; it never compares with the current time, never sleeps to separate two times, and its result cannot change with elapsed time, scheduling delay or a change to the system clock (hostile validation round 10 finding R10-F3; strengthened between rounds under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\", 2026-11-03). This covers every recorded time a unit test checks, including the creation and update times a service stamps on a record it stores: the test supplies the service's clock as scripted times and asserts that each stamp equals the scripted time the service read (sibling sweep before round 11 of hostile validation round 10 finding R10-F3, 2026-11-03, under the same rulings). A wall-clock bound is an assertion whose outcome depends on how much real time passes: an elapsed time compared with a limit, or work the test expects to have happened during a short real-time wait (for example a periodic tick, a file-system event or a debounce); such a test is an integration test. A timeout whose only effect is to fail a test that would otherwise hang, set far above the time the awaited step needs, is not a wall-clock bound (holistic read before round 11, 2026-11-03, under the same rulings). A cancellation or timeout that a unit test arms on a real timer is such a wait when a step the test asserts must happen before the timer fires (finding of the hostile validation round 11 that stopped without a verdict, 2026-11-03, under the same rulings). Of the two sentences above, the hang-guard sentence governs: a timer a unit test arms whose only effect when it fires is to fail a test that would otherwise hang is a hang guard, not a wall-clock wait, even when an asserted step must finish before it fires. A test-armed cancellation or timeout is a wall-clock wait when its firing changes what the code under test does (for example it cancels or times out the operation whose outcome the test asserts) and an asserted step must happen before it fires. \"Far above\" means at least 100 times the longest real or scripted delay of the awaited step; a step with no real or scripted delay meets it for any positive timeout (holistic read before hostile validation round 12, finding B4; operator 2026-11-03: \"Strengthen + margin (Recommended)\")."
+          },
+          {
+            "id": "AC-007",
+            "isSatisfied": false,
+            "text": "The rejected fourteenth receipt is preserved with an explicit supersession notice, and the fifteenth evidence records every failed, inconclusive, and passing run with independently verified hashes and command mappings."
+          }
+        ],
+        "updatedAt": "2026-11-03T22:38:29.1712759+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "notes": "Retired FR, operator 2026-11-02: FR-MCP-USECASE-016 was converted into this TR on 2026-10-19 and deleted. It must not be recreated, restored or recommended for restoration; its criteria are this TR's. Any reference to it is repointed to FR-MCP-USECASE-001 (the FR this TR maps to) and to this TR. Restoring it caused a delete-and-restore loop that recurred three times (plan sections 9, 17 and 27; triage-report-8928fd021e6b47c1945387935f0765d9).",
+        "priority": "medium",
+        "createdAt": "2026-11-03T22:38:29.1711392+00:00",
+        "description": "Use searchable Linux directory modes and descriptor-relative restoration. Isolate potentially blocking physical identity and SQLite pre-handle opens behind finitely owned platform cancellation mechanisms. Classify cancellation from direct operation evidence, and resolve repository fixtures from deterministic assembly metadata rather than mapped caller paths.\nConverted from FR-MCP-USECASE-016 on 2026-10-19 (operator: \"If it is in a FR, then that FR needs to be converted to a TR\"; answers \"Merge into its TR (Recommended)\" and \"FR-001, delete FRs (Recommended)\"). FR-MCP-USECASE-016 stated: Use-case persistence and its supporting contained rollback, physical workspace identity, SQLite opening, cancellation classification, and repository evidence paths shall remain safe and finitely completing on every supported platform, including deterministic CI builds, while preserving exact provider failures and truthful supersession evidence.\n**Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-019",
+        "area": "MCP",
+        "subarea": "USECASE",
+        "status": "pending",
+        "id": "TR-MCP-USECASE-018",
+        "title": "Cross-platform bounded native I/O and deterministic evidence"
+      }
+    }
+  ]
+}

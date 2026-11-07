@@ -1,0 +1,218 @@
+commit 8c254695d886d6ff87d5caaa42b0fa6b421c9c6b
+Author:     Sharp Ninja <ninja@thesharp.ninja>
+AuthorDate: Wed Oct 21 05:24:16 2026 -0500
+Commit:     Sharp Ninja <ninja@thesharp.ninja>
+CommitDate: Wed Oct 21 05:24:16 2026 -0500
+
+    test(memory): the harness binding cites the memory CRUD chain present in the store (R4-F3, IMPL-UNITGREEN-001)
+    
+    Hostile validation round 4 finding R4-F3: MemoryS1HarnessDatabaseTests cited TEST-MCP-MEMORY-010, which neither
+    this requirements store nor PAYTON-LEGION2's holds (getTest and getFr not_found in both; runs/ug-r4-legion2-memory-reqs.txt).
+    The binding now cites FR-MCP-MEMORY-002 (Memory CRUD tools), TR-MCP-MEMORY-002 and TEST-MCP-MEMORY-002, present and
+    mapped in the store; MemoryS1Harness is the shared fixture of the memory CRUD tests. Its documentation states that
+    TEST-MCP-MEMORY-010 is absent. Documentation comment only; no behavior, test case or assertion changed.
+    
+    Full Nuke Test ug-r5-citation-run-1: 4518 total, 4518 passed, 0 failed, 0 not executed; by name the same results as
+    ug-r4-linux-test-3. Pre-commit lane ug-r5-precommit-lane-1: 397 total, 397 passed, 0 failed, 0 not executed; the same names as
+    ug-r4-linux-lane-3.
+    
+    Requirements: FR-MCP-MEMORY-002, TR-MCP-MEMORY-002, TEST-MCP-MEMORY-002.
+    
+    Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs
+index e16b1458..d3bfcf3f 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs
+@@ -3,13 +3,16 @@ using QBrainAi.Support.Mcp.Tests.Services;
+ namespace QBrainAi.Support.Mcp.Tests.Memory;
+ 
+ /// <summary>
+-/// TEST-MCP-MEMORY-010 (test harness): <see cref="MemoryS1Harness"/> gives each context its own connection to one
+-/// test-owned database, so its concurrent memory operations never share one connection, where SQLite reports rows
+-/// affected per connection.
++/// TEST-MCP-MEMORY-002 / FR-MCP-MEMORY-002 (test harness): <see cref="MemoryS1Harness"/>, the shared fixture of the
++/// memory CRUD tests, gives each context its own connection to one test-owned database, so its concurrent memory
++/// operations never share one connection, where SQLite reports rows affected per connection.
+ /// </summary>
+ /// <remarks>
+ /// The race class of triage-report-9b96ada18d72483dad2a3113e455c01b, found by the sibling sweep of IMPL-UNITGREEN-001
+-/// round 4; operator 2026-10-20: "Extend fix, then round 4 (Recommended)". Test data: the harness's own temporary
++/// round 4; operator 2026-10-20: "Extend fix, then round 4 (Recommended)". Traceability: FR-MCP-MEMORY-002 (Memory
++/// CRUD tools), TR-MCP-MEMORY-002 and TEST-MCP-MEMORY-002 are present and mapped in the requirements store; the
++/// TEST-MCP-MEMORY-010 that the concurrency tests cite is absent from it (hostile validation round 4 finding R4-F3).
++/// Test data: the harness's own temporary
+ /// database file. The assertion, its positive control and its negative controls (one shared in-memory connection,
+ /// private in-memory databases) are in <see cref="HandoffTestDatabaseTests"/>; this binds the same assertion to the
+ /// harness's context factory.
+
+commit ccc78b7a7624e0367725af585a5fd7c4f38b3661
+Author:     Sharp Ninja <ninja@thesharp.ninja>
+AuthorDate: Wed Oct 21 05:55:57 2026 -0500
+Commit:     Sharp Ninja <ninja@thesharp.ninja>
+CommitDate: Wed Oct 21 05:55:57 2026 -0500
+
+    test(scanner): the scanner documentation states the declared alias limit (R4-F1, IMPL-UNITGREEN-001)
+    
+    Hostile validation round 4 finding R4-F1: UnitSuitePlatformScanner keeps the rightmost name of an alias target and
+    follows one alias step, so an alias whose target is another alias (using Host = OS;) and a using static that names an
+    alias are not resolved. Operator 2026-10-21T05:10:50: "Declare the limit, no fix". Operator 2026-10-21T05:43:12:
+    "Correct the doc comments (Recommended)", because the scanner's own documentation still said an aliased name and a
+    using static import are read like a plain call and that aliases resolve "as the compiler resolves them", and its
+    limits list did not name the limit; and "New TODO for the scanner": the scanner alias work is TODO
+    IMPL-SCANNERALIAS-001.
+    
+    UnitSuitePlatformScanner.cs: the class summary names aliases and static imports whose targets name a type, uses the
+    compiler's scope order instead of compiler equivalence, and lists the declared limit with IMPL-SCANNERALIAS-001; the
+    ScopeFor remarks say each alias and static import keeps the rightmost name of its target.
+    UnitSuitePlatformScannerAliasScopeTests.cs: the summary states the same limit. Documentation comments only; no
+    behavior, test case or assertion changed; the scanner's behavior is unchanged since 801e6862.
+    
+    Full Nuke Test ug-r5-docfix-run-1: 4518 total, 4518 passed, 0 failed, 0 skipped (console counts). Pre-commit lane
+    ug-r5-precommit-lane-2: 397 total, 397 passed, 0 failed, 0 not executed; by name the same results as
+    ug-r4-linux-lane-3.
+    
+    Requirements: TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008).
+    
+    Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs b/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs
+index 4c34c72b..fd03c02e 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs
+@@ -11,11 +11,12 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
+ /// attribute, an xUnit skip, or a binding to the real process host is a finding unless the test method, its
+ /// test class, or an enclosing class carries <c>[Trait("Category", "Integration")]</c>. The compiler's parser
+ /// separates code from strings, comments and documentation and keeps the code inside interpolation holes, so a
+-/// member access split across lines, a qualified, global-qualified or aliased name, a <c>using static</c>
+-/// import, a method group, and an attribute anywhere in an attribute list are read like a plain call or
+-/// attribute; a name inside <c>nameof</c> is not a use. Aliases and static imports resolve in the lexical scope
+-/// of the code that uses them, as the compiler resolves them: the file's directives, then each enclosing
+-/// namespace's, an inner alias hiding an outer one, so a directive in one namespace does not reach another. Every conditional-compilation branch is read: the file
++/// member access split across lines, a qualified or global-qualified name, a name used through a using alias
++/// whose target names a type, a <c>using static</c> import that names a type, a method group, and an attribute
++/// anywhere in an attribute list are read like a plain call or attribute; a name inside <c>nameof</c> is not a
++/// use. Aliases and static imports resolve in the lexical scope of the code that uses them, in the compiler's
++/// scope order: the file's directives, then each enclosing namespace's, an inner alias hiding an outer one, so a
++/// directive in one namespace does not reach another. Every conditional-compilation branch is read: the file
+ /// is parsed once for each combination of the symbols its <c>#if</c> and <c>#elif</c> directives name, and a
+ /// file that names more than <see cref="MaxConditionalSymbols"/> symbols fails the scan instead of leaving a
+ /// branch unread. Test classes are types whose name ends in <c>Tests</c> or that declare a method with an
+@@ -23,7 +24,11 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
+ /// <c>UnitTestPaths</c> fixture) are not test classes. An OS-platform attribute on the assembly or module is a
+ /// finding for the whole project. Limits: the scan reads one file's syntax, so dependence reached through a
+ /// helper type defined in another file, a global using or alias declared in another file, reflection, or
+-/// operating-system behavior of a base-library call such as <c>Path.GetFullPath</c> is outside it. Repository
++/// operating-system behavior of a base-library call such as <c>Path.GetFullPath</c> is outside it. An alias
++/// is resolved one step, to the rightmost name of its target, so an alias whose target is another alias (an
++/// alias chain such as <c>using Host = OS;</c>) and a <c>using static</c> that names an alias are not resolved:
++/// a declared limit (hostile validation round 4 finding R4-F1; operator 2026-10-21 "Declare the limit, no fix"),
++/// with the scanner work tracked in TODO IMPL-SCANNERALIAS-001. Repository
+ /// reads are covered by construction instead: <see cref="FindRepositoryLocators"/> keeps the shared
+ /// <c>TestRepositoryRoot</c> the only repository-root locator (DRY), and that locator refuses to resolve outside
+ /// an integration test, so a unit test that reads the checkout through any helper fails the unit run.
+@@ -188,8 +193,10 @@ internal static class UnitSuitePlatformScanner
+ 
+     /// <summary>
+     /// The using aliases and static imports in effect inside <paramref name="container"/> (the file or a namespace),
+-    /// resolved the way the compiler resolves them: the file's directives, then each enclosing namespace's from the
+-    /// outermost in, an inner alias hiding an outer alias of the same name. Cached per container.
++    /// in the compiler's scope order: the file's directives, then each enclosing namespace's from the outermost in,
++    /// an inner alias hiding an outer alias of the same name. Each alias and static import keeps the rightmost name
++    /// of its target as written, so an alias chain or a static import that names an alias is not resolved (the
++    /// declared limit in the class summary). Cached per container.
+     /// </summary>
+     private static ImportScope ScopeFor(SyntaxNode container, Dictionary<SyntaxNode, ImportScope> scopes)
+     {
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs
+index e13a00c3..0e6eff37 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs
+@@ -5,8 +5,10 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
+ /// <summary>
+ /// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): the unit-suite platform scanner resolves a using alias
+ /// or a <c>using static</c> import in the lexical scope of the code that uses it (the enclosing namespace, then the
+-/// file), the way the compiler does, so an alias or import declared in one namespace neither hides nor invents a
+-/// platform check in another namespace of the same file.
++/// file), in the compiler's scope order, so an alias or import declared in one namespace neither hides nor invents a
++/// platform check in another namespace of the same file. An alias whose target is another alias and a
++/// <c>using static</c> that names an alias are not resolved, a declared limit (hostile validation round 4 finding
++/// R4-F1; operator 2026-10-21 "Declare the limit, no fix"; TODO IMPL-SCANNERALIAS-001), and no case here uses either form.
+ /// </summary>
+ /// <remarks>
+ /// Found by hostile validation round 3 (finding R3-F2: the scanner collected every alias of a file into one dictionary,
+
+commit 810ee8aa0fbdcc6cf64a3d9575693068d261a97c
+Author:     Sharp Ninja <ninja@thesharp.ninja>
+AuthorDate: Wed Oct 21 07:48:30 2026 -0500
+Commit:     Sharp Ninja <ninja@thesharp.ninja>
+CommitDate: Wed Oct 21 07:48:30 2026 -0500
+
+    test(maintenance): the environment-instance parse test is an integration test that controls both instance variables (IMPL-UNITGREEN-001)
+    
+    McpDatabaseEncryptionTransitionCommandTests.TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted set only
+    MCP_INSTANCE, but the command reads ProductEnvironment.GetLegacy("MCP_INSTANCE"), where QBRAINAI_INSTANCE wins when set
+    (ProductEnvironment.cs:5), so the unit test failed on any machine that sets QBRAINAI_INSTANCE. Found by the widened
+    hostile-environment gate (operator 2026-10-21 on the gate scope: "If it needs to be done, do it."): ug-r5-hostile-wide-1
+    and ug-r5-hostile-wide-2 (about 90 scripted variables, both forms of every GetLegacy name) each 4518 total, 4517 passed,
+    1 failed, this test only ("env-instance" expected, "hostile-instance" actual); those red runs are the gate's negative
+    control.
+    
+    The test reads and writes the process environment, so by the day-one rule (operator 2026-10-19: "If it depends on the
+    environment, it's an integration test.") it is now Category=Integration (no Platform tag; it runs in both hosts'
+    MigrationIntegrationTests), and it clears QBRAINAI_INSTANCE for its duration and restores both variables, so its result
+    no longer depends on the machine. Assertions unchanged. Test-only; no product change.
+    
+    Widened hostile gate on this content, ug-r5-hostile-wide-3: 4517 total, 4517 passed, 0 failed, 0 not executed; by name
+    the red run minus this test. Pre-commit lane ug-r5-precommit-lane-3: 398 total, 398 passed, 0 failed, 0 not executed;
+    by name ug-r5-linux-lane-2 plus this test.
+    
+    Requirements: TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008); test coverage FR-MCP-077, TR-MCP-CFG-007.
+    
+    Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 98%, completeness 96%
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs b/tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs
+index 556cfade..2a81b0dd 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs
+@@ -55,16 +55,25 @@ public sealed class McpDatabaseEncryptionTransitionCommandTests
+     /// Verifies that the maintenance command falls back to <c>MCP_INSTANCE</c> when the caller does not pass <c>--instance</c>.
+     /// </summary>
+     /// <remarks>
+-    /// Requirement coverage: FR-MCP-077, TR-MCP-CFG-007.
++    /// Requirement coverage: FR-MCP-077, TR-MCP-CFG-007; classification TR-MCP-USECASE-018 (AC-006),
++    /// TR-MCP-USECASE-019 (AC-008).
+     /// Test data: an environment-scoped instance name and a minimal verify command.
+     /// This data is used to prove that the documented environment-variable override resolves the same effective instance selector as the explicit CLI option.
++    /// The test reads and writes the process environment, so it is an integration test (operator 2026-10-19: "If it
++    /// depends on the environment, it's an integration test."). The command reads the instance through
++    /// <c>ProductEnvironment.GetLegacy("MCP_INSTANCE")</c>, where <c>QBRAINAI_INSTANCE</c> wins when set, so the test
++    /// clears <c>QBRAINAI_INSTANCE</c> for its duration and restores both variables; found by the widened hostile
++    /// environment gate (IMPL-UNITGREEN-001, runs ug-r5-hostile-wide-1 and -2), where the machine's value won.
+     /// </remarks>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public void TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted()
+     {
+         var previous = Environment.GetEnvironmentVariable("MCP_INSTANCE");
++        var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
+         try
+         {
++            Environment.SetEnvironmentVariable("QBRAINAI_INSTANCE", null);
+             Environment.SetEnvironmentVariable("MCP_INSTANCE", "env-instance");
+ 
+             var parsed = McpDatabaseEncryptionTransitionCommand.TryParse(
+@@ -83,6 +92,7 @@ public sealed class McpDatabaseEncryptionTransitionCommandTests
+         finally
+         {
+             Environment.SetEnvironmentVariable("MCP_INSTANCE", previous);
++            Environment.SetEnvironmentVariable("QBRAINAI_INSTANCE", previousModern);
+         }
+     }
+ 

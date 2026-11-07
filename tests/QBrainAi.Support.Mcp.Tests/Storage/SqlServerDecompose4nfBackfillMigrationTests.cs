@@ -15,22 +15,25 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// reconstruction. Uses <c>(localdb)\MSSQLLocalDB</c> (override with
 /// <c>MCP_TEST_SQLSERVER_CONNECTION</c>); LocalDB is provisioned by the
 /// <c>InstallTestDependencies</c> Nuke target, and an unreachable server fails the gate directly.
+/// FR-MCP-TESTRESOURCE-001 ac-5: each migration reports its first EF command/connection failure
+/// before any later lock-release failure through an operation-scoped reporter.
 /// </summary>
 [Trait("Category", "Integration")]
+[Collection(SqlServerLocalDbCollection.Name)]
 public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
 {
     private const string PreSliceMigration = "20260628194732_RepairTriageCreatedTodoWorkspace";
     private const string WorkspacePath = "Q:\\__mcp_unit_test__\\QBrainAi";
     private readonly string _serverConnectionString;
     private readonly string _databaseName = $"mcp_backfill_{Guid.NewGuid():N}";
+    private readonly SqlServerMigrationFailureReporter _failures = new();
     private DbContextOptions<McpDbContext>? _options;
     private string? _databaseConnectionString;
 
     /// <summary>Resolves the server connection (LocalDB by default).</summary>
     public SqlServerDecompose4nfBackfillMigrationTests()
     {
-        _serverConnectionString = Environment.GetEnvironmentVariable("MCP_TEST_SQLSERVER_CONNECTION")
-            ?? "Server=(localdb)\\MSSQLLocalDB;Integrated Security=True;TrustServerCertificate=True";
+        _serverConnectionString = SqlServerTestConnection.Server;
     }
 
     /// <summary>
@@ -45,13 +48,13 @@ public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
 
         using (var db = CreateContext())
         {
-            db.GetService<IMigrator>().Migrate(PreSliceMigration);
+            _failures.Run(() => db.GetService<IMigrator>().Migrate(PreSliceMigration));
             SeedPreSliceData(db);
         }
 
         using (var db = CreateContext())
         {
-            db.Database.Migrate();
+            _failures.Run(() => db.Database.Migrate());
 
             var files = db.SessionLogCommitFiles
                 .IgnoreQueryFilters()
@@ -146,18 +149,18 @@ public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
 
         using (var db = CreateContext())
         {
-            db.GetService<IMigrator>().Migrate(PreSliceMigration);
+            _failures.Run(() => db.GetService<IMigrator>().Migrate(PreSliceMigration));
             SeedPreSliceData(db);
         }
 
         using (var db = CreateContext())
         {
-            db.GetService<IMigrator>().Migrate("20260702193940_Decompose4nfAgentModelLists");
+            _failures.Run(() => db.GetService<IMigrator>().Migrate("20260702193940_Decompose4nfAgentModelLists"));
         }
 
         using (var db = CreateContext())
         {
-            db.GetService<IMigrator>().Migrate(PreSliceMigration);
+            _failures.Run(() => db.GetService<IMigrator>().Migrate(PreSliceMigration));
         }
 
         Assert.Equal(new[] { "src/A.cs", "docs/B.md" }, ReadJsonStringArray(
@@ -229,6 +232,7 @@ public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
         _databaseConnectionString = builder.ToString();
         _options = new DbContextOptionsBuilder<McpDbContext>()
             .UseSqlServer(_databaseConnectionString, sql => { sql.MigrationsAssembly("QBrainAi.Storage.SqlServerMigrations"); sql.CommandTimeout(120); })
+            .LogTo(SqlServerMigrationFailureReporter.ShouldCapture, _failures.Observe)
             .Options;
     }
 

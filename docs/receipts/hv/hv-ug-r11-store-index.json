@@ -1,0 +1,302 @@
+[
+  {
+    "id": "TR-MCP-NUKE-019",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-NUKE-019.json"
+  },
+  {
+    "id": "TR-MCP-NUKE-018",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-NUKE-018.json"
+  },
+  {
+    "id": "TR-MCP-REPL-008",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-REPL-008.json"
+  },
+  {
+    "id": "FR-MCP-REPL-007",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-REPL-007.json"
+  },
+  {
+    "id": "TR-MCP-REPL-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-REPL-001.json"
+  },
+  {
+    "id": "FR-MCP-REPL-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-REPL-001.json"
+  },
+  {
+    "id": "TR-MCP-USECASE-018",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-USECASE-018.json"
+  },
+  {
+    "id": "TR-MCP-USECASE-019",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-USECASE-019.json"
+  },
+  {
+    "id": "FR-MCP-USECASE-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-USECASE-001.json"
+  },
+  {
+    "id": "TEST-MCP-USECASE-019",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-MCP-USECASE-019.json"
+  },
+  {
+    "id": "TEST-MCP-USECASE-020",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-MCP-USECASE-020.json"
+  },
+  {
+    "id": "TR-MCP-QUALITY-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-QUALITY-001.json"
+  },
+  {
+    "id": "FR-MCP-PATHNORM-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-PATHNORM-001.json"
+  },
+  {
+    "id": "TR-MCP-PATHNORM-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-PATHNORM-001.json"
+  },
+  {
+    "id": "TEST-MCP-PATHNORM-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-MCP-PATHNORM-001.json"
+  },
+  {
+    "id": "TR-MCP-WS-005",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-WS-005.json"
+  },
+  {
+    "id": "FR-MCP-018",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-018.json"
+  },
+  {
+    "id": "TR-MCP-SESSIONLOG-006",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-SESSIONLOG-006.json"
+  },
+  {
+    "id": "FR-MCP-SESSIONLOGCTX-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-SESSIONLOGCTX-001.json"
+  },
+  {
+    "id": "TEST-HANDOFF-004",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-HANDOFF-004.json"
+  },
+  {
+    "id": "TEST-HANDOFF-005",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-HANDOFF-005.json"
+  },
+  {
+    "id": "TEST-HANDOFF-006",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-HANDOFF-006.json"
+  },
+  {
+    "id": "TEST-HANDOFF-007",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-HANDOFF-007.json"
+  },
+  {
+    "id": "FR-MCP-MEMORY-002",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-MEMORY-002.json"
+  },
+  {
+    "id": "TR-MCP-MEMORY-002",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-MEMORY-002.json"
+  },
+  {
+    "id": "TEST-MCP-MEMORY-002",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-MCP-MEMORY-002.json"
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-003",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-MCP-TRIAGE-003.json"
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-005",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-MCP-TRIAGE-005.json"
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-008",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-MCP-TRANSCRIPT-008.json"
+  },
+  {
+    "id": "TEST-MCP-QBOLLAMA-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-MCP-QBOLLAMA-001.json"
+  },
+  {
+    "id": "TEST-MCP-QBOPENAI-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TEST-MCP-QBOPENAI-001.json"
+  },
+  {
+    "id": "FR-MCP-USECASE-016",
+    "success": false,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T174209Z-28d4\n  code: not_found\n  message: FR 'FR-MCP-USECASE-016' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "FR-MCP-USECASE-017",
+    "success": false,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T174211Z-5c8b\n  code: not_found\n  message: FR 'FR-MCP-USECASE-017' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "TEST-MCP-MEMORY-010",
+    "success": false,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T174214Z-8894\n  code: not_found\n  message: TEST 'TEST-MCP-MEMORY-010' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "TEST-MCP-QBCLI-001",
+    "success": false,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T174216Z-dbd9\n  code: not_found\n  message: TEST 'TEST-MCP-QBCLI-001' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "FR-MCP-MEMORY-018",
+    "success": false,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T174219Z-7f1a\n  code: not_found\n  message: FR 'FR-MCP-MEMORY-018' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "TEST-MCP-MEMORY-018",
+    "success": false,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T174221Z-78b4\n  code: not_found\n  message: TEST 'TEST-MCP-MEMORY-018' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "TEST-MCP-PLUGIN-PSONLY-001",
+    "success": false,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T174224Z-f760\n  code: not_found\n  message: TEST 'TEST-MCP-PLUGIN-PSONLY-001' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "TR-MCP-MEMORY-SEARCH-002",
+    "success": false,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T174227Z-7549\n  code: not_found\n  message: TR 'TR-MCP-MEMORY-SEARCH-002' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "FR-MCP-TESTRESOURCE-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-TESTRESOURCE-001.json"
+  },
+  {
+    "id": "FR-MCP-QBOPENAI-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-QBOPENAI-001.json"
+  },
+  {
+    "id": "FR-MCP-FED-PATH-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-FED-PATH-001.json"
+  },
+  {
+    "id": "TR-MCP-FED-PATH-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-FED-PATH-001.json"
+  },
+  {
+    "id": "FR-MCP-REPL-008",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-REPL-008.json"
+  },
+  {
+    "id": "FR-MCP-047",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-047.json"
+  },
+  {
+    "id": "TR-MCP-NUKE-020",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-NUKE-020.json"
+  },
+  {
+    "id": "FR-MCP-BUILD-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-BUILD-001.json"
+  },
+  {
+    "id": "FR-MCP-040",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-040.json"
+  },
+  {
+    "id": "TR-MCP-NUKE-016",
+    "success": true,
+    "receipt": "hv-ug-r11-store-TR-MCP-NUKE-016.json"
+  },
+  {
+    "id": "FR-MCP-079",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-079.json"
+  },
+  {
+    "id": "FR-MCP-MEMORY-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-FR-MCP-MEMORY-001.json"
+  },
+  {
+    "id": "FR-MCP-MEMORY-010",
+    "success": false,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T174300Z-e4f6\n  code: not_found\n  message: FR 'FR-MCP-MEMORY-010' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "IMPL-UNITGREEN-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-IMPL-UNITGREEN-001.json"
+  },
+  {
+    "id": "IMPL-SCANNERALIAS-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-IMPL-SCANNERALIAS-001.json"
+  },
+  {
+    "id": "IMPL-TXNINTEGRATION-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-IMPL-TXNINTEGRATION-001.json"
+  },
+  {
+    "id": "BUG-TRIAGE-139",
+    "success": true,
+    "receipt": "hv-ug-r11-store-BUG-TRIAGE-139.json"
+  },
+  {
+    "id": "PLAN-AZURERETIRE-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-PLAN-AZURERETIRE-001.json"
+  },
+  {
+    "id": "PLAN-LINKVALIDATOR-001",
+    "success": true,
+    "receipt": "hv-ug-r11-store-PLAN-LINKVALIDATOR-001.json"
+  },
+  {
+    "id": "effective",
+    "success": true,
+    "receipt": "hv-ug-r11-store-effective.json"
+  },
+  {
+    "id": "mappings",
+    "success": true,
+    "receipt": "hv-ug-r11-store-mappings.json"
+  }
+]

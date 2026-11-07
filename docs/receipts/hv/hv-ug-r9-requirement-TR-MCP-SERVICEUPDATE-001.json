@@ -1,0 +1,57 @@
+{
+  "TimestampLocal": "2026-11-02T19:31:19",
+  "TimestampUtc": "2026-11-03T01:31:19.5368930Z",
+  "Method": "workflow.requirements.getTr",
+  "Params": {
+    "id": "TR-MCP-SERVICEUPDATE-001"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "Preserve Windows behavior. Linux uses bounded shell-free systemctl/tar operations, installed-unit preflight, platform RID/apphost selection, shared preservation paths,0700 backup directories/0600 archives, ownership/mode/ACL/xattr preservation, failure restoration and same health checks. No SQL database export or automatic binary rollback claim.",
+          "updatedAt": "2026-11-03T01:31:21.9042811+00:00",
+          "status": "pending",
+          "id": "TR-MCP-SERVICEUPDATE-001",
+          "createdAt": "2026-11-03T01:31:21.9041726+00:00",
+          "title": "Platform adapters and metadata-preserving Linux service lifecycle",
+          "priority": "high",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "subarea": "SERVICEUPDATE",
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "text": "UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.",
+              "id": "platform"
+            },
+            {
+              "isSatisfied": false,
+              "text": "Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.",
+              "id": "preserve"
+            },
+            {
+              "isSatisfied": false,
+              "text": "Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.",
+              "id": "lifecycle"
+            },
+            {
+              "isSatisfied": false,
+              "text": "Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.",
+              "id": "validation"
+            },
+            {
+              "isSatisfied": false,
+              "text": "Every Build.Tests ServiceUpdateTests case runs and passes on Linux and on Windows with no skip. A case whose Linux check needs a Linux-only facility (a FIFO, Unix file modes, GNU tar ACL and xattr preservation, unlinking a directory symbolic link with File.Delete) asserts on Windows the outcome the helper produces there for the same input (PLAN-SESSIONTRIAGEFIX-001 C2, triage-report-cdf116ad, as BUG-BASELINE-004 did for Windows-only tests; StatDouble_ReportsRegisteredSpecialFileAsFifo, and the Windows cases of LinuxPreflight_RejectsSpecialStageFiles, LinuxPreflight_RejectsSpecialApphostAndTextInputs, LinuxArchive_UsesPrivateMetadataPreservingCommands, LinuxReplacement_DoesNotFollowSymlinks and LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage).",
+              "id": "per-os-tests"
+            }
+          ]
+        },
+        "requestId": "req-20261103T013120Z-addc",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

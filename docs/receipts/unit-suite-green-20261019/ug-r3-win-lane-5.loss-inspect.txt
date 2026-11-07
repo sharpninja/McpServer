@@ -1,0 +1,10 @@
+RECEIPT 2026-10-20T14:07:19 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Inspect-WinLaneLoss.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-20T14:07:18 trx=F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\TestResults\ug-r3-win-lane-5\provider\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx
+COUNTS definitions=360 entries=360 results=360
+FRAGMENT ListsAndExports_AreScopedToActiveWorkspace definitions=0
+FRAGMENT RequirementsDatabaseDocumentServiceTests definitions=2
+LOG lines=113
+END 2026-10-20T14:07:18

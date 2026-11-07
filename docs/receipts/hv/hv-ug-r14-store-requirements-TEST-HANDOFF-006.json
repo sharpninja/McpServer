@@ -1,0 +1,26 @@
+{
+  "timestampUtc": "2026-11-06T22:21:43.1632206+00:00",
+  "timestampLocal": "2026-11-06T16:21:45",
+  "method": "workflow.requirements.getTest",
+  "recordId": "TEST-HANDOFF-006",
+  "response": {
+    "payload": {
+      "result": {
+        "area": "HANDOFF",
+        "status": "pending",
+        "testType": "unit",
+        "updatedAt": "2026-11-06T22:21:45.6323377+00:00",
+        "createdAt": "2026-11-06T22:21:45.6322254+00:00",
+        "description": "Cover API, client, REPL, Director, MCP-tool, and plugin-skill inventory and invocation parity, including workspace isolation.",
+        "id": "TEST-HANDOFF-006",
+        "priority": "medium",
+        "acceptanceCriteria": [],
+        "scopeStartLayerKey": "layer-1",
+        "title": "Test TEST-HANDOFF-006"
+      },
+      "requestId": "req-20261106T222144Z-bd6b",
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

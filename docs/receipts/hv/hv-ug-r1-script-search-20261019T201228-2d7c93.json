@@ -1,0 +1,14 @@
+{
+  "TimestampUtc": "2026-10-20T01:12:28.7877843Z",
+  "TimestampLocal": "2026-10-19T20:12:28",
+  "Mode": "Search",
+  "Arguments": [
+    "-n",
+    "unit-green-guard|python|node|powershell.exe",
+    "docs/receipts/hv/hv-ug-r1-deep-Scripts-20261019T201131.json"
+  ],
+  "Offset": 0,
+  "Count": 200,
+  "ExitCode": 0,
+  "Output": "3888:      \"command\": \"pwsh -NoProfile -NonInteractive -File \\\"/home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1\\\" -Worktree \\\"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\\\" -Target \\\"Test\\\" -ExtraArgs \\\"--test-run-id;unit-green-guard-mock-20261019T1720\\\" -RunDir \\\"/home/sharpninja/.claude/scratch/pr82-review-20261019/runs\\\" -Name \\\"unit-green-guard-mock-20261019T1720\\\"\",\n3897:      \"command\": \"pwsh -NoProfile -NonInteractive -File \\\"/home/sharpninja/.claude/scratch/pr82-review-20261019/Get-NukeRunStatus.ps1\\\" -RunDir \\\"/home/sharpninja/.claude/scratch/pr82-review-20261019/runs\\\" -Name \\\"unit-green-guard-mock-20261019T1720\\\" -Tail 12 -WaitSeconds 280\",\n3907:      \"command\": \"pwsh -NoProfile -NonInteractive -File \\\"/home/sharpninja/.claude/scratch/pr82-review-20261019/Search-Text.ps1\\\" -Root \\\"/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-guard-mock-20261019T1720.out.log\\\" -Pattern \\\"UnitSuitePlatformScanner|Offenders:\\\" -Include \\\"*.log\\\" -MaxChars 600\","
+}

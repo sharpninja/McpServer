@@ -1,0 +1,71 @@
+RECEIPT 2026-10-27T20:01:26 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Read-WinLaneLog.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-27T20:01:26 log=C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\MigrationIntegrationTests-ug-r8b-win-lane-1.log lines=65
+1: ​
+2: ███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+3: ████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+4: ██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+5: ██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+6: ██║ ╚████║╚██████╔╝██║  ██╗███████╗
+7: ╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+8: ​
+9: NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+10: ​
+11: ​
+12: ╬══════════════════
+13: ║ InstallOllama
+14: ╬═════════
+15: ​
+16: 19:37:41 [INF] Ollama missing; downloading the portable release ollama-windows-amd64.zip ...
+17: 19:39:21 [ERR] Target InstallOllama has thrown an exception
+18: System.Threading.Tasks.TaskCanceledException: The request was canceled due to the configured HttpClient.Timeout of 100 seconds elapsing.
+19:  ---> System.TimeoutException: The operation was canceled.
+20:  ---> System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+21:  ---> System.IO.IOException: The read operation failed, see inner exception.
+22:  ---> System.ObjectDisposedException: Cannot access a disposed object.
+23: Object name: 'System.Net.Security.SslStream'.
+24:    at System.Net.Security.SslStream.<ThrowIfExceptional>g__ThrowExceptional|131_0(ExceptionDispatchInfo e)
+25:    at System.Net.Security.SslStream.DecryptData(Int32 frameSize)
+26:    at System.Net.Security.SslStream.ReadAsyncInternal[TIOAdapter](Memory`1 buffer, CancellationToken cancellationToken)
+27:    --- End of inner exception stack trace ---
+28:    at System.Net.Security.SslStream.ReadAsyncInternal[TIOAdapter](Memory`1 buffer, CancellationToken cancellationToken)
+29:    at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+30:    at System.Net.Http.HttpConnection.FillAsync(Boolean async)
+31:    at System.Net.Http.HttpConnection.CopyToContentLengthAsync(Stream destination, Boolean async, UInt64 length, Int32 bufferSize, CancellationToken cancellationToken)
+32:    at System.Net.Http.HttpConnection.ContentLengthReadStream.CompleteCopyToAsync(Task copyTask, CancellationToken cancellationToken)
+33:    --- End of inner exception stack trace ---
+34:    at System.Net.Http.HttpConnection.ContentLengthReadStream.CompleteCopyToAsync(Task copyTask, CancellationToken cancellationToken)
+35:    at System.Net.Http.HttpConnectionResponseContent.<SerializeToStreamAsync>g__Impl|6_0(Stream stream, CancellationToken cancellationToken)
+36:    at System.Net.Http.HttpContent.LoadIntoBufferAsyncCore(Task serializeToStreamTask, LimitArrayPoolWriteStream tempBuffer)
+37:    at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+38:    --- End of inner exception stack trace ---
+39:    --- End of inner exception stack trace ---
+40:    at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+41:    at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+42:    at Build.DownloadFile(String url, String destinationPath) in F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\build\Build.TestDependencies.cs:line 450
+43:    at Build.EnsureOllamaBinaries(IntegrationLaneHost host) in F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\build\Build.TestDependencies.cs:line 249
+44:    at Build.<>c.<get_InstallOllama>b__152_1() in F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\build\Build.TestDependencies.cs:line 212
+45:    at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+46:    at System.Collections.Generic.List`1.ForEach(Action`1 action)
+47:    at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+48: ​
+49: ╬══════════════════════
+50: ║ Errors & Warnings
+51: ╬═════════════
+52: ​
+53: [ERR] InstallOllama: Target InstallOllama has thrown an exception
+54: ​
+55: ═════════════════════════════════════════════════
+56: Target                       Status      Duration
+57: ─────────────────────────────────────────────────
+58: InstallOllama                Failed          1:43   // TaskCanceledException: The request was canceled due to the configured HttpClient.Timeout of 100 seconds elapsing.
+59: InstallTestDependencies      NotRun              
+60: MigrationIntegrationTests    NotRun              
+61: ─────────────────────────────────────────────────
+62: Total                                        1:43
+63: ═════════════════════════════════════════════════
+64: ​
+65: Build failed on 10/27/2026 7:39:21 PM. (╯°□°）╯︵ ┻━┻
+END 2026-10-27T20:01:26

@@ -163,11 +163,25 @@ public sealed partial class MemoryS1Harness
     private static BindingFlags BindingFlagsPublicInstanceStatic()
         => BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): the clock the production handlers read when a test sets it; null
+    /// leaves every handler on its default clock (hostile validation round 12 finding R12-F2, sibling S37).
+    /// </summary>
+    internal TimeProvider? Clock { get; set; }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: a CQRS dispatcher over the production memory handlers, with logging, the harness's
+    /// options and, when <see cref="Clock"/> is set, that clock registered for the handlers to read.
+    /// </summary>
+    /// <returns>The dispatcher.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed in slice Z4 to register <see cref="Clock"/> when a test sets it (hostile validation round 12 finding R12-F2, sibling S37), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private IDispatcher CreateProductionDispatcher()
     {
         var services = new ServiceCollection();
         services.AddLogging();
         services.AddSingleton(_options);
+        if (Clock is not null)
+            services.AddSingleton(Clock);
         services.AddCqrs(typeof(RememberMemoryCommand).Assembly, typeof(MemoryController).Assembly);
         var provider = services.BuildServiceProvider();
         return provider.GetRequiredService<IDispatcher>();

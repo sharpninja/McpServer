@@ -1,9 +1,9 @@
 using System.Collections;
-using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
@@ -12,9 +12,11 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// bounded streaming requirements snapshots.
 /// </summary>
 [Collection(nameof(QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
 public sealed class RequirementsTwelfthAdversarialReviewTests
 {
     /// <summary>Traversal must reject a file count beyond its explicit limit.</summary>
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnumerateFiles_FileCountLimit_Throws()
     {
@@ -31,6 +33,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     }
 
     /// <summary>Traversal must reject a file larger than its explicit per-file byte limit.</summary>
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnumerateFiles_PerFileByteLimit_Throws()
     {
@@ -46,6 +49,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     }
 
     /// <summary>Traversal must reject files whose combined size exceeds its aggregate limit.</summary>
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnumerateFiles_AggregateByteLimit_Throws()
     {
@@ -62,6 +66,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     }
 
     /// <summary>Traversal must reject recursion beyond its explicit depth limit.</summary>
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnumerateFiles_RecursionDepthLimit_Throws()
     {
@@ -79,6 +84,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     /// <summary>
     /// Enumeration must be lazy and observe cancellation after the first yielded file.
     /// </summary>
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnumerateFiles_CancelledAfterFirstYield_StopsWithoutMaterializingAllPaths()
     {
@@ -108,6 +114,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     /// contract.
     /// </summary>
 #pragma warning disable xUnit1051 // Explicit deadlines must fail visibly instead of becoming runner-cancelled no-result tests.
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject()
     {
@@ -170,6 +177,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     /// <summary>
     /// A swapping directory alias must never permit rollback-style writes to an external object.
     /// </summary>
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject()
     {
@@ -520,34 +528,11 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
                 return;
             }
 
-            var escapedAlias = aliasPath.Replace("'", "''", StringComparison.Ordinal);
-            var escapedTarget = targetPath.Replace("'", "''", StringComparison.Ordinal);
-            var startInfo = new ProcessStartInfo("pwsh.exe")
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-            };
-            startInfo.ArgumentList.Add("-NoProfile");
-            startInfo.ArgumentList.Add("-NonInteractive");
-            startInfo.ArgumentList.Add("-Command");
-            startInfo.ArgumentList.Add(
-                $"New-Item -ItemType Junction -Path '{escapedAlias}' -Target '{escapedTarget}' | Out-Null");
-
-            using var process = Process.Start(startInfo)
-                ?? throw new InvalidOperationException("Unable to start junction creation process.");
-            var stdout = process.StandardOutput.ReadToEndAsync();
-            var stderr = process.StandardError.ReadToEndAsync();
-            if (!process.WaitForExit(5000))
-            {
-                process.Kill(entireProcessTree: true);
-                throw new TimeoutException("Junction creation timed out.");
-            }
-
-            Task.WaitAll(stdout, stderr);
-            Assert.True(
-                process.ExitCode == 0,
-                $"Junction creation failed: {stderr.Result}");
+            // TR-MCP-USECASE-019 AC-008 as replaced 2026-10-26T14:18:23: the junction is created with operating-system
+            // calls in the test process, so the outcome never depends on how long a helper process takes to start
+            // (the earlier pwsh.exe helper failed under load on a 5-second budget;
+            // triage-report-8c2c30ef63d442bdb29fd785ec91e7d7).
+            WindowsJunction.Create(aliasPath, targetPath);
         }
     }
 }

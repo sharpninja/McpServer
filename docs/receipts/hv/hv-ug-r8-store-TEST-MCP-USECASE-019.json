@@ -1,0 +1,27 @@
+{
+  "TimestampLocal": "2026-10-27T03:46:52",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-MCP-USECASE-019"
+  },
+  "Response": {
+    "payload": {
+      "requestId": "req-20261027T084653Z-0b99",
+      "deprecated": true,
+      "result": {
+        "scopeStartLayerKey": "layer-1",
+        "acceptanceCriteria": [],
+        "title": "Test TEST-MCP-USECASE-019",
+        "status": "pending",
+        "id": "TEST-MCP-USECASE-019",
+        "testType": "unit",
+        "description": "For every fifteenth-review behavior (TR-MCP-USECASE-018), write the consumer test and the real-service, kernel, provider, or adversarial test with scripted data first and prove them against that data in a green mock gate with negative controls before production changes (BDPv4: no red tests); then bind the same cases to production and prove focused and cumulative GREEN with exact zero-failure, zero-skip, zero-abort, and zero-inconclusive accounting from C:-physical artifacts. Platform-specific cases are integration tests that run in their host's lane (TR-MCP-NUKE-019).",
+        "area": "MCP",
+        "priority": "medium",
+        "updatedAt": "2026-10-27T08:46:55.1890548+00:00",
+        "createdAt": "2026-10-27T08:46:55.1889287+00:00"
+      }
+    },
+    "type": "result"
+  }
+}

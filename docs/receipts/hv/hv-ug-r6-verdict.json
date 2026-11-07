@@ -1,0 +1,204 @@
+{
+  "overallVerdict": "DISAGREE",
+  "accuracy": 97,
+  "completeness": 95,
+  "confidence": 99,
+  "passCount": 13,
+  "failCount": 8,
+  "unknownCount": 0,
+  "failList": [
+    {
+      "id": "UG3",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "Fourteen untagged units execute real environment-dependent temp-root resolution. The original thirteen moved cases have Integration classification and controlled inputs, but they are not the complete dependent set.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG7",
+      "findingIds": [
+        "R6-F2"
+      ],
+      "defect": "The four strengthened criteria, expected retirements, mappings and TODO state match the claim, but five other active requirement citations in changed tests are absent.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG8",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "The plan preserves its amendments and superseded history, but section 19 reports an environment sweep as complete while fourteen dependent units remain. Its completion/evidence conclusions are therefore incomplete.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG11",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "The self-review and PR accurately disclose their known history, but omit the material remaining environment dependence and overstate the sweep outcome.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG12",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "The proposed post-AGREE completion is not supported now. In particular AC-006/AC-008 and the D-B-dependent full-platform evidence conditions cannot be declared satisfied, and task 22/all-task closure cannot be checked on this sweep.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG17",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "Chosen options were recorded and executed in the correct order, but the promised complete real-environment sweep missed the fourteen cases in R6-F1.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG20",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "The v3/v4 name-set and negative-control records check out, but the claim that no unit depends on a scripted variable is disproved by the five temp-root inputs already in the gate.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG22",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "The thirteen recorded moves and collection binding are real and correctly counted, but the slice does not achieve its promised exhaustive independence outcome.",
+      "classification": "implementer edit"
+    }
+  ],
+  "unknownList": [],
+  "implementerFixes": [
+    {
+      "id": "R6-F1",
+      "title": "Fourteen unit tests still depend on ambient CLI temporary-directory variables",
+      "change": "Apply the existing classification rule to these fourteen cases: Category=Integration on both hosts, every relevant primary/fallback temp variable set and restored, writers serialized, existing assertions preserved. Extend the one-time dependency search through helpers and production calls, and exercise hostile values rather than only writable paths. Update the collection binding if another writer class joins. Reconcile the sweep receipt, plan, PR and TODO; rerun the required gates at the resulting code head. Any new seam/helper implementation follows BDPv4 mock-before-production order. Do not weaken assertions, suppress path errors, add scanner work or mark AC-006/AC-008 or the parent TODO complete on the present evidence."
+    },
+    {
+      "id": "R6-F2",
+      "title": "The active requirement-citation presence claim is false for five retained citations",
+      "change": "Reconcile this PR active test-coverage citations and the complete-presence assertion with authoritative records. Cite a present mapped record only where its actual text covers the behavior; otherwise explicitly identify an unavailable inherited citation as historical and exclude it from an active coverage claim. Preserve behavioral assertions. No broad store repair, invented mapping, new scanner work or Azure remediation is required by this finding."
+    }
+  ],
+  "operatorDecisionFails": [],
+  "operatorOverriddenObservations": [
+    {
+      "id": "UG18",
+      "observation": "UnitSuitePlatformScanner and its tests/documentation have no change since ccc78b7a. IMPL-SCANNERALIAS-001 remains open with three tasks. Its coverage statements, alias/static-import limits and earlier scanner-linked findings are not evaluated for failure or score deduction. No scanner change is requested.",
+      "authority": "Operator 2026-10-21T06:06:46: no more scanner work; explicit review override."
+    }
+  ],
+  "closure": [
+    {
+      "id": "R5-F1",
+      "verdict": "PASS",
+      "evidence": "All seven roots are checked before traversal. Own compiled root/ancestor probe 15/15; scripted mock/binding and both real-link lanes pass."
+    },
+    {
+      "id": "R5-F2",
+      "verdict": "PASS",
+      "evidence": "The specifically named ProductAlias case is Integration, controls/restores all six relevant probe/port values, preserves assertions and passes both lanes. Fourteen sibling dependencies are new R6-F1."
+    },
+    {
+      "id": "R4-F1",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner alias/static-import coverage is excluded by the explicit operator override."
+    },
+    {
+      "id": "R4-F2",
+      "verdict": "PASS",
+      "evidence": "Current plan and TODO preserve correction notices for the old round 4 head, task count and profile-only seam. Original historical request remains evidence rather than current instruction."
+    },
+    {
+      "id": "R4-F3",
+      "verdict": "PASS",
+      "evidence": "MemoryS1Harness binding cites present mapped FR/TR/TEST-MCP-MEMORY-002 and explicitly says TEST-MCP-MEMORY-010 is absent."
+    },
+    {
+      "id": "R3-F1",
+      "verdict": "PASS",
+      "evidence": "Approved source seam isolates explicit plugin roots, workspace sibling input and profile; resolve tests use scripted sources. Current root fix preserves it and own sandbox run passes."
+    },
+    {
+      "id": "R3-F2",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner lexical alias coverage is excluded from scores and required fixes."
+    },
+    {
+      "id": "R3-F3",
+      "verdict": "PASS",
+      "evidence": "FR-MCP-USECASE-017 is absent through dedicated getter and effective view; replacement TR/TEST mapping remains."
+    },
+    {
+      "id": "R3-F4",
+      "verdict": "PASS",
+      "evidence": "Historical round 3 self-review correction remains explicitly carried in plan and later receipts; no regression in current claim."
+    },
+    {
+      "id": "R2-F1",
+      "verdict": "PASS",
+      "evidence": "The named repository/native-environment tests remain Integration; shared TestRepositoryRoot rejects unit-context access. The new temp-root cases are separately R6-F1."
+    },
+    {
+      "id": "R2-F2",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner coverage portion remains overridden, never treated as repaired coverage."
+    },
+    {
+      "id": "R2-F3",
+      "verdict": "PASS",
+      "evidence": "Prior mock/binding/source chronology and Windows runner-analysis correction remain accurately recorded; round 6 uses the pinned PowerShell runner and dry-run receipts."
+    },
+    {
+      "id": "F1",
+      "verdict": "PASS",
+      "evidence": "Historical red runs and missing-receipt steps are not credited as green. Current requirements/mock/production ordering has raw receipts."
+    },
+    {
+      "id": "F2",
+      "verdict": "PASS",
+      "evidence": "The original named platform-dependent cases retain integration classification and assertions. Present original gates include them in applicable lanes. New sibling failures are not misrepresented as those old cases."
+    },
+    {
+      "id": "F3",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner-enforcement scope is overridden; independently inspected skip policy and executed TRX remain zero skips."
+    },
+    {
+      "id": "F4",
+      "verdict": "PASS",
+      "evidence": "Current Windows lane is demonstrably interactive, at c8418301, 388/0/0 and complete by name."
+    },
+    {
+      "id": "F5",
+      "verdict": "PASS",
+      "evidence": "All seven Test projects actually execute in original and own runs; project totals agree. Scanner assertions are excluded."
+    },
+    {
+      "id": "F6",
+      "verdict": "PASS",
+      "evidence": "Historical Bash deviations are disclosed; current designed scripts and pinned Windows runner are PowerShell. No new false all-history-compliant claim found."
+    },
+    {
+      "id": "F7",
+      "verdict": "PASS",
+      "evidence": "D-B retains the corrected narrow list and leaves the other seventeen USECASE criteria unsatisfied. New evidence still blocks present completion under UG12."
+    }
+  ],
+  "headSha": "3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b",
+  "receiptPaths": {
+    "requestJsonl": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261026T072431-unitgreen-r6.request.jsonl",
+    "responseJsonl": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261026T072431-unitgreen-r6.response.jsonl",
+    "markdown": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r6-20261026T072431.md",
+    "json": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r6-20261026T072431.json",
+    "persistenceProof": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-persistence-proof.json",
+    "history": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-history-final.json"
+  },
+  "reviewerSessionId": "Codex-20261026T122926Z-unitgreen-r6",
+  "reviewerRequestId": "req-20261026T123039Z-unitgreen-r6"
+}

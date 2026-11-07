@@ -8,6 +8,8 @@ public sealed class SessionLogSanitizerRegistrationTests
     /// <summary>
     /// HTTP session logging must sanitize after local transaction gating, federation merge, and pagination.
     /// </summary>
+    /// <remarks>Integration: reads the live HTTP or stdio host registration source (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Program_RegistersSessionLogSanitizerAsOutermostHttpDecorator()
     {
@@ -30,6 +32,8 @@ public sealed class SessionLogSanitizerRegistrationTests
     /// <summary>
     /// Stdio session logging must sanitize after the transaction gate so all read transports share one behavior.
     /// </summary>
+    /// <remarks>Integration: reads the live HTTP or stdio host registration source (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void McpStdioHost_RegistersSessionLogSanitizerAsOutermostStdioDecorator()
     {
@@ -49,10 +53,7 @@ public sealed class SessionLogSanitizerRegistrationTests
         Assert.True(sanitizerConstruction > transactionGateConstruction, "McpStdioHost.cs must wrap the transaction-gated service with the sanitizer as the outermost decorator.");
     }
 
-    private static string ReadRepoFile(string relativePath)
-    {
-        var repoRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
-        return File.ReadAllText(Path.Combine(repoRoot, relativePath));
-    }
+    private static string ReadRepoFile(string relativePath) =>
+        File.ReadAllText(QBrainAi.Tests.Shared.TestRepositoryRoot.Combine(relativePath));
 }
 

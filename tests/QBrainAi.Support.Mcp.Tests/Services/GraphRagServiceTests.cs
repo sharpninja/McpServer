@@ -14,6 +14,12 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>Tests for core GraphRagService lifecycle operations (status, init, index, query).</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): CreateSut takes an optional clock handed to the service; the stale-artifact case and the D2 binding use a settable clock (hostile validation round 12 finding R12-F2); the other cases keep the default clock and are unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed class GraphRagServiceTests : IDisposable
 {
     private readonly string _workspacePath;
@@ -187,20 +193,59 @@ public sealed class GraphRagServiceTests : IDisposable
         Assert.StartsWith(sharedRoot, statusB.GraphRoot, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// Initialization removes a temporary artifact older than two hours. The service reads a settable test clock and the
+    /// file's last write is set from the same instant (TR-MCP-USECASE-018 AC-006), so the case does not depend on the
+    /// system clock.
+    /// </summary>
+    /// <returns>A task that completes when the case finishes.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the reference time and the file time come from a <see cref="QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider"/> instead of DateTime.UtcNow; the assertion is unchanged (hostile validation round 12 finding R12-F2).</remarks>
     [Fact]
     public async Task InitializeAsync_RemovesStaleTemporaryArtifacts()
     {
-        var sut = CreateSut(enabled: true);
+        var now = QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0];
+        var sut = CreateSut(enabled: true, clock: new QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider(now));
         var status = await sut.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var stale = Path.Combine(status.GraphRoot, "cache", "old.tmp");
         await File.WriteAllTextAsync(stale, "stale", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        File.SetLastWriteTimeUtc(stale, DateTime.UtcNow.AddHours(-3));
+        File.SetLastWriteTimeUtc(stale, now.UtcDateTime.AddHours(-3));
 
         _ = await sut.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(File.Exists(stale));
     }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding, decision D2 of
+    /// <see cref="QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests"/>: for each scripted reference time and
+    /// each contract row, a temporary file in the cache folder and a partial file in the output folder, both last written
+    /// at the row's time, are deleted by initialization exactly when the contract says (kept at exactly two hours,
+    /// because only an age above two hours is deleted). Test data: the contract's times; files named per row.
+    /// </summary>
+    /// <returns>A task that completes when every row has been asserted.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added for hostile validation round 12 finding R12-F2 (the reviewer's proposed ArtifactCleanup_UsesScriptedAgeBoundary).</remarks>
+    [Fact]
+    public Task ArtifactCleanup_UsesScriptedAgeBoundary() =>
+        QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.AssertDecisionAsync("D2 temporary artifact cleanup", async (reference, recorded) =>
+        {
+            var sut = CreateSut(enabled: true, clock: new QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider(reference));
+            var status = await sut.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var row = Guid.NewGuid().ToString("N");
+            var temporary = Path.Combine(status.GraphRoot, "cache", row + ".tmp");
+            var partial = Path.Combine(status.GraphRoot, "output", row + ".partial");
+            foreach (var file in new[] { temporary, partial })
+            {
+                await File.WriteAllTextAsync(file, "artifact", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+                File.SetLastWriteTimeUtc(file, recorded.UtcDateTime);
+                Assert.Equal(recorded.UtcDateTime, File.GetLastWriteTimeUtc(file));
+            }
+
+            _ = await sut.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.Equal(File.Exists(temporary), File.Exists(partial));
+            return !File.Exists(temporary);
+        });
 
     public void Dispose()
     {
@@ -215,6 +260,20 @@ public sealed class GraphRagServiceTests : IDisposable
         }
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: a GraphRagService over the test workspace, an in-memory database, a substitute context
+    /// search and embedding service, the internal fallback and external command back ends, and the clock passed in.
+    /// </summary>
+    /// <param name="enabled">Whether GraphRAG is enabled.</param>
+    /// <param name="backendCommand">The external back-end command, or null.</param>
+    /// <param name="processRunner">The process runner, or null for a substitute that answers "ok".</param>
+    /// <param name="workspacePath">The workspace path, or null for the test workspace.</param>
+    /// <param name="rootPath">The graph root path, or null for mcp-data/graphrag.</param>
+    /// <param name="globalRootPath">The global graph root path, or null for graphrag-global.</param>
+    /// <param name="configuration">The configuration, or null for one whose DataFolder is the test workspace.</param>
+    /// <param name="clock">The clock the service reads, or null for its default clock.</param>
+    /// <returns>The service under test.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed in slice Z4 to take an optional clock handed to the service (hostile validation round 12 finding R12-F2), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private GraphRagService CreateSut(
         bool enabled,
         string? backendCommand = null,
@@ -222,7 +281,8 @@ public sealed class GraphRagServiceTests : IDisposable
         string? workspacePath = null,
         string? rootPath = null,
         string? globalRootPath = null,
-        IConfiguration? configuration = null)
+        IConfiguration? configuration = null,
+        TimeProvider? clock = null)
     {
         var effectiveWorkspacePath = workspacePath ?? _workspacePath;
         var options = Microsoft.Extensions.Options.Options.Create(new GraphRagOptions
@@ -290,6 +350,7 @@ public sealed class GraphRagServiceTests : IDisposable
             NullLogger<GraphRagService>.Instance,
             db,
             embeddingService,
-            vectorIndexService);
+            vectorIndexService,
+            timeProvider: clock);
     }
 }

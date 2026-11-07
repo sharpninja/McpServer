@@ -1,0 +1,16 @@
+{
+  "name": "ug-r7-linux-test-2",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r7-linux-test-2"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "c31f36d81dc87509b605175c5ced0d3b0f08180c",
+  "dirtyPaths": [],
+  "startedLocal": "2026-10-26T10:55:58",
+  "startedUtc": "2026-10-26T15:55:58.5433203Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r7/ug-r7-linux-test-2.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r7/ug-r7-linux-test-2.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r7/ug-r7-linux-test-2.exit.txt"
+}

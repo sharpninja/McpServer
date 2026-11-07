@@ -1,0 +1,26 @@
+{
+  "name": "ug-r8b-restart-mockgate-1",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r8b-restart-mockgate-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+  "dirtyPaths": [
+    " M build/Build.TestDependencies.cs",
+    " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+    " M tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    "?? build/IntegrationLaneProjects.cs",
+    "?? build/IntegrationLaneProjectsContracts.cs",
+    "?? tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    "?? tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    "?? tests/Build.Tests/IntegrationLaneProjectsTests.cs"
+  ],
+  "startedLocal": "2026-10-27T14:56:52",
+  "startedUtc": "2026-10-27T19:56:52.2490329Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-restart-mockgate-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-restart-mockgate-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-restart-mockgate-1.exit.txt"
+}

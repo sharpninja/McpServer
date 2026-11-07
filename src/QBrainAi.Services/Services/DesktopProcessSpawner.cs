@@ -90,15 +90,33 @@ public sealed class DesktopProcessSpawner : IProcessSpawner
         if (psi.Environment.Count == 0)
             return null;
 
-        var result = new Dictionary<string, string>(psi.Environment.Count, StringComparer.OrdinalIgnoreCase);
         var currentEnvironment = Environment.GetEnvironmentVariables();
-        foreach (var (key, value) in psi.Environment)
+        return ExtractEnvironment(psi.Environment, key => currentEnvironment[key] as string);
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008 (explicit-baseline environment deltas; hostile validation
+    /// finding R8B-F1): the variables of <paramref name="requested"/> that differ from <paramref name="baseline"/>. A
+    /// value equal to the baseline (ordinal) is omitted, a changed value or a variable the baseline lacks is kept
+    /// exactly, a null requested value is skipped, and no deltas gives null.
+    /// </summary>
+    /// <param name="requested">The environment the launch asks for.</param>
+    /// <param name="baseline">Returns the baseline value of a variable, or null when the baseline lacks it.</param>
+    /// <returns>The deltas, or null when nothing differs.</returns>
+    internal static Dictionary<string, string>? ExtractEnvironment(
+        IEnumerable<KeyValuePair<string, string?>> requested,
+        Func<string, string?> baseline)
+    {
+        ArgumentNullException.ThrowIfNull(requested);
+        ArgumentNullException.ThrowIfNull(baseline);
+
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (key, value) in requested)
         {
             if (value is null)
                 continue;
 
-            var currentValue = currentEnvironment[key] as string;
-            if (!string.Equals(currentValue, value, StringComparison.Ordinal))
+            if (!string.Equals(baseline(key), value, StringComparison.Ordinal))
                 result[key] = value;
         }
 

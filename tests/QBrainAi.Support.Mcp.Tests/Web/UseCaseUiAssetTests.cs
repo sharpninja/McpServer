@@ -9,6 +9,8 @@ namespace QBrainAi.Support.Mcp.Tests.Web;
 public sealed class UseCaseUiAssetTests
 {
     /// <summary>HTML UI page is present under wwwroot/usecases and references REST.</summary>
+    /// <remarks>Integration: reads the shipped use-case UI assets from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void UseCaseUi_IndexHtml_ExistsAndReferencesRestApi()
     {
@@ -20,6 +22,8 @@ public sealed class UseCaseUiAssetTests
     }
 
     /// <summary>app.js drives list/create/diagram/coverage via REST only.</summary>
+    /// <remarks>Integration: reads the shipped use-case UI assets from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void UseCaseUi_AppJs_CallsLiveRestEndpoints()
     {
@@ -37,6 +41,8 @@ public sealed class UseCaseUiAssetTests
     /// Operator-in-scope: built-in diagram VIEW (rendered surface, not source dump alone)
     /// and EDIT path (structure editor that mutates via REST and refreshes diagram).
     /// </summary>
+    /// <remarks>Integration: reads the shipped use-case UI assets from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void UseCaseUi_HasBuiltInDiagramViewAndEditSurface()
     {
@@ -73,6 +79,8 @@ public sealed class UseCaseUiAssetTests
     }
 
     /// <summary>Structure panels exist so diagram edit is model-driven, not freehand-only.</summary>
+    /// <remarks>Integration: reads the shipped use-case UI assets from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void UseCaseUi_ExposesStructurePanelsForActorsFlowsStepsLinks()
     {
@@ -86,15 +94,6 @@ public sealed class UseCaseUiAssetTests
         Assert.Contains("id=\"frId\"", html, StringComparison.Ordinal);
     }
 
-    private static string FindWwwrootFile(string folder, string file)
-    {
-        // Prefer project source tree over bin output.
-        var candidates = new[]
-        {
-            Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "src", "QBrainAi.Support.Mcp", "wwwroot", folder, file)),
-            Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "wwwroot", folder, file)),
-            Path.Combine("F:", "GitHub", "QBrainAi", "src", "QBrainAi.Support.Mcp", "wwwroot", folder, file),
-        };
-        return candidates.FirstOrDefault(File.Exists) ?? candidates[0];
-    }
+    private static string FindWwwrootFile(string folder, string file) =>
+        QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src", "QBrainAi.Support.Mcp", "wwwroot", folder, file);
 }

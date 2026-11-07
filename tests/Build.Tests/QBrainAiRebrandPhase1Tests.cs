@@ -17,6 +17,8 @@ public sealed class QBrainAiRebrandPhase1Tests
     /// TEST-MCP-QBRAIN-007: Every inventory row has a class and a closed action.
     /// Reads docs/receipts/qbrain-ai-rebrand-phase1-inventory.tsv.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Inventory_EveryRowHasClosedAction()
     {
@@ -37,6 +39,8 @@ public sealed class QBrainAiRebrandPhase1Tests
     /// <summary>
     /// TEST-MCP-QBRAIN-002: The solution root token is QBrainAi. Build.Tests and _build stay.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SolutionAndProjects_UseQBrainAiRoot()
     {
@@ -70,6 +74,8 @@ public sealed class QBrainAiRebrandPhase1Tests
     /// <summary>
     /// TEST-MCP-QBRAIN-001: Namespaces use QBrainAi, package ids use QBrainAI, and QBAgent stays.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Tokens_KeepNamespaceAndPackageSpellingsApart()
     {
@@ -85,6 +91,8 @@ public sealed class QBrainAiRebrandPhase1Tests
     /// <summary>
     /// TEST-MCP-QBRAIN-003: New package ids and 1.x facades, plus the repl command alias.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Packages_NewIdsAndLegacyFacades()
     {
@@ -124,6 +132,8 @@ public sealed class QBrainAiRebrandPhase1Tests
     /// <summary>
     /// TEST-MCP-QBRAIN-004: RepositoryUrl still names the live GitHub repository.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void RepositoryUrl_KeepsLiveGitHubName()
     {
@@ -135,6 +145,8 @@ public sealed class QBrainAiRebrandPhase1Tests
     /// <summary>
     /// TEST-MCP-QBRAIN-005: Todo is declared on both product prefixes and /mcp-transport is unchanged.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Routes_KeepProtocolEndpointAndAliasProductPrefix()
     {
@@ -160,6 +172,8 @@ public sealed class QBrainAiRebrandPhase1Tests
     /// <summary>
     /// TEST-MCP-QBRAIN-001 and TEST-MCP-QBRAIN-006: README title, Docker slug, and service defaults.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void DisplayDockerAndServiceDefaults_UseQBrainNames()
     {
@@ -179,6 +193,8 @@ public sealed class QBrainAiRebrandPhase1Tests
     /// <summary>
     /// TEST-MCP-QBRAIN-007: Persisted names and the Omarchy database identity stay.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PersistedStateAndHostNames_Stay()
     {
@@ -198,6 +214,8 @@ public sealed class QBrainAiRebrandPhase1Tests
     /// TR-MCP-QBRAIN-003: Shipped triage migrations keep the original column, and a later migration renames it.
     /// The checkout workspace path stays the McpServer folder.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ReviewAliases_KeepLegacyColumnAndCheckoutPath()
     {
@@ -240,6 +258,8 @@ public sealed class QBrainAiRebrandPhase1Tests
     /// <summary>
     /// TR-MCP-QBRAIN-005: Node REPL callers accept the installed 1.x command when the new command is absent.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ReplNodeCallers_ResolveLegacyCommand()
     {

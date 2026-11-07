@@ -1,15 +1,17 @@
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TEST-NUKE-POWERSHELL-001: Guards build and deployment automation so child
+/// TEST-NUKE-POWERSHELL-001 (historical): Guards build and deployment automation so child
 /// PowerShell hosts run without user profiles or interactive prompts.
 /// </summary>
 public sealed class PowerShellInvocationTests
 {
     /// <summary>
-    /// TEST-NUKE-POWERSHELL-001: Verifies the Nuke PowerShell bootstrap
+    /// TEST-NUKE-POWERSHELL-001 (historical): Verifies the Nuke PowerShell bootstrap
     /// relaunches through an explicit non-interactive PowerShell host.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task BuildBootstrap_RelaunchesWithNonInteractivePowerShellFlags()
     {
@@ -23,9 +25,11 @@ public sealed class PowerShellInvocationTests
     }
 
     /// <summary>
-    /// TEST-NUKE-POWERSHELL-001: Verifies Build.Tests helpers that spawn
+    /// TEST-NUKE-POWERSHELL-001 (historical): Verifies Build.Tests helpers that spawn
     /// <c>pwsh.exe</c> also use the same non-interactive host flags.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task BuildTests_PwshProcessStartInfo_UsesNonInteractiveFlags()
     {
@@ -39,9 +43,11 @@ public sealed class PowerShellInvocationTests
     }
 
     /// <summary>
-    /// TEST-NUKE-POWERSHELL-001: Verifies live deployment guidance does not
+    /// TEST-NUKE-POWERSHELL-001 (historical): Verifies live deployment guidance does not
     /// tell operators to run script PowerShell hosts interactively.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task DeploymentGuidance_PwshCommandsUseNonInteractiveFlags()
     {

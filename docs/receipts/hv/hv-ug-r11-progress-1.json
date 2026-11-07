@@ -1,0 +1,10 @@
+{
+  "timestampUtc": "2026-11-03T17:46:26.7614201Z",
+  "timestampLocal": "2026-11-03T11:46:26",
+  "action": "Log",
+  "method": "",
+  "id": "",
+  "scope": "",
+  "cacheRoot": "/tmp/hv-ug-r11-codex-plugin-20261103T113108",
+  "output": "type: result\npayload:\n  result:\n    code: persisted\n    retryable: false\n    persisted: true\n    degraded: false\n    queued: false\n    method: workflow.sessionlog.appendDialog\n    agent: Codex\n    sessionId: Codex-20261103T173510Z-plugin-session\n    requestId: req-20261103T173514Z-unitgreen-r11\n    failsafePath: \"\"\n    message: appendDialog persisted requestId=req-20261103T173514Z-unitgreen-r11\n    childStderr: \"\""
+}

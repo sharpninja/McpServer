@@ -1,0 +1,10 @@
+type: result
+payload:
+  requestId: req-20261020T230236Z-8dde
+  result:
+    agent: Codex
+    sessionId: Codex-20261020T221031Z-plugin-session
+    created: false
+
+---
+

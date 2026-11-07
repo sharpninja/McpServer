@@ -1,0 +1,2 @@
+rg: src/McpServer.Support.Mcp/Services/SessionLogService.cs: IO error for operation on src/McpServer.Support.Mcp/Services/SessionLogService.cs: No such file or directory (os error 2)
+

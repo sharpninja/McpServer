@@ -1,0 +1,6 @@
+?? docs/receipts/hv/20261020T170824-unitgreen-r3.request.jsonl
+?? docs/receipts/hv/20261020T170824-unitgreen-r3.response.jsonl
+?? docs/receipts/hv/20261020T170824-unitgreen-r3.selfreview.md
+?? docs/receipts/hv/hv-ug-r3-commands.jsonl
+?? docs/receipts/hv/hv-ug-r3-head.txt
+

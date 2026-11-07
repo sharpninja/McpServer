@@ -1,0 +1,5 @@
+RECEIPT 2026-10-19T19:57:43 host=PAYTON-LEGION2 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveRunState.ps1
+PROBE 2026-10-19T19:57:44 host=PAYTON-LEGION2 user=lab-wsman
+WORKTREE exists=False
+TESTRESULTS exists=False
+END 2026-10-19T19:57:44

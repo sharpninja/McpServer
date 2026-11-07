@@ -12,6 +12,7 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>TR-MCP-GH-002: Unit tests for encrypted workspace GitHub token storage.</summary>
+[Trait("Category", "Integration")]
 public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
 {
     private readonly string _tempRoot;
@@ -32,6 +33,7 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
         _sut = new FileGitHubWorkspaceTokenStore(options, dataProtection, NullLogger<FileGitHubWorkspaceTokenStore>.Instance);
     }
 
+    /// <remarks>Integration: exercises physical token-store files, locking or host permission behavior (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task UpsertAndGetAsync_RoundTripsToken()
     {
@@ -47,6 +49,7 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
         Assert.False(string.IsNullOrWhiteSpace(record.WorkspacePath));
     }
 
+    /// <remarks>Integration: exercises physical token-store files, locking or host permission behavior (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task UpsertAsync_SecondWriteReplacesToken()
     {
@@ -60,6 +63,7 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
         Assert.Equal("gho_second", record.AccessToken);
     }
 
+    /// <remarks>Integration: exercises physical token-store files, locking or host permission behavior (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task DeleteAsync_RemovesTokenRecord()
     {
@@ -73,6 +77,7 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
         Assert.Null(record);
     }
 
+    /// <remarks>Integration: exercises physical token-store files, locking or host permission behavior (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task UpsertAsync_WhenStoreLockIsHeld_WaitsForRelease()
     {
@@ -93,6 +98,7 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
         Assert.Equal("gho_wait_for_lock", record.AccessToken);
     }
 
+    /// <remarks>Integration: exercises physical token-store files, locking or host permission behavior (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task UpsertAsync_HardensStoreAndLockFilePermissions()
     {

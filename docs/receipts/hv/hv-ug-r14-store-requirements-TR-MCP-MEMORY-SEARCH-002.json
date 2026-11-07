@@ -1,0 +1,8 @@
+{
+  "timestampUtc": "2026-11-06T22:22:29.7061642+00:00",
+  "timestampLocal": "2026-11-06T16:22:32",
+  "method": "workflow.requirements.getTr",
+  "recordId": "TR-MCP-MEMORY-SEARCH-002",
+  "wrapperError": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261106T222230Z-5ae4\n  code: not_found\n  message: TR 'TR-MCP-MEMORY-SEARCH-002' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n",
+  "explicitNotFound": true
+}

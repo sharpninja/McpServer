@@ -1,0 +1,121 @@
+{
+  "name": "ug-r11-final-linux-lane-1",
+  "kind": "gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "2e1210150ae009162b047c604b56b75426c4d428",
+  "dirtyPaths": [
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-binding-u-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-binding-u-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-compile-u-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-compile-u-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-compile-u-3.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-criteria-u-readback-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-criteria-v-readback-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-win-lane-1.start.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-win-unit-1.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-win-unit-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-linux-unit-compare-r10-r11.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-u-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-u-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-win-unit-compare-r10-r11.txt"
+  ],
+  "command": [
+    "./build.ps1",
+    "MigrationIntegrationTests",
+    "--test-run-id",
+    "ug-r11-final-linux-lane-1"
+  ],
+  "startedLocal": "2026-11-03T08:54:14",
+  "endedLocal": "2026-11-03T09:25:30",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 739,
+  "passed": 739,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11-final-linux-lane-1/provider/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/Build.Tests.trx",
+      "sha256": "B37D1A47F3EB81C399738C922AD7B993AD1D136EC8A0FC946EC3A0073FD0A95B",
+      "total": 96,
+      "passed": 96,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.McpAgent.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11-final-linux-lane-1/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/QBrainAi.McpAgent.Tests.trx",
+      "sha256": "6FB85A3A8BAA288B3EC5A67AED43DC0082AC00165C03EB553123491025E7295C",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.QBAgent.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11-final-linux-lane-1/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/QBrainAi.QBAgent.Tests.trx",
+      "sha256": "52DA54CAB9988CD6FEB09A46E2FF71EDB998D0FBA02D137CA48C7BFEDE29C1A2",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11-final-linux-lane-1/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "84EE3CC5DFA410651133CF337C099B63A3727271F01DA472DDEB3A54F222C73D",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Repl.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11-final-linux-lane-1/provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/QBrainAi.Repl.IntegrationTests.trx",
+      "sha256": "54B5F57919D763DE6B59035B6377C755E27CB20201E5589C0263A3CBF75BD3D7",
+      "total": 179,
+      "passed": 179,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11-final-linux-lane-1/provider/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "sha256": "F1148219B092305FEAD043E8EE80F7235DCD53B9F7AB3B6D1A6AE2B0B24FEEE2",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11-final-linux-lane-1/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "86C50D647AE716A6D52788331CD9056B90486692853001448344CEB87D7E1491",
+      "total": 453,
+      "passed": 453,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [],
+  "writtenLocal": "2026-11-03T09:27:24",
+  "writtenBy": "ClaudeCode"
+}

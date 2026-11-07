@@ -345,12 +345,17 @@ public class TodoWorkflowTests
             async () => await _workflow.SelectAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken));
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 (appended 2026-11-03): after a selection, the current selection carries the scripted
+    /// selection time exactly (hostile validation round 10 finding R10-F3: the case formerly required a time within a
+    /// window of the live clock).
+    /// </summary>
     [Fact]
     public async Task CurrentSelection_AfterSelection_ReturnsSelectionWithTimestamp()
     {
-        var now = DateTimeOffset.UtcNow;
+        var selectedAt = new DateTimeOffset(2026, 1, 15, 9, 45, 0, TimeSpan.Zero);
         var mockSelectionState = CreateMockSelectionState("MCP-API-001", "Implement API", "backend", "high", false);
-        mockSelectionState.SelectedAt.Returns(now);
+        mockSelectionState.SelectedAt.Returns(selectedAt);
 
         await _workflow.SelectAsync("MCP-API-001", cancellationToken: TestContext.Current.CancellationToken);
         _workflow.CurrentSelection().Returns(mockSelectionState);
@@ -358,8 +363,7 @@ public class TodoWorkflowTests
         var selection = _workflow.CurrentSelection();
 
         Assert.NotNull(selection);
-        Assert.True(selection!.SelectedAt <= DateTimeOffset.UtcNow.AddSeconds(1));
-        Assert.True(selection.SelectedAt >= DateTimeOffset.UtcNow.AddMinutes(-1));
+        QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.AssertRecordedTimes([selectedAt], [selection!.SelectedAt], "TODO selection");
     }
 
     [Fact]
@@ -1347,6 +1351,14 @@ public class TodoWorkflowTests
         };
     }
 
+    /// <summary>TR-MCP-USECASE-018 AC-006: a substitute TODO selection holding the given fields and a fixed selection time, 2026-01-15 09:40 UTC.</summary>
+    /// <param name="id">The TODO id.</param>
+    /// <param name="title">The title.</param>
+    /// <param name="section">The section.</param>
+    /// <param name="priority">The priority.</param>
+    /// <param name="done">Whether the item is done.</param>
+    /// <returns>The substitute selection state.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed on 2026-11-03 to return a fixed selection time instead of the live clock (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static ITodoSelectionState CreateMockSelectionState(string id, string title, string section, string priority, bool done)
     {
         var state = Substitute.For<ITodoSelectionState>();
@@ -1355,7 +1367,7 @@ public class TodoWorkflowTests
         state.Section.Returns(section);
         state.Priority.Returns(priority);
         state.Done.Returns(done);
-        state.SelectedAt.Returns(DateTimeOffset.UtcNow);
+        state.SelectedAt.Returns(new DateTimeOffset(2026, 1, 15, 9, 40, 0, TimeSpan.Zero));
         return state;
     }
 

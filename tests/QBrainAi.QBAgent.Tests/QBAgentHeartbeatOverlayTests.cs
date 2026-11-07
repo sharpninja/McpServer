@@ -33,7 +33,15 @@ public sealed class QBAgentHeartbeatOverlayTests
         Assert.Equal(QBAgentHeartbeatOverlay.FrameAt(0), QBAgentHeartbeatOverlay.FrameAt(QBAgentHeartbeatOverlay.Frames.Length));
     }
 
+    /// <summary>
+    /// The run loop paints rotating heartbeat frames in the top-right cell while a turn runs, writes no "still working"
+    /// line, and hides the glyph when the turn ends. An integration case: it expects the real 20 ms heartbeat timer to
+    /// tick at least once during an 80 ms real-time wait, so its outcome depends on how much real time passes.
+    /// </summary>
+    /// <returns>The test task.</returns>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (appended "A wall-clock bound is an assertion whose outcome depends on how much real time passes ... such a test is an integration test"): tagged Category=Integration with its assertions unchanged, so it runs in the MigrationIntegrationTests lane and not in the unit suite, because the holistic read before round 11 found the second frame depends on scheduling within an 80 ms wait.</remarks>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines()
     {
         var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -72,6 +80,12 @@ public sealed class QBAgentHeartbeatOverlayTests
         Assert.Contains("done", text, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// The run loop hides the heartbeat glyph and reports the error when the runner fails after a scripted 80 ms of
+    /// work, and writes no "still working" line. The run is bounded by a hang guard only.
+    /// </summary>
+    /// <returns>The test task.</returns>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (appended for finding B4: "Far above" means at least 100 times the longest real or scripted delay of the awaited step): the hang guard on the run loop rises from 2 s to 10 s, because the awaited run includes the runner's 80 ms delay, so a hang guard must be at least 8 s; the holistic read before hostile validation round 12 found 2 s, 25 times the delay (operator 2026-11-03: "Strengthen + margin (Recommended)").</remarks>
     [Fact]
     public async Task RunAsync_RunnerThrows_HidesGlyph()
     {
@@ -95,7 +109,7 @@ public sealed class QBAgentHeartbeatOverlayTests
                     TerminalWidth = static () => 24,
                 },
                 cancellationToken: TestContext.Current.CancellationToken)
-            .WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken)
+            .WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         var text = output.ToString();

@@ -1,0 +1,25 @@
+{
+  "timestampUtc": "2026-11-06T22:22:47.9125925+00:00",
+  "timestampLocal": "2026-11-06T16:22:50",
+  "method": "workflow.requirements.getFr",
+  "recordId": "FR-MCP-079",
+  "response": {
+    "payload": {
+      "result": {
+        "area": "MCP",
+        "status": "✅ complete",
+        "updatedAt": "2026-11-06T22:22:50.4403293+00:00",
+        "createdAt": "2026-11-06T22:22:50.4402031+00:00",
+        "description": "The server shall provide full CRUD operations for explicit graph entity nodes and relationship edges, persisted in workspace-scoped EF Core tables. Entities shall have name, type, description, and extensible JSON metadata. Relationships shall link two entities with a typed, weighted, described edge. Deleting an entity shall cascade to all its relationships. All operations shall be available via REST endpoints, MCP tools, and REPL commands.\n\n\n**Covered by:** `GraphRagController` (entity + relationship endpoints), `QBrainAi.GraphRag` (`GraphRagService` entity / relationship CRUD), `GraphEntityEntity`, `GraphRelationshipEntity`, `FwhMcpTools` (graphrag entity/relationship tools), `QBrainAi.Repl.Core` (graphrag command shapes)",
+        "id": "FR-MCP-079",
+        "priority": "medium",
+        "acceptanceCriteria": [],
+        "scopeStartLayerKey": "layer-1",
+        "title": "GraphRAG Entity and Relationship CRUD"
+      },
+      "requestId": "req-20261106T222248Z-dcc1",
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

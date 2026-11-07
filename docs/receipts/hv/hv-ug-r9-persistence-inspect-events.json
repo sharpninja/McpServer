@@ -1,0 +1,30 @@
+[
+  {
+    "TimestampUtc": "2026-11-03T02:50:56.7688582Z",
+    "Method": "workflow.sessionlog.queryHistory",
+    "ReceiptName": "inspect-history",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      null
+    ],
+    "Persisted": [
+      null
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:51:00.4531164Z",
+    "Method": "client.SessionLog.QueryAsync",
+    "ReceiptName": "inspect-full",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      null
+    ],
+    "Persisted": [
+      null
+    ]
+  }
+]

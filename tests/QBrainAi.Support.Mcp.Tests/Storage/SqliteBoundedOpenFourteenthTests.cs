@@ -32,6 +32,13 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// Cancellation before SQLite has a handle must return without permitting the isolated worker
     /// to mutate the caller, while truthful accounting remains until that worker actually exits.
     /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-03</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-03 16:37:35: a hang guard is at least 100 times the longest real or scripted delay of the awaited step): the bound on the cancelled open rises from 5 s to 25 s. After the caller cancels a worker the hook still holds, the opener spends up to its 250 ms native cleanup deadline (SqliteBoundedConnectionOpener s_nativeCleanupTimeout) before it throws, so the awaited step has a real 250 ms delay and 5 s was 20 times it; the second holistic read before hostile validation round 12 found its class (finding C1). On a passing run the open ends about 250 ms after the cancel.</description></item>
+    /// <item><term>2026-11-04</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 12:20:22: the longest delay of the awaited step is the sum of every real or scripted delay on its path, read from the sources): the bound on the cancelled open rises from 25 s to 30 s. On the cancelled open's path the opener waits up to its 250 ms native cleanup deadline in a 10 ms loop, and its worker tracker polls the thread's exit every 5 ms (SqliteBoundedConnectionOpener.cs:20, :208-217 and :278-279), 265 ms in all, so 25 s was 94 times it and 30 s is 113 times; the third holistic read before hostile validation round 12 raised the measure (finding d3; operator 2026-11-04: "Fix it"). Assertions unchanged.</description></item>
+    /// </list>
+    /// </remarks>
     [Fact]
     public async Task OpenAsync_PreHandleNativeWait_CancelsWithoutMutatingCaller()
     {
@@ -69,7 +76,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
             cancellation.Cancel();
             var exception = await Assert.ThrowsAnyAsync<OperationCanceledException>(
                     async () => await operation.WaitAsync(
-                            TimeSpan.FromSeconds(5),
+                            TimeSpan.FromSeconds(30),
                             TestContext.Current.CancellationToken)
                         .ConfigureAwait(true))
                 .ConfigureAwait(true);
@@ -102,6 +109,8 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// its task at once and fails with TimeoutException at the bound, no open worker starts, and the held preflight
     /// stays counted until it actually returns. Fixture: a file data source in a temporary directory.
     /// </summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact(Timeout = 60_000)]
     public async Task OpenAsync_PreflightHeldAtBoundary_TimesOutWithoutBlockingTheCaller()
     {
@@ -188,6 +197,8 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// A provider-native shared-cache lock encountered during Open must honor the finite deadline,
     /// close the partial handle, and leave no worker behind.
     /// </summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task OpenAsync_NativeLockAtOpen_TimesOutAndJoinsWorker()
     {
@@ -247,6 +258,13 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// <summary>
     /// Close and disposal may race cancellation without invalid-handle access or a leaked worker.
     /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-03</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-03 16:37:35: a hang guard is at least 100 times the longest real or scripted delay of the awaited step): the bound on each cancelled open rises from 5 s to 25 s. After the cancel and the disposal, the opener spends up to its 250 ms native cleanup deadline (SqliteBoundedConnectionOpener s_nativeCleanupTimeout) before it throws, so the awaited step has a real 250 ms delay and 5 s was 20 times it; the second holistic read before hostile validation round 12 found its class (finding C1). On a passing run each of the eight opens ends about 250 ms after its cancel.</description></item>
+    /// <item><term>2026-11-04</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 12:20:22: the longest delay of the awaited step is the sum of every real or scripted delay on its path, read from the sources): the bound on each cancelled open rises from 25 s to 30 s. On each cancelled open's path the opener waits up to its 250 ms native cleanup deadline in a 10 ms loop, and its worker tracker polls the thread's exit every 5 ms (SqliteBoundedConnectionOpener.cs:20, :208-217 and :278-279), 265 ms in all, so 25 s was 94 times it and 30 s is 113 times; the third holistic read before hostile validation round 12 raised the measure (finding d3; operator 2026-11-04: "Fix it"). Assertions unchanged.</description></item>
+    /// </list>
+    /// </remarks>
     [Fact]
     public async Task OpenAsync_CloseDisposeCancellationRaces_DoNotLeakWorkersOrHandles()
     {
@@ -294,7 +312,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
 
                 var exception = await Assert.ThrowsAsync<OperationCanceledException>(
                         () => operation.WaitAsync(
-                            TimeSpan.FromSeconds(5),
+                            TimeSpan.FromSeconds(30),
                             TestContext.Current.CancellationToken))
                     .ConfigureAwait(true);
                 Assert.Equal(cancellation.Token, exception.CancellationToken);
@@ -324,6 +342,8 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// Repeated pooled and non-pooled opens preserve the exact connection string, release the outer
     /// handle on close, and dispose cancellation registration before the connection is reused.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Theory]
     [InlineData(true)]
     [InlineData(false)]

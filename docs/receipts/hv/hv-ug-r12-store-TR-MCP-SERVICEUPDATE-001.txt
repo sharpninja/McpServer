@@ -1,0 +1,43 @@
+type: result
+payload:
+  requestId: req-20261105T065101Z-30f7
+  result:
+    id: TR-MCP-SERVICEUPDATE-001
+    title: Platform adapters and metadata-preserving Linux service lifecycle
+    description: Preserve Windows behavior. Linux uses bounded shell-free systemctl/tar operations, installed-unit preflight, platform RID/apphost selection, shared preservation paths,0700 backup directories/0600 archives, ownership/mode/ACL/xattr preservation, failure restoration and same health checks. No SQL database export or automatic binary rollback claim.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: SERVICEUPDATE
+    acceptanceCriteria:
+    - id: platform
+      text: UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.
+      isSatisfied: false
+    - id: preserve
+      text: Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
+      isSatisfied: false
+    - id: lifecycle
+      text: Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
+      isSatisfied: false
+    - id: validation
+      text: Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
+      isSatisfied: false
+    - id: per-os-tests
+      text: Every Build.Tests ServiceUpdateTests case runs and passes on Linux and on Windows with no skip. A case whose Linux check needs a Linux-only facility (a FIFO, Unix file modes, GNU tar ACL and xattr preservation, unlinking a directory symbolic link with File.Delete) asserts on Windows the outcome the helper produces there for the same input (PLAN-SESSIONTRIAGEFIX-001 C2, triage-report-cdf116ad, as BUG-BASELINE-004 did for Windows-only tests; StatDouble_ReportsRegisteredSpecialFileAsFifo, and the Windows cases of LinuxPreflight_RejectsSpecialStageFiles, LinuxPreflight_RejectsSpecialApphostAndTextInputs, LinuxArchive_UsesPrivateMetadataPreservingCommands, LinuxReplacement_DoesNotFollowSymlinks and LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage).
+      isSatisfied: false
+    - id: repeated-properties
+      text: "The Linux update reads a unit whose systemctl show output repeats a property on separate lines (systemd 262 prints one EnvironmentFiles line per environment file) and validates and preserves every environment file those lines name. Redeploy of 2026-11-04: on systemd 262 the update stopped at the second EnvironmentFiles line before any service change. Added under the operator's standing word of 2026-10-26: \"if you surface new AC, add them without waiting for approval\"."
+      isSatisfied: false
+    - id: startup-health-wait
+      text: "After the start, the Linux update keeps checking HTTP health while the unit stays active, for up to 10 minutes, because the server registers every workspace before it listens (93 s on 2026-11-04 at 14:27); it fails as soon as the unit leaves the active state or the 10 minutes are spent, and never stops a unit that is still starting within them. Redeploy of 2026-11-04: an 18 s health window stopped a server that was starting normally. Added under the operator's standing word of 2026-10-26: \"if you surface new AC, add them without waiting for approval\"; operator 2026-11-04: \"Start now, fix target after (Recommended)\"."
+      isSatisfied: false
+    - id: failed-update-startable
+      text: 'When a Linux update fails after it has replaced the installed files, its recovery restores the preserved live state and then leaves the unit startable: a unit file or drop-in that names the legacy apphost McpServer.Support.Mcp is retargeted at QBrainAi.Support.Mcp, the apphost the completed replacement put in the install, as a successful update does, and systemd is reloaded after that change; a unit that already names QBrainAi.Support.Mcp is restored unchanged with no extra reload. The update still performs no binary rollback, and a failure before the replacement completes is outside this criterion. Redeploy of 2026-11-04: the failure path restored a unit file naming the removed legacy apphost, and the service could not start until a manual retarget. Fifth holistic read before hostile validation round 12, finding d3; operator 2026-11-04: "Strengthen + fix in Z3 (Recommended)".'
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T06:51:03.2307466+00:00
+    updatedAt: 2026-11-05T06:51:03.2308551+00:00
+  deprecated: true
+
+---
+

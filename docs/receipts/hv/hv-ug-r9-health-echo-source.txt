@@ -1,0 +1,3 @@
+src/QBrainAi.ServiceDefaults/Extensions.cs:230:            var nonce = context.Request.Query.TryGetValue("nonce", out var nonceValues)
+src/QBrainAi.Support.Mcp/Services/StorageConnectivityHealthCheck.cs:11:/// <c>live</c>: <c>/health</c> keeps liveness semantics and stays Healthy with an exact nonce
+src/QBrainAi.Support.Mcp/Program.cs:611:    // liveness semantics (Healthy + exact nonce echo) during a storage-only outage so marker

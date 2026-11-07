@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "order": 7,
+      "type": "design_decision",
+      "status": "completed",
+      "description": "Confirmed R12-F2: four unit cases still classify recorded timestamps against the real clock. SessionLogTriageStoreTests lines 173-197 seeds recent/stale times from UtcNow while SessionLogService lines 569-607 reads UtcNow again; the recent exclusion changes after elapsed time or a clock change. GraphRagServiceTests lines 198-202 similarly compares the file stamp through GraphRagService line 994; WorkspaceHygieneG5OverlayTests lines 226-253 calls TimeProvider.System at 409. Both supplied unit TRX contain all four. TR-MCP-USECASE-018 AC-006 explicitly requires scripted inputs and immunity to a system-clock change for recorded-time checks. This is an implementer fix under the existing criterion, not an operator scope choice. Rejected treating the green runs or a large clock margin as proof of clock independence. Propose deterministic age-boundary contracts and production binding with a scripted clock; no tests were run.",
+      "filePath": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs"
+    }
+  ]
+}

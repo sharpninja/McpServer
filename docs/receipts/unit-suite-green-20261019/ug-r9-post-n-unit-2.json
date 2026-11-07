@@ -1,0 +1,1831 @@
+{
+  "timestampLocal": "2026-10-30T20:24:43",
+  "phase": "Post-N full unit fixture-propagation verification; acceptance pending",
+  "runId": "ug-r9-post-n-unit-2",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+  "dirtyPaths": [
+    ".nuke/build.schema.json",
+    "build/Build.TestDependencies.cs",
+    "build/IntegrationLaneFilter.cs",
+    "build/IntegrationLaneFilterContracts.cs",
+    "build/IntegrationLaneProjects.cs",
+    "build/IntegrationLaneProjectsContracts.cs",
+    "docs/Project/Functional-Requirements.md",
+    "docs/Project/Requirements-Matrix.md",
+    "docs/Project/TR-per-FR-Mapping.md",
+    "docs/Project/Technical-Requirements.md",
+    "docs/Project/Testing-Requirements.md",
+    "docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+    "docs/plans/2026-10-19-unit-suite-green.md",
+    "src/QBrainAi.Repl.Core/AgentStdioProtocol.cs",
+    "src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs",
+    "src/QBrainAi.Repl.Core/ReplCommandTimeout.cs",
+    "src/QBrainAi.Repl.Host/IMarkerFileSystem.cs",
+    "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+    "src/QBrainAi.Repl.Host/PhysicalMarkerFileSystem.cs",
+    "src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+    "src/QBrainAi.Services/Services/DesktopProcessSpawner.cs",
+    "src/QBrainAi.Services/Services/DirectoryListingEntry.cs",
+    "src/QBrainAi.Services/Services/DirectoryTreeWalker.cs",
+    "src/QBrainAi.Services/Services/GitHubCliService.cs",
+    "src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "src/QBrainAi.Services/Services/SessionLogService.cs",
+    "src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+    "src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs",
+    "tests/Build.Tests/BoundedProcessTests.cs",
+    "tests/Build.Tests/BuildProjectSetTests.cs",
+    "tests/Build.Tests/BuildTargetTests.cs",
+    "tests/Build.Tests/DocsSyncG8OverlayTests.cs",
+    "tests/Build.Tests/HandoffD3D5OverlayTests.cs",
+    "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "tests/Build.Tests/IntegrationLanePreconditionContract.cs",
+    "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    "tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    "tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+    "tests/Build.Tests/MigrationAssemblyObsoleteWarningTests.cs",
+    "tests/Build.Tests/NukeParametersTests.cs",
+    "tests/Build.Tests/OllamaInstallLayoutContract.cs",
+    "tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs",
+    "tests/Build.Tests/PowerShellInvocationTests.cs",
+    "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "tests/Build.Tests/ProvisioningDownloadContract.cs",
+    "tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs",
+    "tests/Build.Tests/QuadBrainDescriptorAbsenceTests.cs",
+    "tests/Build.Tests/SyncAgentPluginsChecksumTests.cs",
+    "tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs",
+    "tests/Build.Tests/TrCoverageConsistencyTests.cs",
+    "tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs",
+    "tests/Build.Tests/WarningSuppressionApprovalValidatorTests.cs",
+    "tests/Build.Tests/WarningSuppressionValidationTargetTests.cs",
+    "tests/Directory.Build.targets",
+    "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkContract.cs",
+    "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    "tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs",
+    "tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+    "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs",
+    "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Configuration/TriageConfigurationContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139EighteenthEvidenceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/McpStdio/BrainSlotToolAbsenceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryApiIdempotencyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchConflictTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchInjectionTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchIsolationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnDocsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnPackTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnScoringTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchSafetyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchScoringTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchToolUseTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMcpSchemaTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryToolsDiscoveryTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffWorkspacePathsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsFourteenthLinuxNativeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogDenseGraphTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogReplaceSectionRetryableTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizerRegistrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseCqrsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseExpandedScopeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/AddSessionLogTurnPlanFileAndTodoIdMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthSqliteTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthLinuxNativeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthSharedTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthWindowsNativeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthSqliteConsumerTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/ProductMigrationApplyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/ScriptedWorkspacePathNormalizer.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogTurnPlanFileTodoIdMigrationApplyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseMigrationApplyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollection.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/UnitTestPaths.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseCanvasUiAssetTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs",
+    "tests/Shared/TestRepositoryRoot.cs",
+    "tests/TestSupport.Shared/ScratchQBrainAi.cs",
+    "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "build/IntegrationLaneClassFilter.cs",
+    "build/IntegrationLaneClassFilterContracts.cs",
+    "build/IntegrationLaneExecution.cs",
+    "build/OllamaDetachedLaunch.cs",
+    "build/scripts/Start-OllamaServer.ps1",
+    "docs/receipts/unit-suite-green-20261019/checkout-reading-build-tests.json",
+    "docs/receipts/unit-suite-green-20261019/classification-review-20261030.json",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T182326/diagnostic-o-01/diagnostic-o-01.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T182326/diagnostic-o-02/diagnostic-o-02.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T182326/diagnostic-o-03/diagnostic-o-03.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T182326/diagnostic-o-04/diagnostic-o-04.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T182326/diagnostic-o-05/diagnostic-o-05.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T182326/manifest.json",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T182326/receipt.json",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-01/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-01/diagnostic-o-01.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-01/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-01/sql-events.txt.json",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-01/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-02/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-02/diagnostic-o-02.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-02/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-02/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-03/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-03/diagnostic-o-03.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-03/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-03/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-04/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-04/diagnostic-o-04.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-04/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-04/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-05/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-05/diagnostic-o-05.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-05/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-05/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-06/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-06/diagnostic-o-06.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-06/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-06/sql-events.txt.json",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-06/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-07/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-07/diagnostic-o-07.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-07/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-07/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-08/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-08/diagnostic-o-08.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-08/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-08/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-09/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-09/diagnostic-o-09.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-09/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-09/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-10/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-10/diagnostic-o-10.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-10/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/diagnostic-o-10/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/manifest.json",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/receipt.json",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-01/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-01/diagnostic-o-01.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-01/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-01/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-02/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-02/diagnostic-o-02.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-02/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-02/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-03/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-03/diagnostic-o-03.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-03/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-03/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-04/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-04/diagnostic-o-04.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-04/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-04/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-05/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-05/diagnostic-o-05.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-05/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-05/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-06/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-06/diagnostic-o-06.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-06/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-06/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-07/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-07/diagnostic-o-07.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-07/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-07/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-08/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-08/diagnostic-o-08.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-08/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-08/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-09/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-09/diagnostic-o-09.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-09/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-09/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-10/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-10/diagnostic-o-10.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-10/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-10/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-11/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-11/diagnostic-o-11.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-11/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-11/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-12/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-12/diagnostic-o-12.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-12/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-12/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-13/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-13/diagnostic-o-13.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-13/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-13/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-14/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-14/diagnostic-o-14.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-14/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-14/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-15/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-15/diagnostic-o-15.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-15/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-15/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-16/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-16/diagnostic-o-16.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-16/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-16/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-17/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-17/diagnostic-o-17.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-17/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-17/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-18/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-18/diagnostic-o-18.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-18/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-18/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-19/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-19/diagnostic-o-19.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-19/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-19/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-20/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-20/diagnostic-o-20.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-20/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-20/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-21/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-21/diagnostic-o-21.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-21/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-21/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-22/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-22/diagnostic-o-22.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-22/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-22/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-23/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-23/diagnostic-o-23.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-23/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-23/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-24/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-24/diagnostic-o-24.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-24/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-24/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-25/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-25/diagnostic-o-25.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-25/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-25/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-26/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-26/diagnostic-o-26.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-26/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-26/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-27/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-27/diagnostic-o-27.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-27/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-27/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-28/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-28/diagnostic-o-28.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-28/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-28/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-29/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-29/diagnostic-o-29.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-29/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-29/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-30/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-30/diagnostic-o-30.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-30/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-30/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-31/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-31/diagnostic-o-31.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-31/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-31/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-32/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-32/diagnostic-o-32.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-32/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-32/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-33/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-33/diagnostic-o-33.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-33/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-33/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-34/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-34/diagnostic-o-34.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-34/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-34/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-35/capture.sql",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-35/diagnostic-o-35.trx",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-35/sql-events.txt",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/diagnostic-o-35/sql-events.txt.stderr",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/manifest.json",
+    "docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/receipt.json",
+    "docs/receipts/unit-suite-green-20261019/mixed-fixture-method-classifications.json",
+    "docs/receipts/unit-suite-green-20261019/requirement-projection-export-20261030.json",
+    "docs/receipts/unit-suite-green-20261019/source-identifier-audit-20261030.json",
+    "docs/receipts/unit-suite-green-20261019/sql-diagnostic-summary-20261030.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-binding-i-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-binding-j-full-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-binding-j-unit-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-binding-m1-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-binding-m2-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-binding-m3-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-binding-o-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-i-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-i-3.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-j-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-m1-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-m2-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-m3-1.failed.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-m3-2.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-o-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r9-post-n-unit-1.failed.json",
+    "tests/Build.Tests/Fixtures/Check-PowerShellFixtures.ps1",
+    "tests/Build.Tests/InlineTheoryCoverage.cs",
+    "tests/Build.Tests/IntegrationLaneClassFilterContract.cs",
+    "tests/Build.Tests/IntegrationLaneClassFilterMockGateTests.cs",
+    "tests/Build.Tests/IntegrationLaneClassFilterTests.cs",
+    "tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs",
+    "tests/Build.Tests/IntegrationLaneExecutionBindingTests.cs",
+    "tests/Build.Tests/IntegrationLaneExecutionContractTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationBindingTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationBindingTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationBindingTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogOwnedHomeFilterContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureBindingTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathFacadeTests.cs",
+    "tests/TestSupport.Shared/OwnedInstanceProcess.cs",
+    "tests/TestSupport.Shared/OwnedReplStart.cs"
+  ],
+  "sourceHashes": [
+    {
+      "path": "build/Build.TestDependencies.cs",
+      "sha256": "C660547CEC246DB161588A1294D5C56F8FCE31A74B2F7D8A87E95FA9F50DA8B4"
+    },
+    {
+      "path": "build/IntegrationLaneClassFilter.cs",
+      "sha256": "3DB560F752C2B3684289958917F01B8E04EB849B068AB6A7C899DC12A7D912C4"
+    },
+    {
+      "path": "build/IntegrationLaneClassFilterContracts.cs",
+      "sha256": "5662AA070A1F963644E8293213AD101B528B0284B825B9BB54C5A333F2A1CBAF"
+    },
+    {
+      "path": "build/IntegrationLaneExecution.cs",
+      "sha256": "232BCC0A9FEA6B018B189FF868419AEB19AED76C5D6B8E7434DD352EE1248580"
+    },
+    {
+      "path": "build/IntegrationLaneFilter.cs",
+      "sha256": "ED80346B89D3A9609A4FCF3D2BDF987A70F175E24BDC40F60D5AA34ECD260073"
+    },
+    {
+      "path": "build/IntegrationLaneFilterContracts.cs",
+      "sha256": "DA78500CCE622FB694882279021F78914034B3F696E3F5B7323B417DF3FFA07B"
+    },
+    {
+      "path": "build/IntegrationLaneProjects.cs",
+      "sha256": "C7DAEF18268BB1832993AFC33AC2537D5376A352EEA1AE07010C563C7F4C1D72"
+    },
+    {
+      "path": "build/IntegrationLaneProjectsContracts.cs",
+      "sha256": "FF3024572BFF06E6A260C24C3193064ED16A9024C5BC9CA243A7B3207A070EE1"
+    },
+    {
+      "path": "build/OllamaDetachedLaunch.cs",
+      "sha256": "6AC3A604892188E7C66E79F5424DC304741BACECC548C2E1FD71DB8B2DD396CB"
+    },
+    {
+      "path": "build/scripts/Start-OllamaServer.ps1",
+      "sha256": "D199D5AA9DFDA5DC933AD72F4AD9FCC61FB0E16C1E3E192C815D688BB636C98E"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/AgentStdioProtocol.cs",
+      "sha256": "BCE7244CE85D61F8591CBA6A5DC96C45D1CDCBC5C0A6D90C59416821EBC3765C"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs",
+      "sha256": "FC18C910E80078DF727A6320BD40CD92589085A0AF4D6B4A0722EBD1FC8D16CE"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/ReplCommandTimeout.cs",
+      "sha256": "A2F6A8140FFD899C917851B79D04EDE5D2CF80B573657A13A2FA1382B5088F88"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/IMarkerFileSystem.cs",
+      "sha256": "0D8E4B92B9138F1EBDF9FF1E989C808A34AF7D7A205C364D9CF5B614778522F8"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "sha256": "20FDE35EC51BDB09276C8A2A0AE15C7048BF41455D6CCA3DBABCEB41239B9233"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/PhysicalMarkerFileSystem.cs",
+      "sha256": "06320C5D47907450609B7B3AF19C6E091B7619E1AFB9A31499A297CC98969BD5"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+      "sha256": "2652AF287F9BDC95E917406B52E60555984AD34632C95E68EACE3718A48369C6"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/DesktopProcessSpawner.cs",
+      "sha256": "57632A35587EE64B0F404A90280CDE95A4263620918C08E03EA47114DB4B082B"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/DirectoryListingEntry.cs",
+      "sha256": "E71C298A574FD1ECAA2F824F611BBDE7CFF3A0E75B45C714889FDF1EF17E97B8"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/DirectoryTreeWalker.cs",
+      "sha256": "77A0781C155E5500711762C1621066709C0EB8642C0C279463C7BAC459CF6696"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+      "sha256": "93B98131FF9BB88FEFFC9469CDBAC43F484A59D9DEFBDC014789F5C7BB2F6599"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/MarkerFileService.cs",
+      "sha256": "57A7EB061C55111785D67C04D897CEB2F923E6E5B3D28C85403B0B79E34ECC6C"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "sha256": "8E72D6649583097751564F4D4617F7E73803D9FD915924BBCEFEB8A4FC7A86A1"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+      "sha256": "ACC16571500FD045141D627CDBF7689E3029B63CFFE86C24CD9FA6AE7978C6E3"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs",
+      "sha256": "67308A3C219791F3607D62ACC471C546E56601E65C40D0198FF122C8524FCC2F"
+    },
+    {
+      "path": "tests/Build.Tests/BoundedProcessTests.cs",
+      "sha256": "B80D34B00926AF7BF54B7018E56F0E1D8100ADC9B6735FC782DCBB0DDCD8DA55"
+    },
+    {
+      "path": "tests/Build.Tests/BuildProjectSetTests.cs",
+      "sha256": "79C0052DA52EA10AEDAAE137ECB451F1B6C30FEAB640C4102D7C9BE9DE23D5AE"
+    },
+    {
+      "path": "tests/Build.Tests/BuildTargetTests.cs",
+      "sha256": "4EFF11343EBE78ADAC995C6726275977457E9AF5E47576E810DA57F30F68429C"
+    },
+    {
+      "path": "tests/Build.Tests/DocsSyncG8OverlayTests.cs",
+      "sha256": "0A9CC408EC45361AAEA845AAD8F4BF958E4BD6AC92A267649371DF0EBD640A1D"
+    },
+    {
+      "path": "tests/Build.Tests/Fixtures/Check-PowerShellFixtures.ps1",
+      "sha256": "5D685D6E1F961E0420810E8912578733072C7E1EA4F30E96936ECDB1943E410C"
+    },
+    {
+      "path": "tests/Build.Tests/HandoffD3D5OverlayTests.cs",
+      "sha256": "89FA7E5B421AAABEE0C540FC0BEC3D945D8A20C0527C0932FCD29BCD604545B3"
+    },
+    {
+      "path": "tests/Build.Tests/InlineTheoryCoverage.cs",
+      "sha256": "2A5850DFD8B7A3C4CE2B4026D0DB535F9EF6F27A5C71691EC719735BCBFE1756"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneClassFilterContract.cs",
+      "sha256": "14B83C1B893FED33D802E057A520D8D9641A299CCA3B11AB071B77A3950A53A5"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneClassFilterMockGateTests.cs",
+      "sha256": "4A86B336E0EAA7ADE6ED0E0B213973C153F0064D8B1F697B6A46D51C1D4255FF"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneClassFilterTests.cs",
+      "sha256": "5D988FE274DC6F14CF7B33D8769D8863100AC2A4C253A6C43C70E806447813FD"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs",
+      "sha256": "2929D53DE4684F0722067DFFD46423A2558D335FF77AD62D500826FF03062553"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneExecutionBindingTests.cs",
+      "sha256": "046ABB505E3292CDE70304865EC0570A793CE9669D7E22F7DFA7D696373BAD71"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneExecutionContractTests.cs",
+      "sha256": "5BE4B16E96E76F3675CA45059775244C1A29F893873006F9A9C75E8817954D42"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+      "sha256": "5E72C57E171D05EA0EB35F0FDC4C59CDF5AD2ACA7C671894B54B5D28F3DC75AB"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLanePreconditionContract.cs",
+      "sha256": "DBFA86A7FF4E9A7CF7CC8864FBB3090568E6F08AAB2356FB1000B0C432BFA739"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+      "sha256": "8D764E851D2B4E7ABC9F95954E21ED05BD0F7FA23F42A237554EA6AC145B1FD2"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+      "sha256": "CC92DC3065A61F763183D8C3DC6DB75A3334FBD24ECA4376BC0259C442050A46"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+      "sha256": "3583D59580401023DE6716AC1BA60D8E7DDC56125EB2EDBFF10ADB24B39AF5A2"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+      "sha256": "1D429322AE6554BFFB0DCAB9C5B6916CEA3C0F968E94CE5F4117427177D5E61C"
+    },
+    {
+      "path": "tests/Build.Tests/MigrationAssemblyObsoleteWarningTests.cs",
+      "sha256": "192DAC751E1083B2D847396DEBF7E254B2DA46E6D3B18DECFB41FCA2D3466B35"
+    },
+    {
+      "path": "tests/Build.Tests/NukeParametersTests.cs",
+      "sha256": "AD56CDB8F9FE53002E54494CE0C119B109BF73964B35A2B2C7788214FA4C8CBD"
+    },
+    {
+      "path": "tests/Build.Tests/OllamaInstallLayoutContract.cs",
+      "sha256": "0DD2B9D4772AEA7316E6A27166894E081DAF31C51C6F53DED55A359F3D701B46"
+    },
+    {
+      "path": "tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs",
+      "sha256": "CE26C526AB6BD7CAC6E095C56CF2A99B8480936E3B281CF0DC90A989AA174C85"
+    },
+    {
+      "path": "tests/Build.Tests/PowerShellInvocationTests.cs",
+      "sha256": "12A6F1BFF355FEE5B72F91ED8E9D75BA92A5E905117CA2A79199BAC0157F2827"
+    },
+    {
+      "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+      "sha256": "EC234E17A98684A691A4AD6FD24FB0319A77E80B203BAEC5E8B446FD3C065D95"
+    },
+    {
+      "path": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+      "sha256": "C5795E4CD25D09DBC70D834A60BB60CEFB893471E6ECB36CD4DCA89D37E94B43"
+    },
+    {
+      "path": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+      "sha256": "D61C5D431CA634B19934ADE47CF6DFD3A6B19CFD165BDFA4F80F1F79C52B6F6D"
+    },
+    {
+      "path": "tests/Build.Tests/ProvisioningDownloadContract.cs",
+      "sha256": "9D55A13B34963ED1611E5C85A16958ABA4C1F2DFBAD86DB1677DAD37293883DC"
+    },
+    {
+      "path": "tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs",
+      "sha256": "A519A2C00DA25D71F3FF5CF7723AB138994BACFF9984E5F7E8E3D3307A1F40F6"
+    },
+    {
+      "path": "tests/Build.Tests/QuadBrainDescriptorAbsenceTests.cs",
+      "sha256": "E7C1B3ED0A39EE4A3DCF81659F0577DDB895A5984E228C2B7ED3B8AA19110BF4"
+    },
+    {
+      "path": "tests/Build.Tests/SyncAgentPluginsChecksumTests.cs",
+      "sha256": "225DCCBEC2FB68B577D31FD1E25521DBE71EFDC4952B249C1DEBD1FAD154D59A"
+    },
+    {
+      "path": "tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs",
+      "sha256": "858533257806D60C00FC95DC212911837863BEEFD63AC1C42C32DB4FAD2CEB2D"
+    },
+    {
+      "path": "tests/Build.Tests/TrCoverageConsistencyTests.cs",
+      "sha256": "33F64586AF3C5C72E2F8299DCA25C345DA0A95B4BCD6CBBB796B0FF769A58CE8"
+    },
+    {
+      "path": "tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs",
+      "sha256": "F53DF35B60BEDA08637D30E0635CB94C088CBCCDF424B6CDB7C3091E7FCEA1B8"
+    },
+    {
+      "path": "tests/Build.Tests/WarningSuppressionApprovalValidatorTests.cs",
+      "sha256": "EEE791A012E124ABCD6A6BF9DF03D5C9EA996351A22343B9F47EBDCD0B938BB7"
+    },
+    {
+      "path": "tests/Build.Tests/WarningSuppressionValidationTargetTests.cs",
+      "sha256": "F2F06B889E9696853FFF5AB0FC7527AED5A6A2A3777C69BBD9B241DE1B85A1EE"
+    },
+    {
+      "path": "tests/Directory.Build.targets",
+      "sha256": "2E302B441EA9B8AA6D547B4420819FB4C0660ED49BDF07AB37567E69B5CBF2B0"
+    },
+    {
+      "path": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+      "sha256": "C631B153CBD6F06B2F7750F8FB964CC23694AC3E29F1C7DD7A5DBFF9D9AD32D2"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+      "sha256": "6A92961830964A88EBC23541581356D92DE649C76684C79779BD2C13B596B583"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationBindingTests.cs",
+      "sha256": "49E081E7AC9273F47C71D88A9D2F591CEF2264F451AA88A99A2FE5B38A0A32D7"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs",
+      "sha256": "6A6ACA5C9F3212B5A61B8D14B9F31DBC6BD6C478469C4D220BEF1590E6BA4A01"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkContract.cs",
+      "sha256": "7B8BFE83616893724AAF2983659E414D23A9D18FC4E70FB6F59C0DECE563741C"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs",
+      "sha256": "4DB49C1B9CD8664A2513F3781CEA06F33B1AF85B1B9CD9430CECB8A4033A5F1F"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs",
+      "sha256": "4239711CECB94E6ED1617FF4425058F302FBE47C8709CAE99C2B87D8AA81B12F"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs",
+      "sha256": "DEF86C5531C4CBD5E4DFF309CC52442876A34512471EA15180BF4B378CECC93F"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+      "sha256": "D02A8C21972262E52619814C3F4278BAE6A610397F9F9CA8465CEFA0FD53BAA3"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs",
+      "sha256": "D828AE5DCA352712D719FEB876ECAA0CDA1446CC79CD30737FFB9A88F578FAC2"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs",
+      "sha256": "8420D32AEC291ADDDF087749BE115DFC1DA0163F3B1305FECF2F2431FFA4C5DC"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationBindingTests.cs",
+      "sha256": "0B73CD16E033549B79D954F501FEC46B4C415CB89284464054052033B00AECCA"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+      "sha256": "F1E7F8B01567FDDDF2992A362936530468383B70B145F79F2FC64C1C1672D7C4"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+      "sha256": "F92AC595C02D2CF635457DE5AD74A7A3FEC6077614809EF47B578F1F96CA59FD"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs",
+      "sha256": "C335CBA705C463E658746DE5258829058C2904EA3A0409357E4AA9FD393227FF"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+      "sha256": "E74A716AC6C0861723F4CC50C46C047ABF41B92AD19CD06BDB2262386DF88D05"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs",
+      "sha256": "06A85A5930774F7CE6257C3FF33F69CB14FBD55CB2640AFA490EE3AD52BD6AA5"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs",
+      "sha256": "5B15A98C1F0E48626754C95B4EA449B23E4020B4046CB0394336AD078E5F5BF0"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+      "sha256": "889CD863BB8B8F4B53F56F64748F38F8ED59E8EF67A270472CD7DBCF2E0056F9"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs",
+      "sha256": "4BBFC2E79CA006ECD32A84182BA2940FF166940B81CF7729CC9FFFC1DB3F7A3B"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+      "sha256": "57C7C56C95023A7AD947F43A84A9003BC15DD13D95AAE9715F3C2A1D11F079A8"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TriageConfigurationContractTests.cs",
+      "sha256": "E7DFF020DBF120533FED375F6C8EA349537593E028B6C288146A219726D00A9C"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139EighteenthEvidenceTests.cs",
+      "sha256": "92BD5E2BE4716DAEA29F57DC7A7ED728A6EE4108FB0E816881C7BB30E01E9ADE"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+      "sha256": "3CB8A858059B405520AE894BA7570DE95DFFD07C83B1BBB40201A250EC59DF5C"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+      "sha256": "80680555E745B4BA2FB925A15266C53CCD193B0C205FB0AC5761AEA78D557E6E"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+      "sha256": "28C92BB74B8B8ED029785CF915912C13B62067E41419A0587BC2EA6727D7B3F1"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs",
+      "sha256": "7814EFA8129B7014372198D4B1658D9F282CA1EA3FCD8116A1F01B3AFD41FAC3"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs",
+      "sha256": "34363299CBEDD8BFBE899F195F6FDB5D806C2CDBE924E3E7658B87005C59493F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs",
+      "sha256": "0087B2A2FF0D62E94EA8C240AE590130E7017B806BDD16107563AFC047998F39"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+      "sha256": "27A962068B4469029BB749C650953F66B212166FD34E6B22B9C9690E3B5FE927"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationBindingTests.cs",
+      "sha256": "1520BF3492E015E47A57EE5052CC4FCD441863F1B17085F8A3B978510971D3F8"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationContractTests.cs",
+      "sha256": "56A1575B18692F285E1D72A32FE0BD312310E38847102A1BE3176B1060ABD186"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "sha256": "4F50A9A32E514EE02F5BDEE61565E4FD5D7B60F22A1DE3D3E02AB7A4B4EB693D"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs",
+      "sha256": "55EFC47CC38C48618BD648392FBB8CBAF15A68ED39A34E7A8DDCFFBC01F455F9"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/McpStdio/BrainSlotToolAbsenceTests.cs",
+      "sha256": "C57357E6028035EC5A4EC8E602EB62972751B21FD8178500209B1E9973AA9299"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      "sha256": "84253F2866DD18F4DED133A315B02D7A48B9259139BA368DFC07C66BED1CBE76"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs",
+      "sha256": "58338C43747C2C06EB9E8D4038ADAC74C44DAAD6CB49C4B3E704CDB7C3804EAF"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs",
+      "sha256": "80F96195833E24C31F5FD5E2EF7A21AF1196C9A7444EA7788834FDD4EDCEFD49"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryApiIdempotencyTests.cs",
+      "sha256": "7C82F6E95029930BF515C846BA65B1EFE42F171A5D34BF16CC1FDDAFA521E238"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs",
+      "sha256": "BCC883448435FA703C647A0EF414B8C92B9E596AD0A16223D2CE4B0F902BAE42"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchConflictTests.cs",
+      "sha256": "F4BD69707B3E3CC8CA98483D00C60D11D6C795C41E81AF8C53301E2CB5AD4999"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs",
+      "sha256": "44F93A39B93B56FF6EDA5B414C441D202464B0767486A38ACA005410BAF77E54"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "sha256": "457AABC506F2E772DB66B0519D2A5D21CCFC8B4AE487812A0995F5269FBF500C"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchInjectionTests.cs",
+      "sha256": "FC39E1A4BA13B68D9B2E9772E68BAA8C9C9B57D9DFE4388D78C9EC422BBEDF7F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchIsolationTests.cs",
+      "sha256": "2F516AAE3846AD9A7951A3E00937CDEE35BE85CB9F3CD0D587CF03C30D351C1B"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnDocsTests.cs",
+      "sha256": "4B28726466B9294777FE0C67E92F040062426616448FA766909C1278C379F3E3"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs",
+      "sha256": "38E81BA87CE49D31EBAD3FCD9264DE94DDCF0E5A24FD871CE5D5CFA1A94EBBFE"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnPackTests.cs",
+      "sha256": "DD15017C443AF255147CC80DE5D958721B539F9143E62DDB789AD9975BFF8D48"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnScoringTests.cs",
+      "sha256": "7555B08EAC2D3265FB24440E27E72C3A2C0575E62DDCEE1C283C31A3C2BF1BC1"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs",
+      "sha256": "2F52AB2F0EB9528D4B891DC3CFC61576AAA8528BA77C04516315964F41DBCB74"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs",
+      "sha256": "3F93AE8E7E887D9EBC87636B115A8D1E9394E0F5FD045BC8BF474B272BCED32F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs",
+      "sha256": "EAA6B22C39C51CC4984A49FB9EA72B68F0417531EFE529C71A1669EB54AC6D59"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchSafetyTests.cs",
+      "sha256": "DC915B11F0DAF0B53CC4C2293FDA67BE0EEB79FA7887D109AD807A5FEB2EB4DF"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchScoringTests.cs",
+      "sha256": "92E96674AA2879A856E26911F6941A5132A6BC3AE71D768777F7F8533C5879A1"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs",
+      "sha256": "204F7DC6569284D3B15306244BC7A2AD7BE71F9EF4038218CF51981F0AA3CD5C"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs",
+      "sha256": "9C35E110424B53A000738D60735443653F97862BD6EA4B27E0217F9BB443FEBC"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchToolUseTests.cs",
+      "sha256": "33F3719B8F1D514892500250AD6559490E6D8748286A0F05111A9EF26C65A1A1"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs",
+      "sha256": "5196FE5F1938EF865F6EC2251921F46B1F3A5C87FB6954F84D57F98A12943436"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs",
+      "sha256": "F69B29FF4AD985D6A4E2F1EE0A27DFD64D11521870792FE992DD79DF05FFFA7A"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMcpSchemaTests.cs",
+      "sha256": "F204E6A1A1617048945665A7D8B96FE210A898D44A35D7A77E8C810AE6783F49"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs",
+      "sha256": "33330FE6516AF81A702E0B78D5E4AF7B721D5239069F440F2E194FB07927A3B9"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs",
+      "sha256": "D768684ACE53554572AEFB38775191D9434A0BABB54BDD6F9B3DDFE2FA213B81"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs",
+      "sha256": "3B76DA19F84194F84D099D7C60E5688A7FB151BBBB32778240934EDF8E3105B2"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+      "sha256": "08DF3052F15E74BA039D1FA838B89C3ADFC1A09BF244F05FFCCEB7D1D029E1BE"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+      "sha256": "2086F1383A4C92A4A548CA3A1B0D47BA2AE3878681653DE67432F38B5BF9DB3F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs",
+      "sha256": "849BAAD65CE4B7788001756AD4F52A7D545B81C9578FB62081F2AA7A5B9960B5"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs",
+      "sha256": "66058241E0DE9FC8F22B5ADF4FE3C1130BAEFD9136B0F27AF7AEC54B978F63B5"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryToolsDiscoveryTests.cs",
+      "sha256": "F0525068736D52065287D91F0DF790EC60569E70B909A20E6F3D635F8A098986"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs",
+      "sha256": "E545B5762F0818801CE96EAB065DF4478CD59C80EB9DF2F857305923CEDF4B33"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs",
+      "sha256": "72068368BA2A369A6C8BAF07A093445D508DE9B86F3F66972B4BFC5CB2085C5C"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiTests.cs",
+      "sha256": "8E25F0DF989BA4A863B2D0340A4CEE6CDD82CFFA69566B58179EC0ACD201092F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+      "sha256": "0A72E652D946FD962606E0B921714671C676AD8E026930ABAE90B7099AE426D8"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryMigrationTests.cs",
+      "sha256": "83C74D8F6C4CEEEC36B888D4505EB246895A9F153DA50938A97EABBF1091E788"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryTests.cs",
+      "sha256": "AD34FB4852445BB97E4132130A2C1E2A6B1D0BF2148FFFAD3EF707A2DADAD78D"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+      "sha256": "97196D530E5A617DE81B205257994D8AD1E23CB65D556D8F29D8BE5BB2DD1874"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs",
+      "sha256": "BFDA9754683A8DEE6CF55167624E82FC02A94C2414C3AC18F4D681F6E5B989DC"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs",
+      "sha256": "038C28C3012AB8002DC48C4B782BA6290B62F539216208E4740B444B96738CA9"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "sha256": "0DA1851CB5ED925E185CD5816711CEC5E2BCAAB90439371DEEB1DE42462826F3"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+      "sha256": "DDFB93E65AC5AA158F8AD6D465DC1CF4217FC92E5B1237D70B9392946B69B6DB"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+      "sha256": "67D435EA128C0906291FE66736DCC03217D0563C8785E7DCA96A578BEEBC3CED"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs",
+      "sha256": "1AEABA655945AD88AAD67A75A26461BF1C4552562C276A19EC7DC12C46EEF0AB"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs",
+      "sha256": "769CDCC52DB7400EF8F0042203F8E303C515B417A31F907CC3DDF2D8C3C4B17F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs",
+      "sha256": "C5E68CA4F137526C8F0BFC682531C300BAF7036FF997C70FBE97B5233B9020F4"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+      "sha256": "DBCE6D8012DF427174D9872B9E26546AF811523D0C82A296BC83D97AB3B6351D"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs",
+      "sha256": "06C6153A5EB815E00392838EC037F63413E28B39B01FCA90954781516E12060C"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs",
+      "sha256": "47EFC5348B0E5309D8C322104AA69CC8E7CB29FBBF335D835B72F564F781E610"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs",
+      "sha256": "AB2B438A8D038BBC97668343E8FDABC0A5B3809648252709C96CB5D7F724D149"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "sha256": "A6A5ADC6B15FB132436D45419547B230A277AD618158ABF8A7B35347F32850BA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+      "sha256": "105FCDD13EF789B15E5964B9C60385DA8E81DBCAD182528B7358CB3B09128246"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs",
+      "sha256": "439EF6B3CE9EF0D57637250ECA8055DDA952F8B99C8E9086FD08852AAF2AA580"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs",
+      "sha256": "709ADB3BAA00CFC0D934C9D8501AD299C5B633A703A4044483918C32FC5CEA36"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs",
+      "sha256": "42381C4F9F289E2D4F5267068CEA46A3183075D11E96D85804FCEE7A3F79C6CA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+      "sha256": "E0F819D899C3E77C4CCD821ED9E2657A68091A47DA3F023B5FEBA327EA86EFDF"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffWorkspacePathsTests.cs",
+      "sha256": "3063B4E14C0D6C543ACA6F3324E1E4FF9FBAEF25BEA3AB8D618317B5A2DA75A7"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+      "sha256": "D162085CBDEA66CBF410E517A771F481A35C8D2A07C1DABFB85CCD3FB9581F8D"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+      "sha256": "1EC3B764D343BD2534A38F8F1B885821720B82BC503A690AC2D75D8E736C6267"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+      "sha256": "4DD310C490ABCD3B4F663927DE7DC1304D9C1C65653C14A9562B4957476B7B68"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs",
+      "sha256": "BF1827361DD631BCC8F4CC1642B86FFF7BE78C228353FCACE251B98AF4B771B6"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs",
+      "sha256": "966E1DDDFE1FF6F7AB430F2A0C5EE3C2970676EB256B227D38809D39D954FDFC"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs",
+      "sha256": "3C65C7C4410166A95696A6989F8E52C7EAF8956B0C6ECF3EFB2A07A0D65BE50E"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs",
+      "sha256": "22F60C9D6983235DDE749F22190FF6E7FDD6EFCC7151D3D402E98D833A7B947A"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs",
+      "sha256": "41C196A0CAFC9AE2C7DFE8DAB9190D67CE99B1B0E2C6006C8A4A0774C5EA3E8A"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsFourteenthLinuxNativeTests.cs",
+      "sha256": "D6698692DCC78255BF00B0303814DD0D159E451DBCF19A777FE96E567E1D275F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs",
+      "sha256": "AA106F7CC5BF13D9A459A89635B499C87EC4D7FB6BA2598005740FC8D4147E70"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs",
+      "sha256": "7FB16AA90DE1C7F48D03066EEB7E443C173706D5AF69F2DF6879D2F187384CC3"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs",
+      "sha256": "47C1EE23BD9450B3B6FBA714F65EBA65F2FA96BC586FD08DA2D66FC60CEE7DD9"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogDenseGraphTests.cs",
+      "sha256": "92CDAE748E4B79331CF0FDF7784876D3BD6857701899ED3FA43B47C525C604F7"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs",
+      "sha256": "8BD2BBB92C45D94117227756C5AE5D1785D01634C1D4FE03FC58BC1D94DFC2FA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogOwnedHomeFilterContractTests.cs",
+      "sha256": "1167F14F2B88DB9D4D62B8CF1F24575005F26B379BD534B31FC7B7D7CF28207A"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogReplaceSectionRetryableTests.cs",
+      "sha256": "3D84C7863A3280EA0876CF0775FED839B119E31A10FB1430AC706C81B9744C13"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs",
+      "sha256": "CB25F10A0B41C4E6CA5A8728D909F0CF222133E64AF1F1305D098994E5D7377B"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizerRegistrationTests.cs",
+      "sha256": "F993B73BACAC78937FF8B9F516D7A50E861488B2A370E9554F1108B35573D24A"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs",
+      "sha256": "448C19F923CDA4FDB00D416DA55C18E29F1370244AABE667644D360B1A661B6E"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs",
+      "sha256": "57D202C2D294FCDAC89DBD18304060C9B2014A4DB7E46EBDD223526A69B5005A"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs",
+      "sha256": "5E22EBF7471718A15A62F1324198498B3626E444E8F22FBD4A165A3833259E91"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs",
+      "sha256": "60AEA7CFD4EC2554BEECD46AB6B084968945670B421D8A5848981518F5DAE99F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs",
+      "sha256": "A19D0BB786938122B7A4AC66FB56215212CB7DFA85F655E97E0D2BE9DA43C921"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs",
+      "sha256": "089E2F926DF903D706A4F038AB2717BB6DB0DA6FD3F91C744C2E5F391DB298C7"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs",
+      "sha256": "06362F8C0A6719FBAA682E92D35CB0E5C3C0159C3DB261605F9D3E74B9ABDFE3"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs",
+      "sha256": "6A0881B31416902C957F6CF930BD0779EC176FDCC394DDA501E8D142AC444223"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs",
+      "sha256": "FEE07D663E25B55CAE12CF8BE9E8AAC167165E785A8F4A46391F74B7F63085AB"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs",
+      "sha256": "01127489A6908CFC5B8B5894C20C753ACCEBC2A454782B4117E9BAD9DFE29ABC"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs",
+      "sha256": "B0BB22319E1A3377B49A078281D44B8F60E619F24EC6B92637D5660A5B770AE4"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateContractTests.cs",
+      "sha256": "C1F7E5899C3ADF31EA7BE290AC361E4273B2C05B22946F32E8FB5AD814F254DC"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseCqrsTests.cs",
+      "sha256": "AC083368D8A54582FC0C17BD05113FBC037BC865C68452814679B641076772B3"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseExpandedScopeTests.cs",
+      "sha256": "1432F3431E85B440AEBFC5CF61FEA7DAF1EF7FE8472B963F0C53FF1AAA9217D3"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+      "sha256": "26A04AC20BBE9D59C2E5F80518BDF04B0873D1F1F7E016DC6AB1A9F7B103F00D"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+      "sha256": "5376A1703FDFB9DF999DEB2121D80FC896B2AA8F6764E4C2BE7CD6A2AE3BF9A5"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs",
+      "sha256": "0EFF7A6B6C23F3AF560514B9965AC675DC2F0CE256C0FF5CABDE4DAC8BA96651"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs",
+      "sha256": "1B7CEF39D738ACC8ED38581397BCA5DBAAEDBF2AE5E73543663B977F477599DA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs",
+      "sha256": "7B145A0C8456C21F1A6972181BCFD49B243409339E60230AA0C64C37B319A5D7"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+      "sha256": "7921B788021377F99730AD76879B091DB20336B1F26B749ABB31795D8B252D08"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs",
+      "sha256": "61F5C5123DD764269D078B595DACFF2F7ECFF9AE6DF1F024FF15FB872292610F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/AddSessionLogTurnPlanFileAndTodoIdMigrationTests.cs",
+      "sha256": "D4DE6DCCBFE26FFC2EDF97E9EA73A094AC84A1864575D2A47ACB604D33B51C1E"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs",
+      "sha256": "113BF1FA46D0C67337E79F24631BA0E0E7064BEAAEC7FC3CC2B718BF614E3914"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs",
+      "sha256": "1E6051B88B2730CCDDA816E0B09C88AE4972D69253B112A0D4E2308BE0980A5B"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthSqliteTests.cs",
+      "sha256": "5A630E4A0DD91F23D7AECD52E107563AF9DEEB1CA7CD301997A5E19A9FF6CFE8"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthLinuxNativeTests.cs",
+      "sha256": "8DCE07D74EDBBE23FC9CE53C87C4E76CB3F84BFD0B01BF6C5F55E30CE152EF0C"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthSharedTests.cs",
+      "sha256": "E996C87CB2FE2E6E00F920DB969C212DE0E6908EA707137A7CA60D1193FC445C"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthWindowsNativeTests.cs",
+      "sha256": "3B598A93A1CE1E3BC35DAE741C908AA4E8C1DC77D647106613A2B1448DD2BB5D"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+      "sha256": "060DB8873601E820B42D51C42FBD6855D571B74F54014BF2A4E09E1B49C5447B"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs",
+      "sha256": "B4C36729D51CA4F9B369E7230D40F7C75AA6D4B76EAC5AE33745A63D673558BA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs",
+      "sha256": "612B0DA150909DA7102B57CF4910AA246608F958EA1B64DA087A9677070D5E9E"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthSqliteConsumerTests.cs",
+      "sha256": "B14E1FFABCAF070398386CE5270FF3DADE57A480DD3DA9341421551EB8F475C4"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+      "sha256": "EE5769831CC222626E4A77063F58CC15792B8920D39D6DC86805741EE2E7B781"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+      "sha256": "0D2EA8ED0B7D6A4DECB25B6ABBD83ECFBDAAA6D3962629F1FC54E08D14EDCB43"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+      "sha256": "BA9958D9DA7EE4EE439FBB8DD53B369B7DEEE6E44F10BAFC2C8AF55C9092388C"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/ProductMigrationApplyTests.cs",
+      "sha256": "3C5C3C4C882F223C4E5CE78924D2DB8BE1FC84829C2F9E991D2B7C685543C549"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/ScriptedWorkspacePathNormalizer.cs",
+      "sha256": "9F09EC9E511C328EBA3C32B64C51CFAEB08DF45068FE02F109BE842F56A290E5"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+      "sha256": "C5AC55F34CA8BA9E5F879214EF048D5551AF995234FA49F4476ACD332971C51E"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogTurnPlanFileTodoIdMigrationApplyTests.cs",
+      "sha256": "F570A252EB8FA05BA50BB20D907391D9000C7BADD4BB09F67782C160A8A66169"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs",
+      "sha256": "36624F55CC4C9AA8070E2EBF51D859F5998107D33CE2A66C87D1D48A55401FC1"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs",
+      "sha256": "D36A790AF1CA47F3C97C76D7CA3573DBCA6AB1D5D5E339062D8D79DCBA95326E"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs",
+      "sha256": "17E433E970DD367DC418BB35AE9080BCDA7A8223A3EF9972F696E2CB80900897"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+      "sha256": "F6FCF7840B399575E9429CB31A83AD6B2D1B061DC161BA0AD5F95CAE68B1D3FF"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureBindingTests.cs",
+      "sha256": "531651AC0D78729E46DE06A58ADA296026A4ABB398423D7DA671F1CF7307CBC3"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureContractTests.cs",
+      "sha256": "4010355D8366642964AFC3A75899B580A1AEF5EAC3318C04B0BE5C42141691E7"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs",
+      "sha256": "EED3A9738DB33B7FDE6042FA1CF1D61D0C7786F4922F8B21F4CBD8B10F5DC345"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs",
+      "sha256": "660567D1696BB2BDEAEA03BDC1E76555F1CAFDDC8378D5AFBA28651131E0C936"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs",
+      "sha256": "E1D0B2DAB8665207A71C92FD756245AE782F60AE53C25F32A128A3404188F36C"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+      "sha256": "8A2E71DA85DBB5AA330836AA0AA8948DF8273EA454643F9C0018D7D5BFC8ED45"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseMigrationApplyTests.cs",
+      "sha256": "E8EDE657656867A489BC7A8C0FBABFF2A7BD5FC0F5159BFD6902F93F7A718D29"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+      "sha256": "81E31092F9A772D3F89CA1BC53694377C7859F80AF4BFCC18F424847BDD2F274"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs",
+      "sha256": "6978D16029608CE02E4A0095E7D2260598EAA860F89669FE59E63325ECFE37A2"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathFacadeTests.cs",
+      "sha256": "38C45F51638549737633025ADE56455E66F4BA151F2B240C528AAFF4D03D3B09"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+      "sha256": "F76B2DB3AE9DAB7966AA9003BADEC7D780BAE26A78BBAA4FF5BD87773811748A"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs",
+      "sha256": "AD8FA02A1B403B26AC448CB669D39B643CD410CFC8D4C0C193B736165BD0334D"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs",
+      "sha256": "F6C1163B5EAB5F11FD17C8A5A6D8EC7D695F3BB861D5697DE4044ACF64B81A27"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+      "sha256": "39783930DC06461671F4C615FAFE6CE59C8B9E85601581B5C3088A904DD26C8B"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+      "sha256": "9058A4C9DC71E860B4721B3BB737F83501DD7F302C61763CA67B526536707D02"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+      "sha256": "FBD2198275CD958F9C880AAD1B6EA4AC961A822109A692010370FEB7497D51C7"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+      "sha256": "D1CE1587005A44190767A927C160DB1101E9EA1F4A940662090E3AC8DE70D3FD"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollection.cs",
+      "sha256": "43E88DBA9CEF58976F3C5F78D2EAE39008792EDEF62C0B602EE4C72034829AC6"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+      "sha256": "B892300C2D3C90F4C44090AFAC9E96AC2212F27A399156910E8ACBC94B2EB83C"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs",
+      "sha256": "922570C43FE8C41C3BD05CB2678D406BAE2497FF78031DFF07043B241AFC498E"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+      "sha256": "93C106E7CA0E75DFFD5E9EEA056275DFF428A119322AB4F63BC1328420850BF9"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/UnitTestPaths.cs",
+      "sha256": "872C9721D35DE7BF2679EFA2F3E966A7658779E119A8030895578CC509A6CE47"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseCanvasUiAssetTests.cs",
+      "sha256": "D4B17FE1D6B202B8AA7D05CC0475ED691F7DFE8E7AC07798333FEAC97E6F5DE1"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs",
+      "sha256": "B1E7CD6257F078D106CFC641670AB9E0B40EC6BD056DB0947CA3DA5F50C92AE0"
+    },
+    {
+      "path": "tests/Shared/TestRepositoryRoot.cs",
+      "sha256": "CF96869D80B285F43591B93514F578E6D371F62A1FB8429E342361F0EDC90D13"
+    },
+    {
+      "path": "tests/TestSupport.Shared/OwnedInstanceProcess.cs",
+      "sha256": "27B7C13FCB575AD19A85A9B6ECF81F0E1B51B9F47BA8F9078492A93A2A2156FB"
+    },
+    {
+      "path": "tests/TestSupport.Shared/OwnedReplStart.cs",
+      "sha256": "73B39C295A87F93D56D02D5C5CF781E236800EF7F76973A5DCC8C3C2170CD923"
+    },
+    {
+      "path": "tests/TestSupport.Shared/ScratchQBrainAi.cs",
+      "sha256": "E462D6EE07F8595E3BB96BD9B598C12D6A6ABC5028DC70ACFFAD52F380940096"
+    },
+    {
+      "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+      "sha256": "CB7E117C014179EDF6C77CCA5F1324968B621F133B71EAA8898E28503A6C6042"
+    }
+  ],
+  "runMetadata": {
+    "name": "ug-r9-post-n-unit-2",
+    "target": "Test",
+    "extraArgs": [
+      "Test",
+      "--test-run-id",
+      "ug-r9-post-n-unit-2"
+    ],
+    "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+    "head": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+    "dirtyPaths": [
+      " M .nuke/build.schema.json",
+      " M build/Build.TestDependencies.cs",
+      " M build/IntegrationLaneFilter.cs",
+      " M build/IntegrationLaneFilterContracts.cs",
+      " M build/IntegrationLaneProjects.cs",
+      " M build/IntegrationLaneProjectsContracts.cs",
+      " M docs/Project/Functional-Requirements.md",
+      " M docs/Project/Requirements-Matrix.md",
+      " M docs/Project/TR-per-FR-Mapping.md",
+      " M docs/Project/Technical-Requirements.md",
+      " M docs/Project/Testing-Requirements.md",
+      " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+      " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+      " M docs/plans/2026-10-19-unit-suite-green.md",
+      " M src/QBrainAi.Repl.Core/AgentStdioProtocol.cs",
+      " M src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs",
+      " M src/QBrainAi.Repl.Core/ReplCommandTimeout.cs",
+      " M src/QBrainAi.Repl.Host/IMarkerFileSystem.cs",
+      " M src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      " M src/QBrainAi.Repl.Host/PhysicalMarkerFileSystem.cs",
+      " M src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+      " M src/QBrainAi.Services/Services/DesktopProcessSpawner.cs",
+      " M src/QBrainAi.Services/Services/DirectoryListingEntry.cs",
+      " M src/QBrainAi.Services/Services/DirectoryTreeWalker.cs",
+      " M src/QBrainAi.Services/Services/GitHubCliService.cs",
+      " M src/QBrainAi.Services/Services/MarkerFileService.cs",
+      " M src/QBrainAi.Services/Services/SessionLogService.cs",
+      " M src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+      " M src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs",
+      " M tests/Build.Tests/BoundedProcessTests.cs",
+      " M tests/Build.Tests/BuildProjectSetTests.cs",
+      " M tests/Build.Tests/BuildTargetTests.cs",
+      " M tests/Build.Tests/DocsSyncG8OverlayTests.cs",
+      " M tests/Build.Tests/HandoffD3D5OverlayTests.cs",
+      " M tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+      " M tests/Build.Tests/IntegrationLanePreconditionContract.cs",
+      " M tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+      " M tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+      " M tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+      " M tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+      " M tests/Build.Tests/MigrationAssemblyObsoleteWarningTests.cs",
+      " M tests/Build.Tests/NukeParametersTests.cs",
+      " M tests/Build.Tests/OllamaInstallLayoutContract.cs",
+      " M tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs",
+      " M tests/Build.Tests/PowerShellInvocationTests.cs",
+      " M tests/Build.Tests/ProviderTestProvisioningContract.cs",
+      " M tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+      " M tests/Build.Tests/ProviderTestProvisioningTests.cs",
+      " M tests/Build.Tests/ProvisioningDownloadContract.cs",
+      " M tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs",
+      " M tests/Build.Tests/QuadBrainDescriptorAbsenceTests.cs",
+      " M tests/Build.Tests/SyncAgentPluginsChecksumTests.cs",
+      " M tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs",
+      " M tests/Build.Tests/TrCoverageConsistencyTests.cs",
+      " M tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs",
+      " M tests/Build.Tests/WarningSuppressionApprovalValidatorTests.cs",
+      " M tests/Build.Tests/WarningSuppressionValidationTargetTests.cs",
+      " M tests/Directory.Build.targets",
+      " M tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+      " M tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+      " M tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkContract.cs",
+      " M tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs",
+      " M tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs",
+      " M tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs",
+      " M tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+      " M tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+      " M tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs",
+      " M tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+      " M tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs",
+      " M tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Configuration/TriageConfigurationContractTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139EighteenthEvidenceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/McpStdio/BrainSlotToolAbsenceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryApiIdempotencyTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchConflictTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchInjectionTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchIsolationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnDocsTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnPackTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnScoringTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchSafetyTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchScoringTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchToolUseTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMcpSchemaTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryToolsDiscoveryTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryMigrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffWorkspacePathsTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsFourteenthLinuxNativeTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogDenseGraphTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogReplaceSectionRetryableTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizerRegistrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateContractTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseCqrsTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseExpandedScopeTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/AddSessionLogTurnPlanFileAndTodoIdMigrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthSqliteTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthLinuxNativeTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthSharedTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthWindowsNativeTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthSqliteConsumerTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/ProductMigrationApplyTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/ScriptedWorkspacePathNormalizer.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogTurnPlanFileTodoIdMigrationApplyTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseMigrationApplyTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollection.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/UnitTestPaths.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseCanvasUiAssetTests.cs",
+      " M tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs",
+      " M tests/Shared/TestRepositoryRoot.cs",
+      " M tests/TestSupport.Shared/ScratchQBrainAi.cs",
+      " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+      "?? build/IntegrationLaneClassFilter.cs",
+      "?? build/IntegrationLaneClassFilterContracts.cs",
+      "?? build/IntegrationLaneExecution.cs",
+      "?? build/OllamaDetachedLaunch.cs",
+      "?? build/scripts/",
+      "?? docs/receipts/unit-suite-green-20261019/checkout-reading-build-tests.json",
+      "?? docs/receipts/unit-suite-green-20261019/classification-review-20261030.json",
+      "?? docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T182326/",
+      "?? docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T184145/",
+      "?? docs/receipts/unit-suite-green-20261019/diagnostic-o-20261030T185441/",
+      "?? docs/receipts/unit-suite-green-20261019/mixed-fixture-method-classifications.json",
+      "?? docs/receipts/unit-suite-green-20261019/requirement-projection-export-20261030.json",
+      "?? docs/receipts/unit-suite-green-20261019/source-identifier-audit-20261030.json",
+      "?? docs/receipts/unit-suite-green-20261019/sql-diagnostic-summary-20261030.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-i-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-j-full-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-j-unit-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-m1-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-m2-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-m3-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-o-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-i-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-i-3.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-j-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-m1-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-m2-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-m3-1.failed.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-m3-2.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-o-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r9-post-n-unit-1.failed.json",
+      "?? tests/Build.Tests/Fixtures/Check-PowerShellFixtures.ps1",
+      "?? tests/Build.Tests/InlineTheoryCoverage.cs",
+      "?? tests/Build.Tests/IntegrationLaneClassFilterContract.cs",
+      "?? tests/Build.Tests/IntegrationLaneClassFilterMockGateTests.cs",
+      "?? tests/Build.Tests/IntegrationLaneClassFilterTests.cs",
+      "?? tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs",
+      "?? tests/Build.Tests/IntegrationLaneExecutionBindingTests.cs",
+      "?? tests/Build.Tests/IntegrationLaneExecutionContractTests.cs",
+      "?? tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationBindingTests.cs",
+      "?? tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs",
+      "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs",
+      "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs",
+      "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationBindingTests.cs",
+      "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+      "?? tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationBindingTests.cs",
+      "?? tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationContractTests.cs",
+      "?? tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs",
+      "?? tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs",
+      "?? tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogOwnedHomeFilterContractTests.cs",
+      "?? tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureBindingTests.cs",
+      "?? tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureContractTests.cs",
+      "?? tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs",
+      "?? tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathFacadeTests.cs",
+      "?? tests/TestSupport.Shared/OwnedInstanceProcess.cs",
+      "?? tests/TestSupport.Shared/OwnedReplStart.cs"
+    ],
+    "startedLocal": "2026-10-30T20:16:48",
+    "startedUtc": "2026-10-31T01:16:48.1569396Z",
+    "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-post-n-unit-2.out.log",
+    "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-post-n-unit-2.err.log",
+    "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-post-n-unit-2.exit.txt"
+  },
+  "total": 4670,
+  "passed": 4670,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-post-n-unit-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "2FF182A98499F3192EA1D727365DBBE2FC188E85B9CDD21942A8E70CFCE3C7D6",
+      "total": 3201,
+      "passed": 3201,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-post-n-unit-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+      "sha256": "6B2F717B52EF117A6B019684BF48074BD6EC68A5D4235F8F79006FA5B9052675",
+      "total": 306,
+      "passed": 306,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-post-n-unit-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+      "sha256": "25F14B23D0C8D3304AFE5FEC9FD6601F4A6F8C939083E9194A7A4A86CC0F4273",
+      "total": 33,
+      "passed": 33,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-post-n-unit-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+      "sha256": "A7B6F59325F7468A628FDE144CBB993115034DD3563B5E0B0116037D1FD231E2",
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-post-n-unit-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "sha256": "D6CE0A7D59EE0A88120111E760D4342F1DCDA4A066610684FC115B8A71FFFBFE",
+      "total": 64,
+      "passed": 64,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-post-n-unit-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "DAA6658487528BFC5F481BDEA8FBB92EB2A7A221E24E55E15656D9617F1DECBA",
+      "total": 952,
+      "passed": 952,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-post-n-unit-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "sha256": "BFE3ABC1376C2E368A625893A53D4FDE3644A1C0C23A2A6AB1274BACF90056F9",
+      "total": 94,
+      "passed": 94,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  ],
+  "failures": [],
+  "exitCode": 0,
+  "acceptedGate": true,
+  "hostileValidation": "pending; no plan/TODO/requirement completion claimed",
+  "auditSessionId": "Codex-20261030T202533Z-plugin-session",
+  "auditRequestId": "req-20261030T203231Z-turn-00b0"
+}

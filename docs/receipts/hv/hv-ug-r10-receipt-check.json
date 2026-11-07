@@ -1,0 +1,25 @@
+{
+  "TimestampLocal": "2026-11-03T07:51:26",
+  "Claims": 37,
+  "Closure": 33,
+  "Findings": 3,
+  "FailIds": [
+    "UG3",
+    "UG4",
+    "UG8",
+    "UG11",
+    "UG12",
+    "UG13",
+    "UG17",
+    "UG28",
+    "UG30",
+    "UG33",
+    "UG35",
+    "UG37"
+  ],
+  "MissingCitedPaths": [],
+  "ProhibitedDashCount": 0,
+  "MarkdownTableCount": 0,
+  "KnownMarkerKeyPresent": false,
+  "CommandExitMetadataOmissions": []
+}

@@ -1,0 +1,12 @@
+Store readback comparison, written 2026-11-06T08:17:58 local by ClaudeCode (Compare-StoreReadbacks.ps1; read only over the two receipts).
+before /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z13-store-readback-1.json sha256=B5A698217851E53ACACD9E38CD34427E77F35FC996DE00B745AD3592E5AA6AD3
+after /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z14-store-readback-1.json sha256=848834CFECBEC243E2DEE693DA75B5A9E43BC501EF97676B44B467AE15EC3A4E
+before read 2026-11-06T06:03:16; after read 2026-11-06T08:17:10
+TR-MCP-SERVICEUPDATE-001: criteria before=8 after=8
+TR-MCP-USECASE-018: criteria before=7 after=7
+  position 5 id=AC-006: CHANGED append=True satisfied False->False tail= Such an observation shows a finished pass only when no removal of that pass can suspend before the decision is read, and the code or the test enforces that: when a pass removes records one at a time and can await between removals, a record it has already removed shows only that the pass reached that record, so the test either reads the decision after the pass's last removal or shows that no removal in its trace can await (for example because no record in the trace holds a resource whose release awaits). A removal decision may be read directly after the trigger, because an unfinished pass can only make it fail (sixteenth holistic read before hostile validation round 14, findings e1 and g2; added under the operator's "if you surface new AC, add them without waiting for approval" and "Strengthening Acceptance Criteria should always be the recommended option", 2026-11-06).
+FR-MCP-TESTRESOURCE-001: criteria before=12 after=12
+IMPL-UNITGREEN-001: tasks before=58 after=59
+  task 58: CHANGED done False->False
+  task 59: NEW done=False
+IMPL-SERVICEOVERRIDES-001: tasks before=3 after=3

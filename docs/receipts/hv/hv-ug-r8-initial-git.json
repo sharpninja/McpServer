@@ -1,0 +1,21 @@
+{
+  "timestampLocal": "2026-10-27T03:43:51",
+  "tool": "git",
+  "arguments": [
+    "status",
+    "--short"
+  ],
+  "exitCode": 0,
+  "output": [
+    "?? docs/receipts/hv/20261027T033814-unitgreen-r8.request.jsonl",
+    "?? docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+    "?? docs/receipts/hv/20261027T033814-unitgreen-r8.selfreview.md",
+    "?? docs/receipts/hv/hv-ug-r8-begin-turn.txt",
+    "?? docs/receipts/hv/hv-ug-r8-history-query.psd1",
+    "?? docs/receipts/hv/hv-ug-r8-identity.json",
+    "?? docs/receipts/hv/hv-ug-r8-initial-log.json",
+    "?? docs/receipts/hv/hv-ug-r8-initial-log.psd1",
+    "?? docs/receipts/hv/hv-ug-r8-plugin-status.txt",
+    "?? docs/receipts/hv/hv-ug-r8-session-start.txt"
+  ]
+}

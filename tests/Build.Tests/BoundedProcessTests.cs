@@ -130,6 +130,8 @@ public sealed class BoundedProcessTests
     /// waits for a child to exit, so every child process the suite starts is bounded. Scans the C# sources under tests/Build.Tests
     /// (build output excluded) for direct output reads and exit waits.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess()
     {

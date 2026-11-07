@@ -1,64 +1,98 @@
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.TestSupport.TemporaryInstance;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-16..23: Each plugin completes the full pack after H7a.
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-16 (historical)..23: Each plugin completes the full pack after H7a.
 /// </summary>
 public sealed class MemoryBenchPluginTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-16: Grok completes every prompt × both conditions with tokens_*.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Grok_CompletesFullPack_Required()
         => AssertPluginCompletesFullPack("grok", MemoryBenchCatalog.StubGrok());
 
     /// <summary>AC-FR-MCP-MEMORY-018-17: Claude Code completes the full pack after H7a AGREE.</summary>
+    /// <remarks>Integration: loads the recorded benchmark pack and value-gate artifacts through the shared physical catalog (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ClaudeCode_CompletesFullPack_AfterGrokValueGate()
         => AssertPluginCompletesFullPack("claude-code", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-18: Claude Cowork completes the full pack after H7a AGREE.</summary>
+    /// <remarks>Integration: loads the recorded benchmark pack and value-gate artifacts through the shared physical catalog (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ClaudeCowork_CompletesFullPack_AfterGrokValueGate()
         => AssertPluginCompletesFullPack("claude-cowork", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-19: Cline completes the full pack after H7a AGREE.</summary>
+    /// <remarks>Integration: loads the recorded benchmark pack and value-gate artifacts through the shared physical catalog (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Cline_CompletesFullPack_AfterGrokValueGate()
         => AssertPluginCompletesFullPack("cline", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-20: Cline v2 completes the full pack after H7a AGREE.</summary>
+    /// <remarks>Integration: loads the recorded benchmark pack and value-gate artifacts through the shared physical catalog (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ClineV2_CompletesFullPack_AfterGrokValueGate()
         => AssertPluginCompletesFullPack("cline-v2", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-21: Codex completes the full pack after H7a AGREE.</summary>
+    /// <remarks>Integration: loads the recorded benchmark pack and value-gate artifacts through the shared physical catalog (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Codex_CompletesFullPack_AfterGrokValueGate()
         => AssertPluginCompletesFullPack("codex", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-22: Copilot completes the full pack after H7a AGREE.</summary>
+    /// <remarks>Integration: loads the recorded benchmark pack and value-gate artifacts through the shared physical catalog (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Copilot_CompletesFullPack_AfterGrokValueGate()
         => AssertPluginCompletesFullPack("copilot", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-23: OpenCode completes the full pack after H7a AGREE.</summary>
+    /// <remarks>Integration: loads the recorded benchmark pack and value-gate artifacts through the shared physical catalog (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Opencode_CompletesFullPack_AfterGrokValueGate()
         => AssertPluginCompletesFullPack("opencode", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-09 / H7b: Stub -Plugin all writes per-cell tokens for all eight plugins.</summary>
+    /// <remarks>
+    /// Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).
+    /// The stub artifacts go to a new test-owned folder outside the checkout (FR-MCP-TESTRESOURCE-001, second criterion).
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, generated artifacts in test-owned locations): the run writes to a new temporary folder that TemporaryInstanceChecks.CheckTestOutputFolder accepts, instead of the checkout's docs/benchmarks/results, whose two tracked files every lane run rewrote (operator 2026-11-02: "Fix in scope"; triage-report-32e6bc07); assertions unchanged.</description></item>
+    /// </list>
+    /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AllEight_WritesStubArtifacts()
     {
-        var directory = Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "benchmarks", "results");
+        var directory = Path.Combine(Path.GetTempPath(), "memory-bench-stub-" + Guid.NewGuid().ToString("N"));
+        Assert.Null(TemporaryInstanceChecks.CheckTestOutputFolder(directory, MemoryBenchCatalog.FindRepoRoot()));
         Directory.CreateDirectory(directory);
-        var result = MemoryBenchCatalog.RunStub(["all"], directory, utcStamp: "20260919T091800Z");
-        Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, result.Plugins);
-        Assert.Equal(128, result.Cells.Count);
-        Assert.Equal(1.0, result.Cells.Average(cell => cell.Pass ? 1 : 0));
-        Assert.True(File.Exists(Path.Combine(directory, "memory-bench-20260919T091800Z.json")));
-        Assert.True(File.Exists(Path.Combine(directory, "memory-bench-20260919T091800Z.md")));
+        try
+        {
+            var result = MemoryBenchCatalog.RunStub(["all"], directory, utcStamp: "20260919T091800Z");
+            Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, result.Plugins);
+            Assert.Equal(128, result.Cells.Count);
+            Assert.Equal(1.0, result.Cells.Average(cell => cell.Pass ? 1 : 0));
+            Assert.True(File.Exists(Path.Combine(directory, "memory-bench-20260919T091800Z.json")));
+            Assert.True(File.Exists(Path.Combine(directory, "memory-bench-20260919T091800Z.md")));
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
     }
 
     private static void AssertPluginCompletesFullPack(string plugin, MemoryBenchRunResult result)

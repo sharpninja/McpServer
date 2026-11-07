@@ -1,0 +1,7 @@
+Now: 2026-10-20T21:21:31 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r4-ext-mockgate-1 (4514) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r4-ext-binding-1 (4516)
+onlyBefore=0 onlyAfter=2 common=4514
+onlyAfter QBrainAi.Support.Mcp.Tests=2
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryS1HarnessDatabaseTests.TestDatabase_GivesEachContextItsOwnConnectionToOneDatabase
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffAuditDefectTests.TestDatabase_GivesEachContextItsOwnConnectionToOneDatabase

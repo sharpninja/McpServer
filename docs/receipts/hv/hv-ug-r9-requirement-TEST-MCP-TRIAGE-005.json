@@ -1,0 +1,31 @@
+{
+  "TimestampLocal": "2026-11-02T19:17:01",
+  "TimestampUtc": "2026-11-03T01:17:01.3751437Z",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-MCP-TRIAGE-005"
+  },
+  "Data": [
+    {
+      "payload": {
+        "deprecated": true,
+        "result": {
+          "acceptanceCriteria": [],
+          "testType": "unit",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "createdAt": "2026-11-03T01:17:03.6397870+00:00",
+          "status": "pending",
+          "id": "TEST-MCP-TRIAGE-005",
+          "description": "Invalid agent output or failed agent run creates no TODO and leaves inspectable failure state.",
+          "updatedAt": "2026-11-03T01:17:03.6400075+00:00",
+          "title": "Test TEST-MCP-TRIAGE-005",
+          "priority": "medium"
+        },
+        "requestId": "req-20261103T011702Z-c70a"
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

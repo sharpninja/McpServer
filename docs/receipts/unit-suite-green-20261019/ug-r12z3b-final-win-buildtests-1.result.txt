@@ -1,0 +1,22 @@
+RECEIPT 2026-11-04T18:16:56 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinBuildTests.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-11-04T18:16:20 host=PAYTON-LEGION2 user=kingd session=0 interactive=False
+REF origin/fix/unit-suite-green-20261019-windows=4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6 expected=4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6 match=True
+FILTER NotInLane=Category!=Integration&Platform!=Linux
+COMMAND dotnet test F:/GitHub/McpServer/.worktrees/unit-suite-green-windows-20261102/tests/Build.Tests/Build.Tests.csproj -c Debug --filter Category!=Integration&Platform!=Linux --logger trx;LogFileName=Build.Tests.trx --results-directory F:/GitHub/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r12z3b-final-win-buildtests-1/build-tests
+HEAD 4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6 expected=4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6 match=True
+TEST begin 2026-11-04T18:16:21
+TEST exit=0 end 2026-11-04T18:16:54 log=C:\Users\kingd\AppData\Local\Temp\unit-suite-green-windows-20261102\BuildTests-ug-r12z3b-final-win-buildtests-1.log
+  LOG   Determining projects to restore...
+  LOG   All projects are up-to-date for restore.
+  LOG   _build -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\build\bin\Debug\_build.dll
+  LOG   Build.Tests -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll
+  LOG Test run for F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll (.NETCoreApp,Version=v10.0)
+  LOG A total of 1 test files matched the specified pattern.
+  LOG Results File: F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\TestResults\ug-r12z3b-final-win-buildtests-1\build-tests\Build.Tests.trx
+  LOG 
+  LOG Passed!  - Failed:     0, Passed:   453, Skipped:     0, Total:   453, Duration: 23 s - Build.Tests.dll (net10.0)
+TRX \Build.Tests.trx total=453 executed=453 passed=453 failed=0 notExecuted=0
+END 2026-11-04T18:16:54

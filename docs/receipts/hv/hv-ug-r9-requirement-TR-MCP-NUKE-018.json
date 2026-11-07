@@ -1,0 +1,38 @@
+{
+  "TimestampLocal": "2026-11-02T19:15:57",
+  "TimestampUtc": "2026-11-03T01:15:57.1418819Z",
+  "Method": "workflow.requirements.getTr",
+  "Params": {
+    "id": "TR-MCP-NUKE-018"
+  },
+  "Data": [
+    {
+      "payload": {
+        "deprecated": true,
+        "result": {
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "id": "AC-4",
+              "text": "Connection-string values never appear in logs, exception messages, or committed files; only variable names, file paths, container names and host:port endpoints are reported."
+            }
+          ],
+          "createdAt": "2026-11-03T01:15:59.3814498+00:00",
+          "updatedAt": "2026-11-03T01:15:59.3815717+00:00",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "subarea": "NUKE",
+          "status": "pending",
+          "id": "TR-MCP-NUKE-018",
+          "description": "On Linux, InstallTestDependencies supplies the PostgreSQL and SQL Server endpoints of the Category=Integration provider tests from the host test-database env file and the dedicated qbrain-test containers (operator decision 2026-10-11, BUG-BASELINE-005), and exports them to the test processes the build starts; Windows provisioning is unchanged.",
+          "notes": "PLAN-C4MODEL-001. Operator answers 2026-10-19: \"Fix all 14 in this plan\", \"Fix 10 here; 4 via PR 82/83\", \"Trait + Linux provisioning (Recommended)\". Operational configuration: the Linux provider lane reads a private test-database env file under the user configuration directory. It supplies MCP_TEST_POSTGRES_CONNECTION and MCP_TEST_SQLSERVER_CONNECTION for the dedicated test containers. Concrete host paths, addresses and container observations belong to execution receipts.",
+          "title": "InstallTestDependencies provisions provider test servers on Linux",
+          "priority": "high"
+        },
+        "requestId": "req-20261103T011558Z-8c38"
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

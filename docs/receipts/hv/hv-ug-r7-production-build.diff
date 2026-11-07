@@ -1,0 +1,1348 @@
+diff --git a/Directory.Packages.props b/Directory.Packages.props
+index c78be2b1..498a9468 100644
+--- a/Directory.Packages.props
++++ b/Directory.Packages.props
+@@ -37,11 +37,11 @@
+     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0" />
+     <PackageVersion Include="Microsoft.EntityFrameworkCore.Analyzers" Version="10.0.0" />
+     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.0" />
+-    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="5.3.0" />
+-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.3.0" />
+-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.3.0" />
+-    <PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="5.3.0" />
+-    <PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="5.3.0" />
++    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="5.9.0" />
++    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
++    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.9.0" />
++    <PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="5.9.0" />
++    <PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="5.9.0" />
+     <PackageVersion Include="Microsoft.Build" Version="18.6.3" />
+     <PackageVersion Include="Microsoft.Build.Framework" Version="18.6.3" />
+     <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="18.6.3" />
+@@ -88,7 +88,9 @@
+     <PackageVersion Include="Microsoft.ML.OnnxRuntime" Version="1.24.1" />
+     <PackageVersion Include="HnswIndex" Version="1.6.0" />
+     <PackageVersion Include="System.Text.Json" Version="9.0.5" />
+-    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.10" />
++    <!-- TR-MCP-QUALITY-001 ac-21: advisory-patched versions (GHSA-2fmv-rv2c-59x7, GHSA-846f-f764-76mx, GHSA-7hqp-7c5m-4vq6, GHSA-c399-9853-6jmj, GHSA-r955-8q5j-3h83) -->
++    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.13" />
++    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+     <PackageVersion Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
+     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.2" />
+     <PackageVersion Include="Reqnroll" Version="3.0.0" />
+diff --git a/build/Build.TestDependencies.cs b/build/Build.TestDependencies.cs
+index aaec368e..0efc64b7 100644
+--- a/build/Build.TestDependencies.cs
++++ b/build/Build.TestDependencies.cs
+@@ -36,29 +36,72 @@ partial class Build
+         (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) / "QBrainAi" / "test-tools";
+ 
+     /// <summary>
+-    /// Idempotent installer for the provider integration-test dependencies:
+-    /// SQL Server LocalDB (elevated MSI install when missing) and PostgreSQL server binaries
+-    /// (existing installation preferred; otherwise the portable EDB binaries zip is downloaded
+-    /// to a user-scoped tools directory, no elevation required). Re-running when everything is
+-    /// already present is a no-op.
++    /// TR-MCP-NUKE-018 AC-1: test-database env file read on non-Windows hosts when a provider connection
++    /// variable is not already set; defaults to ~/.config/qbrain-test/test-db.env.
++    /// </summary>
++    [Parameter("Test-database env file for Linux provider test provisioning (default ~/.config/qbrain-test/test-db.env)")]
++    readonly string TestDbEnvFile = string.Empty;
++
++    /// <summary>
++    /// Idempotent installer for the provider integration-test dependencies. On Windows: SQL Server
++    /// LocalDB (elevated MSI install when missing) and PostgreSQL server binaries (existing
++    /// installation preferred; otherwise the portable EDB binaries zip is downloaded to a
++    /// user-scoped tools directory, no elevation required). On other hosts (TR-MCP-NUKE-018): the
++    /// PostgreSQL and SQL Server endpoints come from the test-database env file and the dedicated
++    /// qbrain-test containers, and must accept connections. Re-running when everything is already
++    /// present is a no-op.
+     /// </summary>
+     public Target InstallTestDependencies => _ => _
+-        .Description("Ensure SQL Server LocalDB and PostgreSQL binaries exist for provider integration tests (idempotent)")
++        .Description("Ensure provider integration-test servers: LocalDB and PostgreSQL binaries on Windows; qbrain-test containers and env file elsewhere (idempotent)")
+         .Executes(() =>
+         {
++            if (!OperatingSystem.IsWindows())
++            {
++                ProvisionProviderTestServers();
++                return;
++            }
++
+             EnsureSqlLocalDb();
+             var pgBin = EnsurePostgresBinaries();
+             Log.Information("Test dependencies ready. LocalDB: OK; PostgreSQL binaries: {PgBin}", pgBin);
+         });
+ 
++    /// <summary>
++    /// TR-MCP-NUKE-018 AC-1 to AC-4: provisions the provider test endpoints through the production
++    /// provisioner and the real host boundary, logs each action (names only, never values), and fails
++    /// the target with every error when any endpoint is unavailable (no skip).
++    /// </summary>
++    void ProvisionProviderTestServers()
++    {
++        var envFile = string.IsNullOrWhiteSpace(TestDbEnvFile)
++            ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ProviderTestNames.DefaultEnvFileRelativeToHome)
++            : Path.GetFullPath(TestDbEnvFile);
++        var result = new LinuxProviderTestProvisioner().Provision(envFile, new SystemProviderTestHost());
++        foreach (var action in result.Actions)
++            Log.Information("Provider test provisioning: {Action}", action);
++
++        if (!result.Succeeded)
++        {
++            foreach (var error in result.Errors)
++                Log.Error("Provider test provisioning: {Error}", error);
++            throw new InvalidOperationException("Provider test provisioning failed: " + string.Join("; ", result.Errors));
++        }
++
++        Log.Information("Test dependencies ready: {Postgres} and {SqlServer} accept connections.", ProviderTestNames.PostgresVariable, ProviderTestNames.SqlServerVariable);
++    }
++
+     /// <summary>
+     /// Runs the <c>Category=Integration</c> tests living inside the unit-test projects, including
+     /// the provider migration tests (SQLite in-memory, PostgreSQL, SQL Server LocalDB). The
+     /// PostgreSQL tests boot their own ephemeral cluster with generated credentials on a free port
+     /// via their xUnit class fixture (or honor <c>MCP_TEST_POSTGRES_CONNECTION</c>); SQL Server
+-    /// tests use an ad-hoc LocalDB database (auto-started). Integration tests run only through
++    /// tests use an ad-hoc LocalDB database (auto-started) on Windows. On other hosts both
++    /// providers use the endpoints InstallTestDependencies provisions (TR-MCP-NUKE-018 AC-6), and a
++    /// provisioning failure fails this target before any test runs. Integration tests run only through
+     /// this target: the default <c>Test</c> target excludes the category. The dedicated
+     /// <c>*.IntegrationTests</c> projects remain separate (their classes carry the same trait).
++    /// TR-MCP-NUKE-019: the selection is host-scoped through <see cref="IntegrationLaneFilter"/>; cases tagged
++    /// <c>Platform=Linux</c> run only on Linux hosts, <c>Platform=Windows</c> only on Windows hosts, untagged on both.
+     /// </summary>
+     public Target MigrationIntegrationTests => _ => _
+         .Description("Run Category=Integration tests (provider migrations, process spawns) with provisioned dependencies")
+@@ -67,12 +110,31 @@ partial class Build
+         {
+             // Only projects that contain Category=Integration tests: an empty filter match
+             // makes the test runner fail the target.
++            // TR-MCP-NUKE-019 AC-2: every project that holds Category=Integration cases, so the two hosts
++            // together run every integration case. Repl.Core.Tests and QBAgent.Tests hold the tests that read the
++            // repository checkout through the shared TestRepositoryRoot (TR-MCP-USECASE-018 AC-006).
+             var projectsWithIntegrationTests = new[]
+             {
+                 TestsDirectory / "QBrainAi.Support.Mcp.Tests" / "QBrainAi.Support.Mcp.Tests.csproj",
++                TestsDirectory / "QBrainAi.McpAgent.Tests" / "QBrainAi.McpAgent.Tests.csproj",
++                TestsDirectory / "QBrainAi.Repl.Core.Tests" / "QBrainAi.Repl.Core.Tests.csproj",
++                TestsDirectory / "QBrainAi.QBAgent.Tests" / "QBrainAi.QBAgent.Tests.csproj",
+                 TestsDirectory / "Build.Tests" / "Build.Tests.csproj",
+             };
+ 
++            // TR-MCP-NUKE-019 AC-5: on Windows the lane runs only from an interactive desktop session; refuse
++            // before any test runs, naming the missing session.
++            var readiness = new InteractiveSessionPrecondition().Evaluate(IntegrationLaneFilter.CurrentHost(), Environment.UserInteractive);
++            if (!readiness.CanRun)
++            {
++                Log.Error("Integration lane precondition: {Message}", readiness.FailureMessage);
++                throw new InvalidOperationException(readiness.FailureMessage);
++            }
++
++            // TR-MCP-NUKE-019 AC-1 and AC-3: select this host's integration cases and name the filter in the log.
++            var laneFilter = new IntegrationLaneFilter().Compose(IntegrationLaneFilter.CurrentHost());
++            Log.Information("Integration lane filter: {Filter}", laneFilter);
++
+             var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId);
+             if (runId is not null)
+             {
+@@ -95,7 +157,7 @@ partial class Build
+                     {
+                         DotNetTest(_ => _
+                             .SetProjectFile(project)
+-                            .SetFilter("Category=Integration")
++                            .SetFilter(laneFilter)
+                             .SetVerbosity(DotNetVerbosity.minimal));
+                     }
+                     else
+@@ -104,7 +166,7 @@ partial class Build
+                         Directory.CreateDirectory(directory);
+                         DotNetTest(_ => _
+                             .SetProjectFile(project)
+-                            .SetFilter("Category=Integration")
++                            .SetFilter(laneFilter)
+                             .SetVerbosity(DotNetVerbosity.minimal)
+                             .SetResultsDirectory(directory)
+                             .SetLoggers($"trx;LogFileName={projectName}.trx"));
+diff --git a/build/IntegrationLaneFilter.cs b/build/IntegrationLaneFilter.cs
+new file mode 100644
+index 00000000..c6a39c6e
+--- /dev/null
++++ b/build/IntegrationLaneFilter.cs
+@@ -0,0 +1,18 @@
++/// <summary>
++/// TR-MCP-NUKE-019: Production <see cref="IIntegrationLaneFilter"/>. Selects the Category=Integration cases of one
++/// host by excluding the other host's Platform trait, so untagged integration cases run on both hosts.
++/// </summary>
++sealed class IntegrationLaneFilter : IIntegrationLaneFilter
++{
++    /// <inheritdoc />
++    public string Compose(IntegrationLaneHost host) => host switch
++    {
++        IntegrationLaneHost.Windows => "Category=Integration&Platform!=Linux",
++        IntegrationLaneHost.Linux => "Category=Integration&Platform!=Windows",
++        _ => throw new ArgumentOutOfRangeException(nameof(host), host, "Unknown integration lane host."),
++    };
++
++    /// <summary>TR-MCP-NUKE-019: The host the running build is on.</summary>
++    public static IntegrationLaneHost CurrentHost()
++        => OperatingSystem.IsWindows() ? IntegrationLaneHost.Windows : IntegrationLaneHost.Linux;
++}
+diff --git a/build/IntegrationLaneFilterContracts.cs b/build/IntegrationLaneFilterContracts.cs
+new file mode 100644
+index 00000000..9a17b334
+--- /dev/null
++++ b/build/IntegrationLaneFilterContracts.cs
+@@ -0,0 +1,23 @@
++/// <summary>
++/// TR-MCP-NUKE-019: Host operating system whose Category=Integration cases a MigrationIntegrationTests run selects.
++/// </summary>
++enum IntegrationLaneHost
++{
++    /// <summary>A Windows host (PAYTON-LEGION2).</summary>
++    Windows,
++
++    /// <summary>A Linux host (LAB-OMARCHY).</summary>
++    Linux,
++}
++
++/// <summary>
++/// TR-MCP-NUKE-019: Composes the dotnet test filter of the host-scoped integration lane. Cases tagged
++/// Platform=Linux run only on Linux hosts, cases tagged Platform=Windows only on Windows hosts, and untagged
++/// integration cases on both.
++/// </summary>
++interface IIntegrationLaneFilter
++{
++    /// <summary>Returns the test filter that selects the Category=Integration cases of <paramref name="host"/>.</summary>
++    /// <param name="host">Host the lane runs on.</param>
++    string Compose(IntegrationLaneHost host);
++}
+diff --git a/build/IntegrationLanePreconditionContracts.cs b/build/IntegrationLanePreconditionContracts.cs
+new file mode 100644
+index 00000000..1b144c4c
+--- /dev/null
++++ b/build/IntegrationLanePreconditionContracts.cs
+@@ -0,0 +1,19 @@
++/// <summary>
++/// TR-MCP-NUKE-019 AC-5: whether MigrationIntegrationTests may start its test processes, and why not.
++/// </summary>
++/// <param name="CanRun">True when the lane may run its tests.</param>
++/// <param name="FailureMessage">When <paramref name="CanRun"/> is false, the message that names the missing session; otherwise null.</param>
++sealed record IntegrationLaneReadiness(bool CanRun, string? FailureMessage);
++
++/// <summary>
++/// TR-MCP-NUKE-019 AC-5: decides, before any test runs, whether the host session can run the integration lane.
++/// On Windows the lane runs in an interactive desktop session of the logged-on user; elsewhere no session
++/// requirement applies.
++/// </summary>
++interface IIntegrationLanePrecondition
++{
++    /// <summary>Evaluates the precondition for one host and one session.</summary>
++    /// <param name="host">Host the lane runs on.</param>
++    /// <param name="userInteractive">Whether the running process is in an interactive desktop session.</param>
++    IntegrationLaneReadiness Evaluate(IntegrationLaneHost host, bool userInteractive);
++}
+diff --git a/build/InteractiveSessionPrecondition.cs b/build/InteractiveSessionPrecondition.cs
+new file mode 100644
+index 00000000..03b122f0
+--- /dev/null
++++ b/build/InteractiveSessionPrecondition.cs
+@@ -0,0 +1,17 @@
++/// <summary>
++/// TR-MCP-NUKE-019 AC-5: production <see cref="IIntegrationLanePrecondition"/>. On Windows the integration lane runs
++/// only from an interactive desktop session of the logged-on user; a WSMan, SSH or service session is refused
++/// before any test runs, with a message that names the missing session. No session requirement applies elsewhere.
++/// </summary>
++sealed class InteractiveSessionPrecondition : IIntegrationLanePrecondition
++{
++    /// <inheritdoc />
++    public IntegrationLaneReadiness Evaluate(IntegrationLaneHost host, bool userInteractive) =>
++        host == IntegrationLaneHost.Windows && !userInteractive
++            ? new IntegrationLaneReadiness(
++                false,
++                "MigrationIntegrationTests needs an interactive desktop session on Windows (TR-MCP-NUKE-019 AC-5): this process "
++                + "is not interactive (for example a WSMan, SSH or service session). Run the target from a console in the "
++                + "logged-on user's interactive desktop session.")
++            : new IntegrationLaneReadiness(true, null);
++}
+diff --git a/build/LinuxProviderTestProvisioner.cs b/build/LinuxProviderTestProvisioner.cs
+new file mode 100644
+index 00000000..2649ae8c
+--- /dev/null
++++ b/build/LinuxProviderTestProvisioner.cs
+@@ -0,0 +1,320 @@
++using System.Data.Common;
++using System.Diagnostics;
++using System.Globalization;
++using System.Net.Sockets;
++
++/// <summary>
++/// TR-MCP-NUKE-018: Production Linux provisioning of the provider test endpoints (operator decision 2026-10-11,
++/// BUG-BASELINE-005). Each variable already set is adopted; otherwise it is loaded from the test-database env file and
++/// its dedicated qbrain-test container is started when stopped. Every endpoint must accept TCP before tests run.
++/// Actions and errors name variables, the file, containers and host:port only, never connection-string values.
++/// </summary>
++sealed class LinuxProviderTestProvisioner : IProviderTestProvisioner
++{
++    private static readonly TimeSpan ProbeTimeout = TimeSpan.FromSeconds(2);
++    private const int ProbeAttempts = 30;
++
++    private static readonly (string Variable, string Container, int DefaultPort, bool IsSqlServer)[] Endpoints =
++    [
++        (ProviderTestNames.PostgresVariable, ProviderTestNames.PostgresContainer, 5432, false),
++        (ProviderTestNames.SqlServerVariable, ProviderTestNames.SqlServerContainer, 1433, true),
++    ];
++
++    /// <inheritdoc />
++    public ProviderTestProvisioningResult Provision(string envFilePath, IProviderTestHost host)
++    {
++        ArgumentException.ThrowIfNullOrWhiteSpace(envFilePath);
++        ArgumentNullException.ThrowIfNull(host);
++        var actions = new List<string>();
++        var errors = new List<string>();
++        Dictionary<string, string>? fileValues = null;
++        var fileMissing = false;
++
++        foreach (var (variable, container, defaultPort, isSqlServer) in Endpoints)
++        {
++            var value = host.GetVariable(variable);
++            var loadedFromFile = false;
++            if (!string.IsNullOrWhiteSpace(value))
++            {
++                actions.Add("adopt " + variable + " (already set)");
++            }
++            else
++            {
++                if (fileValues is null && !fileMissing)
++                {
++                    var text = host.ReadFile(envFilePath);
++                    if (text is null)
++                    {
++                        fileMissing = true;
++                        errors.Add("test-database env file not found: " + envFilePath);
++                    }
++                    else
++                    {
++                        fileValues = ParseEnvFile(text);
++                    }
++                }
++
++                if (fileMissing)
++                {
++                    continue;
++                }
++
++                if (!fileValues!.TryGetValue(variable, out value) || string.IsNullOrWhiteSpace(value))
++                {
++                    errors.Add(variable + " is not defined in " + envFilePath);
++                    continue;
++                }
++
++                host.SetVariable(variable, value);
++                actions.Add("load " + variable + " from " + envFilePath);
++                loadedFromFile = true;
++            }
++
++            var startedNow = false;
++            if (loadedFromFile)
++            {
++                var state = host.GetContainerState(container);
++                if (state == ProviderTestContainerState.Missing)
++                {
++                    errors.Add("container " + container + " not found");
++                    continue;
++                }
++
++                if (state == ProviderTestContainerState.Stopped)
++                {
++                    if (!host.StartContainer(container))
++                    {
++                        errors.Add("container " + container + " could not be started");
++                        continue;
++                    }
++
++                    actions.Add("start " + container);
++                    startedNow = true;
++                }
++            }
++
++            if (!TryReadEndpoint(value, isSqlServer, defaultPort, out var endpointHost, out var port, out var problem))
++            {
++                errors.Add(variable + " " + problem);
++                continue;
++            }
++
++            var endpoint = endpointHost + ":" + port.ToString(CultureInfo.InvariantCulture);
++            var attempts = startedNow ? ProbeAttempts : 1;
++            var reachable = false;
++            for (var attempt = 0; attempt < attempts && !reachable; attempt++)
++            {
++                reachable = host.CanConnect(endpointHost, port, ProbeTimeout);
++                if (!reachable && attempt + 1 < attempts)
++                {
++                    Thread.Sleep(TimeSpan.FromSeconds(1));
++                }
++            }
++
++            if (reachable)
++            {
++                actions.Add("endpoint " + endpoint + " reachable");
++            }
++            else
++            {
++                errors.Add("endpoint " + endpoint + " for " + variable + " is not accepting connections");
++            }
++        }
++
++        return new ProviderTestProvisioningResult(actions, errors);
++    }
++
++    /// <summary>Parses KEY=VALUE lines; skips blanks and comments; strips an export prefix and matching quotes.</summary>
++    internal static Dictionary<string, string> ParseEnvFile(string text)
++    {
++        var values = new Dictionary<string, string>(StringComparer.Ordinal);
++        foreach (var raw in text.Split('\n'))
++        {
++            var line = raw.Trim();
++            if (line.Length == 0 || line.StartsWith('#'))
++            {
++                continue;
++            }
++
++            if (line.StartsWith("export ", StringComparison.Ordinal))
++            {
++                line = line["export ".Length..].TrimStart();
++            }
++
++            var equals = line.IndexOf('=', StringComparison.Ordinal);
++            if (equals <= 0)
++            {
++                continue;
++            }
++
++            var key = line[..equals].Trim();
++            var value = line[(equals + 1)..].Trim();
++            if (value.Length >= 2 && (value[0] == '"' || value[0] == '\'') && value[^1] == value[0])
++            {
++                value = value[1..^1];
++            }
++
++            values[key] = value;
++        }
++
++        return values;
++    }
++
++    private static bool TryReadEndpoint(string connectionString, bool isSqlServer, int defaultPort, out string host, out int port, out string problem)
++    {
++        host = string.Empty;
++        port = defaultPort;
++        problem = string.Empty;
++        var builder = new DbConnectionStringBuilder();
++        try
++        {
++            builder.ConnectionString = connectionString;
++        }
++        catch (ArgumentException)
++        {
++            problem = "is not a valid connection string";
++            return false;
++        }
++
++        if (isSqlServer)
++        {
++            var server = FirstValue(builder, "Server", "Data Source", "Address", "Addr", "Network Address");
++            if (server is null)
++            {
++                problem = "names no server";
++                return false;
++            }
++
++            if (server.StartsWith("(localdb)", StringComparison.OrdinalIgnoreCase))
++            {
++                problem = "names a LocalDB server, which has no TCP endpoint on Linux";
++                return false;
++            }
++
++            if (server.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase))
++            {
++                server = server[4..];
++            }
++
++            var comma = server.IndexOf(',', StringComparison.Ordinal);
++            if (comma >= 0)
++            {
++                if (!int.TryParse(server[(comma + 1)..].Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out port))
++                {
++                    problem = "names a server with an unreadable port";
++                    return false;
++                }
++
++                server = server[..comma];
++            }
++
++            host = server.Split('\\')[0].Trim();
++        }
++        else
++        {
++            var server = FirstValue(builder, "Host", "Server");
++            if (server is null)
++            {
++                problem = "names no host";
++                return false;
++            }
++
++            host = server.Split(',')[0].Trim();
++            var portText = FirstValue(builder, "Port");
++            if (portText is not null && !int.TryParse(portText, NumberStyles.Integer, CultureInfo.InvariantCulture, out port))
++            {
++                problem = "names an unreadable port";
++                return false;
++            }
++        }
++
++        if (host.Length == 0 || host == ".")
++        {
++            host = "localhost";
++        }
++
++        return true;
++    }
++
++    private static string? FirstValue(DbConnectionStringBuilder builder, params string[] keys)
++    {
++        foreach (var key in keys)
++        {
++            if (builder.TryGetValue(key, out var value) && value is not null && !string.IsNullOrWhiteSpace(value.ToString()))
++            {
++                return value.ToString()!.Trim();
++            }
++        }
++
++        return null;
++    }
++}
++
++/// <summary>
++/// TR-MCP-NUKE-018: Real host boundary: process environment, file system, docker CLI (inspect and start only) and TCP.
++/// </summary>
++sealed class SystemProviderTestHost : IProviderTestHost
++{
++    /// <inheritdoc />
++    public string? GetVariable(string name) => Environment.GetEnvironmentVariable(name);
++
++    /// <inheritdoc />
++    public void SetVariable(string name, string value) => Environment.SetEnvironmentVariable(name, value);
++
++    /// <inheritdoc />
++    public string? ReadFile(string path) => File.Exists(path) ? File.ReadAllText(path) : null;
++
++    /// <inheritdoc />
++    public ProviderTestContainerState GetContainerState(string containerName)
++    {
++        var (exitCode, output) = Docker("inspect", "--format", "{{.State.Status}}", containerName);
++        if (exitCode != 0)
++        {
++            return ProviderTestContainerState.Missing;
++        }
++
++        return string.Equals(output.Trim(), "running", StringComparison.Ordinal)
++            ? ProviderTestContainerState.Running
++            : ProviderTestContainerState.Stopped;
++    }
++
++    /// <inheritdoc />
++    public bool StartContainer(string containerName)
++        => Docker("start", containerName).ExitCode == 0
++           && GetContainerState(containerName) == ProviderTestContainerState.Running;
++
++    /// <inheritdoc />
++    public bool CanConnect(string host, int port, TimeSpan timeout)
++    {
++        try
++        {
++            using var client = new TcpClient();
++            return client.ConnectAsync(host, port).Wait(timeout) && client.Connected;
++        }
++        catch (Exception exception) when (exception is SocketException or AggregateException)
++        {
++            return false;
++        }
++    }
++
++    private static (int ExitCode, string Output) Docker(params string[] arguments)
++    {
++        var start = new ProcessStartInfo("docker") { RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false };
++        foreach (var argument in arguments)
++        {
++            start.ArgumentList.Add(argument);
++        }
++
++        using var process = Process.Start(start) ?? throw new InvalidOperationException("Could not start docker.");
++        var output = process.StandardOutput.ReadToEndAsync();
++        var error = process.StandardError.ReadToEndAsync();
++        if (!process.WaitForExit(TimeSpan.FromMinutes(2)))
++        {
++            process.Kill(entireProcessTree: true);
++            return (-1, string.Empty);
++        }
++
++        _ = error.GetAwaiter().GetResult();
++        return (process.ExitCode, output.GetAwaiter().GetResult());
++    }
++}
+diff --git a/build/ProviderTestProvisioningContracts.cs b/build/ProviderTestProvisioningContracts.cs
+new file mode 100644
+index 00000000..c9fe9f5c
+--- /dev/null
++++ b/build/ProviderTestProvisioningContracts.cs
+@@ -0,0 +1,82 @@
++/// <summary>
++/// TR-MCP-NUKE-018: State of a Docker container as seen by the provider test provisioning.
++/// </summary>
++enum ProviderTestContainerState
++{
++    /// <summary>No container with the name exists.</summary>
++    Missing,
++
++    /// <summary>The container exists and is not running.</summary>
++    Stopped,
++
++    /// <summary>The container is running.</summary>
++    Running,
++}
++
++/// <summary>
++/// TR-MCP-NUKE-018: Host boundary of the Linux provider test provisioning: process environment, the test-database
++/// env file, the two dedicated qbrain-test containers, and TCP reachability. Implementations never log values.
++/// </summary>
++interface IProviderTestHost
++{
++    /// <summary>Returns the process environment variable, or null when unset.</summary>
++    string? GetVariable(string name);
++
++    /// <summary>Sets a process environment variable inherited by test processes the build starts.</summary>
++    void SetVariable(string name, string value);
++
++    /// <summary>Returns the file text, or null when the file does not exist.</summary>
++    string? ReadFile(string path);
++
++    /// <summary>Returns the state of the named container.</summary>
++    ProviderTestContainerState GetContainerState(string containerName);
++
++    /// <summary>Starts the named stopped container; returns true when it is running afterwards.</summary>
++    bool StartContainer(string containerName);
++
++    /// <summary>Returns true when host:port accepts a TCP connection within the timeout.</summary>
++    bool CanConnect(string host, int port, TimeSpan timeout);
++}
++
++/// <summary>
++/// TR-MCP-NUKE-018: Outcome of provider test provisioning. Actions and errors carry variable names, file paths,
++/// container names and host:port endpoints only, never connection-string values (AC-4).
++/// </summary>
++/// <param name="Actions">Ordered actions taken.</param>
++/// <param name="Errors">Problems that fail the provisioning (AC-3, no skip).</param>
++sealed record ProviderTestProvisioningResult(IReadOnlyList<string> Actions, IReadOnlyList<string> Errors)
++{
++    /// <summary>True when provisioning found no problem.</summary>
++    public bool Succeeded => Errors.Count == 0;
++}
++
++/// <summary>
++/// TR-MCP-NUKE-018: Linux provisioning of the PostgreSQL and SQL Server endpoints used by the Category=Integration
++/// provider tests (AC-1 to AC-4, AC-6).
++/// </summary>
++interface IProviderTestProvisioner
++{
++    /// <summary>Provisions both endpoints through the host boundary, reading the env file when needed.</summary>
++    ProviderTestProvisioningResult Provision(string envFilePath, IProviderTestHost host);
++}
++
++/// <summary>
++/// TR-MCP-NUKE-018: Names fixed by the operator decision of 2026-10-11 (BUG-BASELINE-005).
++/// </summary>
++static class ProviderTestNames
++{
++    /// <summary>PostgreSQL server connection string variable read by EphemeralPostgresFixture.</summary>
++    public const string PostgresVariable = "MCP_TEST_POSTGRES_CONNECTION";
++
++    /// <summary>SQL Server connection string variable read by the SQL Server provider tests.</summary>
++    public const string SqlServerVariable = "MCP_TEST_SQLSERVER_CONNECTION";
++
++    /// <summary>Dedicated PostgreSQL test container.</summary>
++    public const string PostgresContainer = "qbrain-test-postgres";
++
++    /// <summary>Dedicated SQL Server test container.</summary>
++    public const string SqlServerContainer = "qbrain-test-sqlserver";
++
++    /// <summary>Default env file, relative to the user home directory.</summary>
++    public const string DefaultEnvFileRelativeToHome = ".config/qbrain-test/test-db.env";
++}
+diff --git a/src/QBrainAi.Client/WorkspaceIdentityPath.cs b/src/QBrainAi.Client/WorkspaceIdentityPath.cs
+index c329b5cd..d64229d3 100644
+--- a/src/QBrainAi.Client/WorkspaceIdentityPath.cs
++++ b/src/QBrainAi.Client/WorkspaceIdentityPath.cs
+@@ -1040,10 +1040,23 @@ public static class WorkspaceIdentityPath
+     /// <param name="path">Canonical (or already native) path.</param>
+     /// <param name="platform">Platform the path belongs to.</param>
+     /// <returns>The host-native spelling.</returns>
+-    public static string ToNativePath(string path, WorkspacePathPlatform platform)
++    public static string ToNativePath(string path, WorkspacePathPlatform platform) =>
++        ToNativePath(path, platform, SystemWorkspaceHostEnvironment.Instance);
++
++    /// <summary>
++    /// TR-MCP-PATHNORM-001 / TEST-MCP-PATHNORM-001 (criterion unitgreen-native-host): the same native
++    /// spelling decided by an injected host, so tests prove both host branches on any runner. On a
++    /// Windows host a Windows-platform path switches to backslashes; anything else is unchanged.
++    /// </summary>
++    /// <param name="path">Canonical (or already native) path.</param>
++    /// <param name="platform">Platform the path belongs to.</param>
++    /// <param name="host">Host whose operating system decides the spelling.</param>
++    /// <returns>The host-native spelling.</returns>
++    public static string ToNativePath(string path, WorkspacePathPlatform platform, IWorkspaceHostEnvironment host)
+     {
+         ArgumentNullException.ThrowIfNull(path);
+-        return OperatingSystem.IsWindows() && platform == WorkspacePathPlatform.Windows
++        ArgumentNullException.ThrowIfNull(host);
++        return host.Platform == WorkspacePathPlatform.Windows && platform == WorkspacePathPlatform.Windows
+             ? path.Replace('/', (char)92)
+             : path;
+     }
+diff --git a/src/QBrainAi.Services/Services/AgentPluginVersionSources.cs b/src/QBrainAi.Services/Services/AgentPluginVersionSources.cs
+new file mode 100644
+index 00000000..4240223c
+--- /dev/null
++++ b/src/QBrainAi.Services/Services/AgentPluginVersionSources.cs
+@@ -0,0 +1,16 @@
++namespace QBrainAi.Support.Mcp.Services;
++
++/// <summary>
++/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001: every input that agent-plugin version resolution reads, in the order it reads
++/// them: the plugin root an environment variable names, the plugin folder beside the workspace, and the plugin caches
++/// under the user profile. Unit tests give resolution test-owned sources, so no unit test reads the process
++/// environment, the machine or the real profile; the running process's sources are
++/// <see cref="MarkerFileService.ProcessAgentPluginVersionSources"/>.
++/// </summary>
++/// <param name="EnvironmentVariable">Reads a plugin-root environment variable by name; null when it is not set.</param>
++/// <param name="SiblingRoot">The plugin folder beside a workspace, from the workspace path and the plugin name; null when there is none.</param>
++/// <param name="UserProfile">The profile whose plugin caches are scanned; null or empty for none.</param>
++internal sealed record AgentPluginVersionSources(
++    Func<string, string?> EnvironmentVariable,
++    Func<string, string, string?> SiblingRoot,
++    string? UserProfile);
+diff --git a/src/QBrainAi.Services/Services/DirectoryListingEntry.cs b/src/QBrainAi.Services/Services/DirectoryListingEntry.cs
+new file mode 100644
+index 00000000..1f21575c
+--- /dev/null
++++ b/src/QBrainAi.Services/Services/DirectoryListingEntry.cs
+@@ -0,0 +1,10 @@
++namespace QBrainAi.Support.Mcp.Services;
++
++/// <summary>
++/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001, TR-MCP-SESSIONLOG-006 / AC-TR-MCP-SESSIONLOG-006-009:
++/// one entry of a single directory listing, as the user-profile scans read it.
++/// </summary>
++/// <param name="Path">Full path of the entry.</param>
++/// <param name="IsDirectory">True when the entry is a directory, or a link that resolves to one.</param>
++/// <param name="IsLink">True when the entry is a link or other reparse point (symbolic link, junction, mount point).</param>
++internal readonly record struct DirectoryListingEntry(string Path, bool IsDirectory, bool IsLink);
+diff --git a/src/QBrainAi.Services/Services/DirectoryTreeWalker.cs b/src/QBrainAi.Services/Services/DirectoryTreeWalker.cs
+new file mode 100644
+index 00000000..08a2d74d
+--- /dev/null
++++ b/src/QBrainAi.Services/Services/DirectoryTreeWalker.cs
+@@ -0,0 +1,160 @@
++namespace QBrainAi.Support.Mcp.Services;
++
++/// <summary>
++/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001, TR-MCP-SESSIONLOG-006 / AC-TR-MCP-SESSIONLOG-006-009:
++/// walks a directory tree under the user profile breadth first without following directory links or other
++/// reparse points, and skips the contents of any directory whose listing fails with an IO or access error
++/// (an untrusted mount point, an access-denied or vanished folder), so a scan never fails on what it cannot
++/// traverse.
++/// </summary>
++/// <remarks>
++/// A directory is yielded when its parent lists it, unless it is a link; its contents are walked only when its own
++/// listing succeeds. File links are yielded as files. Listing errors other than <see cref="IOException"/> and
++/// <see cref="UnauthorizedAccessException"/> propagate. A scan root below the user profile or home is walked only
++/// when <see cref="IsReachable"/> holds for it (hostile validation round 5 finding R5-F1; operator 2026-10-21:
++/// "Fix both, strengthen ACs").
++/// </remarks>
++internal sealed class DirectoryTreeWalker
++{
++    private static readonly StringComparison s_pathComparison =
++        OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
++
++    private static readonly EnumerationOptions s_singleLevel = new()
++    {
++        RecurseSubdirectories = false,
++        IgnoreInaccessible = false,
++        AttributesToSkip = 0,
++        ReturnSpecialDirectories = false,
++    };
++
++    private readonly Func<string, IReadOnlyList<DirectoryListingEntry>> _list;
++
++    /// <summary>Creates a walker that lists each directory through <paramref name="list"/>.</summary>
++    /// <param name="list">Lists one directory, or throws when it cannot be listed.</param>
++    internal DirectoryTreeWalker(Func<string, IReadOnlyList<DirectoryListingEntry>> list)
++    {
++        ArgumentNullException.ThrowIfNull(list);
++        _list = list;
++    }
++
++    /// <summary>The walker over the real file system.</summary>
++    internal static DirectoryTreeWalker FileSystem { get; } = new(ListFileSystem);
++
++    /// <summary>Every directory below <paramref name="root"/> that the walk reaches.</summary>
++    /// <param name="root">Directory to walk; it is listed but not yielded.</param>
++    /// <returns>The reached directories, breadth first.</returns>
++    internal IEnumerable<string> EnumerateDirectories(string root) => Walk(root, yieldDirectories: true);
++
++    /// <summary>Every file below <paramref name="root"/> that the walk reaches.</summary>
++    /// <param name="root">Directory to walk.</param>
++    /// <returns>The reached files, breadth first.</returns>
++    internal IEnumerable<string> EnumerateFiles(string root) => Walk(root, yieldDirectories: false);
++
++    /// <summary>
++    /// AC-TR-MCP-WS-005-001, AC-TR-MCP-SESSIONLOG-006-009: whether <paramref name="root"/> may be walked from
++    /// <paramref name="boundary"/>: the root and every folder between the boundary and it must each be listed by
++    /// its parent as a directory that is not a link or other reparse point. The boundary itself is trusted (a user
++    /// profile or home that is itself a link is still scanned) and its parent is never listed; a root that is the
++    /// boundary is reachable without any listing.
++    /// </summary>
++    /// <remarks>
++    /// A folder whose listing fails with an <see cref="IOException"/> or <see cref="UnauthorizedAccessException"/>
++    /// cannot be traversed, so the root is not reachable; any other listing error propagates. A root that is not
++    /// below the boundary, or that a parent does not list as a directory, is not reachable.
++    /// </remarks>
++    /// <param name="boundary">The trusted folder the scan starts from (the user profile or home).</param>
++    /// <param name="root">The scan root below <paramref name="boundary"/>.</param>
++    /// <returns>True when the root may be walked.</returns>
++    internal bool IsReachable(string boundary, string root)
++    {
++        ArgumentNullException.ThrowIfNull(boundary);
++        ArgumentNullException.ThrowIfNull(root);
++        var target = Path.TrimEndingDirectorySeparator(root);
++        var current = Path.TrimEndingDirectorySeparator(boundary);
++        while (!string.Equals(current, target, s_pathComparison))
++        {
++            IReadOnlyList<DirectoryListingEntry> entries;
++            try
++            {
++                entries = _list(current);
++            }
++            catch (IOException)
++            {
++                return false;
++            }
++            catch (UnauthorizedAccessException)
++            {
++                return false;
++            }
++
++            var found = entries
++                .Where(entry => LeadsTo(entry.Path, target))
++                .Select(entry => (DirectoryListingEntry?)entry)
++                .FirstOrDefault();
++            if (found is not { } next || !next.IsDirectory || next.IsLink || next.Path.Length <= current.Length)
++                return false;
++            current = next.Path;
++        }
++
++        return true;
++    }
++
++    /// <summary>True when <paramref name="path"/> is <paramref name="target"/> or a folder above it.</summary>
++    private static bool LeadsTo(string path, string target) =>
++        target.StartsWith(path, s_pathComparison)
++        && (target.Length == path.Length
++            || target[path.Length] == Path.DirectorySeparatorChar
++            || target[path.Length] == Path.AltDirectorySeparatorChar);
++
++    /// <summary>Lists one real directory with each entry's directory and link flags.</summary>
++    /// <param name="directory">Directory to list.</param>
++    /// <returns>The entries of <paramref name="directory"/>.</returns>
++    internal static IReadOnlyList<DirectoryListingEntry> ListFileSystem(string directory) =>
++        new DirectoryInfo(directory)
++            .EnumerateFileSystemInfos("*", s_singleLevel)
++            .Select(info => new DirectoryListingEntry(
++                info.FullName,
++                info is DirectoryInfo,
++                (info.Attributes & FileAttributes.ReparsePoint) != 0))
++            .ToList();
++
++    private IEnumerable<string> Walk(string root, bool yieldDirectories)
++    {
++        var pending = new Queue<string>();
++        pending.Enqueue(root);
++        while (pending.Count > 0)
++        {
++            foreach (var entry in TryList(pending.Dequeue()))
++            {
++                if (entry.IsDirectory)
++                {
++                    if (entry.IsLink)
++                        continue;
++                    pending.Enqueue(entry.Path);
++                    if (yieldDirectories)
++                        yield return entry.Path;
++                }
++                else if (!yieldDirectories)
++                {
++                    yield return entry.Path;
++                }
++            }
++        }
++    }
++
++    private IReadOnlyList<DirectoryListingEntry> TryList(string directory)
++    {
++        try
++        {
++            return _list(directory);
++        }
++        catch (IOException)
++        {
++            return [];
++        }
++        catch (UnauthorizedAccessException)
++        {
++            return [];
++        }
++    }
++}
+diff --git a/src/QBrainAi.Services/Services/GitHubCliService.cs b/src/QBrainAi.Services/Services/GitHubCliService.cs
+index c771cf2e..0c9ca325 100644
+--- a/src/QBrainAi.Services/Services/GitHubCliService.cs
++++ b/src/QBrainAi.Services/Services/GitHubCliService.cs
+@@ -779,12 +779,20 @@ public sealed class GitHubCliService : IGitHubCliService
+         return record.AccessToken;
+     }
+ 
++    /// <summary>
++    /// TR-MCP-GH-004 with FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001: the host-native workspace is the gh working
++    /// directory; a foreign-platform workspace (a Windows path on a POSIX host, a POSIX path on Windows) is an
++    /// identity only and is never opened on the host, so gh runs without a working directory and safe.directory.
++    /// </summary>
+     private string? ResolveWorkingDirectory()
+     {
+         var workingDirectory = _workspaceAccessor?.GetWorkspacePath();
+-        return string.IsNullOrWhiteSpace(workingDirectory)
+-            ? null
+-            : Path.GetFullPath(workingDirectory);
++        if (string.IsNullOrWhiteSpace(workingDirectory))
++            return null;
++
++        return QBrainAi.Client.WorkspacePathNormalizer.Process.IsHostNative(workingDirectory)
++            ? Path.GetFullPath(workingDirectory)
++            : null;
+     }
+ 
+     private GitHubIssueDetail? ParseIssueDetail(string? json)
+diff --git a/src/QBrainAi.Services/Services/MarkerFileService.cs b/src/QBrainAi.Services/Services/MarkerFileService.cs
+index c6064229..7489f6dd 100644
+--- a/src/QBrainAi.Services/Services/MarkerFileService.cs
++++ b/src/QBrainAi.Services/Services/MarkerFileService.cs
+@@ -90,10 +90,33 @@ public static class MarkerFileService
+         SignaturePayloadFields[..^ConditionalAgentPluginFieldCount];
+ 
+     /// <summary>
+-    /// Test seam: when set, plugin-version resolution scans this directory for user plugin caches
+-    /// instead of the real user profile, so tests are hermetic against locally installed plugins.
++    /// AC-TR-MCP-WS-005-001 test seam: when set, marker plugin-version resolution reads every input (the plugin-root
++    /// environment variables, the workspace sibling plugin folder and the user profile caches) from these sources
++    /// instead of <see cref="ProcessAgentPluginVersionSources"/>, so unit tests never read the process environment,
++    /// the machine or the real profile. Set only by the unit-test assembly fixture.
+     /// </summary>
+-    internal static string? AgentPluginUserProfileOverride { get; set; }
++    internal static AgentPluginVersionSources? AgentPluginVersionSourcesOverride { get; set; }
++
++    /// <summary>
++    /// AC-TR-MCP-WS-005-001: the running process's plugin-version sources: its environment variables, the plugin
++    /// folder beside the workspace (<see cref="SiblingPluginRoot"/>), and the current user's profile, read when each
++    /// resolution starts.
++    /// </summary>
++    internal static AgentPluginVersionSources ProcessAgentPluginVersionSources =>
++        new(Environment.GetEnvironmentVariable, SiblingPluginRoot, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
++
++    /// <summary>AC-TR-MCP-WS-005-001: the plugin folder beside <paramref name="workspacePath"/>; null when the workspace has no parent.</summary>
++    /// <param name="workspacePath">Workspace path; none when empty.</param>
++    /// <param name="pluginName">Plugin folder name.</param>
++    /// <returns>The sibling plugin folder, or null.</returns>
++    internal static string? SiblingPluginRoot(string workspacePath, string pluginName)
++    {
++        if (string.IsNullOrWhiteSpace(workspacePath))
++            return null;
++
++        var parent = Path.GetDirectoryName(Path.GetFullPath(workspacePath));
++        return string.IsNullOrWhiteSpace(parent) ? null : Path.Combine(parent, pluginName);
++    }
+ 
+     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
+         .WithNamingConvention(CamelCaseNamingConvention.Instance)
+@@ -529,12 +552,22 @@ public static class MarkerFileService
+             $"Marker signature payload field '{field}' has no value binding. Update ResolveSignaturePayloadValue when adding a field to SignaturePayloadFields."),
+     };
+ 
+-    internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath)
++    internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath) =>
++        BuildDefaultAgentPlugins(workspacePath, AgentPluginVersionSourcesOverride ?? ProcessAgentPluginVersionSources);
++
++    /// <summary>
++    /// AC-TR-MCP-WS-005-001: builds the default agent-plugin contract, resolving each plugin version from
++    /// <paramref name="sources"/> only.
++    /// </summary>
++    /// <param name="workspacePath">Workspace the marker describes.</param>
++    /// <param name="sources">Every input plugin-version resolution reads.</param>
++    /// <returns>The agent-plugin contract.</returns>
++    internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath, AgentPluginVersionSources sources)
+     {
+         var siblingRoot = Path.GetDirectoryName(Path.GetFullPath(workspacePath)) ?? string.Empty;
+         string Sibling(string name) => string.IsNullOrWhiteSpace(siblingRoot) ? name : Path.Combine(siblingRoot, name);
+         string Version(string pluginName, string environmentVariableName) =>
+-            ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName);
++            ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName, sources, DirectoryTreeWalker.FileSystem);
+ 
+         return new MarkerAgentPlugins
+         {
+@@ -610,14 +643,49 @@ public static class MarkerFileService
+         };
+     }
+ 
++    /// <summary>
++    /// AC-TR-MCP-WS-005-001: resolves an agent plugin version from <paramref name="sources"/> only: the plugin root
++    /// its environment variable names, then the plugin folder beside the workspace, then the plugin caches under its
++    /// user profile, scanned through <paramref name="walker"/>, which skips directory links and any directory it
++    /// cannot list; falls back to <see cref="SyncedAgentPluginVersion"/>.
++    /// </summary>
++    /// <param name="workspacePath">Workspace whose sibling folder may hold the plugin.</param>
++    /// <param name="pluginName">Plugin folder name.</param>
++    /// <param name="environmentVariableName">Variable that may name the plugin root.</param>
++    /// <param name="sources">Every input resolution reads.</param>
++    /// <param name="walker">Directory walk used for the cache scan.</param>
++    /// <returns>The resolved version.</returns>
+     internal static string ResolveAgentPluginVersion(
+         string workspacePath,
+         string pluginName,
+-        string environmentVariableName)
++        string environmentVariableName,
++        AgentPluginVersionSources sources,
++        DirectoryTreeWalker walker) =>
++        ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName, sources, walker, ReadExistingFileText);
++
++    /// <summary>
++    /// AC-TR-MCP-WS-005-001: resolves an agent plugin version as the overload above does, reading each candidate's
++    /// version files through <paramref name="readText"/>, so a version file that exists but cannot be read yields no
++    /// version and resolution goes on to the next file and candidate.
++    /// </summary>
++    /// <param name="workspacePath">Workspace whose sibling folder may hold the plugin.</param>
++    /// <param name="pluginName">Plugin folder name.</param>
++    /// <param name="environmentVariableName">Variable that may name the plugin root.</param>
++    /// <param name="sources">Every input resolution reads.</param>
++    /// <param name="walker">Directory walk used for the cache scan.</param>
++    /// <param name="readText">Reads a file's text; null when the file does not exist; throws when it cannot be read.</param>
++    /// <returns>The resolved version.</returns>
++    internal static string ResolveAgentPluginVersion(
++        string workspacePath,
++        string pluginName,
++        string environmentVariableName,
++        AgentPluginVersionSources sources,
++        DirectoryTreeWalker walker,
++        Func<string, string?> readText)
+     {
+-        foreach (var root in EnumerateAgentPluginVersionRoots(workspacePath, pluginName, environmentVariableName))
++        foreach (var root in EnumerateAgentPluginVersionRoots(workspacePath, pluginName, environmentVariableName, sources, walker, readText))
+         {
+-            var version = TryReadAgentPluginVersion(root);
++            var version = TryReadAgentPluginVersion(root, readText);
+             if (!string.IsNullOrWhiteSpace(version))
+                 return version;
+         }
+@@ -625,73 +693,87 @@ public static class MarkerFileService
+         return SyncedAgentPluginVersion;
+     }
+ 
++    /// <summary>
++    /// AC-TR-MCP-WS-005-001: the file read used for version files: a file's text, or null when it does not exist.
++    /// A file that exists but cannot be read throws, and the version read treats that as a file without a version.
++    /// </summary>
++    /// <param name="path">File path.</param>
++    /// <returns>The file text, or null when the file does not exist.</returns>
++    internal static string? ReadExistingFileText(string path) =>
++        File.Exists(path) ? File.ReadAllText(path) : null;
++
+     private static IEnumerable<string> EnumerateAgentPluginVersionRoots(
+         string workspacePath,
+         string pluginName,
+-        string environmentVariableName)
++        string environmentVariableName,
++        AgentPluginVersionSources sources,
++        DirectoryTreeWalker walker,
++        Func<string, string?> readText)
+     {
+-        var environmentRoot = Environment.GetEnvironmentVariable(environmentVariableName);
++        var environmentRoot = sources.EnvironmentVariable(environmentVariableName);
+         if (!string.IsNullOrWhiteSpace(environmentRoot))
+             yield return environmentRoot;
+ 
+-        if (!string.IsNullOrWhiteSpace(workspacePath))
+-        {
+-            var siblingRoot = Path.GetDirectoryName(Path.GetFullPath(workspacePath));
+-            if (!string.IsNullOrWhiteSpace(siblingRoot))
+-                yield return Path.Combine(siblingRoot, pluginName);
+-        }
++        var siblingRoot = sources.SiblingRoot(workspacePath, pluginName);
++        if (!string.IsNullOrWhiteSpace(siblingRoot))
++            yield return siblingRoot;
+ 
+-        var userProfile = AgentPluginUserProfileOverride
+-            ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
++        var userProfile = sources.UserProfile;
+         if (!string.IsNullOrWhiteSpace(userProfile))
+         {
+-            foreach (var candidate in EnumerateUserPluginCacheRoots(userProfile, pluginName))
++            foreach (var candidate in EnumerateUserPluginCacheRoots(userProfile, pluginName, walker, readText))
+                 yield return candidate;
+         }
+     }
+ 
+-    private static IEnumerable<string> EnumerateUserPluginCacheRoots(string userProfile, string pluginName)
++    private static IEnumerable<string> EnumerateUserPluginCacheRoots(
++        string userProfile,
++        string pluginName,
++        DirectoryTreeWalker walker,
++        Func<string, string?> readText)
+     {
++        // AC-TR-MCP-WS-005-001: a cache root that is a link, or that is reached through a link below the user
++        // profile, contributes no candidate (hostile validation round 5 finding R5-F1).
+         var codexCache = Path.Combine(userProfile, ".codex", "plugins", "cache", pluginName);
+-        if (Directory.Exists(codexCache))
++        if (Directory.Exists(codexCache) && walker.IsReachable(userProfile, codexCache))
+         {
+-            foreach (var candidate in OrderPluginVersionRoots(Directory.EnumerateDirectories(codexCache, "*", SearchOption.AllDirectories)))
++            foreach (var candidate in OrderPluginVersionRoots(walker.EnumerateDirectories(codexCache), readText))
+                 yield return candidate;
+         }
+ 
+         var claudeCache = Path.Combine(userProfile, ".claude", "plugins", "cache");
+-        if (Directory.Exists(claudeCache))
++        if (Directory.Exists(claudeCache) && walker.IsReachable(userProfile, claudeCache))
+         {
+-            var candidates = Directory.EnumerateDirectories(claudeCache, "*", SearchOption.AllDirectories)
++            var candidates = walker.EnumerateDirectories(claudeCache)
+                 .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
+                     || Path.GetFileName(path).Contains("mcpserver", StringComparison.OrdinalIgnoreCase));
+-            foreach (var candidate in OrderPluginVersionRoots(candidates))
++            foreach (var candidate in OrderPluginVersionRoots(candidates, readText))
+                 yield return candidate;
+         }
+ 
+         var grokCache = Path.Combine(userProfile, ".grok", "installed-plugins");
+-        if (Directory.Exists(grokCache))
++        if (Directory.Exists(grokCache) && walker.IsReachable(userProfile, grokCache))
+         {
+-            var candidates = Directory.EnumerateDirectories(grokCache, "*", SearchOption.AllDirectories)
++            var candidates = walker.EnumerateDirectories(grokCache)
+                 .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
+                     || Path.GetFileName(path).Contains("mcpserver", StringComparison.OrdinalIgnoreCase));
+-            foreach (var candidate in OrderPluginVersionRoots(candidates))
++            foreach (var candidate in OrderPluginVersionRoots(candidates, readText))
+                 yield return candidate;
+         }
+     }
+ 
+-    private static IEnumerable<string> OrderPluginVersionRoots(IEnumerable<string> candidates)
++    private static IEnumerable<string> OrderPluginVersionRoots(IEnumerable<string> candidates, Func<string, string?> readText)
+     {
+         return candidates
+-            .Select(path => new { Path = path, Version = GetPluginVersionSortKey(path) })
++            .Select(path => new { Path = path, Version = GetPluginVersionSortKey(path, readText) })
+             .OrderByDescending(candidate => candidate.Version)
+             .ThenByDescending(candidate => candidate.Path, StringComparer.OrdinalIgnoreCase)
+             .Select(candidate => candidate.Path);
+     }
+ 
+-    private static System.Version GetPluginVersionSortKey(string root)
++    private static System.Version GetPluginVersionSortKey(string root, Func<string, string?> readText)
+     {
+-        var versionText = TryReadAgentPluginVersion(root);
++        var versionText = TryReadAgentPluginVersion(root, readText);
+         if (string.IsNullOrWhiteSpace(versionText))
+             return new System.Version(0, 0);
+ 
+@@ -701,18 +783,23 @@ public static class MarkerFileService
+             : new System.Version(0, 0);
+     }
+ 
+-    private static string? TryReadAgentPluginVersion(string root)
++    /// <summary>
++    /// AC-TR-MCP-WS-005-001: reads the version of one candidate root from <c>.version</c>, then the plugin manifests
++    /// and <c>package.json</c>, in that order, through <paramref name="readText"/>; the first non-empty version wins.
++    /// A file that exists but cannot be read (an IO or access error) yields no version and the read goes on to the
++    /// next file; malformed JSON yields no version; any other error propagates.
++    /// </summary>
++    /// <param name="root">Candidate plugin root.</param>
++    /// <param name="readText">Reads a file's text; null when the file does not exist; throws when it cannot be read.</param>
++    /// <returns>The version, or null when no file yields one.</returns>
++    internal static string? TryReadAgentPluginVersion(string root, Func<string, string?> readText)
+     {
+-        if (string.IsNullOrWhiteSpace(root) || !Directory.Exists(root))
++        if (string.IsNullOrWhiteSpace(root))
+             return null;
+ 
+-        var versionFile = Path.Combine(root, ".version");
+-        if (File.Exists(versionFile))
+-        {
+-            var version = File.ReadAllText(versionFile).Trim();
+-            if (!string.IsNullOrWhiteSpace(version))
+-                return version;
+-        }
++        var version = TryReadFileText(Path.Combine(root, ".version"), readText)?.Trim();
++        if (!string.IsNullOrWhiteSpace(version))
++            return version;
+ 
+         foreach (var manifest in new[]
+                  {
+@@ -723,11 +810,11 @@ public static class MarkerFileService
+                      "package.json",
+                  })
+         {
+-            var path = Path.Combine(root, manifest);
+-            if (!File.Exists(path))
++            var text = TryReadFileText(Path.Combine(root, manifest), readText);
++            if (text is null)
+                 continue;
+ 
+-            var version = TryReadVersionFromJson(path);
++            version = TryReadVersionFromJson(text);
+             if (!string.IsNullOrWhiteSpace(version))
+                 return version;
+         }
+@@ -735,11 +822,23 @@ public static class MarkerFileService
+         return null;
+     }
+ 
+-    private static string? TryReadVersionFromJson(string path)
++    private static string? TryReadFileText(string path, Func<string, string?> readText)
+     {
+         try
+         {
+-            using var document = JsonDocument.Parse(File.ReadAllText(path));
++            return readText(path);
++        }
++        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
++        {
++            return null;
++        }
++    }
++
++    private static string? TryReadVersionFromJson(string text)
++    {
++        try
++        {
++            using var document = JsonDocument.Parse(text);
+             if (document.RootElement.TryGetProperty("version", out var version)
+                 && version.ValueKind == JsonValueKind.String)
+             {
+diff --git a/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs b/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs
+index d022c74c..685efc7a 100644
+--- a/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs
++++ b/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs
+@@ -20,6 +20,27 @@ public sealed class SessionLogTurnContextExtractor
+     private const int MaxHistoryFiles = 20;
+     private const int MaxHistoryBytes = 1_048_576;
+ 
++    private readonly DirectoryTreeWalker _walker;
++
++    /// <summary>
++    /// Creates an extractor whose agent-history scan walks the real file system (AC-TR-MCP-SESSIONLOG-006-009).
++    /// </summary>
++    public SessionLogTurnContextExtractor()
++        : this(DirectoryTreeWalker.FileSystem)
++    {
++    }
++
++    /// <summary>
++    /// AC-TR-MCP-SESSIONLOG-006-009: creates an extractor whose agent-history scan walks through
++    /// <paramref name="walker"/>, which skips directory links and any directory it cannot list.
++    /// </summary>
++    /// <param name="walker">Directory walk used for the history scan.</param>
++    internal SessionLogTurnContextExtractor(DirectoryTreeWalker walker)
++    {
++        ArgumentNullException.ThrowIfNull(walker);
++        _walker = walker;
++    }
++
+     /// <summary>
+     /// Extracts a validated pair. Always returns <see cref="SessionLogTurnContextValidator.NoneSentinel"/>
+     /// or a valid value. Never invents ids or paths.
+@@ -39,7 +60,7 @@ public sealed class SessionLogTurnContextExtractor
+     {
+         ArgumentNullException.ThrowIfNull(turn);
+ 
+-        var sources = CollectSources(turn, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile);
++        var sources = CollectSources(turn, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile, _walker);
+         var todoId = ExtractTodoId(turn, sources);
+         var planFile = ExtractPlanFile(turn, sources, workspacePath, userProfilePath);
+         return (planFile, todoId);
+@@ -50,7 +71,8 @@ public sealed class SessionLogTurnContextExtractor
+         string? workspacePath,
+         string? userProfilePath,
+         string? agentSessionId,
+-        string? agentSessionTranscriptFile)
++        string? agentSessionTranscriptFile,
++        DirectoryTreeWalker walker)
+     {
+         var parts = new List<string>();
+         AddIfAny(parts, turn.QueryTitle);
+@@ -72,7 +94,7 @@ public sealed class SessionLogTurnContextExtractor
+         foreach (var dialog in turn.ProcessingDialog)
+             AddIfAny(parts, dialog.Content);
+ 
+-        AppendHistory(parts, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile);
++        AppendHistory(parts, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile, walker);
+         return parts;
+     }
+ 
+@@ -81,7 +103,8 @@ public sealed class SessionLogTurnContextExtractor
+         string? workspacePath,
+         string? userProfilePath,
+         string? agentSessionId,
+-        string? agentSessionTranscriptFile)
++        string? agentSessionTranscriptFile,
++        DirectoryTreeWalker walker)
+     {
+         var files = new List<string>();
+         if (!string.IsNullOrWhiteSpace(agentSessionTranscriptFile) && File.Exists(agentSessionTranscriptFile))
+@@ -99,24 +122,13 @@ public sealed class SessionLogTurnContextExtractor
+         foreach (var rootName in new[] { ".grok", ".claude", ".codex", ".cursor" })
+         {
+             var root = Path.Combine(home, rootName);
+-            if (!Directory.Exists(root))
++            // AC-TR-MCP-SESSIONLOG-006-009: a history root that is a link contributes no file, the same as a link
++            // inside it (hostile validation round 5 finding R5-F1); a home that is itself a link is still scanned.
++            if (!Directory.Exists(root) || !walker.IsReachable(home, root))
+                 continue;
+ 
+-            IEnumerable<string> candidates;
+-            try
+-            {
+-                candidates = Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories);
+-            }
+-            catch (IOException)
+-            {
+-                continue;
+-            }
+-            catch (UnauthorizedAccessException)
+-            {
+-                continue;
+-            }
+-
+-            foreach (var file in candidates)
++            // AC-TR-MCP-SESSIONLOG-006-009: the walk skips directory links and any directory it cannot list.
++            foreach (var file in walker.EnumerateFiles(root))
+             {
+                 if (files.Count >= MaxHistoryFiles)
+                     break;

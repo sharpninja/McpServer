@@ -1,0 +1,460 @@
+[
+  {
+    "id": "FR-MCP-079",
+    "title": "GraphRAG Entity and Relationship CRUD",
+    "description": "The server shall provide full CRUD operations for explicit graph entity nodes and relationship edges, persisted in workspace-scoped EF Core tables. Entities shall have name, type, description, and extensible JSON metadata. Relationships shall link two entities with a typed, weighted, described edge. Deleting an entity shall cascade to all its relationships. All operations shall be available via REST endpoints, MCP tools, and REPL commands.\n\n\n**Covered by:** `GraphRagController` (entity + relationship endpoints), `QBrainAi.GraphRag` (`GraphRagService` entity / relationship CRUD), `GraphEntityEntity`, `GraphRelationshipEntity`, `FwhMcpTools` (graphrag entity/relationship tools), `QBrainAi.Repl.Core` (graphrag command shapes)",
+    "condition": null,
+    "expected": null,
+    "testType": null,
+    "status": "✅ complete",
+    "criteria": [],
+    "notes": null
+  },
+  {
+    "id": "FR-MCP-FED-PATH-001",
+    "title": "Request workspace paths are interpreted by their own syntax",
+    "description": "A server must interpret any request-supplied workspace path by its own syntax (drive letter, UNC, POSIX root), never by the host OS, so a Linux host accepts and stores Windows paths unchanged in meaning.",
+    "condition": null,
+    "expected": null,
+    "testType": null,
+    "status": "pending",
+    "criteria": [
+      {
+        "text": "On a Linux host, C:\\Users\\fixture-user, C:/Users/fixture-user resolve to the same Windows identity; nothing is prefixed with the process cwd.",
+        "id": "AC1",
+        "isSatisfied": false
+      },
+      {
+        "text": "On a Windows host, /home/x stays a POSIX path.",
+        "id": "AC2",
+        "isSatisfied": false
+      },
+      {
+        "text": "Triage submit/status round-trips: getReport with the submitter's original path finds the report on a Linux hub.",
+        "id": "AC3",
+        "isSatisfied": false
+      },
+      {
+        "text": "WorkspaceService.Init never creates a directory from a foreign-platform path.",
+        "id": "AC4",
+        "isSatisfied": false
+      },
+      {
+        "text": "When the workspace path belongs to the other platform and no Mcp:GitHub:Repository is configured, a GitHub CLI operation never starts gh and returns a failure that names the foreign workspace and the missing Mcp:GitHub:Repository setting; with a repository configured, gh runs with --repo and no working directory (operator 2026-10-29: \"gh foreign-workspace AC (Recommended)\"; holistic review findings SRC-1 and SRC-4).",
+        "id": "AC5",
+        "isSatisfied": false
+      }
+    ],
+    "notes": "Registered in this workspace store 2026-10-19 by operator decision (\"Create the records here now\"). Statement and FR criteria verbatim from docs/plans/2026-10-07-federation-fixes.md:53-59 (approved 2026-10-07; first registered in the original Windows workspace store). Architecture Amendment 1 H0 import must merge with these records."
+  },
+  {
+    "id": "FR-MCP-MEMORY-001",
+    "title": "Global and workspace memory storage",
+    "description": "The QBrain.AI SHALL store raw-text memories with a stable memory ID, explicit scope, and exact text round-trip semantics. Supported scopes are Global and Workspace. Global memories are visible to every workspace, while Workspace memories are visible only to their owning workspace.",
+    "condition": null,
+    "expected": null,
+    "testType": null,
+    "status": "pending",
+    "criteria": [
+      {
+        "text": "A memory record has a stable ID, scope, category, raw text, version, author metadata, and created/updated timestamps.",
+        "id": "",
+        "isSatisfied": true
+      },
+      {
+        "text": "Global memories are returned for every workspace and are not stamped with a workspace owner.",
+        "id": "",
+        "isSatisfied": true
+      },
+      {
+        "text": "Workspace memories require an owning workspace and are not returned for any other workspace.",
+        "id": "",
+        "isSatisfied": true
+      },
+      {
+        "text": "Removed memories are hidden from normal reads and lists without physically deleting the row.",
+        "id": "",
+        "isSatisfied": true
+      },
+      {
+        "text": "Memory text round-trips exactly, including internal newlines and punctuation.",
+        "id": "",
+        "isSatisfied": true
+      }
+    ],
+    "notes": null
+  },
+  {
+    "id": "FR-MCP-MEMORY-002",
+    "title": "Memory CRUD tools",
+    "description": "The QBrain.AI SHALL expose add, list, update, and remove operations for raw-text memories through REST, typed client, MCP stdio, and REPL workflow surfaces.",
+    "condition": null,
+    "expected": null,
+    "testType": null,
+    "status": "pending",
+    "criteria": [
+      {
+        "id": "",
+        "isSatisfied": true,
+        "text": "Add creates a memory and returns ID, text, scope, category, version, and timestamps."
+      },
+      {
+        "id": "",
+        "isSatisfied": true,
+        "text": "List returns the effective memory set for the active workspace by default."
+      },
+      {
+        "id": "",
+        "isSatisfied": true,
+        "text": "Update replaces raw text, increments version, and can change scope under validated rules."
+      },
+      {
+        "id": "",
+        "isSatisfied": true,
+        "text": "Remove soft-deletes a memory by ID."
+      },
+      {
+        "id": "",
+        "isSatisfied": true,
+        "text": "Invalid IDs, duplicate active IDs, invalid scopes, empty text, and unauthorized scope changes return clear errors."
+      }
+    ],
+    "notes": null
+  },
+  {
+    "id": "FR-MCP-MEMORY-018",
+    "notFound": true,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261106T061649Z-d9a6\n  code: not_found\n  message: FR 'FR-MCP-MEMORY-018' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "FR-MCP-QBOPENAI-001",
+    "title": "QuadBrain OpenAI-compatible chat-completions endpoint",
+    "description": "QuadBrain SHALL expose an inbound OpenAI-compatible chat-completions endpoint (chat/completions shape) backed by QuadBrain orchestration, accepting standard OpenAI chat messages and tool/function definitions and returning OpenAI-shaped completions - including assistant tool_calls when the model elects to invoke a tool - so any OpenAI-compatible client, including QBAgent, can use QuadBrain as a drop-in model. QBAgent (FR-MCP-QBAGENT-001) consumes this endpoint as its IChatClient and executes the emitted tool calls via the Microsoft Agent Framework loop; the ACID tightly-coupled profile is NOT required for QBAgent.",
+    "condition": null,
+    "expected": null,
+    "testType": null,
+    "status": "pending",
+    "criteria": [
+      {
+        "text": "An inbound OpenAI chat request maps the role-tagged transcript onto QuadBrain orchestration and returns the Arbiter output as the assistant message.",
+        "id": "",
+        "isSatisfied": true
+      },
+      {
+        "text": "Tool definitions in the request flow through and the response emits assistant tool_calls when QuadBrain elects to call a tool.",
+        "id": "",
+        "isSatisfied": true
+      },
+      {
+        "text": "Bearer-auth (Authorization Bearer with X-Api-Key fallback) is validated via WorkspaceTokenService; invalid or missing yields 401.",
+        "id": "",
+        "isSatisfied": true
+      },
+      {
+        "text": "QBAgent wires a standard OpenAI IChatClient to the v1 endpoint and runs the Agent Framework tool loop with action tools under the non-ACID profile.",
+        "id": "",
+        "isSatisfied": true
+      },
+      {
+        "text": "With no tools in the request and no tool_choice, an Arbiter reply that is not an arbiter envelope is the final answer after one orchestration round and is returned as the assistant message with finish reason stop; an explicit continue envelope still asks for another round (PLAN-SESSIONTRIAGEFIX-001 B13; operator decision 2026-10-15 \"Both rules (Recommended)\"). A tool_choice of auto with no tools counts as no tool_choice, and a committed Arbiter output that is empty is answered with the no-decision message after one round (operator 2026-10-29: \"QuadBrain ACs (Recommended)\"; holistic review finding SRC-3).",
+        "id": "ac-5",
+        "isSatisfied": false
+      },
+      {
+        "text": "When the round budget (8 orchestration rounds) ends without a final envelope, the response carries the last Arbiter output formatted for display as the assistant message with finish reason stop, never empty content; a last output whose display formatting leaves nothing (an Arbiter envelope without displayable content, or any other output that formats to nothing), and a budget that ends after an internal-tool round, are answered as ac-7 states (PLAN-SESSIONTRIAGEFIX-001 B13; operator decision 2026-10-15 \"Both rules (Recommended)\"; operator 2026-10-30: \"F2: ac-6 vs ac-7 (Recommended)\"; operator 2026-11-02: \"Strengthen ac-6 (Recommended)\").",
+        "id": "ac-6",
+        "isSatisfied": false
+      },
+      {
+        "text": "The assistant content is never an Arbiter envelope without displayable content: when display formatting of the answer leaves nothing, the content is a plain message naming the round budget and the last intent, and when the round budget ends after an internal-tool round, the content is that round's internal tool results (operator 2026-10-29: \"QuadBrain ACs (Recommended)\"; holistic review finding SRC-2).",
+        "id": "ac-7",
+        "isSatisfied": false
+      }
+    ],
+    "notes": null
+  },
+  {
+    "id": "TEST-HANDOFF-004",
+    "title": "Test TEST-HANDOFF-004",
+    "description": "Cover draft validation, field-specific diagnostics, DraftOnly, RequireReview, CreateWhenConfident, low confidence, and ambiguous handoffs.",
+    "condition": null,
+    "expected": null,
+    "testType": "unit",
+    "status": "pending",
+    "criteria": [],
+    "notes": null
+  },
+  {
+    "id": "TEST-HANDOFF-005",
+    "title": "Test TEST-HANDOFF-005",
+    "description": "Cover exclusive TODO-service persistence, exact-one creation, deterministic replay, ID collisions, approval races, and TODO-service failure.",
+    "condition": null,
+    "expected": null,
+    "testType": "unit",
+    "status": "pending",
+    "criteria": [],
+    "notes": null
+  },
+  {
+    "id": "TEST-HANDOFF-006",
+    "title": "Test TEST-HANDOFF-006",
+    "description": "Cover API, client, REPL, Director, MCP-tool, and plugin-skill inventory and invocation parity, including workspace isolation.",
+    "condition": null,
+    "expected": null,
+    "testType": "unit",
+    "status": "pending",
+    "criteria": [],
+    "notes": null
+  },
+  {
+    "id": "TEST-HANDOFF-007",
+    "title": "Test TEST-HANDOFF-007",
+    "description": "Cover normalized run storage, diagnostic persistence, cancellation, and the prohibition on logging credentials or raw source content.",
+    "condition": null,
+    "expected": null,
+    "testType": "unit",
+    "status": "pending",
+    "criteria": [
+      {
+        "id": "AC-001",
+        "isSatisfied": false,
+        "text": "Sqlite_HandoffMigration_DowngradeAndReupgrade, PostgreSql_HandoffMigration_DowngradeAndReupgrade and SqlServer_HandoffMigration_DowngradeAndReupgrade: on a clean database migrated only up to AddHandoffIngestionStorage, a downgrade to the immediately preceding migration removes AddHandoffIngestionStorage from the applied migrations and a re-upgrade restores it; proven first by HandoffCycleAssertion_AcceptsReversibleCycleAndRejectsMissingOrForwardOnlyCrossing over applied-migration lists (negative controls: the handoff migration still applied after the downgrade, absent after the re-upgrade, and a downgrade target older than 20260929140000_VersionedAuditPayloads) (PLAN-SESSIONTRIAGEFIX-001 B12, triage-report-61c2a2b2)."
+      },
+      {
+        "id": "AC-002",
+        "isSatisfied": false,
+        "text": "The same tests then migrate the database to head, where a handoff ingestion run and its diagnostic persist and read back (PLAN-SESSIONTRIAGEFIX-001 B12)."
+      },
+      {
+        "id": "AC-003",
+        "isSatisfied": false,
+        "text": "VersionedAuditPayloads_DownIsForwardOnly_OnEveryProvider: 20260929140000_VersionedAuditPayloads' Down raises NotSupportedException on SQLite, PostgreSQL and SQL Server, the forward-only boundary that migration declares, so no downgrade test crosses it (PLAN-SESSIONTRIAGEFIX-001 B12)."
+      }
+    ],
+    "notes": null
+  },
+  {
+    "id": "TEST-MCP-MEMORY-002",
+    "title": "Test TEST-MCP-MEMORY-002",
+    "description": "CRUD behavior tests SHALL prove add, list, update, remove, soft-delete omission, scope preservation, scope changes, invalid ID, invalid text, invalid category, and invalid scope failures.",
+    "condition": null,
+    "expected": null,
+    "testType": "unit",
+    "status": "pending",
+    "criteria": [],
+    "notes": null
+  },
+  {
+    "id": "TEST-MCP-MEMORY-010",
+    "notFound": true,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261106T061644Z-962b\n  code: not_found\n  message: TEST 'TEST-MCP-MEMORY-010' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "TEST-MCP-MEMORY-018",
+    "notFound": true,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261106T061651Z-02cd\n  code: not_found\n  message: TEST 'TEST-MCP-MEMORY-018' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "TEST-MCP-QBCLI-001",
+    "notFound": true,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261106T061646Z-798b\n  code: not_found\n  message: TEST 'TEST-MCP-QBCLI-001' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "TEST-MCP-QBOLLAMA-001",
+    "title": "QuadBrain Ollama endpoint integration tests",
+    "description": "QuadBrainOllamaEndpointIntegrationTests exercise the OpenAI-compatible QuadBrain endpoint against a real local Ollama server that OllamaServerFixture adopts or starts (FR-MCP-QBOLLAMA-002), proving FR-MCP-QBOPENAI-001 runs the normal Creativity, Logic and Arbiter workflow without faking the LLM calls, on Windows and on Linux once InstallOllama has provisioned Ollama (TR-MCP-NUKE-016).",
+    "condition": null,
+    "expected": null,
+    "testType": "unit",
+    "status": "pending",
+    "criteria": [
+      {
+        "id": "AC-001",
+        "isSatisfied": false,
+        "text": "ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots (prompts \"Hello\" and \"Create Hello World in C++\"): with the local Ollama default model assigned to all four slots, each prompt triggers the normal Creativity, Logic and Arbiter workflow through POST /v1/chat/completions and returns non-empty content; every brain call uses that model at the Ollama endpoint, and the session log captures the brain outputs on the turn."
+      },
+      {
+        "id": "AC-002",
+        "isSatisfied": false,
+        "text": "QBAgentRunLoop_LocalOllamaDefaultModel_DisplaysQuadBrainResponse (prompt \"Hello\"): QBAgent displays the QuadBrain response it received, never a placeholder; its transcript names the model QuadBrain and the QBrainAi endpoint and never the Ollama model id or endpoint."
+      },
+      {
+        "id": "AC-003",
+        "isSatisfied": false,
+        "text": "ChatCompletions_OpenAiCompatibleFieldVariants_AreLoggedToSessionTurn: content, reasoning and reasoning_content outputs are persisted to the turn's processing dialog."
+      },
+      {
+        "id": "AC-004",
+        "isSatisfied": false,
+        "text": "The class runs against a real local Ollama: OllamaServerFixture adopts a server already answering or starts one from a discovered executable and stops only what it started (FR-MCP-QBOLLAMA-002); on the Linux lab host the executable is the one InstallOllama provisions (TR-MCP-NUKE-016; PLAN-SESSIONTRIAGEFIX-001 B13, triage-report-680916ed)."
+      }
+    ],
+    "notes": "Recorded 2026-10-15: the four tests and OllamaServerController cite this id, which the store never held (operator decision \"Approve all three (Recommended)\"; PLAN-SESSIONTRIAGEFIX-001 B13, triage-report-680916ed)."
+  },
+  {
+    "id": "TEST-MCP-QBOPENAI-001",
+    "title": "Test TEST-MCP-QBOPENAI-001",
+    "description": "An inbound OpenAI ChatCompletion request maps to QuadBrain orchestration and returns an OpenAI-shaped response with the Arbiter output as the assistant message; later slices assert tool definitions flow through and assistant tool_calls are emitted, and that QBAgent executes them via the Agent Framework loop.",
+    "condition": null,
+    "expected": null,
+    "testType": "unit",
+    "status": "pending",
+    "criteria": [
+      {
+        "id": "AC-001",
+        "isSatisfied": false,
+        "text": "FR-MCP-QBOPENAI-001 ac-5 and ac-6: the mock gate ChatRoundOutcomeAssertion_AcceptsFinalAnswerAndRejectsEmptyOrExtraRounds (recorded outcomes: one round returning the reply, and the last reply after the budget, are accepted; empty content, an extra round and a reply other than the last are rejected), then QuadBrainOpenAiChatServiceTests CompleteAsync_NoToolsNonEnvelopeReply_ReturnsItAfterOneRound, CompleteAsync_NoToolsContinueEnvelope_StillRePrompts and CompleteAsync_RoundsExhaustedWithoutFinal_ReturnsLastArbiterOutput over scripted orchestration; QuadBrainOllamaEndpointIntegrationTests (TEST-MCP-QBOLLAMA-001) then run green against gemma4:e4b (PLAN-SESSIONTRIAGEFIX-001 B13; operator decision 2026-10-15 \"Both rules (Recommended)\")."
+      }
+    ],
+    "notes": null
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-008",
+    "title": "Test TEST-MCP-TRANSCRIPT-008",
+    "description": "Tests verify typed client, REPL commands, HTTP MCP discovery, stdio MCP discovery, and tool invocation for transcript ingestion and normalization.",
+    "condition": null,
+    "expected": null,
+    "testType": "unit",
+    "status": "pending",
+    "criteria": [],
+    "notes": null
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-003",
+    "title": "Test TEST-MCP-TRIAGE-003",
+    "description": "Research worker invokes configured direct agent with group JSON and prompt.",
+    "condition": null,
+    "expected": null,
+    "testType": "unit",
+    "status": "pending",
+    "criteria": [],
+    "notes": null
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-005",
+    "title": "Test TEST-MCP-TRIAGE-005",
+    "description": "Invalid agent output or failed agent run creates no TODO and leaves inspectable failure state.",
+    "condition": null,
+    "expected": null,
+    "testType": "unit",
+    "status": "pending",
+    "criteria": [],
+    "notes": null
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-007",
+    "title": "Test TEST-MCP-TRIAGESTORE-007",
+    "description": "Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.",
+    "condition": null,
+    "expected": null,
+    "testType": "unit",
+    "status": "pending",
+    "criteria": [],
+    "notes": null
+  },
+  {
+    "id": "TR-MCP-FED-PATH-001",
+    "title": "Single request-path normalization entry point",
+    "description": "Introduce a single request-path normalization entry point (IWorkspacePathNormalizer backed by WorkspaceIdentityPath) with an injectable host-platform abstraction; all resolvers listed in section 1.2 use it. No direct Path.GetFullPath on request-supplied workspace paths outside it (enforced by an architecture test).",
+    "condition": null,
+    "expected": null,
+    "testType": null,
+    "status": "pending",
+    "criteria": [
+      {
+        "evidence": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs (CombineResolvesRootRelativeWindowsSegmentAgainstDrive, CombineResolvesRootRelativeWindowsSegmentAgainstUncShare); WorkspacePathNormalizerMockDataTests.cs (RootRelativeNegativeControls_AreRejectedInsidePassingHarness); PR 82 commits f6768359 and dcd0269a",
+        "text": "IWorkspacePathNormalizer.Combine treats a segment with one leading backslash as root-relative on Windows: it keeps the current root's volume, the drive (C:/) or the UNC server and share (//srv/share/), and replaces the rest of the path, on a Linux hub and a Windows host (PR 81 finding P12, PR 82 review).",
+        "id": "AC1",
+        "isSatisfied": false
+      }
+    ],
+    "notes": "Registered in this workspace store 2026-10-19 by operator decision (\"Create the records here now\"). Statement and FR criteria verbatim from docs/plans/2026-10-07-federation-fixes.md:53-59 (approved 2026-10-07; first registered in the Windows lab host's McpServer store). Architecture Amendment 1 H0 import must merge with these records."
+  },
+  {
+    "id": "TR-MCP-HOSTILEREVIEW-003",
+    "title": "Hostile review execution capture",
+    "description": "ReviewExecution entity stores model string, effort, agent, plugin/source, template id/version, run id, start/end UTC. Token counts are optional and must not be invented.\n**Covered by:** FR: FR-MCP-HOSTILEREVIEW-003; TEST: TEST-MCP-HOSTILEREVIEW-003",
+    "condition": null,
+    "expected": null,
+    "testType": null,
+    "status": "pending",
+    "criteria": [
+      {
+        "text": "Invalid HostileReviewWorker options fail host startup with an error that names HostileReviewWorker, on Linux and on Windows: RenewalInterval not less than LeaseDuration; MaximumActiveQueue, MaximumConcurrentReviews or MaximumAttempts below 1. AgentName, RequiredModel and RequiredEffort are not startup rules: none is pinned, and an unset one means the default (operator rule 2026-10-15; PLAN-SESSIONTRIAGEFIX-001 B9). The test host owns its logging providers, so an account that cannot write the Windows Application event log cannot turn the startup failure into a logging error (PLAN-SESSIONTRIAGEFIX-001 B4, triage-report-f4d47e1f, measured on the Windows lab host 2026-10-15; HostileReviewStartupAssertion_AcceptsWorkerFailureAndRejectsMaskedOrMissing, HostileReviewWorker_InvalidOptions_FailStartup, HostileReviewWorkerOptions_AnyAgentModelEffort_PassValidation).",
+        "id": "AC-001",
+        "isSatisfied": false
+      },
+      {
+        "text": "A reviewer output is accepted with the model and effort it reports, and the execution records them, when HostileReviewWorker RequiredModel and RequiredEffort are not configured; a configured RequiredModel or RequiredEffort is required of the output, and an output reporting a different value fails the request as ModelUnavailable (operator rule 2026-10-15; PLAN-SESSIONTRIAGEFIX-001 B9; tests: WorkerOptionsAndOutputRules_AcceptUnpinnedOrConfiguredAndRejectPinsOrIgnoredConfig, AcceptReviewerOutput_NoConfiguredModel_RecordsReportedModel, AcceptReviewerOutput_ConfiguredModelMismatch_FailsModelUnavailable). An output that omits the reviewer agent, model or effort records them empty (not reported), never a default model (operator decision 2026-10-15 \"Empty defaults, in B9\"; test: AcceptReviewerOutput_NoConfiguredModel_RecordsReportedModel).",
+        "id": "AC-002",
+        "isSatisfied": false
+      }
+    ],
+    "notes": null
+  },
+  {
+    "id": "TR-MCP-MEMORY-002",
+    "title": "Provider memory migrations",
+    "description": "Add provider migrations for SQLite, SQL Server, and PostgreSQL. Each migration creates the memory table, unique ID constraint, scope and workspace indexes, category/update-time indexes, soft-delete metadata, and provider-appropriate constraints or service-level validation for Global rows with null `WorkspaceId` and Workspace rows with required `WorkspaceId`.\n**Covered by:** FR: FR-MCP-MEMORY-002; TEST: TEST-MCP-MEMORY-002",
+    "condition": null,
+    "expected": null,
+    "testType": null,
+    "status": "pending",
+    "criteria": [],
+    "notes": null
+  },
+  {
+    "id": "TR-MCP-MEMORY-SEARCH-002",
+    "notFound": true,
+    "error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261106T061656Z-80b7\n  code: not_found\n  message: TR 'TR-MCP-MEMORY-SEARCH-002' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+  },
+  {
+    "id": "TR-MCP-QBRAIN-004",
+    "title": "",
+    "description": "Cloud pull requests land on the current GitHub names. Payton renames repositories only in Phase 3. Phase 1 does not rename a GitHub repository. RepositoryUrl keeps the live repo name until that rename.\n**Covered by:** FR: FR-MCP-QBRAIN-005; TEST: TEST-MCP-QBRAIN-004",
+    "condition": null,
+    "expected": null,
+    "testType": null,
+    "status": "in_progress",
+    "criteria": [
+      {
+        "text": "No cloud phase renames a GitHub repository.",
+        "id": "",
+        "isSatisfied": false
+      },
+      {
+        "text": "Package RepositoryUrl values still point at sharpninja/QBrainAi.",
+        "id": "",
+        "isSatisfied": false
+      }
+    ],
+    "notes": null
+  },
+  {
+    "id": "TR-MCP-QBRAIN-006",
+    "title": "",
+    "description": "Docker image, container, network, and volume use qbrain-ai. Windows service name becomes QBrainAi, DisplayName becomes QBrain.AI, and the default install path becomes C:\\ProgramData\\QBrainAi, with parameters that can still target the old service and path. Linux paths, the qbrainai account, and qbrainai.service stay Phase 4-L text. Do not rename database McpServer_Omarchy or host PAYTON-LEGION2.\n**Covered by:** FR: FR-MCP-QBRAIN-001, FR-MCP-QBRAIN-005; TEST: TEST-MCP-QBRAIN-006",
+    "condition": null,
+    "expected": null,
+    "testType": null,
+    "status": "in_progress",
+    "criteria": [
+      {
+        "text": "Compose and Dockerfile names in git match the qbrain-ai forms.",
+        "id": "",
+        "isSatisfied": false
+      },
+      {
+        "text": "Service script defaults in git match QBrainAi and C:\\ProgramData\\QBrainAi, and the old names remain available as parameters.",
+        "id": "",
+        "isSatisfied": false
+      },
+      {
+        "text": "McpServer_Omarchy and PAYTON-LEGION2 remain where they identify that database and that host.",
+        "id": "",
+        "isSatisfied": false
+      }
+    ],
+    "notes": null
+  }
+]

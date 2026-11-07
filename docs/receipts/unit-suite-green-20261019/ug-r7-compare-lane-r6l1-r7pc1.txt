@@ -1,0 +1,21 @@
+Now: 2026-10-26T09:57:08 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-lane-1 (412) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-precommit-lane-1 (428)
+onlyBefore=0 onlyAfter=16 common=412
+onlyAfter QBrainAi.Support.Mcp.Tests=16
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_PointsEveryNameAtItsFolderThenRestoresThem

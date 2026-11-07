@@ -1,0 +1,43 @@
+{
+  "TimestampUtc": "2026-11-03T02:51:03.3399814Z",
+  "Mode": "Inspect",
+  "SessionId": "Codex-20261103T011224Z-unitgreen-r9-hv",
+  "RequestId": "req-20261103T011329Z-unitgreen-r9",
+  "HistoryMatches": 1,
+  "HistoryStatus": [
+    "in_progress"
+  ],
+  "TurnMatches": 1,
+  "TurnStatus": [
+    "in_progress"
+  ],
+  "ResultKeys": [
+    "turns",
+    "agentExecutablePath",
+    "turnCount",
+    "model",
+    "agentExecutableVersion",
+    "sessionId",
+    "sourceType",
+    "title",
+    "agentSessionId",
+    "status",
+    "lastUpdated",
+    "started"
+  ],
+  "TurnKeys": [
+    "timestamp",
+    "model",
+    "requestId",
+    "todoId",
+    "tokenCount",
+    "planFile",
+    "actions",
+    "response",
+    "queryTitle",
+    "queryText",
+    "status",
+    "processingDialog"
+  ],
+  "Formats": []
+}

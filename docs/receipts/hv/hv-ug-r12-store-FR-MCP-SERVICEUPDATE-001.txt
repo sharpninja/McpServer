@@ -1,0 +1,30 @@
+type: result
+payload:
+  requestId: req-20261105T065021Z-6a50
+  result:
+    id: FR-MCP-SERVICEUPDATE-001
+    title: Cross-platform service update preserving live state
+    description: The existing Nuke UpdateService target detects Windows or Linux and updates the selected service while preserving the live configuration and file data strategy. Linux updates an existing systemd service without rewriting its operator configuration.
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria:
+    - id: ''
+      text: UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.
+      isSatisfied: false
+    - id: ''
+      text: Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
+      isSatisfied: false
+    - id: ''
+      text: Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
+      isSatisfied: false
+    - id: ''
+      text: Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T06:50:22.6384251+00:00
+    updatedAt: 2026-11-05T06:50:22.6385399+00:00
+  deprecated: true
+
+---
+

@@ -1,0 +1,125 @@
+[
+  {
+    "Original": "FR-MCP-USECASE-016",
+    "Target": "TR-MCP-USECASE-018",
+    "OriginalCount": 7,
+    "TargetCount": 7,
+    "Comparisons": [
+      {
+        "OriginalIndex": 1,
+        "NewId": "AC-001",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 2,
+        "NewId": "AC-002",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 3,
+        "NewId": "AC-003",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 4,
+        "NewId": "AC-004",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 5,
+        "NewId": "AC-005",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 6,
+        "NewId": "AC-006",
+        "ApprovedRestatement": true,
+        "Verbatim": false,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 7,
+        "NewId": "AC-007",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      }
+    ],
+    "ExistingCriteriaPreserved": true
+  },
+  {
+    "Original": "FR-MCP-USECASE-017",
+    "Target": "TR-MCP-USECASE-019",
+    "OriginalCount": 8,
+    "TargetCount": 12,
+    "Comparisons": [
+      {
+        "OriginalIndex": 1,
+        "NewId": "AC-005",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 2,
+        "NewId": "AC-006",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 3,
+        "NewId": "AC-007",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 4,
+        "NewId": "AC-008",
+        "ApprovedRestatement": true,
+        "Verbatim": false,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 5,
+        "NewId": "AC-009",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 6,
+        "NewId": "AC-010",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 7,
+        "NewId": "AC-011",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      },
+      {
+        "OriginalIndex": 8,
+        "NewId": "AC-012",
+        "ApprovedRestatement": false,
+        "Verbatim": true,
+        "IsSatisfied": false
+      }
+    ],
+    "ExistingCriteriaPreserved": true
+  }
+]

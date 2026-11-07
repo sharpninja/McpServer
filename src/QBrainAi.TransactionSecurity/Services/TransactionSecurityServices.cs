@@ -180,17 +180,25 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
     private readonly IOptionsMonitor<KeyServerOptions> _options;
     private readonly ITransactionManifestCanonicalizer _canonicalizer;
     private readonly IKeyServerStateStore _stateStore;
+
+    /// <summary>TR-MCP-USECASE-018 AC-006: the clock manifest signing stamps a manifest with and verification checks its expiry and future issue against.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the field, added in slice Z4 with the optional constructor clock (hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
+    private readonly TimeProvider _time;
     private readonly Dictionary<string, Dictionary<string, ECDsa>> _signingKeys = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>Initializes a new instance of the <see cref="InMemoryKeyServerService"/> class.</summary>
     /// <param name="options">Keyserver options.</param>
     /// <param name="canonicalizer">Manifest canonicalizer.</param>
+    /// <param name="time">The clock manifest signing stamps and verification checks against; null uses <see cref="TimeProvider.System"/>.</param>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added the optional <paramref name="time"/> clock, read once by SignManifestAsync and once by VerifyManifestAsync instead of DateTimeOffset.UtcNow, because hostile validation round 12 finding R12-F2 and its sibling sweep showed the manifest expiry and future-issue checks ran on the live clock in unit cases (mock gate ug-r13z4-mockgate-b-1).</remarks>
     public InMemoryKeyServerService(
         IOptionsMonitor<KeyServerOptions> options,
-        ITransactionManifestCanonicalizer canonicalizer)
+        ITransactionManifestCanonicalizer canonicalizer,
+        TimeProvider? time = null)
     {
         _options = options;
         _canonicalizer = canonicalizer;
+        _time = time ?? TimeProvider.System;
         _stateStore = CreateKeyServerStateStore(options.CurrentValue);
     }
 
@@ -281,6 +289,7 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
         => _stateStore.GetPartyKeyAsync(partyId.Trim(), keyId.Trim(), cancellationToken);
 
     /// <inheritdoc />
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): stamps the manifest's issue and expiry times from the injected clock, read once, instead of DateTimeOffset.UtcNow (hostile validation round 12 finding R12-F2 and its sibling sweep; mock gate ug-r13z4-mockgate-b-1). This member's own entry was added after the seventh holistic read before hostile validation round 13 (finding c5); until then the change was logged only on the constructor.</remarks>
     public async Task<TransactionManifestSignResponse> SignManifestAsync(
         TransactionManifestSignRequest request,
         CancellationToken cancellationToken = default)
@@ -332,7 +341,7 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
         if (!IsActive(encryptionDescriptor.Status))
             return await FailedSignAsync(TransactionFailureReason.DisabledKey, request.TransactionId, cancellationToken).ConfigureAwait(false);
 
-        var now = DateTimeOffset.UtcNow;
+        var now = _time.GetUtcNow();
         var issuedAt = request.IssuedAtUtc ?? now;
         var ttl = Math.Max(1, _options.CurrentValue.ManifestTtlSeconds);
         var expiresAt = request.ExpiresAtUtc ?? issuedAt.AddSeconds(ttl);
@@ -433,6 +442,7 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): checks the manifest's expiry and future issue against the injected clock, read once, instead of DateTimeOffset.UtcNow (hostile validation round 12 finding R12-F2 and its sibling sweep; mock gate ug-r13z4-mockgate-b-1). This member's own entry was added after the seventh holistic read before hostile validation round 13 (finding c5); until then the change was logged only on the constructor.</remarks>
     public async Task<TransactionManifestVerifyResponse> VerifyManifestAsync(
         TransactionManifestVerifyRequest request,
         CancellationToken cancellationToken = default)
@@ -441,7 +451,7 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
         cancellationToken.ThrowIfCancellationRequested();
         var manifest = request.Manifest ?? new TransactionManifestDto();
         var manifestHash = _canonicalizer.ComputeManifestHash(manifest);
-        var now = DateTimeOffset.UtcNow;
+        var now = _time.GetUtcNow();
         var skew = TimeSpan.FromSeconds(Math.Max(0, _options.CurrentValue.MaxClockSkewSeconds));
 
         if (!string.IsNullOrWhiteSpace(request.ExpectedSubscriberPartyId) &&

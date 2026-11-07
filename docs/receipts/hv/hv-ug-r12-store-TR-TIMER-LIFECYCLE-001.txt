@@ -1,0 +1,28 @@
+type: result
+payload:
+  requestId: req-20261105T075311Z-d2fa
+  result:
+    id: TR-TIMER-LIFECYCLE-001
+    title: Serialize timer lifecycle admission separately from callback invocation
+    description: Protect shutdown admission and token replacement with a short-lived state lock. Cancel outside locks before draining the callback invocation gate. Reject queued Restart if shutdown admission changed while it waited. Do not dispose cancellation sources still visible to callbacks. Preserve reentrant Stop/Dispose/Restart behavior.
+    status: pending
+    priority: high
+    area: TIMER
+    subarea: LIFECYCLE
+    acceptanceCriteria:
+    - id: tr-timer-lifecycle-001-ac-001
+      text: Both Manager timer implementations enforce the same shutdown admission and fresh-token rules without invoking user callbacks under the state lock.
+      isSatisfied: false
+    - id: tr-timer-lifecycle-001-ac-002
+      text: Restart cannot replace the token after a shutdown captured it; multiple overlapping shutdowns cannot reopen admission early.
+      isSatisfied: false
+    - id: tr-timer-lifecycle-001-ac-003
+      text: Cancellation registration and callback reentrancy cannot deadlock the lifecycle state lock.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T07:53:12.3488635+00:00
+    updatedAt: 2026-11-05T07:53:12.3489712+00:00
+  deprecated: true
+
+---
+

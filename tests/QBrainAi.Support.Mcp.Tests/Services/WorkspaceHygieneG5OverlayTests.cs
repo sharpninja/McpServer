@@ -25,11 +25,24 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// Overlay G5 hygiene: named tests against shipped
 /// <see cref="WorkspaceValidationService"/>. TEST-MCP-HYGIENE-001 through 005.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): CreateService hands every service the class's settable clock instead of TimeProvider.System, the two stale-turn cases seed from it, and the D3 binding was added (hostile validation round 12 finding R12-F2, S3 and S4); the assertions are unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 {
     private readonly string _workspace;
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _options;
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): the clock every service of this class reads, so the stale-turn
+    /// rule is decided by the test's instant and the seeds placed from it (hostile validation round 12 finding R12-F2).
+    /// </summary>
+    private readonly QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider _clock =
+        new(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0]);
 
     /// <summary>Isolated in-memory SQLite workspace.</summary>
     public WorkspaceHygieneG5OverlayTests()
@@ -220,10 +233,11 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-HYGIENE-004: stale in_progress turn using UTC timestamps.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the turn is seeded 49 hours before the class's settable clock, which the service reads, instead of DateTimeOffset.UtcNow; the assertion is unchanged (hostile validation round 12 finding R12-F2).</remarks>
     [Fact]
     public async Task Rule_InProgressTurn_OlderThan48h_UtcClock()
     {
-        SeedStaleTurn(DateTimeOffset.UtcNow.AddHours(-49));
+        SeedStaleTurn(_clock.GetUtcNow().AddHours(-49));
         var result = await CreateService().ValidateAsync(new WorkspaceValidationRequest(), TestContext.Current.CancellationToken);
         Assert.Contains(result.Findings, item => item.RuleCode == "session_stale_in_progress");
     }
@@ -241,10 +255,11 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-HYGIENE-004: threshold override is bounded, authenticated, and recorded.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the turn is seeded 10 hours before the class's settable clock, which the service reads, instead of DateTimeOffset.UtcNow; the assertions are unchanged (hostile validation round 12 finding R12-F2).</remarks>
     [Fact]
     public async Task Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded()
     {
-        SeedStaleTurn(DateTimeOffset.UtcNow.AddHours(-10));
+        SeedStaleTurn(_clock.GetUtcNow().AddHours(-10));
         var tooWide = await CreateService().ValidateAsync(new WorkspaceValidationRequest { StaleTurnThresholdHours = 200 }, TestContext.Current.CancellationToken);
         Assert.Equal("threshold_out_of_range", tooWide.ErrorCode);
         var recorded = await CreateService().ValidateAsync(new WorkspaceValidationRequest { StaleTurnThresholdHours = 8 }, TestContext.Current.CancellationToken);
@@ -287,6 +302,8 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-HYGIENE-005: REST, REPL, Director, plugin expose the same validation.</summary>
+    /// <remarks>Integration: reads the live API, Director, REPL or service source to verify implementation parity (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts()
     {
@@ -403,8 +420,43 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
         Assert.True(string.IsNullOrWhiteSpace(todo.DoneSummary));
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding, decisions D3 of
+    /// <see cref="QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests"/>: for each scripted reference time and
+    /// each contract row, one in-progress turn recorded at the row's time raises the stale-turn finding exactly when the
+    /// contract says, under the default 48 hour threshold and under an 8 hour override (no finding exactly at the
+    /// threshold, because only a turn before the cutoff is stale). Test data: the contract's times; one turn per row.
+    /// </summary>
+    /// <returns>A task that completes when every row has been asserted.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added for hostile validation round 12 finding R12-F2 (the reviewer's proposed WorkspaceHygiene_UsesScriptedStaleThreshold).</remarks>
+    [Fact]
+    public async Task WorkspaceHygiene_UsesScriptedStaleThreshold()
+    {
+        foreach (var (name, threshold) in new (string Name, int? Threshold)[]
+                 {
+                     ("D3 hygiene stale turn, default threshold", null),
+                     ("D3 hygiene stale turn, override threshold", 8),
+                 })
+        {
+            await QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.AssertDecisionAsync(name, async (reference, recorded) =>
+            {
+                _clock.Set(reference);
+                var key = Guid.NewGuid().ToString("N")[..12];
+                SeedInProgressTurn(recorded, key);
+                var result = await CreateService().ValidateAsync(
+                    new WorkspaceValidationRequest { StaleTurnThresholdHours = threshold },
+                    TestContext.Current.CancellationToken).ConfigureAwait(true);
+                Assert.True(result.Success, result.ErrorCode);
+                return result.Findings.Any(item => item.RuleCode == "session_stale_in_progress" && item.RecordId == "req-" + key);
+            }).ConfigureAwait(true);
+        }
+    }
+
+    /// <summary>TR-MCP-USECASE-018 AC-006: a workspace validation service over a new context of the class's database, reading the class's settable clock.</summary>
+    /// <returns>The service under test.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed in slice Z4 to hand the service the class's settable clock instead of TimeProvider.System (hostile validation round 12 finding R12-F2, S3 and S4), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private WorkspaceValidationService CreateService()
-        => new(CreateDb(), TimeProvider.System);
+        => new(CreateDb(), _clock);
 
     private McpDbContext CreateDb()
         => new(_options, new WorkspaceContext { WorkspacePath = _workspace });
@@ -507,6 +559,34 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
         db.SaveChanges();
     }
 
+    /// <summary>Seeds one in-progress turn at <paramref name="timestamp"/> in its own session, named by <paramref name="key"/>.</summary>
+    /// <param name="timestamp">The turn's recorded time.</param>
+    /// <param name="key">The row key; the turn's request id is "req-" followed by it.</param>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended): added for the D3 binding (hostile validation round 12 finding R12-F2).</remarks>
+    private void SeedInProgressTurn(DateTimeOffset timestamp, string key)
+    {
+        using var db = CreateDb();
+        var session = new SessionLogEntity
+        {
+            WorkspaceId = _workspace,
+            SourceType = "GrokCode",
+            SessionId = "GrokCode-20260910T000000Z-hygiene" + key,
+        };
+        db.SessionLogs.Add(session);
+        db.SaveChanges();
+        db.SessionLogTurns.Add(new SessionLogTurnEntity
+        {
+            WorkspaceId = _workspace,
+            SessionLogId = session.Id,
+            RequestId = "req-" + key,
+            Status = "in_progress",
+            Timestamp = timestamp,
+            PlanFile = "None",
+            TodoId = "None",
+        });
+        db.SaveChanges();
+    }
+
     private void SeedTriage(string reportId, string status)
     {
         using var db = CreateDb();
@@ -542,6 +622,8 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-HYGIENE-003: triage statuses come from the live triage domain, queries are batched.</summary>
+    /// <remarks>Integration: reads the live API, Director, REPL or service source to verify implementation parity (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ValidationService_UsesLiveTriageDomainAndBatchedQueries()
     {
@@ -588,22 +670,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
         }));
     }
 
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "AGENTS.md"))
-                && Directory.Exists(Path.Combine(directory.FullName, "docs", "Project")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
+    private static string FindRepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
 
     private async Task<string> InvokePluginValidateAsync(IWorkspaceValidationService service, CancellationToken cancellationToken)
     {

@@ -1,0 +1,9 @@
+Now: 2026-11-06T08:01:22 worktree=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 head=f9b6bde8f08dc56e8fd40d9a22ce70657b7711bf revision=HEAD map=NO-TOKEN-OLD=NO-TOKEN-NEW
+FILE src/QBrainAi.Services/Services/VoiceConversationService.cs codeReplaced=0 docAdded=2 docRemoved=1 unmatched=0 oldTokensLeft=0 sha256=1F60C762F9FEEE53E85FBC8BF28D87A98315317F6B035030792C127115AFCBA5
+FILE tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs codeReplaced=0 docAdded=12 docRemoved=6 unmatched=2 oldTokensLeft=0 sha256=7234A272EB4F4AD423F9A0CEF487932A1E231FDD3A2C95CB33E363D3FF7009C0
+  ADDED-UNMATCHED Assert.True(sentinelTranscript is null, $"At {reference:O}: the fired pass, whose removals cannot await here, has run to its end before the row is read: the sentinel, two seconds past the timeout, is already removed.");
+  REMOVED-UNMATCHED Assert.True(sentinelTranscript is null, $"At {reference:O}: the fired pass has run to its end before the row is read: the sentinel, two seconds past the timeout, is already removed.");
+FILE tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs codeReplaced=0 docAdded=22 docRemoved=15 unmatched=2 oldTokensLeft=0 sha256=7E965772C3C33A676B300891CCE0802B541B6D0BD0735BA506870D027457C583
+  ADDED-UNMATCHED Assert.False(await pool.ExistsAsync(sentinel).ConfigureAwait(true), $"At {reference:O}: the triggered pass, whose removals cannot await in this trace, has run to its end before its decisions are read: the sentinel, one step past the idle threshold, is already removed.");
+  REMOVED-UNMATCHED Assert.False(await pool.ExistsAsync(sentinel).ConfigureAwait(true), $"At {reference:O}: the triggered pass has run to its end before its decisions are read: the sentinel, one step past the idle threshold, is already removed.");
+END failedFiles=2

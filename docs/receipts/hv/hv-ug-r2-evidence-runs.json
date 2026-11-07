@@ -1,0 +1,371 @@
+{
+  "TimestampLocal": "2026-10-19T21:37:29",
+  "Mode": "Runs",
+  "Runs": [
+    {
+      "Name": "unit-green-r2-buildtests-20261019T2120",
+      "Head": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "Target": null,
+      "Args": null,
+      "DirtyTracked": [
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+      ],
+      "StartedLocal": "2026-10-19T21:20:28",
+      "ExitText": null,
+      "MetaCopyMatches": true,
+      "Trx": [
+        {
+          "Path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-buildtests-20261019T2120/unit-green-r2-buildtests-20261019T2120.trx",
+          "Counters": "<Counters total=\"436\" executed=\"436\" passed=\"436\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 436
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "4D60B85206D3D4303336E287450E5AAF46D5AB606CD937D8FC14682B680960EA"
+        }
+      ],
+      "Stdout": null,
+      "Stderr": null
+    },
+    {
+      "Name": "unit-green-r2-guard-compile-20261019T2100",
+      "Head": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+      "Target": "Compile",
+      "Args": [],
+      "DirtyTracked": [
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+        " M tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+        " M tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+        " M tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+        " M tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs"
+      ],
+      "StartedLocal": "2026-10-19T21:00:37",
+      "ExitText": "0 2026-10-19T21:02:45",
+      "MetaCopyMatches": true,
+      "Trx": [],
+      "Stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-guard-compile-20261019T2100.out.log",
+      "Stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-guard-compile-20261019T2100.err.log"
+    },
+    {
+      "Name": "unit-green-r2-guard-mockgate-20261019T2103",
+      "Head": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+      "Target": "Test",
+      "Args": [
+        "--test-run-id",
+        "unit-green-r2-guard-mockgate-20261019T2103"
+      ],
+      "DirtyTracked": [
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+        " M tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+        " M tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+        " M tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+        " M tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs"
+      ],
+      "StartedLocal": "2026-10-19T21:03:02",
+      "ExitText": "0 2026-10-19T21:06:34",
+      "MetaCopyMatches": true,
+      "Trx": [
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-guard-mockgate-20261019T2103/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "Counters": "<Counters total=\"3237\" executed=\"3237\" passed=\"3237\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 3237
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "4A501CC8B2AFA2C5E84423E902CF707705E3D722C9B8A72AA81FDAC556EFCDF8"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-guard-mockgate-20261019T2103/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "Counters": "<Counters total=\"306\" executed=\"306\" passed=\"306\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 306
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "6612CA12744483DD02C9628ECEC549D083F1F942E0FE5308A4D6840F19887752"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-guard-mockgate-20261019T2103/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "Counters": "<Counters total=\"33\" executed=\"33\" passed=\"33\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 33
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "DCE704D377019DF77B0798FFB12C54A810CF5D16C40655356ABC2C6D2BF8B10B"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-guard-mockgate-20261019T2103/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "Counters": "<Counters total=\"20\" executed=\"20\" passed=\"20\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 20
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "7DB572EE2F13BB6ACFA3953C92F6EB17A5A5A68EF25B872588FF6AC7DA411F0F"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-guard-mockgate-20261019T2103/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "Counters": "<Counters total=\"64\" executed=\"64\" passed=\"64\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 64
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "C09DDAF857C8FCA10E02CD4E35F5F56DD74096B0EF6FF14C41971458BF3C63C0"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-guard-mockgate-20261019T2103/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "Counters": "<Counters total=\"868\" executed=\"868\" passed=\"868\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 868
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "870164F3185F184BA50FA3B7C56F6BEFDB0780E8552C29AB9F8FCABB541ACB8F"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-guard-mockgate-20261019T2103/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "Counters": "<Counters total=\"96\" executed=\"96\" passed=\"96\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 96
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "A07013A4EDB49341EDF0FAD00C1BF178E92F5B801DDFB3C9201F1104D6A750B1"
+        }
+      ],
+      "Stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-guard-mockgate-20261019T2103.out.log",
+      "Stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-guard-mockgate-20261019T2103.err.log"
+    },
+    {
+      "Name": "unit-green-r2-int-20261019T2118",
+      "Head": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "Target": "MigrationIntegrationTests",
+      "Args": [
+        "--test-run-id",
+        "unit-green-r2-int-20261019T2118"
+      ],
+      "DirtyTracked": [
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+      ],
+      "StartedLocal": "2026-10-19T21:17:50",
+      "ExitText": "0 2026-10-19T21:19:49",
+      "MetaCopyMatches": true,
+      "Trx": [
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-int-20261019T2118/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "Counters": "<Counters total=\"171\" executed=\"171\" passed=\"171\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 171
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "362FFECDA9E3844EE77668FB5AFA8FB8D5F7D4F53E910055552D7B83E744E0C0"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-int-20261019T2118/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "Counters": "<Counters total=\"1\" executed=\"1\" passed=\"1\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 1
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "AE95C7CD53B8337E1A69B7AAC390A62636CF8EA6FE8535E8D3BA00FA3F1544E4"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-int-20261019T2118/provider/Build.Tests/Build.Tests.trx",
+          "Counters": "<Counters total=\"16\" executed=\"16\" passed=\"16\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 16
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "71CF08E4DA3BEDC98D2C8DAFE012F3FD81F1F0E7FCF352D1FB83C4F7AB7681A8"
+        }
+      ],
+      "Stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-int-20261019T2118.out.log",
+      "Stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-int-20261019T2118.err.log"
+    },
+    {
+      "Name": "unit-green-r2-sandbox-test-20261019T2116",
+      "Head": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "Target": "Test",
+      "Args": null,
+      "DirtyTracked": [
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+      ],
+      "StartedLocal": "2026-10-19T21:16:10",
+      "ExitText": null,
+      "MetaCopyMatches": true,
+      "Trx": [],
+      "Stdout": null,
+      "Stderr": null
+    },
+    {
+      "Name": "unit-green-r2-sandbox-test-20261019T2117",
+      "Head": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "Target": "Test",
+      "Args": null,
+      "DirtyTracked": [
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+      ],
+      "StartedLocal": "2026-10-19T21:17:11",
+      "ExitText": null,
+      "MetaCopyMatches": true,
+      "Trx": [],
+      "Stdout": null,
+      "Stderr": null
+    },
+    {
+      "Name": "unit-green-r2-test-20261019T2110",
+      "Head": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "Target": "Test",
+      "Args": [
+        "--test-run-id",
+        "unit-green-r2-test-20261019T2110"
+      ],
+      "DirtyTracked": [
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+      ],
+      "StartedLocal": "2026-10-19T21:09:42",
+      "ExitText": "0 2026-10-19T21:13:47",
+      "MetaCopyMatches": true,
+      "Trx": [
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-test-20261019T2110/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "Counters": "<Counters total=\"3201\" executed=\"3201\" passed=\"3201\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 3201
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "F6E047F6B4B1B15D0B0E6EA2750FA73354E639724B21AD42ABD2EECA08F2D623"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-test-20261019T2110/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "Counters": "<Counters total=\"306\" executed=\"306\" passed=\"306\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 306
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "6C8A925ACCD5F58A70D74E0B35D2125F847F77DAAD4C9D7DA44DCC0B7092E510"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-test-20261019T2110/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "Counters": "<Counters total=\"33\" executed=\"33\" passed=\"33\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 33
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "38BEEF46770A6C28D669748AD75FA793C80F981FC49DE0F955A3E6C17F3A82A5"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-test-20261019T2110/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "Counters": "<Counters total=\"20\" executed=\"20\" passed=\"20\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 20
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "4F031BB87ACB032DC285B6261F920F1EE4D60B1C5CB75123BE49A84289CEB9B7"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-test-20261019T2110/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "Counters": "<Counters total=\"64\" executed=\"64\" passed=\"64\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 64
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "F7714F4C4DC6AA003FBBF60120436A71044FC4A18052C1C82F1E6B7AE775CD91"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-test-20261019T2110/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "Counters": "<Counters total=\"868\" executed=\"868\" passed=\"868\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 868
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "09504C7102065797D3329832CA15235EF8A115D092DC630116F46EDF6DA66C9E"
+        },
+        {
+          "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/unit-green-r2-test-20261019T2110/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "Counters": "<Counters total=\"96\" executed=\"96\" passed=\"96\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+          "OutcomeGroups": [
+            {
+              "Outcome": "Passed",
+              "Count": 96
+            }
+          ],
+          "FailedNames": [],
+          "Sha256": "41F4A2B9EADE7B2B7993FC2C613DD0DF527DC9E704743FDDDCF6C391C205CCDD"
+        }
+      ],
+      "Stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-test-20261019T2110.out.log",
+      "Stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-test-20261019T2110.err.log"
+    },
+    {
+      "Name": "unit-green-r2-traceability-20261019T2120",
+      "Head": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "Target": "ValidateTraceability",
+      "Args": [],
+      "DirtyTracked": [
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+      ],
+      "StartedLocal": "2026-10-19T21:20:16",
+      "ExitText": "0 2026-10-19T21:20:21",
+      "MetaCopyMatches": true,
+      "Trx": [],
+      "Stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-traceability-20261019T2120.out.log",
+      "Stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-traceability-20261019T2120.err.log"
+    }
+  ]
+}

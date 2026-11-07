@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore.Migrations;
+using QBrainAi.Tests.Shared;
 using Xunit;
 using PostgreSqlRecovery = QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations.AddRequirementsRecoveryRuns;
 using SqliteRecovery = QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations.AddRequirementsRecoveryRuns;
@@ -13,6 +14,8 @@ namespace QBrainAi.Support.Mcp.Tests.Requirements;
 public sealed class RequirementsRecoveryMigrationTests
 {
     /// <summary>The three provider assemblies discover the same recovery migration id.</summary>
+    /// <remarks>Integration: reads each provider migration source file from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Discovers_AddRequirementsRecoveryRuns_OnAllProviders()
     {
@@ -41,16 +44,5 @@ public sealed class RequirementsRecoveryMigrationTests
         return Path.Combine("src", "QBrainAi.Storage.PostgreSqlMigrations", "Migrations", "20260929020000_AddRequirementsRecoveryRuns.cs");
     }
 
-    private static string RepositoryRoot()
-    {
-        var current = new DirectoryInfo(AppContext.BaseDirectory);
-        while (current is not null)
-        {
-            if (File.Exists(Path.Combine(current.FullName, "QBrainAi.sln")))
-                return current.FullName;
-            current = current.Parent;
-        }
-
-        throw new DirectoryNotFoundException("QBrainAi.sln was not found above the test base directory.");
-    }
+    private static string RepositoryRoot() => TestRepositoryRoot.Resolve();
 }

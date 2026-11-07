@@ -1,0 +1,26 @@
+RECEIPT started=2026-11-05T12:26:16 ended=2026-11-05T12:26:18 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-CodeLines.ps1 sha256=6CB582531536BFCDFC583B99ACED75DD62505EED8C6D053A3FE448FC4EA64E72
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Roots | tests | -PatternFile | /home/sharpninja/.claude/scratch/pr82-review-20261019/pattern-z6-host-prefixed-sets.txt
+HEAD 88c5abccee5f92b785f1368fdaace50dc0d4e2c2
+Now: 2026-11-05T12:26:17 roots=tests pattern=\["(DOTNET|ASPNETCORE)_[A-Za-z0-9_]+"\]\s*=
+tests/QBrainAi.PluginIntegration.Tests/PluginIntegrationServerFixture.cs:196: startInfo.Environment["ASPNETCORE_ENVIRONMENT"] = "Production";
+tests/QBrainAi.PluginIntegration.Tests/PluginIntegrationServerFixture.cs:197: startInfo.Environment["DOTNET_ENVIRONMENT"] = "Production";
+tests/QBrainAi.PluginIntegration.Tests/PluginIntegrationServerFixture.cs:198: startInfo.Environment["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1";
+tests/QBrainAi.PluginIntegration.Tests/PluginIntegrationServerFixture.cs:199: startInfo.Environment["DOTNET_NOLOGO"] = "1";
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:67: new() { ["PATH"] = "/usr/bin", ["HOME"] = "/home/example", ["DOTNET_ROOT"] = "/usr/share/dotnet" },
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:68: new() { ["PATH"] = "/usr/bin", ["HOME"] = "/home/example", ["DOTNET_ROOT"] = "/usr/share/dotnet" }),
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:38: ["DOTNET_ENVIRONMENT"] = "Production", ["ASPNETCORE_ENVIRONMENT"] = "Production",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:39: ["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1", ["DOTNET_NOLOGO"] = "1",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:87: var inherited = new Dictionary<string, string?> { [key] = "foreign", ["PATH"] = "/tools", ["DOTNET_ROOT"] = "/runtime" };
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:90: ["PATH"] = "/tools", ["DOTNET_ROOT"] = "/runtime",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:63: ["DOTNET_NOLOGO"] = "1",
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:116: new() { ["DOTNET_ROOT"] = "/usr/share/dotnet", ["DOTNET_gcServer"] = "1", ["PATH"] = "/usr/bin" },
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:117: new() { ["DOTNET_ROOT"] = "/usr/share/dotnet", ["DOTNET_gcServer"] = "1", ["PATH"] = "/usr/bin" }),
+tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:140: new() { ["DOTNET_Logging__LogLevel__Default"] = "Trace", ["DOTNET_port"] = "7147", ["PATH"] = "/usr/bin" },
+tests/TestSupport.Shared/OwnedReplStart.cs:34: ["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1",
+tests/TestSupport.Shared/OwnedReplStart.cs:35: ["DOTNET_NOLOGO"] = "1",
+tests/TestSupport.Shared/ScratchQBrainAi.cs:263: ["ASPNETCORE_ENVIRONMENT"] = "Production",
+tests/TestSupport.Shared/ScratchQBrainAi.cs:264: ["DOTNET_ENVIRONMENT"] = "Production",
+tests/TestSupport.Shared/ScratchQBrainAi.cs:265: ["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1",
+tests/TestSupport.Shared/ScratchQBrainAi.cs:266: ["DOTNET_NOLOGO"] = "1",
+END matches=20

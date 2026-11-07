@@ -1,11 +1,15 @@
 using System.Text.Json;
+using QBrainAi.Tests.Shared;
 
 namespace QBrainAi.Repl.Core.Tests;
 
 /// <summary>
 /// TEST-MCP-MEMORY-007: Verifies the canonical REPL YAML schema advertises
-/// and constrains the workflow.memory namespace.
+/// and constrains the workflow.memory namespace. The schema is read from the repository checkout through the shared
+/// <see cref="TestRepositoryRoot"/>, so this is an integration test on both hosts (TR-MCP-USECASE-018 AC-006,
+/// hostile validation round 2 finding R2-F1).
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class MemorySchemaContractTests
 {
     /// <summary>The canonical schema contains memory workflow rules, scopes, and ID validation.</summary>
@@ -49,19 +53,5 @@ public sealed class MemorySchemaContractTests
         Assert.Equal("^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", idPattern);
     }
 
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "docs", "context", "repl-yaml-message.schema.json")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
+    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
 }

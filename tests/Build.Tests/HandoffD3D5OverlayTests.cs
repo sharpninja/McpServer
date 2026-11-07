@@ -17,6 +17,8 @@ public sealed class HandoffD3D5OverlayTests
     /// <summary>
     /// D3: the shipped Nuke target exists and invokes TraceabilityValidator.Validate on docs/Project.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void D3_NukeValidateTraceabilityTarget_InvokesShippedValidatorOnDocsProject()
     {
@@ -40,6 +42,8 @@ public sealed class HandoffD3D5OverlayTests
     /// D3 / C3: TraceabilityValidator.Validate on live docs/Project reports no FR mapping/matrix gaps,
     /// and every live FR-HANDOFF heading is covered.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void D3_ValidateTraceability_ShippedValidator_PassesOnLiveDocsProject()
     {

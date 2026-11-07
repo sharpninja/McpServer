@@ -1,0 +1,25 @@
+{
+  "timestampUtc": "2026-11-06T22:21:09.1828452+00:00",
+  "timestampLocal": "2026-11-06T16:21:11",
+  "method": "workflow.requirements.getFr",
+  "recordId": "FR-MCP-USECASE-001",
+  "response": {
+    "payload": {
+      "result": {
+        "area": "MCP",
+        "status": "pending",
+        "updatedAt": "2026-11-06T22:21:11.6220182+00:00",
+        "createdAt": "2026-11-06T22:21:11.6218840+00:00",
+        "description": "The server shall support create, read, update, and soft-delete of workspace-scoped use cases with header fields: title, brief description, precondition, postcondition, scope, and priority. Default queries exclude soft-deleted rows. Multi-tenant isolation via WorkspaceId is required.",
+        "id": "FR-MCP-USECASE-001",
+        "priority": "medium",
+        "acceptanceCriteria": [],
+        "scopeStartLayerKey": "layer-1",
+        "title": "CRUD workspace-scoped use cases"
+      },
+      "requestId": "req-20261106T222110Z-13fc",
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

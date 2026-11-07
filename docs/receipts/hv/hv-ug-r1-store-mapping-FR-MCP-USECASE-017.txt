@@ -1,0 +1,11 @@
+type: result
+payload:
+  requestId: req-20261020T005717Z-3cd7
+  result:
+    items: []
+    totalCount: 0
+  deprecated: true
+
+---
+
+

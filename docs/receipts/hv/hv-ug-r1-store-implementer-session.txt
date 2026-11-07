@@ -1,0 +1,14 @@
+type: error
+payload:
+  requestId: req-20261020T012112Z-2c8a
+  code: method_invocation_error
+  message: 'Unknown method: GetAsync on client: SessionLogClient. Valid methods: AppendDialogAsync, BeginTurnAsync, ClearTurnSectionAsync, CompleteTurnAsync, DeleteSessionAsync, DeleteTurnAsync, DeleteTurnItemAsync, FailTurnAsync, IngestTranscriptPathAsync, IngestTranscriptUploadAsync, OpenSessionAsync, PatchTurnAsync, QueryAsync, RepairWorkspaceStampsAsync, ReplaceTurnAsync, ReplaceTurnSectionAsync, SetSessionTitleAsync, SetTurnTitleAsync, SubmitAsync, UpsertTurnAsync'
+  retryable: false
+  details:
+    clientName: SessionLog
+    methodName: GetAsync
+    exceptionType: System.InvalidOperationException
+
+---
+
+

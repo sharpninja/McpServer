@@ -1,0 +1,2 @@
+RECEIPT ug-r3-build-tests-8 (TRX summary of /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-build-tests-8, written 2026-10-20T17:02:09)
+ug-r3-build-tests-8.trx: total=436 executed=436 passed=436 failed=0 notExecuted=0

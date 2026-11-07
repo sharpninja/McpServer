@@ -1,0 +1,20 @@
+{
+  "payload": {
+    "requestId": "req-20261103T123139Z-e387",
+    "result": {
+      "createdAt": "2026-11-03T12:31:41.2344457+00:00",
+      "area": "HANDOFF",
+      "title": "Test TEST-HANDOFF-006",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-11-03T12:31:41.2345680+00:00",
+      "testType": "unit",
+      "status": "pending",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "id": "TEST-HANDOFF-006",
+      "description": "Cover API, client, REPL, Director, MCP-tool, and plugin-skill inventory and invocation parity, including workspace isolation."
+    },
+    "deprecated": true
+  },
+  "type": "result"
+}

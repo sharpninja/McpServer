@@ -1,7 +1,9 @@
 using System.Diagnostics;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Serilog;
 
 /// <summary>TR-MCP-SERVICEUPDATE-001: native command result; output is never included in failure messages.</summary>
 internal sealed record ServiceCommandResult(int ExitCode, string StandardOutput);
@@ -15,6 +17,22 @@ internal sealed record LinuxServiceUpdateResult(string ArchivePath, string Archi
 
 /// <summary>Systemd environment-file path and missing-file policy.</summary>
 internal sealed record ServiceEnvironmentFile(string Path, bool Optional);
+
+/// <summary>TR-MCP-SERVICEUPDATE-001 startup-health-wait (slice Z3, 2026-11-04): how a startup health wait ended.</summary>
+internal enum StartupHealthOutcome
+{
+    /// <summary>The server answered health.</summary>
+    Healthy,
+
+    /// <summary>The unit left the active state before it answered.</summary>
+    UnitStopped,
+
+    /// <summary>The allowed probes were spent.</summary>
+    TimedOut,
+}
+
+/// <summary>TR-MCP-SERVICEUPDATE-001 startup-health-wait (slice Z3, 2026-11-04): the outcome and the probes made.</summary>
+internal sealed record StartupHealthResult(StartupHealthOutcome Outcome, int Probes);
 
 /// <summary>TR-MCP-SERVICEUPDATE-001: updates an existing systemd unit with retained live-state recovery.</summary>
 internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, ServiceCommandResult> run)
@@ -47,6 +65,18 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
     }
 
     /// <summary>Validates, stops, archives, replaces, restores and verifies exactly the selected service.</summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criterion failed-update-startable (slice Z3,
+    /// fifth holistic read before hostile validation round 12, finding d3): when the update fails after the replacement
+    /// completed, the recovery restores the preserved state and then retargets a unit file or drop-in that names the
+    /// legacy apphost, as the success path does, and reloads systemd after that change, so the unit names the apphost
+    /// the replacement installed and can be started by hand. Before, the recovery restored a unit file that named the
+    /// removed legacy apphost, and the redeploy of 2026-11-04 left a service that could not start until a manual
+    /// retarget. A failure before the replacement completes keeps the old recovery (no binary rollback either
+    /// way).</description></item>
+    /// </list>
+    /// </remarks>
     public LinuxServiceUpdateResult Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth)
     {
         if (Command("id", "-u").Trim() != "0")
@@ -100,6 +130,7 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
         MakePrivateDirectory(archiveDirectory);
         var archive = Path.Combine(archiveDirectory, "preserved-state.tar");
         string? hash = null;
+        var replaced = false;
         Stop(options.ServiceName);
         try
         {
@@ -110,10 +141,11 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
             Command("tar", "--list", "--file", archive);
             hash = Hash(archive);
             ReplaceFiles(stage, install, preserved);
+            replaced = true;
             EnsureNoLinks(Path.Combine(install, "config", "brain-slots", "quad-brain-slot-assignments.yaml"));
             copyRuntimeConfig();
             Restore(archive, hash, preserved, install);
-            RetargetLegacyExecStart(unit, install);
+            _ = RetargetLegacyExecStart(unit, install);
             Command("systemctl", "daemon-reload");
             Command("systemctl", "start", options.ServiceName);
             var pid = WaitForServiceProcess(options.ServiceName, Path.Combine(install, AppHost));
@@ -124,7 +156,13 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
         {
             if (hash is not null)
             {
-                try { Stop(options.ServiceName); Restore(archive, hash, preserved, install); }
+                try
+                {
+                    Stop(options.ServiceName);
+                    Restore(archive, hash, preserved, install);
+                    if (replaced && RetargetLegacyExecStart(unit, install))
+                        Command("systemctl", "daemon-reload");
+                }
                 catch (Exception recovery)
                 {
                     throw new AggregateException($"Update and live-state restoration failed. Retained archive: {archive}", failure, recovery);
@@ -132,6 +170,91 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
             }
             throw new InvalidOperationException($"Service update failed; recovery evidence retained at {archiveDirectory}. No binary rollback was performed.", failure);
         }
+    }
+
+    /// <summary>TR-MCP-SERVICEUPDATE-001 startup-health-wait: seconds between health probes after the start.</summary>
+    internal static readonly TimeSpan StartupHealthInterval = TimeSpan.FromSeconds(5);
+
+    /// <summary>TR-MCP-SERVICEUPDATE-001 startup-health-wait: probes allowed after the start, 10 minutes at the interval.</summary>
+    internal const int StartupHealthProbes = 120;
+
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 startup-health-wait: waits for HTTP health after the start while the unit stays active,
+    /// for up to <see cref="StartupHealthProbes"/> probes <see cref="StartupHealthInterval"/> apart, and throws when the
+    /// unit leaves the active state or the probes are spent, so a server that is still starting is never stopped as
+    /// unhealthy.
+    /// </summary>
+    /// <param name="service">The unit.</param>
+    /// <param name="probe">One health probe; true when the server answers healthy.</param>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria startup-health-wait and lifecycle
+    /// (slice Z3): new. The redeploy of 2026-11-04 stopped a server that was starting normally, because the update probed
+    /// health 10 times 2 s apart while the server registers every workspace before it listens (93 s at 14:27).</description></item>
+    /// </list>
+    /// </remarks>
+    internal void WaitForStartupHealth(string service, Func<bool> probe)
+    {
+        var result = EvaluateStartupHealth(() => Value(GetUnit(service), "ActiveState"), probe, Thread.Sleep, StartupHealthProbes, StartupHealthInterval);
+        if (result.Outcome == StartupHealthOutcome.UnitStopped)
+            throw new InvalidOperationException("Updated service left the active state before it answered health.");
+        if (result.Outcome == StartupHealthOutcome.TimedOut)
+            throw new InvalidOperationException("Updated service did not answer health within the startup wait.");
+        Log.Information("  Startup health answered after {Probes} probe(s).", result.Probes);
+    }
+
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 startup-health-wait: the wait itself, over an injected unit state, probe and sleep. Before
+    /// each probe it reads the unit; a unit that is not active ends the wait at once. It sleeps only between probes and
+    /// stops after <paramref name="maxProbes"/>.
+    /// </summary>
+    /// <param name="activeState">Reads the unit's ActiveState.</param>
+    /// <param name="probe">One health probe.</param>
+    /// <param name="sleep">Waits between probes.</param>
+    /// <param name="maxProbes">The probes allowed.</param>
+    /// <param name="interval">The wait between probes.</param>
+    /// <returns>The outcome and the probes made.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria startup-health-wait and lifecycle
+    /// (slice Z3): new. Its contract rows are ServiceStartupHealthContractTests.Rows, proven against a reference wait and
+    /// five wrong waits in mock gate ug-r12z3-mockgate-2 before this change.</description></item>
+    /// </list>
+    /// </remarks>
+    internal static StartupHealthResult EvaluateStartupHealth(Func<string> activeState, Func<bool> probe, Action<TimeSpan> sleep, int maxProbes, TimeSpan interval)
+    {
+        var probes = 0;
+        while (probes < maxProbes)
+        {
+            if (!string.Equals(activeState(), "active", StringComparison.Ordinal))
+                return new(StartupHealthOutcome.UnitStopped, probes);
+            probes++;
+            if (probe())
+                return new(StartupHealthOutcome.Healthy, probes);
+            if (probes < maxProbes)
+                sleep(interval);
+        }
+        return new(StartupHealthOutcome.TimedOut, probes);
+    }
+
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 startup-health-wait: one quiet probe of the loopback health endpoint (3 s timeout); a
+    /// refused or timed-out request is "not yet", not an error.
+    /// </summary>
+    /// <param name="port">The service HTTP port.</param>
+    /// <returns>True when /health answers with a success status.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criterion startup-health-wait (slice Z3): new, so
+    /// the startup wait does not log an error for every probe the starting server refuses.</description></item>
+    /// </list>
+    /// </remarks>
+    internal static bool ProbeHealth(int port)
+    {
+        using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(3) };
+        try { return client.GetAsync($"http://localhost:{port}/health").GetAwaiter().GetResult().IsSuccessStatusCode; }
+        catch (HttpRequestException) { return false; }
+        catch (TaskCanceledException) { return false; }
     }
 
     /// <summary>TR-MCP-SERVICEUPDATE-001: systemd simple units report start before exec; bound retries until the active main process resolves to the deployed apphost.</summary>
@@ -155,9 +278,45 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
         throw new InvalidOperationException("Updated service did not become active with the expected executable within the startup retry limit.");
     }
     /// <summary>Gets only required systemd properties; sensitive values remain local.</summary>
-    private Dictionary<string, string> GetUnit(string name) => Command("systemctl", "show", name, "--no-pager", "--property=" + UnitProperties)
-        .Split('\n').Where(line => line.Contains('='))
-        .Select(line => line.Split('=', 2)).ToDictionary(pair => pair[0], pair => pair[1].TrimEnd('\r'), StringComparer.Ordinal);
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria repeated-properties, preserve and lifecycle
+    /// (slice Z3): the output is read through <see cref="ParseUnitProperties"/>, because systemd 262 prints one
+    /// EnvironmentFiles line per environment file and keying the lines with ToDictionary threw on the second line, before
+    /// any service change (redeploy of 2026-11-04).</description></item>
+    /// </list>
+    /// </remarks>
+    private Dictionary<string, string> GetUnit(string name) => ParseUnitProperties(Command("systemctl", "show", name, "--no-pager", "--property=" + UnitProperties));
+
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 repeated-properties: reads systemctl show output into properties by name. Repeated lines
+    /// of one property are one value, their non-empty values in order separated by one space, which ParseEnvironmentFiles
+    /// and ParseWords read as a list; a repeated ExecStart still fails ValidateUnit's single-command check. Lines without a
+    /// property are ignored and carriage returns are removed.
+    /// </summary>
+    /// <param name="output">The systemctl show output.</param>
+    /// <returns>The properties by name.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria repeated-properties, preserve and lifecycle
+    /// (slice Z3): new. Its contract rows are ServiceUnitPropertiesContractTests.Rows, proven against a reference reader
+    /// and six wrong readers in mock gate ug-r12z3-mockgate-1 before this change.</description></item>
+    /// </list>
+    /// </remarks>
+    internal static Dictionary<string, string> ParseUnitProperties(string output)
+    {
+        var properties = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var line in output.Split('\n'))
+        {
+            var separator = line.IndexOf('=', StringComparison.Ordinal);
+            if (separator < 0) continue;
+            var key = line[..separator];
+            var value = line[(separator + 1)..].TrimEnd('\r');
+            if (!properties.TryGetValue(key, out var existing)) properties[key] = value;
+            else if (value.Length > 0) properties[key] = existing.Length == 0 ? value : existing + " " + value;
+        }
+        return properties;
+    }
 
     /// <summary>Reads an optional property without leaking contents in errors.</summary>
     private static string Value(IReadOnlyDictionary<string, string> unit, string key) => unit.GetValueOrDefault(key, "");
@@ -188,16 +347,27 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
     /// TR-MCP-QBRAIN-006: After files are replaced, a preserved unit or drop-in that still names McpServer.Support.Mcp
     /// is retargeted at QBrainAi.Support.Mcp before daemon-reload. The effective ExecStart may live in a drop-in.
     /// </summary>
-    private void RetargetLegacyExecStart(IReadOnlyDictionary<string, string> unit, string install)
+    /// <param name="unit">The unit properties read before the update.</param>
+    /// <param name="install">The install folder.</param>
+    /// <returns>True when a unit file or drop-in was retargeted; false when the unit does not run the legacy apphost.</returns>
+    /// <exception cref="InvalidOperationException">The unit runs the legacy apphost but no unit file or drop-in names it.</exception>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criterion failed-update-startable (slice Z3,
+    /// finding d3 of the fifth holistic read): now returns whether it retargeted a file, so the failure path reloads
+    /// systemd only after a change; the retargeting itself is unchanged.</description></item>
+    /// </list>
+    /// </remarks>
+    private bool RetargetLegacyExecStart(IReadOnlyDictionary<string, string> unit, string install)
     {
         var start = Value(unit, "ExecStart");
         var executable = Regex.Match(start, @"^\{ path=(.*?) ; argv\[\]=", RegexOptions.CultureInvariant);
         if (!executable.Success)
-            return;
+            return false;
 
         var legacyPath = Path.Combine(install, LegacyAppHost);
         if (!string.Equals(Decode(executable.Groups[1].Value), legacyPath, StringComparison.Ordinal))
-            return;
+            return false;
 
         var candidates = new List<string> { RequiredUnitFile(Value(unit, "FragmentPath")) };
         candidates.AddRange(ParseWords(Value(unit, "DropInPaths")).Select(RequiredUnitFile));
@@ -215,6 +385,7 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
 
         if (!replaced)
             throw new InvalidOperationException("Legacy ExecStart could not be retargeted to the deployed application host.");
+        return true;
     }
 
     /// <summary>Fails closed when configuration precedence could point preservation at the wrong live data.</summary>

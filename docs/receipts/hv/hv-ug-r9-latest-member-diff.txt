@@ -1,0 +1,320 @@
+diff --git a/build/TestGroupExecution.cs b/build/TestGroupExecution.cs
+new file mode 100644
+index 00000000..e31be0bb
+--- /dev/null
++++ b/build/TestGroupExecution.cs
+@@ -0,0 +1,159 @@
++using System.Xml.Linq;
++
++/// <summary>TR-MCP-NUKE-020 AC-1 and AC-5: one TestGroups run: the lane-shaped run record and the classes it names.</summary>
++/// <param name="Run">The project, path, filter, log line and TRX name, as the lane composes them.</param>
++/// <param name="Classes">The classes this run's groups named, in first-seen order.</param>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-5: added so the target can check every named class of a project's merged groups against that project's TRX.</description></item>
++/// </list>
++/// </remarks>
++internal sealed record TestGroupRun(IntegrationLaneRun Run, IReadOnlyList<string> Classes);
++
++/// <summary>
++/// TR-MCP-NUKE-020 AC-1, AC-2, AC-4 and AC-5: pure composition and result checks of the TestGroups target. Each
++/// <c>--test-groups</c> value is <c>&lt;test project&gt;:&lt;Class&gt;[,&lt;Class&gt;...]</c>; groups that name one project merge
++/// into one run in first-seen order, so each selected project writes one TRX. The filter is the lane's host platform
++/// clause (<see cref="IntegrationLaneFilter.PlatformClause"/>) and class clause
++/// (<see cref="IntegrationLaneClassFilter.ClassClause"/>), with no category clause; the run record, log line and TRX name
++/// follow the lane's <see cref="IntegrationLaneRun"/>. Every refusal happens before any test runs.
++/// </summary>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2, AC-3: added the TestGroups composition and run-id policy so targeted runs go through Nuke (operator 2026-11-02) and reuse the lane composition.</description></item>
++/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4, AC-5: added the host platform clause and the per-class result check after a Windows-only class was run on Linux.</description></item>
++/// </list>
++/// </remarks>
++internal static class TestGroupExecution
++{
++    /// <summary>Composes the runs for the given groups against the solution's projects on one host.</summary>
++    /// <param name="groups">The <c>--test-groups</c> values, in order.</param>
++    /// <param name="projects">The solution's project names and paths.</param>
++    /// <param name="host">The host the runs execute on.</param>
++    /// <returns>One run per selected project, in the order the groups first name them.</returns>
++    /// <exception cref="InvalidOperationException">No group, a malformed group, an unknown or blank project, or a class
++    /// name that is empty or not a plain class name.</exception>
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2: added; one run per project with the lane's class clause and run record.</description></item>
++    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4: added the host parameter and the platform clause so other-platform cases never run.</description></item>
++    /// </list>
++    /// </remarks>
++    internal static IReadOnlyList<TestGroupRun> Compose(IReadOnlyList<string> groups, IReadOnlyList<(string Name, string Path)> projects, IntegrationLaneHost host)
++    {
++        ArgumentNullException.ThrowIfNull(groups);
++        ArgumentNullException.ThrowIfNull(projects);
++        if (groups.Count == 0)
++            throw new InvalidOperationException("TestGroups needs at least one --test-groups value '<test project>:<Class>[,<Class>...]'.");
++
++        var platform = IntegrationLaneFilter.PlatformClause(host);
++        var order = new List<string>();
++        var classes = new Dictionary<string, List<string>>(StringComparer.Ordinal);
++        foreach (var raw in groups)
++        {
++            var group = raw ?? string.Empty;
++            var separator = group.IndexOf(':', StringComparison.Ordinal);
++            if (separator < 0)
++                throw new InvalidOperationException($"Test group '{group}' must be '<test project>:<Class>[,<Class>...]'.");
++
++            var project = group[..separator].Trim();
++            if (project.Length == 0)
++                throw new InvalidOperationException($"Test group '{group}' names no test project.");
++            if (!projects.Any(entry => string.Equals(entry.Name, project, StringComparison.Ordinal)))
++                throw new InvalidOperationException($"Test group '{group}' names test project '{project}', which the solution does not contain.");
++
++            var names = group[(separator + 1)..].Split(',').Select(name => name.Trim()).ToArray();
++            if (names.Any(name => name.Length == 0))
++                throw new InvalidOperationException($"Test group '{group}' has an empty class name.");
++            foreach (var name in names)
++            {
++                try
++                {
++                    IntegrationLaneClassFilter.ClassClause([name]);
++                }
++                catch (ArgumentException)
++                {
++                    throw new InvalidOperationException($"Test group '{group}' names class '{name}', which is not a plain class name.");
++                }
++            }
++
++            if (!classes.TryGetValue(project, out var selected))
++            {
++                selected = [];
++                classes[project] = selected;
++                order.Add(project);
++            }
++
++            foreach (var name in names.Where(name => !selected.Contains(name, StringComparer.Ordinal)))
++                selected.Add(name);
++        }
++
++        return order.Select(name =>
++        {
++            var path = projects.First(entry => string.Equals(entry.Name, name, StringComparison.Ordinal)).Path;
++            var filter = platform + "&" + IntegrationLaneClassFilter.ClassClause(classes[name]);
++            return new TestGroupRun(
++                new IntegrationLaneRun(name, path, filter, $"Test group filter for {name}: {filter}", name + ".trx"),
++                classes[name].ToArray());
++        }).ToArray();
++    }
++
++    /// <summary>TR-MCP-NUKE-020 AC-1: TestGroups always writes TRX receipts, so it requires a safe --test-run-id.</summary>
++    /// <param name="testRunId">The raw <c>--test-run-id</c> value.</param>
++    /// <returns>The run id.</returns>
++    /// <exception cref="InvalidOperationException">The id is blank or not a single path segment.</exception>
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1: added so a targeted run always leaves TRX receipts.</description></item>
++    /// </list>
++    /// </remarks>
++    internal static string RequireRunId(string testRunId) =>
++        SessionLifeUnitGateReports.NormalizeRunId(testRunId)
++            ?? throw new InvalidOperationException("TestGroups requires --test-run-id, so that every selected project writes its TRX receipt.");
++
++    /// <summary>
++    /// TR-MCP-NUKE-020 AC-5: every named class ran at least one case. A result counts for a class when its test name holds
++    /// the class as a whole dot-bounded segment, as the filter's <c>FullyQualifiedName~.Class.</c> selects it.
++    /// </summary>
++    /// <param name="project">The project whose TRX is checked.</param>
++    /// <param name="classes">The classes the project's groups named.</param>
++    /// <param name="xml">The complete TRX content.</param>
++    /// <returns>Null when every class ran a case; otherwise the failure, naming each class that ran none.</returns>
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: added so a misspelled class in a multi-class group fails instead of passing silently.</description></item>
++    /// </list>
++    /// </remarks>
++    internal static string? CheckClasses(string project, IReadOnlyList<string> classes, string xml)
++    {
++        ArgumentNullException.ThrowIfNull(classes);
++        string[] testNames;
++        try
++        {
++            var document = XDocument.Parse(xml);
++            // A result's display name normally starts with its class; a TestMethod definition names the class itself,
++            // which still holds when a display name is customized.
++            testNames = document.Descendants()
++                .Where(element => element.Name.LocalName == "UnitTestResult")
++                .Select(element => (string?)element.Attribute("testName") ?? string.Empty)
++                .Concat(document.Descendants()
++                    .Where(element => element.Name.LocalName == "TestMethod")
++                    .Select(element => ((string?)element.Attribute("className") ?? string.Empty) + "."))
++                .ToArray();
++        }
++        catch (System.Xml.XmlException error)
++        {
++            return $"Test group project '{project}' wrote unreadable TRX evidence, so classes {string.Join(", ", classes)} are unproven: {error.Message}";
++        }
++
++        var missing = classes.Where(name => !testNames.Any(test => test.Contains("." + name + ".", StringComparison.Ordinal))).ToArray();
++        return missing.Length == 0
++            ? null
++            : $"Test group project '{project}' ran no case of class {string.Join(", ", missing)}.";
++    }
++}
+diff --git a/src/QBrainAi.Repl.Core/RequirementTimestampText.cs b/src/QBrainAi.Repl.Core/RequirementTimestampText.cs
+new file mode 100644
+index 00000000..535483d1
+--- /dev/null
++++ b/src/QBrainAi.Repl.Core/RequirementTimestampText.cs
+@@ -0,0 +1,21 @@
++using System.Globalization;
++
++namespace QBrainAi.Repl.Core;
++
++/// <summary>
++/// FR-MCP-040 ac-1: the one text form the REPL requirement adapters report for a stored creation or update time: ISO 8601
++/// round-trip text that keeps the stored offset, or null when nothing is stored. It never reads a clock.
++/// </summary>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added, replacing the adapters' DateTimeOffset.UtcNow so the REPL reports stored times and never the read time.</description></item>
++/// </list>
++/// </remarks>
++internal static class RequirementTimestampText
++{
++    /// <summary>Formats a stored time.</summary>
++    /// <param name="stored">The stored time, or null.</param>
++    /// <returns>The round-trip text, or null.</returns>
++    internal static string? Format(DateTimeOffset? stored) => stored?.ToString("o", CultureInfo.InvariantCulture);
++}
+diff --git a/src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs b/src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs
+new file mode 100644
+index 00000000..9a28a364
+--- /dev/null
++++ b/src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs
+@@ -0,0 +1,42 @@
++using System.Globalization;
++
++namespace QBrainAi.Support.Mcp.Requirements;
++
++/// <summary>
++/// FR-MCP-040 ac-1: reads the creation and update times stored with a requirement or traceability link, so a read reports
++/// the stored time and never the time of the read. Stored values are round-trip text written in UTC; a blank or
++/// unreadable value reads as null.
++/// </summary>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added Read and Earliest, because requirement reads reported the time of the read instead of the stored times (operator 2026-11-02: "This HAS to be fixed.").</description></item>
++/// </list>
++/// </remarks>
++internal static class RequirementStoredTimestamp
++{
++    /// <summary>Reads one stored time, keeping its stored offset.</summary>
++    /// <param name="stored">The stored text.</param>
++    /// <returns>The stored time, or null when nothing readable is stored.</returns>
++    internal static DateTimeOffset? Read(string? stored) =>
++        !string.IsNullOrWhiteSpace(stored)
++        && DateTimeOffset.TryParse(stored, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var value)
++            ? value
++            : null;
++
++    /// <summary>Reads the earliest readable stored time, for a mapping that aggregates several links.</summary>
++    /// <param name="stored">The links' stored creation texts.</param>
++    /// <returns>The earliest stored time, or null when none is readable.</returns>
++    internal static DateTimeOffset? Earliest(IEnumerable<string?> stored)
++    {
++        ArgumentNullException.ThrowIfNull(stored);
++        DateTimeOffset? earliest = null;
++        foreach (var value in stored.Select(Read))
++        {
++            if (value is not null && (earliest is null || value.Value < earliest.Value))
++                earliest = value;
++        }
++
++        return earliest;
++    }
++}
+diff --git a/tests/TestSupport.Shared/TemporaryInstanceChecks.cs b/tests/TestSupport.Shared/TemporaryInstanceChecks.cs
+index 2211a3ae..90a9b734 100644
+--- a/tests/TestSupport.Shared/TemporaryInstanceChecks.cs
++++ b/tests/TestSupport.Shared/TemporaryInstanceChecks.cs
+@@ -8,6 +8,8 @@ namespace QBrainAi.TestSupport.TemporaryInstance;
+ /// environment), linked into the unit project that proves their contract (QBrainAi.Repl.Core.Tests) and the
+ /// integration projects whose cases call them. Each check returns null when the input passes and a message naming the
+ /// violation otherwise, so a caller asserts <c>Assert.Null(check)</c> and the failure message says what was wrong.
++/// Since 2026-11-02 it also holds the FR-MCP-TESTRESOURCE-001 check that a test's generated-artifact folder lies outside
++/// the checkout (<see cref="CheckTestOutputFolder"/>).
+ /// </summary>
+ internal static class TemporaryInstanceChecks
+ {
+@@ -153,6 +155,12 @@ internal static class TemporaryInstanceChecks
+     /// <param name="settings">The instance's own variables.</param>
+     /// <param name="ownedRoot">The temporary instance's root folder.</param>
+     /// <returns>Null when the environment passes; otherwise the violation.</returns>
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-4; TR-MCP-NUKE-019 AC-6: the SQLite-only rule now applies to database-engine settings only (Database__Provider, DatabaseProvider, DATABASE_PROVIDER, any prefix), because it refused TodoStorage's valid 'database' backend and broke the stdio host case.</description></item>
++    /// </list>
++    /// </remarks>
+     internal static string? CheckOwnedInstanceEnvironment(
+         IReadOnlyDictionary<string, string?> child,
+         IReadOnlyDictionary<string, string> settings,
+@@ -170,7 +178,11 @@ internal static class TemporaryInstanceChecks
+ 
+         foreach (var (key, value) in settings)
+         {
+-            if ((key.EndsWith("__Provider", StringComparison.OrdinalIgnoreCase)
++            // FR-MCP-TESTRESOURCE-001 ac-4: only database-engine settings must name SQLite: hierarchical Database__Provider,
++            // flat DatabaseProvider and the DATABASE_PROVIDER environment aliases, with any host or instance prefix. Other
++            // provider settings, such as TodoStorage's 'database' backend, keep the exact ownership check above.
++            if ((key.EndsWith("__Database__Provider", StringComparison.OrdinalIgnoreCase)
++                    || key.EndsWith("__DatabaseProvider", StringComparison.OrdinalIgnoreCase)
+                     || key.EndsWith("DATABASE_PROVIDER", StringComparison.OrdinalIgnoreCase)) && !IsSqliteProvider(value))
+                 return $"The temporary instance's database provider '{value}' is not SQLite.";
+             var database = key.Contains("ConnectionString", StringComparison.OrdinalIgnoreCase)
+@@ -219,6 +231,40 @@ internal static class TemporaryInstanceChecks
+             : $"The temporary instance's database '{database ?? connectionString}' is not inside its owned root '{ownedRoot}'.";
+     }
+ 
++    /// <summary>
++    /// FR-MCP-TESTRESOURCE-001 (second criterion: "Generated test artifacts are written only to test-owned disposable
++    /// output locations, not to repository fixture or documentation paths"): accepts a folder for a test's generated
++    /// artifacts only when it is an absolute path with no '.' or '..' segment that lies outside
++    /// <paramref name="checkoutRoot"/>, compared segment by segment (ordinally, as the other owned-root checks) with
++    /// either separator. The checkout root itself, any folder inside it and a relative path are refused.
++    /// </summary>
++    /// <param name="folder">The candidate artifact folder.</param>
++    /// <param name="checkoutRoot">The repository checkout root.</param>
++    /// <returns>Null when the folder is a test-owned location outside the checkout; otherwise the refusal, naming the folder.</returns>
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): added, because two memory-bench stub cases wrote into the checkout's docs/benchmarks/results and rewrote two tracked files on every lane run (operator 2026-11-02: "Fix in scope"; mock gate ug-r9-mockgate-s-1).</description></item>
++    /// </list>
++    /// </remarks>
++    internal static string? CheckTestOutputFolder(string folder, string checkoutRoot)
++    {
++        ArgumentNullException.ThrowIfNull(folder);
++        ArgumentException.ThrowIfNullOrWhiteSpace(checkoutRoot);
++
++        var segments = Segments(folder);
++        var acceptable = IsAbsolute(folder)
++            && !segments.Any(segment => segment is "." or "..")
++            && !IsStrictlyInside(folder, checkoutRoot)
++            && !SameSegments(segments, Segments(checkoutRoot));
++        return acceptable
++            ? null
++            : $"The test artifact folder '{folder}' is not a test-owned location outside the checkout '{checkoutRoot}'.";
++    }
++
++    private static bool SameSegments(string[] left, string[] right) =>
++        left.Length == right.Length && left.Zip(right).All(pair => string.Equals(pair.First, pair.Second, StringComparison.Ordinal));
++
+     private static readonly string[] ConnectionStringPrefixes =
+         ["SQLCONNSTR_", "SQLAZURECONNSTR_", "MYSQLCONNSTR_", "POSTGRESQLCONNSTR_", "CUSTOMCONNSTR_"];
+ 

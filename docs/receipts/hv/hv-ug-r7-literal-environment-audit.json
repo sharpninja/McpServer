@@ -1,0 +1,492 @@
+[
+  {
+    "Path": "tests/Shared/TestRepositoryRoot.cs",
+    "Name": "MCP_REPOSITORY_ROOT",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.GitHub.Validation/GitHubEndpointFixture.cs",
+    "Name": "MCPSERVER_BASEURL",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.GitHub.Validation/GitHubEndpointFixture.cs",
+    "Name": "MCPSERVER_APIKEY",
+    "InGate": false
+  },
+  {
+    "Path": "tests/Validation.Shared/ValidationAuth.cs",
+    "Name": "MCPSERVER_APIKEY",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Repo.Validation/RepoEndpointFixture.cs",
+    "Name": "MCPSERVER_BASEURL",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Repo.Validation/RepoEndpointFixture.cs",
+    "Name": "MCPSERVER_APIKEY",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Workspace.Validation/WorkspaceEndpointFixture.cs",
+    "Name": "MCPSERVER_BASEURL",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Workspace.Validation/WorkspaceEndpointFixture.cs",
+    "Name": "MCPSERVER_APIKEY",
+    "InGate": false
+  },
+  {
+    "Path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+    "Name": "PLUGIN_AGENT_NAME",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+    "Name": "PLUGIN_AGENT_DEFAULT",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.ToolRegistry.Validation/ToolRegistryFixture.cs",
+    "Name": "MCPSERVER_BASEURL",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.ToolRegistry.Validation/ToolRegistryFixture.cs",
+    "Name": "MCPSERVER_APIKEY",
+    "InGate": false
+  },
+  {
+    "Path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+    "Name": "MCPSERVER_WORKSPACE_PATH",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+    "Name": "CLAUDE_PROJECT_DIR",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+    "Name": "PLUGIN_AGENT_NAME",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+    "Name": "PLUGIN_AGENT_DEFAULT",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.QBAgent/QBAgentSessionLog.cs",
+    "Name": "QBAGENT_HOME",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Todo.Validation/TodoEndpointFixture.cs",
+    "Name": "MCPSERVER_BASEURL",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Todo.Validation/TodoEndpointFixture.cs",
+    "Name": "MCPSERVER_APIKEY",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Context.Validation/ContextEndpointFixture.cs",
+    "Name": "MCPSERVER_BASEURL",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Context.Validation/ContextEndpointFixture.cs",
+    "Name": "MCPSERVER_APIKEY",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.PluginIntegration.Tests/PluginSessionLogWorkflowAdapterTests.cs",
+    "Name": "PLUGIN_ROOT_OVERRIDE",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.PluginIntegration.Tests/PluginSessionLogWorkflowAdapterTests.cs",
+    "Name": "PLUGIN_ROOT_OVERRIDE",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.PluginIntegration.Tests/PluginSessionLogWorkflowAdapterTests.cs",
+    "Name": "PLUGIN_ROOT_OVERRIDE",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+    "Name": "PLUGIN_ROOT_OVERRIDE",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.SessionLog.Validation/SessionLogEndpointFixture.cs",
+    "Name": "MCPSERVER_BASEURL",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.SessionLog.Validation/SessionLogEndpointFixture.cs",
+    "Name": "MCPSERVER_APIKEY",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Name": "OPENAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Name": "AZURE_OPENAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Name": "OPENAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Name": "AZURE_OPENAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Name": "OPENAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Name": "AZURE_OPENAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Name": "XAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Name": "XAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Name": "XAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Name": "XAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Name": "XAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Name": "XAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs",
+    "Name": "MCP_QUADBRAIN_OLLAMA_MODEL",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/ProductsLaunchTests.cs",
+    "Name": "MCP_PRODUCTS_LAUNCH_RECEIPT",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/ProductsLaunchTests.cs",
+    "Name": "MCP_PRODUCTS_LAUNCH_RECEIPT_2",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/OllamaServerFixture.cs",
+    "Name": "PATH",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Name": "QBRAINAI_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Name": "MCP_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Name": "QBRAINAI_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Name": "MCP_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Name": "QBRAINAI_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Name": "MCP_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Name": "QBRAINAI_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Name": "MCP_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Name": "QBRAINAI_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Name": "MCP_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Name": "QBRAINAI_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Name": "MCP_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Name": "GROK_PLUGIN_ROOT",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Name": "GROK_HOME",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Name": "GROK_PLUGIN_ROOT",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Name": "GROK_HOME",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Name": "GROK_PLUGIN_ROOT",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Name": "GROK_HOME",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Name": "PUBLIC",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Name": "PUBLIC",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Name": "PUBLIC",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "Name": "PATH",
+    "InGate": false
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "Name": "TEMP",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+    "Name": "MCP_TEST_POSTGRES_CONNECTION",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+    "Name": "MCP_TEST_SQLSERVER_CONNECTION",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+    "Name": "MCP_TEST_POSTGRES_CONNECTION",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs",
+    "Name": "ASPNETCORE_ENVIRONMENT",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs",
+    "Name": "DOTNET_ENVIRONMENT",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Services/VoiceConversationService.cs",
+    "Name": "SystemDrive",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Services/SessionLogTurnContextValidator.cs",
+    "Name": "HOME",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Services/SessionLogTurnContextValidator.cs",
+    "Name": "USERPROFILE",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+    "Name": "MCPSERVER_ONESHOT_TEMP",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+    "Name": "MCPSERVER_CODEX_ONESHOT_TEMP",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+    "Name": "MCPSERVER_CODEX_TRIAGE_TEMP",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs",
+    "Name": "MCPSERVER_GROK_ONESHOT_TEMP",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs",
+    "Name": "MCPSERVER_ONESHOT_TEMP",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+    "Name": "MCPSERVER_CODEX_ONESHOT_TEMP",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+    "Name": "MCPSERVER_CODEX_TRIAGE_TEMP",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Support.Mcp/Program.cs",
+    "Name": "PORT",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+    "Name": "MCPSERVER_QUADBRAIN_CLI_TEMP",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+    "Name": "MCPSERVER_ONESHOT_TEMP",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "Name": "MCP_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "Name": "QBRAINAI_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "Name": "QBRAINAI_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "Name": "MCP_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "Name": "MCP_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "Name": "QBRAINAI_INSTANCE",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+    "Name": "MCP_REPOSITORY_ROOT",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+    "Name": "MCP_REPOSITORY_ROOT",
+    "InGate": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+    "Name": "MCP_REPOSITORY_ROOT",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs",
+    "Name": "GH_TOKEN",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs",
+    "Name": "PATH",
+    "InGate": false
+  },
+  {
+    "Path": "src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs",
+    "Name": "PUBLIC",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Memory/Bench/MemoryBenchGrokMultiTurnAdapter.cs",
+    "Name": "XAI_API_KEY",
+    "InGate": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Memory/Bench/MemoryBenchGrokAdapter.cs",
+    "Name": "XAI_API_KEY",
+    "InGate": true
+  }
+]

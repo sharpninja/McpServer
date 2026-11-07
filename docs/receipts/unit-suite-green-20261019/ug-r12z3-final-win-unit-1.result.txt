@@ -1,0 +1,69 @@
+RECEIPT 2026-11-04T16:04:29 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-11-04T16:00:08 host=PAYTON-LEGION2 user=kingd session=0 interactive=False
+REF origin/fix/unit-suite-green-20261019-windows=b3f26862801cbf2d96ed4a3cdea7473fc653580b expected=b3f26862801cbf2d96ed4a3cdea7473fc653580b match=True
+HEAD b3f26862801cbf2d96ed4a3cdea7473fc653580b expected=b3f26862801cbf2d96ed4a3cdea7473fc653580b match=True
+TARGET Test begin 2026-11-04T16:00:09
+TARGET Test exit=0 end 2026-11-04T16:04:23 log=C:\Users\kingd\AppData\Local\Temp\unit-suite-green-windows-20261102\Test-ug-r12z3-final-win-unit-1.log
+  LOG 16:04:23 [DBG]   Passed QBrainAi.QBAgent.Tests.QBAgentChatClientFactoryTests.BuildEndpoint_AlreadyV1_NotDoubled [< 1 ms]
+  LOG 16:04:23 [DBG]   Passed QBrainAi.QBAgent.Tests.QBAgentRunLoopTests.RunAsync_BlankLinesThenExit_DispatchesNothing [< 1 ms]
+  LOG 16:04:23 [DBG]   Passed QBrainAi.QBAgent.Tests.Tools.QBAgentExternalToolSurfaceTests.Create_IncludesAllExternalPrimitives [93 ms]
+  LOG 16:04:23 [DBG] [xUnit.net 00:00:00.94]   Finished:    QBrainAi.QBAgent.Tests (ID = '98e23a79480d87e88f08f1e4130709ddc2826437b224833959dda23106c74fcf')
+  LOG 16:04:23 [DBG]   Passed QBrainAi.QBAgent.Tests.Tools.QBAgentExternalToolSurfaceTests.Create_NoToolIsMcpPrefixed [1 ms]
+  LOG 16:04:23 [DBG]   Passed QBrainAi.QBAgent.Tests.Tools.QBAgentExternalToolSurfaceTests.Dispose_IsIdempotent [< 1 ms]
+  LOG 16:04:23 [DBG]   Passed QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_RunnerThrows_HidesGlyph [89 ms]
+  LOG 16:04:23 [DBG] Results File: F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\TestResults\ug-r12z3-final-win-unit-1\unit\QBrainAi.QBAgent.Tests\QBrainAi.QBAgent.Tests.trx
+  LOG 16:04:23 [DBG] 
+  LOG 16:04:23 [DBG] Test Run Successful.
+  LOG 16:04:23 [DBG] Total tests: 93
+  LOG 16:04:23 [DBG]      Passed: 93
+  LOG 16:04:23 [DBG]  Total time: 1.4257 Seconds
+  LOG ​
+  LOG ═══════════════════════════════════════
+  LOG Target             Status      Duration
+  LOG ───────────────────────────────────────
+  LOG Restore            Succeeded       0:13
+  LOG Compile            Succeeded       2:16
+  LOG Test               Succeeded       1:37
+  LOG ───────────────────────────────────────
+  LOG Total                              4:07
+  LOG ═══════════════════════════════════════
+  LOG ​
+  LOG Build succeeded on 11/4/2026 4:04:23 PM. ＼（＾ᴗ＾）／
+TARGET ValidateTraceability begin 2026-11-04T16:04:23
+TARGET ValidateTraceability exit=0 end 2026-11-04T16:04:27 log=C:\Users\kingd\AppData\Local\Temp\unit-suite-green-windows-20261102\ValidateTraceability-ug-r12z3-final-win-unit-1.log
+  LOG ████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+  LOG ██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+  LOG ██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+  LOG ██║ ╚████║╚██████╔╝██║  ██╗███████╗
+  LOG ╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+  LOG ​
+  LOG NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+  LOG ​
+  LOG ​
+  LOG ╬═════════════════════════
+  LOG ║ ValidateTraceability
+  LOG ╬════════════════
+  LOG ​
+  LOG 16:04:27 [INF] UseCaseFrLinks coverage source: none (no SQLite path resolved)
+  LOG 16:04:27 [INF] Traceability validation passed.
+  LOG ​
+  LOG ════════════════════════════════════════════
+  LOG Target                  Status      Duration
+  LOG ────────────────────────────────────────────
+  LOG ValidateTraceability    Succeeded     < 1sec
+  LOG ────────────────────────────────────────────
+  LOG Total                                 < 1sec
+  LOG ════════════════════════════════════════════
+  LOG ​
+  LOG Build succeeded on 11/4/2026 4:04:27 PM. ＼（＾ᴗ＾）／
+TRX \unit\QBrainAi.Client.Tests\QBrainAi.Client.Tests.trx total=311 executed=311 passed=311 failed=0 notExecuted=0
+TRX \unit\QBrainAi.Cqrs.Tests\QBrainAi.Cqrs.Tests.trx total=33 executed=33 passed=33 failed=0 notExecuted=0
+TRX \unit\QBrainAi.Launcher.Tests\QBrainAi.Launcher.Tests.trx total=20 executed=20 passed=20 failed=0 notExecuted=0
+TRX \unit\QBrainAi.McpAgent.Tests\QBrainAi.McpAgent.Tests.trx total=64 executed=64 passed=64 failed=0 notExecuted=0
+TRX \unit\QBrainAi.QBAgent.Tests\QBrainAi.QBAgent.Tests.trx total=93 executed=93 passed=93 failed=0 notExecuted=0
+TRX \unit\QBrainAi.Repl.Core.Tests\QBrainAi.Repl.Core.Tests.trx total=997 executed=997 passed=997 failed=0 notExecuted=0
+TRX \unit\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx total=3221 executed=3221 passed=3221 failed=0 notExecuted=0
+END 2026-11-04T16:04:27

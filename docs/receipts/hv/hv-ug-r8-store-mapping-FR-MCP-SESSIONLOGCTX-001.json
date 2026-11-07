@@ -1,0 +1,29 @@
+{
+  "TimestampLocal": "2026-10-27T03:52:26",
+  "Method": "workflow.requirements.listMappings",
+  "Params": {
+    "frId": "FR-MCP-SESSIONLOGCTX-001"
+  },
+  "Response": {
+    "type": "result",
+    "payload": {
+      "deprecated": true,
+      "result": {
+        "totalCount": 2,
+        "items": [
+          {
+            "frId": "FR-MCP-SESSIONLOGCTX-001",
+            "createdAt": "2026-10-27T08:52:28.5576182+00:00",
+            "trId": "TR-MCP-SESSIONLOG-006"
+          },
+          {
+            "frId": "FR-MCP-SESSIONLOGCTX-001",
+            "testId": "TEST-MCP-SESSIONLOG-006",
+            "createdAt": "2026-10-27T08:52:28.5581700+00:00"
+          }
+        ]
+      },
+      "requestId": "req-20261027T085227Z-2283"
+    }
+  }
+}

@@ -14,15 +14,25 @@ public sealed partial class MemoryConsolidateOperations
     private readonly McpDbContext _db;
     private readonly string _workspacePath;
 
+    /// <summary>TR-MCP-USECASE-018 AC-006: the clock the workspace lock's acquisition time and TTL takeover are read from.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the field, added in slice Z4 with the optional constructor clock (hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation. TR-MCP-MEMORY-JOBS-002 in this file is a historical id, not a record in the requirement store.</remarks>
+    private readonly TimeProvider _time;
+
     /// <summary>Creates operations bound to an already-scoped <see cref="McpDbContext"/>.</summary>
-    public MemoryConsolidateOperations(McpDbContext db, string workspacePath)
+    /// <param name="db">The scoped database context.</param>
+    /// <param name="workspacePath">The active workspace.</param>
+    /// <param name="time">The clock the workspace lock and its TTL are read from; null uses <see cref="TimeProvider.System"/>.</param>
+    /// <remarks>2026-11-05, TR-MCP-MEMORY-JOBS-002; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added the optional <paramref name="time"/> clock, read for the lock's acquisition time and TTL takeover instead of DateTimeOffset.UtcNow, because the sibling sweep of hostile validation round 12 finding R12-F2 showed the forced-overlap TTL decision ran on the live clock in a unit case (mock gate ug-r13z4-mockgate-b-1). TR-MCP-MEMORY-JOBS-002 in this file is a historical id of the memory plan, not a record in the requirement store, so it makes no coverage claim (labeled 2026-11-05 before hostile validation round 13).</remarks>
+    public MemoryConsolidateOperations(McpDbContext db, string workspacePath, TimeProvider? time = null)
     {
         _db = db;
         // FR-MCP-PATHNORM-001: stored WorkspaceId values are canonical; filter and lock in the same form.
         _workspacePath = WorkspaceIdentity.CanonicalizeWorkspaceId(workspacePath);
+        _time = time ?? TimeProvider.System;
     }
 
     /// <summary>Plans or applies a consolidate merge for the active workspace.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): passes the time of the lock attempt, read from the injected clock, to TryAcquireLock, which no longer reads DateTimeOffset.UtcNow itself (the sibling sweep of hostile validation round 12 finding R12-F2; mock gate ug-r13z4-mockgate-b-1). This member's own entry was added after the seventh holistic read before hostile validation round 13 (finding c5); until then the change was logged only on the constructor.</remarks>
     public async Task<MemoryConsolidateResult> ConsolidateAsync(
         MemoryConsolidateRequest? request,
         bool readOnlyCaller,
@@ -46,7 +56,7 @@ public sealed partial class MemoryConsolidateOperations
             ? "consol-" + Guid.NewGuid().ToString("N")
             : request.RunId!;
 
-        if (!TryAcquireLock(_workspacePath, forceOverlap: false, out _))
+        if (!TryAcquireLock(_workspacePath, forceOverlap: false, _time.GetUtcNow(), out _))
         {
             return new MemoryConsolidateResult(
                 409,
@@ -146,6 +156,7 @@ public sealed partial class MemoryConsolidateOperations
     }
 
     /// <summary>Runs a scheduled consolidate tick / stats probe.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): reads the job's time once from the injected clock, for the lock attempt and the reported run time, instead of DateTimeOffset.UtcNow (the sibling sweep of hostile validation round 12 finding R12-F2, sibling S37; mock gate ug-r13z4-mockgate-b-1). This member's own entry was added after the seventh holistic read before hostile validation round 13 (finding c5); until then the change was logged only on the constructor.</remarks>
     public async Task<MemoryConsolidateJobResult> RunJobAsync(
         bool? dryRun,
         bool forceOverlap,
@@ -153,9 +164,9 @@ public sealed partial class MemoryConsolidateOperations
     {
         var appliedDryRun = dryRun ?? MemoryConsolidateLimits.DefaultDryRun;
         var runId = "job-" + Guid.NewGuid().ToString("N");
-        var now = DateTimeOffset.UtcNow;
+        var now = _time.GetUtcNow();
 
-        if (!TryAcquireLock(_workspacePath, forceOverlap, out _))
+        if (!TryAcquireLock(_workspacePath, forceOverlap, now, out _))
         {
             return new MemoryConsolidateJobResult(
                 409,

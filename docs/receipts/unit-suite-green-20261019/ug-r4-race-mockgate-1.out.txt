@@ -1,0 +1,706 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)
+​
+​
+╬════════════
+║ Restore
+╬═══
+​
+19:40:54 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/QBrainAi.sln
+19:40:55 [DBG]   Determining projects to restore...
+19:40:57 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Launcher/QBrainAi.Launcher.csproj (in 158 ms).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Context.Validation/QBrainAi.Context.Validation.csproj (in 1.37 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.ToolRegistry.Validation/QBrainAi.ToolRegistry.Validation.csproj (in 1.45 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Workspace.Validation/QBrainAi.Workspace.Validation.csproj (in 1.35 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.KeyServer/QBrainAi.KeyServer.csproj (in 1.35 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Subscriber/QBrainAi.Subscriber.csproj (in 1.37 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.GitHub.Validation/QBrainAi.GitHub.Validation.csproj (in 1.44 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj (in 1.37 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj (in 1.37 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj (in 1.45 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj (in 1.45 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj (in 1.36 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.PlanReview.Tests/QBrainAi.PlanReview.Tests.csproj (in 1.49 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj (in 1.46 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.SessionLog.Validation/QBrainAi.SessionLog.Validation.csproj (in 25 ms).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repo.Validation/QBrainAi.Repo.Validation.csproj (in 25 ms).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Review.Tests/QBrainAi.Review.Tests.csproj (in 31 ms).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj (in 35 ms).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent.SampleHost/QBrainAi.McpAgent.SampleHost.csproj (in 1.51 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj (in 1.29 sec).
+19:40:58 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj (in 1.51 sec).
+19:40:58 [DBG]   27 of 48 projects are up-to-date for restore.
+19:40:58 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj
+19:40:59 [DBG]   Determining projects to restore...
+19:41:00 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj (in 487 ms).
+19:41:00 [DBG]   1 of 2 projects are up-to-date for restore.
+19:41:00 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/SharpNinja.McpServer.Cqrs.Mvvm.csproj
+19:41:00 [DBG]   Determining projects to restore...
+19:41:02 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/SharpNinja.McpServer.Cqrs.Mvvm.csproj (in 605 ms).
+19:41:02 [DBG]   2 of 3 projects are up-to-date for restore.
+19:41:02 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs/SharpNinja.McpServer.Cqrs.csproj
+19:41:02 [DBG]   Determining projects to restore...
+19:41:03 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs/SharpNinja.McpServer.Cqrs.csproj (in 475 ms).
+19:41:03 [DBG]   1 of 2 projects are up-to-date for restore.
+19:41:03 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.McpAgent/SharpNinja.McpServer.McpAgent.csproj
+19:41:04 [DBG]   Determining projects to restore...
+19:41:05 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.McpAgent/SharpNinja.McpServer.McpAgent.csproj (in 630 ms).
+19:41:05 [DBG]   4 of 5 projects are up-to-date for restore.
+19:41:05 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.QBAgent/SharpNinja.McpServer.QBAgent.csproj
+19:41:06 [DBG]   Determining projects to restore...
+19:41:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.QBAgent/SharpNinja.McpServer.QBAgent.csproj (in 717 ms).
+19:41:08 [DBG]   6 of 7 projects are up-to-date for restore.
+19:41:08 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Repl.Core/SharpNinja.McpServer.Repl.Core.csproj
+19:41:08 [DBG]   Determining projects to restore...
+19:41:10 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Repl.Core/SharpNinja.McpServer.Repl.Core.csproj (in 530 ms).
+19:41:10 [DBG]   3 of 4 projects are up-to-date for restore.
+19:41:10 [INF] > /home/sharpninja/.local/bin/dotnet restore /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Repl/SharpNinja.McpServer.Repl.csproj
+19:41:10 [DBG]   Determining projects to restore...
+19:41:12 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Repl/SharpNinja.McpServer.Repl.csproj (in 597 ms).
+19:41:12 [DBG]   4 of 5 projects are up-to-date for restore.
+​
+╬════════════
+║ Compile
+╬═══
+​
+19:41:12 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:24 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:41:24 [DBG]   SharpNinja.McpServer.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Client/bin/Debug/net10.0/SharpNinja.McpServer.Client.dll
+19:41:24 [DBG] 
+19:41:24 [DBG] Build succeeded.
+19:41:24 [DBG]     0 Warning(s)
+19:41:24 [DBG]     0 Error(s)
+19:41:24 [DBG] 
+19:41:24 [DBG] Time Elapsed 00:00:12.38
+19:41:25 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/SharpNinja.McpServer.Cqrs.Mvvm.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:26 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+19:41:26 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+19:41:26 [DBG]   SharpNinja.McpServer.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/bin/Debug/net10.0/SharpNinja.McpServer.Cqrs.Mvvm.dll
+19:41:26 [DBG] 
+19:41:26 [DBG] Build succeeded.
+19:41:26 [DBG]     0 Warning(s)
+19:41:26 [DBG]     0 Error(s)
+19:41:26 [DBG] 
+19:41:26 [DBG] Time Elapsed 00:00:01.60
+19:41:26 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs/SharpNinja.McpServer.Cqrs.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:28 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+19:41:28 [DBG]   SharpNinja.McpServer.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Cqrs/bin/Debug/net10.0/SharpNinja.McpServer.Cqrs.dll
+19:41:28 [DBG] 
+19:41:28 [DBG] Build succeeded.
+19:41:28 [DBG]     0 Warning(s)
+19:41:28 [DBG]     0 Error(s)
+19:41:28 [DBG] 
+19:41:28 [DBG] Time Elapsed 00:00:01.06
+19:41:28 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.McpAgent/SharpNinja.McpServer.McpAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:29 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:41:29 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:41:30 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:41:30 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:41:31 [DBG]   SharpNinja.McpServer.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.McpAgent/bin/Debug/net10.0/SharpNinja.McpServer.McpAgent.dll
+19:41:31 [DBG] 
+19:41:31 [DBG] Build succeeded.
+19:41:31 [DBG]     0 Warning(s)
+19:41:31 [DBG]     0 Error(s)
+19:41:31 [DBG] 
+19:41:31 [DBG] Time Elapsed 00:00:02.82
+19:41:31 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.QBAgent/SharpNinja.McpServer.QBAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:32 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:41:32 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:41:32 [DBG]   QBrainAi.QBAgent.Skills -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+19:41:32 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:41:32 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:41:33 [DBG]   QBrainAi.QBAgent.Tools -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+19:41:33 [DBG]   SharpNinja.McpServer.QBAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.QBAgent/bin/Debug/net10.0/SharpNinja.McpServer.QBAgent.dll
+19:41:33 [DBG] 
+19:41:33 [DBG] Build succeeded.
+19:41:33 [DBG]     0 Warning(s)
+19:41:33 [DBG]     0 Error(s)
+19:41:33 [DBG] 
+19:41:33 [DBG] Time Elapsed 00:00:01.87
+19:41:33 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Repl.Core/SharpNinja.McpServer.Repl.Core.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:34 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:41:34 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:41:35 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:41:35 [DBG]   SharpNinja.McpServer.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Repl.Core/bin/Debug/net10.0/SharpNinja.McpServer.Repl.Core.dll
+19:41:35 [DBG] 
+19:41:35 [DBG] Build succeeded.
+19:41:35 [DBG]     0 Warning(s)
+19:41:35 [DBG]     0 Error(s)
+19:41:35 [DBG] 
+19:41:35 [DBG] Time Elapsed 00:00:01.41
+19:41:35 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Repl/SharpNinja.McpServer.Repl.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:36 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:41:36 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:41:36 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:41:37 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+19:41:37 [DBG]   SharpNinja.McpServer.Repl -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/Compatibility/SharpNinja.McpServer.Repl/bin/Debug/net10.0/SharpNinja.McpServer.Repl.dll
+19:41:37 [DBG] 
+19:41:37 [DBG] Build succeeded.
+19:41:37 [DBG]     0 Warning(s)
+19:41:37 [DBG]     0 Error(s)
+19:41:37 [DBG] 
+19:41:37 [DBG] Time Elapsed 00:00:02.08
+19:41:37 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/QBrainAi.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:38 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:41:38 [DBG] 
+19:41:38 [DBG] Build succeeded.
+19:41:38 [DBG]     0 Warning(s)
+19:41:38 [DBG]     0 Error(s)
+19:41:38 [DBG] 
+19:41:38 [DBG] Time Elapsed 00:00:00.78
+19:41:38 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/QBrainAi.Common.AgentCli.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:39 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:41:39 [DBG] 
+19:41:39 [DBG] Build succeeded.
+19:41:39 [DBG]     0 Warning(s)
+19:41:39 [DBG]     0 Error(s)
+19:41:39 [DBG] 
+19:41:39 [DBG] Time Elapsed 00:00:00.66
+19:41:39 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/QBrainAi.Cqrs.Mvvm.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:40 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+19:41:40 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+19:41:40 [DBG] 
+19:41:40 [DBG] Build succeeded.
+19:41:40 [DBG]     0 Warning(s)
+19:41:40 [DBG]     0 Error(s)
+19:41:40 [DBG] 
+19:41:40 [DBG] Time Elapsed 00:00:00.92
+19:41:40 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/QBrainAi.Cqrs.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:41 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+19:41:41 [DBG] 
+19:41:41 [DBG] Build succeeded.
+19:41:41 [DBG]     0 Warning(s)
+19:41:41 [DBG]     0 Error(s)
+19:41:41 [DBG] 
+19:41:41 [DBG] Time Elapsed 00:00:00.68
+19:41:41 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.GraphRag/QBrainAi.GraphRag.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:42 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:41:42 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+19:41:42 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:41:42 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+19:41:43 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:41:43 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:41:43 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:41:44 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+19:41:49 [DBG]   QBrainAi.Services -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+19:41:49 [DBG]   QBrainAi.GraphRag -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+19:41:49 [DBG] 
+19:41:49 [DBG] Build succeeded.
+19:41:49 [DBG]     0 Warning(s)
+19:41:49 [DBG]     0 Error(s)
+19:41:49 [DBG] 
+19:41:49 [DBG] Time Elapsed 00:00:07.58
+19:41:49 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.KeyServer/QBrainAi.KeyServer.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:50 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+19:41:51 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:41:51 [DBG]   QBrainAi.KeyServer -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.KeyServer/bin/Debug/net10.0/QBrainAi.KeyServer.dll
+19:41:51 [DBG] 
+19:41:51 [DBG] Build succeeded.
+19:41:51 [DBG]     0 Warning(s)
+19:41:51 [DBG]     0 Error(s)
+19:41:51 [DBG] 
+19:41:51 [DBG] Time Elapsed 00:00:01.91
+19:41:51 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Launcher/QBrainAi.Launcher.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:53 [DBG]   QBrainAi.Launcher -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Launcher/bin/Debug/net10.0-windows/QBrainAi.Launcher.dll
+19:41:53 [DBG] 
+19:41:53 [DBG] Build succeeded.
+19:41:53 [DBG]     0 Warning(s)
+19:41:53 [DBG]     0 Error(s)
+19:41:53 [DBG] 
+19:41:53 [DBG] Time Elapsed 00:00:01.03
+19:41:53 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent.SampleHost/QBrainAi.McpAgent.SampleHost.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:54 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:41:54 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:41:54 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:41:54 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:41:55 [DBG]   QBrainAi.McpAgent.SampleHost -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent.SampleHost/bin/Debug/net10.0/QBrainAi.McpAgent.SampleHost.dll
+19:41:55 [DBG] 
+19:41:55 [DBG] Build succeeded.
+19:41:55 [DBG]     0 Warning(s)
+19:41:55 [DBG]     0 Error(s)
+19:41:55 [DBG] 
+19:41:55 [DBG] Time Elapsed 00:00:01.71
+19:41:55 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/QBrainAi.McpAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:56 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:41:56 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:41:56 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:41:56 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:41:56 [DBG] 
+19:41:56 [DBG] Build succeeded.
+19:41:56 [DBG]     0 Warning(s)
+19:41:56 [DBG]     0 Error(s)
+19:41:56 [DBG] 
+19:41:56 [DBG] Time Elapsed 00:00:01.30
+19:41:56 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Skills/QBrainAi.QBAgent.Skills.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:57 [DBG]   QBrainAi.QBAgent.Skills -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+19:41:57 [DBG] 
+19:41:57 [DBG] Build succeeded.
+19:41:57 [DBG]     0 Warning(s)
+19:41:57 [DBG]     0 Error(s)
+19:41:57 [DBG] 
+19:41:57 [DBG] Time Elapsed 00:00:00.74
+19:41:57 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Tools/QBrainAi.QBAgent.Tools.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:41:58 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:41:58 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:41:58 [DBG]   QBrainAi.QBAgent.Skills -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+19:41:58 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:41:59 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:41:59 [DBG]   QBrainAi.QBAgent.Tools -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+19:41:59 [DBG] 
+19:41:59 [DBG] Build succeeded.
+19:41:59 [DBG]     0 Warning(s)
+19:41:59 [DBG]     0 Error(s)
+19:41:59 [DBG] 
+19:41:59 [DBG] Time Elapsed 00:00:01.26
+19:41:59 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent/QBrainAi.QBAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:00 [DBG]   QBrainAi.QBAgent.Skills -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+19:42:00 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:00 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:00 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:42:00 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:42:00 [DBG]   QBrainAi.QBAgent.Tools -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+19:42:01 [DBG]   QBrainAi.QBAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent/bin/Debug/net10.0/QBrainAi.QBAgent.dll
+19:42:01 [DBG] 
+19:42:01 [DBG] Build succeeded.
+19:42:01 [DBG]     0 Warning(s)
+19:42:01 [DBG]     0 Error(s)
+19:42:01 [DBG] 
+19:42:01 [DBG] Time Elapsed 00:00:01.58
+19:42:01 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/QBrainAi.Repl.Core.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:02 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:02 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:02 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:42:02 [DBG] 
+19:42:02 [DBG] Build succeeded.
+19:42:02 [DBG]     0 Warning(s)
+19:42:02 [DBG]     0 Error(s)
+19:42:02 [DBG] 
+19:42:02 [DBG] Time Elapsed 00:00:01.07
+19:42:02 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:03 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:03 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:03 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+19:42:04 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:42:04 [DBG]   QBrainAi.Repl.Host -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Host/bin/Debug/net10.0/QBrainAi.Repl.Host.dll
+19:42:04 [DBG] 
+19:42:04 [DBG] Build succeeded.
+19:42:04 [DBG]     0 Warning(s)
+19:42:04 [DBG]     0 Error(s)
+19:42:04 [DBG] 
+19:42:04 [DBG] Time Elapsed 00:00:01.62
+19:42:04 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/QBrainAi.ServiceDefaults.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:05 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:42:05 [DBG] 
+19:42:05 [DBG] Build succeeded.
+19:42:05 [DBG]     0 Warning(s)
+19:42:05 [DBG]     0 Error(s)
+19:42:05 [DBG] 
+19:42:05 [DBG] Time Elapsed 00:00:00.79
+19:42:05 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/QBrainAi.Services.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:06 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:06 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:06 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+19:42:06 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:42:06 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:42:06 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+19:42:06 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+19:42:07 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:42:07 [DBG]   QBrainAi.Services -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+19:42:07 [DBG] 
+19:42:07 [DBG] Build succeeded.
+19:42:07 [DBG]     0 Warning(s)
+19:42:07 [DBG]     0 Error(s)
+19:42:07 [DBG] 
+19:42:07 [DBG] Time Elapsed 00:00:01.52
+19:42:07 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.SessionLog.Transcripts/QBrainAi.SessionLog.Transcripts.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:08 [DBG]   QBrainAi.SessionLog.Transcripts -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+19:42:08 [DBG] 
+19:42:08 [DBG] Build succeeded.
+19:42:08 [DBG]     0 Warning(s)
+19:42:08 [DBG]     0 Error(s)
+19:42:08 [DBG] 
+19:42:08 [DBG] Time Elapsed 00:00:00.82
+19:42:08 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/QBrainAi.Storage.PostgreSqlMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:09 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:09 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:09 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:42:09 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+19:42:12 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+19:42:12 [DBG] 
+19:42:12 [DBG] Build succeeded.
+19:42:12 [DBG]     0 Warning(s)
+19:42:12 [DBG]     0 Error(s)
+19:42:12 [DBG] 
+19:42:12 [DBG] Time Elapsed 00:00:03.40
+19:42:12 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqliteMigrations/QBrainAi.Storage.SqliteMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:13 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:13 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:13 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:42:13 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+19:42:15 [DBG]   QBrainAi.Storage.SqliteMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+19:42:15 [DBG] 
+19:42:15 [DBG] Build succeeded.
+19:42:15 [DBG]     0 Warning(s)
+19:42:15 [DBG]     0 Error(s)
+19:42:15 [DBG] 
+19:42:15 [DBG] Time Elapsed 00:00:02.95
+19:42:15 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqlServerMigrations/QBrainAi.Storage.SqlServerMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:16 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:16 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:16 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:42:16 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+19:42:19 [DBG]   QBrainAi.Storage.SqlServerMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+19:42:19 [DBG] 
+19:42:19 [DBG] Build succeeded.
+19:42:19 [DBG]     0 Warning(s)
+19:42:19 [DBG]     0 Error(s)
+19:42:19 [DBG] 
+19:42:19 [DBG] Time Elapsed 00:00:03.49
+19:42:19 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/QBrainAi.Storage.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:20 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:20 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:20 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:42:20 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+19:42:20 [DBG] 
+19:42:20 [DBG] Build succeeded.
+19:42:20 [DBG]     0 Warning(s)
+19:42:20 [DBG]     0 Error(s)
+19:42:20 [DBG] 
+19:42:20 [DBG] Time Elapsed 00:00:01.28
+19:42:21 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Subscriber/QBrainAi.Subscriber.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:22 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+19:42:22 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:42:22 [DBG]   QBrainAi.Subscriber -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Subscriber/bin/Debug/net10.0/QBrainAi.Subscriber.dll
+19:42:23 [DBG] 
+19:42:23 [DBG] Build succeeded.
+19:42:23 [DBG]     0 Warning(s)
+19:42:23 [DBG]     0 Error(s)
+19:42:23 [DBG] 
+19:42:23 [DBG] Time Elapsed 00:00:01.77
+19:42:23 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:24 [DBG]   QBrainAi.SessionLog.Transcripts -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+19:42:24 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+19:42:24 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+19:42:24 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:24 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:24 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+19:42:24 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:42:24 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:42:24 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:42:24 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+19:42:24 [DBG]   QBrainAi.Services -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+19:42:24 [DBG]   QBrainAi.Storage.SqliteMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+19:42:24 [DBG]   QBrainAi.Storage.SqlServerMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+19:42:24 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+19:42:25 [DBG]   QBrainAi.GraphRag -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+19:42:28 [DBG]   QBrainAi.Support.Mcp -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+19:42:28 [DBG] 
+19:42:28 [DBG] Build succeeded.
+19:42:28 [DBG]     0 Warning(s)
+19:42:28 [DBG]     0 Error(s)
+19:42:28 [DBG] 
+19:42:28 [DBG] Time Elapsed 00:00:05.19
+19:42:28 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/QBrainAi.TransactionSecurity.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:29 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+19:42:29 [DBG] 
+19:42:29 [DBG] Build succeeded.
+19:42:29 [DBG]     0 Warning(s)
+19:42:29 [DBG]     0 Error(s)
+19:42:29 [DBG] 
+19:42:29 [DBG] Time Elapsed 00:00:00.84
+19:42:29 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:30 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+19:42:30 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:42:31 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:31 [DBG]   QBrainAi.KeyServer -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.KeyServer/bin/Debug/net10.0/QBrainAi.KeyServer.dll
+19:42:31 [DBG]   QBrainAi.Subscriber -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Subscriber/bin/Debug/net10.0/QBrainAi.Subscriber.dll
+19:42:31 [DBG]   QBrainAi.Acid.IntegrationTests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Acid.IntegrationTests/bin/Debug/net10.0/QBrainAi.Acid.IntegrationTests.dll
+19:42:31 [DBG] 
+19:42:31 [DBG] Build succeeded.
+19:42:31 [DBG]     0 Warning(s)
+19:42:31 [DBG]     0 Error(s)
+19:42:31 [DBG] 
+19:42:31 [DBG] Time Elapsed 00:00:01.67
+19:42:31 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:32 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:33 [DBG]   QBrainAi.Client.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Client.Tests/bin/Debug/net10.0/QBrainAi.Client.Tests.dll
+19:42:33 [DBG] 
+19:42:33 [DBG] Build succeeded.
+19:42:33 [DBG]     0 Warning(s)
+19:42:33 [DBG]     0 Error(s)
+19:42:33 [DBG] 
+19:42:33 [DBG] Time Elapsed 00:00:01.49
+19:42:33 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Context.Validation/QBrainAi.Context.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:34 [DBG]   QBrainAi.Context.Validation -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Context.Validation/bin/Debug/net10.0/QBrainAi.Context.Validation.dll
+19:42:34 [DBG] 
+19:42:34 [DBG] Build succeeded.
+19:42:34 [DBG]     0 Warning(s)
+19:42:34 [DBG]     0 Error(s)
+19:42:34 [DBG] 
+19:42:34 [DBG] Time Elapsed 00:00:00.98
+19:42:34 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:36 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+19:42:36 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+19:42:36 [DBG]   QBrainAi.Cqrs.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Cqrs.Tests/bin/Debug/net10.0/QBrainAi.Cqrs.Tests.dll
+19:42:36 [DBG] 
+19:42:36 [DBG] Build succeeded.
+19:42:36 [DBG]     0 Warning(s)
+19:42:36 [DBG]     0 Error(s)
+19:42:36 [DBG] 
+19:42:36 [DBG] Time Elapsed 00:00:01.48
+19:42:36 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.GitHub.Validation/QBrainAi.GitHub.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:37 [DBG]   QBrainAi.GitHub.Validation -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.GitHub.Validation/bin/Debug/net10.0/QBrainAi.GitHub.Validation.dll
+19:42:37 [DBG] 
+19:42:37 [DBG] Build succeeded.
+19:42:37 [DBG]     0 Warning(s)
+19:42:37 [DBG]     0 Error(s)
+19:42:37 [DBG] 
+19:42:37 [DBG] Time Elapsed 00:00:01.00
+19:42:37 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:38 [DBG]   QBrainAi.Launcher -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Launcher/bin/Debug/net10.0-windows/QBrainAi.Launcher.dll
+19:42:39 [DBG]   QBrainAi.Launcher.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Launcher.Tests/bin/Debug/net10.0-windows/QBrainAi.Launcher.Tests.dll
+19:42:39 [DBG] 
+19:42:39 [DBG] Build succeeded.
+19:42:39 [DBG]     0 Warning(s)
+19:42:39 [DBG]     0 Error(s)
+19:42:39 [DBG] 
+19:42:39 [DBG] Time Elapsed 00:00:01.33
+19:42:39 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:40 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:40 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:40 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:42:40 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:42:41 [DBG]   QBrainAi.McpAgent.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll
+19:42:41 [DBG] 
+19:42:41 [DBG] Build succeeded.
+19:42:41 [DBG]     0 Warning(s)
+19:42:41 [DBG]     0 Error(s)
+19:42:41 [DBG] 
+19:42:41 [DBG] Time Elapsed 00:00:01.67
+19:42:41 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.PlanReview.Tests/QBrainAi.PlanReview.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:42 [DBG]   QBrainAi.PlanReview.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.PlanReview.Tests/bin/Debug/net10.0/QBrainAi.PlanReview.Tests.dll
+19:42:42 [DBG] 
+19:42:42 [DBG] Build succeeded.
+19:42:42 [DBG]     0 Warning(s)
+19:42:42 [DBG]     0 Error(s)
+19:42:42 [DBG] 
+19:42:42 [DBG] Time Elapsed 00:00:00.96
+19:42:42 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:43 [DBG]   QBrainAi.SessionLog.Transcripts -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+19:42:43 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:43 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+19:42:44 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+19:42:44 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:42:44 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+19:42:44 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:44 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:42:44 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+19:42:44 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:42:44 [DBG]   QBrainAi.Storage.SqliteMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+19:42:44 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+19:42:44 [DBG]   QBrainAi.Storage.SqlServerMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+19:42:44 [DBG]   QBrainAi.Services -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+19:42:44 [DBG]   QBrainAi.GraphRag -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+19:42:44 [DBG]   QBrainAi.Support.Mcp -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+19:42:45 [DBG]   QBrainAi.PluginIntegration.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.PluginIntegration.Tests/bin/Debug/net10.0/QBrainAi.PluginIntegration.Tests.dll
+19:42:45 [DBG] 
+19:42:45 [DBG] Build succeeded.
+19:42:45 [DBG]     0 Warning(s)
+19:42:45 [DBG]     0 Error(s)
+19:42:45 [DBG] 
+19:42:45 [DBG] Time Elapsed 00:00:02.98
+19:42:45 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.ProcessTree.TestHelper/QBrainAi.ProcessTree.TestHelper.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:46 [DBG]   QBrainAi.ProcessTree.TestHelper -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.ProcessTree.TestHelper/bin/Debug/net10.0/QBrainAi.ProcessTree.TestHelper.dll
+19:42:47 [DBG] 
+19:42:47 [DBG] Build succeeded.
+19:42:47 [DBG]     0 Warning(s)
+19:42:47 [DBG]     0 Error(s)
+19:42:47 [DBG] 
+19:42:47 [DBG] Time Elapsed 00:00:00.80
+19:42:47 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:48 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:48 [DBG]   QBrainAi.QBAgent.Skills -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+19:42:48 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:48 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:42:48 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:42:48 [DBG]   QBrainAi.QBAgent.Tools -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+19:42:48 [DBG]   QBrainAi.QBAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent/bin/Debug/net10.0/QBrainAi.QBAgent.dll
+19:42:49 [DBG]   QBrainAi.QBAgent.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/bin/Debug/net10.0/QBrainAi.QBAgent.Tests.dll
+19:42:49 [DBG] 
+19:42:49 [DBG] Build succeeded.
+19:42:49 [DBG]     0 Warning(s)
+19:42:49 [DBG]     0 Error(s)
+19:42:49 [DBG] 
+19:42:49 [DBG] Time Elapsed 00:00:01.96
+19:42:49 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:50 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:50 [DBG]   QBrainAi.Todo.Validation -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Todo.Validation/bin/Debug/net10.0/QBrainAi.Todo.Validation.dll
+19:42:50 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:50 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:42:51 [DBG]   QBrainAi.Repl.Core.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll
+19:42:51 [DBG] 
+19:42:51 [DBG] Build succeeded.
+19:42:51 [DBG]     0 Warning(s)
+19:42:51 [DBG]     0 Error(s)
+19:42:51 [DBG] 
+19:42:51 [DBG] Time Elapsed 00:00:02.29
+19:42:51 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:52 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:52 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:52 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+19:42:53 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:42:53 [DBG]   QBrainAi.Repl.Host -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Host/bin/Debug/net10.0/QBrainAi.Repl.Host.dll
+19:42:53 [DBG]   QBrainAi.Repl.IntegrationTests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.IntegrationTests/bin/Debug/net10.0/QBrainAi.Repl.IntegrationTests.dll
+19:42:53 [DBG] 
+19:42:53 [DBG] Build succeeded.
+19:42:53 [DBG]     0 Warning(s)
+19:42:53 [DBG]     0 Error(s)
+19:42:53 [DBG] 
+19:42:53 [DBG] Time Elapsed 00:00:01.64
+19:42:53 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repo.Validation/QBrainAi.Repo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:55 [DBG]   QBrainAi.Repo.Validation -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repo.Validation/bin/Debug/net10.0/QBrainAi.Repo.Validation.dll
+19:42:55 [DBG] 
+19:42:55 [DBG] Build succeeded.
+19:42:55 [DBG]     0 Warning(s)
+19:42:55 [DBG]     0 Error(s)
+19:42:55 [DBG] 
+19:42:55 [DBG] Time Elapsed 00:00:01.04
+19:42:55 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Review.Tests/QBrainAi.Review.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:56 [DBG]   QBrainAi.Review.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Review.Tests/bin/Debug/net10.0/QBrainAi.Review.Tests.dll
+19:42:56 [DBG] 
+19:42:56 [DBG] Build succeeded.
+19:42:56 [DBG]     0 Warning(s)
+19:42:56 [DBG]     0 Error(s)
+19:42:56 [DBG] 
+19:42:56 [DBG] Time Elapsed 00:00:00.94
+19:42:56 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.SessionLog.Validation/QBrainAi.SessionLog.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:57 [DBG]   QBrainAi.SessionLog.Validation -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.SessionLog.Validation/bin/Debug/net10.0/QBrainAi.SessionLog.Validation.dll
+19:42:57 [DBG] 
+19:42:57 [DBG] Build succeeded.
+19:42:57 [DBG]     0 Warning(s)
+19:42:57 [DBG]     0 Error(s)
+19:42:57 [DBG] 
+19:42:57 [DBG] Time Elapsed 00:00:00.98
+19:42:57 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:42:58 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+19:42:58 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:42:58 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:42:58 [DBG]   QBrainAi.QBAgent.Skills -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+19:42:58 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:42:59 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+19:42:59 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+19:42:59 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:42:59 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:42:59 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+19:42:59 [DBG]   QBrainAi.Storage.SqlServerMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+19:42:59 [DBG]   QBrainAi.Storage.SqliteMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+19:42:59 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+19:42:59 [DBG]   QBrainAi.QBAgent.Tools -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+19:42:59 [DBG]   QBrainAi.Services -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+19:42:59 [DBG]   QBrainAi.SessionLog.Transcripts -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+19:42:59 [DBG]   QBrainAi.QBAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent/bin/Debug/net10.0/QBrainAi.QBAgent.dll
+19:42:59 [DBG]   QBrainAi.Repl.Host -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Host/bin/Debug/net10.0/QBrainAi.Repl.Host.dll
+19:42:59 [DBG]   QBrainAi.GraphRag -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+19:42:59 [DBG]   QBrainAi.Support.Mcp -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+19:43:01 [DBG]   QBrainAi.Support.Mcp.IntegrationTests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.IntegrationTests.dll
+19:43:01 [DBG] 
+19:43:01 [DBG] Build succeeded.
+19:43:01 [DBG]     0 Warning(s)
+19:43:01 [DBG]     0 Error(s)
+19:43:01 [DBG] 
+19:43:01 [DBG] Time Elapsed 00:00:03.53
+19:43:01 [INF] > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+19:43:02 [DBG]   QBrainAi.SessionLog.Transcripts -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+19:43:02 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+19:43:02 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+19:43:02 [DBG]   QBrainAi.ProcessTree.TestHelper -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.ProcessTree.TestHelper/bin/Debug/net10.0/QBrainAi.ProcessTree.TestHelper.dll
+19:43:02 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+19:43:02 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+19:43:02 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+19:43:02 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+19:43:02 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+19:43:02 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+19:43:03 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+19:43:03 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+19:43:03 [DBG]   QBrainAi.Storage.SqliteMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+19:43:03 [DBG]   QBrainAi.Services -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+19:43:03 [DBG]   QBrainAi.GraphRag -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+19:43:03 [DBG]   QBrainAi.Storage.SqlServerMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+19:43:03 [DBG]   QBrainAi.Support.Mcp -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+19:43:07 [ERR] /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs(54,24): error EF1002: Method 'ExecuteSqlRaw' inserts interpolated strings directly into the SQL, without any protection against SQL injection. Consider using 'ExecuteSql' instead, which protects against SQL injection, or make sure that the value is sanitized and suppress the warning. [/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj]
+19:43:07 [DBG] 
+19:43:07 [DBG] Build FAILED.
+19:43:07 [DBG] 
+19:43:07 [ERR] /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs(54,24): error EF1002: Method 'ExecuteSqlRaw' inserts interpolated strings directly into the SQL, without any protection against SQL injection. Consider using 'ExecuteSql' instead, which protects against SQL injection, or make sure that the value is sanitized and suppress the warning. [/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj]
+19:43:07 [DBG]     0 Warning(s)
+19:43:07 [DBG]     1 Error(s)
+19:43:07 [DBG] 
+19:43:07 [DBG] Time Elapsed 00:00:06.27
+19:43:08 [ERR] Target Compile has thrown an exception
+Nuke.Common.Tooling.ProcessException: Process 'dotnet' exited with code 1.
+   > /home/sharpninja/.local/bin/dotnet build /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+   @ /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019
+Standard output:
+     QBrainAi.SessionLog.Transcripts -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+     QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+     QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+     QBrainAi.ProcessTree.TestHelper -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.ProcessTree.TestHelper/bin/Debug/net10.0/QBrainAi.ProcessTree.TestHelper.dll
+     QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+     QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+     QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+     QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+     QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+     QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+     QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+     QBrainAi.Storage.PostgreSqlMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+     QBrainAi.Storage.SqliteMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+     QBrainAi.Services -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+     QBrainAi.GraphRag -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+     QBrainAi.Storage.SqlServerMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+     QBrainAi.Support.Mcp -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+   /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs(54,24): error EF1002: Method 'ExecuteSqlRaw' inserts interpolated strings directly into the SQL, without any protection against SQL injection. Consider using 'ExecuteSql' instead, which protects against SQL injection, or make sure that the value is sanitized and suppress the warning. [/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj]
+   
+   Build FAILED.
+   
+   /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs(54,24): error EF1002: Method 'ExecuteSqlRaw' inserts interpolated strings directly into the SQL, without any protection against SQL injection. Consider using 'ExecuteSql' instead, which protects against SQL injection, or make sure that the value is sanitized and suppress the warning. [/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj]
+       0 Warning(s)
+       1 Error(s)
+   
+   Time Elapsed 00:00:06.27
+
+   at Nuke.Common.Tooling.ProcessExtensions.AssertZeroExitCode(IProcess process) in /_/source/Nuke.Tooling/ProcessExtensions.cs:line 38
+   at Nuke.Common.Tooling.ToolTasks.<>c.<GetExitHandler>b__4_0(ToolOptions _, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 27
+   at Nuke.Common.Tooling.ToolTasks.<>c__DisplayClass8_0.<GetExitHandlerInternal>b__3(ToolOptions o, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 22
+   at Nuke.Common.Tooling.ToolTasks.Run[T](T options) in /_/source/Nuke.Tooling/ToolTasks.Run.cs:line 36
+   at Nuke.Common.Tools.DotNet.DotNetTasks.DotNetBuild(Configure`1 configurator) in /_/source/Nuke.Common/Tools/DotNet/DotNet.Generated.cs:line 62
+   at Build.<get_Compile>b__17_1() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.Compile.cs:line 17
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[ERR] Compile: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs(54,24): error EF1002: Method 'ExecuteSqlRaw' inserts interpolated strings directly into the SQL, without any protection against SQL injection. Consider using 'ExecuteSql' instead, which protects against SQL injection, or make sure that the value is sanitized and suppress the warning. [/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj]
+[ERR] Compile: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs(54,24): error EF1002: Method 'ExecuteSqlRaw' inserts interpolated strings directly into the SQL, without any protection against SQL injection. Consider using 'ExecuteSql' instead, which protects against SQL injection, or make sure that the value is sanitized and suppress the warning. [/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj]
+[ERR] Compile: Target Compile has thrown an exception
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            Succeeded       0:18
+Compile            Failed          1:55   // ProcessException: Process 'dotnet' exited with code 1.
+Test               NotRun              
+───────────────────────────────────────
+Total                              2:13
+═══════════════════════════════════════
+​
+Build failed on 10/20/2026 7:43:08 PM. (╯°□°）╯︵ ┻━┻

@@ -1,0 +1,14 @@
+RECEIPT 2026-10-26T14:12:00 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Measure-PwshStartup.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-10-26T14:11:58 host=PAYTON-LEGION2 user=kingd session=0
+PATH pwsh.exe: C:\Users\kingd\AppData\Local\Microsoft\WindowsApps\Microsoft.PowerShell_8wekyb3d8bbwe\pwsh.exe version=0.0.0.0
+PATH pwsh.exe: C:\Users\kingd\AppData\Local\Microsoft\WindowsApps\pwsh.exe version=0.0.0.0
+PATH pwsh.exe: C:\Users\kingd\.dotnet\tools\pwsh.exe version=7.5.4.0
+RUN 1: 285 ms exit=0
+RUN 2: 262 ms exit=0
+RUN 3: 268 ms exit=0
+RUN 4: 267 ms exit=0
+RUN 5: 277 ms exit=0
+END 2026-10-26T14:12:00

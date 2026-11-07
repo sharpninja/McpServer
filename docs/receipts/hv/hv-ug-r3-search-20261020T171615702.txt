@@ -1,0 +1,38 @@
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs:18:public sealed class HermeticUserProfileFixtureTests
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs:43:    public void AgentPluginUserProfileOverride_IsAnEmptyTemporaryProfile()
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs:48:        var live = MarkerFileService.AgentPluginUserProfileOverride;
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs:16:/// it ends. Tests that need a populated profile set <see cref="MarkerFileService.AgentPluginUserProfileOverride"/>
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs:19:public sealed class HermeticUserProfileFixture : IDisposable
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs:26:        MarkerFileService.AgentPluginUserProfileOverride = Profile;
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs:35:        if (string.Equals(MarkerFileService.AgentPluginUserProfileOverride, Profile, StringComparison.Ordinal))
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs:36:            MarkerFileService.AgentPluginUserProfileOverride = null;
+src/QBrainAi.Services/Services/MarkerFileService.cs:96:    internal static string? AgentPluginUserProfileOverride { get; set; }
+src/QBrainAi.Services/Services/MarkerFileService.cs:537:            ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName);
+src/QBrainAi.Services/Services/MarkerFileService.cs:613:    internal static string ResolveAgentPluginVersion(
+src/QBrainAi.Services/Services/MarkerFileService.cs:617:        ResolveAgentPluginVersion(
+src/QBrainAi.Services/Services/MarkerFileService.cs:621:            AgentPluginUserProfileOverride ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+src/QBrainAi.Services/Services/MarkerFileService.cs:635:    internal static string ResolveAgentPluginVersion(
+src/QBrainAi.Services/Services/MarkerFileService.cs:641:        ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName, userProfile, walker, ReadExistingFileText);
+src/QBrainAi.Services/Services/MarkerFileService.cs:655:    internal static string ResolveAgentPluginVersion(
+src/QBrainAi.Services/Services/MarkerFileService.cs:665:            var version = TryReadAgentPluginVersion(root, readText);
+src/QBrainAi.Services/Services/MarkerFileService.cs:753:        var versionText = TryReadAgentPluginVersion(root, readText);
+src/QBrainAi.Services/Services/MarkerFileService.cs:772:    internal static string? TryReadAgentPluginVersion(string root, Func<string, string?> readText)
+src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs:97:        AppendHistory(parts, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile, walker);
+src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs:101:    private static void AppendHistory(
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:80:        MarkerFileService.ResolveAgentPluginVersion(
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:93:    public void ResolveAgentPluginVersion_UnlistableAndLinkedCacheDirectories_ResolveTheReachableVersion()
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:106:    public void ResolveAgentPluginVersion_CacheRootUnlistable_FallsBackToTheSyncedVersion()
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:124:        MarkerFileService.ResolveAgentPluginVersion(
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:138:    public void ResolveAgentPluginVersion_UnreadableVersionFile_ResolvesTheNextReadableVersion()
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:151:    public void ResolveAgentPluginVersion_EveryVersionFileUnreadable_FallsBackToTheSyncedVersion()
+tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:177:    /// Production binding of the scripted cases: <see cref="MarkerFileService.TryReadAgentPluginVersion"/> over each
+tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:184:        RunAndAssert(name, MarkerFileService.TryReadAgentPluginVersion);
+tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:188:    /// of <see cref="MarkerFileService.TryReadAgentPluginVersion"/> instead of being treated as a missing version.
+tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:197:        Assert.Throws<InvalidOperationException>(() => MarkerFileService.TryReadAgentPluginVersion(Root, files.Read));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:66:    private static void WithHermeticPluginVersionResolution(Action action)
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:70:        var previous = MarkerFileService.AgentPluginUserProfileOverride;
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:73:            MarkerFileService.AgentPluginUserProfileOverride = emptyProfile;
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:78:            MarkerFileService.AgentPluginUserProfileOverride = previous;
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:786:        WithHermeticPluginVersionResolution(() =>
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:811:            WithHermeticPluginVersionResolution(() =>
+

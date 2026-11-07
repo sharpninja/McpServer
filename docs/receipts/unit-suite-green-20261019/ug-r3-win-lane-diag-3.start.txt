@@ -1,0 +1,14 @@
+RECEIPT 2026-10-20T14:48:33 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-10-20T14:48:24 host=PAYTON-LEGION2 user=kingd
+RUNNER C:\Users\kingd\AppData\Local\Temp\Invoke-WinLaneDiagRunner.ps1 sha256=A98190407B9EDC286619CDA3371550CD630A8B5E5A9872D858DE16C8C8B015BC expected=A98190407B9EDC286619CDA3371550CD630A8B5E5A9872D858DE16C8C8B015BC match=True
+  checkout: HEAD is now at 6ea425ab test(storage): the ephemeral PostgreSQL fixture runs pg_ctl silent so it cannot garble xUnit messages (IMPL-UNITGREEN-001)
+HEAD 6ea425ab943ebdd8aad1de1c84896de92d0270d8 expected=6ea425ab943ebdd8aad1de1c84896de92d0270d8 match=True
+PWSH C:\Program Files\PowerShell\7-LabWsman\pwsh.exe
+ACTION -NoProfile -ExecutionPolicy Bypass -File "C:\Users\kingd\AppData\Local\Temp\Invoke-WinLaneDiagRunner.ps1" -Worktree "F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019" -RunId "ug-r3-win-lane-diag-3" -LogPath "C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\MigrationIntegrationTests-ug-r3-win-lane-diag-3.log" -ProofPath "C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\proof-ug-r3-win-lane-diag-3.txt" -ExitPath "C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\exit-ug-r3-win-lane-diag-3.txt"
+ACCOUNT PAYTON-LEGION2\kingd
+TASK McpUnitGreenLane-ug-r3-win-lane-diag-3 state=Running lastRun=10/20/2026 14:48:26 result=267009
+PROOF so far: START 2026-10-20T14:48:27 user=kingd session=1 interactive=True head=6ea425ab943ebdd8aad1de1c84896de92d0270d8 runsettings=C:\Users\kingd\AppData\Local\Temp\diag-lane-ug-r3-win-lane-diag-3.runsettings exists=True vstestdiag=C:\Users\kingd\AppData\Local\Temp\vstest-diag-ug-r3-win-lane-diag-3\log.txt
+END 2026-10-20T14:48:32

@@ -1,0 +1,6222 @@
+[
+  {
+    "id": "FR-HANDOFF-001",
+    "title": "Ingest workspace-scoped handoff documents"
+  },
+  {
+    "id": "FR-HANDOFF-002",
+    "title": "Extract structured MCP TODO drafts via one-shot agents"
+  },
+  {
+    "id": "FR-HANDOFF-003",
+    "title": "Validate and normalize generated TODO drafts"
+  },
+  {
+    "id": "FR-HANDOFF-004",
+    "title": "Support DraftOnly, RequireReview, and CreateWhenConfident modes"
+  },
+  {
+    "id": "FR-HANDOFF-005",
+    "title": "Persist approved TODOs exclusively through the TODO service"
+  },
+  {
+    "id": "FR-HANDOFF-006",
+    "title": "Preserve auditable provenance and diagnostics"
+  },
+  {
+    "id": "FR-HANDOFF-007",
+    "title": "Provide equivalent public handoff surfaces"
+  },
+  {
+    "id": "FR-LOC-001",
+    "title": "Localization Support"
+  },
+  {
+    "id": "FR-MCP-001",
+    "title": "Configurable workspace root and paths"
+  },
+  {
+    "id": "FR-MCP-002",
+    "title": "TODO management API"
+  },
+  {
+    "id": "FR-MCP-003",
+    "title": "Session log ingestion and query"
+  },
+  {
+    "id": "FR-MCP-004",
+    "title": "Hybrid context search"
+  },
+  {
+    "id": "FR-MCP-005",
+    "title": "GitHub issue sync"
+  },
+  {
+    "id": "FR-MCP-006",
+    "title": "Multi-source ingestion"
+  },
+  {
+    "id": "FR-MCP-007",
+    "title": "Dual transport"
+  },
+  {
+    "id": "FR-MCP-008",
+    "title": "Containerized deployment"
+  },
+  {
+    "id": "FR-MCP-009",
+    "title": "Workspace Management"
+  },
+  {
+    "id": "FR-MCP-011",
+    "title": "Workspace Process Orchestration"
+  },
+  {
+    "id": "FR-MCP-012",
+    "title": "Tool Registry"
+  },
+  {
+    "id": "FR-MCP-013",
+    "title": "Per-Workspace Auth Tokens"
+  },
+  {
+    "id": "FR-MCP-014",
+    "title": "Pairing Web UI"
+  },
+  {
+    "id": "FR-MCP-015",
+    "title": "Tunnel Providers"
+  },
+  {
+    "id": "FR-MCP-016",
+    "title": "MCP Streamable HTTP Transport"
+  },
+  {
+    "id": "FR-MCP-017",
+    "title": "Windows Service"
+  },
+  {
+    "id": "FR-MCP-018",
+    "title": "Marker File Agent Discovery"
+  },
+  {
+    "id": "FR-MCP-019",
+    "title": "Workspace Host Controller Isolation"
+  },
+  {
+    "id": "FR-MCP-020",
+    "title": "Workspace Auto-Start on Service Startup"
+  },
+  {
+    "id": "FR-MCP-021",
+    "title": "Workspace Auto-Init and Auto-Start on Creation"
+  },
+  {
+    "id": "FR-MCP-022",
+    "title": "Tool Registry Default Bucket Seeding"
+  },
+  {
+    "id": "FR-MCP-023",
+    "title": "AI-Assisted Requirements Analysis"
+  },
+  {
+    "id": "FR-MCP-024",
+    "title": "Markdown Session Log Ingestion"
+  },
+  {
+    "id": "FR-MCP-025",
+    "title": "Primary Workspace Detection and Deduplication"
+  },
+  {
+    "id": "FR-MCP-026",
+    "title": "OIDC Authentication"
+  },
+  {
+    "id": "FR-MCP-027",
+    "title": "Agent Definition Management"
+  },
+  {
+    "id": "FR-MCP-028",
+    "title": "Per-Workspace Agent Configuration"
+  },
+  {
+    "id": "FR-MCP-029",
+    "title": "CQRS Framework"
+  },
+  {
+    "id": "FR-MCP-030",
+    "title": "Director CLI"
+  },
+  {
+    "id": "FR-MCP-031",
+    "title": "QBrainAi Management Web UI"
+  },
+  {
+    "id": "FR-MCP-032",
+    "title": "Enhanced GitHub Integration"
+  },
+  {
+    "id": "FR-MCP-033",
+    "title": "Natural Language Policy Management"
+  },
+  {
+    "id": "FR-MCP-034",
+    "title": "Workspace Compliance Configuration"
+  },
+  {
+    "id": "FR-MCP-035",
+    "title": "Agent Values and Conduct Enforcement"
+  },
+  {
+    "id": "FR-MCP-036",
+    "title": "Audited Copilot Interactions"
+  },
+  {
+    "id": "FR-MCP-037",
+    "title": "Director CLI Exec Command"
+  },
+  {
+    "id": "FR-MCP-038",
+    "title": "Session Continuity Protocol"
+  },
+  {
+    "id": "FR-MCP-039",
+    "title": "MCP Context Indexing for New Projects"
+  },
+  {
+    "id": "FR-MCP-040",
+    "title": "Requirements Document CRUD Management"
+  },
+  {
+    "id": "FR-MCP-041",
+    "title": "Requirements Document Generation"
+  },
+  {
+    "id": "FR-MCP-042",
+    "title": "Requirements Management MCP Tools"
+  },
+  {
+    "id": "FR-MCP-043",
+    "title": "Multi-Tenant Workspace Resolution"
+  },
+  {
+    "id": "FR-MCP-044",
+    "title": "Shared Database Multi-Tenancy"
+  },
+  {
+    "id": "FR-MCP-045",
+    "title": "Cross-Workspace TODO Move"
+  },
+  {
+    "id": "FR-MCP-046",
+    "title": "Voice Conversation Sessions"
+  },
+  {
+    "id": "FR-MCP-047",
+    "title": "Desktop Process Launch"
+  },
+  {
+    "id": "FR-MCP-048",
+    "title": "YAML Configuration Support"
+  },
+  {
+    "id": "FR-MCP-049",
+    "title": "Prompt Template Registry"
+  },
+  {
+    "id": "FR-MCP-050",
+    "title": "Per-Agent Workspace Runtime Management"
+  },
+  {
+    "id": "FR-MCP-051",
+    "title": "System-Wide Default Copilot Model"
+  },
+  {
+    "id": "FR-MCP-052",
+    "title": "Agent Pool Runtime Orchestration"
+  },
+  {
+    "id": "FR-MCP-053",
+    "title": "One-Shot Queueing and Deferred Attachment"
+  },
+  {
+    "id": "FR-MCP-054",
+    "title": "Agent Pool Availability and Control Endpoints"
+  },
+  {
+    "id": "FR-MCP-055",
+    "title": "Default Agent Selection by Request Intent"
+  },
+  {
+    "id": "FR-MCP-056",
+    "title": "Template-Aware One-Shot Prompt Resolution"
+  },
+  {
+    "id": "FR-MCP-057",
+    "title": "Director Agent Pool Management UI"
+  },
+  {
+    "id": "FR-MCP-058",
+    "title": "Interactive Presence Signaling"
+  },
+  {
+    "id": "FR-MCP-059",
+    "title": "DI-Centered Single Source of Truth State Flow"
+  },
+  {
+    "id": "FR-MCP-060",
+    "title": "Director MVVM/CQRS Full Endpoint Coverage"
+  },
+  {
+    "id": "FR-MCP-061",
+    "title": "Canonical TODO and Session Identifier Conventions"
+  },
+  {
+    "id": "FR-MCP-062",
+    "title": "Workspace Change Notifications"
+  },
+  {
+    "id": "FR-MCP-063",
+    "title": "Workspace GitHub OAuth Bootstrap, Token Lifecycle, and Actions Control"
+  },
+  {
+    "id": "FR-MCP-064",
+    "title": "Marketing and Adoption Documentation"
+  },
+  {
+    "id": "FR-MCP-065",
+    "title": "Direct Website URL Ingestion"
+  },
+  {
+    "id": "FR-MCP-066",
+    "title": "Hosted Microsoft Agent Framework Library"
+  },
+  {
+    "id": "FR-MCP-067",
+    "title": "Detailed Internal Server Error Responses"
+  },
+  {
+    "id": "FR-MCP-068",
+    "title": "Administrative Configuration Management API"
+  },
+  {
+    "id": "FR-MCP-069",
+    "title": "Immediate GitHub-Backed TODO Creation"
+  },
+  {
+    "id": "FR-MCP-070",
+    "title": "Authoritative ISSUE-* Update Sync and Immutable Descriptions"
+  },
+  {
+    "id": "FR-MCP-071",
+    "title": "ISSUE Comment Round-Trip and GitHub-Driven Closure Reconciliation"
+  },
+  {
+    "id": "FR-MCP-072",
+    "title": "Database-Authoritative TODO Storage with YAML Projection and Audit History"
+  },
+  {
+    "id": "FR-MCP-073",
+    "title": "Parseable Log Event Field Cap"
+  },
+  {
+    "id": "FR-MCP-075",
+    "title": "PowerShell Session Cache Discovery from `.mcpSession`"
+  },
+  {
+    "id": "FR-MCP-076",
+    "title": "Marker File Trust Bootstrap and Session Authenticity Validation"
+  },
+  {
+    "id": "FR-MCP-077",
+    "title": "Server Federation and Request Proxying"
+  },
+  {
+    "id": "FR-MCP-078",
+    "title": "GraphRAG Ad-Hoc Document Ingestion"
+  },
+  {
+    "id": "FR-MCP-079",
+    "title": "GraphRAG Entity and Relationship CRUD"
+  },
+  {
+    "id": "FR-MCP-080",
+    "title": "GraphRAG Document Management"
+  },
+  {
+    "id": "FR-MCP-081",
+    "title": "Byrd Iteration Phase and TODO Execution Persistence"
+  },
+  {
+    "id": "FR-MCP-082",
+    "title": "Bounded Byrd Execution Context Hydration"
+  },
+  {
+    "id": "FR-MCP-083",
+    "title": "Structured Android Validation for Byrd TODOs"
+  },
+  {
+    "id": "FR-MCP-084",
+    "title": "Requirements Wiki Workspace Export/Import"
+  },
+  {
+    "id": "FR-MCP-085",
+    "title": "QA Workspace Question CRUD"
+  },
+  {
+    "id": "FR-MCP-086",
+    "title": "QA Workspace Answer CRUD"
+  },
+  {
+    "id": "FR-MCP-087",
+    "title": "QA Accepted Answer Invariant"
+  },
+  {
+    "id": "FR-MCP-088",
+    "title": "QA Question Tag Filtering"
+  },
+  {
+    "id": "FR-MCP-089",
+    "title": "QA Per User Voting"
+  },
+  {
+    "id": "FR-MCP-090",
+    "title": "QA Threaded Comments"
+  },
+  {
+    "id": "FR-MCP-091",
+    "title": "QA FAQ Projection"
+  },
+  {
+    "id": "FR-MCP-092",
+    "title": "QA Author Resolution"
+  },
+  {
+    "id": "FR-MCP-093",
+    "title": "QA Workspace Isolation"
+  },
+  {
+    "id": "FR-MCP-094",
+    "title": "QA REST MCP STDIO and Client Parity"
+  },
+  {
+    "id": "FR-MCP-095",
+    "title": "QA REPL and PowerShell Parity"
+  },
+  {
+    "id": "FR-MCP-096",
+    "title": "QA User and Agent Documentation"
+  },
+  {
+    "id": "FR-MCP-097",
+    "title": "QA Plugin Skill"
+  },
+  {
+    "id": "FR-MCP-098",
+    "title": "QA Append Only Audit"
+  },
+  {
+    "id": "FR-MCP-099",
+    "title": "QA Web Research Capture"
+  },
+  {
+    "id": "FR-MCP-100",
+    "title": "QA Close and Duplicate Flags"
+  },
+  {
+    "id": "FR-MCP-101",
+    "title": "QA Markdown Rendering and Sanitization"
+  },
+  {
+    "id": "FR-MCP-102",
+    "title": "QA Generated FAQ Wiki Page"
+  },
+  {
+    "id": "FR-MCP-103",
+    "title": "Hub-and-Spoke Federation"
+  },
+  {
+    "id": "FR-MCP-104",
+    "title": "Decision-complete agent plans"
+  },
+  {
+    "id": "FR-MCP-105",
+    "title": "Database integrity and durable audit enforcement"
+  },
+  {
+    "id": "FR-MCP-106",
+    "title": "Reliable plugin requirement updates"
+  },
+  {
+    "id": "FR-MCP-107",
+    "title": "Outstanding session work consolidation"
+  },
+  {
+    "id": "FR-MCP-108",
+    "title": "TODO Markdown description preservation"
+  },
+  {
+    "id": "FR-MCP-109",
+    "title": "Batch requirements mutation"
+  },
+  {
+    "id": "FR-MCP-110",
+    "title": "Deterministic Nuke PowerShell execution"
+  },
+  {
+    "id": "FR-MCP-111",
+    "title": "Package workflow closeout skills across QBrainAi plugins"
+  },
+  {
+    "id": "FR-MCP-112",
+    "title": "Requirements export description and AC formatting"
+  },
+  {
+    "id": "FR-MCP-113",
+    "title": "Plugin requirement batch payload parsing"
+  },
+  {
+    "id": "FR-MCP-114",
+    "title": "Parent TODO completion isolation"
+  },
+  {
+    "id": "FR-MCP-115",
+    "title": "Session and compaction hook output schema compliance"
+  },
+  {
+    "id": "FR-MCP-116",
+    "title": "GitHub CLI service-account ownership resilience"
+  },
+  {
+    "id": "FR-MCP-117",
+    "title": "Codex plugin wrapper bounded execution"
+  },
+  {
+    "id": "FR-MCP-118",
+    "title": "Keyserver trust service"
+  },
+  {
+    "id": "FR-MCP-119",
+    "title": "Subscriber diffgram commit service"
+  },
+  {
+    "id": "FR-MCP-120",
+    "title": "QBrain.AI transaction gating"
+  },
+  {
+    "id": "FR-MCP-121",
+    "title": "Degraded mode and rollback"
+  },
+  {
+    "id": "FR-MCP-122",
+    "title": "Byrd v4 execution control"
+  },
+  {
+    "id": "FR-MCP-123",
+    "title": "Quad-model future scaffolding"
+  },
+  {
+    "id": "FR-MCP-124",
+    "title": "Imported document and diagram preservation"
+  },
+  {
+    "id": "FR-MCP-125",
+    "title": "Federation and compatibility preservation"
+  },
+  {
+    "id": "FR-MCP-126",
+    "title": "aiUnit plan review"
+  },
+  {
+    "id": "FR-MCP-127",
+    "title": "Diagram-derived implementation tests"
+  },
+  {
+    "id": "FR-MCP-128",
+    "title": "Two-round architecture and design review"
+  },
+  {
+    "id": "FR-MCP-129",
+    "title": "Durable external brain-slot registry and live invocation"
+  },
+  {
+    "id": "FR-MCP-130",
+    "title": "Transaction-gated Curiosity external result admission"
+  },
+  {
+    "id": "FR-MCP-131",
+    "title": "Quad containment and authorization boundary"
+  },
+  {
+    "id": "FR-MCP-132",
+    "title": "Accurate HTTP semantics for /qbrainai/* credential failures"
+  },
+  {
+    "id": "FR-MCP-133",
+    "title": "Readiness reflects the workspace/token subsystem"
+  },
+  {
+    "id": "FR-MCP-134",
+    "title": "Full Quad-Brain orchestration and AoT reconciliation"
+  },
+  {
+    "id": "FR-MCP-135",
+    "title": "Quad-Brain weight update controls"
+  },
+  {
+    "id": "FR-MCP-136",
+    "title": "ACID-coupled Microsoft Agent Framework agent definition"
+  },
+  {
+    "id": "FR-MCP-137",
+    "title": "Quad Brain coding agent execution"
+  },
+  {
+    "id": "FR-MCP-138",
+    "title": "AiCodeReview and AiProjectReview Nuke targets trigger aiUnit via library"
+  },
+  {
+    "id": "FR-MCP-139",
+    "title": "Warning suppression governance"
+  },
+  {
+    "id": "FR-MCP-140",
+    "title": "Self-describing marker signature canonicalization"
+  },
+  {
+    "id": "FR-MCP-141",
+    "title": "Service-account process environment fidelity"
+  },
+  {
+    "id": "FR-MCP-142",
+    "title": "QuadBrain is absent from every general agent surface"
+  },
+  {
+    "id": "FR-MCP-143",
+    "title": "Session-log turns persist without a title and never lose a refined one"
+  },
+  {
+    "id": "FR-MCP-170",
+    "title": "Incremental session-log dialog persist"
+  },
+  {
+    "id": "FR-MCP-171",
+    "title": "Retryable session-log persist degrade-queue"
+  },
+  {
+    "id": "FR-MCP-172",
+    "title": "Failsafe drain does not poison successful plugin calls"
+  },
+  {
+    "id": "FR-MCP-173",
+    "title": "Keyserver signs QuadBrain transactions only"
+  },
+  {
+    "id": "FR-MCP-ACKRECOVERY-001",
+    "title": "Recover reliable MCP session logging"
+  },
+  {
+    "id": "FR-MCP-AGENT-PARITY-001",
+    "title": "FR-MCP-AGENT-PARITY-001"
+  },
+  {
+    "id": "FR-MCP-AGENT-PARITY-002",
+    "title": "FR-MCP-AGENT-PARITY-002"
+  },
+  {
+    "id": "FR-MCP-AUDIT-001",
+    "title": "Permanent local audit history"
+  },
+  {
+    "id": "FR-MCP-AUDITACTION-001",
+    "title": "Recognized tool execution audit actions"
+  },
+  {
+    "id": "FR-MCP-BATCH-001",
+    "title": "Plugin requirement batch payload parsing"
+  },
+  {
+    "id": "FR-MCP-BUILD-001",
+    "title": "Tooling for repeatable builds"
+  },
+  {
+    "id": "FR-MCP-CLEARSESSION-001",
+    "title": "Shared clear-session reset skill for all agent plugins"
+  },
+  {
+    "id": "FR-MCP-DOCFXWIKI-001",
+    "title": "Optional DocFX content in requirements wiki exports"
+  },
+  {
+    "id": "FR-MCP-FAILSAFE-001",
+    "title": "Failsafe drain treats 503 backend_unavailable as backend-down and can retry"
+  },
+  {
+    "id": "FR-MCP-FED-BACKFILL-001",
+    "title": "FR-MCP-FED-BACKFILL-001"
+  },
+  {
+    "id": "FR-MCP-FED-PATH-001",
+    "title": "Request workspace paths are interpreted by their own syntax"
+  },
+  {
+    "id": "FR-MCP-FED-ROUTE-001",
+    "title": "FR-MCP-FED-ROUTE-001"
+  },
+  {
+    "id": "FR-MCP-FED-WSSYNC-001",
+    "title": "FR-MCP-FED-WSSYNC-001"
+  },
+  {
+    "id": "FR-MCP-FILETOOLS-001",
+    "title": "Global repository discovery tools"
+  },
+  {
+    "id": "FR-MCP-HELP-001",
+    "title": "Agent Help conversation API"
+  },
+  {
+    "id": "FR-MCP-HELP-002",
+    "title": "Inbound guardrails"
+  },
+  {
+    "id": "FR-MCP-HELP-003",
+    "title": "Transcript persistence"
+  },
+  {
+    "id": "FR-MCP-HELP-004",
+    "title": "Guard incident logging"
+  },
+  {
+    "id": "FR-MCP-HELP-005",
+    "title": "Corpus bootstrap and outcome analysis"
+  },
+  {
+    "id": "FR-MCP-HELP-006",
+    "title": "MCP STDIO tool parity"
+  },
+  {
+    "id": "FR-MCP-HELP-007",
+    "title": "Typed client library"
+  },
+  {
+    "id": "FR-MCP-HELP-008",
+    "title": "Marker prompt guidance"
+  },
+  {
+    "id": "FR-MCP-HELP-009",
+    "title": "REPL workflow parity"
+  },
+  {
+    "id": "FR-MCP-HELP-010",
+    "title": "Agent Help configuration"
+  },
+  {
+    "id": "FR-MCP-HELP-011",
+    "title": "Agent Help grok-cli execution strategy and default"
+  },
+  {
+    "id": "FR-MCP-HOSTILEREVIEW-001",
+    "title": "Enqueue bounded hostile review request"
+  },
+  {
+    "id": "FR-MCP-HOSTILEREVIEW-002",
+    "title": "Artifact links resolve through MCP APIs"
+  },
+  {
+    "id": "FR-MCP-HOSTILEREVIEW-003",
+    "title": "Reviewer run records model effort identity"
+  },
+  {
+    "id": "FR-MCP-HOSTILEREVIEW-004",
+    "title": "Normalized findings and request quality"
+  },
+  {
+    "id": "FR-MCP-HOSTILEREVIEW-005",
+    "title": "Query failure modes by dimensions"
+  },
+  {
+    "id": "FR-MCP-HOSTILEREVIEW-006",
+    "title": "Default queue-and-record no auto mutation"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-001",
+    "title": "Reviewer pool configuration and real-time management"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-002",
+    "title": "Identity normalization, submitter and author exclusion, and round-robin assignment"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-003",
+    "title": "Reviewer readiness: NONCE, offline, and online"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-004",
+    "title": "Submission scopes and snapshot membership"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-005",
+    "title": "Admission eligibility and refusal with context"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-006",
+    "title": "Request context and requirement references"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-007",
+    "title": "Durable scheduling: queue, leases, fences, and restart safety"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-008",
+    "title": "Execution lifecycle: true live output, heartbeats, no time limit, cancellation"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-009",
+    "title": "Execution failures: incidents through triage, offline, retry bound"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-010",
+    "title": "Reviewer output contract, per-turn and holistic evaluation"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-011",
+    "title": "Evidence completeness, GZIP at rest, round-trip verification"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-012",
+    "title": "Atomic finalization and turn finality"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-013",
+    "title": "Self-review independence"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-014",
+    "title": "Verdict only: no TODO automation"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-015",
+    "title": "Results, evidence retrieval, and the standard result document"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-016",
+    "title": "Live output stream, progress, and honest ETA"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-017",
+    "title": "Completion notification stream"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-018",
+    "title": "Audit participation and hard stop"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-019",
+    "title": "Retention until explicit removal"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-020",
+    "title": "Surface parity: REST, MCP, client, REPL, Director, and plugin"
+  },
+  {
+    "id": "FR-MCP-HVPIPE-021",
+    "title": "Response grading and trust through finalization"
+  },
+  {
+    "id": "FR-MCP-HYGIENE-001",
+    "title": "Read-only workspace validation service"
+  },
+  {
+    "id": "FR-MCP-HYGIENE-002",
+    "title": "Traceability and missing-AC rules"
+  },
+  {
+    "id": "FR-MCP-HYGIENE-003",
+    "title": "TODO consistency rules"
+  },
+  {
+    "id": "FR-MCP-HYGIENE-004",
+    "title": "Stale turns and non-terminal triage"
+  },
+  {
+    "id": "FR-MCP-HYGIENE-005",
+    "title": "Surface parity and no auto-repair"
+  },
+  {
+    "id": "FR-MCP-LIVE-CODEX-20260603T2014Z",
+    "title": "Live Codex plugin acceptanceCriteria verification"
+  },
+  {
+    "id": "FR-MCP-LIVE-CODEX-20260603T2015Z",
+    "title": "Live Codex plugin acceptanceCriteria verification"
+  },
+  {
+    "id": "FR-MCP-LLMSTRATEGY-001",
+    "title": "Per-role QuadBrain LLM completion strategy"
+  },
+  {
+    "id": "FR-MCP-MARKER-004",
+    "title": "Marker removal deletes the marker and leaves no tombstone"
+  },
+  {
+    "id": "FR-MCP-MEMORY-001",
+    "title": "Global and workspace memory storage"
+  },
+  {
+    "id": "FR-MCP-MEMORY-002",
+    "title": "Memory CRUD tools"
+  },
+  {
+    "id": "FR-MCP-MEMORY-003",
+    "title": "Required memories injection format"
+  },
+  {
+    "id": "FR-MCP-MEMORY-004",
+    "title": "Marker template memory guidance"
+  },
+  {
+    "id": "FR-MCP-MEMORY-005",
+    "title": "REPL memory namespace"
+  },
+  {
+    "id": "FR-MCP-MEMORY-006",
+    "title": "Memory scope management and ordering"
+  },
+  {
+    "id": "FR-MCP-MEMORY-007",
+    "title": "Agent plugin memory integration"
+  },
+  {
+    "id": "FR-MCP-MEMORY-008",
+    "title": "Federated Memory State"
+  },
+  {
+    "id": "FR-MCP-PATHNORM-001",
+    "title": "Persist workspace paths with forward slashes and platform tag"
+  },
+  {
+    "id": "FR-MCP-PLUGIN-BATCH-001",
+    "title": "Plugin requirement batch payload parsing"
+  },
+  {
+    "id": "FR-MCP-PLUGINCORE-001",
+    "title": "Canonical plugin core with sync and checksum guard"
+  },
+  {
+    "id": "FR-MCP-PLUGINCORE-003",
+    "title": "Persistent REPL daemon"
+  },
+  {
+    "id": "FR-MCP-PLUGINCORE-004",
+    "title": "Reliable plugin session-log dialog parsing"
+  },
+  {
+    "id": "FR-MCP-PLUGIN-HEADER-001",
+    "title": "Agent runtime header fields record only observed values"
+  },
+  {
+    "id": "FR-MCP-PLUGININT-001",
+    "title": "End-to-end Session Log validation for every agent plugin"
+  },
+  {
+    "id": "FR-MCP-PLUGIN-SKILLS-001",
+    "title": "Package workflow closeout skills across QBrainAi plugins"
+  },
+  {
+    "id": "FR-MCP-PRODUCT-001",
+    "title": "Product CRUD"
+  },
+  {
+    "id": "FR-MCP-PRODUCT-002",
+    "title": "Workspace product membership"
+  },
+  {
+    "id": "FR-MCP-PRODUCT-003",
+    "title": "Shared effective requirements"
+  },
+  {
+    "id": "FR-MCP-PRODUCT-004",
+    "title": "Product isolation"
+  },
+  {
+    "id": "FR-MCP-PRODUCT-005",
+    "title": "Product requirement context"
+  },
+  {
+    "id": "FR-MCP-QBAGENT-001",
+    "title": "QBAgent marker-driven QuadBrain-only bootstrap"
+  },
+  {
+    "id": "FR-MCP-QBEXEC-001",
+    "title": "QuadBrain server-side MCP-tool execution with AoT transaction interception"
+  },
+  {
+    "id": "FR-MCP-QBEXEC-002",
+    "title": "Concrete QuadBrain internal-tool executor"
+  },
+  {
+    "id": "FR-MCP-QBEXEC-003",
+    "title": "Full-fidelity inter-brain session logging"
+  },
+  {
+    "id": "FR-MCP-QBOLLAMA-002",
+    "title": "Ollama integration tests provision and release their own server"
+  },
+  {
+    "id": "FR-MCP-QBOPENAI-001",
+    "title": "QuadBrain OpenAI-compatible chat-completions endpoint"
+  },
+  {
+    "id": "FR-MCP-QBPROGRESS-001",
+    "title": "Live QuadBrain role progress on qbagent"
+  },
+  {
+    "id": "FR-MCP-QBRAIN-001",
+    "title": "Product display brand is QBrain.AI"
+  },
+  {
+    "id": "FR-MCP-QBRAIN-002",
+    "title": "Product identity stays distinct from the Model Context Protocol"
+  },
+  {
+    "id": "FR-MCP-QBRAIN-003",
+    "title": "Product identity stays distinct from QuadBrain and QBAgent"
+  },
+  {
+    "id": "FR-MCP-QBRAIN-004",
+    "title": "1.x callers keep a working product identity"
+  },
+  {
+    "id": "FR-MCP-QBRAIN-005",
+    "title": "Historical identity and host names stay"
+  },
+  {
+    "id": "FR-MCP-QBSEED-001",
+    "title": "Config-driven Quad-Brain provisioning and live-loop readiness"
+  },
+  {
+    "id": "FR-MCP-QBSKILLS-001",
+    "title": "Agent Skills registry and progressive disclosure"
+  },
+  {
+    "id": "FR-MCP-QBSKILLS-002",
+    "title": "Skill tool (list_skills / load_skill)"
+  },
+  {
+    "id": "FR-MCP-QBSKILLS-003",
+    "title": "Vendor dotnet/skills and author workspace skills"
+  },
+  {
+    "id": "FR-MCP-QBTOOLS-001",
+    "title": "QBAgent external file tools"
+  },
+  {
+    "id": "FR-MCP-QBTOOLS-002",
+    "title": "QBAgent run_powershell tool"
+  },
+  {
+    "id": "FR-MCP-QBTOOLS-003",
+    "title": "QBAgent run_bash tool (optional Git Bash)"
+  },
+  {
+    "id": "FR-MCP-QBTOOLS-004",
+    "title": "QBAgent git tool (full, push to origin)"
+  },
+  {
+    "id": "FR-MCP-QBTOOLS-005",
+    "title": "Server-side mcp_repo_edit, mcp_bash, mcp_git tools"
+  },
+  {
+    "id": "FR-MCP-QBTOOLS-006",
+    "title": "RepoFileService targeted edit"
+  },
+  {
+    "id": "FR-MCP-QBTOOLS-007",
+    "title": "QBAgent registers full tool and skill surface"
+  },
+  {
+    "id": "FR-MCP-QUAD-SESSION-001",
+    "title": "Per-session QuadBrain instances over global brains"
+  },
+  {
+    "id": "FR-MCP-REPL-001",
+    "title": "YAML Protocol STDIO REPL Host"
+  },
+  {
+    "id": "FR-MCP-REPL-002",
+    "title": "REPL Lifecycle Management"
+  },
+  {
+    "id": "FR-MCP-REPL-003",
+    "title": "Command Namespace Parity"
+  },
+  {
+    "id": "FR-MCP-REPL-004",
+    "title": "Trust Bootstrap and Auth Rotation"
+  },
+  {
+    "id": "FR-MCP-REPL-005",
+    "title": "Orchestration State Visibility"
+  },
+  {
+    "id": "FR-MCP-REPL-006",
+    "title": "Deprecate workflow.* REPL namespaces in favor of client.* passthrough"
+  },
+  {
+    "id": "FR-MCP-REPL-007",
+    "title": "REPL Credential Discovery Diagnostics"
+  },
+  {
+    "id": "FR-MCP-REPL-008",
+    "title": "Per-agent REPL isolation"
+  },
+  {
+    "id": "FR-MCP-REPL-009",
+    "title": "Degraded session-log persistence isolation"
+  },
+  {
+    "id": "FR-MCP-REPL-010",
+    "title": "Plugin session-log title refinement surfaces"
+  },
+  {
+    "id": "FR-MCP-REPL-011",
+    "title": "Plugin failsafe queue drains instead of accumulating"
+  },
+  {
+    "id": "FR-MCP-REQAC-001",
+    "title": "Structured acceptance criteria on requirements"
+  },
+  {
+    "id": "FR-MCP-REQAC-002",
+    "title": "Copy acceptance criteria from a TODO to a requirement"
+  },
+  {
+    "id": "FR-MCP-REQAC-PLUGIN-001",
+    "title": "Plugin acceptanceCriteria rollout"
+  },
+  {
+    "id": "FR-MCP-REQACPLUGIN-001",
+    "title": "Plugins expose AcceptanceCriteria on requirements surface"
+  },
+  {
+    "id": "FR-MCP-REQACPLUGIN-002",
+    "title": "Plugins fail on proven AcceptanceCriteria loss"
+  },
+  {
+    "id": "FR-MCP-REQRECOVERY-001",
+    "title": "Atomic requirements ledger recovery"
+  },
+  {
+    "id": "FR-MCP-REQSCOPE-001",
+    "title": "FR-MCP-REQSCOPE-001"
+  },
+  {
+    "id": "FR-MCP-REQSCOPE-002",
+    "title": "FR-MCP-REQSCOPE-002"
+  },
+  {
+    "id": "FR-MCP-REQSCOPE-003",
+    "title": "FR-MCP-REQSCOPE-003"
+  },
+  {
+    "id": "FR-MCP-REQSCOPE-004",
+    "title": "FR-MCP-REQSCOPE-004"
+  },
+  {
+    "id": "FR-MCP-RUNAS-001",
+    "title": "Proposed Linux Agent Helper Grok RunAs worker"
+  },
+  {
+    "id": "FR-MCP-SERVICEUPDATE-001",
+    "title": "Cross-platform service update preserving live state"
+  },
+  {
+    "id": "FR-MCP-SESSIONATTR-001",
+    "title": "Session-log foreign filesModified and commits are rejected or marked"
+  },
+  {
+    "id": "FR-MCP-SESSIONEND-001",
+    "title": "SessionEnd emits empty object when cache cannot be resolved"
+  },
+  {
+    "id": "FR-MCP-SESSIONLIFE-001",
+    "title": "Degraded begin keeps the full turn and does not advertise a stored open"
+  },
+  {
+    "id": "FR-MCP-SESSIONLIFE-002",
+    "title": "Durability before verb mode for plan and todo metadata"
+  },
+  {
+    "id": "FR-MCP-SESSIONLIFE-003",
+    "title": "Three session-log persist outcomes"
+  },
+  {
+    "id": "FR-MCP-SESSIONLIFE-004",
+    "title": "Failsafe replay, child deadline, and contention classification"
+  },
+  {
+    "id": "FR-MCP-SESSIONLIFE-005",
+    "title": "Stop hook stale pin and session-log uniqueness"
+  },
+  {
+    "id": "FR-MCP-SESSIONLOGCTX-001",
+    "title": "Session turns record current plan file and MCP TODO id"
+  },
+  {
+    "id": "FR-MCP-SESSIONLOGSAN-001",
+    "title": "Sanitized session-log read responses"
+  },
+  {
+    "id": "FR-MCP-STRICTCOUNT-001",
+    "title": "updateTurn accepts omitted empty or scalar tags and contextList under StrictMode"
+  },
+  {
+    "id": "FR-MCP-SUBLOG-001",
+    "title": "Subscriber high-performance message logging"
+  },
+  {
+    "id": "FR-MCP-TEMPVOL-001",
+    "title": "Plugin wrappers align TEMP to the workspace volume"
+  },
+  {
+    "id": "FR-MCP-TESTRESOURCE-001",
+    "title": "Repository-independent test fixtures and outputs"
+  },
+  {
+    "id": "FR-MCP-TODO-CLOSE-001",
+    "title": "Close TODO item by ID"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-001",
+    "title": "Transcript source ingestion"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-002",
+    "title": "Faithful loss-aware normalization"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-003",
+    "title": "Canonical session log projection"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-004",
+    "title": "Idempotent import and recovery"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-005",
+    "title": "Model-owned session log writing for Claude Codex Grok"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-006",
+    "title": "HTTP path and upload ingestion"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-007",
+    "title": "REPL and MCP ingestion parity"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-008",
+    "title": "Secondary provider normalization"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-009",
+    "title": "Transcript ingestion size ceilings raised to Int32.MaxValue"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-SEARCH-001",
+    "title": "Codex transcript adapter handles tool_search and inter_agent records"
+  },
+  {
+    "id": "FR-MCP-TRIAGE-001",
+    "title": "Fire-and-forget triage intake"
+  },
+  {
+    "id": "FR-MCP-TRIAGE-002",
+    "title": "Async triage grouping and research"
+  },
+  {
+    "id": "FR-MCP-TRIAGE-003",
+    "title": "REPL triage parity"
+  },
+  {
+    "id": "FR-MCP-TRIAGE-004",
+    "title": "Plugin triage skills"
+  },
+  {
+    "id": "FR-MCP-TRIAGEERR-001",
+    "title": "Normalized error envelope for REST, MCP, REPL, and plugins"
+  },
+  {
+    "id": "FR-MCP-TRIAGEHELP-001",
+    "title": "Agent Help is diagnosis or incomplete never completed echo"
+  },
+  {
+    "id": "FR-MCP-TRIAGEPLUGIN-001",
+    "title": "Plugin root session, cache, console, and persist identity"
+  },
+  {
+    "id": "FR-MCP-TRIAGEREQ-001",
+    "title": "listTr ids are getTr updateTr deleteTr able"
+  },
+  {
+    "id": "FR-MCP-TRIAGESCHEMA-001",
+    "title": "SessionLogs missing AgentSession columns fail closed"
+  },
+  {
+    "id": "FR-MCP-TRIAGESTORE-001",
+    "title": "Session-log persist is diagnosable and idempotent"
+  },
+  {
+    "id": "FR-MCP-TRIAGESTORE-002",
+    "title": "Storage-only outages fail fast without flipping health liveness"
+  },
+  {
+    "id": "FR-MCP-TRIAGETODO-001",
+    "title": "EXEC dual-store rehydrate and retry-clean plan create"
+  },
+  {
+    "id": "FR-MCP-USECASE-001",
+    "title": "CRUD workspace-scoped use cases"
+  },
+  {
+    "id": "FR-MCP-USECASE-002",
+    "title": "Actors, flows, and ordered steps"
+  },
+  {
+    "id": "FR-MCP-USECASE-003",
+    "title": "Bidirectional UC to FR links with Realizes default"
+  },
+  {
+    "id": "FR-MCP-USECASE-004",
+    "title": "Create use case from FR"
+  },
+  {
+    "id": "FR-MCP-USECASE-005",
+    "title": "Diagram generation Mermaid primary"
+  },
+  {
+    "id": "FR-MCP-USECASE-006",
+    "title": "UC FR Realizes coverage API"
+  },
+  {
+    "id": "FR-MCP-USECASE-007",
+    "title": "First-party Use Case UI"
+  },
+  {
+    "id": "FR-MCP-USECASE-008",
+    "title": "Use case versioning and approval"
+  },
+  {
+    "id": "FR-MCP-USECASE-009",
+    "title": "Product membership hooks"
+  },
+  {
+    "id": "FR-MCP-USECASE-010",
+    "title": "Traceability integration for UC-FR Realizes"
+  },
+  {
+    "id": "FR-MCP-USECASE-011",
+    "title": "UML use-case canvas editor"
+  },
+  {
+    "id": "FR-MCP-USECASE-012",
+    "title": "Persist use-case diagram graph"
+  },
+  {
+    "id": "FR-MCP-USECASE-013",
+    "title": "Export diagram to Mermaid"
+  },
+  {
+    "id": "FR-MCP-USECASE-014",
+    "title": "Export diagram to PlantUML"
+  },
+  {
+    "id": "FR-MCP-USECASE-015",
+    "title": "BUG-TRIAGE-139 fourteenth-review safe durable remediation"
+  },
+  {
+    "id": "FR-MCP-VERIFYPOLICY-001",
+    "title": "Authenticated workspace verification policy reads"
+  },
+  {
+    "id": "FR-MCP-VERIFYWRAP-001",
+    "title": "Code-verify reports disk-full and honors timeout without hanging"
+  },
+  {
+    "id": "FR-MCP-WIKIEXPORT-001",
+    "title": "Configurable requirements wiki export tree"
+  },
+  {
+    "id": "FR-MCP-WIKIEXPORT-002",
+    "title": "Default wiki export configuration during marker generation"
+  },
+  {
+    "id": "FR-MCP-WIKIEXPORT-003",
+    "title": "Optional wiki export JSON dump"
+  },
+  {
+    "id": "FR-MCP-WIKIEXPORT-004",
+    "title": "add-workspace dump hydration"
+  },
+  {
+    "id": "FR-MCP-WIKIEXPORT-005",
+    "title": "todo.yaml deprecation"
+  },
+  {
+    "id": "FR-MCP-WORKSPACE-LAYER-001",
+    "title": "FR-MCP-WORKSPACE-LAYER-001"
+  },
+  {
+    "id": "FR-MCP-XAGENT-001",
+    "title": "CompleteTurn refuses cross-sourceType current-turn rebind"
+  },
+  {
+    "id": "FR-SUPPORT-010",
+    "title": "MCP Context Unification"
+  },
+  {
+    "id": "FR-SUPPORT-010A",
+    "title": "SessionLog Workspace Stamping"
+  },
+  {
+    "id": "FR-SUPPORT-010B",
+    "title": "SessionLog ProblemDetails Errors"
+  },
+  {
+    "id": "FR-SUPPORT-010C",
+    "title": "SessionLog REST Surface Completion"
+  },
+  {
+    "id": "FR-SUPPORT-010E",
+    "title": "Stateless session lifecycle endpoints"
+  },
+  {
+    "id": "FR-SUPPORT-010F",
+    "title": "Additive partial session-log submits"
+  },
+  {
+    "id": "FR-SUPPORT-011",
+    "title": "SessionLog Workspace Stamping"
+  },
+  {
+    "id": "FR-SUPPORT-012",
+    "title": "SessionLog ProblemDetails Errors"
+  },
+  {
+    "id": "FR-SUPPORT-013",
+    "title": "SessionLog REST Surface Completion"
+  },
+  {
+    "id": "FR-SUPPORT-014",
+    "title": "Stateless session lifecycle endpoints"
+  },
+  {
+    "id": "FR-SUPPORT-015",
+    "title": "Additive partial session-log submits"
+  },
+  {
+    "id": "FR-SUPPORT-016",
+    "title": "Turn replace and section API"
+  },
+  {
+    "id": "FR-TEST-002",
+    "title": "FR-TEST-002"
+  },
+  {
+    "id": "FR-TRIAGE-001",
+    "title": "Triage dashboard inspection"
+  },
+  {
+    "id": "FR-TRIAGE-002",
+    "title": "Triage-created TODO index"
+  },
+  {
+    "id": "FR-WEB-001",
+    "title": "Orchestration cockpit in mcp-web"
+  },
+  {
+    "id": "FR-WEB-002",
+    "title": "Workspace is the mission"
+  },
+  {
+    "id": "FR-WEB-003",
+    "title": "Agent fleet lifecycle and status"
+  },
+  {
+    "id": "FR-WEB-004",
+    "title": "TODO task bank lanes"
+  },
+  {
+    "id": "FR-WEB-005",
+    "title": "Fire-and-forget parallel dispatch"
+  },
+  {
+    "id": "FR-WEB-006",
+    "title": "Recurring scheduled TODOs"
+  },
+  {
+    "id": "FR-WEB-007",
+    "title": "Hierarchical context inheritance"
+  },
+  {
+    "id": "FR-WEB-008",
+    "title": "One-click retry with preserved context"
+  },
+  {
+    "id": "FR-WEB-009",
+    "title": "Live peek of agent work"
+  },
+  {
+    "id": "FR-WEB-010",
+    "title": "Token burn and daily progress"
+  },
+  {
+    "id": "FR-WEB-011",
+    "title": "Human feedback queue"
+  },
+  {
+    "id": "FR-WEB-012",
+    "title": "Idle orchestrator proposes tentative TODOs"
+  },
+  {
+    "id": "FR-WEB-013",
+    "title": "Tool and path allow/deny UI"
+  },
+  {
+    "id": "FR-WEB-014",
+    "title": "Per-agent multi-provider backends"
+  },
+  {
+    "id": "FR-WEB-015",
+    "title": "TODO to git commit linkage"
+  },
+  {
+    "id": "FR-WEB-016",
+    "title": "mcp-web local-first privacy"
+  },
+  {
+    "id": "FR-WEB-017",
+    "title": "Desktop and mobile viewports"
+  },
+  {
+    "id": "FR-WEB-018",
+    "title": "TODO dependencies and blocked lane"
+  },
+  {
+    "id": "FR-WEB-019",
+    "title": "Persistent specialized agent prompts"
+  },
+  {
+    "id": "FR-WEB-020",
+    "title": "Per-agent spend budgets"
+  },
+  {
+    "id": "FR-QB-001",
+    "title": "Built-in, non-disableable plugin"
+  },
+  {
+    "id": "FR-QB-002",
+    "title": "Trusted, workspace-bound startup"
+  },
+  {
+    "id": "FR-QB-003",
+    "title": "Durable session auditing"
+  },
+  {
+    "id": "FR-QB-004",
+    "title": "Enforced completion obligations"
+  },
+  {
+    "id": "FR-QB-005",
+    "title": "Enforcement across execution paths"
+  },
+  {
+    "id": "FR-QB-006",
+    "title": "No Cline Cloud infrastructure"
+  },
+  {
+    "id": "FR-QB-007",
+    "title": "Session Log inspection"
+  },
+  {
+    "id": "FR-QB-008",
+    "title": "TODO inspection"
+  },
+  {
+    "id": "FR-QB-009",
+    "title": "Safe refresh/context isolation"
+  },
+  {
+    "id": "FR-QB-010",
+    "title": "qbrain.ai integration settings"
+  },
+  {
+    "id": "FR-QB-011",
+    "title": "Aspect-dependent TUI panel"
+  },
+  {
+    "id": "FR-QB-012",
+    "title": "Three-state panel placement"
+  },
+  {
+    "id": "FR-QB-013",
+    "title": "User-defined panel dimensions"
+  },
+  {
+    "id": "FR-QB-014",
+    "title": "Expand/shrink panel shortcuts"
+  },
+  {
+    "id": "FR-QB-015",
+    "title": "User-definable panel bindings"
+  },
+  {
+    "id": "FR-QB-016",
+    "title": "Remember preferences across invocations"
+  },
+  {
+    "id": "FR-QB-017",
+    "title": "Desktop Session Log/TODO sidebar"
+  },
+  {
+    "id": "FR-QB-018",
+    "title": "cline-qb identity"
+  },
+  {
+    "id": "FR-QB-019",
+    "title": "Self-contained governed distribution"
+  },
+  {
+    "id": "FR-QB-020",
+    "title": "Compact tool-invocation presentation"
+  },
+  {
+    "id": "TR-01",
+    "title": "TR-01"
+  },
+  {
+    "id": "TR-02",
+    "title": "TR-02"
+  },
+  {
+    "id": "TR-03",
+    "title": "TR-03"
+  },
+  {
+    "id": "TR-04",
+    "title": "TR-04"
+  },
+  {
+    "id": "TR-05",
+    "title": "TR-05"
+  },
+  {
+    "id": "TR-06",
+    "title": "TR-06"
+  },
+  {
+    "id": "TR-07",
+    "title": "TR-07"
+  },
+  {
+    "id": "TR-08",
+    "title": "TR-08"
+  },
+  {
+    "id": "TR-09",
+    "title": "TR-09"
+  },
+  {
+    "id": "TR-10",
+    "title": "TR-10"
+  },
+  {
+    "id": "TR-11",
+    "title": "TR-11"
+  },
+  {
+    "id": "TR-12",
+    "title": "TR-12"
+  },
+  {
+    "id": "TR-13",
+    "title": "TR-13"
+  },
+  {
+    "id": "TR-14",
+    "title": "TR-14"
+  },
+  {
+    "id": "TR-GRAPHRAG-ADHOC-001",
+    "title": "Ad-hoc text ingestion pipeline"
+  },
+  {
+    "id": "TR-GRAPHRAG-ADHOC-002",
+    "title": "Explicit graph entity and relationship storage"
+  },
+  {
+    "id": "TR-GRAPHRAG-ADHOC-003",
+    "title": "Document lifecycle with cascade delete and vector cleanup"
+  },
+  {
+    "id": "TR-HANDOFF-AGENT-001",
+    "title": "Versioned HandoffTodoDraft one-shot extraction"
+  },
+  {
+    "id": "TR-HANDOFF-AUDIT-001",
+    "title": "Normalized ingestion-run and diagnostic persistence"
+  },
+  {
+    "id": "TR-HANDOFF-CONTRACT-001",
+    "title": "Documented handoff contracts"
+  },
+  {
+    "id": "TR-HANDOFF-MODES-001",
+    "title": "Confidence gating, review approval, and idempotent replay"
+  },
+  {
+    "id": "TR-HANDOFF-SECURITY-001",
+    "title": "Bounded workspace-contained handoff readers"
+  },
+  {
+    "id": "TR-HANDOFF-SURFACE-001",
+    "title": "Shared API, client, REPL, Director, MCP, and plugin delegation"
+  },
+  {
+    "id": "TR-HANDOFF-TODO-001",
+    "title": "Exclusive TODO-service persistence"
+  },
+  {
+    "id": "TR-HANDOFF-VALIDATE-001",
+    "title": "Pure draft validation and normalization"
+  },
+  {
+    "id": "TR-LOC-001",
+    "title": "Localization Infrastructure"
+  },
+  {
+    "id": "TR-MCP-ACKRECOVERY-001",
+    "title": "Deploy compatible guarded session runtime"
+  },
+  {
+    "id": "TR-MCP-AGENT-001",
+    "title": "Agent EF Core Entities"
+  },
+  {
+    "id": "TR-MCP-AGENT-002",
+    "title": "Built-in Agent Type Defaults"
+  },
+  {
+    "id": "TR-MCP-AGENT-003",
+    "title": "Agent REST API"
+  },
+  {
+    "id": "TR-MCP-AGENT-004",
+    "title": "Agent Pool Configuration Contract"
+  },
+  {
+    "id": "TR-MCP-AGENT-005",
+    "title": "Pooled Runtime and Queue Dispatcher"
+  },
+  {
+    "id": "TR-MCP-AGENT-006",
+    "title": "Hosted .NET 9 Microsoft Agent Framework Library"
+  },
+  {
+    "id": "TR-MCP-AGENT-007",
+    "title": "Built-In MCP Session Log, TODO, Repository, Desktop-Launch, and PowerShell Workflow for Hosted Agents"
+  },
+  {
+    "id": "TR-MCP-AGENT-008",
+    "title": "Agent Pool Orchestration"
+  },
+  {
+    "id": "TR-MCP-AGENT-009",
+    "title": "Agent Plugin Discovery"
+  },
+  {
+    "id": "TR-MCP-AGENT-010",
+    "title": "Agent Process Lifecycle"
+  },
+  {
+    "id": "TR-MCP-AGENT-011",
+    "title": "Agent State Synchronization"
+  },
+  {
+    "id": "TR-MCP-AGENT-012",
+    "title": "Agent Notification Bus"
+  },
+  {
+    "id": "TR-MCP-AGENT-013",
+    "title": "PowerShell McpSession Dual-Path Session Cache Resolution"
+  },
+  {
+    "id": "TR-MCP-AGENT-014",
+    "title": "PowerShell McpSession Trust Bootstrap Parity"
+  },
+  {
+    "id": "TR-MCP-AGENT-015",
+    "title": "ACID hosted-agent profile and sealed run contract"
+  },
+  {
+    "id": "TR-MCP-AGENT-016",
+    "title": "Hosted-agent Quad Brain coding adapter"
+  },
+  {
+    "id": "TR-MCP-AGENT-PARITY-010",
+    "title": "TR-MCP-AGENT-PARITY-010"
+  },
+  {
+    "id": "TR-MCP-AGENT-PARITY-011",
+    "title": "TR-MCP-AGENT-PARITY-011"
+  },
+  {
+    "id": "TR-MCP-AGENT-PARITY-012",
+    "title": "TR-MCP-AGENT-PARITY-012"
+  },
+  {
+    "id": "TR-MCP-AGENT-PARITY-013",
+    "title": "TR-MCP-AGENT-PARITY-013"
+  },
+  {
+    "id": "TR-MCP-AGENT-PARITY-020",
+    "title": "TR-MCP-AGENT-PARITY-020"
+  },
+  {
+    "id": "TR-MCP-AGENT-PARITY-020..027",
+    "title": "TR-MCP-AGENT-PARITY-020..027"
+  },
+  {
+    "id": "TR-MCP-AGENT-PARITY-020-027",
+    "title": "TR-MCP-AGENT-PARITY-020-027"
+  },
+  {
+    "id": "TR-MCP-AGENT-PARITY-030",
+    "title": "TR-MCP-AGENT-PARITY-030"
+  },
+  {
+    "id": "TR-MCP-AIUNIT-001",
+    "title": "Implement CreateAiUnitClient and library-triggered Send in Nuke build for reviews"
+  },
+  {
+    "id": "TR-MCP-API-001",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-API-002",
+    "title": "One-Shot Submission Contract and Intent Routing"
+  },
+  {
+    "id": "TR-MCP-API-003",
+    "title": "Agent Pool Monitoring and Control APIs"
+  },
+  {
+    "id": "TR-MCP-ARCH-001",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-ARCH-002",
+    "title": "DI Single Source of Truth and Pull-Based Change Notification"
+  },
+  {
+    "id": "TR-MCP-AUDIT-001",
+    "title": "Audited Copilot Client"
+  },
+  {
+    "id": "TR-MCP-AUDIT-002",
+    "title": "Versioned compressed generic audit payloads"
+  },
+  {
+    "id": "TR-MCP-AUDIT-003",
+    "title": "Restricted SQL Server audit runtime role"
+  },
+  {
+    "id": "TR-MCP-AUDIT-004",
+    "title": "Local-only audit federation and export policy"
+  },
+  {
+    "id": "TR-MCP-AUDITACTION-001",
+    "title": "Validate tool execution actions at session write boundaries"
+  },
+  {
+    "id": "TR-MCP-AUTH-001",
+    "title": "OIDC JWT Bearer Authentication"
+  },
+  {
+    "id": "TR-MCP-AUTH-002",
+    "title": "GitHub Federation via OIDC Provider"
+  },
+  {
+    "id": "TR-MCP-AUTH-003",
+    "title": "Device Authorization Flow for CLI Clients"
+  },
+  {
+    "id": "TR-MCP-AUTH-010",
+    "title": "WorkspaceAuthMiddleware 503/401 gating"
+  },
+  {
+    "id": "TR-MCP-AUTH-011",
+    "title": "WorkspaceTokenService.IsInitialized"
+  },
+  {
+    "id": "TR-MCP-BATCH-001",
+    "title": "Robust Bash plugin batch records normalization"
+  },
+  {
+    "id": "TR-MCP-BATCH-109",
+    "title": "Requirements batch endpoint and workflow support"
+  },
+  {
+    "id": "TR-MCP-BATCHTS-001",
+    "title": "Robust TypeScript plugin batch records normalization"
+  },
+  {
+    "id": "TR-MCP-BYRD-001",
+    "title": "Workspace-Scoped Byrd Execution Store"
+  },
+  {
+    "id": "TR-MCP-BYRD-002",
+    "title": "Bounded Hydration and Delta Queries"
+  },
+  {
+    "id": "TR-MCP-BYRD-003",
+    "title": "Byrd Progression Enforcement"
+  },
+  {
+    "id": "TR-MCP-BYRD-004",
+    "title": "Structured TODO Execution Surfaces"
+  },
+  {
+    "id": "TR-MCP-BYRD-005",
+    "title": "Byrd process plan creation requirements"
+  },
+  {
+    "id": "TR-MCP-CFG-001",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-CFG-002",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-CFG-003",
+    "title": "Workspace Configuration Schema"
+  },
+  {
+    "id": "TR-MCP-CFG-004",
+    "title": "YAML Configuration Support"
+  },
+  {
+    "id": "TR-MCP-CFG-005",
+    "title": "System-Wide Default Copilot Model Propagation"
+  },
+  {
+    "id": "TR-MCP-CFG-006",
+    "title": "Administrative Configuration Snapshot and YAML Patch API"
+  },
+  {
+    "id": "TR-MCP-CFG-007",
+    "title": "Encryption Configuration and Provider Settings Surface"
+  },
+  {
+    "id": "TR-MCP-CLEARSESSION-001",
+    "title": "clear-session skill content contract"
+  },
+  {
+    "id": "TR-MCP-CLIENT-001",
+    "title": "Typed client request bodies are registered for source-generated JSON"
+  },
+  {
+    "id": "TR-MCP-COMP-001",
+    "title": "Workspace Compliance Ban Lists"
+  },
+  {
+    "id": "TR-MCP-COMP-002",
+    "title": "Agent Values Prompt Sections"
+  },
+  {
+    "id": "TR-MCP-COMP-003",
+    "title": "Session Continuity Protocol"
+  },
+  {
+    "id": "TR-MCP-CQRS-001",
+    "title": "Standalone CQRS Library"
+  },
+  {
+    "id": "TR-MCP-CQRS-002",
+    "title": "Decimal Correlation IDs"
+  },
+  {
+    "id": "TR-MCP-CQRS-003",
+    "title": "Dispatcher as ILoggerProvider with Context Registry"
+  },
+  {
+    "id": "TR-MCP-CQRS-004",
+    "title": "Automatic Result Monad Logging"
+  },
+  {
+    "id": "TR-MCP-CQRS-005",
+    "title": "Pipeline Behaviors"
+  },
+  {
+    "id": "TR-MCP-CRYPTO-001",
+    "title": "Transactional Diffgram Cryptography"
+  },
+  {
+    "id": "TR-MCP-CTX-001",
+    "title": "New Project Context Indexing"
+  },
+  {
+    "id": "TR-MCP-DATA-001",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DATA-002",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DATA-003",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DB-001",
+    "title": "Database-authoritative workspace registry"
+  },
+  {
+    "id": "TR-MCP-DB-002",
+    "title": "Workspace foreign-key integrity"
+  },
+  {
+    "id": "TR-MCP-DB-003",
+    "title": "Soft deletes for persistent MCP data"
+  },
+  {
+    "id": "TR-MCP-DB-004",
+    "title": "Generic audit ledger for mutable data"
+  },
+  {
+    "id": "TR-MCP-DB-005",
+    "title": "TODO and requirement relational links"
+  },
+  {
+    "id": "TR-MCP-DB-006",
+    "title": "Concurrent turn deletes serialized per session"
+  },
+  {
+    "id": "TR-MCP-DB-DTO-001",
+    "title": "DateTimeOffset values are stored as UTC DateTime on every provider"
+  },
+  {
+    "id": "TR-MCP-DESKTOP-001",
+    "title": "Desktop Process Launcher"
+  },
+  {
+    "id": "TR-MCP-DIR-001",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DIR-002",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DIR-003",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DIR-004",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DIR-005",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DIR-006",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DIR-007",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DIR-008",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DOC-001",
+    "title": "Marketing documentation coverage"
+  },
+  {
+    "id": "TR-MCP-DOC-002",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DOCFXWIKI-001",
+    "title": "Typed and isolated DocFX wiki workflow execution"
+  },
+  {
+    "id": "TR-MCP-DRY-001",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-DTO-001",
+    "title": "Extended Session Log Entry Fields"
+  },
+  {
+    "id": "TR-MCP-EVT-001",
+    "title": "In-Process Change Event Bus"
+  },
+  {
+    "id": "TR-MCP-EVT-002",
+    "title": "Service-Layer Mutation Publishing"
+  },
+  {
+    "id": "TR-MCP-EVT-003",
+    "title": "SSE Delivery Endpoint"
+  },
+  {
+    "id": "TR-MCP-EVT-004",
+    "title": "Change Event Contract"
+  },
+  {
+    "id": "TR-MCP-EVT-005",
+    "title": "Workspace Notification Category Coverage"
+  },
+  {
+    "id": "TR-MCP-FAILSAFE-001",
+    "title": "Failsafe drain abort markers include backend_unavailable and HTTP 503"
+  },
+  {
+    "id": "TR-MCP-FED-001",
+    "title": "Hub Proxy Federation Contract"
+  },
+  {
+    "id": "TR-MCP-FED-BACKFILL-001",
+    "title": "TR-MCP-FED-BACKFILL-001"
+  },
+  {
+    "id": "TR-MCP-FED-MEMORY-001",
+    "title": "Memory Federation Adapter Contract"
+  },
+  {
+    "id": "TR-MCP-FED-PATH-001",
+    "title": "Single request-path normalization entry point"
+  },
+  {
+    "id": "TR-MCP-FED-ROUTE-001",
+    "title": "TR-MCP-FED-ROUTE-001"
+  },
+  {
+    "id": "TR-MCP-FED-SESSIONLOG-001",
+    "title": "Session-log federation snapshot carries the full session graph"
+  },
+  {
+    "id": "TR-MCP-FED-WSSYNC-001",
+    "title": "TR-MCP-FED-WSSYNC-001"
+  },
+  {
+    "id": "TR-MCP-FILETOOLS-001",
+    "title": "Server-owned repository discovery core"
+  },
+  {
+    "id": "TR-MCP-GH-001",
+    "title": "GitHub OAuth Bootstrap Configuration Contract"
+  },
+  {
+    "id": "TR-MCP-GH-002",
+    "title": "Encrypted Workspace GitHub Token Persistence"
+  },
+  {
+    "id": "TR-MCP-GH-003",
+    "title": "Authenticated GitHub CLI Execution Path with Policy-Governed Fallback"
+  },
+  {
+    "id": "TR-MCP-GH-004",
+    "title": "GitHub Actions Workflow Run API Surface"
+  },
+  {
+    "id": "TR-MCP-GH-005",
+    "title": "Workspace-Scoped gh Repository Execution"
+  },
+  {
+    "id": "TR-MCP-GH-006",
+    "title": "Canonical GitHub Priority Labels, MCP-Authoritative Priority Sync, and ISSUE Change Comments"
+  },
+  {
+    "id": "TR-MCP-GH-007",
+    "title": "Generated GitHub Comment Note Sections and TODO Comment Round-Trip"
+  },
+  {
+    "id": "TR-MCP-GH-008",
+    "title": "Ownership-safe GitHub CLI repository selection"
+  },
+  {
+    "id": "TR-MCP-HEALTH-002",
+    "title": "WorkspaceReadinessHealthCheck"
+  },
+  {
+    "id": "TR-MCP-HEALTH-003",
+    "title": "Health reflects storage reachability and backend errors are typed"
+  },
+  {
+    "id": "TR-MCP-HELP-001",
+    "title": "Agent Help options and startup validation"
+  },
+  {
+    "id": "TR-MCP-HELP-002",
+    "title": "Agent Help HTTP and WebSocket API surface"
+  },
+  {
+    "id": "TR-MCP-HELP-003",
+    "title": "Help transcript JSONL writer"
+  },
+  {
+    "id": "TR-MCP-HELP-004",
+    "title": "Deterministic inbound guard"
+  },
+  {
+    "id": "TR-MCP-HELP-005",
+    "title": "Guard incident JSON logger"
+  },
+  {
+    "id": "TR-MCP-HELP-006",
+    "title": "Stub corpus bootstrap"
+  },
+  {
+    "id": "TR-MCP-HELP-007",
+    "title": "In-memory conversation orchestration"
+  },
+  {
+    "id": "TR-MCP-HELP-008",
+    "title": "Outcome analysis recommendations"
+  },
+  {
+    "id": "TR-MCP-HELP-009",
+    "title": "MCP STDIO and typed client adapters"
+  },
+  {
+    "id": "TR-MCP-HELP-010",
+    "title": "GrokCliAgentExecutionStrategy one-shot grok invocation"
+  },
+  {
+    "id": "TR-MCP-HOSTILEREVIEW-001",
+    "title": "Hostile review request schema and storage"
+  },
+  {
+    "id": "TR-MCP-HOSTILEREVIEW-002",
+    "title": "Hostile review artifact resolver"
+  },
+  {
+    "id": "TR-MCP-HOSTILEREVIEW-003",
+    "title": "Hostile review execution capture"
+  },
+  {
+    "id": "TR-MCP-HOSTILEREVIEW-004",
+    "title": "Findings taxonomy and request-quality schema"
+  },
+  {
+    "id": "TR-MCP-HOSTILEREVIEW-005",
+    "title": "Hostile review query indexes"
+  },
+  {
+    "id": "TR-MCP-HOSTILEREVIEW-006",
+    "title": "No auto-mutation and surface parity"
+  },
+  {
+    "id": "TR-MCP-HTTP-001",
+    "title": "MCP Streamable HTTP Endpoint"
+  },
+  {
+    "id": "TR-MCP-HTTP-002",
+    "title": "Detailed and Sanitized HTTP 500 Error Contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-001",
+    "title": "Reviewer pool configuration and real-time management: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-002",
+    "title": "Identity normalization, submitter and author exclusion, and round-robin assignment: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-003",
+    "title": "Reviewer readiness: NONCE, offline, and online: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-004",
+    "title": "Submission scopes and snapshot membership: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-005",
+    "title": "Admission eligibility and refusal with context: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-006",
+    "title": "Request context and requirement references: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-007",
+    "title": "Durable scheduling: queue, leases, fences, and restart safety: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-008",
+    "title": "Execution lifecycle: true live output, heartbeats, no time limit, cancellation: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-009",
+    "title": "Execution failures: incidents through triage, offline, retry bound: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-010",
+    "title": "Reviewer output contract, per-turn and holistic evaluation: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-011",
+    "title": "Evidence completeness, GZIP at rest, round-trip verification: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-012",
+    "title": "Atomic finalization and turn finality: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-013",
+    "title": "Self-review independence: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-014",
+    "title": "Verdict only: no TODO automation: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-015",
+    "title": "Results, evidence retrieval, and the standard result document: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-016",
+    "title": "Live output stream, progress, and honest ETA: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-017",
+    "title": "Completion notification stream: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-018",
+    "title": "Audit participation and hard stop: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-019",
+    "title": "Retention until explicit removal: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-020",
+    "title": "Surface parity: REST, MCP, client, REPL, Director, and plugin: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HVPIPE-021",
+    "title": "Response grading and trust through finalization: implementation contract"
+  },
+  {
+    "id": "TR-MCP-HYGIENE-001",
+    "title": "Validation registry and result contract"
+  },
+  {
+    "id": "TR-MCP-HYGIENE-002",
+    "title": "Traceability rule implementations"
+  },
+  {
+    "id": "TR-MCP-HYGIENE-003",
+    "title": "TODO consistency rule implementations"
+  },
+  {
+    "id": "TR-MCP-HYGIENE-004",
+    "title": "Stale-turn clock and triage domain enum"
+  },
+  {
+    "id": "TR-MCP-HYGIENE-005",
+    "title": "Hygiene surface adapters and Director exit codes"
+  },
+  {
+    "id": "TR-MCP-INGEST-001",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-INGEST-002",
+    "title": "Markdown Session Log Parser"
+  },
+  {
+    "id": "TR-MCP-INGEST-003",
+    "title": "Direct Website URL Ingestion"
+  },
+  {
+    "id": "TR-MCP-KEYSERVER-001",
+    "title": "Transaction Keyserver Service"
+  },
+  {
+    "id": "TR-MCP-LLMSTRATEGY-001",
+    "title": "Orchestration-to-strategy turn context seam"
+  },
+  {
+    "id": "TR-MCP-LOG-001",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-LOG-002",
+    "title": "Identifier Naming Validation"
+  },
+  {
+    "id": "TR-MCP-LOG-003",
+    "title": "Parseable Event Field-Cap Enforcement"
+  },
+  {
+    "id": "TR-MCP-MARKER-004",
+    "title": "RemoveSingleFile deletes rather than archives; tombstone builder removed"
+  },
+  {
+    "id": "TR-MCP-MEMORY-001",
+    "title": "EF memory storage model"
+  },
+  {
+    "id": "TR-MCP-MEMORY-002",
+    "title": "Provider memory migrations"
+  },
+  {
+    "id": "TR-MCP-MEMORY-003",
+    "title": "Memory service layer"
+  },
+  {
+    "id": "TR-MCP-MEMORY-004",
+    "title": "Memory REST and typed client contract"
+  },
+  {
+    "id": "TR-MCP-MEMORY-005",
+    "title": "MCP stdio and REPL memory tools"
+  },
+  {
+    "id": "TR-MCP-MEMORY-006",
+    "title": "Memory schema and contract coverage"
+  },
+  {
+    "id": "TR-MCP-MEMORY-007",
+    "title": "Scope-aware effective memory querying"
+  },
+  {
+    "id": "TR-MCP-MEMORY-008",
+    "title": "Agent plugin memory integration"
+  },
+  {
+    "id": "TR-MCP-MT-001",
+    "title": "WorkspaceContext Scoped Per-Request Service"
+  },
+  {
+    "id": "TR-MCP-MT-002",
+    "title": "WorkspaceResolutionMiddleware"
+  },
+  {
+    "id": "TR-MCP-MT-003",
+    "title": "EF Core Global Query Filter for WorkspaceId"
+  },
+  {
+    "id": "TR-MCP-MT-003A",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-MT-004",
+    "title": "WorkspaceId stamping in SessionLogService"
+  },
+  {
+    "id": "TR-MCP-NUKE-001",
+    "title": "Non-interactive PowerShell hosts for Nuke automation"
+  },
+  {
+    "id": "TR-MCP-NUKE-002",
+    "title": "Nuke solution parameter and shared build project set"
+  },
+  {
+    "id": "TR-MCP-NUKE-005",
+    "title": "build.ps1 -WhatIf: full dry run with checks"
+  },
+  {
+    "id": "TR-MCP-NUKE-006",
+    "title": "Sibling plugin parent resolution from the checkout or its worktrees"
+  },
+  {
+    "id": "TR-MCP-NUKE-007",
+    "title": "InstallReplTool detects the installed REPL global tool by its package id"
+  },
+  {
+    "id": "TR-MCP-NUKE-008",
+    "title": "ValidateConfig reads the canonical QBrainAi root and the legacy Mcp root"
+  },
+  {
+    "id": "TR-MCP-NUKE-009",
+    "title": "Build infrastructure tests bound every child process and its redirected output"
+  },
+  {
+    "id": "TR-MCP-NUKE-010",
+    "title": "Build infrastructure tests remove their temporary build artifacts on every OS"
+  },
+  {
+    "id": "TR-MCP-NUKE-011",
+    "title": "Targeted test runs through Nuke: Test accepts --test-projects and --test-filter"
+  },
+  {
+    "id": "TR-MCP-NUKE-012",
+    "title": "Plugin core suite through Nuke (G4): TestPluginCore --pester-paths"
+  },
+  {
+    "id": "TR-MCP-NUKE-015",
+    "title": "UpdateService: cross-platform service update preserving live state"
+  },
+  {
+    "id": "TR-MCP-NUKE-016",
+    "title": "InstallOllama provisions Ollama on Windows and Linux"
+  },
+  {
+    "id": "TR-MCP-NUKE-017",
+    "title": "ArchitectureDiagrams: one C4 definition for every documentation diagram"
+  },
+  {
+    "id": "TR-MCP-NUKE-018",
+    "title": "InstallTestDependencies provisions provider test servers on Linux"
+  },
+  {
+    "id": "TR-MCP-NUKE-019",
+    "title": "MigrationIntegrationTests selects host-specific integration cases by the Platform trait"
+  },
+  {
+    "id": "TR-MCP-OPS-001",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-PATHNORM-001",
+    "title": "Forward-slash storage keys, rekey maintenance command and startup guard"
+  },
+  {
+    "id": "TR-MCP-PERSIST-001",
+    "title": "Plugin appendDialog uses incremental dialog POST"
+  },
+  {
+    "id": "TR-MCP-PERSIST-002",
+    "title": "PersistTurn maps 503 to timeout degrade-queue"
+  },
+  {
+    "id": "TR-MCP-PERSIST-003",
+    "title": "Failsafe drain inspects errors without Write-Error Stop skip"
+  },
+  {
+    "id": "TR-MCP-PERSIST-004",
+    "title": "SQLITE_BUSY under budget is persist contention not storage-down"
+  },
+  {
+    "id": "TR-MCP-PLAN-001",
+    "title": "Safe session wrap-up and deploy sequencing"
+  },
+  {
+    "id": "TR-MCP-PLUGIN-008",
+    "title": "Codex requirements update command fallback parity"
+  },
+  {
+    "id": "TR-MCP-PLUGIN-009",
+    "title": "Session and compaction hook output contract"
+  },
+  {
+    "id": "TR-MCP-PLUGIN-010",
+    "title": "PowerShell wrapper process timeout control"
+  },
+  {
+    "id": "TR-MCP-PLUGIN-011",
+    "title": "Stop gate no-ops phantom turns and counts commits"
+  },
+  {
+    "id": "TR-MCP-PLUGIN-012",
+    "title": "Session rotation keeps the current turn fresh in its own session"
+  },
+  {
+    "id": "TR-MCP-PLUGIN-013",
+    "title": "UserPromptSubmit hook opens exactly one turn per prompt"
+  },
+  {
+    "id": "TR-MCP-PLUGINCORE-001",
+    "title": "sync-plugin-core + check-core-integrity (sh+ps1)"
+  },
+  {
+    "id": "TR-MCP-PLUGINCORE-003",
+    "title": "repl-daemon.js TCP broker + repl-persistent.sh wrapper"
+  },
+  {
+    "id": "TR-MCP-PLUGINCORE-004",
+    "title": "Dictionary-safe plugin dialog parsing"
+  },
+  {
+    "id": "TR-MCP-PLUGINCORE-005",
+    "title": "PowerShell.MCP cross-volume text-edit workaround documented"
+  },
+  {
+    "id": "TR-MCP-PLUGIN-HEADER-001",
+    "title": "Observed-only resolution of agent runtime header fields"
+  },
+  {
+    "id": "TR-MCP-PLUGININT-001",
+    "title": "Shared multi-plugin Session Log integration harness"
+  },
+  {
+    "id": "TR-MCP-PLUGIN-SKILLS-001",
+    "title": "Probe TR id pattern"
+  },
+  {
+    "id": "TR-MCP-PLUGIN-TRIAGE-001",
+    "title": "Triage plugin guidance"
+  },
+  {
+    "id": "TR-MCP-POL-001",
+    "title": "Natural Language Policy Management"
+  },
+  {
+    "id": "TR-MCP-PRODUCT-API-001",
+    "title": "Product CQRS and adapters"
+  },
+  {
+    "id": "TR-MCP-PRODUCT-AUTH-001",
+    "title": "Product authorization and transaction gating"
+  },
+  {
+    "id": "TR-MCP-PRODUCT-CTX-001",
+    "title": "Product requirement context source"
+  },
+  {
+    "id": "TR-MCP-PRODUCT-MODEL-001",
+    "title": "Product storage model"
+  },
+  {
+    "id": "TR-MCP-PRODUCT-SHARE-001",
+    "title": "Product requirement share query"
+  },
+  {
+    "id": "TR-MCP-QA-001",
+    "title": "QA Entity Tenancy"
+  },
+  {
+    "id": "TR-MCP-QA-002",
+    "title": "QA Question Tags JSON"
+  },
+  {
+    "id": "TR-MCP-QA-003",
+    "title": "QA Provider Migrations"
+  },
+  {
+    "id": "TR-MCP-QA-004",
+    "title": "QA Denormalized Vote Counters"
+  },
+  {
+    "id": "TR-MCP-QA-005",
+    "title": "QA Accepted Answer Storage"
+  },
+  {
+    "id": "TR-MCP-QA-006",
+    "title": "QA Service Shape"
+  },
+  {
+    "id": "TR-MCP-QA-007",
+    "title": "QA REST Surface"
+  },
+  {
+    "id": "TR-MCP-QA-008",
+    "title": "QA Search Indexing"
+  },
+  {
+    "id": "TR-MCP-QA-009",
+    "title": "QA Author Resolver"
+  },
+  {
+    "id": "TR-MCP-QA-010",
+    "title": "QA MCP STDIO Tools"
+  },
+  {
+    "id": "TR-MCP-QA-011",
+    "title": "QA FAQ Query Projection"
+  },
+  {
+    "id": "TR-MCP-QA-012",
+    "title": "QA Typed Client"
+  },
+  {
+    "id": "TR-MCP-QA-013",
+    "title": "QA XML Documentation"
+  },
+  {
+    "id": "TR-MCP-QA-014",
+    "title": "QA REPL Workflow"
+  },
+  {
+    "id": "TR-MCP-QA-015",
+    "title": "QA PowerShell Module"
+  },
+  {
+    "id": "TR-MCP-QA-016",
+    "title": "QA Plugin Skill"
+  },
+  {
+    "id": "TR-MCP-QA-017",
+    "title": "QA Documentation Surface"
+  },
+  {
+    "id": "TR-MCP-QA-018",
+    "title": "QA Audit Storage"
+  },
+  {
+    "id": "TR-MCP-QA-019",
+    "title": "QA Audit Emission"
+  },
+  {
+    "id": "TR-MCP-QA-020",
+    "title": "QA Audit Query"
+  },
+  {
+    "id": "TR-MCP-QA-021",
+    "title": "QA Audit Surfaces"
+  },
+  {
+    "id": "TR-MCP-QA-022",
+    "title": "QA Answer Sources JSON"
+  },
+  {
+    "id": "TR-MCP-QA-023",
+    "title": "QA Mandatory Web Capture Skill Rule"
+  },
+  {
+    "id": "TR-MCP-QA-024",
+    "title": "QA Companion Web Skill Cross References"
+  },
+  {
+    "id": "TR-MCP-QA-025",
+    "title": "QA Close and Duplicate Storage"
+  },
+  {
+    "id": "TR-MCP-QA-026",
+    "title": "QA Close and Duplicate Surfaces"
+  },
+  {
+    "id": "TR-MCP-QA-027",
+    "title": "QA Body Rendering"
+  },
+  {
+    "id": "TR-MCP-QA-028",
+    "title": "QA Sanitization Tests"
+  },
+  {
+    "id": "TR-MCP-QA-029",
+    "title": "QA FAQ Wiki Generation Target"
+  },
+  {
+    "id": "TR-MCP-QA-030",
+    "title": "QA FAQ Wiki Snapshot Tests"
+  },
+  {
+    "id": "TR-MCP-QA-031",
+    "title": "QA Voter History"
+  },
+  {
+    "id": "TR-MCP-QA-032",
+    "title": "QA Vote State Storage"
+  },
+  {
+    "id": "TR-MCP-QA-033",
+    "title": "QA Vote State Machine"
+  },
+  {
+    "id": "TR-MCP-QA-034",
+    "title": "QA Vote Audit Actions"
+  },
+  {
+    "id": "TR-MCP-QB-001",
+    "title": "Remove the QuadBrain tool surface from plugins, MCP transports, passthrough, and the shared agent catalog"
+  },
+  {
+    "id": "TR-MCP-QBAGENT-001",
+    "title": "QBAgent marker bootstrap and graceful no-marker exit"
+  },
+  {
+    "id": "TR-MCP-QBEXEC-001",
+    "title": "QuadBrain internal-tool interception"
+  },
+  {
+    "id": "TR-MCP-QBEXEC-002",
+    "title": "Internal-tool executor dispatch"
+  },
+  {
+    "id": "TR-MCP-QBEXEC-003",
+    "title": "Full-text inter-brain session-log capture"
+  },
+  {
+    "id": "TR-MCP-QBOLLAMA-002",
+    "title": "OllamaServerController with injectable probe, launcher, and ownership-scoped teardown"
+  },
+  {
+    "id": "TR-MCP-QBOPENAI-001",
+    "title": "OpenAI chat-completions surface over QuadBrain orchestration"
+  },
+  {
+    "id": "TR-MCP-QBPROGRESS-001",
+    "title": "Role progress via orchestration IProgress and OpenAI SSE"
+  },
+  {
+    "id": "TR-MCP-QBRAIN-001",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-QBRAIN-002",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-QBRAIN-003",
+    "title": "Package and tool migration"
+  },
+  {
+    "id": "TR-MCP-QBRAIN-004",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-QBRAIN-005",
+    "title": "Route, config, and environment migration"
+  },
+  {
+    "id": "TR-MCP-QBRAIN-006",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-QBRAIN-007",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-QBRAIN-008",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-QBSEED-002",
+    "title": "Gated idempotent Quad-Brain startup provisioning and /v1 workspace scoping"
+  },
+  {
+    "id": "TR-MCP-QBSKILLS-001",
+    "title": "SKILL.md manifest model and parser"
+  },
+  {
+    "id": "TR-MCP-QBSKILLS-002",
+    "title": "Skill storage layout and dotnet/skills vendoring"
+  },
+  {
+    "id": "TR-MCP-QBSKILLS-003",
+    "title": "Discovery-list injection"
+  },
+  {
+    "id": "TR-MCP-QBTOOLS-000",
+    "title": "Single core per capability (anti-duplication)"
+  },
+  {
+    "id": "TR-MCP-QBTOOLS-001",
+    "title": "External tool surface project and registration"
+  },
+  {
+    "id": "TR-MCP-QBTOOLS-002",
+    "title": "run_powershell backed by HostedPowerShellSessionManager"
+  },
+  {
+    "id": "TR-MCP-QBTOOLS-003",
+    "title": "run_bash via ProcessRunner with PATH resolution"
+  },
+  {
+    "id": "TR-MCP-QBTOOLS-004",
+    "title": "git tool via ProcessRunner with push guard"
+  },
+  {
+    "id": "TR-MCP-QBTOOLS-005",
+    "title": "Server-side adapter tools mcp_repo_edit/mcp_bash/mcp_git"
+  },
+  {
+    "id": "TR-MCP-QBTOOLS-006",
+    "title": "RepoFileService.EditAsync semantics"
+  },
+  {
+    "id": "TR-MCP-QBTOOLS-007",
+    "title": "Transaction-gated EditAsync compensation"
+  },
+  {
+    "id": "TR-MCP-QBTOOLS-008",
+    "title": "QBAgent tool/skill DI wiring"
+  },
+  {
+    "id": "TR-MCP-QUAD-001",
+    "title": "Brain-slot storage, DTOs, CRUD, and validation"
+  },
+  {
+    "id": "TR-MCP-QUAD-002",
+    "title": "External model provider adapter, credentials, endpoint allowlist, timeout, and redaction"
+  },
+  {
+    "id": "TR-MCP-QUAD-003",
+    "title": "Keyserver party mapping and transaction diffgram admission"
+  },
+  {
+    "id": "TR-MCP-QUAD-004",
+    "title": "Quad branch containment and authorization"
+  },
+  {
+    "id": "TR-MCP-QUAD-005",
+    "title": "Quad orchestration service and contracts"
+  },
+  {
+    "id": "TR-MCP-QUAD-006",
+    "title": "AoT reconciliation decision loop"
+  },
+  {
+    "id": "TR-MCP-QUAD-007",
+    "title": "Durable weight versioning and safety gates"
+  },
+  {
+    "id": "TR-MCP-QUAD-SESSION-001",
+    "title": "Per-session QuadBrain instance attachment over global brains"
+  },
+  {
+    "id": "TR-MCP-QUALITY-001",
+    "title": "Warning suppression decision register and aiUnit audit"
+  },
+  {
+    "id": "TR-MCP-REPL-001",
+    "title": "YAML Envelope Protocol"
+  },
+  {
+    "id": "TR-MCP-REPL-002",
+    "title": "DI-Integrated REPL Host"
+  },
+  {
+    "id": "TR-MCP-REPL-003",
+    "title": "Command Loop Lifecycle"
+  },
+  {
+    "id": "TR-MCP-REPL-004",
+    "title": "Command Registry and Dispatcher"
+  },
+  {
+    "id": "TR-MCP-REPL-005",
+    "title": "Namespace Organization and Handler Parity"
+  },
+  {
+    "id": "TR-MCP-REPL-006",
+    "title": "Trust Bootstrap and Token Validation"
+  },
+  {
+    "id": "TR-MCP-REPL-007",
+    "title": "State Query Commands"
+  },
+  {
+    "id": "TR-MCP-REPL-008",
+    "title": ""
+  },
+  {
+    "id": "TR-MCP-REPL-009",
+    "title": "Explicit agent identity propagation"
+  },
+  {
+    "id": "TR-MCP-REPL-010",
+    "title": "Independent REPL session-log persistence strategies"
+  },
+  {
+    "id": "TR-MCP-REPL-011",
+    "title": "PascalCase session-id agent + openSession persistence"
+  },
+  {
+    "id": "TR-MCP-REPL-012",
+    "title": "Per-method REPL invocation timeout"
+  },
+  {
+    "id": "TR-MCP-REPL-013",
+    "title": "Marker-bearing current directory outranks inherited workspace env for repl resolution"
+  },
+  {
+    "id": "TR-MCP-REPL-014",
+    "title": "Plugin setTurnTitle and setSessionTitle handlers"
+  },
+  {
+    "id": "TR-MCP-REPL-015",
+    "title": "Plugin omits titles on incidental whole-session re-submit"
+  },
+  {
+    "id": "TR-MCP-REPL-016",
+    "title": "Failsafe queue drains oldest-first after a proven-reachable backend call"
+  },
+  {
+    "id": "TR-MCP-REPL-017",
+    "title": "Failsafe quarantine and truthful pending queue depth in plugin status"
+  },
+  {
+    "id": "TR-MCP-REPL-018",
+    "title": "Turn upsert accepts a deliberately empty title"
+  },
+  {
+    "id": "TR-MCP-REPL-019",
+    "title": "Supersede preserves a server-refined turn title"
+  },
+  {
+    "id": "TR-MCP-REPL-020",
+    "title": "failTurn resolves the active turn from the plugin cache"
+  },
+  {
+    "id": "TR-MCP-REPL-TRIAGE-001",
+    "title": "Triage REPL surface"
+  },
+  {
+    "id": "TR-MCP-REQ-001",
+    "title": "AI Requirements Analysis Service"
+  },
+  {
+    "id": "TR-MCP-REQ-002",
+    "title": "Requirements Document Management Service"
+  },
+  {
+    "id": "TR-MCP-REQ-003",
+    "title": "Requirements REST + STDIO Tool Integration"
+  },
+  {
+    "id": "TR-MCP-REQ-004",
+    "title": "Dual Wiki Workspace Renderer"
+  },
+  {
+    "id": "TR-MCP-REQ-005",
+    "title": "Wiki Import Selection and Authoritative Sync"
+  },
+  {
+    "id": "TR-MCP-REQAC-001",
+    "title": "Acceptance criteria persistence"
+  },
+  {
+    "id": "TR-MCP-REQAC-002",
+    "title": "Acceptance criteria markdown rendering"
+  },
+  {
+    "id": "TR-MCP-REQAC-PLUGIN-001",
+    "title": "Plugin typed request shaping preserves acceptanceCriteria"
+  },
+  {
+    "id": "TR-MCP-REQACPLUGIN-001",
+    "title": "Plugin-side schema + shaper changes for AcceptanceCriteria"
+  },
+  {
+    "id": "TR-MCP-REQACPLUGIN-002",
+    "title": "Plugin-side AcceptanceCriteria capture verification"
+  },
+  {
+    "id": "TR-MCP-REQEXPORT-001",
+    "title": "Wiki requirement document renderer emits Markdown sections for TEST descriptions and AC"
+  },
+  {
+    "id": "TR-MCP-REQEXPORT-002",
+    "title": "Wiki generate surfaces real exception, never opaque 500"
+  },
+  {
+    "id": "TR-MCP-REQEXPORT-003",
+    "title": "Requirements generateDocument accepts markdown for all non-wiki docTypes"
+  },
+  {
+    "id": "TR-MCP-REQEXPORT-004",
+    "title": "Requirements generateDocument honors explicit workspacePath override end-to-end"
+  },
+  {
+    "id": "TR-MCP-REQRECOVERY-001",
+    "title": "Transactional requirements recovery service and shared plugin contract"
+  },
+  {
+    "id": "TR-MCP-REQSCOPE-001",
+    "title": "TR-MCP-REQSCOPE-001"
+  },
+  {
+    "id": "TR-MCP-REQSCOPE-002",
+    "title": "TR-MCP-REQSCOPE-002"
+  },
+  {
+    "id": "TR-MCP-REQSCOPE-003",
+    "title": "TR-MCP-REQSCOPE-003"
+  },
+  {
+    "id": "TR-MCP-REQSCOPE-004",
+    "title": "TR-MCP-REQSCOPE-004"
+  },
+  {
+    "id": "TR-MCP-RUNAS-001",
+    "title": "Proposed helper-only Unix worker, transient cgroup and journaled updater"
+  },
+  {
+    "id": "TR-MCP-SCHEMA-109",
+    "title": "REPL request schema enforcement"
+  },
+  {
+    "id": "TR-MCP-SEC-001",
+    "title": "Per-Workspace Auth Tokens"
+  },
+  {
+    "id": "TR-MCP-SEC-002",
+    "title": "Pairing Session Security"
+  },
+  {
+    "id": "TR-MCP-SEC-003",
+    "title": "Signed Marker Bootstrap and Health Nonce Verification"
+  },
+  {
+    "id": "TR-MCP-SEC-004",
+    "title": "Provider-Native At-Rest Encryption with No-Loss Transition Procedures"
+  },
+  {
+    "id": "TR-MCP-SEC-005",
+    "title": "Self-describing marker signature payload"
+  },
+  {
+    "id": "TR-MCP-SEC-006",
+    "title": "Brain-slot signing keys follow a renamed party id"
+  },
+  {
+    "id": "TR-MCP-SERVICEUPDATE-001",
+    "title": "Platform adapters and metadata-preserving Linux service lifecycle"
+  },
+  {
+    "id": "TR-MCP-SESSIONATTR-001",
+    "title": "Validate filesModified and commit paths against workspace root"
+  },
+  {
+    "id": "TR-MCP-SESSIONEND-001",
+    "title": "SessionEnd cache flush no-ops when cache cannot be resolved"
+  },
+  {
+    "id": "TR-MCP-SESSIONLIFE-001",
+    "title": "Plugin keeps degraded turn cache and honest hook status"
+  },
+  {
+    "id": "TR-MCP-SESSIONLIFE-002",
+    "title": "Metadata durability and freshness rebind"
+  },
+  {
+    "id": "TR-MCP-SESSIONLIFE-003",
+    "title": "Wrapper three-outcome exit contract"
+  },
+  {
+    "id": "TR-MCP-SESSIONLIFE-004",
+    "title": "Quarantine repair, import recovery, and contention drain"
+  },
+  {
+    "id": "TR-MCP-SESSIONLIFE-005",
+    "title": "Stop-hook stale pin and upsert uniqueness"
+  },
+  {
+    "id": "TR-MCP-SESSIONLOG-001",
+    "title": "Session-log lifecycle tools return structured errors"
+  },
+  {
+    "id": "TR-MCP-SESSIONLOG-002",
+    "title": "Session-log text search covers dialog and child collections"
+  },
+  {
+    "id": "TR-MCP-SESSIONLOG-003",
+    "title": "Terminal-turn compliance gate is QBAgent-only"
+  },
+  {
+    "id": "TR-MCP-SESSIONLOG-005",
+    "title": "Dedicated session and turn title-update service, endpoints, and client"
+  },
+  {
+    "id": "TR-MCP-SESSIONLOG-006",
+    "title": "Required planFile and todoId scalars with None sentinel and backfill"
+  },
+  {
+    "id": "TR-MCP-SESSIONLOGSAN-001",
+    "title": "Bounded outbound session-log sanitizer"
+  },
+  {
+    "id": "TR-MCP-SESSIONLOGSAN-002",
+    "title": "Sanitizer timeout fail-open is deterministically testable"
+  },
+  {
+    "id": "TR-MCP-SKILLS-001",
+    "title": "Use supported plugin MCP bridge paths"
+  },
+  {
+    "id": "TR-MCP-SKILLS-002",
+    "title": "Preserve commit-sync pause acknowledgement contract"
+  },
+  {
+    "id": "TR-MCP-SKILLS-003",
+    "title": "Package skills through existing plugin distribution metadata"
+  },
+  {
+    "id": "TR-MCP-STDIO-109",
+    "title": "Plugin stdio JSON request envelopes"
+  },
+  {
+    "id": "TR-MCP-STRICTCOUNT-001",
+    "title": "Null-safe Count for updateTurn collection fields under StrictMode"
+  },
+  {
+    "id": "TR-MCP-SUBLOG-001",
+    "title": "Subscriber message-log sink"
+  },
+  {
+    "id": "TR-MCP-SUBSCRIBER-001",
+    "title": "Transaction Subscriber Service"
+  },
+  {
+    "id": "TR-MCP-SVC-001",
+    "title": "Windows Service Configuration"
+  },
+  {
+    "id": "TR-MCP-SVC-002",
+    "title": "Executable resolution skips WindowsApps App-Execution-Alias stubs"
+  },
+  {
+    "id": "TR-MCP-SYNC-001",
+    "title": "Node core vendor package uses a version-less stable file name"
+  },
+  {
+    "id": "TR-MCP-TEMPVOL-001",
+    "title": "Plugin entrypoints set TEMP TMP on the workspace volume"
+  },
+  {
+    "id": "TR-MCP-TESTRESOURCE-001",
+    "title": "Test resource loading and artifact isolation"
+  },
+  {
+    "id": "TR-MCP-TODO-002",
+    "title": "Cross-Workspace TODO Move"
+  },
+  {
+    "id": "TR-MCP-TODO-003",
+    "title": "GitHub-Backed TODO Creation Alias"
+  },
+  {
+    "id": "TR-MCP-TODO-004",
+    "title": "Shared ISSUE-* TODO Update Orchestration"
+  },
+  {
+    "id": "TR-MCP-TODO-005",
+    "title": "Provider-Agnostic Database-Authoritative TODO Storage with Deterministic YAML Projection"
+  },
+  {
+    "id": "TR-MCP-TODO-006",
+    "title": "Append-Only TODO Audit History, Projection Failure Classification, and Repair Contract"
+  },
+  {
+    "id": "TR-MCP-TODO-007",
+    "title": "Legacy SQLite TODO Storage One-Shot Migration"
+  },
+  {
+    "id": "TR-MCP-TODO-008",
+    "title": "Workspace-Scoped Database-Backed TODO Storage with Per-Workspace YAML Bootstrap"
+  },
+  {
+    "id": "TR-MCP-TODO-009",
+    "title": "Preserve TODO description Markdown"
+  },
+  {
+    "id": "TR-MCP-TODO-010",
+    "title": "Root-scoped TODO done serialization"
+  },
+  {
+    "id": "TR-MCP-TODO-CLOSE-001",
+    "title": "TODO close operation surfaces"
+  },
+  {
+    "id": "TR-MCP-TPL-001",
+    "title": "Prompt Template YAML Storage"
+  },
+  {
+    "id": "TR-MCP-TPL-002",
+    "title": "Prompt Template Rendering"
+  },
+  {
+    "id": "TR-MCP-TPL-003",
+    "title": "Prompt Template REST + MCP Endpoints"
+  },
+  {
+    "id": "TR-MCP-TPL-004",
+    "title": "Prompt Template CQRS + Director UI"
+  },
+  {
+    "id": "TR-MCP-TPL-005",
+    "title": "System Template Externalization"
+  },
+  {
+    "id": "TR-MCP-TPL-006",
+    "title": "Template Resolution for One-Shot Requests"
+  },
+  {
+    "id": "TR-MCP-TPL-007",
+    "title": "Marker template requires actionable requirements-backed plans"
+  },
+  {
+    "id": "TR-MCP-TR-001",
+    "title": "Tool Registry Service"
+  },
+  {
+    "id": "TR-MCP-TR-002",
+    "title": "Tool Bucket Service"
+  },
+  {
+    "id": "TR-MCP-TR-003",
+    "title": "Tool Registry Default Bucket Seeding"
+  },
+  {
+    "id": "TR-MCP-TRANSCRIPT-001",
+    "title": "Bounded transcript reader and parser registry"
+  },
+  {
+    "id": "TR-MCP-TRANSCRIPT-002",
+    "title": "Source adapters and bundle detection"
+  },
+  {
+    "id": "TR-MCP-TRANSCRIPT-003",
+    "title": "Neutral event model and projectors"
+  },
+  {
+    "id": "TR-MCP-TRANSCRIPT-004",
+    "title": "Canonical YAML and write-ahead persistence"
+  },
+  {
+    "id": "TR-MCP-TRANSCRIPT-005",
+    "title": "REPL import and model-owned session logging"
+  },
+  {
+    "id": "TR-MCP-TRANSCRIPT-006",
+    "title": "Recursive discovery upload extraction and path security"
+  },
+  {
+    "id": "TR-MCP-TRANSCRIPT-007",
+    "title": "HTTP client MCP and REPL contracts"
+  },
+  {
+    "id": "TR-MCP-TRANSCRIPT-008",
+    "title": "Provider normalization and native stores"
+  },
+  {
+    "id": "TR-MCP-TRANSCRIPT-009",
+    "title": "Codex transcript ingestion normalizes tool-call, reasoning, and turn_context records"
+  },
+  {
+    "id": "TR-MCP-TRANSCRIPT-010",
+    "title": "Int32.MaxValue transcript ceilings with streaming JSONL reader"
+  },
+  {
+    "id": "TR-MCP-TRANSCRIPT-SEARCH-001",
+    "title": "CodexTranscriptAdapter cases for tool_search and inter_agent"
+  },
+  {
+    "id": "TR-MCP-TRIAGE-001",
+    "title": "Durable triage storage"
+  },
+  {
+    "id": "TR-MCP-TRIAGE-002",
+    "title": "Deterministic triage grouping"
+  },
+  {
+    "id": "TR-MCP-TRIAGE-003",
+    "title": "Async triage worker"
+  },
+  {
+    "id": "TR-MCP-TRIAGE-004",
+    "title": "Triage schema and TODO creation"
+  },
+  {
+    "id": "TR-MCP-TRIAGE-005",
+    "title": "Triage Grok runner omits CLI-rejected flags"
+  },
+  {
+    "id": "TR-MCP-TRIAGEERR-001",
+    "title": "Shared error classifier and envelope"
+  },
+  {
+    "id": "TR-MCP-TRIAGEHELP-001",
+    "title": "Agent Help no completed echo and long timeout"
+  },
+  {
+    "id": "TR-MCP-TRIAGEPLUGIN-001",
+    "title": "Sticky root session cache rebind and degraded persist"
+  },
+  {
+    "id": "TR-MCP-TRIAGEREQ-001",
+    "title": "ValidateTrId create only"
+  },
+  {
+    "id": "TR-MCP-TRIAGESCHEMA-001",
+    "title": "Startup probe for AgentSession header columns"
+  },
+  {
+    "id": "TR-MCP-TRIAGESTORE-001",
+    "title": "Session-log merge tags replace supersede"
+  },
+  {
+    "id": "TR-MCP-TRIAGESTORE-002",
+    "title": "Five second intake and submit storage budget"
+  },
+  {
+    "id": "TR-MCP-TRIAGETODO-001",
+    "title": "Durable EXEC fallback and soft-delete id allocate"
+  },
+  {
+    "id": "TR-MCP-TUN-001",
+    "title": "Tunnel Strategy Pattern"
+  },
+  {
+    "id": "TR-MCP-TUN-002",
+    "title": "Tunnel Process Lifecycle"
+  },
+  {
+    "id": "TR-MCP-TUN-003",
+    "title": "Ngrok Auth Token Security"
+  },
+  {
+    "id": "TR-MCP-TUN-004",
+    "title": "Tunnel provider inherits the interactive user environment"
+  },
+  {
+    "id": "TR-MCP-TXN-001",
+    "title": "Turn Transaction Coordinator"
+  },
+  {
+    "id": "TR-MCP-TXNAIUNIT-001",
+    "title": "aiUnit Plan Review Gate"
+  },
+  {
+    "id": "TR-MCP-TXNARCH-001",
+    "title": "Transaction Architecture Rounds"
+  },
+  {
+    "id": "TR-MCP-TXNAUDIT-001",
+    "title": "Transaction Audit Actions"
+  },
+  {
+    "id": "TR-MCP-TXNBYRD-001",
+    "title": "Byrd v4 Transaction Gates"
+  },
+  {
+    "id": "TR-MCP-TXNCOMPAT-001",
+    "title": "Federation Compatibility"
+  },
+  {
+    "id": "TR-MCP-TXNDESIGN-001",
+    "title": "Implementable Transaction Design Contracts"
+  },
+  {
+    "id": "TR-MCP-TXNDIAGRAMS-001",
+    "title": "Imported Diagram Traceability"
+  },
+  {
+    "id": "TR-MCP-TXNKEY-001",
+    "title": "Keyserver gate is QuadBrain/brain-slot only"
+  },
+  {
+    "id": "TR-MCP-USECASE-001",
+    "title": "Use case EF storage multi-provider soft-delete"
+  },
+  {
+    "id": "TR-MCP-USECASE-002",
+    "title": "Use case CQRS commands and queries"
+  },
+  {
+    "id": "TR-MCP-USECASE-003",
+    "title": "Use Case REST controller"
+  },
+  {
+    "id": "TR-MCP-USECASE-004",
+    "title": "Use Case diagram service"
+  },
+  {
+    "id": "TR-MCP-USECASE-005",
+    "title": "Use Case MCP tools, client, plugins"
+  },
+  {
+    "id": "TR-MCP-USECASE-006",
+    "title": "FR projection, coverage, audit"
+  },
+  {
+    "id": "TR-MCP-USECASE-007",
+    "title": "Use Case UI hosting"
+  },
+  {
+    "id": "TR-MCP-USECASE-008",
+    "title": "Approval and product API"
+  },
+  {
+    "id": "TR-MCP-USECASE-009",
+    "title": "Validation seams"
+  },
+  {
+    "id": "TR-MCP-USECASE-010",
+    "title": "Use Case service deploy"
+  },
+  {
+    "id": "TR-MCP-USECASE-011",
+    "title": "Graph storage"
+  },
+  {
+    "id": "TR-MCP-USECASE-012",
+    "title": "Diagram graph CQRS"
+  },
+  {
+    "id": "TR-MCP-USECASE-013",
+    "title": "Diagram graph REST"
+  },
+  {
+    "id": "TR-MCP-USECASE-014",
+    "title": "UML serialization service"
+  },
+  {
+    "id": "TR-MCP-USECASE-015",
+    "title": "Canvas UI hosting"
+  },
+  {
+    "id": "TR-MCP-USECASE-016",
+    "title": "Graph put audit"
+  },
+  {
+    "id": "TR-MCP-USECASE-017",
+    "title": "Handle-relative containment, bounded providers, canonical identity, and hermetic evidence"
+  },
+  {
+    "id": "TR-MCP-USECASE-018",
+    "title": "Cross-platform bounded native I/O and deterministic evidence"
+  },
+  {
+    "id": "TR-MCP-USECASE-019",
+    "title": "Race-safe physical I/O, causal cancellation, and immutable evidence"
+  },
+  {
+    "id": "TR-MCP-VERIFYPOLICY-001",
+    "title": "Challenge-bound signed verification policy contract"
+  },
+  {
+    "id": "TR-MCP-VERIFYWRAP-001",
+    "title": "code-verify catch disk-full and enforce wrapper timeout"
+  },
+  {
+    "id": "TR-MCP-VOICE-001",
+    "title": "Voice Conversation Service"
+  },
+  {
+    "id": "TR-MCP-VOICE-002",
+    "title": "Voice Controller REST API"
+  },
+  {
+    "id": "TR-MCP-VOICE-003",
+    "title": "Voice Session Lifecycle Management"
+  },
+  {
+    "id": "TR-MCP-VOICE-004",
+    "title": "Interactive Presence Signals on Stream State Changes"
+  },
+  {
+    "id": "TR-MCP-WEB-001",
+    "title": "Web UI Ownership Boundary"
+  },
+  {
+    "id": "TR-MCP-WEB-002",
+    "title": "Web UI API Compatibility Contract"
+  },
+  {
+    "id": "TR-MCP-WEB-003",
+    "title": "Web UI Authentication And Workspace Boundary"
+  },
+  {
+    "id": "TR-MCP-WEB-004",
+    "title": "Web UI Deployment And Handoff Documentation"
+  },
+  {
+    "id": "TR-MCP-WIKIEXPORT-001",
+    "title": "docs/wiki.yaml export configuration loader and renderer integration"
+  },
+  {
+    "id": "TR-MCP-WIKIEXPORT-002",
+    "title": "Marker writer default wiki.yaml serializer"
+  },
+  {
+    "id": "TR-MCP-WIKIEXPORT-003",
+    "title": "Dump schema and export flag"
+  },
+  {
+    "id": "TR-MCP-WIKIEXPORT-004",
+    "title": "Import remap and dump parameter binding"
+  },
+  {
+    "id": "TR-MCP-WIKIEXPORT-005",
+    "title": "todo.yaml archive and conflict diagnostics"
+  },
+  {
+    "id": "TR-MCP-WS-002",
+    "title": "Workspace Service"
+  },
+  {
+    "id": "TR-MCP-WS-003",
+    "title": "Workspace Process Manager"
+  },
+  {
+    "id": "TR-MCP-WS-004",
+    "title": "Workspace Controller"
+  },
+  {
+    "id": "TR-MCP-WS-005",
+    "title": "Marker File Service"
+  },
+  {
+    "id": "TR-MCP-WS-006",
+    "title": "Workspace Host Controller Isolation"
+  },
+  {
+    "id": "TR-MCP-WS-007",
+    "title": "Workspace Auto-Start on Service Startup"
+  },
+  {
+    "id": "TR-MCP-WS-008",
+    "title": "Workspace Auto-Init and Auto-Start on Creation"
+  },
+  {
+    "id": "TR-MCP-WS-009",
+    "title": "Primary Workspace Detection and IsEnabled Gating"
+  },
+  {
+    "id": "TR-MCP-WS-UI-001",
+    "title": "McpServer Management Web UI"
+  },
+  {
+    "id": "TR-MCP-XAGENT-001",
+    "title": "Assert-ReplCurrentTurnFresh refuses different sourceType prefixes"
+  },
+  {
+    "id": "TR-PLANNED-013A",
+    "title": ""
+  },
+  {
+    "id": "TR-PLANNED-CORE-014",
+    "title": "Problem+JSON response factory for model binding failures"
+  },
+  {
+    "id": "TR-SUPPORT-010E",
+    "title": "Stateless lifecycle controller + client + tool adapters"
+  },
+  {
+    "id": "TR-SUPPORT-010F",
+    "title": "Merge-on-null mapping for partial submits"
+  },
+  {
+    "id": "TR-SUPPORT-CORE-014",
+    "title": "Stateless lifecycle controller with client and tool adapters"
+  },
+  {
+    "id": "TR-SUPPORT-CORE-015",
+    "title": "Merge-on-null mapping for partial submits"
+  },
+  {
+    "id": "TR-SUPPORT-CORE-016",
+    "title": "Turn replace and section service"
+  },
+  {
+    "id": "TR-SUPPORT-LOG-010",
+    "title": "Session-log ProblemDetails contract"
+  },
+  {
+    "id": "TR-TEST-001",
+    "title": "TR-TEST-001"
+  },
+  {
+    "id": "TR-TRIAGE-CLIENT-001",
+    "title": "Typed triage dashboard client endpoints"
+  },
+  {
+    "id": "TR-TRIAGE-CLIENT-002",
+    "title": "Typed triage TODO client endpoint"
+  },
+  {
+    "id": "TR-WEB-API-001",
+    "title": "New REST only when existing APIs cannot meet AC"
+  },
+  {
+    "id": "TR-WEB-BUDGET-001",
+    "title": "Budget enforcement at enqueue"
+  },
+  {
+    "id": "TR-WEB-CTX-001",
+    "title": "Hierarchical context via templates and memories"
+  },
+  {
+    "id": "TR-WEB-GIT-001",
+    "title": "Commit linkage from session-log commit actions"
+  },
+  {
+    "id": "TR-WEB-OBS-001",
+    "title": "Burn and progress from session logs"
+  },
+  {
+    "id": "TR-WEB-ORCH-001",
+    "title": "Fleet uses AgentPoolClient"
+  },
+  {
+    "id": "TR-WEB-PRIV-001",
+    "title": "No prompt or file telemetry from mcp-web"
+  },
+  {
+    "id": "TR-WEB-SCHED-001",
+    "title": "Recurring TODOs have a durable scheduler"
+  },
+  {
+    "id": "TR-WEB-SEC-001",
+    "title": "Reuse pairing and OIDC"
+  },
+  {
+    "id": "TR-WEB-SEC-002",
+    "title": "Allow/deny stored as workspace policy"
+  },
+  {
+    "id": "TR-WEB-SESS-001",
+    "title": "Live peek uses session log and events"
+  },
+  {
+    "id": "TR-WEB-TODO-001",
+    "title": "Task bank uses TodoClient only"
+  },
+  {
+    "id": "TR-WEB-UI-001",
+    "title": "Host orchestration UI in McpServer.Web"
+  },
+  {
+    "id": "TR-WEB-UI-002",
+    "title": "Primer layout with desktop and mobile breakpoints"
+  },
+  {
+    "id": "TR-QB-AUDIT-001",
+    "title": "Durable session auditing"
+  },
+  {
+    "id": "TR-QB-BRANDING-001",
+    "title": "cline-qb identity"
+  },
+  {
+    "id": "TR-QB-COMPLETION-001",
+    "title": "Enforced completion obligations"
+  },
+  {
+    "id": "TR-QB-DATA-001",
+    "title": "Safe refresh/context isolation"
+  },
+  {
+    "id": "TR-QB-DESKTOP-001",
+    "title": "Desktop Session Log/TODO sidebar"
+  },
+  {
+    "id": "TR-QB-DISTRIBUTION-001",
+    "title": "Self-contained governed distribution"
+  },
+  {
+    "id": "TR-QB-KEYS-001",
+    "title": "User-definable panel bindings"
+  },
+  {
+    "id": "TR-QB-LAYOUT-001",
+    "title": "Aspect-dependent TUI panel"
+  },
+  {
+    "id": "TR-QB-LOGREAD-001",
+    "title": "Session Log inspection"
+  },
+  {
+    "id": "TR-QB-NETWORK-001",
+    "title": "No Cline Cloud infrastructure"
+  },
+  {
+    "id": "TR-QB-PERSIST-001",
+    "title": "Remember preferences across invocations"
+  },
+  {
+    "id": "TR-QB-PLUGIN-001",
+    "title": "Built-in, non-disableable plugin"
+  },
+  {
+    "id": "TR-QB-PRESENTATION-001",
+    "title": "Compact tool-invocation presentation"
+  },
+  {
+    "id": "TR-QB-RESIZE-001",
+    "title": "Expand/shrink panel shortcuts"
+  },
+  {
+    "id": "TR-QB-RUNTIME-001",
+    "title": "Enforcement across execution paths"
+  },
+  {
+    "id": "TR-QB-SETTINGS-001",
+    "title": "qbrain.ai integration settings"
+  },
+  {
+    "id": "TR-QB-SIZE-001",
+    "title": "User-defined panel dimensions"
+  },
+  {
+    "id": "TR-QB-TODOREAD-001",
+    "title": "TODO inspection"
+  },
+  {
+    "id": "TR-QB-TRUST-001",
+    "title": "Trusted, workspace-bound startup"
+  },
+  {
+    "id": "TR-QB-VISIBILITY-001",
+    "title": "Three-state panel placement"
+  },
+  {
+    "id": "TEST-GRAPHRAG-ADHOC-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-GRAPHRAG-ADHOC-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-GRAPHRAG-ADHOC-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-GRAPHRAG-ADHOC-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-GRAPHRAG-ADHOC-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-GRAPHRAG-ADHOC-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-GRAPHRAG-ADHOC-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-HANDOFF-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-HANDOFF-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-HANDOFF-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-HANDOFF-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-HANDOFF-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-HANDOFF-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-HANDOFF-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-008",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-009",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-010",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-011",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-012",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-013",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-014",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-015",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-026",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-027",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-028",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-029",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-030",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-031",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-032",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-033",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-034",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-035",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-036",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-037",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-038",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-039",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-040",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-041",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-042",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-043",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-044",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-045",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-046",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-047",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-048",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-049",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-050",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-051",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-052",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-053",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-054",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-055",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-056",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-057",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-058",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-059",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-060",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-061",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-062",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-063",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-064",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-065",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-066",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-067",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-068",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-069",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-070",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-071",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-072",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-073",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-074",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-075",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-076",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-077",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-078",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-079",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-080",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-081",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-082",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-083",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-084",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-085",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-086",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-087",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-088",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-089",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-090",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-091",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-092",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-093",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-094",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-095",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-096",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-097",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-098",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-100",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-101",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-102",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-103",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-104",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-105",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-106",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-107",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-108",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-109",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-110",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-111",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-112",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-113",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-114",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-115",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-116",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-117",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-118",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-119",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-120",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-121",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-122",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-123",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-124",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-125",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-126",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-127",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-128",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-129",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-130",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-131",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-132",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-133",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-134",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-135",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-136",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-137",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-138",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-139",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-140",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-141",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-142",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-143",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-144",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-145",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-146",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-147",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-148",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-149",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-150",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-151",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-152",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-153",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-154",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-155",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-156",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-157",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-158",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-159",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-160",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-161",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-162",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-163",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-164",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-165",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-166",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-167",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-168",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-169",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-170",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-171",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-172",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-173",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-174",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-175",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-176",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-177",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-178",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-179",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-180",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-181",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-182",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-183",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-184",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-185",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-186",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-187",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-188",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-189",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-190",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-191",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-192",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-193",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-194",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-195",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-196",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-221",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-ACID-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-ACID-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-ACID-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-ACID-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-ACID-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-ACID-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-ACKRECOVERY-001",
+    "title": "Verify existing runtime and live recovery"
+  },
+  {
+    "id": "TEST-MCP-AIUNIT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-AIUNIT-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-AUDIT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-AUDIT-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-AUDIT-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-AUDITACTION-001",
+    "title": "Tool execution validation, persistence and compatibility"
+  },
+  {
+    "id": "TEST-MCP-AUTH-010",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-AUTH-011",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-AUTH-012",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-BATCH-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-BUGTRIAGE-042",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-BUGTRIAGE-043",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-CLEARSESSION-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-DB-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-DOCFXWIKI-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-FAILSAFE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-FED-PATH-001",
+    "title": "Cross-platform workspace path normalizer matrix"
+  },
+  {
+    "id": "TEST-MCP-FILETOOLS-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-FILETOOLSINT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HEALTH-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HEALTH-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-008",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-SEC-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-SEC-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-SEC-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-SEC-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-SEC-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-SEC-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HELP-SEC-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HOSTILEREVIEW-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HOSTILEREVIEW-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HOSTILEREVIEW-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HOSTILEREVIEW-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HOSTILEREVIEW-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HOSTILEREVIEW-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-001",
+    "title": "Reviewer pool configuration and real-time management: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-002",
+    "title": "Identity normalization, submitter and author exclusion, and round-robin assignment: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-003",
+    "title": "Reviewer readiness: NONCE, offline, and online: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-004",
+    "title": "Submission scopes and snapshot membership: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-005",
+    "title": "Admission eligibility and refusal with context: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-006",
+    "title": "Request context and requirement references: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-007",
+    "title": "Durable scheduling: queue, leases, fences, and restart safety: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-008",
+    "title": "Execution lifecycle: true live output, heartbeats, no time limit, cancellation: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-009",
+    "title": "Execution failures: incidents through triage, offline, retry bound: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-010",
+    "title": "Reviewer output contract, per-turn and holistic evaluation: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-011",
+    "title": "Evidence completeness, GZIP at rest, round-trip verification: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-012",
+    "title": "Atomic finalization and turn finality: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-013",
+    "title": "Self-review independence: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-014",
+    "title": "Verdict only: no TODO automation: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-015",
+    "title": "Results, evidence retrieval, and the standard result document: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-016",
+    "title": "Live output stream, progress, and honest ETA: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-017",
+    "title": "Completion notification stream: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-018",
+    "title": "Audit participation and hard stop: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-019",
+    "title": "Retention until explicit removal: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-020",
+    "title": "Surface parity: REST, MCP, client, REPL, Director, and plugin: named tests"
+  },
+  {
+    "id": "TEST-MCP-HVPIPE-021",
+    "title": "Response grading and trust through finalization: named tests"
+  },
+  {
+    "id": "TEST-MCP-HYGIENE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HYGIENE-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HYGIENE-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HYGIENE-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-HYGIENE-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-LLMSTRATEGY-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-MARKER-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-MEMORY-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-MEMORY-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-MEMORY-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-MEMORY-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-MEMORY-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-MEMORY-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-MEMORY-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-MEMORY-008",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-MEMORY-009",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-MEMORY-FED-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PATHNORM-001",
+    "title": "Test TEST-MCP-PATHNORM-001"
+  },
+  {
+    "id": "TEST-MCP-PLUGIN-011",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PLUGIN-012",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PLUGIN-013",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PLUGINCORE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PLUGINCORE-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PLUGINCORE-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PLUGINCORE-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PLUGIN-HEADER-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PLUGIN-HEADER-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PLUGIN-HEADER-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PLUGIN-HEADER-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PLUGININT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PLUGIN-TRIAGE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PRODUCT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PRODUCT-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PRODUCT-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PRODUCT-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PRODUCT-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-PRODUCT-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBAGENT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBAGENTINT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBEXEC-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBEXEC-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBEXEC-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBINT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBLIVE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBLIVEINT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBOLLAMA-001",
+    "title": "QuadBrain Ollama endpoint integration tests"
+  },
+  {
+    "id": "TEST-MCP-QBOLLAMA-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBOPENAI-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBPROGRESS-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBRAIN-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBRAIN-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBRAIN-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBRAIN-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBRAIN-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBRAIN-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBRAIN-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBRAIN-008",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBSEED-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBSKILLS-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBSKILLS-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBSKILLS-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBTOOLS-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBTOOLS-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBTOOLS-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBTOOLS-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBTOOLS-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBTOOLS-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBTOOLS-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QBTOOLSINT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-QUAD-SESSION-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-007-1",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-007-2",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-007-3",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-007-4",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-008",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-009",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-010",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-011",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-012",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-013",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-014",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-015",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-016",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-017",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-018",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-019",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-020",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-021",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-022",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-023",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-024",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-025",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-026",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-027",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-028",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-029",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-030",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-031",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-032",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-033",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-034",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-035",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-036",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-037",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-038",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-039",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-040",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REPL-TRIAGE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQ-003",
+    "title": "Requirement records report their stored timestamps"
+  },
+  {
+    "id": "TEST-MCP-REQAC-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQAC-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQAC-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQAC-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQACPLUGIN-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQACPLUGIN-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQAC-PLUGIN-BASH",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQACPLUGIN-BASH",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQACPLUGIN-CAPTURE",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQACPLUGIN-LIVE",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQAC-PLUGIN-TS",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQACPLUGIN-TS",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQEXPORT-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQEXPORT-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQRECOVERY-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-REQWS-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-RUNAS-001",
+    "title": "Proposed RunAs routing, identity, protocol, lifetime and recovery gates"
+  },
+  {
+    "id": "TEST-MCP-SESSIONATTR-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONEND-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONLIFE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONLIFE-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONLIFE-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONLIFE-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONLIFE-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONLOG-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONLOG-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONLOG-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONLOG-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONLOG-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONLOG-FED-001",
+    "title": "Session-log federation snapshot carries the full session graph"
+  },
+  {
+    "id": "TEST-MCP-SESSIONLOGSAN-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SESSIONLOGSAN-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-STRICTCOUNT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-SUBLOG-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TEMPVOL-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TESTRESOURCE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TODO-CLOSE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRACE-LEGACY-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRACE-LEGACY-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRACE-LEGACY-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRACE-REPL-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-008",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-009",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-010",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-011",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-012",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-013",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-SEARCH-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGEERR-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGEHELP-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGEPLUGIN-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGEPLUGIN-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGEPLUGIN-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGEPLUGIN-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGEPLUGIN-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGEREQ-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-REQAC-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGESCHEMA-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGETODO-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIAGETODO-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-TRIM-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-008",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-009",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-010",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-011",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-012",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-013",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-014",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-015",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-016",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-017",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-018",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-019",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-USECASE-020",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-VERIFYPOLICY-001",
+    "title": "Policy authenticity, isolation and supported read path"
+  },
+  {
+    "id": "TEST-MCP-VERIFYWRAP-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-WIKIEXPORT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-WIKIEXPORT-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-WIKIEXPORT-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-WIKIEXPORT-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-WIKIEXPORT-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-MCP-XAGENT-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-REQAC-LIVE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-010",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-010A-1",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-010A-2",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-010B-1",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-010B-2",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-010C-1",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-010C-2",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-010C-3",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-010E",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-010F",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-014",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-015",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-016",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-017",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-018",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-019",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-020",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-021",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-022",
+    "title": ""
+  },
+  {
+    "id": "TEST-SUPPORT-024",
+    "title": "Turn replace and section API"
+  },
+  {
+    "id": "TEST-TRIAGE-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-TRIAGE-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-001",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-002",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-003",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-004",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-005",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-006",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-007",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-008",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-009",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-010",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-011",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-012",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-013",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-014",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-015",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-016",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-017",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-018",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-019",
+    "title": ""
+  },
+  {
+    "id": "TEST-WEB-020",
+    "title": ""
+  },
+  {
+    "id": "TEST-QB-001",
+    "title": "registers_bundled_plugin_without_user_enablement"
+  },
+  {
+    "id": "TEST-QB-002",
+    "title": "rejects_required_plugin_disable_and_shadow_attempts"
+  },
+  {
+    "id": "TEST-QB-003",
+    "title": "blocks_execution_when_required_plugin_is_unusable"
+  },
+  {
+    "id": "TEST-QB-004",
+    "title": "fails_closed_on_workspace_trust_failure"
+  },
+  {
+    "id": "TEST-QB-005",
+    "title": "isolates_concurrent_workspace_and_session_contexts"
+  },
+  {
+    "id": "TEST-QB-006",
+    "title": "preserves_required_guidance_and_rejects_false_empty_results"
+  },
+  {
+    "id": "TEST-QB-007",
+    "title": "opens_linked_request_turn_before_agent_work"
+  },
+  {
+    "id": "TEST-QB-008",
+    "title": "records_ordered_actions_and_separate_decisions"
+  },
+  {
+    "id": "TEST-QB-009",
+    "title": "distinguishes_confirmed_audit_from_pending_recovery"
+  },
+  {
+    "id": "TEST-QB-010",
+    "title": "gates_all_successful_completion_paths"
+  },
+  {
+    "id": "TEST-QB-011",
+    "title": "blocks_completion_on_failed_missing_or_stale_verification"
+  },
+  {
+    "id": "TEST-QB-012",
+    "title": "classifies_operations_and_gates_phase_closure_on_verified_hv_receipt (administrative, development, valid receipt, forged receipt, stale receipt)"
+  },
+  {
+    "id": "TEST-QB-013",
+    "title": "requires_governance_across_application_entrypoints"
+  },
+  {
+    "id": "TEST-QB-014",
+    "title": "preserves_governance_through_rebuild_and_delegation"
+  },
+  {
+    "id": "TEST-QB-015",
+    "title": "rejects_remote_hosts_without_required_policy"
+  },
+  {
+    "id": "TEST-QB-016",
+    "title": "makes_no_prohibited_cline_service_requests"
+  },
+  {
+    "id": "TEST-QB-017",
+    "title": "rejects_cline_cloud_execution_and_control_paths"
+  },
+  {
+    "id": "TEST-QB-018",
+    "title": "runs_permitted_execution_without_cline_account"
+  },
+  {
+    "id": "TEST-QB-019",
+    "title": "reads_the_explicitly_linked_mcp_session"
+  },
+  {
+    "id": "TEST-QB-020",
+    "title": "projects_complete_session_log_details"
+  },
+  {
+    "id": "TEST-QB-021",
+    "title": "retrieves_large_logs_with_bounded_detail_reads"
+  },
+  {
+    "id": "TEST-QB-022",
+    "title": "projects_workspace_todo_list_and_details"
+  },
+  {
+    "id": "TEST-QB-023",
+    "title": "filters_and_browses_todos_without_mutation"
+  },
+  {
+    "id": "TEST-QB-024",
+    "title": "distinguishes_todo_empty_error_and_agenda_states"
+  },
+  {
+    "id": "TEST-QB-025",
+    "title": "routes_panel_reads_through_shared_plugin_service"
+  },
+  {
+    "id": "TEST-QB-026",
+    "title": "refreshes_without_overlaps_or_cross_context_results"
+  },
+  {
+    "id": "TEST-QB-027",
+    "title": "keeps_panel_refresh_independent_of_agent_execution"
+  },
+  {
+    "id": "TEST-QB-028",
+    "title": "renders_qbrain_integration_configuration_and_status"
+  },
+  {
+    "id": "TEST-QB-029",
+    "title": "protects_secrets_and_revalidates_connection_changes"
+  },
+  {
+    "id": "TEST-QB-030",
+    "title": "rejects_settings_that_weaken_governance"
+  },
+  {
+    "id": "TEST-QB-031",
+    "title": "selects_panel_orientation_from_full_terminal_aspect"
+  },
+  {
+    "id": "TEST-QB-032",
+    "title": "preserves_interaction_state_during_terminal_resize"
+  },
+  {
+    "id": "TEST-QB-033",
+    "title": "fits_content_to_panes_and_handles_small_terminals"
+  },
+  {
+    "id": "TEST-QB-034",
+    "title": "cycles_each_orientation_through_two_edges_and_hidden"
+  },
+  {
+    "id": "TEST-QB-035",
+    "title": "preserves_hidden_state_across_aspect_changes"
+  },
+  {
+    "id": "TEST-QB-036",
+    "title": "hides_presentation_without_disabling_governance"
+  },
+  {
+    "id": "TEST-QB-037",
+    "title": "validates_independent_column_and_line_preferences"
+  },
+  {
+    "id": "TEST-QB-038",
+    "title": "clamps_effective_size_without_losing_requested_size"
+  },
+  {
+    "id": "TEST-QB-039",
+    "title": "restores_independent_auto_sizing"
+  },
+  {
+    "id": "TEST-QB-040",
+    "title": "resizes_the_active_dimension_with_default_shortcuts"
+  },
+  {
+    "id": "TEST-QB-041",
+    "title": "handles_repeat_limits_and_auto_to_explicit_resize"
+  },
+  {
+    "id": "TEST-QB-042",
+    "title": "resizes_without_input_or_modal_interference"
+  },
+  {
+    "id": "TEST-QB-043",
+    "title": "supports_custom_panel_bindings_and_default_reset"
+  },
+  {
+    "id": "TEST-QB-044",
+    "title": "rejects_conflicting_or_invalid_key_bindings"
+  },
+  {
+    "id": "TEST-QB-045",
+    "title": "keeps_shortcut_help_and_dispatch_consistent"
+  },
+  {
+    "id": "TEST-QB-046",
+    "title": "restores_panel_preferences_in_a_new_invocation"
+  },
+  {
+    "id": "TEST-QB-047",
+    "title": "persists_requested_preferences_not_transient_layout"
+  },
+  {
+    "id": "TEST-QB-048",
+    "title": "handles_corrupt_preferences_and_failed_saves_honestly"
+  },
+  {
+    "id": "TEST-QB-049",
+    "title": "integrates_data_views_without_resetting_desktop_chat"
+  },
+  {
+    "id": "TEST-QB-050",
+    "title": "scopes_desktop_data_to_selected_execution_context"
+  },
+  {
+    "id": "TEST-QB-051",
+    "title": "preserves_accessible_read_only_sidebar_behavior"
+  },
+  {
+    "id": "TEST-QB-052",
+    "title": "uses_cline_qb_identity_across_shipped_surfaces"
+  },
+  {
+    "id": "TEST-QB-053",
+    "title": "isolates_cline_qb_state_and_governs_compatibility_entrypoints"
+  },
+  {
+    "id": "TEST-QB-054",
+    "title": "checks_documented_commands_defaults_and_contracts"
+  },
+  {
+    "id": "TEST-QB-055",
+    "title": "verifies_required_assets_and_policy_in_packaged_artifacts"
+  },
+  {
+    "id": "TEST-QB-056",
+    "title": "rejects_upstream_replacement_update_paths"
+  },
+  {
+    "id": "TEST-QB-057",
+    "title": "passes_packaged_governance_and_ui_acceptance_matrix"
+  },
+  {
+    "id": "TEST-QB-058",
+    "title": "builds_compact_tool_invocation_summaries"
+  },
+  {
+    "id": "TEST-QB-059",
+    "title": "preserves_tool_payloads_while_compressing_presentation"
+  },
+  {
+    "id": "TEST-QB-060",
+    "title": "renders_single_row_invocation_headers_across_hosts"
+  },
+  {
+    "id": "TEST-QB-061",
+    "title": "prevents_legacy_account_onboarding_reactivation"
+  },
+  {
+    "id": "TEST-QB-062",
+    "title": "offers_only_compatible_direct_onboarding_forms"
+  },
+  {
+    "id": "TEST-QB-063",
+    "title": "surfaces_schedule_catalog_failure_without_fallback"
+  },
+  {
+    "id": "TEST-QB-064",
+    "title": "preserves_explicit_schedule_provider_model_selection"
+  },
+  {
+    "id": "TEST-QB-065",
+    "title": "requires_explicit_replacement_of_hosted_schedule_selection"
+  },
+  {
+    "id": "TEST-QB-066",
+    "title": "keeps_migrated_schedule_model_selection_atomic"
+  },
+  {
+    "id": "TEST-QB-067",
+    "title": "requires_explicit_direct_desktop_recovery"
+  },
+  {
+    "id": "TEST-QB-068",
+    "title": "isolates_compiled_startup_and_ignores_upstream_overrides"
+  },
+  {
+    "id": "TEST-QB-069",
+    "title": "preserves_exact_request_and_final_result_with_complete_turn_coverage"
+  },
+  {
+    "id": "TEST-QB-070",
+    "title": "verifies_complete_pinned_powershell_runtime_offline"
+  },
+  {
+    "id": "TEST-QB-071",
+    "title": "isolates_all_verification_processes_from_operator_application_state"
+  },
+  {
+    "id": "TEST-QB-072",
+    "title": "invalidates_live_authorization_after_trust_or_policy_change"
+  },
+  {
+    "id": "TEST-QB-073",
+    "title": "retrieves_complete_todo_pages_under_refresh_and_filter_changes"
+  },
+  {
+    "id": "TEST-QB-074",
+    "title": "renders_session_log_and_todo_content_as_inert_data"
+  },
+  {
+    "id": "TEST-QB-075",
+    "title": "recovers_preference_write_progress_after_writer_failure"
+  },
+  {
+    "id": "TEST-QB-076",
+    "title": "bounds_individual_record_and_detail_payload_processing"
+  }
+]

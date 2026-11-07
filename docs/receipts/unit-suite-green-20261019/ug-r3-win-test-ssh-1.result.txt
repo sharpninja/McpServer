@@ -1,0 +1,109 @@
+RECEIPT 2026-10-20T09:48:00 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinNukeTargetResult.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-20T09:48:01 host=PAYTON-LEGION2 user=kingd
+WORKTREE HEAD 27c43bccd19a591e4ca30560b52d4c5a9e8b81c9
+RUNNING processes=0
+LOG Test lines=6301 written=2026-10-20T09:44:46
+  LOG 09:40:54 [DBG] Build succeeded.
+  LOG 09:40:57 [DBG] Build succeeded.
+  LOG 09:40:58 [DBG] Build succeeded.
+  LOG 09:41:03 [DBG] Build succeeded.
+  LOG 09:41:06 [DBG] Build succeeded.
+  LOG 09:41:07 [DBG] Build succeeded.
+  LOG 09:41:10 [DBG] Build succeeded.
+  LOG 09:41:11 [DBG] Build succeeded.
+  LOG 09:41:12 [DBG] Build succeeded.
+  LOG 09:41:13 [DBG] Build succeeded.
+  LOG 09:41:14 [DBG] Build succeeded.
+  LOG 09:41:25 [DBG] Build succeeded.
+  LOG 09:41:27 [DBG] Build succeeded.
+  LOG 09:41:28 [DBG] Build succeeded.
+  LOG 09:41:30 [DBG] Build succeeded.
+  LOG 09:41:31 [DBG] Build succeeded.
+  LOG 09:41:32 [DBG] Build succeeded.
+  LOG 09:41:34 [DBG] Build succeeded.
+  LOG 09:41:36 [DBG] Build succeeded.
+  LOG 09:41:37 [DBG] Build succeeded.
+  LOG 09:41:39 [DBG] Build succeeded.
+  LOG 09:41:40 [DBG] Build succeeded.
+  LOG 09:41:42 [DBG] Build succeeded.
+  LOG 09:41:43 [DBG] Build succeeded.
+  LOG 09:41:46 [DBG] Build succeeded.
+  LOG 09:41:49 [DBG] Build succeeded.
+  LOG 09:41:52 [DBG] Build succeeded.
+  LOG 09:41:54 [DBG] Build succeeded.
+  LOG 09:41:56 [DBG] Build succeeded.
+  LOG 09:42:03 [DBG] Build succeeded.
+  LOG 09:42:04 [DBG] Build succeeded.
+  LOG 09:42:07 [DBG] Build succeeded.
+  LOG 09:42:08 [DBG] Build succeeded.
+  LOG 09:42:10 [DBG] Build succeeded.
+  LOG 09:42:11 [DBG] Build succeeded.
+  LOG 09:42:13 [DBG] Build succeeded.
+  LOG 09:42:14 [DBG] Build succeeded.
+  LOG 09:42:16 [DBG] Build succeeded.
+  LOG 09:42:18 [DBG] Build succeeded.
+  LOG 09:42:23 [DBG] Build succeeded.
+  LOG 09:42:24 [DBG] Build succeeded.
+  LOG 09:42:26 [DBG] Build succeeded.
+  LOG 09:42:28 [DBG] Build succeeded.
+  LOG 09:42:31 [DBG] Build succeeded.
+  LOG 09:42:32 [DBG] Build succeeded.
+  LOG 09:42:33 [DBG] Build succeeded.
+  LOG 09:42:35 [DBG] Build succeeded.
+  LOG 09:42:40 [DBG] Build succeeded.
+  LOG 09:42:48 [DBG] Build succeeded.
+  LOG 09:42:49 [DBG] Build succeeded.
+  LOG 09:42:50 [DBG] Build succeeded.
+  LOG 09:42:52 [DBG] Build succeeded.
+  LOG 09:42:54 [DBG] Build succeeded.
+  LOG 09:44:24 [DBG] Total tests: 3049
+  LOG 09:44:27 [DBG] Total tests: 306
+  LOG 09:44:29 [DBG] Total tests: 33
+  LOG 09:44:32 [DBG] Total tests: 20
+  LOG 09:44:40 [DBG] Total tests: 64
+  LOG 09:44:43 [DBG] Total tests: 865
+  LOG 09:44:46 [DBG] Total tests: 94
+  LOG Build failed on 10/20/2026 9:44:46 AM. (╯°□°）╯︵ ┻━┻
+TRX \unit\QBrainAi.Client.Tests\QBrainAi.Client.Tests.trx total=306 executed=306 passed=306 failed=0 notExecuted=0
+TRX \unit\QBrainAi.Cqrs.Tests\QBrainAi.Cqrs.Tests.trx total=33 executed=33 passed=33 failed=0 notExecuted=0
+TRX \unit\QBrainAi.Launcher.Tests\QBrainAi.Launcher.Tests.trx total=20 executed=20 passed=20 failed=0 notExecuted=0
+TRX \unit\QBrainAi.McpAgent.Tests\QBrainAi.McpAgent.Tests.trx total=64 executed=64 passed=64 failed=0 notExecuted=0
+TRX \unit\QBrainAi.QBAgent.Tests\QBrainAi.QBAgent.Tests.trx total=94 executed=94 passed=94 failed=0 notExecuted=0
+TRX \unit\QBrainAi.Repl.Core.Tests\QBrainAi.Repl.Core.Tests.trx total=865 executed=865 passed=865 failed=0 notExecuted=0
+TRX \unit\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx total=3049 executed=3049 passed=3017 failed=32 notExecuted=0
+  Failed QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.DeleteTurnAsync_ImportedProviderNativeIds_DeletesTurn :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\marketplaces\caveman\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.TriagePromptTemplateTests.DefaultMarkerPromptTemplate_RendersSessionLogWrapperRecoveryGuidance :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.BuildTemplateContext_NullWorkspace_UsesFallbacks :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ComputeAgentPluginsDigest_ChangesWhenResolvedPluginVersionChanges :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_CustomGlobal_ReplacesDefault :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_EmptyWorkspace_NotAppended :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenUpsertingMarkdownThenSessionIsUpdated :: Assert.True() Failure Expected: True Actual: False
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.WriteMarkerAsync_EmitsSelfDescribingSignatureFieldsAndFormat :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.WriteMarkerAsync_CreatesDefaultWikiYamlWhenMissing :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.WriteMarkerAsync_EmitsUtcTimestampsAndDiagnosticsEndpoints :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.WriteMarkerAsync_AddsMarkerQBrainAiAndCacheEntriesToGitIgnoreWithoutDuplicates :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenImportingValidMarkdownThenSessionIsPersisted :: Assert.True() Failure Expected: True Actual: False
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_BothCustom_CombinesWithNewlines :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_WorkspaceAppends :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenImportingJsonSessionLogThenSessionIsPersisted :: Assert.Equal() Failure: Values differ Expected: 1 Actual: 0
+  Failed QBrainAi.Support.Mcp.Tests.Services.TranscriptSessionLogPersisterTests.Import_OmittedFields_PersistsExtractorResultOrNone :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\marketplaces\caveman\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.Ingest_OmittedFields_PersistsExtractorResultOrNone :: Assert.Equal() Failure: Values differ Expected: 1 Actual: 0
+  Failed QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.ReplaceTurnSectionAsync_ImportedProviderNativeIds_ReplacesSection :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\marketplaces\caveman\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ImportMissingFields_ExtractsFromTurnText :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\marketplaces\caveman\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.WriteMarkerAsync_PreservesExistingWikiYaml :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenImportingJsonAndMarkdownThenBothAreProcessed :: Assert.True() Failure Expected: True Actual: False
+  Failed QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.DeleteSessionAsync_ImportedProviderNativeIds_IsRejected :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\marketplaces\caveman\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.SessionLogResubmissionReviveTests.SubmitAsync_ImportResubmitAfterTombstone_RevivesSession :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\marketplaces\caveman\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.BuildSignaturePayload_IncludesAgentPluginDigestWhenContractIsPresent :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_EmptyGlobal_Throws :: Assert.Throws() Failure: Exception type was not an exact match Expected: typeof(System.ArgumentException) Actual: typeof(System.IO.IOException) ---- System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.WorkspaceProcessManagerStartupTests.StartAsync_EmptyWorkspacePathInMiddle_SkipsItAndRegistersSubsequentWorkspaces :: Assert.NotNull() Failure: Value is null
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_HandlebarsRendersWorkspaceProperties :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_NullGlobal_Throws :: Assert.Throws() Failure: Exception type was not an exact match Expected: typeof(System.ArgumentException) Actual: typeof(System.IO.IOException) ---- System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_WorkspaceBaseUrlSubstitution :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.BuildTemplateContext_WithWorkspaceDto_IncludesAllProperties :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.TriagePromptTemplateTests.DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+  Failed QBrainAi.Support.Mcp.Tests.Services.FederatedSessionLogServiceTests.Apply_OmittedFields_PersistsProperValue :: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\marketplaces\caveman\compress\scripts'.
+END 2026-10-20T09:48:02

@@ -808,6 +808,16 @@ public sealed class QuadBrainOpenAiChatServiceTests
                 : InternalToolExecutionOutcome.Unhandled);
     }
 
+    // FR-MCP-QBOPENAI-001 ac-7: handles every MCP-internal tool and answers with the tool's name.
+    private sealed class EchoingMcpExecutor : IQuadBrainInternalToolExecutor
+    {
+        public Task<InternalToolExecutionOutcome> TryExecuteAsync(
+            OpenAiToolCall toolCall,
+            string? turnId,
+            CancellationToken cancellationToken = default)
+            => Task.FromResult(InternalToolExecutionOutcome.Ok($$"""{"tool":"{{toolCall.Function.Name}}"}"""));
+    }
+
     private sealed class FailingExecutor(string failedToolName) : IQuadBrainInternalToolExecutor
     {
         public Task<InternalToolExecutionOutcome> TryExecuteAsync(
@@ -937,6 +947,380 @@ public sealed class QuadBrainOpenAiChatServiceTests
         public Task<int> RepairWorkspaceStampsAsync(bool dryRun = false, CancellationToken cancellationToken = default)
             => throw new NotSupportedException();
     }
+
+    /// <summary>
+    /// TEST-MCP-QBOPENAI-001 AC-001 mock gate (FR-MCP-QBOPENAI-001 ac-5 and ac-6; PLAN-SESSIONTRIAGEFIX-001 B13, operator decision 2026-10-15
+    /// "Both rules (Recommended)"; ported into IMPL-UNITGREEN-001 by operator decision 2026-10-29 "Port ac-5/ac-6 into PR 87"): the round
+    /// outcome assertion accepts a reply returned after one round and the last reply returned after the eight-round budget, each with finish
+    /// reason stop, and rejects empty content, an extra round, a reply other than the last, and a finish reason other than stop. Data:
+    /// hand-built choices and round counts; no orchestration.
+    /// </summary>
+    [Fact]
+    public void ChatRoundOutcomeAssertion_AcceptsFinalAnswerAndRejectsEmptyOrExtraRounds()
+    {
+        AssertChatRoundOutcome(1, "the plain answer", 1, Choice("the plain answer", "stop"));
+        AssertChatRoundOutcome(8, "reply 8", 8, Choice("reply 8", "stop"));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertChatRoundOutcome(8, "reply 8", 8, Choice(null, "stop")));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertChatRoundOutcome(1, "the plain answer", 2, Choice("the plain answer", "stop")));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertChatRoundOutcome(8, "reply 8", 8, Choice("reply 1", "stop")));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertChatRoundOutcome(1, "the plain answer", 1, Choice("the plain answer", "tool_calls")));
+    }
+
+    /// <summary>
+    /// TEST-MCP-QBOPENAI-001 AC-001, FR-MCP-QBOPENAI-001 ac-5: with no tools and no tool_choice, a reply that is not an envelope is the final
+    /// answer after one round. Data: scripted orchestration whose second reply would show a second round.
+    /// </summary>
+    [Fact]
+    public async Task CompleteAsync_NoToolsNonEnvelopeReply_ReturnsItAfterOneRound()
+    {
+        var orchestration = new ScriptedOrchestrationService(
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = "the plain answer" },
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = "a second round ran" });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "Hello" }] },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        AssertChatRoundOutcome(1, "the plain answer", orchestration.CallCount, Assert.Single(response.Choices));
+    }
+
+    /// <summary>
+    /// TEST-MCP-QBOPENAI-001 AC-001, FR-MCP-QBOPENAI-001 ac-5: with no tools and no tool_choice, an explicit continue envelope still asks for
+    /// another round, and the final envelope that follows is the answer. Data: scripted continue, then final envelopes.
+    /// </summary>
+    [Fact]
+    public async Task CompleteAsync_NoToolsContinueEnvelope_StillRePrompts()
+    {
+        var orchestration = new ScriptedOrchestrationService(
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = """{"intent":"continue","content":"Looking."}""" },
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = """{"intent":"final","content":"done"}""" });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "Hello" }] },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        AssertChatRoundOutcome(2, "done", orchestration.CallCount, Assert.Single(response.Choices));
+        Assert.Contains(QuadBrainOpenAiChatService.ContinueDirective, orchestration.Requests[1].Input, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TEST-MCP-QBOPENAI-001 AC-001, FR-MCP-QBOPENAI-001 ac-6: with a tool offered, eight distinct replies that are not envelopes use the whole
+    /// round budget, and the eighth reply comes back instead of empty content. Data: scripted replies "reply 1" to "reply 9" (a ninth round would
+    /// show the budget overrun).
+    /// </summary>
+    [Fact]
+    public async Task CompleteAsync_RoundsExhaustedWithoutFinal_ReturnsLastArbiterOutput()
+    {
+        var orchestration = new ScriptedOrchestrationService(
+            Enumerable.Range(1, 9).Select(n => new QuadBrainOrchestrationResponse { Status = "committed", Output = $"reply {n}" }).ToArray());
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest
+            {
+                Messages = [new OpenAiChatMessage { Role = "user", Content = "update voice chat" }],
+                Tools = [Tool("read_file")],
+            },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        AssertChatRoundOutcome(8, "reply 8", orchestration.CallCount, Assert.Single(response.Choices));
+    }
+
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 ac-7 and ac-6 contract, mock gate (operator 2026-10-29 "QuadBrain ACs (Recommended)", 2026-10-30 "F2: ac-6 vs ac-7
+    /// (Recommended)"; holistic review finding SRC-2): the display-content rows hold for a scripted reference resolver. A plain reply and an
+    /// envelope's content come back as they are, an empty output gets the no-decision message, and an Arbiter envelope without displayable
+    /// content gets a plain message that names the round budget and the envelope's intent. Data: hand-written outputs; no orchestration.
+    /// </summary>
+    [Fact]
+    public void DisplayContentContract_ScriptedReference_SatisfiesTheRows()
+    {
+        foreach (var row in DisplayContentRows)
+            AssertDisplayContent(row, ScriptedDisplayContent(row.Output, row.RoundsUsed, NoDecision));
+    }
+
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 ac-7 contract, negative controls inside a passing harness: a resolver that passes a content-less envelope through
+    /// raw (the SRC-2 defect), one that returns empty content, one whose message omits the intent, one whose message omits the round budget,
+    /// and one that answers every output with the message are each rejected by at least one row. Data: the same rows as the reference.
+    /// </summary>
+    [Fact]
+    public void DisplayContentContract_WrongResolvers_AreRejectedInsidePassingHarness()
+    {
+        Func<string?, int, string, string>[] wrongResolvers =
+        [
+            (output, _, noDecision) => string.IsNullOrWhiteSpace(output)
+                ? noDecision
+                : QuadBrainArbiterEnvelope.FormatForDisplay(output, showIntent: false) is { Length: > 0 } shown ? shown : output,
+            (output, _, noDecision) => string.IsNullOrWhiteSpace(output) ? noDecision : QuadBrainArbiterEnvelope.FormatForDisplay(output, showIntent: false),
+            (output, rounds, noDecision) =>
+            {
+                var reference = ScriptedDisplayContent(output, rounds, noDecision);
+                var envelope = QuadBrainArbiterEnvelope.TryParse(output);
+                return envelope is not null && string.IsNullOrWhiteSpace(QuadBrainArbiterEnvelope.FormatForDisplay(output, showIntent: false))
+                    ? reference.Replace(envelope.Intent, "unknown", StringComparison.Ordinal)
+                    : reference;
+            },
+            (output, rounds, noDecision) => ScriptedDisplayContent(output, rounds, noDecision)
+                .Replace($" of {QuadBrainOpenAiChatService.MaxProcessingRounds} orchestration rounds", " orchestration rounds", StringComparison.Ordinal),
+            (output, rounds, _) => $"QuadBrain gave no displayable answer after {rounds} of {QuadBrainOpenAiChatService.MaxProcessingRounds} orchestration rounds (last Arbiter intent: {QuadBrainArbiterEnvelope.TryParse(output)?.Intent ?? "none"}).",
+        ];
+
+        foreach (var resolver in wrongResolvers)
+        {
+            Assert.ThrowsAny<Xunit.Sdk.XunitException>(() =>
+            {
+                foreach (var row in DisplayContentRows)
+                    AssertDisplayContent(row, resolver(row.Output, row.RoundsUsed, NoDecision));
+            });
+        }
+    }
+
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 ac-7 mock gate: the internal-round outcome assertion accepts the internal tool results of the round that spent the
+    /// budget, with finish reason stop and no tool calls, and rejects the tool-call envelope, another round's results, empty content and an
+    /// extra round. Data: hand-built choices and round counts; no orchestration.
+    /// </summary>
+    [Fact]
+    public void InternalRoundOutcomeAssertion_AcceptsTheRoundsToolResultsAndRejectsEnvelopesOrOtherRounds()
+    {
+        const string results = """{"tool":"mcp_round_8"}""";
+        AssertInternalRoundOutcome(8, results, 8, Choice(results, "stop"));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertInternalRoundOutcome(8, results, 8, Choice("""{"tool_calls":[{"name":"mcp_round_8","arguments":{}}]}""", "stop")));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertInternalRoundOutcome(8, results, 8, Choice("""{"tool":"mcp_round_7"}""", "stop")));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertInternalRoundOutcome(8, results, 8, Choice(null, "stop")));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertInternalRoundOutcome(8, results, 9, Choice(results, "stop")));
+    }
+
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 ac-6 and ac-7 binding: the display-content rows hold for the production resolver. Data: the contract rows.
+    /// </summary>
+    [Fact]
+    public void DisplayContentContract_Production_SatisfiesTheRows()
+    {
+        foreach (var row in DisplayContentRows)
+            AssertDisplayContent(row, QuadBrainOpenAiChatService.ResolveDisplayContent(row.Output, row.RoundsUsed, NoDecision));
+    }
+
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 ac-5 binding (holistic review finding SRC-3): a tool_choice of auto with no tools counts as no tool_choice,
+    /// so a reply that is not an envelope is the answer after one round. Data: scripted orchestration whose second reply would show a
+    /// second round.
+    /// </summary>
+    [Fact]
+    public async Task CompleteAsync_ToolChoiceAutoNoTools_ReturnsNonEnvelopeReplyAfterOneRound()
+    {
+        var orchestration = new ScriptedOrchestrationService(
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = "the plain answer" },
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = "a second round ran" });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest
+            {
+                Messages = [new OpenAiChatMessage { Role = "user", Content = "Hello" }],
+                ToolChoice = ToolChoice("\"auto\""),
+            },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        AssertChatRoundOutcome(1, "the plain answer", orchestration.CallCount, Assert.Single(response.Choices));
+    }
+
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 ac-5 binding (SRC-3): with no tools, a committed Arbiter output that is empty is answered with the
+    /// no-decision message after one round. Data: scripted empty output, then a reply that would show a second round.
+    /// </summary>
+    [Fact]
+    public async Task CompleteAsync_NoToolsEmptyCommittedOutput_ReturnsNoDecisionAfterOneRound()
+    {
+        var orchestration = new ScriptedOrchestrationService(
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = "" },
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = "a second round ran" });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "Hello" }] },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        AssertChatRoundOutcome(1, NoDecision, orchestration.CallCount, Assert.Single(response.Choices));
+    }
+
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 ac-7 binding (SRC-2): a repeated continue envelope without content ends the loop with a plain message that
+    /// names the round budget and the intent, never the raw envelope. Data: a tool offered; the same content-less continue envelope twice.
+    /// </summary>
+    [Fact]
+    public async Task CompleteAsync_RepeatedContentlessContinue_ReturnsBudgetMessage()
+    {
+        const string continueEnvelope = """{"intent":"continue"}""";
+        var orchestration = new ScriptedOrchestrationService(
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = continueEnvelope },
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = continueEnvelope },
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = "a third round ran" });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest
+            {
+                Messages = [new OpenAiChatMessage { Role = "user", Content = "update voice chat" }],
+                Tools = [Tool("read_file")],
+            },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var choice = Assert.Single(response.Choices);
+        Assert.Equal(2, orchestration.CallCount);
+        Assert.Equal("stop", choice.FinishReason);
+        AssertDisplayContent(new DisplayContentRow(continueEnvelope, 2, null, "continue"), choice.Message.Content);
+    }
+
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 ac-7 binding (SRC-2): a final envelope without content is answered with the plain message after one round.
+    /// Data: no tools; one content-less final envelope, then a reply that would show a second round.
+    /// </summary>
+    [Fact]
+    public async Task CompleteAsync_FinalEnvelopeWithoutContent_ReturnsBudgetMessage()
+    {
+        const string finalEnvelope = """{"intent":"final"}""";
+        var orchestration = new ScriptedOrchestrationService(
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = finalEnvelope },
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = "a second round ran" });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "Hello" }] },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var choice = Assert.Single(response.Choices);
+        Assert.Equal(1, orchestration.CallCount);
+        Assert.Equal("stop", choice.FinishReason);
+        AssertDisplayContent(new DisplayContentRow(finalEnvelope, 1, null, "final"), choice.Message.Content);
+    }
+
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 ac-6 and ac-7 binding (F2): when the round budget ends on content-less continue envelopes, the content is
+    /// the plain message that names the budget and the intent, not the last envelope. Data: a tool offered; nine distinct content-less
+    /// continue envelopes (a ninth round would show the budget overrun).
+    /// </summary>
+    [Fact]
+    public async Task CompleteAsync_RoundsExhaustedOnContentlessEnvelopes_ReturnsBudgetMessage()
+    {
+        var orchestration = new ScriptedOrchestrationService(
+            Enumerable.Range(1, 9)
+                .Select(n => new QuadBrainOrchestrationResponse { Status = "committed", Output = $$$"""{"intent":"continue","step":{{{n}}}}""" })
+                .ToArray());
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest
+            {
+                Messages = [new OpenAiChatMessage { Role = "user", Content = "update voice chat" }],
+                Tools = [Tool("read_file")],
+            },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var choice = Assert.Single(response.Choices);
+        Assert.Equal(QuadBrainOpenAiChatService.MaxProcessingRounds, orchestration.CallCount);
+        Assert.Equal("stop", choice.FinishReason);
+        AssertDisplayContent(
+            new DisplayContentRow("""{"intent":"continue","step":8}""", QuadBrainOpenAiChatService.MaxProcessingRounds, null, "continue"),
+            choice.Message.Content);
+    }
+
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 ac-7 binding (SRC-2): when the round budget ends after an internal-tool round, the content is that round's
+    /// internal tool results, not the tool-call envelope. Data: nine rounds, each calling a different MCP-internal tool that a scripted
+    /// executor handles (distinct names, so the repeated-signature exit never fires).
+    /// </summary>
+    [Fact]
+    public async Task CompleteAsync_RoundsExhaustedAfterInternalToolRound_ReturnsThatRoundsToolResults()
+    {
+        var orchestration = new ScriptedOrchestrationService(
+            Enumerable.Range(1, 9)
+                .Select(n => new QuadBrainOrchestrationResponse { Status = "committed", Output = $$$"""{"tool_calls":[{"name":"mcp_round_{{{n}}}","arguments":{}}]}""" })
+                .ToArray());
+        var service = new QuadBrainOpenAiChatService(orchestration, classifier: null, internalToolExecutor: new EchoingMcpExecutor());
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "list open todo" }] },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        AssertInternalRoundOutcome(
+            QuadBrainOpenAiChatService.MaxProcessingRounds,
+            """{"tool":"mcp_round_8"}""",
+            orchestration.CallCount,
+            Assert.Single(response.Choices));
+    }
+
+    // FR-MCP-QBOPENAI-001 ac-5 to ac-7: the no-decision message the scripted orchestration's committed empty output earns.
+    private const string NoDecision = "QuadBrain returned no decision (committed).";
+
+    // FR-MCP-QBOPENAI-001 ac-6 and ac-7 rows: an output, the rounds used, and either the exact content or the intent the plain message names.
+    private static readonly DisplayContentRow[] DisplayContentRows =
+    [
+        new("the plain answer", 1, "the plain answer", null),
+        new("""{"intent":"final","content":"done"}""", 2, "done", null),
+        new("", 1, NoDecision, null),
+        new("""{"intent":"continue"}""", 3, null, "continue"),
+        new("""{"intent":"final"}""", 1, null, "final"),
+        new("""{"intent":"reject","content":"   "}""", 8, null, "reject"),
+        new("""{"tool_calls":[{"name":"read_file","arguments":{}}]}""", 8, null, "tool_calls"),
+    ];
+
+    // FR-MCP-QBOPENAI-001 ac-7: the content is never empty; an exact row gets its content; otherwise the content is not an Arbiter envelope and
+    // names the round budget and the row's intent.
+    private static void AssertDisplayContent(DisplayContentRow row, string? content)
+    {
+        Assert.False(string.IsNullOrWhiteSpace(content), $"Empty content for output '{row.Output}'.");
+        if (row.ExpectedExact is not null)
+        {
+            Assert.Equal(row.ExpectedExact, content);
+            return;
+        }
+
+        Assert.Null(QuadBrainArbiterEnvelope.TryParse(content));
+        Assert.Matches($@"\b{QuadBrainOpenAiChatService.MaxProcessingRounds}\b", content);
+        Assert.Contains(row.ExpectedIntent!, content, StringComparison.Ordinal);
+    }
+
+    // FR-MCP-QBOPENAI-001 ac-7 scripted reference: display text when there is some, the no-decision message for an empty output, otherwise a
+    // plain message naming the rounds used, the round budget and the envelope's intent.
+    private static string ScriptedDisplayContent(string? output, int roundsUsed, string noDecision)
+    {
+        if (string.IsNullOrWhiteSpace(output))
+            return noDecision;
+        var shown = QuadBrainArbiterEnvelope.FormatForDisplay(output, showIntent: false);
+        if (!string.IsNullOrWhiteSpace(shown))
+            return shown;
+        var intent = QuadBrainArbiterEnvelope.TryParse(output)?.Intent ?? "none";
+        return $"QuadBrain gave no displayable answer after {roundsUsed} of {QuadBrainOpenAiChatService.MaxProcessingRounds} orchestration rounds (last Arbiter intent: {intent}).";
+    }
+
+    // FR-MCP-QBOPENAI-001 ac-7: after an internal-tool round spends the budget, the content is that round's tool results, not an envelope.
+    private static void AssertInternalRoundOutcome(int expectedRounds, string expectedToolResults, int rounds, OpenAiChatChoice choice)
+    {
+        Assert.Equal(expectedRounds, rounds);
+        Assert.Equal("stop", choice.FinishReason);
+        Assert.Null(choice.Message.ToolCalls);
+        Assert.Equal(expectedToolResults, choice.Message.Content);
+        Assert.Null(QuadBrainArbiterEnvelope.TryParse(choice.Message.Content));
+    }
+
+    private sealed record DisplayContentRow(string? Output, int RoundsUsed, string? ExpectedExact, string? ExpectedIntent);
+
+    // FR-MCP-QBOPENAI-001 ac-5 and ac-6: the expected number of orchestration rounds ran, and the reply the requirement names came back as
+    // non-empty assistant content with finish reason stop.
+    private static void AssertChatRoundOutcome(int expectedRounds, string expectedContent, int rounds, OpenAiChatChoice choice)
+    {
+        Assert.Equal(expectedRounds, rounds);
+        Assert.Equal("stop", choice.FinishReason);
+        Assert.False(string.IsNullOrWhiteSpace(choice.Message.Content), "The assistant message is empty.");
+        Assert.Equal(expectedContent, choice.Message.Content);
+    }
+
+    private static OpenAiChatChoice Choice(string? content, string finishReason)
+        => new() { Index = 0, Message = new OpenAiChatResponseMessage { Role = "assistant", Content = content }, FinishReason = finishReason };
 
     private static OpenAiToolDefinition Tool(string name)
         => new() { Function = new OpenAiFunctionDefinition { Name = name, Description = $"Run {name}." } };

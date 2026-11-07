@@ -1,0 +1,135 @@
+[
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_MixedJsonAndYamlEnvelopes_EachDispatched",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 84\n   at QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_MixedJsonAndYamlEnvelopes_EachDispatched() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/AgentStdioFramingTests.cs:line 73\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_DocumentSeparators_DispatchedIndependently",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 73\n   at QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_DocumentSeparators_DispatchedIndependently() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/YamlPipeExecutionTests.cs:line 1531\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_StructuredTurnWithYamlNumbers_SendsCompleteDto",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 67\n   at QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_StructuredTurnWithYamlNumbers_SendsCompleteDto() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/GenericClientPassthroughYamlBindingTests.cs:line 185\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_PreservesPersistenceReceipt(persisted: True, degraded: False, queued: False)",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 84\n   at QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_PreservesPersistenceReceipt(Boolean persisted, Boolean degraded, Boolean queued) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/GenericClientPassthroughYamlBindingTests.cs:line 48\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsArgumentException_WritesValidationEnvelope",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 67\n   at QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AssertTypeErrorAsync(Exception thrown, String code, Boolean retryable) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/ReplMcpErrorClassifierTests.cs:line 236\n   at QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsArgumentException_WritesValidationEnvelope() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/ReplMcpErrorClassifierTests.cs:line 162\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsDbUpdateException_WritesClassifiedEnvelope",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 67\n   at QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsDbUpdateException_WritesClassifiedEnvelope() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/ReplMcpErrorClassifierTests.cs:line 209\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_DashSeparatedYamlEnvelopes_EachDispatched",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 73\n   at QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_DashSeparatedYamlEnvelopes_EachDispatched() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/AgentStdioFramingTests.cs:line 107\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsStorageBudget_WritesBackendUnavailableEnvelope",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 67\n   at QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AssertTypeErrorAsync(Exception thrown, String code, Boolean retryable) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/ReplMcpErrorClassifierTests.cs:line 236\n   at QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsStorageBudget_WritesBackendUnavailableEnvelope() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/ReplMcpErrorClassifierTests.cs:line 182\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_UpdateFrBatchYaml_PreservesAcceptanceCriteriaBoolean",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 73\n   at QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_UpdateFrBatchYaml_PreservesAcceptanceCriteriaBoolean() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/YamlPipeExecutionTests.cs:line 653\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.RequirementScopeLayerWorkflowTests.RequirementScopeLayer_ReplYamlWorkflow_ExercisesBeforeAndAfterEffectiveQueries",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 67\n   at QBrainAi.Repl.Core.Tests.RequirementScopeLayerWorkflowTests.RunReplAsync(AgentStdioProtocol protocol, String input) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/RequirementScopeLayerWorkflowTests.cs:line 228\n   at QBrainAi.Repl.Core.Tests.RequirementScopeLayerWorkflowTests.RequirementScopeLayer_ReplYamlWorkflow_ExercisesBeforeAndAfterEffectiveQueries() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/RequirementScopeLayerWorkflowTests.cs:line 118\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsKeyNotFound_WritesNotFoundEnvelope",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 67\n   at QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AssertTypeErrorAsync(Exception thrown, String code, Boolean retryable) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/ReplMcpErrorClassifierTests.cs:line 236\n   at QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsKeyNotFound_WritesNotFoundEnvelope() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/ReplMcpErrorClassifierTests.cs:line 172\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientTriageQueryRunsAsync_AsyncTaskSubclass_EmitsResultPayload",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 84\n   at QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientTriageQueryRunsAsync_AsyncTaskSubclass_EmitsResultPayload() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/GenericClientPassthroughYamlBindingTests.cs:line 254\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_MalformedYaml_WritesErrorAndContinues",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 73\n   at QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_MalformedYaml_WritesErrorAndContinues() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/YamlPipeExecutionTests.cs:line 1566\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_MultiLineRequestTerminatedByBlankLine_DispatchedOnce",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 73\n   at QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_MultiLineRequestTerminatedByBlankLine_DispatchedOnce() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/YamlPipeExecutionTests.cs:line 1442\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientCreateFrAsync_NestedYamlAcceptanceCriteria_SendsCriteriaToRestClient",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 67\n   at QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientCreateFrAsync_NestedYamlAcceptanceCriteria_SendsCriteriaToRestClient() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/GenericClientPassthroughYamlBindingTests.cs:line 116\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_Responses_TerminatedByBlankLineAndDocumentSeparator",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 73\n   at QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_Responses_TerminatedByBlankLineAndDocumentSeparator() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/AgentStdioFramingTests.cs:line 137\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_TwoEnvelopes_DispatchedIndependently",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 73\n   at QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_TwoEnvelopes_DispatchedIndependently() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/YamlPipeExecutionTests.cs:line 1488\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_PreservesPersistenceReceipt(persisted: False, degraded: True, queued: True)",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 84\n   at QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_PreservesPersistenceReceipt(Boolean persisted, Boolean degraded, Boolean queued) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/GenericClientPassthroughYamlBindingTests.cs:line 48\n--- End of stack trace from previous location ---"
+  },
+  {
+    "Project": "QBrainAi.Repl.Core.Tests",
+    "Test": "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_BackToBackSingleLineJsonEnvelopes_EachDispatched",
+    "Outcome": "Failed",
+    "Message": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')",
+    "StackTrace": "   at System.Threading.CancellationTokenSource.CancelAfter(TimeSpan delay)\n   at QBrainAi.Repl.Core.AgentStdioProtocol.FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 163\n   at QBrainAi.Repl.Core.AgentStdioProtocol.RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:line 84\n   at QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_BackToBackSingleLineJsonEnvelopes_EachDispatched() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/AgentStdioFramingTests.cs:line 42\n--- End of stack trace from previous location ---"
+  }
+]

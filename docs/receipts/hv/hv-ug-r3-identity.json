@@ -1,0 +1,46 @@
+{
+  "TimestampLocal": "2026-10-20T17:51:11",
+  "Path": "/home/sharpninja/.codex/sessions/2026/10/20/rollout-2026-10-20T17-08-26-01a15b5b-ceab-7e90-a42c-0fa7defcb1e3.jsonl",
+  "Records": [
+    {
+      "Line": 1,
+      "Type": "session_meta",
+      "Timestamp": "2026-10-20T22:08:26.529Z",
+      "ThreadId": "01a15b5b-ceab-7e90-a42c-0fa7defcb1e3",
+      "Originator": "codex_exec",
+      "CliVersion": "0.160.1"
+    },
+    {
+      "Line": 8,
+      "Type": "turn_context",
+      "Timestamp": "2026-10-20T22:08:27.642Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+    },
+    {
+      "Line": 344,
+      "Type": "turn_context",
+      "Timestamp": "2026-10-20T22:22:10.356Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+    },
+    {
+      "Line": 739,
+      "Type": "turn_context",
+      "Timestamp": "2026-10-20T22:36:40.688Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+    },
+    {
+      "Line": 1052,
+      "Type": "turn_context",
+      "Timestamp": "2026-10-20T22:48:58.641Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+    }
+  ]
+}

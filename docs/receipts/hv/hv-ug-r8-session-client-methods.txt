@@ -1,0 +1,7 @@
+17:public sealed class SessionLogClient : McpClientBase
+44:    public async Task<SessionLogQueryResult> QueryAsync(
+49:        return await QueryAsync(
+64:    public async Task<SessionLogQueryResult> QueryAsync(
+84:        return await GetAsync<SessionLogQueryResult>($"qbrainai/sessionlog{qs}", cancellationToken);
+95:    public Task<UnifiedSessionLogDto> GetAsync(
+101:        return GetAsync<UnifiedSessionLogDto>(path, cancellationToken);

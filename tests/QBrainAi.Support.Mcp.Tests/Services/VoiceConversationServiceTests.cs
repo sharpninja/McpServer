@@ -9,12 +9,36 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
+/// <summary>
+/// Tests <see cref="VoiceConversationService"/>: session reuse, execution strategy selection, turn options, the streaming
+/// error path, and (TR-MCP-USECASE-018 AC-006, appended 2026-11-06) the idle-session lifecycle and its idle decisions on
+/// scripted time. Every service here is built on a <see cref="TriggeredTimerTimeProvider"/>, so its idle-cleanup timer
+/// fires only where a test fires it and no case depends on the system clock or on elapsed time.
+/// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): every fixture service now runs on a scripted clock whose timers fire only when the test fires them, and four bindings were added (the lifecycle trace of <see cref="IdleSessionLifecycleContractTests"/>, decisions D8 and D9 of <see cref="AgeBoundaryContractTests"/>, and the cleanup schedule), because hostile validation round 13 finding R13-F1 found that the session-reuse case depended on the service's real 60-second cleanup timer and the live clock. The earlier cases and their assertions are unchanged; documented in the same change (MEMORY-FACT-008).</description></item>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): the lifecycle pool creates the trace's sentinel in a second workspace, decision D8's binding asserts a sentinel removed by the same fired pass before each row is read, and the three sibling cases of the round 13 sweep (the two SubmitTurnAsync cases and the streaming error case) gained XML docs, because the fifteenth holistic read before hostile validation round 14 (findings d7 and g2) found that a keep decision was read without observing that the pass had finished and that those docs were missing. The earlier assertions are unchanged.</description></item>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "Such an observation shows a finished pass only when no removal of that pass can suspend before the decision is read"): the lifecycle pool, the lifecycle binding and decision D8's binding now state the condition their sentinel observation rests on (no create carries an agent prompt and no turn is submitted, so no session holds an interactive session and no removal of a fired cleanup awaits), and D8's sentinel message names it, because the sixteenth holistic read before hostile validation round 14 (finding e1) found that a removed sentinel alone shows only that the pass reached it. No assertion changed.</description></item>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): the fixture can decorate the strategy resolver with a counter of the agent execution sessions the service creates, the lifecycle pool and decision D8's binding assert before each fire that the service created none, a negative control rejects a lifecycle trace whose creates submit a turn, and the sentinel request's summary states the condition, because the seventeenth holistic read before hostile validation round 14 (findings g2 and f1) found the condition stated but not checked at run time and the sentinel summary still claiming a finished pass from the removal alone. The earlier assertions are unchanged.</description></item>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): the lifecycle pool and decision D8's binding observe directly after each fire, before reading any decision, that the task of the service's idle-cleanup pass has completed, and a negative control rejects a lifecycle trace whose removal awaits an interactive session's end while the session count is not consulted, because the eighteenth holistic read before hostile validation round 14 (finding G1) found that the session count sees only one kind of awaiting resource. The earlier assertions are unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed class VoiceConversationServiceTests
 {
+    /// <summary>TR-MCP-USECASE-018 AC-006: the fixed UTC instant the fixture clock starts at when a test supplies none.</summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added with the scripted fixture clock (hostile validation round 13 finding R13-F1).</remarks>
+    private static readonly DateTimeOffset FixtureStart = new(2001, 2, 3, 4, 5, 6, TimeSpan.Zero);
+
+    /// <summary>Two creates for the same agent and workspace reuse the idle session.</summary>
+    /// <returns>A task that completes when the check finishes.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: documented, and now on the scripted fixture clock, so no cleanup can run between the two creates (hostile validation round 13 finding R13-F1); the assertion is unchanged.</remarks>
     [Fact]
     public async Task CreateSessionAsync_SameAgentAndWorkspace_ReusesExistingIdleSession()
     {
@@ -105,6 +129,12 @@ public sealed class VoiceConversationServiceTests
         Assert.Equal(AgentExecutionStrategyNames.CopilotCli, created.ExecutionStrategy);
     }
 
+    /// <summary>
+    /// A turn submitted to a hosted-strategy session passes the configured model API key to the execution options under
+    /// the configured environment variable name.
+    /// </summary>
+    /// <returns>A task that completes when the check finishes.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: documented; since slice Z12 the service runs on the scripted fixture clock, so no cleanup can remove the session between create and submit (a sibling of hostile validation round 13 finding R13-F1), and the docs were added because the fifteenth holistic read before hostile validation round 14 (finding g2) found them missing; the assertions are unchanged.</remarks>
     [Fact]
     public async Task SubmitTurnAsync_IncludesConfiguredModelApiKeyInExecutionOptions()
     {
@@ -132,6 +162,9 @@ public sealed class VoiceConversationServiceTests
             hostedStrategy.LastRequest!.Options.EnvironmentVariables["ANTHROPIC_API_KEY"]);
     }
 
+    /// <summary>A turn submitted to a hosted-strategy session passes an infinite timeout to the execution options.</summary>
+    /// <returns>A task that completes when the check finishes.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: documented; since slice Z12 the service runs on the scripted fixture clock, so no cleanup can remove the session between create and submit (a sibling of hostile validation round 13 finding R13-F1), and the docs were added because the fifteenth holistic read before hostile validation round 14 (finding g2) found them missing; the assertions are unchanged.</remarks>
     [Fact]
     public async Task SubmitTurnAsync_UsesInfiniteCopilotTimeoutInExecutionOptions()
     {
@@ -154,6 +187,12 @@ public sealed class VoiceConversationServiceTests
         Assert.Equal(Timeout.InfiniteTimeSpan, hostedStrategy.LastRequest!.Options.Timeout);
     }
 
+    /// <summary>
+    /// A streamed turn whose runtime returns an empty stream emits one terminal error event, sets the session status to
+    /// error with the runtime message, and records the user entry and the assistant error entry in the transcript.
+    /// </summary>
+    /// <returns>A task that completes when the check finishes.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: documented; since slice Z12 the service runs on the scripted fixture clock, so no cleanup can remove the session between create and the streamed turn (a sibling of hostile validation round 13 finding R13-F1), and the docs were added because the fifteenth holistic read before hostile validation round 14 (finding g2) found them missing; the assertions are unchanged.</remarks>
     [Fact]
     public async Task SubmitTurnStreamingAsync_EmptyRuntimeStream_EmitsErrorAndRecordsAssistantError()
     {
@@ -204,7 +243,7 @@ public sealed class VoiceConversationServiceTests
             {
                 AgentPath = "copilot",
                 Model = "auto",
-                WorkingDirectory = Environment.CurrentDirectory,
+                WorkingDirectory = AppContext.BaseDirectory,
                 Timeout = Timeout.InfiniteTimeSpan,
             }),
             processEnvironment,
@@ -223,18 +262,192 @@ public sealed class VoiceConversationServiceTests
         Assert.Contains("Node.js v24", exception.Message, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding of <see cref="IdleSessionLifecycleContractTests.AssertLifecycleAsync"/>: on the
+    /// production service, two creates reuse one session while its scripted idle age is eligible, across a cleanup the
+    /// test triggers between them; no cleanup runs unless the test fires the service's timer, even past the threshold; a
+    /// fired cleanup keeps a session exactly at the strict 15-minute threshold and removes it one second past it; and a
+    /// create after the removal gives a new session. The keep decision after the fire at the threshold is read only once
+    /// the same fired pass is seen to have removed the trace's sentinel, a session in a second workspace one second
+    /// older; that shows a finished pass because no session in the trace holds an interactive session, so no removal
+    /// awaits, which the trace checks at run time before each fire (the service has created no agent execution session).
+    /// Run at a reference in 2001 and one in 2041.
+    /// </summary>
+    /// <returns>A task that completes when the trace finishes.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added as the reviewer's proposed test of hostile validation round 13 finding R13-F1. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): the bound trace now includes the sentinel step (fifteenth holistic read before hostile validation round 14, finding d7). 2026-11-06, TR-MCP-USECASE-018 AC-006: the summary states the no-await condition the sentinel observation rests on (sixteenth holistic read before hostile validation round 14, finding e1). 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): the bound trace now checks that condition at run time before each fire, through the pool's count of agent execution sessions (seventeenth holistic read before hostile validation round 14, finding g2).</remarks>
+    [Fact]
+    public Task VoiceSessionReuse_DoesNotDependOnWallClockOrCleanupScheduling() =>
+        IdleSessionLifecycleContractTests.AssertLifecycleAsync(reference => new ServiceSessionPool(reference));
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 negative control of the lifecycle binding: when every create also submits a turn, the
+    /// service creates an agent execution session that the session then holds as its interactive session, so a removal of
+    /// a fired cleanup would await; the bound trace rejects that trace through its run-time no-await check, and the
+    /// rejection's message carries <see cref="IdleSessionLifecycleContractTests.NoAwaitCheck"/>. This shows the binding's
+    /// check is not vacuous.
+    /// </summary>
+    /// <returns>A task that completes when the rejection is observed.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): added for the seventeenth holistic read before hostile validation round 14, finding g2.</remarks>
+    [Fact]
+    public async Task VoiceSessionReuse_TraceHoldingAnInteractiveSession_IsRejected()
+    {
+        var exception = await Assert.ThrowsAnyAsync<Xunit.Sdk.XunitException>(() =>
+            IdleSessionLifecycleContractTests.AssertLifecycleAsync(reference => new ServiceSessionPool(reference, submitTurnOnCreate: true))).ConfigureAwait(true);
+        Assert.Contains(IdleSessionLifecycleContractTests.NoAwaitCheck, exception.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 negative control of the lifecycle binding: when every create also submits a turn, the
+    /// interactive session the service then holds ends only when the test releases it, and the pool does not consult the
+    /// session count (standing for an awaited step of the removal path that the count does not see), the removal at the
+    /// second trigger awaits that end; the bound trace rejects the trace through its run-time pass-finished check, and the
+    /// rejection's message carries <see cref="IdleSessionLifecycleContractTests.PassFinishedCheck"/>. This shows the
+    /// binding's pass-finished check is not vacuous.
+    /// </summary>
+    /// <returns>A task that completes when the rejection is observed.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): added for the eighteenth holistic read before hostile validation round 14, finding G1.</remarks>
+    [Fact]
+    public async Task VoiceSessionReuse_TraceWithAnUnreportedAwaitingRemoval_IsRejected()
+    {
+        var exception = await Assert.ThrowsAnyAsync<Xunit.Sdk.XunitException>(() =>
+            IdleSessionLifecycleContractTests.AssertLifecycleAsync(reference => new ServiceSessionPool(reference, submitTurnOnCreate: true, consultSessionCount: false, sessionEndAwaitsRelease: true))).ConfigureAwait(true);
+        Assert.Contains(IdleSessionLifecycleContractTests.PassFinishedCheck, exception.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding of decision D8 of <see cref="AgeBoundaryContractTests"/>: the cleanup the
+    /// service's timer runs removes a session whose recorded idle time is more than the 15-minute timeout before the
+    /// scripted reference, and keeps one exactly at it or one second short of it, at a reference in 2001 and one in 2041.
+    /// Each row's decision is read only after the same fired pass is seen to have run to its end: a sentinel session in a
+    /// second workspace, two seconds past the timeout, is already removed. That shows a finished pass because no removal
+    /// in a row can await: no create carries an agent prompt and no turn is submitted, so no session holds an interactive
+    /// session, and the fired pass runs to its end inside the fire. Each row checks that at run time before the fire: the
+    /// service has created no agent execution session, the only source of an interactive session. After the fire, before
+    /// the row is read, it also observes directly that the fired pass has finished: the task of the service's idle-cleanup
+    /// pass has completed, which fails for an awaited step of any kind.
+    /// </summary>
+    /// <returns>A task that completes when every row has been asserted.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added as the reviewer's proposed test of hostile validation round 13 finding R13-F1. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): each row now creates the sentinel first and asserts it removed after the fire, before the row's decision is read, because the fifteenth holistic read before hostile validation round 14 (finding d7) found that a pass still running when the row was read could make a keep row pass. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "Such an observation shows a finished pass only when no removal of that pass can suspend before the decision is read"): the summary and the sentinel assertion's message state the condition the observation rests on (no session in a row holds an interactive session, so no removal awaits), because the sixteenth holistic read before hostile validation round 14 (finding e1) found that a removed sentinel alone shows only that the pass reached it. No assertion changed. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): each row now counts the agent execution sessions the service creates and asserts none before the fire, because the seventeenth holistic read before hostile validation round 14 (finding g2) found the condition stated but not checked; the earlier assertions are unchanged. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): each row now asserts after the fire, before it is read, that the task of the service's idle-cleanup pass has completed, because the eighteenth holistic read before hostile validation round 14 (finding G1) found that the session count sees only one kind of awaiting resource; the earlier assertions are unchanged.</remarks>
+    [Fact]
+    public Task IdleCleanup_UsesScriptedAgeBoundary() =>
+        AgeBoundaryContractTests.AssertDecisionAsync("D8 voice idle-session cleanup", async (reference, recorded) =>
+        {
+            var sentinelRecorded = reference - IdleSessionLifecycleContractTests.IdleTimeout - AgeBoundaryContractTests.Step - AgeBoundaryContractTests.Step;
+            var clock = new TriggeredTimerTimeProvider(sentinelRecorded);
+            var sessionCounter = new ExecutionSessionCounter();
+            using var service = CreateService(time: clock, sessionCounter: sessionCounter);
+            var sentinel = await service.CreateSessionAsync(SentinelRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            clock.Set(recorded);
+            var created = await service.CreateSessionAsync(ReuseRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            clock.Set(reference);
+            Assert.True(sessionCounter.Created == 0, $"At {reference:O}: before the fire, {IdleSessionLifecycleContractTests.NoAwaitCheck}, checked at run time: the service created no agent execution session in this row, so no session holds an interactive session.");
+            Assert.Single(clock.Timers).Fire();
+            Assert.True(service.IdleCleanupPass.IsCompleted, $"At {reference:O}: after the fire, and before the row is read, {IdleSessionLifecycleContractTests.PassFinishedCheck}, observed directly at run time: the task of the service's idle-cleanup pass has completed.");
+            var sentinelTranscript = await service.GetTranscriptAsync(sentinel.SessionId, TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.True(sentinelTranscript is null, $"At {reference:O}: the fired pass, whose removals cannot await here, has run to its end before the row is read: the sentinel, two seconds past the timeout, is already removed.");
+            var transcript = await service.GetTranscriptAsync(created.SessionId, TestContext.Current.CancellationToken).ConfigureAwait(true);
+            return transcript is null;
+        });
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding of decision D9 of <see cref="AgeBoundaryContractTests"/>: a device lookup skips a
+    /// session whose recorded idle time is more than the 15-minute timeout before the scripted reference, and finds one
+    /// exactly at it or one second short of it, with no cleanup fired.
+    /// </summary>
+    /// <returns>A task that completes when every row has been asserted.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added for the second idle decision of the service (hostile validation round 13 finding R13-F1).</remarks>
+    [Fact]
+    public Task FindSessionByDevice_UsesScriptedAgeBoundary() =>
+        AgeBoundaryContractTests.AssertDecisionAsync("D9 voice device-session idle skip", async (reference, recorded) =>
+        {
+            var clock = new TriggeredTimerTimeProvider(recorded);
+            using var service = CreateService(time: clock);
+            await service.CreateSessionAsync(new VoiceSessionCreateRequest
+            {
+                AgentName = "planner",
+                DeviceId = "device-1",
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            clock.Set(reference);
+            var found = service.FindSessionByDevice("device-1");
+            Assert.Equal(0, Assert.Single(clock.Timers).FireCount);
+            return found is null;
+        });
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: the service arms exactly one idle-cleanup timer through its clock, with the production
+    /// schedule (first run after 60 seconds, then every 60 seconds), never fires it on its own, and disposes it.
+    /// </summary>
+    /// <returns>A task that completes when the check finishes.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added so the binding of hostile validation round 13 finding R13-F1 pins the schedule the production code keeps.</remarks>
+    [Fact]
+    public async Task IdleCleanupTimer_IsArmedThroughTheClockWithTheProductionSchedule()
+    {
+        var clock = new TriggeredTimerTimeProvider(FixtureStart);
+        using var service = CreateService(time: clock);
+        await service.CreateSessionAsync(ReuseRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        clock.Advance(TimeSpan.FromDays(1));
+
+        var timer = Assert.Single(clock.Timers);
+        Assert.Equal(TimeSpan.FromSeconds(60), VoiceConversationService.IdleCleanupInterval);
+        Assert.Equal(TimeSpan.FromSeconds(60), timer.DueTime);
+        Assert.Equal(TimeSpan.FromSeconds(60), timer.Period);
+        Assert.Equal(0, timer.FireCount);
+        Assert.False(timer.IsDisposed);
+
+        service.Dispose();
+        Assert.True(timer.IsDisposed);
+    }
+
+    /// <summary>TR-MCP-USECASE-018 AC-006: the create request the reuse cases send (one fixed agent and workspace).</summary>
+    /// <returns>The request.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added for the bindings of hostile validation round 13 finding R13-F1; the same values as the reuse case.</remarks>
+    private static VoiceSessionCreateRequest ReuseRequest() => new()
+    {
+        AgentName = "planner",
+        AgentModel = "gpt-5.3-codex",
+        WorkspacePath = @"E:\ws-a",
+        OneShotSession = false,
+    };
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: the create request of the sentinel session, the reuse agent in a second workspace, so no
+    /// reuse case reuses it; a fired cleanup pass that removed it has run to its end only while no removal of that pass can
+    /// await, which each binding checks at run time before the fire (no session holds an interactive session).
+    /// </summary>
+    /// <returns>The request.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): added for the fifteenth holistic read before hostile validation round 14, finding d7. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): the summary states the no-await condition and its run-time check, because the seventeenth holistic read before hostile validation round 14 (finding f1, on the sixteenth read's e1) found it still claimed a finished pass from the removal alone.</remarks>
+    private static VoiceSessionCreateRequest SentinelRequest() => new()
+    {
+        AgentName = "planner",
+        AgentModel = "gpt-5.3-codex",
+        WorkspacePath = @"E:\ws-sentinel",
+        OneShotSession = false,
+    };
+
+    /// <summary>Builds the service under test with fake strategies and the scripted clock.</summary>
+    /// <param name="defaultExecutionStrategy">The configured default execution strategy.</param>
+    /// <param name="modelApiKey">The configured model API key.</param>
+    /// <param name="modelApiKeyEnvironmentVariableName">The variable name the key is passed under.</param>
+    /// <param name="hostedStrategy">The hosted strategy, or null for a fake.</param>
+    /// <param name="oneShotStrategy">The one-shot strategy, or null for a fake.</param>
+    /// <param name="time">The service's clock, or null for a <see cref="TriggeredTimerTimeProvider"/> at <see cref="FixtureStart"/>.</param>
+    /// <param name="sessionCounter">When given, records every agent execution session the service creates, through a counting decorator of the strategy resolver; when null the resolver is registered undecorated, as before.</param>
+    /// <returns>The service.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added the <paramref name="time"/> parameter, defaulting to a scripted clock whose timers fire only when a test fires them, and the idle timeout now comes from <see cref="IdleSessionLifecycleContractTests.IdleTimeout"/> (15 minutes, unchanged), because hostile validation round 13 finding R13-F1 found that every service here armed a real cleanup timer; documented in the same change (MEMORY-FACT-008). 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): added the optional <paramref name="sessionCounter"/> parameter, because the seventeenth holistic read before hostile validation round 14 (finding g2) found the idle bindings' no-await condition stated but not checked at run time.</remarks>
     private static VoiceConversationService CreateService(
         string defaultExecutionStrategy = AgentExecutionStrategyNames.OneShotCli,
         string? modelApiKey = null,
         string modelApiKeyEnvironmentVariableName = "OPENAI_API_KEY",
         IAgentExecutionStrategy? hostedStrategy = null,
-        IAgentExecutionStrategy? oneShotStrategy = null)
+        IAgentExecutionStrategy? oneShotStrategy = null,
+        TimeProvider? time = null,
+        ExecutionSessionCounter? sessionCounter = null)
     {
         var copilotClient = Substitute.For<IAgentCliClient>();
         var workspaceAccessor = CreateWorkspaceAccessor();
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>()).Build();
         var hostEnvironment = Substitute.For<IHostEnvironment>();
-        hostEnvironment.ContentRootPath.Returns(Environment.CurrentDirectory);
+        hostEnvironment.ContentRootPath.Returns(AppContext.BaseDirectory);
         hostEnvironment.EnvironmentName.Returns("Test");
         hostEnvironment.ApplicationName.Returns("QBrainAi.Support.Mcp.Tests");
         var strategyResolver = new AgentExecutionStrategyResolver(
@@ -246,7 +459,8 @@ public sealed class VoiceConversationServiceTests
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         var issueSyncService = Substitute.For<IIssueTodoSyncService>();
         var services = new ServiceCollection();
-        services.AddSingleton<IAgentExecutionStrategyResolver>(strategyResolver);
+        services.AddSingleton<IAgentExecutionStrategyResolver>(
+            sessionCounter is null ? strategyResolver : new CountingStrategyResolver(strategyResolver, sessionCounter));
         services.AddSingleton(gitHubCliService);
         services.AddSingleton(issueSyncService);
         services.AddSingleton(new TodoCreationService(workspaceAccessor, gitHubCliService, NullLogger<TodoCreationService>.Instance));
@@ -265,12 +479,234 @@ public sealed class VoiceConversationServiceTests
                 DefaultExecutionStrategy = defaultExecutionStrategy,
                 ModelApiKey = modelApiKey,
                 ModelApiKeyEnvironmentVariableName = modelApiKeyEnvironmentVariableName,
-                SessionIdleTimeoutMinutes = TimeSpan.FromMinutes(15),
+                SessionIdleTimeoutMinutes = IdleSessionLifecycleContractTests.IdleTimeout,
             }),
             CreateOptionsMonitor(new TodoPromptOptions { BaseUrl = "http://localhost:7147" }),
             hostEnvironment,
             NullLogger<VoiceConversationService>.Instance,
-            NullLoggerFactory.Instance);
+            NullLoggerFactory.Instance,
+            time ?? new TriggeredTimerTimeProvider(FixtureStart));
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: the production service as a pool of <see cref="IdleSessionLifecycleContractTests"/>:
+    /// the scripted clock is a <see cref="TriggeredTimerTimeProvider"/>, a create sends <see cref="ReuseRequest"/>, a
+    /// session exists while its transcript can be read (a read that does not refresh its idle time), and a triggered
+    /// cleanup fires the service's one cleanup timer. No create carries an agent prompt and the trace submits no turn, so
+    /// no session holds an interactive session, no removal of a fired cleanup awaits, and the fired pass runs to its end
+    /// inside the fire; the pool reports that at run time from a count of the agent execution sessions the service
+    /// creates, the only source of an interactive session. It also reports directly whether a fired pass has finished,
+    /// from the task of the service's latest idle-cleanup pass. Only the binding's negative controls submit a turn on
+    /// create; only the unreported-await control ignores the session count and makes a session's end await a release.
+    /// </summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added for the lifecycle binding of hostile validation round 13 finding R13-F1. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): the sentinel create was added, sending <see cref="SentinelRequest"/>, for the fifteenth holistic read before hostile validation round 14, finding d7. 2026-11-06, TR-MCP-USECASE-018 AC-006: the summary states the no-await condition the sentinel observation rests on (sixteenth holistic read before hostile validation round 14, finding e1). 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): the pool counts the service's agent execution sessions, reports through AnyRemovalCanAwait whether any exists, and can submit a turn on create for the binding's negative control (seventeenth holistic read before hostile validation round 14, finding g2). 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): the pool reports through TriggeredPassFinished whether the task of the service's latest idle-cleanup pass has completed, and can ignore the session count and give sessions an end that awaits a release, for the binding's unreported-await negative control (eighteenth holistic read before hostile validation round 14, finding G1).</remarks>
+    private sealed class ServiceSessionPool : IdleSessionLifecycleContractTests.IIdleSessionPool
+    {
+        /// <summary>The service's scripted clock.</summary>
+        private readonly TriggeredTimerTimeProvider _clock;
+
+        /// <summary>The service under test.</summary>
+        private readonly VoiceConversationService _service;
+
+        /// <summary>Records every agent execution session the service creates.</summary>
+        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): added for the seventeenth holistic read before hostile validation round 14, finding g2.</remarks>
+        private readonly ExecutionSessionCounter _sessionCounter = new();
+
+        /// <summary>Whether each create also submits a turn, for the negative control of the lifecycle binding.</summary>
+        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): added for the seventeenth holistic read before hostile validation round 14, finding g2.</remarks>
+        private readonly bool _submitTurnOnCreate;
+
+        /// <summary>Whether <see cref="AnyRemovalCanAwait"/> consults the session count; only the unreported-await negative control clears it.</summary>
+        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): added for the eighteenth holistic read before hostile validation round 14, finding G1.</remarks>
+        private readonly bool _consultSessionCount;
+
+        /// <summary>Released at dispose; while unreleased, the end of an interactive session the awaiting strategy created awaits it.</summary>
+        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): added for the eighteenth holistic read before hostile validation round 14, finding G1.</remarks>
+        private readonly TaskCompletionSource _sessionEndRelease = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        /// <summary>Creates the service with its clock at <paramref name="start"/>.</summary>
+        /// <param name="start">The scripted start instant.</param>
+        /// <param name="submitTurnOnCreate">Whether each create also submits a turn, so the session holds an interactive session; only the negative controls set it.</param>
+        /// <param name="consultSessionCount">Whether <see cref="AnyRemovalCanAwait"/> consults the session count; only the unreported-await negative control clears it.</param>
+        /// <param name="sessionEndAwaitsRelease">Whether the service's interactive sessions come from a strategy whose session end awaits the pool's release; only the unreported-await negative control sets it.</param>
+        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): the service now records its agent execution sessions in <see cref="_sessionCounter"/>, and the optional <paramref name="submitTurnOnCreate"/> parameter was added for the binding's negative control (seventeenth holistic read before hostile validation round 14, finding g2). 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): the optional <paramref name="consultSessionCount"/> and <paramref name="sessionEndAwaitsRelease"/> parameters were added for the binding's unreported-await negative control (eighteenth holistic read before hostile validation round 14, finding G1); the other parameters are unchanged.</remarks>
+        internal ServiceSessionPool(DateTimeOffset start, bool submitTurnOnCreate = false, bool consultSessionCount = true, bool sessionEndAwaitsRelease = false)
+        {
+            _clock = new TriggeredTimerTimeProvider(start);
+            _service = CreateService(
+                oneShotStrategy: sessionEndAwaitsRelease ? new AwaitingEndStrategy(AgentExecutionStrategyNames.OneShotCli, _sessionEndRelease.Task) : null,
+                time: _clock,
+                sessionCounter: _sessionCounter);
+            _submitTurnOnCreate = submitTurnOnCreate;
+            _consultSessionCount = consultSessionCount;
+        }
+
+        /// <inheritdoc />
+        public void SetClock(DateTimeOffset utcNow) => _clock.Set(utcNow);
+
+        /// <inheritdoc />
+        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: when the pool submits a turn on create, the create then submits one turn to the session (seventeenth holistic read before hostile validation round 14, finding g2); otherwise unchanged.</remarks>
+        public async Task<string> CreateAsync()
+        {
+            var sessionId = (await _service.CreateSessionAsync(ReuseRequest(), TestContext.Current.CancellationToken).ConfigureAwait(true)).SessionId;
+            if (_submitTurnOnCreate)
+            {
+                var response = await _service.SubmitTurnAsync(sessionId, new VoiceTurnRequest { UserTranscriptText = "hello" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+                Assert.NotNull(response);
+            }
+
+            return sessionId;
+        }
+
+        /// <inheritdoc />
+        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added; the sentinel is a session for the same agent in a second workspace, which the fixed session never reuses (fifteenth holistic read before hostile validation round 14, finding d7).</remarks>
+        public async Task<string> CreateSentinelAsync() =>
+            (await _service.CreateSessionAsync(SentinelRequest(), TestContext.Current.CancellationToken).ConfigureAwait(true)).SessionId;
+
+        /// <inheritdoc />
+        public async Task<bool> ExistsAsync(string sessionId) =>
+            await _service.GetTranscriptAsync(sessionId, TestContext.Current.CancellationToken).ConfigureAwait(true) is not null;
+
+        /// <inheritdoc />
+        public void TriggerCleanup() => Assert.Single(_clock.Timers).Fire();
+
+        /// <inheritdoc />
+        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): added; the service sets a session's interactive session only from an agent execution session its strategy resolver creates, so a count of zero means no session holds one and no removal awaits (seventeenth holistic read before hostile validation round 14, finding g2).</remarks>
+        public bool AnyRemovalCanAwait() => _consultSessionCount && _sessionCounter.Created > 0;
+
+        /// <inheritdoc />
+        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): added; reads whether the task of the service's latest idle-cleanup pass has completed (eighteenth holistic read before hostile validation round 14, finding G1).</remarks>
+        public bool TriggeredPassFinished() => _service.IdleCleanupPass.IsCompleted;
+
+        /// <inheritdoc />
+        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): now releases any interactive session end that awaits the pool's release before it disposes the service, so no pass of the unreported-await negative control stays suspended (eighteenth holistic read before hostile validation round 14, finding G1).</remarks>
+        public void Dispose()
+        {
+            _sessionEndRelease.TrySetResult();
+            _service.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: a strategy whose sessions behave like the fake strategy's, except that ending one awaits
+    /// <paramref name="endRelease"/>, so a removal of a session holding one awaits until the test releases it.
+    /// </summary>
+    /// <param name="name">The strategy name.</param>
+    /// <param name="endRelease">The task each session end awaits.</param>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): added for the binding's unreported-await negative control of the eighteenth holistic read before hostile validation round 14, finding G1.</remarks>
+    private sealed class AwaitingEndStrategy(string name, Task endRelease) : IAgentExecutionStrategy
+    {
+        /// <inheritdoc />
+        public string Name { get; } = name;
+
+        /// <inheritdoc />
+        public ValueTask<IAgentExecutionSession> CreateSessionAsync(
+            AgentExecutionSessionRequest request,
+            CancellationToken cancellationToken = default) =>
+            ValueTask.FromResult<IAgentExecutionSession>(new AwaitingEndSession(endRelease));
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: a live session that answers every prompt at once, as the fake session does, and whose
+    /// end awaits <paramref name="endRelease"/>.
+    /// </summary>
+    /// <param name="endRelease">The task the end awaits.</param>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): added for the binding's unreported-await negative control of the eighteenth holistic read before hostile validation round 14, finding G1.</remarks>
+    private sealed class AwaitingEndSession(Task endRelease) : IAgentExecutionSession
+    {
+        /// <summary>The final response every prompt receives.</summary>
+        private const string FinalResponseBody = """{"type":"final_response","displayText":"done","speakText":"done"}""";
+
+        /// <inheritdoc />
+        public bool IsAlive => true;
+
+        /// <inheritdoc />
+        public int? ProcessId => null;
+
+        /// <inheritdoc />
+        public ValueTask DisposeAsync() => ValueTask.CompletedTask;
+
+        /// <inheritdoc />
+        public Task EndAsync(TimeSpan timeout) => endRelease;
+
+        /// <inheritdoc />
+        public Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
+            Task.FromResult(new AgentCliResult { Body = FinalResponseBody, State = AgentCliResultState.Success });
+
+        /// <inheritdoc />
+        public IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(CancellationToken cancellationToken = default) =>
+            NoLines();
+
+        /// <inheritdoc />
+        public Task SendEscapeAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+
+        /// <inheritdoc />
+        public Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
+            Task.FromResult(new AgentCliResult { Body = FinalResponseBody, State = AgentCliResultState.Success });
+
+        /// <inheritdoc />
+        public IAsyncEnumerable<string> SendStreamingAsync(string prompt, CancellationToken cancellationToken = default) =>
+            NoLines();
+
+        /// <summary>A stream that ends at once without awaiting.</summary>
+        /// <returns>An empty stream.</returns>
+        private static async IAsyncEnumerable<string> NoLines()
+        {
+            await Task.CompletedTask.ConfigureAwait(false);
+            yield break;
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: counts the agent execution sessions a service under test creates, read by the idle
+    /// bindings' run-time no-await check.
+    /// </summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): added for the seventeenth holistic read before hostile validation round 14, finding g2.</remarks>
+    private sealed class ExecutionSessionCounter
+    {
+        /// <summary>The number of sessions recorded.</summary>
+        private int _created;
+
+        /// <summary>Gets the number of agent execution sessions the service has asked a strategy to create.</summary>
+        internal int Created => Volatile.Read(ref _created);
+
+        /// <summary>Records one session request.</summary>
+        internal void Record() => Interlocked.Increment(ref _created);
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: a strategy resolver that resolves through <paramref name="inner"/> and wraps each
+    /// strategy so every session it is asked to create is recorded in <paramref name="counter"/>.
+    /// </summary>
+    /// <param name="inner">The resolver the service would otherwise use.</param>
+    /// <param name="counter">The counter.</param>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): added for the seventeenth holistic read before hostile validation round 14, finding g2.</remarks>
+    private sealed class CountingStrategyResolver(IAgentExecutionStrategyResolver inner, ExecutionSessionCounter counter) : IAgentExecutionStrategyResolver
+    {
+        /// <inheritdoc />
+        public IAgentExecutionStrategy Resolve(string? strategyName) => new CountingStrategy(inner.Resolve(strategyName), counter);
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: a strategy that records each session request in <paramref name="counter"/> and then
+    /// delegates to <paramref name="inner"/>.
+    /// </summary>
+    /// <param name="inner">The resolved strategy.</param>
+    /// <param name="counter">The counter.</param>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "To show that no removal in its trace can await, the test checks it at run time"): added for the seventeenth holistic read before hostile validation round 14, finding g2.</remarks>
+    private sealed class CountingStrategy(IAgentExecutionStrategy inner, ExecutionSessionCounter counter) : IAgentExecutionStrategy
+    {
+        /// <inheritdoc />
+        public string Name => inner.Name;
+
+        /// <inheritdoc />
+        public ValueTask<IAgentExecutionSession> CreateSessionAsync(
+            AgentExecutionSessionRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            counter.Record();
+            return inner.CreateSessionAsync(request, cancellationToken);
+        }
     }
 
     private static WorkspaceServiceAccessor CreateWorkspaceAccessor()
@@ -280,13 +716,13 @@ public sealed class VoiceConversationServiceTests
         todoFactory.CreateForWorkspace(Arg.Any<string>(), Arg.Any<WorkspaceContext>()).Returns(todoService);
         var resolver = new TodoServiceResolver(
             todoService,
-            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Environment.CurrentDirectory }),
+            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = AppContext.BaseDirectory }),
             todoFactory);
 
         return new WorkspaceServiceAccessor(
             resolver,
             new HttpContextAccessor(),
-            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Environment.CurrentDirectory }));
+            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = AppContext.BaseDirectory }));
     }
 
     private static IOptionsMonitor<T> CreateOptionsMonitor<T>(T value) where T : class

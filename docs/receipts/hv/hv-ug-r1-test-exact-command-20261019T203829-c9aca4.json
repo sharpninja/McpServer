@@ -1,0 +1,12 @@
+{
+  "TimestampUtc": "2026-10-20T01:38:29.4897906Z",
+  "TimestampLocal": "2026-10-19T20:38:29",
+  "Mode": "Read",
+  "Arguments": [
+    "docs/receipts/hv/hv-ug-r1-test-20261019T201636.meta.json"
+  ],
+  "Offset": 130,
+  "Count": 30,
+  "ExitCode": 0,
+  "Output": "FILE: docs/receipts/hv/hv-ug-r1-test-20261019T201636.meta.json; LINES: 150\n131:     \"?? docs/receipts/hv/hv-ug-r1-windows-probe-code-20261019T195708-6a0b08.json\",\n132:     \"?? docs/receipts/hv/hv-ug-r1-workflow-methods-20261019T201402-e6ddbb.json\"\n133:   ],\n134:   \"TimestampLocal\": \"2026-10-19T20:16:36\",\n135:   \"TimestampUtc\": \"2026-10-20T01:16:36.6522311Z\",\n136:   \"Executable\": \"/home/sharpninja/.local/bin/pwsh.exe\",\n137:   \"Arguments\": [\n138:     \"-NoProfile\",\n139:     \"-NonInteractive\",\n140:     \"-File\",\n141:     \"./build.ps1\",\n142:     \"Test\",\n143:     \"--test-run-id\",\n144:     \"hv-ug-r1-test-20261019T201636\"\n145:   ],\n146:   \"Stdout\": \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-test-20261019T201636.out.log\",\n147:   \"Stderr\": \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-test-20261019T201636.err.log\",\n148:   \"ExitCode\": 0,\n149:   \"FinishedLocal\": \"2026-10-19T20:21:20\"\n150: }"
+}

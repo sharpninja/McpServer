@@ -1,0 +1,10 @@
+Store readback comparison, written 2026-11-04T12:49:38 local by ClaudeCode (Compare-StoreReadbacks.ps1; read only over the two receipts).
+before /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r12z-store-readback-1.json sha256=838A42536C8934B35C6F4478A800451C883718378203AB127D5952694445B855
+after /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r12z2-store-readback-1.json sha256=C14694C427746CA4084F4C67A6DBE0955DF289199F30E7BF81BF083C273003B8
+before read 2026-11-03T19:16:50; after read 2026-11-04T12:49:26
+FR-MCP-TESTRESOURCE-001: criteria before=12 after=12
+TR-MCP-USECASE-018: criteria before=7 after=7
+  position 5 id=AC-006: CHANGED append=True satisfied False->False tail= The longest real or scripted delay of the awaited step is the sum of every real or scripted delay on its path: the waits, polls and delays the test scripts and the production waits, polls and deadlines the step passes through, read from the sources, never a measured run time (third holistic read before hostile validation round 12, finding d3; operator 2026-11-04: "Fix it", read as the recommended option "Strengthen + headroom").
+IMPL-UNITGREEN-001: tasks before=43 after=44
+  task 43: CHANGED done False->False
+  task 44: NEW done=False

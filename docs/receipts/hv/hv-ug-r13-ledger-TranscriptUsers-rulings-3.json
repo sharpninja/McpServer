@@ -1,0 +1,26 @@
+[
+  {
+    "line": 35971,
+    "timestamp": "2026-10-26T14:52:32.958Z",
+    "role": "user",
+    "text": "Stop hook feedback:\n[GOAL: Finish IMPL-UNITGREEN-001 by merging draft PR sharpninja/McpServer#87 (fix/unit-suite-green-20261019 -> develop) under BDPv4, with 0 failed and 0 skipped on both lab hosts and hostile AGREE at 98/98.\n\nDone when every item holds, each with a receipt:\n1. The uncommitted HandoffContainedFileReader fix (Windows-only case moved to HandoffContainedFileReaderWindowsTests, no silent return) is committed and pushed, signed.\n2. At the final PR head:\n   - Linux Test 0 failed and 0 not executed.\n   - Linux MigrationIntegrationTests 0 failed and 0 not executed.\n   - Windows Test 0 failed and 0 not executed, over WSMan, HEAD verified.\n   - Windows MigrationIntegrationTests 0 failed and 0 not executed, run from a console in kingd's interactive desktop session (TR-MCP-NUKE-019 AC-5, amendment H1), with its TRX read back over WSMan.\n   - Full Build.Tests 0 failed (raw dotnet test).\n   - ValidateTraceability passes.\n3. The plan in scratch (sections 1 to 11 with the as-built corrections) is copied to docs/plans/2026-10-19-unit-suite-green.md with a hash check and committed. The PR body is rewritten for the final head: commits, run ids and counts on both hosts, requirement changes, open items.\n4. The requirements wiki export (workflow.requirements.generateDocument, wiki, all) has run and its docs/Project output is committed. If triage-report-a6927fca10364155ab9992506e1abc9c still blocks it, it is declared in the PR and the HV brief instead.\n5. Before HV:\n   - a holistic read of the whole plan and diff, plus a what-if pass for every requirement;\n   - every projected problem shown to the operator (start from ~/.claude/scratch/pr82-review-20261019/pre-hv-projected-problems-20261019.md);\n   - the operator's confirmation obtained.\n6. Hostile validation by Codex gpt-6-astra max returns OverallVerdict AGREE with accuracy and completeness both at least 98.\n   - Request and response jsonl under docs/receipts/hv/, with progress entries (percent and ETA).\n   - The full verdict in the reviewer's own session-log turn.\n   - Review time unbounded.\n   - Every FAIL and UNKNOWN shown to the operator and remediated, then a rerun, until AGREE.\n7. After AGREE:\n   - the TR-MCP-NUKE-019, TR-MCP-USECASE-018/019, TR-MCP-QUALITY-001 ac-21 and TEST-MCP-PATHNORM-001 criteria are set satisfied through the plugin;\n   - the IMPL-UNITGREEN-001 tasks are checked and the TODO marked done, citing the HV receipts;\n   - PR 87 is marked ready and merged into develop with a merge commit (no squash, no force).\n8. The session-log turns for each step are complete, with actions and decisions, in ClaudeCode-20261019T134748Z-plugin-session.\n\nStop and ask the operator when:\n- the Windows lane cannot be run interactively (the 19:03 \"skip\" stands until the operator lifts it);\n- a fix would change a requirement or the approved plan;\n- HV comes back DISAGREE twice on the same design area.\n\nStanding rules:\n- A measured local timestamp opens every text block (Get-LocalNow.ps1).\n- Bash only launches pwsh -File scripts; scripts are analyzed and -WhatIf'd before they run.\n- No Python or Node; plugin routes only, for session log, TODO, requirements and triage.\n- Nuke targets for every gate; Build.Tests runs with raw dotnet test.\n- Never force-push; sign every commit and PR comment.\n- No new code beyond this PR's scope; no done state before AGREE.]: The condition requires AGREE from hostile validation (item 6), but the transcript shows round 7 HV has not yet been launched. As of 2026-10-26T09:52:20, the implementer reports: the binding run is still in progress ('running tests'), AC criteria have been strengthened through the plugin, hostile gate v5 is written with its negative control verified, the 14 tests have been moved to Integration, R6-F2 absent citations are labeled historical, and plan section 20 is drafted. The next steps stated are: pre-commit Linux lane, gates at the new head, docs completion, projected problems shown to the operator, and then 'I'll bring you the projected problems for confirmation before launching round 7.' No HV round 7 receipt, response JSONL, or verdict is present in the transcript."
+  },
+  {
+    "line": 55394,
+    "timestamp": "2026-10-28T03:43:48.762Z",
+    "role": "user",
+    "text": "<!-- reply 1 -->\n> Once the last gates land I’ll bring you the pre-HV list for confirmation, as the HV rule requires. It holds one decision, which I’ve marked recommended: strengthen AC-8. When a download’s connection drops mid-file, the error doesn’t name the URL, and AC-8 doesn’t say what should happen in that case. Strengthening it means a new code head and rerunning every gate.\n\nWhat download?\n\n\n"
+  },
+  {
+    "line": 78512,
+    "timestamp": "2026-11-03T04:52:55.674Z",
+    "role": "user",
+    "text": "Approvef"
+  },
+  {
+    "line": 93361,
+    "timestamp": "2026-11-04T17:21:50.813Z",
+    "role": "user",
+    "text": "<!-- reply 1 -->\n> Writing the measure into the criterion is your decision. How should I handle it?\n\nFix it\n\n\n"
+  }
+]

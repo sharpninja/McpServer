@@ -1,0 +1,15 @@
+{
+  "name": "ug-r6-compile-1",
+  "target": "Compile",
+  "extraArgs": [],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "c3625a64222c558b16c564e62ec2b5d600801e77",
+  "dirtyPaths": [
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs"
+  ],
+  "startedLocal": "2026-10-21T12:46:38",
+  "startedUtc": "2026-10-21T17:46:38.4373959Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r6-compile-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r6-compile-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r6-compile-1.exit.txt"
+}

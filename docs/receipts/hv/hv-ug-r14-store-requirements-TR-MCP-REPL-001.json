@@ -1,0 +1,32 @@
+{
+  "timestampUtc": "2026-11-06T22:21:06.5772303+00:00",
+  "timestampLocal": "2026-11-06T16:21:09",
+  "method": "workflow.requirements.getTr",
+  "recordId": "TR-MCP-REPL-001",
+  "response": {
+    "payload": {
+      "result": {
+        "area": "MCP",
+        "status": "pending",
+        "updatedAt": "2026-11-06T22:21:09.0566999+00:00",
+        "subarea": "REPL",
+        "createdAt": "2026-11-06T22:21:09.0565411+00:00",
+        "description": "The REPL host SHALL parse incoming STDIO lines as YAML-formatted command envelopes containing `type`, `payload` with method-specific parameters, and optional `correlationId`/`requestId`. Response envelopes SHALL contain `type` (`result`/`error`/`event`), `payload` with result data or error details, and echoed identifiers. Malformed YAML SHALL emit structured error responses rather than crashing the process.\n\n**Covered by:** `McpServer.Repl.Core` (`IYamlEnvelope`, `IYamlSerializer`, `IReplProtocol`)",
+        "id": "TR-MCP-REPL-001",
+        "priority": "medium",
+        "acceptanceCriteria": [
+          {
+            "text": "The plugin REPL bridge (plugins/core/lib-ps/repl-invoke.ps1 run with -Method, the REPL surface every agent plugin calls) answers a call that fails before any response envelope arrives (marker refresh failure, REPL executable not found, a timeout, or the REPL exiting without output) with one YAML envelope on stdout of type error whose payload carries code, message (the failure text, or the REPL's exit code when it wrote nothing) and retryable, the code and retryable taken from the plugin's error classification (TR-MCP-TRIAGEERR-001), and the script exits 1; a call that succeeds without output writes nothing; the bridge never writes a bare True or False to stdout (triage-report-eb56d4eb; PLAN-SESSIONTRIAGEFIX-001 F1; tests in plugins/core/test-fixtures/pester/ReplBridgeErrorEnvelope.Tests.ps1: ReplBridgeErrorAssertion_AcceptsErrorEnvelopeAndRejectsBareBooleanOrUntypedOutput, ReplBridge_FailureWithoutOutput_WritesErrorEnvelope, ReplBridge_SuccessWithoutOutput_WritesNothing, ReplBridge_Script_MissingRepl_ExitsOneWithErrorEnvelope).",
+            "isSatisfied": false,
+            "id": "AC-001"
+          }
+        ],
+        "scopeStartLayerKey": "layer-1",
+        "title": "YAML Envelope Protocol"
+      },
+      "requestId": "req-20261106T222107Z-2147",
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "historicalAndOtherScopeRecords": "preserved verbatim from authoritative generated output",
+  "method": "client.Requirements.GenerateAsync",
+  "workspace": "/home/sharpninja/github/McpServer",
+  "completionStates": "copied from server projection; no satisfaction mutation",
+  "plugin": "mcpserver-codex-plugin1.121.0",
+  "timestampLocal": "2026-10-30T20:04:37",
+  "files": [
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Functional-Requirements.md",
+      "sha256": "12B786C45DABA6CB029FB60A36D7879FC254D6076B4ACAFA25B0E6B38882F45E",
+      "originalSha256": "296A55A01C50BD33752ED6AB5A752103502C240D97E877E041A1A2320D099C0B",
+      "docType": "functional",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/requirement-projections-before-20261030T200437/Functional-Requirements.md",
+      "source": "/tmp/unitgreen-export-functional.md"
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Technical-Requirements.md",
+      "sha256": "519309C2E871E4717D8DC2B91FED0CF5E09ABC771002CB99978424578A2B90C2",
+      "originalSha256": "EB01C8F9A0CE54BCE5EFAE2929EE293ACEBB46D297377E4DBBAD5F471074DDD3",
+      "docType": "technical",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/requirement-projections-before-20261030T200437/Technical-Requirements.md",
+      "source": "/tmp/unitgreen-export-technical.md"
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Testing-Requirements.md",
+      "sha256": "62B125645F152453DA2A3E9ADB24A7AA3F5930A4B61E7D4370E6FB3682DF8C05",
+      "originalSha256": "CF25725C6CE4FCC35D4AE7430A5EAE301ECA5B3B05B92EB2BFDA7906F19699E9",
+      "docType": "testing",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/requirement-projections-before-20261030T200437/Testing-Requirements.md",
+      "source": "/tmp/unitgreen-export-testing.md"
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/TR-per-FR-Mapping.md",
+      "sha256": "DFAFC83A826DF949EF335F37F08A71215F4651F72DFEA57E35A1AB5E152719B0",
+      "originalSha256": "C9BCCBF52273B544EAE5557A2C2589478FDA285F893D3BC93F9E71DDC0034566",
+      "docType": "mapping",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/requirement-projections-before-20261030T200437/TR-per-FR-Mapping.md",
+      "source": "/tmp/unitgreen-export-mapping.md"
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Requirements-Matrix.md",
+      "sha256": "A06A769CAD52BD3001ADD0D56E6723710431AAC98BCB12A8326CE267706F5EFD",
+      "originalSha256": "10E2E50FD8DAFE52C82C3CF3037E35826193F54517798BACE2B3584C46FFC8E2",
+      "docType": "matrix",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/requirement-projections-before-20261030T200437/Requirements-Matrix.md",
+      "source": "/tmp/unitgreen-export-matrix.md"
+    }
+  ]
+}

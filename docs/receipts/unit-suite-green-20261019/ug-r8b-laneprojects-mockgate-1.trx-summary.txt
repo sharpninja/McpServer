@@ -1,0 +1,2 @@
+RECEIPT ug-r8b-laneprojects-mockgate-1 (TRX summary of /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-mockgate-1, written 2026-10-27T22:57:32)
+ug-r8b-laneprojects-mockgate-1.trx: total=457 executed=457 passed=457 failed=0 notExecuted=0

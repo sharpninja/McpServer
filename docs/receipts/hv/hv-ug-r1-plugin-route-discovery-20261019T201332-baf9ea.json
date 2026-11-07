@@ -1,0 +1,14 @@
+{
+  "TimestampUtc": "2026-10-20T01:13:32.7526601Z",
+  "TimestampLocal": "2026-10-19T20:13:32",
+  "Mode": "Search",
+  "Arguments": [
+    "-n",
+    "queryHistory|UseCases\\.|workflow.requirements|sessionlog.get",
+    "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib"
+  ],
+  "Offset": 0,
+  "Count": 100,
+  "ExitCode": 0,
+  "Output": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/mcp-status.ps1:19:    'workflow.requirements'\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/mcp-status.ps1:26:    'workflow.requirements.listLayers'\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/mcp-status.ps1:27:    'workflow.requirements.createLayer'\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/mcp-status.ps1:28:    'workflow.requirements.updateLayer'\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/mcp-status.ps1:29:    'workflow.requirements.effective'\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/mcp-status.ps1:30:    'workflow.requirements.planRecovery'\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/mcp-status.ps1:31:    'workflow.requirements.applyRecovery'\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/mcp-status.ps1:32:    'workflow.requirements.getRecovery'\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:650:            'workflow.requirements.generateDocument'  { $long; break }\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:651:            'workflow.requirements.ingestDocument'    { $long; break }\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:652:            'workflow.requirements.analyze*'          { $long; break }\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-params-transfer.ps1:6:    argument made large calls (for example a 194 KB workflow.requirements.updateBatch) fail with"
+}

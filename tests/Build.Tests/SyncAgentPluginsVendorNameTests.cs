@@ -21,6 +21,8 @@ public sealed class SyncAgentPluginsVendorNameTests
     /// TEST-MCP-194: The vendor step names the stable version-less tarball, so consumer package.json
     /// references never break on a version bump.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SyncAgentPlugins_VendorStep_UsesStableVersionlessName()
     {
@@ -33,6 +35,8 @@ public sealed class SyncAgentPluginsVendorNameTests
     /// TEST-MCP-194: No versioned vendor tarball literal exists in the sync source, so a hard-coded
     /// version cannot silently drift from package.json again.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SyncAgentPlugins_VendorStep_HasNoVersionedTarballLiteral()
     {
@@ -46,6 +50,8 @@ public sealed class SyncAgentPluginsVendorNameTests
     /// TEST-MCP-194: The vendor step validates the packed tarball version against
     /// plugins/core/lib-node/package.json, so pack-versus-manifest drift fails the sync loudly.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SyncAgentPlugins_VendorStep_AssertsPackedVersionAgainstPackageJson()
     {

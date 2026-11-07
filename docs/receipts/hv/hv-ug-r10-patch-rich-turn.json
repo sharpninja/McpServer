@@ -1,0 +1,12 @@
+{
+  "type": "result",
+  "payload": {
+    "result": {
+      "requestId": "req-20261103T122503Z-unitgreen-r10",
+      "agent": "Codex",
+      "turnId": 23018,
+      "sessionId": "Codex-20261103T122431Z-plugin-session"
+    },
+    "requestId": "req-20261103T135128Z-af6a"
+  }
+}
