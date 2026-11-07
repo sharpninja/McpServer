@@ -23,6 +23,12 @@ public sealed class GitHubCliServiceTests
         _sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance);
     }
 
+    /// <summary>
+    /// FR-MCP-005: when gh exits 0 with a one-issue JSON array, ListIssuesAsync succeeds and returns that one issue
+    /// with its number (1) and title (Bug). Data: a substituted IProcessRunner returning the scripted gh output; state
+    /// open, limit 10.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ListIssuesAsync_WhenGhSucceeds_ReturnsIssues()
     {
@@ -38,6 +44,12 @@ public sealed class GitHubCliServiceTests
         Assert.Equal("Bug", result.Issues[0].Title);
     }
 
+    /// <summary>
+    /// FR-MCP-005: when gh exits 1 with the error text not authenticated, ListIssuesAsync fails, returns that text as
+    /// the error and returns an empty issue list. Data: a substituted IProcessRunner returning the scripted failure; no
+    /// state filter, limit 10.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ListIssuesAsync_WhenGhFails_ReturnsError()
     {
@@ -51,6 +63,13 @@ public sealed class GitHubCliServiceTests
         Assert.Empty(result.Issues);
     }
 
+    /// <summary>
+    /// No requirement id applies: no FR, TR or TEST record in the store names pull-request listing; the case proves
+    /// that when gh exits 0 with a one-pull-request JSON array, ListPullsAsync succeeds and returns that one pull
+    /// request with number 42. Data: a substituted IProcessRunner returning the scripted gh output; state open, limit
+    /// 10.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ListPullsAsync_WhenGhSucceeds_ReturnsPulls()
     {
@@ -65,6 +84,12 @@ public sealed class GitHubCliServiceTests
         Assert.Equal(42, result.Pulls[0].Number);
     }
 
+    /// <summary>
+    /// FR-MCP-005: when gh prints the new issue URL, CreateIssueAsync succeeds, parses issue number 5 from it and
+    /// returns a URL containing issues/5. Data: a substituted IProcessRunner returning the scripted URL line; title New
+    /// issue, body Body text.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CreateIssueAsync_WhenGhSucceeds_ReturnsUrl()
     {
@@ -78,6 +103,11 @@ public sealed class GitHubCliServiceTests
         Assert.Contains("issues/5", result.Url, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-005: when gh exits 1 with the error text auth required, CreateIssueAsync fails and returns that text as
+    /// the error. Data: a substituted IProcessRunner returning the scripted failure; title New issue, no body.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CreateIssueAsync_WhenGhFails_ReturnsError()
     {
@@ -90,6 +120,11 @@ public sealed class GitHubCliServiceTests
         Assert.Equal("auth required", result.Error);
     }
 
+    /// <summary>
+    /// FR-MCP-005: when gh exits 0, CommentOnIssueAsync reports success for a comment on issue 1. Data: a substituted
+    /// IProcessRunner returning an empty successful result; comment text test comment.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CommentOnIssueAsync_WhenGhSucceeds_ReturnsSuccess()
     {
@@ -119,6 +154,13 @@ public sealed class GitHubCliServiceTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// No requirement id applies: no FR, TR or TEST record in the store names pull-request comments; the case proves
+    /// that CommentOnPullAsync succeeds and runs gh once with <c>pr comment --body "PR comment" -- 42</c>, the pull
+    /// request number placed after the end-of-options marker. Data: a substituted IProcessRunner returning an empty
+    /// successful result; pull request 42, comment PR comment.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CommentOnPullAsync_VerifiesGhArgs()
     {
@@ -133,6 +175,12 @@ public sealed class GitHubCliServiceTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// FR-MCP-005: when gh returns one issue JSON object, GetIssueAsync succeeds and maps its number, title, body,
+    /// state, its one label (bug), its one assignee (user1), the milestone (v1.0), the author (reporter) and its one
+    /// comment (On it). Data: a substituted IProcessRunner returning a scripted issue 42 JSON document.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task GetIssueAsync_WhenGhSucceeds_ReturnsIssueDetail()
     {
@@ -174,6 +222,11 @@ public sealed class GitHubCliServiceTests
         Assert.Equal("On it", result.Issue.Comments[0].Body);
     }
 
+    /// <summary>
+    /// FR-MCP-005: when gh exits 1 with the error text not found, GetIssueAsync fails and returns that text as the
+    /// error message. Data: a substituted IProcessRunner returning the scripted failure; issue 999.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task GetIssueAsync_WhenGhFails_ReturnsError()
     {
@@ -186,6 +239,12 @@ public sealed class GitHubCliServiceTests
         Assert.Equal("not found", result.ErrorMessage);
     }
 
+    /// <summary>
+    /// FR-MCP-005: UpdateIssueAsync succeeds and runs gh once with <c>issue edit 42</c> carrying the --title,
+    /// --add-label and --remove-label options. Data: a substituted IProcessRunner returning the issue URL; an update
+    /// request with title New title, added label bug and removed label wontfix.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task UpdateIssueAsync_AssemblesCorrectArgs()
     {
@@ -209,6 +268,11 @@ public sealed class GitHubCliServiceTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// FR-MCP-005: CloseIssueAsync with the reason not_planned succeeds and runs gh once with <c>issue close 42</c> and
+    /// <c>--reason not_planned</c>. Data: a substituted IProcessRunner returning an empty successful result; issue 42.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CloseIssueAsync_WithReason_IncludesReasonFlag()
     {
@@ -238,6 +302,11 @@ public sealed class GitHubCliServiceTests
         await _processRunner.DidNotReceiveWithAnyArgs().RunAsync(default!, default!, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// FR-MCP-005: CloseIssueAsync without a reason succeeds and runs gh once with <c>issue close 42</c> and no
+    /// --reason option. Data: a substituted IProcessRunner returning an empty successful result; issue 42.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CloseIssueAsync_WithoutReason_NoReasonFlag()
     {
@@ -253,6 +322,11 @@ public sealed class GitHubCliServiceTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// FR-MCP-005: ReopenIssueAsync succeeds and runs gh once with <c>issue reopen 42</c>. Data: a substituted
+    /// IProcessRunner returning an empty successful result; issue 42.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ReopenIssueAsync_WhenGhSucceeds_ReturnsSuccess()
     {
@@ -281,6 +355,11 @@ public sealed class GitHubCliServiceTests
         await _processRunner.DidNotReceiveWithAnyArgs().RunAsync(default!, default!, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// FR-MCP-005: when gh returns a two-label JSON array, ListIssueLabelsAsync succeeds and returns both labels in
+    /// order (bug, then enhancement). Data: a substituted IProcessRunner returning the scripted label JSON.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ListIssueLabelsAsync_WhenGhSucceeds_ReturnsLabels()
     {
@@ -297,6 +376,11 @@ public sealed class GitHubCliServiceTests
         Assert.Equal("enhancement", result.Labels[1].Name);
     }
 
+    /// <summary>
+    /// FR-MCP-005: when gh exits 1 with the error text not authenticated, ListIssueLabelsAsync fails and returns that
+    /// text as the error message. Data: a substituted IProcessRunner returning the scripted failure.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ListIssueLabelsAsync_WhenGhFails_ReturnsError()
     {
@@ -309,6 +393,12 @@ public sealed class GitHubCliServiceTests
         Assert.Equal("not authenticated", result.ErrorMessage);
     }
 
+    /// <summary>
+    /// FR-MCP-063; TR-MCP-GH-004: when gh returns a one-run JSON array, ListWorkflowRunsAsync succeeds and maps the run
+    /// id (101) and the workflow name (CI). Data: a substituted IProcessRunner returning the scripted run JSON; a query
+    /// with limit 10.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-063; TR-MCP-GH-004: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ListWorkflowRunsAsync_WhenGhSucceeds_ReturnsRuns()
     {
@@ -324,6 +414,12 @@ public sealed class GitHubCliServiceTests
         Assert.Equal("CI", result.Runs[0].WorkflowName);
     }
 
+    /// <summary>
+    /// FR-MCP-063; TR-MCP-GH-004: when gh returns one run JSON object with one job and one step, GetWorkflowRunAsync
+    /// succeeds and maps the run id (202), the one job and its one step (checkout). Data: a substituted IProcessRunner
+    /// returning a scripted run 202 JSON document.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-063; TR-MCP-GH-004: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task GetWorkflowRunAsync_WhenGhSucceeds_ReturnsRun()
     {
@@ -369,6 +465,11 @@ public sealed class GitHubCliServiceTests
         Assert.Equal("checkout", result.Run.Jobs[0].Steps[0].Name);
     }
 
+    /// <summary>
+    /// FR-MCP-063; TR-MCP-GH-004: RerunWorkflowRunAsync succeeds and runs gh once with <c>run rerun 303</c>. Data: a
+    /// substituted IProcessRunner returning an empty successful result; run 303.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-063; TR-MCP-GH-004: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task RerunWorkflowRunAsync_UsesRerunCommand()
     {
@@ -383,6 +484,11 @@ public sealed class GitHubCliServiceTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// FR-MCP-063; TR-MCP-GH-004: CancelWorkflowRunAsync succeeds and runs gh once with <c>run cancel 404</c>. Data: a
+    /// substituted IProcessRunner returning an empty successful result; run 404.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-063; TR-MCP-GH-004: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CancelWorkflowRunAsync_UsesCancelCommand()
     {

@@ -143,6 +143,15 @@ public sealed class WikiDumpG7OverlayTests : IDisposable
         Assert.DoesNotContain(SecretSentinel, canonical, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// TEST-MCP-AUDIT-003; FR-MCP-AUDIT-001 (its first criterion, which carries no criterion id): a data audit row of
+    /// the workspace does not reach the exported wiki dump (its snapshot sentinel is absent from the dump JSON), and
+    /// the dump policy registry marks both audit tables, DataAuditLogs and TodoAuditHistory, OMIT-LOCAL. Data: the
+    /// class fixture (an in-memory SQLite McpDbContext over a temporary workspace folder) seeded with one
+    /// DataAuditLogEntity whose CurrentSnapshotJson holds the sentinel local-audit-only-92841, exported through the
+    /// ExportAsync helper with IncludeDump true.
+    /// </summary>
+    /// <remarks>2026-11-07, TEST-MCP-AUDIT-003; FR-MCP-AUDIT-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task Dump_AuditRecordsStayLocal()
     {

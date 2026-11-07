@@ -1,8 +1,8 @@
 /// <summary>
 /// TR-MCP-NUKE-019 AC-2: Selects the projects MigrationIntegrationTests runs from the solution's project names:
-/// QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.EnvironmentIntegrationTests, QBrainAi.McpAgent.IntegrationTests,
+/// QBrainAi.Support.Mcp.EnvironmentIntegrationTests, QBrainAi.McpAgent.IntegrationTests,
 /// QBrainAi.QBAgent.IntegrationTests, NukeBuild.IntegrationTests, QBrainAi.Repl.IntegrationTests and
-/// QBrainAi.Support.Mcp.IntegrationTests, in that order, and
+/// QBrainAi.Support.Mcp.IntegrationTests, in that order, all integration-owned, and
 /// names the classes the
 /// lane runs from a project: from QBrainAi.Support.Mcp.IntegrationTests only RequirementScopeLayerReplIntegrationTests
 /// and QuadBrainOllamaEndpointIntegrationTests, every class of the others. QBrainAi.Acid.IntegrationTests and
@@ -15,6 +15,7 @@
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the named selection follows slice S4 (Build.IntegrationTests replaces Build.Tests); the contract is unchanged.</para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the named selection follows slice S5 (QBrainAi.Support.Mcp.Environment.IntegrationTests runs after QBrainAi.Support.Mcp.Tests); the contract is unchanged.</para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the named selection follows the project renames (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name."): QBrainAi.Support.Mcp.EnvironmentIntegrationTests and NukeBuild.IntegrationTests, formerly QBrainAi.Support.Mcp.Environment.IntegrationTests and Build.IntegrationTests; the contract is unchanged.</para>
+/// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the named selection follows slice S8, which took QBrainAi.Support.Mcp.Tests out of the lane once it held no integration case; the summary had kept it in the list (ClaudeCode review of slice S9); the contract is unchanged.</para>
 /// </remarks>
 interface IIntegrationLaneProjects
 {

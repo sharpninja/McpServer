@@ -10,6 +10,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
+/// <summary>
+/// FR-MCP-MEMORY-002; FR-MCP-MEMORY-003; TR-MCP-MEMORY-003; TR-MCP-USECASE-018 AC-006: this part of MemoryS1Harness
+/// holds the fixture and probe helpers: InsertEdgeFixtureAsync, GetEmbeddingStatusAsync and SetEmbeddingStatusAsync
+/// over the harness database; RenderRequiredMemories, which finds a production REQUIRED MEMORIES renderer by
+/// reflection; FindMappedEntity and HasUniqueEdgeIndex over the EF model; the MemoryService passthroughs
+/// AddCompatAsync, ListCompatAsync, GetCompatAsync, UpdateCompatAsync and RemoveCompatAsync; StatusOf for MVC results;
+/// the Clock a test may set for the handlers; and CreateProductionDispatcher, which every dispatch helper of the
+/// harness uses. The memory tests that build a MemoryS1Harness use them.
+/// </summary>
+/// <remarks>2026-11-07, FR-MCP-MEMORY-002; FR-MCP-MEMORY-003; TR-MCP-MEMORY-003; TR-MCP-USECASE-018 AC-006: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the code is unchanged.</remarks>
 public sealed partial class MemoryS1Harness
 {
     /// <summary>Test-only fixture helper to plant a directed edge without the S3 create-edge API.</summary>

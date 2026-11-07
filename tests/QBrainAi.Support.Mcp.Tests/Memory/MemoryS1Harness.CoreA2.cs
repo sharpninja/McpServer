@@ -3,6 +3,15 @@ using QBrainAi.Support.Mcp.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
+/// <summary>
+/// No requirement id applies: this part of MemoryS1Harness holds the S2 and S3 dispatch helpers IndexAsync,
+/// ReconcileIndexAsync, BatchIndexAsync, ExploreAsync, CreateEdgeAsync and RecordHebbianAsync; each sends its memory
+/// command or query through the production CQRS dispatcher (CreateProductionDispatcher, in MemoryS1Harness.CoreB.cs)
+/// for workspace A unless another workspace is given, and returns a 501 result carrying the dispatch error when no
+/// handler answers (IndexAsync also reports the stored EmbeddingStatus). The memory tests that build a MemoryS1Harness
+/// use them.
+/// </summary>
+/// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the code is unchanged.</remarks>
 public sealed partial class MemoryS1Harness
 {
     /// <summary>Indexes one memory through the S2 CQRS command port when a handler is registered.</summary>

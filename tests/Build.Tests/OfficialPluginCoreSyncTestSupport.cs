@@ -3,6 +3,17 @@ using System.Security.Cryptography;
 
 namespace NukeBuild.Tests;
 
+/// <summary>
+/// TR-MCP-NUKE-009 AC-006; FR-MCP-BUILD-001: provides AssertCanonicalCorePropagatesAsync, which checks that
+/// build/Build.SyncAgentPlugins.cs names the five official plugin repositories and syncs each plugin root, then runs
+/// plugins/core/sync/sync-plugin-core.ps1 into a temporary plugin root through BoundedProcess (the only child-process
+/// route TR-MCP-NUKE-009 AC-006 allows, bounded at five minutes) and asserts exit code 0 and a matching SHA256 for
+/// every top-level *.ps1 file of plugins/core/lib-ps; its only callers are the two Category=Integration checksum cases
+/// of NukeBuild.IntegrationTests (SyncAgentPluginsChecksumTests and DocsSyncG8OverlayTests), which compile this file by
+/// link. Data: the repository checkout passed as repoRoot and a temporary plugin root under the system temp folder,
+/// removed in a finally block.
+/// </summary>
+/// <remarks>2026-11-07, TR-MCP-NUKE-009 AC-006; FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the code is unchanged.</remarks>
 internal static class OfficialPluginCoreSyncTestSupport
 {
     private static readonly string[] s_officialPlugins =

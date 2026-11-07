@@ -1,5 +1,6 @@
 using QBrainAi.SessionLog.Transcripts;
 using QBrainAi.Tests.Shared;
+using static QBrainAi.Support.Mcp.Tests.Ingestion.ImportRecoveryIngestionFakes;
 
 namespace QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Ingestion;
 
@@ -7,7 +8,10 @@ namespace QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Ingestion;
 /// TEST-MCP-SESSIONLIFE-004: transcript ingestion replays pending import-recovery envelopes
 /// through the source adapter and session persister, then deletes only the envelope.
 /// </summary>
-/// <remarks>2026-11-07, TEST-MCP-SESSIONLIFE-004; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: moved whole with its private fakes from QBrainAi.Support.Mcp.Tests (Ingestion/ImportRecoveryEnvelopeTests.cs) into the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests, so the unit-owned project holds only unit cases (slice S8, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"); no unit class uses its fakes (the unit ImportRecoveryIngestionTests declares its own), and its envelope fixture is still read from the repository checkout through the linked TestRepositoryRoot; only the namespace changed.</remarks>
+/// <remarks>
+/// <para>2026-11-07, TEST-MCP-SESSIONLIFE-004; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: moved whole with its private fakes from QBrainAi.Support.Mcp.Tests (Ingestion/ImportRecoveryEnvelopeTests.cs) into the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests, so the unit-owned project holds only unit cases (slice S8, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"); no unit class uses its fakes (the unit ImportRecoveryIngestionTests declares its own), and its envelope fixture is still read from the repository checkout through the linked TestRepositoryRoot; only the namespace changed.</para>
+/// <para>2026-11-07, TEST-MCP-SESSIONLIFE-004; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: its private EmptyDetector, CodexSourceAdapter and RecordingPersister, identical in behavior to the copies the unit ImportRecoveryIngestionTests declared, are replaced by the one shared definition in ImportRecoveryIngestionFakes, defined in QBrainAi.Support.Mcp.Tests and linked into this project (slice S9 of hostile validation finding R14-F4, DRY); so the earlier entry's "the unit ImportRecoveryIngestionTests declares its own" no longer holds, and the test method is unchanged.</para>
+/// </remarks>
 public sealed class ImportRecoveryEnvelopeTests
 {
     /// <summary>
@@ -78,48 +82,4 @@ public sealed class ImportRecoveryEnvelopeTests
     }
 
     private static string FindRepositoryRoot() => TestRepositoryRoot.Resolve();
-
-    private sealed class EmptyDetector : ITranscriptBundleDetector
-    {
-        /// <inheritdoc />
-        public Task<IReadOnlyList<TranscriptBundle>> DetectAsync(string path, bool recursive, CancellationToken cancellationToken = default)
-            => Task.FromResult<IReadOnlyList<TranscriptBundle>>([]);
-    }
-
-    private sealed class CodexSourceAdapter : ITranscriptSourceAdapter
-    {
-        /// <inheritdoc />
-        public TranscriptSourceKind SourceKind => TranscriptSourceKind.Codex;
-
-        /// <inheritdoc />
-        public Task<TranscriptSession> NormalizeAsync(TranscriptBundle bundle, CancellationToken cancellationToken = default)
-        {
-            var session = new TranscriptSession(
-                TranscriptSourceKind.Codex,
-                "Codex-20260923T205606Z-life",
-                [],
-                "session: from-source\n",
-                sourceFiles: bundle.Files);
-            return Task.FromResult(session);
-        }
-    }
-
-    private sealed class RecordingPersister : ITranscriptSessionPersister
-    {
-        /// <summary>Persisted sessions.</summary>
-        public List<(TranscriptSession Session, TranscriptSessionReceipt Receipt)> Calls { get; } = [];
-
-        /// <inheritdoc />
-        public Task<string> PersistAsync(
-            TranscriptIngestionRequest request,
-            TranscriptSession session,
-            TranscriptSessionReceipt receipt,
-            CancellationToken cancellationToken = default)
-        {
-            if (session.CanonicalYaml.Contains("importRecovery:", StringComparison.Ordinal))
-                throw new InvalidOperationException("Envelope YAML must not be submitted.");
-            Calls.Add((session, receipt));
-            return Task.FromResult("sessionLogId:1");
-        }
-    }
 }

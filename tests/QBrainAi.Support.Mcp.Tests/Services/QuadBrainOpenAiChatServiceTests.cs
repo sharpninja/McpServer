@@ -88,6 +88,13 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.Contains("edit_local_file", orchestration.LastRequest!.Input, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 (second criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: a tool_calls JSON
+    /// object that follows prose in the Arbiter output is still emitted as one external tool call (write_file, its
+    /// arguments holding a.cs) with finish reason tool_calls. Data: a capturing orchestration stub returning that
+    /// output; a request offering the write_file tool.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-QBOPENAI-001 (second criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CompleteAsync_ToolCallsJsonEmbeddedInProse_ReturnsExternalToolCalls()
     {
@@ -115,6 +122,14 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.Contains("a.cs", call.Function.Arguments, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-QBEXEC-001 (second and seventh criteria, no ids); TR-MCP-QBEXEC-001; TEST-MCP-QBEXEC-001: an elected
+    /// mcp_todo_query is executed server-side and not emitted, and the response is a normal assistant message with
+    /// finish reason stop, no tool calls, and content carrying the scripted TODO result. Data: a capturing
+    /// orchestration stub electing mcp_todo_query; a scripted internal executor that handles only that tool and returns
+    /// a one-item TODO JSON result.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-QBEXEC-001 (second and seventh criteria, no ids); TR-MCP-QBEXEC-001; TEST-MCP-QBEXEC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CompleteAsync_McpTodoQuery_ReturnsNormalAssistantContent()
     {
@@ -138,6 +153,14 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.Contains("PLAN-X-001", choice.Message.Content, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 (second criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: when the Arbiter
+    /// output only defers in prose and the Logic role result carries a tool_calls envelope, the response emits that
+    /// tool call (read_file, its arguments naming AGENTS-README-FIRST.yaml) with finish reason tool_calls. Data: a
+    /// capturing orchestration stub returning the deferring Arbiter prose and the Logic role result; a request offering
+    /// read_file.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-QBOPENAI-001 (second criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CompleteAsync_ArbiterDeferredProse_UsesLogicToolCalls()
     {
@@ -170,6 +193,14 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.Contains("AGENTS-README-FIRST.yaml", choice.Message.ToolCalls![0].Function.Arguments, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-QBEXEC-001 (second criterion, no id); TR-MCP-QBEXEC-001; TEST-MCP-QBEXEC-001: an internal mcp_todo_query
+    /// elected in round 1 is executed server-side, its result is fed into the round 2 orchestration input, and the
+    /// content of the round 2 final envelope is returned with finish reason stop after exactly 2 rounds. Data: a
+    /// scripted orchestration stub (a tool-call envelope, then a final envelope); a scripted internal executor handling
+    /// mcp_todo_query.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-QBEXEC-001 (second criterion, no id); TR-MCP-QBEXEC-001; TEST-MCP-QBEXEC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CompleteAsync_InternalTool_LoopsUntilProseAnswer()
     {
@@ -200,6 +231,14 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.Contains("PLAN-X-001 is the open work", choice.Message.Content, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 (no criterion states this fallback): when orchestration is rejected with ProviderFailed and
+    /// an empty Arbiter output but the Creativity role result holds a final envelope, the service runs one round only
+    /// and returns that envelope content as the assistant message with finish reason stop, without the ProviderFailed
+    /// reason text. Data: a scripted orchestration stub (two ProviderFailed rejections, the first carrying the
+    /// Creativity final envelope); a request offering read_file.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-QBOPENAI-001 (no criterion states this fallback): documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CompleteAsync_ProviderFailed_UsesCreativityFinalInsteadOfLooping()
     {
@@ -240,6 +279,13 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.DoesNotContain("ProviderFailed", response.Choices[0].Message.Content, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 (first criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: an Arbiter final
+    /// envelope is returned as its content alone (Voice chat should call QuadBrain.) with finish reason stop, without
+    /// the envelope or its intent field. Data: a capturing orchestration stub returning the final envelope; a request
+    /// with one user message and no tools.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-QBOPENAI-001 (first criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CompleteAsync_ArbiterFinalIntent_ReturnsContentWithoutEnvelope()
     {
@@ -260,6 +306,13 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.DoesNotContain("intent", choice.Message.Content, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 (second criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: with a tool offered,
+    /// an Arbiter continue envelope triggers a second round whose input carries the continue directive, and the
+    /// tool_calls envelope of that round is emitted as one read_file tool call with finish reason tool_calls. Data: a
+    /// scripted orchestration stub (a continue envelope, then a tool_calls envelope); a request offering read_file.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-QBOPENAI-001 (second criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CompleteAsync_ArbiterContinueIntent_RePromptsThenTools()
     {
@@ -290,6 +343,14 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.Equal("read_file", Assert.Single(response.Choices[0].Message.ToolCalls!).Function.Name);
     }
 
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 (second criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: with a tool offered,
+    /// deferring Arbiter prose that names no tool call is not returned as the answer; a second round runs with the
+    /// continue directive in its input, and its tool_calls output is emitted as one read_file tool call with finish
+    /// reason tool_calls. Data: a scripted orchestration stub (deferring prose, then a tool_calls JSON object); a
+    /// request offering read_file.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-QBOPENAI-001 (second criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CompleteAsync_LiveArbiterDeferredProse_RePromptsInsteadOfStopping()
     {
@@ -320,6 +381,13 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.Equal("read_file", Assert.Single(response.Choices[0].Message.ToolCalls!).Function.Name);
     }
 
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 (first criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: a deferring prose
+    /// reply that carries no tool call is re-prompted (a second round runs with the continue directive in its input),
+    /// and the final envelope content of that round is returned with finish reason stop. Data: a scripted orchestration
+    /// stub (deferring prose, then a final envelope); the request offers the read_file tool.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-QBOPENAI-001 (first criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CompleteAsync_DeferredWithoutTools_RePromptsThenReturnsAnswer()
     {
@@ -350,6 +418,12 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.Contains("Voice chat should call QuadBrain", response.Choices[0].Message.Content, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001 (first criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: an incoming tool
+    /// message is folded into the orchestration input with its call id label (tool [call_0]) and its content. Data: a
+    /// capturing orchestration stub; a transcript of one user message and one tool message with tool call id call_0.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-QBOPENAI-001 (first criterion, no id); TR-MCP-QBOPENAI-001; TEST-MCP-QBOPENAI-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CompleteAsync_IncomingToolResult_IsFoldedIntoOrchestrationInput()
     {

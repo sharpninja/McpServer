@@ -15,6 +15,12 @@ namespace QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing;
 /// </remarks>
 public sealed class EmbeddingServiceTests : EmbeddingServiceTestsBase, IDisposable
 {
+    /// <summary>
+    /// FR-MCP-004: when the ONNX model is loaded, the embedding of "hello world" holds at least one nonzero value; when
+    /// the service reports the model unavailable the case returns without asserting. Data: the EmbeddingService that
+    /// the linked base class EmbeddingServiceTestsBase builds from default EmbeddingOptions (no model path set).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-004: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void GenerateEmbedding_WithModel_ReturnsNonZeroVector()
@@ -27,6 +33,12 @@ public sealed class EmbeddingServiceTests : EmbeddingServiceTestsBase, IDisposab
         Assert.Contains(embedding, v => v != 0f);
     }
 
+    /// <summary>
+    /// FR-MCP-004: when the ONNX model is loaded, two embeddings of the same text "deterministic test" are equal; when
+    /// the service reports the model unavailable the case returns without asserting. Data: the EmbeddingService that
+    /// the linked base class EmbeddingServiceTestsBase builds from default EmbeddingOptions (no model path set).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-004: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void GenerateEmbedding_SameInput_ReturnsDeterministicOutput()
@@ -39,6 +51,12 @@ public sealed class EmbeddingServiceTests : EmbeddingServiceTestsBase, IDisposab
         Assert.Equal(e1, e2);
     }
 
+    /// <summary>
+    /// FR-MCP-004: when the ONNX model is loaded, the embeddings of "cats and dogs" and "quantum physics" differ; when
+    /// the service reports the model unavailable the case returns without asserting. Data: the EmbeddingService that
+    /// the linked base class EmbeddingServiceTestsBase builds from default EmbeddingOptions (no model path set).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-004: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void GenerateEmbedding_DifferentInput_ReturnsDifferentVectors()
@@ -51,6 +69,13 @@ public sealed class EmbeddingServiceTests : EmbeddingServiceTestsBase, IDisposab
         Assert.NotEqual(e1, e2);
     }
 
+    /// <summary>
+    /// FR-MCP-004: when the ONNX model is loaded, a 500-word input still yields a 384-value embedding with at least one
+    /// nonzero value; when the service reports the model unavailable the case returns without asserting. Data: the text
+    /// "word" repeated 500 times and the EmbeddingService that the linked base class EmbeddingServiceTestsBase builds
+    /// from default EmbeddingOptions (no model path set).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-004: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void GenerateEmbedding_LongInput_TruncatesCorrectly()

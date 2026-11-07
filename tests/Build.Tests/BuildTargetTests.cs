@@ -23,12 +23,22 @@ public sealed class BuildTargetTests
 {
     private static readonly Type BuildType = typeof(Build);
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): the build class Build derives from
+    /// Nuke.Common.NukeBuild, read by reflection. Data: the Build type of the referenced _build project; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_ExtendsNukeBuild()
     {
         Assert.True(BuildType.IsSubclassOf(typeof(Nuke.Common.NukeBuild)));
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public Compile target property,
+    /// found by reflection; the case asserts only that the property exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasCompileTarget()
     {
@@ -36,6 +46,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public Clean target property,
+    /// found by reflection; the case asserts only that the property exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasCleanTarget()
     {
@@ -43,6 +58,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public Restore target property,
+    /// found by reflection; the case asserts only that the property exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasRestoreTarget()
     {
@@ -50,6 +70,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public Configuration field of
+    /// type string, found by reflection. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasConfigurationParameter()
     {
@@ -58,6 +83,11 @@ public sealed class BuildTargetTests
         Assert.Equal(typeof(string), field!.FieldType);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a non-public instance Solution
+    /// field, found by reflection; the case asserts only that the field exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasSolutionField()
     {
@@ -66,6 +96,12 @@ public sealed class BuildTargetTests
         Assert.NotNull(field);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares public SourceDirectory,
+    /// TestsDirectory, ArtifactsDirectory and LocalPackagesDirectory properties, found by reflection. Data: the Build
+    /// type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasDirectoryProperties()
     {
@@ -75,6 +111,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(BuildType.GetProperty("LocalPackagesDirectory"));
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public Test target property,
+    /// found by reflection; the case asserts only that the property exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasTestTarget()
     {
@@ -82,6 +123,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public PublishNuGet target
+    /// property, found by reflection; the case asserts only that the property exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasPublishNuGetTarget()
     {
@@ -89,6 +135,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public SyncAgentPlugins target
+    /// property, found by reflection; the case asserts only that the property exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasSyncAgentPluginsTarget()
     {
@@ -97,6 +148,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a non-public instance
+    /// AgentPluginParent field of type string, found by reflection. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasAgentPluginParentParameter()
     {
@@ -240,6 +296,12 @@ public sealed class BuildTargetTests
         Assert.NotNull(BuildType.GetProperty("DeployQBAgentTool"));
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build.NuGetApiKeyEnvironmentVariable is
+    /// NUGET_API_KEY and Build.NuGetOrgSource is the nuget.org v3 index URL https://api.nuget.org/v3/index.json. Data:
+    /// the two constants of the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void PublishNuGet_UsesNUGET_API_KEYEnvironmentVariable()
     {
@@ -247,6 +309,12 @@ public sealed class BuildTargetTests
         Assert.Equal("https://api.nuget.org/v3/index.json", Build.NuGetOrgSource);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): ResolveNuGetApiKey returns the value its lookup
+    /// gives for NUGET_API_KEY. Data: an inline lookup delegate that returns a placeholder key string for NUGET_API_KEY
+    /// and null for every other name; no real key and no process environment.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ResolveNuGetApiKey_ReturnsEnvironmentValue()
     {
@@ -255,6 +323,13 @@ public sealed class BuildTargetTests
         Assert.Equal("secret-key", value);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): ResolveNuGetApiKey throws
+    /// InvalidOperationException, with a message naming NUGET_API_KEY, when the lookup gives a missing, empty, blank or
+    /// unexpanded value. Data: four inline cases (null, an empty string, three spaces, and the unexpanded macro text
+    /// $(NUGET_API_KEY)) supplied through an inline lookup delegate; no process environment.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -268,6 +343,14 @@ public sealed class BuildTargetTests
         Assert.Contains(Build.NuGetApiKeyEnvironmentVariable, ex.Message, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): GetNuGetPackagesToPublish returns the .nupkg files
+    /// of a folder sorted by name, leaving out .symbols.nupkg files and files of other kinds. Data: a temporary folder
+    /// under the system temp folder holding empty Example.B.1.0.0.nupkg, Example.A.1.0.0.nupkg,
+    /// Example.A.1.0.0.symbols.nupkg and ignored.txt, removed in a finally block; the expected result is
+    /// Example.A.1.0.0.nupkg then Example.B.1.0.0.nupkg.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void GetNuGetPackagesToPublish_ReturnsSortedNonSymbolPackages()
     {
@@ -294,6 +377,13 @@ public sealed class BuildTargetTests
         }
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): ResolveNuGetPackageVersionFromGitVersion reads
+    /// 1.0.1 from the next-version line of GitVersion configuration text and ignores the comment after it. Data: an
+    /// inline GitVersion configuration string (mode ContinuousDelivery, next-version 1.0.1 followed by a comment, and a
+    /// main branch entry); no file.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ResolveNuGetPackageVersionFromGitVersion_ReadsNextVersion()
     {
@@ -310,6 +400,13 @@ public sealed class BuildTargetTests
         Assert.Equal("1.0.1", version);
     }
 
+    /// <summary>
+    /// TR-MCP-NUKE-007 AC-001; FR-MCP-BUILD-001: GetInstalledGlobalToolVersion matches package ids case-insensitively
+    /// in dotnet tool list --global output and returns 6.1.1 for QBrainAI.Repl, 1.4.41 for the separate 1.x alias
+    /// package SharpNinja.McpServer.Repl, and null for a missing tool. Data: an inline three-row tool list sample
+    /// (qbrainai.repl 6.1.1 qbrain-ai-repl, sharpninja.mcpserver.repl 1.4.41 mcpserver-repl, other.tool 1.0.0 other).
+    /// </summary>
+    /// <remarks>2026-11-07, TR-MCP-NUKE-007 AC-001; FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void InstallReplTool_ParsesInstalledGlobalToolVersion()
     {
@@ -511,6 +608,13 @@ public sealed class BuildTargetTests
         }
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): CleanNuGetPackageOutput deletes the top-level
+    /// .nupkg and .symbols.nupkg files of a folder and keeps other files and the packages in its subfolders. Data: a
+    /// temporary folder under the system temp folder holding empty Example.A.1.0.0.nupkg, Example.A.1.0.0.symbols.nupkg
+    /// and keep.txt, plus nested/Nested.1.0.0.nupkg, removed in a finally block.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void CleanNuGetPackageOutput_RemovesOnlyTopLevelNuGetPackages()
     {
@@ -540,6 +644,13 @@ public sealed class BuildTargetTests
         }
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public target property for each
+    /// named trusted third party and agent target, found by reflection; the case asserts only that each property
+    /// exists. Data: five inline target names (BuildTrustedThirdParty, PublishTrustedThirdParty,
+    /// UpdateTrustedThirdPartyService, BuildAgent, PublishAgent).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Theory]
     [InlineData("BuildTrustedThirdParty")]
     [InlineData("PublishTrustedThirdParty")]
@@ -552,6 +663,13 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a non-public instance field for
+    /// each named trusted third party deployment parameter, found by reflection. Data: four inline parameter names
+    /// (TrustedThirdPartyServiceName, TrustedThirdPartyInstallPath, TrustedThirdPartyPort,
+    /// TrustedThirdPartyPublishSource).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Theory]
     [InlineData("TrustedThirdPartyServiceName")]
     [InlineData("TrustedThirdPartyInstallPath")]

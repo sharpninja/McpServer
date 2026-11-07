@@ -58,10 +58,19 @@ sealed class IntegrationLaneProjects : IIntegrationLaneProjects
 /// projects Test runs. Integration-owned: QBrainAi.Support.Mcp.IntegrationTests, QBrainAi.Repl.IntegrationTests, the
 /// two projects the lane holds out (QBrainAi.TransactionSecurity.IntegrationTests, QBrainAi.Acid.IntegrationTests),
 /// QBrainAi.McpAgent.IntegrationTests, QBrainAi.QBAgent.IntegrationTests, NukeBuild.IntegrationTests and
-/// QBrainAi.Support.Mcp.EnvironmentIntegrationTests. Infrastructure-owned: Build.Tests. Not declared, so offered to neither selection: the .Validation projects, the AI
-/// review projects and QBrainAi.PluginIntegration.Tests, which has its own target. The Test and MigrationIntegrationTests
-/// targets consult these declarations (<see cref="RequireRole"/>, <see cref="RoleOf"/>); <see cref="TestProjectOwnership"/>
-/// judges a selection from them and a supplied case inventory.
+/// QBrainAi.Support.Mcp.EnvironmentIntegrationTests. Infrastructure-owned: Build.Tests. Not declared, so offered to neither
+/// selection, because no selection runs them and none of the three roles fits their runner: the seven .Validation
+/// projects (no build target runs them: Test's name rules leave them out and the lane does not name them; their
+/// untagged cases call a running server over HTTP), the two AI review projects, QBrainAi.Review.Tests (AI review cases,
+/// Category=AiReview, run only by the AiCodeReview, AiProjectReview and AiWarningSuppressionReview targets) and
+/// QBrainAi.PlanReview.Tests (one AI review case that reads a saved review run-log; no target runs it), and
+/// QBrainAi.PluginIntegration.Tests, whose integration cases its own PluginSessionLogIntegration target runs (filters
+/// PluginInt=Deterministic and PluginInt=AI). Declaring any of them integration-owned would make TR-MCP-NUKE-019 AC-2
+/// require the lane to run it, which AC-2 excludes ("no validation, AI review or plugin integration project, which has
+/// its own target"); none holds only unit cases a unit selection runs. QBrainAi.ProcessTree.TestHelper is a helper
+/// program the tests start, not a test project. The Test and MigrationIntegrationTests targets consult these
+/// declarations (<see cref="RequireRole"/>, <see cref="RoleOf"/>); <see cref="TestProjectOwnership"/> judges a selection
+/// from them and a supplied case inventory.
 /// </summary>
 /// <remarks>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added in slice S2 for hostile validation finding R14-F4 (operator 2026-11-06: "Separate projects + AC (Recommended)"; survey: project ownership is decided by the tests' categories and the build). The declarations describe the layout as of da11faa2; slices S3 to S8 add the new integration-owned projects as they create them.</para>
@@ -69,6 +78,7 @@ sealed class IntegrationLaneProjects : IIntegrationLaneProjects
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S4 declares Build.IntegrationTests integration-owned (appended in solution order), the project that took the build's integration cases; Build.Tests stays infrastructure-owned.</para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S5 declares QBrainAi.Support.Mcp.Environment.IntegrationTests integration-owned (appended in solution order), the project that takes the integration cases of QBrainAi.Support.Mcp.Tests; QBrainAi.Support.Mcp.Tests stays unit-owned.</para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the project renames that follow slice S6 (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name."): the integration-owned Build.IntegrationTests and QBrainAi.Support.Mcp.Environment.IntegrationTests are declared under their new names, NukeBuild.IntegrationTests and QBrainAi.Support.Mcp.EnvironmentIntegrationTests, with the same role and position.</para>
+/// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S9 of hostile validation finding R14-F4 inventoried every test project of QBrainAi.sln against these declarations and left them unchanged: the summary now says why each undeclared test project stays undeclared (no selection runs it, and declaring the plugin integration, AI review or validation projects integration-owned would contradict AC-2, which keeps them out of the lane), so Test still selects the seven unit-owned projects and the lane its six integration-owned projects. Every case of the eight declared integration-owned projects carries Category=Integration, and no unit-owned or infrastructure-owned project holds one.</para>
 /// </remarks>
 static class TestProjectRoles
 {

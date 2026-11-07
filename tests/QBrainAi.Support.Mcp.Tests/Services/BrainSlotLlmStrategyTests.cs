@@ -20,6 +20,14 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// </remarks>
 public sealed class BrainSlotLlmStrategyTests
 {
+    /// <summary>
+    /// TEST-MCP-LLMSTRATEGY-001; FR-MCP-LLMSTRATEGY-001 (its first criterion, which carries no criterion id);
+    /// TR-MCP-LLMSTRATEGY-001: the brain-slot chat client factory resolves a non-null completion strategy for each of
+    /// two roles, and the two strategies are of different types. Data: a default BrainSlotChatClientFactory, a
+    /// Creativity slot of provider kind OpenAICompatible at http://localhost:11434/v1 and a Logic slot of provider kind
+    /// OpenAI at https://api.openai.com/v1, both built by the Slot helper, and the credential test-key.
+    /// </summary>
+    /// <remarks>2026-11-07, TEST-MCP-LLMSTRATEGY-001; FR-MCP-LLMSTRATEGY-001; TR-MCP-LLMSTRATEGY-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void CreateStrategy_TwoRoles_ResolvesTwoDifferentStrategyTypes()
     {
@@ -35,6 +43,14 @@ public sealed class BrainSlotLlmStrategyTests
         Assert.NotEqual(creativityStrategy.GetType(), logicStrategy.GetType());
     }
 
+    /// <summary>
+    /// TEST-MCP-LLMSTRATEGY-001; FR-MCP-LLMSTRATEGY-001 (its second criterion, which carries no criterion id): two
+    /// completion strategies called through the IBrainSlotCompletionStrategy seam with one turn context each receive
+    /// that same instance (Assert.Same). Data: a BrainSlotTurnContext with original input shared-original, session
+    /// sess-1, turn turn-1, transaction txn-1 and committed Creativity evidence draft; two RecordingCompletionStrategy
+    /// test doubles that record the context they receive; a Creativity OpenAICompatible slot from the Slot helper.
+    /// </summary>
+    /// <remarks>2026-11-07, TEST-MCP-LLMSTRATEGY-001; FR-MCP-LLMSTRATEGY-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CompletionStrategy_ReceivesSharedTurnContextByReference()
     {
@@ -58,6 +74,16 @@ public sealed class BrainSlotLlmStrategyTests
         Assert.Same(first.ReceivedContext, second.ReceivedContext);
     }
 
+    /// <summary>
+    /// TEST-MCP-LLMSTRATEGY-001; FR-MCP-LLMSTRATEGY-001 (its third criterion, which carries no criterion id);
+    /// TR-MCP-LLMSTRATEGY-001: the OpenAI-compatible request JSON and the OpenAI chat messages built from a slot, a
+    /// role prompt and a turn context both carry the role prompt, the original input, the session id and the committed
+    /// Creativity evidence (the request JSON also the turn and transaction ids), and the OpenAI options carry the
+    /// temperature 0.2. Data: a Logic OpenAICompatible slot from the Slot helper, the role prompt role-prompt-logic,
+    /// and a BrainSlotTurnContext with original input original-user-input, session sess-ctx, turn turn-ctx, transaction
+    /// txn-ctx and Creativity evidence draft-a.
+    /// </summary>
+    /// <remarks>2026-11-07, TEST-MCP-LLMSTRATEGY-001; FR-MCP-LLMSTRATEGY-001; TR-MCP-LLMSTRATEGY-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void BuildOpenAiCompatibleRequestJson_WhenTurnContextSupplied_IncludesOriginalInputAndTurnIds()
     {

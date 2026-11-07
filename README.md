@@ -247,15 +247,17 @@ Sample host: `src/QBrainAi.McpAgent.SampleHost/`
 
 ## Tests
 
-22 test projects covering unit, integration, and Reqnroll validation (plus the `QBrainAi.ProcessTree.TestHelper` support project):
+26 test projects covering unit, integration, and Reqnroll validation (plus the `QBrainAi.ProcessTree.TestHelper` support project). Unit and integration cases live in separate projects: a unit project holds no `Category=Integration` case, and the integration cases of each area live in its integration project:
 
-- `Build.Tests` - build system and configuration
+- `Build.Tests` - build system and configuration (the build's infrastructure tests)
+- `NukeBuild.IntegrationTests` - build targets and scripts against the checkout, processes and tools
 - `QBrainAi.Support.Mcp.Tests` / `.IntegrationTests` - server API and database
+- `QBrainAi.Support.Mcp.EnvironmentIntegrationTests` - server cases that depend on the environment (filesystem, processes, native paths, provider databases)
 - `QBrainAi.Client.Tests` - REST client serialization
-- `QBrainAi.McpAgent.Tests` - agent workflows and tool adapters
-- `QBrainAi.Repl.Core.Tests` / `.IntegrationTests` - REPL protocol
+- `QBrainAi.McpAgent.Tests` / `.IntegrationTests` - agent workflows and tool adapters
+- `QBrainAi.Repl.Core.Tests` / `QBrainAi.Repl.IntegrationTests` - REPL protocol
 - `QBrainAi.Cqrs.Tests` - CQRS dispatcher and pipeline
-- `QBrainAi.QBAgent.Tests` - QuadBrain agent behavior
+- `QBrainAi.QBAgent.Tests` / `.IntegrationTests` - QuadBrain agent behavior
 - `QBrainAi.Launcher.Tests` - launcher host
 - `QBrainAi.Acid.IntegrationTests` - ACID turn-closure matrix
 - `QBrainAi.TransactionSecurity.IntegrationTests` - durable transaction security storage
@@ -267,10 +269,10 @@ Sample host: `src/QBrainAi.McpAgent.SampleHost/`
 `Category=Integration` and `Category=AiReview` tests. Integration suites that need provisioned dependencies run
 through `./build.ps1 MigrationIntegrationTests` or by targeting the project directly.
 
-The audit payload migration integration tests cover SQLite, SQL Server (LocalDB by default), and PostgreSQL (ephemeral cluster by default). Run the focused provider set with:
+The audit payload migration tests cover SQLite, SQL Server (LocalDB by default), and PostgreSQL (ephemeral cluster by default). The SQLite cases (`AuditPayloadMigrationTests`) are in `QBrainAi.Support.Mcp.Tests`; the SQL Server and PostgreSQL integration cases (`SqlServerAuditPayloadMigrationTests`, `PostgreSqlAuditPayloadMigrationTests`) are in `QBrainAi.Support.Mcp.EnvironmentIntegrationTests`. Run the focused provider set through the Nuke `TestGroups` target, one group per project:
 
 ```powershell
-dotnet test tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --filter "FullyQualifiedName~AuditPayloadMigrationTests|FullyQualifiedName~SqlServerAuditPayloadMigrationTests|FullyQualifiedName~PostgreSqlAuditPayloadMigrationTests"
+./build.ps1 TestGroups --test-groups "QBrainAi.Support.Mcp.Tests:AuditPayloadMigrationTests" "QBrainAi.Support.Mcp.EnvironmentIntegrationTests:SqlServerAuditPayloadMigrationTests,PostgreSqlAuditPayloadMigrationTests" --test-run-id audit-payload-providers
 ```
 
 Integration tests provision what they need. The QuadBrain Ollama tests probe `http://localhost:11434` at fixture

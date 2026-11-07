@@ -15,6 +15,14 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
 /// <remarks>2026-11-07, TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 2 Category=Integration cases (RepoIngestor_ResolvesRelativeRepoRoot_AgainstCurrentDirectory and VectorIndexService_SaveAsync_UsesConfiguredRelativeIndexPath) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_tempDirectories, Dispose and CreateTempDirectory) moved once into the abstract base class ConfigurablePathIntegrationTestsBase in Configuration/ConfigurablePathIntegrationTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
 public sealed class ConfigurablePathIntegrationTests : ConfigurablePathIntegrationTestsBase, IDisposable
 {
+    /// <summary>
+    /// FR-MCP-001: ValidateInstances accepts two instances alpha and beta, and the resolver gives them different ports
+    /// (7147 and 7157) and different SQLite data sources, each ending in its own data directory (alpha-data then
+    /// alpha.db, beta-data then beta.db). Data: in-memory configuration under Mcp:Instances over a temporary folder
+    /// from CreateTempDirectory of ConfigurablePathIntegrationTestsBase, with the alpha and beta repository roots
+    /// created on disk.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void McpInstanceResolver_ResolvesIsolatedSettings_ForTwoInstances()
     {

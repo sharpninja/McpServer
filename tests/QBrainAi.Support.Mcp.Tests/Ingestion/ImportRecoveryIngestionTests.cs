@@ -1,4 +1,5 @@
 using QBrainAi.SessionLog.Transcripts;
+using static QBrainAi.Support.Mcp.Tests.Ingestion.ImportRecoveryIngestionFakes;
 
 namespace QBrainAi.Support.Mcp.Tests.Ingestion;
 
@@ -6,6 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Ingestion;
 /// TEST-MCP-SESSIONLIFE-004: ingestion replays pending import-recovery envelopes through the
 /// source adapter and session persister, and deletes only the envelope.
 /// </summary>
+/// <remarks>2026-11-07, TEST-MCP-SESSIONLIFE-004; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: its private EmptyDetector, CodexSourceAdapter and RecordingPersister, identical in behavior to the copies ImportRecoveryEnvelopeTests declared, are replaced by the one shared definition in ImportRecoveryIngestionFakes (slice S9 of hostile validation finding R14-F4, DRY); the test method is unchanged.</remarks>
 public sealed class ImportRecoveryIngestionTests
 {
     /// <summary>
@@ -78,44 +80,5 @@ public sealed class ImportRecoveryIngestionTests
     private static string YamlQuote(string path)
     {
         return "\"" + path.Replace('\\', '/').Replace("\"", string.Empty, StringComparison.Ordinal) + "\"";
-    }
-
-    private sealed class EmptyDetector : ITranscriptBundleDetector
-    {
-        public Task<IReadOnlyList<TranscriptBundle>> DetectAsync(string path, bool recursive, CancellationToken cancellationToken = default)
-            => Task.FromResult<IReadOnlyList<TranscriptBundle>>([]);
-    }
-
-    private sealed class CodexSourceAdapter : ITranscriptSourceAdapter
-    {
-        public TranscriptSourceKind SourceKind => TranscriptSourceKind.Codex;
-
-        public Task<TranscriptSession> NormalizeAsync(TranscriptBundle bundle, CancellationToken cancellationToken = default)
-        {
-            var session = new TranscriptSession(
-                TranscriptSourceKind.Codex,
-                "Codex-20260923T205606Z-life",
-                [],
-                "session: from-source\n",
-                sourceFiles: bundle.Files);
-            return Task.FromResult(session);
-        }
-    }
-
-    private sealed class RecordingPersister : ITranscriptSessionPersister
-    {
-        public List<(TranscriptSession Session, TranscriptSessionReceipt Receipt)> Calls { get; } = [];
-
-        public Task<string> PersistAsync(
-            TranscriptIngestionRequest request,
-            TranscriptSession session,
-            TranscriptSessionReceipt receipt,
-            CancellationToken cancellationToken = default)
-        {
-            if (session.CanonicalYaml.Contains("importRecovery:", StringComparison.Ordinal))
-                throw new InvalidOperationException("Envelope YAML must not be submitted.");
-            Calls.Add((session, receipt));
-            return Task.FromResult("sessionLogId:1");
-        }
     }
 }

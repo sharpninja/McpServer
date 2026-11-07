@@ -11,6 +11,13 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <remarks>2026-11-07, TR-MCP-USECASE-018 AC-006; TEST-MCP-106; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 6 Category=Integration cases and the helpers only they use (SeedGroupedTestingDocs) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_tempRoot, .ctor, Dispose, CreateService and SeedCanonicalDocs) moved once into the abstract base class RequirementsDocumentServiceTestsBase in Services/RequirementsDocumentServiceTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
 public sealed class RequirementsDocumentServiceTests : RequirementsDocumentServiceTestsBase, IDisposable
 {
+    /// <summary>
+    /// FR-MCP-040; FR-MCP-041; TR-MCP-REQ-002: the service parses the seeded canonical documents into 2 FR, 3 TR and 2
+    /// TEST entries and one mapping row (one FR to two TRs and one TEST), and renders the Functional, Technical and
+    /// Matrix documents as text/markdown with the expected headings and Tracked matrix rows. Data: the canonical seed
+    /// documents written by SeedCanonicalDocs (RequirementsDocumentServiceTestsBase) in a per-test temporary folder.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-040; FR-MCP-041; TR-MCP-REQ-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task Constructor_ParsesCanonicalDocs_AndGeneratesMarkdown()
     {
@@ -53,6 +60,12 @@ public sealed class RequirementsDocumentServiceTests : RequirementsDocumentServi
         Assert.Contains("| TEST-MCP-001 | Tracked | Testing-Requirements.md |", matrixDoc.Content);
     }
 
+    /// <summary>
+    /// FR-MCP-040; TR-MCP-REQ-002: 20 concurrent AddTestAsync calls leave a Testing-Requirements.md that parses to
+    /// exactly 20 entries, with no leftover .tmp file in its folder. Data: the empty seed documents written by
+    /// SeedEmptyDocs in a per-test temporary folder; 20 generated TEST entries.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-040; TR-MCP-REQ-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ConcurrentMutations_ProduceValidTestingDocument()
     {
@@ -73,6 +86,12 @@ public sealed class RequirementsDocumentServiceTests : RequirementsDocumentServi
         Assert.DoesNotContain(Directory.GetFiles(Path.GetDirectoryName(testingPath)!, "*.tmp"), _ => true);
     }
 
+    /// <summary>
+    /// FR-MCP-040; TR-MCP-REQ-002: deleting a TR removes it from the mapping row that named it, so the row keeps only
+    /// its other TR. Data: the canonical seed documents written by SeedCanonicalDocs in a per-test temporary folder
+    /// (one mapping row naming two TRs).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-040; TR-MCP-REQ-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task DeleteTrAsync_RemovesTrFromMappingRows()
     {
@@ -87,6 +106,12 @@ public sealed class RequirementsDocumentServiceTests : RequirementsDocumentServi
         Assert.Equal("TR-MCP-CFG-001", mapping.TrIds[0]);
     }
 
+    /// <summary>
+    /// FR-MCP-040; TR-MCP-REQ-002: the mapping parser accepts a legacy two-column table (FR and Primary TRs, no Tests
+    /// column) and returns one row with its two TRs and no tests. Data: an inline mapping document; no service and no
+    /// files.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-040; TR-MCP-REQ-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ParseMapping_AcceptsLegacyTwoColumnRows()
     {
@@ -104,6 +129,13 @@ public sealed class RequirementsDocumentServiceTests : RequirementsDocumentServi
         Assert.Empty(mapping.TestIds);
     }
 
+    /// <summary>
+    /// FR-MCP-040; TR-MCP-REQ-002; FR-MCP-REQAC-001; TR-MCP-REQAC-002: the technical parser takes the first generated
+    /// Status line as the status (completed), strips every Status line from the body, keeps the Covered by line, and
+    /// reads the one checked acceptance criterion as satisfied. Data: an inline technical document with one TR entry,
+    /// two Status lines, a Covered by line and one checked criterion; no service and no files.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-040; TR-MCP-REQ-002; FR-MCP-REQAC-001; TR-MCP-REQAC-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ParseTechnical_StripsGeneratedStatusMetadataFromBody()
     {
@@ -132,6 +164,12 @@ public sealed class RequirementsDocumentServiceTests : RequirementsDocumentServi
         Assert.True(criterion.IsSatisfied);
     }
 
+    /// <summary>
+    /// FR-MCP-084; TR-MCP-REQ-005: the testing parser accepts the wiki-grouped layout (one table under each TEST group
+    /// heading) and returns both rows, unescaping an escaped pipe character in a condition. Data: an inline testing
+    /// document with two group sections; no service and no files.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-084; TR-MCP-REQ-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ParseTesting_AcceptsWikiGroupedTableRows()
     {
@@ -157,6 +195,13 @@ public sealed class RequirementsDocumentServiceTests : RequirementsDocumentServi
         Assert.Equal("TEST-MCP-REPL-021", parsed[1].Id);
     }
 
+    /// <summary>
+    /// FR-MCP-084; TR-MCP-REQ-005; FR-MCP-112; FR-MCP-REQAC-001; TR-MCP-REQAC-002: the testing parser reads back the
+    /// wiki section layout (a TEST heading, its description paragraph and an Acceptance Criteria checklist) as one
+    /// entry with its condition and two criteria, the first unchecked and the second checked with its evidence text
+    /// (parser-test). Data: an inline testing document with one grouped TEST section; no service and no files.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-084; TR-MCP-REQ-005; FR-MCP-112; FR-MCP-REQAC-001; TR-MCP-REQAC-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ParseTesting_AcceptsWikiGroupedSectionsWithAcceptanceCriteria()
     {

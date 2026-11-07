@@ -1,27 +1,28 @@
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TR-MCP-NUKE-019 AC-7 binding (slice S2): runs the <see cref="TestProjectOwnershipContract"/> cases, unchanged from the
-/// BDPv4 mock gate ug-r14f4-s1-mockgate-1, over the production <see cref="TestProjectOwnership"/>; pins the build's role
-/// declarations (<see cref="TestProjectRoles"/>) and the checks Test and MigrationIntegrationTests make with them; and
-/// records the verdicts the real declarations give the current mixed layout.
+/// TR-MCP-NUKE-019 AC-7 binding: runs the <see cref="TestProjectOwnershipContract"/> cases, unchanged from the BDPv4 mock
+/// gate ug-r14f4-s1-mockgate-1, over the production <see cref="TestProjectOwnership"/>; pins the build's role declarations
+/// (<see cref="TestProjectRoles"/>) and the checks Test and MigrationIntegrationTests make with them; and proves that the
+/// build's real declarations and the recorded case inventory are fully separated: every unit-owned project holds only unit
+/// cases, every integration-owned project only integration cases, the infrastructure-owned project is offered to neither
+/// selection, and the unit selection (the projects Test runs) and the integration selection (the lane's projects) each
+/// accept every project offered and run every intended case exactly once.
 /// </summary>
 /// <remarks>
 /// <para>
-/// Recorded expectation, not a failure: on the current layout the unit selection rejects the unit-owned projects
-/// that still hold Category=Integration cases, and the integration selection rejects the unit-owned and
-/// infrastructure-owned projects the lane still runs. That is expected and correct until slices S3 to S8 move the cases
-/// into integration-owned projects. The two CurrentLayout cases therefore assert those verdicts by name and pass; each
-/// later slice that moves cases updates <see cref="CurrentLayoutCaseCounts"/>, the declarations and the recorded verdicts
-/// in the same change, and when slice S9 completes the separation every recorded verdict is Accepted. A verdict that
-/// differs from the record, from a change to the declarations, the inventory or the decision, fails these cases.
+/// A declaration, inventory row or decision that mixes the kinds fails these cases: a unit-owned project with an
+/// integration or infrastructure case, an integration-owned project with a unit or infrastructure case, a declared
+/// project the selections leave unexplained, an infrastructure-owned project in either selection, or a selection that
+/// omits or repeats a case. The method names say what each case proves; the history of the per-slice record they
+/// replace is in the dated entries below.
 /// </para>
 /// <para>
-/// The current layout's case inventory is recorded, not scanned (plan section 27.45: no run-time scanner): the per-project
-/// case counts of the da11faa2 TRX set docs/receipts/hv/unitgreen-r14-trx-da11faa2 (unit cases from the Test gate,
-/// infrastructure cases from the Build.Tests gate, integration cases from the lane as distinct cases across both hosts),
-/// expanded to ordinal case names. Build-infrastructure test, accountable through TR only; it reads no checkout, process
-/// environment or test result, so it carries no Integration trait.
+/// The case inventory is recorded, not scanned (plan section 27.45: no run-time scanner): the per-project case counts of
+/// the da11faa2 TRX set docs/receipts/hv/unitgreen-r14-trx-da11faa2 (unit cases from the Test gate, infrastructure cases
+/// from the Build.Tests gate, integration cases from the lane as distinct cases across both hosts) with the cases slices
+/// S3 to S8 moved, expanded to ordinal case names. Build-infrastructure test, accountable through TR only; it reads no
+/// checkout, process environment or test result, so it carries no Integration trait.
 /// </para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added the binding of slice S2 for hostile validation finding R14-F4 (operator 2026-11-06: "Separate projects + AC (Recommended)"; MEMORY-BESTPRACTICE-001 rules 4.1, 4.4 and 4.5).</para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S3 updates the record: the 1 McpAgent, 2 REPL core and 3 QBAgent integration cases moved to QBrainAi.McpAgent.IntegrationTests, QBrainAi.Repl.IntegrationTests and QBrainAi.QBAgent.IntegrationTests, so the unit selection now accepts QBrainAi.McpAgent.Tests, QBrainAi.Repl.Core.Tests and QBrainAi.QBAgent.Tests, and the integration selection accepts the two new integration-owned projects in the lane; the declarations and the case counts change with them.</para>
@@ -31,6 +32,7 @@ namespace NukeBuild.Tests;
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the project renames that follow slice S6 (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name.") update the record's names only: QBrainAi.Support.Mcp.Environment.IntegrationTests is now QBrainAi.Support.Mcp.EnvironmentIntegrationTests and Build.IntegrationTests is now NukeBuild.IntegrationTests, with the same roles, case counts, run positions and verdicts.</para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S7 updates the record: the mixed classes of QBrainAi.Support.Mcp.Tests split into their unit halves, which stay, and their integration halves in QBrainAi.Support.Mcp.EnvironmentIntegrationTests, with the pure-integration classes that shared their files, so 169 more integration cases moved there (221 to 390); QBrainAi.Support.Mcp.Tests, which still holds 98 integration cases (the reverse-reference bindings and the classes left for slice S8), stays rejected by both selections until then.</para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S8 updates the record: the last 98 integration cases of QBrainAi.Support.Mcp.Tests (the classes its collection bindings named, the platform-native cluster and the S7 leftovers) moved to QBrainAi.Support.Mcp.EnvironmentIntegrationTests, and the two collection bindings that name integration classes moved with them as Category=Integration cases (390 to 490 there); QBrainAi.Support.Mcp.Tests holds 3308 unit cases and no integration case, so the unit selection accepts it, and it left the lane, so the integration selection accepts every lane project. Every recorded verdict is now Accepted.</para>
+/// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S9 of hostile validation finding R14-F4 turns the recorded current-layout expectation that slices S3 to S8 updated into the plain separated assertion, now that the separation is complete: the summary and the first two remarks paragraphs say what the class proves; CurrentLayoutCaseCounts is now RecordedCaseInventory with the same rows; CurrentLayout_UnitSelection_RecordsTheMixedUnitProjectsAsRejected becomes UnitSelection_AcceptsEveryUnitOwnedProject_AndRunsEveryUnitCaseOnce and CurrentLayout_IntegrationSelection_RecordsTheLaneProjectsItCannotAccept becomes IntegrationSelection_AcceptsEveryLaneProject_AndRunsEveryIntegrationCaseOnce, each asserting that every offered project is accepted and every intended case of the inventory runs exactly once instead of listing recorded verdicts; DeclaredProjects_HoldOnlyCasesOfTheirOwnKind and InfrastructureProject_IsOfferedToNeitherSelection are added. The contract cases, the mock gate and the declarations are unchanged (the role decisions of slice S9 leave every declaration as it was; TestProjectRoles documents why the other test projects stay undeclared).</para>
 /// </remarks>
 public sealed class TestProjectOwnershipTests
 {
@@ -42,7 +44,17 @@ public sealed class TestProjectOwnershipTests
     ];
 
     /// <summary>
-    /// The current layout's case counts per project: unit, integration and infrastructure cases, the da11faa2 counts
+    /// The two integration-owned projects the lane holds out until PLAN-SESSIONTRIAGEFIX-001 merges (TODO
+    /// IMPL-TXNINTEGRATION-001), in declaration order: no selection offers them, so the inventory has no row for them.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added in slice S9 for the plain separated assertion.</remarks>
+    private static readonly string[] HeldOutIntegrationProjects =
+    [
+        "QBrainAi.TransactionSecurity.IntegrationTests", "QBrainAi.Acid.IntegrationTests",
+    ];
+
+    /// <summary>
+    /// The recorded case inventory per project: unit, integration and infrastructure cases, the da11faa2 counts
     /// with the cases the completed slices moved. The unit counts add up to 4864 cases per host: the Test gate's 4866 at
     /// da11faa2 less the two collection bindings that slice S8 moved to the integration-owned project as integration cases;
     /// Build.Tests' 467 infrastructure cases and NukeBuild.IntegrationTests' 96 integration cases made the da11faa2 Linux
@@ -57,8 +69,9 @@ public sealed class TestProjectOwnershipTests
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: QBrainAi.Support.Mcp.Environment.IntegrationTests and Build.IntegrationTests renamed to QBrainAi.Support.Mcp.EnvironmentIntegrationTests and NukeBuild.IntegrationTests, their root namespaces (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name."); no count changed.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S7 moved 169 integration cases (distinct across both hosts) of the split mixed classes and the pure classes in their files from QBrainAi.Support.Mcp.Tests (267 to 98) to QBrainAi.Support.Mcp.EnvironmentIntegrationTests (221 to 390; case-identity reconciliation reconciliation-s7.txt); the unit halves keep every unit case, so no unit count changed.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S8 moved the last 98 integration cases (distinct across both hosts) from QBrainAi.Support.Mcp.Tests (98 to 0) to QBrainAi.Support.Mcp.EnvironmentIntegrationTests, and the two collection-membership bindings that name classes there (ProcessEnvironmentCollectionTests.ProcessEnvironmentWriters_AreInASerializedCollection and SqlServerLocalDbCollectionTests.LocalDbClasses_AreInTheSqlServerLocalDbCollection) moved with them and now carry Category=Integration, because an integration-owned project holds only integration cases (3310 to 3308 unit cases; 390 to 490 integration cases; case-identity reconciliation reconciliation-s8-v2.txt).</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: renamed from CurrentLayoutCaseCounts in slice S9, since the separation is complete and the rows are the inventory the plain assertions read; no row or count changed.</para>
     /// </remarks>
-    private static readonly (string Project, int Unit, int Integration, int Infrastructure)[] CurrentLayoutCaseCounts =
+    private static readonly (string Project, int Unit, int Integration, int Infrastructure)[] RecordedCaseInventory =
     [
         ("QBrainAi.Support.Mcp.Tests", 3308, 0, 0),
         ("QBrainAi.Support.Mcp.EnvironmentIntegrationTests", 0, 490, 0),
@@ -199,11 +212,41 @@ public sealed class TestProjectOwnershipTests
     }
 
     /// <summary>
-    /// TR-MCP-NUKE-019 AC-7, recorded expectation for the current layout (see the class remarks): offered Test's seven
-    /// projects with their real declared roles and the current inventory, the unit selection accepts all seven,
-    /// QBrainAi.Support.Mcp.Tests, QBrainAi.Client.Tests, QBrainAi.Cqrs.Tests, QBrainAi.Launcher.Tests,
-    /// QBrainAi.McpAgent.Tests, QBrainAi.Repl.Core.Tests and QBrainAi.QBAgent.Tests, and runs their 4864 cases exactly
-    /// once, since slice S8 moved the last Category=Integration cases out of QBrainAi.Support.Mcp.Tests.
+    /// TR-MCP-NUKE-019 AC-7: the build's real declarations and the recorded inventory are fully separated. Every project of
+    /// the inventory is declared and holds at least one case and only cases of its own kind: a unit-owned project only
+    /// unit cases, an integration-owned project only integration cases, the infrastructure-owned project only
+    /// infrastructure cases. The declared projects without an inventory row are exactly the two integration-owned
+    /// projects the lane holds out, which no selection offers. Data: the recorded inventory and the build's declarations.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added in slice S9 of hostile validation finding R14-F4 as part of the plain separated assertion.</remarks>
+    [Fact]
+    public void DeclaredProjects_HoldOnlyCasesOfTheirOwnKind()
+    {
+        foreach (var (project, unit, integration, infrastructure) in RecordedCaseInventory)
+        {
+            var role = TestProjectRoles.RoleOf(project);
+            var (own, foreign) = role switch
+            {
+                TestProjectRole.Unit => (unit, integration + infrastructure),
+                TestProjectRole.Integration => (integration, unit + infrastructure),
+                _ => (infrastructure, unit + integration),
+            };
+            Assert.True(own > 0 && foreign == 0, $"{project} (declared {role}) holds {unit} unit, {integration} integration and {infrastructure} infrastructure cases.");
+        }
+
+        var withoutInventory = TestProjectRoles.Declared
+            .Select(entry => entry.Project)
+            .Except(RecordedCaseInventory.Select(row => row.Project), StringComparer.Ordinal)
+            .ToArray();
+        Assert.Equal(HeldOutIntegrationProjects, withoutInventory);
+    }
+
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-7: the unit selection is offered every unit-owned project the build declares, exactly the projects
+    /// Test runs (QBrainAi.Support.Mcp.Tests, QBrainAi.Client.Tests, QBrainAi.Cqrs.Tests, QBrainAi.Launcher.Tests,
+    /// QBrainAi.McpAgent.Tests, QBrainAi.Repl.Core.Tests and QBrainAi.QBAgent.Tests), accepts every one with its real
+    /// declared role and recorded inventory, and runs every unit case of the inventory exactly once (4864 cases), none
+    /// omitted and none repeated. Data: the recorded inventory, Test's projects at da11faa2 and the build's declarations.
     /// </summary>
     /// <remarks>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added.</para>
@@ -212,36 +255,32 @@ public sealed class TestProjectOwnershipTests
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S6 moved 208 more; with 267 still there QBrainAi.Support.Mcp.Tests stays rejected, so the verdicts and the 1556 accepted cases are unchanged.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S7 moved 169 more; with 98 still there QBrainAi.Support.Mcp.Tests stays rejected, so the verdicts and the 1556 accepted cases are unchanged.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S8 moved the last 98 and the two collection bindings that name integration classes (now integration cases there), so QBrainAi.Support.Mcp.Tests holds 3308 unit cases and no integration case and is accepted (1556 to 4864 accepted cases); the unit total is 4864, the da11faa2 Test gate's 4866 less those two bindings. The method name is kept for the case's identity; the summary describes the new record.</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S9 renames the case from CurrentLayout_UnitSelection_RecordsTheMixedUnitProjectsAsRejected, which no longer described it, and makes it the plain assertion: the offered projects are every declared unit-owned project, every verdict is Accepted, and the selected cases are every unit case of the inventory exactly once, in place of a recorded verdict list.</para>
     /// </remarks>
     [Fact]
-    public void CurrentLayout_UnitSelection_RecordsTheMixedUnitProjectsAsRejected()
+    public void UnitSelection_AcceptsEveryUnitOwnedProject_AndRunsEveryUnitCaseOnce()
     {
-        Assert.Equal(4864, UnitProjectsTestRanAtDa11faa2.Sum(project => CurrentLayoutCaseCounts.Single(row => row.Project == project).Unit));
-        var offered = UnitProjectsTestRanAtDa11faa2.Select(CurrentLayoutInventory).ToArray();
+        var unitOwned = TestProjectRoles.Declared.Where(entry => entry.Role == TestProjectRole.Unit).Select(entry => entry.Project).ToArray();
+        Assert.Equal(unitOwned, UnitProjectsTestRanAtDa11faa2);
+        var offered = UnitProjectsTestRanAtDa11faa2.Select(RecordedInventory).ToArray();
 
         var outcome = ownership.Decide(TestSelectionKind.Unit, offered);
 
-        TestProjectDecision[] recorded =
-        [
-            new("QBrainAi.Support.Mcp.Tests", TestProjectVerdict.Accepted),
-            new("QBrainAi.Client.Tests", TestProjectVerdict.Accepted),
-            new("QBrainAi.Cqrs.Tests", TestProjectVerdict.Accepted),
-            new("QBrainAi.Launcher.Tests", TestProjectVerdict.Accepted),
-            new("QBrainAi.McpAgent.Tests", TestProjectVerdict.Accepted),
-            new("QBrainAi.Repl.Core.Tests", TestProjectVerdict.Accepted),
-            new("QBrainAi.QBAgent.Tests", TestProjectVerdict.Accepted),
-        ];
-        Assert.Equal(recorded, outcome.Projects);
-        AssertAcceptedCasesRunOnce("current layout, unit selection", offered, outcome, 4864);
+        Assert.Equal(UnitProjectsTestRanAtDa11faa2, outcome.Projects.Select(decision => decision.Project).ToArray());
+        Assert.All(outcome.Projects, decision => Assert.Equal(TestProjectVerdict.Accepted, decision.Verdict));
+        TestProjectOwnershipContract.AssertExactlyOnce("unit selection", outcome.Cases, IntendedCases(TestCaseKind.Unit));
+        Assert.Equal(4864, outcome.Cases.Count);
     }
 
     /// <summary>
-    /// TR-MCP-NUKE-019 AC-7, recorded expectation for the current layout (see the class remarks): offered the lane's six
-    /// projects with their real declared roles and the current inventory, the integration selection accepts every one,
-    /// QBrainAi.Support.Mcp.EnvironmentIntegrationTests, QBrainAi.McpAgent.IntegrationTests,
+    /// TR-MCP-NUKE-019 AC-2, AC-7: the integration selection is offered the lane's projects, which are every
+    /// integration-owned project the build declares except the two the lane holds out
+    /// (QBrainAi.Support.Mcp.EnvironmentIntegrationTests, QBrainAi.McpAgent.IntegrationTests,
     /// QBrainAi.QBAgent.IntegrationTests, NukeBuild.IntegrationTests, QBrainAi.Repl.IntegrationTests and
-    /// QBrainAi.Support.Mcp.IntegrationTests, and runs their 777 cases exactly once; the unit-owned
-    /// QBrainAi.Support.Mcp.Tests is no longer a lane project (slice S8).
+    /// QBrainAi.Support.Mcp.IntegrationTests, whose inventory row counts only the two classes the lane runs), accepts every
+    /// one with its real declared role and recorded inventory, and runs every integration case of the inventory exactly
+    /// once (777 cases), none omitted and none repeated. Data: the recorded inventory, the lane's selection over the
+    /// contract's solution row and the build's declarations.
     /// </summary>
     /// <remarks>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added.</para>
@@ -252,34 +291,72 @@ public sealed class TestProjectOwnershipTests
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the recorded verdicts name the renamed QBrainAi.Support.Mcp.EnvironmentIntegrationTests and NukeBuild.IntegrationTests (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name."); the verdicts and the 508 accepted cases are unchanged.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S7's lane: QBrainAi.Support.Mcp.EnvironmentIntegrationTests is accepted with 390 cases (508 to 677 accepted cases); QBrainAi.Support.Mcp.Tests stays rejected for its role. The summary's "Slices S7 and S8 update this record" now reads "Slice S8", since S7 has updated it.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S8's lane: QBrainAi.Support.Mcp.Tests left the lane, and QBrainAi.Support.Mcp.EnvironmentIntegrationTests is accepted with 490 cases (the last 98 moved cases and the two moved collection bindings; 677 to 777 accepted cases), so the integration selection accepts every lane project. The method name is kept for the case's identity; the summary describes the new record.</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S9 renames the case from CurrentLayout_IntegrationSelection_RecordsTheLaneProjectsItCannotAccept, which no longer described it, and makes it the plain assertion: the lane's projects are every declared integration-owned project except the two held out, every verdict is Accepted, and the selected cases are every integration case of the inventory exactly once, in place of a recorded verdict list.</para>
     /// </remarks>
     [Fact]
-    public void CurrentLayout_IntegrationSelection_RecordsTheLaneProjectsItCannotAccept()
+    public void IntegrationSelection_AcceptsEveryLaneProject_AndRunsEveryIntegrationCaseOnce()
     {
         var lane = new IntegrationLaneProjects().Select(IntegrationLaneProjectsContract.Solution);
-        var offered = lane.Select(CurrentLayoutInventory).ToArray();
+        var integrationOwned = TestProjectRoles.Declared
+            .Where(entry => entry.Role == TestProjectRole.Integration && !HeldOutIntegrationProjects.Contains(entry.Project, StringComparer.Ordinal))
+            .Select(entry => entry.Project)
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+        Assert.Equal(integrationOwned, lane.Order(StringComparer.Ordinal).ToArray());
+        var offered = lane.Select(RecordedInventory).ToArray();
 
         var outcome = ownership.Decide(TestSelectionKind.Integration, offered);
 
-        TestProjectDecision[] recorded =
-        [
-            new("QBrainAi.Support.Mcp.EnvironmentIntegrationTests", TestProjectVerdict.Accepted),
-            new("QBrainAi.McpAgent.IntegrationTests", TestProjectVerdict.Accepted),
-            new("QBrainAi.QBAgent.IntegrationTests", TestProjectVerdict.Accepted),
-            new("NukeBuild.IntegrationTests", TestProjectVerdict.Accepted),
-            new("QBrainAi.Repl.IntegrationTests", TestProjectVerdict.Accepted),
-            new("QBrainAi.Support.Mcp.IntegrationTests", TestProjectVerdict.Accepted),
-        ];
-        Assert.Equal(recorded, outcome.Projects);
-        AssertAcceptedCasesRunOnce("current layout, integration selection", offered, outcome, 777);
+        Assert.Equal(lane, outcome.Projects.Select(decision => decision.Project).ToArray());
+        Assert.All(outcome.Projects, decision => Assert.Equal(TestProjectVerdict.Accepted, decision.Verdict));
+        TestProjectOwnershipContract.AssertExactlyOnce("integration selection", outcome.Cases, IntendedCases(TestCaseKind.Integration));
+        Assert.Equal(777, outcome.Cases.Count);
     }
 
-    /// <summary>TR-MCP-NUKE-019 AC-7: the recorded current-layout inventory of one project, with its real declared role.</summary>
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-2, AC-7: the infrastructure-owned project the build declares (Build.Tests, the build's own tests)
+    /// is offered to neither selection: it is not among the projects Test runs nor among the lane's projects, and no case
+    /// of it is selected; together the two selections run every unit and integration case of the inventory exactly once
+    /// and none of its 467 infrastructure cases. Data: the recorded inventory, Test's projects at da11faa2, the lane's
+    /// selection over the contract's solution row and the build's declarations.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added in slice S9 of hostile validation finding R14-F4 as part of the plain separated assertion.</remarks>
+    [Fact]
+    public void InfrastructureProject_IsOfferedToNeitherSelection()
+    {
+        string[] expectedInfrastructure = ["Build.Tests"];
+        var infrastructure = TestProjectRoles.Declared.Where(entry => entry.Role == TestProjectRole.Infrastructure).Select(entry => entry.Project).ToArray();
+        Assert.Equal(expectedInfrastructure, infrastructure);
+        var lane = new IntegrationLaneProjects().Select(IntegrationLaneProjectsContract.Solution);
+        Assert.DoesNotContain("Build.Tests", UnitProjectsTestRanAtDa11faa2);
+        Assert.DoesNotContain("Build.Tests", lane);
+
+        var unit = ownership.Decide(TestSelectionKind.Unit, UnitProjectsTestRanAtDa11faa2.Select(RecordedInventory).ToArray());
+        var integration = ownership.Decide(TestSelectionKind.Integration, lane.Select(RecordedInventory).ToArray());
+
+        SelectedTestCase[] selected = [.. unit.Cases, .. integration.Cases];
+        Assert.DoesNotContain(selected, item => item.Project == "Build.Tests");
+        TestProjectOwnershipContract.AssertExactlyOnce("both selections", selected, [.. IntendedCases(TestCaseKind.Unit), .. IntendedCases(TestCaseKind.Integration)]);
+        Assert.Equal(467, RecordedInventory("Build.Tests").Cases.Count(item => item.Kind == TestCaseKind.Infrastructure));
+    }
+
+    /// <summary>TR-MCP-NUKE-019 AC-7: every case of one kind in the recorded inventory, identified by project and case name.</summary>
+    /// <param name="kind">The case kind.</param>
+    /// <returns>The cases, in inventory order.</returns>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added in slice S9 for the plain separated assertion.</remarks>
+    private static SelectedTestCase[] IntendedCases(TestCaseKind kind)
+        => RecordedCaseInventory
+            .Select(row => RecordedInventory(row.Project))
+            .SelectMany(project => project.Cases.Where(item => item.Kind == kind).Select(item => new SelectedTestCase(project.Name, item.Name)))
+            .ToArray();
+
+    /// <summary>TR-MCP-NUKE-019 AC-7: the recorded inventory of one project, with its real declared role.</summary>
     /// <param name="project">The project name.</param>
     /// <returns>The project with its declared role and its cases, named by kind and ordinal.</returns>
-    private static TestProjectInventory CurrentLayoutInventory(string project)
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: renamed from CurrentLayoutInventory in slice S9; it reads RecordedCaseInventory (formerly CurrentLayoutCaseCounts); the body is unchanged.</remarks>
+    private static TestProjectInventory RecordedInventory(string project)
     {
-        var (_, unit, integration, infrastructure) = CurrentLayoutCaseCounts.Single(row => row.Project == project);
+        var (_, unit, integration, infrastructure) = RecordedCaseInventory.Single(row => row.Project == project);
         TestCaseEntry[] cases =
         [
             .. Cases(TestCaseKind.Unit, unit),
@@ -295,16 +372,4 @@ public sealed class TestProjectOwnershipTests
     /// <returns>The cases.</returns>
     private static IEnumerable<TestCaseEntry> Cases(TestCaseKind kind, int count)
         => Enumerable.Range(1, count).Select(ordinal => new TestCaseEntry($"{kind} case {ordinal}", kind));
-
-    /// <summary>Asserts the outcome runs every case of the accepted offered projects exactly once, and how many that is.</summary>
-    /// <param name="context">The check named in a failure.</param>
-    /// <param name="offered">The offered projects.</param>
-    /// <param name="outcome">The selection's outcome.</param>
-    /// <param name="count">The number of cases the accepted projects hold.</param>
-    private static void AssertAcceptedCasesRunOnce(string context, TestProjectInventory[] offered, TestOwnershipOutcome outcome, int count)
-    {
-        var accepted = offered.Where(project => outcome.Projects.Any(decision => decision.Project == project.Name && decision.Verdict == TestProjectVerdict.Accepted)).ToArray();
-        TestProjectOwnershipContract.AssertExactlyOnce(context, outcome.Cases, TestProjectOwnershipContract.CasesOf(accepted));
-        Assert.Equal(count, outcome.Cases.Count);
-    }
 }

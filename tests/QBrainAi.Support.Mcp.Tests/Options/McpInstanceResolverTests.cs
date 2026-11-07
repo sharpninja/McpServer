@@ -14,6 +14,11 @@ namespace QBrainAi.Support.Mcp.Tests.Options;
 [Collection(ProcessEnvironmentCollection.Name)]
 public sealed class McpInstanceResolverTests
 {
+    /// <summary>
+    /// No requirement id applies: GetRequestedInstanceName reads the instance name alpha from the argument
+    /// --instance=alpha. Data: the argument array holding --instance=alpha.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void GetRequestedInstanceName_ReadsFromArgs_EqualsSyntax()
     {
@@ -21,6 +26,11 @@ public sealed class McpInstanceResolverTests
         Assert.Equal("alpha", value);
     }
 
+    /// <summary>
+    /// No requirement id applies: GetRequestedInstanceName reads the instance name beta from the separated arguments
+    /// --instance and beta. Data: the argument array holding --instance and beta.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void GetRequestedInstanceName_ReadsFromArgs_SeparatedSyntax()
     {
@@ -28,6 +38,12 @@ public sealed class McpInstanceResolverTests
         Assert.Equal("beta", value);
     }
 
+    /// <summary>
+    /// FR-MCP-001: for instance alt the effective RepoRoot is temp_test from Mcp:Instances:alt:RepoRoot, not the
+    /// Mcp:RepoRoot value. Data: in-memory configuration with Mcp:RepoRoot set to . and Mcp:Instances:alt:RepoRoot set
+    /// to temp_test.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void GetEffectiveMcpValue_PrefersInstanceOverride()
     {
@@ -42,6 +58,11 @@ public sealed class McpInstanceResolverTests
         Assert.Equal("temp_test", value);
     }
 
+    /// <summary>
+    /// No requirement id applies: ValidateInstances throws InvalidOperationException when instances a and b both use
+    /// port 7147. Data: in-memory configuration with both instances on RepoRoot . and Port 7147.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ValidateInstances_ThrowsOnDuplicatePorts()
     {
@@ -57,6 +78,12 @@ public sealed class McpInstanceResolverTests
         Assert.Throws<InvalidOperationException>(() => McpInstanceResolver.ValidateInstances(configuration));
     }
 
+    /// <summary>
+    /// FR-MCP-001: ValidateInstances throws InvalidOperationException whose message says the RepoRoot does not exist
+    /// when an instance names a folder that is not on disk. Data: in-memory configuration with instance a on port 7147
+    /// and a RepoRoot of a never-created folder under the temporary folder.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ValidateInstances_ThrowsWhenRepoRootMissingOnDisk()
     {
@@ -72,6 +99,12 @@ public sealed class McpInstanceResolverTests
         Assert.Contains("does not exist", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// FR-MCP-072; TR-MCP-TODO-005: ValidateTodoStorage rejects the unknown TODO storage provider memory with an
+    /// InvalidOperationException whose message names it. Data: in-memory configuration with Mcp:TodoStorage:Provider
+    /// set to memory.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-072; TR-MCP-TODO-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ValidateTodoStorage_RejectsUnknownProvider()
     {
@@ -85,6 +118,12 @@ public sealed class McpInstanceResolverTests
         Assert.Contains("memory", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// FR-MCP-072; TR-MCP-TODO-005: ValidateTodoStorage accepts the database TODO storage provider when
+    /// Mcp:Database:Provider is set, and does not throw. Data: in-memory configuration with Mcp:TodoStorage:Provider
+    /// set to database and Mcp:Database:Provider set to sqlserver.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-072; TR-MCP-TODO-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ValidateTodoStorage_AcceptsDatabaseProvider_WhenDatabaseConfigured()
     {
@@ -118,6 +157,12 @@ public sealed class McpInstanceResolverTests
         Assert.Contains("database", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// FR-MCP-072; TR-MCP-TODO-005: ValidateTodoStorage accepts the legacy sqlite TODO storage provider as an alias of
+    /// database when Mcp:Database:Provider is set, and does not throw. Data: in-memory configuration with
+    /// Mcp:TodoStorage:Provider set to sqlite and Mcp:Database:Provider set to sqlite.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-072; TR-MCP-TODO-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ValidateTodoStorage_AliasesLegacySqliteToDatabase_WhenDatabaseConfigured()
     {
@@ -131,6 +176,12 @@ public sealed class McpInstanceResolverTests
         McpInstanceResolver.ValidateTodoStorage(configuration, null);
     }
 
+    /// <summary>
+    /// FR-MCP-072; TR-MCP-TODO-005: ValidateTodoStorage rejects the database TODO storage provider when
+    /// Mcp:Database:Provider is missing, with an InvalidOperationException whose message names Mcp:Database:Provider.
+    /// Data: in-memory configuration with only Mcp:TodoStorage:Provider, set to database.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-072; TR-MCP-TODO-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ValidateTodoStorage_RequiresMcpDatabaseProvider_WhenProviderIsDatabase()
     {
@@ -144,6 +195,12 @@ public sealed class McpInstanceResolverTests
         Assert.Contains("Mcp:Database:Provider", ex.Message, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-072; TR-MCP-TODO-005: ValidateTodoStorage rejects the legacy sqlite TODO storage provider with an
+    /// InvalidOperationException when Mcp:Database:Provider is missing. Data: in-memory configuration with only
+    /// Mcp:TodoStorage:Provider, set to sqlite.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-072; TR-MCP-TODO-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ValidateTodoStorage_LegacySqliteAlias_FailsWhenDatabaseProviderMissing()
     {

@@ -33,6 +33,14 @@ public sealed class MarkerFileClientOptionsResolverTests : IDisposable
         if (Directory.Exists(_ownedCache)) Directory.Delete(_ownedCache, recursive: true);
     }
 
+    /// <summary>
+    /// TR-MCP-REPL-006 (marker-file trust bootstrap with signature verification): TryLoadTrustedMarker accepts a marker
+    /// whose HMAC-SHA256 signature over the marker-v1 payload matches its workspace key, and returns its base URL
+    /// (http://localhost:7147), its API key and its workspace path. Data: a temporary workspace folder under the system
+    /// temp folder holding an AGENTS-README-FIRST.yaml built by BuildMarker with a test-only key, removed in a finally
+    /// block; the class owns the verification cache folder through CacheDirectoryOverride.
+    /// </summary>
+    /// <remarks>2026-11-07, TR-MCP-REPL-006: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void TryLoadTrustedMarker_ReturnsMarkerSettingsWhenSignatureMatches()
     {
@@ -453,6 +461,15 @@ signature:
 
     // --- Verified marker cache tests (24h TTL, apiKey change invalidation) ---
 
+    /// <summary>
+    /// FR-MCP-REPL-008 (its verified marker cache criterion, which has no criterion id): with the cache folder and the
+    /// agent overridden (agent Codex), a first TryResolveWithDiagnostics of a signed marker succeeds and writes
+    /// verified-markers.json, and a second resolve within the time to live succeeds with the same API key; the case
+    /// does not tell a cache hit from a fresh verification and does not read the entry key. Data: a temporary workspace
+    /// holding a BuildMarker marker and a temporary cache folder, both under the system temp folder; the previous cache
+    /// and agent overrides are restored and both folders removed in a finally block.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-REPL-008: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void TryResolveWithDiagnostics_UsesVerifiedCacheOnSubsequentCallWithinTtl()
     {
@@ -490,6 +507,16 @@ signature:
         }
     }
 
+    /// <summary>
+    /// FR-MCP-REPL-008 (its verified marker cache criterion, which has no criterion id); TR-MCP-REPL-006 (the API key
+    /// comes from the current marker after a rotation): with agent ClaudeCode, a first resolve fills the cache, the
+    /// marker is then rewritten with a rotated key and a signature valid for it, and a second resolve succeeds and
+    /// returns the rotated key rather than the cached one; the case asserts no staleness warning. Data: a temporary
+    /// workspace holding markers from BuildMarker and BuildMarkerWithApiKey (a second test-only key) and a temporary
+    /// cache folder, both under the system temp folder; the overrides are restored and both folders removed in a
+    /// finally block.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-REPL-008; TR-MCP-REPL-006: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void TryResolveWithDiagnostics_InvalidatesCacheOnApiKeyChange()
     {
@@ -527,6 +554,16 @@ signature:
         }
     }
 
+    /// <summary>
+    /// FR-MCP-REPL-008 (its verified marker cache criterion, which has no criterion id): with agent Grok, after a first
+    /// resolve succeeds the cache file is overwritten with one entry for the workspace and agent that expired in 2020
+    /// and holds a placeholder signature value, and a second resolve still succeeds with the test-only key through full
+    /// verification; because the placeholder signature never matches, the resolver skips that entry whether or not it
+    /// has expired, so the case shows recovery from an unusable entry, not the expiry check alone. Data: a temporary
+    /// workspace holding a BuildMarker marker, a temporary cache folder and an inline expired cache JSON, under the
+    /// system temp folder; the overrides are restored and both folders removed in a finally block.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-REPL-008: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void TryResolveWithDiagnostics_SucceedsWithManuallyExpiredCacheEntry()
     {

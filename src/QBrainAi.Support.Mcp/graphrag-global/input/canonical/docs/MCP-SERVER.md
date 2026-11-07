@@ -14,7 +14,9 @@ Standalone repository for `QBrainAi.Support.Mcp`, the MCP context server used fo
 ## Repository Layout
 
 - `src/QBrainAi.Support.Mcp` - server application
-- `tests/QBrainAi.Support.Mcp.Tests` - unit/integration tests
+- `tests/QBrainAi.Support.Mcp.Tests` - unit tests
+- `tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests` - integration tests that depend on the environment (filesystem, processes, provider databases)
+- `tests/QBrainAi.Support.Mcp.IntegrationTests` - integration tests against an in-process server
 - `MCP-SERVER.md` - detailed operational and configuration guide
 - `AZURE-PIPELINES.md` - Azure DevOps CI/CD variables and retention notes
 - `scripts` - run, validate, test, migration, extension, and packaging scripts

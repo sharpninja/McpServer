@@ -102,6 +102,16 @@ public sealed class PostgreSqlAuditPayloadMigrationTests : IClassFixture<Ephemer
     public PostgreSqlAuditPayloadMigrationTests(EphemeralPostgresFixture fixture)
         => _serverConnectionString = fixture.ServerConnectionString;
 
+    /// <summary>
+    /// FR-MCP-AUDIT-001; TR-MCP-AUDIT-002; TEST-MCP-AUDIT-001: the real PostgreSQL migrations apply to a new database,
+    /// including 20260929140000_VersionedAuditPayloads, and through AuditPayloadProviderAssertions a legacy audit row
+    /// reads back its legacy text with no compressed payload while a new row round trips its previous snapshot, current
+    /// snapshot, diff and metadata JSON with all four compressed payloads stored and the current snapshot payload
+    /// shorter than its JSON. Data: the server of EphemeralPostgresFixture, a uniquely named database the case creates
+    /// and Dispose drops, the QBrainAi.Storage.PostgreSqlMigrations assembly, and the legacy and compressed audit rows
+    /// of AuditPayloadProviderAssertions.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-AUDIT-001; TR-MCP-AUDIT-002; TEST-MCP-AUDIT-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task Migration_PersistsCompressedPayloads()
     {

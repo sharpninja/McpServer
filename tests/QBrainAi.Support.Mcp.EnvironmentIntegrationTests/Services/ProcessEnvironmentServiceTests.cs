@@ -21,6 +21,14 @@ namespace QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services;
 [Trait("Platform", "Windows")]
 public sealed class ProcessEnvironmentServiceTests
 {
+    /// <summary>
+    /// FR-MCP-141; TR-MCP-USECASE-018 AC-006: ApplyRunAsEnvironment for the user mcp-grok-user puts the .grok\bin
+    /// folder of that user profile on the PATH of the start info (compared ignoring case); the case sets the PUBLIC
+    /// variable for the run and restores it afterwards. Data: a temporary folder holding Public and an mcp-grok-user
+    /// profile with .grok\bin and AppData\Local, removed afterwards, PUBLIC pointed at that Public folder, a start info
+    /// for grok, and ProcessEnvironmentService with a null logger.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-141; TR-MCP-USECASE-018 AC-006: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ApplyRunAsEnvironment_IncludesGrokBinWhenProfileContainsGrokInstall()
     {
@@ -58,6 +66,12 @@ public sealed class ProcessEnvironmentServiceTests
         }
     }
 
+    /// <summary>
+    /// FR-MCP-141: ResolveExecutable for grok returns the grok.exe in the single folder that the PATH of the start info
+    /// names. Data: a temporary .grok\bin folder holding an empty grok.exe, removed afterwards, a start info whose PATH
+    /// is that folder, and ProcessEnvironmentService with a null logger.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-141: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ResolveExecutable_FindsGrokFromInjectedUserPath()
     {

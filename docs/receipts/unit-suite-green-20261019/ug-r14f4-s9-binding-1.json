@@ -1,0 +1,81 @@
+{
+  "name": "ug-r14f4-s9-binding-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "908023bac78f28cec8ddb6ff3d0e9a0e89c84055",
+  "dirtyPaths": [
+    " M README.md",
+    " M build/IntegrationLaneProjects.cs",
+    " M docs/MCP-SERVER.md",
+    " M docs/benchmarks/README.md",
+    " M src/QBrainAi.Support.Mcp/graphrag-global/input/canonical/docs/MCP-SERVER.md",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+    " M tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s9-compile-1.json",
+    "?? tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionFakes.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "Build.Tests:TestProjectOwnershipTests,TestProjectOwnershipMockGateTests,IntegrationLaneProjectsTests,IntegrationLaneProjectsMockGateTests,IntegrationLaneClassFilterTests,IntegrationLaneExecutionBindingTests,IntegrationLaneExecutionContractTests",
+    "QBrainAi.Support.Mcp.Tests:ImportRecoveryIngestionTests",
+    "--test-run-id",
+    "ug-r14f4-s9-binding-1"
+  ],
+  "startedLocal": "2026-11-07T16:29:48",
+  "endedLocal": "2026-11-07T16:30:56",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 65,
+  "passed": 65,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s9-binding-1/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s9-binding-1/Build.Tests.trx",
+      "sha256": "8329054AC3CDD375C171DEDFE09D8FD808F4C1F5B7ADD84F3BF8A85A879C6204",
+      "total": 64,
+      "passed": 64,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s9-binding-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s9-binding-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "73F58E54E2961080623C8609F6831D91F22FF32F6A77EABD51B0C78B9274482E",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipTests.cs",
+      "sha256": "A904C71C860A549B42D51CC215E6528EAD05E9DCCB86F7FA44179445413B3B0E"
+    },
+    {
+      "path": "build/IntegrationLaneProjects.cs",
+      "sha256": "5F6D41AF15C45DA0F41E71B69615F71562A4702AB3E56DB56168A2DF05D3486F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionFakes.cs",
+      "sha256": "1C928A5B08B0A9E6C05F0B1D907B9E72909EBF0A1CCA9DD66034B1E7D36B58F5"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "sha256": "C075500561C953F8F9D23ADA52FE72F48A76BE339CD92879DA85C2071BB35829"
+    }
+  ],
+  "writtenLocal": "2026-11-07T16:31:29",
+  "writtenBy": "ClaudeCode"
+}

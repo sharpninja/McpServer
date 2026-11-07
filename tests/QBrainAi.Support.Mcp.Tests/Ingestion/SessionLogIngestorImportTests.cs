@@ -15,6 +15,13 @@ namespace QBrainAi.Support.Mcp.Tests.Ingestion;
 /// <remarks>2026-11-07, TR-PLANNED-CORE-013; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 5 Category=Integration cases moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_db, _service, _tempDir, .ctor, Dispose, CreateIngestor, WriteSessionFile and WriteMdSessionFile) moved once into the abstract base class SessionLogIngestorImportTestsBase in Ingestion/SessionLogIngestorImportTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
 public sealed class SessionLogIngestorImportTests : SessionLogIngestorImportTestsBase, IDisposable
 {
+    /// <summary>
+    /// FR-MCP-003; TR-MCP-INGEST-001: a Cursor JSON session log whose workspace is a string imports as one session and
+    /// stores that string as its Repository. Data: the file cursor-ws.json (session ws-string, workspace
+    /// Q:\fixture\ExampleApp) in the docs/sessions folder of SessionLogIngestorImportTestsBase (an in-memory EF
+    /// database, SessionLogService, a temporary repository root and CreateIngestor).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-003; TR-MCP-INGEST-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task WhenImportingWithStringWorkspaceThenWorkspaceIsHandled()
     {
@@ -37,6 +44,14 @@ public sealed class SessionLogIngestorImportTests : SessionLogIngestorImportTest
         Assert.Equal(@"Q:\fixture\ExampleApp", stored.Repository);
     }
 
+    /// <summary>
+    /// FR-MCP-003; TR-MCP-INGEST-001: a Copilot JSON session log whose workspace is an object persists its project,
+    /// target framework, repository and branch on the stored session. Data: the file copilot-ws.json (session
+    /// ws-object; ExampleApp, .NET 9, example-org/ExampleApp, develop) in the docs/sessions folder of
+    /// SessionLogIngestorImportTestsBase (an in-memory EF database, SessionLogService, a temporary repository root and
+    /// CreateIngestor).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-003; TR-MCP-INGEST-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task WhenImportingWithObjectWorkspaceThenWorkspaceFieldsArePersisted()
     {
@@ -66,6 +81,13 @@ public sealed class SessionLogIngestorImportTests : SessionLogIngestorImportTest
         Assert.Equal("develop", stored.Branch);
     }
 
+    /// <summary>
+    /// FR-MCP-003; TR-MCP-INGEST-001: a JSON session log without sourceType is not imported and is counted as failed
+    /// (Imported 0, Failed 1). Data: the file bad.json (session no-source) in the docs/sessions folder of
+    /// SessionLogIngestorImportTestsBase (an in-memory EF database, SessionLogService, a temporary repository root and
+    /// CreateIngestor).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-003; TR-MCP-INGEST-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task WhenImportingMissingSourceTypeThenFileIsSkipped()
     {
@@ -79,6 +101,13 @@ public sealed class SessionLogIngestorImportTests : SessionLogIngestorImportTest
         Assert.Equal(1, result.Failed);
     }
 
+    /// <summary>
+    /// FR-MCP-003; TR-MCP-INGEST-001: three Cursor session files are all scanned and imported, and three sessions are
+    /// stored. Data: multi-0.json, multi-1.json and multi-2.json written by WriteSessionFile into
+    /// SessionLogIngestorImportTestsBase (an in-memory EF database, SessionLogService, a temporary repository root and
+    /// CreateIngestor).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-003; TR-MCP-INGEST-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task WhenImportingMultipleFilesThenAllAreImported()
     {
@@ -101,6 +130,13 @@ public sealed class SessionLogIngestorImportTests : SessionLogIngestorImportTest
         Assert.Equal(3, await _db.SessionLogs.CountAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
+    /// <summary>
+    /// FR-MCP-003; TR-MCP-INGEST-001: importing a rewritten file again imports it once more and updates the one stored
+    /// session, whose title becomes Updated. Data: upsert.json (session upsert-1) written with title Original,
+    /// imported, then rewritten with title Updated, in SessionLogIngestorImportTestsBase (an in-memory EF database,
+    /// SessionLogService, a temporary repository root and CreateIngestor).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-003; TR-MCP-INGEST-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task WhenReimportingSameFileThenSessionIsUpserted()
     {
@@ -132,6 +168,13 @@ public sealed class SessionLogIngestorImportTests : SessionLogIngestorImportTest
         Assert.Equal("Updated", stored.Title);
     }
 
+    /// <summary>
+    /// FR-MCP-003; TR-MCP-INGEST-001: after a first import imports a file, a second import of the unchanged file
+    /// imports nothing and skips it (Imported 0, Skipped 1). Data: unchanged.json (session unchanged-1) in
+    /// SessionLogIngestorImportTestsBase (an in-memory EF database, SessionLogService, a temporary repository root and
+    /// CreateIngestor).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-003; TR-MCP-INGEST-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task WhenFileIsUnchangedThenImportSkipsIt()
     {
@@ -155,6 +198,13 @@ public sealed class SessionLogIngestorImportTests : SessionLogIngestorImportTest
         Assert.Equal(1, second.Skipped);
     }
 
+    /// <summary>
+    /// FR-MCP-003; TR-MCP-INGEST-001: after a file changes, the next import imports it and the stored title becomes V2.
+    /// Data: changing.json (session changing-1) written with title V1, imported, then rewritten with title V2, in
+    /// SessionLogIngestorImportTestsBase (an in-memory EF database, SessionLogService, a temporary repository root and
+    /// CreateIngestor).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-003; TR-MCP-INGEST-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task WhenFileChangedThenImportUpdatesIt()
     {
@@ -185,6 +235,13 @@ public sealed class SessionLogIngestorImportTests : SessionLogIngestorImportTest
         Assert.Equal("V2", stored.Title);
     }
 
+    /// <summary>
+    /// FR-MCP-003; TR-MCP-INGEST-001: after both files are imported and only one changes, the next import imports the
+    /// changed file and skips the other (Imported 1, Skipped 1). Data: stable.json (session stable-1) and evolving.json
+    /// (session evolving-1, rewritten from title V1 to V2) in SessionLogIngestorImportTestsBase (an in-memory EF
+    /// database, SessionLogService, a temporary repository root and CreateIngestor).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-003; TR-MCP-INGEST-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task WhenMixOfChangedAndUnchangedThenOnlyChangedAreImported()
     {
@@ -221,6 +278,13 @@ public sealed class SessionLogIngestorImportTests : SessionLogIngestorImportTest
         Assert.Equal(1, second.Skipped);
     }
 
+    /// <summary>
+    /// FR-MCP-024; TR-MCP-INGEST-002: a Markdown file without the session log header imports nothing. Data:
+    /// not-a-session-log.md (a "# Regular Document" heading and one line of text) written by WriteMdSessionFile into
+    /// SessionLogIngestorImportTestsBase (an in-memory EF database, SessionLogService, a temporary repository root and
+    /// CreateIngestor).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-024; TR-MCP-INGEST-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task WhenImportingInvalidMarkdownThenFileIsSkipped()
     {

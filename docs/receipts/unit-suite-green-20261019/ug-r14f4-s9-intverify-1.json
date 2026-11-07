@@ -1,0 +1,67 @@
+{
+  "name": "ug-r14f4-s9-intverify-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "908023bac78f28cec8ddb6ff3d0e9a0e89c84055",
+  "dirtyPaths": [
+    " M README.md",
+    " M build/IntegrationLaneProjects.cs",
+    " M docs/MCP-SERVER.md",
+    " M docs/benchmarks/README.md",
+    " M src/QBrainAi.Support.Mcp/graphrag-global/input/canonical/docs/MCP-SERVER.md",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+    " M tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s9-binding-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s9-binding-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s9-compile-1.json",
+    "?? tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionFakes.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Support.Mcp.EnvironmentIntegrationTests:ImportRecoveryEnvelopeTests",
+    "--test-run-id",
+    "ug-r14f4-s9-intverify-1"
+  ],
+  "startedLocal": "2026-11-07T16:31:41",
+  "endedLocal": "2026-11-07T16:32:01",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s9-intverify-1/groups/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s9-intverify-1/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+      "sha256": "7B7EC80781622BCAA51898C1C718DF22B319E5FCBA27363E09313F7497959616",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "sha256": "8D81BE566B7B56185F5207FEB8BD2E83146AD71A88020F06DCED894047A69F82"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionFakes.cs",
+      "sha256": "1C928A5B08B0A9E6C05F0B1D907B9E72909EBF0A1CCA9DD66034B1E7D36B58F5"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+      "sha256": "5AE80F11B9898B824EB2ABE17B12BA51EEA8EE5E4D4CE6F481504FD3ABD4C172"
+    }
+  ],
+  "writtenLocal": "2026-11-07T16:33:36",
+  "writtenBy": "ClaudeCode"
+}

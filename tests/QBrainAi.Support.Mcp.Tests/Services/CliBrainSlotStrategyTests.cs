@@ -28,6 +28,12 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 [Collection(ProcessEnvironmentCollection.Name)]
 public sealed class CliBrainSlotStrategyTests
 {
+    /// <summary>
+    /// No requirement id applies: BrainSlotValidation.NormalizeProviderKind returns the canonical provider kind Cli for
+    /// the inputs Cli and cli, a behavior no record in the requirements store describes. Data: the inline values Cli
+    /// and cli.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Theory]
     [InlineData("Cli")]
     [InlineData("cli")]
@@ -36,6 +42,12 @@ public sealed class CliBrainSlotStrategyTests
         Assert.Equal("Cli", BrainSlotValidation.NormalizeProviderKind(kind));
     }
 
+    /// <summary>
+    /// No requirement id applies: CliBrainSlotEndpoint.TryParse accepts cli://grok-cli and cli://grok-build as the
+    /// grok-cli strategy and cli://codex-cli as the codex-cli strategy, a behavior no record in the requirements store
+    /// describes. Data: three inline endpoint and expected-strategy pairs.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Theory]
     [InlineData("cli://grok-cli", "grok-cli")]
     [InlineData("cli://grok-build", "grok-cli")]
@@ -46,6 +58,12 @@ public sealed class CliBrainSlotStrategyTests
         Assert.Equal(expected, strategy);
     }
 
+    /// <summary>
+    /// No requirement id applies: CliBrainSlotEndpoint.TryParse rejects an HTTP endpoint (http://127.0.0.1:8311/v1), an
+    /// unknown CLI strategy (cli://unknown) and an empty string, a behavior no record in the requirements store
+    /// describes. Data: the three inline endpoints.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Theory]
     [InlineData("http://127.0.0.1:8311/v1")]
     [InlineData("cli://unknown")]
@@ -55,6 +73,13 @@ public sealed class CliBrainSlotStrategyTests
         Assert.False(CliBrainSlotEndpoint.TryParse(endpoint, out _));
     }
 
+    /// <summary>
+    /// No requirement id applies: BrainSlotValidation.ValidateEndpoint accepts the Cli endpoint cli://grok-cli without
+    /// throwing even when loopback endpoints are disallowed and the allowed host list is empty, a behavior no record in
+    /// the requirements store describes. Data: a StaticOptionsMonitor (Services/CliBrainSlotStrategyTestsSupport.cs)
+    /// over BrainSlotOptions with AllowLoopbackEndpoints false and no AllowedEndpointHosts.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ValidateEndpoint_CliKnownStrategy_DoesNotRequireHttpHostAllowlist()
     {
@@ -70,6 +95,13 @@ public sealed class CliBrainSlotStrategyTests
         Assert.Null(exception);
     }
 
+    /// <summary>
+    /// No requirement id applies: BrainSlotValidation.ValidateEndpoint rejects the Cli endpoint cli://copilot-cli with
+    /// a BrainSlotValidationException whose reason is BrainSlotReasonCodes.EndpointNotAllowed, a behavior no record in
+    /// the requirements store describes. Data: a StaticOptionsMonitor (Services/CliBrainSlotStrategyTestsSupport.cs)
+    /// over default BrainSlotOptions.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ValidateEndpoint_CliUnknownStrategy_Throws()
     {
@@ -81,6 +113,15 @@ public sealed class CliBrainSlotStrategyTests
         Assert.Equal(BrainSlotReasonCodes.EndpointNotAllowed, ex.Reason);
     }
 
+    /// <summary>
+    /// No requirement id applies: for a first turn (resume false)
+    /// GrokCliAgentExecutionStrategy.BuildPersistentGrokArgumentList emits --effort xhigh, --reasoning-effort xhigh,
+    /// --model grok-4.6, --session-id with the given id, --always-approve, --no-plan, --max-turns 1, --no-subagents and
+    /// --verbatim, and emits neither --resume nor a bare plan argument; no record in the requirements store describes
+    /// these arguments. Data: the fixed session GUID aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee, the model grok-4.6, and
+    /// placeholder Windows-style working-folder and prompt-file path strings.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void BuildPersistentGrokArgumentList_FirstTurn_UsesSessionIdAndXhigh()
     {
@@ -110,6 +151,14 @@ public sealed class CliBrainSlotStrategyTests
         Assert.Contains("--verbatim", args);
     }
 
+    /// <summary>
+    /// No requirement id applies: for a resumed turn (resume true)
+    /// GrokCliAgentExecutionStrategy.BuildPersistentGrokArgumentList emits --resume and the session id and omits
+    /// --session-id; no record in the requirements store describes these arguments. Data: the fixed session GUID
+    /// aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee, the model grok-4.6, and placeholder Windows-style working-folder and
+    /// prompt-file path strings.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void BuildPersistentGrokArgumentList_Resume_UsesResumeFlag()
     {
@@ -126,6 +175,14 @@ public sealed class CliBrainSlotStrategyTests
         Assert.DoesNotContain("--session-id", args);
     }
 
+    /// <summary>
+    /// No requirement id applies: for a first turn (no session id)
+    /// CodexCliAgentExecutionStrategy.BuildPersistentCodexArgumentList starts with exec, omits resume, and emits
+    /// --model gpt-5.6-sol, model_reasoning_effort="xhigh", --json and the stdin marker -; no record in the
+    /// requirements store describes these arguments. Data: the model gpt-5.6-sol, a null session id, and placeholder
+    /// Windows-style working-folder and output-file path strings.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void BuildPersistentCodexArgumentList_FirstTurn_UsesExecStdinAndXhigh()
     {
@@ -144,6 +201,14 @@ public sealed class CliBrainSlotStrategyTests
         Assert.Contains("--json", args);
     }
 
+    /// <summary>
+    /// No requirement id applies: for a resumed turn CodexCliAgentExecutionStrategy.BuildPersistentCodexArgumentList
+    /// starts with exec, places the exec options (including --json and -o) before the resume subcommand, follows resume
+    /// with the thread id, and ends with the stdin marker -; no record in the requirements store describes these
+    /// arguments. Data: the model gpt-5.6-sol, the session id thread-123, and placeholder Windows-style working-folder
+    /// and output-file path strings.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void BuildPersistentCodexArgumentList_Resume_PlacesExecOptionsBeforeResume()
     {
@@ -163,6 +228,12 @@ public sealed class CliBrainSlotStrategyTests
         Assert.True(args.ToList().IndexOf("-o") < resumeIndex);
     }
 
+    /// <summary>
+    /// No requirement id applies: CliBrainSlotChatClient.ExtractCodexSessionId returns the thread id thr_abc from a
+    /// JSONL stream whose thread.started event carries it; no record in the requirements store describes this parsing.
+    /// Data: an inline two-line JSONL string (a thread.started event and an item.completed event).
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ExtractCodexSessionId_FromJsonlThreadStarted_ReturnsId()
     {
@@ -174,6 +245,13 @@ public sealed class CliBrainSlotStrategyTests
         Assert.Equal("thr_abc", CliBrainSlotChatClient.ExtractCodexSessionId(jsonl));
     }
 
+    /// <summary>
+    /// No requirement id applies: CliBrainSlotChatClient.ExtractCodexAssistantText returns the text of the
+    /// agent_message item from a JSONL stream that also holds a thread.started event and a command_execution item; no
+    /// record in the requirements store describes this parsing. Data: an inline three-line JSONL string whose agent
+    /// message text is Logic analysis of the voice chat.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ExtractCodexAssistantText_FromItemCompletedAgentMessage_ReturnsText()
     {
@@ -188,6 +266,12 @@ public sealed class CliBrainSlotStrategyTests
             CliBrainSlotChatClient.ExtractCodexAssistantText(jsonl));
     }
 
+    /// <summary>
+    /// No requirement id applies: CliBrainSlotChatClient.ExtractCodexAssistantText returns the message of an event_msg
+    /// event whose payload is an agent_message; no record in the requirements store describes this parsing. Data: an
+    /// inline one-line JSONL string whose message is working on it.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ExtractCodexAssistantText_FromEventMsg_ReturnsMessage()
     {
@@ -198,6 +282,13 @@ public sealed class CliBrainSlotStrategyTests
         Assert.Equal("working on it", CliBrainSlotChatClient.ExtractCodexAssistantText(jsonl));
     }
 
+    /// <summary>
+    /// No requirement id applies: BrainSlotCredentialResolver.IsSupportedReference accepts the references
+    /// cli:interactive and cli:session and rejects vault:future; no record in the requirements store describes the cli:
+    /// credential scheme. Data: three inline reference and expected-result rows and a resolver over an empty
+    /// configuration.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Theory]
     [InlineData("cli:interactive", true)]
     [InlineData("cli:session", true)]
@@ -208,6 +299,12 @@ public sealed class CliBrainSlotStrategyTests
         Assert.Equal(expected, resolver.IsSupportedReference(reference));
     }
 
+    /// <summary>
+    /// No requirement id applies: BrainSlotCredentialResolver.ResolveAsync returns the placeholder value cli for the
+    /// reference cli:interactive; no record in the requirements store describes the cli: credential scheme. Data: a
+    /// resolver over an empty configuration.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CredentialResolver_CliInteractive_ReturnsPlaceholder()
     {

@@ -29,6 +29,13 @@ public sealed class SessionLogServiceReplaceDeleteTests
     private const string Agent = "ClaudeCode";
     private const string RequestId = "req-20260613T120000Z-001-seed";
 
+    /// <summary>
+    /// FR-SUPPORT-016 ac-1; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: replacing a turn with a payload that
+    /// restates only the status and one action clears every omitted scalar and collection (query text, tags, context,
+    /// commits, dialog, design decisions, blockers) and leaves exactly that one action. Data: an in-memory SQLite
+    /// database seeded by SeedFullSession with one session whose one turn fills every section.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-SUPPORT-016 ac-1; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ReplaceTurnAsync_ClearsOmittedScalarsAndCollections()
     {
@@ -64,6 +71,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
         Assert.Equal("only remaining action", turn.Actions!.First().Description);
     }
 
+    /// <summary>
+    /// FR-SUPPORT-016 ac-1; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: after a turn replace, every surviving
+    /// child row of the turn carries the WorkspaceId of its parent session (no mismatched stamp in any child table).
+    /// Data: an in-memory SQLite database seeded by SeedFullSession; a replacement turn with one tag and one action.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-SUPPORT-016 ac-1; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ReplaceTurnAsync_PreservesWorkspaceStampOnChildren()
     {
@@ -86,6 +99,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
         Assert.Equal(0, CountMismatchedChildStamps(connection, sessionId));
     }
 
+    /// <summary>
+    /// FR-SUPPORT-016 ac-2; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: replacing the tags section sets the tags
+    /// to exactly alpha and beta and leaves the commits, the design decisions and the query text untouched. Data: an
+    /// in-memory SQLite database seeded by SeedFullSession; a tags-only payload.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-SUPPORT-016 ac-2; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ReplaceTurnSectionAsync_ReplacesOnlyNamedSection()
     {
@@ -109,6 +128,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
         Assert.Equal("seed query", turn.QueryText);
     }
 
+    /// <summary>
+    /// FR-SUPPORT-016 ac-2; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: replacing the designDecisions section
+    /// with an empty list clears it and leaves the unrelated tags section in place. Data: an in-memory SQLite database
+    /// seeded by SeedFullSession; an empty designDecisions payload.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-SUPPORT-016 ac-2; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ReplaceTurnSectionAsync_EmptyPayload_ClearsSection()
     {
@@ -128,6 +153,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
         Assert.NotNull(turn.Tags); // unrelated section preserved
     }
 
+    /// <summary>
+    /// FR-SUPPORT-016 ac-2; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: clearing the commits section returns
+    /// true, removes every commit and leaves the actions in place. Data: an in-memory SQLite database seeded by
+    /// SeedFullSession (two commits, two actions).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-SUPPORT-016 ac-2; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ClearTurnSectionAsync_RemovesAllItemsInSection()
     {
@@ -143,6 +174,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
         Assert.NotNull(turn.Actions);
     }
 
+    /// <summary>
+    /// FR-SUPPORT-016 ac-3; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: deleting the tag seed-tag-b by value
+    /// returns true and leaves only seed-tag-a. Data: an in-memory SQLite database seeded by SeedFullSession (tags
+    /// seed-tag-a and seed-tag-b).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-SUPPORT-016 ac-3; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task DeleteTurnItemAsync_StringSection_RemovesByValue()
     {
@@ -157,6 +194,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
         Assert.Equal(new[] { "seed-tag-a" }, turn.Tags!.ToArray());
     }
 
+    /// <summary>
+    /// FR-SUPPORT-016 ac-3; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: deleting the commit sha-2 by its SHA
+    /// returns true and leaves only the commit sha-1. Data: an in-memory SQLite database seeded by SeedFullSession
+    /// (commits sha-1 and sha-2).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-SUPPORT-016 ac-3; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task DeleteTurnItemAsync_Commit_RemovesBySha()
     {
@@ -172,6 +215,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
         Assert.Equal("sha-1", turn.Commits!.First().Sha);
     }
 
+    /// <summary>
+    /// FR-SUPPORT-016 ac-3; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: deleting the action with order 1 returns
+    /// true and leaves only the action with order 0. Data: an in-memory SQLite database seeded by SeedFullSession
+    /// (actions with orders 0 and 1).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-SUPPORT-016 ac-3; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task DeleteTurnItemAsync_Action_RemovesByOrder()
     {
@@ -187,6 +236,11 @@ public sealed class SessionLogServiceReplaceDeleteTests
         Assert.Equal(0, turn.Actions!.First().Order);
     }
 
+    /// <summary>
+    /// FR-SUPPORT-016 ac-3; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: deleting a tag key the turn does not
+    /// hold (no-such-tag) returns false. Data: an in-memory SQLite database seeded by SeedFullSession.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-SUPPORT-016 ac-3; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task DeleteTurnItemAsync_UnknownKey_ReturnsFalse()
     {
@@ -198,6 +252,13 @@ public sealed class SessionLogServiceReplaceDeleteTests
             Assert.False(await sut.DeleteTurnItemAsync(Agent, sessionId, RequestId, "tags", "no-such-tag", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
+    /// <summary>
+    /// FR-MCP-105; TR-MCP-DB-003; TR-MCP-DB-006 (AC2 of its description); TEST-MCP-DB-006 (AC2 of its description):
+    /// deleting the turn returns true; the session survives with a turn count of 0 and no turns, while the turn row and
+    /// its child rows stay stored, each marked deleted. Data: an in-memory SQLite database seeded by SeedFullSession;
+    /// row counts read with direct SQL over the session-log tables.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-105; TR-MCP-DB-003; TR-MCP-DB-006 (AC2 of its description); TEST-MCP-DB-006 (AC2 of its description): documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task DeleteTurnAsync_SoftDeletesTurnAndChildren()
     {
@@ -222,6 +283,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
         Assert.Equal(CountAllChildRows(connection, sessionId), CountSoftDeletedChildRows(connection, sessionId));
     }
 
+    /// <summary>
+    /// FR-MCP-105; TR-MCP-DB-003: deleting the session returns true and the session no longer reads back, while the
+    /// session row, its turn row and its child rows stay stored, each marked deleted. Data: an in-memory SQLite
+    /// database seeded by SeedFullSession; row counts read with direct SQL over the session-log tables.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-105; TR-MCP-DB-003: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task DeleteSessionAsync_SoftDeletesSessionAndEverything()
     {
@@ -244,6 +311,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
         Assert.Equal(CountAllChildRows(connection, sessionId), CountSoftDeletedChildRows(connection, sessionId));
     }
 
+    /// <summary>
+    /// No requirement id applies: no FR, TR or TEST record in the store states the result of deleting an absent
+    /// session; the case proves that DeleteSessionAsync returns false for a session id that was never stored. Data: an
+    /// in-memory SQLite database seeded by SeedFullSession with a different session.
+    /// </summary>
+    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task DeleteSessionAsync_Missing_ReturnsFalse()
     {
@@ -255,6 +328,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
             Assert.False(await sut.DeleteSessionAsync(Agent, BuildSessionId("absent"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
+    /// <summary>
+    /// FR-SUPPORT-016 ac-2; TEST-SUPPORT-024 AC-001: an additive turn upsert with one new tag appends it to the stored
+    /// tags (seed-tag-a, seed-tag-b and seed-tag-c remain) and keeps the omitted query text. Data: an in-memory SQLite
+    /// database seeded by SeedFullSession; an upsert payload holding only the tag seed-tag-c.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-SUPPORT-016 ac-2; TEST-SUPPORT-024 AC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task UpsertTurnAsync_StaysAdditive_DoesNotRemoveExistingItems()
     {
@@ -275,6 +354,11 @@ public sealed class SessionLogServiceReplaceDeleteTests
         Assert.Equal("seed query", turn.QueryText); // omitted scalar preserved
     }
 
+    /// <summary>
+    /// FR-SUPPORT-016 ac-4; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: replacing a section named nonsense
+    /// throws ArgumentException. Data: an in-memory SQLite database seeded by SeedFullSession.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-SUPPORT-016 ac-4; TR-SUPPORT-CORE-016 ac-1; TEST-SUPPORT-024 AC-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ReplaceTurnSectionAsync_UnknownSection_Throws()
     {

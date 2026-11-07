@@ -184,6 +184,13 @@
     <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\GitHubCliInvocationPlanContractTestsSupport.cs" Link="Shared\Services\GitHubCliInvocationPlanContractTestsSupport.cs" />
     <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\RequirementsTwelfthAdversarialReviewTestsSupport.cs" Link="Shared\Services\RequirementsTwelfthAdversarialReviewTestsSupport.cs" />
   </ItemGroup>
+  <!-- 2026-11-07, TEST-MCP-SESSIONLIFE-004; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the transcript-ingestion fakes that
+       ImportRecoveryEnvelopeTests here and the unit ImportRecoveryIngestionTests both use, extracted once from their two
+       identical private copies into QBrainAi.Support.Mcp.Tests and linked (slice S9, hostile validation finding R14-F4;
+       DRY, never copied). -->
+  <ItemGroup>
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Ingestion\ImportRecoveryIngestionFakes.cs" Link="Shared\Ingestion\ImportRecoveryIngestionFakes.cs" />
+  </ItemGroup>
   <!-- 2026-11-07, TEST-MCP-USECASE-019-AC005; TR-MCP-NUKE-019 AC-7: the Agent Help fixtures that BugTriage139FifteenthHarnessTests
        reads beside the test assembly, linked from QBrainAi.Support.Mcp.Tests (slice S8), whose unit cases read them too. -->
   <ItemGroup>

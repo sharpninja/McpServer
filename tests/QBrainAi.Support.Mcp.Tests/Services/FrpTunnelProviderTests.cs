@@ -16,6 +16,13 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// </remarks>
 public sealed class FrpTunnelProviderTests : FrpTunnelProviderTestsBase
 {
+    /// <summary>
+    /// FR-MCP-015: an FRP provider configured with the unsupported proxy type udp does not start, reports a status
+    /// error that ProxyType udp is not supported yet, and never calls the process runner to check for the frpc CLI.
+    /// Data: the CreateSut helper and substituted IProcessRunner of FrpTunnelProviderTestsBase
+    /// (Services/FrpTunnelProviderTestsBase.cs), with Frp.ProxyType set to udp.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task StartAsync_WhenProxyTypeUnsupported_SetsValidationErrorAndSkipsCliCheck()
     {
@@ -30,6 +37,13 @@ public sealed class FrpTunnelProviderTests : FrpTunnelProviderTestsBase
         _ = _processRunner.DidNotReceiveWithAnyArgs().RunAsync(default!, default!, ct: TestContext.Current.CancellationToken);
     }
 
+    /// <summary>
+    /// FR-MCP-015: an FRP provider configured with both a subdomain and a custom domain does not start and reports a
+    /// status error asking for either Subdomain or CustomDomain. Data: the CreateSut helper of
+    /// FrpTunnelProviderTestsBase (Services/FrpTunnelProviderTestsBase.cs) with Frp.Subdomain mcp and Frp.CustomDomain
+    /// mcp.example.com.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task StartAsync_WhenSubdomainAndCustomDomainConfigured_SetsValidationError()
     {
@@ -47,6 +61,13 @@ public sealed class FrpTunnelProviderTests : FrpTunnelProviderTestsBase
         Assert.Contains("either Subdomain or CustomDomain", status.Error, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-015: when the frpc CLI check fails (exit code 1, not found) the FRP provider does not start and reports a
+    /// status error that the frpc CLI was not found. Data: the substituted IProcessRunner of FrpTunnelProviderTestsBase
+    /// (Services/FrpTunnelProviderTestsBase.cs) scripted to return exit code 1 for frpc, and its CreateSut helper with
+    /// default options.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task StartAsync_WhenCliMissing_SetsError()
     {
@@ -64,6 +85,13 @@ public sealed class FrpTunnelProviderTests : FrpTunnelProviderTestsBase
         Assert.Contains("frpc CLI not found", status.Error, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-015: for an HTTP proxy the private GenerateConfig method of the FRP provider writes a [common] section
+    /// with the server address, server port and auth token and a [[proxies]] entry named mcp-http of type http on local
+    /// port 7788 with the custom domain. Data: CreateSut with port 7788 and FrpTunnelOptions with server
+    /// frps.example.com, server port 7000, token secret-token and custom domain mcp.example.com, called by reflection.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void GenerateConfig_IncludesExpectedHttpFieldsAndToken()
     {
@@ -89,6 +117,13 @@ public sealed class FrpTunnelProviderTests : FrpTunnelProviderTestsBase
         Assert.Contains("customDomains = [\"mcp.example.com\"]", config, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-015: when both a subdomain and a custom domain are set, the private GenerateConfig method of the FRP
+    /// provider writes the subdomain my-mcp and no customDomains line. Data: CreateSut with default options and
+    /// FrpTunnelOptions with server frps.example.com, subdomain my-mcp and custom domain ignored.example.com, called by
+    /// reflection.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void GenerateConfig_WhenSubdomainConfigured_UsesSubdomainInsteadOfCustomDomain()
     {
@@ -106,6 +141,13 @@ public sealed class FrpTunnelProviderTests : FrpTunnelProviderTestsBase
         Assert.DoesNotContain("customDomains =", config, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-015: for a TCP port range the private GenerateConfig method of the FRP provider writes tcp proxies that
+    /// map each port to the same remote port, checked for the first port 7147 and the last port 7149 (name mcp-tcp-PORT
+    /// with equal localPort and remotePort). Data: CreateSut with port 7147 and FrpTunnelOptions with server
+    /// frps.example.com, proxy type tcp and range 7147 to 7149, called by reflection.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void GenerateConfig_TcpRange_CreatesOneToOneMappings()
     {
@@ -132,6 +174,13 @@ public sealed class FrpTunnelProviderTests : FrpTunnelProviderTestsBase
         Assert.Contains("remotePort = 7149", config, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-015: for a single TCP port the private GenerateConfig method of the FRP provider writes one proxy named
+    /// mcp-tcp-17147 from the tunnel local port 7147 to the configured remote port 17147. Data: CreateSut with port
+    /// 7147 and FrpTunnelOptions with server frps.example.com, proxy type tcp and remote port 17147, called by
+    /// reflection.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void GenerateConfig_TcpSinglePort_UsesLocalTunnelPortAndConfiguredRemotePort()
     {
@@ -150,6 +199,15 @@ public sealed class FrpTunnelProviderTests : FrpTunnelProviderTestsBase
         Assert.Contains("remotePort = 17147", config, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-015: the private static BuildPublicUrl method of the FRP provider prefers the trimmed public base URL
+    /// without its trailing slash (https://mcp.up.railway.app), then http plus the custom domain
+    /// (http://mcp.example.com), then http plus the subdomain under the server address (http://mcp.frps.example.com).
+    /// Data: three FrpTunnelOptions on server frps.example.com: one with a padded public base URL with a trailing
+    /// slash, custom domain mcp.example.com and subdomain mcp; one with only the custom domain and subdomain; one with
+    /// only the subdomain; called by reflection.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void BuildPublicUrl_PrefersPublicBaseUrl_ThenCustomDomain_ThenSubdomain()
     {
@@ -181,6 +239,13 @@ public sealed class FrpTunnelProviderTests : FrpTunnelProviderTestsBase
         Assert.Equal("http://mcp.frps.example.com", subdomainUrl);
     }
 
+    /// <summary>
+    /// FR-MCP-015: an FRP TCP proxy configured with a range start but no range end does not start and reports a status
+    /// error that TcpPortRangeStart and TcpPortRangeEnd must be set together. Data: the CreateSut helper of
+    /// FrpTunnelProviderTestsBase (Services/FrpTunnelProviderTestsBase.cs) with proxy type tcp and TcpPortRangeStart
+    /// 7147.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task StartAsync_WhenTcpRangeMissingEnd_SetsValidationError()
     {
@@ -198,6 +263,13 @@ public sealed class FrpTunnelProviderTests : FrpTunnelProviderTestsBase
         Assert.Contains("TcpPortRangeStart and TcpPortRangeEnd must be set together", status.Error, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-015: an FRP TCP proxy configured with both a remote port and a port range does not start and reports a
+    /// status error asking for either RemotePort or TcpPortRangeStart/End. Data: the CreateSut helper of
+    /// FrpTunnelProviderTestsBase (Services/FrpTunnelProviderTestsBase.cs) with proxy type tcp, RemotePort 17147 and
+    /// range 7147 to 7160.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task StartAsync_WhenTcpRangeAndRemotePortBothConfigured_SetsValidationError()
     {

@@ -78,9 +78,9 @@ EF Core with SQLite (`McpDbContext`), with migration projects for SQLite, Postgr
 
 ### Test Projects
 
-- Unit tests: `QBrainAi.Support.Mcp.Tests`, `QBrainAi.Client.Tests`, `QBrainAi.Cqrs.Tests`, `QBrainAi.Launcher.Tests`, `QBrainAi.McpAgent.Tests`, `QBrainAi.Repl.Core.Tests`
+- Unit tests: `QBrainAi.Support.Mcp.Tests`, `QBrainAi.Client.Tests`, `QBrainAi.Cqrs.Tests`, `QBrainAi.Launcher.Tests`, `QBrainAi.McpAgent.Tests`, `QBrainAi.Repl.Core.Tests`, `QBrainAi.QBAgent.Tests`
 - Infrastructure (Nuke build, accountable through TR only; not unit tests, not part of `./build.ps1 Test`): `Build.Tests`
-- Integration: `QBrainAi.Support.Mcp.IntegrationTests`, `QBrainAi.Repl.IntegrationTests`
+- Integration: `QBrainAi.Support.Mcp.IntegrationTests`, `QBrainAi.Repl.IntegrationTests`, `QBrainAi.Support.Mcp.EnvironmentIntegrationTests`, `QBrainAi.McpAgent.IntegrationTests`, `QBrainAi.QBAgent.IntegrationTests`, `NukeBuild.IntegrationTests` (the build's integration cases)
 - BDD/Validation (Reqnroll): `QBrainAi.Context.Validation`, `QBrainAi.GitHub.Validation`, `QBrainAi.Repo.Validation`, `QBrainAi.SessionLog.Validation`, `QBrainAi.Todo.Validation`, `QBrainAi.ToolRegistry.Validation`, `QBrainAi.Workspace.Validation`
 
 ## Coding Conventions

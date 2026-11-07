@@ -18,6 +18,12 @@ public sealed class TunnelProviderTests : TunnelProviderTestsBase
 {
     // --- NgrokTunnelProvider ---
 
+    /// <summary>
+    /// FR-MCP-015: the ngrok tunnel provider reports the provider name ngrok. Data: an NgrokTunnelProvider over
+    /// CreateOptions (port 7147) and the substituted IProcessRunner and IProcessEnvironmentService of
+    /// TunnelProviderTestsBase (Services/TunnelProviderTestsBase.cs).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void NgrokProvider_ProviderName_IsNgrok()
     {
@@ -25,6 +31,14 @@ public sealed class TunnelProviderTests : TunnelProviderTestsBase
         Assert.Equal("ngrok", sut.ProviderName);
     }
 
+    /// <summary>
+    /// FR-MCP-015: when the ngrok CLI check fails (exit code 1, not found) the ngrok provider does not start and
+    /// reports a status error that the ngrok CLI was not found. Data: an NgrokTunnelProvider over CreateOptions, the
+    /// substituted IProcessRunner of TunnelProviderTestsBase (Services/TunnelProviderTestsBase.cs) scripted to return
+    /// exit code 1 for ngrok, and its IProcessEnvironmentService substitute whose ResolveExecutable returns the
+    /// requested name.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task NgrokProvider_StartAsync_WhenCliMissing_SetsError()
     {
@@ -39,6 +53,12 @@ public sealed class TunnelProviderTests : TunnelProviderTestsBase
         Assert.Contains("ngrok CLI not found", status.Error, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-015: an ngrok provider that was never started reports a status that is not running. Data: an
+    /// NgrokTunnelProvider over CreateOptions (port 7147) and the substitutes of TunnelProviderTestsBase
+    /// (Services/TunnelProviderTestsBase.cs).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task NgrokProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning()
     {
@@ -47,6 +67,12 @@ public sealed class TunnelProviderTests : TunnelProviderTestsBase
         Assert.False(status.IsRunning);
     }
 
+    /// <summary>
+    /// FR-MCP-015: the private static BuildStartupTimeoutError method of the ngrok provider names the 8 s timeout, the
+    /// local ngrok API address 127.0.0.1:4040/api/tunnels, the last API query error and the last stderr and stdout
+    /// lines. Data: the inline values 8, curl exited with code -1, stderr line and stdout line, passed by reflection.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void NgrokProvider_BuildStartupTimeoutError_IncludesApiAndOutputContext()
     {
@@ -67,6 +93,12 @@ public sealed class TunnelProviderTests : TunnelProviderTestsBase
 
     // --- CloudflareTunnelProvider ---
 
+    /// <summary>
+    /// FR-MCP-015: the Cloudflare tunnel provider reports the provider name cloudflare. Data: a
+    /// CloudflareTunnelProvider over CreateOptions (port 7147) and the substituted IProcessRunner of
+    /// TunnelProviderTestsBase (Services/TunnelProviderTestsBase.cs).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void CloudflareProvider_ProviderName_IsCloudflare()
     {
@@ -74,6 +106,13 @@ public sealed class TunnelProviderTests : TunnelProviderTestsBase
         Assert.Equal("cloudflare", sut.ProviderName);
     }
 
+    /// <summary>
+    /// FR-MCP-015: when the cloudflared CLI check fails (exit code 1, not found) the Cloudflare provider does not start
+    /// and reports a status error that the cloudflared CLI was not found. Data: a CloudflareTunnelProvider over
+    /// CreateOptions and the substituted IProcessRunner of TunnelProviderTestsBase
+    /// (Services/TunnelProviderTestsBase.cs) scripted to return exit code 1 for cloudflared.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CloudflareProvider_StartAsync_WhenCliMissing_SetsError()
     {
@@ -88,6 +127,12 @@ public sealed class TunnelProviderTests : TunnelProviderTestsBase
         Assert.Contains("cloudflared CLI not found", status.Error, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-015: a Cloudflare provider that was never started reports a status that is not running. Data: a
+    /// CloudflareTunnelProvider over CreateOptions (port 7147) and the substituted IProcessRunner of
+    /// TunnelProviderTestsBase (Services/TunnelProviderTestsBase.cs).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task CloudflareProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning()
     {
@@ -96,6 +141,12 @@ public sealed class TunnelProviderTests : TunnelProviderTestsBase
         Assert.False(status.IsRunning);
     }
 
+    /// <summary>
+    /// FR-MCP-015: the private static BuildStartupTimeoutError method of the Cloudflare provider names the 8 s timeout
+    /// and the last stderr and stdout lines. Data: the inline values 8, stderr line and stdout line, passed by
+    /// reflection.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void CloudflareProvider_BuildStartupTimeoutError_IncludesOutputContext()
     {
@@ -113,6 +164,11 @@ public sealed class TunnelProviderTests : TunnelProviderTestsBase
 
     // --- FrpTunnelProvider ---
 
+    /// <summary>
+    /// FR-MCP-015: the FRP tunnel provider reports the provider name frp. Data: a FrpTunnelProvider over CreateOptions
+    /// (port 7147) and the substituted IProcessRunner of TunnelProviderTestsBase (Services/TunnelProviderTestsBase.cs).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void FrpProvider_ProviderName_IsFrp()
     {
@@ -120,6 +176,13 @@ public sealed class TunnelProviderTests : TunnelProviderTestsBase
         Assert.Equal("frp", sut.ProviderName);
     }
 
+    /// <summary>
+    /// FR-MCP-015: when the frpc CLI check fails (exit code 1, not found) the FRP provider does not start and reports a
+    /// status error that the frpc CLI was not found. Data: a FrpTunnelProvider over CreateOptions and the substituted
+    /// IProcessRunner of TunnelProviderTestsBase (Services/TunnelProviderTestsBase.cs) scripted to return exit code 1
+    /// for frpc.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task FrpProvider_StartAsync_WhenCliMissing_SetsError()
     {
@@ -134,6 +197,12 @@ public sealed class TunnelProviderTests : TunnelProviderTestsBase
         Assert.Contains("frpc CLI not found", status.Error, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-015: an FRP provider that was never started reports a status that is not running. Data: a
+    /// FrpTunnelProvider over CreateOptions (port 7147) and the substituted IProcessRunner of TunnelProviderTestsBase
+    /// (Services/TunnelProviderTestsBase.cs).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-015: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task FrpProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning()
     {
