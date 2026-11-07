@@ -1,0 +1,75 @@
+{
+  "name": "ug-r14f4-s3-mockgate-1",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "ff525e5507aed4e1567e4f0330199a5e9b85ce75",
+  "dirtyPaths": [
+    " M QBrainAi.sln",
+    " M src/QBrainAi.QBAgent/QBrainAi.QBAgent.csproj",
+    " M tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    " M tests/Directory.Build.targets",
+    " M tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    " M tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+    " M tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+    " M tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-buildtests-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-buildtests-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s1-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s1-mockgate-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-binding-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-binding-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-compile-1.json",
+    "?? tests/QBrainAi.McpAgent.IntegrationTests/",
+    "?? tests/QBrainAi.QBAgent.IntegrationTests/",
+    "?? tests/QBrainAi.Repl.IntegrationTests/HandoffSkillDelegationTests.cs",
+    "?? tests/QBrainAi.Repl.IntegrationTests/MemorySchemaContractTests.cs",
+    "?? tests/TestSupport.Shared/HandoffRecordingHandler.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "Build.Tests:IntegrationLaneProjectsMockGateTests",
+    "--test-run-id",
+    "ug-r14f4-s3-mockgate-1"
+  ],
+  "startedLocal": "2026-11-07T09:03:23",
+  "endedLocal": "2026-11-07T09:03:32",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 15,
+  "passed": 15,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s3-mockgate-1/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-mockgate-1/Build.Tests.trx",
+      "sha256": "4B2060572105897749D61BCB3FD7B513E27159343CAD182688F74E7C43DD7228",
+      "total": 15,
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+      "sha256": "D0C06D49BE891C568477EF0C5DAF0A88D38A77DE9FCEC18587ACB03A3CDEB2EC"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+      "sha256": "630F69F350866203B995BAFD7C08B89AA89EABBFB58438397DA9B8449455BD72"
+    }
+  ],
+  "writtenLocal": "2026-11-07T09:03:48",
+  "writtenBy": "ClaudeCode"
+}

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="a05f00e4-c6fe-472b-a4ad-fa8913e5214a" name="@LAB-OMARCHY 2026-11-07 10:05:02" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-07T10:05:02.1534286-06:00" queuing="2026-11-07T10:05:02.1534287-06:00" start="2026-11-07T10:05:00.4261355-06:00" finish="2026-11-07T10:05:02.1642294-06:00" />
+  <TestSettings name="default" id="23cb8a7e-051c-41ee-bce5-3816bd22ad85">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-07_10_05_02" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="b16b9437-7e4a-479b-8a0f-0078b1ef2cb7" testId="da1f956c-749e-5cf6-f6e4-38cb1f10d1cb" testName="QBrainAi.McpAgent.IntegrationTests.McpAgentOptionsLegacySectionHostTests.AddQBrainAiMcpAgent_BindsLegacyMcpServerSection" computerName="LAB-OMARCHY" duration="00:00:00.0817240" startTime="2026-11-07T10:05:01.8318337-06:00" endTime="2026-11-07T10:05:01.9257065-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b16b9437-7e4a-479b-8a0f-0078b1ef2cb7" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.McpAgent.IntegrationTests.McpAgentOptionsLegacySectionHostTests.AddQBrainAiMcpAgent_BindsLegacyMcpServerSection" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.mcpagent.integrationtests/bin/debug/net10.0/qbrainai.mcpagent.integrationtests.dll" id="da1f956c-749e-5cf6-f6e4-38cb1f10d1cb">
+      <Execution id="b16b9437-7e4a-479b-8a0f-0078b1ef2cb7" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.IntegrationTests/bin/Debug/net10.0/QBrainAi.McpAgent.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.McpAgent.IntegrationTests.McpAgentOptionsLegacySectionHostTests" name="AddQBrainAiMcpAgent_BindsLegacyMcpServerSection" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="da1f956c-749e-5cf6-f6e4-38cb1f10d1cb" executionId="b16b9437-7e4a-479b-8a0f-0078b1ef2cb7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.22]   Discovering: QBrainAi.McpAgent.IntegrationTests
+[xUnit.net 00:00:00.49]   Discovered:  QBrainAi.McpAgent.IntegrationTests
+[xUnit.net 00:00:00.79]   Starting:    QBrainAi.McpAgent.IntegrationTests
+[xUnit.net 00:00:01.00]   Finished:    QBrainAi.McpAgent.IntegrationTests (ID = 'deb488198665119d16cbff2e858916bdda4b1c33fcf84a52ee4fe94107833535')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

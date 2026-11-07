@@ -114,7 +114,11 @@ partial class Build
     /// TR-MCP-NUKE-019: the lane also provisions Ollama and the QuadBrain test model on both hosts
     /// (<see cref="InstallOllama"/>) before any test runs.
     /// </summary>
-    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: logs each lane project's role from the build's declarations (<see cref="TestProjectRoles.RoleOf"/>) and fails before any test runs on an undeclared lane project; the lane's projects, filters and cases are unchanged (slice S2).</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: logs each lane project's role from the build's declarations (<see cref="TestProjectRoles.RoleOf"/>) and fails before any test runs on an undeclared lane project; the lane's projects, filters and cases are unchanged (slice S2).</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S3 changes the lane's projects through <see cref="IntegrationLaneProjects"/> (the MCP agent and QBAgent integration-owned projects replace the three unit projects whose integration cases moved); this target's code is unchanged and its comments name the new composition.</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S4 changes the lane's projects the same way (Build.IntegrationTests replaces Build.Tests); the lane builds Build.IntegrationTests itself, because DotNetTest here runs without --no-build and Compile leaves that project out; this target's code is unchanged.</para>
+    /// </remarks>
     public Target MigrationIntegrationTests => _ => _
         .Description("Run Category=Integration tests (provider migrations, process spawns) with provisioned dependencies")
         .DependsOn(InstallTestDependencies, InstallOllama)
@@ -122,8 +126,8 @@ partial class Build
         {
             // TR-MCP-NUKE-019 AC-2/AC-3: a tested composition owns identity, path, filter, log and TRX naming;
             // every project's TRX must prove a nonempty all-passing result, independently of runner exit semantics.
-            // TR-MCP-NUKE-019 AC-2: the seven lane projects IntegrationLaneProjects names, in run order (Repl.Core.Tests and
-            // QBAgent.Tests hold the tests that read the repository checkout through the shared TestRepositoryRoot,
+            // TR-MCP-NUKE-019 AC-2: the six lane projects IntegrationLaneProjects names, in run order (Repl.IntegrationTests and
+            // QBAgent.IntegrationTests hold the tests that read the repository checkout through the shared TestRepositoryRoot,
             // TR-MCP-USECASE-018 AC-006; from QBrainAi.Support.Mcp.IntegrationTests only the classes it names run).
             var solutionProjects = Solution.GetAllProjects("*").ToArray();
             var projectsWithIntegrationTests = IntegrationLaneExecution.Compose(
@@ -139,8 +143,8 @@ partial class Build
                 Log.Information("{LaneProjectFilter}", project.LogLine);
 
             // TR-MCP-NUKE-019 AC-7: the lane consults the build's role declarations: it logs each lane project's declared
-            // role, and an undeclared lane project fails the lane before any test runs. The selection stays the AC-2
-            // composition until the cases move (slices S3 to S8), so no case changes.
+            // role, and an undeclared lane project fails the lane before any test runs. The selection is the AC-2
+            // composition as each slice moves cases into integration-owned projects (S3 and S4 done; S5 to S8 to come).
             foreach (var project in projectsWithIntegrationTests)
                 Log.Information("Integration lane project {Project}: declared role {Role}", project.Name, TestProjectRoles.RoleOf(project.Name));
 

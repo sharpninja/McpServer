@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the integration-owned project of the MCP agent's
+       Category=Integration cases, split out of QBrainAi.McpAgent.Tests so a unit-owned project holds only unit cases
+       (slice S3, hostile validation finding R14-F4). Same packages and reference as QBrainAi.McpAgent.Tests; the cases
+       use only public API, so QBrainAi.McpAgent grants no internals to it. -->
+  <PropertyGroup>
+    <Configurations>Debug;Release;Staging</Configurations>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\QBrainAi.McpAgent\QBrainAi.McpAgent.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+</Project>

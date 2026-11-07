@@ -48,4 +48,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)QBrainAi.Support.Mcp.IntegrationTests\ScratchSqliteSchema.cs"
              Link="TestSupport.Shared\ScratchSqliteSchema.cs" />
   </ItemGroup>
+
+  <!-- 2026-11-07, TEST-HANDOFF-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the handoff client's recording HTTP handler,
+       extracted once from HandoffSkillDelegationTests when that class split into its unit half (QBrainAi.Repl.Core.Tests)
+       and its integration half (QBrainAi.Repl.IntegrationTests), linked into both instead of copied (slice S3). -->
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.Core.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests'">
+    <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\HandoffRecordingHandler.cs"
+             Link="TestSupport.Shared\HandoffRecordingHandler.cs" />
+  </ItemGroup>
 </Project>

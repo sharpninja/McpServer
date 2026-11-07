@@ -6,6 +6,8 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.Json;
+using static NukeBuild.Tests.ServiceUpdateTestSupport;
+using Fixture = NukeBuild.Tests.ServiceUpdateFixture;
 
 namespace NukeBuild.Tests;
 
@@ -17,6 +19,7 @@ namespace NukeBuild.Tests;
 /// <list type="table">
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-06</term><description>TR-MCP-NUKE-015 AC-004 and AC-005, TR-MCP-SERVICEUPDATE-001 per-os-tests: cites the criteria it proves, so the criterion text no longer names the test (operator: "Must be fixed.").</description></item>
+/// <item><term>2026-11-07</term><description>TR-MCP-NUKE-015 AC-004, AC-005; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the infrastructure half of this class; its six Category=Integration methods (ten Platform=Linux cases) moved unchanged to the class of the same name in the integration-owned Build.IntegrationTests, so this infrastructure-owned project holds no integration case (slice S4, hostile validation finding R14-F4). The helpers both halves use (Native, Contract, Property, Call) and the Fixture class moved once into the linked ServiceUpdateTestSupport.cs (ServiceUpdateTestSupport and ServiceUpdateFixture), reached here through a using-static directive and a Fixture alias, so the remaining cases are unchanged.</description></item>
 /// </list>
 /// </remarks>
 public sealed class ServiceUpdateTests
@@ -423,74 +426,6 @@ public sealed class ServiceUpdateTests
         Assert.NotEmpty(Directory.GetFiles(f.Backup, "*.tar", SearchOption.AllDirectories));
     }
 
-    /// <summary>GNU tar preserves modes and symlink targets; private archive protects live secrets.</summary>
-    [Fact]
-    [Trait("Category", "Integration")]
-    [Trait("Platform", "Linux")]
-    [SupportedOSPlatform("linux")]
-    public void LinuxArchive_UsesPrivateMetadataPreservingCommands()
-    {
-        using var f = new Fixture { RealTar = true };
-        File.SetUnixFileMode(f.Env, UnixFileMode.UserRead | UnixFileMode.UserWrite);
-        File.CreateSymbolicLink(Path.Combine(f.Data, "link"), "state");
-        var dataFile = Path.Combine(f.Data, "state");
-        Native("setfacl", "-m", "u:65534:r", dataFile);
-        Native("setfattr", "-n", "user.mcp-test", "-v", "original-attribute", dataFile);
-        var acl = Native("getfacl", "--omit-header", "--numeric", dataFile);
-        var owner = Native("stat", "-c", "%u:%g", dataFile);
-        f.OnCopy = () =>
-        {
-            Native("setfacl", "-b", dataFile);
-            Native("setfattr", "-x", "user.mcp-test", dataFile);
-            File.SetUnixFileMode(f.Env, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.OtherRead);
-            File.Delete(Path.Combine(f.Data, "link"));
-            File.WriteAllText(Path.Combine(f.Data, "link"), "replacement");
-            File.WriteAllText(Path.Combine(f.Data, "state"), "changed");
-        };
-        var result = f.Update();
-        var archive = (string)Property(result, "ArchivePath");
-        Assert.Equal(UnixFileMode.UserRead | UnixFileMode.UserWrite, File.GetUnixFileMode(archive));
-        Assert.Equal(UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute, File.GetUnixFileMode(Path.GetDirectoryName(archive)!));
-        Assert.Equal(UnixFileMode.UserRead | UnixFileMode.UserWrite, File.GetUnixFileMode(f.Env));
-        Assert.Equal("state", new FileInfo(Path.Combine(f.Data, "link")).LinkTarget);
-        Assert.Equal("original", File.ReadAllText(Path.Combine(f.Data, "state")));
-        Assert.Equal(acl, Native("getfacl", "--omit-header", "--numeric", dataFile));
-        Assert.Equal(owner, Native("stat", "-c", "%u:%g", dataFile));
-        Assert.Equal("original-attribute", Native("getfattr", "--only-values", "-n", "user.mcp-test", dataFile).TrimEnd());
-        Assert.Contains("--acls", f.TarArguments);
-        Assert.Contains("--xattrs", f.TarArguments);
-        Assert.DoesNotContain("--dereference", f.TarArguments);
-    }
-
-    /// <summary>A stale directory link is removed without modifying its external target.</summary>
-    [Fact]
-    [Trait("Category", "Integration")]
-    [Trait("Platform", "Linux")]
-    public void LinuxReplacement_DoesNotFollowSymlinks()
-    {
-        using var f = new Fixture();
-        Directory.CreateSymbolicLink(Path.Combine(f.Install, "stale"), f.Data);
-        f.Update();
-        Assert.False(Directory.Exists(Path.Combine(f.Install, "stale")));
-        Assert.Equal("original", File.ReadAllText(Path.Combine(f.Data, "state")));
-    }
-
-    /// <summary>Linux rejects linked data roots and nonexecutable stages before stopping the selected service.</summary>
-    [Theory]
-    [Trait("Category", "Integration")]
-    [Trait("Platform", "Linux")]
-    [SupportedOSPlatform("linux")]
-    [InlineData(true)]
-    [InlineData(false)]
-    public void LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(bool symlink)
-    {
-        using var f = new Fixture();
-        if (symlink) { Directory.Delete(f.Data, true); Directory.CreateSymbolicLink(f.Data, f.Stage); }
-        else File.SetUnixFileMode(Path.Combine(f.Stage, "QBrainAi.Support.Mcp"), UnixFileMode.UserRead);
-        Assert.ThrowsAny<Exception>(() => f.Update());
-        Assert.DoesNotContain("stop", f.Events);
-    }
-
     /// <summary>Concurrent invocation cannot stop or copy while the service lock is held.</summary>
     [Theory]
     [InlineData(false)]
@@ -760,61 +695,6 @@ public sealed class ServiceUpdateTests
         Assert.DoesNotContain("stop", f.Events);
     }
 
-    /// <summary>A preserved runtime-config directory link must not redirect the generated-default callback.</summary>
-    [Fact]
-    [Trait("Category", "Integration")]
-    [Trait("Platform", "Linux")]
-    public void LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination()
-    {
-        using var f = new Fixture { RealTar = true };
-        var configData = Path.Combine(f.Install, "config");
-        Directory.CreateDirectory(configData);
-        File.WriteAllText(f.Config, "DataFolder: '" + configData + "'\n");
-        Directory.CreateSymbolicLink(Path.Combine(configData, "brain-slots"), f.Data);
-        var called = false;
-        f.OnCopy = () => called = true;
-        Assert.ThrowsAny<Exception>(() => f.Update());
-        Assert.False(called);
-    }
-
-    /// <summary>Special stage files are rejected before an apphost read or any service mutation can block on a FIFO.</summary>
-    [Fact]
-    [Trait("Category", "Integration")]
-    [Trait("Platform", "Linux")]
-    public void LinuxPreflight_RejectsSpecialStageFiles()
-    {
-        using var f = new Fixture { InspectRealFileKinds = true };
-        Native("mkfifo", Path.Combine(f.Stage, "pipe"));
-        Assert.ThrowsAny<Exception>(() => Call("LinuxServiceHelper", "ValidateStage", f.CreateHelper(), f.Stage, "linux-x64"));
-        Assert.ThrowsAny<Exception>(() => f.Update());
-        Assert.DoesNotContain("stop", f.Events);
-    }
-
-    /// <summary>Apphost and live text inputs reject FIFOs through the regular-file guard before opening them.</summary>
-    [Theory]
-    [Trait("Category", "Integration")]
-    [Trait("Platform", "Linux")]
-    [InlineData("apphost")]
-    [InlineData("configuration")]
-    [InlineData("environment")]
-    [InlineData("unit")]
-    public void LinuxPreflight_RejectsSpecialApphostAndTextInputs(string input)
-    {
-        using var f = new Fixture { InspectRealFileKinds = true };
-        var path = input switch
-        {
-            "apphost" => Path.Combine(f.Stage, "QBrainAi.Support.Mcp"),
-            "configuration" => f.Config,
-            "environment" => f.Env,
-            _ => Path.Combine(f.Root, "example.service")
-        };
-        File.Delete(path);
-        Native("mkfifo", path);
-        Assert.ThrowsAny<Exception>(() => Call("LinuxServiceHelper", "RequireRegularFile", f.CreateHelper(), path));
-        Assert.ThrowsAny<Exception>(() => f.Update());
-        Assert.DoesNotContain("stop", f.Events);
-    }
-
     /// <summary>Real loaded drop-in bytes are preserved through the same archive as configuration.</summary>
     [Fact]
     public void LinuxUnitState_PreservesDropInWithSpaces()
@@ -828,159 +708,4 @@ public sealed class ServiceUpdateTests
         Assert.Equal("original-unit", File.ReadAllText(dropIn));
     }
 
-    /// <summary>Runs installed metadata utilities against an isolated fixture, failing on timeout or nonzero exit.</summary>
-    private static string Native(string command, params string[] arguments)
-    {
-        var info = new ProcessStartInfo(command);
-        foreach (var argument in arguments) info.ArgumentList.Add(argument);
-        var result = BoundedProcess.Run(info, TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
-        Assert.Equal(0, result.ExitCode);
-        return result.Stdout;
-    }
-
-    /// <summary>Reflection keeps absent production contracts compilable for the red gate.</summary>
-    private static Type Contract(string name) => typeof(WindowsServiceHelper).Assembly.GetType(name) ?? throw new InvalidOperationException("Missing production contract: " + name);
-    /// <summary>Reads a returned contract record.</summary>
-    private static object Property(object target, string name) => target.GetType().GetProperty(name)!.GetValue(target)!;
-    /// <summary>Invokes the intended API while preserving its original exception for assertions.</summary>
-    private static object Call(string type, string method, object? instance, params object[] args)
-    {
-        try { return (Contract(type).GetMethod(method, BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-            ?? throw new InvalidOperationException("Missing production method: " + method)).Invoke(instance, args)!; }
-        catch (TargetInvocationException ex) { ExceptionDispatchInfo.Capture(ex.InnerException!).Throw(); throw; }
-    }
-
-    /// <summary>Isolated live-state fixture and command double; tar executes against temporary files only.</summary>
-    private sealed class Fixture : IDisposable
-    {
-        public string Root { get; } = Path.Combine(Path.GetTempPath(), "service-update-" + Guid.NewGuid().ToString("N"));
-        public string Install => Path.Combine(Root, "app");
-        public string Stage => Path.Combine(Root, "stage");
-        public string Data => Path.Combine(Root, "data");
-        public string Config => Path.Combine(Install, "appsettings.yaml");
-        public string Executable => Path.Combine(Install, "QBrainAi.Support.Mcp");
-        public string Env => Path.Combine(Root, "service.env");
-        public string Backup { get; set; }
-        public string UnitExecutable { get; set; }
-        public string WorkingDirectory { get; set; }
-        public string LoadState { get; set; } = "loaded";
-        public bool FailArchive { get; set; }
-        public bool FailCopy { get; set; }
-        public bool FailHealth { get; set; }
-        public Queue<string?> ProcessObservations { get; } = new();
-        public int ProcessChecks { get; private set; }
-        public bool WrongProcess { get; set; }
-        public bool RealTar { get; set; }
-        public bool InspectRealFileKinds { get; set; }
-        public bool OptionalEnvironment { get; set; }
-        /// <summary>
-        /// 2026-11-04, TR-MCP-SERVICEUPDATE-001 repeated-properties (slice Z3): a required environment file the fake
-        /// systemctl show names on a second EnvironmentFiles line, as systemd 262 prints one line per file; null prints no
-        /// second line.
-        /// </summary>
-        public string? SecondEnv { get; set; }
-        public string DropIns { get; set; } = "";
-        public string PrivateOwner { get; set; } = "0";
-        public string ServiceName { get; set; } = "example.service";
-        public string ExtraProperties { get; set; } = "";
-        public string Arguments { get; set; } = "--urls http://localhost:7147";
-        public Action? OnCopy { get; set; }
-        public string OriginalConfig => "DataFolder: '" + Data + "'\n";
-        public List<string> Events { get; } = [];
-        public List<string> TarArguments { get; } = [];
-        private bool started;
-        private readonly Dictionary<string, byte[]> snapshot = [];
-
-        /// <summary>Builds ordinary config/data plus an ELF header matching the test RID.</summary>
-        public Fixture(bool requireLinux = true)
-        {
-            // Fail the red gate at contract binding, never mistake a missing API for safe rejection.
-            if (requireLinux) _ = Contract("LinuxServiceHelper");
-            foreach (var path in new[] { Install, Stage, Data }) Directory.CreateDirectory(path);
-            Backup = Path.Combine(Root, "backups"); UnitExecutable = Executable;
-            WorkingDirectory = Install;
-            File.WriteAllText(Config, OriginalConfig); File.WriteAllText(Executable, "old");
-            File.WriteAllText(Path.Combine(Data, "state"), "original");
-            File.WriteAllText(Env, "ConnectionStrings__Default=private\n");
-            File.WriteAllText(Path.Combine(Root, "example.service"), "[Service]\n");
-            var elf = new byte[64]; elf[0] = 127; elf[1] = 69; elf[2] = 76; elf[3] = 70; elf[4] = 2; elf[5] = 1; elf[18] = 62;
-            File.WriteAllBytes(Path.Combine(Stage, "QBrainAi.Support.Mcp"), elf);
-            if (!OperatingSystem.IsWindows())
-                File.SetUnixFileMode(Path.Combine(Stage, "QBrainAi.Support.Mcp"), UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute | UnixFileMode.GroupRead | UnixFileMode.GroupExecute | UnixFileMode.OtherRead | UnixFileMode.OtherExecute);
-            File.WriteAllText(Path.Combine(Stage, "appsettings.yaml"), "DataFolder: wrong\n");
-        }
-
-        /// <summary>Adapts the native-command contract without requiring unimplemented types at compile time.</summary>
-        public object Update()
-        {
-            var helper = CreateHelper();
-            var options = Activator.CreateInstance(Contract("LinuxServiceUpdateOptions"), ServiceName, Install, Stage, Backup, "linux-x64", Path.Combine(Root, "locks"))!;
-            return Call("LinuxServiceHelper", "Update", helper, options, (Action)(() =>
-            {
-                Events.Add("defaults"); OnCopy?.Invoke();
-                if (FailCopy) { File.WriteAllText(Config, "changed"); File.WriteAllText(Path.Combine(Data, "state"), "changed"); throw new IOException("injected copy failure"); }
-            }), (Action)(() => { Events.Add("health"); if (FailHealth) { File.WriteAllText(Config, "changed"); File.WriteAllText(Path.Combine(Data, "state"), "changed"); throw new IOException("injected health failure"); } }));
-        }
-
-        /// <summary>Binds the command double for whole-update and isolated preflight tests.</summary>
-        public object CreateHelper()
-        {
-            var resultType = Contract("ServiceCommandResult");
-            var command = Expression.Parameter(typeof(string)); var arguments = Expression.Parameter(typeof(IReadOnlyList<string>));
-            var body = Expression.Convert(Expression.Call(Expression.Constant(this), GetType().GetMethod(nameof(Run))!, command, arguments), resultType);
-            var runner = Expression.Lambda(typeof(Func<,,>).MakeGenericType(typeof(string), typeof(IReadOnlyList<string>), resultType), body, command, arguments).Compile();
-            return Activator.CreateInstance(Contract("LinuxServiceHelper"), runner)!;
-        }
-
-        /// <summary>Fakes systemd/id/readlink; real tar provides independent preservation evidence.</summary>
-        public object Run(string command, IReadOnlyList<string> args)
-        {
-            object Result(int code, string output) => Activator.CreateInstance(Contract("ServiceCommandResult"), code, output)!;
-            if (command == "id") return Result(0, "0");
-            if (command == "stat") return Result(0, args.Contains("%f")
-                ? InspectRealFileKinds ? Native("stat", args.ToArray()) : Directory.Exists(args.Last()) ? "41ed" : "81a4"
-                : PrivateOwner);
-            if (command == "readlink")
-            {
-                ProcessChecks++;
-                var observation = ProcessObservations.Count > 0 ? ProcessObservations.Dequeue() : WrongProcess ? "/unexpected/process" : Executable;
-                return observation is null ? Result(1, "") : Result(0, observation);
-            }
-            if (command == "systemctl")
-            {
-                if (args[0] == "show") return Result(0, $"LoadState={LoadState}\nType=simple\nFragmentPath={Path.Combine(Root, "example.service")}\nDropInPaths={DropIns}\nEnvironmentFiles={Env} (ignore_errors={(OptionalEnvironment ? "yes" : "no")})\n{(SecondEnv is null ? "" : $"EnvironmentFiles={SecondEnv} (ignore_errors=no)\n")}Environment=\nWorkingDirectory={WorkingDirectory}\nExecStart={{ path={UnitExecutable} ; argv[]={UnitExecutable} {Arguments} ; ignore_errors=no ; }}\nMainPID={(started ? Environment.ProcessId : 0)}\nActiveState={(started ? "active" : "inactive")}\n{ExtraProperties}");
-                if (args[0] == "is-active") return Result(started ? 0 : 3, started ? "active" : "inactive");
-                Events.Add(args[0]); if (args[0] == "start") started = true; if (args[0] == "stop") started = false;
-                return Result(0, "");
-            }
-            if (command != "tar") throw new InvalidOperationException("Unexpected command: " + command);
-            TarArguments.AddRange(args);
-            if (args.Contains("--create")) { Events.Add("archive"); if (FailArchive) return Result(2, "injected"); }
-            if (args.Contains("--extract")) Events.Add("restore");
-            if (!RealTar)
-            {
-                if (args.Contains("--create"))
-                {
-                    var array = args.ToArray();
-                    foreach (var relative in array.Skip(Array.IndexOf(array, "--") + 1))
-                    {
-                        var path = Path.GetFullPath(relative, Path.GetPathRoot(Root)!);
-                        foreach (var file in Directory.Exists(path) ? Directory.GetFiles(path, "*", SearchOption.AllDirectories) : new[] { path })
-                            snapshot[file] = File.ReadAllBytes(file);
-                    }
-                    File.WriteAllText(array[Array.IndexOf(array, "--file") + 1], "archive-double");
-                }
-                if (args.Contains("--extract")) foreach (var (path, bytes) in snapshot)
-                { Directory.CreateDirectory(Path.GetDirectoryName(path)!); File.WriteAllBytes(path, bytes); }
-                return Result(0, args.Contains("--version") ? "tar (GNU tar) test-double" : "");
-            }
-            var info = new ProcessStartInfo(command);
-            foreach (var arg in args) info.ArgumentList.Add(arg);
-            var result = BoundedProcess.Run(info, TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
-            return Result(result.ExitCode, result.Stdout);
-        }
-
-        /// <summary>Removes only this test's temporary tree.</summary>
-        public void Dispose() => Directory.Delete(Root, true);
-    }
 }

@@ -1,13 +1,18 @@
 /// <summary>
 /// TR-MCP-NUKE-019 AC-2: Selects the projects MigrationIntegrationTests runs from the solution's project names:
-/// QBrainAi.Support.Mcp.Tests, QBrainAi.McpAgent.Tests, QBrainAi.Repl.Core.Tests, QBrainAi.QBAgent.Tests, Build.Tests,
-/// QBrainAi.Repl.IntegrationTests and QBrainAi.Support.Mcp.IntegrationTests, in that order, and names the classes the
+/// QBrainAi.Support.Mcp.Tests, QBrainAi.McpAgent.IntegrationTests, QBrainAi.QBAgent.IntegrationTests,
+/// Build.IntegrationTests, QBrainAi.Repl.IntegrationTests and QBrainAi.Support.Mcp.IntegrationTests, in that order, and
+/// names the classes the
 /// lane runs from a project: from QBrainAi.Support.Mcp.IntegrationTests only RequirementScopeLayerReplIntegrationTests
 /// and QuadBrainOllamaEndpointIntegrationTests, every class of the others. QBrainAi.Acid.IntegrationTests and
 /// QBrainAi.TransactionSecurity.IntegrationTests are not lane projects until PLAN-SESSIONTRIAGEFIX-001 merges (TODO
 /// IMPL-TXNINTEGRATION-001); the .Validation projects, the AI review projects and QBrainAi.PluginIntegration.Tests, which
-/// has its own target, are not lane projects.
+/// has its own target, and the build's infrastructure tests (Build.Tests) are not lane projects.
 /// </summary>
+/// <remarks>
+/// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the named selection follows slice S3 of hostile validation finding R14-F4 (the MCP agent and QBAgent integration-owned projects replace the three unit projects whose integration cases moved); the contract is unchanged.</para>
+/// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the named selection follows slice S4 (Build.IntegrationTests replaces Build.Tests); the contract is unchanged.</para>
+/// </remarks>
 interface IIntegrationLaneProjects
 {
     /// <summary>

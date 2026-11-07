@@ -1,0 +1,143 @@
+{
+  "name": "ug-r14f4-s3-binding-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "ff525e5507aed4e1567e4f0330199a5e9b85ce75",
+  "dirtyPaths": [
+    " M QBrainAi.sln",
+    " M build/Build.TestDependencies.cs",
+    " M build/IntegrationLaneProjects.cs",
+    " M build/IntegrationLaneProjectsContracts.cs",
+    " M src/QBrainAi.QBAgent/QBrainAi.QBAgent.csproj",
+    " M tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/Directory.Build.targets",
+    " M tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    " M tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+    " M tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+    " M tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-buildtests-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-buildtests-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s1-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s1-mockgate-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-binding-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-binding-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-mockgate-1/",
+    "?? tests/QBrainAi.McpAgent.IntegrationTests/",
+    "?? tests/QBrainAi.QBAgent.IntegrationTests/",
+    "?? tests/QBrainAi.Repl.IntegrationTests/HandoffSkillDelegationTests.cs",
+    "?? tests/QBrainAi.Repl.IntegrationTests/MemorySchemaContractTests.cs",
+    "?? tests/TestSupport.Shared/HandoffRecordingHandler.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.McpAgent.Tests:McpAgentOptionsSectionTests",
+    "QBrainAi.QBAgent.Tests:QBAgentHeartbeatOverlayTests",
+    "QBrainAi.Repl.Core.Tests:HandoffSkillDelegationTests",
+    "Build.Tests:TestProjectOwnershipTests,IntegrationLaneProjectsTests,IntegrationLaneProjectsMockGateTests,IntegrationLaneExecutionContractTests,IntegrationLaneClassFilterTests",
+    "--test-run-id",
+    "ug-r14f4-s3-binding-1"
+  ],
+  "startedLocal": "2026-11-07T09:12:39",
+  "endedLocal": "2026-11-07T09:13:20",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 48,
+  "passed": 48,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s3-binding-1/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-binding-1/Build.Tests.trx",
+      "sha256": "BC04DE3E033D378846D4EE3610D67E80299687FC6BF509492920821528EDE7F5",
+      "total": 42,
+      "passed": 42,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.McpAgent.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s3-binding-1/groups/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-binding-1/QBrainAi.McpAgent.Tests.trx",
+      "sha256": "CE4E3FD23F97899E8F22B2A2F74E7109E520ADAF338FA0F3C67303E8C147509A",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.QBAgent.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s3-binding-1/groups/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-binding-1/QBrainAi.QBAgent.Tests.trx",
+      "sha256": "165791AAF260BF29F7FE72908E64C1E694A88F2D9964BCA198BCC5DD2E916669",
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s3-binding-1/groups/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-binding-1/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "4184FAB37549DC31645B5D65E95ACEBD00C8A837575FD39D2859C34E93E43B9A",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "build/IntegrationLaneProjects.cs",
+      "sha256": "8CE7B857986AEFFB5E83F0182E0A8A9F1F3A9840777DA907C9DB94785AD9BA20"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipTests.cs",
+      "sha256": "28530C5055CAB5DC0D0960F2ED9A86D1AB959142876F7795457381B98859A523"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+      "sha256": "D0C06D49BE891C568477EF0C5DAF0A88D38A77DE9FCEC18587ACB03A3CDEB2EC"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+      "sha256": "630F69F350866203B995BAFD7C08B89AA89EABBFB58438397DA9B8449455BD72"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+      "sha256": "5BA16F5E6926E2DB38DFC2B9BF385727ED89DC6BACC71CA30149BA49E22E8E5D"
+    },
+    {
+      "path": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+      "sha256": "AF6F100264D7EC8AD6B838A9ACEC7BDF1B9D62B71993C9CCFC69A1A7AB65A934"
+    },
+    {
+      "path": "tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+      "sha256": "B9EF2C9A1033E3B4B60A07BACDCBCD90FD73BFAD2AEA9FFF28FF69D5EF6CBB61"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+      "sha256": "B5220963C396922A07BEC41CD682AA2498F1BFA3EF185B626322951A9680EA22"
+    }
+  ],
+  "writtenLocal": "2026-11-07T09:13:42",
+  "writtenBy": "ClaudeCode"
+}

@@ -11,6 +11,7 @@ namespace NukeBuild.Tests;
 /// <list type="table">
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-016 AC-001 (appended: one rule both use): added after mock gate ug-r10-mockgate-t-1, for hostile validation finding R9-F5 (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
+/// <item><term>2026-11-07</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-016 AC-001; TR-MCP-NUKE-019 AC-7: the infrastructure half of this class; its Category=Integration case BothConsumers_UseTheSharedRule and FindRepositoryRoot, which only that case used, moved unchanged to the class of the same name in the integration-owned Build.IntegrationTests, so this infrastructure-owned project holds no integration case (slice S4, hostile validation finding R14-F4); SharedRule_SatisfiesMockGatedContract is unchanged.</description></item>
 /// </list>
 /// </remarks>
 public sealed class QuadBrainOllamaModelBindingTests
@@ -21,51 +22,5 @@ public sealed class QuadBrainOllamaModelBindingTests
     {
         Assert.Equal(QuadBrainOllamaModelContractTests.DefaultModel, QuadBrainOllamaModel.DefaultModel);
         QuadBrainOllamaModelContractTests.AssertSelection(QuadBrainOllamaModel.Select);
-    }
-
-    /// <summary>
-    /// Both consumers call the shared rule with the two variables it names, neither spells a variable name itself, and
-    /// the integration project links the rule's source file.
-    /// </summary>
-    /// <remarks>TR-MCP-NUKE-016 AC-001: integration because this case reads the physical checkout.</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public void BothConsumers_UseTheSharedRule()
-    {
-        var root = FindRepositoryRoot();
-        var consumers = new[]
-        {
-            Path.Combine(root, "build", "Build.TestDependencies.cs"),
-            Path.Combine(root, "tests", "QBrainAi.Support.Mcp.IntegrationTests", "Controllers", "QuadBrainOllamaEndpointIntegrationTests.cs"),
-        };
-        foreach (var path in consumers)
-        {
-            var source = File.ReadAllText(path);
-            Assert.Contains("QuadBrainOllamaModel.Select(", source, StringComparison.Ordinal);
-            Assert.Contains("QuadBrainOllamaModel.CanonicalVariable", source, StringComparison.Ordinal);
-            Assert.Contains("QuadBrainOllamaModel.LegacyVariable", source, StringComparison.Ordinal);
-            Assert.DoesNotContain("\"" + QuadBrainOllamaModel.CanonicalVariable + "\"", source, StringComparison.Ordinal);
-            Assert.DoesNotContain("\"" + QuadBrainOllamaModel.LegacyVariable + "\"", source, StringComparison.Ordinal);
-        }
-
-        var project = File.ReadAllText(Path.Combine(root, "tests", "QBrainAi.Support.Mcp.IntegrationTests", "QBrainAi.Support.Mcp.IntegrationTests.csproj"));
-        Assert.Contains(@"..\..\build\QuadBrainOllamaModel.cs", project, StringComparison.Ordinal);
-    }
-
-    /// <summary>TR-MCP-NUKE-016 AC-001: the checkout root, found from the test output folder.</summary>
-    /// <returns>The folder that holds QBrainAi.sln.</returns>
-    /// <exception cref="DirectoryNotFoundException">No parent folder holds QBrainAi.sln.</exception>
-    private static string FindRepositoryRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
-                return directory.FullName;
-
-            directory = directory.Parent;
-        }
-
-        throw new DirectoryNotFoundException("Could not find repository root containing QBrainAi.sln.");
     }
 }

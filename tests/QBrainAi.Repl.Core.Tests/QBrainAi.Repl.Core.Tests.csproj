@@ -26,9 +26,9 @@
     <ProjectReference Include="..\..\src\QBrainAi.Repl.Host\QBrainAi.Repl.Host.csproj" />
     <ProjectReference Include="..\..\tests\QBrainAi.Todo.Validation\QBrainAi.Todo.Validation.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\Shared\TestRepositoryRoot.cs" Link="Shared\TestRepositoryRoot.cs" />
-  </ItemGroup>
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the shared repository-root locator is no longer linked here;
+       its only users, the Category=Integration cases that read the checkout, moved to QBrainAi.Repl.IntegrationTests,
+       which links it through tests/Directory.Build.targets (slice S3). -->
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>

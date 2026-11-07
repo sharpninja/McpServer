@@ -7,7 +7,8 @@ namespace NukeBuild.Tests;
 /// </summary>
 public sealed class IntegrationLaneProjectsMockGateTests
 {
-    /// <summary>TR-MCP-NUKE-019 AC-2: the scripted selector satisfies every row, class selection and all seven missing-project refusals.</summary>
+    /// <summary>TR-MCP-NUKE-019 AC-2: the scripted selector satisfies every row, class selection and every missing-project refusal.</summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: unchanged case; the documentation no longer counts the lane projects, which slice S3 changed from seven to six.</remarks>
     [Fact]
     public void ScriptedSelector_SatisfiesTheContract()
         => IntegrationLaneProjectsContract.AssertContract(new ScriptedSelector(Fault.None));
@@ -23,12 +24,18 @@ public sealed class IntegrationLaneProjectsMockGateTests
     /// - QBrainAi.Acid.IntegrationTests added;
     /// - QBrainAi.PluginIntegration.Tests added;
     /// - the .Validation projects added;
-    /// - Build.Tests dropped;
+    /// - Build.IntegrationTests dropped;
     /// - QBrainAi.Repl.IntegrationTests run first;
     /// - the lane projects returned in solution order;
-    /// - a missing lane project ignored.
+    /// - a missing lane project ignored;
+    /// - the lane of da11faa2, which still ran the three unit projects whose integration cases slice S3 moved;
+    /// - the lane of slice S3, which still ran the infrastructure-owned Build.Tests.
     /// </summary>
     /// <param name="fault">Injected fault.</param>
+    /// <remarks>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added the negative control KeepsUnitProjects for slice S3 of hostile validation finding R14-F4, so the contract rejects the lane that still selects QBrainAi.McpAgent.Tests, QBrainAi.Repl.Core.Tests and QBrainAi.QBAgent.Tests; the earlier controls are unchanged.</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S4: DropsBuildTests became DropsBuildIntegrationTests, because Build.Tests left the lane and dropping it would no longer be a fault, and KeepsBuildTests was added, so the contract rejects the lane that still selects the infrastructure-owned Build.Tests; the other controls are unchanged.</para>
+    /// </remarks>
     [Theory]
     [InlineData(Fault.FixedFiveOnly)]
     [InlineData(Fault.EveryIntegrationProject)]
@@ -39,10 +46,12 @@ public sealed class IntegrationLaneProjectsMockGateTests
     [InlineData(Fault.TakesAcidIntegration)]
     [InlineData(Fault.TakesPluginIntegration)]
     [InlineData(Fault.TakesValidation)]
-    [InlineData(Fault.DropsBuildTests)]
+    [InlineData(Fault.DropsBuildIntegrationTests)]
     [InlineData(Fault.ReplIntegrationFirst)]
     [InlineData(Fault.KeepsSolutionOrder)]
     [InlineData(Fault.IgnoresMissingProject)]
+    [InlineData(Fault.KeepsUnitProjects)]
+    [InlineData(Fault.KeepsBuildTests)]
     public void WrongSelector_IsRejected(Fault fault)
         => Assert.ThrowsAny<Xunit.Sdk.XunitException>(
             () => IntegrationLaneProjectsContract.AssertContract(new ScriptedSelector(fault)));
@@ -80,8 +89,9 @@ public sealed class IntegrationLaneProjectsMockGateTests
         /// <summary>Also selects the .Validation projects.</summary>
         TakesValidation,
 
-        /// <summary>Leaves out Build.Tests.</summary>
-        DropsBuildTests,
+        /// <summary>Leaves out Build.IntegrationTests.</summary>
+        /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: was DropsBuildTests (leaves out Build.Tests) until slice S4 took Build.Tests out of the lane.</remarks>
+        DropsBuildIntegrationTests,
 
         /// <summary>Runs QBrainAi.Repl.IntegrationTests before the other lane projects.</summary>
         ReplIntegrationFirst,
@@ -91,6 +101,17 @@ public sealed class IntegrationLaneProjectsMockGateTests
 
         /// <summary>Selects what is present instead of refusing a solution that lacks a lane project.</summary>
         IgnoresMissingProject,
+
+        /// <summary>
+        /// Selects the lane of da11faa2: QBrainAi.McpAgent.Tests and QBrainAi.Repl.Core.Tests instead of
+        /// QBrainAi.McpAgent.IntegrationTests, and QBrainAi.QBAgent.Tests instead of QBrainAi.QBAgent.IntegrationTests.
+        /// </summary>
+        /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added (slice S3).</remarks>
+        KeepsUnitProjects,
+
+        /// <summary>Selects the lane of slice S3: the infrastructure-owned Build.Tests instead of Build.IntegrationTests.</summary>
+        /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added (slice S4).</remarks>
+        KeepsBuildTests,
     }
 
     /// <summary>Scripted selector: the contract-derived selection and class names, with an optional injected fault.</summary>
@@ -100,7 +121,7 @@ public sealed class IntegrationLaneProjectsMockGateTests
         public IReadOnlyList<string> Select(IReadOnlyList<string> solutionProjectNames)
         {
             var lane = IntegrationLaneProjectsContract.LaneProjects
-                .Where(project => fault != Fault.DropsBuildTests || project != "Build.Tests")
+                .Where(project => fault != Fault.DropsBuildIntegrationTests || project != "Build.IntegrationTests")
                 .Where(project => fault is not (Fault.FixedFiveOnly or Fault.EveryIntegrationProject) || !project.EndsWith(".IntegrationTests", StringComparison.Ordinal))
                 .Where(project => fault != Fault.OmitsSupportMcpIntegration || project != IntegrationLaneProjectsContract.SupportIntegrationProject)
                 .ToList();
@@ -120,6 +141,13 @@ public sealed class IntegrationLaneProjectsMockGateTests
                 Fault.TakesValidation => [.. lane, .. solutionProjectNames.Where(name => name.EndsWith(".Validation", StringComparison.Ordinal))],
                 Fault.ReplIntegrationFirst => ["QBrainAi.Repl.IntegrationTests", .. lane.Where(project => project != "QBrainAi.Repl.IntegrationTests")],
                 Fault.KeepsSolutionOrder => [.. solutionProjectNames.Where(lane.Contains)],
+                Fault.KeepsUnitProjects => [.. lane.SelectMany(project => project switch
+                {
+                    "QBrainAi.McpAgent.IntegrationTests" => new[] { "QBrainAi.McpAgent.Tests", "QBrainAi.Repl.Core.Tests" },
+                    "QBrainAi.QBAgent.IntegrationTests" => new[] { "QBrainAi.QBAgent.Tests" },
+                    _ => new[] { project },
+                })],
+                Fault.KeepsBuildTests => [.. lane.Select(project => project == "Build.IntegrationTests" ? "Build.Tests" : project)],
                 _ => lane,
             };
         }

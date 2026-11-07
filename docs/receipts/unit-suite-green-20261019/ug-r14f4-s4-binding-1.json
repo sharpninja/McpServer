@@ -1,0 +1,141 @@
+{
+  "name": "ug-r14f4-s4-binding-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "ff525e5507aed4e1567e4f0330199a5e9b85ce75",
+  "dirtyPaths": [
+    " M QBrainAi.sln",
+    " M build/Build.Compile.cs",
+    " M build/Build.TestDependencies.cs",
+    " M build/IntegrationLaneProjects.cs",
+    " M build/IntegrationLaneProjectsContracts.cs",
+    " M build/_build.csproj",
+    " M src/QBrainAi.QBAgent/QBrainAi.QBAgent.csproj",
+    " M tests/Build.Tests/BoundedProcessTests.cs",
+    " M tests/Build.Tests/BuildProjectSetTests.cs",
+    " M tests/Build.Tests/BuildTargetTests.cs",
+    " M tests/Build.Tests/DocsSyncG8OverlayTests.cs",
+    " M tests/Build.Tests/HandoffD3D5OverlayTests.cs",
+    " M tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+    " M tests/Build.Tests/MigrationAssemblyObsoleteWarningTests.cs",
+    " M tests/Build.Tests/NukeParametersTests.cs",
+    " M tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs",
+    " M tests/Build.Tests/PowerShellInvocationTests.cs",
+    " M tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs",
+    " M tests/Build.Tests/QuadBrainDescriptorAbsenceTests.cs",
+    " M tests/Build.Tests/QuadBrainOllamaModelBindingTests.cs",
+    " M tests/Build.Tests/RequirementsWikiPublishScriptTests.cs",
+    " M tests/Build.Tests/ServiceUpdateTests.cs",
+    " M tests/Build.Tests/SyncAgentPluginsChecksumTests.cs",
+    " M tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/Build.Tests/TrCoverageConsistencyTests.cs",
+    " M tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs",
+    " M tests/Build.Tests/TrimArtifactCleanupTests.cs",
+    " M tests/Build.Tests/WarningSuppressionApprovalValidatorTests.cs",
+    " M tests/Build.Tests/WarningSuppressionValidationTargetTests.cs",
+    " M tests/Build.Tests/YamlObjectMutationTests.cs",
+    " M tests/Directory.Build.targets",
+    " M tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    " M tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+    " M tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+    " M tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-buildtests-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-buildtests-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s1-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s1-mockgate-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-binding-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-binding-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-binding-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-binding-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-mockgate-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s4-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s4-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s4-mockgate-1/",
+    "?? tests/Build.IntegrationTests/",
+    "?? tests/Build.Tests/GeneratedObsoletePragmaText.cs",
+    "?? tests/Build.Tests/ServiceUpdateTestSupport.cs",
+    "?? tests/Build.Tests/TrimArtifactCleanup.cs",
+    "?? tests/QBrainAi.McpAgent.IntegrationTests/",
+    "?? tests/QBrainAi.QBAgent.IntegrationTests/",
+    "?? tests/QBrainAi.Repl.IntegrationTests/HandoffSkillDelegationTests.cs",
+    "?? tests/QBrainAi.Repl.IntegrationTests/MemorySchemaContractTests.cs",
+    "?? tests/TestSupport.Shared/HandoffRecordingHandler.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "Build.Tests:TestProjectOwnershipTests,IntegrationLaneProjectsTests,IntegrationLaneProjectsMockGateTests,IntegrationLaneExecutionContractTests,IntegrationLaneClassFilterTests,BoundedProcessTests,BuildTargetTests,QuadBrainOllamaModelBindingTests,ServiceUpdateTests,WarningSuppressionApprovalValidatorTests,WarningSuppressionValidationTargetTests,TrimArtifactCleanupTests",
+    "--test-run-id",
+    "ug-r14f4-s4-binding-1"
+  ],
+  "startedLocal": "2026-11-07T09:56:29",
+  "endedLocal": "2026-11-07T09:57:02",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 180,
+  "passed": 180,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s4-binding-1/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s4-binding-1/Build.Tests.trx",
+      "sha256": "17AB95FB0C7E3FDF16F6338BE9E0AE00A824EB519CCEE64A0479A28C94C618C6",
+      "total": 180,
+      "passed": 180,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "build/IntegrationLaneProjects.cs",
+      "sha256": "8BD626703F6D9012E4FA93ABE118246087DF5FDD9507B4B53CDB8700C314E9B0"
+    },
+    {
+      "path": "build/Build.Compile.cs",
+      "sha256": "70E9A2FCA32749D76157B903390D0D5EEE5A5D1FC31B2FB0091DBED0D5DAE7B2"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipTests.cs",
+      "sha256": "BD91BFF25596CCD8506BE6D97E51A2998A974B13D61AE36BE4825AFFE75E8990"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+      "sha256": "B31AD472A648B8DA170338CAC3CE37049F8755943657A9C86843AD069C4D6FBD"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+      "sha256": "F622150B29F8BEF56291C4D846F4052BD8982B397AE5BD803E58FE3C929BCDDD"
+    },
+    {
+      "path": "tests/Build.Tests/ServiceUpdateTestSupport.cs",
+      "sha256": "1D4B4EA7E6BB9A101F1AF6E19435B497446044154857289330039D8D66F46F99"
+    },
+    {
+      "path": "tests/Build.Tests/GeneratedObsoletePragmaText.cs",
+      "sha256": "D27A6FBD1BEC5671D8CBFDD84CE3A560E97E7AA527DF35BE1E38A570EB97FBC4"
+    },
+    {
+      "path": "tests/Build.Tests/TrimArtifactCleanup.cs",
+      "sha256": "59CE7175F155955D3B17ECD47339C7220E90DD6984B48A421B758DADC2E59143"
+    }
+  ],
+  "writtenLocal": "2026-11-07T09:57:21",
+  "writtenBy": "ClaudeCode"
+}

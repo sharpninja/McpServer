@@ -12,6 +12,9 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Build.Tests" />
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the integration-owned project of the build's integration
+         cases, split out of Build.Tests in slice S4 (hostile validation finding R14-F4), reads the same internals. -->
+    <InternalsVisibleTo Include="Build.IntegrationTests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 

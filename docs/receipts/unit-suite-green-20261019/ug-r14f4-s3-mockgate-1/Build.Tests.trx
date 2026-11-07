@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="3865b80f-1736-4841-8c27-bd3d593976ab" name="@LAB-OMARCHY 2026-11-07 09:03:32" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-07T09:03:32.3987705-06:00" queuing="2026-11-07T09:03:32.3987707-06:00" start="2026-11-07T09:03:30.6591924-06:00" finish="2026-11-07T09:03:32.4343654-06:00" />
+  <TestSettings name="default" id="cb96f6c2-cbf1-41f9-9f64-2b18e1d69fa3">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-07_09_03_32" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="eb90244f-75d7-4345-8048-038a042dc96c" testId="1c9dde14-7897-8044-7c64-1c4a2068c9db" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: TakesPluginIntegration)" computerName="LAB-OMARCHY" duration="00:00:00.0000476" startTime="2026-11-07T09:03:32.2834779-06:00" endTime="2026-11-07T09:03:32.2835516-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eb90244f-75d7-4345-8048-038a042dc96c" />
+    <UnitTestResult executionId="739bfd1c-7cc8-43c1-8a1a-cccf05d48307" testId="b9656664-243f-7912-0844-a38959c8e5d9" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: KeepsUnitProjects)" computerName="LAB-OMARCHY" duration="00:00:00.0004648" startTime="2026-11-07T09:03:32.2837861-06:00" endTime="2026-11-07T09:03:32.2842784-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="739bfd1c-7cc8-43c1-8a1a-cccf05d48307" />
+    <UnitTestResult executionId="775519ed-2f39-434b-a72d-a9a1fa0ed66b" testId="9e2b01bd-d52e-7617-fd57-fbb063d06875" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: TakesAcidIntegration)" computerName="LAB-OMARCHY" duration="00:00:00.0000625" startTime="2026-11-07T09:03:32.2740740-06:00" endTime="2026-11-07T09:03:32.2741822-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="775519ed-2f39-434b-a72d-a9a1fa0ed66b" />
+    <UnitTestResult executionId="1b1ffde8-40af-4bbb-8f23-63e5ee6d63dd" testId="0767ead9-6ba3-cfe2-1a17-ce80a3031030" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: ExtraSupportClass)" computerName="LAB-OMARCHY" duration="00:00:00.0007104" startTime="2026-11-07T09:03:32.2729434-06:00" endTime="2026-11-07T09:03:32.2736912-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1b1ffde8-40af-4bbb-8f23-63e5ee6d63dd" />
+    <UnitTestResult executionId="fa69d437-d9b7-4ef2-bce6-ffc4a564dc92" testId="0ac50679-dd53-ed05-8d56-e0dc7ffa9a03" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: ClassesOnEveryProject)" computerName="LAB-OMARCHY" duration="00:00:00.0000826" startTime="2026-11-07T09:03:32.2817618-06:00" endTime="2026-11-07T09:03:32.2818758-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fa69d437-d9b7-4ef2-bce6-ffc4a564dc92" />
+    <UnitTestResult executionId="02a722ad-4822-4f23-9ee8-2b3e5b83dde4" testId="8080565c-7ed9-85c3-26ec-e00038c348c0" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: TakesValidation)" computerName="LAB-OMARCHY" duration="00:00:00.0001838" startTime="2026-11-07T09:03:32.2821108-06:00" endTime="2026-11-07T09:03:32.2823200-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="02a722ad-4822-4f23-9ee8-2b3e5b83dde4" />
+    <UnitTestResult executionId="acdcc7f1-36b0-4b08-a530-e3593a199000" testId="f68720dd-43fb-97cd-02d5-e7ef0565f0ee" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: FixedFiveOnly)" computerName="LAB-OMARCHY" duration="00:00:00.0000575" startTime="2026-11-07T09:03:32.2744926-06:00" endTime="2026-11-07T09:03:32.2746068-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="acdcc7f1-36b0-4b08-a530-e3593a199000" />
+    <UnitTestResult executionId="25e7ff77-a233-44d2-a91e-e85a6864b477" testId="838bf298-433e-1748-c8a2-c345fdcb163f" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: ReplIntegrationFirst)" computerName="LAB-OMARCHY" duration="00:00:00.0007406" startTime="2026-11-07T09:03:32.2716945-06:00" endTime="2026-11-07T09:03:32.2725453-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="25e7ff77-a233-44d2-a91e-e85a6864b477" />
+    <UnitTestResult executionId="891996e0-4912-46e0-adde-650734ed7f78" testId="a00ff75c-5eef-9188-dfad-200808510dfe" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: EveryIntegrationProject)" computerName="LAB-OMARCHY" duration="00:00:00.0006333" startTime="2026-11-07T09:03:32.2825766-06:00" endTime="2026-11-07T09:03:32.2832357-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="891996e0-4912-46e0-adde-650734ed7f78" />
+    <UnitTestResult executionId="5126d606-14aa-40c8-a904-5ba6952bc0ff" testId="58bbbdc6-2f82-09b8-945d-f47f6c77f715" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: IgnoresMissingProject)" computerName="LAB-OMARCHY" duration="00:00:00.0050257" startTime="2026-11-07T09:03:32.2760361-06:00" endTime="2026-11-07T09:03:32.2811087-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5126d606-14aa-40c8-a904-5ba6952bc0ff" />
+    <UnitTestResult executionId="943570c8-77f1-49d8-8cf7-a79f798f4541" testId="acee7bc7-0f5b-267d-2bf2-1e90d95debc1" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: KeepsSolutionOrder)" computerName="LAB-OMARCHY" duration="00:00:00.0173465" startTime="2026-11-07T09:03:32.2395814-06:00" endTime="2026-11-07T09:03:32.2663751-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="943570c8-77f1-49d8-8cf7-a79f798f4541" />
+    <UnitTestResult executionId="bb3205af-e65e-474c-bf96-ad94fa3dbfc0" testId="f40ecb2c-b856-ed9d-5a18-145bf730d4f4" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: OmitsSupportMcpIntegration)" computerName="LAB-OMARCHY" duration="00:00:00.0000374" startTime="2026-11-07T09:03:32.2748978-06:00" endTime="2026-11-07T09:03:32.2749660-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bb3205af-e65e-474c-bf96-ad94fa3dbfc0" />
+    <UnitTestResult executionId="30d4d9ea-3b8c-4909-b60d-36ecf39e201e" testId="551ef26e-35bb-86d4-0f8f-becd2ba48ebd" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: DropsBuildTests)" computerName="LAB-OMARCHY" duration="00:00:00.0000417" startTime="2026-11-07T09:03:32.2756775-06:00" endTime="2026-11-07T09:03:32.2757441-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="30d4d9ea-3b8c-4909-b60d-36ecf39e201e" />
+    <UnitTestResult executionId="669159f6-f33d-4100-a32e-8d18e3e158d7" testId="41960a53-ab3a-c13c-fc0f-1c75f63640ce" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.ScriptedSelector_SatisfiesTheContract" computerName="LAB-OMARCHY" duration="00:00:00.0005631" startTime="2026-11-07T09:03:32.2864176-06:00" endTime="2026-11-07T09:03:32.2870303-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="669159f6-f33d-4100-a32e-8d18e3e158d7" />
+    <UnitTestResult executionId="4306278a-b1f2-4d97-8604-2886d19c6bc1" testId="76c6685b-d3a5-5e44-362d-b0491020db7e" testName="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: WholeSupportMcpIntegration)" computerName="LAB-OMARCHY" duration="00:00:00.0000964" startTime="2026-11-07T09:03:32.2752661-06:00" endTime="2026-11-07T09:03:32.2753881-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4306278a-b1f2-4d97-8604-2886d19c6bc1" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: IgnoresMissingProject)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="58bbbdc6-2f82-09b8-945d-f47f6c77f715">
+      <Execution id="5126d606-14aa-40c8-a904-5ba6952bc0ff" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: FixedFiveOnly)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="f68720dd-43fb-97cd-02d5-e7ef0565f0ee">
+      <Execution id="acdcc7f1-36b0-4b08-a530-e3593a199000" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: WholeSupportMcpIntegration)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="76c6685b-d3a5-5e44-362d-b0491020db7e">
+      <Execution id="4306278a-b1f2-4d97-8604-2886d19c6bc1" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: ClassesOnEveryProject)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="0ac50679-dd53-ed05-8d56-e0dc7ffa9a03">
+      <Execution id="fa69d437-d9b7-4ef2-bce6-ffc4a564dc92" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: OmitsSupportMcpIntegration)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="f40ecb2c-b856-ed9d-5a18-145bf730d4f4">
+      <Execution id="bb3205af-e65e-474c-bf96-ad94fa3dbfc0" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: TakesValidation)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="8080565c-7ed9-85c3-26ec-e00038c348c0">
+      <Execution id="02a722ad-4822-4f23-9ee8-2b3e5b83dde4" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: TakesPluginIntegration)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="1c9dde14-7897-8044-7c64-1c4a2068c9db">
+      <Execution id="eb90244f-75d7-4345-8048-038a042dc96c" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.ScriptedSelector_SatisfiesTheContract" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="41960a53-ab3a-c13c-fc0f-1c75f63640ce">
+      <Execution id="669159f6-f33d-4100-a32e-8d18e3e158d7" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="ScriptedSelector_SatisfiesTheContract" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: ReplIntegrationFirst)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="838bf298-433e-1748-c8a2-c345fdcb163f">
+      <Execution id="25e7ff77-a233-44d2-a91e-e85a6864b477" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: EveryIntegrationProject)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="a00ff75c-5eef-9188-dfad-200808510dfe">
+      <Execution id="891996e0-4912-46e0-adde-650734ed7f78" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: KeepsSolutionOrder)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="acee7bc7-0f5b-267d-2bf2-1e90d95debc1">
+      <Execution id="943570c8-77f1-49d8-8cf7-a79f798f4541" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: KeepsUnitProjects)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="b9656664-243f-7912-0844-a38959c8e5d9">
+      <Execution id="739bfd1c-7cc8-43c1-8a1a-cccf05d48307" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: DropsBuildTests)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="551ef26e-35bb-86d4-0f8f-becd2ba48ebd">
+      <Execution id="30d4d9ea-3b8c-4909-b60d-36ecf39e201e" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: TakesAcidIntegration)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="9e2b01bd-d52e-7617-fd57-fbb063d06875">
+      <Execution id="775519ed-2f39-434b-a72d-a9a1fa0ed66b" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: ExtraSupportClass)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="0767ead9-6ba3-cfe2-1a17-ce80a3031030">
+      <Execution id="1b1ffde8-40af-4bbb-8f23-63e5ee6d63dd" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.IntegrationLaneProjectsMockGateTests" name="WrongSelector_IsRejected" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1c9dde14-7897-8044-7c64-1c4a2068c9db" executionId="eb90244f-75d7-4345-8048-038a042dc96c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b9656664-243f-7912-0844-a38959c8e5d9" executionId="739bfd1c-7cc8-43c1-8a1a-cccf05d48307" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9e2b01bd-d52e-7617-fd57-fbb063d06875" executionId="775519ed-2f39-434b-a72d-a9a1fa0ed66b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0767ead9-6ba3-cfe2-1a17-ce80a3031030" executionId="1b1ffde8-40af-4bbb-8f23-63e5ee6d63dd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0ac50679-dd53-ed05-8d56-e0dc7ffa9a03" executionId="fa69d437-d9b7-4ef2-bce6-ffc4a564dc92" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8080565c-7ed9-85c3-26ec-e00038c348c0" executionId="02a722ad-4822-4f23-9ee8-2b3e5b83dde4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f68720dd-43fb-97cd-02d5-e7ef0565f0ee" executionId="acdcc7f1-36b0-4b08-a530-e3593a199000" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="838bf298-433e-1748-c8a2-c345fdcb163f" executionId="25e7ff77-a233-44d2-a91e-e85a6864b477" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a00ff75c-5eef-9188-dfad-200808510dfe" executionId="891996e0-4912-46e0-adde-650734ed7f78" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="58bbbdc6-2f82-09b8-945d-f47f6c77f715" executionId="5126d606-14aa-40c8-a904-5ba6952bc0ff" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="acee7bc7-0f5b-267d-2bf2-1e90d95debc1" executionId="943570c8-77f1-49d8-8cf7-a79f798f4541" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f40ecb2c-b856-ed9d-5a18-145bf730d4f4" executionId="bb3205af-e65e-474c-bf96-ad94fa3dbfc0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="551ef26e-35bb-86d4-0f8f-becd2ba48ebd" executionId="30d4d9ea-3b8c-4909-b60d-36ecf39e201e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="41960a53-ab3a-c13c-fc0f-1c75f63640ce" executionId="669159f6-f33d-4100-a32e-8d18e3e158d7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="76c6685b-d3a5-5e44-362d-b0491020db7e" executionId="4306278a-b1f2-4d97-8604-2886d19c6bc1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="15" executed="15" passed="15" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.25]   Discovering: Build.Tests
+[xUnit.net 00:00:00.79]   Discovered:  Build.Tests
+[xUnit.net 00:00:01.04]   Starting:    Build.Tests
+[xUnit.net 00:00:01.21]   Finished:    Build.Tests (ID = 'bc600d8f515939f9633dc43d37b0dea13c118e71e93a0ca456091b1a82b53cff')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

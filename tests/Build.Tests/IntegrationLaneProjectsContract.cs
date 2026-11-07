@@ -1,33 +1,45 @@
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TR-MCP-NUKE-019 (AC-2): Contract cases and assertions for <see cref="IIntegrationLaneProjects"/>. The expected
+/// TR-MCP-NUKE-019 (AC-2, AC-7): Contract cases and assertions for <see cref="IIntegrationLaneProjects"/>. The expected
 /// selection comes from the acceptance criterion as replaced on 2026-10-29 (operator: "Run the 2 classes, AC first
-/// (Recommended)"; hostile validation finding R8B-F2): QBrainAi.Support.Mcp.Tests, QBrainAi.McpAgent.Tests,
-/// QBrainAi.Repl.Core.Tests, QBrainAi.QBAgent.Tests, Build.Tests, QBrainAi.Repl.IntegrationTests and
-/// QBrainAi.Support.Mcp.IntegrationTests, in that order, and nothing else; from QBrainAi.Support.Mcp.IntegrationTests
-/// only the classes RequirementScopeLayerReplIntegrationTests and QuadBrainOllamaEndpointIntegrationTests, by class
-/// name, and every class of the other six; QBrainAi.Acid.IntegrationTests and
-/// QBrainAi.TransactionSecurity.IntegrationTests stay out until PLAN-SESSIONTRIAGEFIX-001 merges (TODO
-/// IMPL-TXNINTEGRATION-001), and the .Validation projects, the AI review projects and QBrainAi.PluginIntegration.Tests
-/// are not lane projects. The solution row is the 48 project names of QBrainAi.sln as of plan section 22, slice A, in
-/// solution order; the binding tests (IntegrationLaneProjectsTests) check that row against the real solution file and
-/// the two class names against the project's sources. The same assertions run against the scripted selector (BDPv4
-/// mock gate), wrong selectors (negative controls), and the production selector.
+/// (Recommended)"; hostile validation finding R8B-F2), with the integration cases of the MCP agent, REPL core and
+/// QBAgent test projects moved into integration-owned projects (AC-7, slice S3) and the build's integration cases moved
+/// out of the infrastructure-owned Build.Tests (AC-7, slice S4): QBrainAi.Support.Mcp.Tests,
+/// QBrainAi.McpAgent.IntegrationTests, QBrainAi.QBAgent.IntegrationTests, Build.IntegrationTests,
+/// QBrainAi.Repl.IntegrationTests and QBrainAi.Support.Mcp.IntegrationTests, in that order, and nothing else; from
+/// QBrainAi.Support.Mcp.IntegrationTests only the classes RequirementScopeLayerReplIntegrationTests and
+/// QuadBrainOllamaEndpointIntegrationTests, by class name, and every class of the other five; QBrainAi.Acid.IntegrationTests
+/// and QBrainAi.TransactionSecurity.IntegrationTests stay out until PLAN-SESSIONTRIAGEFIX-001 merges (TODO
+/// IMPL-TXNINTEGRATION-001), and the .Validation projects, the AI review projects, QBrainAi.PluginIntegration.Tests and
+/// Build.Tests are not lane projects. The solution row is the 51 project names of QBrainAi.sln as of slice S4 of plan
+/// section 27.45, in solution order; the integration half of IntegrationLaneProjectsTests (Build.IntegrationTests) checks
+/// that row against the real solution file and the two class names against the project's sources. The same assertions
+/// run against the scripted selector (BDPv4 mock gate), wrong selectors (negative controls), and the production selector.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-07</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S3 of hostile validation finding R14-F4 (operator 2026-11-06: "Per-owner projects (Recommended)"): the lane's QBrainAi.McpAgent.Tests, QBrainAi.Repl.Core.Tests and QBrainAi.QBAgent.Tests, which no longer hold an integration case, give way to QBrainAi.McpAgent.IntegrationTests and QBrainAi.QBAgent.IntegrationTests in their run positions (the REPL core cases joined QBrainAi.Repl.IntegrationTests); the solution row gains the two new projects (48 to 50 names).</description></item>
+/// <item><term>2026-11-07</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S4 of hostile validation finding R14-F4 (operator 2026-11-06: "Move them (Recommended)"): the infrastructure-owned Build.Tests, which no longer holds an integration case, gives way to the integration-owned Build.IntegrationTests in its run position; the solution row gains Build.IntegrationTests (50 to 51 names); this file is linked into Build.IntegrationTests, whose integration half of IntegrationLaneProjectsTests reads the real solution file.</description></item>
+/// </list>
+/// </remarks>
 internal static class IntegrationLaneProjectsContract
 {
     /// <summary>The project from which AC-2 runs two classes only.</summary>
     internal const string SupportIntegrationProject = "QBrainAi.Support.Mcp.IntegrationTests";
 
-    /// <summary>The seven lane projects AC-2 names, in run order.</summary>
+    /// <summary>The six lane projects, in run order.</summary>
+    /// <remarks>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: QBrainAi.McpAgent.IntegrationTests and QBrainAi.QBAgent.IntegrationTests replace the three unit projects whose integration cases moved (slice S3).</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: Build.IntegrationTests replaces Build.Tests, whose integration cases moved (slice S4).</para>
+    /// </remarks>
     internal static readonly string[] LaneProjects =
     [
         "QBrainAi.Support.Mcp.Tests",
-        "QBrainAi.McpAgent.Tests",
-        "QBrainAi.Repl.Core.Tests",
-        "QBrainAi.QBAgent.Tests",
-        "Build.Tests",
+        "QBrainAi.McpAgent.IntegrationTests",
+        "QBrainAi.QBAgent.IntegrationTests",
+        "Build.IntegrationTests",
         "QBrainAi.Repl.IntegrationTests",
         SupportIntegrationProject,
     ];
@@ -42,7 +54,11 @@ internal static class IntegrationLaneProjectsContract
         "QBrainAi.TransactionSecurity.IntegrationTests",
     ];
 
-    /// <summary>The project names of QBrainAi.sln as of slice A, in solution order.</summary>
+    /// <summary>The project names of QBrainAi.sln as of slice S4, in solution order.</summary>
+    /// <remarks>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the two integration-owned projects of slice S3 appended, in the order the solution lists them.</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: Build.IntegrationTests appended (slice S4).</para>
+    /// </remarks>
     internal static readonly string[] Solution =
     [
         "QBrainAi.Common.AgentCli", "QBrainAi.ServiceDefaults", "QBrainAi.Support.Mcp", "QBrainAi.Support.Mcp.Tests",
@@ -58,19 +74,24 @@ internal static class IntegrationLaneProjectsContract
         "QBrainAi.TransactionSecurity.IntegrationTests", "QBrainAi.Acid.IntegrationTests", "QBrainAi.QBAgent",
         "QBrainAi.QBAgent.Tests", "QBrainAi.QBAgent.Tools", "QBrainAi.QBAgent.Skills", "QBrainAi.Review.Tests",
         "QBrainAi.SessionLog.Transcripts", "QBrainAi.PluginIntegration.Tests", "QBrainAi.ProcessTree.TestHelper",
+        "QBrainAi.McpAgent.IntegrationTests", "QBrainAi.QBAgent.IntegrationTests", "Build.IntegrationTests",
     ];
 
-    /// <summary>The selection AC-2 requires for <see cref="Solution"/>: the seven lane projects, in run order.</summary>
+    /// <summary>The selection AC-2 and AC-7 require for <see cref="Solution"/>: the six lane projects, in run order.</summary>
     internal static readonly string[] SolutionSelection = [.. LaneProjects];
 
     /// <summary>
     /// The contract rows: a row name, the solution's project names, and the selection AC-2 requires: today's solution;
     /// a new .IntegrationTests project, which does not join the lane; a name that holds IntegrationTests without ending
-    /// in it; and today's solution in reverse order. Every row selects the same seven projects in the same order.
+    /// in it; and today's solution in reverse order. Every row selects the same six projects in the same order.
     /// </summary>
+    /// <remarks>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the first row names the solution as of slice S3; the rows are otherwise unchanged.</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the first row names the solution as of slice S4; the rows are otherwise unchanged.</para>
+    /// </remarks>
     internal static readonly (string Name, string[] Projects, string[] Expected)[] Rows =
     [
-        ("the solution as of slice A", Solution, SolutionSelection),
+        ("the solution as of slice S4", Solution, SolutionSelection),
         ("a new IntegrationTests project is not a lane project", [.. Solution, "QBrainAi.Zeta.IntegrationTests"], SolutionSelection),
         ("a name holding IntegrationTests without ending in it", [.. Solution, "QBrainAi.IntegrationTestsSupport"], SolutionSelection),
         ("the solution in reverse order", [.. Enumerable.Reverse(Solution)], SolutionSelection),
@@ -79,9 +100,10 @@ internal static class IntegrationLaneProjectsContract
     /// <summary>
     /// Asserts that <paramref name="selector"/> gives the required selection on every row, never selects a held-out
     /// project, names exactly <see cref="SupportIntegrationClasses"/> for <see cref="SupportIntegrationProject"/> and no
-    /// class for any other lane project, and refuses a solution that lacks any of the seven lane projects,
+    /// class for any other lane project, and refuses a solution that lacks any of the lane projects,
     /// naming the missing one.
     /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: unchanged assertions; the documentation no longer counts the lane projects, which slice S3 changed from seven to six.</remarks>
     /// <param name="selector">Selector under test.</param>
     internal static void AssertContract(IIntegrationLaneProjects selector)
     {
