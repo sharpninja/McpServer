@@ -1,0 +1,29 @@
+type: result
+payload:
+  requestId: req-20261107T013159Z-39a3
+  result:
+    id: IMPL-SERVICEOVERRIDES-001
+    title: 'Linux update preflight: refuse canonical QBrainAi data and instance overrides as well as the legacy Mcp ones'
+    section: Backlog
+    priority: medium
+    done: false
+    note: Created 2026-11-05 by ClaudeCode during PR 87 (IMPL-UNITGREEN-001) from the R12-F1 sibling sweep; not part of PR 87's scope.
+    description:
+    - 'Found 2026-11-05 by ClaudeCode in the sibling sweep for hostile validation round 12 finding R12-F1 (PR 87, IMPL-UNITGREEN-001): build/LinuxServiceHelper.OverridesData reads each service environment name and command-line argument as a configuration key (it already replaces __ with :), but names only DATAFOLDER, MCP:DATADIRECTORY, MCP_INSTANCE, INSTANCE, the content-root names and the MCP:INSTANCES: prefix.'
+    - The product projects the canonical QBrainAi section over the legacy Mcp section (CanonicalSectionProjectionProvider, TR-MCP-QBRAIN-005) and reads QBRAINAI_* before MCP_* (ProductEnvironment.GetLegacy), so QBRAINAI__DATADIRECTORY, QBRAINAI_INSTANCE and QBRAINAI__INSTANCES__* in a unit environment file or the running process environment pass the preflight that refuses their legacy forms.
+    - The method is unchanged since develop 9b099716 and is outside the criteria PR 87 sets satisfied (TR-MCP-SERVICEUPDATE-001 repeated-properties and failed-update-startable), so it is tracked here rather than fixed in PR 87.
+    - 'Requirements first (profile 4.3): state the refusal as an acceptance criterion of TR-MCP-SERVICEUPDATE-001 (Nuke behavior is accountable through TRs), with Build.Tests contract rows for the canonical, legacy and host-prefixed forms before the change.'
+    technicalDetails: &o0 []
+    implementationTasks:
+    - task: State the data, instance and content-root override refusal, canonical and legacy forms, as a TR-MCP-SERVICEUPDATE-001 criterion through the requirements plugin route
+      done: false
+    - task: 'BDPv4: Build.Tests contract rows with a scripted reference and wrong readers (mock gate through TestGroups), then the OverridesData change and its bindings'
+      done: false
+    - task: Full gate set on both hosts and the hostile validation the plan names
+      done: false
+    dependsOn: *o0
+    functionalRequirements: *o0
+    technicalRequirements: *o0
+  deprecated: true
+
+---

@@ -1,0 +1,429 @@
+HV_R14_RELAUNCH_FINAL json part 9/12 SHA256 3DED462EF1D9B243D7A2D90EB324B2EF329DAD6A45EF9EB09E805AFFE3F65E6A
+'docs/receipts/hv/hv-ug-r14-relaunch-workspace-refresh7.txt'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 469,
+      "id": "item_245",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-source.ps1' -Mode Chunk -Paths 'docs/Project/Requirements-Matrix.md' -Start 54000 -Count 30000\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 471,
+      "id": "item_246",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-source.ps1' -Mode Chunk -Paths 'docs/Project/Requirements-Matrix.md' -Start 84000 -Count 30000\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 473,
+      "id": "item_247",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-source.ps1' -Mode Chunk -Paths 'docs/Project/Requirements-Matrix.md' -Start 114000 -Count 30000; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-source.ps1'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 475,
+      "id": "item_248",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-source.ps1' -Mode UnitHits -Start 0 -Count 140\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 477,
+      "id": "item_249",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-source.ps1' -Mode UnitHits -Start 140 -Count 140\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 479,
+      "id": "item_250",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-source.ps1' -Mode UnitHits -Start 280 -Count 140\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 482,
+      "id": "item_252",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Paths -ArgumentList '*AgentPoolService*','*WorkspaceServiceAccessorTests*','*UseCaseComponentUpdateContractTests*','*MarkerFileService.cs','*BrainSlotAdoptedPartyKeySigningTests*','*ProcessPolicySnapshotReaderContractTests*'\"",
+      "exitCode": 1,
+      "status": "failed"
+    },
+    {
+      "responseLine": 483,
+      "id": "item_251",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r14-prelaunch.background-sweep.md'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 485,
+      "id": "item_253",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'tests/QBrainAi.Support.Mcp.Tests/Services/AgentPoolServiceTests.cs' -Start 290 -Count 100; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs' -Count 180; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateContractTests.cs' -Start 290 -Count 170\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 488,
+      "id": "item_255",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateContractTests.cs' -Count 290; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotAdoptedPartyKeySigningTests.cs' -Start 130 -Count 190\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 490,
+      "id": "item_256",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList '--files','src','-g','*MarkerFileService.cs','-g','*MemoryConsolidateOperations*','-g','*WorkspaceIdentityPath.cs','-g','*AgentPoolService.cs'; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r13-prelaunch.clock-sweep.md'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 492,
+      "id": "item_257",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r13-prelaunch.clock-sweep.md' -Start 251 -Count 80; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs','tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterContractTests.cs','tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs' -Count 130\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 494,
+      "id": "item_258",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1'; & './docs/receipts/hv/hv-ug-r14-relaunch-source.ps1' -Mode Diff -Paths 'src/QBrainAi.Services/Services/MarkerFileService.cs' -Count 500\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 496,
+      "id": "item_259",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Git -ArgumentList 'diff','--numstat','9b099716...0980a52b','--','src','build','Directory.Build.props','Directory.Packages.props'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 498,
+      "id": "item_260",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-source.ps1' -Mode Diff -Paths 'build/Build.TestDependencies.cs','build/Build.UpdateService.cs','build/LinuxServiceHelper.cs' -Count 900\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 501,
+      "id": "item_261",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'build/ProvisioningDownload.cs','build/OllamaDetachedLaunch.cs','build/OllamaInstallLayout.cs','build/QuadBrainOllamaModel.cs','build/scripts/Start-OllamaServer.ps1' -Count 200\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 502,
+      "id": "item_262",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'build/LinuxProviderTestProvisioner.cs' -Count 400\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 504,
+      "id": "item_263",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList '--files','tests/Build.Tests','-g','*Contract*','-g','*IntegrationLane*','-g','*Provision*','-g','*ServiceUpdate*'; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs','src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs' -Count 180; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'src/QBrainAi.Client/WorkspaceIdentityPath.cs' -Start 415 -Count 75\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 506,
+      "id": "item_264",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 1 -Count 20\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 508,
+      "id": "item_265",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 21 -Count 20\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 510,
+      "id": "item_266",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 41 -Count 12\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 512,
+      "id": "item_267",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 53 -Count 9\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 514,
+      "id": "item_268",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Git -ArgumentList 'show','--stat','--oneline','11681680'; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Git -ArgumentList 'show','--format=full','--no-patch','11681680'; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList '-n','D-B|27\\\\.21|criteria to|set satisfied','docs/plans/2026-10-19-unit-suite-green.md'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 516,
+      "id": "item_269",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Count 100; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList '-n','\"'^## 27.21|''^## 27.22|'\"\\\\*\\\\*D-B,|criteria as follows','docs/plans/2026-10-19-unit-suite-green.md'\"",
+      "exitCode": 1,
+      "status": "failed"
+    },
+    {
+      "responseLine": 519,
+      "id": "item_271",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md'; Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile' -Filter '*.md' -File | Where-Object { \"'$_.Name -notmatch '\"'\"'^SKILL'\"\\\\.md\"'$'\"' } | Select-Object Name,Length; Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -First 110\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 521,
+      "id": "item_272",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 110 -First 185\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 523,
+      "id": "item_273",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 295; Get-Content -LiteralPath 'docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 525,
+      "id": "item_274",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Status -OutputName profile8-status; & ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.memory.list -DataPath ./docs/receipts/hv/hv-ug-r14-relaunch-global.psd1 -OutputName profile8-global -Quiet; & ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.memory.list -DataPath ./docs/receipts/hv/hv-ug-r14-relaunch-workspace.psd1 -OutputName profile8-workspace -Quiet'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 527,
+      "id": "item_275",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Memories -ArgumentList @('docs/receipts/hv/hv-ug-r14-relaunch-profile8-global.txt','docs/receipts/hv/hv-ug-r14-relaunch-profile8-workspace.txt') -Count 2000\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 529,
+      "id": "item_276",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Memories -ArgumentList @('docs/receipts/hv/hv-ug-r14-relaunch-profile8-workspace.txt') -Count 2000\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 532,
+      "id": "item_278",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.sessionlog.appendDialog -Category decision -Text 'Decision 4: The current TRX package proves byte integrity, zero failed/skipped results, and Linux/Windows unit-name parity at da11faa2. It does not by itself prove environment independence or acceptance-criterion coverage. Continue source/contract review and adjudicate each open task through its mapped requirements. All 61 snapshot task texts and states match the live TODO; no completed task is selected for regression. Alternative rejected: infer source correctness or per-task AGREE from green totals. The first launch findings remain untrusted leads, not inherited verdicts. Profile refresh 8 read the full one-file profile and all 8 Global plus 3 Workspace memories through the installed Codex wrapper.' -OutputName decision4 -WhatIf; & ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.sessionlog.appendDialog -Category decision -Text 'Decision 4: The current TRX package proves byte integrity, zero failed/skipped results, and Linux/Windows unit-name parity at da11faa2. It does not by itself prove environment independence or acceptance-criterion coverage. Continue source/contract review and adjudicate each open task through its mapped requirements. All 61 snapshot task texts and states match the live TODO; no completed task is selected for regression. Alternative rejected: infer source correctness or per-task AGREE from green totals. The first launch findings remain untrusted leads, not inherited verdicts. Profile refresh 8 read the full one-file profile and all 8 Global plus 3 Workspace memories through the installed Codex wrapper.' -OutputName decision4; & ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.sessionlog.appendActions -Text 'Decision 4: Accept supplied TRX integrity and host name parity only; continue independent source and requirement coverage review. All 61 task texts and states match live TODO. No completed-task regression selection. Alternative rejected: infer acceptance from green counters. Profile refresh 8: full one profile file, 8 Global memories, 3 Workspace memories.' -OutputName decision4-action\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 534,
+      "id": "item_279",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList @('docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1','docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1') -Count 250; & ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('--files','tests','-g','*Owned*','-g','*ScratchQBrain*','-g','*SqliteBoundedOpenFourteenth*','-g','*AgeBoundary*')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 537,
+      "id": "item_280",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Code -ArgumentList @('tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs','tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs') -Count 700\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 538,
+      "id": "item_281",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Code -ArgumentList @('tests/TestSupport.Shared/OwnedInstanceProcess.cs','tests/TestSupport.Shared/OwnedReplStart.cs','tests/TestSupport.Shared/ScratchQBrainAi.cs') -Count 650\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 541,
+      "id": "item_283",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Code -ArgumentList @('tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs') -Start 200 -Count 230; & ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Code -ArgumentList @('tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs') -Start 1 -Count 72; & ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('-n','OwnedDatabaseGuard|CheckDatabaseSelection|AddHostedService<Owned','tests/QBrainAi.Support.Mcp.IntegrationTests','tests/QBrainAi.Support.Mcp.Tests','tests/TestSupport.Shared')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 543,
+      "id": "item_284",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1 -Mode Requirement -Ids @('FR-MCP-TESTRESOURCE-001') ; & ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Code -ArgumentList @('tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs') -Start 1 -Count 430\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 545,
+      "id": "item_285",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('-n','CheckHealthAnswer|nonce|OwnedDatabaseGuard|ConnectionGuard|WaitForHealth','tests/QBrainAi.Repl.IntegrationTests','tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs','docs/plans/2026-10-19-unit-suite-green.md','docs/receipts/hv/unitgreen-r14-prelaunch.holistic-findings-18.md'); & ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('-n','DateTimeOffset.UtcNow|DateTime.UtcNow|Task.Delay|TimeProvider|AgeBoundaryContractTests','tests/QBrainAi.Support.Mcp.Tests/Services/AgentPoolServiceTests.cs','src/QBrainAi.Support.Mcp/Services/AgentPoolService.cs')\"",
+      "exitCode": 1,
+      "status": "failed"
+    },
+    {
+      "responseLine": 547,
+      "id": "item_286",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList @('docs/receipts/hv/hostile-validator-unitgreen-r13-20261105T234506.json') -Count 110; & ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('--files','src','-g','*AgentPoolService.cs','-g','*TestFilter*'); & ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList @('docs/plans/2026-10-19-unit-suite-green.md') -Start 2445 -Count 38\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 551,
+      "id": "item_288",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$parseTokens = $null; $parseErrors = $null; [void][Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) '\"'docs/receipts/hv/hv-ug-r14-relaunch-query.ps1'), [ref]\"'$parseTokens, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r14-relaunch-query.ps1 -Severity Warning,Error'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 553,
+      "id": "item_289",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-query.ps1 -Mode Json -Path docs/receipts/hv/hostile-validator-unitgreen-r13-20261105T234506.json; & ./docs/receipts/hv/hv-ug-r14-relaunch-query.ps1 -Mode TaskIds -Count 61; & ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('-n','UtcNow|TimeProvider|Timer|Delay|Timeout|Backoff','src/QBrainAi.Services/Services/AgentPoolService.cs')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 555,
+      "id": "item_290",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-query.ps1 -Mode Json -Path docs/receipts/hv/hostile-validator-unitgreen-r13-20261105T234506.json -Fields @('closure','claims') -Count 30\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 557,
+      "id": "item_291",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-query.ps1 -Mode Json -Path docs/receipts/hv/hostile-validator-unitgreen-r13-20261105T234506.json -Fields @('closure') -Start 30 -Count 30; & ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('--files','tests','-g','*Service*ContractTests.cs','-g','*CliTemp*','-g','*DirectoryTreeWalker*','-g','*EphemeralPostgresFixture*','-g','*SqlServerLocalDbCollection*','-g','*ProcessEnvironmentCollection*')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 560,
+      "id": "item_293",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList @('docs/receipts/hv/unitgreen-r14-prelaunch.holistic-findings-18.md') -Count 260\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 562,
+      "id": "item_294",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1 -Mode Claims -Pattern '\"'^UG3'\"\\\\.|\"'^UG4'\"\\\\.|\"'^UG2'\"\\\\.|\"'^UG5'\"\\\\.|\"'^UG6'\"\\\\.'; & ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('-n','separate projects|separate test projects|mixed project|mixed-project|MEMORY-BESTPRACTICE-001.*4\\\\.|unit-versus-integration','docs/plans/2026-10-19-unit-suite-green.md','docs/receipts/hv/20261106T181559-unitgreen-r14.selfreview.md','docs/receipts/hv/unitgreen-r14-prelaunch.pr-description.md','docs/receipts/hv/unitgreen-r14-prelaunch.projected-problems.md')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 564,
+      "id": "item_295",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('--files','build','-g','*Test*','-g','*Filter*'); & ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Code -ArgumentList @('tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogFileWatcherTests.cs','tests/QBrainAi.Repl.Core.Tests/Host/QBAgentHeartbeatOverlayTests.cs') -Count 180; & ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList @('tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj') -Count 120\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 566,
+      "id": "item_296",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('-l','class SessionLogFileWatcherTests|class QBAgentHeartbeatOverlayTests|Target Test =>','tests','build'); & ./docs/receipts/hv/hv-ug-r14-relaunch-query.ps1 -Mode RequirementIndex -Ids @('FR-MCP-PATHNORM-001','TR-MCP-PATHNORM-001','TEST-MCP-PATHNORM-001','FR-MCP-MEMORY-002','TR-MCP-MEMORY-002','TEST-MCP-MEMORY-002','FR-MCP-REPL-007','TR-MCP-REPL-008','TR-MCP-NUKE-019','TR-MCP-NUKE-020','FR-MCP-USECASE-016','FR-MCP-USECASE-017')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 568,
+      "id": "item_297",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Code -ArgumentList @('build/Build.Test.cs','tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs','tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs') -Count 240; & ./docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1 -Mode Transcript -Start 164203 -Count 4\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 570,
+      "id": "item_298",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.sessionlog.appendDialog -Category observation -Text 'Read-only source audit: OwnedInstanceProcess replaces inherited environment only after the normalized-key guard accepts it; OwnedReplStart rechecks the actual ordinal environment. CustomWebApplicationFactory attaches a DbConnectionInterceptor before open, superseding the historical hosted guard. The supplied lifecycle source directly observes IdleCleanupPass completion after each trigger and before decisions. Remaining record candidates independently confirmed: pre-red Z15 counter wiring and all three counting classes were edited in transcript lines 164203-164206 before the red gate; the generic AC-006 example does not state the resolver-only code fact. Also inspecting a newly consolidated global-rule conflict: MEMORY-BESTPRACTICE-001 rule 4.1 says unit and integration tests live in separate projects, while the authorized branch implements category separation inside mixed projects. No verdict on that conflict yet. Reviewer process note: a prior commentary timestamp 19:14:54 was not measured; that was my error and is not product evidence. No product, requirement, TODO or other session was changed; no build or test was executed.' -OutputName audit-source4\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 573,
+      "id": "item_300",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList @('docs/receipts/hv/20261106T181559-unitgreen-r14.selfreview.md') -Start 25 -Count 75; & ./docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1 -Mode Receipt -Paths @('docs/receipts/unit-suite-green-20261019/ug-r14z15-mockgate-red-1.json','docs/receipts/unit-suite-green-20261019/ug-r14z15-mockgate-1.json')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 575,
+      "id": "item_301",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList @('docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1') -Count 150; & ./docs/receipts/hv/hv-ug-r14-relaunch-query.ps1 -Mode History -Range '53a210ca..0980a52b' -Count 20\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 579,
+      "id": "item_303",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$parseTokens = $null; $parseErrors = $null; [void][Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) '\"'docs/receipts/hv/hv-ug-r14-relaunch-integrity.ps1'), [ref]\"'$parseTokens, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r14-relaunch-integrity.ps1 -Severity Warning,Error'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 582,
+      "id": "item_305",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Start 1 -Count 200\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 584,
+      "id": "item_306",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action ProfileTail -Start 1 -Count 109\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 586,
+      "id": "item_307",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action ProfileTail -Start 110 -Count 185\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 588,
+      "id": "item_308",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action ProfileTail -Start 295 -Count 200\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 590,
+      "id": "item_309",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Status -OutputName 'profile9-status' -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 592,
+      "id": "item_310",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method 'workflow.memory.list' -DataPath './docs/receipts/hv/hv-ug-r14-relaunch-global.psd1' -OutputName 'profile9-global' -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 594,
+      "id": "item_311",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method 'workflow.memory.list' -DataPath './docs/receipts/hv/hv-ug-r14-relaunch-workspace.psd1' -OutputName 'profile9-workspace' -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 596,
+      "id": "item_312",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Memories -ArgumentList './docs/receipts/hv/hv-ug-r14-relaunch-profile9-global.txt' -Count 2000\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 598,
+      "id": "item_313",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Memories -ArgumentList './docs/receipts/hv/hv-ug-r14-relaunch-profile9-workspace.txt' -Count 2000\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 602,
+      "id": "item_316",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/rece

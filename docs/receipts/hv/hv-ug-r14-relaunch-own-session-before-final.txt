@@ -1,0 +1,10 @@
+type: result
+payload:
+  requestId: req-20261107T015057Z-0749
+  result:
+    totalCount: 0
+    limit: 5
+    offset: 0
+    items: []
+
+---

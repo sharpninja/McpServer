@@ -1,0 +1,158 @@
+{
+  "timestampUtc": "2026-11-07T02:05:39.5339254Z",
+  "source": "./docs/receipts/hv/hv-ug-r14-relaunch-own-session-final.txt",
+  "sessionId": "Codex-20261107T002005Z-plugin-session",
+  "requestId": "req-20261107T002200Z-unitgreen-r14-relaunch",
+  "turnStatus": "completed",
+  "partCount": 18,
+  "exactPartCount": 18,
+  "proofs": [
+    {
+      "kind": "prose",
+      "number": 1,
+      "matches": 1,
+      "expectedDialogHash": "E577650B89891F4AD834FC72231AC1E5B2ED077552E8B3BACAC3B94FB9036374",
+      "readbackHash": "E577650B89891F4AD834FC72231AC1E5B2ED077552E8B3BACAC3B94FB9036374",
+      "exact": true
+    },
+    {
+      "kind": "prose",
+      "number": 2,
+      "matches": 1,
+      "expectedDialogHash": "E9C0636955D3E9EADCFEBF3F0AD50B00F25F159BD8477F86369CC0EB4D046106",
+      "readbackHash": "E9C0636955D3E9EADCFEBF3F0AD50B00F25F159BD8477F86369CC0EB4D046106",
+      "exact": true
+    },
+    {
+      "kind": "prose",
+      "number": 3,
+      "matches": 1,
+      "expectedDialogHash": "A41E9A65AD4521C593E929508EDC23E4DEA0FED3671EDE5C700C51969C3D6A4F",
+      "readbackHash": "A41E9A65AD4521C593E929508EDC23E4DEA0FED3671EDE5C700C51969C3D6A4F",
+      "exact": true
+    },
+    {
+      "kind": "prose",
+      "number": 4,
+      "matches": 1,
+      "expectedDialogHash": "33FFE4AE785CD1748FDF0650B3770DD7AB34DEEF77A61671CB00EDF563FF52B8",
+      "readbackHash": "33FFE4AE785CD1748FDF0650B3770DD7AB34DEEF77A61671CB00EDF563FF52B8",
+      "exact": true
+    },
+    {
+      "kind": "json",
+      "number": 1,
+      "matches": 1,
+      "expectedDialogHash": "94935563734DF59E1513769201D2B76E5087549DDF48640228D7FBB65537B250",
+      "readbackHash": "94935563734DF59E1513769201D2B76E5087549DDF48640228D7FBB65537B250",
+      "exact": true
+    },
+    {
+      "kind": "json",
+      "number": 2,
+      "matches": 1,
+      "expectedDialogHash": "F73180B36B3E4AF5FBB88840EB3140F9055B3620EDFC9306E0C75FE20F6BFD1B",
+      "readbackHash": "F73180B36B3E4AF5FBB88840EB3140F9055B3620EDFC9306E0C75FE20F6BFD1B",
+      "exact": true
+    },
+    {
+      "kind": "json",
+      "number": 3,
+      "matches": 1,
+      "expectedDialogHash": "C20D947B65DCD7CE77737064C0467EAAF0B89DCBF3872B404C184AEA25BFD56D",
+      "readbackHash": "C20D947B65DCD7CE77737064C0467EAAF0B89DCBF3872B404C184AEA25BFD56D",
+      "exact": true
+    },
+    {
+      "kind": "json",
+      "number": 4,
+      "matches": 1,
+      "expectedDialogHash": "72046964914BD3309D04341199D63CCA77608F1C431890109C63E6772181A427",
+      "readbackHash": "72046964914BD3309D04341199D63CCA77608F1C431890109C63E6772181A427",
+      "exact": true
+    },
+    {
+      "kind": "json",
+      "number": 5,
+      "matches": 1,
+      "expectedDialogHash": "FE8876C1779085903C40E68CD80CA486A4F4166891CBFAC9A8FA41B90198D397",
+      "readbackHash": "FE8876C1779085903C40E68CD80CA486A4F4166891CBFAC9A8FA41B90198D397",
+      "exact": true
+    },
+    {
+      "kind": "json",
+      "number": 6,
+      "matches": 1,
+      "expectedDialogHash": "8078EA0A245F41CBAE8CF3B6940B4F3AFE01A955B665349A89344F3457297D07",
+      "readbackHash": "8078EA0A245F41CBAE8CF3B6940B4F3AFE01A955B665349A89344F3457297D07",
+      "exact": true
+    },
+    {
+      "kind": "json",
+      "number": 7,
+      "matches": 1,
+      "expectedDialogHash": "A38BBE7A011B198838DE8A2B3F9A8E897B8DD219B72B29B2A2EE4AB547C1BF2F",
+      "readbackHash": "A38BBE7A011B198838DE8A2B3F9A8E897B8DD219B72B29B2A2EE4AB547C1BF2F",
+      "exact": true
+    },
+    {
+      "kind": "json",
+      "number": 8,
+      "matches": 1,
+      "expectedDialogHash": "BB594398BE4F932ACA9D4669087FA7424E023BD59AEE199A328E5204BE35FDD9",
+      "readbackHash": "BB594398BE4F932ACA9D4669087FA7424E023BD59AEE199A328E5204BE35FDD9",
+      "exact": true
+    },
+    {
+      "kind": "json",
+      "number": 9,
+      "matches": 1,
+      "expectedDialogHash": "937267E7767A17175C3AA15FA37DCF4A67D4683BC574EBF1DC3427A9B09A1EF2",
+      "readbackHash": "937267E7767A17175C3AA15FA37DCF4A67D4683BC574EBF1DC3427A9B09A1EF2",
+      "exact": true
+    },
+    {
+      "kind": "json",
+      "number": 10,
+      "matches": 1,
+      "expectedDialogHash": "39A2D694C3C17CBF670DCA0075ACA2E5A8AE7FA675D59C8384653A90BD7D70B0",
+      "readbackHash": "39A2D694C3C17CBF670DCA0075ACA2E5A8AE7FA675D59C8384653A90BD7D70B0",
+      "exact": true
+    },
+    {
+      "kind": "json",
+      "number": 11,
+      "matches": 1,
+      "expectedDialogHash": "55F0F30AE09B28D31110B48F17A214CB557048A17AED92244B086537C4E5D087",
+      "readbackHash": "55F0F30AE09B28D31110B48F17A214CB557048A17AED92244B086537C4E5D087",
+      "exact": true
+    },
+    {
+      "kind": "json",
+      "number": 12,
+      "matches": 1,
+      "expectedDialogHash": "5C49297501B9D5DEA4F690AF775D1B843562D1F0457E445BBF0BEA73EA4956EC",
+      "readbackHash": "5C49297501B9D5DEA4F690AF775D1B843562D1F0457E445BBF0BEA73EA4956EC",
+      "exact": true
+    },
+    {
+      "kind": "final-json",
+      "number": 1,
+      "matches": 1,
+      "expectedDialogHash": "D35FD7FB4C04F4599ABB9FC3EE7E21F945BF22DD841259DBD66F56BC956D836C",
+      "readbackHash": "D35FD7FB4C04F4599ABB9FC3EE7E21F945BF22DD841259DBD66F56BC956D836C",
+      "exact": true
+    },
+    {
+      "kind": "final-json",
+      "number": 2,
+      "matches": 1,
+      "expectedDialogHash": "680DD5E9911CAAF5EE1958B3EFDC5658385757AFC9E99620D5BEAC01C3C86F59",
+      "readbackHash": "680DD5E9911CAAF5EE1958B3EFDC5658385757AFC9E99620D5BEAC01C3C86F59",
+      "exact": true
+    }
+  ],
+  "allExact": true,
+  "proseHash": "F28C8AE8158DCA1CAAA6343B33DF922C44CC934CF0C5957F6B3B3F19DEF79C69",
+  "jsonHash": "04990823ECFD8F0DCDA5AAA28676BF27FEB44130C9B8B9D18415400B33BF5FCF"
+}

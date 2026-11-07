@@ -1,0 +1,604 @@
+HV_R14_RELAUNCH_FINAL json part 10/12 SHA256 CCDF98EC708F09CF65A0A90B0FDE7A183609212D74A97856304CD827097BB620
+ipts/hv/hv-ug-r14-relaunch-integrity.ps1' -Mode Pins -Paths @('docs/receipts/unit-suite-green-20261019/ug-r14z16-compile-1.json','docs/receipts/unit-suite-green-20261019/ug-r14z16-binding-1.json')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 604,
+      "id": "item_317",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList './docs/receipts/hv/hv-ug-r14-relaunch-query.ps1','./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1','./docs/receipts/hv/hv-ug-r14-relaunch-integrity.ps1' -Count 200\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 608,
+      "id": "item_318",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-query.ps1' -Mode Json -Path 'docs/receipts/unit-suite-green-20261019/ug-r14z16-compile-1.json'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 609,
+      "id": "item_320",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList './docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1' -Count 200\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 611,
+      "id": "item_321",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-query.ps1' -Mode Json -Path 'docs/receipts/unit-suite-green-20261019/ug-r14z16-compile-1.json' -Fields sources\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 612,
+      "id": "item_319",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-integrity.ps1' -Mode Citations\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 616,
+      "id": "item_315",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-integrity.ps1' -Mode Hygiene\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 617,
+      "id": "item_323",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$tokens = $null; $parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) '\"'docs/receipts/hv/hv-ug-r14-relaunch-integrity.ps1'), [ref]\"'$tokens, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path '\"'./docs/receipts/hv/hv-ug-r14-relaunch-integrity.ps1' -Severity Warning,Error; if (\"'$parseErrors.Count) { exit 1 }'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 621,
+      "id": "item_324",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1' -Mode Claims -Pattern '\"'^UG[1-7]'\"\\\\.'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 622,
+      "id": "item_326",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList @('-n','CliTempVariables|JunctionFixture|JunctionContract|ServiceRecoveryContract|ServiceUnitPropertiesContract|ServiceStartupHealthContract','tests','build')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 623,
+      "id": "item_325",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-integrity.ps1' -Mode Pins -Paths @('docs/receipts/unit-suite-green-20261019/ug-r14z16-compile-1.json','docs/receipts/unit-suite-green-20261019/ug-r14z16-binding-1.json')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 628,
+      "id": "item_328",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-query.ps1' -Mode Findings -Path 'docs/receipts/hv/hostile-validator-unitgreen-r13-20261105T234506.json' -Start 30 -Count 30\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 629,
+      "id": "item_329",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList @('tests/Build.Tests/ServiceRecoveryContractTests.cs','tests/Build.Tests/ServiceUnitPropertiesContractTests.cs','tests/Build.Tests/ServiceStartupHealthContractTests.cs') -Count 800\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 630,
+      "id": "item_330",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList @('tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs','tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs','tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs') -Count 500\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 632,
+      "id": "item_331",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList @('tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs','tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs','tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs') -Count 500\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 634,
+      "id": "item_332",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-query.ps1' -Mode Json -Path 'docs/receipts/hv/hostile-validator-unitgreen-r13-20261105T234506.json' -Fields claims -Start 30 -Count 10\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 636,
+      "id": "item_333",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Start 1 -Count 160\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 638,
+      "id": "item_334",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList @('-n','workflow.requirements.get|workflow.todo.get|recordId','docs/receipts/hv/hv-ug-r14-relaunch-command-ledger.jsonl')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 640,
+      "id": "item_335",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 1 -Count 24\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 642,
+      "id": "item_336",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 25 -Count 22\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 644,
+      "id": "item_337",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 47 -Count 15\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 646,
+      "id": "item_338",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method 'workflow.requirements.getFr' -RecordId 'FR-MCP-USECASE-016' -OutputName 'absent-fr016' -Quiet\"",
+      "exitCode": 1,
+      "status": "failed"
+    },
+    {
+      "responseLine": 648,
+      "id": "item_339",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method 'workflow.requirements.getFr' -RecordId 'FR-MCP-USECASE-017' -OutputName 'absent-fr017' -Quiet\"",
+      "exitCode": 1,
+      "status": "failed"
+    },
+    {
+      "responseLine": 650,
+      "id": "item_340",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList @('-n','separate projects|test-project ownership|MEMORY-BESTPRACTICE-001|test project','docs/plans/2026-10-19-unit-suite-green.md','docs/receipts/hv/unitgreen-r14-prelaunch.pr-description.md')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 652,
+      "id": "item_341",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1' -Mode Requirement -Ids @('TR-MCP-NUKE-019','TR-MCP-USECASE-019')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 655,
+      "id": "item_343",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r14-prelaunch.holistic-findings-18.md' -Start 60 -Count 120\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 657,
+      "id": "item_344",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList @('-n','IdleCleanupPass|TriggeredPassFinished|UnreportedAwait','src/QBrainAi.Services/Services/VoiceConversationService.cs','tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs','tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 659,
+      "id": "item_345",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/20261106T181559-unitgreen-r14.selfreview.md' -Start 74 -Count 64\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 661,
+      "id": "item_346",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r14-prelaunch.holistic-findings-18.md' -Start 177 -Count 60\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 663,
+      "id": "item_347",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-query.ps1' -Mode Json -Path 'docs/receipts/hv/20261106T181559-unitgreen-r14.request.jsonl' -Fields launchCommand\"",
+      "exitCode": 1,
+      "status": "failed"
+    },
+    {
+      "responseLine": 667,
+      "id": "item_349",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$tokens = $null; $parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) '\"'docs/receipts/hv/hv-ug-r14-relaunch-query.ps1'), [ref]\"'$tokens, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path '\"'./docs/receipts/hv/hv-ug-r14-relaunch-query.ps1' -Severity Warning,Error; if (\"'$parseErrors.Count) { exit 1 }'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 669,
+      "id": "item_350",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-query.ps1' -Mode Jsonl -Path 'docs/receipts/hv/20261106T181559-unitgreen-r14.request.jsonl' -Fields launchCommand,command,launcher\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 671,
+      "id": "item_351",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1' -Mode Paths -Paths 'docs/receipts/unit-suite-green-20261019/ug-r14z15-doc-claim-checks-1.txt'\"",
+      "exitCode": 1,
+      "status": "failed"
+    },
+    {
+      "responseLine": 673,
+      "id": "item_352",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/plans/2026-10-19-unit-suite-green.md' -Start 2474 -Count 12\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 677,
+      "id": "item_354",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method workflow.sessionlog.appendDialog -TextPath './docs/receipts/hv/hv-ug-r14-relaunch-record-assessment.md' -Category decision -OutputName assessment-decision -WhatIf\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 679,
+      "id": "item_355",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method workflow.sessionlog.appendDialog -TextPath './docs/receipts/hv/hv-ug-r14-relaunch-record-assessment.md' -Category decision -OutputName assessment-decision -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 681,
+      "id": "item_356",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method workflow.sessionlog.appendActions -TextPath './docs/receipts/hv/hv-ug-r14-relaunch-record-assessment.md' -OutputName assessment-action -WhatIf\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 683,
+      "id": "item_357",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method workflow.sessionlog.appendActions -TextPath './docs/receipts/hv/hv-ug-r14-relaunch-record-assessment.md' -OutputName assessment-action -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 686,
+      "id": "item_359",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-query.ps1' -Mode AbsentCitations\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 688,
+      "id": "item_360",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'tests/Build.Tests/ServiceStartupHealthContractTests.cs' -Start 126 -Count 10\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 690,
+      "id": "item_361",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-query.ps1' -Mode Jsonl -Path 'docs/receipts/hv/20261106T181559-unitgreen-r14.request.jsonl'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 692,
+      "id": "item_362",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-query.ps1' -Mode Jsonl -Path 'docs/receipts/hv/20261106T181559-unitgreen-r14.request.jsonl' -Fields launch,briefPath\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 694,
+      "id": "item_363",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Git -ArgumentList @('merge-tree','9b099716','9b099716','0980a52b')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 696,
+      "id": "item_364",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-query.ps1' -Mode Json -Path 'docs/receipts/hv/hv-ug-r14-relaunch-inventory.json' -Fields history -Start 0 -Count 150\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 699,
+      "id": "item_366",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Start 1 -Count 200\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 703,
+      "id": "item_368",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Paths -ArgumentList '/home/sharpninja/.claude/profile/*.md'\"",
+      "exitCode": 1,
+      "status": "failed"
+    },
+    {
+      "responseLine": 704,
+      "id": "item_369",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 1 -Count 109\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 705,
+      "id": "item_367",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Status -OutputName profile10-status -Quiet'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 707,
+      "id": "item_370",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 110 -Count 185\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 709,
+      "id": "item_371",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.memory.list -DataPath ./docs/receipts/hv/hv-ug-r14-relaunch-global.psd1 -OutputName profile10-global -Quiet'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 711,
+      "id": "item_372",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action ProfileTail -Start 295 -Count 120'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 713,
+      "id": "item_373",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.memory.list -DataPath ./docs/receipts/hv/hv-ug-r14-relaunch-workspace.psd1 -OutputName profile10-workspace -Quiet'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 715,
+      "id": "item_374",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-profile10-status.txt' -Count 100\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 717,
+      "id": "item_375",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Memories -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-profile10-global.txt' -Count 20000\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 719,
+      "id": "item_376",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Memories -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-profile10-workspace.txt' -Count 20000\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 721,
+      "id": "item_377",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Memories -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-profile10-workspace.txt' -Count 20000\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 727,
+      "id": "item_379",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Git -ArgumentList @('merge-tree','9b099716','0980a52b','9b099716')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 728,
+      "id": "item_380",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Git -ArgumentList @('merge-base','--is-ancestor','9b099716','0980a52b')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 729,
+      "id": "item_381",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList '/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-HvRound.ps1' -Start 1 -Count 170\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 730,
+      "id": "item_382",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList @('docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1','docs/receipts/hv/hv-ug-r14-relaunch-query.ps1','docs/receipts/hv/hv-ug-r14-relaunch-integrity.ps1') -Count 120\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 732,
+      "id": "item_383",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-query.ps1 -Mode Json -Path docs/receipts/hv/unitgreen-r14-tasks-da11faa2.json -Fields tasks -Start 0 -Count 30'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 734,
+      "id": "item_384",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-integrity.ps1 -Mode Pins -Commit 1d77a79c -Paths @('docs/receipts/unit-suite-green-20261019/ug-r13z7-compile-1.json','docs/receipts/unit-suite-green-20261019/ug-r13z7-binding-1.json')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 736,
+      "id": "item_385",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.todo.get -RecordId 'IMPL-SCANNERALIAS-001' -OutputName 'impl-scanneralias-001' -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 738,
+      "id": "item_386",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.todo.get -RecordId 'IMPL-TXNINTEGRATION-001' -OutputName 'impl-txnintegration-001' -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 740,
+      "id": "item_387",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.todo.get -RecordId 'BUG-TRIAGE-139' -OutputName 'bug-triage-139' -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 742,
+      "id": "item_388",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.todo.get -RecordId 'PLAN-AZURERETIRE-001' -OutputName 'plan-azureretire-001' -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 744,
+      "id": "item_389",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.todo.get -RecordId 'PLAN-LINKVALIDATOR-001' -OutputName 'plan-linkvalidator-001' -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 746,
+      "id": "item_390",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.todo.get -RecordId 'IMPL-SERVICEOVERRIDES-001' -OutputName 'impl-serviceoverrides-001' -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 748,
+      "id": "item_391",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-query.ps1 -Mode Json -Path docs/receipts/hv/unitgreen-r14-tasks-da11faa2.json -Fields tasks -Start 22 -Count 2'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 751,
+      "id": "item_393",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList @('docs/receipts/hv/hv-ug-r14-relaunch-impl-scanneralias-001.txt','docs/receipts/hv/hv-ug-r14-relaunch-impl-txnintegration-001.txt','docs/receipts/hv/hv-ug-r14-relaunch-bug-triage-139.txt','docs/receipts/hv/hv-ug-r14-relaunch-plan-azureretire-001.txt','docs/receipts/hv/hv-ug-r14-relaunch-plan-linkvalidator-001.txt','docs/receipts/hv/hv-ug-r14-relaunch-impl-serviceoverrides-001.txt') -Count 500\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 753,
+      "id": "item_394",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList @('docs/receipts/hv/hv-ug-r14-relaunch-assessment-decision.txt','docs/receipts/hv/hv-ug-r14-relaunch-assessment-action.txt','docs/receipts/hv/hv-ug-r14-relaunch-record-assessment.md') -Count 200\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 755,
+      "id": "item_395",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1 -Mode Claims -Ids UG1,UG2,UG3,UG4,UG5,UG6,UG7'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 757,
+      "id": "item_396",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList 'docs/receipts/hv/20261106T181559-unitgreen-r14.selfreview.md' -Start 75 -Count 10\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 759,
+      "id": "item_397",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('-n','--max-columns','4000','--max-columns-preview','\"'^UG[1-7]'\"\\\\.','/home/sharpninja/.claude/scratch/pr82-review-20261019/20261106T181559-unitgreen-r14.brief.md')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 761,
+      "id": "item_398",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-bug-triage-139.txt' -Start 925 -Count 83\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 763,
+      "id": "item_399",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-query.ps1 -Mode Json -Path docs/receipts/hv/hostile-validator-unitgreen-r13-20261105T234506.json -Fields closure -Count 60'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 765,
+      "id": "item_400",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-query.ps1 -Mode Json -Path docs/receipts/hv/unitgreen-r14-tasks-da11faa2.json -Fields tasks -Start 30 -Count 8'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 767,
+      "id": "item_401",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r14-prelaunch.holistic-findings-18.md' -Start 1 -Count 125\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 769,
+      "id": "item_402",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r14-prelaunch.holistic-findings-18.md' -Start 124 -Count 120\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 771,
+      "id": "item_403",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1 -Mode Transcript -Start 165905 -Count 5'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 773,
+      "id": "item_404",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-audit.ps1 -Mode Transcript -Start 165980 -Count 3'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 775,
+      "id": "item_405",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Read -ArgumentList docs/receipts/hv/unitgreen-r14-prelaunch.projected-problems.md -Start 60 -Count 16'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 777,
+      "id": "item_406",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Git -ArgumentList @('log','--format=%H %s','-G','Category.*Integration','9b099716..0980a52b','--','tests/QBrainAi.Support.Mcp.Tests/Services/TriageStoreTests.cs')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 779,
+      "id": "item_407",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('--files','tests','-g','*TriageStoreTests.cs')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 781,
+      "id": "item_408",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Search -ArgumentList @('-n','eighteenth|\\\\[27\\\\.42|C19|C21|C24|F1|D11','docs/plans/2026-10-19-unit-suite-green.md')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 784,
+      "id": "item_410",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1 -Action Git -ArgumentList @('log','--format=%H %s','-G','Category.*Integration','9b099716..0980a52b','--','tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 786,
+      "id": "item_411",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/

@@ -1,0 +1,170 @@
+{
+  "sessionId": "Codex-20261107T002005Z-plugin-session",
+  "requestId": "req-20261107T002200Z-unitgreen-r14-relaunch",
+  "proseHash": "F28C8AE8158DCA1CAAA6343B33DF922C44CC934CF0C5957F6B3B3F19DEF79C69",
+  "jsonHash": "04990823ECFD8F0DCDA5AAA28676BF27FEB44130C9B8B9D18415400B33BF5FCF",
+  "parts": [
+    {
+      "kind": "prose",
+      "number": 1,
+      "count": 4,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-prose-001.txt",
+      "contentHash": "9D0D6A00A7974C51B962C3E4D9D760EA7F3ED92171C7B14669C24CDA83D53845",
+      "dialogHash": "E577650B89891F4AD834FC72231AC1E5B2ED077552E8B3BACAC3B94FB9036374",
+      "length": 30000
+    },
+    {
+      "kind": "prose",
+      "number": 2,
+      "count": 4,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-prose-002.txt",
+      "contentHash": "1A5233AAEEC7EF36E57A11766F51908CA8706C2B6439A388FFB724CD6514FCD6",
+      "dialogHash": "E9C0636955D3E9EADCFEBF3F0AD50B00F25F159BD8477F86369CC0EB4D046106",
+      "length": 30000
+    },
+    {
+      "kind": "prose",
+      "number": 3,
+      "count": 4,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-prose-003.txt",
+      "contentHash": "A2B936AC94CC9775F4E45AA86E5426CD4E5A8A05CD73A84FC4829931BDBB55BD",
+      "dialogHash": "A41E9A65AD4521C593E929508EDC23E4DEA0FED3671EDE5C700C51969C3D6A4F",
+      "length": 30000
+    },
+    {
+      "kind": "prose",
+      "number": 4,
+      "count": 4,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-prose-004.txt",
+      "contentHash": "DB94C027C51F426C088EB6E33624D85B34D69DAC0B17F14DA4E6DE96EB6F5974",
+      "dialogHash": "33FFE4AE785CD1748FDF0650B3770DD7AB34DEEF77A61671CB00EDF563FF52B8",
+      "length": 10164
+    },
+    {
+      "kind": "json",
+      "number": 1,
+      "count": 12,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-json-001.txt",
+      "contentHash": "CCFCC77F2410484EC08A9ECE7E4ED9EEAE72C0A9DD89950F694ADC99BC15B497",
+      "dialogHash": "94935563734DF59E1513769201D2B76E5087549DDF48640228D7FBB65537B250",
+      "length": 30000
+    },
+    {
+      "kind": "json",
+      "number": 2,
+      "count": 12,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-json-002.txt",
+      "contentHash": "DF6EE236AC2927CA737A3CED9E1AF5B8FB4A3F4C04016B69CE7DF58637A6ED47",
+      "dialogHash": "F73180B36B3E4AF5FBB88840EB3140F9055B3620EDFC9306E0C75FE20F6BFD1B",
+      "length": 30000
+    },
+    {
+      "kind": "json",
+      "number": 3,
+      "count": 12,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-json-003.txt",
+      "contentHash": "C1B3C52BAD557092F66F3A16111D330053F7C7C44255849BC911D3996B6C6277",
+      "dialogHash": "C20D947B65DCD7CE77737064C0467EAAF0B89DCBF3872B404C184AEA25BFD56D",
+      "length": 30000
+    },
+    {
+      "kind": "json",
+      "number": 4,
+      "count": 12,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-json-004.txt",
+      "contentHash": "48E897B335A78F62FCF8706FA6444B31936C6CDC2D59A6D69A30016C802478B3",
+      "dialogHash": "72046964914BD3309D04341199D63CCA77608F1C431890109C63E6772181A427",
+      "length": 30000
+    },
+    {
+      "kind": "json",
+      "number": 5,
+      "count": 12,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-json-005.txt",
+      "contentHash": "A53F54C8F431EAD3E3519C4A2409A447E573DED792D70A54557D5AC6A7FEB69A",
+      "dialogHash": "FE8876C1779085903C40E68CD80CA486A4F4166891CBFAC9A8FA41B90198D397",
+      "length": 30000
+    },
+    {
+      "kind": "json",
+      "number": 6,
+      "count": 12,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-json-006.txt",
+      "contentHash": "8EAD2DA55BF5AC6F6E4F6790BFA545B25CE948731AEFB44282618AB4EF5FD5E3",
+      "dialogHash": "8078EA0A245F41CBAE8CF3B6940B4F3AFE01A955B665349A89344F3457297D07",
+      "length": 30000
+    },
+    {
+      "kind": "json",
+      "number": 7,
+      "count": 12,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-json-007.txt",
+      "contentHash": "006455E547EA91BFD76A4A1FADAE79ABD15E613C49ECB8F79EA89D5CDB241AD0",
+      "dialogHash": "A38BBE7A011B198838DE8A2B3F9A8E897B8DD219B72B29B2A2EE4AB547C1BF2F",
+      "length": 30000
+    },
+    {
+      "kind": "json",
+      "number": 8,
+      "count": 12,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-json-008.txt",
+      "contentHash": "85CC9F7995A17DAAC155B1C4ABE1C2A089B14D886917B992DF12A373AA29DD68",
+      "dialogHash": "BB594398BE4F932ACA9D4669087FA7424E023BD59AEE199A328E5204BE35FDD9",
+      "length": 30000
+    },
+    {
+      "kind": "json",
+      "number": 9,
+      "count": 12,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-json-009.txt",
+      "contentHash": "3DED462EF1D9B243D7A2D90EB324B2EF329DAD6A45EF9EB09E805AFFE3F65E6A",
+      "dialogHash": "937267E7767A17175C3AA15FA37DCF4A67D4683BC574EBF1DC3427A9B09A1EF2",
+      "length": 30000
+    },
+    {
+      "kind": "json",
+      "number": 10,
+      "count": 12,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-json-010.txt",
+      "contentHash": "CCDF98EC708F09CF65A0A90B0FDE7A183609212D74A97856304CD827097BB620",
+      "dialogHash": "39A2D694C3C17CBF670DCA0075ACA2E5A8AE7FA675D59C8384653A90BD7D70B0",
+      "length": 30000
+    },
+    {
+      "kind": "json",
+      "number": 11,
+      "count": 12,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-json-011.txt",
+      "contentHash": "2C708061A0913BB6DEC5F0211E143D765D93FC62E8B344D2130BA17E3DDD6A84",
+      "dialogHash": "55F0F30AE09B28D31110B48F17A214CB557048A17AED92244B086537C4E5D087",
+      "length": 30000
+    },
+    {
+      "kind": "json",
+      "number": 12,
+      "count": 12,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-json-012.txt",
+      "contentHash": "A8A64CF4AC3951F711BA0663B3DEA1EEE708A71FAD5355A9C63C832D838E5F23",
+      "dialogHash": "5C49297501B9D5DEA4F690AF775D1B843562D1F0457E445BBF0BEA73EA4956EC",
+      "length": 6711
+    },
+    {
+      "kind": "final-json",
+      "number": 1,
+      "count": 2,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-final-json-001.txt",
+      "contentHash": "FE301F1AE6EFF04297E099ED39F18B7E5429F6AB04C86AD9E948FDB60DB6D905",
+      "dialogHash": "D35FD7FB4C04F4599ABB9FC3EE7E21F945BF22DD841259DBD66F56BC956D836C",
+      "length": 30000
+    },
+    {
+      "kind": "final-json",
+      "number": 2,
+      "count": 2,
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-part-final-json-002.txt",
+      "contentHash": "5E152E133E1FF25E776882A223105382F1E8A8C763A609576D7812095C2670EB",
+      "dialogHash": "680DD5E9911CAAF5EE1958B3EFDC5658385757AFC9E99620D5BEAC01C3C86F59",
+      "length": 9527
+    }
+  ]
+}
