@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "runId": "ug-r14f4-win-recheck-1",
+  "scope": "groups",
+  "generatedAtUtc": "2026-11-08T00:37:34.5498948\u002B00:00",
+  "projects": [
+    {
+      "name": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+      "projectPath": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+      "reportPath": "groups/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx"
+    }
+  ]
+}

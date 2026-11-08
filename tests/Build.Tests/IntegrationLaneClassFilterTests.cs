@@ -6,6 +6,7 @@ namespace NukeBuild.Tests;
 /// filters from the production host filter, project selector and class filter. Build-infrastructure test, accountable
 /// through TR only.
 /// </summary>
+/// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: the production host filter now ends with the quarantine exclusion, and so do the contract's host filter constants; the cases are unchanged.</remarks>
 public sealed class IntegrationLaneClassFilterTests
 {
     /// <summary>TR-MCP-NUKE-019 AC-2: the production class filter satisfies every composition row and every refusal.</summary>

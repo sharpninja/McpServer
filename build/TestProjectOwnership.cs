@@ -5,11 +5,17 @@
 /// integration cases, and neither accepts an infrastructure-owned project; the selection runs every case of every
 /// accepted project exactly once. It reads no checkout, solution, process or test result: the inventory is supplied.
 /// </summary>
-/// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added in slice S2 after mock gate ug-r14f4-s1-mockgate-1, for hostile validation finding R14-F4 (operator 2026-11-06: "Separate projects + AC (Recommended)"; MEMORY-BESTPRACTICE-001 rules 4.1 and 4.4); bound by TestProjectOwnershipTests to the contract cases the mock gate ran.</remarks>
+/// <remarks>
+/// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added in slice S2 after mock gate ug-r14f4-s1-mockgate-1, for hostile validation finding R14-F4 (operator 2026-11-06: "Separate projects + AC (Recommended)"; MEMORY-BESTPRACTICE-001 rules 4.1 and 4.4); bound by TestProjectOwnershipTests to the contract cases the mock gate ran.</para>
+/// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: an accepted project's quarantined cases are counted apart and not selected; the judgment is unchanged (after mock gate ug-qr-mockgate-1; bound by TestProjectOwnershipTests to its quarantine contract).</para>
+/// </remarks>
 sealed class TestProjectOwnership : ITestProjectOwnership
 {
     /// <inheritdoc />
-    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added.</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: the accepted projects' cases split into the selected cases, which hold no quarantined case, and the quarantined cases counted apart.</para>
+    /// </remarks>
     public TestOwnershipOutcome Decide(TestSelectionKind selection, IReadOnlyList<TestProjectInventory> offered)
     {
         ArgumentNullException.ThrowIfNull(offered);
@@ -22,11 +28,14 @@ sealed class TestProjectOwnership : ITestProjectOwnership
 
         RefuseMalformed(selection, offered);
         var decisions = offered.Select(project => new TestProjectDecision(project.Name, Judge(project, ownRole, ownKind))).ToArray();
-        var cases = offered
+        var accepted = offered
             .Where((_, index) => decisions[index].Verdict == TestProjectVerdict.Accepted)
-            .SelectMany(project => project.Cases.Select(item => new SelectedTestCase(project.Name, item.Name)))
+            .SelectMany(project => project.Cases.Select(item => (Case: new SelectedTestCase(project.Name, item.Name), item.Quarantined)))
             .ToArray();
-        return new TestOwnershipOutcome(decisions, cases);
+        return new TestOwnershipOutcome(decisions, accepted.Where(item => !item.Quarantined).Select(item => item.Case).ToArray())
+        {
+            Quarantined = accepted.Where(item => item.Quarantined).Select(item => item.Case).ToArray(),
+        };
     }
 
     /// <summary>TR-MCP-NUKE-019 AC-7: the role is judged first (infrastructure, then the other test role), then the cases.</summary>

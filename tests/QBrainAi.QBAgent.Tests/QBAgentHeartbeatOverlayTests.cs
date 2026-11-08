@@ -15,8 +15,12 @@ public sealed class QBAgentHeartbeatOverlayTests
     /// to row 1, column 80 (<c>ESC[1;80H</c>) and writes the glyph. Data: the literal column 80 and glyph |; no
     /// fixture.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for heartbeat, glyph, still working, spinner, overlay, top right and qbagent (uncited-matches.txt, test 1 of 23); the nearest, FR-MCP-QBAGENT-001 criterion 4 (the interactive run loop), states no overlay paint text. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void Paint_DoesNotContainNewline()
     {
         var text = QBAgentHeartbeatOverlay.Paint(80, '|');
@@ -31,8 +35,12 @@ public sealed class QBAgentHeartbeatOverlayTests
     /// QBAgentHeartbeatOverlay.Hide for column 80 writes no line feed and writes a space in the cell Paint uses
     /// (<c>ESC[1;80H</c> followed by a space). Data: the literal column 80; no fixture.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for heartbeat, glyph, still working, spinner, overlay, top right and qbagent (uncited-matches.txt, test 2 of 23); the nearest, FR-MCP-QBAGENT-001 criterion 4 (the interactive run loop), states nothing about how the overlay erases its glyph. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void Hide_OverwritesGlyphWithSpace_SameCell()
     {
         var text = QBAgentHeartbeatOverlay.Hide(80);
@@ -45,8 +53,12 @@ public sealed class QBAgentHeartbeatOverlayTests
     /// QBAgentHeartbeatOverlay.FrameAt gives different glyphs for beats 0 and 1 and wraps around, giving the same glyph
     /// for beat 0 and for the beat equal to the frame count. Data: the overlay Frames array; no fixture.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for heartbeat, glyph, still working, spinner, overlay, top right, qbagent and rotate wording (uncited-matches.txt, test 3 of 23); no criterion describes heartbeat frames. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void Frames_Rotate()
     {
         Assert.NotEqual(QBAgentHeartbeatOverlay.FrameAt(0), QBAgentHeartbeatOverlay.FrameAt(1));

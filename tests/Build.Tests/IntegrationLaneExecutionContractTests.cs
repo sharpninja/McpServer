@@ -7,6 +7,7 @@ namespace NukeBuild.Tests;
 /// nonempty passing TRX results, pre-provisioning refusal and a Linux daemon with no inherited caller pipes.
 /// Mock controls use literal expected responses before production binding; no checkout, process or environment is read.
 /// </summary>
+/// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: every lane project's filter and logged filter line carry the quarantine exclusion Quarantine!=NoMatchingCriterion after the host clause (before the class clause where one applies); a composition that omits it from the filter, or only from the logged line, is rejected (mock gate ug-qr-mockgate-1, before the production composition changes).</remarks>
 public sealed class IntegrationLaneExecutionContractTests
 {
     /// <summary>The project names deliberately differ from their file stems to expose accidental filename lookups.</summary>
@@ -36,12 +37,20 @@ public sealed class IntegrationLaneExecutionContractTests
     [Fact]
     public void ScriptedComposition_SatisfiesContract() => AssertComposition(ScriptedComposition);
 
-    /// <summary>Wrong project keys, filters, log lines and TRX names are independently rejected.</summary>
+    /// <summary>
+    /// Wrong project keys, filters, log lines and TRX names are independently rejected; TR-MCP-NUKE-019 AC-8: so are a
+    /// filter and log line without the quarantine exclusion, and a log line that leaves the exclusion out of a filter
+    /// that has it.
+    /// </summary>
+    /// <param name="fault">The deliberate fault.</param>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: adds the two quarantine faults.</remarks>
     [Theory]
     [InlineData("file stem")]
     [InlineData("filter")]
     [InlineData("log")]
     [InlineData("trx")]
+    [InlineData("quarantine exclusion omitted")]
+    [InlineData("log omits the quarantine exclusion")]
     public void WrongCompositions_AreRejected(string fault) =>
         Assert.ThrowsAny<XunitException>(() => AssertComposition((projects, host) => ScriptedComposition(projects, host).Select(step => fault switch
         {
@@ -49,6 +58,12 @@ public sealed class IntegrationLaneExecutionContractTests
             "filter" => step with { Filter = "Category=Integration" },
             "log" => step with { LogLine = "wrong filter" },
             "trx" => step with { TrxName = "different-file-name.trx" },
+            "quarantine exclusion omitted" => step with
+            {
+                Filter = WithoutQuarantineExclusion(step.Filter),
+                LogLine = $"Integration lane filter for {step.Name}: {WithoutQuarantineExclusion(step.Filter)}",
+            },
+            "log omits the quarantine exclusion" => step with { LogLine = $"Integration lane filter for {step.Name}: {WithoutQuarantineExclusion(step.Filter)}" },
             _ => throw new ArgumentOutOfRangeException(nameof(fault)),
         }).ToArray()));
 
@@ -109,7 +124,12 @@ public sealed class IntegrationLaneExecutionContractTests
     /// <summary>Checks the actual interface method's abstract flag without reading source text.</summary>
     internal static void AssertExplicitClasses(Type contract) => Assert.True(contract.GetMethod("ClassesOf")?.IsAbstract == true);
 
-    /// <summary>Asserts the same complete project rows against a supplied lane composer on both supported hosts.</summary>
+    /// <summary>
+    /// Asserts the same complete project rows against a supplied lane composer on both supported hosts. TR-MCP-NUKE-019
+    /// AC-8: every project's filter and logged filter line hold the quarantine exclusion.
+    /// </summary>
+    /// <param name="compose">The composer under test.</param>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: the expected filters carry the quarantine exclusion after the host clause, and the filter and the log line are each checked to hold it.</remarks>
     internal static void AssertComposition(Func<IReadOnlyList<(string Name, string Path)>, IntegrationLaneHost, IReadOnlyList<Step>> compose)
     {
         foreach (var host in new[] { IntegrationLaneHost.Linux, IntegrationLaneHost.Windows })
@@ -121,16 +141,40 @@ public sealed class IntegrationLaneExecutionContractTests
                 foreach (var step in result)
                 {
                     Assert.Equal(Projects.Single(project => project.Name == step.Name).Path, step.Path);
-                    var filter = host == IntegrationLaneHost.Linux ? "Category=Integration&Platform!=Windows" : "Category=Integration&Platform!=Linux";
-                    if (step.Name == "QBrainAi.Support.Mcp.IntegrationTests")
-                        filter += "&(FullyQualifiedName~.RequirementScopeLayerReplIntegrationTests.|FullyQualifiedName~.QuadBrainOllamaEndpointIntegrationTests.)";
+                    var filter = ExpectedFilter(step.Name, host);
                     Assert.Equal(filter, step.Filter);
                     Assert.Equal($"Integration lane filter for {step.Name}: {filter}", step.LogLine);
+                    Assert.Contains("&" + IntegrationLaneFilterContract.QuarantineExclusion, step.Filter, StringComparison.Ordinal);
+                    Assert.Contains("&" + IntegrationLaneFilterContract.QuarantineExclusion, step.LogLine, StringComparison.Ordinal);
                     Assert.Equal(step.Name + ".trx", step.TrxName);
                 }
             }
         }
     }
+
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-1, AC-2, AC-8: the filter the lane must pass for one project on one host: the host clause, the
+    /// quarantine exclusion, and for QBrainAi.Support.Mcp.IntegrationTests the class clause of its two classes.
+    /// </summary>
+    /// <param name="project">The lane project.</param>
+    /// <param name="host">The host.</param>
+    /// <returns>The expected filter.</returns>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: extracted from the assertion and the scripted composition so both state the same text, now with the quarantine exclusion.</remarks>
+    private static string ExpectedFilter(string project, IntegrationLaneHost host)
+    {
+        var filter = (host == IntegrationLaneHost.Linux ? "Category=Integration&Platform!=Windows" : "Category=Integration&Platform!=Linux")
+            + "&" + IntegrationLaneFilterContract.QuarantineExclusion;
+        if (project == "QBrainAi.Support.Mcp.IntegrationTests")
+            filter += "&(FullyQualifiedName~.RequirementScopeLayerReplIntegrationTests.|FullyQualifiedName~.QuadBrainOllamaEndpointIntegrationTests.)";
+        return filter;
+    }
+
+    /// <summary>TR-MCP-NUKE-019 AC-8 negative controls: a filter with its quarantine exclusion removed.</summary>
+    /// <param name="filter">The filter.</param>
+    /// <returns>The filter without the exclusion.</returns>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    private static string WithoutQuarantineExclusion(string filter) =>
+        filter.Replace("&" + IntegrationLaneFilterContract.QuarantineExclusion, string.Empty, StringComparison.Ordinal);
 
     /// <summary>Validates every actual TRX verdict against its independent fixture expectation.</summary>
     internal static void AssertTrx(Func<string, bool> validate)
@@ -180,13 +224,16 @@ public sealed class IntegrationLaneExecutionContractTests
         }
     }
 
+    /// <summary>Mock gate scripted composition: the contract's rows, in contract order, with the input's paths.</summary>
+    /// <param name="projects">The solution's projects.</param>
+    /// <param name="host">The host.</param>
+    /// <returns>The expected steps.</returns>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: builds each filter with the shared expected-filter helper, so it carries the quarantine exclusion.</remarks>
     private static IReadOnlyList<Step> ScriptedComposition(IReadOnlyList<(string Name, string Path)> projects, IntegrationLaneHost host) =>
         Projects.Select(expected =>
         {
             var project = projects.Single(input => input.Name == expected.Name);
-            var filter = host == IntegrationLaneHost.Linux ? "Category=Integration&Platform!=Windows" : "Category=Integration&Platform!=Linux";
-            if (project.Name == "QBrainAi.Support.Mcp.IntegrationTests")
-                filter += "&(FullyQualifiedName~.RequirementScopeLayerReplIntegrationTests.|FullyQualifiedName~.QuadBrainOllamaEndpointIntegrationTests.)";
+            var filter = ExpectedFilter(project.Name, host);
             return new Step(project.Name, project.Path, filter, $"Integration lane filter for {project.Name}: {filter}", project.Name + ".trx");
         }).ToArray();
 

@@ -10,13 +10,16 @@ namespace NukeBuild.Tests;
 /// same assertions run against the scripted filter (BDPv4 mock gate), wrong filters (negative controls), and the
 /// production filter.
 /// </summary>
+/// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: the two host filter constants are now the lane's AC-8 host filters, which end with the quarantine exclusion, so the binding that composes the real lane filters from the production pieces (IntegrationLaneClassFilterTests) compares like with like; the class filter only appends the class clause to whatever host filter it is given, so no row's meaning changes (mock gate ug-qr-mockgate-2 over IntegrationLaneClassFilterMockGateTests, the production class filter unchanged).</remarks>
 internal static class IntegrationLaneClassFilterContract
 {
-    /// <summary>The Linux host filter.</summary>
-    internal const string LinuxHost = "Category=Integration&Platform!=Windows";
+    /// <summary>The Linux host filter (TR-MCP-NUKE-019 AC-1 and AC-8).</summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: ends with the quarantine exclusion.</remarks>
+    internal const string LinuxHost = "Category=Integration&Platform!=Windows&" + IntegrationLaneFilterContract.QuarantineExclusion;
 
-    /// <summary>The Windows host filter.</summary>
-    internal const string WindowsHost = "Category=Integration&Platform!=Linux";
+    /// <summary>The Windows host filter (TR-MCP-NUKE-019 AC-1 and AC-8).</summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: ends with the quarantine exclusion.</remarks>
+    internal const string WindowsHost = "Category=Integration&Platform!=Linux&" + IntegrationLaneFilterContract.QuarantineExclusion;
 
     /// <summary>The two classes AC-2 names, in its order.</summary>
     internal static readonly string[] SupportClasses = ["RequirementScopeLayerReplIntegrationTests", "QuadBrainOllamaEndpointIntegrationTests"];

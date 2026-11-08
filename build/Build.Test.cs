@@ -6,7 +6,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 partial class Build
 {
-    /// <summary>Run all unit tests, excluding integration test projects and Category=Integration tests.</summary><remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: after its unchanged name rules select the projects, Test consults the build's role declarations (TestProjectRoles.RequireRole) and refuses, before any test runs, a selected project not declared unit-owned; at the da11faa2 layout the seven selected projects are declared unit-owned, so no case changes (slice S2; this remark shares the summary line so the name-rule lines keep their numbers).</remarks>
+    /// <summary>Run all unit tests, excluding integration test projects and Category=Integration tests.</summary><remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: after its unchanged name rules select the projects, Test consults the build's role declarations (TestProjectRoles.RequireRole) and refuses, before any test runs, a selected project not declared unit-owned; at the da11faa2 layout the seven selected projects are declared unit-owned, so no case changes (slice S2; this remark shares the summary line so the name-rule lines keep their numbers). 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: Test runs no quarantined case: every project runs with <see cref="UnitTestFilter.Filter"/>, the earlier category filter followed by the quarantine exclusion, and Test logs <see cref="UnitTestFilter.LogLine"/> for each project before it runs, so the log shows the exclusion; the name rules and the projects are unchanged (after mock gate ug-qr-mockgate-1; this entry also shares the summary line).</remarks>
     public Target Test => _ => _
         .DependsOn(Compile)
         .Executes(() =>
@@ -42,6 +42,8 @@ partial class Build
             var failures = new List<string>();
             foreach (var project in testProjects)
             {
+                // TR-MCP-NUKE-019 AC-8: the log names the filter, quarantine exclusion included, before the project runs.
+                Log.Information("{UnitTestFilter}", UnitTestFilter.LogLine(project.Name));
                 try
                 {
                     if (runId is null)
@@ -50,7 +52,7 @@ partial class Build
                             .SetProjectFile(project)
                             .SetConfiguration(Configuration)
                             .EnableNoBuild()
-                            .SetFilter("Category!=AiReview&Category!=Integration")
+                            .SetFilter(UnitTestFilter.Filter)
                             .SetResultsDirectory(RootDirectory / "TestResults"));
                     }
                     else
@@ -63,7 +65,7 @@ partial class Build
                             .SetProjectFile(project)
                             .SetConfiguration(Configuration)
                             .EnableNoBuild()
-                            .SetFilter("Category!=AiReview&Category!=Integration")
+                            .SetFilter(UnitTestFilter.Filter)
                             .SetResultsDirectory(directory)
                             .SetLoggers(
                                 $"trx;LogFileName={project.Name}.trx",
@@ -87,4 +89,20 @@ partial class Build
                     "Session-life unit test projects failed: " + string.Join(", ", failures));
             }
         });
+}
+
+/// <summary>
+/// TR-MCP-NUKE-019 AC-8: the Test target's selection filter and the filter line it logs for each project: Test runs no
+/// Category=AiReview, no Category=Integration and no quarantined case (<see cref="TestQuarantine.Exclusion"/>).
+/// </summary>
+/// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added after mock gate ug-qr-mockgate-1 (operator 2026-11-07: "Find the AC matching the test behavior.  If none match, quarantine them (keep, but descope them) for later manual investigation."); the filter was a literal in the Test target, which logged no filter line; bound by UnitTestFilterTests to UnitTestFilterContract.</remarks>
+internal static class UnitTestFilter
+{
+    /// <summary>The filter Test passes to the runner for every project it runs.</summary>
+    internal const string Filter = "Category!=AiReview&Category!=Integration&" + TestQuarantine.Exclusion;
+
+    /// <summary>The line Test logs before it runs <paramref name="project"/>.</summary>
+    /// <param name="project">The test project name.</param>
+    /// <returns>The log line naming the project and the whole filter.</returns>
+    internal static string LogLine(string project) => $"Unit test filter for {project}: {Filter}";
 }

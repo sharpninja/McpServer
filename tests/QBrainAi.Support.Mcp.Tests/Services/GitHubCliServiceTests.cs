@@ -69,8 +69,12 @@ public sealed class GitHubCliServiceTests
     /// request with number 42. Data: a substituted IProcessRunner returning the scripted gh output; state open, limit
     /// 10.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for pull request, pull-request, pull or pulls, PR or PRs, gh pr and ListPulls (uncited-matches.txt, test 21 of 23); the hits are CI triggers, repository renames and provenance notes inside unrelated criteria, and FR-MCP-032 (PR workflows) has no criteria. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public async Task ListPullsAsync_WhenGhSucceeds_ReturnsPulls()
     {
         var json = """[{"number":42,"title":"Feature","url":"https://github.com/test/pr/42","state":"open"}]""";
@@ -160,8 +164,12 @@ public sealed class GitHubCliServiceTests
     /// request number placed after the end-of-options marker. Data: a substituted IProcessRunner returning an empty
     /// successful result; pull request 42, comment PR comment.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for pull request, pull-request, pull or pulls, PR or PRs, gh pr, ListPulls, end-of-options, comment and CommentOnPull (uncited-matches.txt, test 22 of 23); the comment hits are titles and descriptions of issue-comment records without criteria, and TEST-MCP-GH-006, the historical end-of-options record, is not in the store. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public async Task CommentOnPullAsync_VerifiesGhArgs()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())

@@ -1,0 +1,81 @@
+RECEIPT 2026-11-07T18:38:56 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/s10/Invoke-WinNukeTargetRecheck.ps1 exit=255
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-11-07T18:37:24 host=PAYTON-LEGION2 user=kingd session=0 interactive=False
+REF origin/fix/unit-suite-green-20261019-windows=022f9cde436eadf509b47794d18c6cdc9036ad80 expected=022f9cde436eadf509b47794d18c6cdc9036ad80 match=True
+WORKTREE F:/GitHub/McpServer/.worktrees/unit-suite-green-windows-20261102 HEAD before=5ce7fa56c26e4a0672fffba6984273f998db454b
+COMMAND ./build.ps1 <target> --test-run-id ug-r14f4-win-recheck-1 --test-groups QBrainAi.Support.Mcp.EnvironmentIntegrationTests:BugTriage139SixteenthWindowsProcessTests,SqlServerDecompose4nfBackfillMigrationTests,TranscriptMcpStdioHostTests for targets TestGroups
+LOAD before 2026-11-07T18:37:26 cpuLoadPercent=12 freeMemMB=5009 totalMemMB=23926 processes=458
+  BUSY before name=OneDrive.Sync.Service pid=33712 cpuPercent=100 workingSetMB=57
+  BUSY before name=pwsh#24 pid=45220 cpuPercent=60 workingSetMB=39
+  BUSY before name=WmiPrvSE#2 pid=21724 cpuPercent=15 workingSetMB=8
+  BUSY before name=pwsh#19 pid=34324 cpuPercent=10 workingSetMB=169
+  BUSY before name=lsass pid=1924 cpuPercent=5 workingSetMB=12
+  BUSY before name=codex#2 pid=7276 cpuPercent=5 workingSetMB=225
+  BUSY before name=dwm pid=2108 cpuPercent=5 workingSetMB=168
+  BUSY before name=System pid=4 cpuPercent=5 workingSetMB=0
+HEAD 022f9cde436eadf509b47794d18c6cdc9036ad80 expected=022f9cde436eadf509b47794d18c6cdc9036ad80 match=True
+TARGET TestGroups begin 2026-11-07T18:37:27
+TARGET TestGroups exit=-1 end 2026-11-07T18:38:54 log=C:\Users\kingd\AppData\Local\Temp\unit-suite-green-windows-20261102\TestGroups-ug-r14f4-win-recheck-1.log lines=106
+  FILTER 18:37:34 [INF] Test group filter for QBrainAi.Support.Mcp.EnvironmentIntegrationTests: Platform!=Linux&(FullyQualifiedName~.BugTriage139SixteenthWindowsProcessTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.TranscriptMcpStdioHostTests.)
+  LOG    at Nuke.Common.Tooling.ToolTasks.<>c__DisplayClass8_0.<GetExitHandlerInternal>b__3(ToolOptions o, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 22
+  LOG    at Nuke.Common.Tooling.ToolTasks.Run[T](T options) in /_/source/Nuke.Tooling/ToolTasks.Run.cs:line 36
+  LOG    at Nuke.Common.Tools.DotNet.DotNetTasks.DotNetTest(Configure`1 configurator) in /_/source/Nuke.Common/Tools/DotNet/DotNet.Generated.cs:line 34
+  LOG    at Build.<get_TestGroups>b__173_1() in F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\build\Build.TestGroups.cs:line 66
+  LOG 18:38:54 [ERR] Target TestGroups has thrown an exception
+  LOG System.InvalidOperationException: Test group projects failed: QBrainAi.Support.Mcp.EnvironmentIntegrationTests
+  LOG    at Build.<get_TestGroups>b__173_1() in F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\build\Build.TestGroups.cs:line 88
+  LOG    at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+  LOG    at System.Collections.Generic.List`1.ForEach(Action`1 action)
+  LOG    at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+  LOG ​
+  LOG ╬══════════════════════
+  LOG ║ Errors & Warnings
+  LOG ╬═════════════
+  LOG ​
+  LOG [ERR] TestGroups: [xUnit.net 00:00:26.09]     QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_ImmediateNativeDescendant_IsKilledWithinBound [FAIL]
+  LOG [ERR] TestGroups: [xUnit.net 00:00:26.22]     QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_RawArguments_AndArgumentList_PreserveQuotedBoundaries [FAIL]
+  LOG [ERR] TestGroups: [xUnit.net 00:00:26.22]     QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_AssignmentWindow_KeepsImmediateHelperSuspended [FAIL]
+  LOG [ERR] TestGroups: Test group project QBrainAi.Support.Mcp.EnvironmentIntegrationTests failed.
+  LOG [ERR] TestGroups: Target TestGroups has thrown an exception
+  LOG ​
+  LOG ═══════════════════════════════════════
+  LOG Target             Status      Duration
+  LOG ───────────────────────────────────────
+  LOG TestGroups         Failed          1:20   // InvalidOperationException: Test group projects failed: QBrainAi.Support.Mcp.EnvironmentIntegrationTests
+  LOG ───────────────────────────────────────
+  LOG Total                              1:20
+  LOG ═══════════════════════════════════════
+  LOG ​
+  LOG Build failed on 11/7/2026 6:38:54 PM. (╯°□°）╯︵ ┻━┻
+LOAD after 2026-11-07T18:38:56 cpuLoadPercent=24 freeMemMB=4531 totalMemMB=23926 processes=454
+  BUSY after name=WmiPrvSE#2 pid=8444 cpuPercent=20 workingSetMB=8
+  BUSY after name=dwm pid=2108 cpuPercent=5 workingSetMB=168
+  BUSY after name=System pid=4 cpuPercent=5 workingSetMB=0
+  BUSY after name=MsMpEng pid=6900 cpuPercent=5 workingSetMB=349
+  BUSY after name=cline pid=43604 cpuPercent=5 workingSetMB=443
+  BUSY after name=pwsh#9 pid=6832 cpuPercent=0 workingSetMB=146
+  BUSY after name=pwsh#8 pid=43820 cpuPercent=0 workingSetMB=10
+  BUSY after name=pwsh#7 pid=38932 cpuPercent=0 workingSetMB=10
+HELPER F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\bin\Debug\net10.0\QBrainAi.ProcessTree.TestHelper.dll exists=True
+TRX \groups\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx bytes=22090 sha256=E2A54173A1239370BA9F5E8E51C61C4E47E64C5E8E1388C75E2FA00FC1F276C7 total=8 executed=8 passed=5 failed=3 notExecuted=0 start=2026-11-07T18:38:27.7266068-06:00 finish=2026-11-07T18:38:54.5244892-06:00
+  CASE Passed duration=00:00:12.4808332 start=2026-11-07T18:38:34.5884946-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows
+  CASE Passed duration=00:00:00.1216227 start=2026-11-07T18:38:54.2949108-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_RawArguments_PreservesMultipleTokens
+  CASE Passed duration=00:00:05.2740519 start=2026-11-07T18:38:29.2787739-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.McpStdio.TranscriptMcpStdioHostTests.SessionLogNormalizePath_ThroughStdioHost_ResolvesToolGraphAndWritesArtifacts
+  CASE Failed duration=00:00:00.0022455 start=2026-11-07T18:38:54.2590999-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_ImmediateNativeDescendant_IsKilledWithinBound
+    MESSAGE F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.runtimeconfig.json
+    STACK at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_ImmediateNativeDescendant_IsKilledWithinBound() in F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\Documentation\BugTriage139SixteenthWindowsProcessTests.cs:line 164
+    STACK at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+    STACK at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  CASE Failed duration=00:00:00.0019343 start=2026-11-07T18:38:54.4215821-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_AssignmentWindow_KeepsImmediateHelperSuspended
+    MESSAGE F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.runtimeconfig.json
+    STACK at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_AssignmentWindow_KeepsImmediateHelperSuspended() in F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\Documentation\BugTriage139SixteenthWindowsProcessTests.cs:line 66
+    STACK --- End of stack trace from previous location ---
+  CASE Passed duration=00:00:07.1814447 start=2026-11-07T18:38:47.0710349-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables
+  CASE Passed duration=00:00:00.0031107 start=2026-11-07T18:38:54.2553539-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_WindowsLaunchContract_UsesSuspendedCreation
+  CASE Failed duration=00:00:00.0013216 start=2026-11-07T18:38:54.4171167-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_RawArguments_AndArgumentList_PreserveQuotedBoundaries
+    MESSAGE F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.runtimeconfig.json
+    STACK at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_RawArguments_AndArgumentList_PreserveQuotedBoundaries() in F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\Documentation\BugTriage139SixteenthWindowsProcessTests.cs:line 251
+    STACK --- End of stack trace from previous location ---
+END 2026-11-07T18:38:56

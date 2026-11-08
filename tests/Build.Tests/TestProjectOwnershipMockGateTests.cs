@@ -9,7 +9,10 @@ namespace NukeBuild.Tests;
 /// decisions (negative controls), before any production ownership code is written. No checkout, process environment or
 /// solution file is read.
 /// </summary>
-/// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added the mock gate of slice S1 for hostile validation finding R14-F4 (operator 2026-11-06: "Separate projects + AC (Recommended)"; MEMORY-BESTPRACTICE-001 rules 4.1, 4.4 and 4.5).</remarks>
+/// <remarks>
+/// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added the mock gate of slice S1 for hostile validation finding R14-F4 (operator 2026-11-06: "Separate projects + AC (Recommended)"; MEMORY-BESTPRACTICE-001 rules 4.1, 4.4 and 4.5).</para>
+/// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: adds the quarantine mock gate (ug-qr-mockgate-1, before the production ownership changes): a scripted quarantine reference (the AC-7 reference for the verdicts, then the accepted projects' cases split into cases run and quarantined cases counted apart) satisfies <see cref="TestProjectOwnershipContract.AssertQuarantineContract"/>, and seven wrong references are rejected by it, among them a quarantined case counted as a unit or integration case and a quarantined case dropped from the inventory. The AC-7 cases are unchanged.</para>
+/// </remarks>
 public sealed class TestProjectOwnershipMockGateTests
 {
     /// <summary>TR-MCP-NUKE-019 AC-7 positive control: the scripted reference satisfies every row and refusal of the contract.</summary>
@@ -91,6 +94,120 @@ public sealed class TestProjectOwnershipMockGateTests
             _ => () => TestProjectOwnershipContract.AssertContract(wrong),
         };
         Assert.ThrowsAny<XunitException>(assertion);
+    }
+
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-8 positive control: the scripted quarantine reference satisfies every quarantine row and every
+    /// AC-7 row with nothing quarantined.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    [Fact]
+    public void ScriptedQuarantine_SatisfiesTheQuarantineContract()
+        => TestProjectOwnershipContract.AssertQuarantineContract((selection, offered, quarantined) => ScriptedQuarantine(QuarantineFault.None, selection, offered, quarantined));
+
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-8 negative controls, each rejected inside this passing harness by the quarantine contract:
+    /// - a quarantined case counted as a unit or integration case (run with the selection's cases);
+    /// - a quarantined case dropped from the inventory (neither run nor counted);
+    /// - a quarantined case both run and counted;
+    /// - a quarantine matched by case name across projects;
+    /// - a quarantine that hides a case of another kind from the ownership judgment;
+    /// - a decision that drops a case that is not quarantined;
+    /// - a decision that counts the quarantined cases of a project it rejects.
+    /// </summary>
+    /// <param name="fault">The injected fault.</param>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    [Theory]
+    [InlineData(QuarantineFault.RunsQuarantinedCase)]
+    [InlineData(QuarantineFault.DropsQuarantinedCase)]
+    [InlineData(QuarantineFault.RunsAndCountsQuarantinedCase)]
+    [InlineData(QuarantineFault.QuarantinesByCaseName)]
+    [InlineData(QuarantineFault.HidesForeignCase)]
+    [InlineData(QuarantineFault.DropsRunnableCase)]
+    [InlineData(QuarantineFault.CountsRejectedProjectQuarantine)]
+    public void WrongQuarantine_IsRejected(QuarantineFault fault)
+        => Assert.ThrowsAny<XunitException>(() => TestProjectOwnershipContract.AssertQuarantineContract(
+            (selection, offered, quarantined) => ScriptedQuarantine(fault, selection, offered, quarantined)));
+
+    /// <summary>TR-MCP-NUKE-019 AC-8: faults injected into the scripted quarantine reference for the negative controls.</summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    public enum QuarantineFault
+    {
+        /// <summary>No fault: the criterion's rule.</summary>
+        None,
+
+        /// <summary>Runs a quarantined case with the selection's cases instead of counting it apart.</summary>
+        RunsQuarantinedCase,
+
+        /// <summary>Neither runs nor counts a quarantined case.</summary>
+        DropsQuarantinedCase,
+
+        /// <summary>Runs a quarantined case and also counts it apart.</summary>
+        RunsAndCountsQuarantinedCase,
+
+        /// <summary>Treats every case whose name a quarantined case uses as quarantined, in every project.</summary>
+        QuarantinesByCaseName,
+
+        /// <summary>Judges a project's kinds without its quarantined cases, so a quarantine hides a misplaced case.</summary>
+        HidesForeignCase,
+
+        /// <summary>Drops the last case that is not quarantined.</summary>
+        DropsRunnableCase,
+
+        /// <summary>Counts the quarantined cases of a rejected project.</summary>
+        CountsRejectedProjectQuarantine,
+    }
+
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-8 scripted quarantine reference: the verdicts are the AC-7 reference's (the role, then the kind
+    /// of every case, quarantined or not); each accepted project's cases that are not quarantined run, in offer and
+    /// inventory order, and its quarantined cases are counted apart; a rejected project's cases are neither; with an
+    /// optional injected fault.
+    /// </summary>
+    /// <param name="fault">The injected fault.</param>
+    /// <param name="selection">The selection.</param>
+    /// <param name="offered">The offered projects.</param>
+    /// <param name="quarantined">The quarantined cases among them.</param>
+    /// <returns>The verdicts, the cases run and the quarantined cases counted apart.</returns>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    private static TestProjectOwnershipContract.QuarantineOutcome ScriptedQuarantine(
+        QuarantineFault fault, TestSelectionKind selection, IReadOnlyList<TestProjectInventory> offered, IReadOnlyList<SelectedTestCase> quarantined)
+    {
+        bool IsQuarantined(string project, string name) => fault == QuarantineFault.QuarantinesByCaseName
+            ? quarantined.Any(item => item.Case == name)
+            : quarantined.Contains(new SelectedTestCase(project, name));
+
+        var judged = fault == QuarantineFault.HidesForeignCase
+            ? offered.Select(project => project with { Cases = project.Cases.Where(item => !IsQuarantined(project.Name, item.Name)).ToArray() }).ToArray()
+            : offered.ToArray();
+        var verdicts = new ScriptedOwnership(Fault.None).Decide(selection, judged).Projects;
+        var run = new List<SelectedTestCase>();
+        var counted = new List<SelectedTestCase>();
+        for (var index = 0; index < offered.Count; index++)
+        {
+            var project = offered[index];
+            var accepted = verdicts[index].Verdict == TestProjectVerdict.Accepted;
+            foreach (var item in project.Cases)
+            {
+                var identity = new SelectedTestCase(project.Name, item.Name);
+                var isQuarantined = IsQuarantined(project.Name, item.Name);
+                if (!accepted)
+                {
+                    if (isQuarantined && fault == QuarantineFault.CountsRejectedProjectQuarantine)
+                        counted.Add(identity);
+                    continue;
+                }
+
+                if (!isQuarantined || fault == QuarantineFault.RunsQuarantinedCase || fault == QuarantineFault.RunsAndCountsQuarantinedCase)
+                    run.Add(identity);
+                if (isQuarantined && fault != QuarantineFault.RunsQuarantinedCase && fault != QuarantineFault.DropsQuarantinedCase)
+                    counted.Add(identity);
+            }
+        }
+
+        if (fault == QuarantineFault.DropsRunnableCase && run.Count > 0)
+            run.RemoveAt(run.Count - 1);
+        return new TestProjectOwnershipContract.QuarantineOutcome(verdicts, run, counted);
     }
 
     /// <summary>TR-MCP-NUKE-019 AC-7: faults injected into the scripted reference for the negative controls.</summary>

@@ -316,8 +316,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
     /// session; the case proves that DeleteSessionAsync returns false for a session id that was never stored. Data: an
     /// in-memory SQLite database seeded by SeedFullSession with a different session.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for delete near session, delete a or the session, session delete, absent session, DeleteSessionAsync, returns false, session near not found, and unknown or missing (uncited-matches.txt, test 23 of 23); the nearest, FR-SUPPORT-016 ac-3 (an item delete returns false for an unknown key) and TR-MCP-DB-003 AC-001 (what resubmitting a deleted session revives), state neither the result of deleting an absent session, and the class-cited TEST-MCP-DB-006 has no criteria. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public async Task DeleteSessionAsync_Missing_ReturnsFalse()
     {
         using var connection = OpenConnection();

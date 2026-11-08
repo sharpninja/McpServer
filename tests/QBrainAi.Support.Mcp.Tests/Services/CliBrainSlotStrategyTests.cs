@@ -33,8 +33,12 @@ public sealed class CliBrainSlotStrategyTests
     /// the inputs Cli and cli, a behavior no record in the requirements store describes. Data: the inline values Cli
     /// and cli.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for provider kind, brain slot and cli:// (uncited-matches.txt, test 7 of 23); no criterion names a Cli provider kind, and TR-MCP-LLMSTRATEGY-001 and TR-MCP-QUAD-001 have no criteria. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs both rows when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Theory]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     [InlineData("Cli")]
     [InlineData("cli")]
     public void NormalizeProviderKind_AcceptsCli(string kind)
@@ -47,8 +51,12 @@ public sealed class CliBrainSlotStrategyTests
     /// grok-cli strategy and cli://codex-cli as the codex-cli strategy, a behavior no record in the requirements store
     /// describes. Data: three inline endpoint and expected-strategy pairs.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for cli://, grok, codex and brain slot (uncited-matches.txt, test 8 of 23); FR-MCP-HELP-011 (the Agent Help grok-cli strategy) has no criteria and is not the brain-slot endpoint parser. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs all three rows when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Theory]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     [InlineData("cli://grok-cli", "grok-cli")]
     [InlineData("cli://grok-build", "grok-cli")]
     [InlineData("cli://codex-cli", "codex-cli")]
@@ -63,8 +71,12 @@ public sealed class CliBrainSlotStrategyTests
     /// unknown CLI strategy (cli://unknown) and an empty string, a behavior no record in the requirements store
     /// describes. Data: the three inline endpoints.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for cli://, grok, codex and brain slot (uncited-matches.txt, test 9 of 23); no criterion states which endpoints the brain-slot CLI parser refuses. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs all three rows when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Theory]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     [InlineData("http://127.0.0.1:8311/v1")]
     [InlineData("cli://unknown")]
     [InlineData("")]
@@ -79,8 +91,12 @@ public sealed class CliBrainSlotStrategyTests
     /// the requirements store describes. Data: a StaticOptionsMonitor (Services/CliBrainSlotStrategyTestsSupport.cs)
     /// over BrainSlotOptions with AllowLoopbackEndpoints false and no AllowedEndpointHosts.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for endpoint policy, allowed hosts, loopback, cli:// and EndpointNotAllowed (uncited-matches.txt, test 10 of 23); the nearest, FR-MCP-129 criterion 6, states only that an invocation is rejected unless endpoint policy passes, not that a CLI endpoint passes without a host allowlist, and TR-MCP-QUAD-002 has no criteria. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void ValidateEndpoint_CliKnownStrategy_DoesNotRequireHttpHostAllowlist()
     {
         var options = new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
@@ -96,12 +112,19 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     /// <summary>
-    /// No requirement id applies: BrainSlotValidation.ValidateEndpoint rejects the Cli endpoint cli://copilot-cli with
-    /// a BrainSlotValidationException whose reason is BrainSlotReasonCodes.EndpointNotAllowed, a behavior no record in
-    /// the requirements store describes. Data: a StaticOptionsMonitor (Services/CliBrainSlotStrategyTestsSupport.cs)
-    /// over default BrainSlotOptions.
+    /// FR-MCP-129 criterion 6 (by position; the criterion has no id), in part: BrainSlotValidation.ValidateEndpoint
+    /// rejects the Cli endpoint cli://copilot-cli with a BrainSlotValidationException whose reason is
+    /// BrainSlotReasonCodes.EndpointNotAllowed, which proves the endpoint-policy condition of the criterion (an
+    /// invocation is rejected unless, among other conditions, endpoint policy passes): the endpoint check refuses a
+    /// disallowed CLI endpoint with a structured reason. It does not prove that an invocation is then rejected, nor the
+    /// criterion's other conditions (brain-slot execution enabled, the slot enabled, credentials resolving, required turn
+    /// transactions enabled). Data: a StaticOptionsMonitor (Services/CliBrainSlotStrategyTestsSupport.cs) over default
+    /// BrainSlotOptions.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, FR-MCP-129 criterion 6: cites the criterion whose endpoint-policy condition this case proves in part, in place of "No requirement id applies" (operator 2026-11-07: "Find the AC matching the test behavior."; uncited-matches.txt, test 11 of 23, the one partial match); the summary states the part it does not prove; the case is not quarantined and the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
     public void ValidateEndpoint_CliUnknownStrategy_Throws()
     {
@@ -121,8 +144,12 @@ public sealed class CliBrainSlotStrategyTests
     /// these arguments. Data: the fixed session GUID aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee, the model grok-4.6, and
     /// placeholder Windows-style working-folder and prompt-file path strings.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for grok, xhigh, reasoning effort, --resume, session id near resume and brain slot (uncited-matches.txt, test 12 of 23); the nearest, FR-MCP-HVPIPE-001 AC003, states the hostile validation reviewer launch effort, a different component, and none of the brain-slot Grok session arguments. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void BuildPersistentGrokArgumentList_FirstTurn_UsesSessionIdAndXhigh()
     {
         var sessionId = Guid.Parse("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee").ToString();
@@ -158,8 +185,12 @@ public sealed class CliBrainSlotStrategyTests
     /// aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee, the model grok-4.6, and placeholder Windows-style working-folder and
     /// prompt-file path strings.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for grok, xhigh, reasoning effort, --resume, session id near resume and brain slot (uncited-matches.txt, test 13 of 23); no criterion states Grok session resume. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void BuildPersistentGrokArgumentList_Resume_UsesResumeFlag()
     {
         var sessionId = Guid.Parse("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee").ToString();
@@ -182,8 +213,12 @@ public sealed class CliBrainSlotStrategyTests
     /// requirements store describes these arguments. Data: the model gpt-5.6-sol, a null session id, and placeholder
     /// Windows-style working-folder and output-file path strings.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for codex, xhigh, reasoning effort, --resume and brain slot (uncited-matches.txt, test 14 of 23); the nearest, FR-MCP-HVPIPE-001 AC003, states the hostile validation reviewer launch effort, a different component and a different effort value. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void BuildPersistentCodexArgumentList_FirstTurn_UsesExecStdinAndXhigh()
     {
         var args = CodexCliAgentExecutionStrategy.BuildPersistentCodexArgumentList(
@@ -208,8 +243,12 @@ public sealed class CliBrainSlotStrategyTests
     /// arguments. Data: the model gpt-5.6-sol, the session id thread-123, and placeholder Windows-style working-folder
     /// and output-file path strings.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for codex, xhigh, reasoning effort, --resume and brain slot (uncited-matches.txt, test 15 of 23); no criterion states the Codex resume argument order. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void BuildPersistentCodexArgumentList_Resume_PlacesExecOptionsBeforeResume()
     {
         var args = CodexCliAgentExecutionStrategy.BuildPersistentCodexArgumentList(
@@ -233,8 +272,12 @@ public sealed class CliBrainSlotStrategyTests
     /// JSONL stream whose thread.started event carries it; no record in the requirements store describes this parsing.
     /// Data: an inline two-line JSONL string (a thread.started event and an item.completed event).
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for thread.started, ExtractCodex, codex and session id near resume (uncited-matches.txt, test 16 of 23); the Codex criteria concern plugin caches, the hostile validation reviewer pool and transcript ingestion, not the brain-slot client. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void ExtractCodexSessionId_FromJsonlThreadStarted_ReturnsId()
     {
         var jsonl = """
@@ -251,8 +294,12 @@ public sealed class CliBrainSlotStrategyTests
     /// record in the requirements store describes this parsing. Data: an inline three-line JSONL string whose agent
     /// message text is Logic analysis of the voice chat.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for agent_message, assistant text, ExtractCodex and codex (uncited-matches.txt, test 17 of 23); the nearest, FR-MCP-HVPIPE-010 AC006, states how the hostile validation reviewer output contract reads records split across CLI events, a different component, not Codex agent_message extraction. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void ExtractCodexAssistantText_FromItemCompletedAgentMessage_ReturnsText()
     {
         var jsonl = """
@@ -271,8 +318,12 @@ public sealed class CliBrainSlotStrategyTests
     /// event whose payload is an agent_message; no record in the requirements store describes this parsing. Data: an
     /// inline one-line JSONL string whose message is working on it.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for agent_message, assistant text, ExtractCodex and codex (uncited-matches.txt, test 18 of 23); no criterion states Codex event_msg extraction. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void ExtractCodexAssistantText_FromEventMsg_ReturnsMessage()
     {
         var jsonl = """
@@ -288,8 +339,12 @@ public sealed class CliBrainSlotStrategyTests
     /// credential scheme. Data: three inline reference and expected-result rows and a resolver over an empty
     /// configuration.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for cli:interactive, credential near scheme, reference or resolver (uncited-matches.txt, test 19 of 23); the nearest, FR-MCP-129 criterion 4, states that CRUD stores and returns only a credential reference, not which reference schemes the resolver supports, and TEST-MCP-177 has no criteria. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs all three rows when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Theory]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     [InlineData("cli:interactive", true)]
     [InlineData("cli:session", true)]
     [InlineData("vault:future", false)]
@@ -304,8 +359,12 @@ public sealed class CliBrainSlotStrategyTests
     /// reference cli:interactive; no record in the requirements store describes the cli: credential scheme. Data: a
     /// resolver over an empty configuration.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for cli:interactive, credential near scheme, reference or resolver (uncited-matches.txt, test 20 of 23); no criterion states the placeholder the cli: scheme resolves to. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public async Task CredentialResolver_CliInteractive_ReturnsPlaceholder()
     {
         var resolver = new BrainSlotCredentialResolver(new ConfigurationBuilder().Build());

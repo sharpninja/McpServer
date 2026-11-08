@@ -17,6 +17,7 @@ namespace NukeBuild.Tests;
 /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2, AC-3: added the composition and run-id contracts (mock gate ug-r9-mockgate-q-1).</description></item>
 /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4, AC-5: host-aware rows and the per-class check rows (mock gate ug-r9-mockgate-q-2).</description></item>
 /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5 (appended: a class counts only through an executed result joined to its definition by test id): the class rows now carry TRX test definitions, with rows for a definition without an executed result, a display name that mentions the class, a namespace segment that names it, a custom display name and a not-executed result, and wrong checkers for the earlier production check, display names only and definitions only, because hostile validation finding R9-F1 showed the check accepted a class that ran no case; every helper documented (MEMORY-FACT-008; finding R9-F8) (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
+/// <item><term>2026-11-07</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8; TR-MCP-NUKE-020 AC-1: TestGroups still runs a quarantined case when its class is named (named classes run whatever their category), so every composed filter and log line must hold no Quarantine term, and a composition that adds the quarantine exclusion is rejected (mock gate ug-qr-mockgate-1; the production TestGroups composition is unchanged).</description></item>
 /// </list>
 /// </remarks>
 public sealed class TestGroupExecutionContractTests
@@ -104,8 +105,10 @@ public sealed class TestGroupExecutionContractTests
 
     /// <summary>Each wrong composition fails the same assertions: dropped groups, shared TRX names, a leaked lane
     /// category clause, a missing or swapped platform clause, file-stem names, accepted refusals, unmerged groups, a log
-    /// line without its filter and project order instead of group order.</summary>
+    /// line without its filter, project order instead of group order, and (TR-MCP-NUKE-019 AC-8) the lane's quarantine
+    /// exclusion added, which would keep a named class's quarantined cases from running.</summary>
     /// <param name="fault">The deliberate fault.</param>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8; TR-MCP-NUKE-020 AC-1: adds the "quarantine exclusion added" fault.</remarks>
     [Theory]
     [InlineData("dropped group")]
     [InlineData("shared trx")]
@@ -117,6 +120,7 @@ public sealed class TestGroupExecutionContractTests
     [InlineData("unmerged project groups")]
     [InlineData("log without filter")]
     [InlineData("project order instead of group order")]
+    [InlineData("quarantine exclusion added")]
     public void WrongCompositions_AreRejected(string fault) =>
         Assert.ThrowsAny<XunitException>(() => AssertComposition((groups, projects, host) => WrongComposition(fault, groups, projects, host)));
 
@@ -150,9 +154,11 @@ public sealed class TestGroupExecutionContractTests
     }
 
     /// <summary>Asserts every row against a composer on both hosts, with the solution's project list in both orders:
-    /// accepted rows produce exactly the expected runs (one TRX name per project, the host's platform clause first),
-    /// refused rows throw before any run with the row's message fragment.</summary>
+    /// accepted rows produce exactly the expected runs (one TRX name per project, the host's platform clause first, and
+    /// no Quarantine term in the filter or log line, TR-MCP-NUKE-019 AC-8), refused rows throw before any run with the
+    /// row's message fragment.</summary>
     /// <param name="compose">The composer under test.</param>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8; TR-MCP-NUKE-020 AC-1: adds the check that no composed filter or log line holds a Quarantine term, so a named class's quarantined cases run.</remarks>
     internal static void AssertComposition(Func<IReadOnlyList<string>, IReadOnlyList<(string Name, string Path)>, IntegrationLaneHost, IReadOnlyList<Step>> compose)
     {
         foreach (var host in new[] { IntegrationLaneHost.Linux, IntegrationLaneHost.Windows })
@@ -173,7 +179,11 @@ public sealed class TestGroupExecutionContractTests
                     Assert.Equal(expected.Length, actual.Count);
                     Assert.Equal(actual.Count, actual.Select(step => step.TrxName).Distinct(StringComparer.Ordinal).Count());
                     for (var index = 0; index < actual.Count; index++)
+                    {
+                        Assert.DoesNotContain("Quarantine", actual[index].Filter, StringComparison.Ordinal);
+                        Assert.DoesNotContain("Quarantine", actual[index].LogLine, StringComparison.Ordinal);
                         Assert.Equal(expected[index], actual[index]);
+                    }
                 }
             }
         }
@@ -280,6 +290,11 @@ public sealed class TestGroupExecutionContractTests
             "unmerged project groups" => groups.Count == 3 ? [.. steps, steps[0]] : steps,
             "log without filter" => steps.Select(step => step with { LogLine = "Test group filter for " + step.Name }).ToArray(),
             "project order instead of group order" => steps.OrderBy(step => Array.FindIndex(Projects, project => project.Name == step.Name)).ToArray(),
+            "quarantine exclusion added" => steps.Select(step => step with
+            {
+                Filter = step.Filter + "&" + IntegrationLaneFilterContract.QuarantineExclusion,
+                LogLine = step.LogLine + "&" + IntegrationLaneFilterContract.QuarantineExclusion,
+            }).ToArray(),
             _ => throw new ArgumentOutOfRangeException(nameof(fault)),
         };
     }

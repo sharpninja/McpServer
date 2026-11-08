@@ -13,12 +13,23 @@ namespace QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation;
 /// TEST-MCP-USECASE-020: Windows creation-time process-tree containment contracts on shipped
 /// <see cref="ProcessRunner"/>.
 /// </summary>
-/// <remarks>2026-11-07, TEST-MCP-USECASE-020; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: moved whole from QBrainAi.Support.Mcp.Tests (Documentation/BugTriage139SixteenthWindowsProcessTests.cs) into the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests together with the harnesses that find it by reflection in their own assembly, so the unit-owned project holds only unit cases (slice S8, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"); the OS-conditional compile block that leaves this Windows-only file out of a Linux build moved into this project's file; only the namespace changed.</remarks>
+/// <remarks>
+/// <para>2026-11-07, TEST-MCP-USECASE-020; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: moved whole from QBrainAi.Support.Mcp.Tests (Documentation/BugTriage139SixteenthWindowsProcessTests.cs) into the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests together with the harnesses that find it by reflection in their own assembly, so the unit-owned project holds only unit cases (slice S8, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"); the OS-conditional compile block that leaves this Windows-only file out of a Linux build moved into this project's file; only the namespace changed.</para>
+/// <para>2026-11-07, TEST-MCP-USECASE-020; TR-MCP-NUKE-019 AC-2, AC-7: the three helper cases named the runtime configuration file of the project this class came from (QBrainAi.Support.Mcp.Tests.runtimeconfig.json), which this project's output does not hold, so they failed in the Windows lane ug-r14f4-final-win-lane-1 and the recheck ug-r14f4-win-recheck-1; the name now comes from the running test assembly (<see cref="TestRuntimeConfigFileName"/>), defined once; the assertions are unchanged (ClaudeCode fix after the S10 gates).</para>
+/// </remarks>
 [Collection(RepositoryRootProcessStateCollection.Name)]
 [Trait("Category", "Integration")]
 [Trait("Platform", "Windows")]
 public sealed class BugTriage139SixteenthWindowsProcessTests
 {
+    /// <summary>
+    /// TEST-MCP-USECASE-020: the runtime configuration file of the test assembly that holds this class, which sits in
+    /// the output folder beside the ProcessTree helper and supplies the runtime the helper starts with.
+    /// </summary>
+    /// <remarks>2026-11-07, TEST-MCP-USECASE-020; TR-MCP-NUKE-019 AC-7: added, so the cases do not name a project (ClaudeCode fix after the S10 gates).</remarks>
+    private static readonly string TestRuntimeConfigFileName =
+        typeof(BugTriage139SixteenthWindowsProcessTests).Assembly.GetName().Name + ".runtimeconfig.json";
+
     /// <summary>
     /// The compiled harness must expose its suspended native launcher rather than assigning a job
     /// after ordinary process start.
@@ -61,7 +72,7 @@ public sealed class BugTriage139SixteenthWindowsProcessTests
             "QBrainAi.ProcessTree.TestHelper.dll");
         var runtimeConfig = Path.Combine(
             AppContext.BaseDirectory,
-            "QBrainAi.Support.Mcp.Tests.runtimeconfig.json");
+            TestRuntimeConfigFileName);
         Assert.True(File.Exists(helperAssembly), helperAssembly);
         Assert.True(File.Exists(runtimeConfig), runtimeConfig);
 
@@ -159,7 +170,7 @@ public sealed class BugTriage139SixteenthWindowsProcessTests
             "QBrainAi.ProcessTree.TestHelper.dll");
         var runtimeConfig = Path.Combine(
             AppContext.BaseDirectory,
-            "QBrainAi.Support.Mcp.Tests.runtimeconfig.json");
+            TestRuntimeConfigFileName);
         Assert.True(File.Exists(helperAssembly), helperAssembly);
         Assert.True(File.Exists(runtimeConfig), runtimeConfig);
 
@@ -246,7 +257,7 @@ public sealed class BugTriage139SixteenthWindowsProcessTests
             "QBrainAi.ProcessTree.TestHelper.dll");
         var runtimeConfig = Path.Combine(
             AppContext.BaseDirectory,
-            "QBrainAi.Support.Mcp.Tests.runtimeconfig.json");
+            TestRuntimeConfigFileName);
         Assert.True(File.Exists(helperAssembly), helperAssembly);
         Assert.True(File.Exists(runtimeConfig), runtimeConfig);
 

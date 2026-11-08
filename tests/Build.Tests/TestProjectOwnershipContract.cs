@@ -14,6 +14,7 @@ namespace NukeBuild.Tests;
 /// vocabulary (the role, case kind, selection and verdict enums, the inventory and outcome records and
 /// <see cref="ITestProjectOwnership"/>) moved unchanged from this file to build/TestProjectOwnershipContracts.cs after
 /// mock gate ug-r14f4-s1-mockgate-1, so the production type implements the same contract; the rows and assertions are unchanged.
+/// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: adds the quarantine contract (operator 2026-11-07: "Find the AC matching the test behavior.  If none match, quarantine them (keep, but descope them) for later manual investigation."): <see cref="QuarantineRows"/> and <see cref="AssertQuarantineContract"/>. A decision is given the offered projects and the quarantined cases among them (project and case name) and returns the verdicts, the cases the selection runs and the quarantined cases it counts apart, per project; a quarantined case keeps its kind for the ownership judgment, is never run, and is never dropped, and every case that is not quarantined still runs exactly once. The decision is taken as a delegate over the contract's own <see cref="QuarantineOutcome"/> shape, so mock gate ug-qr-mockgate-1 runs it against the unchanged production records and the binding adapts the production type to it; the AC-7 rows and assertions are unchanged.</para>
 /// </remarks>
 internal static class TestProjectOwnershipContract
 {
@@ -173,6 +174,57 @@ internal static class TestProjectOwnershipContract
         ("a project listing a case twice is refused", TestSelectionKind.Unit, [Project("Unit.Repeated", TestProjectRole.Unit, UnitCase("repeated"), UnitCase("repeated"))], "repeated"),
     ];
 
+    /// <summary>TR-MCP-NUKE-019 AC-8: a unit-owned project of three unit cases; the rows quarantine q2.</summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    internal static readonly TestProjectInventory QuarantineUnit = Project("Quarantine.Unit", TestProjectRole.Unit, UnitCase("q1"), UnitCase("q2"), UnitCase("q3"));
+
+    /// <summary>TR-MCP-NUKE-019 AC-8: an integration-owned project of two integration cases; the rows quarantine r1.</summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    internal static readonly TestProjectInventory QuarantineIntegration = Project("Quarantine.Integration", TestProjectRole.Integration, IntegrationCase("r1"), IntegrationCase("r2"));
+
+    /// <summary>TR-MCP-NUKE-019 AC-8: a unit-owned project of one unit case, which the rows quarantine.</summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    internal static readonly TestProjectInventory QuarantineAllUnit = Project("Quarantine.AllUnit", TestProjectRole.Unit, UnitCase("s1"));
+
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-8 rows: each states the selection, the offered projects, the quarantined cases among them, the
+    /// verdict of each project, the cases the selection runs and the quarantined cases it counts apart.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    internal static readonly QuarantineRow[] QuarantineRows =
+    [
+        new("a unit-owned project's quarantined case is counted apart and not run, and the project is still accepted",
+            TestSelectionKind.Unit, [QuarantineUnit, UnitPure], [Case(QuarantineUnit, "q2")],
+            [Verdict(QuarantineUnit, TestProjectVerdict.Accepted), Verdict(UnitPure, TestProjectVerdict.Accepted)],
+            [Case(QuarantineUnit, "q1"), Case(QuarantineUnit, "q3"), .. CasesOf(UnitPure)],
+            [Case(QuarantineUnit, "q2")]),
+        new("an integration-owned project's quarantined case is counted apart and not run",
+            TestSelectionKind.Integration, [QuarantineIntegration], [Case(QuarantineIntegration, "r1")],
+            [Verdict(QuarantineIntegration, TestProjectVerdict.Accepted)],
+            [Case(QuarantineIntegration, "r2")],
+            [Case(QuarantineIntegration, "r1")]),
+        new("a quarantine names one project's case: a case of the same name in another project still runs",
+            TestSelectionKind.Unit, [SeparatedUnitA, SeparatedUnitB], [Case(SeparatedUnitA, "SameName")],
+            [Verdict(SeparatedUnitA, TestProjectVerdict.Accepted), Verdict(SeparatedUnitB, TestProjectVerdict.Accepted)],
+            [Case(SeparatedUnitA, "a2"), Case(SeparatedUnitA, "a3"), Case(SeparatedUnitB, "SameName")],
+            [Case(SeparatedUnitA, "SameName")]),
+        new("a project whose every case is quarantined is accepted, runs no case and counts every case apart",
+            TestSelectionKind.Unit, [QuarantineAllUnit], [Case(QuarantineAllUnit, "s1")],
+            [Verdict(QuarantineAllUnit, TestProjectVerdict.Accepted)],
+            [],
+            [Case(QuarantineAllUnit, "s1")]),
+        new("a quarantine hides no case of another kind: a unit-owned project holding a quarantined integration case is still rejected",
+            TestSelectionKind.Unit, [UnitMixed], [Case(UnitMixed, "i1")],
+            [Verdict(UnitMixed, TestProjectVerdict.RejectedForeignCase)],
+            [],
+            []),
+        new("a rejected project's quarantined case is neither run nor counted by the selection that rejects it",
+            TestSelectionKind.Unit, [QuarantineIntegration, UnitPure], [Case(QuarantineIntegration, "r1")],
+            [Verdict(QuarantineIntegration, TestProjectVerdict.RejectedOtherRole), Verdict(UnitPure, TestProjectVerdict.Accepted)],
+            CasesOf(UnitPure),
+            []),
+    ];
+
     /// <summary>TR-MCP-NUKE-019 AC-7: a unit-owned project holding an integration case is rejected by the unit selection.</summary>
     /// <param name="ownership">The decision under test.</param>
     internal static void AssertUnitProjectWithIntegrationCaseIsRejected(ITestProjectOwnership ownership) => AssertRows(ownership, UnitProjectWithIntegrationCaseRows);
@@ -259,6 +311,57 @@ internal static class TestProjectOwnershipContract
         }
     }
 
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-8: asserts the quarantine contract: every <see cref="QuarantineRows"/> row, and every AC-7 row
+    /// with nothing quarantined, which must give the AC-7 verdicts and cases and count no quarantined case.
+    /// </summary>
+    /// <param name="decide">The decision under test.</param>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    internal static void AssertQuarantineContract(QuarantineDecision decide)
+    {
+        ArgumentNullException.ThrowIfNull(decide);
+        AssertQuarantineRows(decide, QuarantineRows);
+        Row[][] withoutQuarantine = [UnitProjectWithIntegrationCaseRows, IntegrationProjectWithUnitCaseRows, InfrastructureProjectRows, OtherRoleRows, InfrastructureCaseRows, SeparatedRows];
+        AssertQuarantineRows(decide, withoutQuarantine
+            .SelectMany(rows => rows)
+            .Select(row => new QuarantineRow(row.Name + " (nothing quarantined)", row.Selection, row.Offered, [], row.Verdicts, row.Cases, []))
+            .ToArray());
+    }
+
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-8: asserts each quarantine row: one verdict per offered project, in offer order, as the row
+    /// states; the cases run are the row's, each exactly once, and hold no quarantined case; the quarantined cases
+    /// counted apart are the row's, each exactly once, with the row's count for every project; and when every offered
+    /// project is accepted, the cases run and the quarantined cases together are every offered case exactly once, so no
+    /// quarantined case is dropped and no other case is lost.
+    /// </summary>
+    /// <param name="decide">The decision under test.</param>
+    /// <param name="rows">The rows to assert.</param>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    internal static void AssertQuarantineRows(QuarantineDecision decide, IReadOnlyList<QuarantineRow> rows)
+    {
+        ArgumentNullException.ThrowIfNull(decide);
+        ArgumentNullException.ThrowIfNull(rows);
+        foreach (var row in rows)
+        {
+            var outcome = decide(row.Selection, row.Offered, row.QuarantinedOffered);
+            Assert.NotNull(outcome);
+            var actualVerdicts = outcome.Projects.ToArray();
+            Assert.True(row.Verdicts.SequenceEqual(actualVerdicts), $"Row '{row.Name}': expected verdicts [{Describe(row.Verdicts)}] but got [{Describe(actualVerdicts)}].");
+            AssertExactlyOnce($"row '{row.Name}', cases run", outcome.Cases, row.Cases);
+            AssertExactlyOnce($"row '{row.Name}', quarantined cases counted apart", outcome.Quarantined, row.Quarantined);
+            foreach (var project in row.Offered)
+            {
+                var expected = row.Quarantined.Count(item => item.Project == project.Name);
+                var actual = outcome.Quarantined.Count(item => item.Project == project.Name);
+                Assert.True(expected == actual, $"Row '{row.Name}': project {project.Name} counts {actual} quarantined cases apart, the row requires {expected}.");
+            }
+
+            if (actualVerdicts.All(decision => decision.Verdict == TestProjectVerdict.Accepted))
+                AssertExactlyOnce($"row '{row.Name}', valid selection, cases run and quarantined together", [.. outcome.Cases, .. outcome.Quarantined], CasesOf(row.Offered));
+        }
+    }
+
     /// <summary>TR-MCP-NUKE-019 AC-7: every case of <paramref name="projects"/>, in project then inventory order.</summary>
     /// <param name="projects">The projects whose cases are listed.</param>
     /// <returns>The cases, identified by project and case name.</returns>
@@ -288,6 +391,39 @@ internal static class TestProjectOwnershipContract
     /// <param name="Verdicts">The required verdict of each offered project, in offer order.</param>
     /// <param name="Cases">The cases the selection must run, each exactly once.</param>
     internal sealed record Row(string Name, TestSelectionKind Selection, TestProjectInventory[] Offered, TestProjectDecision[] Verdicts, SelectedTestCase[] Cases);
+
+    /// <summary>TR-MCP-NUKE-019 AC-8: the outcome the quarantine contract checks.</summary>
+    /// <param name="Projects">One verdict per offered project, in offer order.</param>
+    /// <param name="Cases">The cases the selection runs: no quarantined case.</param>
+    /// <param name="Quarantined">The quarantined cases of the accepted projects, counted apart from the cases run.</param>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added; the contract's own shape, so the mock gate needs no production change and the binding maps the production outcome to it.</remarks>
+    internal sealed record QuarantineOutcome(IReadOnlyList<TestProjectDecision> Projects, IReadOnlyList<SelectedTestCase> Cases, IReadOnlyList<SelectedTestCase> Quarantined);
+
+    /// <summary>TR-MCP-NUKE-019 AC-8: a quarantine row.</summary>
+    /// <param name="Name">The row name shown in a failure.</param>
+    /// <param name="Selection">The selection under test.</param>
+    /// <param name="Offered">The offered projects, in offer order.</param>
+    /// <param name="QuarantinedOffered">The offered cases that carry Quarantine=NoMatchingCriterion, by project and case name.</param>
+    /// <param name="Verdicts">The required verdict of each offered project, in offer order.</param>
+    /// <param name="Cases">The cases the selection must run, each exactly once.</param>
+    /// <param name="Quarantined">The quarantined cases the selection must count apart, each exactly once.</param>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    internal sealed record QuarantineRow(string Name, TestSelectionKind Selection, TestProjectInventory[] Offered, SelectedTestCase[] QuarantinedOffered, TestProjectDecision[] Verdicts, SelectedTestCase[] Cases, SelectedTestCase[] Quarantined);
+
+    /// <summary>TR-MCP-NUKE-019 AC-8: a decision given the selection, the offered projects and the quarantined cases among them.</summary>
+    /// <param name="selection">The unit or integration selection.</param>
+    /// <param name="offered">The offered projects.</param>
+    /// <param name="quarantined">The offered cases that carry Quarantine=NoMatchingCriterion.</param>
+    /// <returns>The verdicts, the cases run and the quarantined cases counted apart.</returns>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    internal delegate QuarantineOutcome QuarantineDecision(TestSelectionKind selection, IReadOnlyList<TestProjectInventory> offered, IReadOnlyList<SelectedTestCase> quarantined);
+
+    /// <summary>TR-MCP-NUKE-019 AC-8: one scripted case's identity.</summary>
+    /// <param name="project">The project.</param>
+    /// <param name="name">The case name.</param>
+    /// <returns>The case, identified by project and case name.</returns>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    private static SelectedTestCase Case(TestProjectInventory project, string name) => new(project.Name, name);
 
     /// <summary>A scripted unit case.</summary>
     /// <param name="name">The case name.</param>

@@ -5,6 +5,7 @@ namespace NukeBuild.Tests;
 /// the BDPv4 mock gate, to the production <see cref="IntegrationLaneFilter"/>. Pure string composition; no host,
 /// process or test runner is touched.
 /// </summary>
+/// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: the unchanged cases now bind the contract's quarantine exclusion and quarantine selection assertions (mock gate ug-qr-mockgate-1) to the production filter.</remarks>
 public sealed class IntegrationLaneFilterTests
 {
     private readonly IntegrationLaneFilter filter = new();

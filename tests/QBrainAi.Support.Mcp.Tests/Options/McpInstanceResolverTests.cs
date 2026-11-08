@@ -18,8 +18,12 @@ public sealed class McpInstanceResolverTests
     /// No requirement id applies: GetRequestedInstanceName reads the instance name alpha from the argument
     /// --instance=alpha. Data: the argument array holding --instance=alpha.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for --instance, instance name, per-instance, instance with argument, command line, override or resolve, GetRequestedInstanceName and Mcp:Instances (uncited-matches.txt, test 4 of 23); the nearest, TEST-MCP-QBRAIN-005 criterion 4, states the environment-variable precedence, not the command-line argument form. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void GetRequestedInstanceName_ReadsFromArgs_EqualsSyntax()
     {
         var value = McpInstanceResolver.GetRequestedInstanceName(["--instance=alpha"]);
@@ -30,8 +34,12 @@ public sealed class McpInstanceResolverTests
     /// No requirement id applies: GetRequestedInstanceName reads the instance name beta from the separated arguments
     /// --instance and beta. Data: the argument array holding --instance and beta.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for --instance, instance name, per-instance, instance with argument, command line, override or resolve, GetRequestedInstanceName and Mcp:Instances (uncited-matches.txt, test 5 of 23); the nearest, TEST-MCP-QBRAIN-005 criterion 4, states the environment-variable precedence only, not the separated argument form. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void GetRequestedInstanceName_ReadsFromArgs_SeparatedSyntax()
     {
         var value = McpInstanceResolver.GetRequestedInstanceName(["--instance", "beta"]);
@@ -62,8 +70,12 @@ public sealed class McpInstanceResolverTests
     /// No requirement id applies: ValidateInstances throws InvalidOperationException when instances a and b both use
     /// port 7147. Data: in-memory configuration with both instances on RepoRoot . and Port 7147.
     /// </summary>
-    /// <remarks>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, no requirement id applies: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</para>
+    /// <para>2026-11-07, TR-MCP-NUKE-019 AC-8: quarantined with the trait Quarantine=NoMatchingCriterion (operator 2026-11-07: "If none match, quarantine them (keep, but descope them) for later manual investigation."): no acceptance criterion in the requirement store matches the behavior. The FR, TR and TEST criteria, titles and descriptions were searched for duplicate port, same port, instance near port, port near duplicate, conflict, collision, unique or same, ValidateInstances and Mcp:Instances (uncited-matches.txt, test 6 of 23); the hits (TR-MCP-NUKE-019 AC-6, a free port for a temporary instance, and TR-MCP-CFG-003, which has no criteria) state no instance port uniqueness. Test and MigrationIntegrationTests run no quarantined case; TestGroups runs it when this class is named; the test code is unchanged.</para>
+    /// </remarks>
     [Fact]
+    [Trait("Quarantine", "NoMatchingCriterion")]
     public void ValidateInstances_ThrowsOnDuplicatePorts()
     {
         var data = new Dictionary<string, string?>

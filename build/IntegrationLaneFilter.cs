@@ -1,7 +1,9 @@
 /// <summary>
 /// TR-MCP-NUKE-019: Production <see cref="IIntegrationLaneFilter"/>. Selects the Category=Integration cases of one
-/// host by excluding the other host's Platform trait, so untagged integration cases run on both hosts.
+/// host by excluding the other host's Platform trait, so untagged integration cases run on both hosts, and (AC-8)
+/// excludes quarantined cases (<see cref="TestQuarantine.Exclusion"/>).
 /// </summary>
+/// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: the summary names the quarantine exclusion.</remarks>
 sealed class IntegrationLaneFilter : IIntegrationLaneFilter
 {
     /// <inheritdoc />
@@ -9,9 +11,10 @@ sealed class IntegrationLaneFilter : IIntegrationLaneFilter
     /// <list type="table">
     /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
     /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-1; TR-MCP-NUKE-020 AC-3: now built from the shared platform clause; the lane filter text is unchanged.</description></item>
+    /// <item><term>2026-11-07</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: appends the quarantine exclusion, so the lane runs no quarantined case and every lane project filter and logged filter line shows the exclusion; PlatformClause, which TestGroups uses, is unchanged, so TestGroups still runs a named class's quarantined cases (TR-MCP-NUKE-020 AC-1). Added after mock gate ug-qr-mockgate-1.</description></item>
     /// </list>
     /// </remarks>
-    public string Compose(IntegrationLaneHost host) => "Category=Integration&" + PlatformClause(host);
+    public string Compose(IntegrationLaneHost host) => "Category=Integration&" + PlatformClause(host) + "&" + TestQuarantine.Exclusion;
 
     /// <summary>
     /// TR-MCP-NUKE-019 AC-1 and TR-MCP-NUKE-020 AC-4: the host platform clause the lane and TestGroups share. It excludes
