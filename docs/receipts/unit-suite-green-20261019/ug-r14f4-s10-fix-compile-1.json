@@ -1,0 +1,54 @@
+{
+  "name": "ug-r14f4-s10-fix-compile-1",
+  "kind": "compile",
+  "retrospective": false,
+  "note": "Written when the run ended, from its own meta, exit and log files (Save-CompileReceipt.ps1).",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "runHead": "5ce7fa56c26e4a0672fffba6984273f998db454b",
+  "runDirtyPaths": [
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-1.tempdir.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-traceability-1.exit.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-traceability-1.meta.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-traceability-1.out.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-1.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-1.start.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-traceability-1.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-traceability-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-1.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-1.result.txt"
+  ],
+  "command": [
+    "./build.ps1",
+    "Compile"
+  ],
+  "startedLocal": "2026-11-07T18:24:16",
+  "endedLocal": "2026-11-07T18:27:16",
+  "exitCode": 0,
+  "status": "passed",
+  "buildSucceededLine": "Build succeeded on 11/7/2026 6:27:15 PM. ＼（＾ᴗ＾）／",
+  "errorDiagnostics": 0,
+  "warningDiagnostics": 0,
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/s3-s4/runs/ug-r14f4-s10-fix-compile-1.out.log",
+  "logSha256": "81BA84A844D7313332DDCCE19D7F879C9C9C612CB7F84F0BF3922363084CE334",
+  "sources": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+      "sha256": "2DEB34D7705549CBE0A9AAA1A37ACB19678ADF41C89BF3878538390EF5297D09"
+    }
+  ],
+  "metaFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/s3-s4/runs/ug-r14f4-s10-fix-compile-1.meta.json",
+  "metaSha256": "63200CE6E5A4900FAA7F0B0DD8BD04983B652083EB82487FDC37D7ED235E261B",
+  "writtenLocal": "2026-11-07T18:27:39",
+  "minutesAfterRunEnd": 0.39,
+  "writtenBy": "ClaudeCode"
+}

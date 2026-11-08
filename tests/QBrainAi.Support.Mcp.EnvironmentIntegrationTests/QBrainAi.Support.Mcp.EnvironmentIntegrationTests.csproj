@@ -45,6 +45,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\QBrainAi.Support.Mcp\QBrainAi.Support.Mcp.csproj" />
     <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the Windows process cases that slice S8 moved here
+         (BugTriage139SixteenthWindowsProcessTests) start QBrainAi.ProcessTree.TestHelper from this project's output
+         folder, as they did from QBrainAi.Support.Mcp.Tests, which references it; without the reference the helper was
+         missing and three cases failed in the Windows lane ug-r14f4-final-win-lane-1 (ClaudeCode fix after the S10 gates). -->
+    <ProjectReference Include="..\QBrainAi.ProcessTree.TestHelper\QBrainAi.ProcessTree.TestHelper.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />
