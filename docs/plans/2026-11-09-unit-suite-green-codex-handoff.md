@@ -4,6 +4,24 @@ Written 2026-11-09T08:40:04 local (measured) by ClaudeCode (claude-opus-5-5, xhi
 
 This file is the entry point for Codex. It supersedes the "Next" and "Resume here" parts of `docs/plans/2026-10-30-unit-suite-green-handoff.md` (that file stays as history and as the long list of declared open items). The as-built record is `docs/plans/2026-10-19-unit-suite-green.md`, sections 27.19 to 27.45 on the branch; section 27.46 exists only as a scratch draft (section 6 below). Every fact here carries its source. "Observed" means read from a file, git, a receipt or the store at the time named; "inferred" marks an inference. This handoff records state, never server availability (Global memory MEMORY-PROCEDURE-007): recheck live refs, the store and the hosts yourself before acting.
 
+## Latest Codex execution update, 2026-11-09T13:57:54-06:00
+
+This section supersedes the earlier Codex execution update below. The operator narrowed PR87 publication validation to Linux only. The final code/test head is pushed commit `a1e19d7331a2e9804c66ef96a27ee50b2365510c`. The test-owned embedding fixture cleanup correction is the only change after `455f3cbd`; no product source changed.
+
+The current-head Linux phase-exit gates all pass with zero failures and zero skips: Test 4,847, MigrationIntegrationTests 746, Build.Tests 530 and ValidateTraceability passing with no TRX by contract. The dedicated HV evidence manifest is `docs/receipts/hv/unitgreen-r15-trx-a1e19d73/manifest.json`, SHA-256 `99A3DE760BF29C31BBDE0B98C3E31855CB92CB95FC202FCC79A96912AAC6321E`. Its 14 TRX files are copied and hash-verified from the retained gate receipts. The Linux case-identity reconciliation from `03eea747` to `a1e19d73` passes: zero gone identities, 15 expected additions, zero non-passed identities and all four real embedding bindings preserved one-for-one.
+
+Resume with records finalization, not Windows testing: reconcile the five Round 15 records against this manifest, remove all launch placeholders, complete the prelaunch audits and staged secret scan, commit and push the records, mark PR87 ready, and launch full Claude Code Opus 5.5 high HV. PR87 remains draft until the records commit and ready readback. Merge remains a separate operator decision.
+
+## Codex execution update, 2026-11-09T11:21:52-06:00
+
+This update supersedes this handoff's earlier live-state and next-step claims where they differ. P0 and P1 of `docs/plans/2026-11-09-pr87-completion-plan.md` are complete. The live primary TODO has 75 tasks, 45 accepted and 30 open. The source-pinned task map, reconciliation supplement, embedding requirements and mappings, and P0/P1 receipts are current. Plan sections 27.46 and 27.47 are now in the tracked as-built plan.
+
+The local code head is `455f3cbd7d78ace1a2e4171c7434699539358e6d`. P1 replaced the four vacuous embedding passes with required availability and shared discriminating assertions, retained the 12-row mock contract, passed the real binding on both hosts with zero failures and zero skips, and passed Compile with zero warnings and errors. It has not been pushed.
+
+P2 has a verified direct Claude Code 2.1.318 route using exact model `claude-opus-5-5` and high effort. Its effort-local launcher passed parser and analyzer checks plus 12 success/refusal scenarios without starting a reviewer. The five round 15 record drafts are tracked and their current prefaces supersede obsolete Codex/gpt-6-astra and Claude-family-exclusion instructions while preserving the historical text as evidence. The self-review intentionally keeps P3-dependent PENDING and FILL tokens, so the launcher must refuse a live launch until final-head evidence replaces them.
+
+Resume with P3: freeze and push the code head through the approved path, run the full Linux and Windows final gate set at that head, build the new TRX manifest and reconciliation, complete the holistic and what-if reviews, finish the self-review, commit and push the records, update the PR body, mark PR 87 ready, then launch full Claude HV. The PR is still draft. No final-head gate set, Claude verdict, merge or deployment is claimed. The separate merge-go boundary remains in force.
+
 ## 1. Trust directive (operator, 2026-09-07, verbatim; carry it in every continuation handoff)
 
 > If you cannot or will not follow my instructions, then I cannot trust you.  If I cannot trust you, I will not use you.  Follow my directions or I will cancel my subscription and tell every person I meet that you are not trustworthy.

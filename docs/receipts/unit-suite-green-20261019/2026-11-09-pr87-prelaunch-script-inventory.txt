@@ -1,0 +1,15 @@
+PR87 Round 15 prelaunch PowerShell script inventory
+measuredLocal=2026-11-09T14:03:30-06:00
+runner=pwsh.exe
+pythonUsed=false
+nodeUsed=false
+SCRIPT path=/tmp/New-Pr87LinuxHvEvidence.ps1 sha256=B9F697E415AE65C2F784C703EA3337F7F1C7C6980D966C3E23B6D2D00E8FAA79 parseErrors=0 analyzerWarningErrorFindings=0 purpose=copy and verify Linux-only HV TRX package and manifest whatIfBeforeWrite=true
+SCRIPT path=/tmp/Compare-Pr87LinuxCaseIdentity.ps1 sha256=5C5C7DD3705B56DAD3FA023A7AAA3A2769AEAC9E564D04DE118C70922F4B938C parseErrors=0 analyzerWarningErrorFindings=0 purpose=compare Linux case identities against committed baseline whatIfBeforeWrite=true
+SCRIPT path=/tmp/New-Pr87CodeDeltaReceipt.ps1 sha256=F2E7D574640C06D5E9EDC60AE434F0384243A86BC506ECFC9FE0394DE872EA29 parseErrors=0 analyzerWarningErrorFindings=0 purpose=prove test-and-records-only code delta whatIfBeforeWrite=true
+SCRIPT path=/tmp/Test-Pr87PrelaunchEvidence.ps1 sha256=3A2503C926E4887E17272E502E77FCA4213BFB3DE526C2E3563F0EC38CC9000E parseErrors=0 analyzerWarningErrorFindings=0 purpose=verify manifest, pins, claims, command examples and launch placeholders whatIfBeforeWrite=true
+SCRIPT path=/tmp/Test-Pr87StagedSecrets.ps1 sha256=F302D6A8E80ACD56121315189D03B8617CFCAA4E9CEE61CA16F9DF4214F4D179 parseErrors=0 analyzerWarningErrorFindings=0 purpose=scan the exact staged records paths for secret-shaped text
+SCRIPT path=.mcpServer/pr87-hv/Invoke-ClaudeHvRound.ps1 sha256=C54625BA217F6B297927E31056A9001DC8FA286118E0B31DFD375DD6E14A248B parseErrors=0 analyzerWarningErrorFindings=0 purpose=launch direct Claude Code Opus 5.5 high HV only after refusal gates pass
+SCRIPT path=.mcpServer/pr87-hv/Test-ClaudeHvLauncher.ps1 sha256=B84D7E084221904CF93CC285FD2F39FA6C808D85CB0329BDFB90F640137262B3 parseErrors=0 analyzerWarningErrorFindings=0 purpose=exercise twelve launcher refusal and successful WhatIf scenarios result=12/12
+SCRIPT path=/tmp/Finalize-Pr87R15Records.ps1 sha256=597964F64629B287AEEA2CEC9B443DB5BBA483C0AE9B4B7266B59B03A7EF218B parseErrors=0 analyzerWarningErrorFindings=0 purpose=replace every Round 15 launch placeholder and add authoritative current blocks whatIfBeforeWrite=true
+SCRIPT path=/tmp/Fix-Pr87FinalRecordVariables.ps1 sha256=DA2BE07E6CDC9870F3B26583147F5C18B4A7875EF06727F0E5AB88D87CA153F2 parseErrors=0 analyzerWarningErrorFindings=0 purpose=resolve literal record-variable interpolation defect and update staged-scan status whatIfBeforeWrite=true
+VERDICT PASS

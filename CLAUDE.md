@@ -22,10 +22,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug
 
 # Run a single test by name
-dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests.QueryAsync_NoFilters_ReturnsAllItems"
+dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~EfTodoServiceTests.QueryAsync_FiltersByPriorityAndKeyword"
 
 # Run all tests in a class
-dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests"
+./build.ps1 TestGroups --test-groups "QBrainAi.Support.Mcp.Tests:EfTodoServiceTests" --test-run-id todo-service-class
 
 # Integration tests (CustomWebApplicationFactory, in-memory EF)
 dotnet test tests/QBrainAi.Support.Mcp.IntegrationTests -c Debug

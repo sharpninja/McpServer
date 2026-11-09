@@ -1,0 +1,43 @@
+{
+  "name": "ug-r15p3-linuxonly-final-traceability-1",
+  "kind": "gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "a1e19d7331a2e9804c66ef96a27ee50b2365510c",
+  "command": [
+    "./build.ps1",
+    "ValidateTraceability"
+  ],
+  "startedLocal": "2026-11-09T13:13:48",
+  "endedLocal": "2026-11-09T13:13:54",
+  "exitCode": 0,
+  "status": "passed",
+  "noTrxExpected": true,
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingModelAssertionContract.cs",
+      "sha256": "1E4441344C2EF0AF1DF1A605FC3A1E97FDCB582302A79E14772A75D2E392C268"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingModelAssertionContractTests.cs",
+      "sha256": "E2D08E6D483A605AA7235B71269984EC28335322890D58DC95872F2672E811CA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+      "sha256": "73042F104B706C1DFA50332A8697DC6726053E91CD9E701C37EA035289B97815"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingServiceTests.cs",
+      "sha256": "7D371EDC355EA485F0710D0FC77184DFDD6633B2C8B690F8C1E3575C0F3C2550"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs",
+      "sha256": "0A44BB234E508B6D39B215A976AE3D6BBEE5796F8588C5457727984AEC476043"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixtureTests.cs",
+      "sha256": "EBE3A81C2C46142C9613F4FC63F5D07E421E1B97B10C22F7FBD85F995B80425C"
+    }
+  ],
+  "writtenBy": "Codex"
+}

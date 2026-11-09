@@ -38,10 +38,10 @@ For specific operational instructions (session bootstrap, turn logging lifecycle
 dotnet test tests\QBrainAi.Support.Mcp.IntegrationTests -c Debug
 
 # Run a single test by fully-qualified name
-dotnet test tests\QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests.QueryAsync_NoFilters_ReturnsAllItems"
+dotnet test tests\QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~EfTodoServiceTests.QueryAsync_FiltersByPriorityAndKeyword"
 
 # Run tests in a single class
-dotnet test tests\QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests"
+./build.ps1 TestGroups --test-groups "QBrainAi.Support.Mcp.Tests:EfTodoServiceTests" --test-run-id todo-service-class
 
 # Validate appsettings config (via Nuke)
 ./build.ps1 ValidateConfig

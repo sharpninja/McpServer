@@ -73,3 +73,11 @@ After copying both Windows TRX originals into this receipt tree, the six staged 
 upload copies were removed only after exact hash verification. Windows retained its TRX evidence and returned to its
 pre-existing state: detached `03eea74797827aacf7030ac577cc19d46ebee5d2` with only `.nuke/build.schema.json`
 modified.
+
+## Current-head cleanup continuation
+
+The first Windows full integration lane at commit `455f3cbd7d78ace1a2e4171c7434699539358e6d` executed 722 cases with zero failed and zero skipped in its TRX, but the target correctly exited nonzero because xUnit reported a class-cleanup failure: `model.onnx` remained locked when `EmbeddingModelFixture.DisposeAsync` deleted its owned root. This was a fixture lifecycle defect, not a passing Windows phase-exit gate.
+
+BDPv4 test-first evidence is retained as `ug-r15p3-fixture-cleanup-red-1`, which failed with CS0117 before the cleanup helper existed. Commit `a1e19d7331a2e9804c66ef96a27ee50b2365510c`, `test(embedding): retry transient fixture cleanup`, adds one deterministic transient-file-lock control and a bounded retry that handles only `IOException` in the test-owned fixture. Final failure remains visible. Product code, product download behavior and the user model cache remain unchanged. Targeted Linux gate `ug-r15p3-fixture-cleanup-green-linux-1` passed 3/0/0.
+
+By operator direction, publication validation then continued on Linux only. At `a1e19d73`, Test passed 4,847/0/0, MigrationIntegrationTests passed 746/0/0, Build.Tests passed 530/0/0 and ValidateTraceability passed. The dedicated manifest is `docs/receipts/hv/unitgreen-r15-trx-a1e19d73/manifest.json`, SHA-256 `99A3DE760BF29C31BBDE0B98C3E31855CB92CB95FC202FCC79A96912AAC6321E`. The case-identity receipt `ug-r15p3-linuxonly-case-identity-03eea747-to-a1e19d73.txt`, SHA-256 `0D1C4099E8C6097C0A958DA005303A41F15884A4DD9364530FA8CB510DB0252D`, proves zero gone Linux identities, exactly 15 intended additions and all four original real model binding identities preserved.

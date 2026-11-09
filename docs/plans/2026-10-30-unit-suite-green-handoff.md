@@ -6,6 +6,15 @@ Operator request: "Update the handoff for claude to resume work on this. Add any
 
 ClaudeCode handed PR 87 to Codex on 2026-11-09 (operator: "Write highly detailed handoff for codex to take over."). That file supersedes the "Next" and "Resume here" parts below; everything below stays as history and as the list of declared open items.
 
+Latest pointer, 2026-11-09T13:57:54-06:00: use `docs/plans/2026-11-09-unit-suite-green-codex-handoff.md`, its latest Codex execution update, and plan section 27.48. PR87 publication validation is Linux-only by operator direction. The final code/test head is pushed `a1e19d73`; all four Linux gates and the case-identity reconciliation pass. Remaining work is records, ready transition and full Claude Opus 5.5 high HV, not Windows testing.
+
+## Codex execution update, 2026-11-09T11:21:52-06:00
+
+- P0 is complete. The live primary TODO has 75 tasks, 45 accepted and 30 open. Tasks 66 and 67 use the final project names; tasks 73 to 75 cover the quarantine, embedding verification and review/record work. The source-pinned task map and rename supplement are committed receipts.
+- P1 is complete at local code commit `455f3cbd7d78ace1a2e4171c7434699539358e6d`. The four embedding cases cannot pass through missing or unusable artifacts, the 12-row discriminating contract remains green, the real bindings passed on Linux and Windows with zero failures and zero skips, and Compile passed with zero warnings and errors.
+- P2 preparation is substantially complete. Plan sections 27.46 and 27.47, current test-command examples, the direct Claude Code launcher and its 12-scenario launcher check, and the five round 15 record drafts now exist. The direct installed binary reports Claude Code 2.1.318, authentication is available, and the CLI exposes exact model `claude-opus-5-5` with `--effort high`. Historical Codex/gpt-6-astra reviewer instructions are explicitly superseded in the current record prefaces.
+- The self-review intentionally retains P3-dependent PENDING and FILL tokens, so the launcher must still refuse a live review. P3 final-head gates, holistic review, final records commit, push, ready transition and Claude HV have not run. PR 87 remains draft. No merge or deployment is authorized.
+
 ## Claude update, 2026-11-06 (supersedes the sections below where they differ)
 
 Written by ClaudeCode (claude-opus-5-5, xhigh); plan sections 27.19 to 27.44 of `docs/plans/2026-10-19-unit-suite-green.md` are the as-built record, and the history rule that says how to read its sections 1 to 27.40 is stated once, in 27.41. The scratch master copy is `/home/sharpninja/.claude/scratch/pr82-review-20261019/plan-unit-suite-green-20261019-r9final.md` (the earlier master is kept unchanged). Recheck live refs before acting; this section records state, never availability.

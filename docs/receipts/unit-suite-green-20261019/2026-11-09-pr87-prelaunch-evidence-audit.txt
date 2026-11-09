@@ -1,0 +1,19 @@
+PR87 prelaunch evidence audit
+writtenLocal=2026-11-09T14:05:33
+head=a1e19d7331a2e9804c66ef96a27ee50b2365510c
+remoteHead=a1e19d7331a2e9804c66ef96a27ee50b2365510c
+manifest=docs/receipts/hv/unitgreen-r15-trx-a1e19d73/manifest.json
+manifestSha256=99A3DE760BF29C31BBDE0B98C3E31855CB92CB95FC202FCC79A96912AAC6321E
+manifestFiles=14 manifestBytes=9439805
+sourcePins=6
+EVIDENCE caseIdentity path=docs/receipts/unit-suite-green-20261019/ug-r15p3-linuxonly-case-identity-03eea747-to-a1e19d73.txt sha256=0D1C4099E8C6097C0A958DA005303A41F15884A4DD9364530FA8CB510DB0252D
+EVIDENCE codeDelta path=docs/receipts/unit-suite-green-20261019/ug-r15p3-code-delta-03eea747-to-a1e19d73.txt sha256=2BB0A536525200D93333213473C93430DC4FBB8D5E97B057573D145A8A3B71D5
+EVIDENCE taskMap path=docs/receipts/hv/unitgreen-r15-tasks-a1e19d73.txt sha256=5BF9F0781662760AEDD967ACA88485D513A34AE9D596106AF27CB28B513CB7F6
+EVIDENCE requirementReadback path=docs/receipts/unit-suite-green-20261019/ug-r15p3-final-embedding-requirements-readback.txt sha256=5F447CE2B7FD0177056EF33CB59C0562CC9323F46CC8B103643744F552381CCA
+EVIDENCE completionPlan path=docs/plans/2026-11-09-pr87-completion-plan.md sha256=CF01934FC8ED14E6BE5C063576FC729248664A1F4A01B740C0895600F0E50C4E
+EVIDENCE asBuiltPlan path=docs/plans/2026-10-19-unit-suite-green.md sha256=A9371ED3860A5FB60D76AF968DFDF652CDB08F70ED7A658CD86AE5E5EC49F013
+EVIDENCE handoff path=docs/plans/2026-11-09-unit-suite-green-codex-handoff.md sha256=8DD8AE39C8C9DC308651EF9077AF081EC9816B6C6127DF49E45D9306FFB1E198
+commandExamples=EfTodoServiceTests.QueryAsync_FiltersByPriorityAndKeyword and Nuke TestGroups class selection verified
+recordFiles=5 unresolvedLaunchPlaceholderLines=0
+gitDiffCheckLines=0
+VERDICT PASS problems=0

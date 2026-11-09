@@ -1,0 +1,29 @@
+PR87 Linux-only case identity reconciliation
+writtenLocal=2026-11-09T13:56:53
+baselineManifest=docs/receipts/hv/unitgreen-r15-trx-03eea747/manifest.json sha256=572FD28A3D60E93BBD92357D002B9C490A5A4192A60AB98E11B9AEA82D94DDCC
+currentManifest=docs/receipts/hv/unitgreen-r15-trx-a1e19d73/manifest.json sha256=99A3DE760BF29C31BBDE0B98C3E31855CB92CB95FC202FCC79A96912AAC6321E
+baselineHead=03eea74797827aacf7030ac577cc19d46ebee5d2 currentHead=a1e19d7331a2e9804c66ef96a27ee50b2365510c
+LINUX oldExecutions=6108 newExecutions=6123 goneIdentities=0 addedIdentities=15 nonPassedIdentities=0
+ADDED x1 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests.DeleteOwnedRootAsync_RetriesTransientFileLockBeforeDeletingRoot
+ADDED x1 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests.RequireAvailable_RejectsMissingOrCorruptArtifacts(fault: "corrupt")
+ADDED x1 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests.RequireAvailable_RejectsMissingOrCorruptArtifacts(fault: "missing")
+ADDED x1 QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingModelAssertionContractTests.SuppliedResponses_AreDiscriminated(behavior: "different-input", response: "correct")
+ADDED x1 QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingModelAssertionContractTests.SuppliedResponses_AreDiscriminated(behavior: "different-input", response: "unavailable")
+ADDED x1 QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingModelAssertionContractTests.SuppliedResponses_AreDiscriminated(behavior: "different-input", response: "wrong")
+ADDED x1 QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingModelAssertionContractTests.SuppliedResponses_AreDiscriminated(behavior: "long-input", response: "correct")
+ADDED x1 QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingModelAssertionContractTests.SuppliedResponses_AreDiscriminated(behavior: "long-input", response: "unavailable")
+ADDED x1 QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingModelAssertionContractTests.SuppliedResponses_AreDiscriminated(behavior: "long-input", response: "wrong")
+ADDED x1 QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingModelAssertionContractTests.SuppliedResponses_AreDiscriminated(behavior: "nonzero", response: "correct")
+ADDED x1 QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingModelAssertionContractTests.SuppliedResponses_AreDiscriminated(behavior: "nonzero", response: "unavailable")
+ADDED x1 QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingModelAssertionContractTests.SuppliedResponses_AreDiscriminated(behavior: "nonzero", response: "wrong")
+ADDED x1 QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingModelAssertionContractTests.SuppliedResponses_AreDiscriminated(behavior: "same-input", response: "correct")
+ADDED x1 QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingModelAssertionContractTests.SuppliedResponses_AreDiscriminated(behavior: "same-input", response: "unavailable")
+ADDED x1 QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingModelAssertionContractTests.SuppliedResponses_AreDiscriminated(behavior: "same-input", response: "wrong")
+EXPECTED contract actual=12 expected=12
+EXPECTED fixture-negative actual=2 expected=2
+EXPECTED fixture-cleanup actual=1 expected=1
+BINDING EmbeddingServiceTests.GenerateEmbedding_WithModel_ReturnsNonZeroVector old=1 new=1
+BINDING EmbeddingServiceTests.GenerateEmbedding_SameInput_ReturnsDeterministicOutput old=1 new=1
+BINDING EmbeddingServiceTests.GenerateEmbedding_DifferentInput_ReturnsDifferentVectors old=1 new=1
+BINDING EmbeddingServiceTests.GenerateEmbedding_LongInput_TruncatesCorrectly old=1 new=1
+VERDICT PASS problems=0

@@ -1,0 +1,109 @@
+READBACK 2026-11-09T11:42:58 agent=Codex workspace=/home/sharpninja/github/McpServer
+--- FR-MCP-004 ---
+type: result
+payload:
+  requestId: req-20261109T174259Z-25ec
+  result:
+    id: FR-MCP-004
+    title: Hybrid context search
+    description: >-
+      The server shall support FTS and vector search over indexed content.
+
+
+      **Covered by:** `HybridSearchService`, `Fts5SearchService`, `VectorIndexService`, `EmbeddingService`
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria:
+    - id: embedding-vector-contract
+      text: 'The existing embedding contract is source-pinned to four outcomes: an available model produces a nonzero vector for "hello world"; identical text produces equal vectors; the existing two different texts produce distinct vectors; and the existing 500-word input produces a nonzero vector containing exactly 384 values.'
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-09T17:43:02.2735753+00:00
+    updatedAt: 2026-11-09T17:43:02.2737012+00:00
+  deprecated: true
+
+---
+--- TR-MCP-EMBEDDING-001 ---
+type: result
+payload:
+  requestId: req-20261109T174303Z-3a95
+  result:
+    id: TR-MCP-EMBEDDING-001
+    title: Real model-backed embedding integration fixture
+    description: Bind the FR-MCP-004 embedding-vector-contract to a test-owned model and vocabulary so every original integration case executes its assertions without depending on a user model cache.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: EMBEDDING
+    notes: PR87 P1 test-only slice. Product embedding and downloader behavior remain unchanged.
+    acceptanceCriteria:
+    - id: model-backed-assertions
+      text: All four original EmbeddingServiceTests cases retain their identities and inputs, require an available real model, and execute the shared assertions for FR-MCP-004 embedding-vector-contract.
+      isSatisfied: false
+    - id: test-owned-fixture
+      text: The fixture owns one unique temporary root, records source URLs and artifact hashes and lengths, supplies ModelPath explicitly, disables implicit auto-download, and deletes only its owned root after disposing the service.
+      isSatisfied: false
+    - id: unavailable-is-failure
+      text: Missing, corrupt or unloadable model or vocabulary artifacts fail fixture setup and cannot make an original case pass through an early return.
+      isSatisfied: false
+    - id: no-user-cache-mutation
+      text: The fixture does not read from or write to the user home or default model cache, and it does not call the production downloader as a fixture workaround.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-09T17:43:06.4086179+00:00
+    updatedAt: 2026-11-09T17:43:06.4087575+00:00
+  deprecated: true
+
+---
+--- TEST-MCP-EMBEDDING-001 ---
+type: result
+payload:
+  requestId: req-20261109T174307Z-afda
+  result:
+    id: TEST-MCP-EMBEDDING-001
+    title: Embedding vector contract discrimination
+    description: Verify the four existing FR-MCP-004 embedding outcomes with positive supplied vectors and independently reject wrong or unavailable responses before binding the same assertions to the real model.
+    status: pending
+    priority: high
+    area: MCP
+    testType: unit
+    notes: PR87 P1 test-only slice. The pure contract uses supplied availability and vectors, with no disk, environment, network, native inference or clock dependency.
+    acceptanceCriteria:
+    - id: positive-fixtures
+      text: Four correct supplied responses satisfy the source-pinned nonzero, stable, distinct and 384-value long-input outcomes.
+      isSatisfied: false
+    - id: wrong-response-controls
+      text: 'Four independently wrong supplied responses are rejected by the intended assertion: all-zero output, unstable same-input output, equal different-input output, and a long-input response that independently proves rejection of wrong-sized nonzero and correctly-sized all-zero vectors.'
+      isSatisfied: false
+    - id: unavailable-controls
+      text: One unavailable-model response for each original behavior is rejected; a checker that returns before asserting cannot pass the control.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-09T17:43:10.5908437+00:00
+    updatedAt: 2026-11-09T17:43:10.5909843+00:00
+  deprecated: true
+
+---
+--- FR-MCP-004 MAPPINGS ---
+type: result
+payload:
+  requestId: req-20261109T174312Z-0ec2
+  result:
+    items:
+    - frId: FR-MCP-004
+      trId: TR-MCP-DATA-002
+      createdAt: 2026-11-09T17:43:15.0123144+00:00
+    - frId: FR-MCP-004
+      trId: TR-MCP-DATA-003
+      createdAt: 2026-11-09T17:43:15.0130234+00:00
+    - frId: FR-MCP-004
+      trId: TR-MCP-EMBEDDING-001
+      createdAt: 2026-11-09T17:43:15.0131397+00:00
+    - frId: FR-MCP-004
+      testId: TEST-MCP-EMBEDDING-001
+      createdAt: 2026-11-09T17:43:15.0132281+00:00
+    totalCount: 4
+  deprecated: true
+
+---

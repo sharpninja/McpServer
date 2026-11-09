@@ -5,11 +5,26 @@ Status: approved by the operator on 2026-11-09. The separate merge-go boundary r
 Primary TODO: `IMPL-UNITGREEN-001`. PR: https://github.com/sharpninja/McpServer/pull/87.
 Planning session: `Codex-20261109T150912Z-plugin-session`, turn `req-20261109T152301Z-turn-8796`.
 
-Execution update, 2026-11-09T10:34:07-06:00: P0 and P1 are complete. The live primary TODO has 75 tasks,
+Execution update, 2026-11-09T11:21:52-06:00: P0 and P1 are complete. The live primary TODO has 75 tasks,
 45 accepted and 30 open; no new task was marked accepted. P1 removed the four vacuous embedding passes, retained the
 12-row mock gate and diagnostic failures, passed the real binding on Linux and Windows with zero skips, and passed
 Compile with zero warnings/errors. Evidence: `../receipts/unit-suite-green-20261019/2026-11-09-pr87-p1-embedding.md`.
-P2 and later phases have not started, no Claude HV verdict exists for these changes, and no merge is authorized.
+P2 implementation and launch preparation are substantially complete: plan sections 27.46 and 27.47, corrected command
+examples, five reconciled record drafts, and the direct Claude Code launcher with 12 passing success/refusal scenarios
+are present. The launcher uses Claude Code 2.1.318, exact model `claude-opus-5-5` and high effort. P2 remains open only
+because the self-review intentionally retains P3-dependent PENDING and FILL tokens, which correctly refuse a live launch.
+P3 final-head gates, records finalization, push and ready transition have not run. No Claude HV verdict exists for these
+changes, and no merge is authorized.
+
+Execution update, 2026-11-09T13:15:06-06:00: the operator narrowed PR87 publication validation to Linux only. This
+supersedes the two-host P3 and prepublication P4 instructions below without rewriting their approved historical text.
+No further Windows checkout or test work is required for publication. The final code/test head is
+`a1e19d7331a2e9804c66ef96a27ee50b2365510c`; its bounded fixture-cleanup correction is test-only and was pushed to the
+PR branch. The fresh Linux phase-exit receipts are `ug-r15p3-linuxonly-final-unit-1` (4,847/0/0),
+`ug-r15p3-linuxonly-final-lane-1` (746/0/0), `ug-r15p3-linuxonly-final-buildtests-2` (530/0/0), and
+`ug-r15p3-linuxonly-final-traceability-1` (passing exit, no TRX by contract). All test receipts pin the six in-scope
+test paths and the exact code head. Records reconciliation, the records commit, ready transition and full Claude HV
+remain pending. No merge is authorized.
 
 ## 1. Outcome, baseline and authority
 
