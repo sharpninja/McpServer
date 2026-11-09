@@ -18,9 +18,13 @@ namespace QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing;
 /// unavailable-is-failure and no-user-cache-mutation: added for the PR87 test-only slice. The fixture reads the
 /// private product URL constants by reflection so its sources cannot silently diverge, streams each response to its
 /// owned root, records source, SHA-256 and length, and sets AutoDownload=false so no default model cache is used.
+/// 2026-11-09, TR-MCP-EMBEDDING-001 test-owned-fixture: retries only transient IO failures while removing the owned
+/// root because Windows can release the ONNX model file shortly after the disposed native session returns.
 /// </remarks>
 public sealed class EmbeddingModelFixture : IAsyncLifetime
 {
+    private const int DeleteAttemptCount = 20;
+    private static readonly TimeSpan DeleteRetryDelay = TimeSpan.FromMilliseconds(100);
     private readonly HttpClient _httpClient = new() { Timeout = Timeout.InfiniteTimeSpan };
     private readonly List<EmbeddingArtifactReceipt> _artifacts = [];
 
@@ -61,13 +65,49 @@ public sealed class EmbeddingModelFixture : IAsyncLifetime
     }
 
     /// <inheritdoc />
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         Service?.Dispose();
         _httpClient.Dispose();
-        if (Directory.Exists(RootPath))
-            Directory.Delete(RootPath, recursive: true);
-        return ValueTask.CompletedTask;
+        await DeleteOwnedRootAsync(RootPath).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// TR-MCP-EMBEDDING-001 test-owned-fixture: removes the supplied fixture-owned root, retrying bounded transient
+    /// file-lock failures without masking the final failure or any non-IO exception.
+    /// </summary>
+    /// <param name="rootPath">The unique directory owned by one fixture instance.</param>
+    /// <param name="delete">The recursive delete operation, overridden only by the deterministic negative control.</param>
+    /// <param name="delay">The retry delay operation, overridden only by the deterministic negative control.</param>
+    /// <returns>A task that completes after deletion or throws the final cleanup failure.</returns>
+    /// <remarks>
+    /// 2026-11-09, TR-MCP-EMBEDDING-001 test-owned-fixture and no-user-cache-mutation: added after Windows full-lane
+    /// run ug-r15p3-final-win-lane-1 passed every case but exposed a delayed model.onnx handle release at class cleanup.
+    /// </remarks>
+    internal static async ValueTask DeleteOwnedRootAsync(
+        string rootPath,
+        Action<string, bool>? delete = null,
+        Func<TimeSpan, ValueTask>? delay = null)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(rootPath);
+        delete ??= Directory.Delete;
+        delay ??= static duration => new ValueTask(Task.Delay(duration));
+
+        for (var attempt = 1; attempt <= DeleteAttemptCount; attempt++)
+        {
+            if (!Directory.Exists(rootPath))
+                return;
+
+            try
+            {
+                delete(rootPath, true);
+                return;
+            }
+            catch (IOException) when (attempt < DeleteAttemptCount)
+            {
+                await delay(DeleteRetryDelay).ConfigureAwait(false);
+            }
+        }
     }
 
     /// <summary>
