@@ -13,6 +13,8 @@ namespace QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing;
 /// AutoDownload=false, so the product's default model cache is neither read nor written.
 /// 2026-11-09, TR-MCP-EMBEDDING-001 test-owned-fixture: added a deterministic transient-lock control after the first
 /// Windows full-lane gate exposed delayed release of the fixture-owned ONNX file during class cleanup.
+/// 2026-11-09, TR-MCP-EMBEDDING-001 test-owned-fixture; R15-F4: adds persistent-IO and non-IO controls so the bounded
+/// cleanup policy proves its final failure is surfaced and non-transient failures are never retried.
 /// </remarks>
 public sealed class EmbeddingModelFixtureTests
 {
@@ -93,5 +95,71 @@ public sealed class EmbeddingModelFixtureTests
 
         Assert.Equal(3, attempts);
         Assert.False(Directory.Exists(root));
+    }
+
+    /// <summary>Verifies that the twentieth persistent <see cref="IOException"/> is surfaced after exactly twenty attempts.</summary>
+    /// <remarks>2026-11-09, TR-MCP-EMBEDDING-001 test-owned-fixture; R15-F4: required bounded-final-failure negative control.</remarks>
+    [Fact]
+    [Trait("Category", "Integration")]
+    public async Task DeleteOwnedRootAsync_PersistentIOException_ThrowsAfterBoundedAttempts()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"qbrainai-embedding-delete-persistent-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(root);
+        var attempts = 0;
+        try
+        {
+            var failure = await Assert.ThrowsAsync<IOException>(() => EmbeddingModelFixture.DeleteOwnedRootAsync(
+                root,
+                (_, _) =>
+                {
+                    attempts++;
+                    throw new IOException("Persistent simulated ONNX file-handle lock.");
+                },
+                _ => ValueTask.CompletedTask).AsTask());
+
+            Assert.Contains("Persistent simulated", failure.Message, StringComparison.Ordinal);
+            Assert.Equal(20, attempts);
+            Assert.True(Directory.Exists(root));
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    /// <summary>Verifies that a non-IO cleanup failure is surfaced immediately without a retry delay.</summary>
+    /// <remarks>2026-11-09, TR-MCP-EMBEDDING-001 test-owned-fixture; R15-F4: required non-transient-failure negative control.</remarks>
+    [Fact]
+    [Trait("Category", "Integration")]
+    public async Task DeleteOwnedRootAsync_NonIOException_IsNotRetried()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"qbrainai-embedding-delete-nonio-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(root);
+        var attempts = 0;
+        var delays = 0;
+        try
+        {
+            var failure = await Assert.ThrowsAsync<InvalidOperationException>(() => EmbeddingModelFixture.DeleteOwnedRootAsync(
+                root,
+                (_, _) =>
+                {
+                    attempts++;
+                    throw new InvalidOperationException("Non-transient simulated cleanup failure.");
+                },
+                _ =>
+                {
+                    delays++;
+                    return ValueTask.CompletedTask;
+                }).AsTask());
+
+            Assert.Contains("Non-transient simulated", failure.Message, StringComparison.Ordinal);
+            Assert.Equal(1, attempts);
+            Assert.Equal(0, delays);
+            Assert.True(Directory.Exists(root));
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
     }
 }

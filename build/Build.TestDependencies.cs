@@ -121,6 +121,7 @@ partial class Build
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S5 adds QBrainAi.Support.Mcp.Environment.IntegrationTests to the lane through <see cref="IntegrationLaneProjects"/>, immediately after QBrainAi.Support.Mcp.Tests; this target's code is unchanged and its comments name the new composition.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the project renames that follow slice S6 (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name.") reach the lane through <see cref="IntegrationLaneProjects"/>: QBrainAi.Support.Mcp.EnvironmentIntegrationTests and NukeBuild.IntegrationTests run in the positions of QBrainAi.Support.Mcp.Environment.IntegrationTests and Build.IntegrationTests; the lane still builds NukeBuild.IntegrationTests itself, which Compile leaves out; this target's code and comments are unchanged.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S8 takes QBrainAi.Support.Mcp.Tests out of the lane through <see cref="IntegrationLaneProjects"/> once it holds no integration case, so the lane runs only integration-owned projects; the comment on the composition no longer states a project count, which changed with every slice; this target's code is unchanged.</para>
+    /// <para>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7; R15-F1: before executing a test, the lane discovers all cases and the Integration and quarantine subsets from each selected project, composes the real ownership inventory, and fails when an integration-owned project contains a case without Category=Integration. NukeBuild.IntegrationTests may build during its first discovery because Compile intentionally leaves it out.</para>
     /// </remarks>
     public Target MigrationIntegrationTests => _ => _
         .Description("Run Category=Integration tests (provider migrations, process spawns) with provisioned dependencies")
@@ -150,6 +151,22 @@ partial class Build
             // composition as each slice moves cases into integration-owned projects (S3 to S5 done; S6 to S8 to come).
             foreach (var project in projectsWithIntegrationTests)
                 Log.Information("Integration lane project {Project}: declared role {Role}", project.Name, TestProjectRoles.RoleOf(project.Name));
+
+            var discovery = new DotNetListTestDiscoverySource(
+                Configuration.ToString(),
+                projectPath => string.Equals(
+                    Path.GetFileNameWithoutExtension(projectPath),
+                    "NukeBuild.IntegrationTests",
+                    StringComparison.Ordinal));
+            var discovered = projectsWithIntegrationTests.Select(project => TestProjectCaseDiscovery.Discover(
+                project.Name,
+                project.Path,
+                TestProjectRoles.RoleOf(project.Name),
+                discovery)).ToArray();
+            var ownership = new TestProjectOwnership().Decide(TestSelectionKind.Integration, discovered);
+            TestProjectOwnershipGate.RequireAccepted(nameof(MigrationIntegrationTests), ownership);
+            Log.Information("MigrationIntegrationTests runtime ownership discovery accepted {Projects} projects and {Cases} non-quarantined cases.",
+                discovered.Length, ownership.Cases.Count);
 
             var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId)
                 ?? $"integration-{DateTime.Now:yyyyMMddTHHmmss}-{Guid.NewGuid():N}";

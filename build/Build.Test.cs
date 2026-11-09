@@ -6,7 +6,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 partial class Build
 {
-    /// <summary>Run all unit tests, excluding integration test projects and Category=Integration tests.</summary><remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: after its unchanged name rules select the projects, Test consults the build's role declarations (TestProjectRoles.RequireRole) and refuses, before any test runs, a selected project not declared unit-owned; at the da11faa2 layout the seven selected projects are declared unit-owned, so no case changes (slice S2; this remark shares the summary line so the name-rule lines keep their numbers). 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: Test runs no quarantined case: every project runs with <see cref="UnitTestFilter.Filter"/>, the earlier category filter followed by the quarantine exclusion, and Test logs <see cref="UnitTestFilter.LogLine"/> for each project before it runs, so the log shows the exclusion; the name rules and the projects are unchanged (after mock gate ug-qr-mockgate-1; this entry also shares the summary line).</remarks>
+    /// <summary>Run all unit tests, excluding integration test projects and Category=Integration tests.</summary><remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: after its unchanged name rules select the projects, Test consults the build's role declarations (TestProjectRoles.RequireRole) and refuses, before any test runs, a selected project not declared unit-owned; at the da11faa2 layout the seven selected projects are declared unit-owned, so no case changes (slice S2; this remark shares the summary line so the name-rule lines keep their numbers). 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: Test runs no quarantined case: every project runs with <see cref="UnitTestFilter.Filter"/>, the earlier category filter followed by the quarantine exclusion, and Test logs <see cref="UnitTestFilter.LogLine"/> for each project before it runs, so the log shows the exclusion; the name rules and the projects are unchanged (after mock gate ug-qr-mockgate-1; this entry also shares the summary line). 2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7; R15-F1: before executing a test, Test discovers all cases and the Integration and quarantine subsets from each selected project, composes the real ownership inventory, and fails on a foreign case instead of trusting recorded counts.</remarks>
     public Target Test => _ => _
         .DependsOn(Compile)
         .Executes(() =>
@@ -26,6 +26,16 @@ partial class Build
 
             // TR-MCP-NUKE-019 AC-7: every project the name rules select must be declared unit-owned by the build.
             TestProjectRoles.RequireRole(TestProjectRole.Unit, testProjects.Select(project => project.Name).ToArray(), nameof(Test));
+            var discovery = new DotNetListTestDiscoverySource(Configuration.ToString());
+            var discovered = testProjects.Select(project => TestProjectCaseDiscovery.Discover(
+                project.Name,
+                project.Path.ToString(),
+                TestProjectRoles.RoleOf(project.Name),
+                discovery)).ToArray();
+            var ownership = new TestProjectOwnership().Decide(TestSelectionKind.Unit, discovered);
+            TestProjectOwnershipGate.RequireAccepted(nameof(Test), ownership);
+            Log.Information("Test runtime ownership discovery accepted {Projects} projects and {Cases} non-quarantined cases.",
+                discovered.Length, ownership.Cases.Count);
 
             var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId);
             if (runId is not null)
