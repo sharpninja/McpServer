@@ -116,7 +116,10 @@
     <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\SqlServerMigrationFailureReporter.cs" Link="Shared\Storage\SqlServerMigrationFailureReporter.cs" />
     <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\SqlServerTestConnection.cs" Link="Shared\Storage\SqlServerTestConnection.cs" />
     <Compile Include="..\QBrainAi.Support.Mcp.Tests\Configuration\ConfigurablePathIntegrationTestsBase.cs" Link="Shared\Configuration\ConfigurablePathIntegrationTestsBase.cs" />
-    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Indexing\EmbeddingServiceTestsBase.cs" Link="Shared\Indexing\EmbeddingServiceTestsBase.cs" />
+    <!-- 2026-11-09, FR-MCP-004 embedding-vector-contract; TEST-MCP-EMBEDDING-001; TR-MCP-EMBEDDING-001:
+         the pure response assertion contract is linked into the integration assembly so the model-backed cases and
+         the unit-owned positive, wrong-response and unavailable controls execute the same assertions (PR87 P1). -->
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Indexing\EmbeddingModelAssertionContract.cs" Link="Shared\Indexing\EmbeddingModelAssertionContract.cs" />
     <Compile Include="..\QBrainAi.Support.Mcp.Tests\Ingestion\SessionLogIngestorImportTestsBase.cs" Link="Shared\Ingestion\SessionLogIngestorImportTestsBase.cs" />
     <Compile Include="..\QBrainAi.Support.Mcp.Tests\McpStdio\BrainSlotToolAbsenceTestsSupport.cs" Link="Shared\McpStdio\BrainSlotToolAbsenceTestsSupport.cs" />
     <Compile Include="..\QBrainAi.Support.Mcp.Tests\McpStdio\HandoffMcpToolTestsBase.cs" Link="Shared\McpStdio\HandoffMcpToolTestsBase.cs" />

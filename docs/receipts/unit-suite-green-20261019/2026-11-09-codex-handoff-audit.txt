@@ -1,0 +1,113 @@
+MANIFEST SHA256: 572FD28A3D60E93BBD92357D002B9C490A5A4192A60AB98E11B9AEA82D94DDCC
+TRX LAB-OMARCHY QBrainAi.Client.Tests: 311/311/0/0
+TRX LAB-OMARCHY QBrainAi.Cqrs.Tests: 33/33/0/0
+TRX LAB-OMARCHY QBrainAi.Launcher.Tests: 20/20/0/0
+TRX LAB-OMARCHY QBrainAi.McpAgent.Tests: 64/64/0/0
+TRX LAB-OMARCHY QBrainAi.QBAgent.Tests: 90/90/0/0
+TRX LAB-OMARCHY QBrainAi.Repl.Core.Tests: 1035/1035/0/0
+TRX LAB-OMARCHY QBrainAi.Support.Mcp.Tests: 3282/3282/0/0
+RUN ug-r14f4-final-linux-unit-2: 4835/4835/0/0 receipt hash checked
+TRX LAB-OMARCHY NukeBuild.IntegrationTests: 96/96/0/0
+TRX LAB-OMARCHY QBrainAi.McpAgent.IntegrationTests: 1/1/0/0
+TRX LAB-OMARCHY QBrainAi.QBAgent.IntegrationTests: 3/3/0/0
+TRX LAB-OMARCHY QBrainAi.Repl.IntegrationTests: 181/181/0/0
+TRX LAB-OMARCHY QBrainAi.Support.Mcp.EnvironmentIntegrationTests: 456/456/0/0
+TRX LAB-OMARCHY QBrainAi.Support.Mcp.IntegrationTests: 6/6/0/0
+RUN ug-r14f4-final-linux-lane-2: 743/743/0/0 receipt hash checked
+TRX LAB-OMARCHY Build.Tests: 530/530/0/0
+RUN ug-r14f4-final-linux-buildtests-2: 530/530/0/0 receipt hash checked
+RUN ug-r14f4-final-linux-traceability-2: 0/0/0/0 receipt hash checked
+TRX PAYTON-LEGION2 QBrainAi.Client.Tests: 311/311/0/0
+TRX PAYTON-LEGION2 QBrainAi.Cqrs.Tests: 33/33/0/0
+TRX PAYTON-LEGION2 QBrainAi.Launcher.Tests: 20/20/0/0
+TRX PAYTON-LEGION2 QBrainAi.McpAgent.Tests: 64/64/0/0
+TRX PAYTON-LEGION2 QBrainAi.QBAgent.Tests: 90/90/0/0
+TRX PAYTON-LEGION2 QBrainAi.Repl.Core.Tests: 1035/1035/0/0
+TRX PAYTON-LEGION2 QBrainAi.Support.Mcp.Tests: 3282/3282/0/0
+RUN ug-r14f4-final-win-unit-2: 4835/4835/0/0 receipt hash checked
+RUN ug-r14f4-final-win-traceability-2: 0/0/0/0 receipt hash checked
+TRX PAYTON-LEGION2 NukeBuild.IntegrationTests: 85/85/0/0
+TRX PAYTON-LEGION2 QBrainAi.McpAgent.IntegrationTests: 1/1/0/0
+TRX PAYTON-LEGION2 QBrainAi.QBAgent.IntegrationTests: 3/3/0/0
+TRX PAYTON-LEGION2 QBrainAi.Repl.IntegrationTests: 181/181/0/0
+TRX PAYTON-LEGION2 QBrainAi.Support.Mcp.EnvironmentIntegrationTests: 444/444/0/0
+TRX PAYTON-LEGION2 QBrainAi.Support.Mcp.IntegrationTests: 6/6/0/0
+RUN ug-r14f4-final-win-lane-2: 720/720/0/0 receipt hash checked
+TRX PAYTON-LEGION2 Build.Tests: 530/530/0/0
+RUN ug-r14f4-final-win-buildtests-2: 530/530/0/0 receipt hash checked
+VERIFIED: runs=8 trx=28 trxBytes=18769924 allFiles=32 allBytes=18777067 issues=0 originalsVerified=32 originalsMissing=0
+HEAD changed paths=73; non-docs=0
+HEAD trx-evidence paths=33; other gate receipt paths=38
+SCRATCH r15-records/facts-r15.md bytes=16183 lines=94 SHA256=1B92B9AA360EFD0B503E4F4BA543F8F8A9CB0967734FBF198B6DC89652D9440B
+SCRATCH r15-records/plan-r15.md bytes=924141 lines=2541 SHA256=96502E6AA0D8497BA53C89CF49D5B4D90969E956C30A80F1DF4D8302CE1E1A26
+SCRATCH r15-records/changes-r15-log.txt bytes=3694 lines=14 SHA256=74912FB7FF6EAC82A8D0F3E89C1B6DD022B27309D90C1D5DADF052A55A90EE8A
+SCRATCH r15-records/h1/edits-brief-unitgreen-r15-h1.psd1 bytes=102186 lines=1131 SHA256=D67997507AB0F7D4315506BE3E70EB6BB8584A7FA6C5E8D5B1571EB96EFF0642
+SCRATCH r15-records/h2/edits-pr-description-r15-h2.psd1 bytes=52322 lines=415 SHA256=E287ACFCCB517BA2F62AE9A94EED18BC54E2B6D86DBBF9EB1C974216D46717DC
+SCRATCH r15-records/h3/edits-handoff-r15-h3.psd1 bytes=23087 lines=357 SHA256=99021C3E50C1F9B1648EAFFF08EF6AD6C945B0EA95F50C4B31AF8AD0F8EE7F7B
+SCRATCH r15-records/h3/edits-pr-body-r15-h3.psd1 bytes=21151 lines=269 SHA256=49F120A9287998DFEFCB493B8E7AFCFA46C36EDC091CA4A953E3B90186BE0382
+SCRATCH r15-records/h4/edits-self-review-r15-h4.psd1 bytes=41013 lines=293 SHA256=A3F6DD9F57567EC565E75F5C62DF33CEC350B11629291C8AB33257ECEF6E6B66
+SCRATCH r15-records/h5/edits-projected-problems-r15-h5.psd1 bytes=49240 lines=709 SHA256=49AA50E0704D388D7D893E69727E6AF0E9B3CEED8C81DC624A99C70720ABE3A6
+SCRATCH r15/reconciliation-r15-03eea747-vs-da11faa2.txt bytes=132737 lines=705 SHA256=A847021888360DBC7470D5510A0A7B0FC6B3B1886F1327CA160D9B167E8C9CC1
+SCRATCH s8/reconciliation-s8-v2.txt bytes=143108 lines=531 SHA256=393C839AD8B496288E8F37DECE68EB83389B32ADD46369FAA19FB870DFEA09C4
+SCRATCH uncited/uncited-matches.txt bytes=84991 lines=554 SHA256=B610556845E3093E3307ACFE671DDE18E2DFA8864906F4CCA67F0E70B9456169
+PLAN PLACEHOLDERS:
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:990:    - TR-MCP-NUKE-019 AC-4 (provisioning), AC-5 (interactive session), AC-7 (port restart) and AC-8 (provisioning download), at 23:15:58; 8 criteria became 4 [27.46, TR-MCP-NUKE-019 AC-8: the ids AC-7 and AC-8 now name two other criteria, added in round 15's work: AC-7 test-project ownership (written through the plugin in slice S0, the work of commit `95f0bc38`) and AC-8 quarantine (written through the plugin on 2026-11-07 at 18:20:31 after a dry run at 18:20:13; the quarantine work is commit `03eea747`); the getter read on 2026-11-07 at 19:37:59 lists 6 criteria, AC-1, AC-2, AC-3, AC-6, AC-7 and AC-8, none satisfied; every TR-MCP-NUKE-019 AC-7 or AC-8 in sections 22 to 24 means the removed port-restart or provisioning-download criterion].
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:1273:- BLD-6 (operator ruling "Tag checkout-reading Build.Tests"): every Build.Tests case that reads the checkout is tagged Category=Integration, and the infra check runs both sets with their TRX [27.46, R14-F4: since slice S4 (`6e8371e0`) the Build.Tests Integration cases, the checkout-reading ones among them (96 on Linux, 85 on Windows; 79 methods), are in the integration-owned project NukeBuild.IntegrationTests (named Build.IntegrationTests until the rename `99b9c4e7`), which the lane runs; Build.Tests holds only infrastructure cases, offered to neither the unit nor the integration selection, and runs whole with the host platform clause through the raw dotnet test infrastructure runner, so there is one Build.Tests set, not two (at `5ce7fa56`: Linux `ug-r14f4-final-linux-buildtests-1` 498/0/0 with Platform!=Windows; plan 27.46)].
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:2496:- **Layout:** new integration-owned projects QBrainAi.Support.Mcp.Environment.IntegrationTests (the 488 Support.Mcp Integration cases), QBrainAi.QBAgent.IntegrationTests (3), QBrainAi.McpAgent.IntegrationTests (1) and Build.IntegrationTests (the 96 Build.Tests Integration cases, root namespace NukeBuild.IntegrationTests) [27.46, R14-F4: renamed in `99b9c4e7` so that each project's name matches its root namespace (operator: "Project names and root namespaces for the project should match, so fix the project name.", scope "New projects only (Recommended)"): QBrainAi.Support.Mcp.Environment.IntegrationTests is QBrainAi.Support.Mcp.EnvironmentIntegrationTests (its root namespace since the slice S5 review, `033c3c8d`) and Build.IntegrationTests is NukeBuild.IntegrationTests]; the 2 Repl.Core cases join QBrainAi.Repl.IntegrationTests. The 76 mixed classes split into a unit class and an integration class [27.46: as built, slice S7 split 63 classes (62 mixed and FederationTopologyServiceTests) and moved 12 pure classes from mixed files (`f9740ff5`), and slice S8 split the classes the reverse-reference bindings pinned (`8938b7dd`)], with shared private helpers extracted into one linked support file (DRY), never copied. The lane runs every integration-owned project whole with its existing Category=Integration and host platform filter; QBrainAi.Support.Mcp.IntegrationTests keeps its two lane classes and its held-out cases unchanged. Test keeps its project name rules. Build.Tests runs whole with the host platform clause on both hosts (expected 467 each) [27.46: Build.Tests also gained the ownership, lane-contract and quarantine contract, mock gate and binding cases of slices S1 to S9 and `03eea747`: Linux 498/0/0 at `5ce7fa56` (`ug-r14f4-final-linux-buildtests-1`; 31 more than 467 by the gate subagent's arithmetic, not reconciled case by case), Windows not run there; at `03eea747` FILL-GATES-R15: the counts of `ug-r14f4-final-linux-buildtests-2` and `ug-r14f4-final-win-buildtests-2`; it runs through the raw dotnet test infrastructure runner, not a Nuke target]. Expected totals if nothing else changes: Test 4866 per host, lane 741 Linux and 718 Windows, plus the new criterion's cases [27.46: at `5ce7fa56` Test ran 4864 per host (the two reflection bindings of ProcessEnvironmentCollectionTests and SqlServerLocalDbCollectionTests moved in slice S8, with the classes they name, into QBrainAi.Support.Mcp.EnvironmentIntegrationTests as Category=Integration cases) and the lanes 743 on Linux and 720 on Windows (the same cases plus those two); since `03eea747` the ownership binding counts 4835 unit cases run exactly once plus 29 quarantined (TR-MCP-NUKE-019 AC-8) and 777 integration cases, and the lanes are expected unchanged; FILL-GATES-R15: the counts of `ug-r14f4-final-linux-unit-2`, `-win-unit-2`, `-linux-lane-2` and `-win-lane-2`].
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:2497:- **Requirements** (criterion first, through the plugin, dry run, write, read-back; no requirement changes because files move, since tests cite requirements, not the reverse): TR-MCP-NUKE-019 gains AC-7, the reviewer's test-project-ownership criterion with a third role ("given a declared project role and a supplied case inventory, unit selection accepts only unit-owned projects containing unit cases, integration selection accepts only integration-owned projects containing integration cases, infrastructure-owned projects are accepted by neither, and valid selections preserve every intended case exactly once"); the requirement text that names a project or test path is reworded by test kind, category or role (32 criterion texts, about 150 evidence fields, 43 description or notes fields, survey section 3.3) [27.46: as written in slice S0, 253 fields in 113 records: 43 criterion texts, 154 evidence fields, 47 descriptions and 9 notes, with 13 remaining hits justified (subagent turn `req-20261107T042200Z-s0-reword`, commit `95f0bc38`)], each only after every test it named cites that criterion in its XML documentation, so no traceability is lost; criteria without ids are addressed by position.
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:2498:- **Proof of AC-7:** scripted inventories in the build's infrastructure tests over a pure ownership function (UnitProject_WithIntegrationCase_IsRejected, IntegrationProject_WithUnitCase_IsRejected, SeparatedProjects_PreserveSelectedCases, positive controls, omit and duplicate negative controls) as the BDPv4 mock gate, then a binding over the build's real role declarations, plus a one-time case-identity reconciliation receipt at phase exit (every case of the da11faa2 gates exactly once, by host) [27.46: the per-slice reconciliations `reconciliation-s3-v2` to `reconciliation-s8-v2` are scratch files under records-r14/, not committed receipts; the phase-exit reconciliation is written by the `03eea747` gate subagent, FILL-GATES-R15: its path and SHA-256]. No run-time scanner (workspace rules are not mechanized unasked); Test keeps its Category!=Integration term only together with that proof [27.46, TR-MCP-NUKE-019 AC-8: since `03eea747` Test runs every project with Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion and logs it per project; the lane filter appends &Quarantine!=NoMatchingCriterion].
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:2499:- **Slices** (BDPv4; targeted runs through TestGroups after each edit; the full gate set once at phase exit): S0 records, AC-7, the rewording with its citation additions, TODO tasks; S1 the ownership mock gate; S2 its binding over the build's declarations (red on the current layout by design); S3 the small moves (McpAgent 1, Repl.Core 2, QBAgent 3); S4 Build.Tests to Build.IntegrationTests (NukeBuild.IntegrationTests since `99b9c4e7`); S5 the Support.Mcp.Environment foundation (QBrainAi.Support.Mcp.EnvironmentIntegrationTests since `99b9c4e7`) with its first moved folder (csproj, solution entry, InternalsVisibleTo grants, links for shared support, the four xUnit collections and HermeticUserProfileFixture, the tests/Directory.Build.targets conditions, the OS-conditional compile block); S6 the pure-integration files by folder; S7 the mixed-class splits; S8 the reverse-reference bindings and extracted fakes; S9 binding green, documentation, the reconciliation receipt [27.46: slice S9, `5ce7fa56`, wrote no reconciliation receipt; the phase-exit one comes from the `03eea747` gates]; S10 the full gate set on both hosts (Windows lane in the interactive session), the TRX manifest for the new project set, a holistic read, the records commit, then round 15.
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:2500:- **Blast radius:** 4 new projects and their solution entries; Support.Mcp.Tests (about 142 files: 68 moved whole, 74 split), Build.Tests (23 files) [27.46: as built, slices S5, S6 and S8 moved 2, 50 and 19 files whole (their emptied originals removed in `fb122ed3` and `908023ba`), S7 split 63 classes and moved 12, and S8 split the pinned bindings and the S7 leftovers; Build.Tests 16 classes moved whole and 7 split in S4, with 16 emptied files among the 18 removed in `b0591855`], QBAgent.Tests, Repl.Core.Tests, McpAgent.Tests and Repl.IntegrationTests edited; tests/Directory.Build.targets; up to 9 src InternalsVisibleTo grants and build/_build.csproj; build/IntegrationLaneProjects.cs, IntegrationLaneProjectsContracts.cs, Build.Compile.cs, Build.Test.cs and a new ownership declaration; the Build.Tests pins of the lane composition; CLAUDE.md's test project list; the plan's gate-set statements and the handoff. Every moved test keeps its requirement citations; the namespace change alters fully qualified names, so the reconciliation maps by class and method name.
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:2503:### 27.46 R14-F4 slices S0 to S10, the renames, the quarantine, and the gates at `03eea747` (2026-11-07)
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:2505:- **How to read this section:** the history rule of 27.41 holds; this is the newest section of 27 and states the current head, task count, gate set, TRX set, D-A and D-B lines and round order. Every value of the gate set at `03eea747` is marked FILL-GATES-R15 until the gate subagent (turn `req-20261108T012500Z-r15-gates`, brief `records-r14/prompt-r15-gates.md`) reports. This section was drafted in scratch by the records subagent (turn `req-20261108T013000Z-r15-records`, with six read-only helpers on child turns `-h1` to `-h6` and follow-ups `-h1b` to `-h5b`) from the commit messages, the slice reports, the session-log turns and the plugin getters.
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:2519:- **Its two causes, fixed:** `022f9cde` makes the environment integration project reference QBrainAi.ProcessTree.TestHelper (Compile `ug-r14f4-s10-fix-compile-1` 0/0, `A8A19EE6...`) and commits the S10 receipts, the failing lane result included. The Windows recheck `ug-r14f4-win-recheck-1` at `022f9cde` (TestGroups over the three classes, subagent turn `req-20261108T003000Z-win-recheck`, target 18:37:27 to 18:38:54, result `D32BD44D...`, TRX `E2A54173...`) ran 8 cases, 5 passed and 3 failed: the two timeouts did not recur (7.18 s, 12.48 s and 5.27 s), and the three cases failed on a second cause, the old project's runtimeconfig name QBrainAi.Support.Mcp.Tests.runtimeconfig.json hardcoded in three places. `03eea747` takes that name from the running test assembly (TestRuntimeConfigFileName, defined once; assertions unchanged); its proof is the Windows recheck `ug-r14f4-win-recheck-2` at `03eea747` (FILL-GATES-R15: its result, times and receipt hash).
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:2522:- **The gates at `03eea747`** (gate subagent turn `req-20261108T012500Z-r15-gates`; each after a dry run, one run per host at a time, the Windows lane in kingd's interactive session): FILL-GATES-R15: for `ug-r14f4-win-recheck-2` first, then `ug-r14f4-final-linux-unit-2`, `-linux-lane-2`, `-linux-buildtests-2`, `-linux-traceability-2`, `-win-unit-2`, `-win-lane-2`, `-win-buildtests-2` and `-win-traceability-2` (or the `-3` rerun that replaced one): command, host, times, exit, counts per TRX and receipt hash, the dirty paths each Linux receipt lists, and the NU190x result. Expected: Test 4835 per host with each project's logged filter showing the quarantine term; lanes 743 and 720 (the quarantined cases are all unit cases); Build.Tests above 498 on Linux by the quarantine contract tests, and Windows compared with 467 at `da11faa2`; every difference explained.
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:2523:- **The TRX set of record:** `docs/receipts/hv/unitgreen-r15-trx-03eea747/manifest.json` (FILL-GATES-R15: its TRX count, the recheck TRX as a named extra run, every run head `03eea747`, its SHA-256). The `da11faa2` set (`0EB859C9...`) is history; no set was written at `5ce7fa56`. By AC-8 the set holds no TRX of the 29 quarantined cases; `ug-qr-kept-1` is their evidence.
+/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15-records/plan-r15.md:2524:- **The case-identity reconciliation** (task 71): FILL-GATES-R15: its scratch path and SHA-256, how many `da11faa2` cases were found exactly once by class short name, method name and host, the 29 quarantined cases listed as excluded and not lost, and every new and every gone case (none gone beyond the quarantined).
+RECONCILIATION SUMMARY:
+5:RESULT FAIL gone=2 surplusOrDuplicates=0 newNonPassed=0 quarantinedRan=0 hostsWithUnexpectedQuarantineCount=0
+30:HOST LAB-OMARCHY oldExecutions=6170 oldDistinct=6074 newExecutions=6108 matched=6044 argumentMatched=0 gone=1 quarantined=29 (expected 29) quarantinedRan=0 added=64 surplus=0 crossRunDuplicates=0 newNonPassed=0
+63:  MAPPING old project | class => new project | class (matched cases); unchanged first, then changed
+286:  QUARANTINE METHODS WITH NO OLD CASE ON THIS HOST (0)
+287:  QUARANTINED BUT RAN IN THE NEW SET (0)
+288:  GONE (1)
+291:  CROSS-RUN DUPLICATES IN THE NEW SET (0)
+292:  NEW-SET NON-PASSED (0)
+293:  ADDED (64), by project and class
+367:HOST PAYTON-LEGION2 oldExecutions=6051 oldDistinct=6051 newExecutions=6085 matched=6021 argumentMatched=0 gone=1 quarantined=29 (expected 29) quarantinedRan=0 added=64 surplus=0 crossRunDuplicates=0 newNonPassed=0
+400:  MAPPING old project | class => new project | class (matched cases); unchanged first, then changed
+626:  QUARANTINE METHODS WITH NO OLD CASE ON THIS HOST (0)
+627:  QUARANTINED BUT RAN IN THE NEW SET (0)
+628:  GONE (1)
+631:  CROSS-RUN DUPLICATES IN THE NEW SET (0)
+632:  NEW-SET NON-PASSED (0)
+633:  ADDED (64), by project and class
+QUARANTINE TRAITS:
+method attribute count=22
+tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:23:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:43:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:61:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:26:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:42:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:78:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs:324:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:77:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:172:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:41:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:59:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:79:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:99:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:152:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:193:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:221:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:251:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:280:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:302:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:326:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:347:    [Trait("Quarantine", "NoMatchingCriterion")]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:367:    [Trait("Quarantine", "NoMatchingCriterion")]
+MODEL FOLDER EXISTS:
+False
+WORKTREE STATUS:
+?? docs/receipts/unit-suite-green-20261019/2026-11-09-codex-handoff-audit.txt
+2026-11-09T09:18:55

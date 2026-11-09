@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="291cd82e-64ed-4210-bdc3-88fa39aa9887" name="@LAB-OMARCHY 2026-11-09 10:14:08" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-09T10:14:08.0525737-06:00" queuing="2026-11-09T10:14:08.0525738-06:00" start="2026-11-09T10:14:03.9418561-06:00" finish="2026-11-09T10:14:10.5315480-06:00" />
+  <TestSettings name="default" id="8cdfc244-01ac-4a84-906f-5d4ea3d9e2f0">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-09_10_14_08" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="865de553-8219-41d8-a2ce-2c6322c4e1fa" testId="5e889b9c-0961-9a00-5298-943b8568b9aa" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_WithModel_ReturnsNonZeroVector" computerName="LAB-OMARCHY" duration="00:00:00.0010000" startTime="2026-11-09T10:14:10.3962108-06:00" endTime="2026-11-09T10:14:10.3962108-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="865de553-8219-41d8-a2ce-2c6322c4e1fa">
+      <Output>
+        <ErrorInfo>
+          <Message>Class fixture type 'QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture' threw in InitializeAsync
+---- System.InvalidOperationException : The test-owned embedding model and vocabulary did not load. Product log: Failed to load ONNX model; embedding service will remain in stub mode
+-------- System.TypeInitializationException : The type initializer for 'Microsoft.ML.OnnxRuntime.NativeMethods' threw an exception.
+------------ System.DllNotFoundException : Unable to load shared library 'onnxruntime.dll' or one of its dependencies. In order to help diagnose loading problems, consider using a tool like strace. If you're using glibc, consider setting the LD_DEBUG environment variable: 
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll: cannot open shared object file: No such file or directory
+</Message>
+          <StackTrace>
+----- Inner Stack Trace -----
+   at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.RequireAvailable(EmbeddingService service, Exception loadException, String loadMessage) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs:line 86
+   at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.InitializeAsync() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs:line 57
+----- Inner Stack Trace -----
+   at Microsoft.ML.OnnxRuntime.SessionOptions..ctor()
+   at QBrainAi.Support.Mcp.Indexing.EmbeddingService.TryLoadModel() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/Indexing/EmbeddingService.cs:line 155
+----- Inner Stack Trace -----
+   at Microsoft.ML.OnnxRuntime.NativeMethods.OrtGetApiBase()
+   at Microsoft.ML.OnnxRuntime.NativeMethods..cctor()</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="02255f85-ca63-4903-a248-960f3087f22e" testId="8b7acda0-f143-ecb6-a7f7-141925ed6bb2" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests.RequireAvailable_RejectsMissingOrCorruptArtifacts(fault: &quot;missing&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0017581" startTime="2026-11-09T10:14:06.5408582-06:00" endTime="2026-11-09T10:14:06.5428140-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="02255f85-ca63-4903-a248-960f3087f22e" />
+    <UnitTestResult executionId="45cfdd8f-62bd-450f-9b2b-9208e241710d" testId="9681e12c-ad8d-ca89-80d1-3f61547ea556" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_SameInput_ReturnsDeterministicOutput" computerName="LAB-OMARCHY" duration="00:00:00.0010000" startTime="2026-11-09T10:14:10.3952597-06:00" endTime="2026-11-09T10:14:10.3952597-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="45cfdd8f-62bd-450f-9b2b-9208e241710d">
+      <Output>
+        <ErrorInfo>
+          <Message>Class fixture type 'QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture' threw in InitializeAsync
+---- System.InvalidOperationException : The test-owned embedding model and vocabulary did not load. Product log: Failed to load ONNX model; embedding service will remain in stub mode
+-------- System.TypeInitializationException : The type initializer for 'Microsoft.ML.OnnxRuntime.NativeMethods' threw an exception.
+------------ System.DllNotFoundException : Unable to load shared library 'onnxruntime.dll' or one of its dependencies. In order to help diagnose loading problems, consider using a tool like strace. If you're using glibc, consider setting the LD_DEBUG environment variable: 
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll: cannot open shared object file: No such file or directory
+</Message>
+          <StackTrace>
+----- Inner Stack Trace -----
+   at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.RequireAvailable(EmbeddingService service, Exception loadException, String loadMessage) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs:line 86
+   at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.InitializeAsync() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs:line 57
+----- Inner Stack Trace -----
+   at Microsoft.ML.OnnxRuntime.SessionOptions..ctor()
+   at QBrainAi.Support.Mcp.Indexing.EmbeddingService.TryLoadModel() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/Indexing/EmbeddingService.cs:line 155
+----- Inner Stack Trace -----
+   at Microsoft.ML.OnnxRuntime.NativeMethods.OrtGetApiBase()
+   at Microsoft.ML.OnnxRuntime.NativeMethods..cctor()</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1af24972-d0dd-4825-9618-f9d48db6450c" testId="26d47eab-e0cc-0026-ff47-43ea622bce17" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_LongInput_TruncatesCorrectly" computerName="LAB-OMARCHY" duration="00:00:00.0010000" startTime="2026-11-09T10:14:10.3910709-06:00" endTime="2026-11-09T10:14:10.3910709-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1af24972-d0dd-4825-9618-f9d48db6450c">
+      <Output>
+        <ErrorInfo>
+          <Message>Class fixture type 'QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture' threw in InitializeAsync
+---- System.InvalidOperationException : The test-owned embedding model and vocabulary did not load. Product log: Failed to load ONNX model; embedding service will remain in stub mode
+-------- System.TypeInitializationException : The type initializer for 'Microsoft.ML.OnnxRuntime.NativeMethods' threw an exception.
+------------ System.DllNotFoundException : Unable to load shared library 'onnxruntime.dll' or one of its dependencies. In order to help diagnose loading problems, consider using a tool like strace. If you're using glibc, consider setting the LD_DEBUG environment variable: 
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll: cannot open shared object file: No such file or directory
+</Message>
+          <StackTrace>
+----- Inner Stack Trace -----
+   at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.RequireAvailable(EmbeddingService service, Exception loadException, String loadMessage) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs:line 86
+   at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.InitializeAsync() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs:line 57
+----- Inner Stack Trace -----
+   at Microsoft.ML.OnnxRuntime.SessionOptions..ctor()
+   at QBrainAi.Support.Mcp.Indexing.EmbeddingService.TryLoadModel() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/Indexing/EmbeddingService.cs:line 155
+----- Inner Stack Trace -----
+   at Microsoft.ML.OnnxRuntime.NativeMethods.OrtGetApiBase()
+   at Microsoft.ML.OnnxRuntime.NativeMethods..cctor()</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4bc3a9a4-9441-4861-8944-2dcc374e2ef9" testId="987ae72c-5c8e-6f13-848f-92f87b3e6646" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_DifferentInput_ReturnsDifferentVectors" computerName="LAB-OMARCHY" duration="00:00:00.0010000" startTime="2026-11-09T10:14:10.3933342-06:00" endTime="2026-11-09T10:14:10.3933342-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4bc3a9a4-9441-4861-8944-2dcc374e2ef9">
+      <Output>
+        <ErrorInfo>
+          <Message>Class fixture type 'QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture' threw in InitializeAsync
+---- System.InvalidOperationException : The test-owned embedding model and vocabulary did not load. Product log: Failed to load ONNX model; embedding service will remain in stub mode
+-------- System.TypeInitializationException : The type initializer for 'Microsoft.ML.OnnxRuntime.NativeMethods' threw an exception.
+------------ System.DllNotFoundException : Unable to load shared library 'onnxruntime.dll' or one of its dependencies. In order to help diagnose loading problems, consider using a tool like strace. If you're using glibc, consider setting the LD_DEBUG environment variable: 
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll: cannot open shared object file: No such file or directory
+/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll: cannot open shared object file: No such file or directory
+</Message>
+          <StackTrace>
+----- Inner Stack Trace -----
+   at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.RequireAvailable(EmbeddingService service, Exception loadException, String loadMessage) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs:line 86
+   at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.InitializeAsync() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs:line 57
+----- Inner Stack Trace -----
+   at Microsoft.ML.OnnxRuntime.SessionOptions..ctor()
+   at QBrainAi.Support.Mcp.Indexing.EmbeddingService.TryLoadModel() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/Indexing/EmbeddingService.cs:line 155
+----- Inner Stack Trace -----
+   at Microsoft.ML.OnnxRuntime.NativeMethods.OrtGetApiBase()
+   at Microsoft.ML.OnnxRuntime.NativeMethods..cctor()</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b933f882-a13f-4e6f-91b1-e806825f618a" testId="b909fdac-46eb-3161-a536-16a553234270" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests.RequireAvailable_RejectsMissingOrCorruptArtifacts(fault: &quot;corrupt&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0324675" startTime="2026-11-09T10:14:06.4896539-06:00" endTime="2026-11-09T10:14:06.5344829-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b933f882-a13f-4e6f-91b1-e806825f618a" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_SameInput_ReturnsDeterministicOutput" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environmentintegrationtests/bin/debug/net10.0/qbrainai.support.mcp.environmentintegrationtests.dll" id="9681e12c-ad8d-ca89-80d1-3f61547ea556">
+      <Execution id="45cfdd8f-62bd-450f-9b2b-9208e241710d" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests" name="GenerateEmbedding_SameInput_ReturnsDeterministicOutput" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_LongInput_TruncatesCorrectly" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environmentintegrationtests/bin/debug/net10.0/qbrainai.support.mcp.environmentintegrationtests.dll" id="26d47eab-e0cc-0026-ff47-43ea622bce17">
+      <Execution id="1af24972-d0dd-4825-9618-f9d48db6450c" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests" name="GenerateEmbedding_LongInput_TruncatesCorrectly" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests.RequireAvailable_RejectsMissingOrCorruptArtifacts(fault: &quot;missing&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environmentintegrationtests/bin/debug/net10.0/qbrainai.support.mcp.environmentintegrationtests.dll" id="8b7acda0-f143-ecb6-a7f7-141925ed6bb2">
+      <Execution id="02255f85-ca63-4903-a248-960f3087f22e" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests" name="RequireAvailable_RejectsMissingOrCorruptArtifacts" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_WithModel_ReturnsNonZeroVector" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environmentintegrationtests/bin/debug/net10.0/qbrainai.support.mcp.environmentintegrationtests.dll" id="5e889b9c-0961-9a00-5298-943b8568b9aa">
+      <Execution id="865de553-8219-41d8-a2ce-2c6322c4e1fa" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests" name="GenerateEmbedding_WithModel_ReturnsNonZeroVector" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests.RequireAvailable_RejectsMissingOrCorruptArtifacts(fault: &quot;corrupt&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environmentintegrationtests/bin/debug/net10.0/qbrainai.support.mcp.environmentintegrationtests.dll" id="b909fdac-46eb-3161-a536-16a553234270">
+      <Execution id="b933f882-a13f-4e6f-91b1-e806825f618a" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests" name="RequireAvailable_RejectsMissingOrCorruptArtifacts" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_DifferentInput_ReturnsDifferentVectors" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environmentintegrationtests/bin/debug/net10.0/qbrainai.support.mcp.environmentintegrationtests.dll" id="987ae72c-5c8e-6f13-848f-92f87b3e6646">
+      <Execution id="4bc3a9a4-9441-4861-8944-2dcc374e2ef9" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests" name="GenerateEmbedding_DifferentInput_ReturnsDifferentVectors" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="5e889b9c-0961-9a00-5298-943b8568b9aa" executionId="865de553-8219-41d8-a2ce-2c6322c4e1fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8b7acda0-f143-ecb6-a7f7-141925ed6bb2" executionId="02255f85-ca63-4903-a248-960f3087f22e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9681e12c-ad8d-ca89-80d1-3f61547ea556" executionId="45cfdd8f-62bd-450f-9b2b-9208e241710d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="26d47eab-e0cc-0026-ff47-43ea622bce17" executionId="1af24972-d0dd-4825-9618-f9d48db6450c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="987ae72c-5c8e-6f13-848f-92f87b3e6646" executionId="4bc3a9a4-9441-4861-8944-2dcc374e2ef9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b909fdac-46eb-3161-a536-16a553234270" executionId="b933f882-a13f-4e6f-91b1-e806825f618a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="6" executed="6" passed="2" failed="4" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.40]   Discovering: QBrainAi.Support.Mcp.EnvironmentIntegrationTests
+[xUnit.net 00:00:01.15]   Discovered:  QBrainAi.Support.Mcp.EnvironmentIntegrationTests
+[xUnit.net 00:00:01.40]   Starting:    QBrainAi.Support.Mcp.EnvironmentIntegrationTests
+[xUnit.net 00:00:05.54]       Class fixture type 'QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture' threw in InitializeAsync
+[xUnit.net 00:00:05.54]       ---- System.InvalidOperationException : The test-owned embedding model and vocabulary did not load. Product log: Failed to load ONNX model; embedding service will remain in stub mode
+[xUnit.net 00:00:05.54]       -------- System.TypeInitializationException : The type initializer for 'Microsoft.ML.OnnxRuntime.NativeMethods' threw an exception.
+[xUnit.net 00:00:05.54]       ------------ System.DllNotFoundException : Unable to load shared library 'onnxruntime.dll' or one of its dependencies. In order to help diagnose loading problems, consider using a tool like strace. If you're using glibc, consider setting the LD_DEBUG environment variable: 
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       
+[xUnit.net 00:00:05.54]       Stack Trace:
+[xUnit.net 00:00:05.54]         
+[xUnit.net 00:00:05.54]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:05.54]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs(86,0): at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.RequireAvailable(EmbeddingService service, Exception loadException, String loadMessage)
+[xUnit.net 00:00:05.54]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs(57,0): at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.InitializeAsync()
+[xUnit.net 00:00:05.54]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:05.54]            at Microsoft.ML.OnnxRuntime.SessionOptions..ctor()
+[xUnit.net 00:00:05.54]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/Indexing/EmbeddingService.cs(155,0): at QBrainAi.Support.Mcp.Indexing.EmbeddingService.TryLoadModel()
+[xUnit.net 00:00:05.54]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:05.54]            at Microsoft.ML.OnnxRuntime.NativeMethods.OrtGetApiBase()
+[xUnit.net 00:00:05.54]            at Microsoft.ML.OnnxRuntime.NativeMethods..cctor()
+[xUnit.net 00:00:05.54]       Class fixture type 'QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture' threw in InitializeAsync
+[xUnit.net 00:00:05.54]       ---- System.InvalidOperationException : The test-owned embedding model and vocabulary did not load. Product log: Failed to load ONNX model; embedding service will remain in stub mode
+[xUnit.net 00:00:05.54]       -------- System.TypeInitializationException : The type initializer for 'Microsoft.ML.OnnxRuntime.NativeMethods' threw an exception.
+[xUnit.net 00:00:05.54]       ------------ System.DllNotFoundException : Unable to load shared library 'onnxruntime.dll' or one of its dependencies. In order to help diagnose loading problems, consider using a tool like strace. If you're using glibc, consider setting the LD_DEBUG environment variable: 
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.54]       
+[xUnit.net 00:00:05.54]       Stack Trace:
+[xUnit.net 00:00:05.54]         
+[xUnit.net 00:00:05.54]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:05.54]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs(86,0): at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.RequireAvailable(EmbeddingService service, Exception loadException, String loadMessage)
+[xUnit.net 00:00:05.54]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs(57,0): at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.InitializeAsync()
+[xUnit.net 00:00:05.54]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:05.54]            at Microsoft.ML.OnnxRuntime.SessionOptions..ctor()
+[xUnit.net 00:00:05.54]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/Indexing/EmbeddingService.cs(155,0): at QBrainAi.Support.Mcp.Indexing.EmbeddingService.TryLoadModel()
+[xUnit.net 00:00:05.54]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:05.54]            at Microsoft.ML.OnnxRuntime.NativeMethods.OrtGetApiBase()
+[xUnit.net 00:00:05.54]            at Microsoft.ML.OnnxRuntime.NativeMethods..cctor()
+[xUnit.net 00:00:05.54]       Class fixture type 'QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture' threw in InitializeAsync
+[xUnit.net 00:00:05.54]       ---- System.InvalidOperationException : The test-owned embedding model and vocabulary did not load. Product log: Failed to load ONNX model; embedding service will remain in stub mode
+[xUnit.net 00:00:05.55]       -------- System.TypeInitializationException : The type initializer for 'Microsoft.ML.OnnxRuntime.NativeMethods' threw an exception.
+[xUnit.net 00:00:05.55]       ------------ System.DllNotFoundException : Unable to load shared library 'onnxruntime.dll' or one of its dependencies. In order to help diagnose loading problems, consider using a tool like strace. If you're using glibc, consider setting the LD_DEBUG environment variable: 
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       
+[xUnit.net 00:00:05.55]       Stack Trace:
+[xUnit.net 00:00:05.55]         
+[xUnit.net 00:00:05.55]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:05.55]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs(86,0): at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.RequireAvailable(EmbeddingService service, Exception loadException, String loadMessage)
+[xUnit.net 00:00:05.55]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs(57,0): at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.InitializeAsync()
+[xUnit.net 00:00:05.55]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:05.55]            at Microsoft.ML.OnnxRuntime.SessionOptions..ctor()
+[xUnit.net 00:00:05.55]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/Indexing/EmbeddingService.cs(155,0): at QBrainAi.Support.Mcp.Indexing.EmbeddingService.TryLoadModel()
+[xUnit.net 00:00:05.55]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:05.55]            at Microsoft.ML.OnnxRuntime.NativeMethods.OrtGetApiBase()
+[xUnit.net 00:00:05.55]            at Microsoft.ML.OnnxRuntime.NativeMethods..cctor()
+[xUnit.net 00:00:05.55]       Class fixture type 'QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture' threw in InitializeAsync
+[xUnit.net 00:00:05.55]       ---- System.InvalidOperationException : The test-owned embedding model and vocabulary did not load. Product log: Failed to load ONNX model; embedding service will remain in stub mode
+[xUnit.net 00:00:05.55]       -------- System.TypeInitializationException : The type initializer for 'Microsoft.ML.OnnxRuntime.NativeMethods' threw an exception.
+[xUnit.net 00:00:05.55]       ------------ System.DllNotFoundException : Unable to load shared library 'onnxruntime.dll' or one of its dependencies. In order to help diagnose loading problems, consider using a tool like strace. If you're using glibc, consider setting the LD_DEBUG environment variable: 
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll.so: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/onnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/onnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/onnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/runtimes/linux-x64/native/libonnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/.dotnet/shared/Microsoft.NETCore.App/10.0.14/libonnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/libonnxruntime.dll: cannot open shared object file: No such file or directory
+[xUnit.net 00:00:05.55]       
+[xUnit.net 00:00:05.55]       Stack Trace:
+[xUnit.net 00:00:05.55]         
+[xUnit.net 00:00:05.55]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:05.55]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs(86,0): at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.RequireAvailable(EmbeddingService service, Exception loadException, String loadMessage)
+[xUnit.net 00:00:05.55]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs(57,0): at QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixture.InitializeAsync()
+[xUnit.net 00:00:05.55]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:05.55]            at Microsoft.ML.OnnxRuntime.SessionOptions..ctor()
+[xUnit.net 00:00:05.55]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/Indexing/EmbeddingService.cs(155,0): at QBrainAi.Support.Mcp.Indexing.EmbeddingService.TryLoadModel()
+[xUnit.net 00:00:05.55]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:05.55]            at Microsoft.ML.OnnxRuntime.NativeMethods.OrtGetApiBase()
+[xUnit.net 00:00:05.55]            at Microsoft.ML.OnnxRuntime.NativeMethods..cctor()
+[xUnit.net 00:00:05.56]   Finished:    QBrainAi.Support.Mcp.EnvironmentIntegrationTests (ID = '3c9e270ee56aa94bd1a994e690c8d2da16d44625b1d717c9d362fcbe4d705434')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-11-09T10:14:10.4020385-06:00">
+        <Text>[xUnit.net 00:00:05.54]     QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_LongInput_TruncatesCorrectly [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-11-09T10:14:10.4089222-06:00">
+        <Text>[xUnit.net 00:00:05.54]     QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_DifferentInput_ReturnsDifferentVectors [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-11-09T10:14:10.4112065-06:00">
+        <Text>[xUnit.net 00:00:05.54]     QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_SameInput_ReturnsDeterministicOutput [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-11-09T10:14:10.4132955-06:00">
+        <Text>[xUnit.net 00:00:05.55]     QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_WithModel_ReturnsNonZeroVector [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

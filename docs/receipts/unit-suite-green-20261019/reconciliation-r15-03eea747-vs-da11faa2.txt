@@ -1,0 +1,705 @@
+CASE-IDENTITY RECONCILIATION written 2026-11-07T20:27:54 (local) by records-r14/r15/Compare-CaseIdentity-r15q.ps1
+OLD /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/unitgreen-r14-trx-da11faa2 runs: ug-r14z16-final-linux-buildtests-1, ug-r14z16-final-linux-lane-1, ug-r14z16-final-linux-unit-1, ug-r14z16-final-win-buildtests-1, ug-r14z16-final-win-lane-1, ug-r14z16-final-win-unit-1
+NEW /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/unitgreen-r15-trx-03eea747 runs: ug-r14f4-final-linux-buildtests-2, ug-r14f4-final-linux-lane-2, ug-r14f4-final-linux-unit-2, ug-r14f4-final-win-buildtests-2, ug-r14f4-final-win-lane-2, ug-r14f4-final-win-unit-2
+IDENTITY class short name + "." + TRX display remainder (method name plus theory arguments), per host; old full identities counted once per host (largest per-run count), new executions counted each time.
+RESULT FAIL gone=2 surplusOrDuplicates=0 newNonPassed=0 quarantinedRan=0 hostsWithUnexpectedQuarantineCount=0
+QUARANTINE LIST (TR-MCP-NUKE-019 AC-8, [Trait("Quarantine", "NoMatchingCriterion")] read from the sources under /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019): traits=22 methods=22 classes=0; expected excluded cases per host 29
+  TRAIT tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:23 QBAgentHeartbeatOverlayTests.Paint_DoesNotContainNewline
+  TRAIT tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:43 QBAgentHeartbeatOverlayTests.Hide_OverwritesGlyphWithSpace_SameCell
+  TRAIT tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:61 QBAgentHeartbeatOverlayTests.Frames_Rotate
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:26 McpInstanceResolverTests.GetRequestedInstanceName_ReadsFromArgs_EqualsSyntax
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:42 McpInstanceResolverTests.GetRequestedInstanceName_ReadsFromArgs_SeparatedSyntax
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:78 McpInstanceResolverTests.ValidateInstances_ThrowsOnDuplicatePorts
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:41 CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:59 CliBrainSlotStrategyTests.TryParseCliEndpoint_KnownStrategies_Succeed
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:79 CliBrainSlotStrategyTests.TryParseCliEndpoint_Unknown_Fails
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:99 CliBrainSlotStrategyTests.ValidateEndpoint_CliKnownStrategy_DoesNotRequireHttpHostAllowlist
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:152 CliBrainSlotStrategyTests.BuildPersistentGrokArgumentList_FirstTurn_UsesSessionIdAndXhigh
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:193 CliBrainSlotStrategyTests.BuildPersistentGrokArgumentList_Resume_UsesResumeFlag
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:221 CliBrainSlotStrategyTests.BuildPersistentCodexArgumentList_FirstTurn_UsesExecStdinAndXhigh
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:251 CliBrainSlotStrategyTests.BuildPersistentCodexArgumentList_Resume_PlacesExecOptionsBeforeResume
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:280 CliBrainSlotStrategyTests.ExtractCodexSessionId_FromJsonlThreadStarted_ReturnsId
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:302 CliBrainSlotStrategyTests.ExtractCodexAssistantText_FromItemCompletedAgentMessage_ReturnsText
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:326 CliBrainSlotStrategyTests.ExtractCodexAssistantText_FromEventMsg_ReturnsMessage
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:347 CliBrainSlotStrategyTests.CredentialResolver_SupportsCliScheme
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:367 CliBrainSlotStrategyTests.CredentialResolver_CliInteractive_ReturnsPlaceholder
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:77 GitHubCliServiceTests.ListPullsAsync_WhenGhSucceeds_ReturnsPulls
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:172 GitHubCliServiceTests.CommentOnPullAsync_VerifiesGhArgs
+  TRAIT tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs:324 SessionLogServiceReplaceDeleteTests.DeleteSessionAsync_Missing_ReturnsFalse
+
+HOST LAB-OMARCHY oldExecutions=6170 oldDistinct=6074 newExecutions=6108 matched=6044 argumentMatched=0 gone=1 quarantined=29 (expected 29) quarantinedRan=0 added=64 surplus=0 crossRunDuplicates=0 newNonPassed=0
+  CHECK oldDistinct - gone - quarantined + added + surplus = 6108 (newExecutions 6108)
+  NEW-SET EXECUTIONS BY RUN AND PROJECT
+    ug-r14f4-final-linux-buildtests-2, Build.Tests: 530
+    ug-r14f4-final-linux-lane-2, NukeBuild.IntegrationTests: 96
+    ug-r14f4-final-linux-lane-2, QBrainAi.McpAgent.IntegrationTests: 1
+    ug-r14f4-final-linux-lane-2, QBrainAi.QBAgent.IntegrationTests: 3
+    ug-r14f4-final-linux-lane-2, QBrainAi.Repl.IntegrationTests: 181
+    ug-r14f4-final-linux-lane-2, QBrainAi.Support.Mcp.EnvironmentIntegrationTests: 456
+    ug-r14f4-final-linux-lane-2, QBrainAi.Support.Mcp.IntegrationTests: 6
+    ug-r14f4-final-linux-unit-2, QBrainAi.Client.Tests: 311
+    ug-r14f4-final-linux-unit-2, QBrainAi.Cqrs.Tests: 33
+    ug-r14f4-final-linux-unit-2, QBrainAi.Launcher.Tests: 20
+    ug-r14f4-final-linux-unit-2, QBrainAi.McpAgent.Tests: 64
+    ug-r14f4-final-linux-unit-2, QBrainAi.QBAgent.Tests: 90
+    ug-r14f4-final-linux-unit-2, QBrainAi.Repl.Core.Tests: 1035
+    ug-r14f4-final-linux-unit-2, QBrainAi.Support.Mcp.Tests: 3282
+  OLD-SET EXECUTIONS BY RUN AND PROJECT
+    ug-r14z16-final-linux-buildtests-1, Build.Tests: 563
+    ug-r14z16-final-linux-lane-1, Build.Tests: 96
+    ug-r14z16-final-linux-lane-1, QBrainAi.McpAgent.Tests: 1
+    ug-r14z16-final-linux-lane-1, QBrainAi.QBAgent.Tests: 3
+    ug-r14z16-final-linux-lane-1, QBrainAi.Repl.Core.Tests: 2
+    ug-r14z16-final-linux-lane-1, QBrainAi.Repl.IntegrationTests: 179
+    ug-r14z16-final-linux-lane-1, QBrainAi.Support.Mcp.IntegrationTests: 6
+    ug-r14z16-final-linux-lane-1, QBrainAi.Support.Mcp.Tests: 454
+    ug-r14z16-final-linux-unit-1, QBrainAi.Client.Tests: 311
+    ug-r14z16-final-linux-unit-1, QBrainAi.Cqrs.Tests: 33
+    ug-r14z16-final-linux-unit-1, QBrainAi.Launcher.Tests: 20
+    ug-r14z16-final-linux-unit-1, QBrainAi.McpAgent.Tests: 64
+    ug-r14z16-final-linux-unit-1, QBrainAi.QBAgent.Tests: 93
+    ug-r14z16-final-linux-unit-1, QBrainAi.Repl.Core.Tests: 1035
+    ug-r14z16-final-linux-unit-1, QBrainAi.Support.Mcp.Tests: 3310
+  MAPPING old project | class => new project | class (matched cases); unchanged first, then changed
+    UNCHANGED classes=608 cases=5486
+    CHANGED classes=171 cases=558
+      Build.Tests | NukeBuild.Tests.BoundedProcessTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.BoundedProcessTests : 1
+      Build.Tests | NukeBuild.Tests.BuildProjectSetTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.BuildProjectSetTests : 2
+      Build.Tests | NukeBuild.Tests.BuildTargetTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.BuildTargetTests : 11
+      Build.Tests | NukeBuild.Tests.DocsSyncG8OverlayTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.DocsSyncG8OverlayTests : 6
+      Build.Tests | NukeBuild.Tests.HandoffD3D5OverlayTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.HandoffD3D5OverlayTests : 2
+      Build.Tests | NukeBuild.Tests.IntegrationLaneDetachedWorkerTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.IntegrationLaneDetachedWorkerTests : 1
+      Build.Tests | NukeBuild.Tests.IntegrationLaneProjectsTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.IntegrationLaneProjectsTests : 3
+      Build.Tests | NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.MigrationAssemblyObsoleteWarningTests : 9
+      Build.Tests | NukeBuild.Tests.NukeParametersTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.NukeParametersTests : 1
+      Build.Tests | NukeBuild.Tests.PluginSessionLogIntegrationTargetTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.PluginSessionLogIntegrationTargetTests : 5
+      Build.Tests | NukeBuild.Tests.PowerShellInvocationTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.PowerShellInvocationTests : 3
+      Build.Tests | NukeBuild.Tests.QBrainAiRebrandPhase1Tests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.QBrainAiRebrandPhase1Tests : 10
+      Build.Tests | NukeBuild.Tests.QuadBrainDescriptorAbsenceTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.QuadBrainDescriptorAbsenceTests : 1
+      Build.Tests | NukeBuild.Tests.QuadBrainOllamaModelBindingTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.QuadBrainOllamaModelBindingTests : 1
+      Build.Tests | NukeBuild.Tests.RequirementsWikiPublishScriptTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.RequirementsWikiPublishScriptTests : 2
+      Build.Tests | NukeBuild.Tests.ServiceUpdateTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.ServiceUpdateTests : 10
+      Build.Tests | NukeBuild.Tests.SyncAgentPluginsChecksumTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.SyncAgentPluginsChecksumTests : 1
+      Build.Tests | NukeBuild.Tests.SyncAgentPluginsVendorNameTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.SyncAgentPluginsVendorNameTests : 3
+      Build.Tests | NukeBuild.Tests.TrCoverageConsistencyTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.TrCoverageConsistencyTests : 3
+      Build.Tests | NukeBuild.Tests.TrimAnalysisWarningInventoryTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.TrimAnalysisWarningInventoryTests : 8
+      Build.Tests | NukeBuild.Tests.WarningSuppressionApprovalValidatorTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.WarningSuppressionApprovalValidatorTests : 1
+      Build.Tests | NukeBuild.Tests.WarningSuppressionValidationTargetTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.WarningSuppressionValidationTargetTests : 8
+      Build.Tests | NukeBuild.Tests.YamlObjectMutationTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.YamlObjectMutationTests : 4
+      QBrainAi.McpAgent.Tests | QBrainAi.McpAgent.Tests.McpAgentOptionsLegacySectionHostTests => QBrainAi.McpAgent.IntegrationTests | QBrainAi.McpAgent.IntegrationTests.McpAgentOptionsLegacySectionHostTests : 1
+      QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests => QBrainAi.QBAgent.IntegrationTests | QBrainAi.QBAgent.IntegrationTests.QBAgentHeartbeatOverlayTests : 1
+      QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests.Skills.AuthoredSkillsTests => QBrainAi.QBAgent.IntegrationTests | QBrainAi.QBAgent.IntegrationTests.Skills.AuthoredSkillsTests : 2
+      QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests => QBrainAi.Repl.IntegrationTests | QBrainAi.Repl.IntegrationTests.HandoffSkillDelegationTests : 1
+      QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.MemorySchemaContractTests => QBrainAi.Repl.IntegrationTests | QBrainAi.Repl.IntegrationTests.MemorySchemaContractTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.ConfigurablePathIntegrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Configuration.ConfigurablePathIntegrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Configuration.IngestionAllowlistContractTests : 8
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.TestRepositoryRootPolicyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Configuration.TestRepositoryRootPolicyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.TriageConfigurationContractTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Configuration.TriageConfigurationContractTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Configuration.UnitSuitePlatformScannerTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139EighteenthEvidenceTests : 8
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FifteenthHarnessTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139FifteenthHarnessTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139FourteenthHarnessTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation.QuadBrainSlotConfigurationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.QuadBrainSlotConfigurationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation.TurnTransactionPlanArtifactTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.TurnTransactionPlanArtifactTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Ingestion.ImportRecoveryEnvelopeTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Ingestion.ImportRecoveryEnvelopeTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Ingestion.SessionLogFileWatcherTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Ingestion.SessionLogIngestorImportTests : 5
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.McpStdio.BrainSlotToolAbsenceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.McpStdio.BrainSlotToolAbsenceTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.McpStdio.HandoffMcpToolTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.McpStdio.HandoffMcpToolTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.McpStdio.MemoryContractArtifactTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.McpStdio.MemoryContractArtifactTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.McpStdio.TranscriptMcpStdioHostTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.McpStdio.TranscriptMcpStdioHostTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryApiIdempotencyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryApiIdempotencyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchCiTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchCiTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchConflictTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchConflictTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchDocsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchDocsTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchHarnessTests : 9
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchInjectionTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchInjectionTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchIsolationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchIsolationTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnDocsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchMultiTurnDocsTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchMultiTurnHarnessTests : 9
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnPackTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchMultiTurnPackTests : 5
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnScoringTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchMultiTurnScoringTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPackTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchPackTests : 5
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchPluginTests : 9
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchReportTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchReportTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchSafetyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchSafetyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchScoringTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchScoringTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchTechTests : 11
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchTokenTests : 10
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchToolUseTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchToolUseTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchValueGateTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchValueGateTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryIndexerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryIndexerTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryIntegrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryIntegrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryMcpSchemaTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryMcpSchemaTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryOnboardingDocsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryOnboardingDocsTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryPluginSyncTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryPluginSyncTests : 5
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemorySurfaceParityTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemorySurfaceParityTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryToolsDiscoveryTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryToolsDiscoveryTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryUiDeployDocsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryUiDeployDocsTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryUiHostingTests : 6
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryUiTests : 12
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Options.McpInstanceResolverTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.ProductAliasCompatibilityTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Options.ProductAliasCompatibilityTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Requirements.RequirementsRecoveryMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Requirements.RequirementsRecoveryMigrationTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Requirements.RequirementsRecoveryTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Requirements.RequirementsRecoveryTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.BrainSlotCredentialResolverTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.BrainSlotCredentialResolverTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.BrainSlotLlmStrategyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.BrainSlotLlmStrategyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.BugTriage139EighteenthTraversalTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.CliBrainSlotStrategyTests : 13
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyLinuxTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.CodexCliAgentExecutionStrategyLinuxTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.CodexCliAgentExecutionStrategyTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.DesktopProcessSpawnerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.DesktopProcessSpawnerTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.DirectoryTreeWalkerTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.DocsSyncG8OverlayTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FederatedSessionLogServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.FederatedSessionLogServiceTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FederationTopologyServiceLinuxTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.FederationTopologyServiceLinuxTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FileGitHubWorkspaceTokenStoreTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.FileGitHubWorkspaceTokenStoreTests : 5
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.FrpTunnelProviderTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.GitHubCliServiceLinuxTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.GitHubCliServiceLinuxTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HandoffContainedFileReaderTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HandoffD3D5OverlayTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffDeadContractInventoryTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HandoffDeadContractInventoryTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffIngestionServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HandoffIngestionServiceTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffWorkspacePathsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HandoffWorkspacePathsTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HostileReviewG4OverlayTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.MarkerFileServiceTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.OneShotCliAgentExecutionStrategyTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RepoFileServiceTests : 30
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsDatabaseDocumentServiceTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsDocFxWorkflowRunnerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsDocFxWorkflowRunnerTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsDocumentServiceTests : 6
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsFourteenthLinuxNativeTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsFourteenthLinuxNativeTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsTwelfthAdversarialReviewTests : 7
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsWikiExportConfigTests : 28
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsWikiExportOrchestratorTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogDenseGraphTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogDenseGraphTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogImportedSessionDeleteTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogReplaceSectionRetryableTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogReplaceSectionRetryableTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogResubmissionReviveTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogResubmissionReviveTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogSanitizerRegistrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogSanitizerRegistrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogServiceTurnContextTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogSubmitBudgetTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogSubmitBudgetTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogTriageStoreTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogTriageStoreTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogTurnContextBackfillTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogTurnContextBackfillTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogTurnContextExtractorTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogTurnContextExtractorTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.StorageCommandBudgetTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.StorageCommandBudgetTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TransactionGatedSessionLogServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.TransactionGatedSessionLogServiceTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TranscriptSessionLogPersisterTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.TranscriptSessionLogPersisterTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.TriageServiceTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.TunnelProviderTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateContractTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.UseCaseComponentUpdateContractTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UseCaseCqrsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.UseCaseCqrsTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UseCaseDiagramGraphCqrsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.UseCaseDiagramGraphCqrsTests : 6
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UseCaseExpandedScopeTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.UseCaseExpandedScopeTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UseCaseGetWorkspaceResolutionContractTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.UseCaseGetWorkspaceResolutionContractTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.WikiDumpG6OverlayTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.WorkspaceHygieneG5OverlayTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.WorkspaceHygieneG5OverlayTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.WorkspacePathConsumersMockDataTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.WorkspacePathConsumersMockDataTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.WorkspacePathConsumersRealTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.WorkspacePathConsumersRealTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.WorkspaceServiceCrossPlatformMockDataTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.WorkspaceServiceCrossPlatformMockDataTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.WorkspaceServiceCrossPlatformRealTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.WorkspaceServiceCrossPlatformRealTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139EighteenthLinuxTests : 25
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthSqliteTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139EighteenthSqliteTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139FifteenthLinuxNativeTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139FifteenthLinuxNativeTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139FifteenthSharedTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139FifteenthSharedTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthIdentityConsumerLinuxTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139SixteenthIdentityConsumerLinuxTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthIdentityConsumerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139SixteenthIdentityConsumerTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139SixteenthLinuxTests : 8
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthPostgreSqlBoundaryTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139SixteenthPostgreSqlBoundaryTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthSqliteConsumerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139SixteenthSqliteConsumerTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.Decompose4nfBackfillMigrationTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.EphemeralPostgresFixtureTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresDecompose4nfBackfillMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.PostgreSqlAuditPayloadMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgreSqlAuditPayloadMigrationTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.PostgresRenameQuadBrainRolesMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresRenameQuadBrainRolesMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.ProductMigrationApplyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.ProductMigrationApplyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SessionLogAgentSessionHeaderMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SessionLogTurnPlanFileTodoIdMigrationApplyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SessionLogTurnPlanFileTodoIdMigrationApplyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqliteBoundedOpenFourteenthTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqliteBoundedOpenFourteenthTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqlServerAuditPayloadMigrationTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqlServerDecompose4nfBackfillMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqlServerLocalDbCollectionTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqlServerRenameQuadBrainRolesMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.UseCaseMigrationApplyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.UseCaseMigrationApplyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentRealTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.WorkspaceHostEnvironmentRealTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.WorkspaceIdentityFourteenthNativeTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathLinuxFacadeTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.WorkspaceNativePathLinuxFacadeTests : 6
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetRealTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.WorkspacePathGetFullPathRatchetRealTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerProcessTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.WorkspacePathNormalizerProcessTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.TestSupport.CliTempVariablesTests : 7
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.ProcessEnvironmentCollectionTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.TestSupport.ProcessEnvironmentCollectionTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Web.UseCaseCanvasUiAssetTests : 6
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Web.UseCaseUiAssetTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Web.UseCaseUiAssetTests : 4
+  NAMESPACE AND PROJECT MOVES (aggregated over the changed classes)
+    Build.Tests | NukeBuild.Tests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests : 96
+    QBrainAi.McpAgent.Tests | QBrainAi.McpAgent.Tests => QBrainAi.McpAgent.IntegrationTests | QBrainAi.McpAgent.IntegrationTests : 1
+    QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests => QBrainAi.QBAgent.IntegrationTests | QBrainAi.QBAgent.IntegrationTests : 1
+    QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests.Skills => QBrainAi.QBAgent.IntegrationTests | QBrainAi.QBAgent.IntegrationTests.Skills : 2
+    QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests => QBrainAi.Repl.IntegrationTests | QBrainAi.Repl.IntegrationTests : 2
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Configuration : 18
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.DatabaseMaintenance => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.DatabaseMaintenance : 1
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation : 20
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Indexing => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing : 4
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Ingestion => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Ingestion : 7
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.McpStdio => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.McpStdio : 7
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory : 114
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Options : 3
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Requirements => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Requirements : 2
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services : 175
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage : 87
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.TestSupport : 8
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Web => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Web : 10
+  ARGUMENT-NORMALIZED MATCHES (0)
+  QUARANTINED: excluded by Quarantine=NoMatchingCriterion, not lost (29; each listed with its trait line)
+    CliBrainSlotStrategyTests.BuildPersistentCodexArgumentList_FirstTurn_UsesExecStdinAndXhigh x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:221
+    CliBrainSlotStrategyTests.BuildPersistentCodexArgumentList_Resume_PlacesExecOptionsBeforeResume x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:251
+    CliBrainSlotStrategyTests.BuildPersistentGrokArgumentList_FirstTurn_UsesSessionIdAndXhigh x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:152
+    CliBrainSlotStrategyTests.BuildPersistentGrokArgumentList_Resume_UsesResumeFlag x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:193
+    CliBrainSlotStrategyTests.CredentialResolver_CliInteractive_ReturnsPlaceholder x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:367
+    CliBrainSlotStrategyTests.CredentialResolver_SupportsCliScheme(reference: "cli:interactive", expected: True) x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:347
+    CliBrainSlotStrategyTests.CredentialResolver_SupportsCliScheme(reference: "cli:session", expected: True) x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:347
+    CliBrainSlotStrategyTests.CredentialResolver_SupportsCliScheme(reference: "vault:future", expected: False) x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:347
+    CliBrainSlotStrategyTests.ExtractCodexAssistantText_FromEventMsg_ReturnsMessage x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:326
+    CliBrainSlotStrategyTests.ExtractCodexAssistantText_FromItemCompletedAgentMessage_ReturnsText x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:302
+    CliBrainSlotStrategyTests.ExtractCodexSessionId_FromJsonlThreadStarted_ReturnsId x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:280
+    CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: "Cli") x2 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:41
+    CliBrainSlotStrategyTests.TryParseCliEndpoint_KnownStrategies_Succeed(endpoint: "cli://codex-cli", expected: "codex-cli") x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:59
+    CliBrainSlotStrategyTests.TryParseCliEndpoint_KnownStrategies_Succeed(endpoint: "cli://grok-build", expected: "grok-cli") x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:59
+    CliBrainSlotStrategyTests.TryParseCliEndpoint_KnownStrategies_Succeed(endpoint: "cli://grok-cli", expected: "grok-cli") x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:59
+    CliBrainSlotStrategyTests.TryParseCliEndpoint_Unknown_Fails(endpoint: "") x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:79
+    CliBrainSlotStrategyTests.TryParseCliEndpoint_Unknown_Fails(endpoint: "cli://unknown") x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:79
+    CliBrainSlotStrategyTests.TryParseCliEndpoint_Unknown_Fails(endpoint: "http://127.0.0.1:8311/v1") x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:79
+    CliBrainSlotStrategyTests.ValidateEndpoint_CliKnownStrategy_DoesNotRequireHttpHostAllowlist x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:99
+    GitHubCliServiceTests.CommentOnPullAsync_VerifiesGhArgs x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.GitHubCliServiceTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:172
+    GitHubCliServiceTests.ListPullsAsync_WhenGhSucceeds_ReturnsPulls x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.GitHubCliServiceTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:77
+    McpInstanceResolverTests.GetRequestedInstanceName_ReadsFromArgs_EqualsSyntax x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:26
+    McpInstanceResolverTests.GetRequestedInstanceName_ReadsFromArgs_SeparatedSyntax x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:42
+    McpInstanceResolverTests.ValidateInstances_ThrowsOnDuplicatePorts x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:78
+    QBAgentHeartbeatOverlayTests.Frames_Rotate x1 [old QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:61
+    QBAgentHeartbeatOverlayTests.Hide_OverwritesGlyphWithSpace_SameCell x1 [old QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:43
+    QBAgentHeartbeatOverlayTests.Paint_DoesNotContainNewline x1 [old QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:23
+    SessionLogServiceReplaceDeleteTests.DeleteSessionAsync_Missing_ReturnsFalse x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceReplaceDeleteTests runs ug-r14z16-final-linux-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs:324
+  QUARANTINE METHODS WITH NO OLD CASE ON THIS HOST (0)
+  QUARANTINED BUT RAN IN THE NEW SET (0)
+  GONE (1)
+    IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: DropsBuildTests) x1 [old Build.Tests | NukeBuild.Tests.IntegrationLaneProjectsMockGateTests runs ug-r14z16-final-linux-buildtests-1]
+  SURPLUS (0)
+  CROSS-RUN DUPLICATES IN THE NEW SET (0)
+  NEW-SET NON-PASSED (0)
+  ADDED (64), by project and class
+    Build.Tests, NukeBuild.Tests.IntegrationLaneExecutionContractTests: 2
+      IntegrationLaneExecutionContractTests.WrongCompositions_AreRejected(fault: "log omits the quarantine exclusion") [ug-r14f4-final-linux-buildtests-2]
+      IntegrationLaneExecutionContractTests.WrongCompositions_AreRejected(fault: "quarantine exclusion omitted") [ug-r14f4-final-linux-buildtests-2]
+    Build.Tests, NukeBuild.Tests.IntegrationLaneFilterMockGateTests: 4
+      IntegrationLaneFilterMockGateTests.WrongFilter_FailsSelection(host: "linux", fault: OmitsQuarantineExclusion) [ug-r14f4-final-linux-buildtests-2]
+      IntegrationLaneFilterMockGateTests.WrongFilter_FailsSelection(host: "windows", fault: OmitsQuarantineExclusion) [ug-r14f4-final-linux-buildtests-2]
+      IntegrationLaneFilterMockGateTests.WrongFilter_IsRejected(host: "linux", fault: OmitsQuarantineExclusion) [ug-r14f4-final-linux-buildtests-2]
+      IntegrationLaneFilterMockGateTests.WrongFilter_IsRejected(host: "windows", fault: OmitsQuarantineExclusion) [ug-r14f4-final-linux-buildtests-2]
+    Build.Tests, NukeBuild.Tests.IntegrationLaneProjectsMockGateTests: 6
+      IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: DropsNukeBuildIntegrationTests) [ug-r14f4-final-linux-buildtests-2]
+      IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: KeepsBuildTests) [ug-r14f4-final-linux-buildtests-2]
+      IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: KeepsPreRenameNames) [ug-r14f4-final-linux-buildtests-2]
+      IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: KeepsSupportMcpTests) [ug-r14f4-final-linux-buildtests-2]
+      IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: KeepsUnitProjects) [ug-r14f4-final-linux-buildtests-2]
+      IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: OmitsSupportMcpEnvironmentIntegration) [ug-r14f4-final-linux-buildtests-2]
+    Build.Tests, NukeBuild.Tests.TestGroupExecutionContractTests: 1
+      TestGroupExecutionContractTests.WrongCompositions_AreRejected(fault: "quarantine exclusion added") [ug-r14f4-final-linux-buildtests-2]
+    Build.Tests, NukeBuild.Tests.TestProjectOwnershipMockGateTests: 22
+      TestProjectOwnershipMockGateTests.InfrastructureProject_IsAcceptedByNeitherSelection [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.IntegrationProject_WithUnitCase_IsRejected [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.ScriptedOwnership_SatisfiesTheContract [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.ScriptedQuarantine_SatisfiesTheQuarantineContract [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.SeparatedProjects_PreserveSelectedCases [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.UnitProject_WithIntegrationCase_IsRejected [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: AcceptsMixedProject, check: IntegrationProjectWithUnitCase) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: AcceptsMixedProject, check: UnitProjectWithIntegrationCase) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: AcceptsOtherRole, check: Contract) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: DedupesByCaseName, check: SeparatedProjects) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: DuplicatesCase, check: SeparatedProjects) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: IgnoresDuplicates, check: Contract) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: KeepsRejectedCases, check: UnitProjectWithIntegrationCase) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: LetsInfrastructureIn, check: InfrastructureProject) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: OmitsCase, check: SeparatedProjects) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: CountsRejectedProjectQuarantine) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: DropsQuarantinedCase) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: DropsRunnableCase) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: HidesForeignCase) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: QuarantinesByCaseName) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: RunsAndCountsQuarantinedCase) [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: RunsQuarantinedCase) [ug-r14f4-final-linux-buildtests-2]
+    Build.Tests, NukeBuild.Tests.TestProjectOwnershipTests: 14
+      TestProjectOwnershipTests.Declarations_AreTheRecordedRoles [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.DeclaredProjects_HoldOnlyCasesOfTheirOwnKind [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.InfrastructureProject_IsAcceptedByNeitherSelection [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.InfrastructureProject_IsOfferedToNeitherSelection [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.IntegrationProject_WithUnitCase_IsRejected [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.IntegrationSelection_AcceptsEveryLaneProject_AndRunsEveryIntegrationCaseOnce [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.LaneProjects_HaveTheirRecordedRoles_AndAnUndeclaredProjectIsRefused [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.ProductionOwnership_SatisfiesTheContract [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.ProductionOwnership_SatisfiesTheQuarantineContract [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.QuarantinedCases_AreCountedPerProject_ApartFromTheUnitAndIntegrationCases [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.SeparatedProjects_PreserveSelectedCases [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.TestSelection_IsDeclaredUnitOwned_AndRefusesAnyOtherProject [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.UnitProject_WithIntegrationCase_IsRejected [ug-r14f4-final-linux-buildtests-2]
+      TestProjectOwnershipTests.UnitSelection_AcceptsEveryUnitOwnedProject_AndRunsEveryUnitCaseOnce [ug-r14f4-final-linux-buildtests-2]
+    Build.Tests, NukeBuild.Tests.UnitTestFilterMockGateTests: 13
+      UnitTestFilterMockGateTests.ScriptedFilter_SatisfiesTheContract [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_FailsSelection(fault: AdmitsAiReview) [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_FailsSelection(fault: AdmitsIntegration) [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_FailsSelection(fault: OmitsQuarantineExclusion) [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_FailsSelection(fault: QuarantineAsCategory) [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_IsRejected(fault: AdmitsAiReview) [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_IsRejected(fault: AdmitsIntegration) [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_IsRejected(fault: LogOmitsProject) [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_IsRejected(fault: LogOmitsQuarantineExclusion) [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_IsRejected(fault: OmitsQuarantineExclusion) [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_IsRejected(fault: QuarantineAsCategory) [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterMockGateTests.WrongLogLine_IsRejected(fault: LogOmitsProject) [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterMockGateTests.WrongLogLine_IsRejected(fault: LogOmitsQuarantineExclusion) [ug-r14f4-final-linux-buildtests-2]
+    Build.Tests, NukeBuild.Tests.UnitTestFilterTests: 2
+      UnitTestFilterTests.ProductionFilter_SatisfiesTheContract [ug-r14f4-final-linux-buildtests-2]
+      UnitTestFilterTests.ProductionFilter_UsesTheSharedQuarantineExclusion [ug-r14f4-final-linux-buildtests-2]
+
+HOST PAYTON-LEGION2 oldExecutions=6051 oldDistinct=6051 newExecutions=6085 matched=6021 argumentMatched=0 gone=1 quarantined=29 (expected 29) quarantinedRan=0 added=64 surplus=0 crossRunDuplicates=0 newNonPassed=0
+  CHECK oldDistinct - gone - quarantined + added + surplus = 6085 (newExecutions 6085)
+  NEW-SET EXECUTIONS BY RUN AND PROJECT
+    ug-r14f4-final-win-buildtests-2, Build.Tests: 530
+    ug-r14f4-final-win-lane-2, NukeBuild.IntegrationTests: 85
+    ug-r14f4-final-win-lane-2, QBrainAi.McpAgent.IntegrationTests: 1
+    ug-r14f4-final-win-lane-2, QBrainAi.QBAgent.IntegrationTests: 3
+    ug-r14f4-final-win-lane-2, QBrainAi.Repl.IntegrationTests: 181
+    ug-r14f4-final-win-lane-2, QBrainAi.Support.Mcp.EnvironmentIntegrationTests: 444
+    ug-r14f4-final-win-lane-2, QBrainAi.Support.Mcp.IntegrationTests: 6
+    ug-r14f4-final-win-unit-2, QBrainAi.Client.Tests: 311
+    ug-r14f4-final-win-unit-2, QBrainAi.Cqrs.Tests: 33
+    ug-r14f4-final-win-unit-2, QBrainAi.Launcher.Tests: 20
+    ug-r14f4-final-win-unit-2, QBrainAi.McpAgent.Tests: 64
+    ug-r14f4-final-win-unit-2, QBrainAi.QBAgent.Tests: 90
+    ug-r14f4-final-win-unit-2, QBrainAi.Repl.Core.Tests: 1035
+    ug-r14f4-final-win-unit-2, QBrainAi.Support.Mcp.Tests: 3282
+  OLD-SET EXECUTIONS BY RUN AND PROJECT
+    ug-r14z16-final-win-buildtests-1, Build.Tests: 467
+    ug-r14z16-final-win-lane-1, Build.Tests: 85
+    ug-r14z16-final-win-lane-1, QBrainAi.McpAgent.Tests: 1
+    ug-r14z16-final-win-lane-1, QBrainAi.QBAgent.Tests: 3
+    ug-r14z16-final-win-lane-1, QBrainAi.Repl.Core.Tests: 2
+    ug-r14z16-final-win-lane-1, QBrainAi.Repl.IntegrationTests: 179
+    ug-r14z16-final-win-lane-1, QBrainAi.Support.Mcp.IntegrationTests: 6
+    ug-r14z16-final-win-lane-1, QBrainAi.Support.Mcp.Tests: 442
+    ug-r14z16-final-win-unit-1, QBrainAi.Client.Tests: 311
+    ug-r14z16-final-win-unit-1, QBrainAi.Cqrs.Tests: 33
+    ug-r14z16-final-win-unit-1, QBrainAi.Launcher.Tests: 20
+    ug-r14z16-final-win-unit-1, QBrainAi.McpAgent.Tests: 64
+    ug-r14z16-final-win-unit-1, QBrainAi.QBAgent.Tests: 93
+    ug-r14z16-final-win-unit-1, QBrainAi.Repl.Core.Tests: 1035
+    ug-r14z16-final-win-unit-1, QBrainAi.Support.Mcp.Tests: 3310
+  MAPPING old project | class => new project | class (matched cases); unchanged first, then changed
+    UNCHANGED classes=608 cases=5486
+    CHANGED classes=174 cases=535
+      Build.Tests | NukeBuild.Tests.BoundedProcessTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.BoundedProcessTests : 1
+      Build.Tests | NukeBuild.Tests.BuildProjectSetTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.BuildProjectSetTests : 2
+      Build.Tests | NukeBuild.Tests.BuildTargetTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.BuildTargetTests : 11
+      Build.Tests | NukeBuild.Tests.DocsSyncG8OverlayTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.DocsSyncG8OverlayTests : 6
+      Build.Tests | NukeBuild.Tests.HandoffD3D5OverlayTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.HandoffD3D5OverlayTests : 2
+      Build.Tests | NukeBuild.Tests.IntegrationLaneProjectsTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.IntegrationLaneProjectsTests : 3
+      Build.Tests | NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.MigrationAssemblyObsoleteWarningTests : 9
+      Build.Tests | NukeBuild.Tests.NukeParametersTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.NukeParametersTests : 1
+      Build.Tests | NukeBuild.Tests.PluginSessionLogIntegrationTargetTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.PluginSessionLogIntegrationTargetTests : 5
+      Build.Tests | NukeBuild.Tests.PowerShellInvocationTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.PowerShellInvocationTests : 3
+      Build.Tests | NukeBuild.Tests.QBrainAiRebrandPhase1Tests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.QBrainAiRebrandPhase1Tests : 10
+      Build.Tests | NukeBuild.Tests.QuadBrainDescriptorAbsenceTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.QuadBrainDescriptorAbsenceTests : 1
+      Build.Tests | NukeBuild.Tests.QuadBrainOllamaModelBindingTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.QuadBrainOllamaModelBindingTests : 1
+      Build.Tests | NukeBuild.Tests.RequirementsWikiPublishScriptTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.RequirementsWikiPublishScriptTests : 2
+      Build.Tests | NukeBuild.Tests.SyncAgentPluginsChecksumTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.SyncAgentPluginsChecksumTests : 1
+      Build.Tests | NukeBuild.Tests.SyncAgentPluginsVendorNameTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.SyncAgentPluginsVendorNameTests : 3
+      Build.Tests | NukeBuild.Tests.TrCoverageConsistencyTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.TrCoverageConsistencyTests : 3
+      Build.Tests | NukeBuild.Tests.TrimAnalysisWarningInventoryTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.TrimAnalysisWarningInventoryTests : 8
+      Build.Tests | NukeBuild.Tests.WarningSuppressionApprovalValidatorTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.WarningSuppressionApprovalValidatorTests : 1
+      Build.Tests | NukeBuild.Tests.WarningSuppressionValidationTargetTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.WarningSuppressionValidationTargetTests : 8
+      Build.Tests | NukeBuild.Tests.YamlObjectMutationTests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests.YamlObjectMutationTests : 4
+      QBrainAi.McpAgent.Tests | QBrainAi.McpAgent.Tests.McpAgentOptionsLegacySectionHostTests => QBrainAi.McpAgent.IntegrationTests | QBrainAi.McpAgent.IntegrationTests.McpAgentOptionsLegacySectionHostTests : 1
+      QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests => QBrainAi.QBAgent.IntegrationTests | QBrainAi.QBAgent.IntegrationTests.QBAgentHeartbeatOverlayTests : 1
+      QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests.Skills.AuthoredSkillsTests => QBrainAi.QBAgent.IntegrationTests | QBrainAi.QBAgent.IntegrationTests.Skills.AuthoredSkillsTests : 2
+      QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests => QBrainAi.Repl.IntegrationTests | QBrainAi.Repl.IntegrationTests.HandoffSkillDelegationTests : 1
+      QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.MemorySchemaContractTests => QBrainAi.Repl.IntegrationTests | QBrainAi.Repl.IntegrationTests.MemorySchemaContractTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.ConfigurablePathIntegrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Configuration.ConfigurablePathIntegrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Configuration.IngestionAllowlistContractTests : 8
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.TestRepositoryRootPolicyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Configuration.TestRepositoryRootPolicyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.TriageConfigurationContractTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Configuration.TriageConfigurationContractTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Configuration.UnitSuitePlatformScannerTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139EighteenthEvidenceTests : 8
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FifteenthHarnessTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139FifteenthHarnessTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139FourteenthHarnessTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthWindowsProcessTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests : 5
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation.QuadBrainSlotConfigurationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.QuadBrainSlotConfigurationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation.TurnTransactionPlanArtifactTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.TurnTransactionPlanArtifactTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Ingestion.ImportRecoveryEnvelopeTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Ingestion.ImportRecoveryEnvelopeTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Ingestion.SessionLogFileWatcherTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Ingestion.SessionLogIngestorImportTests : 5
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.McpStdio.BrainSlotToolAbsenceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.McpStdio.BrainSlotToolAbsenceTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.McpStdio.HandoffMcpToolTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.McpStdio.HandoffMcpToolTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.McpStdio.MemoryContractArtifactTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.McpStdio.MemoryContractArtifactTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.McpStdio.TranscriptMcpStdioHostTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.McpStdio.TranscriptMcpStdioHostTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryApiIdempotencyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryApiIdempotencyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchCiTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchCiTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchConflictTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchConflictTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchDocsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchDocsTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchHarnessTests : 9
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchInjectionTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchInjectionTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchIsolationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchIsolationTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnDocsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchMultiTurnDocsTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchMultiTurnHarnessTests : 9
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnPackTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchMultiTurnPackTests : 5
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnScoringTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchMultiTurnScoringTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPackTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchPackTests : 5
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchPluginTests : 9
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchReportTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchReportTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchSafetyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchSafetyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchScoringTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchScoringTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchTechTests : 11
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchTokenTests : 10
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchToolUseTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchToolUseTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchValueGateTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryBenchValueGateTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryIndexerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryIndexerTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryIntegrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryIntegrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryMcpSchemaTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryMcpSchemaTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryOnboardingDocsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryOnboardingDocsTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryPluginSyncTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryPluginSyncTests : 5
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemorySurfaceParityTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemorySurfaceParityTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryToolsDiscoveryTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryToolsDiscoveryTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryUiDeployDocsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryUiDeployDocsTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryUiHostingTests : 6
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory.MemoryUiTests : 12
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Options.McpInstanceResolverTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.ProductAliasCompatibilityTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Options.ProductAliasCompatibilityTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Requirements.RequirementsRecoveryMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Requirements.RequirementsRecoveryMigrationTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Requirements.RequirementsRecoveryTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Requirements.RequirementsRecoveryTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.BrainSlotCredentialResolverTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.BrainSlotCredentialResolverTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.BrainSlotLlmStrategyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.BrainSlotLlmStrategyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.BugTriage139EighteenthTraversalTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.CliBrainSlotStrategyTests : 13
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotWindowsTempDirectoryTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.CliBrainSlotWindowsTempDirectoryTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.CodexCliAgentExecutionStrategyTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyWindowsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.CodexCliAgentExecutionStrategyWindowsTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.DesktopProcessSpawnerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.DesktopProcessSpawnerTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.DesktopProcessSpawnerWindowsInteractiveTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.DesktopProcessSpawnerWindowsInteractiveTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.DirectoryTreeWalkerTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.DocsSyncG8OverlayTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FederatedSessionLogServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.FederatedSessionLogServiceTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FederationTopologyServiceWindowsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.FederationTopologyServiceWindowsTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FileGitHubWorkspaceTokenStoreTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.FileGitHubWorkspaceTokenStoreTests : 5
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.FrpTunnelProviderTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.GitHubCliServiceWindowsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.GitHubCliServiceWindowsTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HandoffContainedFileReaderTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderWindowsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HandoffContainedFileReaderWindowsTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HandoffD3D5OverlayTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffDeadContractInventoryTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HandoffDeadContractInventoryTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffIngestionServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HandoffIngestionServiceTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffWorkspacePathsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HandoffWorkspacePathsTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.HostileReviewG4OverlayTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.MarkerFileServiceTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.OneShotCliAgentExecutionStrategyTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.ProcessEnvironmentServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.ProcessEnvironmentServiceTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RepoFileServiceTests : 30
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsDatabaseDocumentServiceTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsDocFxWorkflowRunnerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsDocFxWorkflowRunnerTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsDocumentServiceTests : 6
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsTwelfthAdversarialReviewTests : 7
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsWikiExportConfigTests : 28
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.RequirementsWikiExportOrchestratorTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogDenseGraphTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogDenseGraphTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogImportedSessionDeleteTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogReplaceSectionRetryableTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogReplaceSectionRetryableTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogResubmissionReviveTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogResubmissionReviveTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogSanitizerRegistrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogSanitizerRegistrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogServiceTurnContextTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogSubmitBudgetTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogSubmitBudgetTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogTriageStoreTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogTriageStoreTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogTurnContextBackfillTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogTurnContextBackfillTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogTurnContextExtractorTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.SessionLogTurnContextExtractorTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.StorageCommandBudgetTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.StorageCommandBudgetTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TransactionGatedSessionLogServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.TransactionGatedSessionLogServiceTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TranscriptSessionLogPersisterTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.TranscriptSessionLogPersisterTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.TriageServiceTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.TunnelProviderTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateContractTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.UseCaseComponentUpdateContractTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UseCaseCqrsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.UseCaseCqrsTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UseCaseDiagramGraphCqrsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.UseCaseDiagramGraphCqrsTests : 6
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UseCaseExpandedScopeTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.UseCaseExpandedScopeTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UseCaseGetWorkspaceResolutionContractTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.UseCaseGetWorkspaceResolutionContractTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.WikiDumpG6OverlayTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.WorkspaceHygieneG5OverlayTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.WorkspaceHygieneG5OverlayTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.WorkspacePathConsumersMockDataTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.WorkspacePathConsumersMockDataTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.WorkspacePathConsumersRealTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.WorkspacePathConsumersRealTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.WorkspaceServiceCrossPlatformMockDataTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.WorkspaceServiceCrossPlatformMockDataTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.WorkspaceServiceCrossPlatformRealTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services.WorkspaceServiceCrossPlatformRealTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthSqliteTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139EighteenthSqliteTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139FifteenthSharedTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139FifteenthSharedTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139FifteenthWindowsNativeTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139FifteenthWindowsNativeTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthIdentityConsumerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139SixteenthIdentityConsumerTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthIdentityConsumerWindowsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139SixteenthIdentityConsumerWindowsTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthIdentityWindowsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139SixteenthIdentityWindowsTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthPostgreSqlBoundaryTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139SixteenthPostgreSqlBoundaryTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthSqliteConsumerTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.BugTriage139SixteenthSqliteConsumerTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.Decompose4nfBackfillMigrationTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.EphemeralPostgresFixtureTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresDecompose4nfBackfillMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.PostgreSqlAuditPayloadMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgreSqlAuditPayloadMigrationTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.PostgresRenameQuadBrainRolesMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresRenameQuadBrainRolesMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.ProductMigrationApplyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.ProductMigrationApplyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SessionLogAgentSessionHeaderMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SessionLogTurnPlanFileTodoIdMigrationApplyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SessionLogTurnPlanFileTodoIdMigrationApplyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqliteBoundedOpenFourteenthTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqliteBoundedOpenFourteenthTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqlServerAuditPayloadMigrationTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqlServerDecompose4nfBackfillMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqlServerLocalDbCollectionTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqlServerRenameQuadBrainRolesMigrationTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.UseCaseMigrationApplyTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.UseCaseMigrationApplyTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentRealTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.WorkspaceHostEnvironmentRealTests : 3
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.WorkspaceIdentityFourteenthNativeTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathWindowsFacadeTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.WorkspaceNativePathWindowsFacadeTests : 6
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetRealTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.WorkspacePathGetFullPathRatchetRealTests : 2
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerProcessTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.WorkspacePathNormalizerProcessTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.WorkspaceRemotePathRealTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.WorkspaceRemotePathRealTests : 4
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.TestSupport.CliTempVariablesTests : 7
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.ProcessEnvironmentCollectionTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.TestSupport.ProcessEnvironmentCollectionTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionWindowsTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.TestSupport.WindowsJunctionWindowsTests : 1
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Web.UseCaseCanvasUiAssetTests : 6
+      QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Web.UseCaseUiAssetTests => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Web.UseCaseUiAssetTests : 4
+  NAMESPACE AND PROJECT MOVES (aggregated over the changed classes)
+    Build.Tests | NukeBuild.Tests => NukeBuild.IntegrationTests | NukeBuild.IntegrationTests : 85
+    QBrainAi.McpAgent.Tests | QBrainAi.McpAgent.Tests => QBrainAi.McpAgent.IntegrationTests | QBrainAi.McpAgent.IntegrationTests : 1
+    QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests => QBrainAi.QBAgent.IntegrationTests | QBrainAi.QBAgent.IntegrationTests : 1
+    QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests.Skills => QBrainAi.QBAgent.IntegrationTests | QBrainAi.QBAgent.IntegrationTests.Skills : 2
+    QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests => QBrainAi.Repl.IntegrationTests | QBrainAi.Repl.IntegrationTests : 2
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Configuration => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Configuration : 18
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.DatabaseMaintenance => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.DatabaseMaintenance : 1
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Documentation => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation : 25
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Indexing => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing : 4
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Ingestion => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Ingestion : 7
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.McpStdio => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.McpStdio : 7
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory : 114
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Options : 3
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Requirements => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Requirements : 2
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services : 182
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage : 62
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.TestSupport : 9
+    QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Web => QBrainAi.Support.Mcp.EnvironmentIntegrationTests | QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Web : 10
+  ARGUMENT-NORMALIZED MATCHES (0)
+  QUARANTINED: excluded by Quarantine=NoMatchingCriterion, not lost (29; each listed with its trait line)
+    CliBrainSlotStrategyTests.BuildPersistentCodexArgumentList_FirstTurn_UsesExecStdinAndXhigh x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:221
+    CliBrainSlotStrategyTests.BuildPersistentCodexArgumentList_Resume_PlacesExecOptionsBeforeResume x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:251
+    CliBrainSlotStrategyTests.BuildPersistentGrokArgumentList_FirstTurn_UsesSessionIdAndXhigh x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:152
+    CliBrainSlotStrategyTests.BuildPersistentGrokArgumentList_Resume_UsesResumeFlag x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:193
+    CliBrainSlotStrategyTests.CredentialResolver_CliInteractive_ReturnsPlaceholder x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:367
+    CliBrainSlotStrategyTests.CredentialResolver_SupportsCliScheme(reference: "cli:interactive", expected: True) x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:347
+    CliBrainSlotStrategyTests.CredentialResolver_SupportsCliScheme(reference: "cli:session", expected: True) x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:347
+    CliBrainSlotStrategyTests.CredentialResolver_SupportsCliScheme(reference: "vault:future", expected: False) x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:347
+    CliBrainSlotStrategyTests.ExtractCodexAssistantText_FromEventMsg_ReturnsMessage x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:326
+    CliBrainSlotStrategyTests.ExtractCodexAssistantText_FromItemCompletedAgentMessage_ReturnsText x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:302
+    CliBrainSlotStrategyTests.ExtractCodexSessionId_FromJsonlThreadStarted_ReturnsId x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:280
+    CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: "cli") x2 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:41
+    CliBrainSlotStrategyTests.TryParseCliEndpoint_KnownStrategies_Succeed(endpoint: "cli://codex-cli", expected: "codex-cli") x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:59
+    CliBrainSlotStrategyTests.TryParseCliEndpoint_KnownStrategies_Succeed(endpoint: "cli://grok-build", expected: "grok-cli") x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:59
+    CliBrainSlotStrategyTests.TryParseCliEndpoint_KnownStrategies_Succeed(endpoint: "cli://grok-cli", expected: "grok-cli") x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:59
+    CliBrainSlotStrategyTests.TryParseCliEndpoint_Unknown_Fails(endpoint: "") x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:79
+    CliBrainSlotStrategyTests.TryParseCliEndpoint_Unknown_Fails(endpoint: "cli://unknown") x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:79
+    CliBrainSlotStrategyTests.TryParseCliEndpoint_Unknown_Fails(endpoint: "http://127.0.0.1:8311/v1") x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:79
+    CliBrainSlotStrategyTests.ValidateEndpoint_CliKnownStrategy_DoesNotRequireHttpHostAllowlist x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:99
+    GitHubCliServiceTests.CommentOnPullAsync_VerifiesGhArgs x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.GitHubCliServiceTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:172
+    GitHubCliServiceTests.ListPullsAsync_WhenGhSucceeds_ReturnsPulls x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.GitHubCliServiceTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:77
+    McpInstanceResolverTests.GetRequestedInstanceName_ReadsFromArgs_EqualsSyntax x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:26
+    McpInstanceResolverTests.GetRequestedInstanceName_ReadsFromArgs_SeparatedSyntax x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:42
+    McpInstanceResolverTests.ValidateInstances_ThrowsOnDuplicatePorts x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:78
+    QBAgentHeartbeatOverlayTests.Frames_Rotate x1 [old QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:61
+    QBAgentHeartbeatOverlayTests.Hide_OverwritesGlyphWithSpace_SameCell x1 [old QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:43
+    QBAgentHeartbeatOverlayTests.Paint_DoesNotContainNewline x1 [old QBrainAi.QBAgent.Tests | QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs:23
+    SessionLogServiceReplaceDeleteTests.DeleteSessionAsync_Missing_ReturnsFalse x1 [old QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceReplaceDeleteTests runs ug-r14z16-final-win-unit-1] trait tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs:324
+  QUARANTINE METHODS WITH NO OLD CASE ON THIS HOST (0)
+  QUARANTINED BUT RAN IN THE NEW SET (0)
+  GONE (1)
+    IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: DropsBuildTests) x1 [old Build.Tests | NukeBuild.Tests.IntegrationLaneProjectsMockGateTests runs ug-r14z16-final-win-buildtests-1]
+  SURPLUS (0)
+  CROSS-RUN DUPLICATES IN THE NEW SET (0)
+  NEW-SET NON-PASSED (0)
+  ADDED (64), by project and class
+    Build.Tests, NukeBuild.Tests.IntegrationLaneExecutionContractTests: 2
+      IntegrationLaneExecutionContractTests.WrongCompositions_AreRejected(fault: "log omits the quarantine exclusion") [ug-r14f4-final-win-buildtests-2]
+      IntegrationLaneExecutionContractTests.WrongCompositions_AreRejected(fault: "quarantine exclusion omitted") [ug-r14f4-final-win-buildtests-2]
+    Build.Tests, NukeBuild.Tests.IntegrationLaneFilterMockGateTests: 4
+      IntegrationLaneFilterMockGateTests.WrongFilter_FailsSelection(host: "linux", fault: OmitsQuarantineExclusion) [ug-r14f4-final-win-buildtests-2]
+      IntegrationLaneFilterMockGateTests.WrongFilter_FailsSelection(host: "windows", fault: OmitsQuarantineExclusion) [ug-r14f4-final-win-buildtests-2]
+      IntegrationLaneFilterMockGateTests.WrongFilter_IsRejected(host: "linux", fault: OmitsQuarantineExclusion) [ug-r14f4-final-win-buildtests-2]
+      IntegrationLaneFilterMockGateTests.WrongFilter_IsRejected(host: "windows", fault: OmitsQuarantineExclusion) [ug-r14f4-final-win-buildtests-2]
+    Build.Tests, NukeBuild.Tests.IntegrationLaneProjectsMockGateTests: 6
+      IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: DropsNukeBuildIntegrationTests) [ug-r14f4-final-win-buildtests-2]
+      IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: KeepsBuildTests) [ug-r14f4-final-win-buildtests-2]
+      IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: KeepsPreRenameNames) [ug-r14f4-final-win-buildtests-2]
+      IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: KeepsSupportMcpTests) [ug-r14f4-final-win-buildtests-2]
+      IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: KeepsUnitProjects) [ug-r14f4-final-win-buildtests-2]
+      IntegrationLaneProjectsMockGateTests.WrongSelector_IsRejected(fault: OmitsSupportMcpEnvironmentIntegration) [ug-r14f4-final-win-buildtests-2]
+    Build.Tests, NukeBuild.Tests.TestGroupExecutionContractTests: 1
+      TestGroupExecutionContractTests.WrongCompositions_AreRejected(fault: "quarantine exclusion added") [ug-r14f4-final-win-buildtests-2]
+    Build.Tests, NukeBuild.Tests.TestProjectOwnershipMockGateTests: 22
+      TestProjectOwnershipMockGateTests.InfrastructureProject_IsAcceptedByNeitherSelection [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.IntegrationProject_WithUnitCase_IsRejected [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.ScriptedOwnership_SatisfiesTheContract [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.ScriptedQuarantine_SatisfiesTheQuarantineContract [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.SeparatedProjects_PreserveSelectedCases [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.UnitProject_WithIntegrationCase_IsRejected [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: AcceptsMixedProject, check: IntegrationProjectWithUnitCase) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: AcceptsMixedProject, check: UnitProjectWithIntegrationCase) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: AcceptsOtherRole, check: Contract) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: DedupesByCaseName, check: SeparatedProjects) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: DuplicatesCase, check: SeparatedProjects) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: IgnoresDuplicates, check: Contract) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: KeepsRejectedCases, check: UnitProjectWithIntegrationCase) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: LetsInfrastructureIn, check: InfrastructureProject) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongOwnership_IsRejected(fault: OmitsCase, check: SeparatedProjects) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: CountsRejectedProjectQuarantine) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: DropsQuarantinedCase) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: DropsRunnableCase) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: HidesForeignCase) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: QuarantinesByCaseName) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: RunsAndCountsQuarantinedCase) [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipMockGateTests.WrongQuarantine_IsRejected(fault: RunsQuarantinedCase) [ug-r14f4-final-win-buildtests-2]
+    Build.Tests, NukeBuild.Tests.TestProjectOwnershipTests: 14
+      TestProjectOwnershipTests.Declarations_AreTheRecordedRoles [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.DeclaredProjects_HoldOnlyCasesOfTheirOwnKind [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.InfrastructureProject_IsAcceptedByNeitherSelection [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.InfrastructureProject_IsOfferedToNeitherSelection [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.IntegrationProject_WithUnitCase_IsRejected [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.IntegrationSelection_AcceptsEveryLaneProject_AndRunsEveryIntegrationCaseOnce [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.LaneProjects_HaveTheirRecordedRoles_AndAnUndeclaredProjectIsRefused [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.ProductionOwnership_SatisfiesTheContract [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.ProductionOwnership_SatisfiesTheQuarantineContract [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.QuarantinedCases_AreCountedPerProject_ApartFromTheUnitAndIntegrationCases [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.SeparatedProjects_PreserveSelectedCases [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.TestSelection_IsDeclaredUnitOwned_AndRefusesAnyOtherProject [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.UnitProject_WithIntegrationCase_IsRejected [ug-r14f4-final-win-buildtests-2]
+      TestProjectOwnershipTests.UnitSelection_AcceptsEveryUnitOwnedProject_AndRunsEveryUnitCaseOnce [ug-r14f4-final-win-buildtests-2]
+    Build.Tests, NukeBuild.Tests.UnitTestFilterMockGateTests: 13
+      UnitTestFilterMockGateTests.ScriptedFilter_SatisfiesTheContract [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_FailsSelection(fault: AdmitsAiReview) [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_FailsSelection(fault: AdmitsIntegration) [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_FailsSelection(fault: OmitsQuarantineExclusion) [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_FailsSelection(fault: QuarantineAsCategory) [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_IsRejected(fault: AdmitsAiReview) [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_IsRejected(fault: AdmitsIntegration) [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_IsRejected(fault: LogOmitsProject) [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_IsRejected(fault: LogOmitsQuarantineExclusion) [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_IsRejected(fault: OmitsQuarantineExclusion) [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterMockGateTests.WrongFilter_IsRejected(fault: QuarantineAsCategory) [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterMockGateTests.WrongLogLine_IsRejected(fault: LogOmitsProject) [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterMockGateTests.WrongLogLine_IsRejected(fault: LogOmitsQuarantineExclusion) [ug-r14f4-final-win-buildtests-2]
+    Build.Tests, NukeBuild.Tests.UnitTestFilterTests: 2
+      UnitTestFilterTests.ProductionFilter_SatisfiesTheContract [ug-r14f4-final-win-buildtests-2]
+      UnitTestFilterTests.ProductionFilter_UsesTheSharedQuarantineExclusion [ug-r14f4-final-win-buildtests-2]

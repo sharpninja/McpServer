@@ -1,0 +1,26 @@
+{
+  "name": "ug-r15-embedding-compile-20261109T1017",
+  "target": "Compile",
+  "extraArgs": [],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "c8b231c13164956ac98d6234fb2c6fb459c0cefb",
+  "dirtyPaths": [
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+    "?? docs/plans/2026-11-09-pr87-completion-plan.md",
+    "?? docs/plans/2026-11-09-pr87-handoff-audit.md",
+    "?? docs/receipts/unit-suite-green-20261019/2026-11-09-codex-handoff-audit.txt",
+    "?? docs/receipts/unit-suite-green-20261019/2026-11-09-pr87-p0-task-map.md",
+    "?? docs/receipts/unit-suite-green-20261019/reconciliation-r15-03eea747-vs-da11faa2-supplement.md",
+    "?? docs/receipts/unit-suite-green-20261019/reconciliation-r15-03eea747-vs-da11faa2.txt",
+    "?? tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs",
+    "?? tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixtureTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingModelAssertionContract.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingModelAssertionContractTests.cs"
+  ],
+  "startedLocal": "2026-11-09T10:17:59",
+  "startedUtc": "2026-11-09T16:17:59.8825404Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r15-embedding-compile-20261109T1017.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r15-embedding-compile-20261109T1017.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r15-embedding-compile-20261109T1017.exit.txt"
+}
