@@ -21,4 +21,4 @@ This branch is at final code/test head `167afdcb1bbe4ce8e54770fb5882cc8a48d82b01
 
 The 68 classification-only tests and 1,915 uncited methods remain outside PR87 under PLAN-TESTCITATIONS-001. GitHub review comments are superseded by the full Claude Code Opus 5.5 high-effort hostile-validation workflow. The reviewer does not build or run tests. Merge remains a separate operator authorization.
 
-The PR stays draft until the Round 16 records commit is pushed and read back. It may be marked ready immediately before the independent full HV launch; a DISAGREE returns it to draft.
+Round 16 records commit `ebdcd34285dfc297a68bdb0c8e024e4684bb028e` was pushed and read back exactly. PR87 is ready for the independent full HV launch; a DISAGREE returns it to draft.
