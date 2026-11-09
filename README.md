@@ -200,6 +200,10 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 | `BumpVersion` | Increment patch version in GitVersion.yml |
 | `ValidateConfig` | Validate appsettings instance configuration |
 | `ValidateTraceability` | Check FR/TR/TEST requirements coverage |
+| `ArchitectureDiagrams` | Validate the one C4 workspace (`docs/architecture/c4/workspace.dsl`) with the pinned Structurizr CLI, render every view to `docs/architecture/c4/rendered/`, and fail on any documentation diagram not drawn from it (TR-MCP-NUKE-017) |
+| `InstallTestDependencies` | Ensure SQL Server LocalDB and PostgreSQL binaries exist for provider integration tests (idempotent) |
+| `MigrationIntegrationTests` | Run `Category=Integration` tests (provider migrations, process spawns) with provisioned dependencies |
+| `InstallOllama` | Ensure Ollama is installed, running on localhost:11434, and has the required model (idempotent) |
 | `TestMultiInstance` | Two-instance smoke test |
 | `TestGraphRagSmoke` | GraphRAG endpoint smoke test |
 | `BenchMemory` | Memory bench (v1 smoke + v2 multi-turn; tokens primary). Default `-Plugin grok`; `-Plugin all` after H7a `agree:true` (S7b/H7b on develop) |
@@ -290,6 +294,8 @@ failure names the `InstallOllama` target, which stages the portable binaries and
 |---|---|
 | [User Guide](docs/USER-GUIDE.md) | End-user setup and usage |
 | [Server Guide](docs/MCP-SERVER.md) | Operations and configuration |
+| [C4 model](docs/architecture/c4/README.md) | The one Structurizr definition every documentation diagram renders from; edit and render rules |
+| [xUnit.net v3 test guidance](docs/architecture/xUnit-v3-Test-Architecture-Guidance.md) | Test architecture rules for the xUnit v3 test projects |
 | [Client Integration](docs/CLIENT-INTEGRATION.md) | NuGet client library usage |
 | [REPL Migration Guide](docs/REPL-MIGRATION-GUIDE.md) | Migrating to qbrain-ai-repl |
 | [FAQ](docs/FAQ.md) | Common questions |

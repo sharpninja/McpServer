@@ -9,6 +9,8 @@ docs/architecture/c4/workspace.dsl is the one definition of every diagram in thi
 - views/entities.dsl: custom views of the entity model, EF-<area>-NN, one DbContext area per group.
 - model/mkt.dsl and views/mkt.dsl: the four docs/Marketing diagrams (DocCode MKT), MKT-<diagram>-01 views with -partN tiles; docs/Marketing/diagrams/README.md lists them.
 - model/qmd.dsl and views/qmd.dsl: the six imported diagrams of docs/Project/Quad-Model-Transactional-Diffgram-Plan.md (DocCode QMD), keyed by their imported IDs with -partN tiles and -BR-<branch> views.
+- model/str.dsl and views/str.dsl: the diagrams of docs/architecture/SessionTurn-Review-AgentContext-Architecture.md (DocCode STR), STR-<section>-<NN> views with -partN tiles; docs/Stateless-Agent-Context-Management.md links these views and has no fragment of its own.
+- model/am1.dsl and views/am1.dsl: the diagrams of docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (DocCode AM1), AM1-<section>-<NN> views with -partN tiles.
 - Deployment views (in workspace.dsl): DeploymentDocker, DeploymentDockerWorkspace, DeploymentWindowsService, DeploymentWindowsKeyServer, DeploymentWindowsDesktop, DeploymentLinuxSystemd, DeploymentFrpRailway, DeploymentFrpLocal.
 - documentation/ and decisions/: the architecture overview and the ADRs of PLAN-C4MODEL-001, attached to the software system with !docs and !adrs.
 - evidence.md: file-path evidence and confidence per element, including the full EF Core entity model.

@@ -38,3 +38,8 @@
 - [Scratch Workspace Integration Tests](context/scratch-workspace-integration-tests.md)
 - [Claude Hook Validation Skill Export](claude-hook-validation-skill.md)
 - [Project Requirements](Project/Requirements-Matrix.md)
+- [C4 model of QBrain.AI](architecture/c4/README.md) (the one Structurizr definition every documentation diagram renders from; ADRs under architecture/c4/decisions)
+- [Architecture: Turn Logging, Turn Reviews, and Stateless Agent Context](architecture/SessionTurn-Review-AgentContext-Architecture.md)
+- [Architecture Amendment 1: Durable Multi-Agent Hostile Validation](architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md)
+- [Stateless Agent Context Management](Stateless-Agent-Context-Management.md)
+- [xUnit.net v3 Test Architecture Guidance](architecture/xUnit-v3-Test-Architecture-Guidance.md)

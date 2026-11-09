@@ -324,6 +324,97 @@ documents:
     platforms:
       - github
       - azure
+  - id: arch-c4-model
+    title: C4 Model of QBrain.AI
+    source: docs/architecture/c4/README.md
+    target: Architecture/C4-Model.md
+    platforms:
+      - github
+      - azure
+  - id: arch-c4-overview
+    title: C4 Architecture Overview
+    source: docs/architecture/c4/documentation/01-overview.md
+    target: Architecture/C4-Overview.md
+    platforms:
+      - github
+      - azure
+  - id: arch-c4-evidence
+    title: C4 Model Evidence
+    source: docs/architecture/c4/evidence.md
+    target: Architecture/C4-Evidence.md
+    platforms:
+      - github
+      - azure
+  - id: arch-c4-adr-0001
+    title: 'ADR 1: One Structurizr Definition for Every Diagram'
+    source: docs/architecture/c4/decisions/0001-one-structurizr-definition-for-every-diagram.md
+    target: Architecture/C4-ADR-0001-One-Structurizr-Definition.md
+    platforms:
+      - github
+      - azure
+  - id: arch-c4-adr-0002
+    title: 'ADR 2: Non-C4 Diagrams as Custom Views'
+    source: docs/architecture/c4/decisions/0002-non-c4-diagrams-as-custom-views.md
+    target: Architecture/C4-ADR-0002-Non-C4-Diagrams-As-Custom-Views.md
+    platforms:
+      - github
+      - azure
+  - id: arch-c4-adr-0003
+    title: 'ADR 3: Render with the Structurizr Static Export and Chromium'
+    source: docs/architecture/c4/decisions/0003-render-with-structurizr-static-export-and-chromium.md
+    target: Architecture/C4-ADR-0003-Render-With-Static-Export.md
+    platforms:
+      - github
+      - azure
+  - id: arch-c4-adr-0004
+    title: 'ADR 4: The ArchitectureDiagrams Nuke Target'
+    source: docs/architecture/c4/decisions/0004-architecture-diagrams-nuke-target.md
+    target: Architecture/C4-ADR-0004-ArchitectureDiagrams-Target.md
+    platforms:
+      - github
+      - azure
+  - id: arch-c4-adr-0005
+    title: 'ADR 5: Visible Metadata and 8 to 16 pt Text'
+    source: docs/architecture/c4/decisions/0005-metadata-visible-and-8-to-16-pt-text.md
+    target: Architecture/C4-ADR-0005-Metadata-And-Text-Size.md
+    platforms:
+      - github
+      - azure
+  - id: arch-c4-adr-0006
+    title: 'ADR 6: Inspection Errors Fixed with Content'
+    source: docs/architecture/c4/decisions/0006-inspection-errors-fixed-with-content.md
+    target: Architecture/C4-ADR-0006-Inspection-Errors.md
+    platforms:
+      - github
+      - azure
+  - id: arch-sessionturn-review-agentcontext
+    title: 'Architecture: Turn Logging, Turn Reviews, and Stateless Agent Context'
+    source: docs/architecture/SessionTurn-Review-AgentContext-Architecture.md
+    target: Architecture/SessionTurn-Review-AgentContext-Architecture.md
+    platforms:
+      - github
+      - azure
+  - id: arch-sessionturn-amendment-1-durable-hv
+    title: 'Architecture Amendment 1: Durable Multi-Agent Hostile Validation'
+    source: docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md
+    target: Architecture/SessionTurn-Architecture-Amendment-1-Durable-HV.md
+    platforms:
+      - github
+      - azure
+  - id: arch-xunit-v3-guidance
+    title: xUnit.net v3 Test Architecture Guidance
+    source: docs/architecture/xUnit-v3-Test-Architecture-Guidance.md
+    target: Architecture/xUnit-v3-Test-Architecture-Guidance.md
+    platforms:
+      - github
+      - azure
+  - id: arch-stateless-agent-context
+    title: Stateless Agent Context Management
+    source: docs/Stateless-Agent-Context-Management.md
+    target: Architecture/Stateless-Agent-Context-Management.md
+    platforms:
+      - github
+      - azure
 navigation:
   - document: home
   - title: Requirements
@@ -374,6 +465,19 @@ navigation:
       - document: context-yaml-object-mutation
       - document: context-session-log-workflow-api
       - document: context-scratch-workspace-tests
+      - document: arch-c4-model
+      - document: arch-c4-overview
+      - document: arch-c4-evidence
+      - document: arch-c4-adr-0001
+      - document: arch-c4-adr-0002
+      - document: arch-c4-adr-0003
+      - document: arch-c4-adr-0004
+      - document: arch-c4-adr-0005
+      - document: arch-c4-adr-0006
+      - document: arch-sessionturn-review-agentcontext
+      - document: arch-sessionturn-amendment-1-durable-hv
+      - document: arch-xunit-v3-guidance
+      - document: arch-stateless-agent-context
   - title: Process
     path: Process
     children:
