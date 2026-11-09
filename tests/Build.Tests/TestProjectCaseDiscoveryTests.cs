@@ -96,6 +96,63 @@ public sealed class TestProjectCaseDiscoveryTests
         Assert.Empty(empty);
     }
 
+    /// <summary>Proves an empty unfiltered discovery fails before a target can report success.</summary>
+    /// <remarks>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7; R16-F2: required empty-result negative control.</remarks>
+    [Fact]
+    public void Discover_EmptyAllCaseResult_FailsTarget()
+    {
+        var failure = Assert.Throws<InvalidOperationException>(() => TestProjectCaseDiscovery.Discover(
+            "Project.Tests", "Project.Tests.csproj", TestProjectRole.Unit, new ScriptedDiscoverySource([], [], [])));
+
+        Assert.Contains("found no test case", failure.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>Proves a duplicate runtime identity fails discovery instead of being silently coalesced.</summary>
+    /// <remarks>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7; R16-F2: required duplicate-identity negative control.</remarks>
+    [Fact]
+    public void Discover_DuplicateIdentity_FailsTarget()
+    {
+        var failure = Assert.Throws<InvalidOperationException>(() => TestProjectCaseDiscovery.Discover(
+            "Project.Tests", "Project.Tests.csproj", TestProjectRole.Unit,
+            new ScriptedDiscoverySource(["DuplicateCase", "DuplicateCase"], [], [])));
+
+        Assert.Contains("repeated: DuplicateCase", failure.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>Proves a filtered identity absent from unfiltered discovery fails the target.</summary>
+    /// <remarks>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7; R16-F2: required subset-consistency negative control.</remarks>
+    [Fact]
+    public void Discover_FilteredIdentityAbsentFromAll_FailsTarget()
+    {
+        var failure = Assert.Throws<InvalidOperationException>(() => TestProjectCaseDiscovery.Discover(
+            "Project.Tests", "Project.Tests.csproj", TestProjectRole.Unit,
+            new ScriptedDiscoverySource(["UnitCase"], ["UnknownIntegrationCase"], [])));
+
+        Assert.Contains("absent from all-case discovery: UnknownIntegrationCase", failure.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>Proves successful runner output without the test-list header is rejected.</summary>
+    /// <remarks>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7; R16-F2: required missing-header negative control.</remarks>
+    [Fact]
+    public void DotNetListTestDiscovery_MissingHeader_Throws()
+    {
+        var failure = Assert.Throws<InvalidOperationException>(() => DotNetListTestDiscoverySource.Parse(
+            ["Build succeeded.", "    Namespace.Class.Case"]));
+
+        Assert.Contains("did not contain the test-list header", failure.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>Proves parsing stops at the first unindented runner line after the test list.</summary>
+    /// <remarks>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7; R16-F2: pins the list boundary against trailing output.</remarks>
+    [Fact]
+    public void DotNetListTestDiscovery_UnindentedLineEndsList()
+    {
+        var cases = DotNetListTestDiscoverySource.Parse(
+            ["The following Tests are available:", "    Namespace.Class.First", "Build succeeded.", "    Namespace.Class.AfterBoundary"]);
+
+        Assert.Equal(["Namespace.Class.First"], cases);
+    }
+
     /// <summary>Hermetic discovery source keyed by the exact filters the production composer requests.</summary>
     /// <remarks>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7; R15-F1: added with the scripted discovery contract.</remarks>
     private sealed class ScriptedDiscoverySource(

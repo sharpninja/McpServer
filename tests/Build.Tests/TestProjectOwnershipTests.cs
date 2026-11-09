@@ -4,10 +4,9 @@ namespace NukeBuild.Tests;
 /// TR-MCP-NUKE-019 AC-7 binding: runs the <see cref="TestProjectOwnershipContract"/> cases, unchanged from the BDPv4 mock
 /// gate ug-r14f4-s1-mockgate-1, over the production <see cref="TestProjectOwnership"/>; pins the build's role declarations
 /// (<see cref="TestProjectRoles"/>) and the checks Test and MigrationIntegrationTests make with them; and proves that the
-/// build's real declarations and the recorded case inventory are fully separated: every unit-owned project holds only unit
-/// cases, every integration-owned project only integration cases, the infrastructure-owned project is offered to neither
-/// selection, and the unit selection (the projects Test runs) and the integration selection (the lane's projects) each
-/// accept every project offered and run every intended case exactly once.
+/// build's real role declarations against explicitly synthetic case inventories: unit-owned projects accept only unit
+/// cases, integration-owned projects accept only integration cases, the infrastructure-owned project is offered to neither
+/// selection, and each valid selection preserves every scripted case exactly once.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -18,12 +17,10 @@ namespace NukeBuild.Tests;
 /// replace is in the dated entries below.
 /// </para>
 /// <para>
-/// The case inventory is recorded, not scanned (plan section 27.45: no run-time scanner): the per-project case counts of
-/// the da11faa2 TRX set docs/receipts/hv/unitgreen-r14-trx-da11faa2 (unit cases from the Test gate, infrastructure cases
-/// from the Build.Tests gate, integration cases from the lane as distinct cases across both hosts) with the cases slices
-/// S3 to S8 moved, and the quarantined cases (TR-MCP-NUKE-019 AC-8) counted apart, expanded to ordinal case names.
-/// Build-infrastructure test, accountable through TR only; it reads no checkout, process environment or test result, so
-/// it carries no Integration trait.
+/// These infrastructure tests do not claim the current layout's per-project or total case counts. Runtime target ownership
+/// is bound separately by <see cref="TestProjectCaseDiscoveryTests"/> to cases discovered from each selected project. The
+/// scripted inventories here isolate the pure ownership decision; the only workspace quantity retained is AC-8's 29
+/// quarantined cases, counted apart as 26 and 3. They read no checkout, process environment or test result.
 /// </para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: binds the quarantine contract (mock gate ug-qr-mockgate-1) to the production decision through an adapter that marks the quarantined cases of each offered project, and records the quarantined cases per project apart from the unit and integration cases: the 22 test methods tagged Quarantine=NoMatchingCriterion on 2026-11-07, whose behavior matches no acceptance criterion (uncited-matches.txt), are 29 test cases, 3 in QBrainAi.QBAgent.Tests (QBAgentHeartbeatOverlayTests: 3 methods) and 26 in QBrainAi.Support.Mcp.Tests (McpInstanceResolverTests 3 methods and 3 cases, CliBrainSlotStrategyTests 13 methods and 20 cases, GitHubCliServiceTests 2, SessionLogServiceReplaceDeleteTests 1), because four of the methods are theories (2, 3, 3 and 3 rows). The unit selection still accepts every unit-owned project, runs the 4835 other unit cases exactly once and counts the 29 quarantined cases apart; the integration selection counts none.</para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added the binding of slice S2 for hostile validation finding R14-F4 (operator 2026-11-06: "Separate projects + AC (Recommended)"; MEMORY-BESTPRACTICE-001 rules 4.1, 4.4 and 4.5).</para>
@@ -35,11 +32,12 @@ namespace NukeBuild.Tests;
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S7 updates the record: the mixed classes of QBrainAi.Support.Mcp.Tests split into their unit halves, which stay, and their integration halves in QBrainAi.Support.Mcp.EnvironmentIntegrationTests, with the pure-integration classes that shared their files, so 169 more integration cases moved there (221 to 390); QBrainAi.Support.Mcp.Tests, which still holds 98 integration cases (the reverse-reference bindings and the classes left for slice S8), stays rejected by both selections until then.</para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S8 updates the record: the last 98 integration cases of QBrainAi.Support.Mcp.Tests (the classes its collection bindings named, the platform-native cluster and the S7 leftovers) moved to QBrainAi.Support.Mcp.EnvironmentIntegrationTests, and the two collection bindings that name integration classes moved with them as Category=Integration cases (390 to 490 there); QBrainAi.Support.Mcp.Tests holds 3308 unit cases and no integration case, so the unit selection accepts it, and it left the lane, so the integration selection accepts every lane project. Every recorded verdict is now Accepted.</para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S9 of hostile validation finding R14-F4 turns the recorded current-layout expectation that slices S3 to S8 updated into the plain separated assertion, now that the separation is complete: the summary and the first two remarks paragraphs say what the class proves; CurrentLayoutCaseCounts is now RecordedCaseInventory with the same rows; CurrentLayout_UnitSelection_RecordsTheMixedUnitProjectsAsRejected becomes UnitSelection_AcceptsEveryUnitOwnedProject_AndRunsEveryUnitCaseOnce and CurrentLayout_IntegrationSelection_RecordsTheLaneProjectsItCannotAccept becomes IntegrationSelection_AcceptsEveryLaneProject_AndRunsEveryIntegrationCaseOnce, each asserting that every offered project is accepted and every intended case of the inventory runs exactly once instead of listing recorded verdicts; DeclaredProjects_HoldOnlyCasesOfTheirOwnKind and InfrastructureProject_IsOfferedToNeitherSelection are added. The contract cases, the mock gate and the declarations are unchanged (the role decisions of slice S9 leave every declaration as it was; TestProjectRoles documents why the other test projects stay undeclared).</para>
+/// <para>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7, AC-8; R16-F1: the preceding dated count entries are history only. The binding now uses an explicitly synthetic inventory and makes no current-layout case-count claim; runtime-discovered identities bind the targets in <see cref="TestProjectCaseDiscoveryTests"/>.</para>
 /// </remarks>
 public sealed class TestProjectOwnershipTests
 {
-    /// <summary>The seven projects Test ran at da11faa2 (the unit gate TRX set), in solution order.</summary>
-    private static readonly string[] UnitProjectsTestRanAtDa11faa2 =
+    /// <summary>The declared unit projects offered by Test, in target order.</summary>
+    private static readonly string[] UnitSelectionProjects =
     [
         "QBrainAi.Support.Mcp.Tests", "QBrainAi.Client.Tests", "QBrainAi.Cqrs.Tests", "QBrainAi.Launcher.Tests",
         "QBrainAi.McpAgent.Tests", "QBrainAi.Repl.Core.Tests", "QBrainAi.QBAgent.Tests",
@@ -56,42 +54,26 @@ public sealed class TestProjectOwnershipTests
     ];
 
     /// <summary>
-    /// The recorded case inventory per project: unit, integration and infrastructure cases, the da11faa2 counts
-    /// with the cases the completed slices moved, and the quarantined cases (TR-MCP-NUKE-019 AC-8), counted apart and of
-    /// the project's own kind. The unit and quarantined counts add up to 4864 cases per host (4835 unit cases and 29
-    /// quarantined cases): the Test gate's 4866 at da11faa2 less the two collection bindings that slice S8 moved to the
-    /// integration-owned project as integration cases;
-    /// Build.Tests' 467 infrastructure cases and NukeBuild.IntegrationTests' 96 integration cases made the da11faa2 Linux
-    /// infrastructure gate's 563, when both were in Build.Tests; QBrainAi.Support.Mcp.IntegrationTests counts the 6 cases
-    /// of the two classes the lane runs (its held-out classes are Integration-tagged as well).
+    /// A synthetic ownership inventory: one ordinary case of each declared project's role, plus AC-8's 29 quarantined
+    /// unit cases counted apart in the two projects that own them. It is deliberately not a snapshot of current test counts.
     /// </summary>
-    /// <remarks>
-    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S3 moved 1 case from QBrainAi.McpAgent.Tests to QBrainAi.McpAgent.IntegrationTests, 2 from QBrainAi.Repl.Core.Tests to QBrainAi.Repl.IntegrationTests (179 to 181) and 3 from QBrainAi.QBAgent.Tests to QBrainAi.QBAgent.IntegrationTests; no unit count changed.</para>
-    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S4 moved the 96 integration cases of Build.Tests to Build.IntegrationTests; Build.Tests keeps its 467 infrastructure cases.</para>
-    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S5 moved 13 integration cases (distinct across both hosts: 7 on Linux, 7 on Windows) from QBrainAi.Support.Mcp.Tests (488 to 475) to QBrainAi.Support.Mcp.Environment.IntegrationTests (case-identity reconciliation reconciliation-s5.txt); no unit count changed.</para>
-    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S6 moved 208 integration cases (distinct across both hosts) of 48 whole pure-integration files from QBrainAi.Support.Mcp.Tests (475 to 267) to QBrainAi.Support.Mcp.EnvironmentIntegrationTests (13 to 221; case-identity reconciliation reconciliation-s6.txt); no unit count changed.</para>
-    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: QBrainAi.Support.Mcp.Environment.IntegrationTests and Build.IntegrationTests renamed to QBrainAi.Support.Mcp.EnvironmentIntegrationTests and NukeBuild.IntegrationTests, their root namespaces (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name."); no count changed.</para>
-    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S7 moved 169 integration cases (distinct across both hosts) of the split mixed classes and the pure classes in their files from QBrainAi.Support.Mcp.Tests (267 to 98) to QBrainAi.Support.Mcp.EnvironmentIntegrationTests (221 to 390; case-identity reconciliation reconciliation-s7.txt); the unit halves keep every unit case, so no unit count changed.</para>
-    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S8 moved the last 98 integration cases (distinct across both hosts) from QBrainAi.Support.Mcp.Tests (98 to 0) to QBrainAi.Support.Mcp.EnvironmentIntegrationTests, and the two collection-membership bindings that name classes there (ProcessEnvironmentCollectionTests.ProcessEnvironmentWriters_AreInASerializedCollection and SqlServerLocalDbCollectionTests.LocalDbClasses_AreInTheSqlServerLocalDbCollection) moved with them and now carry Category=Integration, because an integration-owned project holds only integration cases (3310 to 3308 unit cases; 390 to 490 integration cases; case-identity reconciliation reconciliation-s8-v2.txt).</para>
-    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: renamed from CurrentLayoutCaseCounts in slice S9, since the separation is complete and the rows are the inventory the plain assertions read; no row or count changed.</para>
-    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: adds the Quarantined column: QBrainAi.Support.Mcp.Tests 26 of its 3308 unit cases are quarantined (3282 unit cases and 26 quarantined) and QBrainAi.QBAgent.Tests 3 of its 93 (90 and 3); every other row counts none.</para>
-    /// </remarks>
-    private static readonly (string Project, int Unit, int Integration, int Infrastructure, int Quarantined)[] RecordedCaseInventory =
+    /// <remarks>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7, AC-8; R16-F1: replaces the recorded current-layout counts with an explicitly synthetic decision contract.</remarks>
+    private static readonly (string Project, int Unit, int Integration, int Infrastructure, int Quarantined)[] SyntheticCaseInventory =
     [
-        ("QBrainAi.Support.Mcp.Tests", 3282, 0, 0, 26),
-        ("QBrainAi.Support.Mcp.EnvironmentIntegrationTests", 0, 490, 0, 0),
-        ("QBrainAi.Client.Tests", 311, 0, 0, 0),
-        ("QBrainAi.Cqrs.Tests", 33, 0, 0, 0),
-        ("QBrainAi.Launcher.Tests", 20, 0, 0, 0),
-        ("QBrainAi.McpAgent.Tests", 64, 0, 0, 0),
-        ("QBrainAi.Repl.Core.Tests", 1035, 0, 0, 0),
-        ("QBrainAi.QBAgent.Tests", 90, 0, 0, 3),
+        ("QBrainAi.Support.Mcp.Tests", 1, 0, 0, 26),
+        ("QBrainAi.Support.Mcp.EnvironmentIntegrationTests", 0, 1, 0, 0),
+        ("QBrainAi.Client.Tests", 1, 0, 0, 0),
+        ("QBrainAi.Cqrs.Tests", 1, 0, 0, 0),
+        ("QBrainAi.Launcher.Tests", 1, 0, 0, 0),
+        ("QBrainAi.McpAgent.Tests", 1, 0, 0, 0),
+        ("QBrainAi.Repl.Core.Tests", 1, 0, 0, 0),
+        ("QBrainAi.QBAgent.Tests", 1, 0, 0, 3),
         ("QBrainAi.McpAgent.IntegrationTests", 0, 1, 0, 0),
-        ("QBrainAi.QBAgent.IntegrationTests", 0, 3, 0, 0),
-        ("NukeBuild.IntegrationTests", 0, 96, 0, 0),
-        ("Build.Tests", 0, 0, 467, 0),
-        ("QBrainAi.Repl.IntegrationTests", 0, 181, 0, 0),
-        ("QBrainAi.Support.Mcp.IntegrationTests", 0, 6, 0, 0),
+        ("QBrainAi.QBAgent.IntegrationTests", 0, 1, 0, 0),
+        ("NukeBuild.IntegrationTests", 0, 1, 0, 0),
+        ("Build.Tests", 0, 0, 1, 0),
+        ("QBrainAi.Repl.IntegrationTests", 0, 1, 0, 0),
+        ("QBrainAi.Support.Mcp.IntegrationTests", 0, 1, 0, 0),
     ];
 
     /// <summary>
@@ -186,15 +168,14 @@ public sealed class TestProjectOwnershipTests
     }
 
     /// <summary>
-    /// TR-MCP-NUKE-019 AC-7: Test's check passes for the seven projects its name rules selected at da11faa2, so Test runs
-    /// the same projects and cases, and it refuses, naming each, a selected project that is undeclared or declared with
-    /// another role, while not naming a project that is declared unit-owned.
+    /// TR-MCP-NUKE-019 AC-7: Test's declared project list contains only unit-owned projects, and its role check refuses,
+    /// naming each, a project that is undeclared or declared with another role.
     /// </summary>
     /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added.</remarks>
     [Fact]
     public void TestSelection_IsDeclaredUnitOwned_AndRefusesAnyOtherProject()
     {
-        TestProjectRoles.RequireRole(TestProjectRole.Unit, UnitProjectsTestRanAtDa11faa2, "Test");
+        TestProjectRoles.RequireRole(TestProjectRole.Unit, UnitSelectionProjects, "Test");
 
         var refusal = Assert.Throws<InvalidOperationException>(() => TestProjectRoles.RequireRole(
             TestProjectRole.Unit,
@@ -239,20 +220,18 @@ public sealed class TestProjectOwnershipTests
     }
 
     /// <summary>
-    /// TR-MCP-NUKE-019 AC-7: the build's real declarations and the recorded inventory are fully separated. Every project of
-    /// the inventory is declared and holds at least one case and only cases of its own kind: a unit-owned project only
-    /// unit cases, an integration-owned project only integration cases, the infrastructure-owned project only
-    /// infrastructure cases. The declared projects without an inventory row are exactly the two integration-owned
-    /// projects the lane holds out, which no selection offers. Data: the recorded inventory and the build's declarations.
+    /// TR-MCP-NUKE-019 AC-7: every project in the synthetic inventory is declared and holds only cases of its own role.
+    /// The declared projects without a synthetic row are exactly the two integration-owned projects the lane holds out.
     /// </summary>
     /// <remarks>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added in slice S9 of hostile validation finding R14-F4 as part of the plain separated assertion.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: reads the Quarantined column; a project's quarantined cases are of its own kind, so they count with its own cases here, and a project still needs at least one case that is not quarantined.</para>
+    /// <para>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7; R16-F1: the inventory is now explicitly synthetic and asserts no current project count.</para>
     /// </remarks>
     [Fact]
     public void DeclaredProjects_HoldOnlyCasesOfTheirOwnKind()
     {
-        foreach (var (project, unit, integration, infrastructure, quarantined) in RecordedCaseInventory)
+        foreach (var (project, unit, integration, infrastructure, quarantined) in SyntheticCaseInventory)
         {
             var role = TestProjectRoles.RoleOf(project);
             var (own, foreign) = role switch
@@ -266,7 +245,7 @@ public sealed class TestProjectOwnershipTests
 
         var withoutInventory = TestProjectRoles.Declared
             .Select(entry => entry.Project)
-            .Except(RecordedCaseInventory.Select(row => row.Project), StringComparer.Ordinal)
+            .Except(SyntheticCaseInventory.Select(row => row.Project), StringComparer.Ordinal)
             .ToArray();
         Assert.Equal(HeldOutIntegrationProjects, withoutInventory);
     }
@@ -275,9 +254,8 @@ public sealed class TestProjectOwnershipTests
     /// TR-MCP-NUKE-019 AC-7: the unit selection is offered every unit-owned project the build declares, exactly the projects
     /// Test runs (QBrainAi.Support.Mcp.Tests, QBrainAi.Client.Tests, QBrainAi.Cqrs.Tests, QBrainAi.Launcher.Tests,
     /// QBrainAi.McpAgent.Tests, QBrainAi.Repl.Core.Tests and QBrainAi.QBAgent.Tests), accepts every one with its real
-    /// declared role and recorded inventory, runs every unit case of the inventory that is not quarantined exactly once
-    /// (4835 cases), none omitted and none repeated, and counts the 29 quarantined cases apart, per project, each exactly
-    /// once (TR-MCP-NUKE-019 AC-8). Data: the recorded inventory, Test's projects at da11faa2 and the build's declarations.
+    /// declared role and synthetic inventory, runs every scripted unit case exactly once, and counts AC-8's 29 quarantined
+    /// cases apart as 26 and 3. Runtime discovery, not this test, establishes the current layout.
     /// </summary>
     /// <remarks>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added.</para>
@@ -288,20 +266,20 @@ public sealed class TestProjectOwnershipTests
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S8 moved the last 98 and the two collection bindings that name integration classes (now integration cases there), so QBrainAi.Support.Mcp.Tests holds 3308 unit cases and no integration case and is accepted (1556 to 4864 accepted cases); the unit total is 4864, the da11faa2 Test gate's 4866 less those two bindings. The method name is kept for the case's identity; the summary describes the new record.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S9 renames the case from CurrentLayout_UnitSelection_RecordsTheMixedUnitProjectsAsRejected, which no longer described it, and makes it the plain assertion: the offered projects are every declared unit-owned project, every verdict is Accepted, and the selected cases are every unit case of the inventory exactly once, in place of a recorded verdict list.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: the 29 quarantined cases are counted apart, per project (QBrainAi.Support.Mcp.Tests 26, QBrainAi.QBAgent.Tests 3), each exactly once, and the exactly-once count of the cases run drops from 4864 to 4835. The method name is kept for the case's identity.</para>
+    /// <para>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7, AC-8; R16-F1: the earlier totals are historical. This test now uses one scripted unit case per selected project plus the preserved 26-and-3 quarantine contract.</para>
     /// </remarks>
     [Fact]
     public void UnitSelection_AcceptsEveryUnitOwnedProject_AndRunsEveryUnitCaseOnce()
     {
         var unitOwned = TestProjectRoles.Declared.Where(entry => entry.Role == TestProjectRole.Unit).Select(entry => entry.Project).ToArray();
-        Assert.Equal(unitOwned, UnitProjectsTestRanAtDa11faa2);
-        var offered = UnitProjectsTestRanAtDa11faa2.Select(RecordedInventory).ToArray();
+        Assert.Equal(unitOwned, UnitSelectionProjects);
+        var offered = UnitSelectionProjects.Select(SyntheticInventory).ToArray();
 
         var outcome = ownership.Decide(TestSelectionKind.Unit, offered);
 
-        Assert.Equal(UnitProjectsTestRanAtDa11faa2, outcome.Projects.Select(decision => decision.Project).ToArray());
+        Assert.Equal(UnitSelectionProjects, outcome.Projects.Select(decision => decision.Project).ToArray());
         Assert.All(outcome.Projects, decision => Assert.Equal(TestProjectVerdict.Accepted, decision.Verdict));
         TestProjectOwnershipContract.AssertExactlyOnce("unit selection", outcome.Cases, IntendedCases(TestCaseKind.Unit));
-        Assert.Equal(4835, outcome.Cases.Count);
         TestProjectOwnershipContract.AssertExactlyOnce("unit selection, quarantined cases counted apart", outcome.Quarantined, IntendedQuarantinedCases());
         Assert.Equal(QuarantinedPerProject, CountByProject(outcome.Quarantined));
         Assert.Equal(29, outcome.Quarantined.Count);
@@ -311,23 +289,23 @@ public sealed class TestProjectOwnershipTests
     /// TR-MCP-NUKE-019 AC-8: the build's test-project ownership counts the quarantined cases per project apart from the
     /// unit and integration cases: the unit selection counts QBrainAi.Support.Mcp.Tests 26 and QBrainAi.QBAgent.Tests 3
     /// (29 cases of the 22 tagged methods) and runs none of them, the integration selection counts none, and together the
-    /// two selections run every case that is not quarantined exactly once (4835 unit and 777 integration cases) and count
-    /// every quarantined case exactly once, so no case is dropped. Data: the recorded inventory, Test's projects at
-    /// da11faa2, the lane's selection over the contract's solution row and the build's declarations.
+    /// two selections run every non-quarantined scripted case exactly once and account for every quarantined case.
     /// </summary>
-    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</para>
+    /// <para>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7, AC-8; R16-F1: replaces current-layout totals with a synthetic decision trace while retaining the 29-case quarantine assertion.</para>
+    /// </remarks>
     [Fact]
     public void QuarantinedCases_AreCountedPerProject_ApartFromTheUnitAndIntegrationCases()
     {
         var lane = new IntegrationLaneProjects().Select(IntegrationLaneProjectsContract.Solution);
-        var unit = ownership.Decide(TestSelectionKind.Unit, UnitProjectsTestRanAtDa11faa2.Select(RecordedInventory).ToArray());
-        var integration = ownership.Decide(TestSelectionKind.Integration, lane.Select(RecordedInventory).ToArray());
+        var unit = ownership.Decide(TestSelectionKind.Unit, UnitSelectionProjects.Select(SyntheticInventory).ToArray());
+        var integration = ownership.Decide(TestSelectionKind.Integration, lane.Select(SyntheticInventory).ToArray());
 
         Assert.Equal(QuarantinedPerProject, CountByProject(unit.Quarantined));
         Assert.Empty(integration.Quarantined);
         SelectedTestCase[] run = [.. unit.Cases, .. integration.Cases];
         TestProjectOwnershipContract.AssertExactlyOnce("both selections, cases run", run, [.. IntendedCases(TestCaseKind.Unit), .. IntendedCases(TestCaseKind.Integration)]);
-        Assert.Equal(4835 + 777, run.Length);
         TestProjectOwnershipContract.AssertExactlyOnce("both selections, quarantined cases", [.. unit.Quarantined, .. integration.Quarantined], IntendedQuarantinedCases());
         Assert.DoesNotContain(run, item => unit.Quarantined.Contains(item));
     }
@@ -337,10 +315,8 @@ public sealed class TestProjectOwnershipTests
     /// integration-owned project the build declares except the two the lane holds out
     /// (QBrainAi.Support.Mcp.EnvironmentIntegrationTests, QBrainAi.McpAgent.IntegrationTests,
     /// QBrainAi.QBAgent.IntegrationTests, NukeBuild.IntegrationTests, QBrainAi.Repl.IntegrationTests and
-    /// QBrainAi.Support.Mcp.IntegrationTests, whose inventory row counts only the two classes the lane runs), accepts every
-    /// one with its real declared role and recorded inventory, and runs every integration case of the inventory exactly
-    /// once (777 cases), none omitted and none repeated. Data: the recorded inventory, the lane's selection over the
-    /// contract's solution row and the build's declarations.
+    /// QBrainAi.Support.Mcp.IntegrationTests), accepts every one with its real declared role and synthetic inventory, and
+    /// runs every scripted integration case exactly once. Runtime discovery establishes the current case layout.
     /// </summary>
     /// <remarks>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: added.</para>
@@ -353,6 +329,7 @@ public sealed class TestProjectOwnershipTests
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S8's lane: QBrainAi.Support.Mcp.Tests left the lane, and QBrainAi.Support.Mcp.EnvironmentIntegrationTests is accepted with 490 cases (the last 98 moved cases and the two moved collection bindings; 677 to 777 accepted cases), so the integration selection accepts every lane project. The method name is kept for the case's identity; the summary describes the new record.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S9 renames the case from CurrentLayout_IntegrationSelection_RecordsTheLaneProjectsItCannotAccept, which no longer described it, and makes it the plain assertion: the lane's projects are every declared integration-owned project except the two held out, every verdict is Accepted, and the selected cases are every integration case of the inventory exactly once, in place of a recorded verdict list.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: no lane project holds a quarantined case, so the integration selection counts none and still runs the 777 integration cases exactly once.</para>
+    /// <para>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7; R16-F1: the earlier totals are historical; the current binding is explicitly synthetic and asserts no layout count.</para>
     /// </remarks>
     [Fact]
     public void IntegrationSelection_AcceptsEveryLaneProject_AndRunsEveryIntegrationCaseOnce()
@@ -364,25 +341,26 @@ public sealed class TestProjectOwnershipTests
             .Order(StringComparer.Ordinal)
             .ToArray();
         Assert.Equal(integrationOwned, lane.Order(StringComparer.Ordinal).ToArray());
-        var offered = lane.Select(RecordedInventory).ToArray();
+        var offered = lane.Select(SyntheticInventory).ToArray();
 
         var outcome = ownership.Decide(TestSelectionKind.Integration, offered);
 
         Assert.Equal(lane, outcome.Projects.Select(decision => decision.Project).ToArray());
         Assert.All(outcome.Projects, decision => Assert.Equal(TestProjectVerdict.Accepted, decision.Verdict));
         TestProjectOwnershipContract.AssertExactlyOnce("integration selection", outcome.Cases, IntendedCases(TestCaseKind.Integration));
-        Assert.Equal(777, outcome.Cases.Count);
         Assert.Empty(outcome.Quarantined);
     }
 
     /// <summary>
     /// TR-MCP-NUKE-019 AC-2, AC-7: the infrastructure-owned project the build declares (Build.Tests, the build's own tests)
     /// is offered to neither selection: it is not among the projects Test runs nor among the lane's projects, and no case
-    /// of it is selected; together the two selections run every unit and integration case of the inventory exactly once
-    /// and none of its 467 infrastructure cases. Data: the recorded inventory, Test's projects at da11faa2, the lane's
-    /// selection over the contract's solution row and the build's declarations.
+    /// of it is selected; together the two selections preserve every offered synthetic unit and integration case, while
+    /// the synthetic infrastructure case is offered to neither.
     /// </summary>
-    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added in slice S9 of hostile validation finding R14-F4 as part of the plain separated assertion.</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added in slice S9 of hostile validation finding R14-F4 as part of the plain separated assertion.</para>
+    /// <para>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7; R16-F1: replaces the recorded infrastructure count with one explicitly synthetic case.</para>
+    /// </remarks>
     [Fact]
     public void InfrastructureProject_IsOfferedToNeitherSelection()
     {
@@ -390,19 +368,19 @@ public sealed class TestProjectOwnershipTests
         var infrastructure = TestProjectRoles.Declared.Where(entry => entry.Role == TestProjectRole.Infrastructure).Select(entry => entry.Project).ToArray();
         Assert.Equal(expectedInfrastructure, infrastructure);
         var lane = new IntegrationLaneProjects().Select(IntegrationLaneProjectsContract.Solution);
-        Assert.DoesNotContain("Build.Tests", UnitProjectsTestRanAtDa11faa2);
+        Assert.DoesNotContain("Build.Tests", UnitSelectionProjects);
         Assert.DoesNotContain("Build.Tests", lane);
 
-        var unit = ownership.Decide(TestSelectionKind.Unit, UnitProjectsTestRanAtDa11faa2.Select(RecordedInventory).ToArray());
-        var integration = ownership.Decide(TestSelectionKind.Integration, lane.Select(RecordedInventory).ToArray());
+        var unit = ownership.Decide(TestSelectionKind.Unit, UnitSelectionProjects.Select(SyntheticInventory).ToArray());
+        var integration = ownership.Decide(TestSelectionKind.Integration, lane.Select(SyntheticInventory).ToArray());
 
         SelectedTestCase[] selected = [.. unit.Cases, .. integration.Cases];
         Assert.DoesNotContain(selected, item => item.Project == "Build.Tests");
         TestProjectOwnershipContract.AssertExactlyOnce("both selections", selected, [.. IntendedCases(TestCaseKind.Unit), .. IntendedCases(TestCaseKind.Integration)]);
-        Assert.Equal(467, RecordedInventory("Build.Tests").Cases.Count(item => item.Kind == TestCaseKind.Infrastructure));
+        Assert.Single(SyntheticInventory("Build.Tests").Cases, item => item.Kind == TestCaseKind.Infrastructure);
     }
 
-    /// <summary>TR-MCP-NUKE-019 AC-7: every case of one kind in the recorded inventory that is not quarantined, identified by project and case name.</summary>
+    /// <summary>TR-MCP-NUKE-019 AC-7: every non-quarantined case of one kind in the synthetic inventory.</summary>
     /// <param name="kind">The case kind.</param>
     /// <returns>The cases, in inventory order.</returns>
     /// <remarks>
@@ -410,17 +388,17 @@ public sealed class TestProjectOwnershipTests
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: leaves out the quarantined cases, which no selection runs.</para>
     /// </remarks>
     private static SelectedTestCase[] IntendedCases(TestCaseKind kind)
-        => RecordedCaseInventory
-            .Select(row => RecordedInventory(row.Project))
+        => SyntheticCaseInventory
+            .Select(row => SyntheticInventory(row.Project))
             .SelectMany(project => project.Cases.Where(item => item.Kind == kind && !item.Quarantined).Select(item => new SelectedTestCase(project.Name, item.Name)))
             .ToArray();
 
-    /// <summary>TR-MCP-NUKE-019 AC-8: every quarantined case of the recorded inventory, identified by project and case name.</summary>
+    /// <summary>TR-MCP-NUKE-019 AC-8: every quarantined case of the synthetic inventory, identified by project and case name.</summary>
     /// <returns>The cases, in inventory order.</returns>
     /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: added.</remarks>
     private static SelectedTestCase[] IntendedQuarantinedCases()
-        => RecordedCaseInventory
-            .Select(row => RecordedInventory(row.Project))
+        => SyntheticCaseInventory
+            .Select(row => SyntheticInventory(row.Project))
             .SelectMany(project => project.Cases.Where(item => item.Quarantined).Select(item => new SelectedTestCase(project.Name, item.Name)))
             .ToArray();
 
@@ -453,16 +431,17 @@ public sealed class TestProjectOwnershipTests
         return new TestProjectOwnershipContract.QuarantineOutcome(outcome.Projects, outcome.Cases, outcome.Quarantined);
     }
 
-    /// <summary>TR-MCP-NUKE-019 AC-7: the recorded inventory of one project, with its real declared role.</summary>
+    /// <summary>TR-MCP-NUKE-019 AC-7: the explicitly synthetic inventory of one project, with its real declared role.</summary>
     /// <param name="project">The project name.</param>
     /// <returns>The project with its declared role and its cases, named by kind and ordinal.</returns>
     /// <remarks>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: renamed from CurrentLayoutInventory in slice S9; it reads RecordedCaseInventory (formerly CurrentLayoutCaseCounts); the body is unchanged.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-8: adds the project's quarantined cases, of its own kind and marked quarantined.</para>
+    /// <para>2026-11-09, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7, AC-8; R16-F1: renamed to SyntheticInventory and now reads only the explicitly synthetic rows; the 2026-11-07 recorded-layout description is history.</para>
     /// </remarks>
-    private static TestProjectInventory RecordedInventory(string project)
+    private static TestProjectInventory SyntheticInventory(string project)
     {
-        var (_, unit, integration, infrastructure, quarantined) = RecordedCaseInventory.Single(row => row.Project == project);
+        var (_, unit, integration, infrastructure, quarantined) = SyntheticCaseInventory.Single(row => row.Project == project);
         var role = TestProjectRoles.RoleOf(project);
         TestCaseEntry[] cases =
         [
