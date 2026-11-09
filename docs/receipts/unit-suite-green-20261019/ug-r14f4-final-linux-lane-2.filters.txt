@@ -1,0 +1,19 @@
+RECEIPT started=2026-11-07T20:21:48 ended=2026-11-07T20:21:49 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15/Get-LogFilterLines.ps1 sha256=9786F2CC0A65B4F41CA1F9F951E20A5781A8CAC2248542D506FD59E22DC4F05E
+ARGUMENTS -LogPath | /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-lane-2.out.log
+HEAD 03eea74797827aacf7030ac577cc19d46ebee5d2
+READ 2026-11-07T20:21:49 log=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-lane-2.out.log exists=True
+37: 19:43:59 [INF] Integration lane filter: Category=Integration&Platform!=Windows&Quarantine!=NoMatchingCriterion
+38: 19:43:59 [INF] Integration lane filter for QBrainAi.Support.Mcp.EnvironmentIntegrationTests: Category=Integration&Platform!=Windows&Quarantine!=NoMatchingCriterion
+39: 19:43:59 [INF] Integration lane filter for QBrainAi.McpAgent.IntegrationTests: Category=Integration&Platform!=Windows&Quarantine!=NoMatchingCriterion
+40: 19:43:59 [INF] Integration lane filter for QBrainAi.QBAgent.IntegrationTests: Category=Integration&Platform!=Windows&Quarantine!=NoMatchingCriterion
+41: 19:43:59 [INF] Integration lane filter for NukeBuild.IntegrationTests: Category=Integration&Platform!=Windows&Quarantine!=NoMatchingCriterion
+42: 19:43:59 [INF] Integration lane filter for QBrainAi.Repl.IntegrationTests: Category=Integration&Platform!=Windows&Quarantine!=NoMatchingCriterion
+43: 19:43:59 [INF] Integration lane filter for QBrainAi.Support.Mcp.IntegrationTests: Category=Integration&Platform!=Windows&Quarantine!=NoMatchingCriterion&(FullyQualifiedName~.RequirementScopeLayerReplIntegrationTests.|FullyQualifiedName~.QuadBrainOllamaEndpointIntegrationTests.)
+75: 19:46:28 [DBG] Passed!  - Failed:     0, Passed:   456, Skipped:     0, Total:   456, Duration: 1 m 40 s - QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll (net10.0)
+88: 19:46:35 [DBG] Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 117 ms - QBrainAi.McpAgent.IntegrationTests.dll (net10.0)
+104: 19:46:43 [DBG] Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 134 ms - QBrainAi.QBAgent.IntegrationTests.dll (net10.0)
+114: 19:53:56 [DBG] Passed!  - Failed:     0, Passed:    96, Skipped:     0, Total:    96, Duration: 7 m 8 s - NukeBuild.IntegrationTests.dll (net10.0)
+140: 20:18:04 [DBG] Passed!  - Failed:     0, Passed:   181, Skipped:     0, Total:   181, Duration: 23 m 48 s - QBrainAi.Repl.IntegrationTests.dll (net10.0)
+169: 20:21:06 [DBG] Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 2 m 45 s - QBrainAi.Support.Mcp.IntegrationTests.dll (net10.0)
+LINES 182 MATCHES 13 END 2026-11-07T20:21:49

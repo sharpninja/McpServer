@@ -1,0 +1,13 @@
+RECEIPT 2026-11-07T19:40:46 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15/Get-WinTargetFilterLines.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-11-07T19:40:46 host=PAYTON-LEGION2 user=kingd log=C:\Users\kingd\AppData\Local\Temp\unit-suite-green-windows-20261102\Test-ug-r14f4-final-win-unit-2.log exists=True
+724: 19:36:30 [INF] Unit test filter for QBrainAi.Support.Mcp.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+4022: 19:37:43 [INF] Unit test filter for QBrainAi.Client.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+4349: 19:37:46 [INF] Unit test filter for QBrainAi.Cqrs.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+4398: 19:37:49 [INF] Unit test filter for QBrainAi.Launcher.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+4434: 19:37:51 [INF] Unit test filter for QBrainAi.McpAgent.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+4514: 19:37:59 [INF] Unit test filter for QBrainAi.Repl.Core.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+5565: 19:38:09 [INF] Unit test filter for QBrainAi.QBAgent.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+LINES 5683 MATCHES 7 END 2026-11-07T19:40:46

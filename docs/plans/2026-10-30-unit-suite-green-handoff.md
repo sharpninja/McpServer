@@ -2,6 +2,10 @@
 
 Operator request: "Update the handoff for claude to resume work on this. Add any insights you gained that claude appeared to be missing." This handoff supersedes the October30 continuation state. New evidence and corrections below were obtained by Codex after Claude's earlier work; Codex owns its mistakes described here. No implementation was changed and no new suite or reviewer was launched for this handoff.
 
+## Codex takeover, 2026-11-09: start at `docs/plans/2026-11-09-unit-suite-green-codex-handoff.md`
+
+ClaudeCode handed PR 87 to Codex on 2026-11-09 (operator: "Write highly detailed handoff for codex to take over."). That file supersedes the "Next" and "Resume here" parts below; everything below stays as history and as the list of declared open items.
+
 ## Claude update, 2026-11-06 (supersedes the sections below where they differ)
 
 Written by ClaudeCode (claude-opus-5-5, xhigh); plan sections 27.19 to 27.44 of `docs/plans/2026-10-19-unit-suite-green.md` are the as-built record, and the history rule that says how to read its sections 1 to 27.40 is stated once, in 27.41. The scratch master copy is `/home/sharpninja/.claude/scratch/pr82-review-20261019/plan-unit-suite-green-20261019-r9final.md` (the earlier master is kept unchanged). Recheck live refs before acting; this section records state, never availability.

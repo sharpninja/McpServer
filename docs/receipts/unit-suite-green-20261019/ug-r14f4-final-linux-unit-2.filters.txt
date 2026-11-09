@@ -1,0 +1,13 @@
+RECEIPT started=2026-11-07T19:43:38 ended=2026-11-07T19:43:39 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/r15/Get-LogFilterLines.ps1 sha256=9786F2CC0A65B4F41CA1F9F951E20A5781A8CAC2248542D506FD59E22DC4F05E
+ARGUMENTS -LogPath | /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-unit-2.out.log
+HEAD 03eea74797827aacf7030ac577cc19d46ebee5d2
+READ 2026-11-07T19:43:39 log=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-unit-2.out.log exists=True
+724: 19:39:11 [INF] Unit test filter for QBrainAi.Support.Mcp.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+4022: 19:41:07 [INF] Unit test filter for QBrainAi.Client.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+4349: 19:41:12 [INF] Unit test filter for QBrainAi.Cqrs.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+4398: 19:41:15 [INF] Unit test filter for QBrainAi.Launcher.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+4434: 19:41:18 [INF] Unit test filter for QBrainAi.McpAgent.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+4514: 19:41:23 [INF] Unit test filter for QBrainAi.Repl.Core.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+5565: 19:41:33 [INF] Unit test filter for QBrainAi.QBAgent.Tests: Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion
+LINES 5682 MATCHES 7 END 2026-11-07T19:43:39

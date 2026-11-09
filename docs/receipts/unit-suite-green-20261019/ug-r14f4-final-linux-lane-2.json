@@ -1,0 +1,110 @@
+{
+  "name": "ug-r14f4-final-linux-lane-2",
+  "kind": "gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+  "dirtyPaths": [
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2.filters.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-buildtests-2.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-buildtests-2.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-2.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-2.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-2.start.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-traceability-2.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-traceability-2.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-2.filters.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-2.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-2.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-2.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-2.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-2/"
+  ],
+  "command": [
+    "./build.ps1",
+    "MigrationIntegrationTests",
+    "--test-run-id",
+    "ug-r14f4-final-linux-lane-2"
+  ],
+  "startedLocal": "2026-11-07T19:43:53",
+  "endedLocal": "2026-11-07T20:21:07",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 743,
+  "passed": 743,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "NukeBuild.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/NukeBuild.IntegrationTests/NukeBuild.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/NukeBuild.IntegrationTests.trx",
+      "sha256": "27DD4BD5EED953836EE53DB59D3623D321D1DB3477431731F66CD126882C3BB9",
+      "total": 96,
+      "passed": 96,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.McpAgent.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/QBrainAi.McpAgent.IntegrationTests/QBrainAi.McpAgent.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/QBrainAi.McpAgent.IntegrationTests.trx",
+      "sha256": "774BB20629A0C9D249F70F294F5A6B0DBBFA701A244C2CFBA839FCC8BB50F48B",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.QBAgent.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/QBrainAi.QBAgent.IntegrationTests/QBrainAi.QBAgent.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/QBrainAi.QBAgent.IntegrationTests.trx",
+      "sha256": "B0C7500A8C1B701F6C1C408EE7AEA59C8D98EA846B5336CBA834C816A91336B2",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Repl.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/QBrainAi.Repl.IntegrationTests.trx",
+      "sha256": "BFF0563E0C587D847422B70608A86F143A1280E7E93B9C0D4561E5A4DFB089F9",
+      "total": 181,
+      "passed": 181,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+      "sha256": "0642C04B7B72C763A9B2A26231802EAD1129272723BFC3B571F779851179037D",
+      "total": 456,
+      "passed": 456,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "sha256": "3FF3D118469BA4764EAF69F511C5BEE31B483DB4C0AD607F38812BC6150A8411",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [],
+  "writtenLocal": "2026-11-07T20:21:35",
+  "writtenBy": "ClaudeCode"
+}

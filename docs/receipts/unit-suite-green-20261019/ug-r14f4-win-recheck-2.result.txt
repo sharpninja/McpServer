@@ -1,0 +1,68 @@
+RECEIPT 2026-11-07T19:31:54 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/s10/Invoke-WinNukeTargetRecheck.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-11-07T19:30:24 host=PAYTON-LEGION2 user=kingd session=0 interactive=False
+REF origin/fix/unit-suite-green-20261019-windows=03eea74797827aacf7030ac577cc19d46ebee5d2 expected=03eea74797827aacf7030ac577cc19d46ebee5d2 match=True
+WORKTREE F:/GitHub/McpServer/.worktrees/unit-suite-green-windows-20261102 HEAD before=022f9cde436eadf509b47794d18c6cdc9036ad80
+COMMAND ./build.ps1 <target> --test-run-id ug-r14f4-win-recheck-2 --test-groups QBrainAi.Support.Mcp.EnvironmentIntegrationTests:BugTriage139SixteenthWindowsProcessTests for targets TestGroups
+LOAD before 2026-11-07T19:30:26 cpuLoadPercent=38 freeMemMB=4356 totalMemMB=23926 processes=470
+  BUSY before name=MsMpEng pid=6900 cpuPercent=79 workingSetMB=377
+  BUSY before name=pwsh#25 pid=43228 cpuPercent=59 workingSetMB=40
+  BUSY before name=WindowsTerminal pid=10600 cpuPercent=44 workingSetMB=188
+  BUSY before name=codex-computer-use pid=5840 cpuPercent=34 workingSetMB=25
+  BUSY before name=WmiPrvSE#2 pid=36568 cpuPercent=19 workingSetMB=8
+  BUSY before name=codex#2 pid=7276 cpuPercent=14 workingSetMB=240
+  BUSY before name=pwsh#27 pid=48064 cpuPercent=9 workingSetMB=19
+  BUSY before name=OneDrive.Sync.Service pid=33712 cpuPercent=9 workingSetMB=52
+HEAD 03eea74797827aacf7030ac577cc19d46ebee5d2 expected=03eea74797827aacf7030ac577cc19d46ebee5d2 match=True
+TARGET TestGroups begin 2026-11-07T19:30:27
+TARGET TestGroups exit=0 end 2026-11-07T19:31:51 log=C:\Users\kingd\AppData\Local\Temp\unit-suite-green-windows-20261102\TestGroups-ug-r14f4-win-recheck-2.log lines=52
+  FILTER 19:30:36 [INF] Test group filter for QBrainAi.Support.Mcp.EnvironmentIntegrationTests: Platform!=Linux&(FullyQualifiedName~.BugTriage139SixteenthWindowsProcessTests.)
+  LOG 19:30:47 [DBG]   QBrainAi.SessionLog.Transcripts -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.SessionLog.Transcripts\bin\Debug\net10.0\QBrainAi.SessionLog.Transcripts.dll
+  LOG 19:30:48 [DBG]   QBrainAi.ServiceDefaults -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.ServiceDefaults\bin\Debug\net10.0\QBrainAi.ServiceDefaults.dll
+  LOG 19:30:48 [DBG]   QBrainAi.TransactionSecurity -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.TransactionSecurity\bin\Debug\net10.0\QBrainAi.TransactionSecurity.dll
+  LOG 19:30:48 [DBG]   QBrainAi.Cqrs.Mvvm -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.Cqrs.Mvvm\bin\Debug\net10.0\QBrainAi.Cqrs.Mvvm.dll
+  LOG 19:31:11 [DBG]   QBrainAi.Client -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.Client\bin\Debug\net10.0\QBrainAi.Client.dll
+  LOG 19:31:15 [DBG]   QBrainAi.Repl.Core -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.Repl.Core\bin\Debug\net10.0\QBrainAi.Repl.Core.dll
+  LOG 19:31:16 [DBG]   QBrainAi.Storage -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.Storage\bin\Debug\net10.0\QBrainAi.Storage.dll
+  LOG 19:31:16 [DBG]   QBrainAi.McpAgent -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.McpAgent\bin\Debug\net10.0\QBrainAi.McpAgent.dll
+  LOG 19:31:29 [DBG]   QBrainAi.Storage.SqliteMigrations -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.Storage.SqliteMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqliteMigrations.dll
+  LOG 19:31:29 [DBG]   QBrainAi.Storage.SqlServerMigrations -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.Storage.SqlServerMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqlServerMigrations.dll
+  LOG 19:31:30 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.Storage.PostgreSqlMigrations\bin\Debug\net10.0\QBrainAi.Storage.PostgreSqlMigrations.dll
+  LOG 19:31:34 [DBG]   QBrainAi.Services -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.Services\bin\Debug\net10.0\QBrainAi.Services.dll
+  LOG 19:31:35 [DBG]   QBrainAi.GraphRag -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.GraphRag\bin\Debug\net10.0\QBrainAi.GraphRag.dll
+  LOG 19:31:40 [DBG]   QBrainAi.Support.Mcp -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\src\QBrainAi.Support.Mcp\bin\Debug\net10.0\QBrainAi.Support.Mcp.dll
+  LOG 19:31:44 [DBG]   QBrainAi.Support.Mcp.EnvironmentIntegrationTests -> F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\bin\Debug\net10.0\QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll
+  LOG 19:31:44 [DBG] Test run for F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\bin\Debug\net10.0\QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll (.NETCoreApp,Version=v10.0)
+  LOG 19:31:44 [DBG] A total of 1 test files matched the specified pattern.
+  LOG 19:31:51 [DBG] Results File: F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\TestResults\ug-r14f4-win-recheck-2\groups\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx
+  LOG 19:31:51 [DBG] 
+  LOG 19:31:51 [DBG] Passed!  - Failed:     0, Passed:     5, Skipped:     0, Total:     5, Duration: 4 s - QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll (net10.0)
+  LOG ​
+  LOG ═══════════════════════════════════════
+  LOG Target             Status      Duration
+  LOG ───────────────────────────────────────
+  LOG TestGroups         Succeeded       1:14
+  LOG ───────────────────────────────────────
+  LOG Total                              1:14
+  LOG ═══════════════════════════════════════
+  LOG ​
+  LOG Build succeeded on 11/7/2026 7:31:51 PM. ＼（＾ᴗ＾）／
+LOAD after 2026-11-07T19:31:53 cpuLoadPercent=93 freeMemMB=2322 totalMemMB=23926 processes=477
+  BUSY after name=MsMpEng pid=6900 cpuPercent=171 workingSetMB=423
+  BUSY after name=System pid=4 cpuPercent=161 workingSetMB=0
+  BUSY after name=PowerShell.MCP.Proxy#6 pid=7704 cpuPercent=106 workingSetMB=8
+  BUSY after name=VBCSCompiler pid=45280 cpuPercent=92 workingSetMB=1216
+  BUSY after name=PowerShell.MCP.Proxy#7 pid=41628 cpuPercent=87 workingSetMB=8
+  BUSY after name=ChatGPT#7 pid=40132 cpuPercent=69 workingSetMB=1248
+  BUSY after name=codex-x86_64-pc-windows-msvc pid=32808 cpuPercent=37 workingSetMB=67
+  BUSY after name=devenv pid=1540 cpuPercent=32 workingSetMB=679
+HELPER F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\bin\Debug\net10.0\QBrainAi.ProcessTree.TestHelper.dll exists=True
+TRX \groups\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx bytes=10629 sha256=7B3B919CE3B58366596E881FA2565C3876AC303465601D5A54828BF50A2A4954 total=5 executed=5 passed=5 failed=0 notExecuted=0 start=2026-11-07T19:31:44.3669966-06:00 finish=2026-11-07T19:31:51.1024489-06:00
+  CASE Passed duration=00:00:00.0177750 start=2026-11-07T19:31:46.3547730-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_WindowsLaunchContract_UsesSuspendedCreation
+  CASE Passed duration=00:00:02.0270260 start=2026-11-07T19:31:46.3901042-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_ImmediateNativeDescendant_IsKilledWithinBound
+  CASE Passed duration=00:00:00.3782640 start=2026-11-07T19:31:48.5762942-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_RawArguments_AndArgumentList_PreserveQuotedBoundaries
+  CASE Passed duration=00:00:00.1503316 start=2026-11-07T19:31:48.4186423-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_RawArguments_PreservesMultipleTokens
+  CASE Passed duration=00:00:02.0193921 start=2026-11-07T19:31:48.9561496-06:00 QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_AssignmentWindow_KeepsImmediateHelperSuspended
+END 2026-11-07T19:31:55

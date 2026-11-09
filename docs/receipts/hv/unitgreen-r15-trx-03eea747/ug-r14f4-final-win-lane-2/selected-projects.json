@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "runId": "ug-r14f4-final-win-lane-2",
+  "scope": "provider",
+  "generatedAtUtc": "2026-11-08T01:40:35.8041995\u002B00:00",
+  "projects": [
+    {
+      "name": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+      "projectPath": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+      "reportPath": "provider/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx"
+    },
+    {
+      "name": "QBrainAi.McpAgent.IntegrationTests",
+      "projectPath": "tests/QBrainAi.McpAgent.IntegrationTests/QBrainAi.McpAgent.IntegrationTests.csproj",
+      "reportPath": "provider/QBrainAi.McpAgent.IntegrationTests/QBrainAi.McpAgent.IntegrationTests.trx"
+    },
+    {
+      "name": "QBrainAi.QBAgent.IntegrationTests",
+      "projectPath": "tests/QBrainAi.QBAgent.IntegrationTests/QBrainAi.QBAgent.IntegrationTests.csproj",
+      "reportPath": "provider/QBrainAi.QBAgent.IntegrationTests/QBrainAi.QBAgent.IntegrationTests.trx"
+    },
+    {
+      "name": "NukeBuild.IntegrationTests",
+      "projectPath": "tests/NukeBuild.IntegrationTests/NukeBuild.IntegrationTests.csproj",
+      "reportPath": "provider/NukeBuild.IntegrationTests/NukeBuild.IntegrationTests.trx"
+    },
+    {
+      "name": "QBrainAi.Repl.IntegrationTests",
+      "projectPath": "tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+      "reportPath": "provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx"
+    },
+    {
+      "name": "QBrainAi.Support.Mcp.IntegrationTests",
+      "projectPath": "tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj",
+      "reportPath": "provider/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx"
+    }
+  ]
+}
