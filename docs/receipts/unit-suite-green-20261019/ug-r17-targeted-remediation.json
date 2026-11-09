@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "unitgreen-targeted-evidence.v1",
+  "recordedBy": "Codex",
+  "remediationCommit": "287bdcb34e035049d8e15e7f9ce9d0167cbe417d",
+  "finding": [
+    "R16-F1",
+    "R16-F2"
+  ],
+  "runs": [
+    {
+      "runId": "ug-r17-targeted-1",
+      "kind": "sandbox-aborted-attempt",
+      "observedExitCode": 1,
+      "testsStarted": false,
+      "reason": "The sandbox denied the VSTest local socket before any test ran. This attempt is not evidence."
+    },
+    {
+      "runId": "ug-r17-targeted-2",
+      "kind": "corrected-targeted-control",
+      "expectedExitCode": 0,
+      "observedExitCode": 0,
+      "total": 24,
+      "passed": 24,
+      "failed": 0,
+      "notExecuted": 0,
+      "startedLocal": "2026-11-09T16:38:37.9756881-06:00",
+      "finishedLocal": "2026-11-09T16:38:39.8027353-06:00",
+      "rawTrxPath": "TestResults/ug-r17-targeted-2/groups/Build.Tests/Build.Tests.trx",
+      "rawTrxSha256": "97B67BBBFF0370F56937F97BE46F44C2B9BD63A9B79A9773A055D61DA072C9BE",
+      "selectedProjectsSha256": "32C69D1BC478C8F0991D5585D0FA5EB540955C1A61F071DFFDC3A4970490B79B",
+      "rawEvidenceCommitted": false,
+      "requiredControls": [
+        "Discover_EmptyAllCaseResult_FailsTarget",
+        "Discover_DuplicateIdentity_FailsTarget",
+        "Discover_FilteredIdentityAbsentFromAll_FailsTarget",
+        "DotNetListTestDiscovery_MissingHeader_Throws",
+        "DotNetListTestDiscovery_UnindentedLineEndsList"
+      ]
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "build/TestProjectCaseDiscovery.cs",
+      "sha256": "73BA908DA1C72E99BC789CE55274C08A4BE1394115388C3AAEC861DE2917E848"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectCaseDiscoveryTests.cs",
+      "sha256": "1674A0042E454C1D5AAEF422BE74DFC64773ED7144268767B2D2268EC1816E36"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipTests.cs",
+      "sha256": "AE1B9A54B4EB97C4EEB6441B1F07E1563CBF42E87CDE7CB343733DCACEE36E5A"
+    }
+  ],
+  "sourcePinHistory": "These three paths are byte-identical from remediation commit 287bdcb34e035049d8e15e7f9ce9d0167cbe417d through tested head bbd248b94168bb0f50ba86a14c4b9021ffbabf1c.",
+  "disclosure": "The corrected targeted run completed immediately before the remediation commit. Its raw TRX remains in ignored TestResults storage and is not claimed as committed. This receipt preserves the raw hashes, counters, times, exact controls and source pins. The final 540-case Build.Tests TRX is separately committed in the Round 17 publication manifest."
+}
