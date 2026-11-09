@@ -1,0 +1,95 @@
+{
+  "schema": "unitgreen-gate-receipt.v1",
+  "runId": "ug-r16-final-linux-unit-1",
+  "host": "LAB-OMARCHY",
+  "kind": "unit",
+  "head": "167afdcb1bbe4ce8e54770fb5882cc8a48d82b01",
+  "command": [
+    "./build.ps1",
+    "Test",
+    "--test-run-id",
+    "ug-r16-final-linux-unit-1"
+  ],
+  "startedLocal": "2026-11-09T15:17:40.4459084-06:00",
+  "endedLocal": "2026-11-09T15:19:58.3567904-06:00",
+  "exitCode": 0,
+  "totals": {
+    "total": 4847,
+    "passed": 4847,
+    "failed": 0,
+    "notExecuted": 0
+  },
+  "trx": [
+    {
+      "project": "QBrainAi.Client.Tests",
+      "path": "TestResults/ug-r16-final-linux-unit-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+      "bytes": 441469,
+      "sha256": "1D7B20BE8F39EC2A892A71FFAC4FF75E2C250A5F261E8AFB0CE306F202363530",
+      "total": 311,
+      "passed": 311,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "project": "QBrainAi.Cqrs.Tests",
+      "path": "TestResults/ug-r16-final-linux-unit-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+      "bytes": 46236,
+      "sha256": "EB4406EEBA9C36393D0FD6931C4F9E2C1BD0FC5ACEA91AC3CE9A5BEE173A5D29",
+      "total": 33,
+      "passed": 33,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "project": "QBrainAi.Launcher.Tests",
+      "path": "TestResults/ug-r16-final-linux-unit-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+      "bytes": 30714,
+      "sha256": "DF8954BE5D5A4F89603232C40C8F02819E1B0D53763D3C3DC10EDCD099355013",
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "project": "QBrainAi.McpAgent.Tests",
+      "path": "TestResults/ug-r16-final-linux-unit-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "bytes": 97696,
+      "sha256": "243335F402A7A0E7F8B06AFADEB6F8797BC14C87E3CDC702423A4C34F680BA73",
+      "total": 64,
+      "passed": 64,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "project": "QBrainAi.QBAgent.Tests",
+      "path": "TestResults/ug-r16-final-linux-unit-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "bytes": 131457,
+      "sha256": "34209804A8262E647B64A48BAAB488733FFFB0B2AEFA30A19F450A819D23BF81",
+      "total": 90,
+      "passed": 90,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "path": "TestResults/ug-r16-final-linux-unit-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "bytes": 1571978,
+      "sha256": "16C1E6A5EEC2EEBF99D49DF53058B7952B34E7DF80D718C8B09EDC8F24892B65",
+      "total": 1035,
+      "passed": 1035,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "path": "TestResults/ug-r16-final-linux-unit-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "bytes": 5140281,
+      "sha256": "21A4D2239BA4433AF5B1E6FD07E2A1A88A09EF5E0B268791066B4B91C98B50FA",
+      "total": 3294,
+      "passed": 3294,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  ],
+  "notes": "Linux-only publication gate selected by the operator on 2026-11-09."
+}

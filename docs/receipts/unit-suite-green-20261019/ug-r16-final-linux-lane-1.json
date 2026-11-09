@@ -1,0 +1,85 @@
+{
+  "schema": "unitgreen-gate-receipt.v1",
+  "runId": "ug-r16-final-linux-lane-1",
+  "host": "LAB-OMARCHY",
+  "kind": "integration",
+  "head": "167afdcb1bbe4ce8e54770fb5882cc8a48d82b01",
+  "command": [
+    "./build.ps1",
+    "MigrationIntegrationTests",
+    "--test-run-id",
+    "ug-r16-final-linux-lane-1"
+  ],
+  "startedLocal": "2026-11-09T15:21:52.9197217-06:00",
+  "endedLocal": "2026-11-09T15:55:30.0748242-06:00",
+  "exitCode": 0,
+  "totals": {
+    "total": 748,
+    "passed": 748,
+    "failed": 0,
+    "notExecuted": 0
+  },
+  "trx": [
+    {
+      "project": "NukeBuild.IntegrationTests",
+      "path": "TestResults/ug-r16-final-linux-lane-1/provider/NukeBuild.IntegrationTests/NukeBuild.IntegrationTests.trx",
+      "bytes": 137237,
+      "sha256": "AC49B8E93C567AF8C98D561FED8B97C1D7A201CC763E8DF652124EE761EE1298",
+      "total": 96,
+      "passed": 96,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "project": "QBrainAi.McpAgent.IntegrationTests",
+      "path": "TestResults/ug-r16-final-linux-lane-1/provider/QBrainAi.McpAgent.IntegrationTests/QBrainAi.McpAgent.IntegrationTests.trx",
+      "bytes": 3247,
+      "sha256": "F5E6F059CBF0F39A9E7B891FA46D1222798DB07EA508A5F263474B5EFE3E0781",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "project": "QBrainAi.QBAgent.IntegrationTests",
+      "path": "TestResults/ug-r16-final-linux-lane-1/provider/QBrainAi.QBAgent.IntegrationTests/QBrainAi.QBAgent.IntegrationTests.trx",
+      "bytes": 6212,
+      "sha256": "4BF6A83B9F83600D47EA4E4A6C075B0C382C916C6463CD15AB8695545651F661",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "project": "QBrainAi.Repl.IntegrationTests",
+      "path": "TestResults/ug-r16-final-linux-lane-1/provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx",
+      "bytes": 279358,
+      "sha256": "C1EE8148A81555F44297A951A9A73D6C51C31CE8BF5F463D85608E9FF7D73A9D",
+      "total": 181,
+      "passed": 181,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+      "path": "TestResults/ug-r16-final-linux-lane-1/provider/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+      "bytes": 778975,
+      "sha256": "E95035C9ACD1290B39DBA10FC9722D49050BB943168D42F0B811C0C91220AFDA",
+      "total": 461,
+      "passed": 461,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.IntegrationTests",
+      "path": "TestResults/ug-r16-final-linux-lane-1/provider/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "bytes": 13013,
+      "sha256": "6607A7C5E7258F5C92249D8E51C644AB392994D6B18BC97715EA7502AF2CB0F4",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  ],
+  "notes": "Linux-only publication gate selected by the operator on 2026-11-09."
+}

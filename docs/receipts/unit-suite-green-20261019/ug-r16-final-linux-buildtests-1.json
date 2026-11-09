@@ -1,0 +1,42 @@
+{
+  "schema": "unitgreen-gate-receipt.v1",
+  "runId": "ug-r16-final-linux-buildtests-1",
+  "host": "LAB-OMARCHY",
+  "kind": "infrastructure",
+  "head": "167afdcb1bbe4ce8e54770fb5882cc8a48d82b01",
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Build.Tests/Build.Tests.csproj",
+    "-c",
+    "Debug",
+    "--logger",
+    "trx;LogFileName=ug-r16-final-linux-buildtests-1.trx",
+    "--results-directory",
+    "TestResults/ug-r16-final-linux-buildtests-1/infrastructure",
+    "--filter",
+    "Platform!=Windows"
+  ],
+  "startedLocal": "2026-11-09T15:56:07.2378895-06:00",
+  "endedLocal": "2026-11-09T15:56:33.4228543-06:00",
+  "exitCode": 0,
+  "totals": {
+    "total": 535,
+    "passed": 535,
+    "failed": 0,
+    "notExecuted": 0
+  },
+  "trx": [
+    {
+      "project": "ug-r16-final-linux-buildtests-1",
+      "path": "TestResults/ug-r16-final-linux-buildtests-1/infrastructure/ug-r16-final-linux-buildtests-1.trx",
+      "bytes": 772478,
+      "sha256": "8B4B542C8DF28C27D5C2CB6BF39B46451452CC99A46AFEC5D9CFB79E7F28B719",
+      "total": 535,
+      "passed": 535,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  ],
+  "notes": "Established raw Build.Tests infrastructure runner with Platform!=Windows and TMPDIR under TestResults."
+}
