@@ -1,0 +1,586 @@
+HV_R14_RELAUNCH_FINAL json part 4/12 SHA256 48E897B335A78F62FCF8706FA6444B31936C6CDC2D59A6D69A30016C802478B3
+lied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 8,
+      "verdict": "DISAGREE",
+      "accuracy": 99,
+      "completeness": 96,
+      "findings": [
+        "R14-F4"
+      ],
+      "evidence": "Host-scoped filters and original 21/24 contract/binding counts hold; current project ownership needs R14-F4 resolution.",
+      "scoreRationale": "Functional evidence is accurate; current project-ownership compliance remains incomplete until the operator resolves R14-F4."
+    },
+    {
+      "number": 9,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Retired FRs are absent, replacement mappings exist, and Azure export failure is informational under the explicit override.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 10,
+      "verdict": "DISAGREE",
+      "accuracy": 99,
+      "completeness": 96,
+      "findings": [
+        "R14-F4"
+      ],
+      "evidence": "Scanner work is excluded. Category classification holds functionally; mixed-project ownership needs R14-F4 resolution.",
+      "scoreRationale": "Functional evidence is accurate; current project-ownership compliance remains incomplete until the operator resolves R14-F4."
+    },
+    {
+      "number": 11,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Current Linux/Windows unit, lane, Build.Tests and traceability gates are complete in the supplied scope with zero failures/skips.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 14,
+      "verdict": "DISAGREE",
+      "accuracy": 99,
+      "completeness": 96,
+      "findings": [
+        "R14-F4"
+      ],
+      "evidence": "Scanner part excluded. Root-locator dependency classification and static runner are supported; current project ownership conflicts with R14-F4.",
+      "scoreRationale": "Functional evidence is accurate; current project-ownership compliance remains incomplete until the operator resolves R14-F4."
+    },
+    {
+      "number": 15,
+      "verdict": "DISAGREE",
+      "accuracy": 99,
+      "completeness": 96,
+      "findings": [
+        "R14-F4"
+      ],
+      "evidence": "Directory traversal/source seams and 12 category moves hold; current mixed-project placement needs R14-F4 resolution.",
+      "scoreRationale": "Functional evidence is accurate; current project-ownership compliance remains incomplete until the operator resolves R14-F4."
+    },
+    {
+      "number": 16,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "LocalDB timeout/serialization and quiet pg_ctl preserve intended results; current Windows lane is complete.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 17,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Unreadable version files fall through, unrelated errors propagate, and injected reader controls discriminate.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 18,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Source seam and owned concurrent-context database repair hold; scanner and hostile-run portions are excluded.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 19,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Both sibling harnesses use separate connections to owned SQLite files with assertions intact.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 20,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Scanner portion excluded; memory binding citations and historical record corrections hold.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 21,
+      "verdict": "DISAGREE",
+      "accuracy": 99,
+      "completeness": 96,
+      "findings": [
+        "R14-F4"
+      ],
+      "evidence": "Hostile runs excluded; environment-case ownership/restoration is correct, but project placement needs R14-F4 resolution.",
+      "scoreRationale": "Functional evidence is accurate; current project-ownership compliance remains incomplete until the operator resolves R14-F4."
+    },
+    {
+      "number": 22,
+      "verdict": "DISAGREE",
+      "accuracy": 99,
+      "completeness": 96,
+      "findings": [
+        "R14-F4"
+      ],
+      "evidence": "Reachability and environment restoration/serialization hold; category moves retain mixed-project ownership under R14-F4.",
+      "scoreRationale": "Functional evidence is accurate; current project-ownership compliance remains incomplete until the operator resolves R14-F4."
+    },
+    {
+      "number": 23,
+      "verdict": "DISAGREE",
+      "accuracy": 99,
+      "completeness": 96,
+      "findings": [
+        "R14-F4"
+      ],
+      "evidence": "All fallback variables are owned/restored and primary wins remains discriminating; category placement needs R14-F4 resolution.",
+      "scoreRationale": "Functional evidence is accurate; current project-ownership compliance remains incomplete until the operator resolves R14-F4."
+    },
+    {
+      "number": 24,
+      "verdict": "DISAGREE",
+      "accuracy": 99,
+      "completeness": 96,
+      "findings": [
+        "R14-F4"
+      ],
+      "evidence": "Bounded timeout parser/call-site contracts and native junction fix hold; native Integration placement remains in mixed projects under R14-F4.",
+      "scoreRationale": "Functional evidence is accurate; current project-ownership compliance remains incomplete until the operator resolves R14-F4."
+    },
+    {
+      "number": 25,
+      "verdict": "DISAGREE",
+      "accuracy": 99,
+      "completeness": 96,
+      "findings": [
+        "R14-F4"
+      ],
+      "evidence": "Owned instances, streaming download, marker walk and approved project selection hold; mixed-project selection needs R14-F4 resolution.",
+      "scoreRationale": "Functional evidence is accurate; current project-ownership compliance remains incomplete until the operator resolves R14-F4."
+    },
+    {
+      "number": 26,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Hostile-run clauses are removed under the operator directive; no current gate requires those runs.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 27,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Removed environment-specific criteria are absent; kept behavior and historical citations follow the ruling.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 28,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Docs-only merge and reviewed range are correct; ClineQb code is absent and current merge is clean.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 29,
+      "verdict": "DISAGREE",
+      "accuracy": 99,
+      "completeness": 96,
+      "findings": [
+        "R14-F4"
+      ],
+      "evidence": "Explicit baseline, owned database and two-class lane repairs hold; overall project-selection ownership needs R14-F4 resolution.",
+      "scoreRationale": "Functional evidence is accurate; current project-ownership compliance remains incomplete until the operator resolves R14-F4."
+    },
+    {
+      "number": 30,
+      "verdict": "DISAGREE",
+      "accuracy": 99,
+      "completeness": 96,
+      "findings": [
+        "R14-F4"
+      ],
+      "evidence": "I-O implementation and placement amendments hold; category/project ownership remains unresolved under R14-F4.",
+      "scoreRationale": "Functional evidence is accurate; current project-ownership compliance remains incomplete until the operator resolves R14-F4."
+    },
+    {
+      "number": 31,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Named group selector, result-class joins and reject conditions hold with independent contracts and current Build.Tests evidence.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 32,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Provider-only keys and retained GetFullPath allowlist match; r-1 failure is disclosed and r-2 is cited.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 33,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Stored timestamps are implemented through server/client/REPL contracts. This task does not include post-merge deployment; criterion stays unset pending that separate live read.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 34,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Reconciliation edges/deletions have retained getter records; replacement links, projections and current traceability evidence hold.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 36,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Six strengthened criteria, five functional repairs, XML retrofit and original record fixes hold at the final head.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 37,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Artifact ownership, timestamp UTC, ac-5/ac-6 port, retired-reference remedy and retrospective evidence are supported.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 38,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Exact complete dates, path-root identity and scripted recorded clocks discriminate the three original failures.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 39,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Service stamps use supplied clocks and exact assertions; documentation and sibling fixes hold.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 40,
+      "verdict": "DISAGREE",
+      "accuracy": 99,
+      "completeness": 96,
+      "findings": [
+        "R14-F4"
+      ],
+      "evidence": "Scripted lease renewal holds; heartbeat/watcher category moves retain mixed-project ownership under R14-F4.",
+      "scoreRationale": "Functional evidence is accurate; current project-ownership compliance remains incomplete until the operator resolves R14-F4."
+    },
+    {
+      "number": 41,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Device-path refusal, explicit callback cancellation and historical citation correction hold.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 42,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "UNC root-alias refusal and stated margin amendments hold with later corrected sum/conditional-delay measure.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 43,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Six guard changes and shared separators are preserved; later notices correctly supersede the original margin interpretation.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 44,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Summed-delay bounds and recorded overcounts/cleanup-only bounds are accurately delimited.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 45,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Repeated-property reader and conditional waits hold. Startup health remains as built under the operator exception and outside D-B.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 46,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Six-row failed-update recovery binds production; accepted broader replacement/start-limit limits are not concealed.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 47,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Key identity and scripted age decisions hold with Z6/Z12-Z16 supplements; R12-F3 receipt chain is correct.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 48,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Absent MEMORY-JOBS criterion citations are explicitly historical; documentation-only change is compiled in current gates.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 49,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Ordinal unrelated names, owned-key replacement, REPL read-only view and member documentation hold.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 50,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Four lane assertions identify the exact budget while preserving persistence checks; promptness relies on the separately supplied budget cases as disclosed.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 51,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Owned aliases across host prefixes are replaced without collapsing unrelated names; controls and bindings hold.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 52,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "34-member documentation supplement and 18 compile pins are verified; post-run pin limitation is preserved.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 53,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Proxy IDs preserve relations; nineteen test members and two mapping methods have dated entries, with later corrections retained.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 54,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Four federation files use corresponding generic IDs; literal assertion relation is unchanged and mapping history is corrected.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 55,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Account-name summary is generic; documentation corrections and wider citation/lab-name checks hold.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 56,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Original dated entries plus later corrections are preserved; generic store text keeps outcomes/flags and disclosed exceptions.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 57,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Optional clock, triggered timers, D8/D9 and lifecycle binding repair R13-F1; R13-F2 pins and notices are corrected.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 58,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Deferred-pass control and sentinel trace are retained; later direct completion supersedes the original inference.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 59,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Documentation-only scope is accurate; subsequent notices and Z15/Z16 correct the constructor entry and no-await proof.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    },
+    {
+      "number": 60,
+      "verdict": "DISAGREE",
+      "accuracy": 95,
+      "completeness": 96,
+      "findings": [
+        "R14-F1",
+        "R14-F2",
+        "R14-F3"
+      ],
+      "evidence": "Counter, controls and constructor correction work, but R14-F1/F2/F3 leave its chronology/criterion/evidence record inaccurate.",
+      "scoreRationale": "The implementation is evidenced, but its own chronology, criterion attribution and cited audit remain materially inaccurate/incomplete."
+    },
+    {
+      "number": 61,
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "findings": [],
+      "evidence": "Direct completion after every trigger precedes decisions; unreported-await controls reject an unfinished pass. Red/green mock pins, production binding and final 4866-unit gates support the complete slice.",
+      "scoreRationale": "The task-specific source/record claim, scoped criteria and supplied evidence agree. Later corrections and declared operator exceptions are applied; this does not satisfy unrelated criteria or deployment steps."
+    }
+  ],
+  "outOfScopeTasks": [
+    12,
+    13,
+    35
+  ],
+  "regressionResults": [],
+  "regressionSummary": [],
+  "headSha": "0980a52b016386cfa6e131bd3efe9fc32e1c6e78",
+  "receiptPaths": [
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r14-20261106T181559.md",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r14-20261106T181559.json"
+  ],
+  "reviewerSessionId": "Codex-20261107T002005Z-plugin-session",
+  "reviewerRequestId": "req-20261107T002200Z-unitgreen-r14-relaunch",
+  "TimestampUtc": "2026-11-07T02:01:31.4823187Z",
+  "TimestampLocal": "2026-11-06T20:01:31",
+  "ValidatorIdentity": {
+    "agent": "Codex",
+    "model": "gpt-6-astra",
+    "effort": "max",
+    "runtimeProof": {
+      "path": "/home/sharpninja/.codex/sessions/2026/11/06/rollout-2026-11-06T18-16-01-01a1b35c-ba09-7e80-9cba-06848c138e69.jsonl",
+      "observedAtUtc": "2026-11-07T00:21:48.5193898Z",
+      "lastWriteUtc": "2026-11-07T00:21:47.285655Z",
+      "sessionId": "01a1b35c-ba09-7e80-9cba-06848c138e69",
+      "originator": "codex_exec",
+      "cliVersion": "0.167.0",
+      "contexts": [
+        {
+          "line": 10,
+          "timestamp": "2026-11-07T00:16:02.417Z",
+          "model": "gpt-6-astra",
+          "effort": "max",
+          "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+          "turnId": "01a1b35c-bb3b-75b0-8a31-0d96d26b4266"
+        }
+      ]
+    },
+    "pluginReportedModel": "codex",
+    "pluginModelLabelLimit": "The legacy wrapper labels its session model codex; the own rollout turn_context is the live model/effort authority."
+  },
+  "threadId": "01a1b35c-ba09-7e80-9cba-06848c138e69",
+  "turnId": "01a1b35c-bb3b-75b0-8a31-0d96d26b4266",
+  "reviewClass": 1,
+  "codeHead": "da11faa24a3b10400770dd9e6865c9606e294602",
+  "baseHead": "9b099716",
+  "profile": {
+    "skill": "/home/sharpninja/.claude/skills/add-profile/SKILL.md",
+    "fileCount": 1,
+    "files": [
+      "/home/sharpninja/.claude/profile/PROFILE-MERGED.md"
+    ],
+    "globalMemoryCount": 8,
+    "workspaceMemoryCount": 3,
+    "excludedMemory": "MEMORY-PROCESS-007",
+    "refreshCount": 12,
+    "latestReceipts": [
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-profile12-status.txt",
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-profile12-global.txt",
+      "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-profile12-workspace.txt"
+    ],
+    "fullTextRead": true
+  },
+  "marker": {
+    "path": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+    "fullRead": true,
+    "linesRead": 397,
+    "keyValuesDisclosed": false,
+    "plugin": "mcpserver-codex-plugin 1.121.0",
+    "cacheOutsideWorktree": "/tmp/hv-ug-r14-20261106T181559-plugin"
+  },
+  "reviewSummary": "DISAGREE. No completed-task regression was found: all 61 tasks are open and the plan has no checked task entry. Supplied final gates are green and the original R13 findings are closed. Four record-correction findings and one operator policy decision prevent merge readiness. No build, restore or test was run by this reviewer.",
+  "scoreRationale": {
+    "accuracy": "96: material current statements about chronology, a criterion, a nonexistent check and run/commit attribution are false.",
+    "completeness": "96: those record corrections and the current separate-project policy conflict remain unresolved; this is not a deduction for excluded scanner or hostile-environment work.",
+    "confidence": "99: findings are tied to direct source, original transcript, retained receipts and live rule/requirement text.",
+    "method": "Judgment scores, not a statistical estimate or a percentage of passing claims."
+  },
+  "claims": [
+    {
+      "id": "UG1",
+      "verdict": "FAIL",
+      "evidence": "The current da11faa2 gates, 34 evidence-file hashes, 30 TRX counters/result-definition joins, seven-project selections and docs-only tail pass. Unit 4866/4866, lanes 741/718, Build.Tests 563/467, zero failures/skips. The additional assertion of a retained Z15 document-check receipt fails R14-F3.",
+      "findings": [
+        "R14-F3"
+      ]
+    },
+    {
+      "id": "UG2",
+      "verdict": "PASS",
+      "evidence": "Reviewed requirements, mock-gate, binding and commit chronology for the implementation slices, including Z16 red control, green mock gate with unchanged production, then service/binding. Retrospective receipts identify their provenance; failed attempts are not used as green gates. Z15 early binding accounting is separately R14-F1; its production still followed the green mock gate.",
+      "findings": []
+    },
+    {
+      "

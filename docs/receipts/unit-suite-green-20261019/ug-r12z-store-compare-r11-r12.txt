@@ -1,0 +1,10 @@
+Store readback comparison, written 2026-11-04T11:32:00 local by ClaudeCode (Compare-StoreReadbacks.ps1; read only over the two receipts).
+before /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-store-readback-1.json sha256=F448E433DEC575AE2F56574AE2F939DB788483F7DCCB1FF016A8E340F8C2B3F0
+after /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r12-store-readback-1.json sha256=77F27C316BFEC6A13E97B6B13C1FFD8313507B4E3E2F5B6D0A8D76B75A3B9185
+before read 2026-11-03T11:03:39; after read 2026-11-03T15:13:57
+FR-MCP-TESTRESOURCE-001: criteria before=12 after=12
+  position 1 id=: CHANGED append=True satisfied False->False tail= That holds only within one path syntax: a folder is another location only when it and the checkout are both POSIX paths or both Windows paths (a drive letter or a UNC share), and a folder in the other syntax is refused, because on a POSIX host a path with two leading separators names the POSIX root and on Windows a single-rooted path names the current drive. A Windows device path (beginning \\?\, \\.\ or \??\, with either separator) and a Windows folder with a segment that ends in a dot or a space or holds a colon are refused too, because Windows resolves each to a location that may lie inside the checkout (findings of the hostile validation round 11 that stopped without a verdict, 2026-11-03; strengthened under the operator's "Strengthening Acceptance Criteria should always be the recommended option" and "don't gate on me between rounds").
+TR-MCP-USECASE-018: criteria before=7 after=7
+  position 5 id=AC-006: CHANGED append=True satisfied False->False tail= A cancellation or timeout that a unit test arms on a real timer is such a wait when a step the test asserts must happen before the timer fires (finding of the hostile validation round 11 that stopped without a verdict, 2026-11-03, under the same rulings).
+IMPL-UNITGREEN-001: tasks before=40 after=41
+  task 41: NEW done=False

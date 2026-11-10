@@ -1,0 +1,1017 @@
+RECEIPT 2026-11-05T10:21:16 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinHostWindowDiagnostics.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-11-05T10:21:12 host=PAYTON-LEGION2 user=kingd window=2026-11-05T08:20:00..2026-11-05T09:06:00
+SECTION System critical-error-warning count=0
+SECTION System information count=2
+  PROVIDER Microsoft-Windows-HttpService count=2 first=2026-11-05T08:57:04 last=2026-11-05T08:57:04
+SECTION Application critical-error-warning count=769
+  2026-11-05T08:21:11 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:21:11 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:24:54 Application QBrainAi id=20102 level=Error Category: Microsoft.EntityFrameworkCore.Database.Command
+  2026-11-05T08:24:54 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:24:54 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.TriageQueueWorker
+  2026-11-05T08:29:49 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:29:50 Application QBrainAi id=20102 level=Error Category: Microsoft.EntityFrameworkCore.Database.Command
+  2026-11-05T08:29:50 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:29:51 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.TriageQueueWorker
+  2026-11-05T08:31:06 Application QBrainAi id=20004 level=Error Category: Microsoft.EntityFrameworkCore.Database.Connection
+  2026-11-05T08:31:06 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:31:06 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.TriageQueueWorker
+  2026-11-05T08:31:15 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:31:15 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:37:48 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:37:48 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:37:48 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:37:48 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:37:48 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:37:48 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:37:48 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:37:48 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:37:48 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:37:48 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.WorkspaceService
+  2026-11-05T08:38:13 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:40:24 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:40:26 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:40:27 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:40:27 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:40:31 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:40:33 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:40:34 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:40:34 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:40:40 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:40:41 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:40:42 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:40:42 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:40:47 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:40:49 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:40:50 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:40:50 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:40:55 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:40:56 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:40:57 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:40:57 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:41:02 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:04 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:05 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:41:05 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:41:10 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:11 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:12 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:41:12 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:41:16 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:17 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:18 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:41:18 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:41:25 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:26 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:27 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:41:27 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:41:35 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:36 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:37 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:41:37 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:41:43 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:45 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:46 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:41:46 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:41:53 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:55 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:41:56 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:41:56 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:42:01 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:03 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:03 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:42:04 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:42:10 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:11 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:12 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:42:12 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:42:18 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:19 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:20 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:42:20 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:42:27 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:28 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:29 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:42:29 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:42:35 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:37 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:38 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:42:38 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:42:43 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:44 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:45 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:42:45 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:42:52 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:53 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:42:54 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:42:54 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:43:01 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:02 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:03 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:43:03 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:43:09 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:10 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:11 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:43:11 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:43:18 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:20 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:21 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:43:21 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:43:28 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:29 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:30 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:43:30 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:43:37 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:38 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:39 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:43:39 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:43:44 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:46 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:46 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:43:47 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:43:53 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:54 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:43:55 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:43:55 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:44:03 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:04 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:05 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:44:05 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:44:11 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:12 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:13 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:44:13 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:44:20 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:21 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:24 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:44:24 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:44:30 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:31 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:32 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:44:32 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:44:39 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:41 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:42 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:44:42 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:44:47 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:49 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:49 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:44:50 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:44:56 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:57 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:44:58 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:44:58 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:45:04 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:05 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:06 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:45:06 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:45:12 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:14 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:15 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:45:15 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:45:20 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:21 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:22 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:45:22 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:45:32 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:33 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:34 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:45:34 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:45:39 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:41 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:42 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:45:42 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:45:47 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:48 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:49 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:45:49 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:45:55 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:56 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:45:57 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:45:57 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:46:02 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:04 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:04 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:46:05 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:46:10 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:11 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:12 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:46:12 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:46:20 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:21 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:22 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:46:22 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:46:28 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:29 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:30 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:46:30 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:46:37 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:38 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:39 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:46:39 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:46:46 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:47 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:48 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:46:48 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:46:53 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:55 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:46:56 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:46:56 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:47:02 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:03 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:04 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:47:05 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:47:07 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Controllers.RequirementsController
+  2026-11-05T08:47:11 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:13 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:13 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:47:14 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:47:22 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:23 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:24 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:47:24 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:47:30 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:32 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:33 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:47:33 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:47:38 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:39 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:40 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:47:40 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:47:45 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:47 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:47 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:47:48 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:47:54 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:55 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:47:56 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:47:56 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:48:02 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:03 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:04 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:48:04 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:48:10 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:11 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:12 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:48:12 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:48:18 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:19 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:20 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:48:20 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:48:27 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:28 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:29 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:48:29 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:48:34 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:36 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:37 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:48:37 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:48:39 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Controllers.RequirementsController
+  2026-11-05T08:48:43 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:44 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:45 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:48:45 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:48:50 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:51 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:48:52 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:48:52 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:48:58 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:00 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:01 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:49:01 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:49:07 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:09 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:09 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:49:10 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:49:16 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:17 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:18 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:49:18 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:49:21 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Controllers.RequirementsController
+  2026-11-05T08:49:24 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:25 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:26 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:49:26 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:49:28 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:49:31 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:33 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:34 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:49:34 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:49:39 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:40 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:41 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:49:41 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:49:46 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:47 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:48 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:49:48 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:49:50 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:49:54 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:55 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:49:56 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:49:56 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:49:58 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:50:01 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:03 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:03 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:50:04 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:50:09 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:10 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:11 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:50:11 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:50:16 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:17 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:18 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:50:18 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:50:21 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:50:25 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:26 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:27 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:50:27 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:50:30 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:50:33 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:35 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:35 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:50:36 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:50:41 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:42 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:43 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:50:43 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:50:48 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:49 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:50 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:50:50 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:50:53 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:50:56 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:57 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:50:58 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:50:58 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:51:01 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:51:04 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:05 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:06 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:51:06 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:51:11 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:13 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:14 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:51:14 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:51:16 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:51:19 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:21 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:22 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:51:22 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:51:24 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:51:24 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:51:24 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:51:25 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:51:25 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:51:28 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:29 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:30 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:51:30 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:51:35 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:36 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:37 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:51:37 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:51:42 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:44 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:45 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:51:45 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:51:47 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:51:50 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:51 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:52 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:51:52 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:51:57 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:59 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:51:59 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:52:00 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:52:02 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:52:05 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:06 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:07 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:52:07 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:52:13 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:14 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:15 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:52:15 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:52:17 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:52:21 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:23 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:24 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:52:24 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:52:30 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:32 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:34 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:52:34 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:52:36 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.Fts5SearchService
+  2026-11-05T08:52:40 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:41 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:42 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:52:42 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:52:47 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:49 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:49 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:52:50 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:52:53 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:54 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:52:55 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:52:55 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:53:00 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:01 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:02 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:53:02 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:53:06 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:07 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:08 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:53:08 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:53:13 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:14 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:15 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:53:15 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:53:20 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:21 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:22 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:53:22 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:53:26 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:27 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:28 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:53:28 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:53:32 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:34 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:35 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:53:35 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:53:39 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:41 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:42 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:53:42 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:53:47 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:48 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:49 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:53:49 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:53:52 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:54 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:54 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:53:55 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:53:58 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:53:59 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:00 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:54:01 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:54:05 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:07 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:07 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:54:08 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:54:11 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:12 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:13 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:54:13 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:54:18 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:20 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:20 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:54:20 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:54:25 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:27 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:28 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:54:28 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:54:31 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:33 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:33 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:54:34 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:54:39 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:41 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:42 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:54:42 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:54:47 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:48 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:49 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:54:49 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:54:54 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:55 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:54:56 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:54:56 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:55:01 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:03 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:04 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:55:04 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:55:09 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:10 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:11 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:55:11 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:55:17 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:18 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:19 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:55:19 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:55:25 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:26 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:28 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:55:28 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:55:33 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:34 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:35 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:55:35 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:55:42 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:44 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:45 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:55:45 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:55:51 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:53 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:55:53 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:55:54 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:55:58 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:56:00 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:56:01 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:56:01 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:56:04 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:56:12 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:56:12 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:56:12 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:56:12 Application QBrainAi id=9003 level=Warning Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:56:12 Application QBrainAi id=13 level=Error Category: Microsoft.AspNetCore.Server.Kestrel
+  2026-11-05T08:56:12 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:56:12 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:56:12 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:56:20 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:56:20 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:56:20 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:56:20 Application QBrainAi id=9003 level=Warning Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:56:20 Application QBrainAi id=13 level=Error Category: Microsoft.AspNetCore.Server.Kestrel
+  2026-11-05T08:56:20 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:56:20 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:56:20 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:56:28 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:56:28 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:56:28 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:56:28 Application QBrainAi id=9003 level=Warning Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:56:28 Application QBrainAi id=13 level=Error Category: Microsoft.AspNetCore.Server.Kestrel
+  2026-11-05T08:56:28 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:56:28 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:56:31 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:56:33 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:56:34 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:56:34 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:56:41 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:56:42 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:56:43 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:56:43 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:56:50 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:56:51 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:56:52 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:56:52 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:56:57 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:56:59 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:00 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:57:00 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:57:05 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:06 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:07 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:57:07 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:57:12 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:14 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:15 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:57:15 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:57:21 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:23 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:24 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:57:24 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:57:29 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:31 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:32 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:57:32 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:57:35 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:57:43 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:57:43 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:57:43 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:57:43 Application QBrainAi id=9003 level=Warning Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:57:43 Application QBrainAi id=13 level=Error Category: Microsoft.AspNetCore.Server.Kestrel
+  2026-11-05T08:57:43 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:57:43 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:57:46 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:47 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:49 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:57:49 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:57:56 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:57 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:57:58 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:57:58 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:58:05 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:58:06 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:58:07 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:58:07 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:58:10 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:58:18 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:58:18 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:58:18 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:58:18 Application QBrainAi id=9003 level=Warning Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:58:18 Application QBrainAi id=13 level=Error Category: Microsoft.AspNetCore.Server.Kestrel
+  2026-11-05T08:58:18 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:58:18 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:58:21 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:58:23 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:58:23 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:58:24 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:58:30 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:58:31 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:58:32 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:58:32 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:58:39 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:58:40 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:58:41 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:58:41 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:58:46 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:58:48 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:58:48 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:58:49 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:58:52 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:59:00 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:59:00 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:00 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:00 Application QBrainAi id=9003 level=Warning Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:00 Application QBrainAi id=13 level=Error Category: Microsoft.AspNetCore.Server.Kestrel
+  2026-11-05T08:59:00 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:59:00 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:59:00 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:59:08 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:59:08 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:08 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:08 Application QBrainAi id=9003 level=Warning Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:08 Application QBrainAi id=13 level=Error Category: Microsoft.AspNetCore.Server.Kestrel
+  2026-11-05T08:59:08 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:59:08 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:59:08 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:59:16 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:59:16 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:16 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:16 Application QBrainAi id=9003 level=Warning Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:16 Application QBrainAi id=13 level=Error Category: Microsoft.AspNetCore.Server.Kestrel
+  2026-11-05T08:59:16 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:59:16 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:59:19 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:59:21 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:59:22 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:59:22 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:59:25 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:59:32 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:59:32 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:32 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:32 Application QBrainAi id=9003 level=Warning Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:32 Application QBrainAi id=13 level=Error Category: Microsoft.AspNetCore.Server.Kestrel
+  2026-11-05T08:59:32 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:59:32 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:59:36 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:59:37 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:59:38 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:59:38 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T08:59:41 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:59:49 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:59:49 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:49 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:49 Application QBrainAi id=9003 level=Warning Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T08:59:49 Application QBrainAi id=13 level=Error Category: Microsoft.AspNetCore.Server.Kestrel
+  2026-11-05T08:59:49 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T08:59:49 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T08:59:52 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:59:53 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T08:59:55 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T08:59:55 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T09:00:01 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:00:02 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:00:03 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:00:03 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T09:00:11 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:00:12 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:00:13 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:00:13 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T09:00:19 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:00:20 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:00:21 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:00:21 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T09:00:24 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T09:00:32 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T09:00:32 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T09:00:32 Application QBrainAi id=9001 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T09:00:32 Application QBrainAi id=9003 level=Warning Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T09:00:32 Application QBrainAi id=13 level=Error Category: Microsoft.AspNetCore.Server.Kestrel
+  2026-11-05T09:00:32 Application QBrainAi id=0 level=Warning Category: QBrainAi.Common.AgentCli.AgentCliClient
+  2026-11-05T09:00:32 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T09:00:35 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:00:37 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:00:38 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:00:38 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T09:00:46 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:00:47 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:00:48 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:00:48 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T09:00:56 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:00:57 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:00:58 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:00:58 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T09:01:05 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:01:06 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:01:07 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:01:07 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T09:01:15 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:01:16 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:01:17 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:01:17 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T09:01:21 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T09:01:30 Application QBrainAi id=0 level=Warning Category: QBrainAi.Support.Mcp.Services.AuditedAgentCliClient
+  2026-11-05T09:01:30 Application QBrainAi id=0 level=Error Category: Microsoft.Extensions.Hosting.GlobalExceptionHandlerMiddleware
+  2026-11-05T09:01:35 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:01:36 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:01:37 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:01:37 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T09:02:08 Application QBrainAi id=10400 level=Warning Category: Microsoft.EntityFrameworkCore.Model.Validation
+  2026-11-05T09:02:08 Application QBrainAi id=20102 level=Error Category: Microsoft.EntityFrameworkCore.Database.Command
+  2026-11-05T09:02:08 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:02:09 Application QBrainAi id=20102 level=Error Category: Microsoft.EntityFrameworkCore.Database.Command
+  2026-11-05T09:02:09 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:02:09 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:02:12 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:02:14 Application QBrainAi id=20504 level=Warning Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:02:15 Application QBrainAi id=20004 level=Error Category: Microsoft.EntityFrameworkCore.Database.Connection
+  2026-11-05T09:02:15 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:02:15 Application QBrainAi id=20004 level=Error Category: Microsoft.EntityFrameworkCore.Database.Connection
+  2026-11-05T09:02:15 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:02:15 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:02:15 Application QBrainAi id=11 level=Error Category: Microsoft.Extensions.Hosting.Internal.Host
+  2026-11-05T09:02:15 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:02:16 Application QBrainAi id=16 level=Warning Category: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+  2026-11-05T09:02:17 Application QBrainAi id=20102 level=Error Category: Microsoft.EntityFrameworkCore.Database.Command
+  2026-11-05T09:02:17 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:02:18 Application QBrainAi id=20102 level=Error Category: Microsoft.EntityFrameworkCore.Database.Command
+  2026-11-05T09:02:18 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:02:18 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:03:27 Application QBrainAi id=20102 level=Error Category: Microsoft.EntityFrameworkCore.Database.Command
+  2026-11-05T09:03:27 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:03:28 Application QBrainAi id=20102 level=Error Category: Microsoft.EntityFrameworkCore.Database.Command
+  2026-11-05T09:03:28 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:03:28 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+  2026-11-05T09:04:13 Application QBrainAi id=20102 level=Error Category: Microsoft.EntityFrameworkCore.Database.Command
+  2026-11-05T09:04:13 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:04:13 Application QBrainAi id=20102 level=Error Category: Microsoft.EntityFrameworkCore.Database.Command
+  2026-11-05T09:04:13 Application QBrainAi id=10100 level=Error Category: Microsoft.EntityFrameworkCore.Query
+  2026-11-05T09:04:13 Application QBrainAi id=0 level=Error Category: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter
+SECTION Application information count=2103
+  PROVIDER QBrainAi count=2088 first=2026-11-05T08:20:23 last=2026-11-05T09:05:02
+  PROVIDER MSSQLSERVER count=9 first=2026-11-05T08:23:49 last=2026-11-05T09:01:04
+  PROVIDER Microsoft-Windows-Security-SPP count=6 first=2026-11-05T08:21:36 last=2026-11-05T09:02:16
+SECTION Microsoft-Windows-Windows Defender/Operational count=2
+  2026-11-05T09:00:55 Microsoft-Windows-Windows Defender/Operational Microsoft-Windows-Windows Defender id=1150 level=Information Endpoint Protection client is up and running in a healthy state.
+  2026-11-05T09:00:55 Microsoft-Windows-Windows Defender/Operational Microsoft-Windows-Windows Defender id=1151 level=Information Endpoint Protection client health report (time in UTC):
+SECTION Microsoft-Windows-WindowsUpdateClient/Operational count=0
+SECTION Microsoft-Windows-TaskScheduler/Operational started-or-completed count=36
+  2026-11-05T08:21:06 id=129 task=\McpUnitGreenLane-r13z5-final
+  2026-11-05T08:21:06 id=100 task=\McpUnitGreenLane-r13z5-final
+  2026-11-05T08:21:34 id=129 task=\Microsoft\Windows\Flighting\OneSettings\RefreshCache
+  2026-11-05T08:21:34 id=100 task=\Microsoft\Windows\Flighting\OneSettings\RefreshCache
+  2026-11-05T08:21:40 id=201 task=\Microsoft\Windows\Flighting\OneSettings\RefreshCache
+  2026-11-05T08:21:40 id=102 task=\Microsoft\Windows\Flighting\OneSettings\RefreshCache
+  2026-11-05T08:25:37 id=129 task=\Lab\TailscaleLabMode
+  2026-11-05T08:25:37 id=100 task=\Lab\TailscaleLabMode
+  2026-11-05T08:25:48 id=201 task=\Lab\TailscaleLabMode
+  2026-11-05T08:25:48 id=102 task=\Lab\TailscaleLabMode
+  2026-11-05T08:34:51 id=129 task=\MicrosoftEdgeUpdateTaskMachineUA{CF9896CB-7EAC-4902-9EFA-07499F303C04}
+  2026-11-05T08:34:51 id=100 task=\MicrosoftEdgeUpdateTaskMachineUA{CF9896CB-7EAC-4902-9EFA-07499F303C04}
+  2026-11-05T08:34:51 id=201 task=\MicrosoftEdgeUpdateTaskMachineUA{CF9896CB-7EAC-4902-9EFA-07499F303C04}
+  2026-11-05T08:34:51 id=102 task=\MicrosoftEdgeUpdateTaskMachineUA{CF9896CB-7EAC-4902-9EFA-07499F303C04}
+  2026-11-05T08:40:37 id=129 task=\Lab\TailscaleLabMode
+  2026-11-05T08:40:37 id=100 task=\Lab\TailscaleLabMode
+  2026-11-05T08:40:41 id=201 task=\Lab\TailscaleLabMode
+  2026-11-05T08:40:41 id=102 task=\Lab\TailscaleLabMode
+  2026-11-05T08:50:43 id=129 task=\Microsoft\Office\Office Startup Maintenance
+  2026-11-05T08:50:43 id=100 task=\Microsoft\Office\Office Startup Maintenance
+  2026-11-05T08:50:46 id=201 task=\Microsoft\Office\Office Startup Maintenance
+  2026-11-05T08:50:46 id=102 task=\Microsoft\Office\Office Startup Maintenance
+  2026-11-05T08:55:37 id=129 task=\Lab\TailscaleLabMode
+  2026-11-05T08:55:37 id=100 task=\Lab\TailscaleLabMode
+  2026-11-05T08:55:41 id=201 task=\Lab\TailscaleLabMode
+  2026-11-05T08:55:41 id=102 task=\Lab\TailscaleLabMode
+  2026-11-05T08:56:32 id=129 task=\Microsoft\Windows\Flighting\OneSettings\RefreshCache
+  2026-11-05T08:56:32 id=100 task=\Microsoft\Windows\Flighting\OneSettings\RefreshCache
+  2026-11-05T08:56:34 id=201 task=\Microsoft\Windows\Flighting\OneSettings\RefreshCache
+  2026-11-05T08:56:34 id=102 task=\Microsoft\Windows\Flighting\OneSettings\RefreshCache
+  2026-11-05T09:01:01 id=129 task=\McpSqlHourlyBackup
+  2026-11-05T09:01:01 id=100 task=\McpSqlHourlyBackup
+  2026-11-05T09:01:05 id=201 task=\McpSqlHourlyBackup
+  2026-11-05T09:01:05 id=102 task=\McpSqlHourlyBackup
+  2026-11-05T09:05:05 id=201 task=\McpUnitGreenLane-r13z5-final
+  2026-11-05T09:05:05 id=102 task=\McpUnitGreenLane-r13z5-final
+SECTION LocalDB instances root=C:\Users\kingd\AppData\Local\Microsoft\Microsoft SQL Server Local DB\Instances exists=True
+  INSTANCE mcp-provider-00cdc599a8ca4eac9d153e58f2fd1f48 error.log lines=77 lastWrite=2026-07-20T07:45:32 inWindow=0
+  INSTANCE mcp-provider-0601e2e0145e414ab047248280c93997 error.log lines=77 lastWrite=2026-07-20T07:43:33 inWindow=0
+  INSTANCE mcp-provider-09c2bc1178ee48ac98000f1f86076e12 error.log lines=75 lastWrite=2026-09-09T22:33:36 inWindow=0
+  INSTANCE mcp-provider-11c866e141cd46b2a322e081f5444ba5 error.log lines=75 lastWrite=2026-08-16T20:28:58 inWindow=0
+  INSTANCE mcp-provider-14667c395695430d8d7035b01ba6354f error.log lines=75 lastWrite=2026-08-16T21:05:08 inWindow=0
+  INSTANCE mcp-provider-1dee452479b64e628cc4caa5941a8f1d error.log lines=83 lastWrite=2026-08-16T23:37:18 inWindow=0
+  INSTANCE mcp-provider-1f5d000618e64584b0bf2ab7b4c61f63 error.log lines=75 lastWrite=2026-08-16T23:48:34 inWindow=0
+  INSTANCE mcp-provider-22b7db1708ba4abe8d40ec3c73f725d0 error.log lines=77 lastWrite=2026-08-16T15:36:03 inWindow=0
+  INSTANCE mcp-provider-25779ad44054456f94984dd4d54eafad error.log lines=83 lastWrite=2026-08-16T23:51:57 inWindow=0
+  INSTANCE mcp-provider-2737a61ff15741e89f4009d9c1722223 error.log lines=75 lastWrite=2026-08-16T23:43:40 inWindow=0
+  INSTANCE mcp-provider-2f3bd1b303a84ee2a6ff087399661d4f error.log lines=77 lastWrite=2026-08-16T19:20:19 inWindow=0
+  INSTANCE mcp-provider-2f460724a8054bd98c06a0d90c4509ba error.log lines=77 lastWrite=2026-08-16T20:26:28 inWindow=0
+  INSTANCE mcp-provider-2fa812775ab84825ab8af7a906eee4b1 error.log lines=80 lastWrite=2026-07-02T18:04:30 inWindow=0
+  INSTANCE mcp-provider-43efe1180d964162ba3f08efec7f304e error.log lines=75 lastWrite=2026-09-09T21:54:38 inWindow=0
+  INSTANCE mcp-provider-449391e463be49029443a2d63d8179bd error.log lines=82 lastWrite=2026-08-22T08:51:22 inWindow=0
+  INSTANCE mcp-provider-464b0cba0de14b8bb9de825979819840 error.log lines=80 lastWrite=2026-08-16T22:30:43 inWindow=0
+  INSTANCE mcp-provider-4751526967b94932877e1a05cbf579d6 error.log lines=79 lastWrite=2026-08-16T22:25:35 inWindow=0
+  INSTANCE mcp-provider-478c7cc127e444a59032d4bbed85dab6 error.log lines=75 lastWrite=2026-08-21T21:39:51 inWindow=0
+  INSTANCE mcp-provider-483b944246a54b65bd18efeefe2be1e7 error.log lines=77 lastWrite=2026-09-12T22:57:26 inWindow=0
+  INSTANCE mcp-provider-523ab6395d1d4e6a9a8dc44f380e84c7 error.log lines=81 lastWrite=2026-07-02T19:07:48 inWindow=0
+  INSTANCE mcp-provider-52d8cadfbb8147f7b189dba69671ed87 error.log lines=77 lastWrite=2026-08-16T15:34:54 inWindow=0
+  INSTANCE mcp-provider-54785fd02a3f4804b962a999939e94a1 error.log lines=75 lastWrite=2026-08-16T23:38:28 inWindow=0
+  INSTANCE mcp-provider-5df73bde6f794361bec0b6927f0ae27d error.log lines=77 lastWrite=2026-08-16T15:23:04 inWindow=0
+  INSTANCE mcp-provider-5ea6a14b88534a21b98f462fe557fe77 error.log lines=79 lastWrite=2026-08-16T22:26:37 inWindow=0
+  INSTANCE mcp-provider-667cf7a603264364ba79d8af5f26be9c error.log lines=75 lastWrite=2026-08-22T08:52:02 inWindow=0
+  INSTANCE mcp-provider-66ddb5bf493e46c982daeb192c35c588 error.log lines=75 lastWrite=2026-08-22T09:47:18 inWindow=0
+  INSTANCE mcp-provider-66f1834f083e4564926798a102df3ca0 error.log lines=77 lastWrite=2026-09-16T05:31:48 inWindow=0
+  INSTANCE mcp-provider-66faf2d1e83a450985edda3f24970c1c error.log lines=80 lastWrite=2026-08-16T23:47:21 inWindow=0
+  INSTANCE mcp-provider-678c289914f54f389d986245dde253c5 error.log lines=80 lastWrite=2026-08-16T21:04:55 inWindow=0
+  INSTANCE mcp-provider-6908ba634457457c9acf37d76b117263 error.log lines=80 lastWrite=2026-08-16T13:35:10 inWindow=0
+  INSTANCE mcp-provider-69c60901cb6640ab8318f7f18751d75a error.log lines=75 lastWrite=2026-08-22T09:53:35 inWindow=0
+  INSTANCE mcp-provider-6a72055ae5254329b9ea54b984bdf8a4 error.log lines=77 lastWrite=2026-07-20T07:44:17 inWindow=0
+  INSTANCE mcp-provider-6ac11ccbcca04372a76a9c47eed474f7 error.log lines=77 lastWrite=2026-08-16T16:08:48 inWindow=0
+  INSTANCE mcp-provider-6c9ff820773549398e8cfc224406638d error.log lines=77 lastWrite=2026-09-09T21:14:31 inWindow=0
+  INSTANCE mcp-provider-70ba5e63ea0845d5acba74454eaf38d5 error.log lines=84 lastWrite=2026-08-16T21:16:27 inWindow=0
+  INSTANCE mcp-provider-7139ed49ae234eb6988e5633bc02f059 error.log lines=77 lastWrite=2026-07-20T07:41:45 inWindow=0
+  INSTANCE mcp-provider-754e9dad2d9f49a78fd095f0ec1faa7b error.log lines=83 lastWrite=2026-08-16T14:00:06 inWindow=0
+  INSTANCE mcp-provider-787dd21cebfc4ba6bac8dda4fa47ec58 error.log lines=75 lastWrite=2026-08-21T22:30:28 inWindow=0
+  INSTANCE mcp-provider-79731e82b22a424ea7ea84c5855b6d96 error.log lines=78 lastWrite=2026-08-21T22:34:57 inWindow=0
+  INSTANCE mcp-provider-7f1ecd6c750e4efeb5fb322d3a591067 error.log lines=75 lastWrite=2026-09-09T21:13:57 inWindow=0
+  INSTANCE mcp-provider-866c86f02c5249d89aaf37638a717a6a error.log lines=80 lastWrite=2026-07-02T17:06:06 inWindow=0
+  INSTANCE mcp-provider-87c8e210d7894f34b41702b38cc01af9 error.log lines=77 lastWrite=2026-09-06T14:47:26 inWindow=0
+  INSTANCE mcp-provider-8a264fea9c2f4e6696dcf3e155958f3b error.log lines=77 lastWrite=2026-09-09T21:55:03 inWindow=0
+  INSTANCE mcp-provider-951993bdcdd744dbacecf528ff438042 error.log lines=75 lastWrite=2026-08-22T10:28:43 inWindow=0
+  INSTANCE mcp-provider-9dd246b65c34422ab2be6d86be5eb037 error.log lines=80 lastWrite=2026-08-22T10:28:33 inWindow=0
+  INSTANCE mcp-provider-a56e7293d2e74f8393f1f7a2f0d0c11e error.log lines=80 lastWrite=2026-08-22T09:45:38 inWindow=0
+  INSTANCE mcp-provider-b53199cb5f7e4e158dbe2264b0c4ae27 error.log lines=75 lastWrite=2026-08-16T21:13:13 inWindow=0
+  INSTANCE mcp-provider-b5fc0caa91cf40a0b58d6e85b4ad976b error.log lines=75 lastWrite=2026-08-16T20:26:31 inWindow=0
+  INSTANCE mcp-provider-c6a7f9c3afbe4e3c823e59b3012996fd error.log lines=80 lastWrite=2026-08-16T23:41:05 inWindow=0
+  INSTANCE mcp-provider-c8858714bd804a2daf3aef8402d8e2c5 error.log lines=80 lastWrite=2026-08-22T09:29:45 inWindow=0
+  INSTANCE mcp-provider-ca45ad35818a43fab0630b7a444de393 error.log lines=75 lastWrite=2026-08-22T09:37:46 inWindow=0
+  INSTANCE mcp-provider-cdfbae32d9e1473a907723fc98765e3a error.log lines=75 lastWrite=2026-08-16T23:52:20 inWindow=0
+  INSTANCE mcp-provider-ce53a2ed519c47588248615fd0e1bedd error.log lines=77 lastWrite=2026-09-13T01:10:55 inWindow=0
+  INSTANCE mcp-provider-cea286ab935f424a976c4d6f9c1f40c3 error.log lines=77 lastWrite=2026-08-16T20:28:52 inWindow=0
+  INSTANCE mcp-provider-d16377418a2e4239be76e0db31a8dd69 error.log lines=78 lastWrite=2026-08-22T09:32:26 inWindow=0
+  INSTANCE mcp-provider-d5bae4739ae14e19a98ad76004d1fe66 error.log lines=75 lastWrite=2026-08-16T22:45:31 inWindow=0
+  INSTANCE mcp-provider-d78c583520f744a9a9ec7ecaa5fcd6e6 error.log lines=87 lastWrite=2026-07-02T17:07:15 inWindow=0
+  INSTANCE mcp-provider-d7d1b9e72e91446484b1564d71d5c072 error.log lines=80 lastWrite=2026-08-22T09:52:41 inWindow=0
+  INSTANCE mcp-provider-da4cbdbd5dfd4ef39803c83c943db4cd error.log lines=75 lastWrite=2026-08-16T20:21:32 inWindow=0
+  INSTANCE mcp-provider-dfc6ab4f9ba04ee99a5076c0f119f1b0 error.log lines=78 lastWrite=2026-08-21T21:36:00 inWindow=0
+  INSTANCE mcp-provider-e7bdbb5f09494371b054d05308c40e99 error.log lines=75 lastWrite=2026-08-16T23:56:11 inWindow=0
+  INSTANCE mcp-provider-ec50e45cab254395a20f98444e3c2d67 error.log lines=75 lastWrite=2026-09-09T23:15:27 inWindow=0
+  INSTANCE mcp-provider-f08276893e95407c96a075356f1a1332 error.log lines=77 lastWrite=2026-08-16T20:33:23 inWindow=0
+  INSTANCE mcp-provider-f2326b6742984900a1aaecb79eabb722 error.log lines=75 lastWrite=2026-08-16T20:34:15 inWindow=0
+  INSTANCE mcp-provider-f319d29fd7d4446ea9f8417ea6cc1eed error.log lines=77 lastWrite=2026-08-16T20:21:25 inWindow=0
+  INSTANCE mcp-provider-f39105ce077c49d38694d5adc5a53bea error.log lines=80 lastWrite=2026-08-22T09:36:54 inWindow=0
+  INSTANCE mcp-provider-f39750c4c7a74513b299e2cc1eadfa05 error.log lines=77 lastWrite=2026-09-13T01:17:54 inWindow=0
+  INSTANCE mcp-provider-fe34a0c7e6dd4980baa7b0f68e12068f error.log lines=78 lastWrite=2026-08-16T22:32:01 inWindow=0
+  INSTANCE mcp-ut-1085f7a2d629 error.log lines=78 lastWrite=2026-08-16T17:42:01 inWindow=0
+  INSTANCE McpSessionAck_20261001_1522 error.log lines=78 lastWrite=2026-10-01T20:28:30 inWindow=0
+  INSTANCE MSSQLLocalDB error.log lines=131 lastWrite=2026-11-05T08:38:50 inWindow=121
+    2026-11-05 08:27:46.62 Server      Microsoft SQL Server 2022 (RTM) - 16.0.1000.6 (X64) 
+    2026-11-05 08:27:46.62 Server      UTC adjustment: -6:00
+    2026-11-05 08:27:46.62 Server      (c) Microsoft Corporation.
+    2026-11-05 08:27:46.62 Server      All rights reserved.
+    2026-11-05 08:27:46.62 Server      Server process ID is 33352.
+    2026-11-05 08:27:46.62 Server      System Manufacturer: 'LENOVO', System Model: '82K8'.
+    2026-11-05 08:27:46.63 Server      Authentication mode is MIXED.
+    2026-11-05 08:27:46.63 Server      Logging SQL Server messages in file 'C:\Users\kingd\AppData\Local\Microsoft\Microsoft SQL Server Local DB\Instances\MSSQLLocalDB\error.log'.
+    2026-11-05 08:27:46.63 Server      The service account is 'PAYTON-LEGION2\kingd'. This is an informational message; no user action is required.
+    2026-11-05 08:27:46.63 Server      Command Line Startup Parameters:
+    2026-11-05 08:27:46.66 Server      SQL Server detected 1 sockets with 8 cores per socket and 16 logical processors per socket, 16 total logical processors; using 8 logical processors based on SQL Server licensing. This is an informational message; no user action is required.
+    2026-11-05 08:27:46.66 Server      SQL Server is starting at normal priority base (=7). This is an informational message only. No user action is required.
+    2026-11-05 08:27:46.66 Server      Detected 23926 MB of RAM. This is an informational message; no user action is required.
+    2026-11-05 08:27:46.66 Server      Using conventional memory in the memory manager.
+    2026-11-05 08:27:46.66 Server      Detected pause instruction latency: 33 cycles.
+    2026-11-05 08:27:46.66 Server      Page exclusion bitmap is enabled.
+    2026-11-05 08:27:46.78 Server      Buffer Pool: Allocating 524288 bytes for 417405 hashPages.
+    2026-11-05 08:27:46.83 Server      Default collation: SQL_Latin1_General_CP1_CI_AS (us_english 1033)
+    2026-11-05 08:27:46.96 Server      Buffer pool extension is already disabled. No action is necessary.
+    2026-11-05 08:27:47.10 Server      CPU vectorization level(s) detected:  SSE SSE2 SSE3 SSSE3 SSE41 SSE42 AVX AVX2 POPCNT BMI1 BMI2
+    2026-11-05 08:27:47.35 Server      Query Store settings initialized with enabled = 1, 
+    2026-11-05 08:27:47.37 Server      The maximum number of dedicated administrator connections for this instance is '1'
+    2026-11-05 08:27:47.40 Server      Node configuration: node 0: CPU mask: 0x00000000000000ff:0 Active CPU mask: 0x00000000000000ff:0. This message provides a description of the NUMA configuration for this computer. This is an informational message only. No user action is required.
+    2026-11-05 08:27:47.41 Server      Using dynamic lock allocation.  Initial allocation of 2500 Lock blocks and 5000 Lock Owner blocks per node.  This is an informational message only.  No user action is required.
+    2026-11-05 08:27:47.41 Server      Lock partitioning is enabled.  This is an informational message only. No user action is required.
+    2026-11-05 08:27:47.44 Server      In-Memory OLTP initialized on lowend machine.
+    2026-11-05 08:27:47.60 Server      [INFO] Created Extended Events session 'hkenginexesession'
+    2026-11-05 08:27:47.62 Server      Database Instant File Initialization: disabled. For security and performance considerations see the topic 'Database Instant File Initialization' in SQL Server Books Online. This is an informational message only. No user action is required.
+    2026-11-05 08:27:47.65 Server      Total Log Writer threads: 2, Node CPUs: 4, Nodes: 1, Log Writer threads per CPU: 1, Log Writer threads per Node: 2
+    2026-11-05 08:27:47.69 Server      clwb is selected for pmem flush operation.
+    2026-11-05 08:27:47.69 Server      Software Usage Metrics is disabled.
+    2026-11-05 08:27:47.71 Server      CLR version v4.0.30319 loaded.
+    2026-11-05 08:27:47.80 spid27s     Starting up database 'master'.
+    2026-11-05 08:27:47.87 spid27s     24 transactions rolled forward in database 'master' (1:0). This is an informational message only. No user action is required.
+    2026-11-05 08:27:47.88 spid27s     0 transactions rolled back in database 'master' (1:0). This is an informational message only. No user action is required.
+    2026-11-05 08:27:47.88 spid27s     Recovery is writing a checkpoint in database 'master' (1). This is an informational message only. No user action is required.
+    2026-11-05 08:27:48.13 spid33s     External governance manager initialized
+    2026-11-05 08:27:48.13 spid33s     Attribute synchronization manager initialized
+    2026-11-05 08:27:48.15 spid27s     SQL Server Audit is starting the audits. This is an informational message. No user action is required.
+    2026-11-05 08:27:48.16 spid27s     SQL Server Audit has started the audits. This is an informational message. No user action is required.
+    2026-11-05 08:27:48.34 spid27s     XE session 'system_health' started.
+    2026-11-05 08:27:48.65 spid27s     SQL Trace ID 1 was started by login "sa".
+    2026-11-05 08:27:48.70 spid27s     Server name is 'PAYTON-LEGION2\LOCALDB#56687F83'. This is an informational message only. No user action is required.
+    2026-11-05 08:27:48.72 spid37s     Server local connection provider is ready to accept connection on [ \\.\pipe\LOCALDB#56687F83\tsql\query ].
+    2026-11-05 08:27:48.73 spid37s     Dedicated administrator connection support was not started because it is disabled on this edition of SQL Server. If you want to use a dedicated administrator connection, restart SQL Server using the trace flag 7806. This is an informational message only. No user action is required.
+    2026-11-05 08:27:48.73 spid37s     SQL Server is now ready for client connections. This is an informational message; no user action is required.
+    2026-11-05 08:27:48.75 Server      Common language runtime (CLR) functionality initialized using CLR version v4.0.30319 from C:\Windows\Microsoft.NET\Framework64\v4.0.30319\.
+    2026-11-05 08:27:48.85 spid31s     Starting up database 'mssqlsystemresource'.
+    2026-11-05 08:27:48.95 spid31s     The resource database build version is 16.00.1000. This is an informational message only. No user action is required.
+    2026-11-05 08:27:48.96 spid27s     Starting up database 'msdb'.
+    2026-11-05 08:27:49.07 spid31s     Starting up database 'model'.
+    2026-11-05 08:27:49.08 spid27s     1 transactions rolled forward in database 'msdb' (4:0). This is an informational message only. No user action is required.
+    2026-11-05 08:27:49.09 spid27s     0 transactions rolled back in database 'msdb' (4:0). This is an informational message only. No user action is required.
+    2026-11-05 08:27:49.16 spid31s     Clearing tempdb database.
+    2026-11-05 08:27:49.58 spid31s     Starting up database 'tempdb'.
+    2026-11-05 08:27:49.87 spid38s     The Service Broker endpoint is in disabled or stopped state.
+    2026-11-05 08:27:49.87 spid38s     The Database Mirroring endpoint is in disabled or stopped state.
+    2026-11-05 08:27:49.99 spid38s     Service Broker manager has started.
+    2026-11-05 08:27:50.00 spid27s     Recovery is complete. This is an informational message only. No user action is required.
+    2026-11-05 08:27:51.08 spid52      Starting up database 'mcp_triageschema_024e0beb1d4243f09bd273f4b9e74389'.
+    2026-11-05 08:27:51.08 spid52      RemoveStaleDbEntries: Cleanup of stale DB entries called for database ID: [8]
+    2026-11-05 08:27:51.08 spid52      RemoveStaleDbEntries: Cleanup of stale DB entries skipped because master db is not memory optimized. DbId: 8.
+    2026-11-05 08:27:51.11 spid52      Parallel redo is started for database 'mcp_triageschema_024e0beb1d4243f09bd273f4b9e74389' with worker pool size [4].
+    2026-11-05 08:27:51.12 spid52      Parallel redo is shutdown for database 'mcp_triageschema_024e0beb1d4243f09bd273f4b9e74389' with worker pool size [4].
+    2026-11-05 08:27:51.54 spid52      Setting database option SINGLE_USER to ON for database 'mcp_triageschema_024e0beb1d4243f09bd273f4b9e74389'.
+    2026-11-05 08:27:54.61 spid52      RBPEX::NotifyDrop: Called for database ID: [8], file Id [0]
+    2026-11-05 08:27:54.64 spid52      RBPEX::NotifyFileShutdown: Called for database ID: [8], file Id [0]
+    2026-11-05 08:27:54.97 spid52      Starting up database 'mcp_backfill_caf64217bfa74bc295a5055e85d87455'.
+    2026-11-05 08:27:54.97 spid52      RemoveStaleDbEntries: Cleanup of stale DB entries called for database ID: [8]
+    2026-11-05 08:27:54.97 spid52      RemoveStaleDbEntries: Cleanup of stale DB entries skipped because master db is not memory optimized. DbId: 8.
+    2026-11-05 08:27:54.99 spid52      Parallel redo is started for database 'mcp_backfill_caf64217bfa74bc295a5055e85d87455' with worker pool size [4].
+    2026-11-05 08:27:55.00 spid52      Parallel redo is shutdown for database 'mcp_backfill_caf64217bfa74bc295a5055e85d87455' with worker pool size [4].
+    2026-11-05 08:27:55.13 spid61s     RBPEX::NotifyFileShutdown: Called for database ID: [8], file Id [0]
+    2026-11-05 08:27:56.14 spid64      Starting up database 'mcp_backfill_caf64217bfa74bc295a5055e85d87455'.
+    2026-11-05 08:27:56.14 spid64      RemoveStaleDbEntries: Cleanup of stale DB entries called for database ID: [8]
+    2026-11-05 08:27:56.14 spid64      RemoveStaleDbEntries: Cleanup of stale DB entries skipped because master db is not memory optimized. DbId: 8.
+    2026-11-05 08:27:56.16 spid64      Parallel redo is started for database 'mcp_backfill_caf64217bfa74bc295a5055e85d87455' with worker pool size [4].
+    2026-11-05 08:27:56.19 spid64      Parallel redo is shutdown for database 'mcp_backfill_caf64217bfa74bc295a5055e85d87455' with worker pool size [4].
+    2026-11-05 08:30:08.03 spid52      Setting database option SINGLE_USER to ON for database 'mcp_backfill_caf64217bfa74bc295a5055e85d87455'.
+    2026-11-05 08:30:11.13 spid52      RBPEX::NotifyDrop: Called for database ID: [8], file Id [0]
+    2026-11-05 08:30:11.22 spid52      RBPEX::NotifyFileShutdown: Called for database ID: [8], file Id [0]
+    2026-11-05 08:30:11.97 spid52      Starting up database 'mcp_backfill_35b8fd69ee364d549ad9dca1d2e54edf'.
+    2026-11-05 08:30:11.97 spid52      RemoveStaleDbEntries: Cleanup of stale DB entries called for database ID: [8]
+    2026-11-05 08:30:11.97 spid52      RemoveStaleDbEntries: Cleanup of stale DB entries skipped because master db is not memory optimized. DbId: 8.
+    2026-11-05 08:30:12.09 spid52      Parallel redo is started for database 'mcp_backfill_35b8fd69ee364d549ad9dca1d2e54edf' with worker pool size [4].
+    2026-11-05 08:30:12.38 spid52      Parallel redo is shutdown for database 'mcp_backfill_35b8fd69ee364d549ad9dca1d2e54edf' with worker pool size [4].
+    2026-11-05 08:30:13.22 spid46s     RBPEX::NotifyFileShutdown: Called for database ID: [8], file Id [0]
+    2026-11-05 08:30:13.36 spid64      Starting up database 'mcp_backfill_35b8fd69ee364d549ad9dca1d2e54edf'.
+    2026-11-05 08:30:13.36 spid64      RemoveStaleDbEntries: Cleanup of stale DB entries called for database ID: [8]
+    2026-11-05 08:30:13.36 spid64      RemoveStaleDbEntries: Cleanup of stale DB entries skipped because master db is not memory optimized. DbId: 8.
+    2026-11-05 08:30:13.41 spid64      Parallel redo is started for database 'mcp_backfill_35b8fd69ee364d549ad9dca1d2e54edf' with worker pool size [4].
+    2026-11-05 08:30:13.44 spid64      Parallel redo is shutdown for database 'mcp_backfill_35b8fd69ee364d549ad9dca1d2e54edf' with worker pool size [4].
+    2026-11-05 08:31:49.61 spid52      Setting database option SINGLE_USER to ON for database 'mcp_backfill_35b8fd69ee364d549ad9dca1d2e54edf'.
+    2026-11-05 08:31:52.70 spid52      RBPEX::NotifyDrop: Called for database ID: [8], file Id [0]
+    2026-11-05 08:31:52.72 spid52      RBPEX::NotifyFileShutdown: Called for database ID: [8], file Id [0]
+    2026-11-05 08:31:53.02 spid52      Starting up database 'mcp_audit_6c06eb4c29d145d0804ffa2b53ea25d0'.
+    2026-11-05 08:31:53.02 spid52      RemoveStaleDbEntries: Cleanup of stale DB entries called for database ID: [8]
+    2026-11-05 08:31:53.02 spid52      RemoveStaleDbEntries: Cleanup of stale DB entries skipped because master db is not memory optimized. DbId: 8.
+    2026-11-05 08:31:53.04 spid52      Parallel redo is started for database 'mcp_audit_6c06eb4c29d145d0804ffa2b53ea25d0' with worker pool size [4].
+    2026-11-05 08:31:53.04 spid52      Parallel redo is shutdown for database 'mcp_audit_6c06eb4c29d145d0804ffa2b53ea25d0' with worker pool size [4].
+    2026-11-05 08:32:31.29 spid52      Setting database option SINGLE_USER to ON for database 'mcp_audit_6c06eb4c29d145d0804ffa2b53ea25d0'.
+    2026-11-05 08:32:34.31 spid52      RBPEX::NotifyDrop: Called for database ID: [8], file Id [0]
+    2026-11-05 08:32:34.32 spid52      RBPEX::NotifyFileShutdown: Called for database ID: [8], file Id [0]
+    2026-11-05 08:32:34.41 spid52      Starting up database 'mcp_quadbrain_956cc00174b84fcfb48b565af76fb02a'.
+    2026-11-05 08:32:34.41 spid52      RemoveStaleDbEntries: Cleanup of stale DB entries called for database ID: [8]
+    2026-11-05 08:32:34.41 spid52      RemoveStaleDbEntries: Cleanup of stale DB entries skipped because master db is not memory optimized. DbId: 8.
+    2026-11-05 08:32:34.43 spid52      Parallel redo is started for database 'mcp_quadbrain_956cc00174b84fcfb48b565af76fb02a' with worker pool size [4].
+    2026-11-05 08:32:34.43 spid52      Parallel redo is shutdown for database 'mcp_quadbrain_956cc00174b84fcfb48b565af76fb02a' with worker pool size [4].
+    2026-11-05 08:33:29.47 spid52      Setting database option SINGLE_USER to ON for database 'mcp_quadbrain_956cc00174b84fcfb48b565af76fb02a'.
+    2026-11-05 08:33:32.48 spid52      RBPEX::NotifyDrop: Called for database ID: [8], file Id [0]
+    2026-11-05 08:33:32.49 spid52      RBPEX::NotifyFileShutdown: Called for database ID: [8], file Id [0]
+    2026-11-05 08:33:32.56 spid52      Starting up database 'mcp_quadbrain_86f9ae6da71a46d88db70a8aeb113367'.
+    2026-11-05 08:33:32.56 spid52      RemoveStaleDbEntries: Cleanup of stale DB entries called for database ID: [8]
+    2026-11-05 08:33:32.56 spid52      RemoveStaleDbEntries: Cleanup of stale DB entries skipped because master db is not memory optimized. DbId: 8.
+    2026-11-05 08:33:32.58 spid52      Parallel redo is started for database 'mcp_quadbrain_86f9ae6da71a46d88db70a8aeb113367' with worker pool size [4].
+    2026-11-05 08:33:32.59 spid52      Parallel redo is shutdown for database 'mcp_quadbrain_86f9ae6da71a46d88db70a8aeb113367' with worker pool size [4].
+    2026-11-05 08:33:39.04 spid52      Setting database option SINGLE_USER to ON for database 'mcp_quadbrain_86f9ae6da71a46d88db70a8aeb113367'.
+    2026-11-05 08:33:42.05 spid52      RBPEX::NotifyDrop: Called for database ID: [8], file Id [0]
+    2026-11-05 08:33:42.05 spid52      RBPEX::NotifyFileShutdown: Called for database ID: [8], file Id [0]
+    2026-11-05 08:38:50.01 Server      The RANU instance is terminating in response to its internal time out. This is an informational message only. No user action is required.
+    2026-11-05 08:38:50.02 spid36s     SQL Trace was stopped due to server shutdown. Trace ID = '1'. This is an informational message only; no user action is required.
+END 2026-11-05T10:21:15

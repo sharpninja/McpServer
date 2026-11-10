@@ -18,39 +18,9 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// Expanded-scope Use Case tests: PlantUML diagrams, approval versioning, product key hooks,
 /// and shared Realizes coverage evaluation for traceability.
 /// </summary>
-public sealed class UseCaseExpandedScopeTests : IDisposable
+/// <remarks>2026-11-07, FR-MCP-USECASE-008; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (Approval_Approve_IncrementsVersion) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_connection, _provider, _workspace, .ctor and Dispose) moved once into the abstract base class UseCaseExpandedScopeTestsBase in Services/UseCaseExpandedScopeTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
+public sealed class UseCaseExpandedScopeTests : UseCaseExpandedScopeTestsBase, IDisposable
 {
-    private readonly SqliteConnection _connection;
-    private readonly ServiceProvider _provider;
-    private readonly string _workspace = Path.Combine(Path.GetTempPath(), "mcp-uc-expanded-" + Guid.NewGuid().ToString("N"));
-
-    /// <summary>Builds an in-memory EF store with Use Case CQRS registered.</summary>
-    public UseCaseExpandedScopeTests()
-    {
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
-        var services = new ServiceCollection();
-        services.AddLogging();
-        services.AddDbContext<McpDbContext>(o => o.UseSqlite(_connection));
-        services.AddScoped<WorkspaceContext>();
-        services.AddCqrsDispatcher();
-        services.AddUseCaseCqrs();
-        _provider = services.BuildServiceProvider();
-
-        using var scope = _provider.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        db.Database.EnsureCreated();
-        db.Workspaces.Add(new WorkspaceEntity { WorkspaceId = _workspace, WorkspacePath = _workspace, Name = "expanded" });
-        db.SaveChanges();
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        _provider.Dispose();
-        _connection.Dispose();
-    }
-
     /// <summary>TR-MCP-USECASE-004: PlantUML format is supported via diagram service Generate.</summary>
     [Fact]
     public void DiagramService_Generate_PlantUml_ContainsStartUml()
@@ -80,35 +50,6 @@ public sealed class UseCaseExpandedScopeTests : IDisposable
         Assert.Contains("@startuml", plant, StringComparison.Ordinal);
         Assert.Contains("Submit credentials", plant, StringComparison.Ordinal);
         Assert.Contains("@enduml", plant, StringComparison.Ordinal);
-    }
-
-    /// <summary>FR-MCP-USECASE-008: Approving increments version number.</summary>
-    [Fact]
-    public async Task Approval_Approve_IncrementsVersion()
-    {
-        using var scope = _provider.CreateScope();
-        var ws = scope.ServiceProvider.GetRequiredService<WorkspaceContext>();
-        ws.WorkspacePath = _workspace;
-        var dispatcher = scope.ServiceProvider.GetRequiredService<IDispatcher>();
-
-        var created = await dispatcher.SendAsync(
-            new CreateUseCaseCommand(_workspace, new CreateUseCaseRequest { Title = "Approve me", CreateBasicFlow = true }),
-            CancellationToken.None).ConfigureAwait(true);
-        Assert.True(created.IsSuccess, created.Error);
-        Assert.Equal(1, created.Value!.VersionNumber);
-        Assert.Equal("Draft", created.Value.ApprovalStatus);
-
-        var submitted = await dispatcher.SendAsync(
-            new SetUseCaseApprovalStatusCommand(_workspace, created.Value.UseCaseId, "Submitted"),
-            CancellationToken.None).ConfigureAwait(true);
-        Assert.True(submitted.IsSuccess, submitted.Error);
-
-        var approved = await dispatcher.SendAsync(
-            new SetUseCaseApprovalStatusCommand(_workspace, created.Value.UseCaseId, "Approved"),
-            CancellationToken.None).ConfigureAwait(true);
-        Assert.True(approved.IsSuccess, approved.Error);
-        Assert.Equal("Approved", approved.Value!.ApprovalStatus);
-        Assert.Equal(2, approved.Value.VersionNumber);
     }
 
     /// <summary>FR-MCP-USECASE-009: Product key assignment and list-by-product hook.</summary>

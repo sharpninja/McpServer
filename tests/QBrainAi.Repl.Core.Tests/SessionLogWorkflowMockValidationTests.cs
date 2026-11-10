@@ -376,23 +376,27 @@ public class SessionLogWorkflowMockValidationTests
         Assert.Equal(1, _fakeState.TurnCount);
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 (appended 2026-11-03): open, begin and update each record the next scripted time exactly
+    /// as LastUpdated, with no sleep (hostile validation round 10 finding R10-F3: the case formerly slept to separate
+    /// live-clock times).
+    /// </summary>
     [Fact]
     public void SessionState_LastUpdatedTimestamp_UpdatesOnChanges()
     {
-        _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        var initialTimestamp = _fakeState.LastUpdated;
+        var first = new DateTimeOffset(2026, 3, 4, 11, 39, 1, TimeSpan.Zero);
+        DateTimeOffset[] times = [first, first.AddSeconds(1), first.AddSeconds(2)];
+        var state = new FakeSessionLogState(new QBrainAi.Repl.Core.Tests.TestSupport.ScriptedClock(times).Next);
+        var recorded = new List<DateTimeOffset>();
 
-        Thread.Sleep(10);
-        _fakeState.BeginTurn("req-20260304T113901Z-task-001");
-        var afterBeginTimestamp = _fakeState.LastUpdated;
+        state.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
+        recorded.Add(state.LastUpdated);
+        state.BeginTurn("req-20260304T113901Z-task-001");
+        recorded.Add(state.LastUpdated);
+        state.UpdateTurn();
+        recorded.Add(state.LastUpdated);
 
-        Assert.True(afterBeginTimestamp > initialTimestamp);
-
-        Thread.Sleep(10);
-        _fakeState.UpdateTurn();
-        var afterUpdateTimestamp = _fakeState.LastUpdated;
-
-        Assert.True(afterUpdateTimestamp > afterBeginTimestamp);
+        QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.AssertRecordedTimes(times, recorded, "session transitions");
     }
 
     #endregion

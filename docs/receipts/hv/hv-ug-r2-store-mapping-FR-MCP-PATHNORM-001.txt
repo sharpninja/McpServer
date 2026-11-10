@@ -1,0 +1,16 @@
+type: result
+payload:
+  requestId: req-20261020T023755Z-867f
+  result:
+    items:
+    - frId: FR-MCP-PATHNORM-001
+      trId: TR-MCP-PATHNORM-001
+      createdAt: 2026-10-20T02:37:57.5019471+00:00
+    - frId: FR-MCP-PATHNORM-001
+      testId: TEST-MCP-PATHNORM-001
+      createdAt: 2026-10-20T02:37:57.5025505+00:00
+    totalCount: 2
+  deprecated: true
+
+---
+

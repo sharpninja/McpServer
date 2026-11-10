@@ -1,0 +1,22 @@
+{
+  "schema": "unitgreen-gate-receipt.v1",
+  "runId": "ug-r17-final-linux-traceability-1",
+  "host": "LAB-OMARCHY",
+  "kind": "traceability",
+  "head": "bbd248b94168bb0f50ba86a14c4b9021ffbabf1c",
+  "command": [
+    "./build.ps1",
+    "ValidateTraceability"
+  ],
+  "startedLocal": "2026-11-09T17:29:39-06:00",
+  "endedLocal": "2026-11-09T17:29:39-06:00",
+  "exitCode": 0,
+  "totals": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "notExecuted": 0
+  },
+  "trx": [],
+  "notes": "ValidateTraceability passed; it writes no TRX by contract. Output reported no live SQLite source, so effective-requirement plugin readback remains separate evidence."
+}

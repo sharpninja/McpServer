@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="ccb1e626-6d6e-4b65-967d-7f13a231539e" name="kingd@PAYTON-LEGION2 2026-10-28 21:02:52" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-28T21:02:52.6927537-05:00" queuing="2026-10-28T21:02:52.6927542-05:00" start="2026-10-28T21:02:51.3567611-05:00" finish="2026-10-28T21:02:52.8995503-05:00" />
+  <TestSettings name="default" id="d66768c8-9325-4da7-940b-d3b2c30d7c46">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-10-28_21_02_52" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="1526f00e-59e2-40a1-a0cd-803091d94d9e" testId="c3b943fd-0ef3-9d6d-5679-2e18f69f73bc" testName="QBrainAi.Cqrs.Tests.ResultTests.Map_Failure_Propagates" computerName="PAYTON-LEGION2" duration="00:00:00.0001526" startTime="2026-10-28T21:02:52.6808587-05:00" endTime="2026-10-28T21:02:52.6810291-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1526f00e-59e2-40a1-a0cd-803091d94d9e" />
+    <UnitTestResult executionId="e90ab2cf-cfd7-4afd-9d01-d9675c7ae2e8" testId="bc1f7f60-aa57-398c-ae0c-f9a43baccb0b" testName="QBrainAi.Cqrs.Tests.CorrelationIdTests.TryParse_Valid_ReturnsInstance" computerName="PAYTON-LEGION2" duration="00:00:00.0025299" startTime="2026-10-28T21:02:52.6283297-05:00" endTime="2026-10-28T21:02:52.6308930-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e90ab2cf-cfd7-4afd-9d01-d9675c7ae2e8" />
+    <UnitTestResult executionId="0bda09fe-f001-4b65-b1c1-74cff3bea6ee" testId="d62572e9-b4a4-cffb-a9da-ac9094d6a62c" testName="QBrainAi.Cqrs.Tests.ResultTests.Success_HasValue_And_IsSuccess" computerName="PAYTON-LEGION2" duration="00:00:00.0003608" startTime="2026-10-28T21:02:52.6287777-05:00" endTime="2026-10-28T21:02:52.6291620-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0bda09fe-f001-4b65-b1c1-74cff3bea6ee" />
+    <UnitTestResult executionId="c8fd9831-41e9-44a8-b705-21ca976b05c8" testId="d9307a24-eccd-b9c4-a570-1bb2ac98273d" testName="QBrainAi.Cqrs.Tests.ResultTests.GetValueOrDefault_Success_ReturnsValue" computerName="PAYTON-LEGION2" duration="00:00:00.0001220" startTime="2026-10-28T21:02:52.6812242-05:00" endTime="2026-10-28T21:02:52.6813631-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c8fd9831-41e9-44a8-b705-21ca976b05c8" />
+    <UnitTestResult executionId="2c6f8638-306e-4bf1-9382-b26f4b9bbd54" testId="275e978f-8050-35de-cb9d-8cd970847bc5" testName="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_Command_ReturnsSuccess" computerName="PAYTON-LEGION2" duration="00:00:00.0013902" startTime="2026-10-28T21:02:52.7123137-05:00" endTime="2026-10-28T21:02:52.7137344-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2c6f8638-306e-4bf1-9382-b26f4b9bbd54" />
+    <UnitTestResult executionId="90fddac3-021e-49c2-bab4-e3d91615be52" testId="bec58486-0bfb-ee91-076f-4c05635daef8" testName="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_FailingHandler_ReturnsFailure" computerName="PAYTON-LEGION2" duration="00:00:00.0989629" startTime="2026-10-28T21:02:52.5901178-05:00" endTime="2026-10-28T21:02:52.6966783-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="90fddac3-021e-49c2-bab4-e3d91615be52" />
+    <UnitTestResult executionId="8bf65385-4360-4444-8d18-3af40893570b" testId="53ce12bb-9963-ecee-8f63-f670d7744871" testName="QBrainAi.Cqrs.Tests.ResultTests.Bind_Failure_Propagates" computerName="PAYTON-LEGION2" duration="00:00:00.0003820" startTime="2026-10-28T21:02:52.6846969-05:00" endTime="2026-10-28T21:02:52.6851101-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8bf65385-4360-4444-8d18-3af40893570b" />
+    <UnitTestResult executionId="3f570f1d-26cf-4c22-bcb4-e29f9dca3f76" testId="fb31a085-9ef9-c6a5-2c10-a122094d9ced" testName="QBrainAi.Cqrs.Tests.DispatcherTests.QueryAsync_Query_ReturnsSuccess" computerName="PAYTON-LEGION2" duration="00:00:00.0147424" startTime="2026-10-28T21:02:52.6971681-05:00" endTime="2026-10-28T21:02:52.7119518-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3f570f1d-26cf-4c22-bcb4-e29f9dca3f76" />
+    <UnitTestResult executionId="8f445ff3-f019-4bf7-bbda-8c1c787e2cba" testId="c63de8ca-6a5a-2517-02ab-ab63e3471f99" testName="QBrainAi.Cqrs.Tests.ResultTests.Failure_WithException_HasBoth" computerName="PAYTON-LEGION2" duration="00:00:00.0003472" startTime="2026-10-28T21:02:52.6867227-05:00" endTime="2026-10-28T21:02:52.6870970-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8f445ff3-f019-4bf7-bbda-8c1c787e2cba" />
+    <UnitTestResult executionId="847f4837-2e63-48a4-9910-68151dd197a6" testId="77f0d4f9-bf99-5d2e-85c7-f791c5bac86b" testName="QBrainAi.Cqrs.Tests.ResultTests.ToString_Failure_Format" computerName="PAYTON-LEGION2" duration="00:00:00.0002605" startTime="2026-10-28T21:02:52.6796816-05:00" endTime="2026-10-28T21:02:52.6799715-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="847f4837-2e63-48a4-9910-68151dd197a6" />
+    <UnitTestResult executionId="82e54077-98a0-435a-9510-250d7949e7eb" testId="0a8180fb-8193-7780-5a51-faa7f520a2a5" testName="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_WithBehavior_BehaviorExecutes" computerName="PAYTON-LEGION2" duration="00:00:00.0024208" startTime="2026-10-28T21:02:52.8076679-05:00" endTime="2026-10-28T21:02:52.8101182-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="82e54077-98a0-435a-9510-250d7949e7eb" />
+    <UnitTestResult executionId="8e0b66a2-47bf-47e9-a87b-99c9cc305da7" testId="a9ba18c9-f2e6-f860-c7d3-b108d66e2ada" testName="QBrainAi.Cqrs.Tests.ResultTests.Failure_WithMessage_HasError" computerName="PAYTON-LEGION2" duration="00:00:00.0006567" startTime="2026-10-28T21:02:52.6858041-05:00" endTime="2026-10-28T21:02:52.6864893-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8e0b66a2-47bf-47e9-a87b-99c9cc305da7" />
+    <UnitTestResult executionId="3ef558dd-63c5-4350-8ce1-e010c9d4d6a2" testId="eeb2ebba-f422-7fce-bf46-4d3cc0b72ccf" testName="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_MultipleConcurrentDispatches_AllComplete" computerName="PAYTON-LEGION2" duration="00:00:00.0057558" startTime="2026-10-28T21:02:52.8015186-05:00" endTime="2026-10-28T21:02:52.8073070-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3ef558dd-63c5-4350-8ce1-e010c9d4d6a2" />
+    <UnitTestResult executionId="c19a9504-366f-452e-8110-555060750243" testId="d0239fdf-2554-cc49-b4d5-5e2d9d3b85b4" testName="QBrainAi.Cqrs.Tests.ResultTests.NonGeneric_Success" computerName="PAYTON-LEGION2" duration="00:00:00.0002437" startTime="2026-10-28T21:02:52.6853362-05:00" endTime="2026-10-28T21:02:52.6856048-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c19a9504-366f-452e-8110-555060750243" />
+    <UnitTestResult executionId="b285c049-9fb7-4b65-9e42-27175062834e" testId="093a4328-c70c-9e78-1d94-c7853cba6928" testName="QBrainAi.Cqrs.Tests.CorrelationIdTests.Next_Increments" computerName="PAYTON-LEGION2" duration="00:00:00.0188234" startTime="2026-10-28T21:02:52.5901258-05:00" endTime="2026-10-28T21:02:52.6184087-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b285c049-9fb7-4b65-9e42-27175062834e" />
+    <UnitTestResult executionId="86eeb809-ce23-47b0-b21e-09857f6486a0" testId="580ef4c8-58d1-e027-af99-3762d02ce18e" testName="QBrainAi.Cqrs.Tests.DispatcherTests.Dispatcher_Implements_ILoggerProvider" computerName="PAYTON-LEGION2" duration="00:00:00.0005915" startTime="2026-10-28T21:02:52.7139667-05:00" endTime="2026-10-28T21:02:52.7145868-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86eeb809-ce23-47b0-b21e-09857f6486a0" />
+    <UnitTestResult executionId="e19fe2b3-b14f-40e6-9d1e-a26be806d22a" testId="64e8ae5c-e39a-2e7e-2528-87ce8fc38ce3" testName="QBrainAi.Cqrs.Tests.ResultTests.Map_Success_Transforms" computerName="PAYTON-LEGION2" duration="00:00:00.0003909" startTime="2026-10-28T21:02:52.6802083-05:00" endTime="2026-10-28T21:02:52.6806251-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e19fe2b3-b14f-40e6-9d1e-a26be806d22a" />
+    <UnitTestResult executionId="9e14e48d-ce9b-4135-991f-f929cd5a462f" testId="3fce90a4-1415-f0f4-b14f-5e6c1d2ddc92" testName="QBrainAi.Cqrs.Tests.CorrelationIdTests.Next_IsThreadSafe" computerName="PAYTON-LEGION2" duration="00:00:00.0025959" startTime="2026-10-28T21:02:52.6325255-05:00" endTime="2026-10-28T21:02:52.6351457-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9e14e48d-ce9b-4135-991f-f929cd5a462f" />
+    <UnitTestResult executionId="c0cbe9c1-6587-41de-9d0f-bb5732a31805" testId="2433d5a4-8f5d-c963-b31b-5c7833acd9b4" testName="QBrainAi.Cqrs.Tests.ResultTests.GetValueOrDefault_Failure_ReturnsFallback" computerName="PAYTON-LEGION2" duration="00:00:00.0006085" startTime="2026-10-28T21:02:52.6258398-05:00" endTime="2026-10-28T21:02:52.6265162-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c0cbe9c1-6587-41de-9d0f-bb5732a31805" />
+    <UnitTestResult executionId="8551ab46-58ad-48af-97d2-2b56388d4a8d" testId="38a18294-35c0-e34b-a8fd-88d19a06c5ee" testName="QBrainAi.Cqrs.Tests.ResultTests.NonGeneric_Failure" computerName="PAYTON-LEGION2" duration="00:00:00.0006179" startTime="2026-10-28T21:02:52.6267048-05:00" endTime="2026-10-28T21:02:52.6273424-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8551ab46-58ad-48af-97d2-2b56388d4a8d" />
+    <UnitTestResult executionId="e5d86156-5f49-44e6-8dad-eb073ead3129" testId="531747f7-3216-2432-cf91-e424bd80bbbe" testName="QBrainAi.Cqrs.Tests.ResultTests.Bind_Success_Chains" computerName="PAYTON-LEGION2" duration="00:00:00.0009775" startTime="2026-10-28T21:02:52.6275620-05:00" endTime="2026-10-28T21:02:52.6285634-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e5d86156-5f49-44e6-8dad-eb073ead3129" />
+    <UnitTestResult executionId="b8b21c2c-6756-4932-bcea-bc830e1cb6bc" testId="3a9589f4-06e0-235f-09c8-594180ed4b23" testName="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_RecentDispatches_CaptureLogEntries" computerName="PAYTON-LEGION2" duration="00:00:00.0080386" startTime="2026-10-28T21:02:52.7148242-05:00" endTime="2026-10-28T21:02:52.7229022-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b8b21c2c-6756-4932-bcea-bc830e1cb6bc" />
+    <UnitTestResult executionId="838955bb-273a-488b-a738-483fbb4df997" testId="0446eefe-c914-70de-285e-072b07156397" testName="QBrainAi.Cqrs.Tests.CorrelationIdTests.Current_Format" computerName="PAYTON-LEGION2" duration="00:00:00.0003260" startTime="2026-10-28T21:02:52.6358155-05:00" endTime="2026-10-28T21:02:52.6361644-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="838955bb-273a-488b-a738-483fbb4df997" />
+    <UnitTestResult executionId="41bb14e4-ff42-4fda-a3e8-100c884e1740" testId="465bb660-4b31-50ab-17ab-800ddb7a1494" testName="QBrainAi.Cqrs.Tests.ResultTests.Failure_WithMessageAndException" computerName="PAYTON-LEGION2" duration="00:00:00.0178235" startTime="2026-10-28T21:02:52.5901200-05:00" endTime="2026-10-28T21:02:52.6184144-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="41bb14e4-ff42-4fda-a3e8-100c884e1740" />
+    <UnitTestResult executionId="97e770db-77e4-4f36-9068-99cfa67c41bb" testId="5982c56d-6e84-39c5-6270-fe1ccdb2f06f" testName="QBrainAi.Cqrs.Tests.CorrelationIdTests.TryParse_Null_ReturnsNull" computerName="PAYTON-LEGION2" duration="00:00:00.0001040" startTime="2026-10-28T21:02:52.6363904-05:00" endTime="2026-10-28T21:02:52.6365131-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="97e770db-77e4-4f36-9068-99cfa67c41bb" />
+    <UnitTestResult executionId="5560bd5c-c744-4a3d-8bb9-ce64f9e2a5db" testId="d2d4e384-1bb3-4f36-048d-97a86b4b246c" testName="QBrainAi.Cqrs.Tests.CorrelationIdTests.New_HasEightDigitBaseId" computerName="PAYTON-LEGION2" duration="00:00:00.0012857" startTime="2026-10-28T21:02:52.6258398-05:00" endTime="2026-10-28T21:02:52.6271718-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5560bd5c-c744-4a3d-8bb9-ce64f9e2a5db" />
+    <UnitTestResult executionId="3b069880-968f-4f42-91bd-85e00c76d30f" testId="7995bfe8-047b-3aab-2d17-3a9e7b01464b" testName="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_Cancellation_ReturnsFailure" computerName="PAYTON-LEGION2" duration="00:00:00.0008198" startTime="2026-10-28T21:02:52.8004354-05:00" endTime="2026-10-28T21:02:52.8012795-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3b069880-968f-4f42-91bd-85e00c76d30f" />
+    <UnitTestResult executionId="7a96629a-d1cd-4541-bb5d-bc30faf2e8a0" testId="ee2e30f6-2f2c-71b3-7efa-7e13c869bb33" testName="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_RecentDispatches_HasEntryAfterDispatch" computerName="PAYTON-LEGION2" duration="00:00:00.0021092" startTime="2026-10-28T21:02:52.7980043-05:00" endTime="2026-10-28T21:02:52.8001414-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7a96629a-d1cd-4541-bb5d-bc30faf2e8a0" />
+    <UnitTestResult executionId="eb05faaf-d16c-4e75-aaeb-6d42bffd5620" testId="5f0048b5-37c0-4c6a-190a-af1810ec872d" testName="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_WithTimeout_TimesOut" computerName="PAYTON-LEGION2" duration="00:00:00.0693035" startTime="2026-10-28T21:02:52.7232950-05:00" endTime="2026-10-28T21:02:52.7940859-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eb05faaf-d16c-4e75-aaeb-6d42bffd5620" />
+    <UnitTestResult executionId="0551eb38-7e98-4dda-adc2-3c6f89797603" testId="7e881000-d720-f7c8-85bc-f4202a8de44d" testName="QBrainAi.Cqrs.Tests.CorrelationIdTests.TryParse_Invalid_ReturnsNull" computerName="PAYTON-LEGION2" duration="00:00:00.0006575" startTime="2026-10-28T21:02:52.6274086-05:00" endTime="2026-10-28T21:02:52.6280849-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0551eb38-7e98-4dda-adc2-3c6f89797603" />
+    <UnitTestResult executionId="70b0b1df-cd36-4c0b-97a5-181e741ac32a" testId="f507c4a3-b557-9ee3-c024-425fa5641530" testName="QBrainAi.Cqrs.Tests.ResultTests.ToString_Success_Format" computerName="PAYTON-LEGION2" duration="00:00:00.0498905" startTime="2026-10-28T21:02:52.6293774-05:00" endTime="2026-10-28T21:02:52.6793085-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="70b0b1df-cd36-4c0b-97a5-181e741ac32a" />
+    <UnitTestResult executionId="e0016caa-11cb-4104-8f94-166f611a9210" testId="9b1d32be-63dc-95f8-8d60-98e225f316ad" testName="QBrainAi.Cqrs.Tests.CorrelationIdTests.Parse_Invalid_Throws" computerName="PAYTON-LEGION2" duration="00:00:00.0010392" startTime="2026-10-28T21:02:52.6312228-05:00" endTime="2026-10-28T21:02:52.6322946-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e0016caa-11cb-4104-8f94-166f611a9210" />
+    <UnitTestResult executionId="9d420640-5226-4906-a018-10204f3f5227" testId="1a884952-6f38-1aa8-d7a1-4820e9448ee9" testName="QBrainAi.Cqrs.Tests.CorrelationIdTests.Parse_Valid" computerName="PAYTON-LEGION2" duration="00:00:00.0001490" startTime="2026-10-28T21:02:52.6354176-05:00" endTime="2026-10-28T21:02:52.6355906-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9d420640-5226-4906-a018-10204f3f5227" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_RecentDispatches_CaptureLogEntries" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="3a9589f4-06e0-235f-09c8-594180ed4b23">
+      <Execution id="b8b21c2c-6756-4932-bcea-bc830e1cb6bc" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.DispatcherTests" name="SendAsync_RecentDispatches_CaptureLogEntries" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.Success_HasValue_And_IsSuccess" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="d62572e9-b4a4-cffb-a9da-ac9094d6a62c">
+      <Execution id="0bda09fe-f001-4b65-b1c1-74cff3bea6ee" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="Success_HasValue_And_IsSuccess" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.CorrelationIdTests.Parse_Valid" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="1a884952-6f38-1aa8-d7a1-4820e9448ee9">
+      <Execution id="9d420640-5226-4906-a018-10204f3f5227" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.CorrelationIdTests" name="Parse_Valid" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_MultipleConcurrentDispatches_AllComplete" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="eeb2ebba-f422-7fce-bf46-4d3cc0b72ccf">
+      <Execution id="3ef558dd-63c5-4350-8ce1-e010c9d4d6a2" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.DispatcherTests" name="SendAsync_MultipleConcurrentDispatches_AllComplete" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.CorrelationIdTests.TryParse_Valid_ReturnsInstance" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="bc1f7f60-aa57-398c-ae0c-f9a43baccb0b">
+      <Execution id="e90ab2cf-cfd7-4afd-9d01-d9675c7ae2e8" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.CorrelationIdTests" name="TryParse_Valid_ReturnsInstance" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.Map_Failure_Propagates" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="c3b943fd-0ef3-9d6d-5679-2e18f69f73bc">
+      <Execution id="1526f00e-59e2-40a1-a0cd-803091d94d9e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="Map_Failure_Propagates" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.Failure_WithMessageAndException" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="465bb660-4b31-50ab-17ab-800ddb7a1494">
+      <Execution id="41bb14e4-ff42-4fda-a3e8-100c884e1740" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="Failure_WithMessageAndException" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_RecentDispatches_HasEntryAfterDispatch" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="ee2e30f6-2f2c-71b3-7efa-7e13c869bb33">
+      <Execution id="7a96629a-d1cd-4541-bb5d-bc30faf2e8a0" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.DispatcherTests" name="SendAsync_RecentDispatches_HasEntryAfterDispatch" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.GetValueOrDefault_Success_ReturnsValue" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="d9307a24-eccd-b9c4-a570-1bb2ac98273d">
+      <Execution id="c8fd9831-41e9-44a8-b705-21ca976b05c8" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="GetValueOrDefault_Success_ReturnsValue" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.DispatcherTests.QueryAsync_Query_ReturnsSuccess" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="fb31a085-9ef9-c6a5-2c10-a122094d9ced">
+      <Execution id="3f570f1d-26cf-4c22-bcb4-e29f9dca3f76" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.DispatcherTests" name="QueryAsync_Query_ReturnsSuccess" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.Map_Success_Transforms" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="64e8ae5c-e39a-2e7e-2528-87ce8fc38ce3">
+      <Execution id="e19fe2b3-b14f-40e6-9d1e-a26be806d22a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="Map_Success_Transforms" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.ToString_Failure_Format" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="77f0d4f9-bf99-5d2e-85c7-f791c5bac86b">
+      <Execution id="847f4837-2e63-48a4-9910-68151dd197a6" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="ToString_Failure_Format" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.CorrelationIdTests.Next_IsThreadSafe" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="3fce90a4-1415-f0f4-b14f-5e6c1d2ddc92">
+      <Execution id="9e14e48d-ce9b-4135-991f-f929cd5a462f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.CorrelationIdTests" name="Next_IsThreadSafe" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.CorrelationIdTests.Parse_Invalid_Throws" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="9b1d32be-63dc-95f8-8d60-98e225f316ad">
+      <Execution id="e0016caa-11cb-4104-8f94-166f611a9210" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.CorrelationIdTests" name="Parse_Invalid_Throws" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.NonGeneric_Success" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="d0239fdf-2554-cc49-b4d5-5e2d9d3b85b4">
+      <Execution id="c19a9504-366f-452e-8110-555060750243" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="NonGeneric_Success" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.ToString_Success_Format" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="f507c4a3-b557-9ee3-c024-425fa5641530">
+      <Execution id="70b0b1df-cd36-4c0b-97a5-181e741ac32a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="ToString_Success_Format" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.Bind_Failure_Propagates" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="53ce12bb-9963-ecee-8f63-f670d7744871">
+      <Execution id="8bf65385-4360-4444-8d18-3af40893570b" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="Bind_Failure_Propagates" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.CorrelationIdTests.TryParse_Invalid_ReturnsNull" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="7e881000-d720-f7c8-85bc-f4202a8de44d">
+      <Execution id="0551eb38-7e98-4dda-adc2-3c6f89797603" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.CorrelationIdTests" name="TryParse_Invalid_ReturnsNull" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.DispatcherTests.Dispatcher_Implements_ILoggerProvider" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="580ef4c8-58d1-e027-af99-3762d02ce18e">
+      <Execution id="86eeb809-ce23-47b0-b21e-09857f6486a0" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.DispatcherTests" name="Dispatcher_Implements_ILoggerProvider" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.NonGeneric_Failure" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="38a18294-35c0-e34b-a8fd-88d19a06c5ee">
+      <Execution id="8551ab46-58ad-48af-97d2-2b56388d4a8d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="NonGeneric_Failure" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.Failure_WithException_HasBoth" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="c63de8ca-6a5a-2517-02ab-ab63e3471f99">
+      <Execution id="8f445ff3-f019-4bf7-bbda-8c1c787e2cba" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="Failure_WithException_HasBoth" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.CorrelationIdTests.New_HasEightDigitBaseId" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="d2d4e384-1bb3-4f36-048d-97a86b4b246c">
+      <Execution id="5560bd5c-c744-4a3d-8bb9-ce64f9e2a5db" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.CorrelationIdTests" name="New_HasEightDigitBaseId" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.Failure_WithMessage_HasError" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="a9ba18c9-f2e6-f860-c7d3-b108d66e2ada">
+      <Execution id="8e0b66a2-47bf-47e9-a87b-99c9cc305da7" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="Failure_WithMessage_HasError" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.Bind_Success_Chains" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="531747f7-3216-2432-cf91-e424bd80bbbe">
+      <Execution id="e5d86156-5f49-44e6-8dad-eb073ead3129" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="Bind_Success_Chains" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.CorrelationIdTests.Current_Format" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="0446eefe-c914-70de-285e-072b07156397">
+      <Execution id="838955bb-273a-488b-a738-483fbb4df997" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.CorrelationIdTests" name="Current_Format" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.CorrelationIdTests.TryParse_Null_ReturnsNull" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="5982c56d-6e84-39c5-6270-fe1ccdb2f06f">
+      <Execution id="97e770db-77e4-4f36-9068-99cfa67c41bb" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.CorrelationIdTests" name="TryParse_Null_ReturnsNull" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_WithBehavior_BehaviorExecutes" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="0a8180fb-8193-7780-5a51-faa7f520a2a5">
+      <Execution id="82e54077-98a0-435a-9510-250d7949e7eb" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.DispatcherTests" name="SendAsync_WithBehavior_BehaviorExecutes" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_FailingHandler_ReturnsFailure" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="bec58486-0bfb-ee91-076f-4c05635daef8">
+      <Execution id="90fddac3-021e-49c2-bab4-e3d91615be52" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.DispatcherTests" name="SendAsync_FailingHandler_ReturnsFailure" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_Command_ReturnsSuccess" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="275e978f-8050-35de-cb9d-8cd970847bc5">
+      <Execution id="2c6f8638-306e-4bf1-9382-b26f4b9bbd54" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.DispatcherTests" name="SendAsync_Command_ReturnsSuccess" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.ResultTests.GetValueOrDefault_Failure_ReturnsFallback" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="2433d5a4-8f5d-c963-b31b-5c7833acd9b4">
+      <Execution id="c0cbe9c1-6587-41de-9d0f-bb5732a31805" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.ResultTests" name="GetValueOrDefault_Failure_ReturnsFallback" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_WithTimeout_TimesOut" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="5f0048b5-37c0-4c6a-190a-af1810ec872d">
+      <Execution id="eb05faaf-d16c-4e75-aaeb-6d42bffd5620" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.DispatcherTests" name="SendAsync_WithTimeout_TimesOut" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.DispatcherTests.SendAsync_Cancellation_ReturnsFailure" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="7995bfe8-047b-3aab-2d17-3a9e7b01464b">
+      <Execution id="3b069880-968f-4f42-91bd-85e00c76d30f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.DispatcherTests" name="SendAsync_Cancellation_ReturnsFailure" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Cqrs.Tests.CorrelationIdTests.Next_Increments" storage="f:\github\mcpserver\.worktrees\unit-green-r3-ssh\tests\qbrainai.cqrs.tests\bin\debug\net10.0\qbrainai.cqrs.tests.dll" id="093a4328-c70c-9e78-1d94-c7853cba6928">
+      <Execution id="b285c049-9fb7-4b65-9e42-27175062834e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Cqrs.Tests\bin\Debug\net10.0\QBrainAi.Cqrs.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Cqrs.Tests.CorrelationIdTests" name="Next_Increments" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="c3b943fd-0ef3-9d6d-5679-2e18f69f73bc" executionId="1526f00e-59e2-40a1-a0cd-803091d94d9e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bc1f7f60-aa57-398c-ae0c-f9a43baccb0b" executionId="e90ab2cf-cfd7-4afd-9d01-d9675c7ae2e8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d62572e9-b4a4-cffb-a9da-ac9094d6a62c" executionId="0bda09fe-f001-4b65-b1c1-74cff3bea6ee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d9307a24-eccd-b9c4-a570-1bb2ac98273d" executionId="c8fd9831-41e9-44a8-b705-21ca976b05c8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="275e978f-8050-35de-cb9d-8cd970847bc5" executionId="2c6f8638-306e-4bf1-9382-b26f4b9bbd54" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bec58486-0bfb-ee91-076f-4c05635daef8" executionId="90fddac3-021e-49c2-bab4-e3d91615be52" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="53ce12bb-9963-ecee-8f63-f670d7744871" executionId="8bf65385-4360-4444-8d18-3af40893570b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fb31a085-9ef9-c6a5-2c10-a122094d9ced" executionId="3f570f1d-26cf-4c22-bcb4-e29f9dca3f76" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c63de8ca-6a5a-2517-02ab-ab63e3471f99" executionId="8f445ff3-f019-4bf7-bbda-8c1c787e2cba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="77f0d4f9-bf99-5d2e-85c7-f791c5bac86b" executionId="847f4837-2e63-48a4-9910-68151dd197a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0a8180fb-8193-7780-5a51-faa7f520a2a5" executionId="82e54077-98a0-435a-9510-250d7949e7eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a9ba18c9-f2e6-f860-c7d3-b108d66e2ada" executionId="8e0b66a2-47bf-47e9-a87b-99c9cc305da7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eeb2ebba-f422-7fce-bf46-4d3cc0b72ccf" executionId="3ef558dd-63c5-4350-8ce1-e010c9d4d6a2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d0239fdf-2554-cc49-b4d5-5e2d9d3b85b4" executionId="c19a9504-366f-452e-8110-555060750243" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="093a4328-c70c-9e78-1d94-c7853cba6928" executionId="b285c049-9fb7-4b65-9e42-27175062834e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="580ef4c8-58d1-e027-af99-3762d02ce18e" executionId="86eeb809-ce23-47b0-b21e-09857f6486a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="64e8ae5c-e39a-2e7e-2528-87ce8fc38ce3" executionId="e19fe2b3-b14f-40e6-9d1e-a26be806d22a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3fce90a4-1415-f0f4-b14f-5e6c1d2ddc92" executionId="9e14e48d-ce9b-4135-991f-f929cd5a462f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2433d5a4-8f5d-c963-b31b-5c7833acd9b4" executionId="c0cbe9c1-6587-41de-9d0f-bb5732a31805" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="38a18294-35c0-e34b-a8fd-88d19a06c5ee" executionId="8551ab46-58ad-48af-97d2-2b56388d4a8d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="531747f7-3216-2432-cf91-e424bd80bbbe" executionId="e5d86156-5f49-44e6-8dad-eb073ead3129" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3a9589f4-06e0-235f-09c8-594180ed4b23" executionId="b8b21c2c-6756-4932-bcea-bc830e1cb6bc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0446eefe-c914-70de-285e-072b07156397" executionId="838955bb-273a-488b-a738-483fbb4df997" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="465bb660-4b31-50ab-17ab-800ddb7a1494" executionId="41bb14e4-ff42-4fda-a3e8-100c884e1740" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5982c56d-6e84-39c5-6270-fe1ccdb2f06f" executionId="97e770db-77e4-4f36-9068-99cfa67c41bb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d2d4e384-1bb3-4f36-048d-97a86b4b246c" executionId="5560bd5c-c744-4a3d-8bb9-ce64f9e2a5db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7995bfe8-047b-3aab-2d17-3a9e7b01464b" executionId="3b069880-968f-4f42-91bd-85e00c76d30f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ee2e30f6-2f2c-71b3-7efa-7e13c869bb33" executionId="7a96629a-d1cd-4541-bb5d-bc30faf2e8a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5f0048b5-37c0-4c6a-190a-af1810ec872d" executionId="eb05faaf-d16c-4e75-aaeb-6d42bffd5620" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7e881000-d720-f7c8-85bc-f4202a8de44d" executionId="0551eb38-7e98-4dda-adc2-3c6f89797603" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f507c4a3-b557-9ee3-c024-425fa5641530" executionId="70b0b1df-cd36-4c0b-97a5-181e741ac32a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9b1d32be-63dc-95f8-8d60-98e225f316ad" executionId="e0016caa-11cb-4104-8f94-166f611a9210" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1a884952-6f38-1aa8-d7a1-4820e9448ee9" executionId="9d420640-5226-4906-a018-10204f3f5227" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="33" executed="33" passed="33" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)&#xD;
+[xUnit.net 00:00:00.21]   Discovering: QBrainAi.Cqrs.Tests&#xD;
+[xUnit.net 00:00:00.46]   Discovered:  QBrainAi.Cqrs.Tests&#xD;
+[xUnit.net 00:00:00.69]   Starting:    QBrainAi.Cqrs.Tests&#xD;
+[xUnit.net 00:00:01.00]   Finished:    QBrainAi.Cqrs.Tests (ID = '7a9d6ef166ade0172dcc6672e416ccc88acdc26a082c3b231ad4cecdd02be237')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

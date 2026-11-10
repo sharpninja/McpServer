@@ -8,6 +8,7 @@ namespace NukeBuild.Tests;
 /// redirected output. Build-infrastructure test, accountable through TR only. The process cases start real <c>pwsh</c> children
 /// (no mocks); each writes the process id it must clean up to a temporary file that the test removes.
 /// </summary>
+/// <remarks>2026-11-07, TR-MCP-NUKE-009; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the infrastructure half of this class; its Category=Integration case BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess and the helpers only it used (IsBuildOutput, FindRepositoryRoot) moved to the class of the same name in the integration-owned Build.IntegrationTests, which links BoundedProcess, so this infrastructure-owned project holds no integration case (slice S4, hostile validation finding R14-F4); the five remaining cases and their helpers are unchanged.</remarks>
 public sealed class BoundedProcessTests
 {
     /// <summary>
@@ -125,32 +126,6 @@ public sealed class BoundedProcessTests
         Assert.Equal(expected, startInfo.ArgumentList);
     }
 
-    /// <summary>
-    /// TR-MCP-NUKE-009 AC-006: no Build.Tests source other than <see cref="BoundedProcess"/> reads a child's redirected output or
-    /// waits for a child to exit, so every child process the suite starts is bounded. Scans the C# sources under tests/Build.Tests
-    /// (build output excluded) for direct output reads and exit waits.
-    /// </summary>
-    [Fact]
-    public void BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess()
-    {
-        var directory = Path.Combine(FindRepositoryRoot(), "tests", "Build.Tests");
-        string[] patterns = [".StandardOutput", ".StandardError", "WaitForExit", "BeginOutputReadLine", "BeginErrorReadLine"];
-        string[] owners = ["BoundedProcess.cs", "BoundedProcessTests.cs"];
-        var offendingLines = Directory.EnumerateFiles(directory, "*.cs", SearchOption.AllDirectories)
-            .Where(path => !IsBuildOutput(Path.GetRelativePath(directory, path)))
-            .Where(path => !owners.Contains(Path.GetFileName(path), StringComparer.Ordinal))
-            .SelectMany(path => File.ReadLines(path).Select((line, index) => new { Path = path, Line = line, LineNumber = index + 1 }))
-            .Where(entry => patterns.Any(pattern => entry.Line.Contains(pattern, StringComparison.Ordinal)))
-            .Select(entry => $"{Path.GetRelativePath(directory, entry.Path)}:{entry.LineNumber}: {entry.Line.Trim()}")
-            .ToArray();
-
-        Assert.True(
-            offendingLines.Length == 0,
-            "Read child output and wait for children only through BoundedProcess (TR-MCP-NUKE-009 AC-006):"
-                + Environment.NewLine
-                + string.Join(Environment.NewLine, offendingLines));
-    }
-
     private static ProcessStartInfo Pwsh(string command)
     {
         var startInfo = new ProcessStartInfo("pwsh");
@@ -197,27 +172,5 @@ public sealed class BoundedProcessTests
         {
             File.Delete(pidFile);
         }
-    }
-
-    private static bool IsBuildOutput(string relativePath)
-    {
-        var first = relativePath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)[0];
-        return first is "bin" or "obj";
-    }
-
-    private static string FindRepositoryRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new DirectoryNotFoundException("Could not find repository root containing QBrainAi.sln.");
     }
 }

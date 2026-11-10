@@ -1,0 +1,3058 @@
+[
+  {
+    "RunId": "ug-r7-linux-test-2",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-test-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "970B14358269196F8A465AA5E52AA976934D791AD2C85849E680206FC4B70530",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3169,
+        "Executed": 3169,
+        "Passed": 3169,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3169,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:58:20.1466818-05:00",
+        "Finish": "2026-10-26T10:59:56.6957431-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-test-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "20A33813984E8DD9BC0250EF5033CECE5BA54DB2EB305CF70FEE2A5C6127142D",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:59:58.3579241-05:00",
+        "Finish": "2026-10-26T11:00:01.1578627-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-test-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "C6EEB8B8F08459E536E0B68830B4F2289B5F02A71C67E098FA8BFD6DBA6D6CCB",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:00:02.3827517-05:00",
+        "Finish": "2026-10-26T11:00:03.9697749-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-test-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "4CA81CC7D61C1651CD13D14745FF226CAB656A80D6E7FA146DD31B627BC6979A",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:00:05.0247286-05:00",
+        "Finish": "2026-10-26T11:00:06.5732516-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-test-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "ABA2D99B7AC5C2055EC3E34109CC05804C445FFE75C262B47096F7C4064C5045",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:00:07.5401040-05:00",
+        "Finish": "2026-10-26T11:00:10.6324729-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-test-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "F6AD1C1EF3B672E92A2A82F5CF4A48173CA2D8EE3F68CDA1DC04F88D9ADF5D4D",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:00:11.6375243-05:00",
+        "Finish": "2026-10-26T11:00:14.7178833-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-test-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "8DC195537BF7A5F25E8ED3D720DAF3BF179B6F507D388C0260808FE2DF6B2943",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:00:15.9152732-05:00",
+        "Finish": "2026-10-26T11:00:17.6315525-05:00"
+      }
+    ],
+    "Total": 4551.0,
+    "Passed": 4551.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BrAiNsLoTs\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"searchasync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"brainslots\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"Cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"auto\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"C:\\\\Users\\\\kingd\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  },
+  {
+    "RunId": "ug-r7-hostile-v5-folder-2",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-folder-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "02364993E47D4A562147691F8333356298C8918D33ED269D40F83FF1F65575AA",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3169,
+        "Executed": 3169,
+        "Passed": 3169,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3169,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:04:06.3415636-05:00",
+        "Finish": "2026-10-26T11:05:45.0388967-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-folder-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "E7493379A51DAAB77D6C538C5B5E61ED744AB6B92EE00D18A6B9B92917FD90E8",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:05:46.8828395-05:00",
+        "Finish": "2026-10-26T11:05:49.7163340-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-folder-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "BB6C5FA244BA91CD3F9A75EAFBF6CCB5A9C24E76903E66F18CD2CDE256BDF911",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:05:50.8613833-05:00",
+        "Finish": "2026-10-26T11:05:52.6065689-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-folder-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "4928B0238A2C64D16DEBCCFD544D52BBD46406563B2A2D9E6DDF701592E16F89",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:05:53.7600894-05:00",
+        "Finish": "2026-10-26T11:05:55.3411976-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-folder-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "EE5F2D5C226AE95E24EA6B0654F63B05BF7FD4CC03DB3E298F850447AB483C11",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:05:56.3051580-05:00",
+        "Finish": "2026-10-26T11:05:59.2773166-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-folder-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "FA387F02151DF1FF0919EC05854B8806AE1B45F86630468A8C0DBC18EBC70B25",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:06:00.3273331-05:00",
+        "Finish": "2026-10-26T11:06:03.4225117-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-folder-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "87C4D3CE918FA8121D5720510B87C3D85E217D4675B7B50B541BCBC0D271EFD6",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:06:04.7152264-05:00",
+        "Finish": "2026-10-26T11:06:06.5410735-05:00"
+      }
+    ],
+    "Total": 4551.0,
+    "Passed": 4551.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BrAiNsLoTs\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"SearchAsync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"brainslots\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"AUTO\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"C:\\\\Users\\\\kingd\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  },
+  {
+    "RunId": "ug-r7-hostile-v5-file-2",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-file-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "4C4F2E8416CA52A87F6DD7792D360D7279C925B88976B952B9FD833BFE518BCB",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3169,
+        "Executed": 3169,
+        "Passed": 3169,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3169,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:09:00.3345611-05:00",
+        "Finish": "2026-10-26T11:10:40.6940343-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-file-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "190963DEEAD4ACB6D47C33A703FCDAF1907A4B2E6A9EE0A6DA10902DD0DE9F25",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:10:42.4796848-05:00",
+        "Finish": "2026-10-26T11:10:45.2862321-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-file-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "2BA53216E88708D65E7BD0AAD83638793AB56A60CFE98C0D0170E326F0F06954",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:10:46.3676827-05:00",
+        "Finish": "2026-10-26T11:10:48.0231667-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-file-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "8EC9AD558F7C4CB81A4CFD1D78B176567D23813C389639179FB5BBC2644122ED",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:10:49.0346704-05:00",
+        "Finish": "2026-10-26T11:10:50.8513941-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-file-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "9E437E864ADFA2210DDD30162FF8CE66FD6807992A2E88B6FDA08420A6A9C051",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:10:51.9710852-05:00",
+        "Finish": "2026-10-26T11:10:55.2730113-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-file-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "CBB4A1E2D9EBA49C0303B952D808ED7F4447290E770A14EA45F0761E2E771863",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:10:56.3766732-05:00",
+        "Finish": "2026-10-26T11:10:59.4558400-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-hostile-v5-file-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "752C8F97D0DD42BCE6655E791796A256EF5141008B795EADC87E8EB682E17F53",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:11:00.7088186-05:00",
+        "Finish": "2026-10-26T11:11:02.4832847-05:00"
+      }
+    ],
+    "Total": 4551.0,
+    "Passed": 4551.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BRAINSLOTS\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"SearchAsync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"brainslots\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"Cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"auto\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  },
+  {
+    "RunId": "ug-r7-linux-lane-2",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-lane-2/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "D106E3E92DCDB90F75FE6C9BA110AD7CCF9254DABA18E6828BCE269801345135",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 411,
+        "Executed": 411,
+        "Passed": 411,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 411,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:13:34.7580203-05:00",
+        "Finish": "2026-10-26T11:15:16.3358644-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-lane-2/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "CB4EA18724290252330D0C5E3F1F57B0B56C56FE52EB4BFE22246A9A144653BF",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 1,
+        "Executed": 1,
+        "Passed": 1,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 1,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:15:27.2478296-05:00",
+        "Finish": "2026-10-26T11:15:29.5221488-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-lane-2/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "3FBC8CB6EE112A9306D619BEFD5F7C372F74B9A4D896CB85DF4C49B9BC61BE9F",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 3,
+        "Executed": 3,
+        "Passed": 3,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:15:43.4244319-05:00",
+        "Finish": "2026-10-26T11:15:47.2661163-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-lane-2/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "0A1F7F031F1BF2C4D2F5F7D617041DC4AD2E88417CC09C997F250FA04F402877",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 2,
+        "Executed": 2,
+        "Passed": 2,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 2,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:16:07.2275323-05:00",
+        "Finish": "2026-10-26T11:16:09.0435154-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-lane-2/provider/Build.Tests/Build.Tests.trx",
+        "Hash": "720063A4AFD9C6099C2F5B41B1BAF5C19FBAE42736530A8F4D21CA6BFD1FAF46",
+        "Project": "Build.Tests",
+        "Total": 16,
+        "Executed": 16,
+        "Passed": 16,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 16,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:16:13.4464166-05:00",
+        "Finish": "2026-10-26T11:16:19.8512643-05:00"
+      }
+    ],
+    "Total": 433.0,
+    "Passed": 433.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": []
+  },
+  {
+    "RunId": "ug-r7-build-tests-2",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r7/ug-r7-build-tests-2/ug-r7-build-tests-2.trx",
+        "Hash": "73100416A192ECA2EE843A5C386B579C537DAC03A07D0385FC72825DD52571C1",
+        "Project": "ug-r7-build-tests-2",
+        "Total": 436,
+        "Executed": 436,
+        "Passed": 436,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 436,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:17:24.3168892-05:00",
+        "Finish": "2026-10-26T11:22:34.2449970-05:00"
+      }
+    ],
+    "Total": 436.0,
+    "Passed": 436.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": []
+  },
+  {
+    "RunId": "ug-r7-hostile-v5-file-negative-2",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/ug-r7-negative-20261026/TestResults/ug-r7-hostile-v5-file-negative-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "BDD04CF496E8025B735C69E50350CEC7F5ED97AC363014EC52A6BDEDCE4E8E9B",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3176,
+        "Executed": 3176,
+        "Passed": 3162,
+        "Failed": 14,
+        "NotExecuted": 0,
+        "ResultRows": 3176,
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:28:42.6978855-05:00",
+        "Finish": "2026-10-26T09:30:23.4376635-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/ug-r7-negative-20261026/TestResults/ug-r7-hostile-v5-file-negative-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "4DA405860CF46DDB5B26B71F0463EEA74B9E311F82CCA70941353803796DF40D",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:30:25.1521667-05:00",
+        "Finish": "2026-10-26T09:30:28.0545525-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/ug-r7-negative-20261026/TestResults/ug-r7-hostile-v5-file-negative-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "C179AE206AFD7AE8F6AD16D86B43B57018A5CFD00D8AEFB651A8AB5E2C83F738",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:30:29.1660093-05:00",
+        "Finish": "2026-10-26T09:30:30.8229008-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/ug-r7-negative-20261026/TestResults/ug-r7-hostile-v5-file-negative-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "7773958E27511744627759E15D93850EAE59C1FD42B550A49480F71557418A4D",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:30:31.7700913-05:00",
+        "Finish": "2026-10-26T09:30:33.3248680-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/ug-r7-negative-20261026/TestResults/ug-r7-hostile-v5-file-negative-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "9BD89EE1CE926E73FA8660099F6D27404AE5508F2D9DC19FF4615FAFC06278AF",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:30:34.2597228-05:00",
+        "Finish": "2026-10-26T09:30:37.4447016-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/ug-r7-negative-20261026/TestResults/ug-r7-hostile-v5-file-negative-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "770955D682B42172072B1E177D8A536AE526611EC7624CDDE69D4B65636C3583",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:30:38.4721673-05:00",
+        "Finish": "2026-10-26T09:30:42.0434940-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/ug-r7-negative-20261026/TestResults/ug-r7-hostile-v5-file-negative-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "9F08CEED94B6A1632D4DF0D607C12A607EB3A1B32401552A4D0D85E35AEFD011",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:30:44.2469033-05:00",
+        "Finish": "2026-10-26T09:30:46.4629227-05:00"
+      }
+    ],
+    "Total": 4558.0,
+    "Passed": 4544.0,
+    "Failed": 14.0,
+    "NotExecuted": 0.0,
+    "Failures": [
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:29:58.3470357-05:00",
+        "End": "2026-10-26T09:29:58.3497712-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_oneshot_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:30:13.2251844-05:00",
+        "End": "2026-10-26T09:30:13.2273332-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_quadbrain_cli_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:30:11.8093546-05:00",
+        "End": "2026-10-26T09:30:11.8121146-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_codex_oneshot_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:30:13.1945116-05:00",
+        "End": "2026-10-26T09:30:13.1981620-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_quadbrain_cli_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:30:11.8038103-05:00",
+        "End": "2026-10-26T09:30:11.8088839-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_codex_oneshot_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:30:13.2227352-05:00",
+        "End": "2026-10-26T09:30:13.2247778-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_quadbrain_cli_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:30:13.2106475-05:00",
+        "End": "2026-10-26T09:30:13.2123593-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_quadbrain_cli_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:29:58.3209206-05:00",
+        "End": "2026-10-26T09:29:58.3327993-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_oneshot_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:30:13.2205085-05:00",
+        "End": "2026-10-26T09:30:13.2223694-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_quadbrain_cli_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:30:13.2277305-05:00",
+        "End": "2026-10-26T09:30:13.2297688-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_quadbrain_cli_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:29:58.3343611-05:00",
+        "End": "2026-10-26T09:29:58.3369995-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_oneshot_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:29:58.2867292-05:00",
+        "End": "2026-10-26T09:29:58.3197741-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_oneshot_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:30:13.2302334-05:00",
+        "End": "2026-10-26T09:30:13.2356532-05:00",
+        "Error": "Assert.Throws() Failure: Exception type was not an exact match\nExpected: typeof(System.InvalidOperationException)\nActual:   typeof(System.IO.IOException)\n---- System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_quadbrain_cli_temp' already exists."
+      },
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T09:30:11.8126275-05:00",
+        "End": "2026-10-26T09:30:11.8149801-05:00",
+        "Error": "System.IO.IOException : The file '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-2/files/mcpserver_codex_oneshot_temp' already exists."
+      }
+    ],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BrainSlots\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"SearchAsync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"BrainSlots\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"Cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"auto\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"C:\\\\Users\\\\kingd\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"C:\\\\Users\\\\kingd\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  },
+  {
+    "RunId": "ug-r7-clitemp-mockgate-1",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-clitemp-mockgate-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "60C41D3EE9D059E61673D142DB15153B1B5CB6293AC73535E583E0FEB752304A",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3181,
+        "Executed": 3181,
+        "Passed": 3181,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3181,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:35:24.0600354-05:00",
+        "Finish": "2026-10-26T09:37:00.6115266-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-clitemp-mockgate-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "493BF24D3C845D4035FF842875C481DC13ECBEBF6D187E1BE1B57305007930C7",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:37:02.2455378-05:00",
+        "Finish": "2026-10-26T09:37:04.9290054-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-clitemp-mockgate-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "84E24540472621F745E0470E99EEA2DCB740408634ABD0EC4FA7B246818DAD95",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:37:06.0521673-05:00",
+        "Finish": "2026-10-26T09:37:07.7503421-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-clitemp-mockgate-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "C7F35E5F0CDF958F13F638A932F5CC63D056A3DE9FEA0752A9CF4D2F32D25F13",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:37:08.7048559-05:00",
+        "Finish": "2026-10-26T09:37:10.2570944-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-clitemp-mockgate-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "0AC9D8C41B7932822FBF5B9F5EDC942BFD6DC5E4F1B370860F25414A6E34DBC3",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:37:11.2355682-05:00",
+        "Finish": "2026-10-26T09:37:14.1713091-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-clitemp-mockgate-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "98908968EF3803D52241602A148388A463BCFCFEB90A22F6B61BBCD95E913057",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:37:15.1859062-05:00",
+        "Finish": "2026-10-26T09:37:18.1231715-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-clitemp-mockgate-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "D3D931A0F1588C3D3A2510BBD8BEC360B3FDF19182358EDF4D98181520DCFB8D",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:37:19.4199060-05:00",
+        "Finish": "2026-10-26T09:37:21.2962905-05:00"
+      }
+    ],
+    "Total": 4563.0,
+    "Passed": 4563.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"brainslots\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"SearchAsync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"brainslots\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"Cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"AUTO\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  },
+  {
+    "RunId": "ug-r7-binding-1",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-binding-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "5183A92D23EA04A471B79246958DD475992670E20710AE66B91B69B9492727AF",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3167,
+        "Executed": 3167,
+        "Passed": 3167,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3167,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:50:08.6172194-05:00",
+        "Finish": "2026-10-26T09:51:50.4854534-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-binding-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "4518DCDA353BFA46079E823F7308AF53085DAB88A6C47ADA2E8937502885E6C0",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:51:52.2207680-05:00",
+        "Finish": "2026-10-26T09:51:55.1947558-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-binding-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "D7F8207C4FD011599E798A14ECB52FB4FC3EC0C3A3983FA5BD845AFA7462658D",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:51:56.3346259-05:00",
+        "Finish": "2026-10-26T09:51:58.0339110-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-binding-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "7CFB02C3E5F96491B460EF3EB681867E3F2CC594DC8F0265B8753539FB59EB55",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:51:59.0222512-05:00",
+        "Finish": "2026-10-26T09:52:00.5224292-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-binding-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "88A2EFB6D8B6A0EC360EE70D9EAC77569AD833496D4EA2B43982324352F32FBD",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:52:01.5063016-05:00",
+        "Finish": "2026-10-26T09:52:04.6575596-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-binding-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "1BED4056489BF57F23C1CA96D581439D357037D0988B0226433C88FE335EAA3D",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:52:05.6944558-05:00",
+        "Finish": "2026-10-26T09:52:08.7124752-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-binding-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "9729351619EC9763C707FE2EEC81233700AC1AD7DCAF496F255980EB4C3D6D72",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:52:09.9320883-05:00",
+        "Finish": "2026-10-26T09:52:11.7939894-05:00"
+      }
+    ],
+    "Total": 4549.0,
+    "Passed": 4549.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BRAINSLOTS\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"searchasync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"BrainSlots\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"AUTO\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"C:\\\\Users\\\\kingd\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"C:\\\\Users\\\\kingd\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  },
+  {
+    "RunId": "ug-r7-precommit-lane-1",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-precommit-lane-1/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "DDDACAB124B3DE383C10FB0ED2CBDC7C536372A3019BE52D28FA11C1B0584ED0",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 406,
+        "Executed": 406,
+        "Passed": 406,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 406,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:54:21.3205277-05:00",
+        "Finish": "2026-10-26T09:56:03.5141401-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-precommit-lane-1/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "A7080D0DE6EADE0C929BAF7049F25D6DAD0C1D5E5211E86F0E21326FFC1FE722",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 1,
+        "Executed": 1,
+        "Passed": 1,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 1,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:56:10.0731855-05:00",
+        "Finish": "2026-10-26T09:56:12.3518323-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-precommit-lane-1/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "6BAAE33719FEEA311B361ACB5352E16163F9F0CE0636543C08C15AC136A57669",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 3,
+        "Executed": 3,
+        "Passed": 3,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:56:17.5856447-05:00",
+        "Finish": "2026-10-26T09:56:20.2953589-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-precommit-lane-1/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "EBFBC71D7B0F7B1FBB63883433665F028E89D185EEEE6492BF57D9F53D50E02C",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 2,
+        "Executed": 2,
+        "Passed": 2,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 2,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:56:26.9801110-05:00",
+        "Finish": "2026-10-26T09:56:29.1750646-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-precommit-lane-1/provider/Build.Tests/Build.Tests.trx",
+        "Hash": "7735A2B735E9D63D4C98931828B5D2EC01B30BBBEBE4E8BAF0351F936895B2B8",
+        "Project": "Build.Tests",
+        "Total": 16,
+        "Executed": 16,
+        "Passed": 16,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 16,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T09:56:32.7243898-05:00",
+        "Finish": "2026-10-26T09:56:38.8542826-05:00"
+      }
+    ],
+    "Total": 428.0,
+    "Passed": 428.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": []
+  },
+  {
+    "RunId": "ug-r7-chain-mockgate-1",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-mockgate-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "D0D9459375CAB0887212C50E6620B66109EB89024AE349ECA8C5F73487B0EF2E",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3171,
+        "Executed": 3171,
+        "Passed": 3171,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3171,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:38:46.5760509-05:00",
+        "Finish": "2026-10-26T10:40:22.0033895-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-mockgate-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "7ADF186ABBCB41A8BE4E4229C2DC2B708323C03C51C83B8405F0A671DD212484",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:40:23.6733980-05:00",
+        "Finish": "2026-10-26T10:40:26.4420379-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-mockgate-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "D98FBB486CF2C35F215E93D5B492E930E5581E7B55C316E3806DF5B137B8312F",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:40:27.5126488-05:00",
+        "Finish": "2026-10-26T10:40:29.2188171-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-mockgate-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "EA66CA38B1D3BC56EB833389A53380DD546D6D2B27B96833222A6EAEDF934C7F",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:40:30.1880772-05:00",
+        "Finish": "2026-10-26T10:40:31.7277238-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-mockgate-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "32CE1898E4F8F325B5564318CC8DDF7DFB276E3021989AEBCBE3D15110BED116",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:40:32.7251613-05:00",
+        "Finish": "2026-10-26T10:40:35.6923602-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-mockgate-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "D85497D6DF6436E54059EBACD461E82E2DBBF63DC6D082B83CB69C718C9D650F",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:40:36.6422385-05:00",
+        "Finish": "2026-10-26T10:40:39.5460260-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-mockgate-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "1D00B3E7094F872AB074BBF85C2B572B0C6FA98519FF23583B2CA1308129C173",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:40:40.8010493-05:00",
+        "Finish": "2026-10-26T10:40:42.5896106-05:00"
+      }
+    ],
+    "Total": 4553.0,
+    "Passed": 4553.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BrainSlots\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"searchasync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"BrainSlots\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"AUTO\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"C:\\\\Users\\\\kingd\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  },
+  {
+    "RunId": "ug-r7-chain-binding-1",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-binding-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "41917B36BF56F2DFE457C2DFCA26B8B8CED7F89D93B12D906313C53F040DD337",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3169,
+        "Executed": 3169,
+        "Passed": 3169,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3169,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:46:35.7006280-05:00",
+        "Finish": "2026-10-26T10:48:21.6101438-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-binding-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "66E8E2B2518E4628215FDBFD34A33AC9831AABF7DC18F8826BF94DAD142C928F",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:48:25.2212596-05:00",
+        "Finish": "2026-10-26T10:48:28.7674099-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-binding-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "FF5124CE412697AF12886D2B0A4CF662FAF0C3B4C4969DBBF5FE1263296C0B86",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:48:30.2267409-05:00",
+        "Finish": "2026-10-26T10:48:32.7489786-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-binding-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "97A4A10F104E2CD0B45681D08995189FE954D54F89345E2DAE7C38986D5BDD5A",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:48:34.5368423-05:00",
+        "Finish": "2026-10-26T10:48:36.7702722-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-binding-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "4E9A58886E756E3AC510AA4F8B16019CF5A306A1280C6C63A46BA7E6F1BA44D2",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:48:37.7644522-05:00",
+        "Finish": "2026-10-26T10:48:42.4067454-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-binding-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "52E62EB65D6DE882CAE2A8DEB4182E6F3F97F8C4C3D36B496A073B5601AA2205",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:48:44.8646842-05:00",
+        "Finish": "2026-10-26T10:48:49.1718649-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-binding-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "907A8FC27BE1184E012B6FCB93926742DADF66475D8336708DD9B0246964A75A",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:48:50.9530000-05:00",
+        "Finish": "2026-10-26T10:48:56.3982545-05:00"
+      }
+    ],
+    "Total": 4551.0,
+    "Passed": 4551.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"brainslots\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"searchasync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"BRAINSLOTS\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"Cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"AUTO\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"C:\\\\Users\\\\kingd\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"C:\\\\Users\\\\kingd\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  },
+  {
+    "RunId": "ug-r7-precommit-lane-2",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-precommit-lane-2/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "A3A40B5D35FDB6C70D0CB94623C0352DBA84E0907E5C4E3EEC9C1814544FE8C6",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 411,
+        "Executed": 411,
+        "Passed": 411,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 411,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:51:10.7430443-05:00",
+        "Finish": "2026-10-26T10:53:25.2083056-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-precommit-lane-2/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "A1E284135EECCED57A50172B08DAED2B9A78F9C5650BC8212A1435C08D59ED77",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 1,
+        "Executed": 1,
+        "Passed": 1,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 1,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:53:29.7986642-05:00",
+        "Finish": "2026-10-26T10:53:31.6252936-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-precommit-lane-2/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "96617F692939ABC0BC6DB05A8B4393B97481F57D09C8F358A7DD53E866B19D8A",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 3,
+        "Executed": 3,
+        "Passed": 3,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:53:36.1331466-05:00",
+        "Finish": "2026-10-26T10:53:38.6334474-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-precommit-lane-2/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "AF8311C2F2064667616AB4F2DBFDCF335CDFB9D5DE09DF164F9E0BEE130B93A8",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 2,
+        "Executed": 2,
+        "Passed": 2,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 2,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:53:45.0607533-05:00",
+        "Finish": "2026-10-26T10:53:46.9415613-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-precommit-lane-2/provider/Build.Tests/Build.Tests.trx",
+        "Hash": "E84CE5DABD5CF3775A309AC28776FBDF395D71F215888E0C534DFEE932C57D1A",
+        "Project": "Build.Tests",
+        "Total": 16,
+        "Executed": 16,
+        "Passed": 16,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 16,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T10:53:49.3857972-05:00",
+        "Finish": "2026-10-26T10:53:55.2107220-05:00"
+      }
+    ],
+    "Total": 433.0,
+    "Passed": 433.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": []
+  },
+  {
+    "RunId": "ug-r6-linux-test-2",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-test-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "5FDDCB29D5F040A5A415F19C394B66719990B35D1C1A8F3F8F7D7DF7EA4AB4D8",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3176,
+        "Executed": 3176,
+        "Passed": 3176,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3176,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T13:48:25.0992103-05:00",
+        "Finish": "2026-10-21T13:49:59.3419971-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-test-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "6A4E135A87A624AEDD86D24AAF6DE8D9E44A1EB413F2C2BFE8565802BBE2A270",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T13:50:01.0089113-05:00",
+        "Finish": "2026-10-21T13:50:03.8650373-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-test-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "D410AC843369BF29E04D006049D09064054D9E5708174C51E653095A399C915D",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T13:50:04.8487479-05:00",
+        "Finish": "2026-10-21T13:50:06.4497074-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-test-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "C9B06CA25EE494080311883AC4728B8ABEF6E943FB8A1929CFF274D500BF4262",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T13:50:07.3880953-05:00",
+        "Finish": "2026-10-21T13:50:08.9333306-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-test-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "78BD890A16E29E542B9E70839516C7A6C89523E24376A7140C5B9FE499AD3CA4",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T13:50:09.8892831-05:00",
+        "Finish": "2026-10-21T13:50:12.7437114-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-test-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "33510AB734FA547AB576C7FCF9CE7B253C86AE1D43A485751AE307A1D26F7667",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T13:50:13.7226316-05:00",
+        "Finish": "2026-10-21T13:50:16.6765811-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-test-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "97F10747F157E090865894C7E806DE16AEAD3A943DCD240422C4BF869C743FC5",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T13:50:17.9001816-05:00",
+        "Finish": "2026-10-21T13:50:19.6875247-05:00"
+      }
+    ],
+    "Total": 4558.0,
+    "Passed": 4558.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BrainSlots\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"searchasync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"brainslots\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"Cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"AUTO\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  },
+  {
+    "RunId": "ug-r6-linux-lane-1",
+    "Host": "Linux",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-lane-1/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "2AB5630C2E4919DCC5D380D4E17B0ED55DB048AE0D2B38F5A8D395DB71D3C8CB",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 390,
+        "Executed": 390,
+        "Passed": 390,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 390,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T13:56:39.2686804-05:00",
+        "Finish": "2026-10-21T13:58:08.5725348-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-lane-1/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "20499EAD458A81BA41DA1A8C26A86EB5AB919CB5D061E2032654679C30B5BF09",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 1,
+        "Executed": 1,
+        "Passed": 1,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 1,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T13:58:14.0625588-05:00",
+        "Finish": "2026-10-21T13:58:15.8305792-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-lane-1/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "EBCFFAE146D03AA57958B66F528748BE854332F15C90ACC76C6499A77EE4DE37",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 3,
+        "Executed": 3,
+        "Passed": 3,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T13:58:21.2890907-05:00",
+        "Finish": "2026-10-21T13:58:23.6014883-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-lane-1/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "7F0B16B7CF106DE4CC58D54D404142D651A6C90DFAA392191D52D13C1A0FD86E",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 2,
+        "Executed": 2,
+        "Passed": 2,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 2,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T13:58:30.3893883-05:00",
+        "Finish": "2026-10-21T13:58:32.0149643-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-linux-lane-1/provider/Build.Tests/Build.Tests.trx",
+        "Hash": "46D8CD129B696DBE811FFB89BD200DB2015040BDA718B2EC93E0B78443A048C8",
+        "Project": "Build.Tests",
+        "Total": 16,
+        "Executed": 16,
+        "Passed": 16,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 16,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T13:58:35.3771676-05:00",
+        "Finish": "2026-10-21T13:58:40.7710379-05:00"
+      }
+    ],
+    "Total": 412.0,
+    "Passed": 412.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": []
+  },
+  {
+    "RunId": "ug-r7-win-test-ssh-2",
+    "Host": "Windows",
+    "Projects": [
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r7-win-test-ssh-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "9D2706F789AF9ED45F4B570D7C1AF3F48CAC8FB005FDEA69404B031D9077C3C4",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:05:46.6152759-05:00",
+        "Finish": "2026-10-26T11:05:48.8193424-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r7-win-test-ssh-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "7791B5CB3C46EE1880690A73110802C07BA5F1196FCA933F78B32CDF88352853",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:05:49.8627738-05:00",
+        "Finish": "2026-10-26T11:05:51.3458853-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r7-win-test-ssh-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "5AB19DBA92B483C6F5092BAAB74F2216C3DBE0091236318D9823DB7CEF187FFE",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:05:52.3211805-05:00",
+        "Finish": "2026-10-26T11:05:53.6404449-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r7-win-test-ssh-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "79309EC380EE44CF65FD289F7DE04BBCD129308F3CBC770D1DA3EB4878DC65E5",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:05:54.5888252-05:00",
+        "Finish": "2026-10-26T11:06:02.2369395-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r7-win-test-ssh-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "4354563AF4E683EFA482620BA738A219F3680CED5D41ED0487713B389BF03CCB",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:06:06.7293813-05:00",
+        "Finish": "2026-10-26T11:06:08.4453781-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r7-win-test-ssh-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "D2DE0A085268F896A13D9881C61667523A987515B59BAD7DB24D226497429632",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:06:03.2173913-05:00",
+        "Finish": "2026-10-26T11:06:05.6635563-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r7-win-test-ssh-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "E744370FB1FBC0B9E066F19914CFC173FB858B1DB42A64E09EA50BB812AAE162",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3169,
+        "Executed": 3169,
+        "Passed": 3169,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3169,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:04:15.2026531-05:00",
+        "Finish": "2026-10-26T11:05:44.9351148-05:00"
+      }
+    ],
+    "Total": 4551.0,
+    "Passed": 4551.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BrAiNsLoTs\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"searchasync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"BRAINSLOTS\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"Cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"AUTO\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  },
+  {
+    "RunId": "ug-r7-win-lane-2",
+    "Host": "Windows",
+    "Projects": [
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r7-win-lane-2/provider/Build.Tests/Build.Tests.trx",
+        "Hash": "094819C21808F744D920047C2A20A63324273880C452E64E5ACABB11DCBCD295",
+        "Project": "Build.Tests",
+        "Total": 6,
+        "Executed": 6,
+        "Passed": 6,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 6,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:16:03.6296210-05:00",
+        "Finish": "2026-10-26T11:16:08.0817293-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r7-win-lane-2/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "2041FE81E32C7EDC70CCDC6613B8E06DD430EF6C0C074E681020D5CED6D8E5FE",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 1,
+        "Executed": 1,
+        "Passed": 1,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 1,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:15:43.6882569-05:00",
+        "Finish": "2026-10-26T11:15:45.4487844-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r7-win-lane-2/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "DF3A06DC3CBCF79FC5F978CFDC65D825EDCFD37FC2024C49CBCA9C610B559D38",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 2,
+        "Executed": 2,
+        "Passed": 2,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 2,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:15:58.4710161-05:00",
+        "Finish": "2026-10-26T11:16:00.2108737-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r7-win-lane-2/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "3888FB0598437B6572BE12C8D05FCF7D1B4CDA93F3959A63754D4F602B51564E",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 3,
+        "Executed": 3,
+        "Passed": 3,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:15:49.4812853-05:00",
+        "Finish": "2026-10-26T11:15:51.7656600-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r7-win-lane-2/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "A18A28E5E00CD9D3E52BA1C8339C2C65C6BA864F4BFB5AEF48DED2E3937075C6",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 397,
+        "Executed": 397,
+        "Passed": 397,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 397,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T11:08:13.0662615-05:00",
+        "Finish": "2026-10-26T11:15:34.5815132-05:00"
+      }
+    ],
+    "Total": 409.0,
+    "Passed": 409.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": []
+  },
+  {
+    "RunId": "ug-r6-win-lane-1",
+    "Host": "Windows",
+    "Projects": [
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r6-win-lane-1/provider/Build.Tests/Build.Tests.trx",
+        "Hash": "06AB2F21A298FCE3B03DC5FC24D19D05DECEF729D57969316B07A896E604D16D",
+        "Project": "Build.Tests",
+        "Total": 6,
+        "Executed": 6,
+        "Passed": 6,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 6,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T14:06:39.6118319-05:00",
+        "Finish": "2026-10-21T14:06:44.0108608-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r6-win-lane-1/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "8F8F66F979E3BA69B9454047F6BEE3ADCC0601BBC1F964E512FE2340FB50C20E",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 1,
+        "Executed": 1,
+        "Passed": 1,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 1,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T14:06:22.4079336-05:00",
+        "Finish": "2026-10-21T14:06:23.9955612-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r6-win-lane-1/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "CDC82E83C11B9FC77A986CCB668D062360DF9B063FFCA41AD72C0CC6E5F5FA4F",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 2,
+        "Executed": 2,
+        "Passed": 2,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 2,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T14:06:35.5285394-05:00",
+        "Finish": "2026-10-21T14:06:37.1091849-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r6-win-lane-1/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "035D122807C227A646B71487ED9575D11C4354D188AED8DA3475CBBA517CE33F",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 3,
+        "Executed": 3,
+        "Passed": 3,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T14:06:27.9228769-05:00",
+        "Finish": "2026-10-21T14:06:30.0481017-05:00"
+      },
+      {
+        "File": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r6-win-lane-1/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "D9D202F2C0353C0660BB889688558694BC26F5A6F340362F9CC3328F2453B0F4",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 376,
+        "Executed": 376,
+        "Passed": 376,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 376,
+        "Outcome": "Completed",
+        "Start": "2026-10-21T14:00:22.1030549-05:00",
+        "Finish": "2026-10-21T14:06:16.8610074-05:00"
+      }
+    ],
+    "Total": 388.0,
+    "Passed": 388.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": []
+  },
+  {
+    "RunId": "hv-ug-r7-independent-command-2",
+    "Host": "Linux reviewer",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-command-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "2A97BB4239ACAC2C72DD6D495E7AF6A1759638D07EAE0511D339962EE04FE5B9",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3169,
+        "Executed": 3169,
+        "Passed": 3169,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3169,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:46:08.3682909-05:00",
+        "Finish": "2026-10-26T12:48:10.6515056-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-command-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "6373C6EFE3F7288584B2911A5FBD2EAC0FA9ED8A090651A7A1909A004DD69B5C",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:48:12.5341127-05:00",
+        "Finish": "2026-10-26T12:48:15.7354181-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-command-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "FBE305DEA0A1A6E2B25DE15837A2D682C2E350DB4DB025B03277333FAB7A05C2",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:48:16.8213518-05:00",
+        "Finish": "2026-10-26T12:48:18.6673387-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-command-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "285E90F8F15A0F9D451D0BF34A3BFB63FFF2950E98359AA32C84B95205158B5F",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:48:20.1736781-05:00",
+        "Finish": "2026-10-26T12:48:21.9579023-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-command-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "B68FFD68501BBA2C5BA7EAA761E34103CC71619BDD7837769BBA565901BE683F",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:48:23.0483636-05:00",
+        "Finish": "2026-10-26T12:48:26.7055044-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-command-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "CFFA649D2CC8C0C4436965E39F8CC426A58109BA9579F836202FAE6418D89421",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 846,
+        "Failed": 19,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:27.7689108-05:00",
+        "Finish": "2026-10-26T12:48:31.3006326-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-command-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "8B7E0C7E4ACC5389C4BEE8CD92A984A1CB600FFA54DC648FB6DF2C03712729F7",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:48:32.7295922-05:00",
+        "Finish": "2026-10-26T12:48:35.6037148-05:00"
+      }
+    ],
+    "Total": 4551.0,
+    "Passed": 4532.0,
+    "Failed": 19.0,
+    "NotExecuted": 0.0,
+    "Failures": [
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_MultiLineRequestTerminatedByBlankLine_DispatchedOnce",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.7569499-05:00",
+        "End": "2026-10-26T12:48:30.7634616-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_PreservesPersistenceReceipt(persisted: False, degraded: True, queued: True)",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.9461520-05:00",
+        "End": "2026-10-26T12:48:30.9551443-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_UpdateFrBatchYaml_PreservesAcceptanceCriteriaBoolean",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:31.0096925-05:00",
+        "End": "2026-10-26T12:48:31.0142587-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientCreateFrAsync_NestedYamlAcceptanceCriteria_SendsCriteriaToRestClient",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.8323626-05:00",
+        "End": "2026-10-26T12:48:30.8371268-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsArgumentException_WritesValidationEnvelope",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.6977650-05:00",
+        "End": "2026-10-26T12:48:30.7165635-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_BackToBackSingleLineJsonEnvelopes_EachDispatched",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.6455412-05:00",
+        "End": "2026-10-26T12:48:30.6505634-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_Responses_TerminatedByBlankLineAndDocumentSeparator",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.2973067-05:00",
+        "End": "2026-10-26T12:48:30.6010376-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsStorageBudget_WritesBackendUnavailableEnvelope",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.7205224-05:00",
+        "End": "2026-10-26T12:48:30.7270274-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_StructuredTurnWithYamlNumbers_SendsCompleteDto",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.8114564-05:00",
+        "End": "2026-10-26T12:48:30.8221111-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsDbUpdateException_WritesClassifiedEnvelope",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.6733604-05:00",
+        "End": "2026-10-26T12:48:30.6966033-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_DashSeparatedYamlEnvelopes_EachDispatched",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.6117844-05:00",
+        "End": "2026-10-26T12:48:30.6170352-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_MixedJsonAndYamlEnvelopes_EachDispatched",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.6175184-05:00",
+        "End": "2026-10-26T12:48:30.6450852-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsKeyNotFound_WritesNotFoundEnvelope",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.7506359-05:00",
+        "End": "2026-10-26T12:48:30.7550826-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientTriageQueryRunsAsync_AsyncTaskSubclass_EmitsResultPayload",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.8375202-05:00",
+        "End": "2026-10-26T12:48:30.9143742-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_MalformedYaml_WritesErrorAndContinues",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.6765217-05:00",
+        "End": "2026-10-26T12:48:30.7013151-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_DocumentSeparators_DispatchedIndependently",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:31.0754228-05:00",
+        "End": "2026-10-26T12:48:31.0783610-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_PreservesPersistenceReceipt(persisted: True, degraded: False, queued: False)",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.9149852-05:00",
+        "End": "2026-10-26T12:48:30.9455411-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.RequirementScopeLayerWorkflowTests.RequirementScopeLayer_ReplYamlWorkflow_ExercisesBeforeAndAfterEffectiveQueries",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:30.4760270-05:00",
+        "End": "2026-10-26T12:48:30.6010546-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_TwoEnvelopes_DispatchedIndependently",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:48:31.0664797-05:00",
+        "End": "2026-10-26T12:48:31.0727517-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      }
+    ],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BrainSlots\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"SearchAsync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"BrainSlots\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"AUTO\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"C:\\\\Users\\\\kingd\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  },
+  {
+    "RunId": "hv-ug-r7-independent-control-1",
+    "Host": "Linux reviewer",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-control-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "1AEE4EBD941551946EF74CAF8E761CFF742DA88C5992EE5F88E04FEF4CE1944A",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3169,
+        "Executed": 3169,
+        "Passed": 3169,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3169,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:39:22.2835735-05:00",
+        "Finish": "2026-10-26T12:41:01.1225591-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-control-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "88C592CC4DB3B3ED13D15C1AD54301062C843FA8AF331AB9A54D15FEA03AD9B8",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:41:02.9092561-05:00",
+        "Finish": "2026-10-26T12:41:05.6114434-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-control-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "E780C647B643E0D48E0060C54EDFE5FB12E033E7D76476A2022A7564835FDA5A",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:41:06.7049718-05:00",
+        "Finish": "2026-10-26T12:41:08.3665794-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-control-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "DC41EDC0E1C1091667D07A729CAAB7BBDA5D719C71EB182615DDEDE16EDB7D97",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:41:09.4131894-05:00",
+        "Finish": "2026-10-26T12:41:10.9984735-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-control-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "4A20AB72593C3F5ED7C0224F46F9685D05F3A6F61A6DCBACAD1AD71D7D243373",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:41:11.9901965-05:00",
+        "Finish": "2026-10-26T12:41:15.1502596-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-control-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "4D32B197A277D1C20DC98B39D0D6EE8920E38E842841FE6AA034770DAB24094C",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:41:16.1816431-05:00",
+        "Finish": "2026-10-26T12:41:19.1187446-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-control-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "5F0C25DC9B24757B35708969DAA7AF5ABEDD3A2ED99119C5353F318DBD6C3725",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:41:20.3802390-05:00",
+        "Finish": "2026-10-26T12:41:22.1999093-05:00"
+      }
+    ],
+    "Total": 4551.0,
+    "Passed": 4551.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0,
+    "Failures": [],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BrainSlots\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"SearchAsync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"brainslots\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"Cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"AUTO\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"C:\\\\Users\\\\kingd\", expected: \"C:/Users/kingd\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  },
+  {
+    "RunId": "hv-ug-r7-independent-timeout-1",
+    "Host": "Linux reviewer",
+    "Projects": [
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-timeout-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Hash": "02862F88C474EC710B23D01847D470FED7D3332FC4AB5084C2A235EF1FA00756",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Total": 3169,
+        "Executed": 3169,
+        "Passed": 3169,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 3169,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:33:45.1975657-05:00",
+        "Finish": "2026-10-26T12:35:32.2449333-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-timeout-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Hash": "ED0F916E488278D485FDC74245049E2098EF76E663E0799391E1B9FD800058C2",
+        "Project": "QBrainAi.Client.Tests",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 306,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:35:34.0658003-05:00",
+        "Finish": "2026-10-26T12:35:37.0868465-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-timeout-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Hash": "76A27EE8D44EFBFA45FE0DFF8BED998C01339D67D065959A46008D87267F2A0E",
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 33,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:35:38.8179109-05:00",
+        "Finish": "2026-10-26T12:35:40.7995593-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-timeout-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Hash": "0DE3C00E9CF7B9A9FFFC9105A1BD8E907B9E7A440624C2994230F97B1AB6309A",
+        "Project": "QBrainAi.Launcher.Tests",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 20,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:35:41.8945502-05:00",
+        "Finish": "2026-10-26T12:35:43.4188162-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-timeout-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Hash": "B2D5C00B47FC21C8DD645C82C135173A806C5BE23B1ABECBBB3BD01B755013F1",
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 64,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:35:44.4099177-05:00",
+        "Finish": "2026-10-26T12:35:47.5923993-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-timeout-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Hash": "A173445F4D5C36AE28032077E9D101F2FE521E029DBFB21C7ECFB18ACC2D8E20",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 846,
+        "Failed": 19,
+        "NotExecuted": 0,
+        "ResultRows": 865,
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:48.6210144-05:00",
+        "Finish": "2026-10-26T12:35:52.0577136-05:00"
+      },
+      {
+        "File": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r7-independent-timeout-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Hash": "8AF6DDB4CCE63034F5DDA340FF58B7B357E00EE6C8B4290E49304EEE0C6C1C8C",
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ResultRows": 94,
+        "Outcome": "Completed",
+        "Start": "2026-10-26T12:35:53.2846184-05:00",
+        "Finish": "2026-10-26T12:35:55.1933004-05:00"
+      }
+    ],
+    "Total": 4551.0,
+    "Passed": 4532.0,
+    "Failed": 19.0,
+    "NotExecuted": 0.0,
+    "Failures": [
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_MixedJsonAndYamlEnvelopes_EachDispatched",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:50.9974673-05:00",
+        "End": "2026-10-26T12:35:51.0071316-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_DocumentSeparators_DispatchedIndependently",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.8131479-05:00",
+        "End": "2026-10-26T12:35:51.8158902-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_StructuredTurnWithYamlNumbers_SendsCompleteDto",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.2874866-05:00",
+        "End": "2026-10-26T12:35:51.2936902-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_PreservesPersistenceReceipt(persisted: True, degraded: False, queued: False)",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.4491430-05:00",
+        "End": "2026-10-26T12:35:51.5253623-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsArgumentException_WritesValidationEnvelope",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.2359232-05:00",
+        "End": "2026-10-26T12:35:51.2440332-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsDbUpdateException_WritesClassifiedEnvelope",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.1986012-05:00",
+        "End": "2026-10-26T12:35:51.2344412-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_DashSeparatedYamlEnvelopes_EachDispatched",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:50.9904021-05:00",
+        "End": "2026-10-26T12:35:50.9960635-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsStorageBudget_WritesBackendUnavailableEnvelope",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.2461091-05:00",
+        "End": "2026-10-26T12:35:51.2622760-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_UpdateFrBatchYaml_PreservesAcceptanceCriteriaBoolean",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.7537043-05:00",
+        "End": "2026-10-26T12:35:51.7574466-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.RequirementScopeLayerWorkflowTests.RequirementScopeLayer_ReplYamlWorkflow_ExercisesBeforeAndAfterEffectiveQueries",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:50.7684658-05:00",
+        "End": "2026-10-26T12:35:50.9433705-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsKeyNotFound_WritesNotFoundEnvelope",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.2689928-05:00",
+        "End": "2026-10-26T12:35:51.2726206-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientTriageQueryRunsAsync_AsyncTaskSubclass_EmitsResultPayload",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.3083605-05:00",
+        "End": "2026-10-26T12:35:51.4368652-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_MalformedYaml_WritesErrorAndContinues",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.6188173-05:00",
+        "End": "2026-10-26T12:35:51.6253066-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_MultiLineRequestTerminatedByBlankLine_DispatchedOnce",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.6342593-05:00",
+        "End": "2026-10-26T12:35:51.6372829-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientCreateFrAsync_NestedYamlAcceptanceCriteria_SendsCriteriaToRestClient",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.2941386-05:00",
+        "End": "2026-10-26T12:35:51.3080230-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_Responses_TerminatedByBlankLineAndDocumentSeparator",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:50.7684348-05:00",
+        "End": "2026-10-26T12:35:50.9898926-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_TwoEnvelopes_DispatchedIndependently",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.8067875-05:00",
+        "End": "2026-10-26T12:35:51.8106765-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_PreservesPersistenceReceipt(persisted: False, degraded: True, queued: True)",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.5258230-05:00",
+        "End": "2026-10-26T12:35:51.5283037-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_BackToBackSingleLineJsonEnvelopes_EachDispatched",
+        "Outcome": "Failed",
+        "Start": "2026-10-26T12:35:51.0076095-05:00",
+        "End": "2026-10-26T12:35:51.0107154-05:00",
+        "Error": "System.ArgumentOutOfRangeException : Specified argument was out of the range of valid values. (Parameter 'delay')"
+      }
+    ],
+    "DuplicateNames": [
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.BrainSlotPassthroughAbsenceTests.InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(clientName: \"BRAINSLOTS\")",
+        "Count": 4
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.ClientMutationPolicyTests.Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(clientName: \"context\", methodName: \"searchasync\", expectedAllowed: True)",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Repl.Core.Tests, QBrainAi.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(clientName: \"BRAINSLOTS\")",
+        "Count": 3
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"Cli\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(model: \"AUTO\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorMockDataTests.Canonicalize_PathShapedOnly(input: \"q:\\\\WS\\\\A\", expected: \"q:/WS/A\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceDiscriminatorRealTests.Canonicalize_PathShapedOnly(input: \"Q:\\\\ws\\\\a\", expected: \"Q:/ws/a\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityMockDataTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.DrivePath_NormalizesToForwardSlashes(input: \"c:\\\\users\\\\KINGD\", expected: \"c:/users/KINGD\")",
+        "Count": 2
+      },
+      {
+        "Name": "QBrainAi.Support.Mcp.Tests, QBrainAi.Support.Mcp.Tests.Storage.WorkspaceLexicalIdentityRealTests.StorageKey_UsesForwardSlashesAndPlatformTag(input: \"c:\\\\users\\\\KINGD\", expected: \"windows:C:/USERS/KINGD\")",
+        "Count": 2
+      }
+    ]
+  }
+]

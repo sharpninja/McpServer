@@ -1,0 +1,8 @@
+REPL build check by ClaudeCode (Get-ReplToolVersion.ps1), 2026-11-04T19:50:11 local; read only; the order lib/repl-invoke.ps1 uses.
+ENV MCP_REPL_EXECUTABLE not set
+PATH qbrain-ai-repl not found
+PATH mcpserver-repl -> /home/sharpninja/.local/bin/mcpserver-repl
+EXE /home/sharpninja/.local/bin/mcpserver-repl target=/home/sharpninja/.dotnet/tools/mcpserver-repl lastWrite=2026-11-04T12:07:16
+STORE sharpninja.mcpserver.repl/1.4.41-recovery.b53ce6b8 lastWrite=2026-10-06T15:43:47
+  DLL McpServer.Repl.Core.dll productVersion=1.0.0+b53ce6b8e498d9d12982c1d64ff989217383ba17 lastWrite=2026-10-06T15:43:47
+END 2026-11-04T19:50:11 local

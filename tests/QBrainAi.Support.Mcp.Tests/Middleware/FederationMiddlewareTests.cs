@@ -12,6 +12,13 @@ namespace QBrainAi.Support.Mcp.Tests.Middleware;
 /// Unit tests for <see cref="FederationMiddleware"/>. Validates pass-through and proxy
 /// decision logic including the anti-loop check. FR-MCP-077.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: TR-MCP-QUALITY-001 ac-14.
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-QUALITY-001 ac-14: cites the criterion whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class FederationMiddlewareTests
 {
     private static FederationRegistry CreateRegistry(bool enabled = false, string? defaultTarget = null)

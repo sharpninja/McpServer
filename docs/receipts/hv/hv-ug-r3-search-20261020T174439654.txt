@@ -1,0 +1,2 @@
+rg: /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib-ps/sessionlog.ps1: No such file or directory (os error 2)
+

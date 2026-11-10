@@ -1,0 +1,37 @@
+{
+  "timestampUtc": "2026-11-06T06:17:19.1498565+00:00",
+  "timestampLocal": "2026-11-06T00:17:21",
+  "method": "workflow.requirements.getTr",
+  "recordId": "TR-MCP-HOSTILEREVIEW-003",
+  "response": {
+    "payload": {
+      "requestId": "req-20261106T061720Z-5a2d",
+      "result": {
+        "createdAt": "2026-11-06T06:17:21.6119094+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "area": "MCP",
+        "acceptanceCriteria": [
+          {
+            "text": "Invalid HostileReviewWorker options fail host startup with an error that names HostileReviewWorker, on Linux and on Windows: RenewalInterval not less than LeaseDuration; MaximumActiveQueue, MaximumConcurrentReviews or MaximumAttempts below 1. AgentName, RequiredModel and RequiredEffort are not startup rules: none is pinned, and an unset one means the default (operator rule 2026-10-15; PLAN-SESSIONTRIAGEFIX-001 B9). The test host owns its logging providers, so an account that cannot write the Windows Application event log cannot turn the startup failure into a logging error (PLAN-SESSIONTRIAGEFIX-001 B4, triage-report-f4d47e1f, measured on the Windows lab host 2026-10-15; HostileReviewStartupAssertion_AcceptsWorkerFailureAndRejectsMaskedOrMissing, HostileReviewWorker_InvalidOptions_FailStartup, HostileReviewWorkerOptions_AnyAgentModelEffort_PassValidation).",
+            "id": "AC-001",
+            "isSatisfied": false
+          },
+          {
+            "text": "A reviewer output is accepted with the model and effort it reports, and the execution records them, when HostileReviewWorker RequiredModel and RequiredEffort are not configured; a configured RequiredModel or RequiredEffort is required of the output, and an output reporting a different value fails the request as ModelUnavailable (operator rule 2026-10-15; PLAN-SESSIONTRIAGEFIX-001 B9; tests: WorkerOptionsAndOutputRules_AcceptUnpinnedOrConfiguredAndRejectPinsOrIgnoredConfig, AcceptReviewerOutput_NoConfiguredModel_RecordsReportedModel, AcceptReviewerOutput_ConfiguredModelMismatch_FailsModelUnavailable). An output that omits the reviewer agent, model or effort records them empty (not reported), never a default model (operator decision 2026-10-15 \"Empty defaults, in B9\"; test: AcceptReviewerOutput_NoConfiguredModel_RecordsReportedModel).",
+            "id": "AC-002",
+            "isSatisfied": false
+          }
+        ],
+        "status": "pending",
+        "title": "Hostile review execution capture",
+        "updatedAt": "2026-11-06T06:17:21.6120310+00:00",
+        "id": "TR-MCP-HOSTILEREVIEW-003",
+        "description": "ReviewExecution entity stores model string, effort, agent, plugin/source, template id/version, run id, start/end UTC. Token counts are optional and must not be invented.\n**Covered by:** FR: FR-MCP-HOSTILEREVIEW-003; TEST: TEST-MCP-HOSTILEREVIEW-003",
+        "subarea": "HOSTILEREVIEW",
+        "priority": "medium"
+      },
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

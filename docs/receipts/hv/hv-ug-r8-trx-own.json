@@ -1,0 +1,801 @@
+{
+  "timestampLocal": "2026-10-27T04:20:26",
+  "summaries": [
+    {
+      "run": "hv-ug-r8-hostile-invalid-1",
+      "root": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-invalid-1",
+      "exists": true,
+      "head": null,
+      "dirtyPaths": null,
+      "target": null,
+      "exitCode": null,
+      "projectCount": 7,
+      "total": 4563.0,
+      "passed": 4563.0,
+      "failed": 0.0,
+      "notExecuted": 0.0,
+      "projects": [
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-invalid-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "sha256": "0390B51AD822D6C37BF41907BCE018D13B2FF67D8F6C751881F71500D973BE1C",
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "total": 3172,
+          "executed": 3172,
+          "passed": 3172,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 3172,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": [
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffDbExceptionsTests.IsCommitAmbiguous_SqlServerTimeoutNumber_IsTrue",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.ScriptedMember_PassesTheMembershipAssertion",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.DefaultNegativeControls_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_SessionLogsAlreadyHasHeaderColumnsAndTags_Succeeds",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionTests.WrongBuilders_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionTests.FixtureBuilder_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerProviderResiliencyTests.Configure_ExplicitRetrySettings_ArePreserved",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: False)",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.ScriptedSerializedDefinition_PassesTheDefinitionAssertion",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.RequiredDefault_PassesTheDefaultAssertion",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.LocalDbDefault_PassesTheDefaultAssertion",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Identity.IdentityServerExtensionsTests.ResolveIdentityConnectionString_UsesMcpSqlServerConnectionWhenIdentityIsBlank",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.LocalDbClasses_AreInTheSqlServerLocalDbCollection",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: True)",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.MembershipNegativeControls_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.DefinitionNegativeControls_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionTests.ScriptedReferenceBuilder_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.Resolve_Override_IsReturnedUnchanged",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests.RunAsync_DryRunSqlServerEnable_BuildsTdePlan",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffDbExceptionsTests.IsUniqueViolation_SqlServerNumbers_AreTrue(number: 2601)",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffDbExceptionsTests.IsUniqueViolation_SqlServerNumbers_AreTrue(number: 2627)",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerProviderResiliencyTests.Configure_DefaultConnectionString_AddsConnectRetrySettings",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewEntity_RoundTrip_SqlitePgSqlServer",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Identity.IdentityServerExtensionsTests.ResolveIdentityConnectionString_FallsBackToLocalDbWhenMcpSqlServerIsUnavailable",
+              "outcome": "Passed"
+            }
+          ]
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-invalid-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "sha256": "C4657AE3491C4CA5E4846865C92C657D7E41EFEFD1432DCC89E3D114EBA41E76",
+          "project": "QBrainAi.Client.Tests",
+          "total": 306,
+          "executed": 306,
+          "passed": 306,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 306,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-invalid-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "sha256": "30FF6792F17F6E1BE55F6BBCFB85F0C6387085CBD7D5202D6F4B7809571BC48A",
+          "project": "QBrainAi.Cqrs.Tests",
+          "total": 33,
+          "executed": 33,
+          "passed": 33,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 33,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-invalid-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "sha256": "DD50B84E772F228F1DCD1362CC9553E65C6DF12AC4DC8B24642FAE4027FD826B",
+          "project": "QBrainAi.Launcher.Tests",
+          "total": 20,
+          "executed": 20,
+          "passed": 20,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 20,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-invalid-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "sha256": "436E04CAF4125F55FFFCD9760357F5F1AF5304E0EF21B892DD5E91D8EE853B03",
+          "project": "QBrainAi.McpAgent.Tests",
+          "total": 64,
+          "executed": 64,
+          "passed": 64,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 64,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-invalid-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "sha256": "7352D899990AECF6E83329959AC1627848D70CF771EB31AE1BC806AF5F8B1FF3",
+          "project": "QBrainAi.Repl.Core.Tests",
+          "total": 874,
+          "executed": 874,
+          "passed": 874,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 874,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": [
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.WrongCallSites_AreRejectedInsidePassingHarness(callSite: \"command\")",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.ProductionStreamCommand_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.WrongParsers_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.WrongCallSites_AreRejectedInsidePassingHarness(callSite: \"stream\")",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.ScriptedReferenceCallSite_SatisfiesTheContract_ForBothCallSites",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.ScriptedReferenceParser_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.CancelAfter_AcceptsTheLargestSecondsAndRejectsOneMore",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.ProductionProtocol_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.ProductionParser_SatisfiesTheContract",
+              "outcome": "Passed"
+            }
+          ]
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-invalid-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "sha256": "7B1EE076D0BC71D30205BC051AB328CA5712675ACAED4BB6D9BCE42604833E65",
+          "project": "QBrainAi.QBAgent.Tests",
+          "total": 94,
+          "executed": 94,
+          "passed": 94,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 94,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        }
+      ]
+    },
+    {
+      "run": "hv-ug-r8-hostile-max-1",
+      "root": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-max-1",
+      "exists": false,
+      "head": null,
+      "dirtyPaths": null,
+      "target": null,
+      "exitCode": null,
+      "projectCount": 0,
+      "total": 0.0,
+      "passed": 0.0,
+      "failed": 0.0,
+      "notExecuted": 0.0,
+      "projects": []
+    },
+    {
+      "run": "hv-ug-r8-hostile-max-2",
+      "root": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-max-2",
+      "exists": true,
+      "head": null,
+      "dirtyPaths": null,
+      "target": null,
+      "exitCode": null,
+      "projectCount": 7,
+      "total": 4563.0,
+      "passed": 4563.0,
+      "failed": 0.0,
+      "notExecuted": 0.0,
+      "projects": [
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-max-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "sha256": "D5236CBC903140E29BBCF1038420CB40AB54C1954CE4E3B6D6A9BD60C8F4BE1A",
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "total": 3172,
+          "executed": 3172,
+          "passed": 3172,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 3172,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": [
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.LocalDbDefault_PassesTheDefaultAssertion",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: False)",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerProviderResiliencyTests.Configure_ExplicitRetrySettings_ArePreserved",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_SessionLogsAlreadyHasHeaderColumnsAndTags_Succeeds",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffDbExceptionsTests.IsUniqueViolation_SqlServerNumbers_AreTrue(number: 2601)",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.RequiredDefault_PassesTheDefaultAssertion",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.Resolve_Override_IsReturnedUnchanged",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Identity.IdentityServerExtensionsTests.ResolveIdentityConnectionString_UsesMcpSqlServerConnectionWhenIdentityIsBlank",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionTests.WrongBuilders_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.LocalDbClasses_AreInTheSqlServerLocalDbCollection",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffDbExceptionsTests.IsUniqueViolation_SqlServerNumbers_AreTrue(number: 2627)",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerProviderResiliencyTests.Configure_DefaultConnectionString_AddsConnectRetrySettings",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Identity.IdentityServerExtensionsTests.ResolveIdentityConnectionString_FallsBackToLocalDbWhenMcpSqlServerIsUnavailable",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests.RunAsync_DryRunSqlServerEnable_BuildsTdePlan",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewEntity_RoundTrip_SqlitePgSqlServer",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.DefaultNegativeControls_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffDbExceptionsTests.IsCommitAmbiguous_SqlServerTimeoutNumber_IsTrue",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: True)",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionTests.FixtureBuilder_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.MembershipNegativeControls_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionTests.ScriptedReferenceBuilder_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.ScriptedMember_PassesTheMembershipAssertion",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.DefinitionNegativeControls_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.ScriptedSerializedDefinition_PassesTheDefinitionAssertion",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+              "outcome": "Passed"
+            }
+          ]
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-max-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "sha256": "E6D819B20A819A4331DD9AFFABBF96A1F9398D3A831989023C068B3BFD0F9C6E",
+          "project": "QBrainAi.Client.Tests",
+          "total": 306,
+          "executed": 306,
+          "passed": 306,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 306,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-max-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "sha256": "4F6E54CF65F2B10AB54EE199FF54D08F0B0CFC2B3C2AD35ABB18EC8D09E78FF7",
+          "project": "QBrainAi.Cqrs.Tests",
+          "total": 33,
+          "executed": 33,
+          "passed": 33,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 33,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-max-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "sha256": "6BE9A8A0866B95FDF05487A2E4058B6B952CA83135AD73B6338DE444F663C93B",
+          "project": "QBrainAi.Launcher.Tests",
+          "total": 20,
+          "executed": 20,
+          "passed": 20,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 20,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-max-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "sha256": "51633DDDB780BDFB4A75CA1B3913097C506F5C2197ADC632C10B302B6A50072E",
+          "project": "QBrainAi.McpAgent.Tests",
+          "total": 64,
+          "executed": 64,
+          "passed": 64,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 64,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-max-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "sha256": "0EFC7BE79B3DD8056A0E494F95200A884A19666E884B8FF835E55D4976850827",
+          "project": "QBrainAi.Repl.Core.Tests",
+          "total": 874,
+          "executed": 874,
+          "passed": 874,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 874,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": [
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.WrongCallSites_AreRejectedInsidePassingHarness(callSite: \"stream\")",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.ProductionParser_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.ScriptedReferenceParser_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.WrongCallSites_AreRejectedInsidePassingHarness(callSite: \"command\")",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.ScriptedReferenceCallSite_SatisfiesTheContract_ForBothCallSites",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.CancelAfter_AcceptsTheLargestSecondsAndRejectsOneMore",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.ProductionStreamCommand_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.ProductionProtocol_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.WrongParsers_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            }
+          ]
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-hostile-max-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "sha256": "76EC507EB4B76069CC2DFDFA96A5EFFB46DF0013C4F476FFEF50009C889FF91E",
+          "project": "QBrainAi.QBAgent.Tests",
+          "total": 94,
+          "executed": 94,
+          "passed": 94,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 94,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        }
+      ]
+    },
+    {
+      "run": "hv-ug-r8-sandbox-test-1",
+      "root": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-sandbox-test-1",
+      "exists": true,
+      "head": null,
+      "dirtyPaths": null,
+      "target": null,
+      "exitCode": null,
+      "projectCount": 7,
+      "total": 4563.0,
+      "passed": 4563.0,
+      "failed": 0.0,
+      "notExecuted": 0.0,
+      "projects": [
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-sandbox-test-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "sha256": "E09F15F688384A7964D05236B741489A148A135BEB571718E25B87C8983E6AC5",
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "total": 3172,
+          "executed": 3172,
+          "passed": 3172,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 3172,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": [
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.MembershipNegativeControls_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.LocalDbDefault_PassesTheDefaultAssertion",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionTests.WrongBuilders_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: False)",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.ScriptedMember_PassesTheMembershipAssertion",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.LocalDbClasses_AreInTheSqlServerLocalDbCollection",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Identity.IdentityServerExtensionsTests.ResolveIdentityConnectionString_UsesMcpSqlServerConnectionWhenIdentityIsBlank",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffDbExceptionsTests.IsCommitAmbiguous_SqlServerTimeoutNumber_IsTrue",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.RequiredDefault_PassesTheDefaultAssertion",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.DefaultNegativeControls_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_SessionLogsAlreadyHasHeaderColumnsAndTags_Succeeds",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.ScriptedSerializedDefinition_PassesTheDefinitionAssertion",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Identity.IdentityServerExtensionsTests.ResolveIdentityConnectionString_FallsBackToLocalDbWhenMcpSqlServerIsUnavailable",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.DefinitionNegativeControls_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionTests.ScriptedReferenceBuilder_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionTests.FixtureBuilder_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.Resolve_Override_IsReturnedUnchanged",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: True)",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerProviderResiliencyTests.Configure_ExplicitRetrySettings_ArePreserved",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests.RunAsync_DryRunSqlServerEnable_BuildsTdePlan",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffDbExceptionsTests.IsUniqueViolation_SqlServerNumbers_AreTrue(number: 2601)",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffDbExceptionsTests.IsUniqueViolation_SqlServerNumbers_AreTrue(number: 2627)",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerProviderResiliencyTests.Configure_DefaultConnectionString_AddsConnectRetrySettings",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewEntity_RoundTrip_SqlitePgSqlServer",
+              "outcome": "Passed"
+            }
+          ]
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-sandbox-test-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "sha256": "1E01ECF2DC9846F61D06CE71306008E34DEC063703821BB480E502C6606C153F",
+          "project": "QBrainAi.Client.Tests",
+          "total": 306,
+          "executed": 306,
+          "passed": 306,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 306,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-sandbox-test-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "sha256": "E46EC60AED41AE2F96A891F91CD25AEB5F16E698C08C568DF4A73BF2FE7C7ACD",
+          "project": "QBrainAi.Cqrs.Tests",
+          "total": 33,
+          "executed": 33,
+          "passed": 33,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 33,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-sandbox-test-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "sha256": "6D7B5BEC522970C9475CBE18E3B059309C6983A86AF9CA0035BC26A12C9B640A",
+          "project": "QBrainAi.Launcher.Tests",
+          "total": 20,
+          "executed": 20,
+          "passed": 20,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 20,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-sandbox-test-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "sha256": "A4C1CA220C4F50C9F723BDB8B75AB536552E1C995E33A2DD3DD556AF8C354411",
+          "project": "QBrainAi.McpAgent.Tests",
+          "total": 64,
+          "executed": 64,
+          "passed": 64,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 64,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-sandbox-test-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "sha256": "2956A65004C6E709702847BEE02B7631DB0BE98BE09D337E028AA5F582CE7FDE",
+          "project": "QBrainAi.Repl.Core.Tests",
+          "total": 874,
+          "executed": 874,
+          "passed": 874,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 874,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": [
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.WrongCallSites_AreRejectedInsidePassingHarness(callSite: \"stream\")",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.WrongCallSites_AreRejectedInsidePassingHarness(callSite: \"command\")",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.CancelAfter_AcceptsTheLargestSecondsAndRejectsOneMore",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.ProductionStreamCommand_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.ProductionProtocol_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.ScriptedReferenceParser_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.WrongParsers_AreRejectedInsidePassingHarness",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.ProductionParser_SatisfiesTheContract",
+              "outcome": "Passed"
+            },
+            {
+              "name": "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.ScriptedReferenceCallSite_SatisfiesTheContract_ForBothCallSites",
+              "outcome": "Passed"
+            }
+          ]
+        },
+        {
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r8-sandbox-test-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "sha256": "B72D64EE2424E2A7AFFC559B2173DAA88026629A4F212C73961AA7FB3FDA7149",
+          "project": "QBrainAi.QBAgent.Tests",
+          "total": 94,
+          "executed": 94,
+          "passed": 94,
+          "failed": 0,
+          "notExecuted": 0,
+          "resultCount": 94,
+          "nonPassed": [],
+          "times": [],
+          "namedChecks": []
+        }
+      ]
+    }
+  ],
+  "comparisons": []
+}

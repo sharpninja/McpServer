@@ -1,0 +1,8 @@
+{
+  "timestampUtc": "2026-11-06T06:16:45.7286921+00:00",
+  "timestampLocal": "2026-11-06T00:16:48",
+  "method": "workflow.requirements.getTest",
+  "recordId": "TEST-MCP-QBCLI-001",
+  "wrapperError": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261106T061646Z-798b\n  code: not_found\n  message: TEST 'TEST-MCP-QBCLI-001' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n",
+  "explicitNotFound": true
+}

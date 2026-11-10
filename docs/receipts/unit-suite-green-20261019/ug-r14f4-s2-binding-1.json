@@ -1,0 +1,88 @@
+{
+  "name": "ug-r14f4-s2-binding-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "95f0bc38ee61fa836f22a06987d4bb55ae84f957",
+  "dirtyPaths": [
+    " M build/Build.Test.cs",
+    " M build/Build.TestDependencies.cs",
+    " M build/IntegrationLaneProjects.cs",
+    "?? build/TestProjectOwnership.cs",
+    "?? build/TestProjectOwnershipContracts.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-buildtests-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-buildtests-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s1-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s1-mockgate-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-compile-1.json",
+    "?? tests/Build.Tests/TestProjectOwnershipContract.cs",
+    "?? tests/Build.Tests/TestProjectOwnershipMockGateTests.cs",
+    "?? tests/Build.Tests/TestProjectOwnershipTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "Build.Tests:TestProjectOwnershipMockGateTests,TestProjectOwnershipTests,IntegrationLaneProjectsTests,PluginSessionLogIntegrationTargetTests,QuadBrainOllamaModelBindingTests",
+    "--test-run-id",
+    "ug-r14f4-s2-binding-1"
+  ],
+  "startedLocal": "2026-11-07T08:36:45",
+  "endedLocal": "2026-11-07T08:36:54",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 35,
+  "passed": 35,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s2-binding-1/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-binding-1/Build.Tests.trx",
+      "sha256": "57AEDFD9E52A7BEE9CF38E080605504C605EDF69007B2F600995D42341A5E549",
+      "total": 35,
+      "passed": 35,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "build/TestProjectOwnershipContracts.cs",
+      "sha256": "36CB4E83CFF292CE77C51F5D3AA82A77CC24885C4270AE5905EA40DFEFA9A4AB"
+    },
+    {
+      "path": "build/TestProjectOwnership.cs",
+      "sha256": "67043AACAEB415A4366709F925D047B8A2F25C19BF3A259199726D49E53B2DD2"
+    },
+    {
+      "path": "build/IntegrationLaneProjects.cs",
+      "sha256": "83CA6DB12612AFD9EA45965207215DA3F4DD37056B3DD77A831913EDBC5ECDC0"
+    },
+    {
+      "path": "build/Build.Test.cs",
+      "sha256": "F311263B9F145CCFB8B6E948F907A36AA5D9AE0FFFF23B375B8754C82B118472"
+    },
+    {
+      "path": "build/Build.TestDependencies.cs",
+      "sha256": "67906C47C068B71694B4B44FA0B5C39395E0A489A7112EE03243B707BB5FD287"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipContract.cs",
+      "sha256": "3A5AF72EA18354442B901863206E4F56618DE8D05D09A89DF548EE368DAD47F1"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipMockGateTests.cs",
+      "sha256": "4F55A09642EC40A11335C24D36092D304A9D180B68751DE0C9F00AB42CF8F9AC"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipTests.cs",
+      "sha256": "D73C4C41AE170E173D0BAF970322170A0156F0E7B2A728FDF8B844C95BB49F11"
+    }
+  ],
+  "writtenLocal": "2026-11-07T08:37:28",
+  "writtenBy": "ClaudeCode"
+}

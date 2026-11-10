@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "runId": "ug-r8b-linux-test-4",
+  "scope": "unit",
+  "generatedAtUtc": "2026-10-28T04:37:05.9673346\u002B00:00",
+  "projects": [
+    {
+      "name": "QBrainAi.Support.Mcp.Tests",
+      "projectPath": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+      "reportPath": "unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "QBrainAi.Client.Tests",
+      "projectPath": "tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj",
+      "reportPath": "unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx"
+    },
+    {
+      "name": "QBrainAi.Cqrs.Tests",
+      "projectPath": "tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj",
+      "reportPath": "unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx"
+    },
+    {
+      "name": "QBrainAi.Launcher.Tests",
+      "projectPath": "tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj",
+      "reportPath": "unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx"
+    },
+    {
+      "name": "QBrainAi.McpAgent.Tests",
+      "projectPath": "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+      "reportPath": "unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx"
+    },
+    {
+      "name": "QBrainAi.Repl.Core.Tests",
+      "projectPath": "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+      "reportPath": "unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx"
+    },
+    {
+      "name": "QBrainAi.QBAgent.Tests",
+      "projectPath": "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+      "reportPath": "unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+104:                Assert.False(string.IsNullOrWhiteSpace(marker.ApiKey), $"Generated marker did not contain an API key.{Environment.NewLine}{server.Diagnostics}");
+162:                var stdout = _stdout.Count == 0 ? "<none>" : string.Join(Environment.NewLine, _stdout);
+163:                var stderr = _stderr.Count == 0 ? "<none>" : string.Join(Environment.NewLine, _stderr);
+164:                return $"STDOUT:{Environment.NewLine}{stdout}{Environment.NewLine}STDERR:{Environment.NewLine}{stderr}";
+245:        var startInfo = new ProcessStartInfo
+271:            ["Mcp__Database__Provider"] = "sqlite",
+272:            ["Mcp__Database__Sqlite__ConnectionString"] = $"Data Source={DatabasePath}",
+273:            ["QBrainAi__Database__Provider"] = "sqlite",
+274:            ["QBrainAi__Database__Sqlite__ConnectionString"] = $"Data Source={DatabasePath}",
+278:        OwnedInstanceProcess.ApplyOwnedEnvironment(startInfo, settings, RootPath);
+341:                    $"QBrain.AI exited before generating '{MarkerPath}' with code {_process.ExitCode}.{Environment.NewLine}{Diagnostics}");
+353:            $"Timed out after {MarkerTimeout} waiting for generated marker '{MarkerPath}'.{Environment.NewLine}{Diagnostics}");
+424:                    $"QBrain.AI exited before health was available with code {_process.ExitCode}.{Environment.NewLine}{Diagnostics}");
+446:            $"Timed out after {ServerHealthTimeout} waiting for QBrain.AI health at '{baseUrl}'.{Environment.NewLine}{Diagnostics}");
+462:              DatabaseProvider: sqlite
+465:                Provider: sqlite
+480:                Provider: yaml
+483:                Provider: database

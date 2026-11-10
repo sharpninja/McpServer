@@ -1,0 +1,56 @@
+RECEIPT 2026-10-20T14:24:02 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Read-WinLogRange.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-20T14:24:02 file=log.host.26-10-20_14-18-44_99691_5.txt lines=12533 range=11570-11800 tokens=7
+11571: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:00.742, 3336102232654, testhost.dll, TestRunCache: InProgressTests is null
+11573: TpTrace Verbose: 0 : 48844, 14, 2026/10/20, 14:19:00.941, 3336104226664, testhost.dll, TestExecutionRecorder.RecordResult: Received result for test: QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.UnitTestClasses_HaveNoPlatformDependence.
+11574: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:00.942, 3336104227618, testhost.dll, TestRunCache: No test found corresponding to testResult 'QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.UnitTestClasses_HaveNoPlatformDependence' in inProgress list.
+11575: TpTrace Verbose: 0 : 48844, 14, 2026/10/20, 14:19:00.942, 3336104228118, testhost.dll, TestExecutionRecorder.RecordEnd: test: QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.UnitTestClasses_HaveNoPlatformDependence execution completed.
+11576: TpTrace Verbose: 0 : 48844, 15, 2026/10/20, 14:19:00.943, 3336104240163, testhost.dll, TestExecutionRecorder.RecordStart: Starting test: QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.GuardProjectSelection_MatchesTheUnitTestTarget.
+11577: TpTrace Verbose: 0 : 48844, 15, 2026/10/20, 14:19:00.945, 3336104258416, testhost.dll, TestExecutionRecorder.RecordResult: Received result for test: QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.GuardProjectSelection_MatchesTheUnitTestTarget.
+11578: TpTrace Verbose: 0 : 48844, 15, 2026/10/20, 14:19:00.945, 3336104259207, testhost.dll, TestExecutionRecorder.RecordEnd: test: QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.GuardProjectSelection_MatchesTheUnitTestTarget execution completed.
+11579: TpTrace Verbose: 0 : 48844, 14, 2026/10/20, 14:19:00.945, 3336104260163, testhost.dll, TestExecutionRecorder.RecordStart: Starting test: QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.UnitProjects_HoldNoRepositoryLocatorBesideTheSharedOne.
+11591: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:01.451, 3336109318981, testhost.dll, TestRunCache: No test found corresponding to testResult 'QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables' in inProgress list.
+11598: TpTrace Verbose: 0 : 48844, 15, 2026/10/20, 14:19:01.568, 3336110488323, testhost.dll, TestRequestHandler.SendData: sending data from testhost: {"Version":7,"MessageType":"TestExecution.StatsChange","Payload":{"NewTestResults":[{"TestCase":{"Id":"518073dc-07df-7ecf-6ce7-c597d3dc6c16","FullyQualifiedName":"QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.UnitTestClasses_HaveNoPlatformDependence","DisplayName":"QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.UnitTestClasses_HaveNoPlatformDependence","ExecutorUri":"executor://xunit/VsTestRunner3/netcore/","Source":"F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\tests\\QBrainAi.Su
+11601: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:01.966, 3336114469636, testhost.dll, TestRunCache: InProgressTests is null
+11602: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:01.966, 3336114469823, testhost.dll, TestRunCache: No test found corresponding to testResult 'QBrainAi.Support.Mcp.Tests.McpStdio.TranscriptMcpStdioHostTests.SessionLogNormalizePath_ThroughStdioHost_ResolvesToolGraphAndWritesArtifacts' in inProgress list.
+11604: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:01.966, 3336114470816, testhost.dll, TestRunCache: InProgressTests is null
+11608: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:01.972, 3336114528209, testhost.dll, TestRunCache: InProgressTests is null
+11612: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.024, 3336115049108, testhost.dll, TestRunCache: InProgressTests is null
+11616: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.052, 3336115334095, testhost.dll, TestRunCache: InProgressTests is null
+11619: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.055, 3336115360986, testhost.dll, TestRunCache: No test found corresponding to testResult 'QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure' in inProgress list.
+11623: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:02.055, 3336115365829, testhost.dll, TestRunCache: InProgressTests is null
+11636: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.093, 3336115742341, testhost.dll, TestRunCache: InProgressTests is null
+11637: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.093, 3336115742644, testhost.dll, TestRunCache: No test found corresponding to testResult 'QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.RecordsPerTurnAndPerJobTokens' in inProgress list.
+11639: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.093, 3336115743483, testhost.dll, TestRunCache: InProgressTests is null
+11643: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:02.102, 3336115835666, testhost.dll, TestRunCache: InProgressTests is null
+11647: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:02.104, 3336115852787, testhost.dll, TestRunCache: InProgressTests is null
+11651: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:02.172, 3336116528324, testhost.dll, TestRunCache: InProgressTests is null
+11655: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:02.180, 3336116614818, testhost.dll, TestRunCache: InProgressTests is null
+11659: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.287, 3336117680327, testhost.dll, TestRunCache: InProgressTests is null
+11663: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:02.290, 3336117716906, testhost.dll, TestRunCache: InProgressTests is null
+11667: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.294, 3336117753679, testhost.dll, TestRunCache: InProgressTests is null
+11671: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.295, 3336117765669, testhost.dll, TestRunCache: InProgressTests is null
+11677: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.296, 3336117772183, testhost.dll, TestRunCache: InProgressTests is null
+11678: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.296, 3336117772464, testhost.dll, TestRunCache: No test found corresponding to testResult 'QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentRealTests.NormalizeNativePath_CollapsesToCanonicalForm' in inProgress list.
+11680: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.296, 3336117773128, testhost.dll, TestRunCache: InProgressTests is null
+11684: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:02.297, 3336117777953, testhost.dll, TestRunCache: InProgressTests is null
+11686: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.365, 3336118465785, testhost.dll, TestRunCache: InProgressTests is null
+11687: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.365, 3336118465979, testhost.dll, TestRunCache: No test found corresponding to testResult 'QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput' in inProgress list.
+11689: TpTrace Warning: 0 : 48844, 15, 2026/10/20, 14:19:02.365, 3336118466423, testhost.dll, TestRunCache: InProgressTests is null
+11694: TpTrace Warning: 0 : 48844, 11, 2026/10/20, 14:19:02.541, 3336120224072, testhost.dll, TestRunCache: InProgressTests is null
+11703: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:03.044, 3336125255362, testhost.dll, TestRunCache: InProgressTests is null
+11704: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:03.044, 3336125255743, testhost.dll, TestRunCache: No test found corresponding to testResult 'QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows' in inProgress list.
+11706: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:03.044, 3336125256763, testhost.dll, TestRunCache: InProgressTests is null
+11743: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:04.208, 3336136892705, testhost.dll, TestRunCache: InProgressTests is null
+11744: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:04.208, 3336136892894, testhost.dll, TestRunCache: No test found corresponding to testResult 'QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthPostgreSqlBoundaryTests.FreshPostgreSql_StatementTimeoutConcurrentWithCallerCancellation_IsPreserved' in inProgress list.
+11746: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:04.208, 3336136893454, testhost.dll, TestRunCache: InProgressTests is null
+11750: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:04.401, 3336138825179, testhost.dll, TestRunCache: InProgressTests is null
+11755: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:04.559, 3336140403317, testhost.dll, TestRunCache: InProgressTests is null
+11764: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:04.658, 3336141394900, testhost.dll, TestRunCache: InProgressTests is null
+11765: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:04.658, 3336141395533, testhost.dll, TestRunCache: No test found corresponding to testResult 'QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText' in inProgress list.
+11767: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:04.658, 3336141396447, testhost.dll, TestRunCache: InProgressTests is null
+11793: TpTrace Verbose: 0 : 48844, 14, 2026/10/20, 14:19:05.815, 3336152964765, testhost.dll, TestExecutionRecorder.RecordEnd: test: QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.UnitProjects_HoldNoRepositoryLocatorBesideTheSharedOne execution completed.
+11794: TpTrace Warning: 0 : 48844, 14, 2026/10/20, 14:19:05.815, 3336152965317, testhost.dll, TestRunCache: InProgressTests is null
+END 2026-10-20T14:24:02

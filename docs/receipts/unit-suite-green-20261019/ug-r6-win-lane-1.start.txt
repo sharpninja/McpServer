@@ -1,0 +1,15 @@
+RECEIPT 2026-10-21T13:59:39 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-10-21T13:59:30 host=PAYTON-LEGION2 user=kingd
+RUNNER C:\Users\kingd\AppData\Local\Temp\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True
+  checkout: Previous HEAD position was 810ee8aa test(maintenance): the environment-instance parse test is an integration test that controls both instance variables (IMPL-UNITGREEN-001)
+  checkout: HEAD is now at c8418301 test: environment-touching unit tests become integration tests; env writers run one at a time (R5-F2, IMPL-UNITGREEN-001)
+HEAD c84183016a032bd522f5ae085a90d7c912bef810 expected=c84183016a032bd522f5ae085a90d7c912bef810 match=True
+PWSH C:\Program Files\PowerShell\7-LabWsman\pwsh.exe
+ACTION -NoProfile -ExecutionPolicy Bypass -File "C:\Users\kingd\AppData\Local\Temp\Invoke-WinLaneRunner.ps1" -Worktree "F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019" -RunId "ug-r6-win-lane-1" -LogPath "C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\MigrationIntegrationTests-ug-r6-win-lane-1.log" -ProofPath "C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\proof-ug-r6-win-lane-1.txt" -ExitPath "C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\exit-ug-r6-win-lane-1.txt"
+ACCOUNT PAYTON-LEGION2\kingd
+TASK McpUnitGreenLane-ug-r6-win-lane-1 state=Running lastRun=10/21/2026 13:59:32 result=267009
+PROOF so far: START 2026-10-21T13:59:34 user=kingd session=1 interactive=True head=c84183016a032bd522f5ae085a90d7c912bef810
+END 2026-10-21T13:59:38

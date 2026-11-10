@@ -24,6 +24,8 @@
     <ProjectReference Include="..\..\src\QBrainAi.QBAgent\QBrainAi.QBAgent.csproj" />
     <ProjectReference Include="..\..\src\QBrainAi.QBAgent.Tools\QBrainAi.QBAgent.Tools.csproj" />
   </ItemGroup>
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the shared repository-root locator is no longer linked here;
+       its only users, the Category=Integration skill cases, moved to QBrainAi.QBAgent.IntegrationTests (slice S3). -->
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>

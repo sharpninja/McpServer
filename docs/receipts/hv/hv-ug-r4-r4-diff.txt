@@ -1,0 +1,1381 @@
+diff --git a/src/QBrainAi.Services/Services/AgentPluginVersionSources.cs b/src/QBrainAi.Services/Services/AgentPluginVersionSources.cs
+new file mode 100644
+index 00000000..4240223c
+--- /dev/null
++++ b/src/QBrainAi.Services/Services/AgentPluginVersionSources.cs
+@@ -0,0 +1,16 @@
++namespace QBrainAi.Support.Mcp.Services;
++
++/// <summary>
++/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001: every input that agent-plugin version resolution reads, in the order it reads
++/// them: the plugin root an environment variable names, the plugin folder beside the workspace, and the plugin caches
++/// under the user profile. Unit tests give resolution test-owned sources, so no unit test reads the process
++/// environment, the machine or the real profile; the running process's sources are
++/// <see cref="MarkerFileService.ProcessAgentPluginVersionSources"/>.
++/// </summary>
++/// <param name="EnvironmentVariable">Reads a plugin-root environment variable by name; null when it is not set.</param>
++/// <param name="SiblingRoot">The plugin folder beside a workspace, from the workspace path and the plugin name; null when there is none.</param>
++/// <param name="UserProfile">The profile whose plugin caches are scanned; null or empty for none.</param>
++internal sealed record AgentPluginVersionSources(
++    Func<string, string?> EnvironmentVariable,
++    Func<string, string, string?> SiblingRoot,
++    string? UserProfile);
+diff --git a/src/QBrainAi.Services/Services/MarkerFileService.cs b/src/QBrainAi.Services/Services/MarkerFileService.cs
+index 06e2d82e..b6af899c 100644
+--- a/src/QBrainAi.Services/Services/MarkerFileService.cs
++++ b/src/QBrainAi.Services/Services/MarkerFileService.cs
+@@ -90,10 +90,33 @@ public static class MarkerFileService
+         SignaturePayloadFields[..^ConditionalAgentPluginFieldCount];
+ 
+     /// <summary>
+-    /// Test seam: when set, plugin-version resolution scans this directory for user plugin caches
+-    /// instead of the real user profile, so tests are hermetic against locally installed plugins.
++    /// AC-TR-MCP-WS-005-001 test seam: when set, marker plugin-version resolution reads every input (the plugin-root
++    /// environment variables, the workspace sibling plugin folder and the user profile caches) from these sources
++    /// instead of <see cref="ProcessAgentPluginVersionSources"/>, so unit tests never read the process environment,
++    /// the machine or the real profile. Set only by the unit-test assembly fixture.
+     /// </summary>
+-    internal static string? AgentPluginUserProfileOverride { get; set; }
++    internal static AgentPluginVersionSources? AgentPluginVersionSourcesOverride { get; set; }
++
++    /// <summary>
++    /// AC-TR-MCP-WS-005-001: the running process's plugin-version sources: its environment variables, the plugin
++    /// folder beside the workspace (<see cref="SiblingPluginRoot"/>), and the current user's profile, read when each
++    /// resolution starts.
++    /// </summary>
++    internal static AgentPluginVersionSources ProcessAgentPluginVersionSources =>
++        new(Environment.GetEnvironmentVariable, SiblingPluginRoot, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
++
++    /// <summary>AC-TR-MCP-WS-005-001: the plugin folder beside <paramref name="workspacePath"/>; null when the workspace has no parent.</summary>
++    /// <param name="workspacePath">Workspace path; none when empty.</param>
++    /// <param name="pluginName">Plugin folder name.</param>
++    /// <returns>The sibling plugin folder, or null.</returns>
++    internal static string? SiblingPluginRoot(string workspacePath, string pluginName)
++    {
++        if (string.IsNullOrWhiteSpace(workspacePath))
++            return null;
++
++        var parent = Path.GetDirectoryName(Path.GetFullPath(workspacePath));
++        return string.IsNullOrWhiteSpace(parent) ? null : Path.Combine(parent, pluginName);
++    }
+ 
+     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
+         .WithNamingConvention(CamelCaseNamingConvention.Instance)
+@@ -529,12 +552,22 @@ public static class MarkerFileService
+             $"Marker signature payload field '{field}' has no value binding. Update ResolveSignaturePayloadValue when adding a field to SignaturePayloadFields."),
+     };
+ 
+-    internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath)
++    internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath) =>
++        BuildDefaultAgentPlugins(workspacePath, AgentPluginVersionSourcesOverride ?? ProcessAgentPluginVersionSources);
++
++    /// <summary>
++    /// AC-TR-MCP-WS-005-001: builds the default agent-plugin contract, resolving each plugin version from
++    /// <paramref name="sources"/> only.
++    /// </summary>
++    /// <param name="workspacePath">Workspace the marker describes.</param>
++    /// <param name="sources">Every input plugin-version resolution reads.</param>
++    /// <returns>The agent-plugin contract.</returns>
++    internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath, AgentPluginVersionSources sources)
+     {
+         var siblingRoot = Path.GetDirectoryName(Path.GetFullPath(workspacePath)) ?? string.Empty;
+         string Sibling(string name) => string.IsNullOrWhiteSpace(siblingRoot) ? name : Path.Combine(siblingRoot, name);
+         string Version(string pluginName, string environmentVariableName) =>
+-            ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName);
++            ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName, sources, DirectoryTreeWalker.FileSystem);
+ 
+         return new MarkerAgentPlugins
+         {
+@@ -610,35 +643,25 @@ public static class MarkerFileService
+         };
+     }
+ 
+-    internal static string ResolveAgentPluginVersion(
+-        string workspacePath,
+-        string pluginName,
+-        string environmentVariableName) =>
+-        ResolveAgentPluginVersion(
+-            workspacePath,
+-            pluginName,
+-            environmentVariableName,
+-            AgentPluginUserProfileOverride ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+-            DirectoryTreeWalker.FileSystem);
+-
+     /// <summary>
+-    /// AC-TR-MCP-WS-005-001: resolves an agent plugin version, scanning the plugin caches under
+-    /// <paramref name="userProfile"/> through <paramref name="walker"/>, which skips directory links and any
+-    /// directory it cannot list; falls back to <see cref="SyncedAgentPluginVersion"/>.
++    /// AC-TR-MCP-WS-005-001: resolves an agent plugin version from <paramref name="sources"/> only: the plugin root
++    /// its environment variable names, then the plugin folder beside the workspace, then the plugin caches under its
++    /// user profile, scanned through <paramref name="walker"/>, which skips directory links and any directory it
++    /// cannot list; falls back to <see cref="SyncedAgentPluginVersion"/>.
+     /// </summary>
+     /// <param name="workspacePath">Workspace whose sibling folder may hold the plugin.</param>
+     /// <param name="pluginName">Plugin folder name.</param>
+     /// <param name="environmentVariableName">Variable that may name the plugin root.</param>
+-    /// <param name="userProfile">Profile whose plugin caches are scanned; none when empty.</param>
++    /// <param name="sources">Every input resolution reads.</param>
+     /// <param name="walker">Directory walk used for the cache scan.</param>
+     /// <returns>The resolved version.</returns>
+     internal static string ResolveAgentPluginVersion(
+         string workspacePath,
+         string pluginName,
+         string environmentVariableName,
+-        string? userProfile,
++        AgentPluginVersionSources sources,
+         DirectoryTreeWalker walker) =>
+-        ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName, userProfile, walker, ReadExistingFileText);
++        ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName, sources, walker, ReadExistingFileText);
+ 
+     /// <summary>
+     /// AC-TR-MCP-WS-005-001: resolves an agent plugin version as the overload above does, reading each candidate's
+@@ -648,7 +671,7 @@ public static class MarkerFileService
+     /// <param name="workspacePath">Workspace whose sibling folder may hold the plugin.</param>
+     /// <param name="pluginName">Plugin folder name.</param>
+     /// <param name="environmentVariableName">Variable that may name the plugin root.</param>
+-    /// <param name="userProfile">Profile whose plugin caches are scanned; none when empty.</param>
++    /// <param name="sources">Every input resolution reads.</param>
+     /// <param name="walker">Directory walk used for the cache scan.</param>
+     /// <param name="readText">Reads a file's text; null when the file does not exist; throws when it cannot be read.</param>
+     /// <returns>The resolved version.</returns>
+@@ -656,11 +679,11 @@ public static class MarkerFileService
+         string workspacePath,
+         string pluginName,
+         string environmentVariableName,
+-        string? userProfile,
++        AgentPluginVersionSources sources,
+         DirectoryTreeWalker walker,
+         Func<string, string?> readText)
+     {
+-        foreach (var root in EnumerateAgentPluginVersionRoots(workspacePath, pluginName, environmentVariableName, userProfile, walker, readText))
++        foreach (var root in EnumerateAgentPluginVersionRoots(workspacePath, pluginName, environmentVariableName, sources, walker, readText))
+         {
+             var version = TryReadAgentPluginVersion(root, readText);
+             if (!string.IsNullOrWhiteSpace(version))
+@@ -683,21 +706,19 @@ public static class MarkerFileService
+         string workspacePath,
+         string pluginName,
+         string environmentVariableName,
+-        string? userProfile,
++        AgentPluginVersionSources sources,
+         DirectoryTreeWalker walker,
+         Func<string, string?> readText)
+     {
+-        var environmentRoot = Environment.GetEnvironmentVariable(environmentVariableName);
++        var environmentRoot = sources.EnvironmentVariable(environmentVariableName);
+         if (!string.IsNullOrWhiteSpace(environmentRoot))
+             yield return environmentRoot;
+ 
+-        if (!string.IsNullOrWhiteSpace(workspacePath))
+-        {
+-            var siblingRoot = Path.GetDirectoryName(Path.GetFullPath(workspacePath));
+-            if (!string.IsNullOrWhiteSpace(siblingRoot))
+-                yield return Path.Combine(siblingRoot, pluginName);
+-        }
++        var siblingRoot = sources.SiblingRoot(workspacePath, pluginName);
++        if (!string.IsNullOrWhiteSpace(siblingRoot))
++            yield return siblingRoot;
+ 
++        var userProfile = sources.UserProfile;
+         if (!string.IsNullOrWhiteSpace(userProfile))
+         {
+             foreach (var candidate in EnumerateUserPluginCacheRoots(userProfile, pluginName, walker, readText))
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs b/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs
+index d377aa78..4c34c72b 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs
+@@ -13,7 +13,9 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
+ /// separates code from strings, comments and documentation and keeps the code inside interpolation holes, so a
+ /// member access split across lines, a qualified, global-qualified or aliased name, a <c>using static</c>
+ /// import, a method group, and an attribute anywhere in an attribute list are read like a plain call or
+-/// attribute; a name inside <c>nameof</c> is not a use. Every conditional-compilation branch is read: the file
++/// attribute; a name inside <c>nameof</c> is not a use. Aliases and static imports resolve in the lexical scope
++/// of the code that uses them, as the compiler resolves them: the file's directives, then each enclosing
++/// namespace's, an inner alias hiding an outer one, so a directive in one namespace does not reach another. Every conditional-compilation branch is read: the file
+ /// is parsed once for each combination of the symbols its <c>#if</c> and <c>#elif</c> directives name, and a
+ /// file that names more than <see cref="MaxConditionalSymbols"/> symbols fails the scan instead of leaving a
+ /// branch unread. Test classes are types whose name ends in <c>Tests</c> or that declare a method with an
+@@ -161,9 +163,45 @@ internal static class UnitSuitePlatformScanner
+     /// <summary>Every rule hit in one tree, with the node it is reported on.</summary>
+     private static IEnumerable<(SyntaxNode Node, string Kind)> FindHits(CompilationUnitSyntax root)
+     {
+-        var aliases = new Dictionary<string, string>(StringComparer.Ordinal);
+-        var staticTypes = new HashSet<string>(StringComparer.Ordinal);
+-        foreach (var directive in root.DescendantNodes().OfType<UsingDirectiveSyntax>())
++        var scopes = new Dictionary<SyntaxNode, ImportScope>();
++        foreach (var node in root.DescendantNodes(child => child is not UsingDirectiveSyntax))
++        {
++            IReadOnlyList<string> kinds = node switch
++            {
++                AttributeSyntax attribute => AttributeKinds(attribute, ScopeOf(attribute, scopes).Aliases),
++                MemberAccessExpressionSyntax access => MemberKinds(TypeName(access.Expression, ScopeOf(access, scopes).Aliases), access.Name.Identifier.ValueText),
++                IdentifierNameSyntax { Identifier.ValueText: "SkipException" } => ["skip"],
++                IdentifierNameSyntax identifier when IsUnqualified(identifier) => StaticImportKinds(identifier.Identifier.ValueText, ScopeOf(identifier, scopes).StaticTypes),
++                _ => [],
++            };
++            if (kinds.Count > 0 && (node is AttributeSyntax || !InNameOf(node)))
++            {
++                foreach (var kind in kinds)
++                    yield return (node, kind);
++            }
++        }
++    }
++
++    /// <summary>The using aliases and static imports in effect at <paramref name="node"/>.</summary>
++    private static ImportScope ScopeOf(SyntaxNode node, Dictionary<SyntaxNode, ImportScope> scopes) =>
++        ScopeFor(node.Ancestors().First(IsImportContainer), scopes);
++
++    /// <summary>
++    /// The using aliases and static imports in effect inside <paramref name="container"/> (the file or a namespace),
++    /// resolved the way the compiler resolves them: the file's directives, then each enclosing namespace's from the
++    /// outermost in, an inner alias hiding an outer alias of the same name. Cached per container.
++    /// </summary>
++    private static ImportScope ScopeFor(SyntaxNode container, Dictionary<SyntaxNode, ImportScope> scopes)
++    {
++        if (scopes.TryGetValue(container, out var known))
++            return known;
++
++        var outer = container.Ancestors().FirstOrDefault(IsImportContainer);
++        var enclosing = outer is null ? ImportScope.Empty : ScopeFor(outer, scopes);
++        var aliases = new Dictionary<string, string>(enclosing.Aliases, StringComparer.Ordinal);
++        var staticTypes = new HashSet<string>(enclosing.StaticTypes, StringComparer.Ordinal);
++        var usings = container is BaseNamespaceDeclarationSyntax space ? space.Usings : ((CompilationUnitSyntax)container).Usings;
++        foreach (var directive in usings)
+         {
+             var target = RightmostName(directive.NamespaceOrType);
+             if (target is null)
+@@ -174,24 +212,13 @@ internal static class UnitSuitePlatformScanner
+                 staticTypes.Add(target);
+         }
+ 
+-        foreach (var node in root.DescendantNodes(child => child is not UsingDirectiveSyntax))
+-        {
+-            IReadOnlyList<string> kinds = node switch
+-            {
+-                AttributeSyntax attribute => AttributeKinds(attribute, aliases),
+-                MemberAccessExpressionSyntax access => MemberKinds(TypeName(access.Expression, aliases), access.Name.Identifier.ValueText),
+-                IdentifierNameSyntax { Identifier.ValueText: "SkipException" } => ["skip"],
+-                IdentifierNameSyntax identifier when IsUnqualified(identifier) => StaticImportKinds(identifier.Identifier.ValueText, staticTypes),
+-                _ => [],
+-            };
+-            if (kinds.Count > 0 && (node is AttributeSyntax || !InNameOf(node)))
+-            {
+-                foreach (var kind in kinds)
+-                    yield return (node, kind);
+-            }
+-        }
++        var scope = new ImportScope(aliases, staticTypes);
++        scopes[container] = scope;
++        return scope;
+     }
+ 
++    private static bool IsImportContainer(SyntaxNode node) => node is CompilationUnitSyntax or BaseNamespaceDeclarationSyntax;
++
+     private static IEnumerable<SyntaxNode> RepositoryLocatorNodes(CompilationUnitSyntax root)
+     {
+         foreach (var member in root.DescendantNodes().OfType<MemberDeclarationSyntax>()
+@@ -319,7 +346,7 @@ internal static class UnitSuitePlatformScanner
+         node.Ancestors().Any(ancestor =>
+             ancestor is InvocationExpressionSyntax { Expression: IdentifierNameSyntax { Identifier.ValueText: "nameof" } });
+ 
+-    /// <summary>The rightmost name of a type or receiver expression, resolving a file-level using alias.</summary>
++    /// <summary>The rightmost name of a type or receiver expression, resolving a using alias in scope.</summary>
+     private static string? TypeName(SyntaxNode node, IReadOnlyDictionary<string, string> aliases) =>
+         node is IdentifierNameSyntax identifier && aliases.TryGetValue(identifier.Identifier.ValueText, out var target)
+             ? target
+@@ -342,6 +369,13 @@ internal static class UnitSuitePlatformScanner
+     private static int LineOf(SyntaxNode node) => node.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+ 
+     private sealed record MemberRule(string Kind, string Type, Func<string, bool> Matches);
++
++    /// <summary>Using aliases (alias to the target's rightmost name) and static-import types in effect in one scope.</summary>
++    private sealed record ImportScope(IReadOnlyDictionary<string, string> Aliases, IReadOnlySet<string> StaticTypes)
++    {
++        internal static readonly ImportScope Empty =
++            new(new Dictionary<string, string>(StringComparer.Ordinal), new HashSet<string>(StringComparer.Ordinal));
++    }
+ }
+ 
+ /// <summary>TR-MCP-USECASE-018 (AC-006): one platform-dependent line in a unit test class.</summary>
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs
+new file mode 100644
+index 00000000..e13a00c3
+--- /dev/null
++++ b/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs
+@@ -0,0 +1,191 @@
++using System.Globalization;
++
++namespace QBrainAi.Support.Mcp.Tests.Configuration;
++
++/// <summary>
++/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): the unit-suite platform scanner resolves a using alias
++/// or a <c>using static</c> import in the lexical scope of the code that uses it (the enclosing namespace, then the
++/// file), the way the compiler does, so an alias or import declared in one namespace neither hides nor invents a
++/// platform check in another namespace of the same file.
++/// </summary>
++/// <remarks>
++/// Found by hostile validation round 3 (finding R3-F2: the scanner collected every alias of a file into one dictionary,
++/// so a sibling namespace's <c>using OS = System.String</c> hid a real <c>OS.IsWindows()</c>); fix chosen by the
++/// operator on 2026-10-20 ("Structural fix, round 4 (Recommended)"). Test data: scripted C# sources with the findings
++/// the rule requires (the reviewer's counterexample, the same namespaces in reverse order, a nested namespace that
++/// overrides a file-level alias, a namespace-scoped static import, a file-scoped namespace alias, and an alias whose
++/// name is OperatingSystem but whose target is String). Negative controls are the outputs the file-wide resolution
++/// gave, each rejected by the finding assertion inside a passing harness.
++/// </remarks>
++public sealed class UnitSuitePlatformScannerAliasScopeTests
++{
++    private static readonly Dictionary<string, (string Source, string[] Expected)> Cases = new(StringComparer.Ordinal)
++    {
++        ["sibling-namespace-alias"] = ("""
++            namespace A
++            {
++                using OS = System.OperatingSystem;
++                public class AliasTests
++                {
++                    [Fact]
++                    public void A() { _ = OS.IsWindows(); }
++                }
++            }
++            namespace B
++            {
++                using OS = System.String;
++                public class Helper
++                {
++                    public OS Name { get; set; }
++                }
++            }
++            """, ["7 os-check AliasTests"]),
++        ["reverse-order-alias"] = ("""
++            namespace B
++            {
++                using OS = System.String;
++                public class StringTests
++                {
++                    [Fact]
++                    public void B() { _ = OS.IsNullOrEmpty("x"); }
++                }
++            }
++            namespace A
++            {
++                using OS = System.OperatingSystem;
++                public class AliasTests
++                {
++                    [Fact]
++                    public void A() { _ = OS.IsWindows(); }
++                }
++            }
++            """, ["16 os-check AliasTests"]),
++        ["nested-namespace-override"] = ("""
++            using OS = System.OperatingSystem;
++            namespace Outer
++            {
++                namespace Inner
++                {
++                    using OS = System.String;
++                    public class InnerTests
++                    {
++                        [Fact]
++                        public void A() { _ = OS.IsNullOrEmpty("x"); }
++                    }
++                }
++                public class OuterTests
++                {
++                    [Fact]
++                    public void B() { _ = OS.IsWindows(); }
++                }
++            }
++            """, ["16 os-check OuterTests"]),
++        ["namespace-static-import"] = ("""
++            namespace A
++            {
++                using static System.OperatingSystem;
++                public class StaticTests
++                {
++                    [Fact]
++                    public void A() { _ = IsWindows(); }
++                }
++            }
++            namespace B
++            {
++                public class OtherTests
++                {
++                    [Fact]
++                    public void B() { _ = IsWindows(); }
++                    private static bool IsWindows() => true;
++                }
++            }
++            """, ["7 os-check StaticTests"]),
++        ["file-scoped-namespace-alias"] = ("""
++            namespace N;
++            using OS = System.OperatingSystem;
++            public sealed class FileScopedTests
++            {
++                [Fact]
++                public void A() { _ = OS.IsLinux(); }
++            }
++            """, ["6 os-check FileScopedTests"]),
++        ["non-platform-alias-named-like-os"] = ("""
++            namespace N
++            {
++                using OperatingSystem = System.String;
++                public class StringTests
++                {
++                    [Fact]
++                    public void A() { _ = OperatingSystem.IsNullOrEmpty("x"); }
++                }
++            }
++            """, []),
++    };
++
++    /// <summary>The scripted case names, for the theories.</summary>
++    public static TheoryData<string> CaseNames =>
++        new()
++        {
++            "sibling-namespace-alias",
++            "reverse-order-alias",
++            "nested-namespace-override",
++            "namespace-static-import",
++            "file-scoped-namespace-alias",
++            "non-platform-alias-named-like-os",
++        };
++
++    /// <summary>Builds scanner findings from "line kind class" strings, as the scanner would report them.</summary>
++    private static UnitSuitePlatformFinding[] Findings(string path, IEnumerable<string> lines) =>
++        lines.Select(line => line.Split(' '))
++            .Select(parts => new UnitSuitePlatformFinding(path, int.Parse(parts[0], CultureInfo.InvariantCulture), parts[1], parts[2]))
++            .ToArray();
++
++    /// <summary>Mock gate positive control: each case's required findings pass the finding assertion.</summary>
++    /// <param name="name">Case name.</param>
++    [Theory]
++    [MemberData(nameof(CaseNames))]
++    public void ScriptedCase_RequiredFindings_PassTheFindingAssertion(string name)
++    {
++        var expected = Cases[name].Expected;
++        UnitSuitePlatformScannerMockGateTests.AssertFindings(expected, Findings(name + ".cs", expected));
++    }
++
++    /// <summary>
++    /// Production binding: the scanner gives each case exactly its required findings, so an alias or static import
++    /// declared in one namespace neither hides nor invents a finding in another.
++    /// </summary>
++    /// <param name="name">Case name.</param>
++    [Theory]
++    [MemberData(nameof(CaseNames))]
++    public void ScriptedCase_Scanner_ReportsTheRequiredFindings(string name)
++    {
++        var (source, expected) = Cases[name];
++        UnitSuitePlatformScannerMockGateTests.AssertFindings(expected, UnitSuitePlatformScanner.Scan(name + ".cs", source));
++    }
++
++    /// <summary>The theories cover every scripted case.</summary>
++    [Fact]
++    public void ScriptedTheory_CoversEveryCase() => Assert.Equal(6, Cases.Count);
++
++    /// <summary>
++    /// Mock gate negative controls: the outputs the file-wide alias and import resolution gave are each rejected by
++    /// the finding assertion: no finding for the reviewer's counterexample (the sibling alias won), a false finding
++    /// on String.IsNullOrEmpty in reverse order (the later OperatingSystem alias won), no finding for the outer test
++    /// when an inner namespace overrides the alias, and a false finding on another namespace's own IsWindows method
++    /// when a static import was applied file-wide.
++    /// </summary>
++    [Fact]
++    public void FileWideResolutionOutputs_AreRejectedInsidePassingHarness()
++    {
++        Assert.NotNull(Record.Exception(() => UnitSuitePlatformScannerMockGateTests.AssertFindings(
++            Cases["sibling-namespace-alias"].Expected, Findings("sibling.cs", []))));
++        Assert.NotNull(Record.Exception(() => UnitSuitePlatformScannerMockGateTests.AssertFindings(
++            Cases["reverse-order-alias"].Expected, Findings("reverse.cs", ["7 os-check StringTests", "16 os-check AliasTests"]))));
++        Assert.NotNull(Record.Exception(() => UnitSuitePlatformScannerMockGateTests.AssertFindings(
++            Cases["nested-namespace-override"].Expected, Findings("nested.cs", []))));
++        Assert.NotNull(Record.Exception(() => UnitSuitePlatformScannerMockGateTests.AssertFindings(
++            Cases["namespace-static-import"].Expected, Findings("static.cs", ["7 os-check StaticTests", "15 os-check OtherTests"]))));
++        Assert.NotNull(Record.Exception(() => UnitSuitePlatformScannerMockGateTests.AssertFindings(
++            Cases["non-platform-alias-named-like-os"].Expected, Findings("named.cs", ["7 os-check StringTests"]))));
++    }
++}
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs b/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs
+index afa22054..5c454aaf 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs
+@@ -7,33 +7,39 @@ using Xunit;
+ namespace QBrainAi.Support.Mcp.Tests;
+ 
+ /// <summary>
+-/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001: points marker agent-plugin version resolution at an empty temporary
+-/// profile for the whole test assembly, so no test in this assembly reads the plugin caches of the user who runs
+-/// it (operator 2026-10-20: "Fix scans in PR 87 (Recommended)"; unit tests may not depend on the environment).
++/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001: gives marker agent-plugin version resolution test-owned sources for the whole
++/// test assembly: no plugin-root environment variable, no folder beside the workspace, and an empty temporary profile,
++/// so no test in this assembly reads the environment, the machine or the plugin caches of the user who runs it
++/// (operator 2026-10-20: "Fix scans in PR 87 (Recommended)" and "Structural fix, round 4 (Recommended)"; unit tests
++/// may not depend on the environment).
+ /// </summary>
+ /// <remarks>
+ /// Test data: one empty directory under the system temp folder, created when the assembly starts and deleted when
+-/// it ends. Tests that need a populated profile set <see cref="MarkerFileService.AgentPluginUserProfileOverride"/>
+-/// themselves and restore the previous value afterwards, so the value is never the real profile.
++/// it ends. The sources are set once here and never changed at run time; tests that exercise resolution with other
++/// data pass their own <see cref="AgentPluginVersionSources"/> to the resolution they call.
+ /// </remarks>
+ public sealed class HermeticUserProfileFixture : IDisposable
+ {
+-    /// <summary>Creates the empty profile and points plugin-version resolution at it.</summary>
++    /// <summary>Creates the empty profile and installs the hermetic sources.</summary>
+     public HermeticUserProfileFixture()
+     {
+         Profile = Path.Combine(Path.GetTempPath(), $"mcp-hermetic-profile-{Guid.NewGuid():N}");
+         Directory.CreateDirectory(Profile);
+-        MarkerFileService.AgentPluginUserProfileOverride = Profile;
++        Sources = new AgentPluginVersionSources(_ => null, (_, _) => null, Profile);
++        MarkerFileService.AgentPluginVersionSourcesOverride = Sources;
+     }
+ 
+     /// <summary>The empty temporary profile used for the whole assembly.</summary>
+     public string Profile { get; }
+ 
+-    /// <summary>Clears the override when it still holds this profile, and deletes the profile.</summary>
++    /// <summary>The hermetic sources installed for the whole assembly.</summary>
++    internal AgentPluginVersionSources Sources { get; }
++
++    /// <summary>Clears the override when it still holds these sources, and deletes the profile.</summary>
+     public void Dispose()
+     {
+-        if (string.Equals(MarkerFileService.AgentPluginUserProfileOverride, Profile, StringComparison.Ordinal))
+-            MarkerFileService.AgentPluginUserProfileOverride = null;
++        if (ReferenceEquals(MarkerFileService.AgentPluginVersionSourcesOverride, Sources))
++            MarkerFileService.AgentPluginVersionSourcesOverride = null;
+         if (Directory.Exists(Profile))
+             Directory.Delete(Profile, recursive: true);
+     }
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs b/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs
+index a0be516f..161f481c 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs
+@@ -5,15 +5,16 @@ namespace QBrainAi.Support.Mcp.Tests;
+ 
+ /// <summary>
+ /// Tests that <see cref="HermeticUserProfileFixture"/> is in effect for this assembly: marker agent-plugin version
+-/// resolution points at an existing, empty directory under the system temp folder, never an unset value that
+-/// would fall back to the real user profile.
++/// resolution reads the fixture's sources, which resolve no plugin-root variable, offer no folder beside the workspace,
++/// and point at an existing, empty directory under the system temp folder, never the real user profile.
+ /// </summary>
+ /// <remarks>
+ /// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (operator 2026-10-20: "Fix scans in PR 87
+-/// (Recommended)"). Test data: the assembly fixture's profile, injected; negative controls feed the hermeticity
+-/// assertion an unset override, a directory outside the temp folder, and a temp directory that holds a plugin cache,
+-/// and prove the assertion rejects each. The live override is only checked to be set and under the temp folder:
+-/// a test class running in parallel may hold its own temporary profile there and delete it when it finishes.
++/// (Recommended)" and "Structural fix, round 4 (Recommended)"). Test data: the assembly fixture's profile and sources,
++/// injected; negative controls feed the profile assertion an unset override, a directory outside the temp folder, and
++/// a temp directory that holds a plugin cache, and prove the assertion rejects each (the source-level controls are in
++/// <c>AgentPluginVersionSourcesTests</c>). No test changes the live override at run time, so it is checked to be the
++/// fixture's own sources.
+ /// </remarks>
+ public sealed class HermeticUserProfileFixtureTests
+ {
+@@ -36,18 +37,19 @@ public sealed class HermeticUserProfileFixtureTests
+     }
+ 
+     /// <summary>
+-    /// The fixture's profile is an existing, empty directory under the temp folder, and the live override is set
+-    /// and lies under the temp folder, so plugin-version resolution never falls back to the real user profile.
++    /// The fixture's profile is an existing, empty directory under the temp folder, and the live override is the
++    /// fixture's sources, which pass the source hermeticity assertion, so plugin-version resolution never reads the
++    /// environment, the machine or the real user profile.
+     /// </summary>
+     [Fact]
+-    public void AgentPluginUserProfileOverride_IsAnEmptyTemporaryProfile()
++    public void AgentPluginVersionSourcesOverride_IsTheHermeticAssemblySources()
+     {
+         AssertHermetic(_fixture.Profile, Path.GetTempPath());
+ 
+-        // Read once: another test class may be inside its own hermetic scope, whose folder it deletes afterwards.
+-        var live = MarkerFileService.AgentPluginUserProfileOverride;
+-        Assert.False(string.IsNullOrWhiteSpace(live));
+-        Assert.StartsWith(Path.GetFullPath(Path.GetTempPath()), Path.GetFullPath(live), StringComparison.Ordinal);
++        var live = MarkerFileService.AgentPluginVersionSourcesOverride;
++        Assert.Same(_fixture.Sources, live);
++        QBrainAi.Support.Mcp.Tests.Services.AgentPluginVersionSourcesTests.AssertHermetic(live!);
++        Assert.Equal(_fixture.Profile, live!.UserProfile);
+     }
+ 
+     /// <summary>
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs
+index 98c0b920..0b5c2860 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs
+@@ -17,9 +17,16 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
+ /// TEST-MCP-MEMORY-010 / TEST-MCP-MEMORY-011 / TEST-MCP-MEMORY-012 / TEST-MCP-MEMORY-014 / TEST-MCP-MEMORY-016:
+ /// Shared SQLite fixture and production-surface probes for MCP-MEMORY-002 S1/S2/S3 tests.
+ /// </summary>
++/// <remarks>
++/// Test data: one temporary SQLite database file per harness in its own temporary folder, opened without connection
++/// pooling, so every context the harness creates (concurrent operations included) has its own connection to that
++/// database, as production does (the race class of triage-report-9b96ada18d72483dad2a3113e455c01b; operator
++/// 2026-10-20: "Extend fix, then round 4 (Recommended)"; the harness assertion and its negative controls are in
++/// <c>HandoffTestDatabaseTests</c>, bound here by <c>MemoryS1HarnessDatabaseTests</c>).
++/// </remarks>
+ public sealed partial class MemoryS1Harness : IDisposable
+ {
+-    private readonly SqliteConnection _connection;
++    private readonly string _databaseFolder = Path.Combine(Path.GetTempPath(), "mcp-s1-db-" + Guid.NewGuid().ToString("N"));
+     private readonly DbContextOptions<McpDbContext> _options;
+ 
+     /// <summary>Workspace A path used as the calling workspace.</summary>
+@@ -28,13 +35,17 @@ public sealed partial class MemoryS1Harness : IDisposable
+     /// <summary>Workspace B path used as a foreign workspace.</summary>
+     public string WorkspaceB { get; } = Path.Combine(Path.GetTempPath(), "mcp-s1-b-" + Guid.NewGuid().ToString("N"));
+ 
+-    /// <summary>Creates an isolated in-memory SQLite schema.</summary>
++    /// <summary>Creates an isolated SQLite schema in a temporary database file.</summary>
+     public MemoryS1Harness()
+     {
+-        _connection = new SqliteConnection("Data Source=:memory:");
+-        _connection.Open();
++        Directory.CreateDirectory(_databaseFolder);
++        var connectionString = new SqliteConnectionStringBuilder
++        {
++            DataSource = Path.Combine(_databaseFolder, "memory-s1.db"),
++            Pooling = false,
++        }.ToString();
+         _options = new DbContextOptionsBuilder<McpDbContext>()
+-            .UseSqlite(_connection)
++            .UseSqlite(connectionString)
+             .Options;
+ 
+         using var ctx = CreateContext(WorkspaceA);
+@@ -42,7 +53,11 @@ public sealed partial class MemoryS1Harness : IDisposable
+     }
+ 
+     /// <inheritdoc />
+-    public void Dispose() => _connection.Dispose();
++    public void Dispose()
++    {
++        if (Directory.Exists(_databaseFolder))
++            Directory.Delete(_databaseFolder, recursive: true);
++    }
+ 
+     /// <summary>Creates a context bound to <paramref name="workspacePath"/>.</summary>
+     public McpDbContext CreateContext(string? workspacePath)
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs
+new file mode 100644
+index 00000000..e16b1458
+--- /dev/null
++++ b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs
+@@ -0,0 +1,28 @@
++using QBrainAi.Support.Mcp.Tests.Services;
++
++namespace QBrainAi.Support.Mcp.Tests.Memory;
++
++/// <summary>
++/// TEST-MCP-MEMORY-010 (test harness): <see cref="MemoryS1Harness"/> gives each context its own connection to one
++/// test-owned database, so its concurrent memory operations never share one connection, where SQLite reports rows
++/// affected per connection.
++/// </summary>
++/// <remarks>
++/// The race class of triage-report-9b96ada18d72483dad2a3113e455c01b, found by the sibling sweep of IMPL-UNITGREEN-001
++/// round 4; operator 2026-10-20: "Extend fix, then round 4 (Recommended)". Test data: the harness's own temporary
++/// database file. The assertion, its positive control and its negative controls (one shared in-memory connection,
++/// private in-memory databases) are in <see cref="HandoffTestDatabaseTests"/>; this binds the same assertion to the
++/// harness's context factory.
++/// </remarks>
++public sealed class MemoryS1HarnessDatabaseTests : IDisposable
++{
++    private readonly MemoryS1Harness _harness = new();
++
++    /// <inheritdoc />
++    public void Dispose() => _harness.Dispose();
++
++    /// <summary>Harness binding: every context the harness creates has its own connection to the harness's one database.</summary>
++    [Fact]
++    public void TestDatabase_GivesEachContextItsOwnConnectionToOneDatabase() =>
++        HandoffTestDatabaseTests.AssertOwnConnectionsToOneDatabase(() => _harness.CreateContext(_harness.WorkspaceA));
++}
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs
+new file mode 100644
+index 00000000..7019e673
+--- /dev/null
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs
+@@ -0,0 +1,257 @@
++using QBrainAi.Support.Mcp.Services;
++using Xunit;
++
++namespace QBrainAi.Support.Mcp.Tests.Services;
++
++/// <summary>
++/// Tests that agent-plugin version resolution reads only the sources it is given (<see cref="AgentPluginVersionSources"/>):
++/// the plugin root an environment variable names, then the plugin folder beside the workspace, then the plugin caches
++/// under the user profile, then the synced version; and that the sources the unit-test assembly installs are hermetic
++/// (no plugin-root variable, no sibling folder, an empty temporary profile).
++/// </summary>
++/// <remarks>
++/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (unit tests take every plugin-version input from
++/// test-owned data). Found by hostile validation round 3 (finding R3-F1: the assembly fixture replaced only the
++/// profile, so a plugin-root variable reached 19 unit tests); fix chosen by the operator on 2026-10-20 ("Structural
++/// fix, round 4 (Recommended)"). Test data: a temporary root per test holding test-owned plugin folders with fixed
++/// versions (environment root 4.0.0, sibling root 3.0.0, profile cache 2.0.0) and a stand-in for the machine (a
++/// plugin-root variable at 9.0.0, the folder beside the workspace at 8.0.0, a profile cache at 7.0.0); no real
++/// environment variable, machine folder or profile is read. Expected versions follow the criterion's reading order.
++/// Negative controls run deliberately wrong resolutions that read one machine input instead of the given source, and
++/// hermeticity controls reject sources that name a plugin root, compute a sibling, or point at a populated or
++/// non-temporary profile.
++/// </remarks>
++public sealed class AgentPluginVersionSourcesTests : IDisposable
++{
++    private const string Variable = "CLAUDE_PLUGIN_ROOT";
++
++    private static readonly string[] PluginRootVariables =
++        ["CODEX_PLUGIN_ROOT", "CLAUDE_PLUGIN_ROOT", "COPILOT_PLUGIN_ROOT", "CLINE_PLUGIN_ROOT", "GROK_PLUGIN_ROOT"];
++
++    private readonly string _root = Path.Combine(Path.GetTempPath(), $"mcp-plugin-sources-{Guid.NewGuid():N}");
++
++    private readonly string _plugin = $"mcpserver-sources-test-{Guid.NewGuid():N}";
++
++    /// <summary>A resolution under test: resolves a plugin version for a workspace from the given sources.</summary>
++    private delegate string ResolveFunction(string workspacePath, string pluginName, string variable, AgentPluginVersionSources sources);
++
++    /// <summary>Creates the test-owned plugin folders and the machine stand-in under a temporary root.</summary>
++    public AgentPluginVersionSourcesTests()
++    {
++        Directory.CreateDirectory(Workspace);
++        WriteVersion(EnvironmentRoot, "4.0.0");
++        WriteVersion(GivenSibling, "3.0.0");
++        WriteVersion(Path.Combine(GivenProfile, ".claude", "plugins", "cache", _plugin, "2.0.0"), "2.0.0");
++        Directory.CreateDirectory(EmptyProfile);
++        WriteVersion(MachineEnvironmentRoot, "9.0.0");
++        WriteVersion(Path.Combine(_root, _plugin), "8.0.0");
++        WriteVersion(Path.Combine(MachineProfile, ".claude", "plugins", "cache", _plugin, "7.0.0"), "7.0.0");
++    }
++
++    /// <summary>Deletes the temporary root.</summary>
++    public void Dispose()
++    {
++        if (Directory.Exists(_root))
++            Directory.Delete(_root, recursive: true);
++    }
++
++    private string Workspace => Path.Combine(_root, "workspace");
++
++    private string EnvironmentRoot => Path.Combine(_root, "given-environment-root");
++
++    private string GivenSibling => Path.Combine(_root, "elsewhere", _plugin);
++
++    private string GivenProfile => Path.Combine(_root, "given-profile");
++
++    private string EmptyProfile => Path.Combine(_root, "empty-profile");
++
++    private string MachineEnvironmentRoot => Path.Combine(_root, "machine-environment-root");
++
++    private string MachineProfile => Path.Combine(_root, "machine-profile");
++
++    /// <summary>The stand-in for the machine: what a resolution that ignores its sources would read instead.</summary>
++    private AgentPluginVersionSources Machine => new(
++        name => name == Variable ? MachineEnvironmentRoot : null,
++        (workspace, plugin) => Path.Combine(Path.GetDirectoryName(Path.GetFullPath(workspace))!, plugin),
++        MachineProfile);
++
++    private static void WriteVersion(string directory, string version)
++    {
++        Directory.CreateDirectory(directory);
++        File.WriteAllText(Path.Combine(directory, ".version"), version);
++    }
++
++    /// <summary>The scripted cases: the given sources and the version the criterion requires.</summary>
++    private (AgentPluginVersionSources Sources, string Version) Case(string name) => name switch
++    {
++        "environment-root-first" => (new(v => v == Variable ? EnvironmentRoot : null, (_, _) => GivenSibling, GivenProfile), "4.0.0"),
++        "sibling-root-next" => (new(_ => null, (_, _) => GivenSibling, GivenProfile), "3.0.0"),
++        "profile-cache-next" => (new(_ => null, (_, _) => null, GivenProfile), "2.0.0"),
++        "nothing-falls-back" => (new(_ => null, (_, _) => null, EmptyProfile), MarkerFileService.SyncedAgentPluginVersion),
++        "no-profile" => (new(_ => null, (_, _) => null, null), MarkerFileService.SyncedAgentPluginVersion),
++        _ => throw new ArgumentOutOfRangeException(nameof(name), name, "Unknown case."),
++    };
++
++    /// <summary>The scripted case names, for the theories.</summary>
++    public static TheoryData<string> CaseNames =>
++        new() { "environment-root-first", "sibling-root-next", "profile-cache-next", "nothing-falls-back", "no-profile" };
++
++    /// <summary>Asserts one resolution result against the version a case requires.</summary>
++    private static void AssertVersion(string expected, string actual) => Assert.Equal(expected, actual);
++
++    private void RunAndAssert(string name, ResolveFunction resolve)
++    {
++        var (sources, version) = Case(name);
++        AssertVersion(version, resolve(Workspace, _plugin, Variable, sources));
++    }
++
++    /// <summary>
++    /// A model of resolution that reads the plugin roots in the criterion's order from the sources it is handed:
++    /// the environment root, the sibling root, then the Claude plugin cache versions under the profile, newest first.
++    /// </summary>
++    private static string ModelResolve(string workspacePath, string pluginName, string variable, AgentPluginVersionSources sources)
++    {
++        foreach (var root in Roots())
++        {
++            var version = MarkerFileService.TryReadAgentPluginVersion(root, MarkerFileService.ReadExistingFileText);
++            if (!string.IsNullOrWhiteSpace(version))
++                return version;
++        }
++
++        return MarkerFileService.SyncedAgentPluginVersion;
++
++        IEnumerable<string> Roots()
++        {
++            if (sources.EnvironmentVariable(variable) is { Length: > 0 } environmentRoot)
++                yield return environmentRoot;
++            if (sources.SiblingRoot(workspacePath, pluginName) is { Length: > 0 } siblingRoot)
++                yield return siblingRoot;
++            if (!string.IsNullOrWhiteSpace(sources.UserProfile))
++            {
++                var cache = Path.Combine(sources.UserProfile, ".claude", "plugins", "cache", pluginName);
++                if (Directory.Exists(cache))
++                {
++                    foreach (var candidate in Directory.EnumerateDirectories(cache).Order(StringComparer.Ordinal).Reverse())
++                        yield return candidate;
++                }
++            }
++        }
++    }
++
++    /// <summary>Mock gate positive control: each case's required version passes the version assertion.</summary>
++    /// <param name="name">Scripted case name.</param>
++    [Theory]
++    [MemberData(nameof(CaseNames))]
++    public void ScriptedCase_RequiredVersion_PassesTheVersionAssertion(string name) =>
++        AssertVersion(Case(name).Version, Case(name).Version);
++
++    /// <summary>Mock gate positive control: the model that reads only its given sources yields every required version.</summary>
++    /// <param name="name">Scripted case name.</param>
++    [Theory]
++    [MemberData(nameof(CaseNames))]
++    public void ScriptedCase_SourceOnlyModel_PassesTheVersionAssertion(string name) =>
++        RunAndAssert(name, ModelResolve);
++
++    /// <summary>
++    /// Production binding: <c>MarkerFileService.ResolveAgentPluginVersion</c> with the file-system walk reads only the
++    /// sources it is given and yields every required version, while the machine stand-in holds a
++    /// different version at each input.
++    /// </summary>
++    /// <param name="name">Scripted case name.</param>
++    [Theory]
++    [MemberData(nameof(CaseNames))]
++    public void ScriptedCase_ProductionResolution_YieldsTheRequiredVersion(string name) =>
++        RunAndAssert(name, (w, p, v, s) => MarkerFileService.ResolveAgentPluginVersion(w, p, v, s, DirectoryTreeWalker.FileSystem));
++
++    /// <summary>
++    /// Production binding: the marker's agent-plugin contract takes every version from the sources it is given: the
++    /// agent whose variable resolves gets that root's version, and every other agent gets the given sibling's version.
++    /// </summary>
++    [Fact]
++    public void BuildDefaultAgentPlugins_GivenSources_ResolvesEveryAgentFromThem()
++    {
++        var (sources, _) = Case("environment-root-first");
++
++        var plugins = MarkerFileService.BuildDefaultAgentPlugins(Workspace, sources);
++
++        Assert.Equal(5, plugins.Agents.Count);
++        Assert.Equal("4.0.0", plugins.Agents["Claude"].PluginVersion);
++        Assert.All(plugins.Agents.Where(pair => pair.Key != "Claude"), pair => Assert.Equal("3.0.0", pair.Value.PluginVersion));
++    }
++
++    /// <summary>
++    /// Production binding: the sources the unit-test assembly installs, which every default marker build in this
++    /// assembly reads, pass the hermeticity assertion.
++    /// </summary>
++    [Fact]
++    public void AssemblySources_AreHermetic()
++    {
++        var live = MarkerFileService.AgentPluginVersionSourcesOverride;
++
++        Assert.NotNull(live);
++        AssertHermetic(live);
++    }
++
++    /// <summary>
++    /// Mock gate negative controls: a resolution that reads the machine's plugin-root variable, one that computes the
++    /// folder beside the workspace, one that scans the machine's profile, and one that ignores every given source are
++    /// each rejected by the version assertion on the case that exposes it, inside a passing harness.
++    /// </summary>
++    [Fact]
++    public void MachineReadingNegativeControls_AreRejectedInsidePassingHarness()
++    {
++        var machine = Machine;
++        ResolveFunction readsMachineEnvironment = (w, p, v, s) => ModelResolve(w, p, v, s with { EnvironmentVariable = machine.EnvironmentVariable });
++        ResolveFunction computesSibling = (w, p, v, s) => ModelResolve(w, p, v, s with { SiblingRoot = machine.SiblingRoot });
++        ResolveFunction readsMachineProfile = (w, p, v, s) => ModelResolve(w, p, v, s with { UserProfile = machine.UserProfile });
++        ResolveFunction ignoresSources = (w, p, v, _) => ModelResolve(w, p, v, machine);
++
++        Assert.NotNull(Record.Exception(() => RunAndAssert("environment-root-first", readsMachineEnvironment)));
++        Assert.NotNull(Record.Exception(() => RunAndAssert("profile-cache-next", computesSibling)));
++        Assert.NotNull(Record.Exception(() => RunAndAssert("nothing-falls-back", readsMachineProfile)));
++        Assert.NotNull(Record.Exception(() => RunAndAssert("no-profile", readsMachineProfile)));
++        foreach (var name in new[] { "environment-root-first", "sibling-root-next", "profile-cache-next", "nothing-falls-back", "no-profile" })
++            Assert.NotNull(Record.Exception(() => RunAndAssert(name, ignoresSources)));
++
++        // Each wrong resolution is wrong only where its machine input is reached: when an earlier given source already
++        // yields a version, it returns the required one, so the rejections above come from the input it reads.
++        Assert.Null(Record.Exception(() => RunAndAssert("environment-root-first", computesSibling)));
++        Assert.Null(Record.Exception(() => RunAndAssert("environment-root-first", readsMachineProfile)));
++    }
++
++    /// <summary>
++    /// Asserts that sources are hermetic for unit tests: no plugin-root variable (nor any other name) resolves, no
++    /// sibling folder is offered for any workspace, and the profile is an existing, empty directory under the
++    /// system temporary folder.
++    /// </summary>
++    internal static void AssertHermetic(AgentPluginVersionSources sources)
++    {
++        foreach (var name in PluginRootVariables.Append("ANY_OTHER_VARIABLE"))
++            Assert.Null(sources.EnvironmentVariable(name));
++        Assert.Null(sources.SiblingRoot(Path.Combine(Path.GetTempPath(), "workspace"), "mcpserver-claude-code-plugin"));
++        Assert.Null(sources.SiblingRoot(@"C:\test", "mcpserver-codex-plugin"));
++        Assert.False(string.IsNullOrWhiteSpace(sources.UserProfile));
++        Assert.True(Directory.Exists(sources.UserProfile));
++        Assert.Empty(Directory.EnumerateFileSystemEntries(sources.UserProfile!));
++        Assert.StartsWith(Path.GetFullPath(Path.GetTempPath()), Path.GetFullPath(sources.UserProfile!), StringComparison.Ordinal);
++    }
++
++    /// <summary>Mock gate positive control: scripted hermetic sources pass the hermeticity assertion.</summary>
++    [Fact]
++    public void ScriptedHermeticSources_PassTheHermeticityAssertion() =>
++        AssertHermetic(new AgentPluginVersionSources(_ => null, (_, _) => null, EmptyProfile));
++
++    /// <summary>
++    /// Mock gate negative controls: sources that resolve a plugin-root variable, compute the folder beside the
++    /// workspace, point at a populated profile, or point at no profile are each rejected by the hermeticity
++    /// assertion, inside a passing harness.
++    /// </summary>
++    [Fact]
++    public void LeakySourcesNegativeControls_AreRejectedInsidePassingHarness()
++    {
++        Assert.NotNull(Record.Exception(() => AssertHermetic(new AgentPluginVersionSources(Machine.EnvironmentVariable, (_, _) => null, EmptyProfile))));
++        Assert.NotNull(Record.Exception(() => AssertHermetic(new AgentPluginVersionSources(_ => null, Machine.SiblingRoot, EmptyProfile))));
++        Assert.NotNull(Record.Exception(() => AssertHermetic(new AgentPluginVersionSources(_ => null, (_, _) => null, GivenProfile))));
++        Assert.NotNull(Record.Exception(() => AssertHermetic(new AgentPluginVersionSources(_ => null, (_, _) => null, null))));
++    }
++}
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs
+index f56887b0..336b9c91 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs
+@@ -16,20 +16,29 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
+ /// TEST-HANDOFF-004 through TEST-HANDOFF-007: behavior coverage for the audit defects
+ /// (replay uniqueness, outcome mapping, invalid drafts, sanitization, cancellation).
+ /// </summary>
++/// <remarks>
++/// Test data: one temporary SQLite database file per test in the test's own temporary workspace, opened without
++/// connection pooling, so the concurrently running services each have their own connection to that database, as
++/// production does (the race class of triage-report-9b96ada18d72483dad2a3113e455c01b; operator 2026-10-20: "Extend
++/// fix, then round 4 (Recommended)"; the harness assertion and its negative controls are in
++/// <see cref="HandoffTestDatabaseTests"/>).
++/// </remarks>
+ public sealed class HandoffAuditDefectTests : IDisposable
+ {
+     private readonly string _workspace;
+-    private readonly SqliteConnection _connection;
+     private readonly DbContextOptions<McpDbContext> _dbOptions;
+ 
+-    /// <summary>Creates an isolated SQLite workspace for audit-defect tests.</summary>
++    /// <summary>Creates an isolated SQLite database file in a temporary workspace for audit-defect tests.</summary>
+     public HandoffAuditDefectTests()
+     {
+         _workspace = Path.Combine(Path.GetTempPath(), "handoff-audit", Guid.NewGuid().ToString("N"));
+         Directory.CreateDirectory(_workspace);
+-        _connection = new SqliteConnection("Data Source=:memory:");
+-        _connection.Open();
+-        _dbOptions = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(_connection).Options;
++        var connectionString = new SqliteConnectionStringBuilder
++        {
++            DataSource = Path.Combine(_workspace, "handoff-audit.db"),
++            Pooling = false,
++        }.ToString();
++        _dbOptions = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connectionString).Options;
+         using var db = CreateDb();
+         db.Database.EnsureCreated();
+     }
+@@ -37,11 +46,18 @@ public sealed class HandoffAuditDefectTests : IDisposable
+     /// <inheritdoc />
+     public void Dispose()
+     {
+-        _connection.Dispose();
+         if (Directory.Exists(_workspace))
+             Directory.Delete(_workspace, recursive: true);
+     }
+ 
++    /// <summary>
++    /// Harness binding: every context this class creates has its own connection to the class's one test database
++    /// (the assertion of <see cref="HandoffTestDatabaseTests"/>, bound to this class's context factory).
++    /// </summary>
++    [Fact]
++    public void TestDatabase_GivesEachContextItsOwnConnectionToOneDatabase() =>
++        HandoffTestDatabaseTests.AssertOwnConnectionsToOneDatabase(CreateDb);
++
+     /// <summary>Concurrent same-hash ingest creates one run and extracts once.</summary>
+     [Fact]
+     public async Task IngestAsync_ConcurrentSameHash_ReservesOnce()
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs
+index 4425a62d..dc5a4a32 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs
+@@ -19,23 +19,32 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
+ /// TEST-HANDOFF-005 / TEST-HANDOFF-007: durable ingest/approval leases, TODO provenance,
+ /// SaveChanges compensation, and Success/ErrorCode honesty.
+ /// </summary>
++/// <remarks>
++/// Test data: one temporary SQLite database file per test in the test's own temporary workspace, opened without
++/// connection pooling, so every context (each competing service and the test's own polling) has its own connection
++/// to that database, as production does, and SQLite's per-connection rows-affected count belongs to the statement
++/// that produced it (triage-report-9b96ada18d72483dad2a3113e455c01b; operator 2026-10-20: "Fix the race in PR 87
++/// (Recommended)"; the harness assertion and its negative controls are in <see cref="HandoffTestDatabaseTests"/>).
++/// </remarks>
+ public sealed class HandoffDurabilityTests : IDisposable
+ {
+     private readonly string _workspace;
+-    private readonly SqliteConnection _connection;
+     private readonly DbContextOptions<McpDbContext> _dbOptions;
+     private readonly AdjustableTimeProvider _time = new(new DateTimeOffset(2026, 8, 17, 0, 0, 0, TimeSpan.Zero));
+     private readonly FailNextSaveInterceptor _failNextSave = new();
+ 
+-    /// <summary>Creates an isolated in-memory SQLite workspace for durability tests.</summary>
++    /// <summary>Creates an isolated SQLite database file in a temporary workspace for durability tests.</summary>
+     public HandoffDurabilityTests()
+     {
+         _workspace = Path.Combine(Path.GetTempPath(), "handoff-durability", Guid.NewGuid().ToString("N"));
+         Directory.CreateDirectory(_workspace);
+-        _connection = new SqliteConnection("Data Source=:memory:");
+-        _connection.Open();
++        var connectionString = new SqliteConnectionStringBuilder
++        {
++            DataSource = Path.Combine(_workspace, "handoff-durability.db"),
++            Pooling = false,
++        }.ToString();
+         _dbOptions = new DbContextOptionsBuilder<McpDbContext>()
+-            .UseSqlite(_connection)
++            .UseSqlite(connectionString)
+             .AddInterceptors(_failNextSave)
+             .Options;
+         using var db = CreateDb();
+@@ -45,11 +54,18 @@ public sealed class HandoffDurabilityTests : IDisposable
+     /// <inheritdoc />
+     public void Dispose()
+     {
+-        _connection.Dispose();
+         if (Directory.Exists(_workspace))
+             Directory.Delete(_workspace, recursive: true);
+     }
+ 
++    /// <summary>
++    /// Harness binding: every context this class creates has its own connection to the class's one test database
++    /// (the assertion of <see cref="HandoffTestDatabaseTests"/>, bound to <see cref="CreateDb"/>).
++    /// </summary>
++    [Fact]
++    public void TestDatabase_GivesEachContextItsOwnConnectionToOneDatabase() =>
++        HandoffTestDatabaseTests.AssertOwnConnectionsToOneDatabase(CreateDb);
++
+     /// <summary>A live in-flight reservation is not mapped as a completed replay.</summary>
+     [Fact]
+     public async Task IngestAsync_ConcurrentReplayOfLiveLease_ReturnsInProgressNotReplay()
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs
+new file mode 100644
+index 00000000..399a8685
+--- /dev/null
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs
+@@ -0,0 +1,123 @@
++using System.Data.Common;
++using Microsoft.Data.Sqlite;
++using Microsoft.EntityFrameworkCore;
++using QBrainAi.Support.Mcp.Services;
++using QBrainAi.Support.Mcp.Storage;
++using Xunit;
++
++namespace QBrainAi.Support.Mcp.Tests.Services;
++
++/// <summary>
++/// TEST-HANDOFF-005 / TEST-HANDOFF-007 (test harness): the handoff durability tests give each database context its own
++/// connection to one test-owned database, the way production does, so the competing services and the test's own
++/// polling never issue statements on one shared connection, where SQLite reports rows affected per connection.
++/// </summary>
++/// <remarks>
++/// Found while gating IMPL-UNITGREEN-001 round 4: <c>HandoffDurabilityTests.ApproveAsync_LeaseExpiresDuringLiveCreate_SecondInstanceWins</c>
++/// failed once on PAYTON-LEGION2 with one in-memory connection shared by every context
++/// (triage-report-9b96ada18d72483dad2a3113e455c01b); fix chosen by the operator on 2026-10-20 ("Fix the race in PR 87
++/// (Recommended)"). Test data: scripted context factories over a temporary database file the test creates and
++/// deletes. The positive control gives each context its own connection to that file. Negative controls, each rejected
++/// by the harness assertion inside a passing test: the harness's previous shape (one opened in-memory connection
++/// handed to every context) and separate private in-memory databases (own connections, but not one database). The
++/// sibling sweep of the same round found the race class in <c>HandoffAuditDefectTests</c> and <c>MemoryS1Harness</c>
++/// (operator 2026-10-20: "Extend fix, then round 4 (Recommended)"); the one assertion here is bound to all three
++/// harnesses.
++/// </remarks>
++public sealed class HandoffTestDatabaseTests : IDisposable
++{
++    private readonly string _root = Path.Combine(Path.GetTempPath(), $"mcp-handoff-harness-{Guid.NewGuid():N}");
++
++    private readonly List<IDisposable> _owned = [];
++
++    /// <summary>Creates the temporary folder that holds the scripted database file.</summary>
++    public HandoffTestDatabaseTests() => Directory.CreateDirectory(_root);
++
++    /// <summary>Releases the scripted connections and deletes the temporary folder.</summary>
++    public void Dispose()
++    {
++        foreach (var item in _owned)
++            item.Dispose();
++        if (Directory.Exists(_root))
++            Directory.Delete(_root, recursive: true);
++    }
++
++    /// <summary>
++    /// Asserts that <paramref name="createContext"/> gives each context its own connection to one database: two
++    /// contexts hold different connection objects, and a row one writes is read by the other.
++    /// </summary>
++    /// <param name="createContext">Creates a database context the way the harness under test does.</param>
++    internal static void AssertOwnConnectionsToOneDatabase(Func<McpDbContext> createContext)
++    {
++        using var first = createContext();
++        using var second = createContext();
++        Assert.NotSame(first.Database.GetDbConnection(), second.Database.GetDbConnection());
++
++        first.Database.ExecuteSqlRaw("CREATE TABLE IF NOT EXISTS harness_probe (value TEXT); INSERT INTO harness_probe (value) VALUES ('probe');");
++        Assert.Equal(1L, Scalar(second.Database.GetDbConnection(), "SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = 'harness_probe'"));
++        Assert.True(Scalar(second.Database.GetDbConnection(), "SELECT count(*) FROM harness_probe") >= 1);
++    }
++
++    private static long Scalar(DbConnection connection, string sql)
++    {
++        var opened = connection.State != System.Data.ConnectionState.Open;
++        if (opened)
++            connection.Open();
++        try
++        {
++            using var command = connection.CreateCommand();
++            command.CommandText = sql;
++            return Convert.ToInt64(command.ExecuteScalar(), System.Globalization.CultureInfo.InvariantCulture);
++        }
++        finally
++        {
++            if (opened)
++                connection.Close();
++        }
++    }
++
++    private McpDbContext Context(DbContextOptions<McpDbContext> options) =>
++        new(options, new WorkspaceContext { WorkspacePath = _root });
++
++    /// <summary>Scripted harness: each context opens its own connection to one temporary database file.</summary>
++    private Func<McpDbContext> OwnConnectionsToOneFile()
++    {
++        var options = new DbContextOptionsBuilder<McpDbContext>()
++            .UseSqlite($"Data Source={Path.Combine(_root, "scripted.db")};Pooling=False")
++            .Options;
++        return () => Context(options);
++    }
++
++    /// <summary>Scripted harness in the previous shape: one opened in-memory connection handed to every context.</summary>
++    private Func<McpDbContext> OneSharedInMemoryConnection()
++    {
++        var connection = new SqliteConnection("Data Source=:memory:");
++        connection.Open();
++        _owned.Add(connection);
++        var options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connection).Options;
++        return () => Context(options);
++    }
++
++    /// <summary>Scripted harness with own connections but no shared database: each context gets a private in-memory database.</summary>
++    private Func<McpDbContext> PrivateInMemoryDatabases()
++    {
++        var options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite("Data Source=:memory:").Options;
++        return () => Context(options);
++    }
++
++    /// <summary>Mock gate positive control: own connections to one database file pass the harness assertion.</summary>
++    [Fact]
++    public void OwnConnectionsToOneFile_PassTheHarnessAssertion() =>
++        AssertOwnConnectionsToOneDatabase(OwnConnectionsToOneFile());
++
++    /// <summary>
++    /// Mock gate negative controls: one shared in-memory connection (the previous harness) and private in-memory
++    /// databases are each rejected by the harness assertion, inside a passing harness.
++    /// </summary>
++    [Fact]
++    public void SharedConnectionAndPrivateDatabases_AreRejectedInsidePassingHarness()
++    {
++        Assert.NotNull(Record.Exception(() => AssertOwnConnectionsToOneDatabase(OneSharedInMemoryConnection())));
++        Assert.NotNull(Record.Exception(() => AssertOwnConnectionsToOneDatabase(PrivateInMemoryDatabases())));
++    }
++}
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs
+index 970a71d9..e64830ac 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs
+@@ -26,59 +26,13 @@ public sealed class MarkerFileServiceTests
+         .WithNamingConvention(CamelCaseNamingConvention.Instance)
+         .Build();
+ 
+-    private static readonly string[] PluginVersionEnvironmentVariables =
+-    [
+-        "CODEX_PLUGIN_ROOT",
+-        "CLAUDE_PLUGIN_ROOT",
+-        "COPILOT_PLUGIN_ROOT",
+-        "CLINE_PLUGIN_ROOT",
+-        "GROK_PLUGIN_ROOT",
+-    ];
+-
+-    private static void WithClearedPluginVersionEnvironment(Action action)
+-    {
+-        var saved = PluginVersionEnvironmentVariables.ToDictionary(
+-            name => name,
+-            name => Environment.GetEnvironmentVariable(name));
+-
+-        try
+-        {
+-            foreach (var name in PluginVersionEnvironmentVariables)
+-                Environment.SetEnvironmentVariable(name, null);
+-
+-            action();
+-        }
+-        finally
+-        {
+-            foreach (var (name, value) in saved)
+-                Environment.SetEnvironmentVariable(name, value);
+-        }
+-    }
+-
+     /// <summary>
+-    /// Runs <paramref name="action"/> with plugin-version env vars cleared and the user-profile
+-    /// cache scan redirected to an empty temp directory, so resolution sees only the inputs the
+-    /// test controls regardless of plugins installed on the machine. The previous override (the
+-    /// assembly's <see cref="HermeticUserProfileFixture"/> profile) is restored afterwards, never
+-    /// cleared, so resolution never falls back to the real user profile (AC-TR-MCP-WS-005-001).
++    /// Test-owned plugin-version sources for a temporary workspace (AC-TR-MCP-WS-005-001): no plugin-root variable,
++    /// the production sibling rule applied to that workspace, and no profile, so resolution sees only the folders the
++    /// test creates, without reading or changing the process environment.
+     /// </summary>
+-    /// <param name="action">The assertion body to run hermetically.</param>
+-    private static void WithHermeticPluginVersionResolution(Action action)
+-    {
+-        var emptyProfile = Path.Combine(Path.GetTempPath(), $"mcp-marker-profile-{Guid.NewGuid():N}");
+-        Directory.CreateDirectory(emptyProfile);
+-        var previous = MarkerFileService.AgentPluginUserProfileOverride;
+-        try
+-        {
+-            MarkerFileService.AgentPluginUserProfileOverride = emptyProfile;
+-            WithClearedPluginVersionEnvironment(action);
+-        }
+-        finally
+-        {
+-            MarkerFileService.AgentPluginUserProfileOverride = previous;
+-            Directory.Delete(emptyProfile, recursive: true);
+-        }
+-    }
++    private static readonly AgentPluginVersionSources s_siblingOnlySources =
++        new(_ => null, MarkerFileService.SiblingPluginRoot, UserProfile: null);
+ 
+     /// <summary>
+     /// Builds a minimal template context for prompt-rendering tests.
+@@ -778,19 +732,17 @@ public sealed class MarkerFileServiceTests
+     }
+ 
+     /// <summary>
+-    /// TEST-MCP-PLUGIN-PSONLY-001: marker plugin contracts publish the current synced plugin version.
++    /// TEST-MCP-PLUGIN-PSONLY-001: marker plugin contracts publish the current synced plugin version. Resolution reads
++    /// the assembly's hermetic sources (<see cref="HermeticUserProfileFixture"/>), so no installed plugin is seen.
+     /// </summary>
+     [Fact]
+     public void BuildDefaultAgentPlugins_UsesCurrentSyncedPluginVersion()
+     {
+-        WithHermeticPluginVersionResolution(() =>
+-        {
+-            var plugins = MarkerFileService.BuildDefaultAgentPlugins(@"C:\test");
++        var plugins = MarkerFileService.BuildDefaultAgentPlugins(@"C:\test");
+ 
+-            Assert.All(
+-                plugins.Agents,
+-                pair => Assert.Equal("1.26.0", pair.Value.PluginVersion));
+-        });
++        Assert.All(
++            plugins.Agents,
++            pair => Assert.Equal("1.26.0", pair.Value.PluginVersion));
+     }
+ 
+     /// <summary>
+@@ -808,13 +760,10 @@ public sealed class MarkerFileServiceTests
+ 
+         try
+         {
+-            WithHermeticPluginVersionResolution(() =>
+-            {
+-                var plugins = MarkerFileService.BuildDefaultAgentPlugins(workspace);
++            var plugins = MarkerFileService.BuildDefaultAgentPlugins(workspace, s_siblingOnlySources);
+ 
+-                Assert.Equal("9.8.7", plugins.Agents["Claude"].PluginVersion);
+-                Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, plugins.Agents["Codex"].PluginVersion);
+-            });
++            Assert.Equal("9.8.7", plugins.Agents["Claude"].PluginVersion);
++            Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, plugins.Agents["Codex"].PluginVersion);
+         }
+         finally
+         {
+@@ -836,17 +785,14 @@ public sealed class MarkerFileServiceTests
+ 
+         try
+         {
+-            WithClearedPluginVersionEnvironment(() =>
+-            {
+-                var baseline = MarkerFileService.BuildDefaultAgentPlugins(workspace);
+-                var baselineDigest = MarkerFileService.ComputeAgentPluginsDigest(baseline);
++            var baseline = MarkerFileService.BuildDefaultAgentPlugins(workspace, s_siblingOnlySources);
++            var baselineDigest = MarkerFileService.ComputeAgentPluginsDigest(baseline);
+ 
+-                File.WriteAllText(Path.Combine(claudePlugin, ".version"), "9.8.7");
+-                var updated = MarkerFileService.BuildDefaultAgentPlugins(workspace);
+-                var updatedDigest = MarkerFileService.ComputeAgentPluginsDigest(updated);
++            File.WriteAllText(Path.Combine(claudePlugin, ".version"), "9.8.7");
++            var updated = MarkerFileService.BuildDefaultAgentPlugins(workspace, s_siblingOnlySources);
++            var updatedDigest = MarkerFileService.ComputeAgentPluginsDigest(updated);
+ 
+-                Assert.NotEqual(baselineDigest, updatedDigest);
+-            });
++            Assert.NotEqual(baselineDigest, updatedDigest);
+         }
+         finally
+         {
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs
+index d286ace8..4eed9a53 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs
+@@ -76,12 +76,18 @@ public sealed class UserProfileScanBindingTests : IDisposable
+         return (unlistable, linked);
+     }
+ 
++    /// <summary>
++    /// Test-owned resolution sources: no plugin-root variable, the production sibling rule applied to the temporary
++    /// workspace (a folder that is never created), and the temporary profile.
++    /// </summary>
++    private AgentPluginVersionSources Sources => new(_ => null, MarkerFileService.SiblingPluginRoot, Profile);
++
+     private string Resolve(DirectoryTreeWalker walker) =>
+         MarkerFileService.ResolveAgentPluginVersion(
+             Workspace,
+             PluginName,
+-            $"MCP_SCAN_BINDING_UNSET_{Guid.NewGuid():N}",
+-            Profile,
++            "CLAUDE_PLUGIN_ROOT",
++            Sources,
+             walker);
+ 
+     /// <summary>
+@@ -124,8 +130,8 @@ public sealed class UserProfileScanBindingTests : IDisposable
+         MarkerFileService.ResolveAgentPluginVersion(
+             Workspace,
+             PluginName,
+-            $"MCP_SCAN_BINDING_UNSET_{Guid.NewGuid():N}",
+-            Profile,
++            "CLAUDE_PLUGIN_ROOT",
++            Sources,
+             DirectoryTreeWalker.FileSystem,
+             readText);
+ 
+

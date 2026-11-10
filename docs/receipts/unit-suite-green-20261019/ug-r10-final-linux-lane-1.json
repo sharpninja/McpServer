@@ -1,0 +1,119 @@
+{
+  "name": "ug-r10-final-linux-lane-1",
+  "kind": "gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+  "dirtyPaths": [
+    " M docs/plans/2026-10-30-unit-suite-green-handoff.md",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-binding-t-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-binding-t-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-compile-t-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-compile-t-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-final-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-final-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-final-win-lane-1.start.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-final-win-unit-1.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-final-win-unit-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-linux-unit-compare-final4-final.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-mockgate-t-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-mockgate-t-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-win-unit-compare-final4-final.txt"
+  ],
+  "command": [
+    "./build.ps1",
+    "MigrationIntegrationTests",
+    "--test-run-id",
+    "ug-r10-final-linux-lane-1"
+  ],
+  "startedLocal": "2026-11-02T22:31:47",
+  "endedLocal": "2026-11-02T23:02:17",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 739,
+  "passed": 739,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-final-linux-lane-1/Build.Tests.trx",
+      "sha256": "9F534C52A91AF0BC9B7419134C4BAD96573A93F2E005053E3E5CB5C95BA0C353",
+      "total": 96,
+      "passed": 96,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.McpAgent.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-final-linux-lane-1/QBrainAi.McpAgent.Tests.trx",
+      "sha256": "C9944708D4F7473A3A2E05B1DDB4EF6A418D91C87E2FB93D6D9F365F7EF16C55",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.QBAgent.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-final-linux-lane-1/QBrainAi.QBAgent.Tests.trx",
+      "sha256": "F25D04F7C4FC3D0350235C6A66622ED0D18FC63A50E0BA1AC40991326EF0A91B",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-final-linux-lane-1/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "87D3E2197A03E4DC91FD59B90F215FDB4510723722BE3EF897C5D1749F6DEBB8",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Repl.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-final-linux-lane-1/QBrainAi.Repl.IntegrationTests.trx",
+      "sha256": "28EFC9DF19DADD4FF21040E94AAB0474C67657351E94E5EA13E9529DEB32C616",
+      "total": 179,
+      "passed": 179,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-final-linux-lane-1/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "sha256": "DA89CE0ACB452DD64EA3E8908154F383FAB23CF6EBE1038CE26F73BFC5152C0C",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-final-linux-lane-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "ED97217FB6528868934D4B87EE14608350BBFB266E4EC09CF9C939ED0D2E31BA",
+      "total": 453,
+      "passed": 453,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [],
+  "writtenLocal": "2026-11-02T23:03:05",
+  "writtenBy": "ClaudeCode"
+}

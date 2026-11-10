@@ -1,0 +1,71 @@
+tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs:9:/// checkout through the shared <see cref="TestRepositoryRoot"/>, so these are integration tests on both hosts
+tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs:26:    private static string FindSkillsRoot() => TestRepositoryRoot.Combine("skills");
+tests/QBrainAi.QBAgent.Tests/QBAgentBootstrapperTests.cs:8:/// endpoint and API key from the AGENTS-README-FIRST.yaml marker, applies the QBAgent profile, rejects an
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TriageConfigurationContractTests.cs:45:    private static string FindFileFromRepoRoot(params string[] segments) => TestRepositoryRoot.Combine(segments);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:312:    /// Locates a repository file under the checkout root through the shared <see cref="TestRepositoryRoot"/>, which
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:317:    private static string FindFileFromRepoRoot(params string[] segments) => TestRepositoryRoot.Combine(segments);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:319:    private static string FindDirectoryFromRepoRoot(params string[] segments) => TestRepositoryRoot.Combine(segments);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:7:/// <see cref="TestRepositoryRoot"/>, the one repository-root locator: scripted trait sets (mock data) pass only when
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:13:public sealed class TestRepositoryRootPolicyTests
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:44:        AssertPolicy(TestRepositoryRoot.EnsureIntegration, traits, allowed);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:63:        Assert.Null(Record.Exception(() => AssertPolicy(TestRepositoryRoot.EnsureIntegration, unit, allowed: false)));
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:64:        Assert.Null(Record.Exception(() => AssertPolicy(TestRepositoryRoot.EnsureIntegration, integration, allowed: true)));
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:71:        var resolve = Assert.Throws<InvalidOperationException>(() => TestRepositoryRoot.Resolve());
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:73:        var combine = Assert.Throws<InvalidOperationException>(() => TestRepositoryRoot.Combine("tests"));
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:75:        var metadata = Assert.Throws<InvalidOperationException>(() => TestRepositoryRoot.BuildMetadataRoot);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:84:        var root = TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:86:        Assert.Equal(Path.Combine(root, "tests"), TestRepositoryRoot.Combine("tests"));
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:87:        Assert.True(File.Exists(TestRepositoryRoot.Combine("tests", "Shared", "TestRepositoryRoot.cs")));
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:88:        Assert.False(string.IsNullOrWhiteSpace(TestRepositoryRoot.BuildMetadataRoot));
+tests/QBrainAi.Client.Tests/HealthClientTests.cs:75:            """{"repoPath":"Q:\\__mcp_unit_test__\\QBrainAi","markerPath":"Q:\\__mcp_unit_test__\\QBrainAi\\AGENTS-README-FIRST.yaml","exists":true,"lastWriteTimeUtc":"2026-06-25T12:00:00Z","creationTimeUtc":"2026-06-25T11:59:00Z","length":1024}""");
+tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseCanvasUiAssetTests.cs:93:        QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src", "QBrainAi.Support.Mcp", "wwwroot", folder, file);
+tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs:94:        QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src", "QBrainAi.Support.Mcp", "wwwroot", folder, file);
+tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:9:/// <see cref="TestRepositoryRoot"/>, so this is an integration test on both hosts (TR-MCP-USECASE-018 AC-006,
+tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:56:    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs:17:/// repository checkout through the shared <see cref="TestRepositoryRoot"/>, so this is an integration test on both
+tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs:132:    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs:93:    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs:212:    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/BrainSlotToolAbsenceTests.cs:92:    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:347:            QBrainAi.Tests.Shared.TestRepositoryRoot.BuildMetadataRoot ??
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs:47:    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:187:            QBrainAi.Tests.Shared.TestRepositoryRoot.BuildMetadataRoot ??
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs:86:    /// <summary>The repository root through the shared <see cref="TestRepositoryRoot"/> (integration tests only).</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs:87:    public static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs:177:    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs:176:    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs:22:        var metadataRoot = QBrainAi.Tests.Shared.TestRepositoryRoot.BuildMetadataRoot;
+tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs:232:    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseMigrationApplyTests.cs:84:        var repoSrc = QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src");
+tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogTurnPlanFileTodoIdMigrationApplyTests.cs:71:        var repoSrc = QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src");
+tests/QBrainAi.Support.Mcp.Tests/Storage/ProductMigrationApplyTests.cs:78:        var repoSrc = QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src");
+tests/QBrainAi.Support.Mcp.Tests/Storage/AddSessionLogTurnPlanFileAndTodoIdMigrationTests.cs:79:        var repoSrc = QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src");
+tests/QBrainAi.Support.Mcp.Tests/Storage/McpDbContextMultiTenantTests.cs:39:                DefaultInstructionFile = "AGENTS-README-FIRST.yaml",
+tests/QBrainAi.Support.Mcp.Tests/Storage/McpDbContextMultiTenantTests.cs:52:                DefaultInstructionFile = "AGENTS-README-FIRST.yaml",
+tests/QBrainAi.Support.Mcp.Tests/Storage/McpDbContextMultiTenantTests.cs:65:                DefaultInstructionFile = "AGENTS-README-FIRST.yaml",
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:18:    /// The repository root through the shared <see cref="QBrainAi.Tests.Shared.TestRepositoryRoot"/> (the one locator:
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:23:    internal static string ResolveRepositoryRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryMigrationTests.cs:46:    private static string RepositoryRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs:31:            var fixture = Path.Combine(FindRepositoryRoot(), "tests", "QBrainAi.Support.Mcp.Tests", "Ingestion", "Fixtures", "import-recovery-envelope.yaml");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs:78:    private static string FindRepositoryRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationOperationApplyServiceTests.cs:182:            ResourceId = "AGENTS-README-FIRST.yaml",
+tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:553:    private static string FindRepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:392:                outputBody: """{"tool_calls":[{"name":"read_file","arguments":{"path":"AGENTS-README-FIRST.yaml"}}]}""");
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationStateAdapterRegistryTests.cs:638:            ResourceId = "AGENTS-README-FIRST.yaml",
+tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:145:                    Output = "{\"tool_calls\":[{\"name\":\"read_file\",\"arguments\":{\"path\":\"AGENTS-README-FIRST.yaml\"}}]}",
+tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:162:        Assert.Contains("AGENTS-README-FIRST.yaml", choice.Message.ToolCalls![0].Function.Arguments, StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:267:                Output = """{"intent":"tool_calls","tool_calls":[{"name":"read_file","arguments":{"path":"AGENTS-README-FIRST.yaml"}}]}""",
+tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:297:                Output = "{\"tool_calls\":[{\"name\":\"read_file\",\"arguments\":{\"path\":\"AGENTS-README-FIRST.yaml\"}}]}",
+tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:359:                new OpenAiChatMessage { Role = "tool", ToolCallId = "call_0", Content = "AGENTS-README-FIRST.yaml contents" },
+tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:365:        Assert.Contains("AGENTS-README-FIRST.yaml contents", orchestration.LastRequest!.Input, StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:372:            Assert.Equal(1, gitignoreLines.Count(line => line == "AGENTS-README-FIRST.yaml"));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:1010:    /// Locates a repository file through the shared <see cref="QBrainAi.Tests.Shared.TestRepositoryRoot"/> (integration
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:1015:    private static string FindFileFromRepoRoot(params string[] segments) => QBrainAi.Tests.Shared.TestRepositoryRoot.Combine(segments);
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs:180:            FindRepositoryRoot(),
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs:540:    private static string FindRepositoryRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizerRegistrationTests.cs:55:        File.ReadAllText(QBrainAi.Tests.Shared.TestRepositoryRoot.Combine(relativePath));
+tests/QBrainAi.Support.Mcp.Tests/Services/TriagePromptTemplateTests.cs:152:        Assert.Contains("Do not read AGENTS-README-FIRST.yaml", result.RenderedContent, StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs:593:    private static string FindRepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:164:    private static string FindRepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs:67:    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs:130:    private static string RepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();

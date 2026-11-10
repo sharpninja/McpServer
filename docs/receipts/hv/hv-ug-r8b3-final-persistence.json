@@ -1,0 +1,80 @@
+{
+  "TimestampUtc": "2026-10-29T05:05:08.8331752Z",
+  "TimestampLocal": "2026-10-29T00:05:08",
+  "SessionId": "Codex-20261029T032954Z-plugin-session",
+  "RequestId": "req-20261029T032957Z-unitgreen-r8b",
+  "TurnStatus": "completed",
+  "ExpectedParts": 10,
+  "ActualParts": 10,
+  "Parts": [
+    {
+      "Index": 1,
+      "Occurrences": 1,
+      "Exact": true,
+      "ExpectedSha256": "F4B16C87AA20ABFD4CF936FC7B97D4F0711BDF4E9107ED24854FA1DEA8CA59B8"
+    },
+    {
+      "Index": 2,
+      "Occurrences": 1,
+      "Exact": true,
+      "ExpectedSha256": "9817345F3F4C08A2A2BE8F9135A7C33BBEFBE8AE708BADA83FECBA98319BF00A"
+    },
+    {
+      "Index": 3,
+      "Occurrences": 1,
+      "Exact": true,
+      "ExpectedSha256": "D2E44BB0414600C83A218C4A443F1216AABE7E2230DCCD83B0AC9988573307C5"
+    },
+    {
+      "Index": 4,
+      "Occurrences": 1,
+      "Exact": true,
+      "ExpectedSha256": "8A287FE992B25018F9CD6335A83921EF7E23228243765DC6D92738045AFEE580"
+    },
+    {
+      "Index": 5,
+      "Occurrences": 1,
+      "Exact": true,
+      "ExpectedSha256": "24BAD14693C79C1CDEE822D3CBD69D2743DCA92EE6D16C8506F72ACA9E0C27FD"
+    },
+    {
+      "Index": 6,
+      "Occurrences": 1,
+      "Exact": true,
+      "ExpectedSha256": "109F7B125EC61A8F724983F640D704654ED199F79B581A77EE524105442B952E"
+    },
+    {
+      "Index": 7,
+      "Occurrences": 1,
+      "Exact": true,
+      "ExpectedSha256": "3A5E88968AA39B214025FDC737B895EB3CDBF46752BB9BC53357DF26CB0BC30F"
+    },
+    {
+      "Index": 8,
+      "Occurrences": 1,
+      "Exact": true,
+      "ExpectedSha256": "CF08A97566F5B4AC5759D7466543BD210D4C86387C968A29C389A4222D2FDE29"
+    },
+    {
+      "Index": 9,
+      "Occurrences": 1,
+      "Exact": true,
+      "ExpectedSha256": "458D3EE9799E71B42C9C1AD74D8D4362C249F386B9644BC183649E5898ADA531"
+    },
+    {
+      "Index": 10,
+      "Occurrences": 1,
+      "Exact": true,
+      "ExpectedSha256": "F9A74E5A1BE6A93A8E764DB240B488F48AE08E63CFD8CEFB4A6637657DA2E0C9"
+    }
+  ],
+  "AllPartsExact": true,
+  "ExpectedPayloadSha256": "989D0A7A18ED8AA76FF15DD91C6331EEC474D0809CF2D0CEA850DA48300B89E4",
+  "ActualPayloadSha256": "989D0A7A18ED8AA76FF15DD91C6331EEC474D0809CF2D0CEA850DA48300B89E4",
+  "CompleteResultMatches": true,
+  "MarkdownSha256": "2DFF0714FA268BF1264DFA0DA875CAC1C1FE73DEBA885C0E9166571942FA94B8",
+  "JsonSha256": "A95275F34A95BD0DED75D9546EED57CB423DCAA4123ABE6C7D8C94127E6C4C12",
+  "Query": "client.SessionLog.QueryAsync through installed Codex wrapper",
+  "HistoryProofPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r8b3-final-history.txt",
+  "ReadbackPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r8b3-result-readback-2.txt"
+}

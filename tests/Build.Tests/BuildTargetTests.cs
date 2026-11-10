@@ -4,21 +4,41 @@ using System.Xml.Linq;
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TEST-NUKE-001: Verifies that the Nuke _build project compiles and the Build class
+/// TEST-NUKE-001 (historical): Verifies that the Nuke _build project compiles and the Build class
 /// is defined with the expected targets. Since NukeBuild requires specific runtime
 /// initialization (assembly name = "_build"), we verify via reflection rather than
 /// direct instantiation.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence or text: TR-MCP-NUKE-002 AC-002 (BuildTargets_UseGitVersionForCompileAndReplTool),
+/// TR-MCP-NUKE-007 AC-001 (InstallReplTool_ParsesInstalledGlobalToolVersion) and TR-MCP-SYNC-001 AC-003
+/// (PlanPluginVersionUpdates_BumpsMinorAndSkipsNodeModules).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-NUKE-002 AC-002, TR-MCP-NUKE-007 AC-001 and TR-MCP-SYNC-001 AC-003: cites the criteria these cases prove, so the criterion text and evidence no longer name the test (operator: "Must be fixed.").</description></item>
+/// <item><term>2026-11-07</term><description>TR-MCP-NUKE-007 AC-001, TR-MCP-SYNC-001 AC-003; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the infrastructure half of this class; its eleven Category=Integration cases and FindRepositoryRoot, which only they used, moved unchanged to the class of the same name in the integration-owned Build.IntegrationTests, so this infrastructure-owned project holds no integration case (slice S4, hostile validation finding R14-F4). Of the coverage named above, BuildTargets_UseGitVersionForCompileAndReplTool (TR-MCP-NUKE-002 AC-002) is now there; the remaining cases are unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed class BuildTargetTests
 {
     private static readonly Type BuildType = typeof(Build);
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): the build class Build derives from
+    /// Nuke.Common.NukeBuild, read by reflection. Data: the Build type of the referenced _build project; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_ExtendsNukeBuild()
     {
         Assert.True(BuildType.IsSubclassOf(typeof(Nuke.Common.NukeBuild)));
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public Compile target property,
+    /// found by reflection; the case asserts only that the property exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasCompileTarget()
     {
@@ -26,6 +46,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public Clean target property,
+    /// found by reflection; the case asserts only that the property exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasCleanTarget()
     {
@@ -33,6 +58,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public Restore target property,
+    /// found by reflection; the case asserts only that the property exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasRestoreTarget()
     {
@@ -40,6 +70,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public Configuration field of
+    /// type string, found by reflection. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasConfigurationParameter()
     {
@@ -48,6 +83,11 @@ public sealed class BuildTargetTests
         Assert.Equal(typeof(string), field!.FieldType);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a non-public instance Solution
+    /// field, found by reflection; the case asserts only that the field exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasSolutionField()
     {
@@ -56,6 +96,12 @@ public sealed class BuildTargetTests
         Assert.NotNull(field);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares public SourceDirectory,
+    /// TestsDirectory, ArtifactsDirectory and LocalPackagesDirectory properties, found by reflection. Data: the Build
+    /// type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasDirectoryProperties()
     {
@@ -65,6 +111,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(BuildType.GetProperty("LocalPackagesDirectory"));
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public Test target property,
+    /// found by reflection; the case asserts only that the property exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasTestTarget()
     {
@@ -72,6 +123,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public PublishNuGet target
+    /// property, found by reflection; the case asserts only that the property exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasPublishNuGetTarget()
     {
@@ -79,6 +135,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public SyncAgentPlugins target
+    /// property, found by reflection; the case asserts only that the property exists. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasSyncAgentPluginsTarget()
     {
@@ -87,6 +148,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a non-public instance
+    /// AgentPluginParent field of type string, found by reflection. Data: the Build type; no fixture.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void Build_HasAgentPluginParentParameter()
     {
@@ -96,22 +162,6 @@ public sealed class BuildTargetTests
 
         Assert.NotNull(field);
         Assert.Equal(typeof(string), field!.FieldType);
-    }
-
-    /// <summary>Sync restores lib-node with npm ci when typescript/bin/tsc is missing, before npm run build.</summary>
-    [Fact]
-    public void SyncAgentPlugins_EnsuresNodeCoreNpmCiBeforeNpmRunBuild()
-    {
-        var repoRoot = FindRepositoryRoot();
-        var source = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.SyncAgentPlugins.cs"));
-        const string ensureCall = "EnsureNodePluginCoreDependencies(nodeCoreRoot.ToString());";
-        const string buildCall = "ProcessTasks.StartProcess(\"npm\", \"run build\", workingDirectory: nodeCoreRoot.ToString())";
-
-        Assert.Contains(ensureCall, source, StringComparison.Ordinal);
-        Assert.Contains("npm\", \"ci\"", source, StringComparison.Ordinal);
-        Assert.True(
-            source.IndexOf(ensureCall, StringComparison.Ordinal) < source.IndexOf(buildCall, StringComparison.Ordinal),
-            "npm ci must restore typescript/bin/tsc before npm run build.");
     }
 
     /// <summary>HasTsc is true only when node_modules/typescript/bin/tsc exists.</summary>
@@ -134,39 +184,7 @@ public sealed class BuildTargetTests
         }
     }
 
-    /// <summary>TEST-MCP-PLUGIN-PSONLY-001: Plugin sync refreshes Node core vendor packages before installed caches are refreshed.</summary>
-    [Fact]
-    public void SyncAgentPlugins_RefreshesNodeCoreVendorPackageBeforeCaches()
-    {
-        var repoRoot = FindRepositoryRoot();
-        var source = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.SyncAgentPlugins.cs"));
-        const string refreshCall = "RefreshNodePluginCoreVendorPackages(RootDirectory, pluginRoots);";
-        const string cacheCall = "RefreshKnownPluginCaches(pluginRoots, nextVersion);";
-
-        Assert.Contains(refreshCall, source, StringComparison.Ordinal);
-        Assert.Contains("sharpninja-mcpserver-plugin-core.tgz", source, StringComparison.Ordinal);
-        Assert.True(
-            source.IndexOf(refreshCall, StringComparison.Ordinal) < source.IndexOf(cacheCall, StringComparison.Ordinal),
-            "Node plugin core vendor packages must be refreshed before installed plugin caches are copied.");
-    }
-
-    /// <summary>MCP-PLUGIN-SYNC-001: Plugin sync refreshes the workspace staged package before optional sibling plugin repositories.</summary>
-    [Fact]
-    public void SyncAgentPlugins_RefreshesWorkspaceStagedPackageBeforeSiblingDiscovery()
-    {
-        var repoRoot = FindRepositoryRoot();
-        var source = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.SyncAgentPlugins.cs"));
-        const string stagedSync = "SyncPluginCorePackage(RootDirectory, stagedRoot, syncScript, wrapperScript, \"claude-code\");";
-        const string discoverCall = "var pluginRoots = DiscoverAgentPluginRoots(RootDirectory, AgentPluginParent);";
-
-        Assert.Contains(stagedSync, source, StringComparison.Ordinal);
-        Assert.Contains(discoverCall, source, StringComparison.Ordinal);
-        Assert.True(
-            source.IndexOf(stagedSync, StringComparison.Ordinal) < source.IndexOf(discoverCall, StringComparison.Ordinal),
-            "The ignored workspace staged package must be refreshed before optional sibling plugin discovery can return early.");
-    }
-
-    /// <summary>TEST-MCP-REQSCOPE-005: Plugin validation fails stale Requirements skills that omit layer method shapes.</summary>
+    /// <summary>TEST-MCP-REQSCOPE-005 (historical): Plugin validation fails stale Requirements skills that omit layer method shapes.</summary>
     [Fact]
     public void ValidateRequirementsSkillLayerGuidance_RequiresLayerMethodDocs()
     {
@@ -270,7 +288,7 @@ public sealed class BuildTargetTests
         }
     }
 
-    /// <summary>TEST-MCP-QBAGENTTOOL-001: QBAgent has dedicated pack and deploy targets.</summary>
+    /// <summary>TEST-MCP-QBAGENTTOOL-001 (historical): QBAgent has dedicated pack and deploy targets.</summary>
     [Fact]
     public void Build_HasQBAgentToolTargets()
     {
@@ -278,46 +296,12 @@ public sealed class BuildTargetTests
         Assert.NotNull(BuildType.GetProperty("DeployQBAgentTool"));
     }
 
-    /// <summary>TEST-MCP-QBAGENTTOOL-001: QBAgent is configured as a .NET global tool package.</summary>
-    [Fact]
-    public void QBAgentProject_IsConfiguredAsDotNetTool()
-    {
-        var repoRoot = FindRepositoryRoot();
-        var projectPath = Path.Combine(repoRoot, "src", "QBrainAi.QBAgent", "QBrainAi.QBAgent.csproj");
-        var properties = XDocument.Load(projectPath)
-            .Descendants("PropertyGroup")
-            .Elements()
-            .ToDictionary(element => element.Name.LocalName, element => element.Value, StringComparer.OrdinalIgnoreCase);
-
-        Assert.Equal("Exe", properties["OutputType"]);
-        Assert.Equal("true", properties["IsPackable"]);
-        Assert.Equal("true", properties["PackAsTool"]);
-        Assert.Equal("qbagent", properties["ToolCommandName"]);
-        Assert.Equal("QBrainAI.QBAgent", properties["PackageId"]);
-    }
-
     /// <summary>
-    /// PackQBAgentTool must pack QBrainAi.QBAgent.csproj only. Depending on solution Compile
-    /// builds every test project and fails when testhosts lock those outputs.
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build.NuGetApiKeyEnvironmentVariable is
+    /// NUGET_API_KEY and Build.NuGetOrgSource is the nuget.org v3 index URL https://api.nuget.org/v3/index.json. Data:
+    /// the two constants of the Build type; no fixture.
     /// </summary>
-    [Fact]
-    public void PackQBAgentTool_DoesNotDependOnSolutionCompile()
-    {
-        var source = File.ReadAllText(Path.Combine(FindRepositoryRoot(), "build", "Build.PackQBAgentTool.cs"));
-        Assert.DoesNotContain("DependsOn(Compile)", source, StringComparison.Ordinal);
-        Assert.Contains("QBrainAi.QBAgent.csproj", source, StringComparison.Ordinal);
-        Assert.DoesNotContain("TestsDirectory", source, StringComparison.Ordinal);
-    }
-
-    /// <summary>DeployQBAgentTool installs the packed tool; it must not pull solution Compile.</summary>
-    [Fact]
-    public void DeployQBAgentTool_DependsOnPackQBAgentTool_NotCompile()
-    {
-        var source = File.ReadAllText(Path.Combine(FindRepositoryRoot(), "build", "Build.DeployQBAgentTool.cs"));
-        Assert.Contains("DependsOn(PackQBAgentTool)", source, StringComparison.Ordinal);
-        Assert.DoesNotContain("DependsOn(Compile)", source, StringComparison.Ordinal);
-    }
-
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void PublishNuGet_UsesNUGET_API_KEYEnvironmentVariable()
     {
@@ -325,6 +309,12 @@ public sealed class BuildTargetTests
         Assert.Equal("https://api.nuget.org/v3/index.json", Build.NuGetOrgSource);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): ResolveNuGetApiKey returns the value its lookup
+    /// gives for NUGET_API_KEY. Data: an inline lookup delegate that returns a placeholder key string for NUGET_API_KEY
+    /// and null for every other name; no real key and no process environment.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ResolveNuGetApiKey_ReturnsEnvironmentValue()
     {
@@ -333,6 +323,13 @@ public sealed class BuildTargetTests
         Assert.Equal("secret-key", value);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): ResolveNuGetApiKey throws
+    /// InvalidOperationException, with a message naming NUGET_API_KEY, when the lookup gives a missing, empty, blank or
+    /// unexpanded value. Data: four inline cases (null, an empty string, three spaces, and the unexpanded macro text
+    /// $(NUGET_API_KEY)) supplied through an inline lookup delegate; no process environment.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -346,6 +343,14 @@ public sealed class BuildTargetTests
         Assert.Contains(Build.NuGetApiKeyEnvironmentVariable, ex.Message, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): GetNuGetPackagesToPublish returns the .nupkg files
+    /// of a folder sorted by name, leaving out .symbols.nupkg files and files of other kinds. Data: a temporary folder
+    /// under the system temp folder holding empty Example.B.1.0.0.nupkg, Example.A.1.0.0.nupkg,
+    /// Example.A.1.0.0.symbols.nupkg and ignored.txt, removed in a finally block; the expected result is
+    /// Example.A.1.0.0.nupkg then Example.B.1.0.0.nupkg.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void GetNuGetPackagesToPublish_ReturnsSortedNonSymbolPackages()
     {
@@ -354,16 +359,16 @@ public sealed class BuildTargetTests
         try
         {
             Directory.CreateDirectory(directory);
-            File.WriteAllText(Path.Combine(directory, "SharpNinja.B.1.0.0.nupkg"), "");
-            File.WriteAllText(Path.Combine(directory, "SharpNinja.A.1.0.0.nupkg"), "");
-            File.WriteAllText(Path.Combine(directory, "SharpNinja.A.1.0.0.symbols.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "Example.B.1.0.0.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "Example.A.1.0.0.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "Example.A.1.0.0.symbols.nupkg"), "");
             File.WriteAllText(Path.Combine(directory, "ignored.txt"), "");
 
             var packages = Build.GetNuGetPackagesToPublish((AbsolutePath)directory)
                 .Select(path => path.Name)
                 .ToArray();
 
-            Assert.Equal(["SharpNinja.A.1.0.0.nupkg", "SharpNinja.B.1.0.0.nupkg"], packages);
+            Assert.Equal(["Example.A.1.0.0.nupkg", "Example.B.1.0.0.nupkg"], packages);
         }
         finally
         {
@@ -372,17 +377,13 @@ public sealed class BuildTargetTests
         }
     }
 
-    [Fact]
-    public void ResolveNuGetPackageVersion_ReturnsExplicitParameter()
-    {
-        var repoRoot = FindRepositoryRoot();
-        var gitVersionPath = (AbsolutePath)Path.Combine(repoRoot, "GitVersion.yml");
-
-        var version = Build.ResolveNuGetPackageVersion(" 2.3.4 ", gitVersionPath);
-
-        Assert.Equal("2.3.4", version);
-    }
-
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): ResolveNuGetPackageVersionFromGitVersion reads
+    /// 1.0.1 from the next-version line of GitVersion configuration text and ignores the comment after it. Data: an
+    /// inline GitVersion configuration string (mode ContinuousDelivery, next-version 1.0.1 followed by a comment, and a
+    /// main branch entry); no file.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ResolveNuGetPackageVersionFromGitVersion_ReadsNextVersion()
     {
@@ -399,54 +400,13 @@ public sealed class BuildTargetTests
         Assert.Equal("1.0.1", version);
     }
 
-    [Fact]
-    public void Build_SourceProjects_DoNotPinDivergentVersionMetadata()
-    {
-        var repoRoot = FindRepositoryRoot();
-        var packageProjects = Directory.GetFiles(
-            Path.Combine(repoRoot, "src"),
-            "*.csproj",
-            SearchOption.AllDirectories);
-
-        Assert.NotEmpty(packageProjects);
-
-        foreach (var project in packageProjects)
-        {
-            var content = File.ReadAllText(project);
-
-            Assert.DoesNotContain("<Version>", content, StringComparison.OrdinalIgnoreCase);
-            Assert.DoesNotContain("<PackageVersion>", content, StringComparison.OrdinalIgnoreCase);
-        }
-    }
-
-    [Fact]
-    public void BuildTargets_UseGitVersionForCompileAndReplTool()
-    {
-        var repoRoot = FindRepositoryRoot();
-        var compileTarget = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.Compile.cs"));
-        var packReplTarget = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.PackReplTool.cs"));
-        var installReplTarget = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.InstallReplTool.cs"));
-
-        Assert.Contains("ResolveNuGetPackageVersion(PackageVersion, RootDirectory / \"GitVersion.yml\")", compileTarget, StringComparison.Ordinal);
-        Assert.Contains("EnumerateFiles(sourceDirectory, \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
-        Assert.Contains("EnumerateFiles(testsDirectory, \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
-        Assert.Contains("!path.EndsWith(Path.Combine(\"Build.Tests\", \"Build.Tests.csproj\"), StringComparison.OrdinalIgnoreCase)", compileTarget, StringComparison.Ordinal);
-        Assert.DoesNotContain(".SetProjectFile(Solution)", compileTarget, StringComparison.Ordinal);
-        Assert.Contains(".SetProperty(\"PackageVersion\", buildVersion)", compileTarget, StringComparison.Ordinal);
-        Assert.Contains(".SetProperty(\"Version\", buildVersion)", compileTarget, StringComparison.Ordinal);
-        Assert.Contains(".SetProperty(\"InformationalVersion\", buildVersion)", compileTarget, StringComparison.Ordinal);
-
-        Assert.Contains("ResolveNuGetPackageVersion(PackageVersion, RootDirectory / \"GitVersion.yml\")", packReplTarget, StringComparison.Ordinal);
-        Assert.Contains(".SetProperty(\"PackageVersion\", packageVersion)", packReplTarget, StringComparison.Ordinal);
-        Assert.Contains(".SetProperty(\"Version\", packageVersion)", packReplTarget, StringComparison.Ordinal);
-        Assert.Contains(".SetProperty(\"InformationalVersion\", packageVersion)", packReplTarget, StringComparison.Ordinal);
-
-        Assert.Contains("ResolveNuGetPackageVersion(PackageVersion, RootDirectory / \"GitVersion.yml\")", installReplTarget, StringComparison.Ordinal);
-        Assert.Contains("GetInstalledGlobalToolVersion(installedTools, packageId)", installReplTarget, StringComparison.Ordinal);
-        Assert.Contains("tool uninstall --global {packageId}", installReplTarget, StringComparison.Ordinal);
-        Assert.Contains("--version {packageVersion}", installReplTarget, StringComparison.Ordinal);
-    }
-
+    /// <summary>
+    /// TR-MCP-NUKE-007 AC-001; FR-MCP-BUILD-001: GetInstalledGlobalToolVersion matches package ids case-insensitively
+    /// in dotnet tool list --global output and returns 6.1.1 for QBrainAI.Repl, 1.4.41 for the separate 1.x alias
+    /// package SharpNinja.McpServer.Repl, and null for a missing tool. Data: an inline three-row tool list sample
+    /// (qbrainai.repl 6.1.1 qbrain-ai-repl, sharpninja.mcpserver.repl 1.4.41 mcpserver-repl, other.tool 1.0.0 other).
+    /// </summary>
+    /// <remarks>2026-11-07, TR-MCP-NUKE-007 AC-001; FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void InstallReplTool_ParsesInstalledGlobalToolVersion()
     {
@@ -648,6 +608,13 @@ public sealed class BuildTargetTests
         }
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): CleanNuGetPackageOutput deletes the top-level
+    /// .nupkg and .symbols.nupkg files of a folder and keeps other files and the packages in its subfolders. Data: a
+    /// temporary folder under the system temp folder holding empty Example.A.1.0.0.nupkg, Example.A.1.0.0.symbols.nupkg
+    /// and keep.txt, plus nested/Nested.1.0.0.nupkg, removed in a finally block.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void CleanNuGetPackageOutput_RemovesOnlyTopLevelNuGetPackages()
     {
@@ -658,15 +625,15 @@ public sealed class BuildTargetTests
             Directory.CreateDirectory(directory);
             var nested = Path.Combine(directory, "nested");
             Directory.CreateDirectory(nested);
-            File.WriteAllText(Path.Combine(directory, "SharpNinja.A.1.0.0.nupkg"), "");
-            File.WriteAllText(Path.Combine(directory, "SharpNinja.A.1.0.0.symbols.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "Example.A.1.0.0.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "Example.A.1.0.0.symbols.nupkg"), "");
             File.WriteAllText(Path.Combine(directory, "keep.txt"), "");
             File.WriteAllText(Path.Combine(nested, "Nested.1.0.0.nupkg"), "");
 
             Build.CleanNuGetPackageOutput((AbsolutePath)directory);
 
-            Assert.False(File.Exists(Path.Combine(directory, "SharpNinja.A.1.0.0.nupkg")));
-            Assert.False(File.Exists(Path.Combine(directory, "SharpNinja.A.1.0.0.symbols.nupkg")));
+            Assert.False(File.Exists(Path.Combine(directory, "Example.A.1.0.0.nupkg")));
+            Assert.False(File.Exists(Path.Combine(directory, "Example.A.1.0.0.symbols.nupkg")));
             Assert.True(File.Exists(Path.Combine(directory, "keep.txt")));
             Assert.True(File.Exists(Path.Combine(nested, "Nested.1.0.0.nupkg")));
         }
@@ -677,6 +644,13 @@ public sealed class BuildTargetTests
         }
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a public target property for each
+    /// named trusted third party and agent target, found by reflection; the case asserts only that each property
+    /// exists. Data: five inline target names (BuildTrustedThirdParty, PublishTrustedThirdParty,
+    /// UpdateTrustedThirdPartyService, BuildAgent, PublishAgent).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Theory]
     [InlineData("BuildTrustedThirdParty")]
     [InlineData("PublishTrustedThirdParty")]
@@ -689,6 +663,13 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001 (no TR-MCP-NUKE criterion names this check): Build declares a non-public instance field for
+    /// each named trusted third party deployment parameter, found by reflection. Data: four inline parameter names
+    /// (TrustedThirdPartyServiceName, TrustedThirdPartyInstallPath, TrustedThirdPartyPort,
+    /// TrustedThirdPartyPublishSource).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Theory]
     [InlineData("TrustedThirdPartyServiceName")]
     [InlineData("TrustedThirdPartyInstallPath")]
@@ -702,59 +683,8 @@ public sealed class BuildTargetTests
         Assert.NotNull(field);
     }
 
-    [Fact]
-    public void CopyBrainSlotRuntimeConfig_CopiesAssignmentFileToDeploymentConfigPath()
-    {
-        var repoRoot = FindRepositoryRoot();
-        var destination = Path.Combine(Path.GetTempPath(), $"mcpserver-build-test-{Guid.NewGuid():N}");
-
-        try
-        {
-            var copied = Build.CopyBrainSlotRuntimeConfig((AbsolutePath)repoRoot, destination);
-
-            Assert.True(File.Exists(copied));
-            Assert.EndsWith(
-                Path.Combine("config", Build.BrainSlotConfigDirectoryName, Build.BrainSlotConfigFileName),
-                copied,
-                StringComparison.OrdinalIgnoreCase);
-            Assert.Contains("slotId: brain-slot-arbiter-of-truth-grok-build", File.ReadAllText(copied), StringComparison.OrdinalIgnoreCase);
-        }
-        finally
-        {
-            if (Directory.Exists(destination))
-                Directory.Delete(destination, true);
-        }
-    }
-
-    /// <summary>Windows UpdateService validates a complete stage before it stops the live service.</summary>
-    [Fact]
-    public void UpdateService_StagesBaselineConfigurationBeforeStoppingWindowsService()
-    {
-        var repoRoot = FindRepositoryRoot();
-        var source = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.UpdateService.cs"));
-        const string stageCall = "WindowsServiceHelper.EnsureBaselineConfiguration(stageDir, baselineConfigPath);";
-        const string stopCall = "WindowsServiceHelper.StopService(serviceName, serviceProcessName);";
-        const string backupCall = "WindowsServiceHelper.BackupPreservedState(installPath, backupDir, archivePath);";
-        const string copyCall = "WindowsServiceHelper.CopyDirectory(stageDir, installPath);";
-
-        Assert.Contains(stageCall, source, StringComparison.Ordinal);
-        Assert.Contains(stopCall, source, StringComparison.Ordinal);
-        Assert.Contains(backupCall, source, StringComparison.Ordinal);
-        Assert.Contains(copyCall, source, StringComparison.Ordinal);
-        Assert.True(
-            source.IndexOf(stageCall, StringComparison.Ordinal) < source.IndexOf(stopCall, StringComparison.Ordinal),
-            "The complete publish stage must be validated before the service is stopped.");
-        Assert.True(
-            source.IndexOf(stopCall, StringComparison.Ordinal) < source.IndexOf(backupCall, StringComparison.Ordinal),
-            "The live service must stop before its mutable state is backed up.");
-        Assert.True(
-            source.IndexOf(backupCall, StringComparison.Ordinal) < source.IndexOf(copyCall, StringComparison.Ordinal),
-            "Backup must complete before published files replace the live installation.");
-    }
-
-
     /// <summary>
-    /// TEST-NUKE-002: BackupPreservedState tolerates a first-time install where the
+    /// TEST-NUKE-002 (historical): BackupPreservedState tolerates a first-time install where the
     /// install root does not yet exist - it creates the root, performs no backup, and
     /// returns an empty result so the deploy can proceed. Regression for the
     /// trusted-third-party first-install DirectoryNotFoundException.
@@ -793,25 +723,6 @@ public sealed class BuildTargetTests
         // Write method surface for aiUnit reviews (used by review tests)
         var writeMethod = BuildType.GetMethod("WriteAiUnitReviewMarkdownFromData", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
         Assert.NotNull(writeMethod);
-    }
-
-    private static string FindRepositoryRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            var candidate = Path.Combine(
-                directory.FullName,
-                "config",
-                Build.BrainSlotConfigDirectoryName,
-                Build.BrainSlotConfigFileName);
-            if (File.Exists(candidate))
-                return directory.FullName;
-
-            directory = directory.Parent;
-        }
-
-        throw new DirectoryNotFoundException("Could not find repository root containing brain-slot configuration.");
     }
 
     // NOTE: Ai* target + Write + client factory tests (TEST-MCP-AIUNIT-001) are validated via the reflection checks

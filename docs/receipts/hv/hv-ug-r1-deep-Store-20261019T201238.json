@@ -1,0 +1,489 @@
+[
+  {
+    "File": "hv-ug-r1-store-effective.txt",
+    "Keys": [
+      "technical",
+      "testing",
+      "currentLayer",
+      "mappings",
+      "functional"
+    ],
+    "DeletedFrReferences": [
+      "        Converted from FR-MCP-USECASE-016 on 2026-10-19 (operator: \"If it is in a FR, then that FR needs to be converted to a TR\"; answers \"Merge into its TR (Recommended)\" and \"FR-001, delete FRs (Recommended)\"). FR-MCP-USECASE-016 stated: Use-case persistence and its supporting contained rollback, physical workspace identity, SQLite opening, cancellation classification, and repository evidence paths shall remain safe and finitely completing on every supported platform, including deterministic CI builds, while preserving exact provider failures and truthful supersession evidence.",
+      "        Converted from FR-MCP-USECASE-017 on 2026-10-19 (operator: \"If it is in a FR, then that FR needs to be converted to a TR\"; answers \"Merge into its TR (Recommended)\" and \"FR-001, delete FRs (Recommended)\"). FR-MCP-USECASE-017 stated: Use-case persistence and its filesystem, provider, process, platform-test, and evidence boundaries shall close physical alias and replacement races, complete publicly within finite contracts, preserve truthful worker and provider causality, execute applicable native contracts, and report only exact immutable evidence while retaining every previously approved control."
+    ],
+    "Result": "Full effective record retained in source receipt; reference search shown."
+  },
+  {
+    "File": "hv-ug-r1-store-FR-MCP-USECASE-001.txt",
+    "Keys": [
+      "status",
+      "title",
+      "updatedAt",
+      "priority",
+      "area",
+      "scopeStartLayerKey",
+      "id",
+      "acceptanceCriteria",
+      "createdAt",
+      "description"
+    ],
+    "DeletedFrReferences": [],
+    "Result": {
+      "status": "pending",
+      "title": "CRUD workspace-scoped use cases",
+      "updatedAt": "2026-10-20T00:56:58.7276580+00:00",
+      "priority": "medium",
+      "area": "MCP",
+      "scopeStartLayerKey": "layer-1",
+      "id": "FR-MCP-USECASE-001",
+      "acceptanceCriteria": [],
+      "createdAt": "2026-10-20T00:56:58.7275460+00:00",
+      "description": "The server shall support create, read, update, and soft-delete of workspace-scoped use cases with header fields: title, brief description, precondition, postcondition, scope, and priority. Default queries exclude soft-deleted rows. Multi-tenant isolation via WorkspaceId is required."
+    }
+  },
+  {
+    "File": "hv-ug-r1-store-FR-MCP-USECASE-016.txt",
+    "Keys": [
+      null
+    ],
+    "DeletedFrReferences": [
+      "  message: FR 'FR-MCP-USECASE-016' not found."
+    ],
+    "Result": null
+  },
+  {
+    "File": "hv-ug-r1-store-FR-MCP-USECASE-017.txt",
+    "Keys": [
+      null
+    ],
+    "DeletedFrReferences": [
+      "  message: FR 'FR-MCP-USECASE-017' not found."
+    ],
+    "Result": null
+  },
+  {
+    "File": "hv-ug-r1-store-mapping-FR-MCP-BUILD-001.txt",
+    "Keys": [
+      "items",
+      "totalCount"
+    ],
+    "DeletedFrReferences": [],
+    "Result": {
+      "items": [
+        {
+          "createdAt": "2026-10-20T00:57:12.6280755+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-001"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6287404+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-002"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6288653+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-005"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6289530+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-006"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6290328+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-007"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6291118+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-008"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6291948+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-009"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6292964+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-010"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6293734+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-011"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6294604+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-012"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6295369+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-015"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6296118+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-016"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6296876+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-017"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6297664+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-018"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:12.6298423+00:00",
+          "frId": "FR-MCP-BUILD-001",
+          "trId": "TR-MCP-NUKE-019"
+        }
+      ],
+      "totalCount": 15
+    }
+  },
+  {
+    "File": "hv-ug-r1-store-mapping-FR-MCP-PATHNORM-001.txt",
+    "Keys": [
+      "items",
+      "totalCount"
+    ],
+    "DeletedFrReferences": [],
+    "Result": {
+      "items": [
+        {
+          "createdAt": "2026-10-20T00:57:15.6728346+00:00",
+          "frId": "FR-MCP-PATHNORM-001",
+          "trId": "TR-MCP-PATHNORM-001"
+        },
+        {
+          "frId": "FR-MCP-PATHNORM-001",
+          "createdAt": "2026-10-20T00:57:15.6734759+00:00",
+          "testId": "TEST-MCP-PATHNORM-001"
+        }
+      ],
+      "totalCount": 2
+    }
+  },
+  {
+    "File": "hv-ug-r1-store-mapping-FR-MCP-USECASE-001.txt",
+    "Keys": [
+      "items",
+      "totalCount"
+    ],
+    "DeletedFrReferences": [],
+    "Result": {
+      "items": [
+        {
+          "createdAt": "2026-10-20T00:57:14.2079686+00:00",
+          "frId": "FR-MCP-USECASE-001",
+          "trId": "TR-MCP-USECASE-001"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:14.2086616+00:00",
+          "frId": "FR-MCP-USECASE-001",
+          "trId": "TR-MCP-USECASE-002"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:14.2087807+00:00",
+          "frId": "FR-MCP-USECASE-001",
+          "trId": "TR-MCP-USECASE-003"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:14.2088723+00:00",
+          "frId": "FR-MCP-USECASE-001",
+          "trId": "TR-MCP-USECASE-005"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:14.2089559+00:00",
+          "frId": "FR-MCP-USECASE-001",
+          "trId": "TR-MCP-USECASE-018"
+        },
+        {
+          "createdAt": "2026-10-20T00:57:14.2090350+00:00",
+          "frId": "FR-MCP-USECASE-001",
+          "trId": "TR-MCP-USECASE-019"
+        },
+        {
+          "frId": "FR-MCP-USECASE-001",
+          "createdAt": "2026-10-20T00:57:14.2091149+00:00",
+          "testId": "TEST-MCP-USECASE-001"
+        },
+        {
+          "frId": "FR-MCP-USECASE-001",
+          "createdAt": "2026-10-20T00:57:14.2092102+00:00",
+          "testId": "TEST-MCP-USECASE-002"
+        },
+        {
+          "frId": "FR-MCP-USECASE-001",
+          "createdAt": "2026-10-20T00:57:14.2092987+00:00",
+          "testId": "TEST-MCP-USECASE-004"
+        },
+        {
+          "frId": "FR-MCP-USECASE-001",
+          "createdAt": "2026-10-20T00:57:14.2093853+00:00",
+          "testId": "TEST-MCP-USECASE-019"
+        },
+        {
+          "frId": "FR-MCP-USECASE-001",
+          "createdAt": "2026-10-20T00:57:14.2094671+00:00",
+          "testId": "TEST-MCP-USECASE-020"
+        }
+      ],
+      "totalCount": 11
+    }
+  },
+  {
+    "File": "hv-ug-r1-store-mapping-FR-MCP-USECASE-016.txt",
+    "Keys": [
+      "items",
+      "totalCount"
+    ],
+    "DeletedFrReferences": [],
+    "Result": {
+      "items": [],
+      "totalCount": 0
+    }
+  },
+  {
+    "File": "hv-ug-r1-store-mapping-FR-MCP-USECASE-017.txt",
+    "Keys": [
+      "items",
+      "totalCount"
+    ],
+    "DeletedFrReferences": [],
+    "Result": {
+      "items": [],
+      "totalCount": 0
+    }
+  },
+  {
+    "File": "hv-ug-r1-store-TEST-MCP-USECASE-019.txt",
+    "Keys": [
+      "status",
+      "testType",
+      "title",
+      "updatedAt",
+      "priority",
+      "area",
+      "scopeStartLayerKey",
+      "id",
+      "acceptanceCriteria",
+      "createdAt",
+      "description"
+    ],
+    "DeletedFrReferences": [],
+    "Result": {
+      "status": "pending",
+      "testType": "unit",
+      "title": "Test TEST-MCP-USECASE-019",
+      "updatedAt": "2026-10-20T00:57:00.1702575+00:00",
+      "priority": "medium",
+      "area": "MCP",
+      "scopeStartLayerKey": "layer-1",
+      "id": "TEST-MCP-USECASE-019",
+      "acceptanceCriteria": [],
+      "createdAt": "2026-10-20T00:57:00.1701188+00:00",
+      "description": "For every fifteenth-review behavior (TR-MCP-USECASE-018), write the consumer test and the real-service, kernel, provider, or adversarial test with scripted data first and prove them against that data in a green mock gate with negative controls before production changes (BDPv4: no red tests); then bind the same cases to production and prove focused and cumulative GREEN with exact zero-failure, zero-skip, zero-abort, and zero-inconclusive accounting from C:-physical artifacts. Platform-specific cases are integration tests that run in their host's lane (TR-MCP-NUKE-019)."
+    }
+  },
+  {
+    "File": "hv-ug-r1-store-TEST-MCP-USECASE-020.txt",
+    "Keys": [
+      "status",
+      "testType",
+      "title",
+      "updatedAt",
+      "priority",
+      "area",
+      "scopeStartLayerKey",
+      "id",
+      "acceptanceCriteria",
+      "createdAt",
+      "description"
+    ],
+    "DeletedFrReferences": [],
+    "Result": {
+      "status": "pending",
+      "testType": "unit",
+      "title": "Test TEST-MCP-USECASE-020",
+      "updatedAt": "2026-10-20T00:57:01.5640676+00:00",
+      "priority": "medium",
+      "area": "MCP",
+      "scopeStartLayerKey": "layer-1",
+      "id": "TEST-MCP-USECASE-020",
+      "acceptanceCriteria": [],
+      "createdAt": "2026-10-20T00:57:01.5639564+00:00",
+      "description": "For each sixteenth-review finding (TR-MCP-USECASE-019), write the consumer-facing test and the real operating-system, mount, provider, process, or evidence-boundary test with scripted data first and prove them against that data in a green mock gate with negative controls before production changes (BDPv4: no red tests); then bind the same cases to production and prove focused and cumulative GREEN from C:-physical artifacts with exact zero-failure, zero-skip, zero-abort, zero-inconclusive, and expected-minimum accounting. Platform-specific cases are integration tests that run in their host's lane (TR-MCP-NUKE-019)."
+    }
+  },
+  {
+    "File": "hv-ug-r1-store-TR-MCP-USECASE-018.txt",
+    "Keys": [
+      "subarea",
+      "status",
+      "title",
+      "updatedAt",
+      "priority",
+      "area",
+      "scopeStartLayerKey",
+      "id",
+      "acceptanceCriteria",
+      "createdAt",
+      "description"
+    ],
+    "DeletedFrReferences": [
+      "      Converted from FR-MCP-USECASE-016 on 2026-10-19 (operator: \"If it is in a FR, then that FR needs to be converted to a TR\"; answers \"Merge into its TR (Recommended)\" and \"FR-001, delete FRs (Recommended)\"). FR-MCP-USECASE-016 stated: Use-case persistence and its supporting contained rollback, physical workspace identity, SQLite opening, cancellation classification, and repository evidence paths shall remain safe and finitely completing on every supported platform, including deterministic CI builds, while preserving exact provider failures and truthful supersession evidence."
+    ],
+    "Result": {
+      "subarea": "USECASE",
+      "status": "pending",
+      "title": "Cross-platform bounded native I/O and deterministic evidence",
+      "updatedAt": "2026-10-20T00:56:55.9114025+00:00",
+      "priority": "medium",
+      "area": "MCP",
+      "scopeStartLayerKey": "layer-1",
+      "id": "TR-MCP-USECASE-018",
+      "acceptanceCriteria": [
+        {
+          "text": "Linux rollback directories retain owner search and execute permission, nested restoration reproduces file contents and mode, and all mutations remain contained.",
+          "id": "AC-001",
+          "isSatisfied": false
+        },
+        {
+          "text": "Physical workspace identity resolution completes within a finite bound on Windows and non-Windows without caller-thread blocking, cancellation gaps, abandoned workers, or silent platform returns.",
+          "id": "AC-002",
+          "isSatisfied": false
+        },
+        {
+          "text": "SQLite connection opening is finitely bounded before native-handle publication on every supported platform and leaves no worker, handle, callback, interrupt, pool, or lifecycle leak.",
+          "id": "AC-003",
+          "isSatisfied": false
+        },
+        {
+          "text": "Only outcomes precisely attributable to requested cancellation become OperationCanceledException; independent I/O, disposal, and provider failures retain their original type and details.",
+          "id": "AC-004",
+          "isSatisfied": false
+        },
+        {
+          "text": "Repository and Agent Help fixtures discover their root from true external deterministic builds with mapped CallerFilePath and no MCP_REPOSITORY_ROOT override.",
+          "id": "AC-005",
+          "isSatisfied": false
+        },
+        {
+          "text": "Every supported platform executes an applicable native contract assertion in the integration lane: platform-specific tests are Category=Integration tests, tagged Platform=Linux or Platform=Windows when they apply to one host, that run in their host's MigrationIntegrationTests (TR-MCP-NUKE-019) and neither skip nor silently return; no unit test depends on the platform.",
+          "id": "AC-006",
+          "isSatisfied": false
+        },
+        {
+          "text": "The rejected fourteenth receipt is preserved with an explicit supersession notice, and the fifteenth evidence records every failed, inconclusive, and passing run with independently verified hashes and command mappings.",
+          "id": "AC-007",
+          "isSatisfied": false
+        }
+      ],
+      "createdAt": "2026-10-20T00:56:55.9112890+00:00",
+      "description": "Use searchable Linux directory modes and descriptor-relative restoration. Isolate potentially blocking physical identity and SQLite pre-handle opens behind finitely owned platform cancellation mechanisms. Classify cancellation from direct operation evidence, and resolve repository fixtures from deterministic assembly metadata rather than mapped caller paths.\nConverted from FR-MCP-USECASE-016 on 2026-10-19 (operator: \"If it is in a FR, then that FR needs to be converted to a TR\"; answers \"Merge into its TR (Recommended)\" and \"FR-001, delete FRs (Recommended)\"). FR-MCP-USECASE-016 stated: Use-case persistence and its supporting contained rollback, physical workspace identity, SQLite opening, cancellation classification, and repository evidence paths shall remain safe and finitely completing on every supported platform, including deterministic CI builds, while preserving exact provider failures and truthful supersession evidence.\n**Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-019"
+    }
+  },
+  {
+    "File": "hv-ug-r1-store-TR-MCP-USECASE-019.txt",
+    "Keys": [
+      "subarea",
+      "status",
+      "title",
+      "updatedAt",
+      "priority",
+      "area",
+      "scopeStartLayerKey",
+      "id",
+      "acceptanceCriteria",
+      "createdAt",
+      "description"
+    ],
+    "DeletedFrReferences": [
+      "      Converted from FR-MCP-USECASE-017 on 2026-10-19 (operator: \"If it is in a FR, then that FR needs to be converted to a TR\"; answers \"Merge into its TR (Recommended)\" and \"FR-001, delete FRs (Recommended)\"). FR-MCP-USECASE-017 stated: Use-case persistence and its filesystem, provider, process, platform-test, and evidence boundaries shall close physical alias and replacement races, complete publicly within finite contracts, preserve truthful worker and provider causality, execute applicable native contracts, and report only exact immutable evidence while retaining every previously approved control."
+    ],
+    "Result": {
+      "subarea": "USECASE",
+      "status": "pending",
+      "title": "Race-safe physical I/O, causal cancellation, and immutable evidence",
+      "updatedAt": "2026-10-20T00:56:57.3097830+00:00",
+      "priority": "medium",
+      "area": "MCP",
+      "scopeStartLayerKey": "layer-1",
+      "id": "TR-MCP-USECASE-019",
+      "acceptanceCriteria": [
+        {
+          "text": "Linux preflight classifies each path prefix with statx(AT_SYMLINK_NOFOLLOW) and reads link targets with readlink, so a symbolic link to any path inside a userspace or network mount (not only its root) is rejected from the mount table without sending that mount a request (BUG-BASELINE-009 C1; BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkBelowFuseRoot_IsRejectedWithoutEnteringTheMount).",
+          "id": "AC-001",
+          "isSatisfied": false
+        },
+        {
+          "text": "The SQLite caller-side data-source preflight runs off the caller's thread under the open's single finite deadline and the caller's cancellation: OpenAsync returns its task at once, a preflight that does not return fails the open with TimeoutException at the bound, no open worker starts, and the preflight stays counted (ActivePreflightCount) until it actually returns (BUG-BASELINE-009 C2; SqliteBoundedOpenFourteenthTests.OpenAsync_PreflightHeldAtBoundary_TimesOutWithoutBlockingTheCaller).",
+          "id": "AC-002",
+          "isSatisfied": false
+        },
+        {
+          "text": "Linux workspace identity resolution resolves symbolic-link prefixes through the mount table before its anchored RESOLVE_NO_XDEV lookup, so an absolute alias within a nested approved mount (for example /tmp) resolves like the data-file and SQLite opens instead of failing with a mount transition (BUG-BASELINE-009 C3; WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers).",
+          "id": "AC-003",
+          "isSatisfied": false
+        },
+        {
+          "text": "A bounded traversal or file worker that uses the export root descriptor holds a reference on it from before it starts until it actually exits, so disposing the root at the public deadline defers the close: on Linux the root descriptor stays open while the worker runs and closes after it exits; on Windows the open root still blocks rename (BUG-BASELINE-009, operator decision 2026-10-11 \"Fix it now\"; BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting).",
+          "id": "AC-004",
+          "isSatisfied": false
+        },
+        {
+          "text": "Physical workspace identity rejects safe lexical paths whose physical target is on an unsafe mount, remains safe across symlink or mount replacement timing, completes publicly within its deadline, and reports any unstoppable worker as active until it actually exits.",
+          "id": "AC-005",
+          "isSatisfied": false
+        },
+        {
+          "text": "SQLite data-source validation and pre-handle opening resist safe-link and check-to-open replacement, use no ineffective Thread.Interrupt dependency for native Linux I/O, finish cleanup within a finite deadline, and preserve exact lifecycle, handle, worker, and exception state.",
+          "id": "AC-006",
+          "isSatisfied": false
+        },
+        {
+          "text": "PostgreSQL SQLSTATE 57014 is translated to caller cancellation only with causal evidence produced by the caller-triggered cancellation mechanism; statement timeout and administrative cancellation remain PostgresException even during concurrent token cancellation.",
+          "id": "AC-007",
+          "isSatisfied": false
+        },
+        {
+          "text": "Platform-specific tests are Category=Integration tests, tagged with the Platform trait of the host they apply to, that run only in that host's MigrationIntegrationTests (TR-MCP-NUKE-019), prove real execution and inventory counts, and never pass through source inspection, skip, silent return, abort, inconclusive outcome, or a below-minimum count; no unit test depends on the platform.",
+          "id": "AC-008",
+          "isSatisfied": false
+        },
+        {
+          "text": "Containment race coverage requires at least one successful contained read and write while proving no escape or corruption, and deterministic total-rejection tests prove that rejecting every attempt cannot satisfy the success gate.",
+          "id": "AC-009",
+          "isSatisfied": false
+        },
+        {
+          "text": "Windows descendant cleanup establishes containment at process creation or proves an equivalent race-free boundary before descendants can escape, and timeout or cancellation terminates immediate descendants finitely without regressing non-Windows process-group cleanup.",
+          "id": "AC-010",
+          "isSatisfied": false
+        },
+        {
+          "text": "Historical rejected receipts remain intact but are explicitly superseded; final evidence identifies the exact immutable tested SHA, contains executable commands or a mechanically complete ledger, independently reconciles hashes, mappings and totals, and limits conclusions to the proven local and retained-evidence boundary.",
+          "id": "AC-011",
+          "isSatisfied": false
+        },
+        {
+          "text": "All current and prior requirements pass focused and cumulative Windows, native Linux/FUSE/non-root, SQLite, LocalDB, fresh PostgreSQL, deterministic external, BDPv4, build, traceability, Release, repository, history, harness, and EOL gates from C:-physical outputs with exact zero failures and zero skips.",
+          "id": "AC-012",
+          "isSatisfied": false
+        }
+      ],
+      "createdAt": "2026-10-20T00:56:57.3096742+00:00",
+      "description": "Resolve and validate physical filesystem identity through interruptible native handles or isolated workers whose public deadlines and accounting remain truthful; bind SQLite opening to the validated object without lexical races; attribute PostgreSQL cancellation to the actual caller cancel request; compose platform-native tests and process containment without pass-through fallbacks; and generate exact-final-HEAD evidence through a mechanically verified immutable workflow.\nConverted from FR-MCP-USECASE-017 on 2026-10-19 (operator: \"If it is in a FR, then that FR needs to be converted to a TR\"; answers \"Merge into its TR (Recommended)\" and \"FR-001, delete FRs (Recommended)\"). FR-MCP-USECASE-017 stated: Use-case persistence and its filesystem, provider, process, platform-test, and evidence boundaries shall close physical alias and replacement races, complete publicly within finite contracts, preserve truthful worker and provider causality, execute applicable native contracts, and report only exact immutable evidence while retaining every previously approved control.\n**Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-020"
+    }
+  }
+]

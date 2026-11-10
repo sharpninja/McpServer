@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20261029T024551Z-5315
+  result:
+    id: FR-MCP-REPL-007
+    title: REPL Credential Discovery Diagnostics
+    description: >-
+      `qbrain-ai-repl --agent-stdio` shall expose `--workspace-path` and `--marker-file` CLI overrides for credential resolution. When marker discovery fails, the diagnostic message shall enumerate every directory searched and distinguish "marker not found" from "marker signature mismatch". The diagnostic is forwarded into the `QBrainAiClient` and appended to the "Authentication required" exception so callers see the root cause rather than the generic message.
+
+
+      **Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-29T02:45:53.1467607+00:00
+    updatedAt: 2026-10-29T02:45:53.1469277+00:00
+  deprecated: true
+
+---

@@ -12,6 +12,13 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// redaction, that logging is a no-op without session/turn context, and that append failures never propagate
 /// (FR-MCP-QBEXEC-003).
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-QBEXEC-001 (its fifth criterion, which carries no criterion id).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-QBEXEC-001 (criterion without an id): cites the criterion whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class BrainInteractionSessionLoggerTests
 {
     private readonly ISessionLogService _sessionLog = Substitute.For<ISessionLogService>();

@@ -1,0 +1,96 @@
+{
+  "TimestampUtc": "2026-11-03T13:55:14.7971161+00:00",
+  "TimestampLocal": "2026-11-03T07:55:14",
+  "SessionId": "Codex-20261103T122431Z-plugin-session",
+  "RequestId": "req-20261103T122503Z-unitgreen-r10",
+  "HistoryPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-history-final.json",
+  "SessionFound": 1,
+  "TurnFound": 1,
+  "TurnStatus": "completed",
+  "TurnModel": "codex",
+  "ValidatorIdentity": {
+    "Agent": "Codex",
+    "Model": "gpt-6-astra",
+    "Effort": "max",
+    "ThreadId": "01a1a15b-8945-7311-82a6-626a8317d80d",
+    "Rollout": "/home/sharpninja/.codex/sessions/2026/11/03/rollout-2026-11-03T06-21-33-01a1a15b-8945-7311-82a6-626a8317d80d.jsonl",
+    "TurnContexts": [
+      {
+        "Line": 10,
+        "TimestampUtc": "2026-11-03T12:21:34.86Z",
+        "Model": "gpt-6-astra",
+        "Effort": "max",
+        "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+        "TurnId": "01a1a15b-8be9-76d1-97f4-a397b6da0c65"
+      },
+      {
+        "Line": 310,
+        "TimestampUtc": "2026-11-03T12:36:05.597Z",
+        "Model": "gpt-6-astra",
+        "Effort": "max",
+        "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+        "TurnId": "01a1a15b-8be9-76d1-97f4-a397b6da0c65"
+      },
+      {
+        "Line": 577,
+        "TimestampUtc": "2026-11-03T12:49:58.877Z",
+        "Model": "gpt-6-astra",
+        "Effort": "max",
+        "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+        "TurnId": "01a1a15b-8be9-76d1-97f4-a397b6da0c65"
+      },
+      {
+        "Line": 875,
+        "TimestampUtc": "2026-11-03T13:02:01.838Z",
+        "Model": "gpt-6-astra",
+        "Effort": "max",
+        "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+        "TurnId": "01a1a15b-8be9-76d1-97f4-a397b6da0c65"
+      },
+      {
+        "Line": 1159,
+        "TimestampUtc": "2026-11-03T13:16:09.602Z",
+        "Model": "gpt-6-astra",
+        "Effort": "max",
+        "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+        "TurnId": "01a1a15b-8be9-76d1-97f4-a397b6da0c65"
+      },
+      {
+        "Line": 1613,
+        "TimestampUtc": "2026-11-03T13:34:15.079Z",
+        "Model": "gpt-6-astra",
+        "Effort": "max",
+        "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+        "TurnId": "01a1a15b-8be9-76d1-97f4-a397b6da0c65"
+      }
+    ],
+    "IdentitySource": "Own rollout turn_context records, not the requester or plugin default model label."
+  },
+  "OperationalIssues": [
+    "The full readback before completion reported turn model gpt-6-astra. workflow.sessionlog.completeTurn restored the plugin default codex label. The immutable turn retains the complete independent live-rollout model=gpt-6-astra, effort=max proof, and both full result documents remain byte-exact. This is an operational metadata issue with no product-score effect under MEMORY-PROCESS-013."
+  ],
+  "ProcessingDialogCount": 37,
+  "ActionCount": 10,
+  "DesignDecisionCount": 9,
+  "Documents": [
+    {
+      "Kind": "PROSE",
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r10-20261103T062131.md",
+      "Parts": 11,
+      "Characters": 205231,
+      "ExpectedSha256": "1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66",
+      "ReadbackSha256": "1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66",
+      "ByteExact": true
+    },
+    {
+      "Kind": "STRUCTURED",
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r10-20261103T062131.json",
+      "Parts": 17,
+      "Characters": 339297,
+      "ExpectedSha256": "AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17",
+      "ReadbackSha256": "AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17",
+      "ByteExact": true
+    }
+  ],
+  "EntireResultPersisted": true
+}

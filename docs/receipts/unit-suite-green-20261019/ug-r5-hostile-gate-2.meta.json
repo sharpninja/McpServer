@@ -1,0 +1,34 @@
+{
+  "name": "ug-r5-hostile-gate-2",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r5-hostile-gate-2"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "ccc78b7a7624e0367725af585a5fd7c4f38b3661",
+  "dirtyPaths": [],
+  "startedLocal": "2026-10-21T06:03:15",
+  "startedUtc": "2026-10-21T11:03:15.6755661Z",
+  "hostileRoot": "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2",
+  "environment": {
+    "CODEX_PLUGIN_ROOT": "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2/plugin-root",
+    "CLAUDE_PLUGIN_ROOT": "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2/plugin-root",
+    "COPILOT_PLUGIN_ROOT": "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2/plugin-root",
+    "CLINE_PLUGIN_ROOT": "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2/plugin-root",
+    "GROK_PLUGIN_ROOT": "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2/plugin-root",
+    "HOME": "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2/home",
+    "NUGET_PACKAGES": "/home/sharpninja/.nuget/packages",
+    "DOTNET_CLI_HOME": "/home/sharpninja"
+  },
+  "manifestDirs": [
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2/plugin-root",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2/home/.claude/plugins/cache/mcpserver-claude-code-plugin/9.9.9",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2/home/.claude/plugins/cache/mcpserver-hostile/9.9.9",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2/home/.codex/plugins/cache/mcpserver-codex-plugin/9.9.9",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2/home/.grok/installed-plugins/mcpserver-grok-plugin/9.9.9"
+  ],
+  "historyFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-gate-2/home/.claude/projects/hostile-agent/chat.jsonl",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-hostile-gate-2.out.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-hostile-gate-2.exit.txt"
+}

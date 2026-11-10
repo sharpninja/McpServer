@@ -1,0 +1,36 @@
+{
+  "TimestampLocal": "2026-11-02T19:17:44",
+  "TimestampUtc": "2026-11-03T01:17:44.7249668Z",
+  "Method": "workflow.requirements.getFr",
+  "Params": {
+    "id": "FR-MCP-040"
+  },
+  "Data": [
+    {
+      "payload": {
+        "deprecated": true,
+        "result": {
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "id": "ac-1",
+              "text": "Reading an FR, TR, TEST or mapping through REST, the typed client or the REPL reports the creation and update times stored with that record. A read never reports the time of the read; when the store holds no time, the value is null (operator 2026-11-02: \"This HAS to be fixed.\"; PR 87 slice P). A stored time written without an offset is read as UTC (operator 2026-11-02: \"UTC\"; pre-HV what-if finding: no contract row pinned it)."
+            }
+          ],
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "createdAt": "2026-11-03T01:17:47.0826431+00:00",
+          "status": "pending",
+          "id": "FR-MCP-040",
+          "description": "The server shall support CRUD operations for Functional Requirements (FR), Technical Requirements (TR), Testing Requirements (TEST), and FR-to-TR mapping rows backed by the canonical project requirements Markdown files.\n\n**Covered by:** `RequirementsController`, `RequirementsDocumentService`, `IRequirementsRepository`",
+          "updatedAt": "2026-11-03T01:17:47.0827543+00:00",
+          "title": "Requirements Document CRUD Management",
+          "priority": "medium"
+        },
+        "requestId": "req-20261103T011745Z-7514"
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

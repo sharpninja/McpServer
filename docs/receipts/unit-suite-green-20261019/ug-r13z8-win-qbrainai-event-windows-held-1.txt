@@ -1,0 +1,12 @@
+RECEIPT started=2026-11-05T16:07:57 ended=2026-11-05T16:07:58 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Measure-EventSourceWindows-v2.ps1 sha256=09D3B4D70C2DF611F796BFF3D1EFD0F2DD860B8DBF493DBCBDB08D26803F8349
+ARGUMENTS -Receipt | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z6-win-qbrainai-event-sources-1.txt | -ServicePid | 36252
+HEAD 1d77a79c4e1e78a4c8e164a49779393721a95061
+Now: 2026-11-05T16:07:58 receipt=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z6-win-qbrainai-event-sources-1.txt service=36252 smallBelow=100
+OLDEST 2026-11-05T10:02:01
+WINDOW z5lane1 minutes=43.9 heldFrom=2026-11-05T10:02:01 heldMinutes=0 events=0 processes=0 service=0 servicePerHeldMinute=0 otherProcesses=0 otherEvents=0 small=0 smallEvents=0 large=0 largeEvents=0
+WINDOW gapA minutes=83 heldFrom=2026-11-05T10:02:01 heldMinutes=27 events=1333 processes=1 service=1333 servicePerHeldMinute=49.4 otherProcesses=0 otherEvents=0 small=0 smallEvents=0 large=0 largeEvents=0
+WINDOW z5lane2 minutes=30.1 heldFrom=2026-11-05T10:30:47 heldMinutes=30.1 events=3506 processes=143 service=808 servicePerHeldMinute=26.8 otherProcesses=142 otherEvents=2698 small=141 smallEvents=695 large=1 largeEvents=2003
+WINDOW gapB minutes=65 heldFrom=2026-11-05T11:04:00 heldMinutes=65 events=1199 processes=1 service=1199 servicePerHeldMinute=18.4 otherProcesses=0 otherEvents=0 small=0 smallEvents=0 large=0 largeEvents=0
+WINDOW z6lane minutes=30.6 heldFrom=2026-11-05T12:17:07 heldMinutes=30.6 events=2777 processes=141 service=124 servicePerHeldMinute=4.1 otherProcesses=140 otherEvents=2653 small=139 smallEvents=695 large=1 largeEvents=1958
+END

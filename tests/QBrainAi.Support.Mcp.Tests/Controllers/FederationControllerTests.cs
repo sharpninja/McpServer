@@ -15,6 +15,12 @@ namespace QBrainAi.Support.Mcp.Tests.Controllers;
 /// Unit tests for <see cref="FederationController"/>. Validates management API behaviour:
 /// enable/disable, target CRUD, workspace routing, and tunnel discovery. FR-MCP-077.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>FR-MCP-077: the envelope intake and sync cases use generic proxy ids (proxy-a for the former first lab machine name, proxy-b for the second) instead of lab machine names, because the eleventh holistic read before hostile validation round 13 (findings g1 and d1) found them in this file, which the plan 27.7 scrub of this pull request covers in every file it touches; each value meets the same values as before, so every assertion checks the same relation.</description></item>
+/// </list>
+/// </remarks>
 public sealed class FederationControllerTests
 {
     private static FederationRegistry CreateRegistry(Action<FederationOptions>? configure = null)
@@ -33,6 +39,9 @@ public sealed class FederationControllerTests
             NullLogger<TunnelRegistry>.Instance);
     }
 
+    /// <summary>A signer over the test secret whose signing stamps and verification checks read a settable test clock fixed at one instant.</summary>
+    /// <returns>The signer.</returns>
+    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the signer reads a settable clock instead of the system clock, so the envelope expiry and future-issue checks cannot change a case's outcome with the time spent between signing and recording (the sibling sweep of hostile validation round 12 finding R12-F2).</remarks>
     private static FederationEnvelopeSigner CreateSigner()
     {
         var monitor = Substitute.For<IOptionsMonitor<FederationOptions>>();
@@ -45,7 +54,9 @@ public sealed class FederationControllerTests
                 EnvelopeTtlSeconds = 300,
             },
         });
-        return new FederationEnvelopeSigner(monitor);
+        return new FederationEnvelopeSigner(
+            monitor,
+            new QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0]));
     }
 
     private static FederationController CreateController(
@@ -124,14 +135,14 @@ public sealed class FederationControllerTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-1",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "proxy-a",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             HttpMethod = "PUT",
             Path = "/qbrainai/todo/PLAN-FEDERATION-001",
             BodyBase64 = Convert.ToBase64String("{\"done\":true}"u8.ToArray()),
         };
-        var envelope = signer.Sign(operation, "PAYTON-LEGION2");
+        var envelope = signer.Sign(operation, "proxy-a");
         topology.RecordOperationAsync(operation, Arg.Any<CancellationToken>())
             .Returns(new FederationOperationResponse { OperationId = "op-1", Status = "accepted", Created = true });
         topology.AcknowledgeOperationAsync("op-1", Arg.Any<FederationOperationAckRequest>(), Arg.Any<CancellationToken>())
@@ -174,12 +185,12 @@ public sealed class FederationControllerTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-replay-1",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "proxy-a",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             BodyBase64 = Convert.ToBase64String("{\"done\":true}"u8.ToArray()),
         };
-        var envelope = signer.Sign(operation, "PAYTON-LEGION2");
+        var envelope = signer.Sign(operation, "proxy-a");
         topology.RecordOperationAsync(operation, Arg.Any<CancellationToken>())
             .Returns(new FederationOperationResponse { OperationId = "op-replay-1", Status = "accepted", Created = false });
         topology.AcknowledgeOperationAsync("op-replay-1", Arg.Any<FederationOperationAckRequest>(), Arg.Any<CancellationToken>())
@@ -213,14 +224,14 @@ public sealed class FederationControllerTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-wait-apply",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "proxy-a",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             HttpMethod = "PUT",
             Path = "/qbrainai/todo/PLAN-FEDERATION-001",
             BodyBase64 = Convert.ToBase64String("{\"done\":true}"u8.ToArray()),
         };
-        var envelope = signer.Sign(operation, "PAYTON-LEGION2");
+        var envelope = signer.Sign(operation, "proxy-a");
         topology.RecordOperationAsync(operation, Arg.Any<CancellationToken>())
             .Returns(new FederationOperationResponse { OperationId = "op-wait-apply", Status = "accepted", Created = true });
         topology.AcknowledgeOperationAsync("op-wait-apply", Arg.Any<FederationOperationAckRequest>(), Arg.Any<CancellationToken>())
@@ -270,12 +281,12 @@ public sealed class FederationControllerTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-degraded-apply",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "proxy-a",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             BodyBase64 = Convert.ToBase64String("{\"done\":true}"u8.ToArray()),
         };
-        var envelope = signer.Sign(operation, "PAYTON-LEGION2");
+        var envelope = signer.Sign(operation, "proxy-a");
         topology.RecordOperationAsync(operation, Arg.Any<CancellationToken>())
             .Returns(new FederationOperationResponse { OperationId = "op-degraded-apply", Status = "accepted", Created = true });
         topology.AcknowledgeOperationAsync("op-degraded-apply", Arg.Any<FederationOperationAckRequest>(), Arg.Any<CancellationToken>())
@@ -318,12 +329,12 @@ public sealed class FederationControllerTests
     {
         var topology = Substitute.For<IFederationTopologyService>();
         var signer = CreateSigner();
-        topology.GetSyncItemsAsync("PAYTON-LEGION2", 0, Arg.Any<CancellationToken>())
+        topology.GetSyncItemsAsync("proxy-a", 0, Arg.Any<CancellationToken>())
             .Returns([new FederationSyncItem
             {
                 Sequence = 7,
                 OperationId = "op-local-1",
-                ProxyId = "PAYTON-DESKTOP",
+                ProxyId = "proxy-b",
                 Domain = "local_execution",
                 Method = "desktop_launch",
                 BodyBase64 = Convert.ToBase64String("{}"u8.ToArray()),
@@ -334,14 +345,14 @@ public sealed class FederationControllerTests
             topologyService: topology,
             envelopeSigner: signer);
 
-        var result = await controller.Sync("PAYTON-LEGION2", 0, CancellationToken.None).ConfigureAwait(true);
+        var result = await controller.Sync("proxy-a", 0, CancellationToken.None).ConfigureAwait(true);
 
         var ok = Assert.IsType<OkObjectResult>(result.Result);
         var items = Assert.IsAssignableFrom<IReadOnlyList<FederationSyncItem>>(ok.Value);
         var item = Assert.Single(items);
         Assert.NotNull(item.Envelope);
         Assert.Equal("local_execution", item.Envelope.ApplyMode);
-        Assert.Equal("PAYTON-LEGION2", item.Envelope.TargetProxyId);
+        Assert.Equal("proxy-a", item.Envelope.TargetProxyId);
     }
 
     // --- Enable / Disable ---
@@ -650,12 +661,12 @@ public sealed class FederationControllerTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-signed-txn",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "proxy-a",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             BodyBase64 = Convert.ToBase64String("{\"done\":true}"u8.ToArray()),
         };
-        var envelope = signer.Sign(operation, "PAYTON-LEGION2");
+        var envelope = signer.Sign(operation, "proxy-a");
         topology.RecordOperationAsync(operation, Arg.Any<CancellationToken>())
             .Returns(new FederationOperationResponse { OperationId = "op-signed-txn", Status = "accepted", Created = true });
         topology.AcknowledgeOperationAsync("op-signed-txn", Arg.Any<FederationOperationAckRequest>(), Arg.Any<CancellationToken>())

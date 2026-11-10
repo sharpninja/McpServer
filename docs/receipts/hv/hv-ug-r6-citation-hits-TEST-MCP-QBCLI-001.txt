@@ -1,0 +1,8 @@
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:15:/// TEST-MCP-QBCLI-001: QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session reuse. The
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:124:    /// TEST-MCP-QBCLI-001: Grok runs in an isolated working folder with its dashboard, memory and subagents off and
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:340:    /// TEST-MCP-QBCLI-001: Codex returns the assistant text from the JSONL stream, not the raw events. The test writes
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:379:    /// TEST-MCP-QBCLI-001: Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:415:    /// TEST-MCP-QBCLI-001: the temp folder comes from the configured variable without the Windows service ACL. The
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:433:    /// TEST-MCP-QBCLI-001: Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:472:    /// TEST-MCP-QBCLI-001: Codex writes its output file under the configured temp folder. The test writes the process
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:798:/// TEST-MCP-QBCLI-001: the default shared CLI temp directory on a Windows host lives under the machine's

@@ -1,0 +1,171 @@
+[
+  {
+    "Commit": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 94%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 93%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "127468345afcc7a24e6a254f712d6b75a54713e8",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "5924926051f84720c110ab1421430499fadf918a",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "4f668b76d26b26e7162d8654fb946c484fd42539",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 93%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "8a6173342dcd7683b9d9549005a5af819b8abc90",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "11681680d316bee7c8c184e45b699af7c1bd2188",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 97%, completeness 93%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "a4c358efd91131e7fb714370726997b5c2d076cb",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 92%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "de5813532adb51b964b222644ae0519bd814f8ef",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 93%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 92%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "Commit": "cbc74e823e7af96f8df1a1320498998e5de2b328",
+    "Signature": [
+      "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 90%"
+    ],
+    "SignaturePresent": true
+  },
+  {
+    "TakeoverFile": ".nuke/build.schema.json",
+    "Identical": false
+  },
+  {
+    "TakeoverFile": "build/Build.TestDependencies.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "build/LinuxProviderTestProvisioner.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "build/ProviderTestProvisioningContracts.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+    "Identical": true
+  },
+  {
+    "TakeoverFile": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+    "Identical": true
+  }
+]

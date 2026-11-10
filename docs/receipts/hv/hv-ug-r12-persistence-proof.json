@@ -1,0 +1,34 @@
+{
+  "timestampUtc": "2026-11-05T08:27:32.3978001Z",
+  "timestampLocal": "2026-11-05T02:27:32",
+  "reviewerSessionId": "Codex-20261105T064457Z-plugin-session",
+  "reviewerRequestId": "req-20261105T064500Z-unitgreen-r12",
+  "historyPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r12-persist-history-full.txt",
+  "status": "in_progress",
+  "checks": [
+    {
+      "kind": "PROSE",
+      "parts": 10,
+      "characters": 179241,
+      "sha256": "BBAFF68BBA76A34A09FCE06C63F6ABF54F5137599B26E185577DC4844906027D",
+      "exactMatch": true
+    },
+    {
+      "kind": "JSON",
+      "parts": 13,
+      "characters": 220169,
+      "sha256": "55985CF7BD3440B70266F74C031D3883F4DDB0760DA437B7887E7E8F55A800EA",
+      "exactMatch": true
+    }
+  ],
+  "result": "Complete prose and complete JSON persisted and reassembled exactly from own-turn processingDialog",
+  "completion": {
+    "timestampUtc": "2026-11-05T08:28:54.9723082Z",
+    "timestampLocal": "2026-11-05T02:28:54",
+    "historyPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r12-persist-history-complete.txt",
+    "status": "completed",
+    "fullResponseExactMatch": true,
+    "responseSha256": "BBAFF68BBA76A34A09FCE06C63F6ABF54F5137599B26E185577DC4844906027D",
+    "dialogPartCount": 23
+  }
+}

@@ -8,6 +8,13 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// TEST-MCP-QBEXEC-001: Verifies MCP-internal vs external tool classification and that the interceptor executes
 /// internal tools server-side (stripping them) while leaving external and unhandled-internal calls for the agent.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-QBEXEC-001 (its first two criteria, which carry no criterion ids).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-QBEXEC-001 (criteria without ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class QuadBrainToolInterceptionTests
 {
     /// <summary><c>mcp_</c>-prefixed tools are internal; others are external.</summary>

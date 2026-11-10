@@ -1,0 +1,72 @@
+{
+  "name": "ug-r14f4-s0-compile-1",
+  "kind": "compile",
+  "retrospective": false,
+  "note": "Written when the run ended, from its own meta, exit and log files (Save-CompileReceipt.ps1).",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "runHead": "f9b905798d6f5c89797b3b9e2c6677281005224f",
+  "runDirtyPaths": [
+    " M tests/Build.Tests/BuildTargetTests.cs",
+    " M tests/Build.Tests/DocsSyncG8OverlayTests.cs",
+    " M tests/Build.Tests/HandoffD3D5OverlayTests.cs",
+    " M tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs",
+    " M tests/Build.Tests/ServiceUpdateTests.cs",
+    " M tests/Build.Tests/SyncAgentPluginsChecksumTests.cs",
+    " M tests/Build.Tests/SyncAgentPluginsPackNameTests.cs",
+    " M tests/QBrainAi.Client.Tests/HandoffClientTests.cs",
+    " M tests/QBrainAi.PlanReview.Tests/PlanTransactionReviewTests.cs",
+    " M tests/QBrainAi.PluginIntegration.Tests/PluginSessionLogWorkflowAdapterTests.cs",
+    " M tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs",
+    " M tests/QBrainAi.Review.Tests/AiReviewTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Middleware/FederationMiddlewareTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/BrainInteractionSessionLoggerTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainLiveOrchestrationTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizerTimeoutTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG7OverlayTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerMockDataTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "Compile"
+  ],
+  "startedLocal": "2026-11-07T08:01:51",
+  "endedLocal": "2026-11-07T08:04:40",
+  "exitCode": 0,
+  "status": "passed",
+  "buildSucceededLine": "Build succeeded on 11/7/2026 8:04:40 AM. ＼（＾ᴗ＾）／",
+  "errorDiagnostics": 0,
+  "warningDiagnostics": 0,
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-s0-compile-1.out.log",
+  "logSha256": "E286386D6E1C398BB07D15DFA500AF1B83682E6D220EA724B40C8F6965AF9AC3",
+  "sources": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+      "sha256": "3AD602FFC2C81501DE807B5480D4F68FD2383E571B1C67AB5D45E4C26ADA3440"
+    },
+    {
+      "path": "tests/Build.Tests/ServiceUpdateTests.cs",
+      "sha256": "79791767B2008DDFCB854C4D3E4C9BF74085EEF673F789820F41071FF9E15DE7"
+    }
+  ],
+  "metaFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-s0-compile-1.meta.json",
+  "metaSha256": "AE8789CF3D59D05CD64F49BDFB96DF3589C1355F0A7698EF09276C2F2B3F6845",
+  "writtenLocal": "2026-11-07T08:05:07",
+  "minutesAfterRunEnd": 0.46,
+  "writtenBy": "ClaudeCode"
+}

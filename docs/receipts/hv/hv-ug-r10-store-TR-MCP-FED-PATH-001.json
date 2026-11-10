@@ -1,0 +1,28 @@
+{
+  "payload": {
+    "deprecated": true,
+    "result": {
+      "acceptanceCriteria": [
+        {
+          "evidence": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs (CombineResolvesRootRelativeWindowsSegmentAgainstDrive, CombineResolvesRootRelativeWindowsSegmentAgainstUncShare); WorkspacePathNormalizerMockDataTests.cs (RootRelativeNegativeControls_AreRejectedInsidePassingHarness); PR 82 commits f6768359 and dcd0269a",
+          "id": "AC1",
+          "text": "IWorkspacePathNormalizer.Combine treats a segment with one leading backslash as root-relative on Windows: it keeps the current root's volume, the drive (C:/) or the UNC server and share (//srv/share/), and replaces the rest of the path, on a Linux hub and a Windows host (PR 81 finding P12, PR 82 review).",
+          "isSatisfied": false
+        }
+      ],
+      "updatedAt": "2026-11-03T12:38:00.9644273+00:00",
+      "id": "TR-MCP-FED-PATH-001",
+      "status": "pending",
+      "priority": "medium",
+      "subarea": "FED",
+      "notes": "Registered in this workspace store 2026-10-19 by operator decision (\"Create the records here now\"). Statement and FR criteria verbatim from docs/plans/2026-10-07-federation-fixes.md:53-59 (approved 2026-10-07; first registered in the F:\\GitHub\\McpServer store on PAYTON-LEGION2). Architecture Amendment 1 H0 import must merge with these records.",
+      "title": "Single request-path normalization entry point",
+      "area": "MCP",
+      "description": "Introduce a single request-path normalization entry point (IWorkspacePathNormalizer backed by WorkspaceIdentityPath) with an injectable host-platform abstraction; all resolvers listed in section 1.2 use it. No direct Path.GetFullPath on request-supplied workspace paths outside it (enforced by an architecture test).",
+      "createdAt": "2026-11-03T12:38:00.9643175+00:00",
+      "scopeStartLayerKey": "layer-1"
+    },
+    "requestId": "req-20261103T123759Z-9154"
+  },
+  "type": "result"
+}

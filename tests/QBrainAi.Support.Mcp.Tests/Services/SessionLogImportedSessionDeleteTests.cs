@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Xunit;
+using static QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTestsSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
@@ -19,79 +20,9 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// imported sessions are never deletable. Uses an in-memory SQLite McpDbContext seeded through
 /// SubmitAsync with a source file path.
 /// </summary>
+/// <remarks>2026-11-07, TR-MCP-TRANSCRIPT-004; TEST-MCP-TRANSCRIPT-012; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 3 Category=Integration cases (DeleteSessionAsync_ImportedProviderNativeIds_IsRejected, DeleteTurnAsync_ImportedProviderNativeIds_DeletesTurn and ReplaceTurnSectionAsync_ImportedProviderNativeIds_ReplacesSection) and the helpers only they use (ImportedSessionId, ImportedRequestId and SeedImportedSession) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the helpers both halves use (WorkspacePath, Agent, OpenConnection and BuildSut) moved once into Services/SessionLogImportedSessionDeleteTestsSupport.cs beside this file, which the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
 public sealed class SessionLogImportedSessionDeleteTests
 {
-    private const string WorkspacePath = @"E:\tests\sessionlog-imported-delete";
-    private const string Agent = "Codex";
-    private const string ImportedSessionId = "019f2580-48c8-7912-b6a9-27f61b18d0d3";
-    private const string ImportedRequestId = "fc_08eff9c03a00059d016a470a6942688197";
-
-    /// <summary>Session delete stays canonical-only: imported UUID session ids are rejected.</summary>
-    [Fact]
-    public async Task DeleteSessionAsync_ImportedProviderNativeIds_IsRejected()
-    {
-        using var connection = OpenConnection();
-        SeedImportedSession(connection);
-
-        var (sut, db) = BuildSut(connection);
-        using (db)
-            await Assert.ThrowsAsync<ArgumentException>(() => sut.DeleteSessionAsync(Agent, ImportedSessionId, TestContext.Current.CancellationToken)).ConfigureAwait(true);
-
-        var (reader, readerDb) = BuildSut(connection);
-        using (readerDb)
-            Assert.NotNull(await reader.GetAsync(Agent, ImportedSessionId, TestContext.Current.CancellationToken).ConfigureAwait(true));
-    }
-
-    /// <summary>Imported turns with provider-native request ids must be deletable.</summary>
-    [Fact]
-    public async Task DeleteTurnAsync_ImportedProviderNativeIds_DeletesTurn()
-    {
-        using var connection = OpenConnection();
-        SeedImportedSession(connection);
-
-        var (sut, db) = BuildSut(connection);
-        using (db)
-        {
-            var deleted = await sut.DeleteTurnAsync(Agent, ImportedSessionId, ImportedRequestId, TestContext.Current.CancellationToken).ConfigureAwait(true);
-            Assert.True(deleted);
-        }
-
-        var (reader, readerDb) = BuildSut(connection);
-        using (readerDb)
-        {
-            var session = await reader.GetAsync(Agent, ImportedSessionId, TestContext.Current.CancellationToken).ConfigureAwait(true);
-            Assert.NotNull(session);
-            Assert.DoesNotContain(session!.Turns ?? [], turn => turn.RequestId == ImportedRequestId);
-        }
-    }
-
-    /// <summary>Imported turns must accept section-level replace operations.</summary>
-    [Fact]
-    public async Task ReplaceTurnSectionAsync_ImportedProviderNativeIds_ReplacesSection()
-    {
-        using var connection = OpenConnection();
-        SeedImportedSession(connection);
-
-        var (sut, db) = BuildSut(connection);
-        using (db)
-        {
-            var replaced = await sut.ReplaceTurnSectionAsync(Agent, ImportedSessionId, ImportedRequestId, "tags", new UnifiedRequestEntryDto
-            {
-                RequestId = ImportedRequestId,
-                Tags = ["retagged"],
-            }, TestContext.Current.CancellationToken).ConfigureAwait(true);
-            Assert.True(replaced);
-        }
-
-        var (reader, readerDb) = BuildSut(connection);
-        using (readerDb)
-        {
-            var session = await reader.GetAsync(Agent, ImportedSessionId, TestContext.Current.CancellationToken).ConfigureAwait(true);
-            var turn = session!.Turns!.Single(item => item.RequestId == ImportedRequestId);
-            Assert.Equal(["retagged"], turn.Tags);
-        }
-    }
-
     /// <summary>Whitespace identifiers stay rejected on the delete path.</summary>
     [Fact]
     public async Task DeleteSessionAsync_WhitespaceSessionId_Throws()
@@ -110,58 +41,5 @@ public sealed class SessionLogImportedSessionDeleteTests
         var (sut, db) = BuildSut(connection);
         using (db)
             await Assert.ThrowsAsync<ArgumentException>(() => sut.DeleteSessionAsync(Agent, "no-such-imported-session", TestContext.Current.CancellationToken)).ConfigureAwait(true);
-    }
-
-    private static SqliteConnection OpenConnection()
-    {
-        var connection = new SqliteConnection("Data Source=:memory:");
-        connection.Open();
-        return connection;
-    }
-
-    private static (SessionLogService Sut, McpDbContext Db) BuildSut(SqliteConnection connection)
-    {
-        var options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connection).Options;
-        var workspaceContext = new WorkspaceContext { WorkspacePath = WorkspacePath };
-        var db = new McpDbContext(options, workspaceContext);
-        db.Database.EnsureCreated();
-        var sut = new SessionLogService(db, NullLogger<SessionLogService>.Instance, Substitute.For<IChangeEventBus>(), workspaceContext);
-        return (sut, db);
-    }
-
-    /// <summary>Seeds one imported session (SubmitAsync with sourceFilePath) carrying provider-native ids.</summary>
-    private static void SeedImportedSession(SqliteConnection connection)
-    {
-        var (sut, db) = BuildSut(connection);
-        using (db)
-        {
-            sut.SubmitAsync(new UnifiedSessionLogDto
-            {
-                SourceType = Agent,
-                SessionId = ImportedSessionId,
-                Title = "Imported Codex transcript",
-                Started = "2026-07-02T20:03:25Z",
-                LastUpdated = "2026-07-13T17:21:42Z",
-                Status = "completed",
-                Turns =
-                [
-                    new UnifiedRequestEntryDto
-                    {
-                        RequestId = ImportedRequestId,
-                        Timestamp = "2026-07-03T01:03:38Z",
-                        QueryTitle = "shell_command",
-                        Status = "completed",
-                        Tags = ["transcript-import"],
-                    },
-                    new UnifiedRequestEntryDto
-                    {
-                        RequestId = "codex-event-2",
-                        Timestamp = "2026-07-03T01:03:45Z",
-                        QueryTitle = "output",
-                        Status = "completed",
-                    },
-                ]
-            }, sourceFilePath: @"F:\imports\rollout.jsonl", contentHash: "hash-1").GetAwaiter().GetResult();
-        }
     }
 }

@@ -1,0 +1,15 @@
+RECEIPT 2026-11-02T12:49:54 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-11-02T12:49:44 host=PAYTON-LEGION2 user=kingd
+RUNNER C:\Users\kingd\AppData\Local\Temp\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True
+  checkout: Previous HEAD position was 611a5dc5 fix: targeted test groups, owned provider keys, stored requirement times
+  checkout: HEAD is now at 62c5882d docs(xml): dated change logs per MEMORY-FACT-008 on PR 87 slices P, Q and R
+HEAD 62c5882d87f3d0b5019827b1f803140cbf79ca0d expected=62c5882d87f3d0b5019827b1f803140cbf79ca0d match=True
+PWSH C:\Program Files\PowerShell\7-LabWsman\pwsh.exe
+ACTION -NoProfile -ExecutionPolicy Bypass -File "C:\Users\kingd\AppData\Local\Temp\Invoke-WinLaneRunner.ps1" -Worktree "F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019" -RunId "ug-r9-final3-win-lane-1" -LogPath "C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\MigrationIntegrationTests-ug-r9-final3-win-lane-1.log" -ProofPath "C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\proof-ug-r9-final3-win-lane-1.txt" -ExitPath "C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\exit-ug-r9-final3-win-lane-1.txt"
+ACCOUNT PAYTON-LEGION2\kingd
+TASK McpUnitGreenLane-r9-final3 state=Running lastRun=11/02/2026 12:49:47 result=267009
+PROOF so far: START 2026-11-02T12:49:49 user=kingd session=1 interactive=True head=62c5882d87f3d0b5019827b1f803140cbf79ca0d
+END 2026-11-02T12:49:53

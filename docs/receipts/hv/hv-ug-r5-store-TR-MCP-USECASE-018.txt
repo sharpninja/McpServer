@@ -1,0 +1,45 @@
+type: result
+payload:
+  requestId: req-20261021T162442Z-3cc5
+  result:
+    id: TR-MCP-USECASE-018
+    title: Cross-platform bounded native I/O and deterministic evidence
+    description: >-
+      Use searchable Linux directory modes and descriptor-relative restoration. Isolate potentially blocking physical identity and SQLite pre-handle opens behind finitely owned platform cancellation mechanisms. Classify cancellation from direct operation evidence, and resolve repository fixtures from deterministic assembly metadata rather than mapped caller paths.
+
+      Converted from FR-MCP-USECASE-016 on 2026-10-19 (operator: "If it is in a FR, then that FR needs to be converted to a TR"; answers "Merge into its TR (Recommended)" and "FR-001, delete FRs (Recommended)"). FR-MCP-USECASE-016 stated: Use-case persistence and its supporting contained rollback, physical workspace identity, SQLite opening, cancellation classification, and repository evidence paths shall remain safe and finitely completing on every supported platform, including deterministic CI builds, while preserving exact provider failures and truthful supersession evidence.
+
+      **Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-019
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: USECASE
+    acceptanceCriteria:
+    - id: AC-001
+      text: Linux rollback directories retain owner search and execute permission, nested restoration reproduces file contents and mode, and all mutations remain contained.
+      isSatisfied: false
+    - id: AC-002
+      text: Physical workspace identity resolution completes within a finite bound on Windows and non-Windows without caller-thread blocking, cancellation gaps, abandoned workers, or silent platform returns.
+      isSatisfied: false
+    - id: AC-003
+      text: SQLite connection opening is finitely bounded before native-handle publication on every supported platform and leaves no worker, handle, callback, interrupt, pool, or lifecycle leak.
+      isSatisfied: false
+    - id: AC-004
+      text: Only outcomes precisely attributable to requested cancellation become OperationCanceledException; independent I/O, disposal, and provider failures retain their original type and details.
+      isSatisfied: false
+    - id: AC-005
+      text: Repository and Agent Help fixtures discover their root from true external deterministic builds with mapped CallerFilePath and no MCP_REPOSITORY_ROOT override.
+      isSatisfied: false
+    - id: AC-006
+      text: "Every supported platform executes an applicable native contract assertion in the integration lane: platform-specific tests are Category=Integration tests, tagged Platform=Linux or Platform=Windows when they apply to one host, that run in their host's MigrationIntegrationTests (TR-MCP-NUKE-019) and neither skip nor silently return; no unit test depends on the platform."
+      isSatisfied: false
+    - id: AC-007
+      text: The rejected fourteenth receipt is preserved with an explicit supersession notice, and the fifteenth evidence records every failed, inconclusive, and passing run with independently verified hashes and command mappings.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T16:24:43.6925454+00:00
+    updatedAt: 2026-10-21T16:24:43.6926691+00:00
+  deprecated: true
+
+---
+

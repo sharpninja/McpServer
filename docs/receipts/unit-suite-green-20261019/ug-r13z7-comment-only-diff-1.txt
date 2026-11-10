@@ -1,0 +1,24 @@
+RECEIPT started=2026-11-05T14:15:30 ended=2026-11-05T14:15:31 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Test-CommentOnlyDiff-v2.ps1 sha256=57E4515CAD25ACC926B2B121D13D96F94DE52BBB9A819250A561E4C4D752A860
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Paths | src/QBrainAi.GraphRag/Services/GraphRagService.cs,src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs,src/QBrainAi.Services/Services/FederationEnvelopeSigner.cs,src/QBrainAi.Services/Services/MemoryService.cs,src/QBrainAi.Services/Services/SessionLogService.cs,src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs,tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs,tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs,tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs,tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs,tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs,tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedClock.cs,tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs,tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs,tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs,tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs,tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs,tests/TestSupport.Shared/TemporaryInstanceChecks.cs
+HEAD 88c5abccee5f92b785f1368fdaace50dc0d4e2c2
+Now: 2026-11-05T14:15:31 head=88c5abcc
+PATH src/QBrainAi.GraphRag/Services/GraphRagService.cs added=3 doc=2 blank=1 removed=0 other=0
+PATH src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs added=3 doc=2 blank=1 removed=0 other=0
+PATH src/QBrainAi.Services/Services/FederationEnvelopeSigner.cs added=3 doc=2 blank=1 removed=0 other=0
+PATH src/QBrainAi.Services/Services/MemoryService.cs added=3 doc=2 blank=1 removed=0 other=0
+PATH src/QBrainAi.Services/Services/SessionLogService.cs added=3 doc=2 blank=1 removed=0 other=0
+PATH src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs added=3 doc=2 blank=1 removed=0 other=0
+PATH tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs added=2 doc=2 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs added=2 doc=2 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs added=3 doc=2 blank=1 removed=0 other=0
+PATH tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs added=34 doc=24 blank=10 removed=0 other=0
+PATH tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs added=4 doc=4 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedClock.cs added=5 doc=4 blank=1 removed=0 other=0
+PATH tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs added=2 doc=2 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs added=8 doc=8 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs added=5 doc=4 blank=1 removed=0 other=0
+PATH tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs added=2 doc=2 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs added=2 doc=2 blank=0 removed=0 other=0
+PATH tests/TestSupport.Shared/TemporaryInstanceChecks.cs added=7 doc=7 blank=0 removed=0 other=0
+END doc=75 blank=19 breaking=0

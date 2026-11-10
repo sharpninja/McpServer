@@ -1,0 +1,219 @@
+{
+  "overallVerdict": "DISAGREE",
+  "accuracy": 96,
+  "completeness": 95,
+  "confidence": 99,
+  "passCount": 17,
+  "failCount": 7,
+  "unknownCount": 0,
+  "failList": [
+    {
+      "Id": "R8B-F1",
+      "Title": "The environment-delta integration assertion does not own its baseline",
+      "Classification": "implementer edit",
+      "Locations": [
+        "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:20-44",
+        "src/QBrainAi.Services/Services/DesktopProcessSpawner.cs:88-105",
+        "TR-MCP-USECASE-018 AC-006",
+        "TR-MCP-USECASE-019 AC-008"
+      ],
+      "Defect": "ExtractEnvironment_RemovesServiceDefaultsAndKeepsExplicitDeltas inherits the parent environment, sets only the child GH_TOKEN to the literal test-token, and indexes deltas[\"GH_TOKEN\"]. ExtractEnvironment compares the child map with Environment.GetEnvironmentVariables and omits equal values. If the parent GH_TOKEN is already test-token, the key is absent and the assertion fails. The test neither sets and restores that baseline nor joins the process-environment collection. Integration classification alone does not fulfill the settled set-and-restore rule.",
+      "Fix": "Own and restore the relevant baseline under the existing serialized process-environment collection, or expose an explicit baseline-map seam and retain a native binding that owns its baseline. Preserve the unchanged-variable and changed-variable assertions. Amend the plan, self-review and D-B evidence to acknowledge and close the gap before marking either criterion satisfied.",
+      "Claims": [
+        "UG3",
+        "UG8",
+        "UG11",
+        "UG12",
+        "UG17"
+      ]
+    },
+    {
+      "Id": "R8B-F2",
+      "Title": "Changed held-out integration bindings have no supplied TRX",
+      "Classification": "operator decision",
+      "Locations": [
+        "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs:27-33",
+        "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/OllamaServerFixture.cs:74-77",
+        "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/manifest.json:688-690",
+        "docs/plans/2026-10-19-unit-suite-green.md:735",
+        "docs/plans/2026-10-19-unit-suite-green.md:1022",
+        "IMPL-TXNINTEGRATION-001"
+      ],
+      "Defect": "The PR changes the Support integration requirement-scope test to use shared ScratchQBrainAi and changes its Ollama fixture candidates, but supplies no TRX for QBrainAi.Support.Mcp.IntegrationTests. The requirement-scope file explicitly retains an active TR-MCP-NUKE-019 AC-6 binding claim. AC-2 validly holds that project out of the lane; it does not prove the changed binding or waive policy 7.9 for integration tests specific to this review. The operator chose Repl only; rest waits with explicit notice that HV could fail for this missing project.",
+      "Fix": "Resolve the paused scope explicitly: provide passing TRX for the changed in-scope integration bindings through the approved build workflow, or defer/remove those changes from this PR, or obtain an explicit policy 7.9 waiver for precisely named retained bindings. Keep the broader held-out TODO open and reconcile the PR, plan and D-B with the selected resolution.",
+      "Claims": [
+        "UG8",
+        "UG11",
+        "UG12",
+        "UG26"
+      ]
+    },
+    {
+      "Id": "R8B-F3",
+      "Title": "The shared temporary instance does not enforce ownership of its database selection",
+      "Classification": "implementer edit",
+      "Locations": [
+        "tests/TestSupport.Shared/ScratchQBrainAi.cs:243-264",
+        "tests/TestSupport.Shared/ScratchQBrainAi.cs:435-455",
+        "src/QBrainAi.Support.Mcp/Program.cs:118-123",
+        "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:102-116",
+        "src/QBrainAi.Services/Options/McpInstanceResolver.cs:34-50",
+        "tests/TestSupport.Shared/TemporaryInstanceChecks.cs:20-59",
+        "TR-MCP-NUKE-019 AC-6"
+      ],
+      "Defect": "ScratchQBrainAi launches a server with the inherited process environment, writes an owned SQLite DataSource to YAML and sets the legacy MCP_SQLITE_DATA_SOURCE variable. It does not remove or override inherited Mcp__Database__Sqlite__ConnectionString or the canonical QBrainAi form. Program loads environment configuration after YAML; ResolveSqliteConnectionString prefers ConnectionString to DataSource. A valid inherited connection string selecting another database therefore wins over the owned file. Workspace/marker argument checks and a health nonce do not check this database selection. The server can use an unowned database or fail startup because of inherited configuration.",
+      "Fix": "Make the owned-instance configuration authoritative for storage and the related workspace/marker destinations, removing or overriding all competing canonical and legacy inputs, or reject a destination outside the owned context before starting the process. Add a pure configuration-selection contract, its scripted negative controls and the production binding. Reconcile the plan, self-review, TODO closure and D-B before satisfying AC-6 or the integration environment-isolation criteria.",
+      "Claims": [
+        "UG3",
+        "UG4",
+        "UG8",
+        "UG11",
+        "UG12",
+        "UG17"
+      ]
+    }
+  ],
+  "unknownList": [],
+  "implementerFixes": [
+    "R8B-F1: own the environment-delta baseline and add deterministic discriminating unit coverage.",
+    "R8B-F3: enforce owned-instance configuration selection and add canonical/legacy conflict contracts before binding."
+  ],
+  "operatorDecisionFails": [
+    {
+      "Id": "R8B-F2",
+      "Decision": "Resolve changed held-out integration coverage",
+      "Options": [
+        "Authorize the changed in-scope bindings and supply passing TRX before closure (recommended).",
+        "Defer or remove these changes from PR 87, leaving the separate integration TODO open.",
+        "Explicitly waive policy 7.9 for the precisely named retained bindings and amend the closure claim."
+      ]
+    }
+  ],
+  "operatorOverriddenObservations": [
+    {
+      "Id": "OO-1",
+      "Observation": "Scanner coverage, syntax resolution, tests, documentation and their descriptions were not scored. Git history confirms the scanner remains unchanged since ccc78b7a. No scanner remediation is requested."
+    }
+  ],
+  "closure": [
+    {
+      "Id": "R7-F1",
+      "Verdict": "PASS",
+      "Evidence": "One bounded parse rule and both Read call-site seams; positive/negative contracts before binding; all 19 former failure names Passed on both final unit hosts (hv-ug-r8b3-closure-cases.json)."
+    },
+    {
+      "Id": "R6-F1",
+      "Verdict": "PASS",
+      "Evidence": "Four CLI temp-resolver paths are inside CliTempVariables with canonical/legacy primary and fallback ownership; the 14 moved cases and helper contracts/bindings pass in supplied evidence."
+    },
+    {
+      "Id": "R6-F2",
+      "Verdict": "PASS",
+      "Evidence": "Changed missing-ID citations are explicitly historical in their files; live present/mapped IDs support active claims; the a78640ba requirement-scope label closes its sibling citation."
+    },
+    {
+      "Id": "R5-F1",
+      "Verdict": "PASS",
+      "Evidence": "Root/ancestor reachability contract and real-link bindings preserve positive reachability plus rejection controls; WS-005 and SESSIONLOG-006 texts/mappings agree."
+    },
+    {
+      "Id": "R5-F2",
+      "Verdict": "PASS",
+      "Evidence": "The specifically identified canonical/legacy environment cases retain their process-environment collection and ownership corrections. R8B-F1 and R8B-F3 are separately identified remaining sibling gaps, not a claim those corrected cases regressed."
+    },
+    {
+      "Id": "R4-F1",
+      "Verdict": "OVERRIDDEN",
+      "Evidence": "Scanner alias-resolution coverage is excluded by the operator override, with no score deduction or requested work."
+    },
+    {
+      "Id": "R4-F2",
+      "Verdict": "PASS",
+      "Evidence": "Historical head, task-count and closure statements carry corrections in the plan and TODO tasks 9, 15 and 18; final code head and gate metadata independently match."
+    },
+    {
+      "Id": "R4-F3",
+      "Verdict": "PASS",
+      "Evidence": "The memory binding uses present FR/TR/TEST-MCP-MEMORY-002 with verified mappings, retaining the corrected citation."
+    },
+    {
+      "Id": "R3-F1",
+      "Verdict": "PASS",
+      "Evidence": "The sources-based version-resolution seam keeps unit inputs test-owned and retains the real filesystem integration binding."
+    },
+    {
+      "Id": "R3-F2",
+      "Verdict": "OVERRIDDEN",
+      "Evidence": "The remaining scanner-mediated failure is excluded; no scanner coverage or documentation remedy is requested."
+    },
+    {
+      "Id": "R3-F3",
+      "Verdict": "PASS",
+      "Evidence": "FR-MCP-USECASE-017 and -016 are absent in dedicated getters and effective view; replacement TR/TEST mappings are present."
+    },
+    {
+      "Id": "R3-F4",
+      "Verdict": "PASS",
+      "Evidence": "The old self-review/head correction is retained; current receipts and self-review identify a78640ba and docs-only descendants correctly. New disclosure omissions are R8B-F1/F3."
+    },
+    {
+      "Id": "R2-F1",
+      "Verdict": "PASS",
+      "Evidence": "The originally named hidden environment/native dependencies are reclassified or isolated through explicit inputs, preserving assertions and current lane inventory."
+    },
+    {
+      "Id": "R2-F2",
+      "Verdict": "OVERRIDDEN",
+      "Evidence": "Scanner-mediated closure is excluded by the operator override."
+    },
+    {
+      "Id": "R2-F3",
+      "Verdict": "PASS",
+      "Evidence": "Historical scripting/audit exceptions and failed invocations are disclosed; receipt provenance and current scored gates are independently checked."
+    },
+    {
+      "Id": "F1",
+      "Verdict": "PASS",
+      "Evidence": "The original guard mock run is retained and explicitly disclosed as 4,692 total, 4,675 Passed, one Failed and 16 NotExecuted, not retroactively called green. Scanner correction requirements are overridden; no lost receipt is reconstructed."
+    },
+    {
+      "Id": "F2",
+      "Verdict": "PASS",
+      "Evidence": "The original native filesystem/SQLite cases and their siblings left the unit filter or gained deterministic seams, with their applicable final lane assertions retained."
+    },
+    {
+      "Id": "F3",
+      "Verdict": "OVERRIDDEN",
+      "Evidence": "Scanner/skip-guard syntax coverage and associated claims are excluded by the operator override."
+    },
+    {
+      "Id": "F4",
+      "Verdict": "PASS",
+      "Evidence": "The current interactive Windows lane has all 589 results Passed, filter and session proof, rather than the original unrun gate."
+    },
+    {
+      "Id": "F5",
+      "Verdict": "OVERRIDDEN",
+      "Evidence": "Scanner project-selection change-detection coverage is excluded by the operator override."
+    },
+    {
+      "Id": "F6",
+      "Verdict": "PASS",
+      "Evidence": "The historical Bash ls exception is disclosed; the current claim does not erase it."
+    },
+    {
+      "Id": "F7",
+      "Verdict": "PASS",
+      "Evidence": "The original missing Windows lane and unconditional satisfaction wording were corrected; the live criteria and all tasks remain false. New insufficiencies in D-B are fully failed in UG12 with R8B-F1/F2/F3."
+    }
+  ],
+  "headSha": "332e0d31dbcb823418c3db30c409bc44df655de8",
+  "receiptPaths": [
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r8b-20261028T222504.md",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r8b-20261028T222504.json",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261028T222504-unitgreen-r8b.request.jsonl",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261028T222504-unitgreen-r8b.response.jsonl"
+  ],
+  "reviewerSessionId": "Codex-20261029T032954Z-plugin-session",
+  "reviewerRequestId": "req-20261029T032957Z-unitgreen-r8b"
+}

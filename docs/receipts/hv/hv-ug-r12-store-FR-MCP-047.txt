@@ -1,0 +1,25 @@
+type: result
+payload:
+  requestId: req-20261105T065013Z-4df7
+  result:
+    id: FR-MCP-047
+    title: Desktop Process Launch
+    description: >-
+      The server shall support launching interactive desktop processes from a Windows service (LocalSystem) context using `CreateProcessAsUser` with WTS session token negotiation, enabling Copilot CLI and other GUI/console tools to run on the interactive desktop with stdio pipe redirection or visible console windows.
+
+
+      **Covered by:** `DesktopProcessLauncher`, `NativeMethods`
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria:
+    - id: ac-1
+      text: 'Code that compares a requested environment with the process environment, such as the explicit deltas a desktop process launch passes on, takes that baseline as an explicit input: its unit contract supplies both maps and proves that equal values are omitted and changed values kept whatever the ambient environment holds (operator 2026-10-29: "Strengthen ACs, fix both (Recommended)"; hostile validation finding R8B-F1; moved from TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008, operator 2026-10-29: "Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.").'
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T06:50:15.1744787+00:00
+    updatedAt: 2026-11-05T06:50:15.1745941+00:00
+  deprecated: true
+
+---
+

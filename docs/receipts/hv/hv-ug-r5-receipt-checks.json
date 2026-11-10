@@ -1,0 +1,47 @@
+{
+  "TimestampLocal": "2026-10-21T12:09:32",
+  "ClaimCount": 20,
+  "PassCount": 12,
+  "FailCount": 7,
+  "FailClaims": [
+    "UG3",
+    "UG8",
+    "UG11",
+    "UG12",
+    "UG14",
+    "UG17",
+    "UG20"
+  ],
+  "UnknownCount": 0,
+  "OverrideCount": 1,
+  "FindingCount": 2,
+  "ClosureCount": 17,
+  "Surfaces": [
+    {
+      "id": 1,
+      "verdict": "FAIL"
+    },
+    {
+      "id": 2,
+      "verdict": "FAIL"
+    },
+    {
+      "id": 3,
+      "verdict": "FAIL"
+    },
+    {
+      "id": 4,
+      "verdict": "FAIL"
+    }
+  ],
+  "ReceiptPathCount": 2,
+  "AllReceiptPathsExist": true,
+  "MissingSourcePaths": [],
+  "MarkdownJsonVerdictEqual": true,
+  "MarkerValueMatches": 0,
+  "ApiKeyPatternMatches": 0,
+  "MdDashCount": 0,
+  "MdTableCount": 0,
+  "MarkdownSha256": "9EA1546CEE5B71CB2A213449A0926B92B19CC02F19450E7CCB5976787508A2DD",
+  "JsonSha256": "DB92A21588C5C11782653EB7ECCFEBFE30EAB789C4D11A6365E50B39C3657FC1"
+}

@@ -1,0 +1,230 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the integration-owned project of QBrainAi.Support.Mcp.Tests'
+       Category=Integration cases, split out folder by folder so the unit-owned project holds only unit cases (slice S5,
+       hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"). It
+       mirrors QBrainAi.Support.Mcp.Tests with only the references the moved cases use: the repository-root assembly
+       metadata (TR-MCP-USECASE-018 AC-005), and no copied fixtures, embedded resources or OS-conditional compile block
+       until moved cases need them. The lane runs it whole with its Category=Integration and host platform filter. -->
+  <PropertyGroup>
+    <Configurations>Debug;Release;Staging</Configurations>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+  </PropertyGroup>
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S6 moved FileGitHubWorkspaceTokenStoreTests and
+       RepoFileServiceTests, which substitute services with NSubstitute, so this project references the vendored
+       NSubstitute the same way QBrainAi.Support.Mcp.Tests does. -->
+  <Import Project="..\..\lib\NSubstitute\NSubstitute.Reference.props" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the root namespace joins "Environment" and "IntegrationTests"
+         into one segment. A namespace QBrainAi.Support.Mcp.Environment would shadow System.Environment for every bare
+         Environment. inside a QBrainAi.Support.Mcp.* namespace of this assembly (C# looks up enclosing namespaces before
+         global usings), which 31 Support.Mcp.Tests files that move here use; the assembly keeps the project name. -->
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the project, formerly QBrainAi.Support.Mcp.Environment.IntegrationTests,
+         now carries the same name as its root namespace, QBrainAi.Support.Mcp.EnvironmentIntegrationTests (operator
+         2026-11-07: "Project names and root namespaces for the project should match, so fix the project name."), so its
+         assembly, which still takes the project name, has that name too; the comment above still gives the reason for the
+         joined segment. -->
+    <RootNamespace>QBrainAi.Support.Mcp.EnvironmentIntegrationTests</RootNamespace>
+    <McpRepositoryRoot>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\..'))</McpRepositoryRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- 2026-11-07, TR-MCP-USECASE-018 AC-006; TR-MCP-NUKE-019 AC-7: the linked UnitSuitePlatformScanner parses C# with
+         Roslyn for UnitSuitePlatformScannerTests (slice S6). -->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="Microsoft.Data.Sqlite" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+    <PackageReference Include="coverlet.collector" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\QBrainAi.Support.Mcp\QBrainAi.Support.Mcp.csproj" />
+    <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the Windows process cases that slice S8 moved here
+         (BugTriage139SixteenthWindowsProcessTests) start QBrainAi.ProcessTree.TestHelper from this project's output
+         folder, as they did from QBrainAi.Support.Mcp.Tests, which references it; without the reference the helper was
+         missing and three cases failed in the Windows lane ug-r14f4-final-win-lane-1 (ClaudeCode fix after the S10 gates). -->
+    <ProjectReference Include="..\QBrainAi.ProcessTree.TestHelper\QBrainAi.ProcessTree.TestHelper.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <!-- The linked support below keeps its QBrainAi.Support.Mcp.Tests namespaces, so a moved file changes only its own
+         namespace line. -->
+    <Using Include="QBrainAi.Support.Mcp.Tests.Storage" />
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the namespaces of the support linked for slice S6, which the
+         moved files reached as their enclosing namespace before. -->
+    <Using Include="QBrainAi.Support.Mcp.Tests.Configuration" />
+    <Using Include="QBrainAi.Support.Mcp.Tests.Infrastructure" />
+    <Using Include="QBrainAi.Support.Mcp.Tests.Memory" />
+    <Using Include="QBrainAi.Support.Mcp.Tests.TestSupport" />
+    <AssemblyMetadata Include="McpRepositoryRoot" Value="$(McpRepositoryRoot)" />
+  </ItemGroup>
+  <!-- Shared by link with QBrainAi.Support.Mcp.Tests (one definition each, never copied): xUnit collection definitions and
+       assembly fixtures apply per assembly, so the four serialized collections (FR-MCP-TESTRESOURCE-001 ac-7 and ac-9)
+       and the hermetic user-profile assembly fixture (TR-MCP-WS-005) are compiled into both. -->
+  <ItemGroup>
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\HermeticUserProfileFixture.cs" Link="Shared\HermeticUserProfileFixture.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\TestSupport\ProcessEnvironmentCollection.cs" Link="Shared\TestSupport\ProcessEnvironmentCollection.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\WorkspaceIdentityNativeProcessStateCollection.cs" Link="Shared\Storage\WorkspaceIdentityNativeProcessStateCollection.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\SqlServerLocalDbCollection.cs" Link="Shared\Storage\SqlServerLocalDbCollection.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Documentation\RepositoryRootProcessStateCollection.cs" Link="Shared\Documentation\RepositoryRootProcessStateCollection.cs" />
+  </ItemGroup>
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: support that the cases moved in slice S6 share with unit cases
+       that stay in QBrainAi.Support.Mcp.Tests, linked (one definition each, never copied); the repository-root locator
+       is the shared tests/Shared one (TR-MCP-USECASE-018 AC-005). -->
+  <ItemGroup>
+    <Compile Include="..\Shared\TestRepositoryRoot.cs" Link="Shared\TestRepositoryRoot.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Configuration\UnitSuitePlatformScanner.cs" Link="Shared\Configuration\UnitSuitePlatformScanner.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Infrastructure\RepositoryEvidenceTestSupport.cs" Link="Shared\Infrastructure\RepositoryEvidenceTestSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Infrastructure\RepositoryEvidenceWindowsProcess.cs" Link="Shared\Infrastructure\RepositoryEvidenceWindowsProcess.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Memory\MemoryBenchCatalog.cs" Link="Shared\Memory\MemoryBenchCatalog.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Memory\MemoryS1Harness.CoreA1.cs" Link="Shared\Memory\MemoryS1Harness.CoreA1.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Memory\MemoryS1Harness.CoreA2.cs" Link="Shared\Memory\MemoryS1Harness.CoreA2.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Memory\MemoryS1Harness.CoreB.cs" Link="Shared\Memory\MemoryS1Harness.CoreB.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Memory\MemoryS1Harness.S4.cs" Link="Shared\Memory\MemoryS1Harness.S4.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Memory\MemoryS5Catalog.cs" Link="Shared\Memory\MemoryS5Catalog.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\EphemeralPostgresFixture.cs" Link="Shared\Storage\EphemeralPostgresFixture.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\TestSupport\WindowsJunction.cs" Link="Shared\TestSupport\WindowsJunction.cs" />
+  </ItemGroup>
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S7 splits the mixed classes of QBrainAi.Support.Mcp.Tests
+       into their unit halves there and their integration halves here. The helpers both halves of a class use are
+       extracted once into a file beside the unit half (a <Class>Support static class reached by using static, a
+       <Class>Base abstract class both halves derive from, or an abstract contract both fixtures derive from) and linked
+       here, never copied (DRY); the support the integration halves share with other unit cases is linked as in S6. The
+       Using items name the namespaces of that support the halves reach by simple name. -->
+  <ItemGroup>
+    <Using Include="QBrainAi.Support.Mcp.Tests" />
+    <Using Include="QBrainAi.Support.Mcp.Tests.Indexing" />
+    <Using Include="QBrainAi.Support.Mcp.Tests.Ingestion" />
+    <Using Include="QBrainAi.Support.Mcp.Tests.McpStdio" />
+    <Using Include="QBrainAi.Support.Mcp.Tests.Services" />
+    <!-- The linked FederationTopologyServiceTestsBase names nameof(FederationTopologyServiceTests): in QBrainAi.Support.Mcp.Tests
+         that is the unit half beside it, here the integration half of the same name, found through this import. -->
+    <Using Include="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\ExpectedWorkspaceKey.cs" Link="Shared\ExpectedWorkspaceKey.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\UnitTestPaths.cs" Link="Shared\UnitTestPaths.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\TestSupport\CliTempVariables.cs" Link="Shared\TestSupport\CliTempVariables.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\TestSupport\SettableTimeProvider.cs" Link="Shared\TestSupport\SettableTimeProvider.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\ProviderTestDatabase.cs" Link="Shared\Storage\ProviderTestDatabase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\SqlServerMigrationFailureReporter.cs" Link="Shared\Storage\SqlServerMigrationFailureReporter.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\SqlServerTestConnection.cs" Link="Shared\Storage\SqlServerTestConnection.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Configuration\ConfigurablePathIntegrationTestsBase.cs" Link="Shared\Configuration\ConfigurablePathIntegrationTestsBase.cs" />
+    <!-- 2026-11-09, FR-MCP-004 embedding-vector-contract; TEST-MCP-EMBEDDING-001; TR-MCP-EMBEDDING-001:
+         the pure response assertion contract is linked into the integration assembly so the model-backed cases and
+         the unit-owned positive, wrong-response and unavailable controls execute the same assertions (PR87 P1). -->
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Indexing\EmbeddingModelAssertionContract.cs" Link="Shared\Indexing\EmbeddingModelAssertionContract.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Ingestion\SessionLogIngestorImportTestsBase.cs" Link="Shared\Ingestion\SessionLogIngestorImportTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\McpStdio\BrainSlotToolAbsenceTestsSupport.cs" Link="Shared\McpStdio\BrainSlotToolAbsenceTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\McpStdio\HandoffMcpToolTestsBase.cs" Link="Shared\McpStdio\HandoffMcpToolTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Memory\MemoryIndexerTestsBase.cs" Link="Shared\Memory\MemoryIndexerTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Memory\MemoryMigrationTestsBase.cs" Link="Shared\Memory\MemoryMigrationTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Requirements\RequirementsRecoveryTestsSupport.cs" Link="Shared\Requirements\RequirementsRecoveryTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\CliBrainSlotStrategyTestsSupport.cs" Link="Shared\Services\CliBrainSlotStrategyTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\CodexCliAgentExecutionStrategyTestsBase.cs" Link="Shared\Services\CodexCliAgentExecutionStrategyTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\FederatedSessionLogServiceTestsBase.cs" Link="Shared\Services\FederatedSessionLogServiceTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\FrpTunnelProviderTestsBase.cs" Link="Shared\Services\FrpTunnelProviderTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\HandoffIngestionServiceTestsBase.cs" Link="Shared\Services\HandoffIngestionServiceTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\HostileReviewG4OverlayTestsBase.cs" Link="Shared\Services\HostileReviewG4OverlayTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\RequirementsDatabaseDocumentServiceTestsSupport.cs" Link="Shared\Services\RequirementsDatabaseDocumentServiceTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\RequirementsDocFxWorkflowRunnerTestsSupport.cs" Link="Shared\Services\RequirementsDocFxWorkflowRunnerTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\RequirementsDocumentServiceTestsBase.cs" Link="Shared\Services\RequirementsDocumentServiceTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\RequirementsWikiExportOrchestratorTestsSupport.cs" Link="Shared\Services\RequirementsWikiExportOrchestratorTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\SessionLogDenseGraphTestsSupport.cs" Link="Shared\Services\SessionLogDenseGraphTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\SessionLogImportedSessionDeleteTestsSupport.cs" Link="Shared\Services\SessionLogImportedSessionDeleteTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\SessionLogReplaceSectionRetryableTestsSupport.cs" Link="Shared\Services\SessionLogReplaceSectionRetryableTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\SessionLogResubmissionReviveTestsSupport.cs" Link="Shared\Services\SessionLogResubmissionReviveTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\SessionLogServiceTurnContextTestsBase.cs" Link="Shared\Services\SessionLogServiceTurnContextTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\SessionLogTriageStoreTestsBase.cs" Link="Shared\Services\SessionLogTriageStoreTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\SessionLogTurnContextBackfillTestsSupport.cs" Link="Shared\Services\SessionLogTurnContextBackfillTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\TriageServiceTestsBase.cs" Link="Shared\Services\TriageServiceTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\TunnelProviderTestsBase.cs" Link="Shared\Services\TunnelProviderTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\UseCaseComponentUpdateContractTestsSupport.cs" Link="Shared\Services\UseCaseComponentUpdateContractTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\UseCaseCqrsTestsBase.cs" Link="Shared\Services\UseCaseCqrsTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\UseCaseExpandedScopeTestsBase.cs" Link="Shared\Services\UseCaseExpandedScopeTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\UseCaseGetWorkspaceResolutionContractTestsSupport.cs" Link="Shared\Services\UseCaseGetWorkspaceResolutionContractTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\WikiDumpG6OverlayTestsBase.cs" Link="Shared\Services\WikiDumpG6OverlayTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\FederationTopologyServiceTestsBase.cs" Link="Shared\Services\FederationTopologyServiceTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\AddSessionLogTurnPlanFileAndTodoIdMigrationTestsBase.cs" Link="Shared\Storage\AddSessionLogTurnPlanFileAndTodoIdMigrationTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\ProductMigrationApplyTestsBase.cs" Link="Shared\Storage\ProductMigrationApplyTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\SessionLogAgentSessionHeaderMigrationTestsBase.cs" Link="Shared\Storage\SessionLogAgentSessionHeaderMigrationTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\SessionLogTurnPlanFileTodoIdMigrationApplyTestsBase.cs" Link="Shared\Storage\SessionLogTurnPlanFileTodoIdMigrationApplyTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\UseCaseMigrationApplyTestsBase.cs" Link="Shared\Storage\UseCaseMigrationApplyTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTestsSupport.cs" Link="Shared\Storage\WorkspaceIdentityFourteenthNativeTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\WorkspaceHostEnvironmentContract.cs" Link="Shared\Storage\WorkspaceHostEnvironmentContract.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\WorkspacePathGetFullPathRatchetContract.cs" Link="Shared\Storage\WorkspacePathGetFullPathRatchetContract.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\WorkspaceRemotePathContract.cs" Link="Shared\Storage\WorkspaceRemotePathContract.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\TestSupport\CliTempVariablesTestsSupport.cs" Link="Shared\TestSupport\CliTempVariablesTestsSupport.cs" />
+  </ItemGroup>
+  <!-- 2026-11-07, TEST-MCP-TRANSCRIPT-008; TR-MCP-NUKE-019 AC-7: the real Codex transcript that TranscriptMcpStdioHostTests
+       copies from its output folder, linked from QBrainAi.Support.Mcp.Tests (slice S6). -->
+  <ItemGroup>
+    <None Include="..\QBrainAi.Support.Mcp.Tests\Fixtures\Transcripts\real\codex\session.jsonl" Link="Fixtures\Transcripts\real\codex\session.jsonl" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7; FR-MCP-TESTRESOURCE-001 ac-7 and ac-9: slice S8 moves the last
+       Category=Integration cases of QBrainAi.Support.Mcp.Tests here: the classes the unit collection bindings named, the
+       platform-native cluster the BUG-TRIAGE-139 harnesses find by reflection in their own assembly, and the S7 leftovers.
+       The support they share with unit cases stays in QBrainAi.Support.Mcp.Tests and is linked (one definition each, never
+       copied): the collection assertions and the collection names of the two binding halves, the migration key
+       assertions, the simulated workspace hosts, the base classes of the two split workspace-path contracts and of the
+       split WorkspaceHygieneG5OverlayTests, the age-boundary reference times its clock reads, the GitHub refusal setting
+       name, the workspace accessor helper and the containment gate assertion. The Documentation import names the namespace
+       of the linked RepositoryRootProcessStateCollection, which the moved harnesses reached as their enclosing namespace. -->
+  <ItemGroup>
+    <Using Include="QBrainAi.Support.Mcp.Tests.Documentation" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\TestSupport\CollectionAssertions.cs" Link="Shared\TestSupport\CollectionAssertions.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\TestSupport\ProcessEnvironmentCollectionTestsSupport.cs" Link="Shared\TestSupport\ProcessEnvironmentCollectionTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\TestSupport\AgeBoundaryContractTestsBase.cs" Link="Shared\TestSupport\AgeBoundaryContractTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\SqlServerLocalDbCollectionTestsSupport.cs" Link="Shared\Storage\SqlServerLocalDbCollectionTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\MigrationKeyAssertions.cs" Link="Shared\Storage\MigrationKeyAssertions.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\SimulatedWorkspaceHosts.cs" Link="Shared\Storage\SimulatedWorkspaceHosts.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\ScriptedWorkspacePathNormalizer.cs" Link="Shared\Storage\ScriptedWorkspacePathNormalizer.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\TestWorkspaceAccessorHelper.cs" Link="Shared\TestWorkspaceAccessorHelper.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\WorkspacePathConsumersContractTestsBase.cs" Link="Shared\Services\WorkspacePathConsumersContractTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\WorkspaceServiceCrossPlatformContractTestsBase.cs" Link="Shared\Services\WorkspaceServiceCrossPlatformContractTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\WorkspaceHygieneG5OverlayTestsBase.cs" Link="Shared\Services\WorkspaceHygieneG5OverlayTestsBase.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\GitHubCliInvocationPlanContractTestsSupport.cs" Link="Shared\Services\GitHubCliInvocationPlanContractTestsSupport.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Services\RequirementsTwelfthAdversarialReviewTestsSupport.cs" Link="Shared\Services\RequirementsTwelfthAdversarialReviewTestsSupport.cs" />
+  </ItemGroup>
+  <!-- 2026-11-07, TEST-MCP-SESSIONLIFE-004; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the transcript-ingestion fakes that
+       ImportRecoveryEnvelopeTests here and the unit ImportRecoveryIngestionTests both use, extracted once from their two
+       identical private copies into QBrainAi.Support.Mcp.Tests and linked (slice S9, hostile validation finding R14-F4;
+       DRY, never copied). -->
+  <ItemGroup>
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Ingestion\ImportRecoveryIngestionFakes.cs" Link="Shared\Ingestion\ImportRecoveryIngestionFakes.cs" />
+  </ItemGroup>
+  <!-- 2026-11-07, TEST-MCP-USECASE-019-AC005; TR-MCP-NUKE-019 AC-7: the Agent Help fixtures that BugTriage139FifteenthHarnessTests
+       reads beside the test assembly, linked from QBrainAi.Support.Mcp.Tests (slice S8), whose unit cases read them too. -->
+  <ItemGroup>
+    <None Include="..\QBrainAi.Support.Mcp.Tests\Fixtures\AgentHelp\**\*" Link="Fixtures\AgentHelp\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <!-- 2026-11-07, TEST-MCP-USECASE-018; TEST-MCP-USECASE-020; TR-MCP-NUKE-019 AC-7: the OS-conditional compile block, moved
+       whole from QBrainAi.Support.Mcp.Tests with the seven platform-native files it governs (slice S8): each host compiles
+       only its own native cases, which BugTriage139FourteenthHarnessTests and BugTriage139FifteenthHarnessTests count. -->
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <Compile Remove="Storage\BugTriage139FifteenthLinuxNativeTests.cs" />
+    <Compile Remove="Storage\BugTriage139SixteenthLinuxTests.cs" />
+    <Compile Remove="Storage\BugTriage139EighteenthLinuxTests.cs" />
+    <Compile Remove="Services\RequirementsFourteenthLinuxNativeTests.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <Compile Remove="Storage\BugTriage139FifteenthWindowsNativeTests.cs" />
+    <Compile Remove="Storage\BugTriage139SixteenthIdentityWindowsTests.cs" />
+    <Compile Remove="Documentation\BugTriage139SixteenthWindowsProcessTests.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="!$([MSBuild]::IsOSPlatform('Windows')) And !$([MSBuild]::IsOSPlatform('Linux'))">
+    <Compile Remove="Storage\BugTriage139FifteenthWindowsNativeTests.cs" />
+    <Compile Remove="Storage\BugTriage139FifteenthLinuxNativeTests.cs" />
+    <Compile Remove="Storage\BugTriage139SixteenthIdentityWindowsTests.cs" />
+    <Compile Remove="Storage\BugTriage139SixteenthLinuxTests.cs" />
+    <Compile Remove="Storage\BugTriage139EighteenthLinuxTests.cs" />
+    <Compile Remove="Services\RequirementsFourteenthLinuxNativeTests.cs" />
+    <Compile Remove="Documentation\BugTriage139SixteenthWindowsProcessTests.cs" />
+  </ItemGroup>
+</Project>

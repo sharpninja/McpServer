@@ -1,0 +1,10 @@
+RECEIPT 2026-10-20T23:06:53 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Read-LegionRequirementIds.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+Now: 2026-10-20T23:06:45 plugin=C:\Users\kingd\.claude\plugins\cache\mcpserver-local\mcpserver\1.121.0
+REPL executable: C:\Users\kingd\.dotnet\tools\qbrain-ai-repl.exe
+RECORD TEST-MCP-MEMORY-010 exit=1 ABSENT code=not_found
+RECORD FR-MCP-MEMORY-010 exit=1 ABSENT code=not_found
+MAPPINGS exit=0 rows=1043
+CLEANUP scratch removed=True

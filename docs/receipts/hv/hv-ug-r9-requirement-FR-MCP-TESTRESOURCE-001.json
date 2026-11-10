@@ -1,0 +1,91 @@
+{
+  "TimestampLocal": "2026-11-02T19:17:27",
+  "TimestampUtc": "2026-11-03T01:17:27.2971114Z",
+  "Method": "workflow.requirements.getFr",
+  "Params": {
+    "id": "FR-MCP-TESTRESOURCE-001"
+  },
+  "Data": [
+    {
+      "payload": {
+        "deprecated": true,
+        "result": {
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "id": "",
+              "text": "Fixture inputs for applicable tests are packaged as resources in their owning test projects and load without using a checkout-root path."
+            },
+            {
+              "isSatisfied": false,
+              "id": "",
+              "text": "Generated test artifacts are written only to test-owned disposable output locations, not to repository fixture or documentation paths."
+            },
+            {
+              "isSatisfied": false,
+              "id": "",
+              "text": "Tests whose subject is the live repository or sibling plugin source retain their real-source integrity checks; the no-repo-path rule does not replace those checks with synthetic fixtures."
+            },
+            {
+              "isSatisfied": false,
+              "id": "ac-4",
+              "text": "A test-owned temporary QBrain.AI instance uses the database inside its owned root: no inherited setting, in configuration or the process environment and in the canonical (QBrainAi, QBRAINAI_), legacy (Mcp, MCP_) or host-prefixed (DOTNET_, ASPNETCORE_) form, nor a connection-string or content-root variable, selects another database for it (a connection string, a data source, a database provider or an instance name), and a database selection outside the owned root is refused. Every consumer of a temporary instance takes its workspace, marker and server address from that instance, and no inherited setting overrides them. These are the unit-proved rules TR-MCP-NUKE-019 AC-6 relies on (operator 2026-10-29: \"Strengthen ACs, fix both (Recommended)\", \"Run the 2 classes, AC first (Recommended)\" and \"Lane ACs (Recommended)\"; operator 2026-10-30: \"FR-MCP-TESTRESOURCE-001 (Recommended)\"; hostile validation findings R8B-F2 and R8B-F3; holistic review findings PLAN-6, PLAN-7, RINT-1, RINT-2 and RINT-3). A REPL host started for a temporary instance names both a workspace and a marker, each strictly inside the instance's owned root, compared by path segment with either separator and with no '.' or '..' segment; the checkout's marker, another or sibling root, a parent-segment escape, the root itself as the marker, and a missing argument or value are refused (operator 2026-10-26: \"if you surface new AC, add them without waiting for approval\"; the start-argument rows of TemporaryInstanceChecksTests already prove it)."
+            },
+            {
+              "isSatisfied": false,
+              "id": "ac-5",
+              "text": "A SQL Server migration test that fails reports the first command or connection failure the migration met, with any later failure (for example the migration-lock release error) attached, never the later failure alone (operator 2026-10-29: \"Diagnose and fix in PR 87 (Recommended)\"; operator 2026-10-30: \"Scope it to SQL Server\"; holistic review finding LANE-1)."
+            },
+            {
+              "isSatisfied": false,
+              "id": "ac-6",
+              "text": "The temporary PostgreSQL cluster a test fixture creates is started and stopped by pg_ctl calls that wait for the operation to finish (-w) and print only errors (-s). Both are options of the pg_ctl call itself, not text inside the server options. The start call keeps the cluster's port, its localhost-only listener and its server log file (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; serves TR-MCP-NUKE-019 AC-2)."
+            },
+            {
+              "isSatisfied": false,
+              "id": "ac-7",
+              "text": "The test classes that open connections to the shared SQL Server LocalDB instance belong to one test collection whose definition disables parallelization, so they run one at a time and never beside another collection (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; serves TR-MCP-NUKE-019 AC-2)."
+            },
+            {
+              "isSatisfied": false,
+              "id": "ac-8",
+              "text": "The default server connection the SQL Server integration test classes share, used when no other server is named, is the default LocalDB instance ((localdb)\\MSSQLLocalDB) with integrated security, a trusted server certificate, no database and a 120 second connect timeout. A server connection named in its place is used unchanged, with no timeout, flag or database added; a blank value counts as no server named (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; operator 2026-10-26: \"if you surface new AC, add them without waiting for approval\" for the blank-value clause; serves TR-MCP-NUKE-019 AC-2)."
+            },
+            {
+              "isSatisfied": false,
+              "id": "ac-9",
+              "text": "Each test class that writes the process environment belongs to a test collection whose definition disables parallelization, so no two of them, and no other test, run while one of them has a variable changed (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; serves TR-MCP-USECASE-018 AC-006)."
+            },
+            {
+              "isSatisfied": false,
+              "id": "ac-10",
+              "text": "The CLI temporary-folder variables the test support sets and restores are the names the CLI strategies' fallback chains read, once each: MCPSERVER_QUADBRAIN_CLI_TEMP, MCPSERVER_ONESHOT_TEMP, MCPSERVER_CODEX_ONESHOT_TEMP, MCPSERVER_CODEX_TRIAGE_TEMP and MCPSERVER_GROK_ONESHOT_TEMP. Its check of a test's variables accepts them only when two things hold. During the test, the name the strategy under test reads first points at the test folder and every other name at a different, test-owned fallback folder. After the test, every name holds the value it held before, an unset name still unset. It refuses a name that is missing, unset or pointed at the wrong folder, a fallback folder equal to the test folder, a first name outside the list, and a name left changed or newly set (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; serves TR-MCP-USECASE-018 AC-006)."
+            },
+            {
+              "isSatisfied": false,
+              "id": "ac-11",
+              "text": "The reparse data a test fixture passes to the operating-system call that makes a directory junction is the documented mount-point reparse buffer for the target. Field by field: the mount-point tag, a data length that excludes the header, the \\??\\ substitute name and the print name, each followed by a null, with the offsets and lengths that locate them. For a pinned target it matches the documented bytes exactly (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; serves TR-MCP-USECASE-019 AC-008)."
+            },
+            {
+              "isSatisfied": false,
+              "id": "ac-12",
+              "text": "An integration case accepts its temporary instance's health answer only when the status is 200 and the body holds the nonce the request sent, compared exactly. It refuses a non-200 status even when the nonce is echoed, a body without the nonce, an empty body, no body, a body that echoes a different nonce, and a request that sent no nonce (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; operator 2026-10-26: \"if you surface new AC, add them without waiting for approval\" for the no-nonce clause; serves TR-MCP-NUKE-019 AC-6)."
+            }
+          ],
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "createdAt": "2026-11-03T01:17:29.6230741+00:00",
+          "status": "pending",
+          "id": "FR-MCP-TESTRESOURCE-001",
+          "description": "Fixture inputs must be packaged as test-project resources and generated test artifacts must use test-owned output locations, without depending on the repository root. Tests that intentionally verify live repository or sibling plugin source may read those sources as their subject.",
+          "updatedAt": "2026-11-03T01:17:29.6232138+00:00",
+          "title": "Repository-independent test fixtures and outputs",
+          "priority": "medium"
+        },
+        "requestId": "req-20261103T011728Z-a1b5"
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

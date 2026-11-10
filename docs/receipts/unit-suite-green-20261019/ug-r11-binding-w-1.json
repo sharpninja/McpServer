@@ -1,0 +1,103 @@
+{
+  "name": "ug-r11-binding-w-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "cb174ac807c8e60b7a38a30bc216a651ed72c6c7",
+  "dirtyPaths": [
+    " M tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-binding-u-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-binding-u-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-binding-v-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-binding-v-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-clock-sweep.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-compile-u-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-compile-u-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-compile-u-3.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-compile-v-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-compile-v-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-criteria-u-readback-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-criteria-v-readback-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-criteria-w-readback-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-win-lane-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-win-lane-1.start.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-win-unit-1.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-win-unit-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-linux-unit-compare-r10-r11.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-u-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-u-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-v-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-v-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-win-unit-compare-r10-r11.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11v-final-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11v-final-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11v-final-win-lane-1.start.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11v-final-win-unit-1.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11v-final-win-unit-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11v-linux-unit-compare-u-v.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11v-win-unit-compare-u-v.txt"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Support.Mcp.Tests:HandoffDurabilityTests,SessionLogFileWatcherTests",
+    "QBrainAi.QBAgent.Tests:QBAgentHeartbeatOverlayTests",
+    "--test-run-id",
+    "ug-r11-binding-w-1"
+  ],
+  "startedLocal": "2026-11-03T10:29:09",
+  "endedLocal": "2026-11-03T10:30:22",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 32,
+  "passed": 32,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.QBAgent.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11-binding-w-1/groups/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-binding-w-1/QBrainAi.QBAgent.Tests.trx",
+      "sha256": "E74149AC8E3095271A8A9EE876E29F717A35EDDA49ADFB6784264D132DB55C52",
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11-binding-w-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-binding-w-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "C73EE4F16E734FFC5CA72692BEB69A3DE86E88E5A488714C2F6791310E91C12C",
+      "total": 27,
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+      "sha256": "B37A36ACA43557094DE0CCE42B4C7EAE142D38EFE5DAC797E7ED3BEDAD1BE000"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs",
+      "sha256": "195B4CA5E504DFB8C2024AC8473C218F25F03CDD3D5FFE97FFD783C98BA15FF8"
+    },
+    {
+      "path": "tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+      "sha256": "5D53658E0005205AD68B4DF88FF76843B695A5118F50CED9DF7BE0F2DD6472F0"
+    }
+  ],
+  "writtenLocal": "2026-11-03T10:31:02",
+  "writtenBy": "ClaudeCode"
+}

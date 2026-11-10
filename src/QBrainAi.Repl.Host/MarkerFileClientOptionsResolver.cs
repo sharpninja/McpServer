@@ -14,13 +14,11 @@ public static class MarkerFileClientOptionsResolver
 
     // Cache for verified marker trust to avoid repeating the full discovery + HMAC
     // signature verification (the "trust chain") on every qbrain-ai-repl --agent-stdio
-    // invocation. Cache lives in ~/.qbrainai/verified-markers.json (or override for tests).
+    // invocation. FR-MCP-REPL-008 ac-4: the product cache override isolates child processes;
+    // otherwise retain the existing user-profile .mcpserver cache.
     // Entries are valid for 24 hours or until the apiKey in the marker file changes.
     // FR-MCP-REPL-008 / TR-MCP-REPL-009: keyed by (WorkspacePath, Agent) for isolation.
     private const int VerifiedCacheHours = 24;
-    private static readonly string s_verifiedCacheDir = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".mcpserver");
-    private static readonly string s_verifiedCachePath = Path.Combine(s_verifiedCacheDir, "verified-markers.json");
     private static readonly JsonSerializerOptions s_cacheJsonOpts = new(JsonSerializerDefaults.Web);
 
     /// <summary>
@@ -31,9 +29,23 @@ public static class MarkerFileClientOptionsResolver
 
     private static string GetVerifiedCachePath()
     {
-        var dir = CacheDirectoryOverride ?? s_verifiedCacheDir;
+        var configured = !string.IsNullOrWhiteSpace(CacheDirectoryOverride)
+            ? CacheDirectoryOverride
+            : QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_REPL_CACHE_DIR");
+        var dir = ResolveVerifiedCacheDirectory(configured,
+            string.IsNullOrWhiteSpace(configured) ? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) : string.Empty);
         return Path.Combine(dir, "verified-markers.json");
     }
+
+    /// <summary>
+    /// FR-MCP-REPL-008 ac-4: selects the verified-marker cache directory from explicit inputs, without accessing
+    /// the process environment or the real user profile. The caller resolves product-variable alias precedence.
+    /// </summary>
+    /// <param name="configuredDirectory">The resolved product override, or null/blank when unset.</param>
+    /// <param name="userProfile">The explicit profile used only when the override is unset.</param>
+    /// <returns>The override verbatim, or the existing .mcpserver directory under the supplied profile.</returns>
+    public static string ResolveVerifiedCacheDirectory(string? configuredDirectory, string userProfile) =>
+        string.IsNullOrWhiteSpace(configuredDirectory) ? Path.Combine(userProfile, ".mcpserver") : configuredDirectory;
 
     /// <summary>
     /// Test hook only. Allows tests to simulate a specific agent when callers do
@@ -225,20 +237,31 @@ public static class MarkerFileClientOptionsResolver
     /// <param name="searchedPaths">Every directory walked in search order.</param>
     /// <returns>The marker file path when found; otherwise, <see langword="null"/>.</returns>
     public static string? FindMarkerFile(string startPath, out IReadOnlyList<string> searchedPaths)
+        => FindMarkerFile(startPath, out searchedPaths, PhysicalMarkerFileSystem.Instance);
+
+    /// <summary>
+    /// FR-MCP-REPL-007 ac-1 to AC-3: the walk over <paramref name="fileSystem"/>, from the start folder up to the file
+    /// system root; the nearest marker wins and every folder checked is reported in walk order.
+    /// </summary>
+    /// <param name="startPath">The path to begin searching from.</param>
+    /// <param name="searchedPaths">Every directory walked in search order.</param>
+    /// <param name="fileSystem">The file system the walk reads.</param>
+    /// <returns>The marker file path when found; otherwise, <see langword="null"/>.</returns>
+    internal static string? FindMarkerFile(string startPath, out IReadOnlyList<string> searchedPaths, IMarkerFileSystem fileSystem)
     {
         var searched = new List<string>();
-        var current = new DirectoryInfo(startPath);
+        var current = fileSystem.GetFullPath(startPath);
         while (current is not null)
         {
-            searched.Add(current.FullName);
-            var candidate = Path.Combine(current.FullName, MarkerFileName);
-            if (File.Exists(candidate))
+            searched.Add(current);
+            var candidate = fileSystem.GetMarkerPath(current);
+            if (fileSystem.FileExists(candidate))
             {
                 searchedPaths = searched;
                 return candidate;
             }
 
-            current = current.Parent;
+            current = fileSystem.GetParentPath(current);
         }
 
         searchedPaths = searched;
@@ -263,6 +286,26 @@ public static class MarkerFileClientOptionsResolver
         out QBrainAiClientOptions? options,
         out string error,
         string? agent = null)
+        => TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error, agent, PhysicalMarkerFileSystem.Instance);
+
+    /// <summary>
+    /// FR-MCP-REPL-007 ac-4: the diagnosed resolution over <paramref name="fileSystem"/>; with no marker on the way up
+    /// the error names the marker file and every folder searched.
+    /// </summary>
+    /// <param name="workspacePathOverride">Optional explicit workspace path (CLI <c>--workspace-path</c>).</param>
+    /// <param name="markerPathOverride">Optional explicit marker file path (CLI <c>--marker-file</c>).</param>
+    /// <param name="options">The resolved options on success.</param>
+    /// <param name="error">Diagnostic message on failure.</param>
+    /// <param name="agent">Optional agent identifier, used for per-agent cache isolation.</param>
+    /// <param name="fileSystem">The file system the walk and the marker read use.</param>
+    /// <returns><see langword="true"/> when resolution succeeds; otherwise <see langword="false"/>.</returns>
+    internal static bool TryResolveWithDiagnostics(
+        string? workspacePathOverride,
+        string? markerPathOverride,
+        out QBrainAiClientOptions? options,
+        out string error,
+        string? agent,
+        IMarkerFileSystem fileSystem)
     {
         options = null;
         error = string.Empty;
@@ -276,7 +319,7 @@ public static class MarkerFileClientOptionsResolver
         {
             markerPath = markerPathOverride;
             searchedPaths = new[] { markerPathOverride };
-            if (!File.Exists(markerPath))
+            if (!fileSystem.FileExists(markerPath))
             {
                 error = $"Marker file not found at explicit path '{markerPath}'. Pass --workspace-path <dir> or place AGENTS-README-FIRST.yaml at that path.";
                 return false;
@@ -290,7 +333,7 @@ public static class MarkerFileClientOptionsResolver
                     ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_WORKSPACE")
                     ?? Environment.CurrentDirectory;
 
-            markerPath = FindMarkerFile(searchRoot, out searchedPaths);
+            markerPath = FindMarkerFile(searchRoot, out searchedPaths, fileSystem);
             if (markerPath is null)
             {
                 var pathList = string.Join("; ", searchedPaths);
@@ -299,7 +342,7 @@ public static class MarkerFileClientOptionsResolver
             }
         }
 
-        var parsed = ParseMarker(File.ReadAllLines(markerPath));
+        var parsed = ParseMarker(fileSystem.ReadAllLines(markerPath));
         if (parsed is null)
         {
             error = $"Marker file at '{markerPath}' is malformed: missing required fields (baseUrl/apiKey/workspacePath/signature).";
@@ -309,7 +352,7 @@ public static class MarkerFileClientOptionsResolver
         // Use local verified marker cache (24h TTL, invalidated on apiKey change in marker)
         // to avoid repeating the full marker discovery + signature verification trust chain
         // on every agent REPL invocation.
-        if (TryUseCachedVerification(parsed.Value, agentKey, out var cachedOptions) && cachedOptions is not null)
+        if (fileSystem.TryUseCachedVerification(parsed.Value, agentKey, out var cachedOptions) && cachedOptions is not null)
         {
             options = cachedOptions;
             return true;
@@ -329,7 +372,7 @@ public static class MarkerFileClientOptionsResolver
         };
 
         // Persist successful verification for future calls within TTL.
-        SaveVerifiedCacheEntry(parsed.Value, agentKey);
+        fileSystem.SaveVerifiedCacheEntry(parsed.Value, agentKey);
         return true;
     }
 
@@ -522,7 +565,12 @@ public static class MarkerFileClientOptionsResolver
             .Append('\n');
     }
 
-    private static bool TryUseCachedVerification(MarkerSettings current, string agentId, out QBrainAiClientOptions? options)
+    /// <summary>Reads the physical verified-marker cache; used only by the physical filesystem adapter.</summary>
+    /// <param name="current">Marker read from the physical filesystem.</param>
+    /// <param name="agentId">Canonical agent cache key.</param>
+    /// <param name="options">Cached client options on a hit.</param>
+    /// <returns>Whether the physical cache contains a live matching entry.</returns>
+    internal static bool TryUseCachedVerification(MarkerSettings current, string agentId, out QBrainAiClientOptions? options)
     {
         options = null;
         try
@@ -563,7 +611,10 @@ public static class MarkerFileClientOptionsResolver
             return false;
         }
     }
-    private static void SaveVerifiedCacheEntry(MarkerSettings verified, string agentId)
+    /// <summary>Writes a verified marker through the physical cache adapter, preserving existing best-effort behavior.</summary>
+    /// <param name="verified">The verified marker.</param>
+    /// <param name="agentId">Canonical agent cache key.</param>
+    internal static void SaveVerifiedCacheEntry(MarkerSettings verified, string agentId)
     {
         try
         {

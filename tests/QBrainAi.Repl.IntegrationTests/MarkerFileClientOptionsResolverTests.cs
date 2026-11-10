@@ -4,31 +4,43 @@ using QBrainAi.Repl.Host;
 namespace QBrainAi.Repl.IntegrationTests;
 
 /// <summary>
-/// Verifies that the REPL host can bootstrap trusted marker-file client options without cached bearer state.
+/// Verifies that the REPL host can bootstrap trusted marker-file client options without cached bearer state. The
+/// marker walk cases (a parent's marker is found, a missing marker lists every folder searched) are unit tests over an
+/// in-memory file system in QBrainAi.Repl.Core.Tests (MarkerWalkTests, FR-MCP-REPL-007 ac-1 to AC-4), because on a
+/// real host the walk from a temporary folder can reach a parent workspace's marker, which is intended.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-REPL-008 (its second and third criteria, which carry no
+/// criterion ids).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-REPL-008 (criteria without ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 [Trait("Category", "Integration")]
-public sealed class MarkerFileClientOptionsResolverTests
+public sealed class MarkerFileClientOptionsResolverTests : IDisposable
 {
-    [Fact]
-    public void ResolveWorkspacePath_FindsMarkerByWalkingParents()
+    private readonly string? _previousCache = MarkerFileClientOptionsResolver.CacheDirectoryOverride;
+    private readonly string _ownedCache = Path.Combine(Path.GetTempPath(), "repl-marker-owned-cache-" + Guid.NewGuid().ToString("N"));
+
+    /// <summary>Owns the physical verification cache for every resolver case; the assembly serializes its tests.</summary>
+    public MarkerFileClientOptionsResolverTests() => MarkerFileClientOptionsResolver.CacheDirectoryOverride = _ownedCache;
+
+    /// <inheritdoc />
+    public void Dispose()
     {
-        var root = CreateTemporaryWorkspace();
-        try
-        {
-            var nested = Path.Combine(root, "src", "nested");
-            Directory.CreateDirectory(nested);
-            File.WriteAllText(Path.Combine(root, "AGENTS-README-FIRST.yaml"), BuildMarker(root));
-
-            var markerPath = MarkerFileClientOptionsResolver.FindMarkerFile(nested);
-
-            Assert.Equal(Path.Combine(root, "AGENTS-README-FIRST.yaml"), markerPath);
-        }
-        finally
-        {
-            Directory.Delete(root, recursive: true);
-        }
+        MarkerFileClientOptionsResolver.CacheDirectoryOverride = _previousCache;
+        if (Directory.Exists(_ownedCache)) Directory.Delete(_ownedCache, recursive: true);
     }
 
+    /// <summary>
+    /// TR-MCP-REPL-006 (marker-file trust bootstrap with signature verification): TryLoadTrustedMarker accepts a marker
+    /// whose HMAC-SHA256 signature over the marker-v1 payload matches its workspace key, and returns its base URL
+    /// (http://localhost:7147), its API key and its workspace path. Data: a temporary workspace folder under the system
+    /// temp folder holding an AGENTS-README-FIRST.yaml built by BuildMarker with a test-only key, removed in a finally
+    /// block; the class owns the verification cache folder through CacheDirectoryOverride.
+    /// </summary>
+    /// <remarks>2026-11-07, TR-MCP-REPL-006: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void TryLoadTrustedMarker_ReturnsMarkerSettingsWhenSignatureMatches()
     {
@@ -43,37 +55,6 @@ public sealed class MarkerFileClientOptionsResolverTests
             Assert.Equal("http://localhost:7147", marker.BaseUrl);
             Assert.Equal("test-api-key", marker.ApiKey);
             Assert.Equal(root, marker.WorkspacePath);
-        }
-        finally
-        {
-            Directory.Delete(root, recursive: true);
-        }
-    }
-
-    /// <summary>
-    /// FR-MCP-REPL-007: When the marker file is missing, the diagnostic surface must
-    /// list every directory that was searched so the user can correct the workspace
-    /// path or marker location.
-    /// </summary>
-    [Fact]
-    public void TryResolveWithDiagnostics_WhenMarkerMissing_EnumeratesSearchedPaths()
-    {
-        var root = CreateTemporaryWorkspace();
-        try
-        {
-            var nested = Path.Combine(root, "src", "nested");
-            Directory.CreateDirectory(nested);
-
-            var ok = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(
-                workspacePathOverride: nested,
-                markerPathOverride: null,
-                out _,
-                out var error);
-
-            Assert.False(ok);
-            Assert.False(string.IsNullOrWhiteSpace(error));
-            Assert.Contains(nested, error, StringComparison.OrdinalIgnoreCase);
-            Assert.Contains(root, error, StringComparison.OrdinalIgnoreCase);
         }
         finally
         {
@@ -480,6 +461,15 @@ signature:
 
     // --- Verified marker cache tests (24h TTL, apiKey change invalidation) ---
 
+    /// <summary>
+    /// FR-MCP-REPL-008 (its verified marker cache criterion, which has no criterion id): with the cache folder and the
+    /// agent overridden (agent Codex), a first TryResolveWithDiagnostics of a signed marker succeeds and writes
+    /// verified-markers.json, and a second resolve within the time to live succeeds with the same API key; the case
+    /// does not tell a cache hit from a fresh verification and does not read the entry key. Data: a temporary workspace
+    /// holding a BuildMarker marker and a temporary cache folder, both under the system temp folder; the previous cache
+    /// and agent overrides are restored and both folders removed in a finally block.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-REPL-008: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void TryResolveWithDiagnostics_UsesVerifiedCacheOnSubsequentCallWithinTtl()
     {
@@ -517,6 +507,16 @@ signature:
         }
     }
 
+    /// <summary>
+    /// FR-MCP-REPL-008 (its verified marker cache criterion, which has no criterion id); TR-MCP-REPL-006 (the API key
+    /// comes from the current marker after a rotation): with agent ClaudeCode, a first resolve fills the cache, the
+    /// marker is then rewritten with a rotated key and a signature valid for it, and a second resolve succeeds and
+    /// returns the rotated key rather than the cached one; the case asserts no staleness warning. Data: a temporary
+    /// workspace holding markers from BuildMarker and BuildMarkerWithApiKey (a second test-only key) and a temporary
+    /// cache folder, both under the system temp folder; the overrides are restored and both folders removed in a
+    /// finally block.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-REPL-008; TR-MCP-REPL-006: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void TryResolveWithDiagnostics_InvalidatesCacheOnApiKeyChange()
     {
@@ -554,6 +554,16 @@ signature:
         }
     }
 
+    /// <summary>
+    /// FR-MCP-REPL-008 (its verified marker cache criterion, which has no criterion id): with agent Grok, after a first
+    /// resolve succeeds the cache file is overwritten with one entry for the workspace and agent that expired in 2020
+    /// and holds a placeholder signature value, and a second resolve still succeeds with the test-only key through full
+    /// verification; because the placeholder signature never matches, the resolver skips that entry whether or not it
+    /// has expired, so the case shows recovery from an unusable entry, not the expiry check alone. Data: a temporary
+    /// workspace holding a BuildMarker marker, a temporary cache folder and an inline expired cache JSON, under the
+    /// system temp folder; the overrides are restored and both folders removed in a finally block.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-REPL-008: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void TryResolveWithDiagnostics_SucceedsWithManuallyExpiredCacheEntry()
     {

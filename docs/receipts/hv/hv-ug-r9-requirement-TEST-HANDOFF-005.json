@@ -1,0 +1,31 @@
+{
+  "TimestampLocal": "2026-11-02T19:16:44",
+  "TimestampUtc": "2026-11-03T01:16:44.1753004Z",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-HANDOFF-005"
+  },
+  "Data": [
+    {
+      "payload": {
+        "deprecated": true,
+        "result": {
+          "acceptanceCriteria": [],
+          "testType": "unit",
+          "scopeStartLayerKey": "layer-1",
+          "area": "HANDOFF",
+          "createdAt": "2026-11-03T01:16:46.4433222+00:00",
+          "status": "pending",
+          "id": "TEST-HANDOFF-005",
+          "description": "Cover exclusive TODO-service persistence, exact-one creation, deterministic replay, ID collisions, approval races, and TODO-service failure.",
+          "updatedAt": "2026-11-03T01:16:46.4434306+00:00",
+          "title": "Test TEST-HANDOFF-005",
+          "priority": "medium"
+        },
+        "requestId": "req-20261103T011645Z-2389"
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

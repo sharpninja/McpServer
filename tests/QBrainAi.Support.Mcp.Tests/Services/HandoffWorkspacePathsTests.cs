@@ -13,18 +13,9 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>TEST-HANDOFF-006: one canonical workspace path is pushed into every handoff scope.</summary>
+/// <remarks>2026-11-07, TEST-HANDOFF-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (Canonicalize_RelativeAndNested_MatchGetFullPath) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the unit cases and the class attributes are unchanged.</remarks>
 public sealed class HandoffWorkspacePathsTests
 {
-    /// <summary>P1-8: relative and nested paths canonicalize to the same absolute value.</summary>
-    [Fact]
-    public void Canonicalize_RelativeAndNested_MatchGetFullPath()
-    {
-        var relative = Path.Combine(".", "nested", "..", "workspace");
-        var canonical = HandoffWorkspacePaths.Canonicalize(relative);
-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(relative)), canonical);
-        Assert.True(Path.IsPathRooted(canonical));
-    }
-
     /// <summary>P1-8: blank paths are rejected.</summary>
     [Fact]
     public void TryCanonicalize_Blank_Fails()
@@ -33,14 +24,12 @@ public sealed class HandoffWorkspacePathsTests
         Assert.False(string.IsNullOrWhiteSpace(error));
     }
 
-    /// <summary>P1-8: two workspaces cannot see each other's handoff runs.</summary>
+    /// <summary>P1-8: explicit virtual workspace identifiers isolate content-only handoff runs in an in-memory database.</summary>
     [Fact]
     public async Task IngestAsync_CrossWorkspace_DoesNotLeakRuns()
     {
-        var leftRoot = Path.Combine(Path.GetTempPath(), "handoff-ws-left", Guid.NewGuid().ToString("N"));
-        var rightRoot = Path.Combine(Path.GetTempPath(), "handoff-ws-right", Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(leftRoot);
-        Directory.CreateDirectory(rightRoot);
+        const string leftRoot = "Q:/fixture/handoff-left";
+        const string rightRoot = "Q:/fixture/handoff-right";
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
         var options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connection).Options;
@@ -73,8 +62,6 @@ public sealed class HandoffWorkspacePathsTests
         Assert.False(missing.Success);
         Assert.Equal(HandoffErrorCodes.RunNotFound, missing.ErrorCode);
 
-        Directory.Delete(leftRoot, recursive: true);
-        Directory.Delete(rightRoot, recursive: true);
     }
 
     private static IHandoffIngestionService CreateService(DbContextOptions<McpDbContext> options, string workspace, IHandoffOneShotExtractor extractor)

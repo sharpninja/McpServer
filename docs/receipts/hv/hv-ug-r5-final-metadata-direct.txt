@@ -1,0 +1,11 @@
+type: result
+payload:
+  requestId: req-20261021T171121Z-fac7
+  result:
+    turnId: 2601
+    agent: Codex
+    sessionId: Codex-20261021T162057Z-unitgreen-r5
+    requestId: req-20261021T162141Z-unitgreen-r5
+
+---
+

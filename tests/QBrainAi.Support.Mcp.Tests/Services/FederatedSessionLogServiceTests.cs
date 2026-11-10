@@ -13,23 +13,12 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <summary>
 /// Unit tests for <see cref="FederatedSessionLogService"/>. Validates merge semantics,
 /// pass-through when federation is disabled, and graceful degradation on remote failure.
-/// FR-MCP-083, TEST-MCP-FED-002.
+/// FR-MCP-083, TEST-MCP-FED-002 (historical).
 /// </summary>
-public sealed class FederatedSessionLogServiceTests
+/// <remarks>2026-11-07, FR-MCP-083; TEST-MCP-FED-002; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (Apply_OmittedFields_PersistsProperValue) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_client and CreateRegistry) moved once into the abstract base class FederatedSessionLogServiceTestsBase in Services/FederatedSessionLogServiceTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
+public sealed class FederatedSessionLogServiceTests : FederatedSessionLogServiceTestsBase
 {
     private readonly ISessionLogService _inner = Substitute.For<ISessionLogService>();
-    private readonly IFederationDataClient _client = Substitute.For<IFederationDataClient>();
-
-    private static FederationRegistry CreateRegistry(bool enabled = false, string? defaultTarget = null)
-    {
-        var opts = new FederationOptions { Enabled = enabled };
-        if (defaultTarget is not null)
-        {
-            opts.DefaultTarget = defaultTarget;
-            opts.Targets.Add(new FederationTargetOptions { Name = defaultTarget, BaseUrl = "http://remote:7147" });
-        }
-        return new FederationRegistry(Microsoft.Extensions.Options.Options.Create(opts));
-    }
 
     private FederatedSessionLogService CreateSut(FederationRegistry? registry = null)
     {
@@ -190,54 +179,6 @@ public sealed class FederatedSessionLogServiceTests
         var result = await sut.AppendProcessingDialogAsync("ClaudeCode", "S-001", "req-1", [], cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(5, result);
-    }
-
-    /// <summary>
-    /// AC-FR-MCP-SESSIONLOGCTX-001-007: federation apply/submit with omitted fields
-    /// persists a validated pair (None if extraction finds nothing).
-    /// </summary>
-    [Fact]
-    public async Task Apply_OmittedFields_PersistsProperValue()
-    {
-        var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<QBrainAi.Support.Mcp.Storage.McpDbContext>()
-            .UseInMemoryDatabase("fed-omit-" + Guid.NewGuid().ToString("N"))
-            .Options;
-        await using var db = new QBrainAi.Support.Mcp.Storage.McpDbContext(options);
-        db.Database.EnsureCreated();
-        var workspace = Path.Combine(Path.GetTempPath(), "fed-omit");
-        db.OverrideWorkspaceId(workspace);
-        var inner = new SessionLogService(
-            db,
-            Microsoft.Extensions.Logging.Abstractions.NullLogger<SessionLogService>.Instance,
-            workspaceContext: new WorkspaceContext { WorkspacePath = workspace });
-        var sut = new FederatedSessionLogService(
-            inner,
-            CreateRegistry(enabled: false),
-            _client,
-            NullLogger<FederatedSessionLogService>.Instance);
-
-        await sut.SubmitAsync(
-            new UnifiedSessionLogDto
-            {
-                SourceType = "Cursor",
-                SessionId = "Cursor-20260304T113901Z-fed",
-                Title = "fed",
-                Turns =
-                [
-                    new UnifiedRequestEntryDto
-                    {
-                        RequestId = "req-20260304T113901Z-fed",
-                        QueryText = "plain text with no identifiers",
-                        Status = "completed",
-                    },
-                ],
-            },
-            sourceFilePath: Path.Combine(workspace, "import.json"),
-            cancellationToken: TestContext.Current.CancellationToken);
-
-        var stored = Assert.Single(db.SessionLogTurns);
-        Assert.Equal("None", stored.PlanFile);
-        Assert.Equal("None", stored.TodoId);
     }
 
     // --- Helpers ---

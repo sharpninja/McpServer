@@ -1,0 +1,48 @@
+{
+  "gate": "unitgreen-r16",
+  "verdict": "DISAGREE",
+  "accuracy": 97,
+  "completeness": 96,
+  "confidence": 90,
+  "reviewer": {
+    "agent": "Claude Code",
+    "version": "2.1.318",
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "recordsHead": "b164cf23fa930b98b6a48bb442dad4d412dd5962",
+  "codeHead": "167afdcb1bbe4ce8e54770fb5882cc8a48d82b01",
+  "runner": {
+    "startedLocal": "2026-11-09T16:15:58-06:00",
+    "endedLocal": "2026-11-09T16:28:59-06:00",
+    "exitCode": 0,
+    "responseLines": 5146
+  },
+  "claims": {
+    "pass": 34,
+    "fail": 2,
+    "unknown": 0,
+    "overridden": 1,
+    "outOfScope": 4
+  },
+  "findings": [
+    {
+      "id": "R16-F1",
+      "tasks": [64, 71, 72],
+      "summary": "RecordedCaseInventory and historical totals remained as current AC-7/AC-8 binding assertions after runtime discovery replaced recorded counts."
+    },
+    {
+      "id": "R16-F2",
+      "tasks": [64, 71],
+      "summary": "Discovery fail-closed branches for empty, duplicate, subset, missing-header and parser-boundary conditions lacked negative controls."
+    }
+  ],
+  "noRegression": true,
+  "secretRedactions": 6,
+  "jsonlInvalidLines": 0,
+  "liveKeyMatchesAfterRedaction": 0,
+  "requestPath": "docs/receipts/hv/20261109T161556-unitgreen-r16.request.jsonl",
+  "responsePath": "docs/receipts/hv/20261109T161556-unitgreen-r16.response.jsonl",
+  "reviewTurn": "req-20261109T221900Z-hv-unitgreen-r16",
+  "triageReport": "triage-report-161b55eda47b4599b42a7c430fe49c17"
+}

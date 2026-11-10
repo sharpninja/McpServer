@@ -1,0 +1,8 @@
+?? docs/receipts/hv/20261026T072431-unitgreen-r6.request.jsonl
+?? docs/receipts/hv/20261026T072431-unitgreen-r6.response.jsonl
+?? docs/receipts/hv/20261026T072431-unitgreen-r6.selfreview.md
+?? docs/receipts/hv/hv-ug-r6-identity.json
+?? docs/receipts/hv/hv-ug-r6-params-initial-dialog.json
+?? docs/receipts/hv/hv-ug-r6-plugin-open.txt
+?? docs/receipts/hv/hv-ug-r6-plugin-status-after-open.txt
+?? docs/receipts/hv/hv-ug-r6-plugin-status.txt

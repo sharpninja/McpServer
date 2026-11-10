@@ -1,0 +1,167 @@
+{
+  "total": 35,
+  "selected": [
+    {
+      "line": 4026,
+      "timestamp": "2026-10-19T19:21:12.157Z",
+      "question": "Fixing develop's 14 failing unit tests is new code outside PR 82's code-freeze exemption. How should I proceed?",
+      "answer": "Plan first, approve later",
+      "chosenText": [
+        "Write a decision-complete plan with a per-test diagnosis and the exact fixes, then stop for your approval before any code."
+      ]
+    },
+    {
+      "line": 4026,
+      "timestamp": "2026-10-19T19:21:12.157Z",
+      "question": "Three failing tests need PostgreSQL binaries or SQL Server LocalDB (Windows-only). The Nuke file says provider tests belong to the MigrationIntegrationTests target (Category=Integration), which the unit Test target excludes; these three lack that trait. What should happen to them?",
+      "answer": "Tag them Integration (Recommended)",
+      "chosenText": [
+        "Verify they are provider integration tests, add Category=Integration, and make them pass in MigrationIntegrationTests with its dependencies, on PAYTON-LEGION2 where LocalDB exists. They then leave the unit run but must still be green in the integration target."
+      ]
+    },
+    {
+      "line": 4991,
+      "timestamp": "2026-10-19T19:51:19.941Z",
+      "question": "Do you approve the unit-suite-green plan as written (groups A to F, requirements first, Nuke gates on both hosts, the additive ToNativePath overload in QBrainAI.Client)?",
+      "answer": "Yes, I approve the change",
+      "chosenText": [
+        "Start with the requirement updates and TODO through the plugin, then the package commit, tests and mock gate, production overload, and the exit gates on both hosts."
+      ]
+    },
+    {
+      "line": 6838,
+      "timestamp": "2026-10-19T21:04:15.328Z",
+      "question": "I take all unit-suite code, including C4's 10 fixes, Decompose4nf and TR-MCP-NUKE-018 provisioning, onto fix/unit-suite-green-20261019, and C4 reverts them from its branch. Who tells the C4 session?",
+      "answer": "You tell C4 (Recommended)",
+      "chosenText": [
+        "Profile 7.8: a decision relayed by one agent may not satisfy the other's approval controls, so you state it to the C4 session directly; I start the takeover now and message C4 only the file list it must revert."
+      ]
+    },
+    {
+      "line": 7266,
+      "timestamp": "2026-10-19T21:22:12.4Z",
+      "question": "Four unit tests check production logic that itself branches on the real OS: FederationTopologyService's string comparison, the opaque-id storage key in BugTriage139SixteenthIdentityConsumerTests, the cmd.exe wrapper choice in CodexCliAgentExecutionStrategy, and GitHubCliServiceTests' foreign-path helper. How should they comply with the rule?",
+      "answer": "Integration + Platform (Recommended)",
+      "chosenText": [
+        "Tag those cases Category=Integration with the Platform trait so each runs on its own host's integration lane; production code is unchanged and no new seam is added."
+      ]
+    },
+    {
+      "line": 7266,
+      "timestamp": "2026-10-19T21:22:12.4Z",
+      "question": "UnitTestPaths.Root (tests/QBrainAi.Support.Mcp.Tests/UnitTestPaths.cs:13) picks a fake root per OS (Q:\\__mcp_unit_test__ or /__mcp_unit_test__) so lexical path tests use host-native syntax; the assertions are the same on both hosts. Is it platform-specific under the rule?",
+      "answer": "Host-neutral fixture (Recommended)",
+      "chosenText": [
+        "Keep it: the tests assert identical behavior on every host and only the fixture spelling follows the host; the new guard exempts this one fixture by name."
+      ]
+    },
+    {
+      "line": 7819,
+      "timestamp": "2026-10-19T21:40:01.524Z",
+      "question": "2026-10-19T16:38:14 - The ff55292e and d248230e unit-suite code is on C4's PR 84 and also uncommitted here, byte-identical, with the lane filter now bound on top of build/Build.TestDependencies.cs. C4 holds your 16:05 \"Keep, no new code\" answer, which predates the 16:02-16:04 handover being put to it. Which way should it go?",
+      "answer": "Handover stands (Recommended)",
+      "chosenText": [
+        "You tell C4 to revert the listed files on PR 84 as a signed commit after its per-file checks; I commit the takeover plus the lane filter on fix/unit-suite-green-20261019. Either merge order is clean because the blobs match."
+      ]
+    },
+    {
+      "line": 9963,
+      "timestamp": "2026-10-19T23:20:06.45Z",
+      "question": "Five IMPL-UNITGREEN-001 implementation tasks were checked done before any hostile review. Under the done-state rule (no plan step checked before AGREE), what should I do?",
+      "answer": "Uncheck them now (Recommended)",
+      "chosenText": [
+        "Set the five back to unchecked through workflow.todo.update with their receipts kept in the task text; they are checked again only after AGREE."
+      ]
+    },
+    {
+      "line": 16673,
+      "timestamp": "2026-10-20T14:51:13.548Z",
+      "question": "Running Windows Test as kingd exposed 32 unit tests that read the real user profile. Two product scans (MarkerFileService plugin-version lookup, SessionLogTurnContextExtractor history) crash on a Windows untrusted mount point in ~/.claude/plugins; the same tests passed as lab-wsman, whose profile has no .claude. Every path to green changes product code outside the approved plan. How should PR 87 proceed?",
+      "answer": "Fix scans in PR 87 (Recommended)",
+      "chosenText": [
+        "BDPv4 bug fix in src: both scans skip links and IO errors, which AppendHistory's misplaced IOException catch already intends. Add an AC to the owning TR, mock tree first. The 19 marker tests become hermetic through the existing AgentPluginUserProfileOverride seam (unit, test only). The 13 session-log tests read the real home, so they are tagged Integration and pass in the Windows lane after the fix. Triage b0e41c36 is closed by this PR."
+      ]
+    },
+    {
+      "line": 23467,
+      "timestamp": "2026-10-20T23:10:19.179Z",
+      "question": "HV round 3 is DISAGREE (97/96) with 4 implementer-edit findings, and the environment-dependent-unit-test area has now failed three rounds (the goal's stop condition). How should PR 87 proceed?",
+      "answer": "Structural fix, round 4 (Recommended)",
+      "chosenText": [
+        "R3-F1 by construction: one internal seam for every marker plugin-version input (environment roots, sibling root, profile caches), set by the assembly fixture to test-owned data; tests of resolution itself pass explicit inputs; these stay unit tests. Plus a new evidence gate (plan amendment): the full Nuke Test rerun under a hostile environment (every plugin-root variable and HOME pointed at scripted temp data) must also be 0 failed, which is the check that found R3-F1. R3-F2 lexical alias scope with the counterexample, reverse-order and non-platform controls. R3-F3 delete FR-MCP-USECASE-017 through the plugin and read back; if it reappears, declare it as a blocker and leave task 9 open. R3-F4 correct the sentence. BDPv4 mock gates first, all gates rerun, then your confirmation and round 4."
+      ]
+    },
+    {
+      "line": 27084,
+      "timestamp": "2026-10-21T10:10:50.14Z",
+      "question": "The unit-suite platform scanner has failed three rounds in a row on name resolution (R2-F2 split and qualified forms, R3-F2 sibling-namespace aliases, R4-F1 alias chains and using static of an alias). Each fix hand-resolved one more C# form. How should round 5 fix it?",
+      "answer": "Declare the limit, no fix",
+      "chosenText": [
+        "No code change. The plan, PR body and brief declare that the scanner does not resolve alias chains or static imports of an alias, and the scanner task stays open. Round 5 still runs. The reviewer said this keeps the scanner claims failing, so AGREE would need the claims narrowed first."
+      ]
+    },
+    {
+      "line": 32032,
+      "timestamp": "2026-10-21T17:25:49.415Z",
+      "question": "HV round 5 is DISAGREE again on environment-dependent unit tests (goal stop condition). How should I proceed?",
+      "answer": "Fix both, strengthen ACs",
+      "chosenText": [
+        "Same as the first option, plus amending AC-TR-MCP-WS-005-001 and AC-TR-MCP-SESSIONLOG-006-009 through the plugin to name a linked scan root and linked ancestors explicitly. That is an AC change, so the plan gains a requirement-change step."
+      ]
+    },
+    {
+      "line": 32384,
+      "timestamp": "2026-10-21T17:37:35.628Z",
+      "question": "Approve plan section 19 (R5-F1 production fix, R5-F2 and the environment sweep, then all seven gates and round 6)?",
+      "answer": "Approve, strengthen AC-006/008 (Recommended)",
+      "chosenText": [
+        "As drafted: AC-006 and AC-008 extended from the platform to the process environment through the plugin before any test change. About 10 environment-touching unit tests move to the integration lanes on both hosts, with both variable forms controlled and assertions unchanged. Environment-writing tests run one at a time in one collection. Then R5-F1 under BDPv4 (mock gate, production fix, binding, real-link integration test), the hostile gate v3, two signed commits, all seven gates, TODO task 22, the pre-HV list, round 6."
+      ]
+    },
+    {
+      "line": 34882,
+      "timestamp": "2026-10-26T14:13:23.996Z",
+      "question": "Round 6 is the second DISAGREE on unit tests that depend on the environment (R6-F1: 14 tests reach production temp-folder code that reads CLI temp variables and branches on Windows). How should I fix it? R6-F2, the five citations missing from the store, gets fixed either way, as the verdict asks.",
+      "answer": "Strengthen AC, move 14 (Recommended)",
+      "chosenText": [
+        "Amend AC-006 (TR-MCP-USECASE-018) and AC-008 (TR-MCP-USECASE-019) through the plugin to cover environment and platform reads reached through production code. The hostile gate must use invalid values (a plain file where a folder is expected) for every variable read along the way. Then move the 14 tests to Integration on both hosts with every temp variable set and restored, assertions unchanged. Extend the one-time search through production code (no scanner), run gate v5 with invalid values, fix R6-F2, rerun all gates at the new head, then HV round 7. Unit suite 4558 -> 4544; Linux lane 412 -> 426; Windows lane 388 -> 402. Test files only, no production change."
+      ]
+    },
+    {
+      "line": 36846,
+      "timestamp": "2026-10-26T15:32:49.704Z",
+      "question": "AC-006 and AC-008, as I amended them at 09:16, say any test that \"reaches production code that reads\" an environment variable is an integration test. Read literally, that covers far more than dependence. Which version should go to round 7?",
+      "answer": "Dependence + proof AC (Recommended)",
+      "chosenText": [
+        "Amend both through the plugin. A test whose outcome can change with an environment variable it reads or writes, directly, through a helper or through the production code it calls, is an integration test. A unit test may reach code that reads a variable only where both gate v5 runs show its outcome doesn't change. XDG_DATA_HOME is stated to follow the scripted HOME. No further moves: unit 4549 plus the new helper controls, lanes 428 and 404 plus the helper bindings. The helper fix and a full gate rerun follow."
+      ]
+    },
+    {
+      "line": 40382,
+      "timestamp": "2026-10-26T18:34:44.606Z",
+      "question": "How should R7-F1 (19 REPL unit cases that depend on the command timeout variable) be fixed before HV round 8?",
+      "answer": "Fix source, strengthen AC (Recommended)",
+      "chosenText": [
+        "Keep the prepared fix: TR-MCP-REPL-001 AC-002 plus one shared parse rule in QBrainAi.Repl.Core, so an out-of-range timeout falls back to the 2-minute default (production change, BDPv4 done: mock gate 4554, binding 4555, max proof 4555/0/0). Also strengthen AC-006 and AC-008 through the plugin: the hostile gate also runs every numeric variable at 0, Int32 max and Int32 min, plus a TZ/culture pass. Then gate v6 runs, the full gates on both hosts, plan section 21, the pre-HV list, and round 8. Unit suite 4555; lanes stay 433 and 409."
+      ]
+    },
+    {
+      "line": 41075,
+      "timestamp": "2026-10-26T19:15:44.112Z",
+      "question": "The first Windows lane at f5cda3c1 failed 2 inherited junction cases on a 5-second pwsh.exe start budget; a rerun at the same head is green and complete by name (409/0/0). How should the gate be settled before HV round 8?",
+      "answer": "Fix flake, strengthen AC (Recommended)",
+      "chosenText": [
+        "Requirements first: strengthen TR-MCP-USECASE-019 AC-008 so a test fixture never depends on starting a helper process within a fixed few seconds. Then BDPv4 test-only: the junction helper calls cmd.exe mklink /J (or the API) instead of the PATH pwsh.exe, its assertions unchanged, with scripted controls first. That makes a new code head, so every gate reruns on both hosts. Unit suite unchanged (4555); lanes unchanged in count."
+      ]
+    },
+    {
+      "line": 52358,
+      "timestamp": "2026-10-27T22:11:40.897Z",
+      "question": "The hygiene branch's unit suite has 14 failures and 16 skips, all in QBrainAi.Support.Mcp.Tests. They are the same 14 and 16 that PR 82 merged with, and PR 87 exists to fix exactly that set. You just cleared PR 87's goal. How should the static-file fix phase get to 0 failed, 0 skipped?",
+      "answer": "Finish PR 87 first (Recommended)",
+      "chosenText": [
+        "Resume PR 87 under its plan until it is green on both hosts, has hostile AGREE and is merged. Then merge develop into the hygiene branch and rerun every gate until 0 failed and 0 skipped. Nothing is fixed twice. The hygiene phase stays open until then."
+      ]
+    }
+  ]
+}

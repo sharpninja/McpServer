@@ -1,0 +1,53 @@
+{
+  "name": "ug-r14f4-final-linux-buildtests-1",
+  "kind": "gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "5ce7fa56c26e4a0672fffba6984273f998db454b",
+  "dirtyPaths": [
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-1.start.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-traceability-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-1.result.txt"
+  ],
+  "command": [
+    "dotnet",
+    "test",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+    "-c",
+    "Debug",
+    "--logger",
+    "trx;LogFileName=ug-r14f4-final-linux-buildtests-1.trx",
+    "--results-directory",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-buildtests-1",
+    "--filter",
+    "Platform!=Windows"
+  ],
+  "startedLocal": "2026-11-07T18:07:18",
+  "endedLocal": "2026-11-07T18:07:48",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 498,
+  "passed": 498,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "ug-r14f4-final-linux-buildtests-1",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-buildtests-1/ug-r14f4-final-linux-buildtests-1.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-1/ug-r14f4-final-linux-buildtests-1.trx",
+      "sha256": "8056C20550F3094536DF05214F60F307583AF7B726DA3468724B8A9054BDFF38",
+      "total": 498,
+      "passed": 498,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [],
+  "writtenLocal": "2026-11-07T18:08:18",
+  "writtenBy": "ClaudeCode"
+}

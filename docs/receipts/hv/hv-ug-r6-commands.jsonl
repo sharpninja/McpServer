@@ -1,0 +1,53 @@
+{"timestampLocal":"2026-10-26T07:33:07","command":"git status --short","exitCode":0}
+{"timestampLocal":"2026-10-26T07:33:07","command":"git rev-parse HEAD","exitCode":0}
+{"timestampLocal":"2026-10-26T07:33:07","command":"git merge-base 3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b origin/develop","exitCode":0}
+{"timestampLocal":"2026-10-26T07:33:07","command":"git log --first-parent --format=fuller 3da2db93..3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b","exitCode":0}
+{"timestampLocal":"2026-10-26T07:33:07","command":"git diff --name-only 3da2db93...3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b","exitCode":0}
+{"timestampLocal":"2026-10-26T07:33:07","command":"git diff --name-only c8418301..3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b","exitCode":0}
+{"timestampLocal":"2026-10-26T07:33:07","command":"git diff 810ee8aa..c8418301 -- src tests build Directory.Packages.props","exitCode":0}
+{"timestampLocal":"2026-10-26T07:33:07","command":"gh pr view 87 --repo sharpninja/McpServer --json title,body,state,isDraft,headRefName,headRefOid,baseRefName,mergeable,mergeStateStatus,url,commits","exitCode":1}
+{"timestampLocal":"2026-10-26T07:35:24","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getFr","exitCode":1}
+{"timestampLocal":"2026-10-26T07:35:25","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getFr","exitCode":1}
+{"timestampLocal":"2026-10-26T07:35:27","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:28","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:30","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:32","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:33","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:35","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:36","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:38","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:39","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":1}
+{"timestampLocal":"2026-10-26T07:35:41","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.listMappings","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:42","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.listMappings","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:44","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.listMappings","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:46","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.listMappings","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:47","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.listMappings","exitCode":0}
+{"timestampLocal":"2026-10-26T07:35:49","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.listMappings","exitCode":0}
+{"timestampLocal":"2026-10-26T07:38:13","command":"/home/sharpninja/.local/share/mise/installs/gh/2.102.0/gh_2.102.0_linux_amd64/bin/gh pr view 87 --repo sharpninja/McpServer --json title,body,state,isDraft,headRefName,headRefOid,baseRefName,mergeable,mergeStateStatus,url,commits","exitCode":0}
+{"timestampLocal":"2026-10-26T07:46:15","command":"pwsh.exe -NoProfile -NonInteractive -File ./build.ps1 Test --test-run-id hv-ug-r6-sandbox-hostile-1","exitCode":0}
+{"timestampLocal":"2026-10-26T07:53:07","command":"Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendDialog","exitCode":0}
+{"timestampLocal":"2026-10-26T07:53:10","command":"Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendActions","exitCode":0}
+{"timestampLocal":"2026-10-26T07:55:59","command":"pwsh.exe -NoProfile -NonInteractive -File ./build.ps1 Test --test-run-id hv-ug-r6-hostile-blocked-temp-1","exitCode":255}
+{"timestampLocal":"2026-10-26T07:56:22","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getFr","exitCode":1}
+{"timestampLocal":"2026-10-26T07:56:24","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":1}
+{"timestampLocal":"2026-10-26T07:56:25","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":1}
+{"timestampLocal":"2026-10-26T07:56:27","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":1}
+{"timestampLocal":"2026-10-26T07:56:28","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTr","exitCode":1}
+{"timestampLocal":"2026-10-26T07:59:19","command":"Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendDialog","exitCode":0}
+{"timestampLocal":"2026-10-26T07:59:22","command":"Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendActions","exitCode":0}
+{"timestampLocal":"2026-10-26T08:06:17","command":"gh api --paginate repos/sharpninja/McpServer/issues/87/timeline?per_page=100","exitCode":0}
+{"timestampLocal":"2026-10-26T08:17:23","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getFr","exitCode":1}
+{"timestampLocal":"2026-10-26T08:17:24","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":1}
+{"timestampLocal":"2026-10-26T08:17:26","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":1}
+{"timestampLocal":"2026-10-26T08:17:28","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest","exitCode":1}
+{"timestampLocal":"2026-10-26T08:17:30","command":"Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTr","exitCode":1}
+{"timestampLocal":"2026-10-26T08:20:52","command":"pwsh.exe -NoProfile -NonInteractive -File ./build.ps1 Test --test-run-id hv-ug-r6-hostile-cli-temp-2","exitCode":255}
+{"timestampLocal":"2026-10-26T08:21:41","command":"Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendDialog","exitCode":0}
+{"timestampLocal":"2026-10-26T08:21:44","command":"Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendActions","exitCode":0}
+{"timestampLocal":"2026-10-26T08:23:35","command":"gh api advisories/GHSA-846f-f764-76mx","exitCode":0}
+{"timestampLocal":"2026-10-26T08:23:35","command":"gh api advisories/GHSA-r955-8q5j-3h83","exitCode":0}
+{"timestampLocal":"2026-10-26T08:23:35","command":"gh api advisories/GHSA-2fmv-rv2c-59x7","exitCode":0}
+{"timestampLocal":"2026-10-26T08:23:35","command":"gh api advisories/GHSA-c399-9853-6jmj","exitCode":0}
+{"timestampLocal":"2026-10-26T08:23:35","command":"gh api advisories/GHSA-7hqp-7c5m-4vq6","exitCode":0}
+{"timestampLocal":"2026-10-26T08:23:38","command":"Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendDialog","exitCode":0}
+{"timestampLocal":"2026-10-26T08:23:41","command":"Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendActions","exitCode":0}

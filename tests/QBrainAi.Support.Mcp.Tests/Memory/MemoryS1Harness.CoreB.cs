@@ -10,6 +10,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
+/// <summary>
+/// FR-MCP-MEMORY-002; FR-MCP-MEMORY-003; TR-MCP-MEMORY-003; TR-MCP-USECASE-018 AC-006: this part of MemoryS1Harness
+/// holds the fixture and probe helpers: InsertEdgeFixtureAsync, GetEmbeddingStatusAsync and SetEmbeddingStatusAsync
+/// over the harness database; RenderRequiredMemories, which finds a production REQUIRED MEMORIES renderer by
+/// reflection; FindMappedEntity and HasUniqueEdgeIndex over the EF model; the MemoryService passthroughs
+/// AddCompatAsync, ListCompatAsync, GetCompatAsync, UpdateCompatAsync and RemoveCompatAsync; StatusOf for MVC results;
+/// the Clock a test may set for the handlers; and CreateProductionDispatcher, which every dispatch helper of the
+/// harness uses. The memory tests that build a MemoryS1Harness use them.
+/// </summary>
+/// <remarks>2026-11-07, FR-MCP-MEMORY-002; FR-MCP-MEMORY-003; TR-MCP-MEMORY-003; TR-MCP-USECASE-018 AC-006: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the code is unchanged.</remarks>
 public sealed partial class MemoryS1Harness
 {
     /// <summary>Test-only fixture helper to plant a directed edge without the S3 create-edge API.</summary>
@@ -163,11 +173,25 @@ public sealed partial class MemoryS1Harness
     private static BindingFlags BindingFlagsPublicInstanceStatic()
         => BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): the clock the production handlers read when a test sets it; null
+    /// leaves every handler on its default clock (hostile validation round 12 finding R12-F2, sibling S37).
+    /// </summary>
+    internal TimeProvider? Clock { get; set; }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: a CQRS dispatcher over the production memory handlers, with logging, the harness's
+    /// options and, when <see cref="Clock"/> is set, that clock registered for the handlers to read.
+    /// </summary>
+    /// <returns>The dispatcher.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed in slice Z4 to register <see cref="Clock"/> when a test sets it (hostile validation round 12 finding R12-F2, sibling S37), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private IDispatcher CreateProductionDispatcher()
     {
         var services = new ServiceCollection();
         services.AddLogging();
         services.AddSingleton(_options);
+        if (Clock is not null)
+            services.AddSingleton(Clock);
         services.AddCqrs(typeof(RememberMemoryCommand).Assembly, typeof(MemoryController).Assembly);
         var provider = services.BuildServiceProvider();
         return provider.GetRequiredService<IDispatcher>();

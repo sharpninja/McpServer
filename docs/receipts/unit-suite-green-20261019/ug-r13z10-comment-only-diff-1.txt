@@ -1,0 +1,4 @@
+Now: 2026-11-05T19:21:16 worktree=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 head=94dc5b69078f746ea6cffc3bb11c73ecb74811be revision=HEAD map=NO-TOKEN-OLD=NO-TOKEN-NEW
+FILE tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs codeReplaced=0 docAdded=4 docRemoved=1 unmatched=0 oldTokensLeft=0 sha256=EA336AC9C0B19F0C71108D073D0E7C9C1A175A57BD14211632B5198E7E555C42
+FILE src/QBrainAi.Repl.Core/RequirementsWorkflow.cs codeReplaced=0 docAdded=2 docRemoved=2 unmatched=0 oldTokensLeft=0 sha256=4524604587A18454BC9236DE6A5C80B0D2CA325CCE65448331040B1233E6C643
+END failedFiles=0

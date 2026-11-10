@@ -1,0 +1,422 @@
+HV_R14_RELAUNCH_FINAL json part 6/12 SHA256 8EAD2DA55BF5AC6F6E4F6790BFA545B25CE948731AEFB44282618AB4EF5FD5E3
+elect-Object -Skip 230; Get-Content -Raw -LiteralPath '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/session/SKILL.md'; Get-Command pwsh.exe,Invoke-ScriptAnalyzer | Select-Object Name,Source; Get-ChildItem -LiteralPath '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib' -Name\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 14,
+      "id": "item_6",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$p = '\"'/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1'; \"'$parseErrors = $null; $parseTokens = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile($p, [ref]$parseTokens, [ref]$parseErrors); $parseErrors | ConvertTo-Json -Depth 4; Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json -Depth 5'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 18,
+      "id": "item_8",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$p = '\"'/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1'; \"'$parseErrors = $null; $parseTokens = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile($p, [ref]$parseTokens, [ref]$parseErrors); [pscustomobject]@{ParserErrors=@($parseErrors).Count; AnalyzerFindings=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error).Count} | ConvertTo-Json'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 20,
+      "id": "item_9",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action ProfileTail -Start 315 -Count 100\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 22,
+      "id": "item_10",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Marker\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 27,
+      "id": "item_13",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$p = '\"'./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1'; \"'$parseErrors = $null; $parseTokens = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p), [ref]$parseTokens, [ref]$parseErrors); [pscustomobject]@{ParserErrors=@($parseErrors).Count; AnalyzerFindings=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error).Count} | ConvertTo-Json'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 29,
+      "id": "item_14",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Marker -Start 1 -Count 240\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 33,
+      "id": "item_15",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Marker -Start 241 -Count 200\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 34,
+      "id": "item_16",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/Invoke-McpPlugin.ps1','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/resolve-cache-dir.ps1','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/session-start.ps1' -Count 160\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 35,
+      "id": "item_17",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Metadata\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 37,
+      "id": "item_18",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/Invoke-McpPlugin.ps1' -Start 157 -Count 200; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList @('-n','openSession|bootstrap|ParamsObject|PLUGIN_MODEL|MCP_AGENT_MODEL','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/McpPluginShim.psm1')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 39,
+      "id": "item_19",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList @('-n','openSession|workflow.sessionlog.bootstrap|MCP_SESSION_MODEL|plugin-session|New-McpSession','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1'); & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/.codex-plugin/plugin.json' -Count 70\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 43,
+      "id": "item_21",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$p = '\"'./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1'; \"'$parseErrors = $null; $parseTokens = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p), [ref]$parseTokens, [ref]$parseErrors); $parseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 45,
+      "id": "item_22",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Status -WhatIf; & './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Status\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 47,
+      "id": "item_23",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1' -Start 105 -Count 205\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 49,
+      "id": "item_24",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1' -Start 1270 -Count 115\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 51,
+      "id": "item_25",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList @('-n','FAILSAFE.*(ROOT|DIR)|MCP_FAILSAFE|MCP_SESSION_MODEL|session-start','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/plugin-hook.ps1','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/hooks/scripts')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 53,
+      "id": "item_26",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/plugin-hook.ps1' -Start 1 -Count 90; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList @('-n','New-ReplPluginSessionId|Ensure.*Session','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 55,
+      "id": "item_27",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1' -Start 310 -Count 130; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList @('-n','function Start-PluginSession|MCP_SESSION_MODEL|model =|model\\\\]','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/plugin-hook.ps1'); & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList @('-n','MCP_FAILSAFE.*(DIR|ROOT)|FAILSAFE_ROOT','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 60,
+      "id": "item_29",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$p = '\"'./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1'; \"'$parseErrors = $null; $parseTokens = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p), [ref]$parseTokens, [ref]$parseErrors); [pscustomobject]@{ParserErrors=@($parseErrors).Count; AnalyzerFindings=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error).Count} | ConvertTo-Json; & $p -Command Start -OutputName bootstrap -WhatIf; & $p -Command Start -OutputName bootstrap'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 64,
+      "id": "item_32",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$p = '\"'./docs/receipts/hv/hv-ug-r14-relaunch-begin.psd1'; \"'$parseErrors = $null; $parseTokens = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p), [ref]$parseTokens, [ref]$parseErrors); [pscustomobject]@{ParserErrors=@($parseErrors).Count; AnalyzerFindings=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error).Count} | ConvertTo-Json; & '\"'./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method workflow.sessionlog.beginTurn -DataPath \"'$p -OutputName begin -WhatIf; & '\"'./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method workflow.sessionlog.beginTurn -DataPath \"'$p -OutputName begin'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 66,
+      "id": "item_33",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Paths -ArgumentList '/tmp/hv-ug-r14-20261106T181559-plugin'; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList @('-n','signature|nonce|verification|status|agent|sessionId|model|workspace','/tmp/hv-ug-r14-20261106T181559-plugin/session-state.yaml')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 69,
+      "id": "item_35",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'AGENTS.md','CLAUDE.md','.github/copilot-instructions.md' -Count 260\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 70,
+      "id": "item_34",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method workflow.memory.list -DataPath './docs/receipts/hv/hv-ug-r14-relaunch-global.psd1' -OutputName global-memories -Quiet; & './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method workflow.memory.list -DataPath './docs/receipts/hv/hv-ug-r14-relaunch-workspace.psd1' -OutputName workspace-memories -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 72,
+      "id": "item_36",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-global-memories.txt' -Count 190; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-workspace-memories.txt' -Count 80; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'CLAUDE.md' -Start 76 -Count 62\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 76,
+      "id": "item_38",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$p = '\"'./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1'; \"'$parseErrors = $null; $parseTokens = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p), [ref]$parseTokens, [ref]$parseErrors); [pscustomobject]@{ParserErrors=@($parseErrors).Count; AnalyzerFindings=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error).Count} | ConvertTo-Json; & $p -Action Memories -ArgumentList '\"'docs/receipts/hv/hv-ug-r14-relaunch-global-memories.txt'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 78,
+      "id": "item_39",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Memories -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-workspace-memories.txt'; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Metadata; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/Development-Process-draft-v4.md' -Count 200\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 80,
+      "id": "item_40",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/requirements/SKILL.md' -Count 180\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 82,
+      "id": "item_41",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Memories -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-workspace-memories.txt'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 87,
+      "id": "item_44",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r14-trx-da11faa2/manifest.json' -Count 105; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r14-tasks-da11faa2.json' -Count 80; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Git -ArgumentList @('status','--short')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 89,
+      "id": "item_43",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$p = '\"'./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1'; \"'$parseErrors = $null; $parseTokens = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $p), [ref]$parseTokens, [ref]$parseErrors); [pscustomobject]@{ParserErrors=@($parseErrors).Count; AnalyzerFindings=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error).Count} | ConvertTo-Json; & $p -Command Invoke -Method workflow.sessionlog.appendDialog -Category decision -Text '\"'Startup: read add-profile skill and one full profile file, all 8 Global and 3 active McpServer Workspace memories through the installed Codex wrapper. MEMORY-PROCESS-007 excluded and absent. Entire root marker read with credentials redacted. Live rollout line 10 proves model gpt-6-astra, effort max, thread 01a1b35c-ba09-7e80-9cba-06848c138e69, CLI 0.167.0. Decision: judge evidence at da11faa2 and records head 0980a52b under the Z16 addendum; retain prior findings as untrusted leads, not verdicts. Follow current MEMORY-HV-001 rule 6 for infrastructure. Alternative of treating prior run as completed rejected because it stopped without verdict. No builds, restores or tests will run. Initial read-only discovery used inline PowerShell before the dedicated inspection script was introduced; subsequent inspection logic is in parser/analyzer-checked PowerShell scripts. No product mutations.' -OutputName startup-dialog -Quiet; & \"'$p -Command Invoke -Method workflow.sessionlog.appendActions -Text '\"'Decided scope: one independent read-only round 14 at code da11faa2 and records 0980a52b, with 61 tasks, supplied TRX only, no remediation, all applicable claims required. Current addendum supersedes earlier gate heads and task counts. Preserve first-launch receipts. Profile loaded: 1 file, 8 Global and 3 Workspace memories; live model and effort proven.' -OutputName startup-action -Quiet; & \"'$p -Command Invoke -Method workflow.todo.get -RecordId IMPL-UNITGREEN-001 -OutputName todo-live -Quiet; & $p -Command Invoke -Method workflow.requirements.effective -OutputName effective-live -Quiet'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 93,
+      "id": "item_46",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r14-trx-da11faa2/manifest.json' -Start 612 -Count 190\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 94,
+      "id": "item_47",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/unit-suite-green-20261019/ug-r14z16-final-linux-unit-1.json' -Count 150; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Git -ArgumentList @('log','--first-parent','--format=%H %ad %s%n%b','--date=iso-strict','53a210ca..0980a52b')\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 95,
+      "id": "item_48",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/plans/2026-10-19-unit-suite-green.md' -Count 135\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 97,
+      "id": "item_49",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Start 1 -Count 250; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action ProfileTail -Start 1 -Count 200\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 99,
+      "id": "item_50",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action ProfileTail -Start 201 -Count 220\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 101,
+      "id": "item_51",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Status -OutputName status-reload -Quiet; & './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method workflow.memory.list -DataPath './docs/receipts/hv/hv-ug-r14-relaunch-global.psd1' -OutputName global-memories-reload -Quiet; & './docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Command Invoke -Method workflow.memory.list -DataPath './docs/receipts/hv/hv-ug-r14-relaunch-workspace.psd1' -OutputName workspace-memories-reload -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 103,
+      "id": "item_52",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1','./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1' -Count 230\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 105,
+      "id": "item_53",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Memories -ArgumentList './docs/receipts/hv/hv-ug-r14-relaunch-global-memories-reload.txt'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 107,
+      "id": "item_54",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Memories -ArgumentList './docs/receipts/hv/hv-ug-r14-relaunch-workspace-memories-reload.txt'; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList './docs/receipts/hv/hv-ug-r14-relaunch-status-reload.txt','./docs/receipts/hv/hv-ug-r14-relaunch-startup-dialog.txt','./docs/receipts/hv/hv-ug-r14-relaunch-startup-action.txt' -Count 100\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 111,
+      "id": "item_56",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/requirements/SKILL.md' -Start 181 -Count 368\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 112,
+      "id": "item_57",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList './docs/receipts/hv/hv-ug-r14-relaunch-effective-live.txt' -Count 45; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Git -ArgumentList 'rev-parse','HEAD'; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Git -ArgumentList 'diff','--name-only','da11faa2..0980a52b'; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList '-n','\"'^##'\"','docs/plans/2026-10-19-unit-suite-green.md'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 114,
+      "id": "item_58",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r14-trx-da11faa2/manifest.json' -Count 50; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r14-tasks-da11faa2.json' -Count 16; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/hv-ug-r14-relaunch-todo-live.txt' -Count 45; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Search -ArgumentList '-n','getFr|queryHistory','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/session/SKILL.md','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/requirements/SKILL.md'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 118,
+      "id": "item_60",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$parserTokens = $null; $parserErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1'), [ref]\"'$parserTokens, [ref]$parserErrors); $analysisFindings = @(Invoke-ScriptAnalyzer -Path '\"'./docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Severity Warning,Error); [pscustomobject]@{ParserErrors=@(\"'$parserErrors).Count; AnalyzerFindings=$analysisFindings.Count} | ConvertTo-Json; $parserErrors; $analysisFindings | Format-List RuleName,Message,Line; if (@($parserErrors).Count -or $analysisFindings.Count) { exit 1 }'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 123,
+      "id": "item_63",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r14-prelaunch.holistic-findings-18.md' -Start 1 -Count 100\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 124,
+      "id": "item_62",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 1 -Count 22\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 125,
+      "id": "item_64",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Evidence\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 127,
+      "id": "item_65",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Read -ArgumentList 'docs/receipts/hv/unitgreen-r14-prelaunch.holistic-findings-18.md' -Start 101 -Count 150\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 132,
+      "id": "item_67",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$parserTokens=$null; $parserErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1'),[ref]\"'$parserTokens,[ref]$parserErrors); $analysisFindings=@(Invoke-ScriptAnalyzer -Path '\"'./docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Severity Warning,Error); [pscustomobject]@{ParserErrors=@(\"'$parserErrors).Count;AnalyzerFindings=$analysisFindings.Count}|ConvertTo-Json; if (@($parserErrors).Count -or $analysisFindings.Count) {$parserErrors; $analysisFindings; exit 1}; & '\"'./docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Evidence\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 133,
+      "id": "item_68",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 1 -Count 15\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 135,
+      "id": "item_69",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 16 -Count 10\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 138,
+      "id": "item_70",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Git -ArgumentList 'diff','--stat','53a210ca..da11faa2','--','src','tests','build'; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Git -ArgumentList 'diff','548b1a28..da11faa2','--','src','tests'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 139,
+      "id": "item_71",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 26 -Count 12\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 143,
+      "id": "item_73",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$parserTokens=$null; $parserErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1'),[ref]\"'$parserTokens,[ref]$parserErrors); $analysisFindings=@(Invoke-ScriptAnalyzer -Path '\"'./docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Severity Warning,Error); [pscustomobject]@{ParserErrors=@(\"'$parserErrors).Count;AnalyzerFindings=$analysisFindings.Count}|ConvertTo-Json; if (@($parserErrors).Count -or $analysisFindings.Count) {$parserErrors; $analysisFindings; exit 1}'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 145,
+      "id": "item_74",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs' -Count 500\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 147,
+      "id": "item_75",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs' -Count 460\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 149,
+      "id": "item_76",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs' -Start 461 -Count 410\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 153,
+      "id": "item_79",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'src/QBrainAi.Services/Services/VoiceConversationService.cs' -Start 1880 -Count 240; & './docs/receipts/hv/hv-ug-r14-relaunch-inspect.ps1' -Action Code -ArgumentList 'tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProvider.cs','tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProviderTests.cs','tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs' -Count 180\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 154,
+      "id": "item_78",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 38 -Count 10\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 157,
+      "id": "item_81",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-evidence.ps1' -Mode Tasks -Start 48 -Count 8\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 158,
+      "id": "item_80",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r14-relaunch-i

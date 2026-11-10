@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c46223c9-69e0-4e79-a317-52b47e6b3f2f" name="@LAB-OMARCHY 2026-11-09 10:16:59" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-09T10:16:59.3653624-06:00" queuing="2026-11-09T10:16:59.3653624-06:00" start="2026-11-09T10:16:55.6555058-06:00" finish="2026-11-09T10:17:02.2327379-06:00" />
+  <TestSettings name="default" id="37f7b794-99a5-4a89-adf1-7421840061bc">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-09_10_16_59" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="a8ec2eca-114f-4479-ba41-e3b94ab37ae1" testId="5e889b9c-0961-9a00-5298-943b8568b9aa" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_WithModel_ReturnsNonZeroVector" computerName="LAB-OMARCHY" duration="00:00:00.0086272" startTime="2026-11-09T10:17:02.0252863-06:00" endTime="2026-11-09T10:17:02.0339955-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a8ec2eca-114f-4479-ba41-e3b94ab37ae1">
+      <Output>
+        <StdOut>EMBEDDING_ARTIFACT source=https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/onnx/model.onnx length=90405214 sha256=6FD5D72FE4589F189F8EBC006442DBB529BB7CE38F8082112682524616046452
+EMBEDDING_ARTIFACT source=https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/vocab.txt length=231508 sha256=07ECED375CEC144D27C900241F3E339478DEC958F92FDDBC551F295C992038A3</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4d3863d8-cd33-461a-93f7-ee868bde97e0" testId="8b7acda0-f143-ecb6-a7f7-141925ed6bb2" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests.RequireAvailable_RejectsMissingOrCorruptArtifacts(fault: &quot;missing&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0016556" startTime="2026-11-09T10:16:57.9150860-06:00" endTime="2026-11-09T10:16:57.9168697-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4d3863d8-cd33-461a-93f7-ee868bde97e0" />
+    <UnitTestResult executionId="b8b95fd8-0420-43dc-aa0e-e66503281138" testId="987ae72c-5c8e-6f13-848f-92f87b3e6646" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_DifferentInput_ReturnsDifferentVectors" computerName="LAB-OMARCHY" duration="00:00:00.0087870" startTime="2026-11-09T10:17:02.0346203-06:00" endTime="2026-11-09T10:17:02.0434857-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b8b95fd8-0420-43dc-aa0e-e66503281138">
+      <Output>
+        <StdOut>EMBEDDING_ARTIFACT source=https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/onnx/model.onnx length=90405214 sha256=6FD5D72FE4589F189F8EBC006442DBB529BB7CE38F8082112682524616046452
+EMBEDDING_ARTIFACT source=https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/vocab.txt length=231508 sha256=07ECED375CEC144D27C900241F3E339478DEC958F92FDDBC551F295C992038A3</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="be89576c-1672-45da-80ee-ce74ca9097c5" testId="b909fdac-46eb-3161-a536-16a553234270" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests.RequireAvailable_RejectsMissingOrCorruptArtifacts(fault: &quot;corrupt&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0981856" startTime="2026-11-09T10:16:57.7984176-06:00" endTime="2026-11-09T10:16:57.9089577-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="be89576c-1672-45da-80ee-ce74ca9097c5" />
+    <UnitTestResult executionId="527388c2-097e-4e19-811f-365d5c32e8a6" testId="26d47eab-e0cc-0026-ff47-43ea622bce17" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_LongInput_TruncatesCorrectly" computerName="LAB-OMARCHY" duration="00:00:00.0578096" startTime="2026-11-09T10:17:02.0440266-06:00" endTime="2026-11-09T10:17:02.1019073-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="527388c2-097e-4e19-811f-365d5c32e8a6">
+      <Output>
+        <StdOut>EMBEDDING_ARTIFACT source=https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/onnx/model.onnx length=90405214 sha256=6FD5D72FE4589F189F8EBC006442DBB529BB7CE38F8082112682524616046452
+EMBEDDING_ARTIFACT source=https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/vocab.txt length=231508 sha256=07ECED375CEC144D27C900241F3E339478DEC958F92FDDBC551F295C992038A3</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="87d9a8c6-b000-4668-a42c-494fe31d08d0" testId="9681e12c-ad8d-ca89-80d1-3f61547ea556" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_SameInput_ReturnsDeterministicOutput" computerName="LAB-OMARCHY" duration="00:00:00.0337282" startTime="2026-11-09T10:17:01.9905376-06:00" endTime="2026-11-09T10:17:02.0243680-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="87d9a8c6-b000-4668-a42c-494fe31d08d0">
+      <Output>
+        <StdOut>EMBEDDING_ARTIFACT source=https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/onnx/model.onnx length=90405214 sha256=6FD5D72FE4589F189F8EBC006442DBB529BB7CE38F8082112682524616046452
+EMBEDDING_ARTIFACT source=https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/vocab.txt length=231508 sha256=07ECED375CEC144D27C900241F3E339478DEC958F92FDDBC551F295C992038A3</StdOut>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_SameInput_ReturnsDeterministicOutput" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environmentintegrationtests/bin/debug/net10.0/qbrainai.support.mcp.environmentintegrationtests.dll" id="9681e12c-ad8d-ca89-80d1-3f61547ea556">
+      <Execution id="87d9a8c6-b000-4668-a42c-494fe31d08d0" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests" name="GenerateEmbedding_SameInput_ReturnsDeterministicOutput" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_LongInput_TruncatesCorrectly" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environmentintegrationtests/bin/debug/net10.0/qbrainai.support.mcp.environmentintegrationtests.dll" id="26d47eab-e0cc-0026-ff47-43ea622bce17">
+      <Execution id="527388c2-097e-4e19-811f-365d5c32e8a6" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests" name="GenerateEmbedding_LongInput_TruncatesCorrectly" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests.RequireAvailable_RejectsMissingOrCorruptArtifacts(fault: &quot;missing&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environmentintegrationtests/bin/debug/net10.0/qbrainai.support.mcp.environmentintegrationtests.dll" id="8b7acda0-f143-ecb6-a7f7-141925ed6bb2">
+      <Execution id="4d3863d8-cd33-461a-93f7-ee868bde97e0" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests" name="RequireAvailable_RejectsMissingOrCorruptArtifacts" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_WithModel_ReturnsNonZeroVector" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environmentintegrationtests/bin/debug/net10.0/qbrainai.support.mcp.environmentintegrationtests.dll" id="5e889b9c-0961-9a00-5298-943b8568b9aa">
+      <Execution id="a8ec2eca-114f-4479-ba41-e3b94ab37ae1" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests" name="GenerateEmbedding_WithModel_ReturnsNonZeroVector" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests.RequireAvailable_RejectsMissingOrCorruptArtifacts(fault: &quot;corrupt&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environmentintegrationtests/bin/debug/net10.0/qbrainai.support.mcp.environmentintegrationtests.dll" id="b909fdac-46eb-3161-a536-16a553234270">
+      <Execution id="be89576c-1672-45da-80ee-ce74ca9097c5" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingModelFixtureTests" name="RequireAvailable_RejectsMissingOrCorruptArtifacts" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests.GenerateEmbedding_DifferentInput_ReturnsDifferentVectors" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environmentintegrationtests/bin/debug/net10.0/qbrainai.support.mcp.environmentintegrationtests.dll" id="987ae72c-5c8e-6f13-848f-92f87b3e6646">
+      <Execution id="b8b95fd8-0420-43dc-aa0e-e66503281138" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Indexing.EmbeddingServiceTests" name="GenerateEmbedding_DifferentInput_ReturnsDifferentVectors" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="5e889b9c-0961-9a00-5298-943b8568b9aa" executionId="a8ec2eca-114f-4479-ba41-e3b94ab37ae1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8b7acda0-f143-ecb6-a7f7-141925ed6bb2" executionId="4d3863d8-cd33-461a-93f7-ee868bde97e0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="987ae72c-5c8e-6f13-848f-92f87b3e6646" executionId="b8b95fd8-0420-43dc-aa0e-e66503281138" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b909fdac-46eb-3161-a536-16a553234270" executionId="be89576c-1672-45da-80ee-ce74ca9097c5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="26d47eab-e0cc-0026-ff47-43ea622bce17" executionId="527388c2-097e-4e19-811f-365d5c32e8a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9681e12c-ad8d-ca89-80d1-3f61547ea556" executionId="87d9a8c6-b000-4668-a42c-494fe31d08d0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="6" executed="6" passed="6" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.29]   Discovering: QBrainAi.Support.Mcp.EnvironmentIntegrationTests
+[xUnit.net 00:00:01.01]   Discovered:  QBrainAi.Support.Mcp.EnvironmentIntegrationTests
+[xUnit.net 00:00:01.29]   Starting:    QBrainAi.Support.Mcp.EnvironmentIntegrationTests
+[xUnit.net 00:00:05.75]   Finished:    QBrainAi.Support.Mcp.EnvironmentIntegrationTests (ID = '3c9e270ee56aa94bd1a994e690c8d2da16d44625b1d717c9d362fcbe4d705434')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

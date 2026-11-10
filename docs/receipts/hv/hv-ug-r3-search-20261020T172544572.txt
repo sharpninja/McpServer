@@ -1,0 +1,9 @@
+tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs:236:            sourceFilePath: Path.Combine(workspace, "import.json"),
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs:60:        Submit(connection, BuildImportedDto(output: "stale output"), sourceFilePath: @"F:\imports\rollout.jsonl");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs:67:        Submit(connection, BuildImportedDto(output: "corrected output"), sourceFilePath: @"F:\imports\rollout.jsonl");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizingServiceTests.cs:67:        inner.SubmitAsync(session, "source.json", "hash", TestContext.Current.CancellationToken).Returns(41L);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizingServiceTests.cs:80:        Assert.Equal(41L, await service.SubmitAsync(session, "source.json", "hash", TestContext.Current.CancellationToken).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizingServiceTests.cs:93:        await inner.Received(1).SubmitAsync(session, "source.json", "hash", TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs:167:            }, sourceFilePath: @"F:\imports\rollout.jsonl", contentHash: "hash-1").GetAwaiter().GetResult();
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs:70:        await _sut.SubmitAsync(dto, sourceFilePath: @"E:\imports\session.json", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+

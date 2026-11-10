@@ -1,0 +1,60 @@
+type: result
+payload:
+  requestId: req-20261026T171703Z-a79f
+  result:
+    id: TR-MCP-USECASE-019
+    title: Race-safe physical I/O, causal cancellation, and immutable evidence
+    description: >-
+      Resolve and validate physical filesystem identity through interruptible native handles or isolated workers whose public deadlines and accounting remain truthful; bind SQLite opening to the validated object without lexical races; attribute PostgreSQL cancellation to the actual caller cancel request; compose platform-native tests and process containment without pass-through fallbacks; and generate exact-final-HEAD evidence through a mechanically verified immutable workflow.
+
+      Converted from FR-MCP-USECASE-017 on 2026-10-19 (operator: "If it is in a FR, then that FR needs to be converted to a TR"; answers "Merge into its TR (Recommended)" and "FR-001, delete FRs (Recommended)"). FR-MCP-USECASE-017 stated: Use-case persistence and its filesystem, provider, process, platform-test, and evidence boundaries shall close physical alias and replacement races, complete publicly within finite contracts, preserve truthful worker and provider causality, execute applicable native contracts, and report only exact immutable evidence while retaining every previously approved control.
+
+      **Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-020
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: USECASE
+    acceptanceCriteria:
+    - id: AC-001
+      text: Linux preflight classifies each path prefix with statx(AT_SYMLINK_NOFOLLOW) and reads link targets with readlink, so a symbolic link to any path inside a userspace or network mount (not only its root) is rejected from the mount table without sending that mount a request (BUG-BASELINE-009 C1; BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkBelowFuseRoot_IsRejectedWithoutEnteringTheMount).
+      isSatisfied: false
+    - id: AC-002
+      text: "The SQLite caller-side data-source preflight runs off the caller's thread under the open's single finite deadline and the caller's cancellation: OpenAsync returns its task at once, a preflight that does not return fails the open with TimeoutException at the bound, no open worker starts, and the preflight stays counted (ActivePreflightCount) until it actually returns (BUG-BASELINE-009 C2; SqliteBoundedOpenFourteenthTests.OpenAsync_PreflightHeldAtBoundary_TimesOutWithoutBlockingTheCaller)."
+      isSatisfied: false
+    - id: AC-003
+      text: Linux workspace identity resolution resolves symbolic-link prefixes through the mount table before its anchored RESOLVE_NO_XDEV lookup, so an absolute alias within a nested approved mount (for example /tmp) resolves like the data-file and SQLite opens instead of failing with a mount transition (BUG-BASELINE-009 C3; WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers).
+      isSatisfied: false
+    - id: AC-004
+      text: 'A bounded traversal or file worker that uses the export root descriptor holds a reference on it from before it starts until it actually exits, so disposing the root at the public deadline defers the close: on Linux the root descriptor stays open while the worker runs and closes after it exits; on Windows the open root still blocks rename (BUG-BASELINE-009, operator decision 2026-10-11 "Fix it now"; BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting).'
+      isSatisfied: false
+    - id: AC-005
+      text: Physical workspace identity rejects safe lexical paths whose physical target is on an unsafe mount, remains safe across symlink or mount replacement timing, completes publicly within its deadline, and reports any unstoppable worker as active until it actually exits.
+      isSatisfied: false
+    - id: AC-006
+      text: SQLite data-source validation and pre-handle opening resist safe-link and check-to-open replacement, use no ineffective Thread.Interrupt dependency for native Linux I/O, finish cleanup within a finite deadline, and preserve exact lifecycle, handle, worker, and exception state.
+      isSatisfied: false
+    - id: AC-007
+      text: PostgreSQL SQLSTATE 57014 is translated to caller cancellation only with causal evidence produced by the caller-triggered cancellation mechanism; statement timeout and administrative cancellation remain PostgresException even during concurrent token cancellation.
+      isSatisfied: false
+    - id: AC-008
+      text: "Platform-specific tests are Category=Integration tests, tagged with the Platform trait of the host they apply to, that run only in that host's MigrationIntegrationTests (TR-MCP-NUKE-019), prove real execution and inventory counts, and never pass through source inspection, skip, silent return, abort, inconclusive outcome, or a below-minimum count; no unit test depends on the platform or on the process environment, directly, through a test helper or through the production code it calls: a test whose outcome can change with the value of an environment variable it reads or writes, directly, through a test helper or through the production code it calls (for example a temporary-folder lookup that takes its folder from a variable and creates it), a test that imports the process environment into configuration (AddEnvironmentVariables or a default host builder), and a test that asserts on an environment value a child process inherits are Category=Integration tests that set and restore every variable their assertions or the code they call depend on, every name of a fallback chain the code reads, both forms where a variable has a canonical (QBrainAi, QBRAINAI_) and a legacy (Mcp, MCP_) form, and the tests that write the process environment run one at a time; a unit test may reach production code that reads an environment variable only where the hostile-environment gate shows its outcome does not change: the full unit suite stays 0 failed and 0 not executed under that gate, which sets every variable a unit test names or the production code reads to a scripted hostile value and runs twice, once with each folder variable at a test-owned folder and once with each folder variable at the path of a test-owned regular file, leaving only PATH, TMPDIR, NUGET_PACKAGES, DOTNET_CLI_HOME and a scripted HOME usable for the build, with XDG_DATA_HOME unset so that it follows the scripted HOME (operator 2026-10-21: \"Fix both, strengthen ACs\", \"Strengthening Acceptance Criteria should always be the recommended option\" and \"Approve, strengthen AC-006/008 (Recommended)\"; operator 2026-10-26: \"Strengthen AC, move 14 (Recommended)\" and \"Dependence + proof AC (Recommended)\"; hostile validation findings R5-F2 and R6-F1)."
+      isSatisfied: false
+    - id: AC-009
+      text: Containment race coverage requires at least one successful contained read and write while proving no escape or corruption, and deterministic total-rejection tests prove that rejecting every attempt cannot satisfy the success gate.
+      isSatisfied: false
+    - id: AC-010
+      text: Windows descendant cleanup establishes containment at process creation or proves an equivalent race-free boundary before descendants can escape, and timeout or cancellation terminates immediate descendants finitely without regressing non-Windows process-group cleanup.
+      isSatisfied: false
+    - id: AC-011
+      text: Historical rejected receipts remain intact but are explicitly superseded; final evidence identifies the exact immutable tested SHA, contains executable commands or a mechanically complete ledger, independently reconciles hashes, mappings and totals, and limits conclusions to the proven local and retained-evidence boundary.
+      isSatisfied: false
+    - id: AC-012
+      text: All current and prior requirements pass focused and cumulative Windows, native Linux/FUSE/non-root, SQLite, LocalDB, fresh PostgreSQL, deterministic external, BDPv4, build, traceability, Release, repository, history, harness, and EOL gates from C:-physical outputs with exact zero failures and zero skips.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-26T17:17:05.0412574+00:00
+    updatedAt: 2026-10-26T17:17:05.0413702+00:00
+  deprecated: true
+
+---
+

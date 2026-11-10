@@ -1,0 +1,724 @@
+[
+  {
+    "mock": "ug-r9-mockgate-de-1",
+    "binding": "ug-r9-binding-1",
+    "mockEnd": "2026-10-29T09:07:01",
+    "bindingStart": "2026-10-29T09:46:01",
+    "ordered": true,
+    "mockCounts": [
+      4606,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      4622,
+      0,
+      0
+    ],
+    "mockPins": 1,
+    "bindingPins": 1,
+    "compared": []
+  },
+  {
+    "mock": "ug-r9-mockgate-f-1",
+    "binding": "ug-r9-binding-f-1",
+    "mockEnd": "2026-10-29T09:38:29",
+    "bindingStart": "2026-10-29T09:40:40",
+    "ordered": true,
+    "mockCounts": [
+      22,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      67,
+      0,
+      0
+    ],
+    "mockPins": 1,
+    "bindingPins": 1,
+    "compared": []
+  },
+  {
+    "mock": "ug-r9-mockgate-g-1",
+    "binding": "ug-r9-binding-1",
+    "mockEnd": "2026-10-29T09:27:01",
+    "bindingStart": "2026-10-29T09:46:01",
+    "ordered": true,
+    "mockCounts": [
+      4621,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      4622,
+      0,
+      0
+    ],
+    "mockPins": 1,
+    "bindingPins": 1,
+    "compared": []
+  },
+  {
+    "mock": "ug-r9-mockgate-h-1",
+    "binding": "ug-r9-binding-h-1",
+    "mockEnd": "2026-10-29T11:01:24",
+    "bindingStart": "2026-10-29T11:18:19",
+    "ordered": true,
+    "mockCounts": [
+      4623,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      4626,
+      0,
+      0
+    ],
+    "mockPins": 1,
+    "bindingPins": 1,
+    "compared": []
+  },
+  {
+    "mock": "ug-r9-mockgate-q-2",
+    "binding": "ug-r9-binding-q-2",
+    "mockEnd": "2026-11-02T10:50:43",
+    "bindingStart": "2026-11-02T10:55:09",
+    "ordered": true,
+    "mockCounts": [
+      63,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      66,
+      0,
+      0
+    ],
+    "mockPins": 4,
+    "bindingPins": 6,
+    "compared": [
+      {
+        "path": "tests/Build.Tests/TestGroupExecutionContractTests.cs",
+        "unchanged": true,
+        "mockHash": "6A0A2891C98DFFB4079FA5EBBCF2B8472A594F1051058A31A76EA947D751286D",
+        "bindingHash": "6A0A2891C98DFFB4079FA5EBBCF2B8472A594F1051058A31A76EA947D751286D"
+      },
+      {
+        "path": "build/IntegrationLaneFilter.cs",
+        "unchanged": false,
+        "mockHash": "ED80346B89D3A9609A4FCF3D2BDF987A70F175E24BDC40F60D5AA34ECD260073",
+        "bindingHash": "19FA347DE4E45B25141CCD813B50A19FA141F7F8D761E703FB5F732A79F22D0B"
+      },
+      {
+        "path": "build/TestGroupExecution.cs",
+        "unchanged": false,
+        "mockHash": "DC54FEE1DBEF5335BDDE907751FC22E133C53A0906CC68E85C9BC308C028E712",
+        "bindingHash": "0EF15C63223627333D4C367F4B88A27A880E57C604253BD8E3EBDFA05DA7002F"
+      },
+      {
+        "path": "build/Build.TestGroups.cs",
+        "unchanged": false,
+        "mockHash": "15B089A73193E875B5C59D6EFA940001925EF1ECDE830E266A72EE05DFBAB86F",
+        "bindingHash": "E49F4753C84414A2B43D721912E6C1C540C87565BF4FB1F5CD725270104DE717"
+      }
+    ]
+  },
+  {
+    "mock": "ug-r9-mockgate-r-1",
+    "binding": "ug-r9-binding-r-2",
+    "mockEnd": "2026-11-02T10:35:21",
+    "bindingStart": "2026-11-02T10:45:40",
+    "ordered": true,
+    "mockCounts": [
+      17,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      99,
+      0,
+      0
+    ],
+    "mockPins": 3,
+    "bindingPins": 3,
+    "compared": [
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs",
+        "unchanged": false,
+        "mockHash": "66EF0B20DB3289CE66678BFCF7E652A7C01086B245A9C3C0E77BAFEC520DA966",
+        "bindingHash": "520A30454EC5EB64597ACB683B1F995E1AAD7A7C5D982560E8F0A1401BE1D639"
+      },
+      {
+        "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+        "unchanged": false,
+        "mockHash": "CB7E117C014179EDF6C77CCA5F1324968B621F133B71EAA8898E28503A6C6042",
+        "bindingHash": "4CE0C50BCDAF799B307F3EC1729A727A9266559C2AE00EE2DECD192C61C2C166"
+      },
+      {
+        "path": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+        "unchanged": false,
+        "mockHash": "93B98131FF9BB88FEFFC9469CDBAC43F484A59D9DEFBDC014789F5C7BB2F6599",
+        "bindingHash": "BB26912897EF7529FE2A5CF4DBF579969C5FF42EB1864C6168255E6A0F612CAA"
+      }
+    ]
+  },
+  {
+    "mock": "ug-r9-mockgate-p-1",
+    "binding": "ug-r9-binding-p-1",
+    "mockEnd": "2026-11-02T11:01:39",
+    "bindingStart": "2026-11-02T11:12:16",
+    "ordered": true,
+    "mockCounts": [
+      14,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      162,
+      0,
+      0
+    ],
+    "mockPins": 7,
+    "bindingPins": 13,
+    "compared": [
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterContractTests.cs",
+        "unchanged": true,
+        "mockHash": "38856A33BEA0867EB5173716476512C111C44E4D69996DAF17A0C91C29587364",
+        "bindingHash": "38856A33BEA0867EB5173716476512C111C44E4D69996DAF17A0C91C29587364"
+      },
+      {
+        "path": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+        "unchanged": true,
+        "mockHash": "09A9F0C1B42E7B0F95DDA8E57DD2D541E82EECC08DD46E91EC3D88EC35236427",
+        "bindingHash": "09A9F0C1B42E7B0F95DDA8E57DD2D541E82EECC08DD46E91EC3D88EC35236427"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+        "unchanged": true,
+        "mockHash": "EBBCD8E8083EDE2F178DF945E7B729FE752D99691CF80AFFE327A3AB427B66DE",
+        "bindingHash": "EBBCD8E8083EDE2F178DF945E7B729FE752D99691CF80AFFE327A3AB427B66DE"
+      },
+      {
+        "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+        "unchanged": false,
+        "mockHash": "F0F937D2AEAD6E9FDA0E6DB824B04F4251D706D991DA2E6A64921CB77B458722",
+        "bindingHash": "8A6B24DC1264690909D4BD1E5A7B252885F3938A8D64DB372BDD2783462CE242"
+      },
+      {
+        "path": "src/QBrainAi.Client/Models/RequirementsModels.cs",
+        "unchanged": false,
+        "mockHash": "6611D07817562BCD66F388EEFA7F241A9BD8F8D2A44B19B75141BD4B02689BFB",
+        "bindingHash": "74300E0DA76A4C47A099B07ABC4F457D52553926530AE01B3E5528153DD5465A"
+      },
+      {
+        "path": "src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs",
+        "unchanged": false,
+        "mockHash": "ABB85A66FB96BD46C8D7E64B0461B25637DC41A35632FBB5B7454AC134CC9FFA",
+        "bindingHash": "16A8FB2D2B2D85269A9A55C3C13EA586F376A5C5AEEC1E86616A6F6461B3617F"
+      },
+      {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "unchanged": false,
+        "mockHash": "0F115FE89FC9F364DF9C8A72B19897083E81A552A86756E3B8C04C61A81E44BE",
+        "bindingHash": "2C0094B059C94FB4C9A455A57953F01E856E239F86690232FD351B703B21E615"
+      }
+    ]
+  },
+  {
+    "mock": "ug-r9-mockgate-s-1",
+    "binding": "ug-r9-binding-s-1",
+    "mockEnd": "2026-11-02T14:38:51",
+    "bindingStart": "2026-11-02T14:45:01",
+    "ordered": true,
+    "mockCounts": [
+      14,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      35,
+      0,
+      0
+    ],
+    "mockPins": 2,
+    "bindingPins": 6,
+    "compared": [
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+        "unchanged": true,
+        "mockHash": "D2F393773E3271A3D6E07679AC1993C0FC3A89C562623441BDEF7331938B9108",
+        "bindingHash": "D2F393773E3271A3D6E07679AC1993C0FC3A89C562623441BDEF7331938B9108"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+        "unchanged": true,
+        "mockHash": "ECF28CAD43C89F9DE2A07E0E53922F382272F1B237F394520E79DF52C1636A4F",
+        "bindingHash": "ECF28CAD43C89F9DE2A07E0E53922F382272F1B237F394520E79DF52C1636A4F"
+      }
+    ]
+  },
+  {
+    "mock": "ug-r10-mockgate-t-1",
+    "binding": "ug-r10-binding-t-1",
+    "mockEnd": "2026-11-02T22:03:59",
+    "bindingStart": "2026-11-02T22:16:00",
+    "ordered": true,
+    "mockCounts": [
+      64,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      142,
+      0,
+      0
+    ],
+    "mockPins": 9,
+    "bindingPins": 12,
+    "compared": [
+      {
+        "path": "tests/Build.Tests/TestGroupExecutionContractTests.cs",
+        "unchanged": true,
+        "mockHash": "7DB74F4E9BEA8EAE1E7355FB310577BD4D3EB574B29B3EB26CB0797609CA7229",
+        "bindingHash": "7DB74F4E9BEA8EAE1E7355FB310577BD4D3EB574B29B3EB26CB0797609CA7229"
+      },
+      {
+        "path": "tests/Build.Tests/QuadBrainOllamaModelContractTests.cs",
+        "unchanged": true,
+        "mockHash": "69EDAD4588912A6187580BCE2550B6EEF8BE72F2157DA4BA2273E92CF2638B1D",
+        "bindingHash": "69EDAD4588912A6187580BCE2550B6EEF8BE72F2157DA4BA2273E92CF2638B1D"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+        "unchanged": true,
+        "mockHash": "C8843655CC5599465566709086A1FA74D527A1046A47DF5D72B8E3AA371A1F59",
+        "bindingHash": "C8843655CC5599465566709086A1FA74D527A1046A47DF5D72B8E3AA371A1F59"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+        "unchanged": true,
+        "mockHash": "7CB6142A5D1054B59F59E369DDC53DEAB8AC8A2FFB8B4BF5B08C0CDDFC28AE94",
+        "bindingHash": "7CB6142A5D1054B59F59E369DDC53DEAB8AC8A2FFB8B4BF5B08C0CDDFC28AE94"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+        "unchanged": true,
+        "mockHash": "79C804776FBDEA4BDCF4043ADF39DDA8F2A3C3610FE682BB05BAF0940809595F",
+        "bindingHash": "79C804776FBDEA4BDCF4043ADF39DDA8F2A3C3610FE682BB05BAF0940809595F"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+        "unchanged": true,
+        "mockHash": "6FE381A6EF8EDD2DA1C19D0B1223EF2B79C44CC9336764322EF93FFAB4C0261C",
+        "bindingHash": "6FE381A6EF8EDD2DA1C19D0B1223EF2B79C44CC9336764322EF93FFAB4C0261C"
+      },
+      {
+        "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+        "unchanged": false,
+        "mockHash": "255286BD71328B1AA212AA48233EE60955D483A7E67C3D6AC0900BCD4838BFD2",
+        "bindingHash": "9EDC453CA39ECF7F49AEDEB0EB7B34028C0BB7BED79C1F387B9DF834BAC74E1B"
+      },
+      {
+        "path": "src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs",
+        "unchanged": false,
+        "mockHash": "8A6C55C8DD9377345F88ECC67A4FEEE510A6177D5DE7B2EC3CD594A576A573F0",
+        "bindingHash": "7F92E651E046DC9FC37BDC5F90711F17A3BE961250AF794A01286733FA9ACAEE"
+      },
+      {
+        "path": "build/TestGroupExecution.cs",
+        "unchanged": false,
+        "mockHash": "44044A453004A269B0E7E32D514BA03CA1D7040E0A8A80E052558D5B7815CD13",
+        "bindingHash": "FE72D08B93F50475E7AB805E1DA28F655053077FF7EFD08D3FE9247294912327"
+      }
+    ]
+  },
+  {
+    "mock": "ug-r11-mockgate-u-1",
+    "binding": "ug-r11-binding-u-1",
+    "mockEnd": "2026-11-03T08:27:09",
+    "bindingStart": "2026-11-03T08:39:16",
+    "ordered": true,
+    "mockCounts": [
+      56,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      347,
+      0,
+      0
+    ],
+    "mockPins": 10,
+    "bindingPins": 12,
+    "compared": [
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+        "unchanged": true,
+        "mockHash": "FD8081AC576A464870463561C6FB2F8D6755614AC73F86AB4D4448B7AA65463E",
+        "bindingHash": "FD8081AC576A464870463561C6FB2F8D6755614AC73F86AB4D4448B7AA65463E"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+        "unchanged": true,
+        "mockHash": "9500C7C40993277541A976D3B44C62ABECEBD4C8C5F1C081291ECB9B0F347F7C",
+        "bindingHash": "9500C7C40993277541A976D3B44C62ABECEBD4C8C5F1C081291ECB9B0F347F7C"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+        "unchanged": true,
+        "mockHash": "FA70787483AC19BAAF62D40EEF7488F334D34CD769B6846297FBDA631321ACC2",
+        "bindingHash": "FA70787483AC19BAAF62D40EEF7488F334D34CD769B6846297FBDA631321ACC2"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+        "unchanged": true,
+        "mockHash": "A8FE01B22A047AAF9F50A178667C38C33325552CDABCF5AFF7C410B1A2795151",
+        "bindingHash": "A8FE01B22A047AAF9F50A178667C38C33325552CDABCF5AFF7C410B1A2795151"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/RecordedTimeContractTests.cs",
+        "unchanged": true,
+        "mockHash": "87925DFD817B408FE9CADE85CFA1CAF49F3C8F9F03D3C044AC6C46715D4D2035",
+        "bindingHash": "87925DFD817B408FE9CADE85CFA1CAF49F3C8F9F03D3C044AC6C46715D4D2035"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedPathIdentity.cs",
+        "unchanged": true,
+        "mockHash": "B0AEC49BAC441CD89562D16213B84FB90F88853CDC926FCE9010B74404B125E2",
+        "bindingHash": "B0AEC49BAC441CD89562D16213B84FB90F88853CDC926FCE9010B74404B125E2"
+      },
+      {
+        "path": "src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs",
+        "unchanged": false,
+        "mockHash": "7F92E651E046DC9FC37BDC5F90711F17A3BE961250AF794A01286733FA9ACAEE",
+        "bindingHash": "9C7DE2C19945C98D6DCF38D6B9D6BF61674C6098D1492785A51FC7FEEE7EDA6C"
+      },
+      {
+        "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+        "unchanged": false,
+        "mockHash": "9EDC453CA39ECF7F49AEDEB0EB7B34028C0BB7BED79C1F387B9DF834BAC74E1B",
+        "bindingHash": "D28255F386E704ADB0E1B08B739CE908DE8D39EBC9435EAE2B055A53E7D5A796"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs",
+        "unchanged": false,
+        "mockHash": "6F27057641C18A5DDE3C57C7D95314FC840010F642F2D3C19E4DA605C7C07B94",
+        "bindingHash": "CB2AC7F7CA811C098F68BEC23E2ED2824689848F2FE11A0C09ECF01524599B50"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs",
+        "unchanged": false,
+        "mockHash": "CB43EE5312F7EDE64BEB314F73A6F664ED475228034DAC3E12BD7CCDB1DA8A84",
+        "bindingHash": "B2D8C69B23604A0CAF81B719C48A56DC29F6C13D5BCE4AA321567CD84B46CC96"
+      }
+    ]
+  },
+  {
+    "mock": "ug-r11-mockgate-v-1",
+    "binding": "ug-r11-binding-v-1",
+    "mockEnd": "2026-11-03T09:32:20",
+    "bindingStart": "2026-11-03T09:36:49",
+    "ordered": true,
+    "mockCounts": [
+      11,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      167,
+      0,
+      0
+    ],
+    "mockPins": 12,
+    "bindingPins": 12,
+    "compared": [
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/StampedTimeContractTests.cs",
+        "unchanged": true,
+        "mockHash": "B77EDDD4197197251497896E4B3D4C0C31CD984441AB0CD52D54F3D4BF7594DC",
+        "bindingHash": "B77EDDD4197197251497896E4B3D4C0C31CD984441AB0CD52D54F3D4BF7594DC"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs",
+        "unchanged": true,
+        "mockHash": "F2A9D146AEA018AC1D4A893F6FA6A10EC561D2CCD57F8104A79A001CFC785114",
+        "bindingHash": "F2A9D146AEA018AC1D4A893F6FA6A10EC561D2CCD57F8104A79A001CFC785114"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProviderTests.cs",
+        "unchanged": true,
+        "mockHash": "AE2DF1674B9D8513E60F3F677971706DC9FBECD2CF3005B142055D1E2D40CF98",
+        "bindingHash": "AE2DF1674B9D8513E60F3F677971706DC9FBECD2CF3005B142055D1E2D40CF98"
+      },
+      {
+        "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+        "unchanged": false,
+        "mockHash": "28B5AED79D88B1D455B69E57AD8C2BF736F75525FA3F35EC6BB7CD6F6C1435AE",
+        "bindingHash": "EB2811E30605A26ACEA1294CC7E5EB253797A7DD649208CF011102F4ED766964"
+      },
+      {
+        "path": "src/QBrainAi.Services/Services/MemoryService.cs",
+        "unchanged": false,
+        "mockHash": "9F1A9A759261319C84B862B5E65A1DE886D4F4E5C251F1C43B47AB975A1500AF",
+        "bindingHash": "4EB2C3D5333A4A420992CE4D8A6D86C756661D1E056E52764BC1C1BF7A851AFF"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityCrudTests.cs",
+        "unchanged": false,
+        "mockHash": "3A5ED52676618778A5438790D837CE85B32B19E556990D137537A18C84012CD6",
+        "bindingHash": "EEC4E3CC58B68AFAB5CE283C9B0618FE5D19A6F0151BAD9B1B928D834DEA572F"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+        "unchanged": false,
+        "mockHash": "3AD973A65555C384FAE6CE636F72F05B7319E73E8507743CB1A93E4A6D676AD7",
+        "bindingHash": "68F9793F011D66073851258D350BE9A08CBD4A10E7FC84716098145C760630F4"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs",
+        "unchanged": false,
+        "mockHash": "951492FE4C7C38C90DEB7EB797BAE885E5B5A10857790FAED637C9B406C92098",
+        "bindingHash": "AC77E69F05BD9E20ACEE37B9BEA3113BAA02B1381AC126E1CCD00F44F3CDB340"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/AuthRotationTests.cs",
+        "unchanged": false,
+        "mockHash": "22B5DC22E023AA1298BFCF62F7E3E61BC318CD1DDF93227408FDD96C97D0BB7D",
+        "bindingHash": "BA188C0838915893E26C69B42329C6D6537947CD29BB84202C1C9A0097093439"
+      },
+      {
+        "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+        "unchanged": false,
+        "mockHash": "D28255F386E704ADB0E1B08B739CE908DE8D39EBC9435EAE2B055A53E7D5A796",
+        "bindingHash": "72622E1A216D1531F772DCE0CB92DD56B32E15D041B0C198E79017B4540DD129"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+        "unchanged": false,
+        "mockHash": "FA70787483AC19BAAF62D40EEF7488F334D34CD769B6846297FBDA631321ACC2",
+        "bindingHash": "EE23021CE4BDE847D47D90C16FB620EF5DAC76EDB9AAE9F8FBBB7AFB96F635D4"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+        "unchanged": false,
+        "mockHash": "9500C7C40993277541A976D3B44C62ABECEBD4C8C5F1C081291ECB9B0F347F7C",
+        "bindingHash": "1C90DEA05F3AE8B2849191E0D95634CFC1A07A72B4E507F11D9C480D67AC04A2"
+      }
+    ]
+  },
+  {
+    "mock": "ug-r11x-mockgate-1",
+    "binding": "ug-r11x-binding-1",
+    "mockEnd": "2026-11-03T12:52:26",
+    "bindingStart": "2026-11-03T12:56:27",
+    "ordered": true,
+    "mockCounts": [
+      17,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      70,
+      0,
+      0
+    ],
+    "mockPins": 6,
+    "bindingPins": 6,
+    "compared": [
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+        "unchanged": true,
+        "mockHash": "857DE9C208F1330F1A074B99BFBB9303C7D534F6311BE43AC5B442721FD21728",
+        "bindingHash": "857DE9C208F1330F1A074B99BFBB9303C7D534F6311BE43AC5B442721FD21728"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedPathIdentity.cs",
+        "unchanged": true,
+        "mockHash": "B0AEC49BAC441CD89562D16213B84FB90F88853CDC926FCE9010B74404B125E2",
+        "bindingHash": "B0AEC49BAC441CD89562D16213B84FB90F88853CDC926FCE9010B74404B125E2"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderBindingTests.cs",
+        "unchanged": true,
+        "mockHash": "B294CF8E6AB29B5E048C8B823228445CE2D6D62E6B904DD0F2972F92B0FA3A23",
+        "bindingHash": "B294CF8E6AB29B5E048C8B823228445CE2D6D62E6B904DD0F2972F92B0FA3A23"
+      },
+      {
+        "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+        "unchanged": false,
+        "mockHash": "72622E1A216D1531F772DCE0CB92DD56B32E15D041B0C198E79017B4540DD129",
+        "bindingHash": "0FD869F1EC6BB374D87BF77E14F52D62E5FFA403EF5ECA54DCB0A0E7E973C103"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/StubMarkerFileReaderTests.cs",
+        "unchanged": false,
+        "mockHash": "93BF062515B83763EC4A8B17286FBA92EB927F2031851E991CB63376398D132D",
+        "bindingHash": "702E32A02970A6160160EDDDF8CAB95584F8A50F901BE21A4A3EBBA04DF44617"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs",
+        "unchanged": false,
+        "mockHash": "195B4CA5E504DFB8C2024AC8473C218F25F03CDD3D5FFE97FFD783C98BA15FF8",
+        "bindingHash": "B9E60652CC9727FFE52DFB5AD1FFF1BCF35E9A4233DB62910D66363EFCCE347B"
+      }
+    ]
+  },
+  {
+    "mock": "ug-r12y-mockgate-1",
+    "binding": "ug-r12y-binding-1",
+    "mockEnd": "2026-11-03T16:48:00",
+    "bindingStart": "2026-11-03T16:52:45",
+    "ordered": true,
+    "mockCounts": [
+      18,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      124,
+      0,
+      0
+    ],
+    "mockPins": 7,
+    "bindingPins": 7,
+    "compared": [
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+        "unchanged": true,
+        "mockHash": "1D18A1D2DF904E449E9D53691E048BAA851A0F9B2A8931DF2E50A145930CC389",
+        "bindingHash": "1D18A1D2DF904E449E9D53691E048BAA851A0F9B2A8931DF2E50A145930CC389"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedPathIdentity.cs",
+        "unchanged": true,
+        "mockHash": "B0AEC49BAC441CD89562D16213B84FB90F88853CDC926FCE9010B74404B125E2",
+        "bindingHash": "B0AEC49BAC441CD89562D16213B84FB90F88853CDC926FCE9010B74404B125E2"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderBindingTests.cs",
+        "unchanged": true,
+        "mockHash": "B294CF8E6AB29B5E048C8B823228445CE2D6D62E6B904DD0F2972F92B0FA3A23",
+        "bindingHash": "B294CF8E6AB29B5E048C8B823228445CE2D6D62E6B904DD0F2972F92B0FA3A23"
+      },
+      {
+        "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+        "unchanged": false,
+        "mockHash": "0FD869F1EC6BB374D87BF77E14F52D62E5FFA403EF5ECA54DCB0A0E7E973C103",
+        "bindingHash": "1F1EF3FC1449E9FC016222137460BFE5E8FBAB8AE67B0265BBAFE40DA924436F"
+      },
+      {
+        "path": "tests/QBrainAi.Repl.Core.Tests/StubMarkerFileReaderTests.cs",
+        "unchanged": false,
+        "mockHash": "702E32A02970A6160160EDDDF8CAB95584F8A50F901BE21A4A3EBBA04DF44617",
+        "bindingHash": "31D86F4245F3B8453C72AFD55AA18FDC258191C9BD5C244EC56D8D7E95706B54"
+      },
+      {
+        "path": "tests/QBrainAi.McpAgent.Tests/TodoWorkflowTests.cs",
+        "unchanged": false,
+        "mockHash": "E4A279E455935507B4B550EFE0158840F96819DC5E612A852A625840AAF74B16",
+        "bindingHash": "BBA4D8C6B5C35F6022436E1A0D35030E2AA6A11E337A9C7AE7B0BBFC24E9B5C1"
+      },
+      {
+        "path": "tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+        "unchanged": false,
+        "mockHash": "5D53658E0005205AD68B4DF88FF76843B695A5118F50CED9DF7BE0F2DD6472F0",
+        "bindingHash": "1E4A9D5E94A3CA7F48024BC6214C5C1D0A2BA2237B0AF8041086D46781856455"
+      }
+    ]
+  },
+  {
+    "mock": "ug-r12z3-mockgate-1",
+    "binding": "ug-r12z3-binding-1",
+    "mockEnd": "2026-11-04T15:34:33",
+    "bindingStart": "2026-11-04T15:38:38",
+    "ordered": true,
+    "mockCounts": [
+      8,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      98,
+      0,
+      0
+    ],
+    "mockPins": 1,
+    "bindingPins": 4,
+    "compared": [
+      {
+        "path": "tests/Build.Tests/ServiceUnitPropertiesContractTests.cs",
+        "unchanged": true,
+        "mockHash": "82A819B1AD11CF2000DD6E3F413B49BD880BF5A6D755530C9AD20CE56ECAA933",
+        "bindingHash": "82A819B1AD11CF2000DD6E3F413B49BD880BF5A6D755530C9AD20CE56ECAA933"
+      }
+    ]
+  },
+  {
+    "mock": "ug-r12z3-mockgate-2",
+    "binding": "ug-r12z3-binding-3",
+    "mockEnd": "2026-11-04T17:16:02",
+    "bindingStart": "2026-11-04T17:29:07",
+    "ordered": true,
+    "mockCounts": [
+      7,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      98,
+      0,
+      0
+    ],
+    "mockPins": 1,
+    "bindingPins": 4,
+    "compared": [
+      {
+        "path": "tests/Build.Tests/ServiceStartupHealthContractTests.cs",
+        "unchanged": true,
+        "mockHash": "71B3BA547E11BD4E5FA85092ED2C9C5A7EA30461BD1CB70EFD514D40F3E2A55D",
+        "bindingHash": "71B3BA547E11BD4E5FA85092ED2C9C5A7EA30461BD1CB70EFD514D40F3E2A55D"
+      }
+    ]
+  },
+  {
+    "mock": "ug-r12z3c-mockgate-1",
+    "binding": "ug-r12z3c-binding-1",
+    "mockEnd": "2026-11-04T19:29:18",
+    "bindingStart": "2026-11-04T19:35:03",
+    "ordered": true,
+    "mockCounts": [
+      8,
+      0,
+      0
+    ],
+    "bindingCounts": [
+      97,
+      0,
+      0
+    ],
+    "mockPins": 3,
+    "bindingPins": 3,
+    "compared": [
+      {
+        "path": "tests/Build.Tests/ServiceRecoveryContractTests.cs",
+        "unchanged": true,
+        "mockHash": "7EF7B33F020DD4DBA9FD4955630F93DD122A9F58CC8A7DAAFBCA78964CD3E1F0",
+        "bindingHash": "7EF7B33F020DD4DBA9FD4955630F93DD122A9F58CC8A7DAAFBCA78964CD3E1F0"
+      },
+      {
+        "path": "build/LinuxServiceHelper.cs",
+        "unchanged": false,
+        "mockHash": "25BE649BE4AE7660A6C4DDBECF8B74E29D714023E4819DF32C7692247F1D9B02",
+        "bindingHash": "A72C5BEB997E46FF8EFDE8A6B99CE99E7D3811DA428CE4FDA3BE9EB591805EA8"
+      },
+      {
+        "path": "tests/Build.Tests/ServiceUpdateTests.cs",
+        "unchanged": false,
+        "mockHash": "AF49839BB5BC35F55DCEB33AAB32BF3F9E8009767BDB4C50C0AC0799E295EBBE",
+        "bindingHash": "3D3D1C283B6F8B2B7436A6618F7F0DAEDCF4367143AB7D1D1A51504A68391795"
+      }
+    ]
+  }
+]

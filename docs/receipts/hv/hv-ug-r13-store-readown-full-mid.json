@@ -1,0 +1,157 @@
+{
+  "timestampUtc": "2026-11-06T07:36:48.1079632+00:00",
+  "timestampLocal": "2026-11-06T01:36:51",
+  "method": "client.SessionLog.QueryAsync",
+  "recordId": "",
+  "response": {
+    "type": "result",
+    "payload": {
+      "requestId": "req-20261106T073649Z-f66c",
+      "result": {
+        "limit": 1,
+        "offset": 0,
+        "items": [
+          {
+            "turnCount": 1,
+            "turns": [
+              {
+                "processingDialog": [
+                  {
+                    "category": "decision",
+                    "content": "Codex live rollout line 10 proves gpt-6-astra effort max. Read the requested add-profile skill and one complete profile file, full root marker with API key redacted, 12 Global memories excluding MEMORY-PROCESS-007 and 3 Workspace memories through Codex plugin 1.121.0. Own cache /tmp/hv-ug-r13-plugin-01a1af63. Decision: perform one read-only class-1 hostile review; use supplied TRX, sources, git history and canonical stores; no build, restore or tests. Scanner overridden and hostile environments out of scope; infrastructure issues separate under MEMORY-PROCESS-013. Alternative of independently running tests rejected by explicit policy 7.9. Review artifacts alone may be written under docs/receipts/hv. Initial profile reads used inline PowerShell before profile section 6.2 was loaded; all subsequent inspection logic is in parser-checked and PSScriptAnalyzer-checked PowerShell files.",
+                    "role": "model",
+                    "timestamp": "2026-11-06T05:53:54.7330370+00:00"
+                  },
+                  {
+                    "category": "observation",
+                    "content": "Read-only source attack found a candidate unclosed R12-F2 sibling: VoiceConversationServiceTests constructs the real VoiceConversationService, whose constructor arms a real 60-second cleanup Timer (src/QBrainAi.Services/Services/VoiceConversationService.cs:68). The callback compares live UtcNow to LastUpdatedUtc and deletes sessions after the configured 15-minute idle timeout (1851-1901). The unit reuse case asserts identical session ids across two calls (tests/.../VoiceConversationServiceTests.cs:19-39). A cleanup tick after an elapsed interval or a forward clock adjustment can remove the first session before reuse. Both supplied unit TRX include all nine class cases Passed. The retained clock sweep explicitly calls this path inert because its timer first fires at 60 seconds; I am checking the claim against the full criterion and sibling paths before final classification. No product code was executed.",
+                    "role": "model",
+                    "timestamp": "2026-11-06T06:06:25.5755993+00:00"
+                  },
+                  {
+                    "category": "decision",
+                    "content": "The manifest and all 34 supplied files match their SHA-256 and committed blobs. All 30 TRX contain only Passed results with matching counters. The case-sensitive historical comparison verifies 4838 distinct unit display names on each host; my earlier audit used PowerShell default case-insensitive sorting and reported 4824, so I corrected my own inspector to preserve case. This is an inspection error, not a product finding. Twenty retained mock-to-binding pairs have the required temporal order; changed contract hashes are examined against the declared appended binding blocks. Current gate metadata lists only untracked docs receipts. I will judge adequacy separately from successful execution, including the live VoiceConversationService idle cleanup path.",
+                    "role": "model",
+                    "timestamp": "2026-11-06T06:21:20.1934564+00:00"
+                  },
+                  {
+                    "category": "observation",
+                    "content": "After context recovery, re-executed add-profile: full skill, dynamically inventoried and fully read one profile file; fresh Global then Workspace plugin queries, all 12 included Global and 3 Workspace memories read in full, excluding MEMORY-PROCESS-007. Re-read workspace instructions and full redacted marker. No build, restore or test executed. Continued the same review session and turn; no substantive verdict yet.",
+                    "role": "model",
+                    "timestamp": "2026-11-06T06:34:36.6990515+00:00"
+                  },
+                  {
+                    "category": "observation",
+                    "content": "After context recovery, read the add-profile skill and all 1 non-skill profile markdown files in full, refreshed plugin status and live Global then Workspace memories, and read all 12 included Global and 3 Workspace texts in full. MEMORY-PROCESS-007 excluded. AGENTS.md, CLAUDE.md, copilot instructions and the root marker reread with credential redaction. Continuing the same independent read-only HV, same session and request, no build or test execution. Evidence and scope recovered; no verdict yet.",
+                    "role": "model",
+                    "timestamp": "2026-11-06T06:40:34.9896982+00:00"
+                  },
+                  {
+                    "category": "decision",
+                    "content": "# R13-F1: the voice-session reuse unit test still depends on live expiry\n\nClassification: implementer edit. Source inspection only; no test or build was run by this reviewer.\n\nAt the reviewed head, the untagged unit fact `VoiceConversationServiceTests.CreateSessionAsync_SameAgentAndWorkspace_ReusesExistingIdleSession` creates a service, creates a session twice, and asserts equal session IDs (tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:18-39). Its fixture configures a real fifteen-minute idle timeout and supplies no clock or scheduler (same file:226-273).\n\nThe production constructor arms a real recurring sixty-second timer (src/QBrainAi.Services/Services/VoiceConversationService.cs:68). Session creation records `DateTimeOffset.UtcNow` (78, 141-155). The timer calls `CleanupIdleSessionsAsync`, which reads another `DateTimeOffset.UtcNow`, compares the recorded timestamp against the configured timeout, and deletes stale idle sessions (1846-1900). The second creation searches the remaining sessions and otherwise allocates a new ID (89-117, 133). `DeleteSessionAsync` removes the session before its asynchronous cleanup (424).\n\nA scheduling pause between the two creations, or a forward wall-clock adjustment followed by a timer callback during that pause, therefore changes the asserted result: the first session can be removed and the second creation returns a different ID. This is a reachable production lifecycle decision that the unit test does not control. It is not a hang guard whose only effect is to fail a hung test.\n\nThe R12-F2 sibling sweep explicitly excludes this path on the assertion that the decision is never reached (docs/receipts/hv/unitgreen-r13-prelaunch.clock-sweep.md:279; its explanation assumes the first sixty-second tick is not reached). There is no source-enforced exclusion. The retained passing unit TRX on both hosts establish that this schedule did not defeat those runs, not that the test is independent of elapsed or wall-clock time.\n\nAffected requirement: TR-MCP-USECASE-018 AC-006, including its 2026-11-05 append covering age, expiry, and staleness decisions inside called production code. Affected claims include UG3, UG47 and the R12-F2 sibling-closure portion of UG13; their propagation into completion and disclosure claims will be stated in the complete verdict.\n\nChange needed: make the checked voice-session lifecycle independent of real time in unit tests through a scripted clock and a test-controlled cleanup trigger or scheduler, while retaining the production defaults. Update the sibling classification and completion evidence. Apply the same correction to the unit siblings that construct this service and assert a session remains available.\n\nProposed strengthening, named `scripted-background-expiry`: an age, expiry, or staleness decision that can change a unit test's asserted lifecycle result, including a background cleanup callback, uses scripted recorded and reference times and test-controlled scheduling. The same input trace gives the same result regardless of wall-clock adjustment or real elapsed time.\n\nProposed tests:\n\n- `VoiceSessionReuse_DoesNotDependOnWallClockOrCleanupScheduling`: two creates for the same idle session reuse its ID when the scripted age remains eligible, with cleanup explicitly interleaved and no live timer required.\n- `IdleCleanup_UsesScriptedAgeBoundary`: retained sessions immediately before and at the configured strict expiry threshold, and removal immediately after it, proved using fixed recorded times and a scripted reference time.\n- Negative controls for a live-clock reader, an uncontrolled cleanup trigger, and an inclusive comparison where the contract requires a strict comparison must be rejected by the same assertions before binding production.\n\nThis finding does not assert that the supplied gate runs failed. Their recorded voice-session cases passed.\n",
+                    "role": "model",
+                    "timestamp": "2026-11-06T06:42:29.4390702+00:00"
+                  },
+                  {
+                    "category": "observation",
+                    "content": "Context recovery 005: re-read add-profile skill and the sole non-skill profile file in full, root marker in full with sensitive values redacted, AGENTS.md, CLAUDE.md and copilot instructions. Refreshed 12 Global and 3 Workspace memories through Codex wrapper; MEMORY-PROCESS-007 excluded. Continued existing review and own turn. No builds or tests run. One MemoryText call omitted Path and failed before data access, then corrected.",
+                    "role": "model",
+                    "timestamp": "2026-11-06T06:51:36.0778954+00:00"
+                  },
+                  {
+                    "category": "observation",
+                    "content": "Recovered context for the same round and own turn. Re-executed add-profile: 1 complete profile file and fresh full texts of 12 Global and 3 Workspace memories, excluding MEMORY-PROCESS-007; reread full redacted root marker and workspace AGENTS/CLAUDE rules. Plugin status available with zero failsafe entries. Preserved no-build/test restriction and existing R13-F1 source finding. No product or store mutation beyond own audit turn.",
+                    "role": "model",
+                    "timestamp": "2026-11-06T06:59:14.5297882+00:00"
+                  },
+                  {
+                    "category": "observation",
+                    "content": "Context recovery completed through add-profile: one profile file read in full, twelve Global and three Workspace live memories read through the verified Codex plugin, MEMORY-PROCESS-007 excluded. Root marker and workspace rules reread with keys redacted. Continue the same independent review and own turn. No builds or tests run. R13-F1 remains supported by the real cleanup timer and live-clock idle expiry reached by VoiceConversationServiceTests. All requested claim and closure checks continue.",
+                    "role": "model",
+                    "timestamp": "2026-11-06T07:05:40.2786682+00:00"
+                  },
+                  {
+                    "category": "observation",
+                    "content": "After context recovery, re-read the add-profile skill and the one non-skill profile Markdown file in full; read fresh 12 Global and 3 Workspace memories, excluding MEMORY-PROCESS-007. Re-read AGENTS.md, CLAUDE.md, copilot instructions and the complete root marker through the redacting reader. Plugin status available, own session and turn retained, zero pending and failsafe entries. Continue one independent round 13; no build or test execution. R13-F1 remains the one confirmed product finding; all remaining claims still being adjudicated.",
+                    "role": "model",
+                    "timestamp": "2026-11-06T07:15:30.5069366+00:00"
+                  },
+                  {
+                    "category": "decision",
+                    "content": "2026-11-06T01:17:02 - R13-F2, implementer edit, confirmed receipt-description defect.\n\nThe plan at docs/plans/2026-10-19-unit-suite-green.md:2209 says the slice Z7 compile and binding \"pinned no hashes\". The same claim appears in the full PR description at docs/receipts/hv/unitgreen-r13-prelaunch.pr-description.md:378, projected problems item 145 at docs/receipts/hv/unitgreen-r13-prelaunch.projected-problems.md:35, and this round's UG50 and UG51 claims.\n\nThat statement is false for the compile receipt. docs/receipts/unit-suite-green-20261019/ug-r13z7-compile-1.json:228 has a sources array containing all 18 changed paths and their SHA-256 values. The receipt identifies runHead 88c5abcc, the modified tree, a successful compile, and writtenLocal 2026-11-05T14:18:48. Independent byte-stream hashes of git blobs at commit 1d77a79c match all 18 entries. The companion binding receipt has no sourceHashes. The observed distinction is a compile receipt with 18 matching source hashes and a binding receipt without source hashes, not two receipts without hashes.\n\nEvidence: hv-ug-r13-final-audit-LatePins.json, produced by hv-ug-r13-final-audit.ps1 after PowerShell parser and PSScriptAnalyzer passed. Its first version inspected sourceHashes only; that reviewer-side schema omission was corrected to inspect compile.sources and compile.runHead before reaching this finding. No product code or tests were executed.\n\nThis is material under the review's explicit rule that a misstatement of a cited receipt is a finding. It does not establish a failing compile, a failing binding, or a defect in the final committed-tree gates. It understates the available compile evidence.\n\nTo pass: correct the current plan, full PR description, projected-problem disclosure and next review claims to distinguish the compile's 18 source pins from the binding's absent pins. Preserve the historical review statements as history and do not rewrite original receipts. State any limits of when those compile hashes were captured only to the extent the original receipt-generation evidence proves them. No new product acceptance criterion or test is needed for this documentation correction, and no operator decision is required.\n",
+                    "role": "model",
+                    "timestamp": "2026-11-06T07:17:42.9829559+00:00"
+                  },
+                  {
+                    "category": "observation",
+                    "content": "2026-11-06 context recovery: reread add-profile skill, the one non-skill profile markdown file in full (388 lines), all 12 included Global and 3 Workspace live memories in full, AGENTS.md, CLAUDE.md, copilot guidance, and all 398 root-marker lines with key values redacted before output. Codex plugin Status available; pending and failsafe counts zero; same own session and turn retained. Review-only restrictions remain binding. Two confirmed findings remain R13-F1 live idle cleanup in a unit case and R13-F2 the false Z7 compile no-hashes declaration. No builds or tests run.",
+                    "role": "model",
+                    "timestamp": "2026-11-06T07:26:23.1146145+00:00"
+                  },
+                  {
+                    "category": "decision",
+                    "content": "The review distinguishes gate authenticity from unit-test independence. All current manifest hashes, counters and final heads checked so far match; R13-F1 is an uncovered lifecycle-clock sibling despite Passed TRX. R13-F2 concerns a false current receipt description, not a failing compile. Current candidate failed claims are UG3, UG8, UG11, UG12, UG13, UG47, UG50 and UG51. Other named repairs are assessed individually, without extending either finding to unrelated behavior. Reviewer operational correction: the 01:28:03 timestamp in a commentary was not measured and was explicitly corrected using the measured 01:26:50 clock result. All substantive evidence is timestamped by the scripts.",
+                    "role": "model",
+                    "timestamp": "2026-11-06T07:35:09.1100956+00:00"
+                  }
+                ],
+                "queryText": "Review unitgreen-r13 at 11326d42fbb9a430b80ac22a4f8637be2adc713c. Complete request is docs/receipts/hv/20261105T234506-unitgreen-r13.request.jsonl. Evidence-only review: no build, restore, tests or implementation changes. Verify Codex live model gpt-6-astra and effort max, review UG1 through UG54, write full verdict and preserve it in this own session. Profile file count 1; root marker read in full with secrets redacted; dedicated Codex plugin cache outside worktree.",
+                "model": "codex",
+                "timestamp": "2026-11-06T05:50:27.0000000+00:00",
+                "status": "in_progress",
+                "planFile": "None",
+                "actions": [
+                  {
+                    "status": "completed",
+                    "type": "design_decision",
+                    "filePath": "",
+                    "order": 1,
+                    "description": "Codex decision: conduct one class-1 read-only hostile review from supplied TRX, sources, history, receipts and live plugin reads. Do not execute builds, restores or tests. Score all applicable UG claims independently; scanner coverage overridden and hostile-environment runs out of scope. Infrastructure failures are operational only unless specific required evidence is inaccessible."
+                  },
+                  {
+                    "status": "completed",
+                    "type": "design_decision",
+                    "filePath": "./docs/receipts/hv/hv-ug-r13-finding-clock.md",
+                    "order": 7,
+                    "description": "R13-F1 confirmed by static source inspection: VoiceConversationServiceTests leaves a real cleanup timer and live-clock expiry able to change the asserted session reuse. Reject the sweep assumption that the timer is never reached. Existing AC-006 requires scripted lifecycle decisions; recommend scripted clock and cleanup scheduling with boundary and negative-control tests. Passed TRX remains valid as run evidence, but does not establish independence."
+                  },
+                  {
+                    "status": "completed",
+                    "type": "design_decision",
+                    "filePath": "./docs/receipts/hv/hv-ug-r13-finding-z7-pins.md",
+                    "order": 8,
+                    "description": ""
+                  },
+                  {
+                    "status": "completed",
+                    "type": "design_decision",
+                    "filePath": "./docs/receipts/hv/hv-ug-r13-finding-z7-pins.md",
+                    "order": 9,
+                    "description": "R13-F2: the Z7 compile receipt has 18 source hashes, all matching the committed 1d77a79c blobs. Current plan, full PR description and projected problems incorrectly state that both compile and binding pinned none. Binding has no source hashes. This action supplies the description omitted accidentally from prior action 8; the complete finding was already persisted in its decision dialog."
+                  }
+                ],
+                "queryTitle": "Independent hostile validation round 13 of IMPL-UNITGREEN-001",
+                "tokenCount": 0,
+                "response": "Actions appended.",
+                "requestId": "req-20261106T055026Z-unitgreen-r13",
+                "todoId": "None"
+              }
+            ],
+            "agentExecutablePath": "/home/sharpninja/.local/bin/codex",
+            "sourceType": "Codex",
+            "agentSessionId": "01a1af63-aebb-7152-bde2-3316931e7a3b",
+            "agentSessionTranscriptFile": "/home/sharpninja/.codex/sessions/2026/11/05/rollout-2026-11-05T23-45-09-01a1af63-aebb-7152-bde2-3316931e7a3b.jsonl",
+            "model": "codex",
+            "agentExecutableVersion": "codex-cli 0.166.0",
+            "lastUpdated": "2026-11-06T07:26:55.0000000+00:00",
+            "title": "Independent hostile validation round 13 of IMPL-UNITGREEN-001",
+            "status": "in_progress",
+            "sessionId": "Codex-20261106T055000Z-plugin-session",
+            "started": "2026-11-06T05:50:03.0000000+00:00"
+          }
+        ],
+        "totalCount": 1
+      }
+    }
+  }
+}

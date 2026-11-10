@@ -1,0 +1,384 @@
+[
+  {
+    "File": "build/Build.TestGroups.cs",
+    "DatedEntries": [
+      {
+        "Line": 15,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1: added the --test-groups array parameter (operator 2026-11-02).</description></item>"
+      },
+      {
+        "Line": 25,
+        "Text": "    /// changed tests through Nuke (operator 2026-11-02: \"Use dedicated targets or an integration target that accepts an"
+      },
+      {
+        "Line": 34,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2, AC-3: added the TestGroups target so mock gates and bindings run only the changed classes through Nuke.</description></item>"
+      },
+      {
+        "Line": 35,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4, AC-5: composes for the current host and checks each named class against its project's TRX.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "build/IntegrationLaneClassFilter.cs",
+    "DatedEntries": [
+      {
+        "Line": 16,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2; TR-MCP-NUKE-020 AC-3: now built from the shared class clause; the lane filter text is unchanged.</description></item>"
+      },
+      {
+        "Line": 39,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2; TR-MCP-NUKE-020 AC-2: extracted so the lane and TestGroups select classes with one clause.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "build/IntegrationLaneFilter.cs",
+    "DatedEntries": [
+      {
+        "Line": 11,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-1; TR-MCP-NUKE-020 AC-3: now built from the shared platform clause; the lane filter text is unchanged.</description></item>"
+      },
+      {
+        "Line": 26,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-1; TR-MCP-NUKE-020 AC-4: extracted so the lane and TestGroups exclude other-platform cases with one clause.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "build/TestGroupExecution.cs",
+    "DatedEntries": [
+      {
+        "Line": 9,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-5: added so the target can check every named class of a project's merged groups against that project's TRX.</description></item>"
+      },
+      {
+        "Line": 25,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2, AC-3: added the TestGroups composition and run-id policy so targeted runs go through Nuke (operator 2026-11-02) and reuse the lane composition.</description></item>"
+      },
+      {
+        "Line": 26,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4, AC-5: added the host platform clause and the per-class result check after a Windows-only class was run on Linux.</description></item>"
+      },
+      {
+        "Line": 41,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2: added; one run per project with the lane's class clause and run record.</description></item>"
+      },
+      {
+        "Line": 42,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4: added the host parameter and the platform clause so other-platform cases never run.</description></item>"
+      },
+      {
+        "Line": 111,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1: added so a targeted run always leaves TRX receipts.</description></item>"
+      },
+      {
+        "Line": 129,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: added so a misspelled class in a multi-class group fails instead of passing silently.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "src/QBrainAi.Client/Models/RequirementsModels.cs",
+    "DatedEntries": [
+      {
+        "Line": 11,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (createdAtUtc, updatedAtUtc) so the client reads the stored times the server sends.</description></item>"
+      },
+      {
+        "Line": 93,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (createdAtUtc, updatedAtUtc) so the client reads the stored times the server sends.</description></item>"
+      },
+      {
+        "Line": 151,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (createdAtUtc, updatedAtUtc) so the client reads the stored times the server sends.</description></item>"
+      },
+      {
+        "Line": 309,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc (createdAtUtc), the earliest stored creation time of the mapping's links.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs",
+    "DatedEntries": [
+      {
+        "Line": 639,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>"
+      },
+      {
+        "Line": 651,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>"
+      },
+      {
+        "Line": 846,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>"
+      },
+      {
+        "Line": 858,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>"
+      },
+      {
+        "Line": 1058,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>"
+      },
+      {
+        "Line": 1070,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>"
+      },
+      {
+        "Line": 1235,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "src/QBrainAi.Repl.Core/RequirementTimestampText.cs",
+    "DatedEntries": [
+      {
+        "Line": 12,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added, replacing the adapters' DateTimeOffset.UtcNow so the REPL reports stored times and never the read time.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+    "DatedEntries": [
+      {
+        "Line": 946,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>"
+      },
+      {
+        "Line": 1012,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>"
+      },
+      {
+        "Line": 1085,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>"
+      },
+      {
+        "Line": 1152,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: takes the mapping's stored creation time and reports it as CreatedAt instead of DateTimeOffset.UtcNow.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs",
+    "DatedEntries": [
+      {
+        "Line": 22,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (optional, last) so reads carry the stored times.</description></item>"
+      },
+      {
+        "Line": 69,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (optional, last) so reads carry the stored times.</description></item>"
+      },
+      {
+        "Line": 102,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (optional, last) so reads carry the stored times.</description></item>"
+      },
+      {
+        "Line": 233,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added; a mapping row aggregates links, so it reports their earliest stored creation time.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs",
+    "DatedEntries": [
+      {
+        "Line": 13,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added Read and Earliest, because requirement reads reported the time of the read instead of the stored times (operator 2026-11-02: \"This HAS to be fixed.\").</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+    "DatedEntries": [
+      {
+        "Line": 143,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: maps the stored CreatedAtUtc and UpdatedAtUtc; made internal so the binding test reads the real mapper.</description></item>"
+      },
+      {
+        "Line": 209,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: maps the stored CreatedAtUtc and UpdatedAtUtc; made internal so the binding test reads the real mapper.</description></item>"
+      },
+      {
+        "Line": 220,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: maps the stored CreatedAtUtc and UpdatedAtUtc; made internal so the binding test reads the real mapper.</description></item>"
+      },
+      {
+        "Line": 238,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added; replaces four copies of the row construction (effective view, GetAllMappingsAsync, GetMappingAsync, BuildVisibleMappings) and adds the earliest stored link time.</description></item>"
+      },
+      {
+        "Line": 417,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: effective FR, TR and TEST rows carry their stored times, and mapping rows are built by BuildMapping.</description></item>"
+      },
+      {
+        "Line": 922,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: rows are built by BuildMapping, so they carry the earliest stored link time.</description></item>"
+      },
+      {
+        "Line": 947,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: the row is built by BuildMapping, so it carries the earliest stored link time.</description></item>"
+      },
+      {
+        "Line": 1841,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: rows are built by BuildMapping, so they carry the earliest stored link time.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+    "DatedEntries": [
+      {
+        "Line": 593,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-FED-PATH-001; TR-MCP-FED-PATH-001 (no AC states its no-direct-GetFullPath rule; gap reported): the git-config callback is passed as a method group, because TryResolveGitConfigPath already normalizes the path and the extra Path.GetFullPath exceeded the reviewed ratchet allowance of 4.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/Build.Tests/TestGroupExecutionBindingTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 13,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1 to AC-5: binds the mock-gated rows to the production TestGroupExecution (bindings ug-r9-binding-q-1 and ug-r9-binding-q-2).</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/Build.Tests/TestGroupExecutionContractTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 17,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2, AC-3: added the composition and run-id contracts (mock gate ug-r9-mockgate-q-1).</description></item>"
+      },
+      {
+        "Line": 18,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4, AC-5: host-aware rows and the per-class check rows (mock gate ug-r9-mockgate-q-2).</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 14,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: binds the mock-gated rows to the client models (binding ug-r9-binding-p-1).</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 16,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added the client timestamp JSON contract (mock gate ug-r9-mockgate-p-1).</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 13,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: binds the mock-gated rows to the production adapters (binding ug-r9-binding-p-1).</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterContractTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 16,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added the adapter timestamp contract (mock gate ug-r9-mockgate-p-1).</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 13,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-4: added 22 fixed provider rows with reference and wrong verdicts (mock gate ug-r9-mockgate-r-1), then the two real bindings (ug-r9-binding-r-2), because the owned-instance check refused TodoStorage's 'database' backend.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderBindingTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 13,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): binds the mock-gated rows to the production check (operator 2026-11-02: \"Fix in scope\").</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 17,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, generated artifacts in test-owned locations): added the output-folder contract, because two memory-bench stub cases wrote into the checkout's docs/benchmarks/results and rewrote two tracked files on every lane run (operator 2026-11-02: \"Fix in scope\"; triage-report-32e6bc07).</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 125,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, generated artifacts in test-owned locations): the run writes to a new temporary folder that TemporaryInstanceChecks.CheckTestOutputFolder accepts, instead of the checkout's docs/benchmarks/results, whose two tracked files every lane run rewrote (operator 2026-11-02: \"Fix in scope\"; triage-report-32e6bc07); assertions unchanged.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 73,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, generated artifacts in test-owned locations): the run writes to a new temporary folder that TemporaryInstanceChecks.CheckTestOutputFolder accepts, instead of the checkout's docs/benchmarks/results, whose two tracked files every lane run rewrote (operator 2026-11-02: \"Fix in scope\"; triage-report-32e6bc07); assertions unchanged.</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 14,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: binds the mock-gated rows to the production reader, row mappers and mapping builder (binding ug-r9-binding-p-1).</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+    "DatedEntries": [
+      {
+        "Line": 16,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added the stored-time reader contract (mock gate ug-r9-mockgate-p-1).</description></item>"
+      },
+      {
+        "Line": 17,
+        "Text": "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1 (appended \"A stored time written without an offset is read as UTC\"): added the offset-less row and a wrong reader that applies a fixed local offset, because no row pinned that case (operator 2026-11-02: \"UTC\").</description></item>"
+      }
+    ]
+  },
+  {
+    "File": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "DatedEntries": [
+      {
+        "Line": 11,
+        "Text": "/// Since 2026-11-02 it also holds the FR-MCP-TESTRESOURCE-001 check that a test's generated-artifact folder lies outside"
+      },
+      {
+        "Line": 161,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-4; TR-MCP-NUKE-019 AC-6: the SQLite-only rule now applies to database-engine settings only (Database__Provider, DatabaseProvider, DATABASE_PROVIDER, any prefix), because it refused TodoStorage's valid 'database' backend and broke the stdio host case.</description></item>"
+      },
+      {
+        "Line": 247,
+        "Text": "    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): added, because two memory-bench stub cases wrote into the checkout's docs/benchmarks/results and rewrote two tracked files on every lane run (operator 2026-11-02: \"Fix in scope\"; mock gate ug-r9-mockgate-s-1).</description></item>"
+      }
+    ]
+  }
+]

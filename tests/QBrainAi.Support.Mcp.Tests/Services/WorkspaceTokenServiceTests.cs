@@ -100,9 +100,10 @@ public sealed class WorkspaceTokenServiceTests
         var token = _sut.GenerateToken(@"C:\projects\test");
         var result = _sut.ResolveWorkspaceByToken(token);
         Assert.NotNull(result);
-        // TR-MCP-FED-PATH-001: the canonical identity, not host Path.GetFullPath (which on a Linux
-        // runner prefixes the working directory to a Windows path).
-        Assert.Equal(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(@"C:\projects\test"), result, ignoreCase: true);
+        // TR-MCP-FED-PATH-001, FR-MCP-PATHNORM-001: the canonical identity, not host Path.GetFullPath (which
+        // on a Linux runner prefixes the working directory to a Windows path). The expected key comes from
+        // the test oracle, not the process host (TR-MCP-USECASE-018 AC-006: no unit test depends on the platform).
+        Assert.Equal(ExpectedWorkspaceKey.Of(@"C:\projects\test"), result, ignoreCase: true);
     }
 
 

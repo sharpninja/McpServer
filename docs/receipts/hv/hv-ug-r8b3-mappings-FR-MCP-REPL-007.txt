@@ -1,0 +1,22 @@
+type: result
+payload:
+  requestId: req-20261029T033827Z-cc60
+  result:
+    items:
+    - frId: FR-MCP-REPL-007
+      trId: TR-MCP-REPL-008
+      createdAt: 2026-10-29T03:38:29.2287824+00:00
+    - frId: FR-MCP-REPL-007
+      testId: TEST-MCP-REPL-007-1
+      createdAt: 2026-10-29T03:38:29.2294284+00:00
+    - frId: FR-MCP-REPL-007
+      testId: TEST-MCP-REPL-007-2
+      createdAt: 2026-10-29T03:38:29.2295509+00:00
+    - frId: FR-MCP-REPL-007
+      testId: TEST-MCP-REPL-007-3
+      createdAt: 2026-10-29T03:38:29.2296421+00:00
+    totalCount: 4
+  deprecated: true
+
+---
+

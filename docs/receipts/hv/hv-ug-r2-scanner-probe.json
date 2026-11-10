@@ -1,0 +1,125 @@
+{
+  "TimestampLocal": "2026-10-19T21:41:24",
+  "AssemblyPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll",
+  "AssemblyHash": "914981D31AB932D02AE6C921ECF99E9F4DD5149E5043A3596B563D08E7350847",
+  "ScannerSourceHash": "E071FACD2CD0C4549625FFCFC207E379227CBDF741F14EE39ED56410D322AA1F",
+  "Cases": [
+    {
+      "Name": "plain",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[Fact(Skip = \"later\")] public void A() { }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[Fact(Skip = \"     \")] public void A() { }\n}\n",
+      "Findings": [
+        "plain.cs:4 skip in FooTests"
+      ],
+      "SkipLines": [
+        4
+      ]
+    },
+    {
+      "Name": "multiline",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[Fact(\nSkip = \"later\")] public void A() { }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[Fact(\nSkip = \"     \")] public void A() { }\n}\n",
+      "Findings": [
+        "multiline.cs:4 skip in FooTests"
+      ],
+      "SkipLines": [
+        4
+      ]
+    },
+    {
+      "Name": "qualified",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[global::Xunit.FactAttribute(Skip = \"later\")] public void A() { }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[global::Xunit.FactAttribute(Skip = \"     \")] public void A() { }\n}\n",
+      "Findings": [
+        "qualified.cs:4 skip in FooTests"
+      ],
+      "SkipLines": [
+        4
+      ]
+    },
+    {
+      "Name": "listed",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[Trait(\"x\", \"y\"), Xunit.Theory(SkipWhen = nameof(Ready))] public void A() { }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[Trait(\" \", \" \"), Xunit.Theory(SkipWhen = nameof(Ready))] public void A() { }\n}\n",
+      "Findings": [
+        "listed.cs:4 skip in FooTests"
+      ],
+      "SkipLines": [
+        4
+      ]
+    },
+    {
+      "Name": "interpolation",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { var s = $\"host {OperatingSystem.IsWindows()}\"; }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { var s = $\"     {OperatingSystem.IsWindows()}\"; }\n}\n",
+      "Findings": [
+        "interpolation.cs:4 os-check in FooTests"
+      ],
+      "SkipLines": []
+    },
+    {
+      "Name": "multilineOs",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { var s = OperatingSystem.\nIsWindows(); }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { var s = OperatingSystem.\nIsWindows(); }\n}\n",
+      "Findings": [],
+      "SkipLines": []
+    },
+    {
+      "Name": "multilineInterpolationOs",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { var s = $\"{OperatingSystem.\nIsWindows()}\"; }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { var s = $\"{OperatingSystem.\nIsWindows()}\"; }\n}\n",
+      "Findings": [],
+      "SkipLines": []
+    },
+    {
+      "Name": "qualifiedOsAttribute",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[global::System.Runtime.Versioning.SupportedOSPlatform(\"windows\")] [Fact] public void A() { }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[global::System.Runtime.Versioning.SupportedOSPlatform(\"       \")] [Fact] public void A() { }\n}\n",
+      "Findings": [],
+      "SkipLines": []
+    },
+    {
+      "Name": "listedOsAttribute",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[Fact, System.Runtime.Versioning.SupportedOSPlatform(\"windows\")] public void A() { }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[Fact, System.Runtime.Versioning.SupportedOSPlatform(\"       \")] public void A() { }\n}\n",
+      "Findings": [],
+      "SkipLines": []
+    },
+    {
+      "Name": "verbatimEscaped",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { var x = @\"\"\"quoted\"; _ = OperatingSystem.IsWindows(); }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { var x = @\"        \"; _ = OperatingSystem.IsWindows(); }\n}\n",
+      "Findings": [
+        "verbatimEscaped.cs:4 os-check in FooTests"
+      ],
+      "SkipLines": []
+    },
+    {
+      "Name": "nestedInterpolation",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { var x = $\"{string.Join(\",\", $\"{OperatingSystem.IsWindows()}\")}\"; }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { var x = $\"{string.Join(\" \", $\"{OperatingSystem.IsWindows()}\")}\"; }\n}\n",
+      "Findings": [
+        "nestedInterpolation.cs:4 os-check in FooTests"
+      ],
+      "SkipLines": []
+    },
+    {
+      "Name": "commentAndLiteral",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { var x = \"Assert.SkipWhen(true)\"; /* OperatingSystem.IsWindows() */ }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { var x = \"                     \";                                   }\n}\n",
+      "Findings": [],
+      "SkipLines": []
+    },
+    {
+      "Name": "multilineAssert",
+      "Source": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { Assert\n.SkipWhen(true, \"later\"); }\n}\n",
+      "Stripped": "namespace N;\npublic sealed class FooTests\n{\n[Fact] public void A() { Assert\n.SkipWhen(true, \"     \"); }\n}\n",
+      "Findings": [
+        "multilineAssert.cs:4 skip in FooTests"
+      ],
+      "SkipLines": [
+        4
+      ]
+    }
+  ]
+}

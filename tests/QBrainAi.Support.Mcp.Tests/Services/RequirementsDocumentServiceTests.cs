@@ -8,20 +8,16 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>Unit tests for <see cref="RequirementsDocumentService"/> document parsing, rendering, and persistence behavior.</summary>
-public sealed class RequirementsDocumentServiceTests : IDisposable
+/// <remarks>2026-11-07, TR-MCP-USECASE-018 AC-006; TEST-MCP-106; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 6 Category=Integration cases and the helpers only they use (SeedGroupedTestingDocs) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_tempRoot, .ctor, Dispose, CreateService and SeedCanonicalDocs) moved once into the abstract base class RequirementsDocumentServiceTestsBase in Services/RequirementsDocumentServiceTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
+public sealed class RequirementsDocumentServiceTests : RequirementsDocumentServiceTestsBase, IDisposable
 {
-    private readonly string _tempRoot = Path.Combine(Path.GetTempPath(), "mcp-reqdocs-tests-" + Guid.NewGuid().ToString("N")[..8]);
-
-    public RequirementsDocumentServiceTests()
-    {
-        Directory.CreateDirectory(Path.Combine(_tempRoot, "docs", "Project"));
-    }
-
-    public void Dispose()
-    {
-        try { Directory.Delete(_tempRoot, recursive: true); } catch { /* best effort */ }
-    }
-
+    /// <summary>
+    /// FR-MCP-040; FR-MCP-041; TR-MCP-REQ-002: the service parses the seeded canonical documents into 2 FR, 3 TR and 2
+    /// TEST entries and one mapping row (one FR to two TRs and one TEST), and renders the Functional, Technical and
+    /// Matrix documents as text/markdown with the expected headings and Tracked matrix rows. Data: the canonical seed
+    /// documents written by SeedCanonicalDocs (RequirementsDocumentServiceTestsBase) in a per-test temporary folder.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-040; FR-MCP-041; TR-MCP-REQ-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task Constructor_ParsesCanonicalDocs_AndGeneratesMarkdown()
     {
@@ -64,188 +60,12 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Contains("| TEST-MCP-001 | Tracked | Testing-Requirements.md |", matrixDoc.Content);
     }
 
-    [Fact]
-    public async Task GenerateAllAsync_WritesCanonicalFilesToWorkspace()
-    {
-        SeedCanonicalDocs();
-        var service = CreateService();
-        var outputRoot = Path.Combine(_tempRoot, "export", "canonical");
-        var generatedAt = new DateTimeOffset(2026, 5, 8, 12, 0, 0, TimeSpan.Zero);
-
-        var result = await service.GenerateAllAsync(outputRoot, generatedAt, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var names = result.Files.Select(e => e.RelativePath).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
-
-        Assert.Equal(
-            new[]
-            {
-                "Functional-Requirements.md",
-                "Requirements-Matrix.md",
-                "TR-per-FR-Mapping.md",
-                "Technical-Requirements.md",
-                "Testing-Requirements.md"
-            },
-            names);
-        Assert.True(result.Success);
-        Assert.Equal("markdown", result.Format);
-        Assert.Equal(Path.GetFullPath(outputRoot), result.OutputRoot);
-        Assert.Contains("FR-MCP-001", File.ReadAllText(Path.Combine(outputRoot, RequirementsDocumentRenderer.FunctionalFileName)));
-        Assert.Contains("TEST-MCP-001", File.ReadAllText(Path.Combine(outputRoot, RequirementsDocumentRenderer.MatrixFileName)));
-        Assert.Equal(generatedAt.UtcDateTime, File.GetLastWriteTimeUtc(Path.Combine(outputRoot, RequirementsDocumentRenderer.FunctionalFileName)));
-    }
-
     /// <summary>
-    /// MCP-REQEXPORT-READONLY-001: Requirements markdown exports are projections and are
-    /// marked read-only so agents do not accidentally edit them as the source of truth.
+    /// FR-MCP-040; TR-MCP-REQ-002: 20 concurrent AddTestAsync calls leave a Testing-Requirements.md that parses to
+    /// exactly 20 entries, with no leftover .tmp file in its folder. Data: the empty seed documents written by
+    /// SeedEmptyDocs in a per-test temporary folder; 20 generated TEST entries.
     /// </summary>
-    [Fact]
-    public async Task GenerateAllAsync_MarksExportedMarkdownFilesReadOnly()
-    {
-        SeedCanonicalDocs();
-        var service = CreateService();
-        var outputRoot = Path.Combine(_tempRoot, "export", "canonical-readonly");
-
-        var result = await service.GenerateAllAsync(outputRoot, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-        Assert.All(result.Files, file =>
-        {
-            var attributes = File.GetAttributes(file.FullPath);
-            Assert.True(
-                attributes.HasFlag(FileAttributes.ReadOnly),
-                $"{file.RelativePath} should be marked read-only.");
-        });
-    }
-
-    [Fact]
-    public async Task GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds()
-    {
-        SeedCanonicalDocs();
-        var projectMatrixPath = Path.Combine(_tempRoot, "docs", "Project", RequirementsDocumentRenderer.MatrixFileName);
-        await File.WriteAllTextAsync(projectMatrixPath, """
-            # Requirements Matrix (QBrain.AI)
-
-            | Requirement | Status | Source Files |
-            | --- | --- | --- |
-            | FR-MCP-001 | Complete | ExistingSource |
-            """, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-        var service = CreateService();
-        var outputRoot = Path.Combine(_tempRoot, "export", "canonical-with-matrix");
-
-        await service.GenerateAllAsync(outputRoot, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-        var matrix = await File.ReadAllTextAsync(Path.Combine(outputRoot, RequirementsDocumentRenderer.MatrixFileName), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Contains("| FR-MCP-001 | Complete | ExistingSource |", matrix);
-        Assert.Contains("| FR-MCP-002 | Tracked | Functional-Requirements.md |", matrix);
-        Assert.Contains("| TR-MCP-CFG-001 | Tracked | Technical-Requirements.md |", matrix);
-        Assert.Contains("| TEST-MCP-001 | Tracked | Testing-Requirements.md |", matrix);
-    }
-
-    [Fact]
-    public async Task GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata()
-    {
-        SeedCanonicalDocs();
-        var service = CreateService();
-        var outputRoot = Path.Combine(_tempRoot, "docs", "Project", "wiki");
-        Directory.CreateDirectory(Path.Combine(outputRoot, "azure"));
-        File.WriteAllText(Path.Combine(outputRoot, "azure", "Old.md"), "stale");
-
-        var generatedAt = new DateTimeOffset(2026, 5, 8, 12, 0, 0, TimeSpan.Zero);
-        var result = await service.GenerateWikiAsync(outputRoot, generatedAt, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var names = result.Files.Select(e => e.RelativePath).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
-
-        Assert.Equal(
-            new[]
-            {
-                "azure/.mcp-requirements-manifest.json",
-                "azure/.order",
-                "azure/Functional-Requirements.md",
-                "azure/Home.md",
-                "azure/Requirements-Matrix.md",
-                "azure/TR-per-FR-Mapping.md",
-                "azure/Technical-Requirements.md",
-                "azure/Testing-Requirements.md",
-                "github/.mcp-requirements-manifest.json",
-                "github/Functional-Requirements.md",
-                "github/Home.md",
-                "github/Requirements-Matrix.md",
-                "github/TR-per-FR-Mapping.md",
-                "github/Technical-Requirements.md",
-                "github/Testing-Requirements.md",
-                "github/_Footer.md",
-                "github/_Sidebar.md"
-            },
-            names);
-
-        var manifest = File.ReadAllText(Path.Combine(outputRoot, "azure", ".mcp-requirements-manifest.json"));
-        Assert.Contains("\"platform\": \"azure\"", manifest, StringComparison.Ordinal);
-        Assert.Contains("\"generatedAtUtc\": \"2026-05-08T12:00:00+00:00\"", manifest, StringComparison.Ordinal);
-        Assert.Contains("\"Requirements-Matrix.md\"", manifest, StringComparison.Ordinal);
-        Assert.False(File.Exists(Path.Combine(outputRoot, "azure", "Old.md")));
-        Assert.Equal(generatedAt.UtcDateTime, File.GetLastWriteTimeUtc(Path.Combine(outputRoot, "github", "_Sidebar.md")));
-        Assert.All(result.Files, file => Assert.True(File.GetAttributes(file.FullPath).HasFlag(FileAttributes.ReadOnly)));
-    }
-
-    /// <summary>
-    /// TEST-MCP-106: Wiki export temporarily clears read-only files for replacement/deletion,
-    /// then leaves exported files read-only after generation completes.
-    /// </summary>
-    [Fact]
-    public async Task GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly()
-    {
-        SeedCanonicalDocs();
-        var service = CreateService();
-        var outputRoot = Path.Combine(_tempRoot, "docs", "Project", "wiki-readonly");
-        var existingExport = Path.Combine(outputRoot, "github", RequirementsDocumentRenderer.FunctionalFileName);
-        var staleExport = Path.Combine(outputRoot, "azure", "Old.md");
-        Directory.CreateDirectory(Path.GetDirectoryName(existingExport)!);
-        Directory.CreateDirectory(Path.GetDirectoryName(staleExport)!);
-        await File.WriteAllTextAsync(existingExport, "stale generated export", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        await File.WriteAllTextAsync(staleExport, "stale export", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        File.SetAttributes(existingExport, File.GetAttributes(existingExport) | FileAttributes.ReadOnly);
-        File.SetAttributes(staleExport, File.GetAttributes(staleExport) | FileAttributes.ReadOnly);
-
-        var result = await service.GenerateWikiAsync(outputRoot, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-        var rewritten = await File.ReadAllTextAsync(existingExport, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Contains("FR-MCP-001", rewritten, StringComparison.Ordinal);
-        Assert.False(File.Exists(staleExport));
-        Assert.All(result.Files, file => Assert.True(
-            File.GetAttributes(file.FullPath).HasFlag(FileAttributes.ReadOnly),
-            $"{file.RelativePath} should be read-only after export."));
-    }
-
-    [Fact]
-    public async Task GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria()
-    {
-        SeedGroupedTestingDocs();
-        var service = CreateService();
-        var outputRoot = Path.Combine(_tempRoot, "docs", "Project", "wiki");
-        var generatedAt = new DateTimeOffset(2026, 5, 22, 16, 30, 0, TimeSpan.Zero);
-
-        await service.GenerateWikiAsync(outputRoot, generatedAt, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-        var githubTesting = await File.ReadAllTextAsync(
-            Path.Combine(outputRoot, "github", RequirementsDocumentRenderer.TestingFileName), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var azureTesting = await File.ReadAllTextAsync(
-            Path.Combine(outputRoot, "azure", RequirementsDocumentRenderer.TestingFileName), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-        Assert.Equal(githubTesting, azureTesting);
-        Assert.Contains("## TEST-MCP", githubTesting);
-        Assert.Contains("### TEST-MCP-001", githubTesting);
-        Assert.Contains("Given configurable RepoRoot/Todo paths, when service starts, then path resolution is correct.", githubTesting);
-        Assert.Contains("**Acceptance Criteria:**", githubTesting);
-        Assert.Contains("- [ ] Path resolution is covered by a focused assertion.", githubTesting);
-        Assert.Contains("- [x] Validation evidence is retained. (evidence: RequirementsDocumentServiceTests)", githubTesting);
-        Assert.Contains("## TEST-MCP-REPL", githubTesting);
-        Assert.Contains("### TEST-MCP-REPL-021", githubTesting);
-        Assert.Contains("Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked.", githubTesting);
-        Assert.Contains("## TEST-SUPPORT", githubTesting);
-        Assert.Contains("### TEST-SUPPORT-016", githubTesting);
-        Assert.Contains("Given a `SessionLogService`, when `SubmitAsync` persists a session, then child entities keep the workspace id.", githubTesting);
-        Assert.DoesNotContain("| ID | Requirement |", githubTesting);
-        Assert.DoesNotContain("- TEST-MCP-001:", githubTesting);
-    }
-
+    /// <remarks>2026-11-07, FR-MCP-040; TR-MCP-REQ-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task ConcurrentMutations_ProduceValidTestingDocument()
     {
@@ -266,6 +86,12 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.DoesNotContain(Directory.GetFiles(Path.GetDirectoryName(testingPath)!, "*.tmp"), _ => true);
     }
 
+    /// <summary>
+    /// FR-MCP-040; TR-MCP-REQ-002: deleting a TR removes it from the mapping row that named it, so the row keeps only
+    /// its other TR. Data: the canonical seed documents written by SeedCanonicalDocs in a per-test temporary folder
+    /// (one mapping row naming two TRs).
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-040; TR-MCP-REQ-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task DeleteTrAsync_RemovesTrFromMappingRows()
     {
@@ -280,6 +106,12 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Equal("TR-MCP-CFG-001", mapping.TrIds[0]);
     }
 
+    /// <summary>
+    /// FR-MCP-040; TR-MCP-REQ-002: the mapping parser accepts a legacy two-column table (FR and Primary TRs, no Tests
+    /// column) and returns one row with its two TRs and no tests. Data: an inline mapping document; no service and no
+    /// files.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-040; TR-MCP-REQ-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ParseMapping_AcceptsLegacyTwoColumnRows()
     {
@@ -297,6 +129,13 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Empty(mapping.TestIds);
     }
 
+    /// <summary>
+    /// FR-MCP-040; TR-MCP-REQ-002; FR-MCP-REQAC-001; TR-MCP-REQAC-002: the technical parser takes the first generated
+    /// Status line as the status (completed), strips every Status line from the body, keeps the Covered by line, and
+    /// reads the one checked acceptance criterion as satisfied. Data: an inline technical document with one TR entry,
+    /// two Status lines, a Covered by line and one checked criterion; no service and no files.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-040; TR-MCP-REQ-002; FR-MCP-REQAC-001; TR-MCP-REQAC-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ParseTechnical_StripsGeneratedStatusMetadataFromBody()
     {
@@ -325,6 +164,12 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.True(criterion.IsSatisfied);
     }
 
+    /// <summary>
+    /// FR-MCP-084; TR-MCP-REQ-005: the testing parser accepts the wiki-grouped layout (one table under each TEST group
+    /// heading) and returns both rows, unescaping an escaped pipe character in a condition. Data: an inline testing
+    /// document with two group sections; no service and no files.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-084; TR-MCP-REQ-005: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ParseTesting_AcceptsWikiGroupedTableRows()
     {
@@ -350,6 +195,13 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Equal("TEST-MCP-REPL-021", parsed[1].Id);
     }
 
+    /// <summary>
+    /// FR-MCP-084; TR-MCP-REQ-005; FR-MCP-112; FR-MCP-REQAC-001; TR-MCP-REQAC-002: the testing parser reads back the
+    /// wiki section layout (a TEST heading, its description paragraph and an Acceptance Criteria checklist) as one
+    /// entry with its condition and two criteria, the first unchecked and the second checked with its evidence text
+    /// (parser-test). Data: an inline testing document with one grouped TEST section; no service and no files.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-084; TR-MCP-REQ-005; FR-MCP-112; FR-MCP-REQAC-001; TR-MCP-REQAC-002: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public void ParseTesting_AcceptsWikiGroupedSectionsWithAcceptanceCriteria()
     {
@@ -378,20 +230,6 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Equal("parser-test", entry.AcceptanceCriteria[1].Evidence);
     }
 
-    private RequirementsDocumentService CreateService()
-    {
-        var options = Microsoft.Extensions.Options.Options.Create(new RequirementsOptions
-        {
-            FunctionalRequirementsPath = Path.Combine(_tempRoot, "docs", "Project", "Functional-Requirements.md"),
-            TechnicalRequirementsPath = Path.Combine(_tempRoot, "docs", "Project", "Technical-Requirements.md"),
-            TestingRequirementsPath = Path.Combine(_tempRoot, "docs", "Project", "Testing-Requirements.md"),
-            MappingPath = Path.Combine(_tempRoot, "docs", "Project", "TR-per-FR-Mapping.md"),
-            MatrixPath = Path.Combine(_tempRoot, "docs", "Project", "Requirements-Matrix.md")
-        });
-
-        return new RequirementsDocumentService(options, NullLogger<RequirementsDocumentService>.Instance);
-    }
-
     private void SeedEmptyDocs()
     {
         var projectDir = Path.Combine(_tempRoot, "docs", "Project");
@@ -399,95 +237,5 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         File.WriteAllText(Path.Combine(projectDir, "Technical-Requirements.md"), "# Technical Requirements (QBrain.AI)\n\n");
         File.WriteAllText(Path.Combine(projectDir, "Testing-Requirements.md"), "# Testing Requirements (QBrain.AI)\n\n");
         File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), "# TR per FR Mapping (QBrain.AI)\n\n| FR | Primary TRs | Tests |\n| --- | --- | --- |\n");
-    }
-
-    private void SeedCanonicalDocs()
-    {
-        var projectDir = Path.Combine(_tempRoot, "docs", "Project");
-        File.WriteAllText(Path.Combine(projectDir, "Functional-Requirements.md"), """
-            # Functional Requirements (QBrain.AI)
-
-            ## FR-MCP-001 Configurable workspace root and paths
-
-            The server shall support configurable `RepoRoot`, `TodoFilePath`, `DataDirectory`, and index paths.
-
-            **Covered by:** `IngestionOptions`, `IOptions`
-
-            ## FR-MCP-002 TODO management API
-
-            The server shall provide CRUD/query operations for TODO items over REST and STDIO.
-
-            **Covered by:** `TodoController`, `TodoService`
-            """);
-
-        File.WriteAllText(Path.Combine(projectDir, "Technical-Requirements.md"), """
-            # Technical Requirements (QBrain.AI)
-
-            ## TR-MCP-CFG-001
-
-            IOptions-based configuration for all filesystem and runtime settings.
-
-            ## TR-MCP-CFG-002
-
-            Port selection from `Mcp:Port` with `PORT` env override.
-
-            ## TR-MCP-WS-004
-
-            **Workspace Controller** — REST API at `/qbrainai/workspace` with Base64URL-encoded path keys.
-            """);
-
-        File.WriteAllText(Path.Combine(projectDir, "Testing-Requirements.md"), """
-            # Testing Requirements (QBrain.AI)
-
-            - TEST-MCP-001: Given configurable RepoRoot/Todo paths, when service starts, then path resolution is correct.
-            - TEST-MCP-002: Given TODO API operations, when create/update/delete/query run, then contracts remain stable.
-            """);
-
-        File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), """
-            # TR per FR Mapping (QBrain.AI)
-
-            | FR | Primary TRs | Tests |
-            | --- | --- | --- |
-            | FR-MCP-001 | TR-MCP-CFG-001, TR-MCP-CFG-002 | TEST-MCP-001 |
-            """);
-    }
-
-    private void SeedGroupedTestingDocs()
-    {
-        var projectDir = Path.Combine(_tempRoot, "docs", "Project");
-        File.WriteAllText(Path.Combine(projectDir, "Functional-Requirements.md"), """
-            # Functional Requirements (QBrain.AI)
-
-            ## FR-MCP-001 Configurable workspace root and paths
-
-            The server shall support configurable paths.
-            """);
-
-        File.WriteAllText(Path.Combine(projectDir, "Technical-Requirements.md"), """
-            # Technical Requirements (QBrain.AI)
-
-            ## TR-MCP-CFG-001
-
-            Configuration paths are resolved through options.
-            """);
-
-        File.WriteAllText(Path.Combine(projectDir, "Testing-Requirements.md"), """
-            # Testing Requirements (QBrain.AI)
-
-            - TEST-MCP-001: Given configurable RepoRoot/Todo paths, when service starts, then path resolution is correct.
-              **Acceptance Criteria:**
-              - [ ] Path resolution is covered by a focused assertion.
-              - [x] Validation evidence is retained. (evidence: RequirementsDocumentServiceTests)
-            - TEST-MCP-REPL-021: Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked.
-            - TEST-SUPPORT-016: Given a `SessionLogService`, when `SubmitAsync` persists a session, then child entities keep the workspace id.
-            """);
-
-        File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), """
-            # TR per FR Mapping (QBrain.AI)
-
-            | FR | Primary TRs | Tests |
-            | --- | --- | --- |
-            | FR-MCP-001 | TR-MCP-CFG-001 | TEST-MCP-001 |
-            """);
     }
 }

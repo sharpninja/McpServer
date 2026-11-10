@@ -1,0 +1,9 @@
+{
+  "startedLocal": "2026-11-06T15:58:23.0098377-06:00",
+  "endedLocal": "2026-11-06T15:58:23.8063120-06:00",
+  "action": "Status",
+  "method": null,
+  "cachePath": "/tmp/hv-ug-r14-codex-01a1b2d9",
+  "pluginRoot": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0",
+  "output": "{\"status\":\"no-session\",\"agent\":\"Codex\",\"namespaces\":[\"workflow.sessionlog\",\"workflow.todo\",\"workflow.requirements\",\"workflow.triage\",\"workflow.graphrag\",\"workflow.memory\",\"workflow.failsafe\"],\"requirementMethods\":[\"workflow.requirements.listLayers\",\"workflow.requirements.createLayer\",\"workflow.requirements.updateLayer\",\"workflow.requirements.effective\",\"workflow.requirements.planRecovery\",\"workflow.requirements.applyRecovery\",\"workflow.requirements.getRecovery\"],\"requirementClientMethods\":[\"client.Requirements.ListRequirementLayersAsync\",\"client.Requirements.CreateRequirementLayerAsync\",\"client.Requirements.UpdateRequirementLayerAsync\",\"client.Requirements.GetEffectiveRequirementsAsync\",\"client.Requirements.PlanRecoveryAsync\",\"client.Requirements.ApplyRecoveryAsync\",\"client.Requirements.GetRecoveryAsync\"],\"cacheDir\":\"/tmp/hv-ug-r14-codex-01a1b2d9\",\"hasSession\":false,\"hasCurrentTurn\":false,\"pendingCount\":0,\"pendingTurnCount\":0,\"failsafeDir\":\"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/.mcpServer/failsafe/Codex/workspaces/L2hvbWUvc2hhcnBuaW5qYS9naXRodWIvTWNwU2VydmVyLy53b3JrdHJlZXMvdW5pdC1zdWl0ZS1ncmVlbi0yMDI2MTAxOQ/pending\",\"failsafeCount\":0,\"failsafeQuarantineCount\":0}\n"
+}

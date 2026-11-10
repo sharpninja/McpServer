@@ -1,0 +1,31 @@
+{
+  "TimestampLocal": "2026-11-02T19:31:02",
+  "TimestampUtc": "2026-11-03T01:31:02.1906315Z",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-MCP-REPL-018"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "Tests must verify canonical agent keying, explicit --agent propagation, absence of production AgentOverride leakage, and named-agent child process launch behavior.\n\nPR87 also covers approved FR-MCP-REPL-008 ac-4: the verified-marker cache selector uses canonical QBRAINAI_REPL_CACHE_DIR, legacy MCP_REPL_CACHE_DIR under ProductEnvironment precedence, then the existing profile fallback. Independent explicit-input cases and wrong adapters pass the mock gate before implementation; the same assertions bind the selector, and owned REPL runtime cases verify the child cache remains inside its instance root. No fixture uses the live profile trust cache.",
+          "updatedAt": "2026-11-03T01:31:04.4917741+00:00",
+          "status": "pending",
+          "id": "TEST-MCP-REPL-018",
+          "createdAt": "2026-11-03T01:31:04.4916520+00:00",
+          "title": "Test TEST-MCP-REPL-018",
+          "priority": "medium",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "testType": "unit",
+          "acceptanceCriteria": []
+        },
+        "requestId": "req-20261103T013103Z-b0fe",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

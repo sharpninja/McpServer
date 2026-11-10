@@ -1,0 +1,15 @@
+{
+  "contextList": [
+    "docs/receipts/hv/hv-ug-r7-identity.json",
+    "docs/receipts/hv/20261026T120945-unitgreen-r7.request.jsonl"
+  ],
+  "response": "Confirmed R7-F1: full Nuke file-mode maximum-timeout run 4551 total, 4532 passed, 19 failed, 0 not executed; matched full Nuke file-mode control 4551 passed, 0 failed, 0 not executed. All 19 failures originate at AgentStdioProtocol.cs:163 from MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS, across AgentStdioFramingTests (4), GenericClientPassthroughYamlBindingTests (5), ReplMcpErrorClassifierTests (4), RequirementScopeLayerWorkflowTests (1), YamlPipeExecutionTests (5). No test changes made. Original gates and 21-by-name integration additions verified. Requirements and TODO remain untouched. The previously exposed credential occurrence was replaced in place in the response receipt at 12:42:46 without copying a secret. A sandboxed folder-mode command-only reproduction is in progress.",
+  "model": "gpt-6-astra",
+  "tags": [
+    "unitgreen-r7",
+    "IMPL-UNITGREEN-001",
+    "gpt-6-astra",
+    "effort-max"
+  ],
+  "interpretation": "Class 1 project implementation review. Independent read-only review of every scoped claim, requirements, evidence, code, tests and plan. Scanner coverage overridden. No tracked implementation edits or shared-store mutations."
+}

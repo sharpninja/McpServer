@@ -1,0 +1,98 @@
+{
+  "LiteralNames": 72,
+  "DistinctLegacyNames": 23,
+  "LegacyCallSites": 32,
+  "MetaEnvironmentCount": 81,
+  "DeclaredReal": [
+    "PATH",
+    "TMPDIR",
+    "NUGET_PACKAGES",
+    "DOTNET_CLI_HOME"
+  ],
+  "ConfigurationProbes": [
+    {
+      "Name": "Mcp__ProjectionProbe",
+      "InImplementerMeta": false
+    },
+    {
+      "Name": "QBrainAi__ProjectionProbe",
+      "InImplementerMeta": false
+    },
+    {
+      "Name": "Mcp__ProjectionCliProbe",
+      "InImplementerMeta": false
+    },
+    {
+      "Name": "QBrainAi__ProjectionCliProbe",
+      "InImplementerMeta": false
+    }
+  ],
+  "HandoffMappings": [
+    {
+      "trIds": [
+        "TR-HANDOFF-VALIDATE-001"
+      ],
+      "testIds": [
+        "TEST-HANDOFF-004"
+      ],
+      "frId": "FR-HANDOFF-003",
+      "workspaceId": "/home/sharpninja/github/McpServer"
+    },
+    {
+      "trIds": [
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-VALIDATE-001"
+      ],
+      "testIds": [
+        "TEST-HANDOFF-004"
+      ],
+      "frId": "FR-HANDOFF-004",
+      "workspaceId": "/home/sharpninja/github/McpServer"
+    },
+    {
+      "trIds": [
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-TODO-001"
+      ],
+      "testIds": [
+        "TEST-HANDOFF-005"
+      ],
+      "frId": "FR-HANDOFF-005",
+      "workspaceId": "/home/sharpninja/github/McpServer"
+    },
+    {
+      "trIds": [
+        "TR-HANDOFF-AUDIT-001"
+      ],
+      "testIds": [
+        "TEST-HANDOFF-007"
+      ],
+      "frId": "FR-HANDOFF-006",
+      "workspaceId": "/home/sharpninja/github/McpServer"
+    },
+    {
+      "trIds": [
+        "TR-HANDOFF-SURFACE-001"
+      ],
+      "testIds": [
+        "TEST-HANDOFF-006"
+      ],
+      "frId": "FR-HANDOFF-007",
+      "workspaceId": "/home/sharpninja/github/McpServer"
+    }
+  ],
+  "MemoryMappings": [
+    {
+      "trIds": [
+        "TR-MCP-MEMORY-002"
+      ],
+      "testIds": [
+        "TEST-MCP-MEMORY-002"
+      ],
+      "frId": "FR-MCP-MEMORY-002",
+      "workspaceId": "/home/sharpninja/github/McpServer"
+    }
+  ],
+  "RetiredFrIds": [],
+  "MissingMemoryTest": []
+}

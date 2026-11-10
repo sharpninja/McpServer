@@ -1,0 +1,523 @@
+{
+  "TimestampUtc": "2026-10-26T13:34:26.8441124Z",
+  "TimestampLocal": "2026-10-26T08:34:26",
+  "Head": "3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b",
+  "HeadExitCode": 0,
+  "TrackedStatus": [],
+  "StatusExitCode": 0,
+  "Streams": [
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261026T072431-unitgreen-r6.request.jsonl",
+      "Bytes": 38934,
+      "Sha256": "6F4A89BA403BB5206D1BDDB99B2BFED2E733EAD5107CF032D82676197860B71D"
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261026T072431-unitgreen-r6.response.jsonl",
+      "Bytes": 1843794,
+      "Sha256": "E79A3FBA05E3B2896D4FDDE0ED26F6E08FB7CAFE2D866D15BC19A371C8EAA51E"
+    }
+  ],
+  "Progress": [
+    {
+      "type": "hv_progress",
+      "percentComplete": 0,
+      "etaSeconds": 7200,
+      "note": "Establishing reviewer identity, required profile reads, marker handling, and an independent audit session"
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 2,
+      "etaSeconds": 7200,
+      "note": "Completing bootstrap and verifying the exact model and reasoning effort"
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 5,
+      "etaSeconds": 6900,
+      "note": "Auditing requirements, TODO state, commit history, PR disclosures, and the plan before reattacking the fixes"
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 10,
+      "etaSeconds": 6600,
+      "note": "Checking strengthened criteria, scan-root reachability, environment-test moves, and historical gate corrections"
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 15,
+      "etaSeconds": 6200,
+      "note": "Verifying raw test receipts, criterion mappings, exact test moves, and the independent hostile run"
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 22,
+      "etaSeconds": 5800,
+      "note": "Auditing raw test inventories, requirement mappings, and remaining environment dependencies."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 27,
+      "etaSeconds": 5500,
+      "note": "Verifying requirement-first ordering and independently retesting linked scan roots."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 32,
+      "etaSeconds": 5100,
+      "note": "Checking earlier finding closures, signed history, and the expanded hostile run."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 38,
+      "etaSeconds": 4700,
+      "note": "Recording the remaining environment-dependent unit tests and completing the other claim audits."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 44,
+      "etaSeconds": 4200,
+      "note": "Finishing gate provenance, historical regression checks, and traceability review."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 51,
+      "etaSeconds": 3600,
+      "note": "Checking remaining requirement citations and Windows source provenance."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 62,
+      "etaSeconds": 2700,
+      "note": "Completing the claim-by-claim verdict and persistence receipts."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 70,
+      "etaSeconds": 2100,
+      "note": "Finalizing findings and assembling the complete verdict receipts."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 76,
+      "etaSeconds": 1800,
+      "note": "Consolidating the 14-test environment finding and the traceability finding into the final receipts."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 78,
+      "etaSeconds": 1500,
+      "note": "Finalizing source locations, claim verdicts, and complete session-log receipts."
+    }
+  ],
+  "ProgressCount": 15,
+  "EveryEtaNumeric": true,
+  "EvidenceFileCount": 182,
+  "OversizedEvidenceFiles": [],
+  "SelfReviewCopies": [
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261026T072431-unitgreen-r6.selfreview.md",
+      "Sha256": "7339545CAB318CECD95A41BF717AAEDACC7DD7824F630E0F8B4CD8870F4887E0"
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/unitgreen-r6-prelaunch.selfreview.md",
+      "Sha256": "7339545CAB318CECD95A41BF717AAEDACC7DD7824F630E0F8B4CD8870F4887E0"
+    }
+  ],
+  "SourceAnchors": [
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 20,
+      "Text": "[Collection(ProcessEnvironmentCollection.Name)]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 21,
+      "Text": "public sealed class CliBrainSlotStrategyTests"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 130,
+      "Text": "[Trait(\"Category\", \"Integration\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 131,
+      "Text": "public async Task CompleteAsync_Grok_UsesIsolatedCwdNotConfiguredRepoRoot()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 180,
+      "Text": "public async Task CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 200,
+      "Text": "public async Task CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 217,
+      "Text": "public async Task CompleteAsync_Grok_NonZeroExit_StillThrows()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 235,
+      "Text": "public async Task CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 345,
+      "Text": "[Trait(\"Category\", \"Integration\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 346,
+      "Text": "public async Task CompleteAsync_Codex_ReturnsAssistantTextFromJsonlNotRawEvents()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 384,
+      "Text": "[Trait(\"Category\", \"Integration\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 385,
+      "Text": "public async Task CompleteAsync_Codex_PrefersJsonlAssistantTextOverOutputFileToolCallJson()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 420,
+      "Text": "[Trait(\"Category\", \"Integration\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 421,
+      "Text": "public async Task ResolveTempDirectory_HonorsConfiguredEnvVar_WithoutWindowsServiceAcl()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 438,
+      "Text": "[Trait(\"Category\", \"Integration\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 439,
+      "Text": "public async Task CompleteAsync_Grok_WritesPromptFileUnderConfiguredTempAndSetsTempEnv()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 477,
+      "Text": "[Trait(\"Category\", \"Integration\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 478,
+      "Text": "public async Task CompleteAsync_Codex_WritesOutputFileUnderConfiguredTemp()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 509,
+      "Text": "public async Task CompleteAsync_GrokSecondCall_ResumesSameSession()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 540,
+      "Text": "public async Task CompleteAsync_CodexSecondCall_ResumesExtractedThread()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 566,
+      "Text": "public async Task Factory_Create_CliSlot_ReturnsCliClient()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 593,
+      "Text": "public async Task CredentialResolver_CliInteractive_ReturnsPlaceholder()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 631,
+      "Text": "var previousQuad = Environment.GetEnvironmentVariable(\"MCPSERVER_QUADBRAIN_CLI_TEMP\");"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 632,
+      "Text": "var previousOneShot = Environment.GetEnvironmentVariable(\"MCPSERVER_ONESHOT_TEMP\");"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 634,
+      "Text": "Directory.CreateDirectory(temp);"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 637,
+      "Text": "Environment.SetEnvironmentVariable(\"MCPSERVER_QUADBRAIN_CLI_TEMP\", temp);"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 638,
+      "Text": "Environment.SetEnvironmentVariable(\"MCPSERVER_ONESHOT_TEMP\", null);"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 643,
+      "Text": "Environment.SetEnvironmentVariable(\"MCPSERVER_QUADBRAIN_CLI_TEMP\", previousQuad);"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 644,
+      "Text": "Environment.SetEnvironmentVariable(\"MCPSERVER_ONESHOT_TEMP\", previousOneShot);"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 802,
+      "Text": "[Trait(\"Category\", \"Integration\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 803,
+      "Text": "[Trait(\"Platform\", \"Windows\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 804,
+      "Text": "public sealed class CliBrainSlotWindowsTempDirectoryTests"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 18,
+      "Text": "[Collection(ProcessEnvironmentCollection.Name)]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 19,
+      "Text": "public sealed class CodexCliAgentExecutionStrategyTests"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 83,
+      "Text": "public async Task ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 104,
+      "Text": "public async Task ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 132,
+      "Text": "public async Task ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 164,
+      "Text": "/// <c>MCPSERVER_CODEX_ONESHOT_TEMP</c>, which the strategy reads first, so it writes the process environment and is"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 168,
+      "Text": "[Trait(\"Category\", \"Integration\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 169,
+      "Text": "public async Task ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedOutputPath()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 172,
+      "Text": "Directory.CreateDirectory(tempRoot);"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 173,
+      "Text": "var previous = Environment.GetEnvironmentVariable(\"MCPSERVER_CODEX_ONESHOT_TEMP\");"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 174,
+      "Text": "Environment.SetEnvironmentVariable(\"MCPSERVER_CODEX_ONESHOT_TEMP\", tempRoot);"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 195,
+      "Text": "Environment.SetEnvironmentVariable(\"MCPSERVER_CODEX_ONESHOT_TEMP\", previous);"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 372,
+      "Text": "[Trait(\"Category\", \"Integration\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 373,
+      "Text": "[Trait(\"Platform\", \"Windows\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 374,
+      "Text": "public sealed class CodexCliAgentExecutionStrategyWindowsTests"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 380,
+      "Text": "public async Task ReadInitialResponseAsync_OnWindows_WrapsCodexExecThroughCmd()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 397,
+      "Text": "public async Task ReadInitialResponseAsync_WithWindowsNpmShim_UsesCmdWrapperAndStdinPrompt()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 400,
+      "Text": "Directory.CreateDirectory(shimDirectory);"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 446,
+      "Text": "[Trait(\"Category\", \"Integration\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 447,
+      "Text": "[Trait(\"Platform\", \"Linux\")]"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 448,
+      "Text": "public sealed class CodexCliAgentExecutionStrategyLinuxTests"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 455,
+      "Text": "public async Task ReadInitialResponseAsync_OffWindows_RunsCodexExecDirectly()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+      "Line": 11,
+      "Text": "public sealed class OneShotCliAgentExecutionStrategyTests"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+      "Line": 14,
+      "Text": "public async Task ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+      "Line": 36,
+      "Text": "public async Task ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+      "Line": 57,
+      "Text": "public async Task ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape()"
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+      "Line": 80,
+      "Text": "public async Task ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape()"
+    },
+    {
+      "Path": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+      "Line": 26,
+      "Text": "public async Task<string> CompleteAsync("
+    },
+    {
+      "Path": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+      "Line": 250,
+      "Text": "Directory.CreateDirectory(grokCwd);"
+    },
+    {
+      "Path": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+      "Line": 411,
+      "Text": "var configured = Environment.GetEnvironmentVariable(\"MCPSERVER_QUADBRAIN_CLI_TEMP\")"
+    },
+    {
+      "Path": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+      "Line": 412,
+      "Text": "?? Environment.GetEnvironmentVariable(\"MCPSERVER_ONESHOT_TEMP\");"
+    },
+    {
+      "Path": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+      "Line": 427,
+      "Text": "Directory.CreateDirectory(fallbackDirectory);"
+    },
+    {
+      "Path": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+      "Line": 434,
+      "Text": "/// to be writable; they set <c>MCPSERVER_QUADBRAIN_CLI_TEMP</c> instead of assuming the Windows service ACL."
+    },
+    {
+      "Path": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+      "Line": 452,
+      "Text": "Directory.CreateDirectory(path);"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+      "Line": 92,
+      "Text": "public async Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+      "Line": 103,
+      "Text": "public async Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+      "Line": 417,
+      "Text": "var configured = Environment.GetEnvironmentVariable(\"MCPSERVER_CODEX_ONESHOT_TEMP\")"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+      "Line": 418,
+      "Text": "?? Environment.GetEnvironmentVariable(\"MCPSERVER_CODEX_TRIAGE_TEMP\");"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+      "Line": 433,
+      "Text": "Directory.CreateDirectory(fallbackDirectory);"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+      "Line": 454,
+      "Text": "Directory.CreateDirectory(path);"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "Line": 54,
+      "Text": "public async Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "Line": 65,
+      "Text": "public async Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "Line": 494,
+      "Text": "var configured = Environment.GetEnvironmentVariable(\"MCPSERVER_ONESHOT_TEMP\")"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "Line": 495,
+      "Text": "?? Environment.GetEnvironmentVariable(\"MCPSERVER_CODEX_ONESHOT_TEMP\")"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "Line": 496,
+      "Text": "?? Environment.GetEnvironmentVariable(\"MCPSERVER_CODEX_TRIAGE_TEMP\");"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "Line": 511,
+      "Text": "Directory.CreateDirectory(fallbackDirectory);"
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "Line": 532,
+      "Text": "Directory.CreateDirectory(path);"
+    }
+  ]
+}

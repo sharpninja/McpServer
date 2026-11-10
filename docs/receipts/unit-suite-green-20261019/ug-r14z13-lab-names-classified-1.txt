@@ -1,0 +1,176 @@
+Now: 2026-11-06T06:04:11 head=f9b6bde8f08dc56e8fd40d9a22ce70657b7711bf range=9b099716..f9b6bde8 allPaths=5417 nonDocs=385
+PATTERN (?i)payton|legion|omarchy|kingd|sharpninja|thesharp|10\.42\.|[a-z]:[\\/]+github|lab-wsman|wsman|leg-vice|/mnt/legion|/home/sharpninja|pi-router|pi3-bridge
+RULES /home/sharpninja/.claude/scratch/pr82-review-20261019/lab-name-rules-r13z11.psd1 sha256=1AAF7FD3119D7BE29200DCA42E7C16C8ED3F57F0FF1362578CB995DC964A3F32 rules=9 coverage=every lab-name match on the line lies inside a span of the rule's Text
+RULE FLAGGED-EXCEPTION path=^tests/Build\.Tests/QBrainAiRebrandPhase1Tests\.cs$ text=(?i)E:\\github\\ reason=operator 2026-11-02 "Keep as flagged exceptions (Recommended)": shipped configuration contract, source-identifier-audit-20261102.json
+RULE FLAGGED-EXCEPTION path=^tests/QBrainAi\.Support\.Mcp\.Tests/Documentation/BugTriage139EighteenthEvidenceTests\.cs$ text=(?i)C:\\Users\\kingd\\ reason=operator 2026-11-02: historical receipt path under an exact-ledger assertion, source-identifier-audit-20261102.json
+RULE FLAGGED-EXCEPTION path=^tests/QBrainAi\.Support\.Mcp\.Tests/Documentation/QuadBrainSlotConfigurationTests\.cs$ text=Assert\.Equal\("kingd" reason=operator 2026-11-02: shipped configuration contract, source-identifier-audit-20261102.json
+RULE FLAGGED-EXCEPTION-SHIPPED path=^tests/Build\.Tests/QBrainAiRebrandPhase1Tests\.cs$ text=(?i)Server_Omarchy|the Omarchy database identity reason=shipped installer identity McpServer_Omarchy in docs/setup/install-local-service.ps1 (from develop), kept by TR-MCP-QBRAIN-006 criterion 3 ("McpServer_Omarchy and PAYTON-LEGION2 remain where they identify that database and that host."); under the operator 2026-11-02 option text "Historical evidence and shipped configuration stay unchanged in PR 87.", recorded as a fifth flagged exception of the same class (slice Z10, plan 27.36)
+RULE PUBLISHED-IDENTITY path=(any) text=(?i)https?://github\.com/sharpninja/|<authors>sharpninja</authors>|\bsharpninja\.(aiunit|mcpserver|qbrainai)\b|"sharpninja\." \+ "mcp"|"sharpninja/" \+ "mcp"|\bsharpninja-mcpserver-plugin-core\b reason=the published package, repository and author identity, by its published forms only: the GitHub repository URL, the package author, the NuGet ids SharpNinja.aiUnit, SharpNinja.McpServer.* and SharpNinja.QBrainAi.*, the split legacy-prefix constants, and the npm tarball sharpninja-mcpserver-plugin-core; not a lab machine, user, address or path
+RULE GENERIC-TEST-VALUE path=^tests/QBrainAi\.Repl\.Core\.Tests/TestSupport/TestOutputFolderContractTests\.cs$ text=(?i)(?<![a-z])c:[\\/]+github[\\/]+repo\b reason=a generic example checkout path (C:/GitHub/repo) in path-syntax rows, not the lab checkout paths F:/GitHub or E:/github
+RULE FALSE-POSITIVE path=(any) text=(?i)working_?directory reason=the identifier WorkingDirectory contains the letters kingd
+RULE FALSE-POSITIVE path=(any) text=(?i)https?://github\.com/(test|x|example-org|ollama)/ reason=a public or example GitHub URL; the drive-letter token matched its scheme
+RULE FALSE-POSITIVE path=(any) text=(?i)(?<!lab-)\bwsman\b reason=WSMan is the name of the Windows Remote Management (WS-Management) protocol, not a lab account; the lab account form lab-wsman is not covered
+PUBLISHED-IDENTITY KEPT Directory.Packages.props:51: <PackageVersion Include="SharpNinja.aiUnit" Version="2.1.3" />
+FALSE-POSITIVE ADDED build/Build.TestDependencies.cs:22: "https://github.com/ollama/ollama/releases/latest/download/";
+FALSE-POSITIVE ADDED build/InteractiveSessionPrecondition.cs:3: /// only from an interactive desktop session of the logged-on user; a WSMan, SSH or service session is refused
+FALSE-POSITIVE ADDED build/InteractiveSessionPrecondition.cs:14: + "is not interactive (for example a WSMan, SSH or service session). Run the target from a console in the "
+FALSE-POSITIVE KEPT build/LinuxServiceHelper.cs:44: private const string UnitProperties = "LoadState,Type,FragmentPath,DropInPaths,EnvironmentFiles,Environment,PassEnvironment,WorkingDirectory,ExecStart,MainPID,ActiveState
+FALSE-POSITIVE KEPT build/LinuxServiceHelper.cs:332: if (Decode(Value(unit, "WorkingDirectory")) != install)
+FALSE-POSITIVE KEPT build/LinuxServiceHelper.cs:333: throw new InvalidOperationException("Service WorkingDirectory must match the selected install path.");
+FALSE-POSITIVE KEPT src/QBrainAi.Client/WorkspaceIdentityPath.cs:313: WorkingDirectory = "/",
+PUBLISHED-IDENTITY KEPT src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj:14: <Authors>SharpNinja</Authors>
+PUBLISHED-IDENTITY KEPT src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj:18: <RepositoryUrl>https://github.com/SharpNinja/McpServer</RepositoryUrl>
+PUBLISHED-IDENTITY KEPT src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj:19: <PackageProjectUrl>https://github.com/SharpNinja/McpServer</PackageProjectUrl>
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/DesktopProcessSpawner.cs:50: "Spawning on desktop session: {FileName} in {WorkingDirectory}",
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/DesktopProcessSpawner.cs:51: startInfo.FileName, startInfo.WorkingDirectory);
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/DesktopProcessSpawner.cs:56: string.IsNullOrEmpty(startInfo.WorkingDirectory) ? null : startInfo.WorkingDirectory,
+FALSE-POSITIVE ADDED src/QBrainAi.Services/Services/GitHubCliService.cs:69: /// <param name="WorkingDirectory">The host-native workspace gh runs in, or null.</param>
+FALSE-POSITIVE ADDED src/QBrainAi.Services/Services/GitHubCliService.cs:71: internal sealed record GhInvocationPlan(bool Refused, string? Refusal, string? WorkingDirectory, string? Repository);
+FALSE-POSITIVE ADDED src/QBrainAi.Services/Services/GitHubCliService.cs:611: var workingDirectory = plan.WorkingDirectory is null ? null : Path.GetFullPath(plan.WorkingDirectory);
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:614: var processWorkingDirectory = string.IsNullOrWhiteSpace(repository) ? workingDirectory : null;
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:616: ? BuildGitSafeDirectoryEnvironment(workingDirectory)
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:626: new ProcessRunRequest(GhExe, args, token, processWorkingDirectory, environmentVariables),
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:638: if (string.IsNullOrWhiteSpace(processWorkingDirectory) && environmentVariables is null)
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:642: new ProcessRunRequest(GhExe, args, WorkingDirectory: processWorkingDirectory, EnvironmentVariables: environmentVariables),
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:646: private static IReadOnlyDictionary<string, string?>? BuildGitSafeDirectoryEnvironment(string? workingDirectory)
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:648: if (string.IsNullOrWhiteSpace(workingDirectory))
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:655: ["GIT_CONFIG_VALUE_0"] = Path.GetFullPath(workingDirectory)
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:687: private static string? TryResolveGitHubRepositoryFromGitConfig(string workingDirectory)
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:689: var configPath = TryResolveGitConfigPath(workingDirectory);
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:722: private static string? TryResolveGitConfigPath(string workingDirectory)
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:726: var dotGitPath = Path.Combine(Path.GetFullPath(workingDirectory), ".git");
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/GitHubCliService.cs:744: : Path.GetFullPath(Path.Combine(workingDirectory, gitDir));
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/VoiceConversationService.cs:1425: var workingDirectory = !string.IsNullOrWhiteSpace(sessionState?.WorkspacePath)
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/VoiceConversationService.cs:1427: : !string.IsNullOrWhiteSpace(opts.WorkingDirectory)
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/VoiceConversationService.cs:1428: ? opts.WorkingDirectory
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/VoiceConversationService.cs:1444: WorkingDirectory = workingDirectory,
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/VoiceConversationService.cs:1472: : options.WorkingDirectory ?? _workspaceAccessor.GetWorkspacePath();
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/VoiceConversationService.cs:1510: var workingDirectory = copilotOpts.WorkingDirectory;
+FALSE-POSITIVE KEPT src/QBrainAi.Services/Services/VoiceConversationService.cs:1534: workingDirectory,
+FALSE-POSITIVE KEPT tests/Build.Tests/BoundedProcessTests.cs:124: Assert.Equal("repo-root", startInfo.WorkingDirectory);
+PUBLISHED-IDENTITY KEPT tests/Build.Tests/BuildProjectSetTests.cs:33: Assert.Contains(actual, path => path.EndsWith(Path.Combine("SharpNinja.McpServer.Client", "SharpNinja.McpServer.Client.csproj"), StringComparison.OrdinalIgnoreCase));
+FALSE-POSITIVE KEPT tests/Build.Tests/BuildTargetTests.cs:110: const string buildCall = "ProcessTasks.StartProcess(\"npm\", \"run build\", workingDirectory: nodeCoreRoot.ToString())";
+PUBLISHED-IDENTITY KEPT tests/Build.Tests/BuildTargetTests.cs:151: Assert.Contains("sharpninja-mcpserver-plugin-core.tgz", source, StringComparison.Ordinal);
+PUBLISHED-IDENTITY KEPT tests/Build.Tests/BuildTargetTests.cs:472: // 1.x alias SharpNinja.McpServer.Repl (mcpserver-repl, TR-MCP-QBRAIN-003) are different tools.
+PUBLISHED-IDENTITY KEPT tests/Build.Tests/BuildTargetTests.cs:477: sharpninja.mcpserver.repl     1.4.41       mcpserver-repl
+PUBLISHED-IDENTITY KEPT tests/Build.Tests/BuildTargetTests.cs:484: Assert.Equal("1.4.41", Build.GetInstalledGlobalToolVersion(output, "SharpNinja.McpServer.Repl"));
+PUBLISHED-IDENTITY KEPT tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs:11: private const string LegacyPackagePrefix = "SharpNinja." + "Mcp" + "Server.";
+PUBLISHED-IDENTITY KEPT tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs:14: private const string LegacyRepoUrlSegment = "SharpNinja/" + "Mcp" + "Server";
+PUBLISHED-IDENTITY KEPT tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs:123: // Folder name is SharpNinja.QBrainAi.<Component>, which still contains the legacy token.
+FLAGGED-EXCEPTION-SHIPPED KEPT tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs:194: /// TEST-MCP-QBRAIN-007: Persisted names and the Omarchy database identity stay.
+FLAGGED-EXCEPTION-SHIPPED KEPT tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs:209: Assert.Contains("Mcp" + "Server_Omarchy", installer, StringComparison.Ordinal);
+FLAGGED-EXCEPTION KEPT tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs:224: Assert.Contains(@"E:\github\McpServer", appsettings, StringComparison.Ordinal);
+FLAGGED-EXCEPTION KEPT tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs:225: Assert.DoesNotContain(@"E:\github\QBrainAi", appsettings, StringComparison.Ordinal);
+FALSE-POSITIVE KEPT tests/Build.Tests/ServiceUpdateTests.cs:338: if (defect == "working-directory") f.WorkingDirectory = f.Data;
+FALSE-POSITIVE KEPT tests/Build.Tests/ServiceUpdateTests.cs:856: public string WorkingDirectory { get; set; }
+FALSE-POSITIVE KEPT tests/Build.Tests/ServiceUpdateTests.cs:892: WorkingDirectory = Install;
+FALSE-POSITIVE ADDED tests/Build.Tests/ServiceUpdateTests.cs:942: if (args[0] == "show") return Result(0, $"LoadState={LoadState}\nType=simple\nFragmentPath={Path.Combine(Root, "example.service")}\nDropInPaths={DropIns}\nEnvironmentFile
+PUBLISHED-IDENTITY KEPT tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs:14: /// (sharpninja-mcpserver-plugin-core-0.1.0.tgz) mislabeled 0.2.0 content after a breaking-change bump.
+PUBLISHED-IDENTITY KEPT tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs:18: private const string StableVendorFileName = "sharpninja-mcpserver-plugin-core.tgz";
+PUBLISHED-IDENTITY KEPT tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs:45: var versioned = Regex.Matches(source, @"sharpninja-mcpserver-plugin-core-\d+\.\d+\.\d+\.tgz");
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:58: new("Windows folder inside the checkout, other separator", "C:/GitHub/repo", @"C:\GitHub\repo\docs\out", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:59: new("Windows temporary folder", "C:/GitHub/repo", @"D:\Temp\memory-bench-stub-0123", true),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:60: new("Windows drive letter case alias inside the checkout", "C:/GitHub/repo", "c:/GitHub/repo/docs/out", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:61: new("Windows folder case alias inside the checkout", "C:/GitHub/repo", @"C:\github\REPO\docs\out", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:62: new("Windows checkout root in another case", "C:/GitHub/repo", "c:/github/repo", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:70: new("a POSIX folder under a drive-letter checkout is another path syntax", "C:/GitHub/repo", "/GitHub/repo/docs/out", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:71: new("a UNC folder under a drive-letter checkout is another location", "C:/GitHub/repo", "//Server/Share/out", true),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:72: new("a device path alias inside the checkout", "C:/GitHub/repo", @"\\?\C:\GitHub\repo\docs\out", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:73: new("a device namespace alias inside the checkout", "C:/GitHub/repo", @"\\.\C:\GitHub\repo\docs\out", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:74: new("a forward-slash device alias inside the checkout", "C:/GitHub/repo", "//?/C:/GitHub/repo/docs/out", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:76: new("an NT object path inside the checkout", "C:/GitHub/repo", @"\??\C:\GitHub\repo\docs", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:77: new("a device path on another drive is still refused", "C:/GitHub/repo", @"\\?\D:\Temp\out", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:78: new("a trailing-dot alias of a checkout segment", "C:/GitHub/repo", @"C:\GitHub\repo.\docs\out", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:79: new("a trailing-space alias of a checkout segment", "C:/GitHub/repo", @"C:\GitHub\repo \docs\out", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:80: new("a stream-syntax alias of the checkout", "C:/GitHub/repo", @"C:\GitHub\repo::$INDEX_ALLOCATION\docs", false),
+GENERIC-TEST-VALUE ADDED tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:85: new("a trailing-dot UNC server outside the checkout is still refused", "C:/GitHub/repo", "//Other./Share/out", false),
+FLAGGED-EXCEPTION KEPT tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139EighteenthEvidenceTests.cs:78: @"C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-eighteenth\final-verification\exact-final-head.yaml",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:225: WorkingDirectory: SourceRepositoryRoot()),
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:265: WorkingDirectory: SourceRepositoryRoot(),
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:291: WorkingDirectory: SourceRepositoryRoot()),
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:380: WorkingDirectory: SourceRepositoryRoot(),
+FLAGGED-EXCEPTION KEPT tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs:88: Assert.Equal("kingd", GetString(brainSlots, "CliRunAs"));
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:28: /// <param name="workingDirectory">Validated repository working directory.</param>
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:33: string workingDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:37: workingDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:46: /// <param name="workingDirectory">Validated repository working directory.</param>
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:51: string workingDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:55: var result = RunGit(workingDirectory, arguments, standardInput);
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:69: /// <param name="workingDirectory">Existing process working directory.</param>
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:77: string workingDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:83: workingDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:92: string workingDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:98: if (!Directory.Exists(workingDirectory))
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:99: throw new DirectoryNotFoundException(workingDirectory);
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:109: workingDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:118: workingDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:174: string workingDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:182: WorkingDirectory = Path.GetFullPath(workingDirectory),
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:142: WorkingDirectory = repositoryRoot,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:87: workingDirectory: @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:116: workingDirectory: @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:164: CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:171: var cwd = spawner.StartInfos[0].WorkingDirectory;
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:319: workingDirectory: @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:337: workingDirectory: @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:409: CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:447: CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:498: CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:538: CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:577: CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:619: CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:791: WorkingDirectory = source.WorkingDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:65: Assert.Equal("Q:\\__mcp_unit_test__\\QBrainAi", spawner.StartInfo.WorkingDirectory);
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:249: WorkingDirectory = "Q:\\__mcp_unit_test__\\QBrainAi",
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:82: "This case needs an interactive Windows session; a non-interactive runner (for example a WSMan session) cannot prove the interactive default-spawner path.");
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs:85: AssertPlan(row, new GhPlan(plan.Refused, plan.Refusal, plan.WorkingDirectory, plan.Repository));
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs:126: public async Task ListIssuesAsync_ForeignWorkspaceWithRepository_RunsWithRepoAndNoWorkingDirectory(WorkspacePathPlatform host, string foreignWorkspace)
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs:152: internal sealed record GhPlan(bool Refused, string? Refusal, string? WorkingDirectory, string? Repository);
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs:192: Assert.Null(plan.WorkingDirectory);
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs:198: Assert.Equal(row.Expected.WorkingDirectory, plan.WorkingDirectory);
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:28: var json = """[{"number":1,"title":"Bug","url":"https://github.com/test/1","state":"open"}]""";
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:56: var json = """[{"number":42,"title":"Feature","url":"https://github.com/test/pr/42","state":"open"}]""";
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:71: .Returns(new ProcessRunResult(0, "https://github.com/test/issues/5\n", null));
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:144: "url": "https://github.com/test/issues/42",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:192: .Returns(new ProcessRunResult(0, "https://github.com/test/issues/42", null));
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:314: var json = """[{"databaseId":101,"workflowName":"CI","displayTitle":"build","headBranch":"main","status":"completed","conclusion":"success","event":"push","url":"https://
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:339: "url": "https://github.com/x/actions/runs/202",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:350: "url": "https://github.com/x/actions/runs/202/job/1",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:450: public async Task ListIssuesAsync_WithWorkspaceAccessor_UsesWorkspaceWorkingDirectory()
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:503: public void WorkingDirectoryPredicates_DiscriminateSpecifiedRequests()
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:506: Assert.True(UsesHostWorkspace(new ProcessRunRequest("gh", "issue list", WorkingDirectory: Path.GetFullPath(host)), host));
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:508: Assert.False(UsesHostWorkspace(new ProcessRunRequest("git", "status", WorkingDirectory: Path.GetFullPath(host)), host));
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:511: Assert.True(OpensWorkspaceOnHost(new ProcessRunRequest("gh", "issue list", WorkingDirectory: reRooted)));
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:522: && request.WorkingDirectory == Path.GetFullPath(workspacePath);
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:526: && (request.WorkingDirectory is not null
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:575: .Returns(new ProcessRunResult(0, "https://github.com/example-org/example-repo/issues/123\n", null));
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:580: Repository = "https://github.com/example-org/example-repo.git"
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:599: && request.WorkingDirectory == Path.GetFullPath(workspacePath)
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs:59: workingDirectory: @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs:84: workingDirectory: @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs:97: workingDirectory: @"Q:\__mcp_unit_test__\QBrainAi",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:177: WorkingDirectory = "Q:\\__mcp_unit_test__\\QBrainAi",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:33: Assert.Equal(workflow.WorkingDirectoryPath, request.WorkingDirectory);
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:196: string workingDirectory = "docs/docfx",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:207: WorkingDirectory = workingDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:208: WorkingDirectoryPath = Path.GetFullPath(Path.Combine(workspaceRoot, workingDirectory)),
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:68: yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(workingDirectory: "../outside")]), "workingDirectory"];
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:251: Assert.Equal(Path.GetFullPath(Path.Combine(_workspaceRoot, "docs", "docfx")), workflow.WorkingDirectoryPath);
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:284: WriteWikiYamlObject(CreateConfigWithDocFx([CreateDocFxWorkflow(workingDirectory: "docs/docfx-link", outputRoot: "docs/docfx-link/_site")]));
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:343: string workingDirectory = "docs/docfx",
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:354: ["workingDirectory"] = workingDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:239: new ProcessRunRequest("dotnet", string.Empty, WorkingDirectory: workspace.Path, ArgumentList: ["tool", "restore"]),
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:483: workingDirectory: docs/docfx
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs:50: public async Task SubmitReportAsync_LinuxHost_WindowsWorkspace_IsNotPrefixedWithHostWorkingDirectory()
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs:87: public async Task SubmitReportAsync_LinuxHost_RelativeWorkspace_AnchorsAtHostWorkingDirectory()
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:243: WorkingDirectory = AppContext.BaseDirectory,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:144: WorkingDirectory = cwd,
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:40: public void CurrentDirectory_IsProcessWorkingDirectory()
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs:18: protected const string LinuxWorkingDirectory = SimulatedWorkspaceHosts.LinuxWorkingDirectory;
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs:28: public void LinuxHost_WindowsDrivePath_IsNotPrefixedWithWorkingDirectory()
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs:35: Assert.DoesNotContain(LinuxWorkingDirectory, result, StringComparison.Ordinal);
+FALSE-POSITIVE KEPT tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs:105: public void LinuxHost_RelativePath_ResolvesAgainstHostWorkingDirectory()
+FALSE-POSITIVE ADDED tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs:37: /// LinuxHost_WindowsDrivePath_IsNotPrefixedWithWorkingDirectory). FR-MCP-PATHNORM-001: the
+FALSE-POSITIVE ADDED tests/TestSupport.Shared/OwnedReplStart.cs:60: FileName = "dotnet", WorkingDirectory = workspacePath, UseShellExecute = false,
+FALSE-POSITIVE ADDED tests/TestSupport.Shared/ScratchQBrainAi.cs:248: WorkingDirectory = RootPath,
+END hits=163 PUBLISHED-IDENTITY=15 FALSE-POSITIVE=126 FLAGGED-EXCEPTION-SHIPPED=2 FLAGGED-EXCEPTION=4 GENERIC-TEST-VALUE=16 labNames=0

@@ -225,6 +225,14 @@ partial class Build
         });
 
     /// <summary>TR-MCP-SERVICEUPDATE-001: publishes before stopping an existing Linux unit and retains recovery state.</summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria startup-health-wait and lifecycle (slice Z3):
+    /// the health check waits through LinuxServiceHelper.WaitForStartupHealth (up to 10 minutes while the unit stays active)
+    /// before the final CheckHealth, because the redeploy of 2026-11-04 stopped a server that was still starting after the
+    /// 18 s that CheckHealth's defaults allow.</description></item>
+    /// </list>
+    /// </remarks>
     private void UpdateLinuxService(ServiceUpdatePlatform platform)
     {
         var identity = LinuxServiceHelper.RunCommand("id", ["-u"]);
@@ -271,6 +279,9 @@ partial class Build
             () => CopyBrainSlotRuntimeConfig(RootDirectory, InstallPath),
             () =>
             {
+                // 2026-11-04, TR-MCP-SERVICEUPDATE-001 startup-health-wait (slice Z3): wait while the unit stays active
+                // for the server to listen (it registers every workspace first) before the final health check.
+                helper.WaitForStartupHealth(ServiceName, () => LinuxServiceHelper.ProbeHealth(Port));
                 var health = WindowsServiceHelper.CheckHealth(Port);
                 if (!health.Healthy) throw new InvalidOperationException("Updated service HTTP health check failed.");
                 WindowsServiceHelper.RequireHealthyWorkspaces(WindowsServiceHelper.CheckWorkspaceHealth(InstallPath, Port));

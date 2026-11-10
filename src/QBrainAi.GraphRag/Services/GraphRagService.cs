@@ -43,7 +43,28 @@ internal sealed class GraphRagService : IGraphRagService
     private readonly IEmbeddingService _embeddingService;
     private readonly IVectorIndexService _vectorIndexService;
 
+    /// <summary>FR-MCP-079: the clock that stamps entity and relationship creation and update times and that the temporary cleanup reads once per run.</summary>
+    /// <remarks>2026-11-05, FR-MCP-079; TR-MCP-USECASE-018 AC-006: this entry documents the field, added on 2026-11-03 with the optional constructor clock (the sibling sweep of hostile validation round 10 finding R10-F3) and read by the temporary cleanup since slice Z4 (hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
+    private readonly TimeProvider _timeProvider;
+
     /// <summary>FR-MCP-078/079/080: Initializes the service with all required dependencies.</summary>
+    /// <param name="options">The GraphRAG options.</param>
+    /// <param name="ingestionOptions">The ingestion options.</param>
+    /// <param name="configuration">The application configuration.</param>
+    /// <param name="workspaceContext">The active workspace.</param>
+    /// <param name="contextSearchService">The context search used for queries.</param>
+    /// <param name="backendAdapters">The backend adapters.</param>
+    /// <param name="logger">The logger.</param>
+    /// <param name="dbContext">The database context.</param>
+    /// <param name="embeddingService">The embedding service.</param>
+    /// <param name="vectorIndexService">The vector index service.</param>
+    /// <param name="timeProvider">The clock that stamps entity and relationship creation and update times; null means the system clock.</param>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-03</term><description>FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended "This covers every recorded time a unit test checks, including the creation and update times a service stamps on a record it stores"): added the optional clock that stamps entity and relationship times, so a unit test can supply scripted times instead of comparing with the live clock or sleeping, because the sibling sweep before round 11 of hostile validation round 10 finding R10-F3 found GraphRagEntityCrudTests doing both (operator 2026-11-03: "don't gate on me between rounds"). Callers that pass no clock keep the system clock, so behavior is unchanged.</description></item>
+    /// </list>
+    /// </remarks>
     public GraphRagService(
         IOptions<GraphRagOptions> options,
         IOptions<IngestionOptions> ingestionOptions,
@@ -54,7 +75,8 @@ internal sealed class GraphRagService : IGraphRagService
         ILogger<GraphRagService> logger,
         McpDbContext dbContext,
         IEmbeddingService embeddingService,
-        IVectorIndexService vectorIndexService)
+        IVectorIndexService vectorIndexService,
+        TimeProvider? timeProvider = null)
     {
         _options = options.Value;
         _ingestionOptions = ingestionOptions.Value;
@@ -66,6 +88,7 @@ internal sealed class GraphRagService : IGraphRagService
         _dbContext = dbContext;
         _embeddingService = embeddingService;
         _vectorIndexService = vectorIndexService;
+        _timeProvider = timeProvider ?? TimeProvider.System;
     }
 
     public async Task<GraphRagStatusResponse> GetStatusAsync(
@@ -519,10 +542,11 @@ internal sealed class GraphRagService : IGraphRagService
     // ── Entity CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
 
     /// <inheritdoc />
+    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the creation and update times come from one reading of the service's clock instead of DateTime.UtcNow, so a unit test can supply scripted times (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     public async Task<GraphEntityResponse> CreateEntityAsync(GraphEntityRequest request, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(request);
-        var now = DateTime.UtcNow;
+        var now = _timeProvider.GetUtcNow().UtcDateTime;
         var entity = new GraphEntityEntity
         {
             Id = $"ge-{Guid.NewGuid():N}",
@@ -548,6 +572,7 @@ internal sealed class GraphRagService : IGraphRagService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the update time comes from the service's clock instead of DateTime.UtcNow, and the creation time is kept, so a unit test can supply scripted times (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     public async Task<GraphEntityResponse?> UpdateEntityAsync(string entityId, GraphEntityRequest request, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -559,7 +584,7 @@ internal sealed class GraphRagService : IGraphRagService
         entity.EntityType = request.EntityType;
         entity.Description = request.Description;
         entity.Metadata = request.Metadata;
-        entity.UpdatedAtUtc = DateTime.UtcNow;
+        entity.UpdatedAtUtc = _timeProvider.GetUtcNow().UtcDateTime;
 
         await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
         return MapEntityToResponse(entity);
@@ -602,6 +627,7 @@ internal sealed class GraphRagService : IGraphRagService
     // ── Relationship CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
 
     /// <inheritdoc />
+    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the creation and update times come from one reading of the service's clock instead of DateTime.UtcNow, the same rule as entities (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     public async Task<GraphRelationshipResponse> CreateRelationshipAsync(GraphRelationshipRequest request, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -614,7 +640,7 @@ internal sealed class GraphRagService : IGraphRagService
         if (!targetExists)
             throw new InvalidOperationException($"Target entity '{request.TargetEntityId}' does not exist.");
 
-        var now = DateTime.UtcNow;
+        var now = _timeProvider.GetUtcNow().UtcDateTime;
         var relationship = new GraphRelationshipEntity
         {
             Id = $"gr-{Guid.NewGuid():N}",
@@ -642,6 +668,7 @@ internal sealed class GraphRagService : IGraphRagService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the update time comes from the service's clock instead of DateTime.UtcNow, the same rule as entities (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     public async Task<GraphRelationshipResponse?> UpdateRelationshipAsync(string relationshipId, GraphRelationshipRequest request, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -655,7 +682,7 @@ internal sealed class GraphRagService : IGraphRagService
         rel.Description = request.Description;
         rel.Weight = request.Weight;
         rel.Metadata = request.Metadata;
-        rel.UpdatedAtUtc = DateTime.UtcNow;
+        rel.UpdatedAtUtc = _timeProvider.GetUtcNow().UtcDateTime;
 
         await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
         return MapRelationshipToResponse(rel);
@@ -940,9 +967,16 @@ internal sealed class GraphRagService : IGraphRagService
         await File.WriteAllTextAsync(readyArtifactPath, json, cancellationToken).ConfigureAwait(false);
     }
 
-    private static void CleanupStaleArtifacts(string graphRoot)
+    /// <summary>
+    /// Deletes the temporary (*.tmp) and partial (*.partial) files under the graph root, its output and its cache folder
+    /// whose last write is more than two hours before the service's clock, read once per cleanup.
+    /// </summary>
+    /// <param name="graphRoot">The graph root.</param>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the age is measured from the injected clock instead of DateTimeOffset.UtcNow, so a unit test supplies the reference time and the file times (hostile validation round 12 finding R12-F2; mock gate ug-r13z4-mockgate-b-1).</remarks>
+    private void CleanupStaleArtifacts(string graphRoot)
     {
         var maxAge = TimeSpan.FromHours(2);
+        var now = _timeProvider.GetUtcNow();
         foreach (var folder in new[]
                  {
                      graphRoot,
@@ -955,19 +989,24 @@ internal sealed class GraphRagService : IGraphRagService
 
             foreach (var file in Directory.EnumerateFiles(folder, "*.tmp", SearchOption.AllDirectories))
             {
-                TryDeleteIfStale(file, maxAge);
+                TryDeleteIfStale(file, maxAge, now);
             }
 
             foreach (var file in Directory.EnumerateFiles(folder, "*.partial", SearchOption.AllDirectories))
             {
-                TryDeleteIfStale(file, maxAge);
+                TryDeleteIfStale(file, maxAge, now);
             }
         }
     }
 
-    private static void TryDeleteIfStale(string filePath, TimeSpan maxAge)
+    /// <summary>Deletes <paramref name="filePath"/> when its last write is more than <paramref name="maxAge"/> before <paramref name="now"/>.</summary>
+    /// <param name="filePath">The file.</param>
+    /// <param name="maxAge">The age a file must exceed to be deleted.</param>
+    /// <param name="now">The reference time, read once by the cleanup.</param>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): takes the reference time from its caller instead of reading DateTimeOffset.UtcNow (hostile validation round 12 finding R12-F2).</remarks>
+    private static void TryDeleteIfStale(string filePath, TimeSpan maxAge, DateTimeOffset now)
     {
-        var age = DateTimeOffset.UtcNow - File.GetLastWriteTimeUtc(filePath);
+        var age = now - File.GetLastWriteTimeUtc(filePath);
         if (age > maxAge)
             File.Delete(filePath);
     }

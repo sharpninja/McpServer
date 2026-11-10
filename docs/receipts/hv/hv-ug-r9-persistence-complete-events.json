@@ -1,0 +1,44 @@
+[
+  {
+    "TimestampUtc": "2026-11-03T02:58:55.0627930Z",
+    "Method": "workflow.sessionlog.completeTurn",
+    "ReceiptName": "complete",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      "persisted"
+    ],
+    "Persisted": [
+      true
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:59:05.3756826Z",
+    "Method": "workflow.sessionlog.queryHistory",
+    "ReceiptName": "complete-history",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      null
+    ],
+    "Persisted": [
+      null
+    ]
+  },
+  {
+    "TimestampUtc": "2026-11-03T02:59:08.7345612Z",
+    "Method": "client.SessionLog.QueryAsync",
+    "ReceiptName": "complete-full",
+    "Types": [
+      "result"
+    ],
+    "Codes": [
+      null
+    ],
+    "Persisted": [
+      null
+    ]
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "TimestampUtc": "2026-10-20T01:11:26.3336172Z",
+  "TimestampLocal": "2026-10-19T20:11:26",
+  "Mode": "Files",
+  "Arguments": [
+    "tests/Build.Tests"
+  ],
+  "Offset": 0,
+  "Count": 200,
+  "ExitCode": 0,
+  "Output": "tests/Build.Tests/Build.Tests.csproj\ntests/Build.Tests/BoundedProcessTests.cs\ntests/Build.Tests/BoundedProcess.cs\ntests/Build.Tests/ConfigValidatorTests.cs\ntests/Build.Tests/BuildTargetTests.cs\ntests/Build.Tests/BuildProjectSetTests.cs\ntests/Build.Tests/DocumentationGuidanceTests.cs\ntests/Build.Tests/DocsSyncG8OverlayTests.cs\ntests/Build.Tests/IntegrationLanePreconditionTests.cs\ntests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs\ntests/Build.Tests/IntegrationLanePreconditionContract.cs\ntests/Build.Tests/OfficialPluginCoreSyncTestSupport.cs\ntests/Build.Tests/IntegrationLaneFilterTests.cs\ntests/Build.Tests/IntegrationLaneFilterMockGateTests.cs\ntests/Build.Tests/IntegrationLaneFilterContract.cs\ntests/Build.Tests/ProviderTestProvisioningTests.cs\ntests/Build.Tests/ProviderTestProvisioningMockGateTests.cs\ntests/Build.Tests/ProviderTestProvisioningContract.cs\ntests/Build.Tests/YamlObjectMutationTests.cs\ntests/Build.Tests/WarningSuppressionValidationTargetTests.cs\ntests/Build.Tests/WarningSuppressionScannerTests.cs\ntests/Build.Tests/WarningSuppressionApprovalValidatorTests.cs\ntests/Build.Tests/TrimArtifactCleanupTests.cs\ntests/Build.Tests/TrimAnalysisWarningInventoryTests.cs\ntests/Build.Tests/TraceabilityValidatorTests.cs\ntests/Build.Tests/TrCoverageConsistencyTests.cs\ntests/Build.Tests/SyncAgentPluginsVendorNameTests.cs\ntests/Build.Tests/SyncAgentPluginsPackNameTests.cs\ntests/Build.Tests/SyncAgentPluginsChecksumTests.cs\ntests/Build.Tests/SessionLifeUnitGateValidatorTests.cs\ntests/Build.Tests/SessionLifeUnitGateConsumerTests.cs\ntests/Build.Tests/ServiceUpdateTests.cs\ntests/Build.Tests/RequirementsWikiPublishScriptTests.cs\ntests/Build.Tests/QuadBrainDescriptorAbsenceTests.cs\ntests/Build.Tests/QBrainAiRebrandPhase1Tests.cs\ntests/Build.Tests/PowerShellInvocationTests.cs\ntests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs\ntests/Build.Tests/PluginParentResolutionTests.cs\ntests/Build.Tests/NukeParametersTests.cs\ntests/Build.Tests/MsixHelperTests.cs\ntests/Build.Tests/MigrationAssemblyObsoleteWarningTests.cs\ntests/Build.Tests/HandoffD3D5OverlayTests.cs\ntests/Build.Tests/GlobalUsings.cs\ntests/Build.Tests/GitVersionBumperTests.cs\ntests/Build.Tests/Fixtures/valid-instances.yaml"
+}

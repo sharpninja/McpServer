@@ -1,0 +1,176 @@
+{
+  "TimestampUtc": "2026-11-03T02:51:00.4531164Z",
+  "Method": "client.SessionLog.QueryAsync",
+  "SessionId": "Codex-20261103T011224Z-unitgreen-r9-hv",
+  "RequestId": "req-20261103T011329Z-unitgreen-r9",
+  "Data": [
+    {
+      "type": "result",
+      "payload": {
+        "result": {
+          "totalCount": 1,
+          "limit": 100,
+          "items": [
+            {
+              "turns": [
+                {
+                  "timestamp": "2026-11-03T01:13:30.0000000+00:00",
+                  "model": "codex",
+                  "requestId": "req-20261103T011329Z-unitgreen-r9",
+                  "todoId": "None",
+                  "tokenCount": 0,
+                  "planFile": "None",
+                  "actions": [
+                    {
+                      "order": 11846,
+                      "status": "completed",
+                      "description": "Decision: supplied evidence passes the initial byte-integrity check: 30 TRX and four selection files match manifest and committed blobs, 11810 actual results all passed, manifest SHA matches the request. No product acceptance follows from counts alone; source behavior, provenance, criteria and chronology remain under review. Read 1 profile file plus 11 Global and 3 Workspace memories, excluding MEMORY-PROCESS-007. The first openSession attempt omitted its required sessionId; I corrected my call using the plugin-generated cached id, then beginTurn and appendDialog persisted. gh pr view encountered a local mise installation failure; this is operational, not a product finding.",
+                      "filePath": "docs/receipts/hv/hv-ug-r9-trx-audit.json",
+                      "type": "design_decision"
+                    },
+                    {
+                      "order": 12432,
+                      "status": "completed",
+                      "description": "After context compaction I re-read the add-profile skill and all one non-skill profile markdown file in full, and freshly loaded all eleven included Global memories and all three Workspace memories through the Codex plugin, excluding MEMORY-PROCESS-007. Decision: latest explicit MEMORY-PROCESS-013 governs infrastructure handling; retained evidence merits govern the review, and I will not build or run tests. Review remains on the same session and request.",
+                      "filePath": "docs/receipts/hv/hv-ug-r9-trx-audit.json",
+                      "type": "design_decision"
+                    },
+                    {
+                      "order": 13639,
+                      "status": "completed",
+                      "description": "Primary source: Microsoft DateTimeOffset.TryParse documentation. Usage: read-only semantic review of RequirementStoredTimestamp.Read. The overload with AssumeUniversal still fills an absent calendar date from the current day. This is a candidate boundary defect, not a reviewer-executed test. URL https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tryparse?view=net-10.0 . No product code, build or tests executed.",
+                      "filePath": "https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tryparse?view=net-10.0",
+                      "type": "web_reference"
+                    },
+                    {
+                      "order": 14548,
+                      "status": "completed",
+                      "description": "Interim review decisions: preserve the supplied green gate counts as genuine; no observed TRX failure is being invented. The literal UG1 empty-dirty-list assertion is contradicted by the Linux final4 lane, Build.Tests and traceability receipts, whose listed paths are untracked review receipts only. Treat this as a disclosure correction, not a demand to rerun green code. The handoff current D-B text and slice R TODO still name superseded dispositions/evidence. TestGroups.CheckClasses uses display strings and unjoined definitions, which cannot establish that each named class executed; investigate as a contract gap under AC-5. The output-folder guard uses case-sensitive segments for Windows spellings, and the stored timestamp parser accepts incomplete date text using current calendar fields; verify these source-derived boundary defects without executing product code. Alternatives rejected: manufacturing failing test results, treating scanner coverage as a finding, or using infrastructure issues to lower acceptance scores.",
+                      "filePath": "docs/receipts/hv/hv-ug-r9-trx-audit.json",
+                      "type": "design_decision"
+                    },
+                    {
+                      "order": 15717,
+                      "status": "completed",
+                      "description": "Decision: retained run TRX hashes and result counts, including retrospective mock gates and declared failed bindings, are evidence of those actual runs; an empty-result negative-control TRX is not a successful gate. New static candidates are an ordinal substring health nonce check versus the exact-echo criterion and a Windows case-alias output containment gap. I will not treat source deductions as reviewer-executed tests. TestResults artifact writes are distinguished from tracked fixture/documentation writes because FR-MCP-TESTRESOURCE-001 permits disposable test-owned outputs. Alternatives rejected: equating every repository-local TestResults file with a prohibited documentation write, or rejecting evidence solely because receipts were retained retrospectively. Further source and requirement checks remain before final findings.",
+                      "filePath": "docs/receipts/hv/hv-ug-r9-trx-audit.json",
+                      "type": "design_decision"
+                    },
+                    {
+                      "order": 21038,
+                      "status": "completed",
+                      "description": "Static source review identifies concrete false acceptance paths in TestGroupExecution.CheckClasses (unjoined definitions and display-name substring), TemporaryInstanceChecks.CheckHealthAnswer (nonce substring), and CheckTestOutputFolder (case-sensitive Windows containment). Existing mock rows omit these inputs; retained green runs are valid but do not prove these boundary claims. Also reviewing the stored timestamp parser for read-date inference, the unowned Ollama model variable, current handoff and TODO propagation, and the exact scope of dated XML documentation. No product code or test was executed. Alternatives rejected: silently rerunning missing tests, treating the scanner as scored evidence, or treating valid TRX counters as proof of untested assertions.",
+                      "filePath": "docs/receipts/hv/hv-ug-r9-trx-audit.json",
+                      "type": "design_decision"
+                    },
+                    {
+                      "order": 22528,
+                      "status": "completed",
+                      "description": "Confirmed the explicit temporary-folder environment example remains in TR-MCP-USECASE-018 AC-006. Source inspection found SkillRegistryTests and TodoWorkflowSelectionStoreTests use ambient Path.GetTempPath and real file writes, and HermeticUserProfileFixture does so assembly-wide. I am checking the operator exclusion for the 417-candidate audit before deciding whether these belong in findings. No product code or tests have been executed. Existing concrete findings remain independent of that scope interpretation.",
+                      "filePath": "docs/receipts/hv/hv-ug-r9-trx-audit.json",
+                      "type": "design_decision"
+                    },
+                    {
+                      "order": 23105,
+                      "status": "completed",
+                      "description": "Confirmed material source counterexamples without executing product code: TestGroupExecution.CheckClasses accepts unexecuted TestMethod definitions or a requested class token in another test display name; health proof checks substring rather than the echoed nonce value; output-folder containment uses ordinal segments for Windows paths. Existing scripted contracts omit those inputs. The 417 physical-I/O candidate audit remains excluded and is not a basis for score deductions. The in-scope Ollama lane reads an unowned legacy model variable while provisioning prefers the canonical name. Current handoff D-B and TODO slice R binding metadata conflict with the canonical plan. Gate TRX counts remain valid; empty-dirtyPaths is a separate inaccurate subclaim.",
+                      "filePath": "docs/receipts/hv/hv-ug-r9-trx-audit.json",
+                      "type": "design_decision"
+                    },
+                    {
+                      "order": 23630,
+                      "status": "completed",
+                      "description": "Primary references read for source-derived counterexamples: Microsoft DateTimeOffset.TryParse documentation, https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tryparse?view=net-10.0, Remarks: missing date defaults to current day even when AssumeUniversal supplies the offset. Microsoft Naming Files, Paths, and Namespaces, https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file, Naming Conventions: default Windows path matching and volume letters are case-insensitive. Used for the timestamp no-clock and output-folder case-alias findings. These are static conclusions, not independently executed product tests.",
+                      "filePath": "https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tryparse?view=net-10.0",
+                      "type": "web_reference"
+                    }
+                  ],
+                  "response": "Actions appended.",
+                  "queryTitle": "Hostile validation round 9: unit suite green on both hosts",
+                  "queryText": "Independent hostile validation round 9 of IMPL-UNITGREEN-001 at e3eb8369481cbe2f49cb95798d9138193a18c1be. Entire request: docs/receipts/hv/20261102T190831-unitgreen-r9.request.jsonl. Review only; no builds, restores, tests, or product mutations. Inspect all UG1-UG36 and earlier closures, preserve full verdict, and treat infrastructure failures separately under MEMORY-PROCESS-013.",
+                  "status": "in_progress",
+                  "processingDialog": [
+                    {
+                      "content": "Decision: inspect supplied evidence only, without builds or tests, and exclude operator-overridden scanner and hostile-environment runs from scores. Rationale: explicit operator scope and policy 7.9. Alternatives rejected: independently running tests or treating infrastructure persistence as product failure. Bootstrap: read the requested add-profile skill and all 1 non-skill profile Markdown files; read full root marker without exposing API key; live rollout 01a19ef3-61d6-7dd2-8605-b39c64ac10eb turn_context at 2026-11-03T01:08:34.654Z proves gpt-6-astra, effort max.",
+                      "role": "model",
+                      "timestamp": "2026-11-03T01:13:32.5576615+00:00",
+                      "category": "decision"
+                    },
+                    {
+                      "content": "Decision: supplied evidence passes the initial byte-integrity check: 30 TRX and four selection files match manifest and committed blobs, 11810 actual results all passed, manifest SHA matches the request. No product acceptance follows from counts alone; source behavior, provenance, criteria and chronology remain under review. Read 1 profile file plus 11 Global and 3 Workspace memories, excluding MEMORY-PROCESS-007. The first openSession attempt omitted its required sessionId; I corrected my call using the plugin-generated cached id, then beginTurn and appendDialog persisted. gh pr view encountered a local mise installation failure; this is operational, not a product finding.",
+                      "role": "model",
+                      "timestamp": "2026-11-03T01:18:42.7688123+00:00",
+                      "category": "decision"
+                    },
+                    {
+                      "content": "After context compaction I re-read the add-profile skill and all one non-skill profile markdown file in full, and freshly loaded all eleven included Global memories and all three Workspace memories through the Codex plugin, excluding MEMORY-PROCESS-007. Decision: latest explicit MEMORY-PROCESS-013 governs infrastructure handling; retained evidence merits govern the review, and I will not build or run tests. Review remains on the same session and request.",
+                      "role": "model",
+                      "timestamp": "2026-11-03T01:24:28.8878661+00:00",
+                      "category": "decision"
+                    },
+                    {
+                      "content": "Primary source: Microsoft DateTimeOffset.TryParse documentation. Usage: read-only semantic review of RequirementStoredTimestamp.Read. The overload with AssumeUniversal still fills an absent calendar date from the current day. This is a candidate boundary defect, not a reviewer-executed test. URL https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tryparse?view=net-10.0 . No product code, build or tests executed.",
+                      "role": "model",
+                      "timestamp": "2026-11-03T01:36:36.4025548+00:00",
+                      "category": "decision"
+                    },
+                    {
+                      "content": "Interim review decisions: preserve the supplied green gate counts as genuine; no observed TRX failure is being invented. The literal UG1 empty-dirty-list assertion is contradicted by the Linux final4 lane, Build.Tests and traceability receipts, whose listed paths are untracked review receipts only. Treat this as a disclosure correction, not a demand to rerun green code. The handoff current D-B text and slice R TODO still name superseded dispositions/evidence. TestGroups.CheckClasses uses display strings and unjoined definitions, which cannot establish that each named class executed; investigate as a contract gap under AC-5. The output-folder guard uses case-sensitive segments for Windows spellings, and the stored timestamp parser accepts incomplete date text using current calendar fields; verify these source-derived boundary defects without executing product code. Alternatives rejected: manufacturing failing test results, treating scanner coverage as a finding, or using infrastructure issues to lower acceptance scores.",
+                      "role": "model",
+                      "timestamp": "2026-11-03T01:45:45.4290763+00:00",
+                      "category": "decision"
+                    },
+                    {
+                      "content": "Decision: retained run TRX hashes and result counts, including retrospective mock gates and declared failed bindings, are evidence of those actual runs; an empty-result negative-control TRX is not a successful gate. New static candidates are an ordinal substring health nonce check versus the exact-echo criterion and a Windows case-alias output containment gap. I will not treat source deductions as reviewer-executed tests. TestResults artifact writes are distinguished from tracked fixture/documentation writes because FR-MCP-TESTRESOURCE-001 permits disposable test-owned outputs. Alternatives rejected: equating every repository-local TestResults file with a prohibited documentation write, or rejecting evidence solely because receipts were retained retrospectively. Further source and requirement checks remain before final findings.",
+                      "role": "model",
+                      "timestamp": "2026-11-03T01:57:13.9735312+00:00",
+                      "category": "decision"
+                    },
+                    {
+                      "content": "Static source review identifies concrete false acceptance paths in TestGroupExecution.CheckClasses (unjoined definitions and display-name substring), TemporaryInstanceChecks.CheckHealthAnswer (nonce substring), and CheckTestOutputFolder (case-sensitive Windows containment). Existing mock rows omit these inputs; retained green runs are valid but do not prove these boundary claims. Also reviewing the stored timestamp parser for read-date inference, the unowned Ollama model variable, current handoff and TODO propagation, and the exact scope of dated XML documentation. No product code or test was executed. Alternatives rejected: silently rerunning missing tests, treating the scanner as scored evidence, or treating valid TRX counters as proof of untested assertions.",
+                      "role": "model",
+                      "timestamp": "2026-11-03T02:10:35.2581019+00:00",
+                      "category": "decision"
+                    },
+                    {
+                      "content": "Confirmed the explicit temporary-folder environment example remains in TR-MCP-USECASE-018 AC-006. Source inspection found SkillRegistryTests and TodoWorkflowSelectionStoreTests use ambient Path.GetTempPath and real file writes, and HermeticUserProfileFixture does so assembly-wide. I am checking the operator exclusion for the 417-candidate audit before deciding whether these belong in findings. No product code or tests have been executed. Existing concrete findings remain independent of that scope interpretation.",
+                      "role": "model",
+                      "timestamp": "2026-11-03T02:25:25.7311611+00:00",
+                      "category": "decision"
+                    },
+                    {
+                      "content": "Confirmed material source counterexamples without executing product code: TestGroupExecution.CheckClasses accepts unexecuted TestMethod definitions or a requested class token in another test display name; health proof checks substring rather than the echoed nonce value; output-folder containment uses ordinal segments for Windows paths. Existing scripted contracts omit those inputs. The 417 physical-I/O candidate audit remains excluded and is not a basis for score deductions. The in-scope Ollama lane reads an unowned legacy model variable while provisioning prefers the canonical name. Current handoff D-B and TODO slice R binding metadata conflict with the canonical plan. Gate TRX counts remain valid; empty-dirtyPaths is a separate inaccurate subclaim.",
+                      "role": "model",
+                      "timestamp": "2026-11-03T02:31:02.4347449+00:00",
+                      "category": "decision"
+                    },
+                    {
+                      "content": "Primary references read for source-derived counterexamples: Microsoft DateTimeOffset.TryParse documentation, https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tryparse?view=net-10.0, Remarks: missing date defaults to current day even when AssumeUniversal supplies the offset. Microsoft Naming Files, Paths, and Namespaces, https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file, Naming Conventions: default Windows path matching and volume letters are case-insensitive. Used for the timestamp no-clock and output-folder case-alias findings. These are static conclusions, not independently executed product tests.",
+                      "role": "model",
+                      "timestamp": "2026-11-03T02:36:27.4415204+00:00",
+                      "category": "decision"
+                    }
+                  ]
+                }
+              ],
+              "agentExecutablePath": "/home/sharpninja/.local/bin/codex",
+              "turnCount": 1,
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.166.0",
+              "sessionId": "Codex-20261103T011224Z-unitgreen-r9-hv",
+              "sourceType": "Codex",
+              "title": "Hostile validation round 9: unit suite green on both hosts",
+              "agentSessionId": "01a19ef3-61d6-7dd2-8605-b39c64ac10eb",
+              "status": "in_progress",
+              "lastUpdated": "2026-11-03T02:36:32.0000000+00:00",
+              "started": "2026-11-03T01:13:30.0000000+00:00"
+            }
+          ],
+          "offset": 0
+        },
+        "requestId": "req-20261103T025101Z-1a4c"
+      }
+    },
+    null
+  ]
+}

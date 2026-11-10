@@ -1,0 +1,19 @@
+{
+  "type": "result",
+  "payload": {
+    "result": {
+      "method": "workflow.sessionlog.appendDialog",
+      "code": "persisted",
+      "childStderr": "",
+      "agent": "Codex",
+      "sessionId": "Codex-20261103T122431Z-plugin-session",
+      "failsafePath": "",
+      "retryable": false,
+      "requestId": "req-20261103T122503Z-unitgreen-r10",
+      "degraded": false,
+      "persisted": true,
+      "queued": false,
+      "message": "appendDialog persisted requestId=req-20261103T122503Z-unitgreen-r10"
+    }
+  }
+}

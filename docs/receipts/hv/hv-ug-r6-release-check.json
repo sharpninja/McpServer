@@ -1,0 +1,226 @@
+{
+  "TimestampUtc": "2026-10-26T13:53:22.8076433Z",
+  "TimestampLocal": "2026-10-26T08:53:22",
+  "Head": "3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b",
+  "HeadExitCode": 0,
+  "TrackedStatus": [],
+  "StatusExitCode": 0,
+  "FullResultExact": true,
+  "ResponseExact": true,
+  "TurnStatus": "completed",
+  "PartCount": 18,
+  "CharacterCount": 213458,
+  "Sha256": "B5A1387BB6E0691A4E6F5ED29BE6C04D3F98E93337FC1D3BAC6ECF9FC03CCF6B",
+  "ManifestChecks": [
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-identity.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-trx-audit.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-gate-provenance.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-own-results.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-root-links.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-criterion-changes.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-effective.txt",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-citation-audit.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-hygiene.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-secret-audit.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-env-coverage.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-windows-state.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-edit-chronology.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-operator-decisions.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-final-audit.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-pr87.json",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-pr-body.txt",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-commands.jsonl",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-IMPL-UNITGREEN-001.txt",
+      "exists": true,
+      "hashMatches": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-IMPL-SCANNERALIAS-001.txt",
+      "exists": true,
+      "hashMatches": true
+    }
+  ],
+  "OwnEvidenceFiles": 215,
+  "OversizedFiles": [],
+  "SecretHitCount": 0,
+  "ProgressCount": 17,
+  "ProgressEntries": [
+    {
+      "type": "hv_progress",
+      "percentComplete": 0,
+      "etaSeconds": 7200,
+      "note": "Establishing reviewer identity, required profile reads, marker handling, and an independent audit session"
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 2,
+      "etaSeconds": 7200,
+      "note": "Completing bootstrap and verifying the exact model and reasoning effort"
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 5,
+      "etaSeconds": 6900,
+      "note": "Auditing requirements, TODO state, commit history, PR disclosures, and the plan before reattacking the fixes"
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 10,
+      "etaSeconds": 6600,
+      "note": "Checking strengthened criteria, scan-root reachability, environment-test moves, and historical gate corrections"
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 15,
+      "etaSeconds": 6200,
+      "note": "Verifying raw test receipts, criterion mappings, exact test moves, and the independent hostile run"
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 22,
+      "etaSeconds": 5800,
+      "note": "Auditing raw test inventories, requirement mappings, and remaining environment dependencies."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 27,
+      "etaSeconds": 5500,
+      "note": "Verifying requirement-first ordering and independently retesting linked scan roots."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 32,
+      "etaSeconds": 5100,
+      "note": "Checking earlier finding closures, signed history, and the expanded hostile run."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 38,
+      "etaSeconds": 4700,
+      "note": "Recording the remaining environment-dependent unit tests and completing the other claim audits."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 44,
+      "etaSeconds": 4200,
+      "note": "Finishing gate provenance, historical regression checks, and traceability review."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 51,
+      "etaSeconds": 3600,
+      "note": "Checking remaining requirement citations and Windows source provenance."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 62,
+      "etaSeconds": 2700,
+      "note": "Completing the claim-by-claim verdict and persistence receipts."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 70,
+      "etaSeconds": 2100,
+      "note": "Finalizing findings and assembling the complete verdict receipts."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 76,
+      "etaSeconds": 1800,
+      "note": "Consolidating the 14-test environment finding and the traceability finding into the final receipts."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 78,
+      "etaSeconds": 1500,
+      "note": "Finalizing source locations, claim verdicts, and complete session-log receipts."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 86,
+      "etaSeconds": 900,
+      "note": "Writing all 22 claim verdicts, 19 closure entries, command evidence, and the complete persisted result."
+    },
+    {
+      "type": "hv_progress",
+      "percentComplete": 96,
+      "etaSeconds": 180,
+      "note": "Full result readback matches; completing the reviewer turn and final receipt checks."
+    }
+  ],
+  "Problems": [],
+  "AllChecksPassed": true
+}

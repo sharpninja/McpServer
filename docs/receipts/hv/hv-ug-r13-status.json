@@ -1,0 +1,39 @@
+{
+  "status": "available",
+  "failsafeDir": "/tmp/hv-ug-r13-plugin-01a1af63/failsafe",
+  "agent": "Codex",
+  "pendingTurnCount": 0,
+  "hasCurrentTurn": true,
+  "namespaces": [
+    "workflow.sessionlog",
+    "workflow.todo",
+    "workflow.requirements",
+    "workflow.triage",
+    "workflow.graphrag",
+    "workflow.memory",
+    "workflow.failsafe"
+  ],
+  "cacheDir": "/tmp/hv-ug-r13-plugin-01a1af63",
+  "failsafeCount": 0,
+  "requirementMethods": [
+    "workflow.requirements.listLayers",
+    "workflow.requirements.createLayer",
+    "workflow.requirements.updateLayer",
+    "workflow.requirements.effective",
+    "workflow.requirements.planRecovery",
+    "workflow.requirements.applyRecovery",
+    "workflow.requirements.getRecovery"
+  ],
+  "pendingCount": 0,
+  "requirementClientMethods": [
+    "client.Requirements.ListRequirementLayersAsync",
+    "client.Requirements.CreateRequirementLayerAsync",
+    "client.Requirements.UpdateRequirementLayerAsync",
+    "client.Requirements.GetEffectiveRequirementsAsync",
+    "client.Requirements.PlanRecoveryAsync",
+    "client.Requirements.ApplyRecoveryAsync",
+    "client.Requirements.GetRecoveryAsync"
+  ],
+  "hasSession": true,
+  "failsafeQuarantineCount": 0
+}

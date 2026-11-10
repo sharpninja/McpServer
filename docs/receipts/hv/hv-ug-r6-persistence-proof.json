@@ -1,0 +1,29 @@
+{
+  "TimestampUtc": "2026-10-26T13:52:01.4295364Z",
+  "TimestampLocal": "2026-10-26T08:52:01",
+  "SessionId": "Codex-20261026T122926Z-unitgreen-r6",
+  "RequestId": "req-20261026T123039Z-unitgreen-r6",
+  "ThreadId": "01a1782b-67b5-7ac0-b313-b48aa91fbca2",
+  "Model": "gpt-6-astra",
+  "TurnModel": "gpt-6-astra",
+  "TurnStatus": "completed",
+  "PartCount": 18,
+  "ExpectedCharacterCount": 213458,
+  "RestoredCharacterCount": 213458,
+  "ExpectedSha256": "B5A1387BB6E0691A4E6F5ED29BE6C04D3F98E93337FC1D3BAC6ECF9FC03CCF6B",
+  "RestoredSha256": "B5A1387BB6E0691A4E6F5ED29BE6C04D3F98E93337FC1D3BAC6ECF9FC03CCF6B",
+  "ExactTextMatch": true,
+  "ResponseExactMatch": true,
+  "MarkdownSha256": "1FE8BC79DB9F1731FA69BDD72FF41A46435527C797C179C76F06AFF343E33C2E",
+  "JsonSha256": "1C15000F230D1A3E1EDE3C96160FF334E9D207B7693EB73A7D084429CA545159",
+  "HistoryMethod": "client.SessionLog.QueryAsync through installed Codex plugin",
+  "HistoryReceipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-history-final.json",
+  "DesignDecisionCount": 6,
+  "Blockers": [
+    "R6-F1: fourteen ambient CLI-temp-dependent unit tests remain.",
+    "R6-F2: five active test requirement citations are absent from both getters and effective view."
+  ],
+  "OverallVerdict": "DISAGREE",
+  "RequestJsonl": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261026T072431-unitgreen-r6.request.jsonl",
+  "ResponseJsonl": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261026T072431-unitgreen-r6.response.jsonl"
+}

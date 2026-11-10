@@ -1,0 +1,7 @@
+Now: 2026-11-05T17:57:34 worktree=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 head=becb0742693de240dce596a8eec4eb41c99a7c1d revision=HEAD map=PAYTON-LEGION2=proxy-a,PAYTON-DESKTOP=proxy-b
+FILE tests/QBrainAi.Support.Mcp.Tests/Controllers/FederationControllerTests.cs codeReplaced=14 docAdded=6 docRemoved=0 unmatched=0 oldTokensLeft=0 sha256=EB8B9F6D8301A0A8EE2B1BA11F46C3AFB3E49071F488CA80E4250413EEE28107
+FILE tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs codeReplaced=12 docAdded=1 docRemoved=0 unmatched=0 oldTokensLeft=0 sha256=CA7FC33453075331C0011ACA92C10DD21084548A03053CDE95AF3680C64086B1
+FILE tests/QBrainAi.Support.Mcp.Tests/Services/FederationFanoutSyncServiceTests.cs codeReplaced=14 docAdded=1 docRemoved=0 unmatched=0 oldTokensLeft=0 sha256=399C56A0507C55F44A341B5693012CD535976BA7B29B1E1EE1D6BF600F6AC983
+FILE tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs codeReplaced=9 docAdded=1 docRemoved=0 unmatched=0 oldTokensLeft=0 sha256=9B3768D429044A07661D61F03B13B3A7AC415B6AC9C37C237F7B55E12BA6F39D
+FILE src/QBrainAi.Repl.Core/RequirementsWorkflow.cs codeReplaced=0 docAdded=1 docRemoved=1 unmatched=0 oldTokensLeft=0 sha256=D9BE11E858A7D5828CF0BB754E2E58B3FCC95A7BF7113220D44BC4DD69CA9BAA
+END failedFiles=0

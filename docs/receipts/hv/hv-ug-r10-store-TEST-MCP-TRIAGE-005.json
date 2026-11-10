@@ -1,0 +1,20 @@
+{
+  "payload": {
+    "requestId": "req-20261103T123155Z-ba5e",
+    "result": {
+      "createdAt": "2026-11-03T12:31:56.8353224+00:00",
+      "area": "MCP",
+      "title": "Test TEST-MCP-TRIAGE-005",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-11-03T12:31:56.8354445+00:00",
+      "testType": "unit",
+      "status": "pending",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "id": "TEST-MCP-TRIAGE-005",
+      "description": "Invalid agent output or failed agent run creates no TODO and leaves inspectable failure state."
+    },
+    "deprecated": true
+  },
+  "type": "result"
+}

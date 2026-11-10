@@ -1,0 +1,31 @@
+{
+  "timestampLocal": "2026-10-27T04:09:22",
+  "tool": "rg",
+  "arguments": [
+    "-n",
+    "Environment|const string|Variable|Names|Timeout|Delay",
+    "src/QBrainAi.QBAgent/QBAgentCliOptions.cs",
+    "src/QBrainAi.Common.AgentCli/ProductEnvironment.cs",
+    "src/QBrainAi.Support.Mcp/Services/OneShotCliAgentExecutionStrategyBase.cs",
+    "src/QBrainAi.Support.Mcp/Services/CodexAgentExecutionStrategy.cs"
+  ],
+  "exitCode": 2,
+  "output": [
+    "src/QBrainAi.Common.AgentCli/ProductEnvironment.cs:8:public static class ProductEnvironment",
+    "src/QBrainAi.Common.AgentCli/ProductEnvironment.cs:11:    public const string UntrustedSentinel = \"MCP_UNTRUSTED\";",
+    "src/QBrainAi.Common.AgentCli/ProductEnvironment.cs:22:            return Environment.GetEnvironmentVariable(UntrustedSentinel);",
+    "src/QBrainAi.Common.AgentCli/ProductEnvironment.cs:27:            var modern = Environment.GetEnvironmentVariable(modernName);",
+    "src/QBrainAi.Common.AgentCli/ProductEnvironment.cs:32:        return Environment.GetEnvironmentVariable(legacyName);",
+    "rg: src/QBrainAi.Support.Mcp/Services/OneShotCliAgentExecutionStrategyBase.cs: No such file or directory (os error 2)",
+    "rg: src/QBrainAi.Support.Mcp/Services/CodexAgentExecutionStrategy.cs: No such file or directory (os error 2)",
+    "src/QBrainAi.QBAgent/QBAgentCliOptions.cs:6:    internal const string ShowIntentFlag = \"--show-intent\";",
+    "src/QBrainAi.QBAgent/QBAgentCliOptions.cs:7:    internal const string HideIntentFlag = \"--hide-intent\";",
+    "src/QBrainAi.QBAgent/QBAgentCliOptions.cs:8:    internal const string ResumeFlag = \"--resume\";",
+    "src/QBrainAi.QBAgent/QBAgentCliOptions.cs:9:    internal const string ResumeLatest = \"latest\";",
+    "src/QBrainAi.QBAgent/QBAgentCliOptions.cs:10:    internal const string ShowIntentEnv = \"QBAGENT_SHOW_INTENT\";",
+    "src/QBrainAi.QBAgent/QBAgentCliOptions.cs:11:    internal const string HideIntentEnv = \"QBAGENT_HIDE_INTENT\";",
+    "src/QBrainAi.QBAgent/QBAgentCliOptions.cs:94:        var env = environment ?? ReadProcessEnvironment();",
+    "src/QBrainAi.QBAgent/QBAgentCliOptions.cs:100:    private static Dictionary<string, string?> ReadProcessEnvironment()",
+    "src/QBrainAi.QBAgent/QBAgentCliOptions.cs:104:            map[name] = Environment.GetEnvironmentVariable(name);"
+  ]
+}

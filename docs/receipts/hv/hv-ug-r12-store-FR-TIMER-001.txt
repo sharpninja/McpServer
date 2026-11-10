@@ -1,0 +1,27 @@
+type: result
+payload:
+  requestId: req-20261105T075308Z-582f
+  result:
+    id: FR-TIMER-001
+    title: Stop and Dispose take precedence over overlapping Restart
+    description: Manager Core and UI.Core timer handles ignore Restart overlapping Stop or Dispose, cancel in-flight callbacks without deadlock, allow a new fresh-token Restart after Stop returns, and never restart after Dispose. Operator approved 2026-10-08 in the Phase 2 rebrand repair.
+    status: pending
+    priority: high
+    area: TIMER
+    acceptanceCriteria:
+    - id: fr-timer-001-ac-001
+      text: Restart while Stop or Dispose is in progress cannot create a new callback run or change the stored interval.
+      isSatisfied: false
+    - id: fr-timer-001-ac-002
+      text: Stop/Dispose cancel the active token before waiting for a synchronous callback and return without external rescue when that callback cooperates with cancellation.
+      isSatisfied: false
+    - id: fr-timer-001-ac-003
+      text: Restart after Stop returns uses a fresh uncanceled token; Dispose is final and repeated stop/dispose calls remain safe.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T07:53:09.8985957+00:00
+    updatedAt: 2026-11-05T07:53:09.8987031+00:00
+  deprecated: true
+
+---
+

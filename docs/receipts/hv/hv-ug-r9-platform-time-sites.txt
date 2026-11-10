@@ -1,0 +1,106 @@
+tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs:51:        var workspacePath = OperatingSystem.IsWindows() ? @"Q:\fixture\McpServer" : "/var/lib/McpServer";
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs:134:        if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs:336:            ? new CallSiteResult(TimedOut, string.Format(CultureInfo.InvariantCulture, messageFormat, timeout.TotalSeconds))
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:49:            OperatingSystem.IsWindows() || OperatingSystem.IsLinux(),
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:65:        var applicableInventory = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:68:        var unsupportedInventory = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:91:            OperatingSystem.IsWindows() ? 11 : 37,
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:105:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:149:            stopwatch.Elapsed < TimeSpan.FromSeconds(8),
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:150:            $"Descendant-held pipe cleanup took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:162:            var executable = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:165:            IReadOnlyList<string> arguments = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:176:            if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:254:    [InlineData("Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:305:        Assert.DoesNotMatch(original, "Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");");
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs:46:        var expected = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs:62:            : OperatingSystem.IsLinux()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:183:                stopwatch.Elapsed < TimeSpan.FromSeconds(7),
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:184:                $"Creation-time descendant cleanup took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs:143:            returnedAfter = stopwatch.Elapsed;
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs:171:                stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs:172:                $"The held preflight was not bounded by the open's timeout: {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs:238:        Assert.InRange(stopwatch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:240:        var fileName = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:29:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:371:        Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"FIFO traversal took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:397:        Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"FUSE rejection took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:410:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:450:            Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"Pinned-root traversal took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:471:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:518:                Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"Caller {index} took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:583:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:639:                                return (caller, stopwatch.Elapsed);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:645:                    result.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:646:                    $"Caller {result.caller} took {result.Elapsed}."));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:676:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:707:            Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"Pinned-root export took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:26:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:51:            stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:52:            $"Physical-alias rejection took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:65:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:117:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:181:            stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:182:            $"SQLite FUSE rejection exceeded one second: {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:198:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:235:            stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:236:            $"Rejection of a link below the FUSE root took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:250:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:314:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:384:            stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:385:            $"Atomic SQLite rejection exceeded one second: {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:396:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:490:            stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:491:            $"Public resolution exceeded its one-second bound: {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:508:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:716:        OperatingSystem.IsLinux() &&
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:908:        while (stopwatch.Elapsed < TimeSpan.FromSeconds(5))
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs:43:        var foreign = OperatingSystem.IsWindows() ? "/fixture/workspaces/McpServer" : @"C:\Users\fixture-user";
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:103:    protected override WorkspacePathPlatform RunningPlatform => OperatingSystem.IsWindows() ? WorkspacePathPlatform.Windows : WorkspacePathPlatform.CaseSensitive;
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:107:    protected override string NativeSample => OperatingSystem.IsWindows() ? @"C:\svc\.\repo" : "/srv/./repo";
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:109:    protected override string NativeSampleExpected => OperatingSystem.IsWindows() ? "C:/svc/repo" : "/srv/repo";
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthSqliteConsumerTests.cs:111:            $"SQLite public timeout exceeded one second; elapsed {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:105:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:132:        else if (OperatingSystem.IsLinux())
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:186:        var minimumInvocationIncrease = OperatingSystem.IsWindows() ? 1 : 9;
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:191:            stopwatch.Elapsed < TimeSpan.FromSeconds(5),
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:192:            $"Repeated native resolution took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:30:            if (OperatingSystem.IsLinux())
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:57:            if (OperatingSystem.IsLinux())
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:286:            invocation.Elapsed < TimeSpan.FromMilliseconds(250),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:287:            $"Async resolution blocked its caller for {invocation.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:451:        while (elapsed.Elapsed < timeout)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:529:            OperatingSystem.IsLinux() &&
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:625:            while (deadline.Elapsed < TimeSpan.FromSeconds(5))
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthSqliteTests.cs:122:            $"SQLite public timeout exceeded one second; elapsed {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:105:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:204:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceWindowsProcess.cs:275:            while (stopwatch.Elapsed < timeout);
+tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:71:    /// The test imports the whole process environment (<c>AddEnvironmentVariables</c>), so it is an integration test
+tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:101:            configuration.AddEnvironmentVariables();
+tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryTests.cs:492:            Assert.True(clock.Elapsed < TimeSpan.FromSeconds(3), $"Recovery save budget took {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:23:        Assert.True(OperatingSystem.IsWindows());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:105:            $"Public identity resolution did not complete within one second; elapsed {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:120:        Assert.True(OperatingSystem.IsWindows());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:183:        Assert.True(OperatingSystem.IsWindows());
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsFourteenthLinuxNativeTests.cs:39:            Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(2), $"Opening the FIFO took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:61:            Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"Timeout took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:63:            if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:85:        if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:330:            if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:280:        var expectedNativeError = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:525:            if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs:26:        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(8), $"Budget took {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs:27:        Assert.True(clock.Elapsed >= TimeSpan.FromSeconds(4), $"Budget expired too early: {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs:63:        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(2), $"Explicit budget took {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:480:        var builder = Host.CreateApplicationBuilder();
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs:158:        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(4), $"SaveChanges budget took {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs:159:        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(5), $"Submit still used the 5 second intake budget: {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs:124:        Assert.True(clock.Elapsed >= TimeSpan.FromSeconds(5), $"Save finished before the old 5 second cancel: {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs:125:        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"Save exceeded the 30 second Submit budget: {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs:77:            if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogReplaceSectionRetryableTests.cs:169:        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(8), $"SaveChanges budget took {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:90:        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(8), $"Intake hung for {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs:114:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs:121:        if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogDenseGraphTests.cs:86:            Assert.True(clock.Elapsed < TimeSpan.FromSeconds(3), $"Graph load budget took {clock.Elapsed}.");

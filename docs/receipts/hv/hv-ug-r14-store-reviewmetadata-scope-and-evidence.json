@@ -1,0 +1,18 @@
+{
+  "timestampUtc": "2026-11-06T22:49:26.6400122+00:00",
+  "timestampLocal": "2026-11-06T16:49:29",
+  "method": "client.SessionLog.PatchTurnAsync",
+  "recordId": "",
+  "response": {
+    "payload": {
+      "requestId": "req-20261106T224927Z-4702",
+      "result": {
+        "requestId": "req-20261106T220114Z-unitgreen-r14",
+        "sessionId": "Codex-20261106T215955Z-plugin-session",
+        "agent": "Codex",
+        "turnId": 32889
+      }
+    },
+    "type": "result"
+  }
+}

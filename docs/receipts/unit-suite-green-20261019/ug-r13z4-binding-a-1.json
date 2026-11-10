@@ -1,0 +1,58 @@
+{
+  "name": "ug-r13z4-binding-a-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "2103243cfb4155e201b0fe1fd257ebc093800d86",
+  "dirtyPaths": [
+    " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1/",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Repl.Core.Tests:OwnedInstanceKeyIdentityContractTests,OwnedInstanceEnvironmentTests,OwnedInstanceIsolationContractTests,OwnedInstanceIsolationBindingTests,OwnedInstanceProviderSettingContractTests,TemporaryInstanceChecksTests,OwnedDatabaseSelectionTests",
+    "--test-run-id",
+    "ug-r13z4-binding-a-1"
+  ],
+  "startedLocal": "2026-11-05T03:02:33",
+  "endedLocal": "2026-11-05T03:02:44",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 80,
+  "passed": 80,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4-binding-a-1/groups/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "AD044AECFC5F665EBB57F128445554A7271DCFCEE053E6C36938F8083302BC7A",
+      "total": 80,
+      "passed": 80,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs",
+      "sha256": "D36DE8AC5495AAE86C6AF0E43D480C2379C5926FA9AAA99C396F30715AD915FA"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs",
+      "sha256": "8420D32AEC291ADDDF087749BE115DFC1DA0163F3B1305FECF2F2431FFA4C5DC"
+    },
+    {
+      "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+      "sha256": "85E5CCC83D9C134893FF087459140FA0153C564EAE2404519EA33433331BFAC5"
+    }
+  ],
+  "writtenLocal": "2026-11-05T03:03:53",
+  "writtenBy": "ClaudeCode"
+}

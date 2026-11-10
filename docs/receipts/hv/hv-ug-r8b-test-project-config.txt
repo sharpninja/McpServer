@@ -1,0 +1,80 @@
+tests/Directory.Build.targets:5:    <Compile Include="$(MSBuildThisFileDirectory)Validation.Shared\ValidationAuth.cs"
+tests/Directory.Build.targets:12:    <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\OllamaServerController.cs"
+tests/Directory.Build.targets:20:    <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\TemporaryInstanceChecks.cs"
+tests/Directory.Build.targets:28:    <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\ScratchQBrainAi.cs"
+tests/Directory.Build.targets:30:    <Compile Include="$(MSBuildThisFileDirectory)Shared\TestRepositoryRoot.cs"
+tests/Directory.Build.targets:34:    <Compile Include="$(MSBuildThisFileDirectory)QBrainAi.Support.Mcp.IntegrationTests\ScratchSqliteSchema.cs"
+tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj:9:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj:23:    <ProjectReference Include="..\..\src\QBrainAi.Cqrs\QBrainAi.Cqrs.csproj" />
+tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj:24:    <ProjectReference Include="..\..\src\QBrainAi.Cqrs.Mvvm\QBrainAi.Cqrs.Mvvm.csproj" />
+tests/QBrainAi.PlanReview.Tests/QBrainAi.PlanReview.Tests.csproj:7:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj:9:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj:26:    <ProjectReference Include="..\..\src\QBrainAi.McpAgent\QBrainAi.McpAgent.csproj" />
+tests/QBrainAi.Context.Validation/QBrainAi.Context.Validation.csproj:8:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.GitHub.Validation/QBrainAi.GitHub.Validation.csproj:8:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj:8:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj:21:    <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
+tests/QBrainAi.ToolRegistry.Validation/QBrainAi.ToolRegistry.Validation.csproj:8:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj:9:    <TargetFramework>net10.0-windows</TargetFramework>
+tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj:22:    <ProjectReference Include="..\..\src\QBrainAi.Launcher\QBrainAi.Launcher.csproj" />
+tests/QBrainAi.ProcessTree.TestHelper/QBrainAi.ProcessTree.TestHelper.csproj:4:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Workspace.Validation/QBrainAi.Workspace.Validation.csproj:8:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Todo.Validation/QBrainAi.Todo.Validation.csproj:8:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj:9:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj:27:    <ProjectReference Include="..\..\src\QBrainAi.Repl.Core\QBrainAi.Repl.Core.csproj" />
+tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj:28:    <ProjectReference Include="..\..\src\QBrainAi.Repl.Host\QBrainAi.Repl.Host.csproj" />
+tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj:29:    <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
+tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj:30:    <ProjectReference Include="..\..\src\QBrainAi.TransactionSecurity\QBrainAi.TransactionSecurity.csproj" />
+tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj:32:    <ProjectReference Include="..\..\src\QBrainAi.Support.Mcp\QBrainAi.Support.Mcp.csproj" />
+tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj:33:    <ProjectReference Include="..\..\src\QBrainAi.Storage.SqliteMigrations\QBrainAi.Storage.SqliteMigrations.csproj" />
+tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj:9:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj:24:    <ProjectReference Include="..\..\src\QBrainAi.QBAgent\QBrainAi.QBAgent.csproj" />
+tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj:25:    <ProjectReference Include="..\..\src\QBrainAi.QBAgent.Tools\QBrainAi.QBAgent.Tools.csproj" />
+tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj:28:    <Compile Include="..\Shared\TestRepositoryRoot.cs" Link="Shared\TestRepositoryRoot.cs" />
+tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj:3:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj:5:    <IsTestProject>true</IsTestProject>
+tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj:20:    <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
+tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj:21:    <ProjectReference Include="..\..\src\QBrainAi.Support.Mcp\QBrainAi.Support.Mcp.csproj" />
+tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj:9:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj:23:    <ProjectReference Include="..\..\src\QBrainAi.Repl.Core\QBrainAi.Repl.Core.csproj" />
+tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj:24:    <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
+tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj:26:    <ProjectReference Include="..\..\src\QBrainAi.Repl.Host\QBrainAi.Repl.Host.csproj" />
+tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj:27:    <ProjectReference Include="..\..\tests\QBrainAi.Todo.Validation\QBrainAi.Todo.Validation.csproj" />
+tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj:30:    <Compile Include="..\Shared\TestRepositoryRoot.cs" Link="Shared\TestRepositoryRoot.cs" />
+tests/QBrainAi.Review.Tests/QBrainAi.Review.Tests.csproj:9:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj:9:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj:28:    <ProjectReference Include="..\..\src\QBrainAi.TransactionSecurity\QBrainAi.TransactionSecurity.csproj" />
+tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj:29:    <ProjectReference Include="..\..\src\QBrainAi.Support.Mcp\QBrainAi.Support.Mcp.csproj" />
+tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj:30:    <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
+tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj:31:    <ProjectReference Include="..\..\src\QBrainAi.Repl.Core\QBrainAi.Repl.Core.csproj" />
+tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj:32:    <ProjectReference Include="..\..\src\QBrainAi.Repl.Host\QBrainAi.Repl.Host.csproj" />
+tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj:33:    <ProjectReference Include="..\..\src\QBrainAi.QBAgent\QBrainAi.QBAgent.csproj" />
+tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj:34:    <ProjectReference Include="..\..\src\QBrainAi.QBAgent.Tools\QBrainAi.QBAgent.Tools.csproj" />
+tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj:35:    <ProjectReference Include="..\..\src\QBrainAi.McpAgent\QBrainAi.McpAgent.csproj" />
+tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj:36:    <ProjectReference Include="..\..\src\QBrainAi.Storage.SqliteMigrations\QBrainAi.Storage.SqliteMigrations.csproj" />
+tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj:42:    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\EphemeralPostgresFixture.cs" Link="Storage\EphemeralPostgresFixture.cs" />
+tests/QBrainAi.Repo.Validation/QBrainAi.Repo.Validation.csproj:8:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj:9:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj:25:    <ProjectReference Include="..\..\src\QBrainAi.TransactionSecurity\QBrainAi.TransactionSecurity.csproj" />
+tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj:26:    <ProjectReference Include="..\..\src\QBrainAi.Support.Mcp\QBrainAi.Support.Mcp.csproj" />
+tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj:27:    <ProjectReference Include="..\..\src\QBrainAi.Cqrs.Mvvm\QBrainAi.Cqrs.Mvvm.csproj" />
+tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj:28:    <ProjectReference Include="..\..\src\QBrainAi.SessionLog.Transcripts\QBrainAi.SessionLog.Transcripts.csproj" />
+tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj:29:    <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
+tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj:30:    <ProjectReference Include="..\..\src\QBrainAi.Repl.Core\QBrainAi.Repl.Core.csproj" />
+tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj:31:    <ProjectReference Include="..\QBrainAi.ProcessTree.TestHelper\QBrainAi.ProcessTree.TestHelper.csproj" />
+tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj:34:    <Compile Include="..\Shared\TestRepositoryRoot.cs" Link="Shared\TestRepositoryRoot.cs" />
+tests/QBrainAi.SessionLog.Validation/QBrainAi.SessionLog.Validation.csproj:8:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj:6:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj:21:    <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
+tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj:22:    <ProjectReference Include="..\..\src\QBrainAi.KeyServer\QBrainAi.KeyServer.csproj" />
+tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj:23:    <ProjectReference Include="..\..\src\QBrainAi.Subscriber\QBrainAi.Subscriber.csproj" />
+tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj:24:    <ProjectReference Include="..\..\src\QBrainAi.TransactionSecurity\QBrainAi.TransactionSecurity.csproj" />
+tests/Build.Tests/Build.Tests.csproj:4:    <TargetFramework>net10.0</TargetFramework>
+tests/Build.Tests/Build.Tests.csproj:6:    <IsTestProject>true</IsTestProject>
+tests/Build.Tests/Build.Tests.csproj:24:    <ProjectReference Include="..\..\build\_build.csproj" />
+tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj:6:    <TargetFramework>net10.0</TargetFramework>
+tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj:21:    <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
+tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj:22:    <ProjectReference Include="..\..\src\QBrainAi.KeyServer\QBrainAi.KeyServer.csproj" />
+tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj:23:    <ProjectReference Include="..\..\src\QBrainAi.Subscriber\QBrainAi.Subscriber.csproj" />
+tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj:24:    <ProjectReference Include="..\..\src\QBrainAi.TransactionSecurity\QBrainAi.TransactionSecurity.csproj" />
+tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs:98:        var projects = System.Text.RegularExpressions.Regex.Matches(csproj, @"<ProjectReference Include=""([^""]+)""")

@@ -1,0 +1,18 @@
+{
+  "name": "ug-r5-precommit-lane-3",
+  "target": "MigrationIntegrationTests",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r5-precommit-lane-3"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "5b818847b4e598b4e85ac6567041b847b0385950",
+  "dirtyPaths": [
+    " M tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs"
+  ],
+  "startedLocal": "2026-10-21T07:45:06",
+  "startedUtc": "2026-10-21T12:45:06.5082150Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-precommit-lane-3.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-precommit-lane-3.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-precommit-lane-3.exit.txt"
+}

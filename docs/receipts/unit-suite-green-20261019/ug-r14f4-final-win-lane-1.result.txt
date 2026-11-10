@@ -1,0 +1,39 @@
+RECEIPT 2026-11-07T18:14:48 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveLane.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-11-07T18:14:46 host=PAYTON-LEGION2 user=kingd
+WORKTREE HEAD 5ce7fa56c26e4a0672fffba6984273f998db454b
+PROOF START 2026-11-07T17:33:28 user=kingd session=1 interactive=True head=5ce7fa56c26e4a0672fffba6984273f998db454b
+EXIT -1 2026-11-07T18:14:00
+TASK state=Ready lastRun=11/07/2026 17:33:25 result=0
+LOG lines=288
+  LOG 17:34:15 [INF] Integration lane filter: Category=Integration&Platform!=Linux
+  LOG 17:34:15 [INF] Integration lane filter for QBrainAi.Support.Mcp.EnvironmentIntegrationTests: Category=Integration&Platform!=Linux
+  LOG 17:34:15 [INF] Integration lane filter for QBrainAi.McpAgent.IntegrationTests: Category=Integration&Platform!=Linux
+  LOG 17:34:15 [INF] Integration lane filter for QBrainAi.QBAgent.IntegrationTests: Category=Integration&Platform!=Linux
+  LOG 17:34:15 [INF] Integration lane filter for NukeBuild.IntegrationTests: Category=Integration&Platform!=Linux
+  LOG 17:34:15 [INF] Integration lane filter for QBrainAi.Repl.IntegrationTests: Category=Integration&Platform!=Linux
+  LOG 17:34:15 [INF] Integration lane filter for QBrainAi.Support.Mcp.IntegrationTests: Category=Integration&Platform!=Linux&(FullyQualifiedName~.RequirementScopeLayerReplIntegrationTests.|FullyQualifiedName~.QuadBrainOllamaEndpointIntegrationTests.)
+  LOG 17:45:32 [DBG] Failed!  - Failed:     5, Passed:   439, Skipped:     0, Total:   444, Duration: 9 m 7 s - QBrainAi.Support.Mcp.EnvironmentIntegrationTests.dll (net10.0)
+  LOG 17:45:43 [DBG] Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 105 ms - QBrainAi.McpAgent.IntegrationTests.dll (net10.0)
+  LOG 17:45:53 [DBG] Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 129 ms - QBrainAi.QBAgent.IntegrationTests.dll (net10.0)
+  LOG 17:49:46 [DBG] Passed!  - Failed:     0, Passed:    85, Skipped:     0, Total:    85, Duration: 3 m 47 s - NukeBuild.IntegrationTests.dll (net10.0)
+  LOG 18:11:17 [DBG] Passed!  - Failed:     0, Passed:   181, Skipped:     0, Total:   181, Duration: 21 m 11 s - QBrainAi.Repl.IntegrationTests.dll (net10.0)
+  LOG 18:13:57 [DBG] Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 2 m 23 s - QBrainAi.Support.Mcp.IntegrationTests.dll (net10.0)
+  LOG 18:13:57 [ERR] Target MigrationIntegrationTests has thrown an exception
+  LOG [ERR] MigrationIntegration: Target MigrationIntegrationTests has thrown an exception
+  LOG Build failed on 11/7/2026 6:13:57 PM. (╯°□°）╯︵ ┻━┻
+TRX \provider\NukeBuild.IntegrationTests\NukeBuild.IntegrationTests.trx total=85 executed=85 passed=85 failed=0 notExecuted=0
+TRX \provider\QBrainAi.McpAgent.IntegrationTests\QBrainAi.McpAgent.IntegrationTests.trx total=1 executed=1 passed=1 failed=0 notExecuted=0
+TRX \provider\QBrainAi.QBAgent.IntegrationTests\QBrainAi.QBAgent.IntegrationTests.trx total=3 executed=3 passed=3 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Repl.IntegrationTests\QBrainAi.Repl.IntegrationTests.trx total=181 executed=181 passed=181 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx total=444 executed=444 passed=439 failed=5 notExecuted=0
+  Failed QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_RawArguments_AndArgumentList_PreserveQuotedBoundaries :: F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\bin\Debug\net10.0\QBrainAi.ProcessTree.TestHelper.dll
+  Failed QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_ImmediateNativeDescendant_IsKilledWithinBound :: F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\bin\Debug\net10.0\QBrainAi.ProcessTree.TestHelper.dll
+  Failed QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_AssignmentWindow_KeepsImmediateHelperSuspended :: F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\bin\Debug\net10.0\QBrainAi.ProcessTree.TestHelper.dll
+  Failed QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables :: System.AggregateException : SQL Server migration: first failure, followed by later failures. (Execution Timeout Expired. The timeout period elapsed prior to completion of the operation or the server is not responding. Operation cancelled by user. The statement has been terminated.) ---- Microsoft.Data.SqlClient.SqlException : Execution Timeout Expired. The timeout period elapsed prior to completio
+  Failed QBrainAi.Support.Mcp.EnvironmentIntegrationTests.McpStdio.TranscriptMcpStdioHostTests.SessionLogNormalizePath_ThroughStdioHost_ResolvesToolGraphAndWritesArtifacts :: System.TimeoutException : Timed out waiting for stdio output. Current stdout:
+TRX \provider\QBrainAi.Support.Mcp.IntegrationTests\QBrainAi.Support.Mcp.IntegrationTests.trx total=6 executed=6 passed=6 failed=0 notExecuted=0
+TASK REMOVED McpUnitGreenLane-r14f4-final present-after=False
+END 2026-11-07T18:14:49

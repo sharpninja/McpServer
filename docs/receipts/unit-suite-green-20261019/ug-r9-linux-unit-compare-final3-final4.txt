@@ -1,0 +1,16 @@
+Now: 2026-11-02T15:33:48 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final3-linux-unit-1 (4694) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final4-linux-unit-1 (4704)
+onlyBefore=0 onlyAfter=10 common=4694
+onlyAfter QBrainAi.Repl.Core.Tests=9
+onlyAfter QBrainAi.Support.Mcp.Tests=1
+--- only in before ---
+--- only in after ---
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderBindingTests.SharedCheck_SatisfiesMockGatedRows
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.ScriptedCheck_SatisfiesEveryRow
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "accepts a relative folder")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "accepts anything")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "accepts the checkout root")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "ignores dot segments")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "one separator only")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "refuses anything")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "string prefix")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Requirements.RequirementStoredTimestampContractTests.WrongReaders_AreRejected(fault: "no offset read with a fixed local offset")

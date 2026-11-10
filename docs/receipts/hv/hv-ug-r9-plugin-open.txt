@@ -1,0 +1,15 @@
+type: result
+payload:
+  result:
+    code: unchanged
+    retryable: false
+    persisted: false
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.openSession
+    agent: Codex
+    sessionId: Codex-20261103T011224Z-unitgreen-r9-hv
+    requestId: ""
+    failsafePath: ""
+    message: workflow.sessionlog.openSession completed without a remote persistence receipt.
+    childStderr: ""

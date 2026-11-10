@@ -1,0 +1,84 @@
+{
+  "name": "ug-r13z4b-binding-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "4398cffc06878dfb1d3defad3cfb67465863fe67",
+  "dirtyPaths": [
+    " M src/QBrainAi.Services/Memory/Commands/RunConsolidateJobCommandHandler.cs",
+    " M src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs",
+    " M src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryConsolidateJobTests.cs",
+    "?? docs/receipts/hv/unitgreen-r13-prelaunch.clock-sweep.md",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-b-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-b-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-citation-sweep-all-1.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-citation-sweep-all-2.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-citation-sweep-all-3.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-citation-sweep.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-configured-durations-compare-z3-z4.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-configured-durations.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-final-linux-lane-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-final-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-final-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-b-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-b-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-serviceupdate-chain-1.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-timing-sweep.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4b-compile-1.json"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Support.Mcp.Tests:MemoryConsolidateJobTests",
+    "--test-run-id",
+    "ug-r13z4b-binding-1"
+  ],
+  "startedLocal": "2026-11-05T04:37:52",
+  "endedLocal": "2026-11-05T04:38:40",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 9,
+  "passed": 9,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4b-binding-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z4b-binding-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "530B2B38BD4EBEA64B5224359A5184927F4E2ADBB9F574C91FAE451FCC4813BA",
+      "total": 9,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "src/QBrainAi.Services/Memory/Commands/RunConsolidateJobCommandHandler.cs",
+      "sha256": "488F3AB41EAD4BFEF63FB8A4F89B35BC5598C99619AB63955B654C498141FF86"
+    },
+    {
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+      "sha256": "BC03276DE8AA57FC8DAD55A58FC814A59AE40F8C20DE918E5C4F2329DB7E8D64"
+    },
+    {
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs",
+      "sha256": "178E4A05D71A3924A5380BD4975ECF98E9163E876F515ABB8438602DCD499D76"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryConsolidateJobTests.cs",
+      "sha256": "6EC2520961BCC2F3A64844D5A3D0D914B343220F4D23DE4B51A84B19554412C7"
+    }
+  ],
+  "writtenLocal": "2026-11-05T04:39:48",
+  "writtenBy": "ClaudeCode"
+}

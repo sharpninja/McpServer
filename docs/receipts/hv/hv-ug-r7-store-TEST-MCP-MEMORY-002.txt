@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261026T171753Z-48f3
+  result:
+    id: TEST-MCP-MEMORY-002
+    title: Test TEST-MCP-MEMORY-002
+    description: CRUD behavior tests SHALL prove add, list, update, remove, soft-delete omission, scope preservation, scope changes, invalid ID, invalid text, invalid category, and invalid scope failures.
+    status: pending
+    priority: medium
+    area: MCP
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-26T17:17:54.5086253+00:00
+    updatedAt: 2026-10-26T17:17:54.5087712+00:00
+  deprecated: true
+
+---
+

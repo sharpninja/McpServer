@@ -1,0 +1,1342 @@
+{
+  "schema": "unitgreen-hv-trx-evidence.v3",
+  "createdLocal": "2026-11-07T20:25:58",
+  "todo": "IMPL-UNITGREEN-001",
+  "pullRequest": "sharpninja/McpServer#87",
+  "codeHead": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+  "policy": "Profile section 7.9 (operator 2026-10-27T04:35, typos fixed at the operator's request at 04:40): HV requests supply TRX files for all unit tests in the repo and for the integration tests specific to the scope of the review; the reviewer does not build code or run tests.",
+  "approvedRunSet": "R14-F4 phase-exit gate set at 03eea747 (round 15), MEMORY-BESTPRACTICE-001 rule 2.6: Nuke Test ug-r14f4-final-linux-unit-2 and ug-r14f4-final-win-unit-2 (the seven unit-owned projects, each with Category!=AiReview&Category!=Integration&Quarantine!=NoMatchingCriterion; TR-MCP-NUKE-019 AC-8), MigrationIntegrationTests ug-r14f4-final-linux-lane-2 and ug-r14f4-final-win-lane-2 (the six integration-owned lane projects, lane filter with &Quarantine!=NoMatchingCriterion; two classes of QBrainAi.Support.Mcp.IntegrationTests), Build.Tests ug-r14f4-final-linux-buildtests-2 and ug-r14f4-final-win-buildtests-2 (whole, host platform clause), ValidateTraceability ug-r14f4-final-linux-traceability-2 and ug-r14f4-final-win-traceability-2 (no TRX). Extra run, not part of the gate set and not copied into it: ug-r14f4-win-recheck-2 (step 1 Windows TestGroups recheck; its TRX copies stay in docs/receipts/unit-suite-green-20261019). No 5ce7fa56 set was written, because that gate set failed. No hostile-environment run (operator 2026-10-27: out of scope).",
+  "trxCount": 28,
+  "totalBytes": 18777067,
+  "runs": [
+    {
+      "runId": "ug-r14f4-final-linux-unit-2",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "command": [
+        "./build.ps1",
+        "Test",
+        "--test-run-id",
+        "ug-r14f4-final-linux-unit-2"
+      ],
+      "launch": "Start-NukeRun.ps1 in the effort worktree (committed tree)",
+      "startedLocal": "2026-11-07T19:35:26",
+      "endedLocal": "2026-11-07T19:41:37",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2.json",
+      "receiptSha256": "9FA24AC7B3CA095861D82670EA1EB6D948813B3D85C6DE3C63F3CB4334430D71",
+      "totals": {
+        "total": 4835,
+        "passed": 4835,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Client.Tests.trx",
+          "sha256": "869DC6A80912261431BD3DAE3E4D33B13DFC23327A8E034007A54533B4C51427",
+          "total": 311,
+          "passed": 311,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Cqrs.Tests.trx",
+          "sha256": "3F85BA349FCFB3A54B8AF5C834CE4031AB4879D4BBDC452FB083921B86E6FE36",
+          "total": 33,
+          "passed": 33,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Launcher.Tests.trx",
+          "sha256": "1D3A1E0D46ECE289AD7E24B4A4B8B8EC5E295C3A1C3F06588DFFD50D244AB424",
+          "total": 20,
+          "passed": 20,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.McpAgent.Tests.trx",
+          "sha256": "F7491FC2D189E564F98E0F75B8B3DACDC4151036B399D88B2229CEBB9AD29EB0",
+          "total": 64,
+          "passed": 64,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.QBAgent.Tests.trx",
+          "sha256": "DCFEA5EDB4ACF904A399F84FB4E8FAC8C31B98F28880971B72A2288511971247",
+          "total": 90,
+          "passed": 90,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Repl.Core.Tests.trx",
+          "sha256": "E60D3FF54D7006EFD9CEFBE8DC420867890518CAC180F6E7AF682C811B90182C",
+          "total": 1035,
+          "passed": 1035,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Support.Mcp.Tests.trx",
+          "sha256": "1652FE8A610BE16AB90BFA591300340C3F27A96BFEBC7ED3FD52C2D901C898A0",
+          "total": 3282,
+          "passed": 3282,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      ]
+    },
+    {
+      "runId": "ug-r14f4-final-linux-lane-2",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "command": [
+        "./build.ps1",
+        "MigrationIntegrationTests",
+        "--test-run-id",
+        "ug-r14f4-final-linux-lane-2"
+      ],
+      "launch": "Start-NukeRun.ps1 in the effort worktree (committed tree); InstallTestDependencies runs inside the target",
+      "startedLocal": "2026-11-07T19:43:53",
+      "endedLocal": "2026-11-07T20:21:07",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2.json",
+      "receiptSha256": "55D5CA8DB8BE0251AD9A4B5B6B886515B7428CA10DB6971107437A2D8E5CD84B",
+      "totals": {
+        "total": 743,
+        "passed": 743,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": [
+        {
+          "project": "NukeBuild.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/NukeBuild.IntegrationTests.trx",
+          "sha256": "27DD4BD5EED953836EE53DB59D3623D321D1DB3477431731F66CD126882C3BB9",
+          "total": 96,
+          "passed": 96,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.McpAgent.IntegrationTests.trx",
+          "sha256": "774BB20629A0C9D249F70F294F5A6B0DBBFA701A244C2CFBA839FCC8BB50F48B",
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.QBAgent.IntegrationTests.trx",
+          "sha256": "B0C7500A8C1B701F6C1C408EE7AEA59C8D98EA846B5336CBA834C816A91336B2",
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Repl.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.Repl.IntegrationTests.trx",
+          "sha256": "BFF0563E0C587D847422B70608A86F143A1280E7E93B9C0D4561E5A4DFB089F9",
+          "total": 181,
+          "passed": 181,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+          "sha256": "0642C04B7B72C763A9B2A26231802EAD1129272723BFC3B571F779851179037D",
+          "total": 456,
+          "passed": 456,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.Support.Mcp.IntegrationTests.trx",
+          "sha256": "3FF3D118469BA4764EAF69F511C5BEE31B483DB4C0AD607F38812BC6150A8411",
+          "total": 6,
+          "passed": 6,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      ]
+    },
+    {
+      "runId": "ug-r14f4-final-linux-buildtests-2",
+      "host": "LAB-OMARCHY",
+      "kind": "infrastructure",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+        "-c",
+        "Debug",
+        "--logger",
+        "trx;LogFileName=ug-r14f4-final-linux-buildtests-2.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-buildtests-2",
+        "--filter",
+        "Platform!=Windows"
+      ],
+      "launch": "Invoke-BuildTestsRunOnDiskTemp.ps1 (raw dotnet test, the Build.Tests infrastructure exception; TMPDIR on disk), whole project, Platform!=Windows",
+      "startedLocal": "2026-11-07T20:22:05",
+      "endedLocal": "2026-11-07T20:22:35",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-2.json",
+      "receiptSha256": "048DCEEB0668523E088FE64B4E89067E2F2C746B70CEFA786DB52299FDAF437A",
+      "totals": {
+        "total": 530,
+        "passed": 530,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": [
+        {
+          "project": "Build.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-buildtests-2/ug-r14f4-final-linux-buildtests-2.trx",
+          "sha256": "D3EC5046ED656EDD97BD0AF622B1BC01AF1BF99D8D6F8C0EBAF363B85124B58D",
+          "total": 530,
+          "passed": 530,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      ]
+    },
+    {
+      "runId": "ug-r14f4-final-linux-traceability-2",
+      "host": "LAB-OMARCHY",
+      "kind": "traceability",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "command": [
+        "./build.ps1",
+        "ValidateTraceability",
+        "--test-run-id",
+        "ug-r14f4-final-linux-traceability-2"
+      ],
+      "launch": "Start-NukeRun.ps1 in the effort worktree; no TRX (log copied as .out.txt, exit as .exit.txt)",
+      "startedLocal": "2026-11-07T20:23:17",
+      "endedLocal": "2026-11-07T20:23:23",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-traceability-2.meta.json",
+      "receiptSha256": "0ECFAA417E7DAA43E769C6012A71CD53D89DD25BCF718B63454FC6EAF0F27E40",
+      "totals": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": []
+    },
+    {
+      "runId": "ug-r14f4-final-win-unit-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "command": [
+        "./build.ps1",
+        "Test",
+        "--test-run-id",
+        "ug-r14f4-final-win-unit-2"
+      ],
+      "launch": "over SSH as kingd (remote/Invoke-WinNukeTarget.ps1 on the child branch worktree; origin ref and HEAD verified)",
+      "startedLocal": "2026-11-07T19:34:19",
+      "endedLocal": "2026-11-07T19:38:12",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-2.result.txt",
+      "receiptSha256": "BE79CECB13FD8D07BA4C87F73557FC9DC96031B50233DBBF24ACE82FC1DC85A8",
+      "totals": {
+        "total": 4835,
+        "passed": 4835,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Client.Tests.trx",
+          "sha256": "5DF7C109C6C6CF9FF12514CE9174007FA694919839F755EC48008141F7AE3716",
+          "total": 311,
+          "passed": 311,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Cqrs.Tests.trx",
+          "sha256": "30595F31A1163E34296AA949C52185391F9A6A9792343D72E78BEEBEEE2B0F5B",
+          "total": 33,
+          "passed": 33,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Launcher.Tests.trx",
+          "sha256": "332FEC915221DC5CF46B3E640F9C2AD7AC397096DAC79464270F76098478DF60",
+          "total": 20,
+          "passed": 20,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.McpAgent.Tests.trx",
+          "sha256": "A0FC7E12BB9CA416B66A245DDAAC871843DE0EC8032F44BAAA6CA7B1FEE0CA44",
+          "total": 64,
+          "passed": 64,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.QBAgent.Tests.trx",
+          "sha256": "5630959FF423F6BAEE21C608761334EB1E2D9AFFF703E3588E85AAEE9BC79F28",
+          "total": 90,
+          "passed": 90,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Repl.Core.Tests.trx",
+          "sha256": "6596588724AE63CF604542ECC99B97CF2A4D88178C5F851A45613C6071F1F5F9",
+          "total": 1035,
+          "passed": 1035,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Support.Mcp.Tests.trx",
+          "sha256": "8A796AC07A3ABF2833BA799A4143C37B241B343583F942BA2E54038CBE8864CA",
+          "total": 3282,
+          "passed": 3282,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      ]
+    },
+    {
+      "runId": "ug-r14f4-final-win-traceability-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "traceability",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "command": [
+        "./build.ps1",
+        "ValidateTraceability",
+        "--test-run-id",
+        "ug-r14f4-final-win-traceability-2"
+      ],
+      "launch": "over SSH as kingd (records-r14/s10/Invoke-WinNukeTargetS10.ps1 -AllowNoTrx, a copy of remote/Invoke-WinNukeTarget.ps1; origin ref and HEAD verified); no TRX",
+      "startedLocal": "2026-11-07T19:39:38",
+      "endedLocal": "2026-11-07T19:39:42",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-traceability-2.result.txt",
+      "receiptSha256": "1D33C4F5F1B611DC1CF2652D9A865C472964242242D9362B93816B8B07425765",
+      "totals": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": []
+    },
+    {
+      "runId": "ug-r14f4-final-win-lane-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "command": [
+        "./build.ps1",
+        "MigrationIntegrationTests",
+        "--test-run-id",
+        "ug-r14f4-final-win-lane-2"
+      ],
+      "launch": "in kingd's interactive desktop session (one-shot scheduled task, remote/Start-WinInteractiveLane.ps1, pinned runner; start receipt ug-r14f4-final-win-lane-2.start.txt)",
+      "startedLocal": "2026-11-07T19:40:26",
+      "endedLocal": "2026-11-07T20:09:06",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-2.result.txt",
+      "receiptSha256": "4397F1C209460AE9151AC36446C504B8035C9B621C414FE8D3CB9FC8517A0E59",
+      "totals": {
+        "total": 720,
+        "passed": 720,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": [
+        {
+          "project": "NukeBuild.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/NukeBuild.IntegrationTests.trx",
+          "sha256": "2A4B0964EAD5915A3AD116F4E2F6BCF9EBFD445236FE9CE06220AEAFAACC0B88",
+          "total": 85,
+          "passed": 85,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.McpAgent.IntegrationTests.trx",
+          "sha256": "83D8405B278C5F380BA5ED2552749F2A5AD0F986C0AA89963DB0A42D6F6092A8",
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.QBAgent.IntegrationTests.trx",
+          "sha256": "0B8E20CCBB8671E5403819B8AFCE5AE7A8CC85EF5BCDB877CF3D671DD933132D",
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Repl.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.Repl.IntegrationTests.trx",
+          "sha256": "CE9D717CC8E0BF621F0B08D6BD6C8305F60B08F9701A3DA3314E96C8BED67BE5",
+          "total": 181,
+          "passed": 181,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+          "sha256": "931F3EAB9D899F2D4404361EB6F8C3A1F77CE7DA1A8F34C152CFC0297B2FC0F1",
+          "total": 444,
+          "passed": 444,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.Support.Mcp.IntegrationTests.trx",
+          "sha256": "B57B3C78D566962B4553BD458BA527665DD63B2C52B171BF7593EB9631DE2C0C",
+          "total": 6,
+          "passed": 6,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      ]
+    },
+    {
+      "runId": "ug-r14f4-final-win-buildtests-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "infrastructure",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "command": [
+        "dotnet",
+        "test",
+        "F:/GitHub/McpServer/.worktrees/unit-suite-green-windows-20261102/tests/Build.Tests/Build.Tests.csproj",
+        "-c",
+        "Debug",
+        "--filter",
+        "Platform!=Linux",
+        "--logger",
+        "trx;LogFileName=Build.Tests.trx",
+        "--results-directory",
+        "F:/GitHub/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14f4-final-win-buildtests-2/build-tests"
+      ],
+      "launch": "over SSH as kingd (remote/Invoke-WinBuildTests.ps1 -FilterSet WindowsAll: raw dotnet test, the Build.Tests infrastructure exception), whole project, Platform!=Linux",
+      "startedLocal": "2026-11-07T20:10:02",
+      "endedLocal": "2026-11-07T20:10:34",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-buildtests-2.result.txt",
+      "receiptSha256": "B04C81A08FFBE41485D56CB6D7FDEA62C5874758456466C5A47DE2E61F69B85C",
+      "totals": {
+        "total": 530,
+        "passed": 530,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": [
+        {
+          "project": "Build.Tests",
+          "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-buildtests-2/Build.Tests.trx",
+          "sha256": "A3065916BA61F2C7445776FA1DB34C30BBE40588D5EDAE9DF0B1A214EC891984",
+          "total": 530,
+          "passed": 530,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      ]
+    }
+  ],
+  "extraRuns": [
+    {
+      "runId": "ug-r14f4-win-recheck-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "recheck",
+      "purpose": "Step 1 of the 03eea747 phase exit: Nuke TestGroups recheck of QBrainAi.Support.Mcp.EnvironmentIntegrationTests:BugTriage139SixteenthWindowsProcessTests on Windows (the runtimeconfig fix), run before the gate set and not part of it.",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "command": [
+        "./build.ps1",
+        "TestGroups",
+        "--test-run-id",
+        "ug-r14f4-win-recheck-2",
+        "--test-groups",
+        "QBrainAi.Support.Mcp.EnvironmentIntegrationTests:BugTriage139SixteenthWindowsProcessTests"
+      ],
+      "launch": "over SSH as kingd (records-r14/s10/Invoke-WinNukeTargetRecheck.ps1 on the child branch worktree; origin ref and HEAD verified)",
+      "startedLocal": "2026-11-07T19:30:27",
+      "endedLocal": "2026-11-07T19:31:51",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-2.result.txt",
+      "receiptSha256": "07928AA608593DA9FFB744ABA9948EBC79415E7D91F31F6CD0DE272A83B8E880",
+      "totals": {
+        "total": 5,
+        "passed": 5,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": [
+        {
+          "project": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+          "path": "docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-2/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+          "sha256": "7B3B919CE3B58366596E881FA2565C3876AC303465601D5A54828BF50A2A4954",
+          "bytes": 10629,
+          "originalPath": "/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14f4-win-recheck-2/groups/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+          "originalSha256": "7B3B919CE3B58366596E881FA2565C3876AC303465601D5A54828BF50A2A4954",
+          "total": 5,
+          "passed": 5,
+          "failed": 0,
+          "notExecuted": 0,
+          "start": "2026-11-07T19:31:44.3669966-06:00",
+          "finish": "2026-11-07T19:31:51.1024489-06:00"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "runId": "ug-r14f4-final-linux-unit-2",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-unit-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Client.Tests.trx",
+      "bytes": 441469,
+      "sha256": "869DC6A80912261431BD3DAE3E4D33B13DFC23327A8E034007A54533B4C51427",
+      "copyVerified": true,
+      "project": "QBrainAi.Client.Tests",
+      "outcome": "Completed",
+      "total": 311,
+      "executed": 311,
+      "passed": 311,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:41:08.3313073-06:00",
+      "finish": "2026-11-07T19:41:12.1181436-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-unit-2",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-unit-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Cqrs.Tests.trx",
+      "bytes": 46236,
+      "sha256": "3F85BA349FCFB3A54B8AF5C834CE4031AB4879D4BBDC452FB083921B86E6FE36",
+      "copyVerified": true,
+      "project": "QBrainAi.Cqrs.Tests",
+      "outcome": "Completed",
+      "total": 33,
+      "executed": 33,
+      "passed": 33,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:41:13.4625786-06:00",
+      "finish": "2026-11-07T19:41:15.4069129-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-unit-2",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-unit-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Launcher.Tests.trx",
+      "bytes": 30714,
+      "sha256": "1D3A1E0D46ECE289AD7E24B4A4B8B8EC5E295C3A1C3F06588DFFD50D244AB424",
+      "copyVerified": true,
+      "project": "QBrainAi.Launcher.Tests",
+      "outcome": "Completed",
+      "total": 20,
+      "executed": 20,
+      "passed": 20,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:41:16.6399535-06:00",
+      "finish": "2026-11-07T19:41:18.4286213-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-unit-2",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-unit-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.McpAgent.Tests.trx",
+      "bytes": 97696,
+      "sha256": "F7491FC2D189E564F98E0F75B8B3DACDC4151036B399D88B2229CEBB9AD29EB0",
+      "copyVerified": true,
+      "project": "QBrainAi.McpAgent.Tests",
+      "outcome": "Completed",
+      "total": 64,
+      "executed": 64,
+      "passed": 64,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:41:19.5514643-06:00",
+      "finish": "2026-11-07T19:41:23.1457252-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-unit-2",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-unit-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.QBAgent.Tests.trx",
+      "bytes": 131457,
+      "sha256": "DCFEA5EDB4ACF904A399F84FB4E8FAC8C31B98F28880971B72A2288511971247",
+      "copyVerified": true,
+      "project": "QBrainAi.QBAgent.Tests",
+      "outcome": "Completed",
+      "total": 90,
+      "executed": 90,
+      "passed": 90,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:41:34.8282428-06:00",
+      "finish": "2026-11-07T19:41:36.7248821-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-unit-2",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-unit-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Repl.Core.Tests.trx",
+      "bytes": 1571978,
+      "sha256": "E60D3FF54D7006EFD9CEFBE8DC420867890518CAC180F6E7AF682C811B90182C",
+      "copyVerified": true,
+      "project": "QBrainAi.Repl.Core.Tests",
+      "outcome": "Completed",
+      "total": 1035,
+      "executed": 1035,
+      "passed": 1035,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:41:24.2626129-06:00",
+      "finish": "2026-11-07T19:41:33.4851536-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-unit-2",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-unit-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Support.Mcp.Tests.trx",
+      "bytes": 5120561,
+      "sha256": "1652FE8A610BE16AB90BFA591300340C3F27A96BFEBC7ED3FD52C2D901C898A0",
+      "copyVerified": true,
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "outcome": "Completed",
+      "total": 3282,
+      "executed": 3282,
+      "passed": 3282,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:39:12.8710080-06:00",
+      "finish": "2026-11-07T19:41:06.2535988-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-unit-2",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-unit-2/unit/selected-projects.json",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/selected-projects.json",
+      "bytes": 1679,
+      "sha256": "87BAC2C2E776F35F5AC2C5F95B602FAA4D4DD97ED85D394DD7AE009BC94685FF",
+      "copyVerified": true
+    },
+    {
+      "runId": "ug-r14f4-final-linux-lane-2",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/NukeBuild.IntegrationTests/NukeBuild.IntegrationTests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/NukeBuild.IntegrationTests.trx",
+      "bytes": 137237,
+      "sha256": "27DD4BD5EED953836EE53DB59D3623D321D1DB3477431731F66CD126882C3BB9",
+      "copyVerified": true,
+      "project": "NukeBuild.IntegrationTests",
+      "outcome": "Completed",
+      "total": 96,
+      "executed": 96,
+      "passed": 96,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:46:46.5811682-06:00",
+      "finish": "2026-11-07T19:53:56.4343650-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-lane-2",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/QBrainAi.McpAgent.IntegrationTests/QBrainAi.McpAgent.IntegrationTests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.McpAgent.IntegrationTests.trx",
+      "bytes": 3247,
+      "sha256": "774BB20629A0C9D249F70F294F5A6B0DBBFA701A244C2CFBA839FCC8BB50F48B",
+      "copyVerified": true,
+      "project": "QBrainAi.McpAgent.IntegrationTests",
+      "outcome": "Completed",
+      "total": 1,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:46:33.3102662-06:00",
+      "finish": "2026-11-07T19:46:35.1804981-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-lane-2",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/QBrainAi.QBAgent.IntegrationTests/QBrainAi.QBAgent.IntegrationTests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.QBAgent.IntegrationTests.trx",
+      "bytes": 6212,
+      "sha256": "B0C7500A8C1B701F6C1C408EE7AEA59C8D98EA846B5336CBA834C816A91336B2",
+      "copyVerified": true,
+      "project": "QBrainAi.QBAgent.IntegrationTests",
+      "outcome": "Completed",
+      "total": 3,
+      "executed": 3,
+      "passed": 3,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:46:42.0548116-06:00",
+      "finish": "2026-11-07T19:46:43.9301632-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-lane-2",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.Repl.IntegrationTests.trx",
+      "bytes": 279358,
+      "sha256": "BFF0563E0C587D847422B70608A86F143A1280E7E93B9C0D4561E5A4DFB089F9",
+      "copyVerified": true,
+      "project": "QBrainAi.Repl.IntegrationTests",
+      "outcome": "Completed",
+      "total": 181,
+      "executed": 181,
+      "passed": 181,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:54:13.8037291-06:00",
+      "finish": "2026-11-07T20:18:04.6205558-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-lane-2",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+      "bytes": 768452,
+      "sha256": "0642C04B7B72C763A9B2A26231802EAD1129272723BFC3B571F779851179037D",
+      "copyVerified": true,
+      "project": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+      "outcome": "Completed",
+      "total": 456,
+      "executed": 456,
+      "passed": 456,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:44:45.8103312-06:00",
+      "finish": "2026-11-07T19:46:28.3804436-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-lane-2",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "bytes": 13013,
+      "sha256": "3FF3D118469BA4764EAF69F511C5BEE31B483DB4C0AD607F38812BC6150A8411",
+      "copyVerified": true,
+      "project": "QBrainAi.Support.Mcp.IntegrationTests",
+      "outcome": "Completed",
+      "total": 6,
+      "executed": 6,
+      "passed": 6,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T20:18:18.9154666-06:00",
+      "finish": "2026-11-07T20:21:06.1695398-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-linux-lane-2",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-final-linux-lane-2/provider/selected-projects.json",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/selected-projects.json",
+      "bytes": 1854,
+      "sha256": "A2893E54E0D83CC486CC89C271C3E3F26CC0DCB241ABD1B7F3B9760E76E35199",
+      "copyVerified": true
+    },
+    {
+      "runId": "ug-r14f4-final-linux-buildtests-2",
+      "host": "LAB-OMARCHY",
+      "kind": "infrastructure",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-buildtests-2/ug-r14f4-final-linux-buildtests-2.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-buildtests-2/ug-r14f4-final-linux-buildtests-2.trx",
+      "bytes": 765349,
+      "sha256": "D3EC5046ED656EDD97BD0AF622B1BC01AF1BF99D8D6F8C0EBAF363B85124B58D",
+      "copyVerified": true,
+      "project": "Build.Tests",
+      "outcome": "Completed",
+      "total": 530,
+      "executed": 530,
+      "passed": 530,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T20:22:09.0934659-06:00",
+      "finish": "2026-11-07T20:22:35.5692950-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-unit-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14f4-final-win-unit-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Client.Tests.trx",
+      "bytes": 440630,
+      "sha256": "5DF7C109C6C6CF9FF12514CE9174007FA694919839F755EC48008141F7AE3716",
+      "copyVerified": true,
+      "project": "QBrainAi.Client.Tests",
+      "outcome": "Completed",
+      "total": 311,
+      "executed": 311,
+      "passed": 311,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:37:44.7362167-06:00",
+      "finish": "2026-11-07T19:37:46.8107534-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-unit-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14f4-final-win-unit-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Cqrs.Tests.trx",
+      "bytes": 46231,
+      "sha256": "30595F31A1163E34296AA949C52185391F9A6A9792343D72E78BEEBEEE2B0F5B",
+      "copyVerified": true,
+      "project": "QBrainAi.Cqrs.Tests",
+      "outcome": "Completed",
+      "total": 33,
+      "executed": 33,
+      "passed": 33,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:37:47.7388859-06:00",
+      "finish": "2026-11-07T19:37:49.0789313-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-unit-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14f4-final-win-unit-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Launcher.Tests.trx",
+      "bytes": 30748,
+      "sha256": "332FEC915221DC5CF46B3E640F9C2AD7AC397096DAC79464270F76098478DF60",
+      "copyVerified": true,
+      "project": "QBrainAi.Launcher.Tests",
+      "outcome": "Completed",
+      "total": 20,
+      "executed": 20,
+      "passed": 20,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:37:50.0198767-06:00",
+      "finish": "2026-11-07T19:37:51.2939242-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-unit-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14f4-final-win-unit-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.McpAgent.Tests.trx",
+      "bytes": 97598,
+      "sha256": "A0FC7E12BB9CA416B66A245DDAAC871843DE0EC8032F44BAAA6CA7B1FEE0CA44",
+      "copyVerified": true,
+      "project": "QBrainAi.McpAgent.Tests",
+      "outcome": "Completed",
+      "total": 64,
+      "executed": 64,
+      "passed": 64,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:37:52.1995690-06:00",
+      "finish": "2026-11-07T19:37:59.6256033-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-unit-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14f4-final-win-unit-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.QBAgent.Tests.trx",
+      "bytes": 131281,
+      "sha256": "5630959FF423F6BAEE21C608761334EB1E2D9AFFF703E3588E85AAEE9BC79F28",
+      "copyVerified": true,
+      "project": "QBrainAi.QBAgent.Tests",
+      "outcome": "Completed",
+      "total": 90,
+      "executed": 90,
+      "passed": 90,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:38:09.9250847-06:00",
+      "finish": "2026-11-07T19:38:11.3140747-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-unit-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14f4-final-win-unit-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Repl.Core.Tests.trx",
+      "bytes": 1569223,
+      "sha256": "6596588724AE63CF604542ECC99B97CF2A4D88178C5F851A45613C6071F1F5F9",
+      "copyVerified": true,
+      "project": "QBrainAi.Repl.Core.Tests",
+      "outcome": "Completed",
+      "total": 1035,
+      "executed": 1035,
+      "passed": 1035,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:38:00.5929186-06:00",
+      "finish": "2026-11-07T19:38:08.8201124-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-unit-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14f4-final-win-unit-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Support.Mcp.Tests.trx",
+      "bytes": 5110809,
+      "sha256": "8A796AC07A3ABF2833BA799A4143C37B241B343583F942BA2E54038CBE8864CA",
+      "copyVerified": true,
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "outcome": "Completed",
+      "total": 3282,
+      "executed": 3282,
+      "passed": 3282,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:36:31.8096932-06:00",
+      "finish": "2026-11-07T19:37:43.3001810-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-unit-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14f4-final-win-unit-2/unit/selected-projects.json",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/selected-projects.json",
+      "bytes": 1720,
+      "sha256": "6D9DAEA01BF3F62EAFA86DE5CD3A1DB9A02BE3E04F57A90F3DCF161E1F90068C",
+      "copyVerified": true
+    },
+    {
+      "runId": "ug-r14f4-final-win-lane-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r14f4-final-win-lane-2/provider/NukeBuild.IntegrationTests/NukeBuild.IntegrationTests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/NukeBuild.IntegrationTests.trx",
+      "bytes": 120328,
+      "sha256": "2A4B0964EAD5915A3AD116F4E2F6BCF9EBFD445236FE9CE06220AEAFAACC0B88",
+      "copyVerified": true,
+      "project": "NukeBuild.IntegrationTests",
+      "outcome": "Completed",
+      "total": 85,
+      "executed": 85,
+      "passed": 85,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:43:51.8841084-06:00",
+      "finish": "2026-11-07T19:47:25.2394324-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-lane-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r14f4-final-win-lane-2/provider/QBrainAi.McpAgent.IntegrationTests/QBrainAi.McpAgent.IntegrationTests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.McpAgent.IntegrationTests.trx",
+      "bytes": 3334,
+      "sha256": "83D8405B278C5F380BA5ED2552749F2A5AD0F986C0AA89963DB0A42D6F6092A8",
+      "copyVerified": true,
+      "project": "QBrainAi.McpAgent.IntegrationTests",
+      "outcome": "Completed",
+      "total": 1,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:43:41.2637532-06:00",
+      "finish": "2026-11-07T19:43:42.6808851-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-lane-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r14f4-final-win-lane-2/provider/QBrainAi.QBAgent.IntegrationTests/QBrainAi.QBAgent.IntegrationTests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.QBAgent.IntegrationTests.trx",
+      "bytes": 6285,
+      "sha256": "0B8E20CCBB8671E5403819B8AFCE5AE7A8CC85EF5BCDB877CF3D671DD933132D",
+      "copyVerified": true,
+      "project": "QBrainAi.QBAgent.IntegrationTests",
+      "outcome": "Completed",
+      "total": 3,
+      "executed": 3,
+      "passed": 3,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:43:47.6508283-06:00",
+      "finish": "2026-11-07T19:43:49.1443129-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-lane-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r14f4-final-win-lane-2/provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.Repl.IntegrationTests.trx",
+      "bytes": 278185,
+      "sha256": "CE9D717CC8E0BF621F0B08D6BD6C8305F60B08F9701A3DA3314E96C8BED67BE5",
+      "copyVerified": true,
+      "project": "QBrainAi.Repl.IntegrationTests",
+      "outcome": "Completed",
+      "total": 181,
+      "executed": 181,
+      "passed": 181,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:47:32.9872459-06:00",
+      "finish": "2026-11-07T20:06:45.7696840-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-lane-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r14f4-final-win-lane-2/provider/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+      "bytes": 745350,
+      "sha256": "931F3EAB9D899F2D4404361EB6F8C3A1F77CE7DA1A8F34C152CFC0297B2FC0F1",
+      "copyVerified": true,
+      "project": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+      "outcome": "Completed",
+      "total": 444,
+      "executed": 444,
+      "passed": 444,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T19:41:25.5664566-06:00",
+      "finish": "2026-11-07T19:43:37.3469667-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-lane-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r14f4-final-win-lane-2/provider/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "bytes": 13090,
+      "sha256": "B57B3C78D566962B4553BD458BA527665DD63B2C52B171BF7593EB9631DE2C0C",
+      "copyVerified": true,
+      "project": "QBrainAi.Support.Mcp.IntegrationTests",
+      "outcome": "Completed",
+      "total": 6,
+      "executed": 6,
+      "passed": 6,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T20:07:00.9709441-06:00",
+      "finish": "2026-11-07T20:09:05.5279048-06:00"
+    },
+    {
+      "runId": "ug-r14f4-final-win-lane-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r14f4-final-win-lane-2/provider/selected-projects.json",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/selected-projects.json",
+      "bytes": 1890,
+      "sha256": "9C93EBDEF9B07FEA63E6C53DAB8618AEAAA7898F606D4A7994E0FF4D0555A858",
+      "copyVerified": true
+    },
+    {
+      "runId": "ug-r14f4-final-win-buildtests-2",
+      "host": "PAYTON-LEGION2",
+      "kind": "infrastructure",
+      "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14f4-final-win-buildtests-2/build-tests/Build.Tests.trx",
+      "path": "docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-buildtests-2/Build.Tests.trx",
+      "bytes": 763853,
+      "sha256": "A3065916BA61F2C7445776FA1DB34C30BBE40588D5EDAE9DF0B1A214EC891984",
+      "copyVerified": true,
+      "project": "Build.Tests",
+      "outcome": "Completed",
+      "total": 530,
+      "executed": 530,
+      "passed": 530,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-07T20:10:08.2050054-06:00",
+      "finish": "2026-11-07T20:10:34.1374324-06:00"
+    }
+  ],
+  "testProjects": [
+    {
+      "project": "Build.Tests",
+      "path": "tests/Build.Tests/Build.Tests.csproj",
+      "role": "Infrastructure",
+      "trxRuns": [
+        "ug-r14f4-final-linux-buildtests-2",
+        "ug-r14f4-final-win-buildtests-2"
+      ]
+    },
+    {
+      "project": "NukeBuild.IntegrationTests",
+      "path": "tests/NukeBuild.IntegrationTests/NukeBuild.IntegrationTests.csproj",
+      "role": "Integration",
+      "trxRuns": [
+        "ug-r14f4-final-linux-lane-2",
+        "ug-r14f4-final-win-lane-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.Acid.IntegrationTests",
+      "path": "tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj",
+      "role": "Integration",
+      "trxRuns": []
+    },
+    {
+      "project": "QBrainAi.Client.Tests",
+      "path": "tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj",
+      "role": "Unit",
+      "trxRuns": [
+        "ug-r14f4-final-linux-unit-2",
+        "ug-r14f4-final-win-unit-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.Context.Validation",
+      "path": "tests/QBrainAi.Context.Validation/QBrainAi.Context.Validation.csproj",
+      "role": "undeclared",
+      "trxRuns": []
+    },
+    {
+      "project": "QBrainAi.Cqrs.Tests",
+      "path": "tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj",
+      "role": "Unit",
+      "trxRuns": [
+        "ug-r14f4-final-linux-unit-2",
+        "ug-r14f4-final-win-unit-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.GitHub.Validation",
+      "path": "tests/QBrainAi.GitHub.Validation/QBrainAi.GitHub.Validation.csproj",
+      "role": "undeclared",
+      "trxRuns": []
+    },
+    {
+      "project": "QBrainAi.Launcher.Tests",
+      "path": "tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj",
+      "role": "Unit",
+      "trxRuns": [
+        "ug-r14f4-final-linux-unit-2",
+        "ug-r14f4-final-win-unit-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.McpAgent.IntegrationTests",
+      "path": "tests/QBrainAi.McpAgent.IntegrationTests/QBrainAi.McpAgent.IntegrationTests.csproj",
+      "role": "Integration",
+      "trxRuns": [
+        "ug-r14f4-final-linux-lane-2",
+        "ug-r14f4-final-win-lane-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.McpAgent.Tests",
+      "path": "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+      "role": "Unit",
+      "trxRuns": [
+        "ug-r14f4-final-linux-unit-2",
+        "ug-r14f4-final-win-unit-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.PlanReview.Tests",
+      "path": "tests/QBrainAi.PlanReview.Tests/QBrainAi.PlanReview.Tests.csproj",
+      "role": "undeclared",
+      "trxRuns": []
+    },
+    {
+      "project": "QBrainAi.PluginIntegration.Tests",
+      "path": "tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj",
+      "role": "undeclared",
+      "trxRuns": []
+    },
+    {
+      "project": "QBrainAi.ProcessTree.TestHelper",
+      "path": "tests/QBrainAi.ProcessTree.TestHelper/QBrainAi.ProcessTree.TestHelper.csproj",
+      "role": "undeclared",
+      "trxRuns": []
+    },
+    {
+      "project": "QBrainAi.QBAgent.IntegrationTests",
+      "path": "tests/QBrainAi.QBAgent.IntegrationTests/QBrainAi.QBAgent.IntegrationTests.csproj",
+      "role": "Integration",
+      "trxRuns": [
+        "ug-r14f4-final-linux-lane-2",
+        "ug-r14f4-final-win-lane-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.QBAgent.Tests",
+      "path": "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+      "role": "Unit",
+      "trxRuns": [
+        "ug-r14f4-final-linux-unit-2",
+        "ug-r14f4-final-win-unit-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "path": "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+      "role": "Unit",
+      "trxRuns": [
+        "ug-r14f4-final-linux-unit-2",
+        "ug-r14f4-final-win-unit-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.Repl.IntegrationTests",
+      "path": "tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+      "role": "Integration",
+      "trxRuns": [
+        "ug-r14f4-final-linux-lane-2",
+        "ug-r14f4-final-win-lane-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.Repo.Validation",
+      "path": "tests/QBrainAi.Repo.Validation/QBrainAi.Repo.Validation.csproj",
+      "role": "undeclared",
+      "trxRuns": []
+    },
+    {
+      "project": "QBrainAi.Review.Tests",
+      "path": "tests/QBrainAi.Review.Tests/QBrainAi.Review.Tests.csproj",
+      "role": "undeclared",
+      "trxRuns": []
+    },
+    {
+      "project": "QBrainAi.SessionLog.Validation",
+      "path": "tests/QBrainAi.SessionLog.Validation/QBrainAi.SessionLog.Validation.csproj",
+      "role": "undeclared",
+      "trxRuns": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+      "role": "Integration",
+      "trxRuns": [
+        "ug-r14f4-final-linux-lane-2",
+        "ug-r14f4-final-win-lane-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.IntegrationTests",
+      "path": "tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj",
+      "role": "Integration",
+      "trxRuns": [
+        "ug-r14f4-final-linux-lane-2",
+        "ug-r14f4-final-win-lane-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "path": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+      "role": "Unit",
+      "trxRuns": [
+        "ug-r14f4-final-linux-unit-2",
+        "ug-r14f4-final-win-unit-2"
+      ]
+    },
+    {
+      "project": "QBrainAi.Todo.Validation",
+      "path": "tests/QBrainAi.Todo.Validation/QBrainAi.Todo.Validation.csproj",
+      "role": "undeclared",
+      "trxRuns": []
+    },
+    {
+      "project": "QBrainAi.ToolRegistry.Validation",
+      "path": "tests/QBrainAi.ToolRegistry.Validation/QBrainAi.ToolRegistry.Validation.csproj",
+      "role": "undeclared",
+      "trxRuns": []
+    },
+    {
+      "project": "QBrainAi.TransactionSecurity.IntegrationTests",
+      "path": "tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj",
+      "role": "Integration",
+      "trxRuns": []
+    },
+    {
+      "project": "QBrainAi.Workspace.Validation",
+      "path": "tests/QBrainAi.Workspace.Validation/QBrainAi.Workspace.Validation.csproj",
+      "role": "undeclared",
+      "trxRuns": []
+    }
+  ]
+}

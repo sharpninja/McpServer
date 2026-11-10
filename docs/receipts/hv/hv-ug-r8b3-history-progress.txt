@@ -1,0 +1,10 @@
+Plugin command failed with exit code 1.
+type: error
+payload:
+  code: internal_server_error
+  message: qbrain-ai-repl timed out after 30s
+  retryable: false
+  details:
+    method: workflow.sessionlog.queryHistory
+
+

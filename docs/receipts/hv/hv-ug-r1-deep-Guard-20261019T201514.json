@@ -1,0 +1,38 @@
+[
+  {
+    "Assembly": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll",
+    "Method": "System.Collections.Generic.IReadOnlyList`1[QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformFinding] Scan(System.String, System.String)",
+    "Runtime": ".NET 10.0.13"
+  },
+  {
+    "Case": "single",
+    "Source": "public class SampleTests { [Fact(Skip = \"unsupported\")] public void Test() {} }",
+    "Hits": [
+      {
+        "Path": "SampleTests.cs",
+        "Line": 1,
+        "Kind": "skip",
+        "TestClass": "SampleTests"
+      }
+    ],
+    "SkipGuardMatches": 1
+  },
+  {
+    "Case": "multiline",
+    "Source": "public class SampleTests { [Fact(\nSkip = \"unsupported\")] public void Test() {} }",
+    "Hits": [],
+    "SkipGuardMatches": 0
+  },
+  {
+    "Case": "qualified",
+    "Source": "public class SampleTests { [Xunit.Fact(Skip = \"unsupported\")] public void Test() {} }",
+    "Hits": [],
+    "SkipGuardMatches": 0
+  },
+  {
+    "Case": "interpolated",
+    "Source": "public class SampleTests { [Fact] public void Test() { var p = $\"{OperatingSystem.IsWindows()}\"; } }",
+    "Hits": [],
+    "SkipGuardMatches": 0
+  }
+]

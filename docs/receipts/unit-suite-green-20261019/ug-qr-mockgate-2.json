@@ -1,0 +1,82 @@
+{
+  "name": "ug-qr-mockgate-2",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "022f9cde436eadf509b47794d18c6cdc9036ad80",
+  "dirtyPaths": [
+    " M build/Build.Test.cs",
+    " M build/IntegrationLaneFilter.cs",
+    " M build/IntegrationLaneFilterContracts.cs",
+    " M build/TestProjectOwnership.cs",
+    " M build/TestProjectOwnershipContracts.cs",
+    " M tests/Build.Tests/IntegrationLaneClassFilterContract.cs",
+    " M tests/Build.Tests/IntegrationLaneClassFilterTests.cs",
+    " M tests/Build.Tests/IntegrationLaneExecutionContractTests.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    " M tests/Build.Tests/TestGroupExecutionContractTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipContract.cs",
+    " M tests/Build.Tests/TestProjectOwnershipMockGateTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-1/",
+    "?? tests/Build.Tests/UnitTestFilterContract.cs",
+    "?? tests/Build.Tests/UnitTestFilterMockGateTests.cs",
+    "?? tests/Build.Tests/UnitTestFilterTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "Build.Tests:IntegrationLaneClassFilterMockGateTests",
+    "--test-run-id",
+    "ug-qr-mockgate-2"
+  ],
+  "startedLocal": "2026-11-07T19:08:48",
+  "endedLocal": "2026-11-07T19:08:59",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-qr-mockgate-2/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-2/Build.Tests.trx",
+      "sha256": "C3A81281FF951718621A563DE89E1A7F6EE25F13C13399BAC2A36FB4C07DC28B",
+      "total": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/Build.Tests/IntegrationLaneClassFilterContract.cs",
+      "sha256": "A585F09C7C3E7128EAE14E704DC8DAF8851CDC83A03520693D5454CDA2467063"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneClassFilterMockGateTests.cs",
+      "sha256": "4A86B336E0EAA7ADE6ED0E0B213973C153F0064D8B1F697B6A46D51C1D4255FF"
+    },
+    {
+      "path": "build/IntegrationLaneClassFilter.cs",
+      "sha256": "B4B4E65DF97951868292BBC368C33063C3480722F99AF8EDC59DB7FB05D744B8"
+    }
+  ],
+  "writtenLocal": "2026-11-07T19:09:57",
+  "writtenBy": "ClaudeCode"
+}

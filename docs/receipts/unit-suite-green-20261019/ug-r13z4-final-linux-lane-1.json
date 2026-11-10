@@ -1,0 +1,117 @@
+{
+  "name": "ug-r13z4-final-linux-lane-1",
+  "kind": "gate",
+  "retrospective": true,
+  "writtenLocal": "2026-11-05T04:35:21",
+  "writtenBy": "ClaudeCode (Save-RetrospectiveReceipt.ps1)",
+  "note": "Written after the run from its own meta, exit and TRX files only, because the historical-id labels of slice Z4 part 2 were already in the working tree when it was written; the lane ran at 4398cffc with the dirty paths its meta lists. History since slice Z4 part 2 (plan 27.30).",
+  "head": "4398cffc06878dfb1d3defad3cfb67465863fe67",
+  "exit": "0 2026-11-05T04:29:54",
+  "totals": {
+    "total": 741,
+    "passed": 741,
+    "failed": 0,
+    "notExecuted": 0
+  },
+  "trx": [
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4-final-linux-lane-1/provider/Build.Tests/Build.Tests.trx",
+      "sha256": "7AB0093873BF1B3C8D77080C9A118C8ADABB21EBAB90ABED38C7A7C654A30ED0",
+      "total": 96,
+      "passed": 96,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-05T04:03:19.6914699-06:00",
+      "finish": "2026-11-05T04:07:38.6306676-06:00"
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4-final-linux-lane-1/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "sha256": "2A117EAD85A73E0FEB72F6B4BEAD0D7130CD6E7DB70466442725F49024926549",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-05T04:03:00.9148740-06:00",
+      "finish": "2026-11-05T04:03:02.4891686-06:00"
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4-final-linux-lane-1/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "sha256": "91B220B0F9A490469B61AD38AF5370D4DA15442B6B02F4C7509629A99B23F90C",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-05T04:03:15.4637102-06:00",
+      "finish": "2026-11-05T04:03:17.1162953-06:00"
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4-final-linux-lane-1/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "CC37CA83A22B0AC7A10F54CD53B40AC6455158650CB8E655A91434F93207D184",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-05T04:03:07.9751039-06:00",
+      "finish": "2026-11-05T04:03:10.1208883-06:00"
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4-final-linux-lane-1/provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx",
+      "sha256": "9F183E8CC09BC5C5DCDD28525E02C54755DD0B7CED9FE88B4E335D7B70A18F16",
+      "total": 179,
+      "passed": 179,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-05T04:07:47.9436674-06:00",
+      "finish": "2026-11-05T04:27:46.9167847-06:00"
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4-final-linux-lane-1/provider/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "sha256": "CD908B437A67414AFDD10C45B61F2692A1687D01BE01812A65522B77D8FD7CFC",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-05T04:28:00.2602118-06:00",
+      "finish": "2026-11-05T04:29:54.0552594-06:00"
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4-final-linux-lane-1/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "864A500E73991C97D9A8EC69836F23AF0AECC99B1168DFF0A7DDE30D751C094F",
+      "total": 454,
+      "passed": 454,
+      "failed": 0,
+      "notExecuted": 0,
+      "start": "2026-11-05T04:01:15.8282686-06:00",
+      "finish": "2026-11-05T04:02:56.5878650-06:00"
+    }
+  ],
+  "runMeta": {
+    "name": "ug-r13z4-final-linux-lane-1",
+    "target": "MigrationIntegrationTests",
+    "extraArgs": [
+      "--test-run-id",
+      "ug-r13z4-final-linux-lane-1"
+    ],
+    "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+    "head": "4398cffc06878dfb1d3defad3cfb67465863fe67",
+    "dirtyPaths": [
+      "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1/",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-b-2.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-b-2/",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-compile-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-final-linux-unit-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-final-linux-unit-1/",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1/",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-b-1.json",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-b-1/",
+      "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-serviceupdate-chain-1.txt"
+    ],
+    "startedLocal": "2026-11-05T04:00:38",
+    "startedUtc": "2026-11-05T10:00:38.2975396Z",
+    "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r13z4-final-linux-lane-1.out.log",
+    "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r13z4-final-linux-lane-1.err.log",
+    "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r13z4-final-linux-lane-1.exit.txt"
+  }
+}

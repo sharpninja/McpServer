@@ -1,0 +1,29 @@
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:112:        var installedRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "PostgreSQL");
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:125:            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:172:        var profile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:178:        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs:63:        Assert.DoesNotContain(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), message, StringComparison.OrdinalIgnoreCase);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs:354:        var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:31:        var sut = new SessionLogTurnContextBackfill(db, new SessionLogTurnContextExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:45:        var sut = new SessionLogTurnContextBackfill(db, new SessionLogTurnContextExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:66:        var sut = new SessionLogTurnContextBackfill(db, new SessionLogTurnContextExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:81:        var sut = new SessionLogTurnContextBackfill(db, new SessionLogTurnContextExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:101:            var sut = new SessionLogTurnContextBackfill(db, new SessionLogTurnContextExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:130:            new SessionLogTurnContextExtractor(),
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:150:            new SessionLogTurnContextExtractor(),
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:185:        var skipped = new SessionLogTurnContextExtractor(ScriptedWalker(unlistable, linked))
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:187:        var followed = new SessionLogTurnContextExtractor(ScriptedWalker(unlistable, link: null))
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:203:        var result = new SessionLogTurnContextExtractor(ScriptedWalker(Path.Combine(Profile, ".claude"), link: null))
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:239:        var imported = await new WikiDumpService(destDb).ImportAsync(new WikiDumpImportRequest
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:260:        var badJson = await sut.ImportAsync(new WikiDumpImportRequest { DumpPath = malformed, DestinationWorkspacePath = dest }, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:266:        var badVersion = await sut.ImportAsync(new WikiDumpImportRequest { DumpPath = version, DestinationWorkspacePath = dest }, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:272:        var badTables = await sut.ImportAsync(new WikiDumpImportRequest { DumpPath = missing, DestinationWorkspacePath = dest }, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:276:        var unsafePath = await sut.ImportAsync(new WikiDumpImportRequest { DumpPath = "..\\windows\\system32", DestinationWorkspacePath = dest }, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:308:        var first = await new WikiDumpService(destDb).ImportAsync(new WikiDumpImportRequest { DumpPath = dumpRoot, DestinationWorkspacePath = dest }, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:309:        var second = await new WikiDumpService(destDb).ImportAsync(new WikiDumpImportRequest { DumpPath = dumpRoot, DestinationWorkspacePath = dest }, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:329:        var imported = await new WikiDumpService(destDb).ImportAsync(new WikiDumpImportRequest
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:353:        var imported = await new WikiDumpService(destDb).ImportAsync(new WikiDumpImportRequest
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:379:        var imported = await new WikiDumpService(destDb).ImportAsync(new WikiDumpImportRequest
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:752:        var common = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:72:            FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "cmd.exe"),
+

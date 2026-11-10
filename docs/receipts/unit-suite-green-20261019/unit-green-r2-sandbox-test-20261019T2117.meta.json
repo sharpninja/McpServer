@@ -1,0 +1,35 @@
+{
+  "name": "unit-green-r2-sandbox-test-20261019T2117",
+  "target": "Test",
+  "command": [
+    "codex",
+    "sandbox",
+    "-P",
+    ":workspace",
+    "-c",
+    "sandbox_workspace_write.network_access=true",
+    "-C",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+    "pwsh",
+    "-NoProfile",
+    "-NonInteractive",
+    "-File",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build.ps1",
+    "Test",
+    "--test-run-id",
+    "unit-green-r2-sandbox-test-20261019T2117",
+    "--skip",
+    "Restore"
+  ],
+  "codexVersion": "codex-cli 0.160.1",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+  "dirtyPaths": [
+    " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+  ],
+  "startedLocal": "2026-10-19T21:17:11",
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-sandbox-test-20261019T2117.out.log",
+  "exitCode": 255,
+  "endedLocal": "2026-10-19T21:17:18"
+}

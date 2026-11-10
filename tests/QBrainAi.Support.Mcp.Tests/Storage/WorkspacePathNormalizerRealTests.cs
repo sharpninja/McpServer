@@ -19,23 +19,4 @@ public sealed class WorkspacePathNormalizerRealTests : WorkspacePathNormalizerCo
     {
         Assert.Throws<ArgumentNullException>(() => new WorkspacePathNormalizer(null!));
     }
-
-    /// <summary>
-    /// FR-MCP-FED-PATH-001-AC1/AC2: With the real process host, a foreign-platform absolute path
-    /// is returned without being re-rooted on the host (Windows runner: POSIX path; Linux runner:
-    /// Windows path). Integration of the production normalizer with
-    /// <see cref="SystemWorkspaceHostEnvironment"/>; the same behaviour is proven against mocked
-    /// data by the contract tests (WindowsHost_PosixAbsolutePath_StaysPosix and
-    /// LinuxHost_WindowsDrivePath_IsNotPrefixedWithWorkingDirectory).
-    /// </summary>
-    [Fact]
-    public void ProcessNormalizer_ForeignAbsolutePath_IsNotReRooted()
-    {
-        var foreign = OperatingSystem.IsWindows() ? "/home/sharpninja/github/McpServer" : @"C:\Users\kingd";
-
-        var result = WorkspacePathNormalizer.Process.Normalize(foreign);
-
-        Assert.Equal(foreign, result);
-        Assert.DoesNotContain(Environment.CurrentDirectory, result, StringComparison.OrdinalIgnoreCase);
-    }
 }

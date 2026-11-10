@@ -1,0 +1,85 @@
+using QBrainAi.SessionLog.Transcripts;
+using QBrainAi.Tests.Shared;
+using static QBrainAi.Support.Mcp.Tests.Ingestion.ImportRecoveryIngestionFakes;
+
+namespace QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Ingestion;
+
+/// <summary>
+/// TEST-MCP-SESSIONLIFE-004: transcript ingestion replays pending import-recovery envelopes
+/// through the source adapter and session persister, then deletes only the envelope.
+/// </summary>
+/// <remarks>
+/// <para>2026-11-07, TEST-MCP-SESSIONLIFE-004; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: moved whole with its private fakes from QBrainAi.Support.Mcp.Tests (Ingestion/ImportRecoveryEnvelopeTests.cs) into the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests, so the unit-owned project holds only unit cases (slice S8, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"); no unit class uses its fakes (the unit ImportRecoveryIngestionTests declares its own), and its envelope fixture is still read from the repository checkout through the linked TestRepositoryRoot; only the namespace changed.</para>
+/// <para>2026-11-07, TEST-MCP-SESSIONLIFE-004; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: its private EmptyDetector, CodexSourceAdapter and RecordingPersister, identical in behavior to the copies the unit ImportRecoveryIngestionTests declared, are replaced by the one shared definition in ImportRecoveryIngestionFakes, defined in QBrainAi.Support.Mcp.Tests and linked into this project (slice S9 of hostile validation finding R14-F4, DRY); so the earlier entry's "the unit ImportRecoveryIngestionTests declares its own" no longer holds, and the test method is unchanged.</para>
+/// </remarks>
+public sealed class ImportRecoveryEnvelopeTests
+{
+    /// <summary>
+    /// A pending envelope is replayed from its source file. The canonical artifact and source file stay.
+    /// The persister receives the normalized session, not the envelope document.
+    /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
+    [Fact]
+    public async Task IngestPath_ReplaysPendingEnvelopeThroughPersister_DeletesOnlyEnvelope()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "import-envelope-" + Guid.NewGuid().ToString("N"));
+        var input = Path.Combine(root, "inbox");
+        var pending = Path.Combine(root, ".mcpServer", "Codex", "failsafe", "pending");
+        Directory.CreateDirectory(input);
+        Directory.CreateDirectory(pending);
+        try
+        {
+            var source = Path.Combine(root, "session.jsonl");
+            var artifact = Path.Combine(root, "session.yaml");
+            await File.WriteAllTextAsync(source, "{\"type\":\"session_meta\"}\n", TestContext.Current.CancellationToken);
+            await File.WriteAllTextAsync(artifact, "session: keep\n", TestContext.Current.CancellationToken);
+            var fixture = Path.Combine(FindRepositoryRoot(), "tests", "QBrainAi.Support.Mcp.Tests", "Ingestion", "Fixtures", "import-recovery-envelope.yaml");
+            var template = await File.ReadAllTextAsync(fixture, TestContext.Current.CancellationToken);
+            var envelopeYaml = template
+                .Replace("{{ARTIFACT}}", artifact.Replace('\\', '/'), StringComparison.Ordinal)
+                .Replace("{{SOURCE}}", source.Replace('\\', '/'), StringComparison.Ordinal);
+            var envelope = Path.Combine(pending, "ok.importRecovery.yaml");
+            await File.WriteAllTextAsync(envelope, envelopeYaml, TestContext.Current.CancellationToken);
+            var kept = Path.Combine(pending, "no.importRecovery.yaml");
+            await File.WriteAllTextAsync(
+                kept,
+                "importRecovery:\n  sourceKind: Codex\n  persisted: false\n  degraded: true\n  yamlArtifactPath: \"" + artifact.Replace('\\', '/') + "\"\n",
+                TestContext.Current.CancellationToken);
+
+            var persister = new RecordingPersister();
+            var service = new TranscriptIngestionService(
+                new EmptyDetector(),
+                [new CodexSourceAdapter()],
+                projectors: null,
+                persister);
+            var result = await service.IngestPathAsync(
+                new TranscriptIngestionRequest(input)
+                {
+                    Persist = true,
+                    Agent = "Codex",
+                    WorkspacePath = root,
+                    Recursive = false,
+                },
+                TestContext.Current.CancellationToken);
+
+            Assert.NotNull(result);
+            Assert.False(File.Exists(envelope));
+            Assert.True(File.Exists(kept));
+            Assert.True(File.Exists(artifact));
+            Assert.True(File.Exists(source));
+            var call = Assert.Single(persister.Calls);
+            Assert.Equal(artifact.Replace('\\', '/'), call.Receipt.YamlArtifactPath.Replace('\\', '/'), StringComparer.OrdinalIgnoreCase);
+            Assert.DoesNotContain("importRecovery:", call.Session.CanonicalYaml, StringComparison.Ordinal);
+            Assert.Contains(
+                call.Session.SourceFiles,
+                file => string.Equals(file.Replace('\\', '/'), source.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase));
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    private static string FindRepositoryRoot() => TestRepositoryRoot.Resolve();
+}

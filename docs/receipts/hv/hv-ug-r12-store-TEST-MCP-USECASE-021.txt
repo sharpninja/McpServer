@@ -1,0 +1,35 @@
+type: result
+payload:
+  requestId: req-20261105T075306Z-6576
+  result:
+    id: TEST-MCP-USECASE-021
+    title: Use-case component update mocks-first and production contract
+    description: Prove identity-preserving actor, flow, and step editing through discriminating independent fakes before production, then bind the same assertions to CQRS, REST, client, MCP, persistence, and authenticated readback.
+    status: pending
+    priority: high
+    area: MCP
+    testType: unit
+    notes: BDPv4 chronological receipts must distinguish mock, negative-control, production, full-suite, deployment, and live readback evidence.
+    acceptanceCriteria:
+    - id: AC-TEST-USECASE-021-1
+      text: Before production edits, contract tests pass against correct independent fake editor responses and prove inside the passing harness that wrong IDs, parent IDs, fields, and mutation counts are rejected.
+      isSatisfied: false
+    - id: AC-TEST-USECASE-021-2
+      text: The same contract cases and assertions pass against the real CQRS handlers for actor, flow, and step updates, including validation, missing, cross-workspace, and parent-mismatch cases.
+      isSatisfied: false
+    - id: AC-TEST-USECASE-021-3
+      text: Controller tests prove the three update routes and classified 400/404 responses; typed-client tests prove HTTP methods, paths, payloads, cancellation, and response deserialization; MCP-tool tests prove dispatcher inputs and serialized results.
+      isSatisfied: false
+    - id: AC-TEST-USECASE-021-4
+      text: A persistence test proves IDs and row counts are unchanged, aggregate approval/version and unrelated data are unchanged, UpdatedAtUtc advances, and authenticated readback returns the edited values.
+      isSatisfied: false
+    - id: AC-TEST-USECASE-021-5
+      text: Focused tests, the full applicable unit suite, Compile, and ValidateTraceability complete with zero failures and zero skips before deployment.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T07:53:07.3922620+00:00
+    updatedAt: 2026-11-05T07:53:07.3923755+00:00
+  deprecated: true
+
+---
+

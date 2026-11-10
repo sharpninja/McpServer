@@ -1,0 +1,713 @@
+[
+  {
+    "Run": "ug-r8b-checks-binding-1",
+    "Metadata": {
+      "name": "ug-r8b-checks-binding-1",
+      "target": "Test",
+      "extraArgs": [
+        "--test-run-id",
+        "ug-r8b-checks-binding-1"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "dirtyPaths": [
+        " M docs/plans/2026-10-19-unit-suite-green.md",
+        " M tests/Directory.Build.targets",
+        " M tests/QBrainAi.Repl.IntegrationTests/AuthKeyAndWorkspaceTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/EndToEndFlowTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/Iteration1IntegrationTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+        " M tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/TrustBootstrapFlowTests.cs",
+        " M tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+        "?? docs/receipts/hv/unitgreen-r8b-trx/",
+        "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/",
+        "?? tests/TestSupport.Shared/ScratchQBrainAi.cs",
+        "?? tests/TestSupport.Shared/TemporaryInstanceChecks.cs"
+      ],
+      "startedLocal": "2026-10-27T05:44:09",
+      "startedUtc": "2026-10-27T10:44:09.4441001Z",
+      "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-binding-1.out.log",
+      "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-binding-1.err.log",
+      "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-binding-1.exit.txt"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-checks-binding-1.out.txt",
+        "Relevant": [
+          "   at Nuke.Common.Tooling.ProcessExtensions.AssertZeroExitCode(IProcess process) in /_/source/Nuke.Tooling/ProcessExtensions.cs:line 38"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-checks-binding-2",
+    "Metadata": {
+      "name": "ug-r8b-checks-binding-2",
+      "target": "Test",
+      "extraArgs": [
+        "--test-run-id",
+        "ug-r8b-checks-binding-2"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "dirtyPaths": [
+        " M docs/plans/2026-10-19-unit-suite-green.md",
+        " M tests/Directory.Build.targets",
+        " M tests/QBrainAi.Repl.IntegrationTests/AuthKeyAndWorkspaceTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/EndToEndFlowTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/Iteration1IntegrationTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+        " M tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/TrustBootstrapFlowTests.cs",
+        " M tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+        "?? docs/receipts/hv/unitgreen-r8b-trx/",
+        "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/",
+        "?? tests/TestSupport.Shared/ScratchQBrainAi.cs",
+        "?? tests/TestSupport.Shared/TemporaryInstanceChecks.cs"
+      ],
+      "startedLocal": "2026-10-27T05:47:23",
+      "startedUtc": "2026-10-27T10:47:23.6549544Z",
+      "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-binding-2.out.log",
+      "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-binding-2.err.log",
+      "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-binding-2.exit.txt"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-checks-binding-2.trx-summary.txt",
+        "Relevant": [
+          "unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx: total=306 executed=306 passed=306 failed=0 notExecuted=0",
+          "unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx: total=33 executed=33 passed=33 failed=0 notExecuted=0",
+          "unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx: total=20 executed=20 passed=20 failed=0 notExecuted=0",
+          "unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx: total=64 executed=64 passed=64 failed=0 notExecuted=0",
+          "unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx: total=94 executed=94 passed=94 failed=0 notExecuted=0",
+          "unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx: total=883 executed=883 passed=883 failed=0 notExecuted=0",
+          "unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx: total=3172 executed=3172 passed=3172 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-checks-mockgate-1",
+    "Metadata": {
+      "name": "ug-r8b-checks-mockgate-1",
+      "target": "Test",
+      "extraArgs": [
+        "--test-run-id",
+        "ug-r8b-checks-mockgate-1"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "dirtyPaths": [
+        " M docs/plans/2026-10-19-unit-suite-green.md",
+        "?? docs/receipts/hv/unitgreen-r8b-trx/",
+        "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/"
+      ],
+      "startedLocal": "2026-10-27T05:27:21",
+      "startedUtc": "2026-10-27T10:27:21.2888795Z",
+      "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-mockgate-1.out.log",
+      "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-mockgate-1.err.log",
+      "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-mockgate-1.exit.txt"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-checks-mockgate-1.trx-summary.txt",
+        "Relevant": [
+          "unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx: total=306 executed=306 passed=306 failed=0 notExecuted=0",
+          "unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx: total=33 executed=33 passed=33 failed=0 notExecuted=0",
+          "unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx: total=20 executed=20 passed=20 failed=0 notExecuted=0",
+          "unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx: total=64 executed=64 passed=64 failed=0 notExecuted=0",
+          "unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx: total=94 executed=94 passed=94 failed=0 notExecuted=0",
+          "unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx: total=882 executed=882 passed=882 failed=0 notExecuted=0",
+          "unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx: total=3172 executed=3172 passed=3172 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-download-binding-1",
+    "Metadata": {
+      "name": "ug-r8b-download-binding-1",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+        "-c",
+        "Debug",
+        "--logger",
+        "trx;LogFileName=ug-r8b-download-binding-1.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-binding-1",
+        "--filter",
+        "FullyQualifiedName~ProvisioningDownload"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "2f67921357bff28a636fc5824d70422dbb1f168d",
+      "dirtyPaths": [
+        " M build/Build.TestDependencies.cs",
+        "?? build/ProvisioningDownload.cs",
+        "?? build/ProvisioningDownloadContracts.cs",
+        "?? tests/Build.Tests/ProvisioningDownloadContract.cs",
+        "?? tests/Build.Tests/ProvisioningDownloadMockGateTests.cs",
+        "?? tests/Build.Tests/ProvisioningDownloadTests.cs"
+      ],
+      "startedLocal": "2026-10-27T20:08:24",
+      "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-binding-1.out.log",
+      "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-binding-1",
+      "exitCode": 0,
+      "endedLocal": "2026-10-27T20:08:49"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-download-binding-1.trx-summary.txt",
+        "Relevant": [
+          "ug-r8b-download-binding-1.trx: total=8 executed=8 passed=8 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-download-mockgate-1",
+    "Metadata": {
+      "name": "ug-r8b-download-mockgate-1",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+        "-c",
+        "Debug",
+        "--logger",
+        "trx;LogFileName=ug-r8b-download-mockgate-1.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-mockgate-1",
+        "--filter",
+        "FullyQualifiedName~ProvisioningDownload"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "2f67921357bff28a636fc5824d70422dbb1f168d",
+      "dirtyPaths": [
+        "?? build/ProvisioningDownloadContracts.cs",
+        "?? tests/Build.Tests/ProvisioningDownloadContract.cs",
+        "?? tests/Build.Tests/ProvisioningDownloadMockGateTests.cs"
+      ],
+      "startedLocal": "2026-10-27T20:06:29",
+      "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-mockgate-1.out.log",
+      "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-mockgate-1",
+      "exitCode": 1,
+      "endedLocal": "2026-10-27T20:06:54"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-download-mockgate-1.trx-summary.txt",
+        "Relevant": [
+          "ug-r8b-download-mockgate-1.trx: total=6 executed=6 passed=5 failed=1 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-download-mockgate-2",
+    "Metadata": {
+      "name": "ug-r8b-download-mockgate-2",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+        "-c",
+        "Debug",
+        "--logger",
+        "trx;LogFileName=ug-r8b-download-mockgate-2.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-mockgate-2",
+        "--filter",
+        "FullyQualifiedName~ProvisioningDownload"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "2f67921357bff28a636fc5824d70422dbb1f168d",
+      "dirtyPaths": [
+        "?? build/ProvisioningDownloadContracts.cs",
+        "?? tests/Build.Tests/ProvisioningDownloadContract.cs",
+        "?? tests/Build.Tests/ProvisioningDownloadMockGateTests.cs"
+      ],
+      "startedLocal": "2026-10-27T20:07:26",
+      "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-mockgate-2.out.log",
+      "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-mockgate-2",
+      "exitCode": 0,
+      "endedLocal": "2026-10-27T20:07:51"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-download-mockgate-2.trx-summary.txt",
+        "Relevant": [
+          "ug-r8b-download-mockgate-2.trx: total=6 executed=6 passed=6 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-laneprojects-binding-1",
+    "Metadata": {
+      "name": "ug-r8b-laneprojects-binding-1",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+        "-c",
+        "Debug",
+        "--logger",
+        "trx;LogFileName=ug-r8b-laneprojects-binding-1.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-binding-1"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+      "dirtyPaths": [
+        " M build/Build.TestDependencies.cs",
+        "?? build/IntegrationLaneProjects.cs",
+        "?? build/IntegrationLaneProjectsContracts.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsTests.cs"
+      ],
+      "startedLocal": "2026-10-27T08:51:37",
+      "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-binding-1.out.log",
+      "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-binding-1",
+      "exitCode": 0,
+      "endedLocal": "2026-10-27T08:55:59"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-laneprojects-binding-1.trx-summary.txt",
+        "Relevant": [
+          "ug-r8b-laneprojects-binding-1.trx: total=460 executed=460 passed=460 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-laneprojects-binding-2",
+    "Metadata": {
+      "name": "ug-r8b-laneprojects-binding-2",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+        "-c",
+        "Debug",
+        "--logger",
+        "trx;LogFileName=ug-r8b-laneprojects-binding-2.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-binding-2",
+        "--filter",
+        "FullyQualifiedName~IntegrationLaneProjects"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+      "dirtyPaths": [
+        " M build/Build.TestDependencies.cs",
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+        "?? build/IntegrationLaneProjects.cs",
+        "?? build/IntegrationLaneProjectsContracts.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsTests.cs"
+      ],
+      "startedLocal": "2026-10-27T14:35:43",
+      "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-binding-2.out.log",
+      "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-binding-2",
+      "exitCode": 0,
+      "endedLocal": "2026-10-27T14:35:48"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-laneprojects-binding-2.trx-summary.txt",
+        "Relevant": [
+          "ug-r8b-laneprojects-binding-2.trx: total=13 executed=13 passed=13 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-laneprojects-mockgate-1",
+    "Metadata": {
+      "name": "ug-r8b-laneprojects-mockgate-1",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+        "-c",
+        "Debug",
+        "--logger",
+        "trx;LogFileName=ug-r8b-laneprojects-mockgate-1.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-mockgate-1"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+      "dirtyPaths": [
+        "?? build/IntegrationLaneProjectsContracts.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs"
+      ],
+      "startedLocal": "2026-10-27T08:46:14",
+      "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-mockgate-1.out.log",
+      "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-mockgate-1",
+      "exitCode": 0,
+      "endedLocal": "2026-10-27T08:50:49"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-laneprojects-mockgate-1.trx-summary.txt",
+        "Relevant": [
+          "ug-r8b-laneprojects-mockgate-1.trx: total=457 executed=457 passed=457 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-laneprojects-mockgate-2",
+    "Metadata": {
+      "name": "ug-r8b-laneprojects-mockgate-2",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+        "-c",
+        "Debug",
+        "--logger",
+        "trx;LogFileName=ug-r8b-laneprojects-mockgate-2.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-mockgate-2",
+        "--filter",
+        "FullyQualifiedName~IntegrationLaneProjectsMockGateTests"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+      "dirtyPaths": [
+        " M build/Build.TestDependencies.cs",
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+        "?? build/IntegrationLaneProjects.cs",
+        "?? build/IntegrationLaneProjectsContracts.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsTests.cs"
+      ],
+      "startedLocal": "2026-10-27T14:34:05",
+      "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-mockgate-2.out.log",
+      "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-mockgate-2",
+      "exitCode": 0,
+      "endedLocal": "2026-10-27T14:34:09"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-laneprojects-mockgate-2.trx-summary.txt",
+        "Relevant": [
+          "ug-r8b-laneprojects-mockgate-2.trx: total=10 executed=10 passed=10 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-markerwalk-binding-1",
+    "Metadata": {
+      "name": "ug-r8b-markerwalk-binding-1",
+      "target": "Test",
+      "extraArgs": [
+        "--test-run-id",
+        "ug-r8b-markerwalk-binding-1"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "4fab4424c0ebcd961e5135e393eace47771dd62c",
+      "dirtyPaths": [
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+        " M src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+        " M src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj",
+        " M tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+        " M tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs",
+        "?? src/QBrainAi.Repl.Host/IMarkerFileSystem.cs",
+        "?? src/QBrainAi.Repl.Host/PhysicalMarkerFileSystem.cs",
+        "?? tests/QBrainAi.Repl.Core.Tests/Host/"
+      ],
+      "startedLocal": "2026-10-27T21:18:41",
+      "startedUtc": "2026-10-28T02:18:41.6476385Z",
+      "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-markerwalk-binding-1.out.log",
+      "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-markerwalk-binding-1.err.log",
+      "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-markerwalk-binding-1.exit.txt"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-markerwalk-binding-1.trx-summary.txt",
+        "Relevant": [
+          "unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx: total=306 executed=306 passed=306 failed=0 notExecuted=0",
+          "unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx: total=33 executed=33 passed=33 failed=0 notExecuted=0",
+          "unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx: total=20 executed=20 passed=20 failed=0 notExecuted=0",
+          "unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx: total=64 executed=64 passed=64 failed=0 notExecuted=0",
+          "unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx: total=94 executed=94 passed=94 failed=0 notExecuted=0",
+          "unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx: total=903 executed=903 passed=903 failed=0 notExecuted=0",
+          "unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx: total=3172 executed=3172 passed=3172 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-markerwalk-mockgate-1",
+    "Metadata": {
+      "name": "ug-r8b-markerwalk-mockgate-1",
+      "target": "Test",
+      "extraArgs": [
+        "--test-run-id",
+        "ug-r8b-markerwalk-mockgate-1"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "4fab4424c0ebcd961e5135e393eace47771dd62c",
+      "dirtyPaths": [
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+        " M src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj",
+        " M tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+        "?? src/QBrainAi.Repl.Host/IMarkerFileSystem.cs",
+        "?? tests/QBrainAi.Repl.Core.Tests/Host/"
+      ],
+      "startedLocal": "2026-10-27T21:11:03",
+      "startedUtc": "2026-10-28T02:11:03.6617503Z",
+      "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-markerwalk-mockgate-1.out.log",
+      "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-markerwalk-mockgate-1.err.log",
+      "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-markerwalk-mockgate-1.exit.txt"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-markerwalk-mockgate-1.trx-summary.txt",
+        "Relevant": [
+          "unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx: total=306 executed=306 passed=306 failed=0 notExecuted=0",
+          "unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx: total=33 executed=33 passed=33 failed=0 notExecuted=0",
+          "unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx: total=20 executed=20 passed=20 failed=0 notExecuted=0",
+          "unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx: total=64 executed=64 passed=64 failed=0 notExecuted=0",
+          "unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx: total=94 executed=94 passed=94 failed=0 notExecuted=0",
+          "unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx: total=899 executed=899 passed=899 failed=0 notExecuted=0",
+          "unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx: total=3172 executed=3172 passed=3172 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-ollama-binding-1",
+    "Metadata": {
+      "name": "ug-r8b-ollama-binding-1",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+        "-c",
+        "Debug",
+        "--logger",
+        "trx;LogFileName=ug-r8b-ollama-binding-1.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-ollama-binding-1"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "8c651f13036db0aa2b90413770377cc66cb419d6",
+      "dirtyPaths": [
+        " M build/Build.TestDependencies.cs",
+        " M tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/OllamaServerFixture.cs",
+        "?? build/OllamaInstallLayout.cs",
+        "?? build/OllamaInstallLayoutContracts.cs",
+        "?? tests/Build.Tests/OllamaInstallLayoutContract.cs",
+        "?? tests/Build.Tests/OllamaInstallLayoutMockGateTests.cs",
+        "?? tests/Build.Tests/OllamaInstallLayoutTests.cs"
+      ],
+      "startedLocal": "2026-10-27T06:06:10",
+      "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-ollama-binding-1.out.log",
+      "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-ollama-binding-1",
+      "exitCode": 0,
+      "endedLocal": "2026-10-27T06:10:59"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-ollama-binding-1.trx-summary.txt",
+        "Relevant": [
+          "ug-r8b-ollama-binding-1.trx: total=449 executed=449 passed=449 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-ollama-mockgate-1",
+    "Metadata": {
+      "name": "ug-r8b-ollama-mockgate-1",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+        "-c",
+        "Debug",
+        "--logger",
+        "trx;LogFileName=ug-r8b-ollama-mockgate-1.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-ollama-mockgate-1"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "8c651f13036db0aa2b90413770377cc66cb419d6",
+      "dirtyPaths": [
+        "?? build/OllamaInstallLayoutContracts.cs",
+        "?? tests/Build.Tests/OllamaInstallLayoutContract.cs",
+        "?? tests/Build.Tests/OllamaInstallLayoutMockGateTests.cs"
+      ],
+      "startedLocal": "2026-10-27T05:59:10",
+      "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-ollama-mockgate-1.out.log",
+      "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-ollama-mockgate-1",
+      "exitCode": 0,
+      "endedLocal": "2026-10-27T06:04:05"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-ollama-mockgate-1.trx-summary.txt",
+        "Relevant": [
+          "ug-r8b-ollama-mockgate-1.trx: total=447 executed=447 passed=447 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-restart-binding-1",
+    "Metadata": {
+      "name": "ug-r8b-restart-binding-1",
+      "target": "Test",
+      "extraArgs": [
+        "--test-run-id",
+        "ug-r8b-restart-binding-1"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+      "dirtyPaths": [
+        " M build/Build.TestDependencies.cs",
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+        " M tests/Directory.Build.targets",
+        " M tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/AuthKeyAndWorkspaceTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+        " M tests/TestSupport.Shared/ScratchQBrainAi.cs",
+        " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+        "?? build/IntegrationLaneProjects.cs",
+        "?? build/IntegrationLaneProjectsContracts.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsTests.cs"
+      ],
+      "startedLocal": "2026-10-27T17:20:06",
+      "startedUtc": "2026-10-27T22:20:06.0907103Z",
+      "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-restart-binding-1.out.log",
+      "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-restart-binding-1.err.log",
+      "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-restart-binding-1.exit.txt"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-restart-binding-1.trx-summary.txt",
+        "Relevant": [
+          "unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx: total=306 executed=306 passed=306 failed=0 notExecuted=0",
+          "unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx: total=33 executed=33 passed=33 failed=0 notExecuted=0",
+          "unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx: total=20 executed=20 passed=20 failed=0 notExecuted=0",
+          "unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx: total=64 executed=64 passed=64 failed=0 notExecuted=0",
+          "unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx: total=94 executed=94 passed=94 failed=0 notExecuted=0",
+          "unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx: total=889 executed=889 passed=889 failed=0 notExecuted=0",
+          "unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx: total=3172 executed=3172 passed=3172 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-restart-mockgate-1",
+    "Metadata": {
+      "name": "ug-r8b-restart-mockgate-1",
+      "target": "Test",
+      "extraArgs": [
+        "--test-run-id",
+        "ug-r8b-restart-mockgate-1"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+      "dirtyPaths": [
+        " M build/Build.TestDependencies.cs",
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+        " M tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+        "?? build/IntegrationLaneProjects.cs",
+        "?? build/IntegrationLaneProjectsContracts.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsTests.cs"
+      ],
+      "startedLocal": "2026-10-27T14:56:52",
+      "startedUtc": "2026-10-27T19:56:52.2490329Z",
+      "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-restart-mockgate-1.out.log",
+      "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-restart-mockgate-1.err.log",
+      "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-restart-mockgate-1.exit.txt"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-restart-mockgate-1.trx-summary.txt",
+        "Relevant": [
+          "unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx: total=306 executed=306 passed=306 failed=0 notExecuted=0",
+          "unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx: total=33 executed=33 passed=33 failed=0 notExecuted=0",
+          "unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx: total=20 executed=20 passed=20 failed=0 notExecuted=0",
+          "unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx: total=64 executed=64 passed=64 failed=0 notExecuted=0",
+          "unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx: total=94 executed=94 passed=94 failed=0 notExecuted=0",
+          "unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx: total=889 executed=889 passed=889 failed=0 notExecuted=0",
+          "unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx: total=3172 executed=3172 passed=3171 failed=1 notExecuted=0"
+        ]
+      }
+    ]
+  },
+  {
+    "Run": "ug-r8b-restart-mockgate-2",
+    "Metadata": {
+      "name": "ug-r8b-restart-mockgate-2",
+      "target": "Test",
+      "extraArgs": [
+        "--test-run-id",
+        "ug-r8b-restart-mockgate-2"
+      ],
+      "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "head": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+      "dirtyPaths": [
+        " M build/Build.TestDependencies.cs",
+        " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+        " M tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/AuthKeyAndWorkspaceTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs",
+        " M tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+        "?? build/IntegrationLaneProjects.cs",
+        "?? build/IntegrationLaneProjectsContracts.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+        "?? tests/Build.Tests/IntegrationLaneProjectsTests.cs"
+      ],
+      "startedLocal": "2026-10-27T17:12:58",
+      "startedUtc": "2026-10-27T22:12:58.7191768Z",
+      "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-restart-mockgate-2.out.log",
+      "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-restart-mockgate-2.err.log",
+      "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-restart-mockgate-2.exit.txt"
+    },
+    "Receipts": [
+      {
+        "File": "ug-r8b-restart-mockgate-2.trx-summary.txt",
+        "Relevant": [
+          "unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx: total=306 executed=306 passed=306 failed=0 notExecuted=0",
+          "unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx: total=33 executed=33 passed=33 failed=0 notExecuted=0",
+          "unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx: total=20 executed=20 passed=20 failed=0 notExecuted=0",
+          "unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx: total=64 executed=64 passed=64 failed=0 notExecuted=0",
+          "unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx: total=94 executed=94 passed=94 failed=0 notExecuted=0",
+          "unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx: total=889 executed=889 passed=889 failed=0 notExecuted=0",
+          "unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx: total=3172 executed=3172 passed=3172 failed=0 notExecuted=0"
+        ]
+      }
+    ]
+  }
+]

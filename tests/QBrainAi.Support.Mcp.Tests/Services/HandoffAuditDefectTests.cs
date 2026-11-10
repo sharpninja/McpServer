@@ -16,20 +16,33 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// TEST-HANDOFF-004 through TEST-HANDOFF-007: behavior coverage for the audit defects
 /// (replay uniqueness, outcome mapping, invalid drafts, sanitization, cancellation).
 /// </summary>
+/// <remarks>
+/// Test data: one temporary SQLite database file per test in the test's own temporary workspace, opened without
+/// connection pooling, so the concurrently running services each have their own connection to that database, as
+/// production does (the race class of triage-report-9b96ada18d72483dad2a3113e455c01b; operator 2026-10-20: "Extend
+/// fix, then round 4 (Recommended)"; the harness assertion and its negative controls are in
+/// <see cref="HandoffTestDatabaseTests"/>).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): CreateService hands every service a settable clock fixed at one instant, so the 30 second processing and approval leases cannot expire between concurrent calls and change a case's outcome (the sibling sweep of hostile validation round 12 finding R12-F2, S36 and U1); the assertions are unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed class HandoffAuditDefectTests : IDisposable
 {
     private readonly string _workspace;
-    private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _dbOptions;
 
-    /// <summary>Creates an isolated SQLite workspace for audit-defect tests.</summary>
+    /// <summary>Creates an isolated SQLite database file in a temporary workspace for audit-defect tests.</summary>
     public HandoffAuditDefectTests()
     {
         _workspace = Path.Combine(Path.GetTempPath(), "handoff-audit", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_workspace);
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
-        _dbOptions = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(_connection).Options;
+        var connectionString = new SqliteConnectionStringBuilder
+        {
+            DataSource = Path.Combine(_workspace, "handoff-audit.db"),
+            Pooling = false,
+        }.ToString();
+        _dbOptions = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connectionString).Options;
         using var db = CreateDb();
         db.Database.EnsureCreated();
     }
@@ -37,10 +50,17 @@ public sealed class HandoffAuditDefectTests : IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
-        _connection.Dispose();
         if (Directory.Exists(_workspace))
             Directory.Delete(_workspace, recursive: true);
     }
+
+    /// <summary>
+    /// Harness binding: every context this class creates has its own connection to the class's one test database
+    /// (the assertion of <see cref="HandoffTestDatabaseTests"/>, bound to this class's context factory).
+    /// </summary>
+    [Fact]
+    public void TestDatabase_GivesEachContextItsOwnConnectionToOneDatabase() =>
+        HandoffTestDatabaseTests.AssertOwnConnectionsToOneDatabase(CreateDb);
 
     /// <summary>Concurrent same-hash ingest creates one run and extracts once.</summary>
     [Fact]
@@ -223,6 +243,15 @@ public sealed class HandoffAuditDefectTests : IDisposable
         Assert.Equal(nameof(HandoffReviewState.Created), stored.ReviewState);
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: a handoff ingestion service over the class's database (seeded once with
+    /// FR-HANDOFF-001 and TR-HANDOFF-CONTRACT-001 records), the extractor and TODO service passed in, and a settable clock
+    /// fixed at the first age-boundary reference.
+    /// </summary>
+    /// <param name="extractor">The one-shot extractor.</param>
+    /// <param name="todo">The TODO service, or null for a substitute.</param>
+    /// <returns>The service under test.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed in slice Z4 to hand the service a settable clock fixed at one instant (the sibling sweep of hostile validation round 12 finding R12-F2, S36 and U1), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private IHandoffIngestionService CreateService(IHandoffOneShotExtractor extractor, ITodoService? todo = null)
     {
         todo ??= Substitute.For<ITodoService>();
@@ -263,7 +292,11 @@ public sealed class HandoffAuditDefectTests : IDisposable
             new HandoffModePolicy(),
             accessor,
             db,
-            new SessionLogSanitizer(MsOptions.Create(new SessionLogSanitizationOptions { RegexTimeoutMilliseconds = 5000 })));
+            new SessionLogSanitizer(MsOptions.Create(new SessionLogSanitizationOptions { RegexTimeoutMilliseconds = 5000 })),
+            // TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): every service of this class reads a settable clock fixed at
+            // one instant, so the 30 second processing and approval leases cannot expire between two concurrent calls and
+            // change a case's outcome (sibling sweep of hostile validation round 12 finding R12-F2, S36 and U1).
+            time: new QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0]));
     }
 
     private McpDbContext CreateDb()

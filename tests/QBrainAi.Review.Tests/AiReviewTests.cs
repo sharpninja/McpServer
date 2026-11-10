@@ -10,6 +10,13 @@ namespace QBrainAi.Review.Tests;
 /// execute the review (using appsettings.aiunit.json strategy) when the test runs.
 /// The test bodies aggregate the resulting prompt + response into docs/reviews MD.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: TR-MCP-QUALITY-001 ac-9.
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-QUALITY-001 ac-9: cites the criterion whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class AiReviewTests
 {
     private readonly Abstractions.ITestOutputHelper _output;

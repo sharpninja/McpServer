@@ -1,0 +1,44 @@
+{
+  "timestampLocal": "2026-11-02T11:36:22",
+  "supersedes": "docs/receipts/unit-suite-green-20261019/source-identifier-audit-20261030.json",
+  "sourceSha256": "4FE189A56BA6243A0CB9A4A6BFF347AA483FDFD12350DDFA171C9DD864E99737",
+  "base": "9b099716e3f4b773787a1caef44353e112bda556",
+  "pattern": "(?i)sharpninja|payton|\\bkingd\\b|lab-omarchy|sql\\.lab|/home/user/github|[FE]:[\\\\/]github|10\\.42\\.0\\.|192\\.168\\.",
+  "disposition": "Operator 2026-11-02 (PR 87 merge plan question, answer \"Keep as flagged exceptions (Recommended)\"): the four exact assertions stay unchanged; each is a flagged lab-bound exception; historical evidence and shipped configuration are not changed in PR 87.",
+  "exceptions": [
+    {
+      "file": "tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs",
+      "line": 224,
+      "text": "        Assert.Contains(@\"E:\\github\\McpServer\", appsettings, StringComparison.Ordinal);",
+      "classification": "Actual shipped configuration contract; changing the literal or configuration requires an explicit disposition, not weaker assertions",
+      "flag": "lab-bound exception (kept exact)",
+      "reason": "Asserts a value the shipped configuration actually holds; changing it needs a configuration change under its own plan."
+    },
+    {
+      "file": "tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs",
+      "line": 225,
+      "text": "        Assert.DoesNotContain(@\"E:\\github\\QBrainAi\", appsettings, StringComparison.Ordinal);",
+      "classification": "Actual shipped configuration contract; changing the literal or configuration requires an explicit disposition, not weaker assertions",
+      "flag": "lab-bound exception (kept exact)",
+      "reason": "Asserts a value the shipped configuration actually holds; changing it needs a configuration change under its own plan."
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139EighteenthEvidenceTests.cs",
+      "line": 78,
+      "text": "            @\"C:\\Users\\kingd\\AppData\\Local\\Temp\\BUG-TRIAGE-139-eighteenth\\final-verification\\exact-final-head.yaml\",",
+      "classification": "Actual historical receipt path under exact-ledger assertion; preserve evidence identity and report scrub conflict",
+      "flag": "lab-bound exception (kept exact)",
+      "reason": "Asserts the exact path of a historical receipt; changing it would falsify evidence identity."
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs",
+      "line": 88,
+      "text": "        Assert.Equal(\"kingd\", GetString(brainSlots, \"CliRunAs\"));",
+      "classification": "Actual shipped configuration contract; changing the literal or configuration requires an explicit disposition, not weaker assertions",
+      "flag": "lab-bound exception (kept exact)",
+      "reason": "Asserts a value the shipped configuration actually holds; changing it needs a configuration change under its own plan."
+    }
+  ],
+  "otherHits": "The remaining 14 hits are actual published identities and attribution, kept as the 2026-10-30 audit classified them.",
+  "writtenBy": "ClaudeCode"
+}

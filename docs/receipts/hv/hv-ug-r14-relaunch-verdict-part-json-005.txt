@@ -1,0 +1,496 @@
+HV_R14_RELAUNCH_FINAL json part 5/12 SHA256 A53F54C8F431EAD3E3519C4A2409A447E573DED792D70A54557D5AC6A7FEB69A
+id": "UG3",
+      "verdict": "PASS",
+      "evidence": "Inspected unit callers and clock/environment seams, timing and background sweeps and their exclusions. Z16 observes the actual triggered cleanup task before decisions; D8/D9 use scripted boundaries. Unit multisets agree on both hosts. No remaining environment-, platform- or elapsed-time-dependent unit outcome was established. Project ownership is separately WS1.",
+      "findings": []
+    },
+    {
+      "id": "UG4",
+      "verdict": "PASS",
+      "evidence": "TR-MCP-NUKE-019 AC-1/2/3/6 match the seven-project selection, two Support integration classes, logged filters and owned-instance checks. All selected lane results pass. The newer separate-project policy conflict is WS1, not a false statement that these ACs or lane counts failed.",
+      "findings": []
+    },
+    {
+      "id": "UG5",
+      "verdict": "PASS",
+      "evidence": "Directory.Packages.props pins and retained Compile/Test logs support QUALITY ac-21, including Roslyn 5.9.0 and repaired cryptography versions. Current gate logs report zero NU190x without an audit-disable override; no-op restore limitations remain disclosed.",
+      "findings": []
+    },
+    {
+      "id": "UG6",
+      "verdict": "PASS",
+      "evidence": "PATHNORM FR/TR/TEST records and mappings are present. Explicit host inputs, the independent path contract and real binding preserve native/foreign path decisions without choosing expected results from the executing host. Current unit results include the cases.",
+      "findings": []
+    },
+    {
+      "id": "UG7",
+      "verdict": "PASS",
+      "evidence": "Live effective requirements, selected dedicated getters, criterion chains and all 61 task text hashes/states match the supplied snapshot and amendments. Retired FR-USECASE-016/017 are absent through both routes. Independent changed-line citation inspection found 101 IDs, 39 absent, all historical labels or three fixture-data IDs. Follow-up TODO states and BUG-139 links agree.",
+      "findings": []
+    },
+    {
+      "id": "UG8",
+      "verdict": "FAIL",
+      "evidence": "The full plan and amendments were read. The revised history rule resolves superseded current values and explicit historical corrections. It cannot cure inaccurate Z15 chronology, attribution, a nonexistent check or false current assurance copies. See R14-F1, F2, F3 and F5.",
+      "findings": [
+        "R14-F1",
+        "R14-F2",
+        "R14-F3",
+        "R14-F5"
+      ]
+    },
+    {
+      "id": "UG9",
+      "verdict": "PASS",
+      "evidence": "Takeover commit 11681680 and its recorded source c2125c42 preserve the 16 transferred files; the separate C4 reversal and ownership ruling are retained. Subsequent modifications belong to this branch and are represented in its history.",
+      "findings": []
+    },
+    {
+      "id": "UG10",
+      "verdict": "PASS",
+      "evidence": "131 first-parent commits carry the required author/model signing line; this is not a cryptographic signature claim. Current plan/full PR have no prohibited tables or en/em dashes. Changed blobs contain no current marker key. Historical scripting exceptions remain disclosed; TRX committed bytes match hashes. No reviewer tracked edit or push occurred.",
+      "findings": []
+    },
+    {
+      "id": "UG11",
+      "verdict": "FAIL",
+      "evidence": "Self-review, projected problems, PR summary/full description and handoff were read in full. R13 fixes are disclosed, but R14-F1/F2/F3/F5 leave false current factual statements. The launch addendum honestly declares open defects; it does not waive their correction.",
+      "findings": [
+        "R14-F1",
+        "R14-F2",
+        "R14-F3",
+        "R14-F5"
+      ]
+    },
+    {
+      "id": "UG12",
+      "verdict": "PASS",
+      "evidence": "Latest D-B at plan 27.42-27.43 and the addendum conditions criterion satisfaction on overall AGREE, task completion on each task AGREE, and records both TODO and plan updates. FR-040 waits for post-merge server plus REPL deployment/live read; startup-health-wait remains excluded. No current task/criterion was prematurely set.",
+      "findings": []
+    },
+    {
+      "id": "UG13",
+      "verdict": "PASS",
+      "evidence": "Reattacked original findings and repaired siblings against current source, records and supplied evidence. R13-F1 is closed through Z12-Z16; R13-F2 is independently confirmed by 18 matching compile pins and no binding pins. The detailed closure list separates original repairs from new record and policy findings.",
+      "findings": []
+    },
+    {
+      "id": "UG14",
+      "verdict": "PASS",
+      "evidence": "DirectoryTreeWalker, AgentPluginVersionSources, marker resolution and injected read errors preserve the owned source seam and fallback behavior. Real-profile/native boundaries are Integration and their selected lane cases pass; scripted unit resolution is independent of ambient plugin caches.",
+      "findings": []
+    },
+    {
+      "id": "UG15",
+      "verdict": "PASS",
+      "evidence": "LocalDB default timeout and the four-class nonparallel collection remain. Windows lane selected SQL Server cases are present and passed. Historical command-timeout failures and the operator-selected rerun are not recast as successful first runs.",
+      "findings": []
+    },
+    {
+      "id": "UG16",
+      "verdict": "PASS",
+      "evidence": "The pg_ctl quiet start remains. Current Windows lane result identities/multiplicities match the previous complete lane, with all 718 results. No lost result or definition-only substitute is counted.",
+      "findings": []
+    },
+    {
+      "id": "UG17",
+      "verdict": "PASS",
+      "evidence": "Operator choices were compared with the plan, code, store and transcript. Declared departures, counts and later rulings are retained. No additional scanner work is required or scored. The newer project-ownership conflict is separately exposed for an operator decision in WS1.",
+      "findings": []
+    },
+    {
+      "id": "UG18",
+      "verdict": "OVERRIDDEN",
+      "evidence": "UnitSuitePlatformScanner implementation, tests and coverage descriptions are wholly excluded by the explicit operator override.",
+      "findings": []
+    },
+    {
+      "id": "UG19",
+      "verdict": "PASS",
+      "evidence": "Handoff and memory harnesses give concurrent contexts separate connections to owned SQLite files and preserve assertions. Memory binding cites the present mapped FR/TR/TEST-MCP-MEMORY-002. Current unit evidence contains the cases.",
+      "findings": []
+    },
+    {
+      "id": "UG20",
+      "verdict": "OUT OF SCOPE",
+      "evidence": "Hostile-environment runs are excluded by the explicit operator rulings. Their absence is neither a failure nor an evidence gap for this review.",
+      "findings": []
+    },
+    {
+      "id": "UG21",
+      "verdict": "PASS",
+      "evidence": "DirectoryTreeWalker checks linked scan roots and ancestors before traversal and skips linked descendants. Scripted reachability controls and native integration bindings remain; the supplied lane evidence covers the approved native cases.",
+      "findings": []
+    },
+    {
+      "id": "UG22",
+      "verdict": "PASS",
+      "evidence": "CliTempVariables owns all five resolver/fallback names, separates primary from fallback folders and restores exact prior values, including exceptions. Caller inspection and Process environment serialization checks cover the four CLI resolver families. Current unit/lane evidence contains the relevant cases.",
+      "findings": []
+    },
+    {
+      "id": "UG23",
+      "verdict": "PASS",
+      "evidence": "ReplCommandTimeout accepts only bounded positive whole seconds and otherwise defaults; both call sites use the injected read seam. Scripted wrong parsers/call sites are rejected and current unit TRX includes their bindings.",
+      "findings": []
+    },
+    {
+      "id": "UG24",
+      "verdict": "PASS",
+      "evidence": "WindowsJunction uses native in-process creation; the buffer contract and controls remain. The sibling traversal fixture uses the same helper. Native cases are correctly selected by the Windows lane, with no process-launch timing substituted for the fixture outcome.",
+      "findings": []
+    },
+    {
+      "id": "UG25",
+      "verdict": "PASS",
+      "evidence": "Moved marker-walk criteria are present on FR-MCP-REPL-007; TR-MCP-REPL-008 no longer duplicates them. Scripted filesystem walk cases and production binding preserve precedence and refusal behavior. Historical AC IDs are interpreted through the recorded move.",
+      "findings": []
+    },
+    {
+      "id": "UG26",
+      "verdict": "PASS",
+      "evidence": "Develop is an ancestor of the reviewed head; legacy read-only merge-tree of develop into HEAD is empty, exit 0. d43c1d12 is docs-only. The manifest inventories 23 projects and supplies every selected unit/lane project; held-out integration scope is explicit. Citation labels were independently checked.",
+      "findings": []
+    },
+    {
+      "id": "UG27",
+      "verdict": "PASS",
+      "evidence": "DesktopProcessSpawner compares explicitly supplied maps; equal values are omitted and changed values retained. The ambient overload delegates. The GH_TOKEN integration case owns/restores its baseline and is serialized with environment writers. Scripted positive/negative contracts and both-host results remain.",
+      "findings": []
+    },
+    {
+      "id": "UG28",
+      "verdict": "PASS",
+      "evidence": "Inspected TemporaryInstanceChecks, OwnedInstanceProcess, OwnedReplStart, ScratchQBrainAi, the factory and stdio starts. Canonical/legacy sections, configuration-key aliases and host-prefixed owned aliases cannot select an outside database. The factory guard runs before opening the connection. Current contracts and lane cases pass.",
+      "findings": []
+    },
+    {
+      "id": "UG29",
+      "verdict": "PASS",
+      "evidence": "Lane selector returns seven projects and only the two approved Support integration class names; filters compose the host predicate and validated class identifiers. The Support integration TRX has exactly those two classes and six cases on each host. The project-layout policy is separate WS1.",
+      "findings": []
+    },
+    {
+      "id": "UG30",
+      "verdict": "PASS",
+      "evidence": "Slices I-O and their contract/binding receipts match the final source. Owned starts, retry/port handling, QuadBrain rounds, foreign workspace handling, test changes and scrub are traceable. Lab identifiers in touched files are generic, approved exceptions or published identities; held-out work remains held out. Current policy conflict is WS1.",
+      "findings": []
+    },
+    {
+      "id": "UG31",
+      "verdict": "PASS",
+      "evidence": "TestGroups composes named groups from lane pieces, joins executed results to definitions and rejects missing classes, empty/unknown groups, failures and skips. Contracts and retained negative gate discriminate the failures. Build.Tests execution through this target follows the specific approved TRs.",
+      "findings": []
+    },
+    {
+      "id": "UG32",
+      "verdict": "PASS",
+      "evidence": "Engine-setting selection, 22-row provider contract, exact path handling and four reviewed GetFullPath uses match the source. Failed binding r-1 is declared and task 32 cites r-2. No absent direct-GetFullPath criterion is claimed satisfied.",
+      "findings": []
+    },
+    {
+      "id": "UG33",
+      "verdict": "PASS",
+      "evidence": "Stored timestamp conversion, earliest mapping link and REST/client/REPL adapters match the independent contracts. Exact complete-date parsing preserves UTC/null semantics. Live deployment remains unverified because the plugin REPL predates the fix; task 33 proves implementation, not live deployment or criterion satisfaction.",
+      "findings": []
+    },
+    {
+      "id": "UG34",
+      "verdict": "PASS",
+      "evidence": "Restored mapping edges are backed by record references; deleted records are retained in the reconciliation receipt and absent from the effective view. BUG-139 now links the replacement FR/TRs. Projections are a declared historical generated snapshot; current ValidateTraceability passes.",
+      "findings": []
+    },
+    {
+      "id": "UG35",
+      "verdict": "PASS",
+      "evidence": "Generated artifacts use owned external output folders. The 39-row contract and wrong checks cover relative/dot/device/cross-syntax/UNC alias cases. Memory benchmark stubs retain their assertions. Benchmark tracked files are unchanged by current lanes; accepted host event-log disclosure is outside this criterion review.",
+      "findings": []
+    },
+    {
+      "id": "UG36",
+      "verdict": "PASS",
+      "evidence": "Changed-member documentation and dated-entry retrofits were checked against changed files and canonical citations. Later field/member supplements and type-level logging limits are accurately disclosed. No unrelated retrospective retrofit is required by the live rule.",
+      "findings": []
+    },
+    {
+      "id": "UG37",
+      "verdict": "PASS",
+      "evidence": "Slice T retains executed-class identity, exact JSON nonce, syntax-aware paths, complete stored dates and one Ollama model rule. Mock and binding pins/negative controls discriminate the original failures. Strengthened criteria and the sixth approved sibling write are recorded.",
+      "findings": []
+    },
+    {
+      "id": "UG38",
+      "verdict": "PASS",
+      "evidence": "Slice U exact date formats, explicit path-root identity and six recorded-time cases on ScriptedClock hold. Mock/binding contract pins and the failed compile history are retained. No missing date component is filled from the read clock.",
+      "findings": []
+    },
+    {
+      "id": "UG39",
+      "verdict": "PASS",
+      "evidence": "GraphRagService and MemoryService stamp through supplied clocks; changed tests assert exact scripted instants. Auth/storage fixtures use fixed dates. The older incomplete sweep is explicitly historical; subsequent sweep exclusions were independently examined.",
+      "findings": []
+    },
+    {
+      "id": "UG40",
+      "verdict": "PASS",
+      "evidence": "Lease renewal is observed and compared to exact scripted expiry. The heartbeat and watcher cases retain assertions and are Integration-tagged; historical by-name transfers agree. This functional classification repair holds; its project ownership remains subject to R14-F4.",
+      "findings": []
+    },
+    {
+      "id": "UG41",
+      "verdict": "PASS",
+      "evidence": "Slice X output guard refuses device paths and syntax aliases; marker callback cancellation is explicit rather than a 100 ms race. Watcher historical citation is labeled. The stopped R11 review has no fabricated verdict, and later ready/draft history is disclosed.",
+      "findings": []
+    },
+    {
+      "id": "UG42",
+      "verdict": "PASS",
+      "evidence": "Slice Y applies Windows alias rules to UNC roots and preserves containment behavior. The 39-row contract and rejected checks remain. Its margin review limitation and later Z/Z2/Z3 corrections are declared; constructor/docs fixes are evaluated at the final head.",
+      "findings": []
+    },
+    {
+      "id": "UG43",
+      "verdict": "PASS",
+      "evidence": "Slice Z assertions remain, timeout increases and one separator source match the diff. No new criterion was falsely claimed. Later sum-based corrections supersede the original largest-delay measure. The final timing inventory and current TRX support the repaired scope.",
+      "findings": []
+    },
+    {
+      "id": "UG44",
+      "verdict": "PASS",
+      "evidence": "Z2 uses the sum of delays; Z3 later covers conditional SQLite retries. The 30 s and 15 s bounds remain above the stated summed paths, with the overcount and cleanup-only swallowed timeout disclosed. Binding and historical by-name results agree.",
+      "findings": []
+    },
+    {
+      "id": "UG45",
+      "verdict": "PASS",
+      "evidence": "Repeated unit properties are joined in order and bound to the same contract rows. Health wait uses scripted probes; its known failure to prove a full elapsed ten minutes remains explicitly outside D-B by operator choice. Conditional-wait changes and deployment outage/recovery history are retained.",
+      "findings": []
+    },
+    {
+      "id": "UG46",
+      "verdict": "PASS",
+      "evidence": "Failed-update recovery restores then retargets/reloads after replacement; six contract rows and wrong recoveries bind the production path. The operator accepted the declared broader replacement/start-limit gaps in D-B. No build code changed after 52e6d627; later changes are elsewhere.",
+      "findings": []
+    },
+    {
+      "id": "UG47",
+      "verdict": "PASS",
+      "evidence": "Z4 key identity and age decisions bind independent contracts; the original raw-prefix and live-clock defects are fixed. D8/D9 and Z16 close the previously missed background sibling. R12-F3 receipt chain and historical-label correction hold; failed lane/compile attempts remain failed history.",
+      "findings": []
+    },
+    {
+      "id": "UG48",
+      "verdict": "PASS",
+      "evidence": "Ordinal inherited names, owned-key replacement and read-only REPL start are in place. Four storage-budget Integration cases assert the exact budget and preserve persistence/classification checks; their reduced promptness claim is disclosed and paired with budget timing cases. Incorrect projected-history attribution is separately R14-F5.",
+      "findings": []
+    },
+    {
+      "id": "UG49",
+      "verdict": "PASS",
+      "evidence": "Z6 compares both host-prefixed and unprefixed owned settings without collapsing unrelated inherited names or rejecting the intended two host prefixes. Rows and wrong implementations discriminate the sibling defect. Event-log writes are declared under the explicit out-of-scope ruling.",
+      "findings": []
+    },
+    {
+      "id": "UG50",
+      "verdict": "PASS",
+      "evidence": "Z7 is documentation-only for 34 members. Independent raw-blob hashing confirms all 18 compile pins match 1d77a79c and the binding has no pins; timestamps prove only post-run pinning, not compile-time bytes. Committed-head gates provide the final compilation evidence.",
+      "findings": []
+    },
+    {
+      "id": "UG51",
+      "verdict": "PASS",
+      "evidence": "Z8 generic proxy identifiers preserve relations and assertions, and Z8b documents the two mapping methods. The syntax-aware documentation audit and retained diff/pins support the declared counts and limits. R13-F2 descriptions are corrected with post-run pin limits.",
+      "findings": []
+    },
+    {
+      "id": "UG52",
+      "verdict": "PASS",
+      "evidence": "Z9 replaces corresponding lab IDs consistently in four touched federation files. The assertion literal retains the same relationship after renaming. Earlier limited-pattern sweep is not credited with the later classified sweep coverage. Mapping-entry history is preserved after Z11.",
+      "findings": []
+    },
+    {
+      "id": "UG53",
+      "verdict": "PASS",
+      "evidence": "Z10 removes the lab-account summary and corrects documentation; the fifth shipped-config exception has the cited operator ruling and QBRAIN-006 backing. The v3 citation audit covers added build files; independent current audit reproduces the 101/39 ID result.",
+      "findings": []
+    },
+    {
+      "id": "UG54",
+      "verdict": "PASS",
+      "evidence": "Z11 keeps original dated entries beside explicit corrections and adds the later accurate wording. Store scrub preserves criterion outcomes/flags; the two lab-bound criteria remain unset. Published-identity exceptions and generated-projection limits are disclosed.",
+      "findings": []
+    },
+    {
+      "id": "UG55",
+      "verdict": "PASS",
+      "evidence": "Z12 adds the optional production clock, manual test timers and D8/D9/lifecycle contracts before binding. Rechecked sweep exclusions do not establish another uncontrolled lifecycle outcome. Current Z16 assertions strengthen completion observation beyond the original sentinel evidence.",
+      "findings": []
+    },
+    {
+      "id": "UG56",
+      "verdict": "PASS",
+      "evidence": "R13-F2 pin correction is independently verified. Task 57 timing and late draft transition remain declared. The 8c944541 gates are historical and their supplied file/hash/count claims are distinct from current da11faa2 evidence. Current task count resolves to 61.",
+      "findings": []
+    },
+    {
+      "id": "UG57",
+      "verdict": "PASS",
+      "evidence": "Z13 deferred-pass negative control and sentinel trace match retained red/green evidence. Its XML-only production change and early sentinel binding declaration are accurate. Later Z14-Z16 changes supersede the original completion inference and constructor exception wording.",
+      "findings": []
+    },
+    {
+      "id": "UG58",
+      "verdict": "PASS",
+      "evidence": "Z14 changed documentation and two assertion messages only. The NullReferenceException claim is explicitly corrected by Z15 and the no-await condition is ultimately enforced by Z16 direct completion. Historical Z14 is not treated as proof of those later fixes.",
+      "findings": []
+    },
+    {
+      "id": "UG59",
+      "verdict": "FAIL",
+      "evidence": "The Z15 counter/controls and constructor correction are present and pass current evidence; Z16 fixes their completion-observation limitation. However this compound claim retains the false early-binding chronology, criterion attribution and nonexistent document-check citation. See R14-F1/F2/F3.",
+      "findings": [
+        "R14-F1",
+        "R14-F2",
+        "R14-F3"
+      ]
+    },
+    {
+      "id": "WS1",
+      "verdict": "FAIL",
+      "evidence": "Mandatory workspace-rule surface: the current separate-project rule conflicts with the approved mixed-project selectors and category moves. The operator must choose structural separation or an explicit workspace exception. This is outside the scanner override and does not impugn the passing gate counts.",
+      "findings": [
+        "R14-F4"
+      ]
+    }
+  ],
+  "outOfScopeListing": [
+    {
+      "number": 12,
+      "reason": "No product requirement in flux is mapped to this review/presentation operation. It remains open without verdict or scores.",
+      "state": "open"
+    },
+    {
+      "number": 13,
+      "reason": "No product requirement in flux is mapped to this PR/handoff operation. It remains open without verdict or scores.",
+      "state": "open"
+    },
+    {
+      "number": 35,
+      "reason": "No product requirement in flux is mapped to the branch/SSH routing operation. It remains open without verdict or scores.",
+      "state": "open"
+    }
+  ],
+  "matrixInterpretation": "Mappings combine exact task text, the named plan section, live requirement records and changed-source attribution. AdditionalTaskRequirementIds comes from the independent per-slice added-line citation audit; fixture records FR-HANDOFF-001 and TR-HANDOFF-CONTRACT-001 are deliberately excluded from task 53. A mapping identifies the portion changed or proved by that task, not acceptance of every criterion of the record. Retired IDs appear only where the reviewed change deletes/repoints them. The operational tasks 12, 13 and 35 have no product requirement in flux; no outcome is adjudicated for them. Shared commits 765490a9 and 611a5dc5 are partitioned by the plan slices, not by copying every commit citation to each task.",
+  "currentEvidence": {
+    "manifest": "docs/receipts/hv/unitgreen-r14-trx-da11faa2/manifest.json",
+    "manifestHash": "0EB859C9934D88F8FD3C992FB42992816CF1FF7920052CF9773E1719F355C6E2",
+    "manifestBlobHash": "0EB859C9934D88F8FD3C992FB42992816CF1FF7920052CF9773E1719F355C6E2",
+    "fileCount": 34,
+    "trxCount": 30,
+    "runs": [
+      {
+        "runId": "ug-r14z16-final-linux-buildtests-1",
+        "trxCount": 1,
+        "total": 563.0,
+        "passed": 563.0,
+        "failed": 0.0,
+        "skipped": 0.0,
+        "results": 563.0,
+        "uniqueNames": 563
+      },
+      {
+        "runId": "ug-r14z16-final-linux-lane-1",
+        "trxCount": 7,
+        "total": 741.0,
+        "passed": 741.0,
+        "failed": 0.0,
+        "skipped": 0.0,
+        "results": 741.0,
+        "uniqueNames": 739
+      },
+      {
+        "runId": "ug-r14z16-final-linux-unit-1",
+        "trxCount": 7,
+        "total": 4866.0,
+        "passed": 4866.0,
+        "failed": 0.0,
+        "skipped": 0.0,
+        "results": 4866.0,
+        "uniqueNames": 4852
+      },
+      {
+        "runId": "ug-r14z16-final-win-buildtests-1",
+        "trxCount": 1,
+        "total": 467.0,
+        "passed": 467.0,
+        "failed": 0.0,
+        "skipped": 0.0,
+        "results": 467.0,
+        "uniqueNames": 467
+      },
+      {
+        "runId": "ug-r14z16-final-win-lane-1",
+        "trxCount": 7,
+        "total": 718.0,
+        "passed": 718.0,
+        "failed": 0.0,
+        "skipped": 0.0,
+        "results": 718.0,
+        "uniqueNames": 716
+      },
+      {
+        "runId": "ug-r14z16-final-win-unit-1",
+        "trxCount": 7,
+        "total": 4866.0,
+        "passed": 4866.0,
+        "failed": 0.0,
+        "skipped": 0.0,
+        "results": 4866.0,
+        "uniqueNames": 4852
+      }
+    ],
+    "equalUnitMultisets": true,
+    "audit": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-evidence.json",
+    "taskAudit": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-tasks-check.json",
+    "citationAudit": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-citations.json",
+    "hygieneAudit": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-hygiene.json",
+    "signedCommitCount": 131,
+    "changedBlobsChecked": 5972,
+    "traceability": "Linux ug-r14z16-final-linux-traceability-1 and Windows ug-r14z16-final-win-unit-1 retained logs pass.",
+    "scope": "All declared unit projects and scope-specific Integration classes are supplied. Held-out Integration projects/cases, overridden scanner and hostile-environment runs are not invented evidence gaps."
+  },
+  "recordFindingDisposition": [
+    "Eighteenth-read G1 is closed by Z16, with direct task-completion observation before every decision and unreported-await negative controls.",
+    "C2/C3 are independently verified as R14-F2/F1; the missing Z15 document-check citation is R14-F3; C5/C19/C21 are independently verified instances of R14-F5.",
+    "The first launch stopped without a verdict. Its candidate files are leads only, never acceptance evidence; original transcript, source and receipts were read afresh.",
+    "Superseded heads, counts and criterion lengths resolve to the explicit Z16 addendum and plan 27.42-27.43. A statement false when written still needs a correction; the history rule does not excuse it.",
+    "Distinct START/END versus TEST timestamps and multiple read times are not contradictions solely because they differ. Historical source anchors explicitly tied to a commit are evaluated at that commit.",
+    "Canonical D-B expressly requires both plan and TODO updates. Incomplete short copies do not override it; task 12 remains out of scope and open, and no merge or criterion completion is authorized by this DISAGREE.",
+    "The eighteen-read report is not asserted fully remediated. Its declared current factual defects remain failures in the families above; unrelated infrastructure/memory operations do not lower the product score."
+  ],
+  "operationalIssues": [
+    "The gh shim attempted its managed tool route and failed; the connected GitHub read tool supplied PR state instead. No installation or PR mutation followed.",
+    "The first QueryAsync text filter returned no match because session ID is not a text-body match; a from string was rejected by the legacy adapter. The supported agent query returned the complete own session. These are read/query limitations, not product failures.",
+    "Reviewer mistakes: a wrongly oriented legacy merge-tree query, broad searches including receipt streams and an unprojected evidence field produced unnecessarily large truncated output. Correct focused inspections replaced them. Literal wildcard/guessed receipt-path reads failed and were replaced with actual inventories. No product mutation resulted. Exact token/time cost per mistake is unavailable.",
+    "The initial history query proves the session existed, not full verdict content. Final proof requires both workflow history and exact own-session dialog readback, retained separately.",
+    "No infrastructure issue is included in failList or scores, per MEMORY-HV-001 rule 6. API values are redacted in reviewer artifacts."
+  ],
+  "commands": [
+    {
+      "responseLine": 5,
+      "id": "item_1",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -Raw -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md'; Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile' -File -Filter '*.md' | Where-Object { \"'$_.Name -notlike '\"'*SKILL*' } | ForEach-Object { Write-Output ('PROFILE_FILE ' + \"'$_.FullName); Get-Content -Raw -LiteralPath $_.FullName }; Get-Content -Raw -LiteralPath '\"'/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/enforcement/SKILL.md'\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 8,
+      "id": "item_3",
+      "command": "/usr/bin/pwsh -NoProfile -Command '$p = '\"'/home/sharpninja/.claude/profile/PROFILE-MERGED.md'; (Get-Content -LiteralPath \"'$p).Count; Get-Content -LiteralPath $p | Select-Object -First 230'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 10,
+      "id": "item_4",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | S

@@ -1,0 +1,92 @@
+[
+  {
+    "File": "build/Build.TestDependencies.cs",
+    "TakenBlob": "7206fba621ac3b4e5f636e92c5c7e00c3d04216d",
+    "OriginalBlob": "7206fba621ac3b4e5f636e92c5c7e00c3d04216d",
+    "Equal": true
+  },
+  {
+    "File": "build/LinuxProviderTestProvisioner.cs",
+    "TakenBlob": "2649ae8c503a46d799c037629b2dd05e5a5c4d1c",
+    "OriginalBlob": "2649ae8c503a46d799c037629b2dd05e5a5c4d1c",
+    "Equal": true
+  },
+  {
+    "File": "build/ProviderTestProvisioningContracts.cs",
+    "TakenBlob": "c9fe9f5c8683a9d10cdade22919faedbff1e751b",
+    "OriginalBlob": "c9fe9f5c8683a9d10cdade22919faedbff1e751b",
+    "Equal": true
+  },
+  {
+    "File": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+    "TakenBlob": "0c9ca325e4dd982818392d7b04005af0f07810ba",
+    "OriginalBlob": "0c9ca325e4dd982818392d7b04005af0f07810ba",
+    "Equal": true
+  },
+  {
+    "File": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "TakenBlob": "fef74b60b6ccccdc2064d961de4d9054b9acf21b",
+    "OriginalBlob": "fef74b60b6ccccdc2064d961de4d9054b9acf21b",
+    "Equal": true
+  },
+  {
+    "File": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "TakenBlob": "281a8b2c77ddbcf2058c3e3a7e97dae3caa51c12",
+    "OriginalBlob": "281a8b2c77ddbcf2058c3e3a7e97dae3caa51c12",
+    "Equal": true
+  },
+  {
+    "File": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "TakenBlob": "a523887077a2747de826facb16add62e0d2a89a8",
+    "OriginalBlob": "a523887077a2747de826facb16add62e0d2a89a8",
+    "Equal": true
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+    "TakenBlob": "98a15c728af7c1db2ef6bc74395e5484a4009775",
+    "OriginalBlob": "98a15c728af7c1db2ef6bc74395e5484a4009775",
+    "Equal": true
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "TakenBlob": "e7350e77a85a05a23d273a8e49d2d33d3711146d",
+    "OriginalBlob": "e7350e77a85a05a23d273a8e49d2d33d3711146d",
+    "Equal": true
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "TakenBlob": "a594df1af7170c9bdabb9cad0289c60f68183ce1",
+    "OriginalBlob": "a594df1af7170c9bdabb9cad0289c60f68183ce1",
+    "Equal": true
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs",
+    "TakenBlob": "f354ddc970f8243c1b0f36ceb63f4460734bbfe2",
+    "OriginalBlob": "f354ddc970f8243c1b0f36ceb63f4460734bbfe2",
+    "Equal": true
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+    "TakenBlob": "3ad458c9988c2f22ecc8f3694c40c5a339ea401d",
+    "OriginalBlob": "3ad458c9988c2f22ecc8f3694c40c5a339ea401d",
+    "Equal": true
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs",
+    "TakenBlob": "14d553ebff1e9b244b802ec665f77957f644e27a",
+    "OriginalBlob": "14d553ebff1e9b244b802ec665f77957f644e27a",
+    "Equal": true
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+    "TakenBlob": "364880bdecc87546a46ddb8a99f706c9729e545c",
+    "OriginalBlob": "364880bdecc87546a46ddb8a99f706c9729e545c",
+    "Equal": true
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+    "TakenBlob": "04b803279c573cb5bb57d402b49215de85d487a6",
+    "OriginalBlob": "04b803279c573cb5bb57d402b49215de85d487a6",
+    "Equal": true
+  }
+]

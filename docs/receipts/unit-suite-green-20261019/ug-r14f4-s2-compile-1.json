@@ -1,0 +1,64 @@
+{
+  "name": "ug-r14f4-s2-compile-1",
+  "kind": "compile",
+  "retrospective": false,
+  "note": "Written when the run ended, from its own meta, exit and log files (Save-CompileReceipt.ps1).",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "runHead": "95f0bc38ee61fa836f22a06987d4bb55ae84f957",
+  "runDirtyPaths": [
+    " M build/Build.Test.cs",
+    " M build/Build.TestDependencies.cs",
+    " M build/IntegrationLaneProjects.cs",
+    "?? build/TestProjectOwnership.cs",
+    "?? build/TestProjectOwnershipContracts.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-buildtests-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-buildtests-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s1-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s1-mockgate-1/",
+    "?? tests/Build.Tests/TestProjectOwnershipContract.cs",
+    "?? tests/Build.Tests/TestProjectOwnershipMockGateTests.cs",
+    "?? tests/Build.Tests/TestProjectOwnershipTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "Compile"
+  ],
+  "startedLocal": "2026-11-07T08:33:30",
+  "endedLocal": "2026-11-07T08:36:02",
+  "exitCode": 0,
+  "status": "passed",
+  "buildSucceededLine": "Build succeeded on 11/7/2026 8:36:02 AM. ＼（＾ᴗ＾）／",
+  "errorDiagnostics": 0,
+  "warningDiagnostics": 0,
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-s2-compile-1.out.log",
+  "logSha256": "84109EB84C9AE67A21B68F7A813B1A0A3C71B55257D9ACCEF525C322ACAAE069",
+  "sources": [
+    {
+      "path": "build/TestProjectOwnershipContracts.cs",
+      "sha256": "36CB4E83CFF292CE77C51F5D3AA82A77CC24885C4270AE5905EA40DFEFA9A4AB"
+    },
+    {
+      "path": "build/TestProjectOwnership.cs",
+      "sha256": "67043AACAEB415A4366709F925D047B8A2F25C19BF3A259199726D49E53B2DD2"
+    },
+    {
+      "path": "build/IntegrationLaneProjects.cs",
+      "sha256": "83CA6DB12612AFD9EA45965207215DA3F4DD37056B3DD77A831913EDBC5ECDC0"
+    },
+    {
+      "path": "build/Build.Test.cs",
+      "sha256": "F311263B9F145CCFB8B6E948F907A36AA5D9AE0FFFF23B375B8754C82B118472"
+    },
+    {
+      "path": "build/Build.TestDependencies.cs",
+      "sha256": "67906C47C068B71694B4B44FA0B5C39395E0A489A7112EE03243B707BB5FD287"
+    }
+  ],
+  "metaFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-s2-compile-1.meta.json",
+  "metaSha256": "A7FFD603165F54A08B7D5E17D077F87744639744C67EB01B4FC58855156E30EB",
+  "writtenLocal": "2026-11-07T08:36:27",
+  "minutesAfterRunEnd": 0.43,
+  "writtenBy": "ClaudeCode"
+}

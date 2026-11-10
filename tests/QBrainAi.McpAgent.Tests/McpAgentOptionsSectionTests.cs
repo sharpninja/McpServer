@@ -7,32 +7,9 @@ namespace QBrainAi.McpAgent.Tests;
 /// <summary>
 /// TR-MCP-QBRAIN-005: McpAgent configuration section aliases.
 /// </summary>
+/// <remarks>2026-11-07, TR-MCP-QBRAIN-005; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: unchanged; the integration class McpAgentOptionsLegacySectionHostTests, which shared this file, moved to the integration-owned QBrainAi.McpAgent.IntegrationTests, so this unit-owned project holds only unit cases (slice S3, hostile validation finding R14-F4).</remarks>
 public sealed class McpAgentOptionsSectionTests
 {
-    /// <summary>
-    /// TR-MCP-QBRAIN-005: McpServer:McpAgent still binds when the canonical section is absent.
-    /// An in-memory configuration supplies the legacy section only.
-    /// </summary>
-    [Fact]
-    public void AddQBrainAiMcpAgent_BindsLegacyMcpServerSection()
-    {
-        var workspacePath = OperatingSystem.IsWindows() ? @"E:\github\McpServer" : "/var/lib/McpServer";
-        var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
-        {
-            ["McpServer:McpAgent:ApiKey"] = "legacy-token",
-            ["McpServer:McpAgent:WorkspacePath"] = workspacePath,
-        }).Build();
-        var services = new ServiceCollection();
-        services.AddSingleton<IConfiguration>(configuration);
-        services.AddQBrainAiMcpAgent();
-
-        using var provider = services.BuildServiceProvider();
-        var options = provider.GetRequiredService<IOptions<McpAgentOptions>>().Value;
-
-        Assert.Equal("legacy-token", options.ApiKey);
-        Assert.Equal(workspacePath, options.WorkspacePath);
-    }
-
     /// <summary>
     /// TR-MCP-QBRAIN-005: QBrainAi:McpAgent wins over McpServer:McpAgent, and an explicit delegate wins over both.
     /// </summary>

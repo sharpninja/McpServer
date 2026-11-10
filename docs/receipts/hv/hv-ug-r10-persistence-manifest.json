@@ -1,0 +1,306 @@
+{
+  "SessionId": "Codex-20261103T122431Z-plugin-session",
+  "RequestId": "req-20261103T122503Z-unitgreen-r10",
+  "Documents": [
+    {
+      "Kind": "PROSE",
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r10-20261103T062131.md",
+      "Characters": 205231,
+      "Sha256": "1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66",
+      "PartCount": 11
+    },
+    {
+      "Kind": "STRUCTURED",
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r10-20261103T062131.json",
+      "Characters": 339297,
+      "Sha256": "AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17",
+      "PartCount": 17
+    }
+  ],
+  "Parts": [
+    {
+      "Sequence": 1,
+      "Kind": "PROSE",
+      "Part": 1,
+      "Header": "HV-UG-R10 FULL RESULT PROSE PART 0001/0011 SHA256 1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66"
+    },
+    {
+      "Sequence": 2,
+      "Kind": "PROSE",
+      "Part": 2,
+      "Header": "HV-UG-R10 FULL RESULT PROSE PART 0002/0011 SHA256 1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66"
+    },
+    {
+      "Sequence": 3,
+      "Kind": "PROSE",
+      "Part": 3,
+      "Header": "HV-UG-R10 FULL RESULT PROSE PART 0003/0011 SHA256 1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66"
+    },
+    {
+      "Sequence": 4,
+      "Kind": "PROSE",
+      "Part": 4,
+      "Header": "HV-UG-R10 FULL RESULT PROSE PART 0004/0011 SHA256 1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66"
+    },
+    {
+      "Sequence": 5,
+      "Kind": "PROSE",
+      "Part": 5,
+      "Header": "HV-UG-R10 FULL RESULT PROSE PART 0005/0011 SHA256 1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66"
+    },
+    {
+      "Sequence": 6,
+      "Kind": "PROSE",
+      "Part": 6,
+      "Header": "HV-UG-R10 FULL RESULT PROSE PART 0006/0011 SHA256 1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66"
+    },
+    {
+      "Sequence": 7,
+      "Kind": "PROSE",
+      "Part": 7,
+      "Header": "HV-UG-R10 FULL RESULT PROSE PART 0007/0011 SHA256 1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66"
+    },
+    {
+      "Sequence": 8,
+      "Kind": "PROSE",
+      "Part": 8,
+      "Header": "HV-UG-R10 FULL RESULT PROSE PART 0008/0011 SHA256 1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66"
+    },
+    {
+      "Sequence": 9,
+      "Kind": "PROSE",
+      "Part": 9,
+      "Header": "HV-UG-R10 FULL RESULT PROSE PART 0009/0011 SHA256 1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66"
+    },
+    {
+      "Sequence": 10,
+      "Kind": "PROSE",
+      "Part": 10,
+      "Header": "HV-UG-R10 FULL RESULT PROSE PART 0010/0011 SHA256 1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66"
+    },
+    {
+      "Sequence": 11,
+      "Kind": "PROSE",
+      "Part": 11,
+      "Header": "HV-UG-R10 FULL RESULT PROSE PART 0011/0011 SHA256 1AF72C180C775FA9D9A3A88E09E727F556915BA571B8E8739A2276531FCCAA66"
+    },
+    {
+      "Sequence": 12,
+      "Kind": "STRUCTURED",
+      "Part": 1,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0001/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 13,
+      "Kind": "STRUCTURED",
+      "Part": 2,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0002/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 14,
+      "Kind": "STRUCTURED",
+      "Part": 3,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0003/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 15,
+      "Kind": "STRUCTURED",
+      "Part": 4,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0004/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 16,
+      "Kind": "STRUCTURED",
+      "Part": 5,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0005/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 17,
+      "Kind": "STRUCTURED",
+      "Part": 6,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0006/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 18,
+      "Kind": "STRUCTURED",
+      "Part": 7,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0007/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 19,
+      "Kind": "STRUCTURED",
+      "Part": 8,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0008/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 20,
+      "Kind": "STRUCTURED",
+      "Part": 9,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0009/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 21,
+      "Kind": "STRUCTURED",
+      "Part": 10,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0010/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 22,
+      "Kind": "STRUCTURED",
+      "Part": 11,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0011/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 23,
+      "Kind": "STRUCTURED",
+      "Part": 12,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0012/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 24,
+      "Kind": "STRUCTURED",
+      "Part": 13,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0013/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 25,
+      "Kind": "STRUCTURED",
+      "Part": 14,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0014/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 26,
+      "Kind": "STRUCTURED",
+      "Part": 15,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0015/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 27,
+      "Kind": "STRUCTURED",
+      "Part": 16,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0016/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    },
+    {
+      "Sequence": 28,
+      "Kind": "STRUCTURED",
+      "Part": 17,
+      "Header": "HV-UG-R10 FULL RESULT STRUCTURED PART 0017/0017 SHA256 AB29C5F2D976E126578F29471F2FB15B76E6334183C016BE94598BDFC542DB17"
+    }
+  ],
+  "Batches": [
+    {
+      "Batch": 0,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-000.json",
+      "Sequences": [
+        1,
+        2
+      ]
+    },
+    {
+      "Batch": 1,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-001.json",
+      "Sequences": [
+        3,
+        4
+      ]
+    },
+    {
+      "Batch": 2,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-002.json",
+      "Sequences": [
+        5,
+        6
+      ]
+    },
+    {
+      "Batch": 3,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-003.json",
+      "Sequences": [
+        7,
+        8
+      ]
+    },
+    {
+      "Batch": 4,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-004.json",
+      "Sequences": [
+        9,
+        10
+      ]
+    },
+    {
+      "Batch": 5,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-005.json",
+      "Sequences": [
+        11,
+        12
+      ]
+    },
+    {
+      "Batch": 6,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-006.json",
+      "Sequences": [
+        13,
+        14
+      ]
+    },
+    {
+      "Batch": 7,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-007.json",
+      "Sequences": [
+        15,
+        16
+      ]
+    },
+    {
+      "Batch": 8,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-008.json",
+      "Sequences": [
+        17,
+        18
+      ]
+    },
+    {
+      "Batch": 9,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-009.json",
+      "Sequences": [
+        19,
+        20
+      ]
+    },
+    {
+      "Batch": 10,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-010.json",
+      "Sequences": [
+        21,
+        22
+      ]
+    },
+    {
+      "Batch": 11,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-011.json",
+      "Sequences": [
+        23,
+        24
+      ]
+    },
+    {
+      "Batch": 12,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-012.json",
+      "Sequences": [
+        25,
+        26
+      ]
+    },
+    {
+      "Batch": 13,
+      "ParamsPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-dialog-batch-013.json",
+      "Sequences": [
+        27,
+        28
+      ]
+    }
+  ],
+  "PatchPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-patch-params.json",
+  "CompletePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r10-complete-params.json"
+}

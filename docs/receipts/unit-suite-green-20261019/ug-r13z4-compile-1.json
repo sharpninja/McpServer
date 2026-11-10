@@ -1,0 +1,83 @@
+{
+  "name": "ug-r13z4-compile-1",
+  "kind": "compile",
+  "retrospective": false,
+  "note": "Written when the run ended, from its own meta, exit and log files (Save-CompileReceipt.ps1).",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "runHead": "2103243cfb4155e201b0fe1fd257ebc093800d86",
+  "runDirtyPaths": [
+    " M src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+    " M src/QBrainAi.Services/Memory/Commands/RunConsolidateJobCommandHandler.cs",
+    " M src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs",
+    " M src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+    " M src/QBrainAi.Services/Services/FederationEnvelopeSigner.cs",
+    " M src/QBrainAi.Services/Services/SessionLogService.cs",
+    " M src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Controllers/FederationControllerTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryConsolidateJobTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreB.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotAdoptedPartyKeySigningTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/FederationFanoutSyncServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceSqliteTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs",
+    " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-b-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-b-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-b-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-b-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-serviceupdate-chain-1.txt",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "Compile"
+  ],
+  "startedLocal": "2026-11-05T03:51:54",
+  "endedLocal": "2026-11-05T03:53:57",
+  "exitCode": 0,
+  "status": "passed",
+  "buildSucceededLine": "Build succeeded on 11/5/2026 3:53:57 AM. ＼（＾ᴗ＾）／",
+  "errorDiagnostics": 0,
+  "warningDiagnostics": 0,
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r13z4-compile-1.out.log",
+  "logSha256": "F98945B303CF0E2EBD544E4EAA100D9372EBB499C78350E0B0BCDDF1FD1B9E63",
+  "sources": [
+    {
+      "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+      "sha256": "85E5CCC83D9C134893FF087459140FA0153C564EAE2404519EA33433331BFAC5"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "sha256": "0076947A565D9DCBD59A722779551981F66AFC9426E8AAA6974206F77237AF72"
+    },
+    {
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs",
+      "sha256": "B9A91459B5E4454E8B36189038BE65C70CEEFFF4FF00D6AE6D0D3217DADC8A26"
+    },
+    {
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs",
+      "sha256": "402CE1D215768169B626F609814657E37E22F442CACF2E0D9CC03DE7323C79DA"
+    }
+  ],
+  "metaFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r13z4-compile-1.meta.json",
+  "metaSha256": "689FEE9C0C8AE738FB26C36162664A75929E7F80424C7CDACE0646E6E052772D",
+  "writtenLocal": "2026-11-05T03:54:53",
+  "minutesAfterRunEnd": 0.94,
+  "writtenBy": "ClaudeCode"
+}

@@ -20,6 +20,14 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// (<see cref="IBrainSlotChatClientFactory"/>) and the transaction-commit machinery
 /// (a committing <see cref="FakeTurnTransactionCoordinator"/>, independently covered by the ACID suite) are faked.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-LLMSTRATEGY-001 (its second criterion, which carries no
+/// criterion id, through ExecuteFullOrchestrationAsync_WithRealServicesAndFakeBrains_CommitsArbiterDecision).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-LLMSTRATEGY-001 (criterion without an id): cites the criterion whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class QuadBrainLiveOrchestrationTests
 {
     private const string WorkspacePath = @"Q:\__mcp_unit_test__\QBrainAi";

@@ -20,12 +20,17 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="YamlDotNet" />
+    <!-- TR-MCP-NUKE-019 AC-6: the shared temporary instance stages its SQLite database through EF Core. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\QBrainAi.Repl.Core\QBrainAi.Repl.Core.csproj" />
     <ProjectReference Include="..\..\src\QBrainAi.Repl.Host\QBrainAi.Repl.Host.csproj" />
     <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
     <ProjectReference Include="..\..\src\QBrainAi.TransactionSecurity\QBrainAi.TransactionSecurity.csproj" />
+    <!-- TR-MCP-NUKE-019 AC-6: the temporary instance runs QBrainAi.Support.Mcp with the SQLite migrations. -->
+    <ProjectReference Include="..\..\src\QBrainAi.Support.Mcp\QBrainAi.Support.Mcp.csproj" />
+    <ProjectReference Include="..\..\src\QBrainAi.Storage.SqliteMigrations\QBrainAi.Storage.SqliteMigrations.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />

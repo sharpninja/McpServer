@@ -25,32 +25,16 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// Overlay G5 hygiene: named tests against shipped
 /// <see cref="WorkspaceValidationService"/>. TEST-MCP-HYGIENE-001 through 005.
 /// </summary>
-public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): CreateService hands every service the class's settable clock instead of TimeProvider.System, the two stale-turn cases seed from it, and the D3 binding was added (hostile validation round 12 finding R12-F2, S3 and S4); the assertions are unchanged.</description></item>
+/// <item><term>2026-11-06</term><description>FR-MCP-HYGIENE-001, FR-MCP-HYGIENE-002, FR-MCP-HYGIENE-003, FR-MCP-HYGIENE-004 and FR-MCP-HYGIENE-005 (every criterion of each; they carry no criterion ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// <item><term>2026-11-07</term><description>TEST-MCP-HYGIENE-001; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 2 Category=Integration cases (Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts and ValidationService_UsesLiveTriageDomainAndBatchedQueries) and the helpers only they use (AssertParity, CreateProductionWorkflow, FindRepoRoot, InvokePluginValidateAsync, RecordingValidationHandler and ServiceForwardingValidationHandler) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S8, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_workspace, _connection, _options, _clock, .ctor, Dispose, CreateService, CreateDb and SeedTodo) moved once into the abstract base class WorkspaceHygieneG5OverlayTestsBase in Services/WorkspaceHygieneG5OverlayTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</description></item>
+/// </list>
+/// </remarks>
+public sealed class WorkspaceHygieneG5OverlayTests : WorkspaceHygieneG5OverlayTestsBase, IDisposable
 {
-    private readonly string _workspace;
-    private readonly SqliteConnection _connection;
-    private readonly DbContextOptions<McpDbContext> _options;
-
-    /// <summary>Isolated in-memory SQLite workspace.</summary>
-    public WorkspaceHygieneG5OverlayTests()
-    {
-        _workspace = Path.Combine(Path.GetTempPath(), "hy-g5", Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(_workspace);
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
-        _options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(_connection).Options;
-        using var db = CreateDb();
-        db.Database.EnsureCreated();
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        _connection.Dispose();
-        if (Directory.Exists(_workspace))
-            Directory.Delete(_workspace, recursive: true);
-    }
-
     /// <summary>TEST-MCP-HYGIENE-001: result contract fields.</summary>
     [Fact]
     public async Task WorkspaceValidation_ResultContract_HasRequiredFields()
@@ -220,10 +204,11 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-HYGIENE-004: stale in_progress turn using UTC timestamps.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the turn is seeded 49 hours before the class's settable clock, which the service reads, instead of DateTimeOffset.UtcNow; the assertion is unchanged (hostile validation round 12 finding R12-F2).</remarks>
     [Fact]
     public async Task Rule_InProgressTurn_OlderThan48h_UtcClock()
     {
-        SeedStaleTurn(DateTimeOffset.UtcNow.AddHours(-49));
+        SeedStaleTurn(_clock.GetUtcNow().AddHours(-49));
         var result = await CreateService().ValidateAsync(new WorkspaceValidationRequest(), TestContext.Current.CancellationToken);
         Assert.Contains(result.Findings, item => item.RuleCode == "session_stale_in_progress");
     }
@@ -241,10 +226,11 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-HYGIENE-004: threshold override is bounded, authenticated, and recorded.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the turn is seeded 10 hours before the class's settable clock, which the service reads, instead of DateTimeOffset.UtcNow; the assertions are unchanged (hostile validation round 12 finding R12-F2).</remarks>
     [Fact]
     public async Task Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded()
     {
-        SeedStaleTurn(DateTimeOffset.UtcNow.AddHours(-10));
+        SeedStaleTurn(_clock.GetUtcNow().AddHours(-10));
         var tooWide = await CreateService().ValidateAsync(new WorkspaceValidationRequest { StaleTurnThresholdHours = 200 }, TestContext.Current.CancellationToken);
         Assert.Equal("threshold_out_of_range", tooWide.ErrorCode);
         var recorded = await CreateService().ValidateAsync(new WorkspaceValidationRequest { StaleTurnThresholdHours = 8 }, TestContext.Current.CancellationToken);
@@ -286,86 +272,6 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
         Assert.NotEqual(page.Findings[0].RecordId, next.Findings[0].RecordId);
     }
 
-    /// <summary>TEST-MCP-HYGIENE-005: REST, REPL, Director, plugin expose the same validation.</summary>
-    [Fact]
-    public async Task Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts()
-    {
-        Assert.Contains("ValidateAsync", typeof(WorkspaceValidationController).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly).Select(method => method.Name));
-        Assert.Equal("workspace.validate", WorkspaceValidationCommandShapes.ValidateMethod);
-        Assert.Equal("validate-workspace", WorkspaceValidationDirectorCommands.Validate);
-        var toolNames = typeof(FwhMcpTools).GetMethods(BindingFlags.Instance | BindingFlags.Public)
-            .Select(method => method.GetCustomAttribute<McpServerToolAttribute>()?.Name)
-            .Where(name => !string.IsNullOrWhiteSpace(name))
-            .ToArray();
-        Assert.Contains("workspace_validate", toolNames);
-        var skill = File.ReadAllText(Path.Combine(FindRepoRoot(), "plugins", "core", "skills", "workspace-validation", "SKILL.md"));
-        Assert.Contains("workspace.validate", skill, StringComparison.Ordinal);
-        Assert.DoesNotContain("workflow.workspace.repair", skill, StringComparison.Ordinal);
-
-        SeedTodo("TODO-HY-PARITY", done: true, doneSummary: null, remaining: null);
-        var service = CreateService();
-        var request = new WorkspaceValidationRequest();
-        var expected = await service.ValidateAsync(request, TestContext.Current.CancellationToken);
-
-        var rest = await new WorkspaceValidationController(service).ValidateAsync(request, TestContext.Current.CancellationToken);
-        Assert.Equal(expected.TotalFindings, rest.TotalFindings);
-        Assert.Equal(expected.ErrorCount, rest.ErrorCount);
-        Assert.Equal(expected.WarningCount, rest.WarningCount);
-        AssertParity(expected, rest);
-
-        var dispatcher = new ReplCommandDispatcher(
-            Substitute.For<IGenericClientPassthrough>(),
-            workspaceValidationWorkflow: CreateProductionWorkflow(service));
-        var envelope = await dispatcher.DispatchAsync(new YamlEnvelope
-        {
-            Type = "request",
-            Payload = new RequestPayload
-            {
-                RequestId = "req-g5-hygiene",
-                Method = WorkspaceValidationCommandShapes.ValidateMethod,
-                Params = new Dictionary<string, object?>(),
-            },
-        }, TestContext.Current.CancellationToken);
-        Assert.Equal("result", envelope.Type);
-        var repl = Assert.IsType<QBrainAi.Client.Models.WorkspaceValidationResult>((envelope.Payload as ResultPayload)!.Result);
-        AssertParity(expected, repl);
-
-        var command = new WorkspaceValidationDirectorCommand(new WorkspaceValidationDirectorExecutor(service));
-        await command.PrimaryCommand.ExecuteAsync(TestContext.Current.CancellationToken);
-        var director = Assert.IsType<WorkspaceValidationResult>(command.Result);
-        Assert.Equal(expected.TotalFindings, director.TotalFindings);
-        Assert.Equal(expected.ErrorCount, director.ErrorCount);
-        Assert.Equal(expected.WarningCount, director.WarningCount);
-        AssertParity(expected, director);
-
-        var pluginJson = await InvokePluginValidateAsync(service, TestContext.Current.CancellationToken);
-        var plugin = System.Text.Json.JsonSerializer.Deserialize<WorkspaceValidationResult>(pluginJson, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        Assert.NotNull(plugin);
-        Assert.Equal(expected.TotalFindings, plugin!.TotalFindings);
-        Assert.Equal(expected.ErrorCount, plugin.ErrorCount);
-        Assert.Equal(expected.WarningCount, plugin.WarningCount);
-        AssertParity(expected, plugin);
-
-        var recorder = new RecordingValidationHandler();
-        using var http = new HttpClient(recorder);
-        var shippedWorkflow = new WorkspaceValidationWorkflow(new WorkspaceValidationClient(http, new QBrainAiClientOptions
-        {
-            BaseUrl = new Uri("http://localhost:7147"),
-            ApiKey = "test-key",
-        }));
-        await shippedWorkflow.ValidateAsync(new Dictionary<string, object?>
-        {
-            ["ruleCodes"] = new[] { "todo_done_missing_summary" },
-            ["offset"] = 0,
-            ["limit"] = 1,
-            ["staleTurnThresholdHours"] = 24d,
-        }, TestContext.Current.CancellationToken);
-        Assert.Contains("/qbrainai/workspace-validation/validate", recorder.Path, StringComparison.Ordinal);
-        Assert.Contains("todo_done_missing_summary", recorder.Body, StringComparison.Ordinal);
-        Assert.Contains("\"limit\":1", recorder.Body, StringComparison.Ordinal);
-        Assert.Contains("staleTurnThresholdHours", recorder.Body, StringComparison.Ordinal);
-    }
-
     /// <summary>TEST-MCP-HYGIENE-005: Director exit 1 when Error findings exist.</summary>
     [Fact]
     public async Task Director_Exit1_WhenErrorSeverityPresent()
@@ -403,11 +309,37 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
         Assert.True(string.IsNullOrWhiteSpace(todo.DoneSummary));
     }
 
-    private WorkspaceValidationService CreateService()
-        => new(CreateDb(), TimeProvider.System);
-
-    private McpDbContext CreateDb()
-        => new(_options, new WorkspaceContext { WorkspacePath = _workspace });
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding, decisions D3 of
+    /// <see cref="QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests"/>: for each scripted reference time and
+    /// each contract row, one in-progress turn recorded at the row's time raises the stale-turn finding exactly when the
+    /// contract says, under the default 48 hour threshold and under an 8 hour override (no finding exactly at the
+    /// threshold, because only a turn before the cutoff is stale). Test data: the contract's times; one turn per row.
+    /// </summary>
+    /// <returns>A task that completes when every row has been asserted.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added for hostile validation round 12 finding R12-F2 (the reviewer's proposed WorkspaceHygiene_UsesScriptedStaleThreshold).</remarks>
+    [Fact]
+    public async Task WorkspaceHygiene_UsesScriptedStaleThreshold()
+    {
+        foreach (var (name, threshold) in new (string Name, int? Threshold)[]
+                 {
+                     ("D3 hygiene stale turn, default threshold", null),
+                     ("D3 hygiene stale turn, override threshold", 8),
+                 })
+        {
+            await QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.AssertDecisionAsync(name, async (reference, recorded) =>
+            {
+                _clock.Set(reference);
+                var key = Guid.NewGuid().ToString("N")[..12];
+                SeedInProgressTurn(recorded, key);
+                var result = await CreateService().ValidateAsync(
+                    new WorkspaceValidationRequest { StaleTurnThresholdHours = threshold },
+                    TestContext.Current.CancellationToken).ConfigureAwait(true);
+                Assert.True(result.Success, result.ErrorCode);
+                return result.Findings.Any(item => item.RuleCode == "session_stale_in_progress" && item.RecordId == "req-" + key);
+            }).ConfigureAwait(true);
+        }
+    }
 
     private void SeedRequirement(string kind, string id)
     {
@@ -453,23 +385,6 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
             CreatedAtUtc = "2026-09-10T00:00:00Z",
         };
 
-    private void SeedTodo(string id, bool done, string? doneSummary, string? remaining)
-    {
-        using var db = CreateDb();
-        db.TodoItems.Add(new TodoItemEntity
-        {
-            Id = id,
-            Title = id,
-            Section = "overlay",
-            Priority = "high",
-            WorkspaceId = _workspace,
-            Done = done,
-            DoneSummary = doneSummary,
-            Remaining = remaining,
-        });
-        db.SaveChanges();
-    }
-
     private void SeedTask(string todoId, bool done)
     {
         using var db = CreateDb();
@@ -499,6 +414,34 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
             WorkspaceId = _workspace,
             SessionLogId = session.Id,
             RequestId = "req-stale",
+            Status = "in_progress",
+            Timestamp = timestamp,
+            PlanFile = "None",
+            TodoId = "None",
+        });
+        db.SaveChanges();
+    }
+
+    /// <summary>Seeds one in-progress turn at <paramref name="timestamp"/> in its own session, named by <paramref name="key"/>.</summary>
+    /// <param name="timestamp">The turn's recorded time.</param>
+    /// <param name="key">The row key; the turn's request id is "req-" followed by it.</param>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended): added for the D3 binding (hostile validation round 12 finding R12-F2).</remarks>
+    private void SeedInProgressTurn(DateTimeOffset timestamp, string key)
+    {
+        using var db = CreateDb();
+        var session = new SessionLogEntity
+        {
+            WorkspaceId = _workspace,
+            SourceType = "GrokCode",
+            SessionId = "GrokCode-20260910T000000Z-hygiene" + key,
+        };
+        db.SessionLogs.Add(session);
+        db.SaveChanges();
+        db.SessionLogTurns.Add(new SessionLogTurnEntity
+        {
+            WorkspaceId = _workspace,
+            SessionLogId = session.Id,
+            RequestId = "req-" + key,
             Status = "in_progress",
             Timestamp = timestamp,
             PlanFile = "None",
@@ -539,134 +482,5 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
             CreatedUtc = DateTimeOffset.UtcNow,
         });
         db.SaveChanges();
-    }
-
-    /// <summary>TEST-MCP-HYGIENE-003: triage statuses come from the live triage domain, queries are batched.</summary>
-    [Fact]
-    public void ValidationService_UsesLiveTriageDomainAndBatchedQueries()
-    {
-        var source = File.ReadAllText(Path.Combine(FindRepoRoot(), "src", "QBrainAi.Services", "Services", "WorkspaceValidationService.cs"));
-        Assert.Contains("TriageService.IsNonTerminalStatus", source, StringComparison.Ordinal);
-        Assert.Contains("TriageService.IsFailedStatus", source, StringComparison.Ordinal);
-        Assert.DoesNotContain("NonTerminalTriageStatuses", source, StringComparison.Ordinal);
-        Assert.Contains("QueryBatchSize", source, StringComparison.Ordinal);
-        Assert.Contains("Take(QueryBatchSize)", source, StringComparison.Ordinal);
-    }
-
-    private static void AssertParity(WorkspaceValidationResult expected, WorkspaceValidationResult actual)
-    {
-        Assert.Equal(expected.StaleTurnThresholdHours, actual.StaleTurnThresholdHours);
-        Assert.Equal(expected.TotalFindings, actual.TotalFindings);
-        Assert.Equal(expected.ErrorCount, actual.ErrorCount);
-        Assert.Equal(expected.WarningCount, actual.WarningCount);
-        Assert.Equal(
-            expected.Findings.Select(item => (item.RuleCode, item.RecordId, item.Severity)).OrderBy(item => item.RuleCode).ThenBy(item => item.RecordId),
-            actual.Findings.Select(item => (item.RuleCode, item.RecordId, item.Severity)).OrderBy(item => item.RuleCode).ThenBy(item => item.RecordId));
-    }
-
-    private static void AssertParity(WorkspaceValidationResult expected, QBrainAi.Client.Models.WorkspaceValidationResult actual)
-    {
-        Assert.Equal(expected.StaleTurnThresholdHours, actual.StaleTurnThresholdHours);
-        Assert.Equal(expected.TotalFindings, actual.TotalFindings);
-        Assert.Equal(expected.ErrorCount, actual.ErrorCount);
-        Assert.Equal(expected.WarningCount, actual.WarningCount);
-        Assert.Equal(
-            expected.Findings.Select(item => (item.RuleCode, item.RecordId, item.Severity)).OrderBy(item => item.RuleCode).ThenBy(item => item.RecordId),
-            actual.Findings.Select(item => (item.RuleCode, item.RecordId, item.Severity)).OrderBy(item => item.RuleCode).ThenBy(item => item.RecordId));
-    }
-
-    private static WorkspaceValidationWorkflow CreateProductionWorkflow(IWorkspaceValidationService service)
-    {
-        var http = new HttpClient(new ServiceForwardingValidationHandler(service))
-        {
-            BaseAddress = new Uri("http://localhost:7147/"),
-        };
-        return new WorkspaceValidationWorkflow(new WorkspaceValidationClient(http, new QBrainAiClientOptions
-        {
-            BaseUrl = new Uri("http://localhost:7147"),
-            ApiKey = "test-key",
-        }));
-    }
-
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "AGENTS.md"))
-                && Directory.Exists(Path.Combine(directory.FullName, "docs", "Project")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
-
-    private async Task<string> InvokePluginValidateAsync(IWorkspaceValidationService service, CancellationToken cancellationToken)
-    {
-        var tools = (FwhMcpTools)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(FwhMcpTools));
-        var ingestion = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _workspace });
-        var resolver = new TodoServiceResolver(Substitute.For<ITodoService>(), ingestion, Substitute.For<ITodoServiceFactory>());
-        var accessor = new WorkspaceServiceAccessor(resolver, new Microsoft.AspNetCore.Http.HttpContextAccessor(), ingestion);
-        typeof(FwhMcpTools).GetField("_workspaceValidationService", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(tools, service);
-        typeof(FwhMcpTools).GetField("_workspaceContext", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(tools, new WorkspaceContext { WorkspacePath = _workspace });
-        typeof(FwhMcpTools).GetField("_httpContextAccessor", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(tools, new Microsoft.AspNetCore.Http.HttpContextAccessor());
-        typeof(FwhMcpTools).GetField("_workspaceAccessor", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(tools, accessor);
-        typeof(FwhMcpTools).GetField("_db", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(tools, CreateDb());
-        return await tools.WorkspaceValidate(_workspace, cancellationToken: cancellationToken);
-    }
-
-    /// <summary>Records the shipped client HTTP body for workflow contract proof.</summary>
-    private sealed class RecordingValidationHandler : HttpMessageHandler
-    {
-        public string Path { get; private set; } = string.Empty;
-        public string Body { get; private set; } = string.Empty;
-
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            Path = request.RequestUri?.AbsolutePath ?? string.Empty;
-            Body = request.Content is null ? string.Empty : await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            return new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent("""{"success":true,"httpStatus":200,"findings":[],"totalFindings":0,"exitCode":0,"errorCount":0,"warningCount":0}""", Encoding.UTF8, "application/json"),
-            };
-        }
-    }
-
-    /// <summary>Production client HTTP path that forwards to the shipped validation service.</summary>
-    private sealed class ServiceForwardingValidationHandler(IWorkspaceValidationService service) : HttpMessageHandler
-    {
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            var json = request.Content is null
-                ? "{}"
-                : await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            var incoming = System.Text.Json.JsonSerializer.Deserialize<QBrainAi.Client.Models.WorkspaceValidationRequest>(
-                json,
-                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true })
-                ?? new QBrainAi.Client.Models.WorkspaceValidationRequest();
-            var result = await service.ValidateAsync(
-                    new WorkspaceValidationRequest
-                    {
-                        Authenticated = incoming.Authenticated,
-                        StaleTurnThresholdHours = incoming.StaleTurnThresholdHours,
-                        RuleCodes = incoming.RuleCodes,
-                        Offset = incoming.Offset,
-                        Limit = incoming.Limit,
-                    },
-                    cancellationToken)
-                .ConfigureAwait(false);
-            var payload = System.Text.Json.JsonSerializer.Serialize(result, new System.Text.Json.JsonSerializerOptions
-            {
-                PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
-            });
-            return new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(payload, Encoding.UTF8, "application/json"),
-            };
-        }
     }
 }

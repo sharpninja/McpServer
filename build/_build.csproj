@@ -12,6 +12,12 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Build.Tests" />
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the integration-owned project of the build's integration
+         cases, split out of Build.Tests in slice S4 (hostile validation finding R14-F4), reads the same internals. -->
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: that project is now NukeBuild.IntegrationTests, Build.IntegrationTests
+         renamed to its root namespace (operator 2026-11-07: "Project names and root namespaces for the project should match,
+         so fix the project name."), so the grant names its new assembly. -->
+    <InternalsVisibleTo Include="NukeBuild.IntegrationTests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 

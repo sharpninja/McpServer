@@ -1,0 +1,26 @@
+{
+  "payload": {
+    "requestId": "req-20261103T123203Z-e6a7",
+    "result": {
+      "createdAt": "2026-11-03T12:32:04.7308592+00:00",
+      "area": "MCP",
+      "title": "Test TEST-MCP-QBOPENAI-001",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-11-03T12:32:04.7310072+00:00",
+      "testType": "unit",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "id": "AC-001",
+          "isSatisfied": false,
+          "text": "FR-MCP-QBOPENAI-001 ac-5 and ac-6: the mock gate ChatRoundOutcomeAssertion_AcceptsFinalAnswerAndRejectsEmptyOrExtraRounds (recorded outcomes: one round returning the reply, and the last reply after the budget, are accepted; empty content, an extra round and a reply other than the last are rejected), then QuadBrainOpenAiChatServiceTests CompleteAsync_NoToolsNonEnvelopeReply_ReturnsItAfterOneRound, CompleteAsync_NoToolsContinueEnvelope_StillRePrompts and CompleteAsync_RoundsExhaustedWithoutFinal_ReturnsLastArbiterOutput over scripted orchestration; QuadBrainOllamaEndpointIntegrationTests (TEST-MCP-QBOLLAMA-001) then run green against gemma4:e4b (PLAN-SESSIONTRIAGEFIX-001 B13; operator decision 2026-10-15 \"Both rules (Recommended)\")."
+        }
+      ],
+      "priority": "medium",
+      "id": "TEST-MCP-QBOPENAI-001",
+      "description": "An inbound OpenAI ChatCompletion request maps to QuadBrain orchestration and returns an OpenAI-shaped response with the Arbiter output as the assistant message; later slices assert tool definitions flow through and assistant tool_calls are emitted, and that QBAgent executes them via the Agent Framework loop."
+    },
+    "deprecated": true
+  },
+  "type": "result"
+}

@@ -1,0 +1,31 @@
+type: result
+payload:
+  requestId: req-20261105T075315Z-93f8
+  result:
+    id: TEST-MCP-SERVICEUPDATE-001
+    title: Cross-platform service update regression and Linux smoke
+    description: Mocks-first ordering/failure/path tests, Windows defaults regression, preservation policy tests, real temporary tar metadata smoke, full unit gates, independent review and local Nuke service update verification per docs/plans/2026-09-28-cross-platform-update-service.md.
+    status: pending
+    priority: medium
+    area: MCP
+    testType: unit
+    acceptanceCriteria:
+    - id: platform
+      text: UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.
+      isSatisfied: false
+    - id: preserve
+      text: Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
+      isSatisfied: false
+    - id: lifecycle
+      text: Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
+      isSatisfied: false
+    - id: validation
+      text: Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T07:53:17.2722412+00:00
+    updatedAt: 2026-11-05T07:53:17.2723498+00:00
+  deprecated: true
+
+---
+

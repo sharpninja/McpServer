@@ -1,0 +1,154 @@
+[2026-11-04T17:31:53] Phase 1/3: checks worktree=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102 head=4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6 version=1.4.43-pr87.4920a8ea service=mcpserver.service install=/opt/mcpserver/app port=7147 whatIf=False
+[2026-11-04T17:31:53]   uid=0
+[2026-11-04T17:31:53]   HEAD 4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6
+[2026-11-04T17:31:53]   changesOutsideDocs=0
+[2026-11-04T17:31:53]   dotnet=/home/sharpninja/.local/bin/dotnet real=/home/sharpninja/.dotnet/dotnet root=/home/sharpninja/.dotnet
+[2026-11-04T17:31:53] Phase 2/3: ./build.ps1 UpdateService --skip-version-bump --service-name mcpserver.service --install-path /opt/mcpserver/app --port 7147 --package-version 1.4.43-pr87.4920a8ea
+[2026-11-04T17:32:23]   NUKE ​
+[2026-11-04T17:32:23]   NUKE ███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+[2026-11-04T17:32:23]   NUKE ████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+[2026-11-04T17:32:23]   NUKE ██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+[2026-11-04T17:32:23]   NUKE ██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+[2026-11-04T17:32:23]   NUKE ██║ ╚████║╚██████╔╝██║  ██╗███████╗
+[2026-11-04T17:32:23]   NUKE ╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+[2026-11-04T17:32:23]   NUKE ​
+[2026-11-04T17:32:23]   NUKE NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)
+[2026-11-04T17:32:23]   NUKE ​
+[2026-11-04T17:32:25]   NUKE ​
+[2026-11-04T17:32:25]   NUKE ╬══════════════════
+[2026-11-04T17:32:25]   NUKE ║ UpdateService
+[2026-11-04T17:32:25]   NUKE ╬═════════
+[2026-11-04T17:32:25]   NUKE ​
+[2026-11-04T17:32:25]   NUKE 17:32:25 [INF] > /home/sharpninja/.dotnet/dotnet publish /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj --configuration Release --self-contained true --runtime linux-x64 --property:PublishSingleFile=true --property:IncludeNativeLibrariesForSelfExtract=true --property:PackageVersion=1.4.43-pr87.4920a8ea --property:Version=1.4.43-pr87.4920a8ea --property:InformationalVersion=1.4.43-pr87.4920a8ea --output /tmp/QBrainAi-linux-publish-25482cff9450453ea030b4aa1064b26e
+[2026-11-04T17:32:27]   NUKE 17:32:27 [DBG]   Determining projects to restore...
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Common.AgentCli/QBrainAi.Common.AgentCli.csproj (in 1.59 sec).
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Cqrs/QBrainAi.Cqrs.csproj (in 1.59 sec).
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.ServiceDefaults/QBrainAi.ServiceDefaults.csproj (in 1.59 sec).
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.TransactionSecurity/QBrainAi.TransactionSecurity.csproj (in 1.59 sec).
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.SessionLog.Transcripts/QBrainAi.SessionLog.Transcripts.csproj (in 1.59 sec).
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Cqrs.Mvvm/QBrainAi.Cqrs.Mvvm.csproj (in 1.59 sec).
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Repl.Core/QBrainAi.Repl.Core.csproj (in 1.59 sec).
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Client/QBrainAi.Client.csproj (in 1.59 sec).
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Storage.SqliteMigrations/QBrainAi.Storage.SqliteMigrations.csproj (in 2.08 sec).
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Storage.SqlServerMigrations/QBrainAi.Storage.SqlServerMigrations.csproj (in 2.1 sec).
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Storage/QBrainAi.Storage.csproj (in 2.08 sec).
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Storage.PostgreSqlMigrations/QBrainAi.Storage.PostgreSqlMigrations.csproj (in 2.13 sec).
+[2026-11-04T17:32:31]   NUKE 17:32:31 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.McpAgent/QBrainAi.McpAgent.csproj (in 2.31 sec).
+[2026-11-04T17:32:32]   NUKE 17:32:32 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Services/QBrainAi.Services.csproj (in 2.42 sec).
+[2026-11-04T17:32:32]   NUKE 17:32:32 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.GraphRag/QBrainAi.GraphRag.csproj (in 2.42 sec).
+[2026-11-04T17:32:32]   NUKE 17:32:32 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj (in 2.42 sec).
+[2026-11-04T17:32:52]   NUKE 17:32:52 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Common.AgentCli/bin/Release/net10.0/QBrainAi.Common.AgentCli.dll
+[2026-11-04T17:32:52]   NUKE 17:32:52 [DBG]   QBrainAi.SessionLog.Transcripts -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.SessionLog.Transcripts/bin/Release/net10.0/QBrainAi.SessionLog.Transcripts.dll
+[2026-11-04T17:32:52]   NUKE 17:32:52 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Cqrs/bin/Release/net10.0/QBrainAi.Cqrs.dll
+[2026-11-04T17:32:52]   NUKE 17:32:52 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.TransactionSecurity/bin/Release/net10.0/QBrainAi.TransactionSecurity.dll
+[2026-11-04T17:32:52]   NUKE 17:32:52 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.ServiceDefaults/bin/Release/net10.0/QBrainAi.ServiceDefaults.dll
+[2026-11-04T17:33:04]   NUKE 17:33:04 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Cqrs.Mvvm/bin/Release/net10.0/QBrainAi.Cqrs.Mvvm.dll
+[2026-11-04T17:33:15]   NUKE 17:33:15 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Client/bin/Release/net10.0/QBrainAi.Client.dll
+[2026-11-04T17:33:20]   NUKE 17:33:20 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Repl.Core/bin/Release/net10.0/QBrainAi.Repl.Core.dll
+[2026-11-04T17:33:22]   NUKE 17:33:22 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Storage/bin/Release/net10.0/QBrainAi.Storage.dll
+[2026-11-04T17:33:22]   NUKE 17:33:22 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.McpAgent/bin/Release/net10.0/QBrainAi.McpAgent.dll
+[2026-11-04T17:33:47]   NUKE 17:33:47 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Storage.PostgreSqlMigrations/bin/Release/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+[2026-11-04T17:33:54]   NUKE 17:33:54 [DBG]   QBrainAi.Storage.SqliteMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Storage.SqliteMigrations/bin/Release/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+[2026-11-04T17:33:56]   NUKE 17:33:56 [DBG]   QBrainAi.Storage.SqlServerMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Storage.SqlServerMigrations/bin/Release/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+[2026-11-04T17:34:03]   NUKE 17:34:03 [DBG]   QBrainAi.Services -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Services/bin/Release/net10.0/QBrainAi.Services.dll
+[2026-11-04T17:34:08]   NUKE 17:34:08 [DBG]   QBrainAi.GraphRag -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.GraphRag/bin/Release/net10.0/QBrainAi.GraphRag.dll
+[2026-11-04T17:34:26]   NUKE 17:34:26 [DBG]   QBrainAi.Support.Mcp -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-windows-20261102/src/QBrainAi.Support.Mcp/bin/Release/net10.0/linux-x64/QBrainAi.Support.Mcp.dll
+[2026-11-04T17:34:29]   NUKE 17:34:29 [DBG]   QBrainAi.Support.Mcp -> /tmp/QBrainAi-linux-publish-25482cff9450453ea030b4aa1064b26e/
+[2026-11-04T17:34:53]   NUKE 17:34:53 [INF]   Brain-slot config deployed: /opt/mcpserver/app/config/brain-slots/quad-brain-slot-assignments.yaml
+[2026-11-04T17:36:16]   NUKE 17:36:16 [INF]   Startup health answered after 13 probe(s).
+[2026-11-04T17:36:16]   NUKE 17:36:16 [INF]   Health: HTTP 200 - {"status":"Healthy","version":"1.4.43-pr87.4920a8ea\u002B4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6","checks":[{"name":"self","status":"Healthy","description":null,"duration":0.3205},{"name":"upstream","status":"Healthy","description":"Federation enabled \u2014 no upstream target configured.","duration":0.1319}],"storage":"reachable"}
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   Health: HTTP 200 - {"status":"Healthy","version":"1.4.43-pr87.4920a8ea\u002B4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6","checks":[{"name":"self","status":"Healthy","description":null,"duration":0.0172},{"name":"upstream","status":"Healthy","description":"Federation enabled \u2014 no upstream target configured.","duration":0.0089}],"storage":"reachable"}
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK .creds [] 596648CEAE47276CDEF641F9B9F82CE0CB48D52371CDF9D1E23208930BC18EED
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK android-local-debugger [] /home/sharpninja/github/android-local-debugger
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK AndroidMcpDesignRemediation [] /home/sharpninja/github/2026-10-26/task-3
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK AssetReview [] DDA28322A3DC121A7B44DE9628115FFD4CB6AAD23B5547C07C0A207F9D01CCB5
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK Avalonia.RemoteControl [] 2D925BE1EDDE024A9EA2E62DC2B464B835F021D804ADF2E7D75759B8C4BBC1F7
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK BBCrawler [] FBEE0834AAFB15059A02CF454B13F9E8ACEED5E3AC403111AFAEBF2F4B90D911
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK BodyAndBrain.Engine [] FE61BBCA47B00D851D749693621771619537DB07E9C26F8D9E445446BA8ABBDD
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK c [] D877D8174535537CA4F9FB1556D6FC08F90AF18ED13D5480892CC038B0372131
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK C:\Users\kingd\OneDrive\Documents\PowerShell\Snippets [] F263294B1353692F0956097C66F75552C14C68E954F1DF2BB0762BE7C42E4B55
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK CbmEngine [] 41EDED84685A60F8185ACCAF66E4E4D5AA4CE34B5924A36A02781E4F791A7806
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK Cline [] /home/sharpninja/github/cline
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK e [] 37998A341B85376B6B5E2C85C548CB2C511324AD8BDBB0C8C79A07629ADD0096
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK E:\F-DevDrive-Migration [] /opt/mcpserver/app/E:\F-DevDrive-Migration
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK EternalDiscord [] E1012F2FEF174026315409285E46D024B989730A1F76293D5DC9322161DFD55C
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK EternalReddit [] 3229A8ECD5BC70707A46665CCA5233451C721A40ED2C1ADCCD1218058F1AE5E8
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK EternalSocial [] AB18513A7C66C66779BB699CF8EF4CA91936DA1519E1C3749AF5A1752279635A
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK EternalX.Blazor [] ED2D95E4BB6C48364B2AADF71B874F4459F1E55B16C907DF3EA4BBF4F5AE0E52
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK F:\GitHub\aiUnit [] 252FE4FA49DCFDD544F2FCA5C79AB7FA95FAAE1184E3949B5D0922BE6F1CF4D6
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK F:\GitHub\bitnet-b1.58-sharp [] F40454544B957CAD3D7D03D0503CF6DF3CE7CC0F1CFD762630FADEC0EFE83442
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK F:\GitHub\FunWasHad [] 91C5242CFEEF3224778B6DA563F8473D6C500778519F947FE5CA7AEFDED0F7D1
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK F:\GitHub\MarkdownServer\AspNetServices [] FBFF00B4C74B7BB749FD302801231E7C01F1809974A1F9C2D1391361C84B21D0
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK F:\GitHub\McpServer [] 5D7B660CC7E8F984913D8CEBCFEB84C8408F2F3D896728AA3E5AAB525E6C2BB3
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK F:\GitHub\McpServerManager [] C6369753DCA22AE0C3F28FAA5E8DA12377205DD15FC9B25BD14F0A64EC7F7F02
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK F:\GitHub\TruckMate [] CCBE68019A6CA19AAE7F1E19B729C464FD9C66EAACA72BCEBB525B5C36AF4858
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK F:\GitHub\vice-sharp [] C7AE2C33FF24DC6AB28E2F71D5CB84652949E591DDE6CA793A100A28B955DD7F
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK F-DevDrive-Migration [] 4F77CCBA2DF2FD8210B73DAE1F04FF13419E6FEC628EFD4303EC3EDF70B03702
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK FeatureFlags [] 0043254F43441E5EBB85EA28A11AC9C3AFBD301A625F9A8EE5AD1222076835B7
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK github-pr-comment-84-944644 [] /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK global [] 
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK GrokOS [] A55B7440CDEE177A3E9B12E7F4DBB4F3051A99FAF9E4AD830CBB64EDDC6B7C45
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK ImageArchive [] 7A21AA4FD5E285F58955867332F7594357C9F124966D2EED995BD58667120EB7
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK i-x20 [] 0D36FCC6E0518E8052DA4FC2C26A933898D0B05B55D47860444B81A5DFAF4C24
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK kingd [] CDD9DF533CA9E699F50D6CA6437A8D3F7AF62C2F39795D8B207A665C7D38EF24
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK LlamaDeck [] 017DED334808A759BFC661B448FDDC2DFF1E4195C508DAE550F55560BD7CEBB4
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK LyftAuditTools [] E371971E262B324B0BD7D6BA44C32AC8EB7F5EED7F218EC6DE2D0B68C5C7DDA7
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK LyftDashboard [] 41AFBE3711C456C80E6D1BE9B2AF1CEF2FFE7D78DEDD1AC96C9867478B8C39F3
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK LyftDashboard [] DA18031C9BC672E60CC101BF6A196162558B80F9056BA782142B554016D39B2E
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK McpServer [primary] /home/sharpninja/github/McpServer
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK McpServer [] 9B717188C79CA054ADDA03B9E515BDD3E83C1E685AF546E55A8E6D1D52D1E284
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK McpServer BUG-TRIAGE-139 Review [] AED654D9ADEFEAEF89506D98B0AB60A9A9E791A13412342120E466C637F1639D
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK mcpserver-claude-code-plugin [] /home/sharpninja/github/mcpserver-claude-code-plugin
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK mcpserver-claude-cowork-plugin [] /home/sharpninja/github/mcpserver-claude-cowork-plugin
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK mcpserver-cline-plugin [] /home/sharpninja/github/mcpserver-cline-plugin
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK mcpserver-cline-v2-plugin [] /home/sharpninja/github/mcpserver-cline-v2-plugin
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK mcpserver-codex-plugin [] /home/sharpninja/github/mcpserver-codex-plugin
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK mcpserver-codex-plugin [] B04AED16B22357DD308E82DDDE4366569835E7ACE67CECE10864B1F7E6145B02
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK mcpserver-copilot-plugin [] /home/sharpninja/github/mcpserver-copilot-plugin
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK mcpserver-grok-bot-plugin [] /home/sharpninja/github/mcpserver-grok-bot-plugin
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK mcpserver-grok-bot-plugin [] AC7AFD509F5234CFA237D3497D561E1C917CCFB0A6799AA72D9710AAF8F4DC3E
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK mcpserver-grok-plugin [] /home/sharpninja/github/mcpserver-grok-plugin
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK mcpserver-opencode-plugin [] /home/sharpninja/github/mcpserver-opencode-plugin
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK mcpserver-opencode-plugin [] DF84EEDEB9C25015E0CEB524DC44651765B095C0E728918FDBEDDCF6CC9BAEB7
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK MouseKeyProxy [] 10A2EFB277003C5BAF39129D8359F2E45E3CC8A91402EF347944FD0DA2CFF7B5
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK Nashville [] 84D29DA4AE68E98E2A0A858566815207ECCEBD1DB5F734726AC5488249A34A39
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK NeuralNetworks [] 6AACE4DF707A054D77B4E857DAC74513C253A600C993A889B023EE40CB389836
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK NinjaTrader [] BEAF512CB67009ACAD759EEA3B5BA277939B7530283F7CAC232566BF8C2DF675
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK optimaizr [] 4AAF60EF0DE2837AF1B509C1746A5ADAA9230C3F5607982A75682CD0104E9DE9
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK qbrain-notion [] /home/sharpninja/github/qbrain-notion
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK RedditPublish [] 5405E6B009B30A707964BDCDC79027CE60EEB39FF7ED9A038AE36A7B03B40DAF
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK repairs [] 17AFEB44C1B1B31B780BD0D3581BE9C88B2EC65CB6F76CE4C2382C85EFCFA126
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK rideaudit [] DDDA00CFAD3386C957A81D7FC2826F0CFDFA15FEF9A6FA8A89938E4200208D21
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK RiskyStars [] C656D615B2E7E1EF3A24485D96BB09F115BEF8CB8E60E8D991B1117747F065A1
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK session-20261009 [] /home/sharpninja/github/McpServer/.claude/worktrees/session-20261009
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK sessionlife-p2-contracts-5cb2 [] 74AD77D9C8C4698F294EE6CF272C1A1290D1AB8F165B73AC3FDCFE9D7BB6D83E
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK SharpNinja.Valhalla [] 1089F7B0FA6905572B9F177378FB25B1D0849A6AFCFBF81AD2B5BC6C3C610941
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK SharpNinja.Valhalla.Avalonia [] 7D094A9EA2AEDB569CF34FFAAD717656D53633A980BB2C837B5F3293D97682BE
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK SharpNinjaHome [] 1DEDEA88E3E7EBA01B18DDB4858AC8BA81A3BF014AF2CF06590167497042EE21
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK Snippets [] /home/sharpninja/.config/powershell/Snippets
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK TCS2 [] 1E26882335118519734BA076C2FCEE53E90C35DD859FD18AC74230096246C01D
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK think-coach [] 7799BECBEE43526BEFDF47AA2E72CF53F24541331E9D2A571735DD0F3C4073F6
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK twelve-dollar-server-challenge [] /home/sharpninja/github/twelve-dollar-server-challenge
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK valhalla-dotnet [] A954A96B0666386C0BA072C0A123A18ED977585C4FAE943D3CDF58627D810000
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK ViceSharp [] /home/sharpninja/github/vice-sharp
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK vice-sharp-romm [] B13FF20B3FC65C29312ECA72BB877196B760BA0E0945533BEF302BE6E3AC11FD
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK wcp-hostile-review [] E4A9BE92AB1944BBBDD59224DC57942A1963D8AB27B3F4BB64A7EFBCB60FA0BF
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK wordpairs [] /home/sharpninja/github/WordGame/.mcpServer/wordpairs
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   OK wslg-protocol-bridge [] D42F7DBAC2E83D92B8FAD747F28B04DD54BBF3AC4E555F967313B387641B53F2
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF]   Deployment manifest: /opt/mcpserver/app/.mcpservice-deployment.json
+[2026-11-04T17:36:17]   NUKE 17:36:17 [INF] Linux update verified. Service: mcpserver.service; PID: 718431; archive: /var/backups/mcpserver/20261104T233430154Z-5875c5b3d53d4f76b762e5c4b99d4329/preserved-state.tar; SHA256: 98F0688C244E9E770221FE004A80B5CF95E91EEB9FFBEC0E131E65C421CAC287
+[2026-11-04T17:36:17]   NUKE ​
+[2026-11-04T17:36:17]   NUKE ═══════════════════════════════════════
+[2026-11-04T17:36:17]   NUKE Target             Status      Duration
+[2026-11-04T17:36:17]   NUKE ───────────────────────────────────────
+[2026-11-04T17:36:17]   NUKE UpdateService      Succeeded       3:52
+[2026-11-04T17:36:17]   NUKE ───────────────────────────────────────
+[2026-11-04T17:36:17]   NUKE Total                              3:52
+[2026-11-04T17:36:17]   NUKE ═══════════════════════════════════════
+[2026-11-04T17:36:17]   NUKE ​
+[2026-11-04T17:36:17]   NUKE Build succeeded on 11/4/2026 5:36:17 PM. ＼（＾ᴗ＾）／
+[2026-11-04T17:36:17]   nukeExit=0
+[2026-11-04T17:36:17] Phase 3/3: give root-created files in the worktree back to sharpninja
+[2026-11-04T17:36:19]   rootOwned=291
+[2026-11-04T17:36:22]   rootOwnedAfter=0
+[2026-11-04T17:36:22] END exit=0

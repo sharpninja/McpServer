@@ -1,0 +1,465 @@
+[
+  {
+    "Pattern": "ReplCommandTimeout",
+    "Total": 18,
+    "Runs": [
+      {
+        "RunId": "ug-r8b-linux-test-6",
+        "Count": 9,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-test-ssh-4",
+        "Count": 9,
+        "NonPass": 0
+      }
+    ],
+    "Names": [
+      "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.ProductionProtocol_SatisfiesTheContract",
+      "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.ProductionStreamCommand_SatisfiesTheContract",
+      "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.ScriptedReferenceCallSite_SatisfiesTheContract_ForBothCallSites",
+      "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.WrongCallSites_AreRejectedInsidePassingHarness(callSite: \"command\")",
+      "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutCallSiteTests.WrongCallSites_AreRejectedInsidePassingHarness(callSite: \"stream\")",
+      "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.CancelAfter_AcceptsTheLargestSecondsAndRejectsOneMore",
+      "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.ProductionParser_SatisfiesTheContract",
+      "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.ScriptedReferenceParser_SatisfiesTheContract",
+      "QBrainAi.Repl.Core.Tests.ReplCommandTimeoutTests.WrongParsers_AreRejectedInsidePassingHarness"
+    ]
+  },
+  {
+    "Pattern": "MarkerFileResolverWalk",
+    "Total": 0,
+    "Runs": [],
+    "Names": []
+  },
+  {
+    "Pattern": "CliTempVariables",
+    "Total": 28,
+    "Runs": [
+      {
+        "RunId": "ug-r8b-linux-lane-4",
+        "Count": 7,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-linux-test-6",
+        "Count": 7,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-lane-5",
+        "Count": 7,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-test-ssh-4",
+        "Count": 7,
+        "NonPass": 0
+      }
+    ],
+    "Names": [
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.Names_HoldEveryChainNameOnce",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_UnknownPrimary_IsRefusedWithoutChanges",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_CODEX_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_CODEX_TRIAGE_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_GROK_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_QUADBRAIN_CLI_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedChain_PrimaryAtFolderOthersAtFallback_Passes(primaryName: \"MCPSERVER_CODEX_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedChain_PrimaryAtFolderOthersAtFallback_Passes(primaryName: \"MCPSERVER_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedChain_PrimaryAtFolderOthersAtFallback_Passes(primaryName: \"MCPSERVER_QUADBRAIN_CLI_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedChain_WrongSnapshot_IsRejectedInsidePassingHarness",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedRestore_EqualSnapshots_Pass",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedRestore_UnrestoredName_IsRejectedInsidePassingHarness"
+    ]
+  },
+  {
+    "Pattern": "CliBrainSlotStrategyTests",
+    "Total": 68,
+    "Runs": [
+      {
+        "RunId": "ug-r8b-linux-lane-4",
+        "Count": 13,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-linux-test-6",
+        "Count": 21,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-lane-5",
+        "Count": 13,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-test-ssh-4",
+        "Count": 21,
+        "NonPass": 0
+      }
+    ],
+    "Names": [
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.BuildPersistentCodexArgumentList_FirstTurn_UsesExecStdinAndXhigh",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.BuildPersistentCodexArgumentList_Resume_PlacesExecOptionsBeforeResume",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.BuildPersistentGrokArgumentList_FirstTurn_UsesSessionIdAndXhigh",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.BuildPersistentGrokArgumentList_Resume_UsesResumeFlag",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Codex_PrefersJsonlAssistantTextOverOutputFileToolCallJson",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Codex_ReturnsAssistantTextFromJsonlNotRawEvents",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Codex_WritesOutputFileUnderConfiguredTemp",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_UsesIsolatedCwdNotConfiguredRepoRoot",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_WritesPromptFileUnderConfiguredTempAndSetsTempEnv",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CredentialResolver_CliInteractive_ReturnsPlaceholder",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CredentialResolver_SupportsCliScheme(reference: \"cli:interactive\", expected: True)",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CredentialResolver_SupportsCliScheme(reference: \"cli:session\", expected: True)",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CredentialResolver_SupportsCliScheme(reference: \"vault:future\", expected: False)",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.ExtractCodexAssistantText_FromEventMsg_ReturnsMessage",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.ExtractCodexAssistantText_FromItemCompletedAgentMessage_ReturnsText",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.ExtractCodexSessionId_FromJsonlThreadStarted_ReturnsId",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.NormalizeProviderKind_AcceptsCli(kind: \"cli\")",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.ResolveTempDirectory_HonorsConfiguredEnvVar_WithoutWindowsServiceAcl",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.TryParseCliEndpoint_KnownStrategies_Succeed(endpoint: \"cli://codex-cli\", expected: \"codex-cli\")",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.TryParseCliEndpoint_KnownStrategies_Succeed(endpoint: \"cli://grok-build\", expected: \"grok-cli\")",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.TryParseCliEndpoint_KnownStrategies_Succeed(endpoint: \"cli://grok-cli\", expected: \"grok-cli\")",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.TryParseCliEndpoint_Unknown_Fails(endpoint: \"\")",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.TryParseCliEndpoint_Unknown_Fails(endpoint: \"cli://unknown\")",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.TryParseCliEndpoint_Unknown_Fails(endpoint: \"http://127.0.0.1:8311/v1\")",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.ValidateEndpoint_CliKnownStrategy_DoesNotRequireHttpHostAllowlist",
+      "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.ValidateEndpoint_CliUnknownStrategy_Throws"
+    ]
+  },
+  {
+    "Pattern": "CodexInteractiveCliAgentExecutionStrategyTests",
+    "Total": 0,
+    "Runs": [],
+    "Names": []
+  },
+  {
+    "Pattern": "OneShotCli",
+    "Total": 12,
+    "Runs": [
+      {
+        "RunId": "ug-r8b-linux-lane-4",
+        "Count": 4,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-linux-test-6",
+        "Count": 2,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-lane-5",
+        "Count": 4,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-test-ssh-4",
+        "Count": 2,
+        "NonPass": 0
+      }
+    ],
+    "Names": [
+      "QBrainAi.Support.Mcp.Tests.Options.VoiceConversationOptionsValidatorTests.Validate_ReturnsSuccess_WhenDefaultExecutionStrategyIsOneShotCli",
+      "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.AgentExecutionStrategyNames_SupportsOneShotCliAndDefaultsAwayFromCopilot",
+      "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape",
+      "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape",
+      "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape",
+      "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape"
+    ]
+  },
+  {
+    "Pattern": "WindowsJunction",
+    "Total": 7,
+    "Runs": [
+      {
+        "RunId": "ug-r8b-linux-test-6",
+        "Count": 3,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-lane-5",
+        "Count": 1,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-test-ssh-4",
+        "Count": 3,
+        "NonPass": 0
+      }
+    ],
+    "Names": [
+      "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionTests.FixtureBuilder_SatisfiesTheContract",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionTests.ScriptedReferenceBuilder_SatisfiesTheContract",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionTests.WrongBuilders_AreRejectedInsidePassingHarness",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.WindowsJunctionWindowsTests.Create_MakesAJunctionThatResolvesToItsTarget"
+    ]
+  },
+  {
+    "Pattern": "TwelfthReview",
+    "Total": 0,
+    "Runs": [],
+    "Names": []
+  },
+  {
+    "Pattern": "EighteenthReview",
+    "Total": 0,
+    "Runs": [],
+    "Names": []
+  },
+  {
+    "Pattern": "SqlServer",
+    "Total": 52,
+    "Runs": [
+      {
+        "RunId": "ug-r8b-linux-lane-4",
+        "Count": 7,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-linux-test-6",
+        "Count": 19,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-lane-5",
+        "Count": 7,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-test-ssh-4",
+        "Count": 19,
+        "NonPass": 0
+      }
+    ],
+    "Names": [
+      "QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests.RunAsync_DryRunSqlServerEnable_BuildsTdePlan",
+      "QBrainAi.Support.Mcp.Tests.Identity.IdentityServerExtensionsTests.ResolveIdentityConnectionString_FallsBackToLocalDbWhenMcpSqlServerIsUnavailable",
+      "QBrainAi.Support.Mcp.Tests.Identity.IdentityServerExtensionsTests.ResolveIdentityConnectionString_UsesMcpSqlServerConnectionWhenIdentityIsBlank",
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffDbExceptionsTests.IsCommitAmbiguous_SqlServerTimeoutNumber_IsTrue",
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffDbExceptionsTests.IsUniqueViolation_SqlServerNumbers_AreTrue(number: 2601)",
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffDbExceptionsTests.IsUniqueViolation_SqlServerNumbers_AreTrue(number: 2627)",
+      "QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewEntity_RoundTrip_SqlitePgSqlServer",
+      "QBrainAi.Support.Mcp.Tests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests.SqlServerMigration_UpAddsColumns_DownDropsThem",
+      "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+      "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.DefinitionNegativeControls_AreRejectedInsidePassingHarness",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.LocalDbClasses_AreInTheSqlServerLocalDbCollection",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.MembershipNegativeControls_AreRejectedInsidePassingHarness",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.ScriptedMember_PassesTheMembershipAssertion",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.ScriptedSerializedDefinition_PassesTheDefinitionAssertion",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerProviderResiliencyTests.Configure_DefaultConnectionString_AddsConnectRetrySettings",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerProviderResiliencyTests.Configure_ExplicitRetrySettings_ArePreserved",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.DefaultNegativeControls_AreRejectedInsidePassingHarness",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.LocalDbDefault_PassesTheDefaultAssertion",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.RequiredDefault_PassesTheDefaultAssertion",
+      "QBrainAi.Support.Mcp.Tests.Storage.SqlServerTestConnectionTests.Resolve_Override_IsReturnedUnchanged"
+    ]
+  },
+  {
+    "Pattern": "DirectoryTreeWalker",
+    "Total": 114,
+    "Runs": [
+      {
+        "RunId": "ug-r8b-linux-lane-4",
+        "Count": 2,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-linux-test-6",
+        "Count": 55,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-lane-5",
+        "Count": 2,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-test-ssh-4",
+        "Count": 55,
+        "NonPass": 0
+      }
+    ],
+    "Names": [
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.FileSystemReach_RealRootAndAncestorLinks_AreNotReachable",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.FileSystemWalk_RealLinks_AreFlaggedAndNotDescended",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ProductionReach_UnexpectedListingError_Propagates",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ProductionWalk_UnexpectedListingError_Propagates",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"access-denied\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"directory-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"file-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"nested-tree\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"root-unlistable\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"untrusted-mount-point\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"vanished-directory\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"access-denied\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"directory-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"file-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"nested-tree\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"root-unlistable\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"untrusted-mount-point\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"vanished-directory\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-boundary-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-history-root-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-history-root\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-middle-ancestor-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-normal\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-outside-boundary\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-parent-access-denied\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-parent-unlistable\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-prefix-sibling-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-root-absent\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-root-is-boundary\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-root-is-file\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-root-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-root-unlistable\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-top-ancestor-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(name: \"reach-trailing-separator\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-boundary-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-history-root-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-history-root\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-middle-ancestor-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-normal\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-outside-boundary\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-parent-access-denied\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-parent-unlistable\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-prefix-sibling-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-root-absent\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-root-is-boundary\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-root-is-file\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-root-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-root-unlistable\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-top-ancestor-link\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(name: \"reach-trailing-separator\")",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedReachTheory_CoversEveryCase",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedTheory_CoversEveryCase",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedTree_RecordsListingsAndRefusesUnscriptedDirectories",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.UnexpectedListingError_EscapesTheScriptedTree",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.UnexpectedReachListingError_EscapesTheScriptedTree",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.WrongReachNegativeControls_AreRejectedInsidePassingHarness",
+      "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.WrongWalkNegativeControls_AreRejectedInsidePassingHarness"
+    ]
+  },
+  {
+    "Pattern": "UserProfileScanBinding",
+    "Total": 40,
+    "Runs": [
+      {
+        "RunId": "ug-r8b-linux-test-6",
+        "Count": 20,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-test-ssh-4",
+        "Count": 20,
+        "NonPass": 0
+      }
+    ],
+    "Names": [
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.Extract_HistoryRootUnlistable_KeepsNone",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.Extract_LinkedHistoryRoot_KeepsNone(rootName: \".claude\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.Extract_LinkedHistoryRoot_KeepsNone(rootName: \".codex\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.Extract_LinkedHistoryRoot_KeepsNone(rootName: \".cursor\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.Extract_LinkedHistoryRoot_KeepsNone(rootName: \".grok\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.Extract_UnlistableAndLinkedHistoryDirectories_ReadTheReachableHistory",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_CacheRootUnlistable_FallsBackToTheSyncedVersion",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_EveryVersionFileUnreadable_FallsBackToTheSyncedVersion",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_LinkedCacheRootOrAncestor_FallsBackToTheSyncedVersion(kind: \"claude\", linkedRelative: \".claude\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_LinkedCacheRootOrAncestor_FallsBackToTheSyncedVersion(kind: \"claude\", linkedRelative: \".claude/plugins\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_LinkedCacheRootOrAncestor_FallsBackToTheSyncedVersion(kind: \"claude\", linkedRelative: \".claude/plugins/cache\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_LinkedCacheRootOrAncestor_FallsBackToTheSyncedVersion(kind: \"codex\", linkedRelative: \".codex\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_LinkedCacheRootOrAncestor_FallsBackToTheSyncedVersion(kind: \"codex\", linkedRelative: \".codex/plugins\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_LinkedCacheRootOrAncestor_FallsBackToTheSyncedVersion(kind: \"codex\", linkedRelative: \".codex/plugins/cache\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_LinkedCacheRootOrAncestor_FallsBackToTheSyncedVersion(kind: \"codex\", linkedRelative: \".codex/plugins/cache/mcpserver-scan-binding-plugin\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_LinkedCacheRootOrAncestor_FallsBackToTheSyncedVersion(kind: \"grok\", linkedRelative: \".grok\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_LinkedCacheRootOrAncestor_FallsBackToTheSyncedVersion(kind: \"grok\", linkedRelative: \".grok/installed-plugins\")",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_LinkedProfile_IsStillScanned",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_UnlistableAndLinkedCacheDirectories_ResolveTheReachableVersion",
+      "QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_UnreadableVersionFile_ResolvesTheNextReadableVersion"
+    ]
+  },
+  {
+    "Pattern": "HandoffAuditDefect",
+    "Total": 16,
+    "Runs": [
+      {
+        "RunId": "ug-r8b-linux-test-6",
+        "Count": 8,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-test-ssh-4",
+        "Count": 8,
+        "NonPass": 0
+      }
+    ],
+    "Names": [
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffAuditDefectTests.ApproveAsync_SeparateContexts_CreatedWins",
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffAuditDefectTests.GetRunAsync_FailedExtraction_DoesNotReportSuccess",
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffAuditDefectTests.IngestAsync_Cancelled_ThrowsWithoutSuccessfulPersist",
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffAuditDefectTests.IngestAsync_ConcurrentSameHash_ReservesOnce",
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffAuditDefectTests.IngestAsync_SecretInDraft_IsRedactedOnPersist",
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffAuditDefectTests.Parser_UnknownField_IsNotSuccess",
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffAuditDefectTests.RequireReview_MalformedDraft_IsFailedAndNotApprovable",
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffAuditDefectTests.TestDatabase_GivesEachContextItsOwnConnectionToOneDatabase"
+    ]
+  },
+  {
+    "Pattern": "MemoryS1HarnessDatabase",
+    "Total": 2,
+    "Runs": [
+      {
+        "RunId": "ug-r8b-linux-test-6",
+        "Count": 1,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-test-ssh-4",
+        "Count": 1,
+        "NonPass": 0
+      }
+    ],
+    "Names": [
+      "QBrainAi.Support.Mcp.Tests.Memory.MemoryS1HarnessDatabaseTests.TestDatabase_GivesEachContextItsOwnConnectionToOneDatabase"
+    ]
+  },
+  {
+    "Pattern": "DesktopProcessSpawner",
+    "Total": 3,
+    "Runs": [
+      {
+        "RunId": "ug-r8b-linux-lane-4",
+        "Count": 1,
+        "NonPass": 0
+      },
+      {
+        "RunId": "ug-r8b-win-lane-5",
+        "Count": 2,
+        "NonPass": 0
+      }
+    ],
+    "Names": [
+      "QBrainAi.Support.Mcp.Tests.Services.DesktopProcessSpawnerTests.ExtractEnvironment_RemovesServiceDefaultsAndKeepsExplicitDeltas",
+      "QBrainAi.Support.Mcp.Tests.Services.DesktopProcessSpawnerWindowsInteractiveTests.Spawn_WhenHostIsInteractive_CanRunCmdThroughDefaultSpawner"
+    ]
+  },
+  {
+    "Pattern": "RequirementScopeLayer_ReplWorkflow",
+    "Total": 0,
+    "Runs": [],
+    "Names": []
+  }
+]

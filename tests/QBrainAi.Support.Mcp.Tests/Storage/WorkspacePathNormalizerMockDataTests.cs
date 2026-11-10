@@ -8,6 +8,14 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// a test-only fake that answers from a literal data table. Green here proves the contract tests
 /// and their expected data are correct independently of the production implementation.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: TR-MCP-FED-PATH-001 AC1 and TEST-MCP-FED-PATH-001 AC1, through
+/// the negative controls of RootRelativeNegativeControls_AreRejectedInsidePassingHarness.
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-FED-PATH-001 AC1 and TEST-MCP-FED-PATH-001 AC1: cites the criteria it proves, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class WorkspacePathNormalizerMockDataTests : WorkspacePathNormalizerContractTests
 {
     /// <inheritdoc />

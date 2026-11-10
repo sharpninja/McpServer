@@ -1,0 +1,152 @@
+[
+  {
+    "TimestampLocal": "2026-10-26T09:16:57",
+    "Line": 35000,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-usecase-018-ac006-r6.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-26T09:17:12",
+    "Line": 35005,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-usecase-019-ac008-r6.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-26T10:33:51",
+    "Line": 36879,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-usecase-018-ac006-r7.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-26T10:33:52",
+    "Line": 36880,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-usecase-019-ac008-r7.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-26T12:57:33",
+    "Line": 39802,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-repl-001-ac002-r8.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-26T13:36:25",
+    "Line": 40416,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-usecase-018-ac006-r8.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-26T13:36:26",
+    "Line": 40417,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-usecase-019-ac008-r8.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-26T14:18:23",
+    "Line": 41147,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-usecase-019-ac008-r8b.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T05:21:16",
+    "Line": 46174,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/req-nuke019-ac2-r8b.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T05:21:31",
+    "Line": 46178,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/req-nuke019-ac4-r8b.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T05:21:32",
+    "Line": 46179,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/req-nuke019-ac6-r8b.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T11:52:22",
+    "Line": 47817,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/req-nuke019-ac2-r8b-2.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T11:52:24",
+    "Line": 47820,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/req-nuke019-ac1-r8b.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T13:58:53",
+    "Line": 48862,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/req-nuke019-ac2-r8b-3.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T13:59:13",
+    "Line": 48868,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/req-nuke019-ac1-r8b-2.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T14:53:01",
+    "Line": 50263,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/req-nuke019-ac7-r8b.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T16:40:21",
+    "Line": 51909,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-usecase-007-ac1.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T16:40:55",
+    "Line": 51918,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-test-usecase-008-ac1.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T20:04:11",
+    "Line": 53335,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/req-nuke019-ac8-r8b.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T21:03:58",
+    "Line": 53822,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-repl-008-ac1.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T21:05:11",
+    "Line": 53865,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-repl-008-ac1.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T21:05:29",
+    "Line": 53869,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-repl-008-ac2.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T21:05:47",
+    "Line": 53873,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-repl-008-ac3.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T21:05:48",
+    "Line": 53874,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-repl-008-ac4.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T22:07:49",
+    "Line": 54731,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-usecase-018-ac006-r8c.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T22:07:49",
+    "Line": 54732,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-usecase-019-ac008-r8c.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T22:25:31",
+    "Line": 55157,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001-r8c.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T23:17:03",
+    "Line": 55990,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-nuke019-ac2-r8c.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T23:17:04",
+    "Line": 55991,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-quality-ac21-r8c.psd1"
+  },
+  {
+    "TimestampLocal": "2026-10-27T23:17:06",
+    "Line": 55992,
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-pathnorm-native-host-r8c.psd1"
+  }
+]

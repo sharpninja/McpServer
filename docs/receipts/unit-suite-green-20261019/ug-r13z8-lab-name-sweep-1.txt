@@ -1,0 +1,10 @@
+RECEIPT started=2026-11-05T15:52:43 ended=2026-11-05T15:52:44 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-AddedLinesMatching.ps1 sha256=3BC049F8E0097BEE256953B92546390A95C4B7DEE9695DFB912446620C3429C5
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Range | 9b099716..1d77a79c | -Paths:src,tests,build | -PatternFile | /home/sharpninja/.claude/scratch/pr82-review-20261019/pattern-z8-lab-names.txt
+HEAD 1d77a79c4e1e78a4c8e164a49779393721a95061
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs:154: var envelope = sut.Sign(Operation(), "PAYTON-LEGION2", "PAYTON-DESKTOP");
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs:157: var result = sut.Verify(envelope, "PAYTON-DESKTOP");
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs:176: var envelope = sut.Sign(Operation(), "PAYTON-LEGION2", "PAYTON-DESKTOP");
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs:179: var result = sut.Verify(envelope, "PAYTON-DESKTOP");
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs:191: ProxyId = "PAYTON-LEGION2",
+END range=9b099716..1d77a79c matches=5

@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c564fec7-eaf0-451d-982f-b5000d0374b2" name="@LAB-OMARCHY 2026-11-04 17:16:02" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-04T17:16:02.5432930-06:00" queuing="2026-11-04T17:16:02.5432931-06:00" start="2026-11-04T17:16:00.5053092-06:00" finish="2026-11-04T17:16:02.5534564-06:00" />
+  <TestSettings name="default" id="99739f86-a4f0-4e40-afd2-ce7610e6efb8">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-04_17_16_02" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="69bf5d6d-7415-4927-b25c-1ca756bbb59b" testId="42b27ba1-546d-351b-455a-09728e379ff7" testName="NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 0)" computerName="LAB-OMARCHY" duration="00:00:00.0001042" startTime="2026-11-04T17:16:02.3218334-06:00" endTime="2026-11-04T17:16:02.3219684-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="69bf5d6d-7415-4927-b25c-1ca756bbb59b" />
+    <UnitTestResult executionId="97ba9247-8dfe-40fe-9144-69993d518b08" testId="5eaaa3d0-e22b-053b-70f4-24ef21cd3adf" testName="NukeBuild.Tests.ServiceStartupHealthContractTests.ReferenceWait_MeetsEveryRow" computerName="LAB-OMARCHY" duration="00:00:00.0151731" startTime="2026-11-04T17:16:02.2823206-06:00" endTime="2026-11-04T17:16:02.3074692-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="97ba9247-8dfe-40fe-9144-69993d518b08" />
+    <UnitTestResult executionId="fb478ead-8bc8-45a7-b194-050dac0f35c0" testId="52335130-2ac5-be28-0910-0a096ca59972" testName="NukeBuild.Tests.ServiceStartupHealthContractTests.OldWindow_FailsOnlyTheSlowStartRow" computerName="LAB-OMARCHY" duration="00:00:00.0093291" startTime="2026-11-04T17:16:02.3222154-06:00" endTime="2026-11-04T17:16:02.3315823-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fb478ead-8bc8-45a7-b194-050dac0f35c0" />
+    <UnitTestResult executionId="e5ac3d44-bce3-4f78-b24f-6db56ab051b3" testId="c6a86e35-237c-cd09-5f39-0c7fa6b29e3a" testName="NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 1)" computerName="LAB-OMARCHY" duration="00:00:00.0047929" startTime="2026-11-04T17:16:02.3147613-06:00" endTime="2026-11-04T17:16:02.3196483-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e5ac3d44-bce3-4f78-b24f-6db56ab051b3" />
+    <UnitTestResult executionId="e9ea0eb8-1ff3-4dc3-acf7-51dec1b7dd3b" testId="a8757b71-15be-b67f-a973-8847bc29243f" testName="NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 3)" computerName="LAB-OMARCHY" duration="00:00:00.0001532" startTime="2026-11-04T17:16:02.3209253-06:00" endTime="2026-11-04T17:16:02.3211048-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e9ea0eb8-1ff3-4dc3-acf7-51dec1b7dd3b" />
+    <UnitTestResult executionId="914092cc-fd58-4758-b618-25c685c5f15d" testId="f7bf25c7-5606-c63b-4904-462098e396d9" testName="NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 4)" computerName="LAB-OMARCHY" duration="00:00:00.0002115" startTime="2026-11-04T17:16:02.3213503-06:00" endTime="2026-11-04T17:16:02.3215853-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="914092cc-fd58-4758-b618-25c685c5f15d" />
+    <UnitTestResult executionId="356bbd53-c286-430e-9266-8f5965adfe74" testId="c41c30cd-6d40-c16a-1bad-516c531e0a91" testName="NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 2)" computerName="LAB-OMARCHY" duration="00:00:00.0005264" startTime="2026-11-04T17:16:02.3200357-06:00" endTime="2026-11-04T17:16:02.3206090-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="356bbd53-c286-430e-9266-8f5965adfe74" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 2)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="c41c30cd-6d40-c16a-1bad-516c531e0a91">
+      <Execution id="356bbd53-c286-430e-9266-8f5965adfe74" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceStartupHealthContractTests" name="WrongWait_FailsAtLeastOneRow" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceStartupHealthContractTests.OldWindow_FailsOnlyTheSlowStartRow" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="52335130-2ac5-be28-0910-0a096ca59972">
+      <Execution id="fb478ead-8bc8-45a7-b194-050dac0f35c0" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceStartupHealthContractTests" name="OldWindow_FailsOnlyTheSlowStartRow" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 1)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="c6a86e35-237c-cd09-5f39-0c7fa6b29e3a">
+      <Execution id="e5ac3d44-bce3-4f78-b24f-6db56ab051b3" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceStartupHealthContractTests" name="WrongWait_FailsAtLeastOneRow" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 0)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="42b27ba1-546d-351b-455a-09728e379ff7">
+      <Execution id="69bf5d6d-7415-4927-b25c-1ca756bbb59b" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceStartupHealthContractTests" name="WrongWait_FailsAtLeastOneRow" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceStartupHealthContractTests.ReferenceWait_MeetsEveryRow" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="5eaaa3d0-e22b-053b-70f4-24ef21cd3adf">
+      <Execution id="97ba9247-8dfe-40fe-9144-69993d518b08" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceStartupHealthContractTests" name="ReferenceWait_MeetsEveryRow" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 3)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="a8757b71-15be-b67f-a973-8847bc29243f">
+      <Execution id="e9ea0eb8-1ff3-4dc3-acf7-51dec1b7dd3b" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceStartupHealthContractTests" name="WrongWait_FailsAtLeastOneRow" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 4)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="f7bf25c7-5606-c63b-4904-462098e396d9">
+      <Execution id="914092cc-fd58-4758-b618-25c685c5f15d" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceStartupHealthContractTests" name="WrongWait_FailsAtLeastOneRow" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="42b27ba1-546d-351b-455a-09728e379ff7" executionId="69bf5d6d-7415-4927-b25c-1ca756bbb59b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5eaaa3d0-e22b-053b-70f4-24ef21cd3adf" executionId="97ba9247-8dfe-40fe-9144-69993d518b08" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="52335130-2ac5-be28-0910-0a096ca59972" executionId="fb478ead-8bc8-45a7-b194-050dac0f35c0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c6a86e35-237c-cd09-5f39-0c7fa6b29e3a" executionId="e5ac3d44-bce3-4f78-b24f-6db56ab051b3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a8757b71-15be-b67f-a973-8847bc29243f" executionId="e9ea0eb8-1ff3-4dc3-acf7-51dec1b7dd3b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f7bf25c7-5606-c63b-4904-462098e396d9" executionId="914092cc-fd58-4758-b618-25c685c5f15d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c41c30cd-6d40-c16a-1bad-516c531e0a91" executionId="356bbd53-c286-430e-9266-8f5965adfe74" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="7" executed="7" passed="7" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.22]   Discovering: Build.Tests
+[xUnit.net 00:00:00.86]   Discovered:  Build.Tests
+[xUnit.net 00:00:01.19]   Starting:    Build.Tests
+[xUnit.net 00:00:01.36]   Finished:    Build.Tests (ID = 'bc600d8f515939f9633dc43d37b0dea13c118e71e93a0ca456091b1a82b53cff')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

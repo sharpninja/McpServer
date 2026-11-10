@@ -1,0 +1,279 @@
+{
+  "TimestampUtc": "2026-10-29T04:51:21.6761462Z",
+  "TimestampLocal": "2026-10-28T23:51:21",
+  "Workspace": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "Head": "332e0d31dbcb823418c3db30c409bc44df655de8",
+  "TrackedChanges": [],
+  "SqlServerCases": [
+    {
+      "RunId": "ug-r8b-linux-test-6",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-linux-test-6",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-linux-test-6",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_SessionLogsAlreadyHasHeaderColumnsAndTags_Succeeds",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-linux-test-6",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-linux-test-6",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: True)",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-linux-test-6",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: False)",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-test-ssh-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-test-ssh-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-test-ssh-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_SessionLogsAlreadyHasHeaderColumnsAndTags_Succeeds",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-test-ssh-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: False)",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-test-ssh-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-test-ssh-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: True)",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-linux-lane-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-linux-lane-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-linux-lane-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-linux-lane-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-linux-lane-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-linux-lane-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-linux-lane-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-lane-5",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-lane-5",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-lane-5",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-lane-5",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-lane-5",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-lane-5",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-lane-5",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows",
+      "Outcome": "Passed"
+    }
+  ],
+  "EnvironmentDeltaCases": [
+    {
+      "RunId": "ug-r8b-linux-lane-4",
+      "Name": "QBrainAi.Support.Mcp.Tests.Services.DesktopProcessSpawnerTests.ExtractEnvironment_RemovesServiceDefaultsAndKeepsExplicitDeltas",
+      "Outcome": "Passed"
+    },
+    {
+      "RunId": "ug-r8b-win-lane-5",
+      "Name": "QBrainAi.Support.Mcp.Tests.Services.DesktopProcessSpawnerTests.ExtractEnvironment_RemovesServiceDefaultsAndKeepsExplicitDeltas",
+      "Outcome": "Passed"
+    }
+  ],
+  "TurnContexts": [
+    {
+      "Line": 8,
+      "Timestamp": "2026-10-29T03:25:13.011Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "TurnId": "01a185b0-b1d4-7f11-bd68-e1aaa4ae8a5c"
+    },
+    {
+      "Line": 270,
+      "Timestamp": "2026-10-29T03:40:40.205Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "TurnId": "01a185b0-b1d4-7f11-bd68-e1aaa4ae8a5c"
+    },
+    {
+      "Line": 541,
+      "Timestamp": "2026-10-29T04:00:04.203Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "TurnId": "01a185b0-b1d4-7f11-bd68-e1aaa4ae8a5c"
+    },
+    {
+      "Line": 775,
+      "Timestamp": "2026-10-29T04:19:38.309Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "TurnId": "01a185b0-b1d4-7f11-bd68-e1aaa4ae8a5c"
+    },
+    {
+      "Line": 1008,
+      "Timestamp": "2026-10-29T04:31:39.998Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "TurnId": "01a185b0-b1d4-7f11-bd68-e1aaa4ae8a5c"
+    },
+    {
+      "Line": 1287,
+      "Timestamp": "2026-10-29T04:48:49.018Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "TurnId": "01a185b0-b1d4-7f11-bd68-e1aaa4ae8a5c"
+    }
+  ],
+  "Streams": [
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261028T222504-unitgreen-r8b.request.jsonl",
+      "Bytes": 58675,
+      "Exists": true,
+      "SnapshotOnly": false,
+      "Sha256": "28F68E3043C2AD7E043D9FCD5B3B68BC935EA542C47E9B156C84DA1C0F8978D0"
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261028T222504-unitgreen-r8b.response.jsonl",
+      "Bytes": 4817081,
+      "Exists": true,
+      "SnapshotOnly": true,
+      "Sha256": "38101798E6F01D9E3FC406E278F37CF91050CC9D3F7ECFBE148911A55BE9F967"
+    }
+  ],
+  "CommandCount": 267,
+  "NonzeroCommands": [
+    {
+      "TimestampLocal": "2026-10-28T22:35:21",
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r8b3-git-pr-inventory.ps1",
+      "Parameters": {},
+      "ExitCode": 1
+    },
+    {
+      "TimestampLocal": "2026-10-28T22:52:29",
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r8b3-source-view.ps1",
+      "Parameters": {
+        "Pattern": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs;src/QBrainAi.Repl.Core/TodoSelectionStore.cs#100:130;tests/QBrainAi.Repl.Core.Tests/TodoSelectionStoreTests.cs#1:170"
+      },
+      "ExitCode": 1
+    },
+    {
+      "TimestampLocal": "2026-10-28T23:15:09",
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r8b3-history.ps1",
+      "Parameters": {},
+      "ExitCode": 1
+    },
+    {
+      "TimestampLocal": "2026-10-28T23:24:31",
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r8b3-diff.ps1",
+      "Parameters": {
+        "Pattern": "tests/QBrainAi.Repl.IntegrationTests/AuthKeyAndWorkspaceTests.cs tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs",
+        "TargetPath": "8b97aa4b..332e0d31"
+      },
+      "ExitCode": 1
+    },
+    {
+      "TimestampLocal": "2026-10-28T23:25:47",
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r8b3-history.ps1",
+      "Parameters": {},
+      "ExitCode": 1
+    },
+    {
+      "TimestampLocal": "2026-10-28T23:35:08",
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r8b3-source-view.ps1",
+      "Parameters": {
+        "Pattern": "tests/TestSupport/ScratchQBrainAi.cs#240:52;src/QBrainAi.Support.Mcp/Program.cs#91:55;src/QBrainAi.Storage/Configuration/McpDatabaseConfigurationResolver.cs#80:80;tests/TestSupport/TemporaryInstanceChecks.cs#1:100"
+      },
+      "ExitCode": 1
+    },
+    {
+      "TimestampLocal": "2026-10-28T23:37:45",
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r8b3-hygiene-scan.ps1",
+      "Parameters": {},
+      "ExitCode": 1
+    },
+    {
+      "TimestampLocal": "2026-10-28T23:41:47",
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r8b3-source-view.ps1",
+      "Parameters": {
+        "Pattern": "tests/TestSupport.Shared/ScratchQBrainAi.cs#425:70;src/QBrainAi.Support.Mcp/Options/McpInstanceResolver.cs#30:80;tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs#15:70"
+      },
+      "ExitCode": 1
+    },
+    {
+      "TimestampLocal": "2026-10-28T23:49:56",
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r8b3-source-view.ps1",
+      "Parameters": {
+        "Pattern": "docs/receipts/hv/hv-ug-r8b3-common.ps1;docs/receipts/hv/hv-ug-r8b3-own-readback.ps1;docs/receipts/hv/hv-ug-r8b3-linkage.json;docs/receipts/hv/hv-ug-r8b3-identity.json"
+      },
+      "ExitCode": 1
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261105T075258Z-6e32
+  result:
+    id: TEST-MCP-PLUGINCORE-002
+    title: Test TEST-MCP-PLUGINCORE-002
+    description: core-guard job fails on a seeded undeclared lib file and passes when declared in PLUGIN-RESIDUAL.txt.
+    status: pending
+    priority: medium
+    area: MCP
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T07:52:59.7583655+00:00
+    updatedAt: 2026-11-05T07:52:59.7584839+00:00
+  deprecated: true
+
+---
+

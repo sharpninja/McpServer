@@ -1,0 +1,177 @@
+using System.Diagnostics;
+
+using QBrainAi.Common.AgentCli;
+
+using Microsoft.Extensions.Logging.Abstractions;
+
+using QBrainAi.Support.Mcp.Tests.TestSupport;
+
+namespace QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services;
+
+/// <summary>
+/// Verifies service-launched agent processes inherit user CLI install paths needed by triage agents.
+/// The cases exercise Windows profile and PATH resolution, so they are integration tests that run on
+/// Windows hosts only, without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The class runs
+/// in <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+/// </summary>
+/// <remarks>2026-11-07, TR-MCP-USECASE-018 AC-006; TR-MCP-USECASE-019 AC-008; TR-MCP-SVC-002; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: moved whole with its four Windows-only Category=Integration cases from QBrainAi.Support.Mcp.Tests (Services/ProcessEnvironmentServiceTests.cs) into the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests, so the unit-owned project holds only unit cases (slice S8, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"); the collection-membership binding of ProcessEnvironmentCollectionTests that names it moved here too; only the namespace changed.</remarks>
+[Collection(ProcessEnvironmentCollection.Name)]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
+public sealed class ProcessEnvironmentServiceTests
+{
+    /// <summary>
+    /// FR-MCP-141; TR-MCP-USECASE-018 AC-006: ApplyRunAsEnvironment for the user mcp-grok-user puts the .grok\bin
+    /// folder of that user profile on the PATH of the start info (compared ignoring case); the case sets the PUBLIC
+    /// variable for the run and restores it afterwards. Data: a temporary folder holding Public and an mcp-grok-user
+    /// profile with .grok\bin and AppData\Local, removed afterwards, PUBLIC pointed at that Public folder, a start info
+    /// for grok, and ProcessEnvironmentService with a null logger.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-141; TR-MCP-USECASE-018 AC-006: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    [Fact]
+    public void ApplyRunAsEnvironment_IncludesGrokBinWhenProfileContainsGrokInstall()
+    {
+        var originalPublic = Environment.GetEnvironmentVariable("PUBLIC");
+        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-process-env-{Guid.NewGuid():N}");
+        var userName = "mcp-grok-user";
+        var publicPath = Path.Combine(tempRoot, "Public");
+        var userProfile = Path.Combine(tempRoot, userName);
+        var grokBin = Path.Combine(userProfile, ".grok", "bin");
+
+        Directory.CreateDirectory(publicPath);
+        Directory.CreateDirectory(grokBin);
+        Directory.CreateDirectory(Path.Combine(userProfile, "AppData", "Local"));
+
+        try
+        {
+            Environment.SetEnvironmentVariable("PUBLIC", publicPath);
+            var service = new ProcessEnvironmentService(NullLogger<ProcessEnvironmentService>.Instance);
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "grok",
+                UseShellExecute = false,
+            };
+
+            service.ApplyRunAsEnvironment(startInfo, userName);
+
+            Assert.True(startInfo.Environment.TryGetValue("PATH", out var path));
+            Assert.Contains(grokBin, path, StringComparison.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("PUBLIC", originalPublic);
+            if (Directory.Exists(tempRoot))
+                Directory.Delete(tempRoot, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// FR-MCP-141: ResolveExecutable for grok returns the grok.exe in the single folder that the PATH of the start info
+    /// names. Data: a temporary .grok\bin folder holding an empty grok.exe, removed afterwards, a start info whose PATH
+    /// is that folder, and ProcessEnvironmentService with a null logger.
+    /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-141: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
+    [Fact]
+    public void ResolveExecutable_FindsGrokFromInjectedUserPath()
+    {
+        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-grok-bin-{Guid.NewGuid():N}");
+        var grokBin = Path.Combine(tempRoot, ".grok", "bin");
+        var grokExe = Path.Combine(grokBin, "grok.exe");
+
+        Directory.CreateDirectory(grokBin);
+        File.WriteAllText(grokExe, string.Empty);
+
+        try
+        {
+            var service = new ProcessEnvironmentService(NullLogger<ProcessEnvironmentService>.Instance);
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "grok",
+                UseShellExecute = false,
+            };
+            startInfo.Environment["PATH"] = grokBin;
+
+            var resolved = service.ResolveExecutable(startInfo, "grok");
+
+            Assert.Equal(grokExe, resolved);
+        }
+        finally
+        {
+            if (Directory.Exists(tempRoot))
+                Directory.Delete(tempRoot, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-SVC-002: verifies <see cref="ProcessEnvironmentService.ResolveExecutable"/> skips any PATH
+    /// directory ending in <c>Microsoft\WindowsApps</c>. Fixture: a temp tree containing a zero-byte
+    /// <c>ngrok.exe</c> App Execution Alias stub under <c>AppData\Local\Microsoft\WindowsApps</c> and a
+    /// real <c>ngrok.exe</c> under a portable install directory, with the alias directory listed first on PATH.
+    /// The alias stub is the shape that raises Win32Exception 1920 under a service account.
+    /// </summary>
+    [Fact]
+    public void ResolveExecutable_SkipsMicrosoftWindowsAppsAliasDirectory()
+    {
+        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-winapps-alias-{Guid.NewGuid():N}");
+        var aliasDir = Path.Combine(tempRoot, "AppData", "Local", "Microsoft", "WindowsApps");
+        var portableDir = Path.Combine(tempRoot, "tools", "ngrok");
+        var aliasStub = Path.Combine(aliasDir, "ngrok.exe");
+        var portableExe = Path.Combine(portableDir, "ngrok.exe");
+
+        Directory.CreateDirectory(aliasDir);
+        Directory.CreateDirectory(portableDir);
+        File.WriteAllBytes(aliasStub, []);
+        File.WriteAllText(portableExe, "real");
+
+        try
+        {
+            var service = new ProcessEnvironmentService(NullLogger<ProcessEnvironmentService>.Instance);
+            var startInfo = new ProcessStartInfo { FileName = "ngrok", UseShellExecute = false };
+            startInfo.Environment["PATH"] = $"{aliasDir};{portableDir}";
+
+            var resolved = service.ResolveExecutable(startInfo, "ngrok");
+
+            Assert.Equal(portableExe, resolved);
+        }
+        finally
+        {
+            if (Directory.Exists(tempRoot))
+                Directory.Delete(tempRoot, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-SVC-002: verifies the App-Execution-Alias guard in
+    /// <see cref="ProcessEnvironmentService.ResolveExecutable"/> does NOT match the genuine
+    /// <c>Program Files\WindowsApps</c> MSIX package root, which holds real launchable executables.
+    /// Fixture: a temp tree with a single PATH entry <c>Program Files\WindowsApps\Contoso.Ngrok_1.0.0_x64</c>
+    /// containing a real <c>ngrok.exe</c>.
+    /// </summary>
+    [Fact]
+    public void ResolveExecutable_DoesNotSkipProgramFilesWindowsAppsPackageRoot()
+    {
+        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-msix-root-{Guid.NewGuid():N}");
+        var msixDir = Path.Combine(tempRoot, "Program Files", "WindowsApps", "Contoso.Ngrok_1.0.0_x64");
+        var msixExe = Path.Combine(msixDir, "ngrok.exe");
+
+        Directory.CreateDirectory(msixDir);
+        File.WriteAllText(msixExe, "real");
+
+        try
+        {
+            var service = new ProcessEnvironmentService(NullLogger<ProcessEnvironmentService>.Instance);
+            var startInfo = new ProcessStartInfo { FileName = "ngrok", UseShellExecute = false };
+            startInfo.Environment["PATH"] = msixDir;
+
+            var resolved = service.ResolveExecutable(startInfo, "ngrok");
+
+            Assert.Equal(msixExe, resolved);
+        }
+        finally
+        {
+            if (Directory.Exists(tempRoot))
+                Directory.Delete(tempRoot, recursive: true);
+        }
+    }
+}

@@ -1,0 +1,19 @@
+{
+  "payload": {
+    "result": {
+      "retryable": false,
+      "degraded": false,
+      "code": "persisted",
+      "childStderr": "",
+      "queued": false,
+      "persisted": true,
+      "agent": "Codex",
+      "message": "Session log persist confirmed a durable write for request 'req-20261103T122503Z-unitgreen-r10'.",
+      "failsafePath": "",
+      "method": "workflow.sessionlog.appendActions",
+      "requestId": "req-20261103T122503Z-unitgreen-r10",
+      "sessionId": "Codex-20261103T122431Z-plugin-session"
+    }
+  },
+  "type": "result"
+}

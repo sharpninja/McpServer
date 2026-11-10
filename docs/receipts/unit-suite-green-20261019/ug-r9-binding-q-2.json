@@ -1,0 +1,89 @@
+{
+  "name": "ug-r9-binding-q-2",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "679eb7881d0342a58ef446be5084b703c0cee7c4",
+  "dirtyPaths": [
+    " M .nuke/build.schema.json",
+    " M build/IntegrationLaneClassFilter.cs",
+    " M build/IntegrationLaneFilter.cs",
+    " M docs/plans/2026-10-19-unit-suite-green.md",
+    " M src/QBrainAi.Services/Services/GitHubCliService.cs",
+    " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "?? build/Build.TestGroups.cs",
+    "?? build/TestGroupExecution.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-r-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-r-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-r-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-binding-r-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-r-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-r-1/",
+    "?? tests/Build.Tests/TestGroupExecutionBindingTests.cs",
+    "?? tests/Build.Tests/TestGroupExecutionContractTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "Build.Tests:TestGroupExecutionContractTests,TestGroupExecutionBindingTests,IntegrationLaneClassFilterMockGateTests,IntegrationLaneClassFilterTests,IntegrationLaneExecutionContractTests,IntegrationLaneExecutionBindingTests,IntegrationLaneFilterMockGateTests,IntegrationLaneFilterTests",
+    "--test-run-id",
+    "ug-r9-binding-q-2"
+  ],
+  "startedLocal": "2026-11-02T10:55:09",
+  "endedLocal": "2026-11-02T10:55:19",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 66,
+  "passed": 66,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-q-2/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-binding-q-2/Build.Tests.trx",
+      "sha256": "1E0CA0A6FF4ECFEAE209A59F0BFE7A8A0A1090B9D49CF3F4DAF571CF0A6C353E",
+      "total": 66,
+      "passed": 66,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/Build.Tests/TestGroupExecutionContractTests.cs",
+      "sha256": "6A0A2891C98DFFB4079FA5EBBCF2B8472A594F1051058A31A76EA947D751286D"
+    },
+    {
+      "path": "tests/Build.Tests/TestGroupExecutionBindingTests.cs",
+      "sha256": "7C721F7F50993D16BC665C9AFEE38504B259E074698B0F46153107BB0AE4D56C"
+    },
+    {
+      "path": "build/IntegrationLaneFilter.cs",
+      "sha256": "19FA347DE4E45B25141CCD813B50A19FA141F7F8D761E703FB5F732A79F22D0B"
+    },
+    {
+      "path": "build/IntegrationLaneClassFilter.cs",
+      "sha256": "2B3813BBFB501074E6F53EB1A1DA007F6A4138CD500B9ED75D8149A483B570DF"
+    },
+    {
+      "path": "build/TestGroupExecution.cs",
+      "sha256": "0EF15C63223627333D4C367F4B88A27A880E57C604253BD8E3EBDFA05DA7002F"
+    },
+    {
+      "path": "build/Build.TestGroups.cs",
+      "sha256": "E49F4753C84414A2B43D721912E6C1C540C87565BF4FB1F5CD725270104DE717"
+    }
+  ],
+  "writtenLocal": "2026-11-02T10:55:35",
+  "writtenBy": "ClaudeCode"
+}

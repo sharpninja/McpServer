@@ -1,0 +1,31 @@
+{
+  "timestampUtc": "2026-11-06T22:17:45.6201706+00:00",
+  "timestampLocal": "2026-11-06T16:17:48",
+  "method": "workflow.requirements.getFr",
+  "recordId": "FR-MCP-040",
+  "response": {
+    "payload": {
+      "requestId": "req-20261106T221746Z-fa80",
+      "result": {
+        "title": "Requirements Document CRUD Management",
+        "createdAt": "2026-11-06T22:17:48.1377238+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "description": "The server shall support CRUD operations for Functional Requirements (FR), Technical Requirements (TR), Testing Requirements (TEST), and FR-to-TR mapping rows backed by the canonical project requirements Markdown files.\n\n**Covered by:** `RequirementsController`, `RequirementsDocumentService`, `IRequirementsRepository`",
+        "status": "pending",
+        "priority": "medium",
+        "updatedAt": "2026-11-06T22:17:48.1378460+00:00",
+        "area": "MCP",
+        "acceptanceCriteria": [
+          {
+            "text": "Reading an FR, TR, TEST or mapping through REST, the typed client or the REPL reports the creation and update times stored with that record. A read never reports the time of the read; when the store holds no time, the value is null (operator 2026-11-02: \"This HAS to be fixed.\"; PR 87 slice P). A stored time written without an offset is read as UTC (operator 2026-11-02: \"UTC\"; pre-HV what-if finding: no contract row pinned it). A read never fills a missing date from the clock: a stored value without a complete date (a time alone, or a partial date) reads as null and is ignored when a mapping's creation time is chosen (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F4). A readable stored time states its year, its month and its day as date components: a year and month alone, and year digits that appear only in a time, a fraction or another component, read as null and are ignored when a mapping's creation time is chosen, whatever the read clock says (hostile validation round 10 finding R10-F1; strengthened between rounds under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\", 2026-11-03).",
+            "isSatisfied": false,
+            "id": "ac-1"
+          }
+        ],
+        "id": "FR-MCP-040"
+      },
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

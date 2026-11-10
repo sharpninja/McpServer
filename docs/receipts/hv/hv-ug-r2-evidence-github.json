@@ -1,0 +1,910 @@
+{
+  "TimestampLocal": "2026-10-19T21:37:28",
+  "Mode": "GitHub",
+  "GhPath": "/home/sharpninja/.local/share/mise/installs/gh/2.102.0/gh_2.102.0_linux_amd64/bin/gh",
+  "PrExitCode": 0,
+  "Pr": {
+    "baseRefName": "develop",
+    "body": "## IMPL-UNITGREEN-001: the unit suite green on both lab hosts (BDPv4: 0 failed, 0 skipped)\n\nOperator, 2026-10-19: \"BDPv4 requires all unit tests be green.\" and \"There should be ZERO platform specific UNIT tests.  If it depends on the environment, it's an integration test.\" Plan: `docs/plans/2026-10-19-unit-suite-green.md` (approved 14:50; amendments in sections 7 to 9 and 11; execution record in sections 10, 12 and 14; decisions in section 13).\n\nDraft until hostile validation (Codex gpt-6-astra max) returns AGREE at 98/98. No done state is claimed: every new or changed criterion is unsatisfied and every TODO task is unchecked.\n\n### Commits (over develop `3da2db93`)\n\n- `cbc74e82`: System.Security.Cryptography.Xml and Pkcs pinned to the advisory-patched 10.0.13 (TR-MCP-QUALITY-001 ac-21).\n- `28bf0b22`, `de581353`: canonical workspace-key tests, provider traits, and the host-aware `WorkspaceIdentityPath.ToNativePath` overload (FR, TR and TEST-MCP-PATHNORM-001; additive public API).\n- `a4c358ef`: narrowing to leave PLAN-C4MODEL-001's fixes to that effort (superseded by `11681680`).\n- `b2319488`: the HostileReviewWorker startup test no longer depends on Event Log write access (TR-MCP-HOSTILEREVIEW-003).\n- `11681680`: takeover of PLAN-C4MODEL-001's unit-suite code and Linux provider provisioning (TR-MCP-NUKE-018), blob-identical to `c2125c42`, by operator decision.\n- `8c2b83ab`: host-scoped MigrationIntegrationTests lane (TR-MCP-NUKE-019 AC-1 to AC-4).\n- `8a617334`: merge of develop with PR 86.\n- `b2bd50b3`: platform-dependent tests classified as integration tests, with the unit-suite guard and a strengthened skip guard. Its first guard run, `unit-green-guard-mock-20261019T1720`, was red (4692 results, 1 failed, 16 not executed); see plan section 10.\n- `4f668b76`: the plan and the PR 82 handoff correction.\n- `59249260`: the interactive desktop-spawner case fails loudly as a Windows integration test.\n- `69d8f3f5`: amendment H1, under which the Windows integration lane refuses a non-interactive session before any test (TR-MCP-NUKE-019 AC-5).\n- `12746834`: the invalid-handle final-path case runs only on Windows, without a silent return.\n- `83417029`, `6b4295b7`: docs only (the plan as built, the code-head receipts, the 19:41 decisions).\n- `49cfec92`: hostile validation round 1, findings F3 and F5. One skip definition serves both guards and catches multiline, qualified and listed skip attributes; interpolation holes are kept as code; the project-selection limit is stated.\n- `b4ad42aa`: round 1 finding F2. The 36 cases that reach a native file-system boundary or write tracked files move to Integration, with assertions unchanged. This is the last code, test or build change.\n- Docs only after it: the plan's round 1 record, the round 1 HV receipts and the round 2 gate receipts. `git diff --name-only b4ad42aa..HEAD` lists only `docs/` paths.\n\n### Gates at `b4ad42aa`\n\n- Guard mock gate `unit-green-r2-guard-mockgate-20261019T2103`: a full Nuke Test with only the four guard files changed. 4624 total, 4624 passed, 0 failed, 0 not executed.\n- Linux Test `unit-green-r2-test-20261019T2110`: 4588 total, 4588 passed, 0 failed, 0 not executed.\n- Windows Test `unit-green-win-r2-20261019T2110` (PAYTON-LEGION2 over WSMan, HEAD verified): 4588 total, 4588 passed, 0 failed, 0 not executed. The WSMan lane in the same run refused before any test, as specified.\n- Windows MigrationIntegrationTests from kingd's interactive desktop session `unit-green-win-interactive-20261019T2112`:\n  - runner proof: `user=kingd session=1 interactive=True head=b4ad42aa`;\n  - filter: `Category=Integration&Platform!=Linux`;\n  - result: 164 passed (Support.Mcp 157, McpAgent 1, Build.Tests 6), 0 failed, 0 not executed;\n  - route: the operator's SSH route as kingd started a one-shot task with the Interactive logon type, which was removed after the run (plan section 14).\n- Linux MigrationIntegrationTests `unit-green-r2-int-20261019T2118`: 188 passed (Support.Mcp 171, McpAgent 1, Build.Tests 16), 0 failed, 0 not executed.\n- ValidateTraceability `unit-green-r2-traceability-20261019T2120`: passed. It reads the committed `docs/Project` exports, which are stale (see Open).\n- Full Build.Tests (raw `dotnet test`) `unit-green-r2-buildtests-20261019T2120`: 436 total, 436 passed, 0 failed, 0 not executed.\n- Receipts: `docs/receipts/unit-suite-green-20261019/`.\n\n### Hostile validation\n\n- Round 1 (`unitgreen-r1`, HEAD `6b4295b7`): DISAGREE, 95/93, 5 PASS and 7 FAIL (F1 to F7, all implementer edits). Receipts: `docs/receipts/hv/20261019T195131-unitgreen-r1.*` and `hostile-validator-unitgreen-r1-20261019T195131.*`. The full result is in reviewer turn `req-20261020T005403Z-unitgreen-r1`. The remediation is recorded in plan section 14.\n- Round 2: pending.\n\n### Requirements\n\n- TR-MCP-NUKE-019 created under FR-MCP-BUILD-001 (AC-1 to AC-5).\n- FR-MCP-USECASE-016 and -017 converted into TR-MCP-USECASE-018 and -019 under FR-MCP-USECASE-001 and deleted; TEST-MCP-USECASE-019 and -020 restated for BDPv4; no use-case link to the deleted FRs remains.\n- TR-MCP-QUALITY-001 ac-21 reopened and strengthened; TEST-MCP-PATHNORM-001 gained `unitgreen-native-host`.\n- After AGREE, these are set satisfied (plan section 13, D-B): TR-MCP-NUKE-019 AC-1 to AC-5, TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008, TR-MCP-QUALITY-001 ac-21 and TEST-MCP-PATHNORM-001 `unitgreen-native-host`. AC-2, AC-3, AC-5, AC-006 and AC-008 rest on the round 2 evidence: the Windows interactive lane and the reclassification. The other 17 USECASE criteria stay unsatisfied.\n\n### Open\n\n- The requirements wiki export (`workflow.requirements.generateDocument`, wiki, all) fails on Linux. Retried at 21:18:51, it returned \"Linux requirements export cleanup rejects nested stale paths before mutation because the kernel lacks a contained atomic delete\" (`triage-report-a6927fca10364155ab9992506e1abc9c`). The generated `docs/Project` exports therefore stay stale and are declared here under goal item 4.\n- Hostile validation round 2.\n- Declared, not part of this PR: the two source-reading guards stay unit tests. A test tagged with both Platform values, or an unknown one, has no stated outcome; none exists today.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 93%\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n",
+    "commits": [
+      {
+        "authoredDate": "2026-10-19T20:18:07Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-19T20:18:07Z",
+        "messageBody": "…ory-patched 10.0.13 (IMPL-UNITGREEN-001 step A)\n\ndevelop pins System.Security.Cryptography.Xml 10.0.10, which brings\nSystem.Security.Cryptography.Pkcs 10.0.10. On PAYTON-LEGION2 the restore of\nbuild/_build.csproj fails NU1902 (GHSA-2fmv-rv2c-59x7) and NU1903\n(GHSA-846f-f764-76mx, GHSA-7hqp-7c5m-4vq6, GHSA-c399-9853-6jmj,\nGHSA-r955-8q5j-3h83), so no Windows build or test can run. All five\nadvisories name 10.0.13 as the first patched 10.x version.\n\nOperator 2026-10-19: \"Gotta use the recommended packages.\" This moves Xml to\n10.0.13 and adds a central Pkcs 10.0.13 pin (transitive pinning is enabled, so\nevery project takes it). No suppression, audit setting, or override.\n\nRequirement: TR-MCP-QUALITY-001 ac-21 (reopened and strengthened 2026-10-19).\nLinux gate: Nuke Restore and Compile succeeded, zero NU-code lines, build and\nSqlServerMigrations assets resolve Pkcs and Xml 10.0.13 (run\nunit-green-linux-a-compile-20261019T1514). Windows gate follows on the pushed branch.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 90%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "fix(deps): pin System.Security.Cryptography.Xml and Pkcs to the advis…",
+        "oid": "cbc74e823e7af96f8df1a1320498998e5de2b328"
+      },
+      {
+        "authoredDate": "2026-10-19T20:33:38Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-19T20:33:38Z",
+        "messageBody": "…ve-path contract (IMPL-UNITGREEN-001 step 2)\n\nBDPv4 step 2 of the approved unit-suite-green plan: tests and scripted data\nonly, before any production change.\n\n- B1 UseCaseGetWorkspaceResolutionContractTests: the raw caller path and the\n  canonical expected key (ExpectedWorkspaceKey.Of) are separate; negative\n  control MockGate_BackslashWorkspaceId_IsRejected.\n- B2 RemoveTodoRecordsMigrationTests and Decompose4nfBackfillMigrationTests:\n  raw-SQL seeds use the canonical stored key form; negative control\n  Migrate_RemoveTodoRecords_NegativeControl_StaleAnchorBackfillIsRejected.\n- B3 WorkspacePathNormalizerRealTests: a foreign Windows path comes back in\n  its canonical '/' spelling and is still not re-rooted.\n- B4 WorkspaceServiceAccessorTests: expectations no longer re-root a foreign\n  path through Path.GetFullPath; negative control for the raw or re-rooted\n  spelling.\n- B5 GitHubCliServiceTests: host-native temporary workspace directories and a\n  negative control rejecting gh calls from any other directory.\n- B6 WorkspaceResolutionMiddlewareTests: the workspace-service double matches\n  by canonical key like WorkspaceService.GetAsync; negative control\n  WorkspaceServiceDouble_MatchesCanonicalKeyOnly.\n- C: SqlServerUpSql and PostgreSqlUpSql (method level) and\n  EphemeralPostgresFixtureTests (class level) are Category=Integration.\n- D: the non-Windows-host native-path case moves to\n  WorkspaceNativePathHostContractTests with a MockData fixture over a\n  simulated host and negative controls; its Real binding follows with the\n  production overload.\n- F: HostileReviewWorker_InvalidOptions_FailStartup reports the whole\n  exception text on failure (same condition).\n\nRequirements: FR, TR, TEST-MCP-PATHNORM-001 (criterion unitgreen-native-host),\nTEST-MCP-USECASE-002, TEST-MCP-TRIAGE-004, TEST-MCP-FED-PATH-001,\nTEST-HANDOFF-006, TEST-MCP-083, TR-MCP-MT-002, TR-MCP-TRIAGESCHEMA-001,\nTR-MCP-HOSTILEREVIEW-003.\n\nMock gate (Linux, Nuke Test, run unit-green-mock-20261019T1528): 4666 total,\n4650 passed, 0 failed, not executed exactly the 16 named Windows-only cases.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 92%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "test: canonical workspace keys, provider traits and a host-aware nati…",
+        "oid": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f"
+      },
+      {
+        "authoredDate": "2026-10-19T20:40:01Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-19T20:40:01Z",
+        "messageBody": "…(IMPL-UNITGREEN-001 step 4)\n\nBDPv4 step 5 for plan item D. ToNativePath(path, platform, host) decides by\nthe injected IWorkspaceHostEnvironment.Platform; the existing two-argument\nmethod delegates with SystemWorkspaceHostEnvironment.Instance, whose Platform\nis Windows exactly when OperatingSystem.IsWindows(), so its behavior is\nunchanged (its two callers at WorkspaceIdentityPath.cs:621 and :694 keep it).\nPublic API addition in the QBrainAI.Client package; additive, not breaking.\n\nWorkspaceNativePathHostRealTests binds the same host contract\n(WorkspaceNativePathHostContractTests, mock gate green in 28bf0b22) to the\nproduction overload, so the non-Windows-host case runs on every host and the\ntwo Windows skips of NonWindowsHost_IsUnchanged are gone.\n\nRequirements: TR-MCP-PATHNORM-001, TEST-MCP-PATHNORM-001 criterion\nunitgreen-native-host.\nProduction-bound Linux run (Nuke Test, unit-green-real-20261019T1535): 4669\ntotal, 4653 passed, 0 failed, not executed exactly the 16 named Windows-only\ncases.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 93%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "feat(client): host-aware WorkspaceIdentityPath.ToNativePath overload …",
+        "oid": "de5813532adb51b964b222644ae0519bd814f8ef"
+      },
+      {
+        "authoredDate": "2026-10-19T20:40:46Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-19T20:40:46Z",
+        "messageBody": "…GREEN-001 scope)\n\nOperator decision 2026-10-19 (\"Narrow mine (Recommended)\"): PLAN-C4MODEL-001\n(branch docs/c4-structurizr-model-20261017) already fixed 10 of the 14 Linux\nunit failures in ff55292e, the Decompose4nf SQLite test in d248230e, and the\nLinux provider lane (TR-MCP-NUKE-018). This restores the six files that\nduplicated that work to their develop (ace70daa) content, so the two branches\ndo not conflict and C4's GitHubCliService production fix is not contradicted\nby a test-only one:\n\n- tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs (B4)\n- tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs (B5)\n- tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs (B6)\n- tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs (C)\n- tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs (C)\n- tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs\n\nThis effort keeps step A (advisory-patched packages), the four tests C4 left\nfor PR 82/83 (ProductionGate, RemoveTodoRecords x2, ProcessNormalizer), D\n(host-aware native path, no Windows skips), F, the Windows evidence route, and\nthe Windows side of the integration lane (plan amendment pending). Exit gates\nrun after C4 lands on develop and develop is merged here; until then the ten\nC4-owned failures are expected on this branch alone.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 92%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "test: leave the PLAN-C4MODEL-001 unit fixes to that effort (IMPL-UNIT…",
+        "oid": "a4c358efd91131e7fb714370726997b5c2d076cb"
+      },
+      {
+        "authoredDate": "2026-10-19T20:52:42Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-19T20:52:42Z",
+        "messageBody": "… write access (IMPL-UNITGREEN-001 F)\n\nPlan item F. With the full exception text (28bf0b22), the Windows failure of\nHostileReviewWorker_InvalidOptions_FailStartup reads: \"System.AggregateException:\nAn error occurred while writing to logger(s). (Cannot open log for source\n'.NET Runtime'. You may not have write access.) ---> Win32Exception (5): Access\nis denied\" (PAYTON-LEGION2 as lab-wsman, run unit-green-win-narrow-20261019T1541).\nHost.CreateApplicationBuilder adds the Event Log provider on Windows, and an\naccount without Event Log write access failed startup in the logger before\noptions validation could report. The test now clears the default logging\nproviders; the assertion is unchanged, so the test still requires host\nstartup to fail naming HostileReviewWorker. Test-only; no production change.\n\nRequirement: TR-MCP-HOSTILEREVIEW-003.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 97%, completeness 93%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "test: HostileReviewWorker startup test no longer depends on Event Log…",
+        "oid": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8"
+      },
+      {
+        "authoredDate": "2026-10-19T21:43:25Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-19T21:43:25Z",
+        "messageBody": "…from PLAN-C4MODEL-001 (IMPL-UNITGREEN-001)\n\nOperator ownership decision 2026-10-19 (\"I don't want you and the C4 agent\nworking on the same thing.  C4 should not be changing code, only docs.\"; I\nnamed IMPL-UNITGREEN-001; at 16:38 \"Handover stands (Recommended)\"): the\nunit-suite code of C4 commits ff55292e and d248230e moves to this effort.\nC4 reverts the same files on PR 84 only on the operator's direct word.\n\nThe 15 files below are byte-identical to C4's c2125c42 (git blob hashes\ncompared file by file at 2026-10-19T16:42:56, 0 mismatches), so C4 can check\neach one against this commit:\n- build/Build.TestDependencies.cs, build/LinuxProviderTestProvisioner.cs,\n  build/ProviderTestProvisioningContracts.cs (TR-MCP-NUKE-018)\n- tests/Build.Tests/ProviderTestProvisioningContract.cs,\n  ProviderTestProvisioningMockGateTests.cs, ProviderTestProvisioningTests.cs\n- src/QBrainAi.Services/Services/GitHubCliService.cs\n- tests/QBrainAi.Support.Mcp.Tests: Middleware/WorkspaceResolutionMiddlewareTests.cs,\n  Services/GitHubCliServiceTests.cs, Services/WorkspaceServiceAccessorTests.cs,\n  Storage/EphemeralPostgresFixtureTests.cs,\n  Storage/SessionLogAgentSessionHeaderMigrationTests.cs,\n  Storage/Decompose4nfBackfillMigrationTests.cs, Storage/MigrationKeyAssertions.cs,\n  Storage/MigrationKeyAssertionsMockGateTests.cs\n.nuke/build.schema.json gains only C4's TestDbEnvFile parameter entry.\n\nLinux gates on this tree before commit: Test 0 failed, 16 not executed (the\nWindows-only cases the next steps move to the integration lane), run\nunit-green-takeover-20261019T1611; MigrationIntegrationTests 68 passed,\n0 failed, 0 not executed, run unit-green-takeover-int-20261019T1616.\n\nRequirements: TR-MCP-NUKE-018, TR-MCP-QUALITY-001, FR/TR/TEST-MCP-PATHNORM-001.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "test: take over the unit-suite fixes and Linux provider provisioning …",
+        "oid": "11681680d316bee7c8c184e45b699af7c1bd2188"
+      },
+      {
+        "authoredDate": "2026-10-19T21:45:58Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-19T21:45:58Z",
+        "messageBody": "…sts (TR-MCP-NUKE-019, IMPL-UNITGREEN-001 G)\n\nPlan amendment G, approved by the operator 2026-10-19 (\"Yes, I approve the\nchange\"). MigrationIntegrationTests now selects the Category=Integration cases\nof the host it runs on: Category=Integration&Platform!=Linux on Windows and\nCategory=Integration&Platform!=Windows on Linux, so untagged integration\ncases run on both hosts and each Platform-tagged case runs on its own host.\nThe target logs the filter text (AC-3). Provisioning is unchanged (AC-4).\n\nBDPv4 order, all through raw dotnet test on Build.Tests (infrastructure,\nnever a Nuke target; operator \"Raw dotnet test, infra only\"):\n- seam build/IntegrationLaneFilterContracts.cs and contract\n  tests/Build.Tests/IntegrationLaneFilterContract.cs (expected filters from\n  AC-1 plus an evaluator of the trait grammar that checks what each filter\n  selects);\n- mock gate IntegrationLaneFilterMockGateTests: scripted filter and fault\n  negative controls (other host admitted, untagged dropped, hosts swapped,\n  Category dropped), each rejected both by the exact-text check and by the\n  selection checks alone; 21 passed, 0 failed, 0 not executed, run\n  unit-green-g-mockgate-20261019T1633, before any production code;\n- production build/IntegrationLaneFilter.cs bound to the same cases in\n  IntegrationLaneFilterTests: 24 passed (21 mock gate + 3 production), 0\n  failed, 0 not executed, run unit-green-g-real-20261019T1635.\n\nFull Build.Tests on this tree: 422 total, 421 passed, 1 failed, 0 not\nexecuted (run unit-green-g-buildtests-20261019T1635). The failure is\nBoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess\nflagging tests/Build.Tests/OfficialPluginCoreSyncTestSupport.cs:71-73, a file\nidentical to develop ace70daa; C4's 252b4946 on PR 84 (TR-MCP-NUKE-017 work,\nwhich stays with C4 by operator decision) already routes it through\nBoundedProcess. Not changed here.\n\nRequirement: TR-MCP-NUKE-019 (under FR-MCP-BUILD-001).\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "build: host-scoped integration lane filter for MigrationIntegrationTe…",
+        "oid": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2"
+      },
+      {
+        "authoredDate": "2026-10-19T22:26:28Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-19T22:26:28Z",
+        "messageBody": "…1019\n\nBrings in the BoundedProcess fix to tests/Build.Tests/OfficialPluginCoreSyncTestSupport.cs\n(TR-MCP-NUKE-009 AC-006) that PLAN-C4MODEL-001 split out of PR 84 by operator decision\n(\"C4 splits the fix out (Recommended)\", 2026-10-19T17:05), so the full Build.Tests\ninfrastructure check can reach 0 failed on this branch. The file stays with PLAN-C4MODEL-001.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "Merge origin/develop (PR 86, 3da2db93) into fix/unit-suite-green-2026…",
+        "oid": "8a6173342dcd7683b9d9549005a5af819b8abc90"
+      },
+      {
+        "authoredDate": "2026-10-19T22:50:34Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-19T22:50:34Z",
+        "messageBody": "…d the unit suite (IMPL-UNITGREEN-001)\n\nOperator rule, verbatim: \"There should be ZERO platform specific UNIT tests.  If it\ndepends on the environment, it's an integration test.\" (a clarification of the rules\nsince day one); decisions \"Integration + Platform (Recommended)\" for tests whose\nproduction code branches on the OS, and \"Host-neutral fixture (Recommended)\" for\nUnitTestPaths. Requirements: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008\n(converted from FR-MCP-USECASE-016/017 today), TR-MCP-NUKE-019.\n\nGuards, tests first (BDPv4):\n- UnitSuitePlatformScanner flags an OS check, OS-platform attribute, xUnit skip or a\n  real process-host binding in a test class without [Trait(\"Category\", \"Integration\")],\n  ignoring strings and comments. Mock gate UnitSuitePlatformScannerMockGateTests: 14\n  scripted sources plus negative controls, 17 passed before any reclassification\n  (run unit-green-guard-mock-20261019T1720). Real binding UnitSuitePlatformScannerTests\n  scans the 7 projects the Test target runs and pins that project list.\n- The skip guard (IngestionAllowlistContractTests) now matches Assert.SkipWhen and\n  Assert.SkipUnless and reads code with literals removed, with scripted cases and\n  negative controls (the old pattern missed both forms).\n\nReclassification:\n- Category=Integration, Platform=Linux: BugTriage139EighteenthLinuxTests,\n  BugTriage139SixteenthLinuxTests, BugTriage139FifteenthLinuxNativeTests,\n  RequirementsFourteenthLinuxNativeTests.\n- Category=Integration, Platform=Windows: BugTriage139SixteenthIdentityWindowsTests,\n  BugTriage139SixteenthWindowsProcessTests, BugTriage139FifteenthWindowsNativeTests,\n  ProcessEnvironmentServiceTests (silent returns removed), WorkspaceRemotePathRealTests.\n- Category=Integration on both hosts: the BUG-TRIAGE-139 harness, shared, traversal and\n  native-identity classes, HandoffContainedFileReaderTests,\n  RequirementsTwelfthAdversarialReviewTests, FileGitHubWorkspaceTokenStoreTests,\n  TranscriptMcpStdioHostTests, the WorkspaceHostEnvironment contract,\n  WorkspacePathNormalizerProcessTests, McpAgentOptionsLegacySectionHostTests.\n- OS branches split into Windows and Linux integration classes with fixed expectations:\n  Codex launcher, CliBrainSlot Windows temp directory, federation enrollment, opaque\n  workspace identity keys, GitHub CLI foreign workspace.\n- Host-neutral unit tests: the Windows-host native-path cases moved onto the simulated\n  host (WorkspaceNativePathHostContractTests, new negative controls); the remote-path\n  MockData stays unit without its skip; the token-service and Grok tests use fixed data.\n- MigrationIntegrationTests also runs QBrainAi.McpAgent.Tests (TR-MCP-NUKE-019 AC-2).\n\nLinux Test on this tree: 4611 total, 4611 passed, 0 failed, 0 not executed\n(run unit-green-reclass-20261019T1745).\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "test: classify platform-dependent tests as integration tests and guar…",
+        "oid": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6"
+      },
+      {
+        "authoredDate": "2026-10-19T22:59:50Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-19T22:59:50Z",
+        "messageBody": "…ITGREEN-001)\n\n- docs/plans/2026-10-19-unit-suite-green.md: the approved plan (operator \"Yes, I approve\n  the change\", 14:50) with amendments 7 to 9 and the execution record in section 10:\n  every commit, mock gate and gate run on both hosts, and what is not done (the wiki\n  export blocked by triage-report-a6927fca10364155ab9992506e1abc9c; hostile validation).\n- docs/handoffs/pr82-review-handoff-20261019T104723.md: correction under step 2. A\n  baseline-equal gate is not acceptable (operator: \"BDPv4 requires all unit tests be\n  green.\"); I recommended it and PR 82 was merged on it as ace70daa; this effort makes\n  the suite green.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 93%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "docs: unit-suite-green plan and the PR 82 handoff correction (IMPL-UN…",
+        "oid": "4f668b76d26b26e7162d8654fb946c484fd42539"
+      },
+      {
+        "authoredDate": "2026-10-19T23:29:50Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-19T23:29:50Z",
+        "messageBody": "…turning silently (IMPL-UNITGREEN-001)\n\nOperator decision 2026-10-19T18:01: \"Platform=Windows, fail loudly (Recommended)\".\nDesktopProcessSpawnerTests.Spawn_WhenHostIsInteractive_CanRunCmdThroughDefaultSpawner\nreturned without asserting anything unless the host was Windows and interactive, which\nTR-MCP-USECASE-018 AC-006 forbids (\"neither skip nor silently return\"). It moves to\nDesktopProcessSpawnerWindowsInteractiveTests (Category=Integration, Platform=Windows)\nand asserts Environment.UserInteractive first, so a non-interactive Windows runner\nfails the case instead of passing it empty. The environment-delta case stays in\nDesktopProcessSpawnerTests (Category=Integration, both hosts).\n\nExpected consequence, stated before the run: the PAYTON-LEGION2 lane over WSMan is not\ninteractive, so this one case fails there until the Windows lane runs in an interactive\nsession.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "test: the interactive desktop-spawner case fails loudly instead of re…",
+        "oid": "5924926051f84720c110ab1421430499fadf918a"
+      },
+      {
+        "authoredDate": "2026-10-19T23:55:59Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-19T23:55:59Z",
+        "messageBody": "…ktop session (TR-MCP-NUKE-019 AC-5, amendment H1)\n\nOperator 2026-10-19: \"Lane runs interactively by design\", then \"Approve H1\n(Recommended)\". On Windows, MigrationIntegrationTests checks its own process before any\ntest runs and fails with a message naming the missing interactive desktop session when\nit is not interactive (a WSMan, SSH or service session); no session requirement applies\non Linux. The Windows lane is run from a console in the logged-on user's desktop session.\n\nBDPv4, raw dotnet test on Build.Tests (infrastructure):\n- seam build/IntegrationLanePreconditionContracts.cs, contract\n  IntegrationLanePreconditionContract (outcomes from AC-5);\n- mock gate IntegrationLanePreconditionMockGateTests: scripted precondition plus\n  negative controls (runs a non-interactive Windows session, stops silently, message\n  omits the session, blocks Linux); 9 passed, 0 failed, run\n  unit-green-h-mockgate-20261019T1849, before production code;\n- production build/InteractiveSessionPrecondition.cs bound to the same cases\n  (IntegrationLanePreconditionTests) and to the target: 14 passed (9 mock gate + 5\n  production), 0 failed, run unit-green-h-real-20261019T1856.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "build: the Windows integration lane runs only from an interactive des…",
+        "oid": "69d8f3f5b19b070f9059a096f344c44bbd359d47"
+      },
+      {
+        "authoredDate": "2026-10-20T00:15:33Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-20T00:15:33Z",
+        "messageBody": "…t a silent return (IMPL-UNITGREEN-001)\n\nHandoffContainedFileReaderTests.TryGetFinalPath_InvalidHandle_FailsClosedOnWindows sat in\nan integration class that runs on both hosts and returned without asserting anything off\nWindows, which TR-MCP-USECASE-018 AC-006 forbids (\"neither skip nor silently return\").\nFound by the pre-HV review (Find-SilentPlatformReturns.ps1 over tests/: one real silent\nreturn; the other two hits are scripted text inside the guard's mock data). The case\nmoves to HandoffContainedFileReaderWindowsTests (Category=Integration, Platform=Windows)\nwith no return; the class it left stays Integration on both hosts. This applies the\napproved plan section 9 rule that tagged tests lose their silent returns.\n\nLinux Test on this tree: unit-green-handoff-20261019T1909, 4611 total, 0 failed.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "test: the invalid-handle final-path case runs only on Windows, withou…",
+        "oid": "127468345afcc7a24e6a254f712d6b75a54713e8"
+      },
+      {
+        "authoredDate": "2026-10-20T00:26:49Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-20T00:26:49Z",
+        "messageBody": "…(IMPL-UNITGREEN-001)\n\nDocs only; no code, test or build change.\n\n- docs/plans/2026-10-19-unit-suite-green.md: recopied from the working plan (SHA-256 checked).\n  Section 9 lists what was built where it differs from the inventory, section 10 records\n  59249260 and the earlier runs, section 11 records amendment H, and the new section 12\n  records the runs at code head 12746834. It also corrects one claim: Linux Test\n  unit-green-handoff-20261019T1909 ran at 69d8f3f5 with the 12746834 change uncommitted,\n  so it is not a clean code-head run.\n- docs/receipts/unit-suite-green-20261019/: TRX summaries, meta and exit files of the Linux\n  runs (Test 4611/0/0, MigrationIntegrationTests 152/0/0, full Build.Tests 436/0/0), the\n  ValidateTraceability log (saved as .out.txt because .gitignore:108 ignores *.log), and the\n  two Windows receipts (Test 4611/0/0 at HEAD 12746834\n  verified; the WSMan lane refusing before any test with the AC-5 message). Copies with\n  SHA-256 verified; the originals are kept.\n\nAll gates rerun at the head that carries this commit. Their run ids go in the PR body and\nthe hostile-validation brief.\n\nOpen: the Windows integration lane from an interactive desktop session (operator \"skip\"\n19:03), the requirements wiki export (triage-report-a6927fca10364155ab9992506e1abc9c), and\nhostile validation.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 93%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "docs: unit-suite-green plan as built and the code-head gate receipts …",
+        "oid": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38"
+      },
+      {
+        "authoredDate": "2026-10-20T00:50:06Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-20T00:50:06Z",
+        "messageBody": "… the unit-suite-green plan (IMPL-UNITGREEN-001)\n\nDocs only (one file); no code, test, build or receipt change. The gates ran at 83417029\nand this commit adds only docs/ paths (decision D-A).\n\n- Section 10 lists 4f668b76 (the plan and the PR 82 handoff correction, step 7), which\n  the execution record had left out.\n- New section 13 records the decisions taken within the guidelines after the operator's\n  19:41 answer (\"You have guidelines to make decisions within.\"):\n  - D-A: final-head rule with a docs-only diff check.\n  - D-B: which criteria are set satisfied after hostile AGREE, and that the other 17\n    USECASE criteria stay unsatisfied.\n  - D-C: residual risks 8 and 9 stay declared.\n  - D-D: the Windows interactive lane was requested from the Claude session LEG-VICE#\n    under amendment H1, and no run was observed by 19:49.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 94%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "docs: record the 19:41 decisions and the handoff-correction commit in…",
+        "oid": "6b4295b790e0e2cde7113f3be4bb83bc66343016"
+      },
+      {
+        "authoredDate": "2026-10-20T02:08:53Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-20T02:08:53Z",
+        "messageBody": "…isted skip attributes; interpolation holes kept as code (IMPL-UNITGREEN-001)\n\nHostile validation round 1 (gate unitgreen-r1), findings F3 and F5:\n\n- F3: both guards missed a Fact/Theory skip attribute whose arguments span lines and a\n  qualified one (Xunit.Fact, global::Xunit.TheoryAttribute, or later in an attribute list),\n  and the platform scanner's string stripping erased code inside interpolation holes.\n  UnitSuitePlatformScanner.FindSkipLines is now the one skip definition both guards use\n  (IngestionAllowlistContractTests.SkipPattern is removed). It parses a test attribute's\n  argument list with balanced parentheses across lines, accepts qualified and listed\n  attributes and the xUnit v3 skip properties, and still ignores strings and comments. The\n  lexer keeps interpolation holes as code, blanks the text around them, escaped braces,\n  strings nested in a hole and a hole's format clause, and no longer treats a verbatim\n  string that opens with an escaped quote as a raw string.\n- F5: GuardProjectSelection_MatchesTheUnitTestTarget now states its limit: it pins the\n  project list and does not read build/Build.Test.cs.\n\nBDPv4 order: the scripted cases and negative controls were written first (scanner:\nmultiline-skip-attribute, qualified-skip-attribute, interpolation-holes, the round 1\ncounterexample controls, the hole-stripping test; skip guard: 19 scripted sources and the\ncontrols proving the earlier single-line patterns miss them), then the lexer and pattern\nchange. Mock gate unit-green-r2-guard-mockgate-20261019T2103 was a full Nuke Test with only\nthese four files changed over 6b4295b7: 4624 total, 4624 passed, 0 failed, 0 not executed\n(4611 plus the 13 new cases). The Test target has no focused filter, so the corrected\nscanner also ran in that run's two repository scans, which passed. Compile first:\nunit-green-r2-guard-compile-20261019T2100, 0 warnings, 0 errors.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "test: one skip definition for both guards; multiline, qualified and l…",
+        "oid": "49cfec920349f17ace1b287b18d1b0fe2d956b03"
+      },
+      {
+        "authoredDate": "2026-10-20T02:09:20Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-20T02:09:20Z",
+        "messageBody": "…acked files move to Integration (IMPL-UNITGREEN-001)\n\nHostile validation round 1 (gate unitgreen-r1), finding F2: the unit suite still ran real\nnative file-system contracts. Under the reviewer's sandboxed /tmp, its Nuke Test run\nhv-ug-r1-test-20261019T195839 at 6b4295b7 failed 34 of 4611 cases, all at one of three\nnative boundaries (Linux physical identity resolution, atomic export-root capture, atomic\ndata-file opening), while both lab hosts pass them. They depend on the environment, so under\nthe day-one rule (operator 2026-10-19: \"If it depends on the environment, it's an\nintegration test.\") they are integration tests on both hosts. Round 1 also ruled that the\ntwo memory-bench tests that write tracked files under docs/benchmarks/results are covered\nby the same rule (triage-report-32e6bc07a7df458094b1d874761b7853).\n\nMoved with assertions unchanged (36 cases):\n- class level, where every case failed: UseCaseDiagramGraphCqrsTests (6) and\n  Support.Mcp DocsSyncG8OverlayTests (1);\n- method level (Add-IntegrationTraits.ps1, one trait line above each attribute block): 2 in\n  UseCaseComponentUpdateContractTests, 3 in RequirementsWikiExportConfigTests, 3 in\n  WikiDumpG6OverlayTests, 6 in RequirementsDocumentServiceTests, 1 in\n  UseCaseExpandedScopeTests, 3 in RequirementsDatabaseDocumentServiceTests, 4 in\n  RequirementsWikiExportOrchestratorTests, 1 theory (2 cases) in\n  SqliteBoundedOpenFourteenthTests, 2 in UseCaseCqrsTests, 1 in HandoffD3D5OverlayTests,\n  and the memory-bench AllEight_WritesStubArtifacts and AllEight_WritesMultiTurnStubArtifacts.\n\nThe siblings in these classes that do not reach a native boundary stay unit tests. They\npassed under the same sandbox. The sandboxed Nuke Test run at this head is the\noperational check, and its result goes in the PR body and the round 2 brief.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "test: unit tests that reach native file-system boundaries or write tr…",
+        "oid": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9"
+      },
+      {
+        "authoredDate": "2026-10-20T02:27:09Z",
+        "authors": [
+          {
+            "email": "ninja@thesharp.ninja",
+            "id": "U_kgDOAPZhLA",
+            "login": "sharpninja",
+            "name": "Sharp Ninja"
+          },
+          {
+            "email": "noreply@anthropic.com",
+            "id": "MDQ6VXNlcjgxODQ3",
+            "login": "claude",
+            "name": "Claude Opus 5.5"
+          }
+        ],
+        "committedDate": "2026-10-20T02:27:09Z",
+        "messageBody": "… the round 2 gate receipts (IMPL-UNITGREEN-001)\n\nDocs only. b4ad42aa remains the last code, test or build change (decision D-A).\n\n- docs/plans/2026-10-19-unit-suite-green.md:\n  - Section 10 corrects the round 1 finding F1: the guard run\n    unit-green-guard-mock-20261019T1720 was red (4692 results, 1 failed, 16 not executed),\n    not a 17/17 mock gate.\n  - Section 13 revises D-B (F7: USECASE AC-006 and AC-008 only with complete\n    platform-rule evidence), D-C (the bench writers are covered by the day-one rule) and\n    D-D (superseded).\n  - New section 14 records round 1 (DISAGREE 95/93, F1 to F7) and its remediation:\n    49cfec92, b4ad42aa, and the Windows interactive lane run at 21:13 through the\n    operator's SSH route as kingd (164 passed, 0 failed, 0 not executed).\n- docs/receipts/hv/: the round 1 request and response JSONL, the reviewer's verdict\n  receipts and its hv-ug-r1-* evidence (217 files scanned with Protect-HvReceipts.ps1,\n  0 redactions).\n- docs/receipts/unit-suite-green-20261019/: TRX summaries, meta and exit files of the round\n  2 runs at b4ad42aa (guard mock gate, Linux Test, Linux lane, full Build.Tests), the\n  ValidateTraceability log, the two failed codex sandbox attempts, and the Windows\n  receipts (WSMan Test with the lane refusal, the interactive lane start and read-back).\n  SHA-256 verified copies; the originals are kept.\n\nSigned: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+        "messageHeadline": "docs: hostile validation round 1 receipts, its remediation record and…",
+        "oid": "a94579db927f25a0cbddd07d639f3054f2ee72e8"
+      }
+    ],
+    "headRefName": "fix/unit-suite-green-20261019",
+    "headRefOid": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+    "isDraft": true,
+    "mergeStateStatus": "CLEAN",
+    "state": "OPEN",
+    "title": "IMPL-UNITGREEN-001: unit suite green on both lab hosts (0 failed, 0 skipped)",
+    "url": "https://github.com/sharpninja/McpServer/pull/87"
+  },
+  "ActivityExitCode": 0,
+  "Activity": [
+    {
+      "id": 47080204632,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9jLpWA",
+      "before": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "after": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-20T02:27:12Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47078990286,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9iBhzg",
+      "before": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+      "after": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-20T02:09:22Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47073611859,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9c5QUw",
+      "before": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+      "after": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-20T00:50:08Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47072052475,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9baE-w",
+      "before": "127468345afcc7a24e6a254f712d6b75a54713e8",
+      "after": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-20T00:26:51Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47071288544,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9arc4A",
+      "before": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+      "after": "127468345afcc7a24e6a254f712d6b75a54713e8",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-20T00:15:34Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47069906481,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9ZXGMQ",
+      "before": "5924926051f84720c110ab1421430499fadf918a",
+      "after": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-19T23:56:00Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47068140574,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9XrUHg",
+      "before": "4f668b76d26b26e7162d8654fb946c484fd42539",
+      "after": "5924926051f84720c110ab1421430499fadf918a",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-19T23:29:52Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47065975821,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9VnMDQ",
+      "before": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6",
+      "after": "4f668b76d26b26e7162d8654fb946c484fd42539",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-19T22:59:51Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47065312023,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9U-rFw",
+      "before": "8a6173342dcd7683b9d9549005a5af819b8abc90",
+      "after": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-19T22:50:35Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47063488512,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9TPYAA",
+      "before": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2",
+      "after": "8a6173342dcd7683b9d9549005a5af819b8abc90",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-19T22:26:29Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47060208652,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9QHMDA",
+      "before": "11681680d316bee7c8c184e45b699af7c1bd2188",
+      "after": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-19T21:45:59Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47059994157,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9P6GLQ",
+      "before": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8",
+      "after": "11681680d316bee7c8c184e45b699af7c1bd2188",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-19T21:43:27Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47055479214,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9Lmhrg",
+      "before": "a4c358efd91131e7fb714370726997b5c2d076cb",
+      "after": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-19T20:52:44Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47054370862,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9Ki4Lg",
+      "before": "de5813532adb51b964b222644ae0519bd814f8ef",
+      "after": "a4c358efd91131e7fb714370726997b5c2d076cb",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-19T20:40:47Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47054298918,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9KefJg",
+      "before": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f",
+      "after": "de5813532adb51b964b222644ae0519bd814f8ef",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-19T20:40:03Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47053700673,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9J5-QQ",
+      "before": "cbc74e823e7af96f8df1a1320498998e5de2b328",
+      "after": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-19T20:33:40Z",
+      "activity_type": "push",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    {
+      "id": 47052232628,
+      "node_id": "PSH_kwLORUA_QM8AAAAK9IgXtA",
+      "before": "0000000000000000000000000000000000000000",
+      "after": "cbc74e823e7af96f8df1a1320498998e5de2b328",
+      "ref": "refs/heads/fix/unit-suite-green-20261019",
+      "timestamp": "2026-10-19T20:18:10Z",
+      "activity_type": "branch_creation",
+      "actor": {
+        "login": "sharpninja",
+        "id": 16146732,
+        "node_id": "U_kgDOAPZhLA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/16146732?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/sharpninja",
+        "html_url": "https://github.com/sharpninja",
+        "followers_url": "https://api.github.com/users/sharpninja/followers",
+        "following_url": "https://api.github.com/users/sharpninja/following{/other_user}",
+        "gists_url": "https://api.github.com/users/sharpninja/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/sharpninja/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/sharpninja/subscriptions",
+        "organizations_url": "https://api.github.com/users/sharpninja/orgs",
+        "repos_url": "https://api.github.com/users/sharpninja/repos",
+        "events_url": "https://api.github.com/users/sharpninja/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/sharpninja/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    }
+  ]
+}

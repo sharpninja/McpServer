@@ -1,0 +1,378 @@
+[
+  {
+    "File": "tests/Build.Tests/BuildTargetTests.cs",
+    "RemovedAssertion": "Assert.Equal([\"SharpNinja.A.1.0.0.nupkg\", \"SharpNinja.B.1.0.0.nupkg\"], packages);"
+  },
+  {
+    "File": "tests/Build.Tests/BuildTargetTests.cs",
+    "RemovedAssertion": "Assert.False(File.Exists(Path.Combine(directory, \"SharpNinja.A.1.0.0.nupkg\")));"
+  },
+  {
+    "File": "tests/Build.Tests/BuildTargetTests.cs",
+    "RemovedAssertion": "Assert.False(File.Exists(Path.Combine(directory, \"SharpNinja.A.1.0.0.symbols.nupkg\")));"
+  },
+  {
+    "File": "tests/QBrainAi.Repl.IntegrationTests/EndToEndFlowTests.cs",
+    "RemovedAssertion": "Assert.Contains(testNonce, content);"
+  },
+  {
+    "File": "tests/QBrainAi.Repl.IntegrationTests/Iteration1IntegrationTests.cs",
+    "RemovedAssertion": "Assert.Contains(\"test-nonce-123\", content);"
+  },
+  {
+    "File": "tests/QBrainAi.Repl.IntegrationTests/Iteration1IntegrationTests.cs",
+    "RemovedAssertion": "Assert.Contains(\"bootstrap-nonce\", healthContent);"
+  },
+  {
+    "File": "tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs",
+    "RemovedAssertion": "Assert.NotNull(evt);"
+  },
+  {
+    "File": "tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs",
+    "RemovedAssertion": "Assert.Equal(Path.Combine(root, \"AGENTS-README-FIRST.yaml\"), markerPath);"
+  },
+  {
+    "File": "tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs",
+    "RemovedAssertion": "Assert.False(string.IsNullOrWhiteSpace(error));"
+  },
+  {
+    "File": "tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs",
+    "RemovedAssertion": "Assert.Contains(nested, error, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "File": "tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs",
+    "RemovedAssertion": "Assert.Contains(root, error, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "File": "tests/QBrainAi.Repl.IntegrationTests/TrustBootstrapFlowTests.cs",
+    "RemovedAssertion": "Assert.Contains(testNonce, content);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs",
+    "RemovedAssertion": "Assert.False(string.IsNullOrWhiteSpace(model), \"Local Ollama has no installed models; run the 'InstallOllama' Nuke target before TEST-MCP-QBOLLAMA-001.\");"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+    "RemovedAssertion": "Assert.Equal(server.Port, marker.Port);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+    "RemovedAssertion": "Assert.False(string.IsNullOrWhiteSpace(marker.ApiKey), $\"Generated marker did not contain an API key.{Environment.NewLine}{server.Diagnostics}\");"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+    "RemovedAssertion": "Assert.NotNull(metadata);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+    "RemovedAssertion": "Assert.False(string.IsNullOrWhiteSpace(metadata!.Value));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs",
+    "RemovedAssertion": "Assert.Equal(@\"E:\\github\\FunWasHad\", stored.Repository);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"FunWasHad\", stored.Project);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"sharpninja/FunWasHad\", stored.Repository);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "RemovedAssertion": "Assert.Equal(@\"E:\\github\\McpServer\", configuration[\"Mcp:RepoRoot\"]);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "RemovedAssertion": "Assert.Equal(@\"E:\\github\\McpServer\", configuration[\"Mcp:Workspaces:0:WorkspacePath\"]);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs",
+    "RemovedAssertion": "Assert.NotNull(dir);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"codex.cmd\", spawner.StartInfo.FileName);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "RemovedAssertion": "Assert.Contains(\"model_reasoning_effort=\\\\\\\"xhigh\\\\\\\"\", serializedArguments, StringComparison.Ordinal);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "RemovedAssertion": "Assert.StartsWith(\"C:\\\\Users\\\\kingd\\\\AppData\\\\Roaming\\\\npm;\", deltas[\"PATH\"], StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"PAYTON-LEGION2\", response.ProxyId);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"PAYTON-LEGION2\", proxy.ProxyId);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "RemovedAssertion": "Assert.True(string.Equals(ExpectedWorkspaceKey.Of(_workspacePath), workspace.WorkspacePath,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"PAYTON-LEGION2\", syncItem.ProxyId);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "RemovedAssertion": "Assert.Single(await sut.GetSyncItemsAsync(\"PAYTON-DESKTOP\", 0, CancellationToken.None).ConfigureAwait(true));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "RemovedAssertion": "Assert.Single(await sut.GetSyncItemsAsync(\"PAYTON-LAB\", 0, CancellationToken.None).ConfigureAwait(true));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "RemovedAssertion": "Assert.Empty(await sut.GetSyncItemsAsync(\"PAYTON-DESKTOP\", 0, CancellationToken.None).ConfigureAwait(true));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs",
+    "RemovedAssertion": "Assert.Equal(explicitPath, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(explicitPath));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "RemovedAssertion": "Assert.Contains(\"HostileReviewWorker\", ex.ToString(), StringComparison.Ordinal);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd\", result.WorkspacePath);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd\", report.OriginalWorkspacePath);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd\", report.WorkspaceId);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/RideAudit\", result.WorkspacePath);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/RideAudit\", report.OriginalWorkspacePath);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/QBrainAi\", result.WorkspacePath);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd\", report.OriginalWorkspacePath);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/QBrainAi\", report.EffectiveWorkspacePath);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(CanonicalWorkspaceId, result.Value.WorkspaceId);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"Start and certify LAB-OMARCHY TruckMate services\", result.Value.Title);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd\", HandoffWorkspacePaths.Canonicalize(@\"C:\\Users\\kingd\", linux));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/McpServer\", sut.ResolveWorkspaceByToken(token));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs",
+    "RemovedAssertion": "Assert.True(sut.ValidateToken(\"/home/sharpninja/github/McpServer/\", token));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/RideAudit/docs/sessions\", wsContext.SessionsPath);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/RideAudit/docs/external\", wsContext.ExternalDocsPath);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs",
+    "RemovedAssertion": "Assert.False(Directory.Exists(hostRewrite), $\"Repo write created {hostRewrite}\");"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/RideAudit\", TodoServiceFactory.NormalizeWorkspaceRoot(\"/home/sharpninja/github/RideAudit/\", windows));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd/repo\", EfTodoService.NormalizeFixedWorkspacePath(\"C:/Users/kingd/repo\", linux));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd/repo\", TodoExecutionService.NormalizeWorkspacePath(\"C:/Users/kingd/repo\", linux));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "RemovedAssertion": "Assert.True(HostileReviewService.IsSameWorkspace(\"/home/sharpninja/github/RideAudit/\", \"/home/sharpninja/github/RideAudit\", windows));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "RemovedAssertion": "Assert.False(HostileReviewService.IsSameWorkspace(\"/home/sharpninja/github/RideAuditOther\", \"/home/sharpninja/github/RideAudit\", windows));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"agent-pool-codex@19080a7b3c66\", AgentPoolService.BuildPooledDeviceId(\"codex\", \"C:/Users/kingd/repo\", Normalizer(LinuxHub)));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"agent-pool-codex@19080a7b3c66\", AgentPoolService.BuildPooledDeviceId(\"codex\", @\"C:\\Users\\kingd\\repo\", Normalizer(LinuxHub)));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"agent-pool-codex@d5731a58e39a\", AgentPoolService.BuildPooledDeviceId(\"codex\", \"/home/sharpninja/github/RideAudit/\", Normalizer(WindowsHost)));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/RideAudit\", FileGitHubWorkspaceTokenStore.NormalizeWorkspacePath(\"/home/sharpninja/github/RideAudit/\", windows));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd/repo\", ToolRegistryService.NormalizeWorkspacePath(@\"C:\\Users\\kingd\\repo\\\", linux));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd/repo\", AgentService.NormalizeWorkspacePath(@\"C:\\Users\\kingd\\repo\\\", Normalizer(LinuxHub)));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathDomainSitesContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd/repo\", WorkspaceService.ResolveRepoRootWorkspacePath(@\"C:\\Users\\kingd\\repo\\\", @\"C:\\svc\", windows));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "RemovedAssertion": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\first\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "RemovedAssertion": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\second\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "RemovedAssertion": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\first\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "RemovedAssertion": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\outer-default\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "RemovedAssertion": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\alpha\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "RemovedAssertion": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\beta\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "RemovedAssertion": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\alpha\")), observed[0]);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "RemovedAssertion": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\beta\")), observed[1]);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "RemovedAssertion": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\default-ws\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/RideAudit\", stored.WorkspaceId);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/RideAudit\", stored.WorkspacePath);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd/repo\", stored.WorkspaceId);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/RideAudit\", found.WorkspacePath);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs",
+    "RemovedAssertion": "Assert.False(Directory.Exists(hostRewrite), $\"Init created {hostRewrite}\");"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs",
+    "RemovedAssertion": "Assert.Equal(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(@\"C:\\projects\\test\"), result, ignoreCase: true);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(Environment.CurrentDirectory, CreateHost().CurrentDirectory);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "RemovedAssertion": "Assert.SkipUnless(OperatingSystem.IsWindows(), \"The backslash spelling applies on a Windows host only.\");"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(expected, ToNativePath(path, WorkspacePathPlatform.Windows));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "RemovedAssertion": "Assert.SkipWhen(OperatingSystem.IsWindows(), \"Applies to non-Windows hosts only.\");"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd/repo\", ToNativePath(\"C:/Users/kingd/repo\", WorkspacePathPlatform.Windows));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd\", result);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(WorkspacePathPlatform.Windows, normalizer.DetectPlatform(@\"C:\\Users\\kingd\"));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd\", CreateSut(LinuxHost()).Normalize(input));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/McpServer\", result);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/home/sharpninja/github/McpServer\", result);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd\", CreateSut(LinuxHost()).Normalize(@\"  C:\\Users\\kingd  \"));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"C:/Users/kingd/b\", CreateSut(LinuxHost()).Combine(@\"C:\\Users\\kingd\", \"a\", \"..\", \"b\"));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs",
+    "RemovedAssertion": "Assert.Equal(\"/srv/other\", CreateSut(LinuxHost()).Combine(@\"C:\\Users\\kingd\", \"/srv/other\"));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "RemovedAssertion": "Assert.Equal(foreign, result);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "RemovedAssertion": "Assert.SkipUnless(OperatingSystem.IsWindows(), \"Windows physical resolution only runs on a Windows host.\");"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "RemovedAssertion": "Assert.SkipUnless(OperatingSystem.IsWindows(), \"Windows physical resolution only runs on a Windows host.\");"
+  }
+]

@@ -1,0 +1,114 @@
+PR87 code delta receipt
+writtenLocal=2026-11-09T13:57:54
+base=03eea74797827aacf7030ac577cc19d46ebee5d2
+head=a1e19d7331a2e9804c66ef96a27ee50b2365510c
+mergeBase=03eea74797827aacf7030ac577cc19d46ebee5d2
+commitCount=3
+COMMIT c8b231c13164956ac98d6234fb2c6fb459c0cefb	docs: hand PR 87 to Codex; commit the 03eea747 phase-exit gate receipts (IMPL-UNITGREEN-001)
+COMMIT 455f3cbd7d78ace1a2e4171c7434699539358e6d	test(embedding): require real model assertions
+COMMIT a1e19d7331a2e9804c66ef96a27ee50b2365510c	test(embedding): retry transient fixture cleanup
+changedPathCount=95
+PATH M	docs/plans/2026-10-30-unit-suite-green-handoff.md
+PATH A	docs/plans/2026-11-09-pr87-completion-plan.md
+PATH A	docs/plans/2026-11-09-pr87-handoff-audit.md
+PATH A	docs/plans/2026-11-09-unit-suite-green-codex-handoff.md
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/manifest.json
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-buildtests-2/ug-r14f4-final-linux-buildtests-2.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/NukeBuild.IntegrationTests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.McpAgent.IntegrationTests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.QBAgent.IntegrationTests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.Repl.IntegrationTests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/QBrainAi.Support.Mcp.IntegrationTests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-lane-2/selected-projects.json
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Client.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Cqrs.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Launcher.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.McpAgent.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.QBAgent.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Repl.Core.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/QBrainAi.Support.Mcp.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-linux-unit-2/selected-projects.json
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-buildtests-2/Build.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/NukeBuild.IntegrationTests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.McpAgent.IntegrationTests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.QBAgent.IntegrationTests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.Repl.IntegrationTests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/QBrainAi.Support.Mcp.IntegrationTests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-lane-2/selected-projects.json
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Client.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Cqrs.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Launcher.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.McpAgent.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.QBAgent.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Repl.Core.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/QBrainAi.Support.Mcp.Tests.trx
+PATH A	docs/receipts/hv/unitgreen-r15-trx-03eea747/ug-r14f4-final-win-unit-2/selected-projects.json
+PATH A	docs/receipts/unit-suite-green-20261019/2026-11-09-codex-handoff-audit.txt
+PATH A	docs/receipts/unit-suite-green-20261019/2026-11-09-pr87-p0-task-map.md
+PATH A	docs/receipts/unit-suite-green-20261019/2026-11-09-pr87-p1-embedding.md
+PATH A	docs/receipts/unit-suite-green-20261019/reconciliation-r15-03eea747-vs-da11faa2-supplement.md
+PATH A	docs/receipts/unit-suite-green-20261019/reconciliation-r15-03eea747-vs-da11faa2.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-2.json
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-2.tempdir.json
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-2/ug-r14f4-final-linux-buildtests-2.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2.filters.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2.json
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/NukeBuild.IntegrationTests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/QBrainAi.McpAgent.IntegrationTests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/QBrainAi.QBAgent.IntegrationTests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/QBrainAi.Repl.IntegrationTests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/QBrainAi.Support.Mcp.IntegrationTests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-nu190x-2.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-traceability-2.exit.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-traceability-2.meta.json
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-traceability-2.out.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2.filters.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2.json
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2/QBrainAi.Client.Tests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2/QBrainAi.Cqrs.Tests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2/QBrainAi.Launcher.Tests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2/QBrainAi.McpAgent.Tests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2/QBrainAi.QBAgent.Tests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2/QBrainAi.Repl.Core.Tests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2/QBrainAi.Support.Mcp.Tests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-buildtests-2.nu190x.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-buildtests-2.result.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-2.nu190x.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-2.result.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-2.start.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-traceability-2.nu190x.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-traceability-2.result.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-2.filters.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-2.nu190x.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-2.result.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-2.nu190x.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-2.result.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-2/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-2/selected-projects.json
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r15-embedding-binding-20261109T1008/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r15-embedding-binding-win-20261109T1021/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r15-embedding-binding-win-20261109T1021/QBrainAi.Support.Mcp.Tests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r15-embedding-bindingdiag-20261109T1013/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r15-embedding-bindingnative-20261109T1015/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r15-embedding-bindingnative-20261109T1015/QBrainAi.Support.Mcp.Tests.trx
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r15-embedding-compile-20261109T1017/compile.meta.json
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r15-embedding-compile-20261109T1017/compile.out.txt
+PATH A	docs/receipts/unit-suite-green-20261019/ug-r15-embedding-mock-20261109T095929/QBrainAi.Support.Mcp.Tests.trx
+PATH A	tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs
+PATH A	tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixtureTests.cs
+PATH M	tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingServiceTests.cs
+PATH M	tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj
+PATH A	tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingModelAssertionContract.cs
+PATH A	tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingModelAssertionContractTests.cs
+nonDocPathCount=6
+NON_DOC tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs
+NON_DOC tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixtureTests.cs
+NON_DOC tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingServiceTests.cs
+NON_DOC tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj
+NON_DOC tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingModelAssertionContract.cs
+NON_DOC tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingModelAssertionContractTests.cs
+productPathCount=0
+VERDICT PASS_TEST_AND_RECORDS_ONLY

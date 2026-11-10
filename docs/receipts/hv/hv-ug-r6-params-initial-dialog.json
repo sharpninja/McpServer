@@ -1,0 +1,10 @@
+{
+  "dialogItems": [
+    {
+      "role": "model",
+      "category": "decision",
+      "timestamp": "2026-10-26T12:33:05.7062331Z",
+      "content": "Class 1 hostile review only. Follow the explicit scanner override without scoring scanner coverage. Require evidence for all other claims and no done-state mutation. Alternatives rejected: treating remediation reports as proof, or lowering the 98/98 bar. Runtime rollout line 8 proves gpt-6-astra effort max, thread 01a1782b-67b5-7ac0-b313-b48aa91fbca2. Add-profile read 1 file in full. Root marker read in full with key redacted. Installed Codex plugin 1.121.0, isolated cache /tmp/hv-ug-r6-codex-01a1782b-67b5-7ac0-b313-b48aa91fbca2. Initial openSession call omitted required sessionId and was rejected; corrected using the wrapper-generated sessionId. Session and request identifiers use UTC because the plugin contract requires it; displayed timestamps use local time."
+    }
+  ]
+}

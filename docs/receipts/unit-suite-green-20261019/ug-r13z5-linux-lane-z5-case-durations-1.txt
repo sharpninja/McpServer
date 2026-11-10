@@ -1,0 +1,11 @@
+RECEIPT started=2026-11-05T08:48:04 ended=2026-11-05T08:48:05 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-TrxCaseMaxDurations.ps1 sha256=3AF839DC42F41344CBFB369A2B3CA3782AF15BE7B844ED74F4A45C24223CFBE2
+ARGUMENTS -Folders | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z5-final-linux-lane-1 | -Fragments | SessionLogTriageStoreTests.SubmitAsync_HungSaveChanges,RequirementsRecoveryTests.ApplyAsync_HungSave,SessionLogDenseGraphTests.UpsertTurnAsync_SlowGraphLoad,SessionLogReplaceSectionRetryableTests.ReplaceTurnSectionAsync_HungSaveChanges
+HEAD a3caa21d67e85f464cc4e6b62b04e2b3bb9ca708
+Now: 2026-11-05T08:48:05 fragments=SessionLogTriageStoreTests.SubmitAsync_HungSaveChanges,RequirementsRecoveryTests.ApplyAsync_HungSave,SessionLogDenseGraphTests.UpsertTurnAsync_SlowGraphLoad,SessionLogReplaceSectionRetryableTests.ReplaceTurnSectionAsync_HungSaveChanges
+RUNS read=1 cases=4
+CASE runs=1 Passed=1 min=2.13s max=2.13s maxRun=ug-r13z5-final-linux-lane-1 QBrainAi.Support.Mcp.Tests.Requirements.RequirementsRecoveryTests.ApplyAsync_HungSave_IsRetryable503
+CASE runs=1 Passed=1 min=3.78s max=3.78s maxRun=ug-r13z5-final-linux-lane-1 QBrainAi.Support.Mcp.Tests.Services.SessionLogDenseGraphTests.UpsertTurnAsync_SlowGraphLoad_FailsRetryableWithoutPersisting
+CASE runs=1 Passed=1 min=5.18s max=5.18s maxRun=ug-r13z5-final-linux-lane-1 QBrainAi.Support.Mcp.Tests.Services.SessionLogReplaceSectionRetryableTests.ReplaceTurnSectionAsync_HungSaveChanges_FailsFastWithRetryableUnavailable
+CASE runs=1 Passed=1 min=5.11s max=5.11s maxRun=ug-r13z5-final-linux-lane-1 QBrainAi.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable
+END

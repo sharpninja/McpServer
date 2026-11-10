@@ -1,0 +1,8 @@
+src/QBrainAi.Client/SessionLogClient.cs:44:    public async Task<SessionLogQueryResult> QueryAsync(
+src/QBrainAi.Client/SessionLogClient.cs:49:        return await QueryAsync(
+src/QBrainAi.Client/SessionLogClient.cs:64:    public async Task<SessionLogQueryResult> QueryAsync(
+src/QBrainAi.Client/SessionLogClient.cs:84:        return await GetAsync<SessionLogQueryResult>($"qbrainai/sessionlog{qs}", cancellationToken);
+src/QBrainAi.Client/SessionLogClient.cs:95:    public Task<UnifiedSessionLogDto> GetAsync(
+src/QBrainAi.Client/SessionLogClient.cs:101:        return GetAsync<UnifiedSessionLogDto>(path, cancellationToken);
+src/QBrainAi.Client/SessionLogClient.cs:241:    public async Task<SessionLogTurnSubmitResult> PatchTurnAsync(
+

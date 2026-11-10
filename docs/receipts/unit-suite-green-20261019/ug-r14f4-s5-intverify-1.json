@@ -1,0 +1,91 @@
+{
+  "name": "ug-r14f4-s5-intverify-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "6e8371e0a8c7300e7f7ad39e1b820d868863643c",
+  "dirtyPaths": [
+    " M QBrainAi.sln",
+    " M build/Build.TestDependencies.cs",
+    " M build/IntegrationLaneProjects.cs",
+    " M build/IntegrationLaneProjectsContracts.cs",
+    " M src/QBrainAi.Services/QBrainAi.Services.csproj",
+    " M src/QBrainAi.Storage/QBrainAi.Storage.csproj",
+    " M tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthSqliteTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathFacadeTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-binding-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-binding-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-mockgate-1/",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Support.Mcp.Environment.IntegrationTests:BugTriage139EighteenthSqliteTests,WorkspaceNativePathLinuxFacadeTests",
+    "Build.IntegrationTests:IntegrationLaneProjectsTests",
+    "--test-run-id",
+    "ug-r14f4-s5-intverify-1"
+  ],
+  "startedLocal": "2026-11-07T10:55:37",
+  "endedLocal": "2026-11-07T10:56:26",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 10,
+  "passed": 10,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s5-intverify-1/groups/Build.IntegrationTests/Build.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-intverify-1/Build.IntegrationTests.trx",
+      "sha256": "32334A3499413F7DCCF3A1660E38CE1C5795738DC2F78F5E004A7DC176ECAD7E",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Environment.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s5-intverify-1/groups/QBrainAi.Support.Mcp.Environment.IntegrationTests/QBrainAi.Support.Mcp.Environment.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-intverify-1/QBrainAi.Support.Mcp.Environment.IntegrationTests.trx",
+      "sha256": "63A23973D80C591D72D645E02E7E6600FE8FBD1E3A79259C8CBEE248DF09868F",
+      "total": 7,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "QBrainAi.sln",
+      "sha256": "B5032D1BDB96E825E67A72B3CF720735EDE817413969FBA819AC3979B2F085AD"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/QBrainAi.Support.Mcp.Environment.IntegrationTests.csproj",
+      "sha256": "80BF28D673B9ABE2EDF8D1861E33FBC1BE8D830B524710A0D63766468D0915E2"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Storage/BugTriage139EighteenthSqliteTests.cs",
+      "sha256": "55F9A44945ABD5424FC1BE5AB773C67A65C57111C8FC8BEDD6F08701B0AA8C3E"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Storage/WorkspaceNativePathFacadeTests.cs",
+      "sha256": "9D75A8C86D8E58B2649BEBAB1C00D51A57CE2FF38E8EB5216B8A31BDDD31FDC7"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+      "sha256": "1B202C40D25CB98684D62E4FA32524C0AE114C645439D1588576320549C94828"
+    }
+  ],
+  "writtenLocal": "2026-11-07T10:57:15",
+  "writtenBy": "ClaudeCode"
+}

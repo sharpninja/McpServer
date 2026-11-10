@@ -1,0 +1,27 @@
+{
+  "TimestampLocal": "2026-10-27T03:47:36",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-MCP-MEMORY-002"
+  },
+  "Response": {
+    "payload": {
+      "requestId": "req-20261027T084737Z-562b",
+      "deprecated": true,
+      "result": {
+        "scopeStartLayerKey": "layer-1",
+        "acceptanceCriteria": [],
+        "title": "Test TEST-MCP-MEMORY-002",
+        "status": "pending",
+        "id": "TEST-MCP-MEMORY-002",
+        "testType": "unit",
+        "description": "CRUD behavior tests SHALL prove add, list, update, remove, soft-delete omission, scope preservation, scope changes, invalid ID, invalid text, invalid category, and invalid scope failures.",
+        "area": "MCP",
+        "priority": "medium",
+        "updatedAt": "2026-10-27T08:47:38.4910834+00:00",
+        "createdAt": "2026-10-27T08:47:38.4909538+00:00"
+      }
+    },
+    "type": "result"
+  }
+}

@@ -1,0 +1,31 @@
+type: result
+payload:
+  requestId: req-20261029T024535Z-3211
+  result:
+    id: TR-MCP-NUKE-019
+    title: MigrationIntegrationTests selects host-specific integration cases by the Platform trait
+    description: "MigrationIntegrationTests runs the Category=Integration cases that belong to the host it runs on: tests tagged Platform=Linux run only on Linux hosts, tests tagged Platform=Windows only on Windows hosts, and untagged integration tests on both. Unit tests contain no platform-specific cases (operator 2026-10-19: \"There should be ZERO platform specific UNIT tests.  If it depends on the environment, it's an integration test.\"). Provisioning stays as TR-MCP-NUKE-018 and the Windows LocalDB and PostgreSQL binaries define it."
+    status: pending
+    priority: high
+    area: MCP
+    subarea: NUKE
+    notes: IMPL-UNITGREEN-001 plan amendment G, approved by the operator 2026-10-19 ("Yes, I approve the change"). Implementation detail of FR-MCP-BUILD-001; no TEST record. Built tests first in Build.Tests (pure filter function, scripted cases, negative controls), then bound in build/Build.TestDependencies.cs. Build.Tests runs directly with dotnet test as the infrastructure check (operator 2026-10-11 and 2026-10-19).
+    acceptanceCriteria:
+    - id: AC-1
+      text: On a Windows host the target runs Category=Integration cases except those tagged Platform=Linux; on a Linux host it runs them except those tagged Platform=Windows; untagged integration cases run on both.
+      isSatisfied: false
+    - id: AC-2
+      text: MigrationIntegrationTests runs the Category=Integration cases of QBrainAi.Support.Mcp.Tests, QBrainAi.McpAgent.Tests, QBrainAi.Repl.Core.Tests, QBrainAi.QBAgent.Tests, Build.Tests and QBrainAi.Repl.IntegrationTests, each project with its own TRX under the run's --test-run-id. QBrainAi.Support.Mcp.IntegrationTests, QBrainAi.Acid.IntegrationTests and QBrainAi.TransactionSecurity.IntegrationTests are not lane projects until PLAN-SESSIONTRIAGEFIX-001 merges and their failing cases are resolved (TODO IMPL-TXNINTEGRATION-001); the .Validation projects, the AI review projects and QBrainAi.PluginIntegration.Tests, which has its own target, are not lane projects.
+      isSatisfied: false
+    - id: AC-3
+      text: The run log names the selection filter (filter text only).
+      isSatisfied: false
+    - id: AC-6
+      text: "Every integration case MigrationIntegrationTests runs uses a temporary instance it owns: a test-owned workspace, marker, database and server process on a free port, never the live server, its marker or its API key. A case that needs a server asserts on that instance's answers and fails when it cannot reach it; it never catches the failure and passes."
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-29T02:45:36.7577002+00:00
+    updatedAt: 2026-10-29T02:45:36.7579264+00:00
+  deprecated: true
+
+---

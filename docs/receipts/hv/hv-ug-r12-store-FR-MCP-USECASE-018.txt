@@ -1,0 +1,34 @@
+type: result
+payload:
+  requestId: req-20261105T075300Z-2ead
+  result:
+    id: FR-MCP-USECASE-018
+    title: Edit existing use-case actors, flows, and steps in place
+    description: Operators and agents shall edit actor, flow, and step records through supported authenticated operations while preserving the existing component identities and parent relationships.
+    status: pending
+    priority: high
+    area: MCP
+    notes: Required to correct UC-125 without replacement rows or direct storage mutation.
+    acceptanceCriteria:
+    - id: AC-FR-USECASE-018-1
+      text: A supported authenticated operation updates an actor already associated with a use case, preserves ActorId and UseCaseId, and returns the changed name, description, type, and IsPrimary values.
+      isSatisfied: false
+    - id: AC-FR-USECASE-018-2
+      text: A supported authenticated operation updates an existing flow in its parent use case, preserves FlowId and UseCaseId, and returns the changed FlowType, Name, and SequenceNumber values.
+      isSatisfied: false
+    - id: AC-FR-USECASE-018-3
+      text: A supported authenticated operation updates an existing step in its parent flow and use case, preserves StepId and FlowId, and returns the changed StepNumber, ActorId, Action, SystemResponse, and DataEntities values.
+      isSatisfied: false
+    - id: AC-FR-USECASE-018-4
+      text: Component updates reject missing, soft-deleted, cross-workspace, and parent-mismatched IDs without changing any row or creating duplicates.
+      isSatisfied: false
+    - id: AC-FR-USECASE-018-5
+      text: Updating actors, flows, or steps leaves the use case approval status, version, links, unrelated actors, unrelated flows, and unrelated steps unchanged while advancing only the aggregate update timestamp.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T07:53:02.2254309+00:00
+    updatedAt: 2026-11-05T07:53:02.2255436+00:00
+  deprecated: true
+
+---
+

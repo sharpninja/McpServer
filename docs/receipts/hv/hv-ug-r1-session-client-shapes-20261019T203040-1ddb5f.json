@@ -1,0 +1,15 @@
+{
+  "TimestampUtc": "2026-10-20T01:30:40.1051475Z",
+  "TimestampLocal": "2026-10-19T20:30:40",
+  "Mode": "Search",
+  "Arguments": [
+    "-n",
+    "model|designDecisions|filesModified|OpenSessionAsync|PatchTurnAsync",
+    "src/QBrainAi.McpAgent/SessionLogWorkflow.cs",
+    "src/QBrainAi.Client/SessionLog"
+  ],
+  "Offset": 0,
+  "Count": 80,
+  "ExitCode": 2,
+  "Output": "rg: src/QBrainAi.McpAgent/SessionLogWorkflow.cs: No such file or directory (os error 2)\nrg: src/QBrainAi.Client/SessionLog: No such file or directory (os error 2)"
+}

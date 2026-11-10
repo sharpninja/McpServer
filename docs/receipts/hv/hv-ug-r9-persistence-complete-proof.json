@@ -1,0 +1,65 @@
+{
+  "TimestampUtc": "2026-11-03T02:59:12.0233441Z",
+  "Mode": "Complete",
+  "SessionId": "Codex-20261103T011224Z-unitgreen-r9-hv",
+  "RequestId": "req-20261103T011329Z-unitgreen-r9",
+  "HistoryMatches": 1,
+  "HistoryStatus": [
+    "in_progress"
+  ],
+  "TurnMatches": 1,
+  "TurnStatus": [
+    "completed"
+  ],
+  "ResultKeys": [
+    "agentExecutablePath",
+    "agentSessionId",
+    "model",
+    "sessionId",
+    "lastUpdated",
+    "turnCount",
+    "title",
+    "status",
+    "sourceType",
+    "agentExecutableVersion",
+    "turns",
+    "started"
+  ],
+  "TurnKeys": [
+    "requestId",
+    "response",
+    "tokenCount",
+    "queryText",
+    "processingDialog",
+    "actions",
+    "todoId",
+    "status",
+    "planFile",
+    "model",
+    "tags",
+    "interpretation",
+    "contextList",
+    "queryTitle",
+    "timestamp"
+  ],
+  "Formats": [
+    {
+      "Format": "markdown",
+      "Parts": 10,
+      "ExpectedCharacters": 225440,
+      "ActualCharacters": 225440,
+      "ExpectedSha256": "DDFF98F996AFAFEAB02FEBAB4484443B0B894EEAC05311515AAB582F6851E64E",
+      "ActualSha256": "DDFF98F996AFAFEAB02FEBAB4484443B0B894EEAC05311515AAB582F6851E64E",
+      "Exact": true
+    },
+    {
+      "Format": "json",
+      "Parts": 17,
+      "ExpectedCharacters": 392347,
+      "ActualCharacters": 392347,
+      "ExpectedSha256": "7B85171C3FEC51C0BAEB98C7F3FB9C3326656527B4EC13AECE980D2544006753",
+      "ActualSha256": "7B85171C3FEC51C0BAEB98C7F3FB9C3326656527B4EC13AECE980D2544006753",
+      "Exact": true
+    }
+  ]
+}

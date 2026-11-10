@@ -1,0 +1,36 @@
+RECEIPT 2026-11-07T17:32:50 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/s10/Invoke-WinNukeTargetS10.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-11-07T17:32:43 host=PAYTON-LEGION2 user=kingd session=0 interactive=False
+REF origin/fix/unit-suite-green-20261019-windows=5ce7fa56c26e4a0672fffba6984273f998db454b expected=5ce7fa56c26e4a0672fffba6984273f998db454b match=True
+HEAD 5ce7fa56c26e4a0672fffba6984273f998db454b expected=5ce7fa56c26e4a0672fffba6984273f998db454b match=True
+TARGET ValidateTraceability begin 2026-11-07T17:32:46
+TARGET ValidateTraceability exit=0 end 2026-11-07T17:32:50 log=C:\Users\kingd\AppData\Local\Temp\unit-suite-green-windows-20261102\ValidateTraceability-ug-r14f4-final-win-traceability-1.log
+  LOG ████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+  LOG ██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+  LOG ██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+  LOG ██║ ╚████║╚██████╔╝██║  ██╗███████╗
+  LOG ╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+  LOG ​
+  LOG NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+  LOG ​
+  LOG ​
+  LOG ╬═════════════════════════
+  LOG ║ ValidateTraceability
+  LOG ╬════════════════
+  LOG ​
+  LOG 17:32:49 [INF] UseCaseFrLinks coverage source: none (no SQLite path resolved)
+  LOG 17:32:49 [INF] Traceability validation passed.
+  LOG ​
+  LOG ════════════════════════════════════════════
+  LOG Target                  Status      Duration
+  LOG ────────────────────────────────────────────
+  LOG ValidateTraceability    Succeeded     < 1sec
+  LOG ────────────────────────────────────────────
+  LOG Total                                 < 1sec
+  LOG ════════════════════════════════════════════
+  LOG ​
+  LOG Build succeeded on 11/7/2026 5:32:49 PM. ＼（＾ᴗ＾）／
+NO-TRX F:\GitHub\McpServer\.worktrees\unit-suite-green-windows-20261102\TestResults\ug-r14f4-final-win-traceability-1 (expected: the targets write no TRX)
+END 2026-11-07T17:32:50

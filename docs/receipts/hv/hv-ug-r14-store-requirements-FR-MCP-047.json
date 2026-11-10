@@ -1,0 +1,31 @@
+{
+  "timestampUtc": "2026-11-06T22:22:42.5900425+00:00",
+  "timestampLocal": "2026-11-06T16:22:45",
+  "method": "workflow.requirements.getFr",
+  "recordId": "FR-MCP-047",
+  "response": {
+    "payload": {
+      "result": {
+        "area": "MCP",
+        "status": "pending",
+        "updatedAt": "2026-11-06T22:22:45.1120951+00:00",
+        "createdAt": "2026-11-06T22:22:45.1119331+00:00",
+        "description": "The server shall support launching interactive desktop processes from a Windows service (LocalSystem) context using `CreateProcessAsUser` with WTS session token negotiation, enabling Copilot CLI and other GUI/console tools to run on the interactive desktop with stdio pipe redirection or visible console windows.\n\n**Covered by:** `DesktopProcessLauncher`, `NativeMethods`",
+        "id": "FR-MCP-047",
+        "priority": "medium",
+        "acceptanceCriteria": [
+          {
+            "text": "Code that compares a requested environment with the process environment, such as the explicit deltas a desktop process launch passes on, takes that baseline as an explicit input: its unit contract supplies both maps and proves that equal values are omitted and changed values kept whatever the ambient environment holds (operator 2026-10-29: \"Strengthen ACs, fix both (Recommended)\"; hostile validation finding R8B-F1; moved from TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008, operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\").",
+            "isSatisfied": false,
+            "id": "ac-1"
+          }
+        ],
+        "scopeStartLayerKey": "layer-1",
+        "title": "Desktop Process Launch"
+      },
+      "requestId": "req-20261106T222243Z-49c0",
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

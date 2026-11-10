@@ -1,0 +1,92 @@
+{
+  "name": "ug-r15p3-linuxonly-final-buildtests-2",
+  "kind": "gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "a1e19d7331a2e9804c66ef96a27ee50b2365510c",
+  "dirtyPaths": [
+    " M .github/copilot-instructions.md",
+    " M CLAUDE.md",
+    " M docs/plans/2026-10-19-unit-suite-green.md",
+    " M docs/plans/2026-10-30-unit-suite-green-handoff.md",
+    " M docs/plans/2026-11-09-pr87-completion-plan.md",
+    " M docs/plans/2026-11-09-unit-suite-green-codex-handoff.md",
+    "?? docs/receipts/hv/unitgreen-r15-prelaunch.brief.md",
+    "?? docs/receipts/hv/unitgreen-r15-prelaunch.pr-body.md",
+    "?? docs/receipts/hv/unitgreen-r15-prelaunch.pr-description.md",
+    "?? docs/receipts/hv/unitgreen-r15-prelaunch.projected-problems.md",
+    "?? docs/receipts/hv/unitgreen-r15-prelaunch.selfreview.md",
+    "?? docs/receipts/hv/unitgreen-r15-tasks-455f3cbd.txt",
+    "?? docs/receipts/unit-suite-green-20261019/2026-11-09-pr87-p2-claude-launcher.md",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r15p3-code-delta-03eea747-to-455f3cbd.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r15p3-final-embedding-requirements-readback.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r15p3-final-linux-lane-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r15p3-final-linux-lane-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r15p3-final-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r15p3-final-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r15p3-final-source-pins-vs-455f3cbd.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r15p3-final-win-unit-1.result.txt"
+  ],
+  "command": [
+    "dotnet",
+    "test",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+    "-c",
+    "Debug",
+    "--logger",
+    "trx;LogFileName=ug-r15p3-linuxonly-final-buildtests-2.trx",
+    "--results-directory",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/.mcpServer/pr87-p3-runs/ug-r15p3-linuxonly-final-buildtests-2",
+    "--filter",
+    "Platform!=Windows"
+  ],
+  "startedLocal": "2026-11-09T13:10:57",
+  "endedLocal": "2026-11-09T13:12:08",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 530,
+  "passed": 530,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "ug-r15p3-linuxonly-final-buildtests-2",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/.mcpServer/pr87-p3-runs/ug-r15p3-linuxonly-final-buildtests-2/ug-r15p3-linuxonly-final-buildtests-2.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r15p3-linuxonly-final-buildtests-2/ug-r15p3-linuxonly-final-buildtests-2.trx",
+      "sha256": "07EEA937CDD25A3717512D7C36FC831CA021BCCBD3CBCCA59E1E8D5C8D532185",
+      "total": 530,
+      "passed": 530,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingModelAssertionContract.cs",
+      "sha256": "1E4441344C2EF0AF1DF1A605FC3A1E97FDCB582302A79E14772A75D2E392C268"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingModelAssertionContractTests.cs",
+      "sha256": "E2D08E6D483A605AA7235B71269984EC28335322890D58DC95872F2672E811CA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+      "sha256": "73042F104B706C1DFA50332A8697DC6726053E91CD9E701C37EA035289B97815"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingServiceTests.cs",
+      "sha256": "7D371EDC355EA485F0710D0FC77184DFDD6633B2C8B690F8C1E3575C0F3C2550"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs",
+      "sha256": "0A44BB234E508B6D39B215A976AE3D6BBEE5796F8588C5457727984AEC476043"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixtureTests.cs",
+      "sha256": "EBE3A81C2C46142C9613F4FC63F5D07E421E1B97B10C22F7FBD85F995B80425C"
+    }
+  ],
+  "writtenLocal": "2026-11-09T13:15:06",
+  "writtenBy": "Codex"
+}

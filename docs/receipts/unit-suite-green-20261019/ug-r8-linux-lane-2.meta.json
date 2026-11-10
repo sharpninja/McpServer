@@ -1,0 +1,16 @@
+{
+  "name": "ug-r8-linux-lane-2",
+  "target": "MigrationIntegrationTests",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r8-linux-lane-2"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+  "dirtyPaths": [],
+  "startedLocal": "2026-10-26T16:14:56",
+  "startedUtc": "2026-10-26T21:14:56.4348859Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-linux-lane-2.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-linux-lane-2.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-linux-lane-2.exit.txt"
+}

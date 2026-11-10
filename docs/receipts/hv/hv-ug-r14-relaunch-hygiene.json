@@ -1,0 +1,937 @@
+{
+  "timestampUtc": "2026-11-07T01:21:20.1089647Z",
+  "commitCount": 131,
+  "signatures": [
+    {
+      "sha": "0980a52b016386cfa6e131bd3efe9fc32e1c6e78",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "aedee994e66e756cf04d44cb74b38433b8b635c8",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "9a2619936f013d490264d39c3fb92846583b8362",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 94%, completeness 90%"
+      ]
+    },
+    {
+      "sha": "da11faa24a3b10400770dd9e6865c9606e294602",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "548b1a2883b4991726ca5696335d55e93c475b05",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "288b03c34d70d2bea5d3f35ad7c8846444558373",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "f9b6bde8f08dc56e8fd40d9a22ce70657b7711bf",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "8c944541f00027e507559c81c781c1a6ba76fce0",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "4e992d30ff705c0b02e060cb3aad65013c5e956f",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "11326d42fbb9a430b80ac22a4f8637be2adc713c",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 94%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "53a210ca4e521474685f2e3e1558b5cf88a5d535",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "baff082f23c87fdbbec0cd20dbc41569f7b1cf3a",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "94dc5b69078f746ea6cffc3bb11c73ecb74811be",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "becb0742693de240dce596a8eec4eb41c99a7c1d",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "b21c21ecdee4b2658830f998b45efcd0491f1d36",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 94%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "1d77a79c4e1e78a4c8e164a49779393721a95061",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 94%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "88c5abccee5f92b785f1368fdaace50dc0d4e2c2",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "a3caa21d67e85f464cc4e6b62b04e2b3bb9ca708",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "ff7dcf517bb788654442cc546012172f07b60b84",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "b79fd51f1638cea821e912abcea8838b7e20bf3c",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "1bb0d61f52302e8f4f9051ea2d3a4a834bf2c92b",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "4398cffc06878dfb1d3defad3cfb67465863fe67",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 94%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "2103243cfb4155e201b0fe1fd257ebc093800d86",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "3fe29d1fd8ffc4ba993782ab810bf9d16f4f42e6",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 94%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "52e6d627b78df808bb469269f0093d8fc1815701",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "b3f26862801cbf2d96ed4a3cdea7473fc653580b",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 94%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "142a93f0d5246f3224f601499073c96eeac072f3",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "cb174ac807c8e60b7a38a30bc216a651ed72c6c7",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "2e1210150ae009162b047c604b56b75426c4d428",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "4e4a227ad63ab789aad4b4c5eb977bc9319e83f2",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "03df5a6a1aec4627d0cd6847fdaab6f2462ec014",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "a98250179d67af8712ad8eb032e333440ba11fd9",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "e3eb8369481cbe2f49cb95798d9138193a18c1be",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "462709315de8609ce9b8b2b1f14dc4df2e092e82",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "23955af0b330ec1fe167138edac1ef5ef8ff3bfd",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "62c5882d87f3d0b5019827b1f803140cbf79ca0d",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "611a5dc556b5d0b6ce22b98c3103a9f873e34ac5",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 92%, accuracy 95%, completeness 85%"
+      ]
+    },
+    {
+      "sha": "679eb7881d0342a58ef446be5084b703c0cee7c4",
+      "signed": true,
+      "signature": [
+        "Signed: gpt-6.1-sol-ultra@Codex | Confidence: correctness 99%, accuracy 99%, completeness 99%"
+      ]
+    },
+    {
+      "sha": "765490a9035878c7888c911776289880493dacab",
+      "signed": true,
+      "signature": [
+        "Signed: gpt-6.1-sol-high@Codex | Confidence: correctness 95%, accuracy 99%, completeness 80%"
+      ]
+    },
+    {
+      "sha": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "0dd224daec46eb3e7c2d0766c6cd2c2ee9ac6a07",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 90%"
+      ]
+    },
+    {
+      "sha": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "332e0d31dbcb823418c3db30c409bc44df655de8",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "a9d6a8d7e259803e438b7125701a186bae8db26d",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "366238a2dfdbbc65991605db19b9b8b2192c3aa9",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "2b0f65d87f1948afcdcab6b0aa7c7afd3edd42cd",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "a69edb612a8f9994b2a1108f5096160332afca9e",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "fbc2da860e83c095433c51f8c7bec3c6038bdba6",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "d43c1d125cc6129940f21f439b5b3982dc1e61c3",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "4634c73c4b97f759177df0057c6142f5339e5027",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "433ce1919d04bb6c5bb3c95a60c6b5df656d59fb",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "751e34e42151dedddca2ce31b5a12c768f3d2876",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "3e487b6b9e520bd8bd7cba836cdb0bea8716fd48",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "4fab4424c0ebcd961e5135e393eace47771dd62c",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 96%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "2f67921357bff28a636fc5824d70422dbb1f168d",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "6667c405fe4e38a651773782809f355f087ac935",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 92%, accuracy 97%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "8c651f13036db0aa2b90413770377cc66cb419d6",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 97%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "868bbb575052a39e763280a42c4fbca01c9c9fdd",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "43cb62a78951ee71d27c8fd49f0fc0c153d42f50",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "845f323b6b6ae13bc01b6165d6f987238c631dea",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "7ab3c1c40bc226056f7c20f1db6963e12311a313",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "f5cda3c15455b8f42f97bb35768c142757323378",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "8b97aa4bee778273688e53a64a737c3170a41823",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "55c1400c58df1e03cb9a0cc2c3926b02534ab75a",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "c31f36d81dc87509b605175c5ced0d3b0f08180c",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "0484114872c09cf5afab5e019748dfabbda294bc",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "6a87791d9363bb972feb6a4539339fac0c1a1915",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "3a607fb17dba72c6c7f920a6067b1ca191ec86fb",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "44e9d810d88c0e34239ae31eef2683a614d392f7",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "c84183016a032bd522f5ae085a90d7c912bef810",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "9933796c53433a55d11cf14a96be97438a087b0f",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "c3625a64222c558b16c564e62ec2b5d600801e77",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "780b6513b4004da0b17c2359d9cb65f6a69de67e",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "8b7a49eaa3e8d4872b33d66af517acc8ad7e21ea",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "810ee8aa0fbdcc6cf64a3d9575693068d261a97c",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 98%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "5b818847b4e598b4e85ac6567041b847b0385950",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "3a9f8ff46690c4e35781bab444deac0d4345bbbd",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "ccc78b7a7624e0367725af585a5fd7c4f38b3661",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "8c254695d886d6ff87d5caaa42b0fa6b421c9c6b",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "094e47f4e0e8074c027e68f25d26482ce68b331e",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "97b7811491ccb3e338804a01d0bf28e4ecfe273a",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "50b58ce515cba89dab9b479b5e3eceb9fbb7c0a8",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "26fc83486be252e63579cca9d53f3132672555c7",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "c31c2918c15d4085e463e00f6a4977fd67913b76",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "801e6862d49d669808c9315a7ad43d0272b1d1f1",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "0996a1164fa84dd6288403e5161f337581fc21cb",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ]
+    },
+    {
+      "sha": "64fc4b1400ac5bc7526c472f8efeacb91980f2a6",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ]
+    },
+    {
+      "sha": "6b89998f4f0257b967bba12e2434135964cf135b",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "e0b078c802d6456d106e6ec681d1aa93d6c4d055",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "395b4cd89726e921af481d4c8c056bf8fa535ae6",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "68fa7b393d007c0d0c466c29ae4da5738bf54af2",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "6ea425ab943ebdd8aad1de1c84896de92d0270d8",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "0210244d27bf2b5e731e4ee40350504934e812a4",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "6042dbb3551c38a740e13de28f44fe9a814e6f0a",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "56d14d7cd7e72975b1cbf0ddcd2cc17c16763249",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "538d0ccf957c041f1e3886864bdf5e4ca693e9ec",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%"
+      ]
+    },
+    {
+      "sha": "27c43bccd19a591e4ca30560b52d4c5a9e8b81c9",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 90%"
+      ]
+    },
+    {
+      "sha": "45a3197c9afda2f7c7d87e7d986908f885c20b02",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%"
+      ]
+    },
+    {
+      "sha": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "49cfec920349f17ace1b287b18d1b0fe2d956b03",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "127468345afcc7a24e6a254f712d6b75a54713e8",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ]
+    },
+    {
+      "sha": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "5924926051f84720c110ab1421430499fadf918a",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "4f668b76d26b26e7162d8654fb946c484fd42539",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%"
+      ]
+    },
+    {
+      "sha": "8a6173342dcd7683b9d9549005a5af819b8abc90",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%"
+      ]
+    },
+    {
+      "sha": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%"
+      ]
+    },
+    {
+      "sha": "11681680d316bee7c8c184e45b699af7c1bd2188",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 97%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "a4c358efd91131e7fb714370726997b5c2d076cb",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "de5813532adb51b964b222644ae0519bd814f8ef",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 93%"
+      ]
+    },
+    {
+      "sha": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 92%"
+      ]
+    },
+    {
+      "sha": "cbc74e823e7af96f8df1a1320498998e5de2b328",
+      "signed": true,
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 90%"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "path": "docs/plans/2026-10-19-unit-suite-green.md",
+      "prohibitedFormatLines": []
+    },
+    {
+      "path": "docs/receipts/hv/unitgreen-r14-prelaunch.pr-description.md",
+      "prohibitedFormatLines": []
+    }
+  ],
+  "currentMarkerKeyCountChecked": 1,
+  "changedBlobsChecked": 5972,
+  "currentMarkerKeyMatches": [],
+  "trackedStatus": []
+}

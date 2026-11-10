@@ -1,0 +1,11 @@
+{
+  "file": "ug-r12z3c-final-linux-traceability-1.meta.json",
+  "name": "ug-r12z3c-final-linux-traceability-1",
+  "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+  "startedLocal": "2026-11-04T20:22:30",
+  "target": "ValidateTraceability",
+  "extraArgs": [],
+  "dirtyCount": 306,
+  "nonDocs": [],
+  "tracked": []
+}

@@ -19,6 +19,13 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// FR-MCP-MEMORY-008 and TR-MCP-FED-MEMORY-001 using isolated EF stores and
 /// signed federation operation envelopes.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>FR-MCP-103; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): CreateProvider registers the envelope signer with a settable clock fixed at one instant, so the envelope expiry and future-issue checks cannot change a case's outcome (the sibling sweep of hostile validation round 12 finding R12-F2, S18 to S20); the assertions are unchanged.</description></item>
+/// <item><term>2026-11-05</term><description>TEST-MCP-MEMORY-FED-001; FR-MCP-MEMORY-008; TR-MCP-FED-MEMORY-001: the cases use generic proxy ids (proxy-a for the former first lab machine name, proxy-b for the second) instead of lab machine names, because the eleventh holistic read before hostile validation round 13 (findings g1 and d1) found them in this file, which the plan 27.7 scrub of this pull request covers in every file it touches; each value meets the same values as before, so every assertion checks the same relation.</description></item>
+/// </list>
+/// </remarks>
 public sealed class MemoryFederationStateAdapterTests
 {
     private const string WorkspaceA = @"Q:\__mcp_unit_test__\QBrainAi";
@@ -242,7 +249,7 @@ public sealed class MemoryFederationStateAdapterTests
         var apply = provider.GetRequiredService<IFederationOperationApplyService>();
         var controller = CreateController(provider, topology, signer, apply);
         var operation = CreateMemoryCreateOperation("op-memory-signed", "MEMORY-OPERATOR-006", "Signed apply", WorkspaceA);
-        var envelope = signer.Sign(operation, "PAYTON-LEGION2");
+        var envelope = signer.Sign(operation, "proxy-a");
 
         var result = await controller.RecordEnvelope(envelope, CancellationToken.None).ConfigureAwait(true);
 
@@ -269,7 +276,7 @@ public sealed class MemoryFederationStateAdapterTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-memory-stale",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "proxy-a",
             Domain = "memory",
             ResourceId = "MEMORY-OPERATOR-007",
             GlobalWorkspaceId = WorkspaceA,
@@ -278,7 +285,7 @@ public sealed class MemoryFederationStateAdapterTests
             BodyBase64 = Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(new MemoryUpdateRequest { Text = "Proxy stale" }, s_jsonOptions)),
             BaseVersion = "1",
         };
-        var envelope = signer.Sign(operation, "PAYTON-LEGION2");
+        var envelope = signer.Sign(operation, "proxy-a");
 
         var result = await controller.RecordEnvelope(envelope, CancellationToken.None).ConfigureAwait(true);
 
@@ -286,7 +293,7 @@ public sealed class MemoryFederationStateAdapterTests
         var response = Assert.IsType<FederationOperationResponse>(ok.Value);
         Assert.Equal("conflict", response.Status);
 
-        var conflicts = await topology.ListConflictsAsync("PAYTON-LEGION2", openOnly: true, CancellationToken.None).ConfigureAwait(true);
+        var conflicts = await topology.ListConflictsAsync("proxy-a", openOnly: true, CancellationToken.None).ConfigureAwait(true);
         var conflict = Assert.Single(conflicts);
         Assert.Equal("memory", conflict.Domain);
         Assert.Equal("MEMORY-OPERATOR-007", conflict.ResourceId);
@@ -306,20 +313,20 @@ public sealed class MemoryFederationStateAdapterTests
     {
         using var hub = CreateProvider();
         var hubTopology = hub.GetRequiredService<IFederationTopologyService>();
-        await hubTopology.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-LEGION2" }, CancellationToken.None).ConfigureAwait(true);
-        await hubTopology.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-DESKTOP" }, CancellationToken.None).ConfigureAwait(true);
+        await hubTopology.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "proxy-a" }, CancellationToken.None).ConfigureAwait(true);
+        await hubTopology.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "proxy-b" }, CancellationToken.None).ConfigureAwait(true);
         var hubSigner = hub.GetRequiredService<IFederationEnvelopeSigner>();
         var hubApply = hub.GetRequiredService<IFederationOperationApplyService>();
         var hubController = CreateController(hub, hubTopology, hubSigner, hubApply);
         var operation = CreateMemoryCreateOperation("op-memory-fanout", "MEMORY-OPERATOR-008", "Fanout apply", WorkspaceA);
 
-        var applyResult = await hubController.RecordEnvelope(hubSigner.Sign(operation, "PAYTON-LEGION2"), CancellationToken.None).ConfigureAwait(true);
+        var applyResult = await hubController.RecordEnvelope(hubSigner.Sign(operation, "proxy-a"), CancellationToken.None).ConfigureAwait(true);
 
         var applyOk = Assert.IsType<OkObjectResult>(applyResult.Result);
         var applyResponse = Assert.IsType<FederationOperationResponse>(applyOk.Value);
         Assert.Equal("applied", applyResponse.Status);
 
-        var syncResult = await hubController.Sync("PAYTON-DESKTOP", 0, CancellationToken.None).ConfigureAwait(true);
+        var syncResult = await hubController.Sync("proxy-b", 0, CancellationToken.None).ConfigureAwait(true);
         var syncOk = Assert.IsType<OkObjectResult>(syncResult.Result);
         var syncItems = Assert.IsAssignableFrom<IReadOnlyList<FederationSyncItem>>(syncOk.Value);
         var syncItem = Assert.Single(syncItems);
@@ -361,7 +368,7 @@ public sealed class MemoryFederationStateAdapterTests
         => new()
         {
             OperationId = operationId,
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "proxy-a",
             Domain = "memory",
             ResourceId = memoryId,
             GlobalWorkspaceId = workspaceId,
@@ -401,6 +408,13 @@ public sealed class MemoryFederationStateAdapterTests
         await db.SaveChangesAsync().ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// FR-MCP-103; TR-MCP-USECASE-018 AC-006: a service provider with federation options (signing enabled, a fixed secret,
+    /// a 300 second envelope TTL), an isolated in-memory database for workspace A, the federation state adapters, topology
+    /// and apply services, and an envelope signer reading a settable clock fixed at the first age-boundary reference.
+    /// </summary>
+    /// <returns>The provider.</returns>
+    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed in slice Z4 to register the envelope signer with a settable clock fixed at one instant (the sibling sweep of hostile validation round 12 finding R12-F2, S18 to S20), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static ServiceProvider CreateProvider()
     {
         var services = new ServiceCollection();
@@ -428,7 +442,11 @@ public sealed class MemoryFederationStateAdapterTests
         services.AddSingleton<FederationStateAdapterRegistry>();
         services.AddSingleton<IFederationTopologyService, FederationTopologyService>();
         services.AddSingleton<IFederationOperationApplyService, FederationOperationApplyService>();
-        services.AddSingleton<IFederationEnvelopeSigner, FederationEnvelopeSigner>();
+        // TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): the signer reads a settable clock fixed at one instant, so the
+        // envelope expiry and future-issue checks cannot change a case's outcome (hostile validation round 12 finding R12-F2).
+        services.AddSingleton<IFederationEnvelopeSigner>(provider => new FederationEnvelopeSigner(
+            provider.GetRequiredService<IOptionsMonitor<FederationOptions>>(),
+            new QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0])));
         return services.BuildServiceProvider();
     }
 }

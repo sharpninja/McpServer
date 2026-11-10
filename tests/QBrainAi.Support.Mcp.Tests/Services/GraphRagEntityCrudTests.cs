@@ -4,6 +4,7 @@ using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Options;
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -17,6 +18,12 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// (Create, Get, Update, List, Delete) in <see cref="GraphRagService"/>
 /// using an in-memory EF Core database.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-03</term><description>FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended "This covers every recorded time a unit test checks, including the creation and update times a service stamps on a record it stores"): the timestamp cases give the service a ScriptedTimeProvider and assert the exact scripted times through StampedTimeContractTests, instead of a range around the live clock and a sleep between create and update, because the sibling sweep before round 11 of hostile validation round 10 finding R10-F3 found both (operator 2026-11-03: "don't gate on me between rounds").</description></item>
+/// </list>
+/// </remarks>
 public sealed class GraphRagEntityCrudTests : IDisposable
 {
     private const string WorkspacePath = @"E:\tests\graphrag-entity-crud";
@@ -62,22 +69,27 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     }
 
     /// <summary>
-    /// FR-MCP-079: Verifies that CreateEntityAsync sets both CreatedAtUtc and UpdatedAtUtc.
+    /// FR-MCP-079: Verifies that CreateEntityAsync sets both CreatedAtUtc and UpdatedAtUtc to one reading of the
+    /// service's clock, and that each UpdateEntityAsync sets UpdatedAtUtc to the next reading and keeps CreatedAtUtc,
+    /// for every row of StampedTimeContractTests (scripted times, no live clock, no sleep).
     /// </summary>
+    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): asserts the exact scripted times through StampedTimeContractTests.AssertStampsAsync instead of a range around DateTime.UtcNow (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
+    /// <returns>The test task.</returns>
     [Fact]
-    public async Task CreateEntity_SetsTimestamps()
-    {
-        var sut = CreateSut();
-        var before = DateTime.UtcNow.AddSeconds(-1);
-        var request = new GraphEntityRequest { Name = "Bob", EntityType = "person" };
+    public Task CreateEntity_SetsTimestamps() =>
+        StampedTimeContractTests.AssertStampsAsync(async (clock, updates) =>
+        {
+            var sut = CreateSut(clock);
+            var entity = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "Bob", EntityType = "person" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            for (var update = 0; update < updates; update++)
+            {
+                var updated = await sut.UpdateEntityAsync(entity.Id, new GraphEntityRequest { Name = $"Bob {update}", EntityType = "person" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+                Assert.NotNull(updated);
+                entity = updated;
+            }
 
-        var result = await sut.CreateEntityAsync(request, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var after = DateTime.UtcNow.AddSeconds(1);
-
-        Assert.InRange(result.CreatedAtUtc, before, after);
-        Assert.InRange(result.UpdatedAtUtc, before, after);
-        Assert.Equal(result.CreatedAtUtc, result.UpdatedAtUtc);
-    }
+            return (StampedTimeContractTests.AsUtc(entity.CreatedAtUtc), StampedTimeContractTests.AsUtc(entity.UpdatedAtUtc));
+        });
 
     /// <summary>
     /// FR-MCP-079: Verifies that GetEntityAsync returns null for a nonexistent entity.
@@ -95,14 +107,12 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     /// <summary>
     /// FR-MCP-079: Verifies that UpdateEntityAsync modifies fields and bumps UpdatedAtUtc.
     /// </summary>
+    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the service reads a ScriptedTimeProvider (creation time, then update time), and the case asserts both exact times instead of sleeping 10 ms and checking that the update time did not go back (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     [Fact]
     public async Task UpdateEntity_ModifiesFieldsAndBumpsTimestamp()
     {
-        var sut = CreateSut();
+        var sut = CreateSut(new ScriptedTimeProvider(StampedTimeContractTests.Created, StampedTimeContractTests.FirstUpdate));
         var created = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "Original", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-        // Small delay to ensure timestamp difference
-        await Task.Delay(10, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var updated = await sut.UpdateEntityAsync(created.Id, new GraphEntityRequest
         {
@@ -117,7 +127,9 @@ public sealed class GraphRagEntityCrudTests : IDisposable
         Assert.Equal("organization", updated.EntityType);
         Assert.Equal("Updated description", updated.Description);
         Assert.Equal("""{"key":"value"}""", updated.Metadata);
-        Assert.True(updated.UpdatedAtUtc >= created.UpdatedAtUtc);
+        Assert.Equal(StampedTimeContractTests.Created, StampedTimeContractTests.AsUtc(created.UpdatedAtUtc));
+        Assert.Equal(StampedTimeContractTests.Created, StampedTimeContractTests.AsUtc(updated.CreatedAtUtc));
+        Assert.Equal(StampedTimeContractTests.FirstUpdate, StampedTimeContractTests.AsUtc(updated.UpdatedAtUtc));
     }
 
     /// <summary>
@@ -188,7 +200,11 @@ public sealed class GraphRagEntityCrudTests : IDisposable
         Assert.False(deleted);
     }
 
-    private GraphRagService CreateSut()
+    /// <summary>FR-MCP-079: the service under test over the in-memory database, stamping times from <paramref name="clock"/>.</summary>
+    /// <param name="clock">The clock the service stamps entity times from; null keeps the service's system clock.</param>
+    /// <returns>The service.</returns>
+    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): takes the clock the timestamp cases script (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
+    private GraphRagService CreateSut(TimeProvider? clock = null)
     {
         var graphRagOptions = Microsoft.Extensions.Options.Options.Create(new GraphRagOptions
         {
@@ -225,6 +241,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
             NullLogger<GraphRagService>.Instance,
             _db,
             embeddingService,
-            vectorIndexService);
+            vectorIndexService,
+            clock);
     }
 }

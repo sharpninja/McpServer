@@ -18,10 +18,9 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// TEST-MCP-TRIAGESTORE-007: session-log Submit uses a configurable SaveChanges budget
 /// that defaults to 30 seconds. Triage intake stays on the 5 second shared default.
 /// </summary>
+/// <remarks>2026-11-07, TEST-MCP-TRIAGESTORE-007; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 2 Category=Integration cases (ShippedAppSettings_AndHosts_RegisterThirtySecondSubmitBudget and SubmitAsync_SaveLongerThanFiveSeconds_CompletesUnderDefaultBudget) and the helpers only they use (WorkspacePath, DelayedSaveChangesInterceptor and CreateSession) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the unit cases and the class attributes are unchanged.</remarks>
 public sealed class SessionLogSubmitBudgetTests
 {
-    private const string WorkspacePath = @"E:\tests\sessionlog-submit-budget";
-
     /// <summary>The options default and the recommended deploy value are 30 seconds.</summary>
     [Fact]
     public void DefaultSubmitBudget_IsThirtySeconds()
@@ -72,96 +71,5 @@ public sealed class SessionLogSubmitBudgetTests
 
         Assert.True(result.Failed);
         Assert.Contains("SubmitCommandBudgetSeconds", result.FailureMessage, StringComparison.Ordinal);
-    }
-
-    /// <summary>The shipped appsettings knob and host registration use the 30 second Submit budget.</summary>
-    [Fact]
-    public void ShippedAppSettings_AndHosts_RegisterThirtySecondSubmitBudget()
-    {
-        var root = RepositoryEvidenceTestSupport.ResolveRepositoryRoot();
-        var appSettings = File.ReadAllText(Path.Combine(root, "src", "QBrainAi.Support.Mcp", "appsettings.yaml"));
-        var program = File.ReadAllText(Path.Combine(root, "src", "QBrainAi.Support.Mcp", "Program.cs"));
-        var stdio = File.ReadAllText(Path.Combine(root, "src", "QBrainAi.Support.Mcp", "McpStdio", "McpStdioHost.cs"));
-
-        Assert.Contains("SubmitCommandBudgetSeconds: 30", appSettings, StringComparison.Ordinal);
-        Assert.Contains("AddOptions<SessionLogSubmitOptions>()", program, StringComparison.Ordinal);
-        Assert.Contains("SessionLogSubmitOptionsValidator", program, StringComparison.Ordinal);
-        Assert.Contains("AddOptions<SessionLogSubmitOptions>()", stdio, StringComparison.Ordinal);
-        Assert.Contains("SessionLogSubmitOptionsValidator", stdio, StringComparison.Ordinal);
-    }
-
-    /// <summary>
-    /// A Submit SaveChanges that outlasts the 5 second intake default completes when the
-    /// service uses the 30 second default budget.
-    /// </summary>
-    [Fact]
-    public async Task SubmitAsync_SaveLongerThanFiveSeconds_CompletesUnderDefaultBudget()
-    {
-        var options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseInMemoryDatabase($"SessionLogSubmitBudget_{Guid.NewGuid():N}")
-            .AddInterceptors(new DelayedSaveChangesInterceptor(TimeSpan.FromSeconds(6)))
-            .Options;
-        await using var db = new McpDbContext(options);
-        db.Database.EnsureCreated();
-        db.OverrideWorkspaceId(WorkspacePath);
-        var sut = new SessionLogService(
-            db,
-            NullLogger<SessionLogService>.Instance,
-            Substitute.For<IChangeEventBus>(),
-            new WorkspaceContext { WorkspacePath = WorkspacePath });
-
-        var clock = Stopwatch.StartNew();
-        var id = await sut.SubmitAsync(
-            CreateSession("Cursor-20260928T215100Z-submit-budget"),
-            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        clock.Stop();
-
-        Assert.True(id > 0);
-        Assert.True(clock.Elapsed >= TimeSpan.FromSeconds(5), $"Save finished before the old 5 second cancel: {clock.Elapsed}.");
-        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"Save exceeded the 30 second Submit budget: {clock.Elapsed}.");
-    }
-
-    /// <summary>Delays SaveChanges for a fixed duration unless the caller cancels.</summary>
-    private sealed class DelayedSaveChangesInterceptor : SaveChangesInterceptor
-    {
-        private readonly TimeSpan _delay;
-
-        /// <summary>Initializes the interceptor.</summary>
-        /// <param name="delay">How long SavingChanges waits.</param>
-        public DelayedSaveChangesInterceptor(TimeSpan delay) => _delay = delay;
-
-        /// <inheritdoc />
-        public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
-            DbContextEventData eventData,
-            InterceptionResult<int> result,
-            CancellationToken cancellationToken = default)
-        {
-            await Task.Delay(_delay, cancellationToken).ConfigureAwait(false);
-            return result;
-        }
-    }
-
-    private static UnifiedSessionLogDto CreateSession(string sessionId)
-    {
-        return new UnifiedSessionLogDto
-        {
-            SourceType = "Cursor",
-            SessionId = sessionId,
-            Title = "Submit budget",
-            Status = "in_progress",
-            TurnCount = 1,
-            Turns =
-            [
-                new UnifiedRequestEntryDto
-                {
-                    RequestId = "req-20260928T215100Z-submit-budget",
-                    Timestamp = "2026-09-28T21:51:00Z",
-                    QueryText = "submit budget",
-                    Status = "in_progress",
-                    PlanFile = SessionLogTurnContextValidator.NoneSentinel,
-                    TodoId = SessionLogTurnContextValidator.NoneSentinel,
-                },
-            ],
-        };
     }
 }

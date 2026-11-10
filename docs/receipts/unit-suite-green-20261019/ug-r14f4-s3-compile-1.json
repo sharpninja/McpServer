@@ -1,0 +1,99 @@
+{
+  "name": "ug-r14f4-s3-compile-1",
+  "kind": "compile",
+  "retrospective": false,
+  "note": "Written when the run ended, from its own meta, exit and log files (Save-CompileReceipt.ps1).",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "runHead": "ff525e5507aed4e1567e4f0330199a5e9b85ce75",
+  "runDirtyPaths": [
+    " M QBrainAi.sln",
+    " M build/Build.TestDependencies.cs",
+    " M build/IntegrationLaneProjects.cs",
+    " M build/IntegrationLaneProjectsContracts.cs",
+    " M src/QBrainAi.QBAgent/QBrainAi.QBAgent.csproj",
+    " M tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/Directory.Build.targets",
+    " M tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    " M tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+    " M tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+    " M tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-buildtests-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-buildtests-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s0-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s1-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s1-mockgate-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-binding-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-binding-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s2-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s3-mockgate-1/",
+    "?? tests/QBrainAi.McpAgent.IntegrationTests/",
+    "?? tests/QBrainAi.QBAgent.IntegrationTests/",
+    "?? tests/QBrainAi.Repl.IntegrationTests/HandoffSkillDelegationTests.cs",
+    "?? tests/QBrainAi.Repl.IntegrationTests/MemorySchemaContractTests.cs",
+    "?? tests/TestSupport.Shared/HandoffRecordingHandler.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "Compile"
+  ],
+  "startedLocal": "2026-11-07T09:08:49",
+  "endedLocal": "2026-11-07T09:11:13",
+  "exitCode": 0,
+  "status": "passed",
+  "buildSucceededLine": "Build succeeded on 11/7/2026 9:11:13 AM. ＼（＾ᴗ＾）／",
+  "errorDiagnostics": 0,
+  "warningDiagnostics": 0,
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-s3-compile-1.out.log",
+  "logSha256": "3A6097865A264EE1831EC73DD8FC6C7C74B1613D90DC8D02A0535AE7F125E0F2",
+  "sources": [
+    {
+      "path": "build/IntegrationLaneProjects.cs",
+      "sha256": "8CE7B857986AEFFB5E83F0182E0A8A9F1F3A9840777DA907C9DB94785AD9BA20"
+    },
+    {
+      "path": "build/IntegrationLaneProjectsContracts.cs",
+      "sha256": "2BD21E9F22036969144C895615FE22BC6706AADC01749D7849CCE7280831D87C"
+    },
+    {
+      "path": "build/Build.TestDependencies.cs",
+      "sha256": "45C281D76862A76A8411DA0D8BA2F284BDA954E93CDCCB94BAAA9AA96BF0168D"
+    },
+    {
+      "path": "QBrainAi.sln",
+      "sha256": "61D30D29650ED7CC6669231C0A3ED3C9A1BF2045402E93F18EAB92A920CE82C3"
+    },
+    {
+      "path": "tests/Directory.Build.targets",
+      "sha256": "D9660DF58BE804CF6FD21142F48779FF1699D707FA1A300C18AF9F437A1F5E70"
+    },
+    {
+      "path": "src/QBrainAi.QBAgent/QBrainAi.QBAgent.csproj",
+      "sha256": "15E4B74D85394EEA636FFCD627E99104949FB916AA9ED0D827402408ACA1AB1D"
+    },
+    {
+      "path": "tests/QBrainAi.McpAgent.IntegrationTests/QBrainAi.McpAgent.IntegrationTests.csproj",
+      "sha256": "48FE008FD270FA1915E4A255C7A898F10D55B8AD5885659800529C5042BD7EF2"
+    },
+    {
+      "path": "tests/QBrainAi.QBAgent.IntegrationTests/QBrainAi.QBAgent.IntegrationTests.csproj",
+      "sha256": "D2BB26A54FF3A838C829BF30AD9E7CD6EE06694F929DBEB78D248813C2BD4D39"
+    },
+    {
+      "path": "tests/TestSupport.Shared/HandoffRecordingHandler.cs",
+      "sha256": "E5D4ADC4E7D076A9B4024FD31E06120EB140C73125B6F8B1253397C7C4D9A7E8"
+    }
+  ],
+  "metaFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-s3-compile-1.meta.json",
+  "metaSha256": "0FF5CEDC314A27D84E7DFD88F2592521BAD5DB70ABEA0E45B41EFF6A19A0D47A",
+  "writtenLocal": "2026-11-07T09:12:18",
+  "minutesAfterRunEnd": 1.09,
+  "writtenBy": "ClaudeCode"
+}

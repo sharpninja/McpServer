@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="3eeda7f2-3cbf-4035-89fa-de727e4d38b7" name="@LAB-OMARCHY 2026-11-02 22:34:49" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-02T22:34:49.9415017-06:00" queuing="2026-11-02T22:34:49.9415019-06:00" start="2026-11-02T22:34:48.1528098-06:00" finish="2026-11-02T22:34:49.9529029-06:00" />
+  <TestSettings name="default" id="cacd9e19-f288-4a5b-9a20-49e790cdf7d7">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-02_22_34_49" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="db147c59-fe94-4229-ab76-c742aeaedca9" testId="f6693c1d-316e-68d6-e840-99f7858befc1" testName="QBrainAi.QBAgent.Tests.Skills.AuthoredSkillsTests.AuthoredSkills_AllParseAndDiscover" computerName="LAB-OMARCHY" duration="00:00:00.0250362" startTime="2026-11-02T22:34:49.7009300-06:00" endTime="2026-11-02T22:34:49.7362730-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="db147c59-fe94-4229-ab76-c742aeaedca9" />
+    <UnitTestResult executionId="979b3e28-40cf-40e2-9b06-c8bf38087b25" testId="4c2f0283-497c-83df-92d4-c668f0ebb651" testName="QBrainAi.QBAgent.Tests.Skills.AuthoredSkillsTests.AuthoredSkills_HaveBodies" computerName="LAB-OMARCHY" duration="00:00:00.0015847" startTime="2026-11-02T22:34:49.7431012-06:00" endTime="2026-11-02T22:34:49.7447876-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="979b3e28-40cf-40e2-9b06-c8bf38087b25" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.QBAgent.Tests.Skills.AuthoredSkillsTests.AuthoredSkills_AllParseAndDiscover" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.qbagent.tests/bin/debug/net10.0/qbrainai.qbagent.tests.dll" id="f6693c1d-316e-68d6-e840-99f7858befc1">
+      <Execution id="db147c59-fe94-4229-ab76-c742aeaedca9" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/bin/Debug/net10.0/QBrainAi.QBAgent.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.QBAgent.Tests.Skills.AuthoredSkillsTests" name="AuthoredSkills_AllParseAndDiscover" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.QBAgent.Tests.Skills.AuthoredSkillsTests.AuthoredSkills_HaveBodies" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.qbagent.tests/bin/debug/net10.0/qbrainai.qbagent.tests.dll" id="4c2f0283-497c-83df-92d4-c668f0ebb651">
+      <Execution id="979b3e28-40cf-40e2-9b06-c8bf38087b25" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/bin/Debug/net10.0/QBrainAi.QBAgent.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.QBAgent.Tests.Skills.AuthoredSkillsTests" name="AuthoredSkills_HaveBodies" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="f6693c1d-316e-68d6-e840-99f7858befc1" executionId="db147c59-fe94-4229-ab76-c742aeaedca9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4c2f0283-497c-83df-92d4-c668f0ebb651" executionId="979b3e28-40cf-40e2-9b06-c8bf38087b25" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.25]   Discovering: QBrainAi.QBAgent.Tests
+[xUnit.net 00:00:00.60]   Discovered:  QBrainAi.QBAgent.Tests
+[xUnit.net 00:00:00.86]   Starting:    QBrainAi.QBAgent.Tests
+[xUnit.net 00:00:01.00]   Finished:    QBrainAi.QBAgent.Tests (ID = '7601ec6b16d2f3b708e2f11598620052a07be33a9bce9cf5776922f6eaa4ae32')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

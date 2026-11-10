@@ -1,0 +1,88 @@
+[2026-11-04T15:18:47] Phase 1/3: checks worktree=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 head=121992b38ce4e2e0d97673d77106b3826c76fb38 version=1.4.42-pr87.121992b3 service=mcpserver.service install=/opt/mcpserver/app port=7147 whatIf=False
+[2026-11-04T15:18:47]   uid=0
+[2026-11-04T15:18:47]   HEAD 121992b38ce4e2e0d97673d77106b3826c76fb38
+[2026-11-04T15:18:47]   changesOutsideDocs=0
+[2026-11-04T15:18:47]   dotnet=/home/sharpninja/.local/bin/dotnet real=/home/sharpninja/.dotnet/dotnet root=/home/sharpninja/.dotnet
+[2026-11-04T15:18:47] Phase 2/3: ./build.ps1 UpdateService --skip-version-bump --service-name mcpserver.service --install-path /opt/mcpserver/app --port 7147 --package-version 1.4.42-pr87.121992b3
+[2026-11-04T15:19:08]   NUKE ​
+[2026-11-04T15:19:08]   NUKE ███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+[2026-11-04T15:19:08]   NUKE ████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+[2026-11-04T15:19:08]   NUKE ██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+[2026-11-04T15:19:08]   NUKE ██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+[2026-11-04T15:19:08]   NUKE ██║ ╚████║╚██████╔╝██║  ██╗███████╗
+[2026-11-04T15:19:08]   NUKE ╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+[2026-11-04T15:19:08]   NUKE ​
+[2026-11-04T15:19:08]   NUKE NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)
+[2026-11-04T15:19:08]   NUKE ​
+[2026-11-04T15:19:09]   NUKE ​
+[2026-11-04T15:19:09]   NUKE ╬══════════════════
+[2026-11-04T15:19:09]   NUKE ║ UpdateService
+[2026-11-04T15:19:09]   NUKE ╬═════════
+[2026-11-04T15:19:09]   NUKE ​
+[2026-11-04T15:19:09]   NUKE 15:19:09 [INF] > /home/sharpninja/.dotnet/dotnet publish /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj --configuration Release --self-contained true --runtime linux-x64 --property:PublishSingleFile=true --property:IncludeNativeLibrariesForSelfExtract=true --property:PackageVersion=1.4.42-pr87.121992b3 --property:Version=1.4.42-pr87.121992b3 --property:InformationalVersion=1.4.42-pr87.121992b3 --output /tmp/QBrainAi-linux-publish-7b9aca2bfbc94752ab48eca0d5c0ba7b
+[2026-11-04T15:19:10]   NUKE 15:19:10 [DBG]   Determining projects to restore...
+[2026-11-04T15:19:34]   NUKE 15:19:34 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.SessionLog.Transcripts/QBrainAi.SessionLog.Transcripts.csproj (in 23.13 sec).
+[2026-11-04T15:19:34]   NUKE 15:19:34 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/QBrainAi.Client.csproj (in 23.13 sec).
+[2026-11-04T15:19:34]   NUKE 15:19:34 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/QBrainAi.ServiceDefaults.csproj (in 23.13 sec).
+[2026-11-04T15:19:34]   NUKE 15:19:34 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/QBrainAi.TransactionSecurity.csproj (in 23.13 sec).
+[2026-11-04T15:19:34]   NUKE 15:19:34 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/QBrainAi.Cqrs.Mvvm.csproj (in 23.13 sec).
+[2026-11-04T15:19:34]   NUKE 15:19:34 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/QBrainAi.Cqrs.csproj (in 23.13 sec).
+[2026-11-04T15:19:34]   NUKE 15:19:34 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/QBrainAi.Common.AgentCli.csproj (in 23.13 sec).
+[2026-11-04T15:19:34]   NUKE 15:19:34 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/QBrainAi.Repl.Core.csproj (in 23.13 sec).
+[2026-11-04T15:19:34]   NUKE 15:19:34 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/QBrainAi.McpAgent.csproj (in 23.27 sec).
+[2026-11-04T15:19:46]   NUKE 15:19:46 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqlServerMigrations/QBrainAi.Storage.SqlServerMigrations.csproj (in 35.1 sec).
+[2026-11-04T15:19:46]   NUKE 15:19:46 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqliteMigrations/QBrainAi.Storage.SqliteMigrations.csproj (in 35.1 sec).
+[2026-11-04T15:19:46]   NUKE 15:19:46 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/QBrainAi.Storage.csproj (in 35.09 sec).
+[2026-11-04T15:19:46]   NUKE 15:19:46 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/QBrainAi.Storage.PostgreSqlMigrations.csproj (in 35.12 sec).
+[2026-11-04T15:19:46]   NUKE 15:19:46 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/QBrainAi.Services.csproj (in 35.19 sec).
+[2026-11-04T15:19:46]   NUKE 15:19:46 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.GraphRag/QBrainAi.GraphRag.csproj (in 35.21 sec).
+[2026-11-04T15:19:46]   NUKE 15:19:46 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj (in 35.22 sec).
+[2026-11-04T15:19:53]   NUKE 15:19:53 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Release/net10.0/QBrainAi.Common.AgentCli.dll
+[2026-11-04T15:19:53]   NUKE 15:19:53 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Release/net10.0/QBrainAi.Cqrs.dll
+[2026-11-04T15:19:53]   NUKE 15:19:53 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Release/net10.0/QBrainAi.ServiceDefaults.dll
+[2026-11-04T15:19:53]   NUKE 15:19:53 [DBG]   QBrainAi.SessionLog.Transcripts -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.SessionLog.Transcripts/bin/Release/net10.0/QBrainAi.SessionLog.Transcripts.dll
+[2026-11-04T15:19:53]   NUKE 15:19:53 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Release/net10.0/QBrainAi.TransactionSecurity.dll
+[2026-11-04T15:19:54]   NUKE 15:19:54 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/bin/Release/net10.0/QBrainAi.Cqrs.Mvvm.dll
+[2026-11-04T15:20:09]   NUKE 15:20:09 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Release/net10.0/QBrainAi.Client.dll
+[2026-11-04T15:20:11]   NUKE 15:20:11 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Release/net10.0/QBrainAi.Repl.Core.dll
+[2026-11-04T15:20:14]   NUKE 15:20:14 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Release/net10.0/QBrainAi.Storage.dll
+[2026-11-04T15:20:17]   NUKE 15:20:17 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Release/net10.0/QBrainAi.McpAgent.dll
+[2026-11-04T15:20:31]   NUKE 15:20:31 [DBG]   QBrainAi.Storage.SqliteMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqliteMigrations/bin/Release/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+[2026-11-04T15:20:32]   NUKE 15:20:32 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/bin/Release/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+[2026-11-04T15:20:34]   NUKE 15:20:34 [DBG]   QBrainAi.Storage.SqlServerMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqlServerMigrations/bin/Release/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+[2026-11-04T15:20:40]   NUKE 15:20:40 [DBG]   QBrainAi.Services -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/bin/Release/net10.0/QBrainAi.Services.dll
+[2026-11-04T15:20:41]   NUKE 15:20:41 [DBG]   QBrainAi.GraphRag -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.GraphRag/bin/Release/net10.0/QBrainAi.GraphRag.dll
+[2026-11-04T15:20:48]   NUKE 15:20:48 [DBG]   QBrainAi.Support.Mcp -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/bin/Release/net10.0/linux-x64/QBrainAi.Support.Mcp.dll
+[2026-11-04T15:20:50]   NUKE 15:20:50 [DBG]   QBrainAi.Support.Mcp -> /tmp/QBrainAi-linux-publish-7b9aca2bfbc94752ab48eca0d5c0ba7b/
+[2026-11-04T15:20:50]   NUKE 15:20:50 [ERR] Target UpdateService has thrown an exception
+[2026-11-04T15:20:50]   NUKE System.ArgumentException: An item with the same key has already been added. Key: EnvironmentFiles
+[2026-11-04T15:20:50]   NUKE    at System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)
+[2026-11-04T15:20:50]   NUKE    at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+[2026-11-04T15:20:50]   NUKE    at LinuxServiceHelper.GetUnit(String name) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/LinuxServiceHelper.cs:line 158
+[2026-11-04T15:20:50]   NUKE    at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/LinuxServiceHelper.cs:line 75
+[2026-11-04T15:20:50]   NUKE    at Build.UpdateLinuxService(ServiceUpdatePlatform platform) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.UpdateService.cs:line 269
+[2026-11-04T15:20:50]   NUKE    at Build.<get_UpdateService>b__219_1() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.UpdateService.cs:line 49
+[2026-11-04T15:20:50]   NUKE    at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+[2026-11-04T15:20:50]   NUKE    at System.Collections.Generic.List`1.ForEach(Action`1 action)
+[2026-11-04T15:20:50]   NUKE    at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+[2026-11-04T15:20:50]   NUKE ​
+[2026-11-04T15:20:50]   NUKE ╬══════════════════════
+[2026-11-04T15:20:50]   NUKE ║ Errors & Warnings
+[2026-11-04T15:20:50]   NUKE ╬═════════════
+[2026-11-04T15:20:50]   NUKE ​
+[2026-11-04T15:20:50]   NUKE [ERR] UpdateService: Target UpdateService has thrown an exception
+[2026-11-04T15:20:50]   NUKE ​
+[2026-11-04T15:20:50]   NUKE ═══════════════════════════════════════
+[2026-11-04T15:20:50]   NUKE Target             Status      Duration
+[2026-11-04T15:20:50]   NUKE ───────────────────────────────────────
+[2026-11-04T15:20:50]   NUKE UpdateService      Failed          1:41   // ArgumentException: An item with the same key has already been added. Key: EnvironmentFiles
+[2026-11-04T15:20:50]   NUKE ───────────────────────────────────────
+[2026-11-04T15:20:50]   NUKE Total                              1:41
+[2026-11-04T15:20:50]   NUKE ═══════════════════════════════════════
+[2026-11-04T15:20:50]   NUKE ​
+[2026-11-04T15:20:50]   NUKE Build failed on 11/4/2026 3:20:50 PM. (╯°□°）╯︵ ┻━┻
+[2026-11-04T15:20:50]   nukeExit=255
+[2026-11-04T15:20:50] Phase 3/3: give root-created files in the worktree back to sharpninja
+[2026-11-04T15:20:52]   rootOwned=2303
+[2026-11-04T15:21:06]   rootOwnedAfter=0
+[2026-11-04T15:21:06] END exit=255

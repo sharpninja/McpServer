@@ -1,0 +1,31 @@
+RECEIPT started=2026-11-05T16:02:30 ended=2026-11-05T16:02:31 host=LAB-OMARCHY exit=1
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Test-CommentOnlyDiff-v2.ps1 sha256=57E4515CAD25ACC926B2B121D13D96F94DE52BBB9A819250A561E4C4D752A860
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Paths:tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs,tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs,tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs,tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs,tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs,tests/QBrainAi.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs,tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreB.cs,tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs,tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs,tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs,tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs,tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs
+HEAD 1d77a79c4e1e78a4c8e164a49779393721a95061
+Now: 2026-11-05T16:02:30 head=1d77a79c
+PATH tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs added=10 doc=10 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs added=13 doc=13 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs added=6 doc=6 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs added=8 doc=8 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs added=9 doc=9 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs added=7 doc=7 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreB.cs added=6 doc=6 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs added=14 doc=14 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs added=9 doc=9 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs added=7 doc=7 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs added=3 doc=3 blank=0 removed=0 other=0
+PATH tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs added=9 doc=4 blank=0 removed=8 other=5
+  BREAKS -            var envelope = sut.Sign(Operation(), "PAYTON-LEGION2", "PAYTON-DESKTOP");
+  BREAKS -            var result = sut.Verify(envelope, "PAYTON-DESKTOP");
+  BREAKS -            var envelope = sut.Sign(Operation(), "PAYTON-LEGION2", "PAYTON-DESKTOP");
+  BREAKS -            var result = sut.Verify(envelope, "PAYTON-DESKTOP");
+  BREAKS -    /// <summary>FR-MCP-103: the fixed operation request every case signs.</summary>
+  BREAKS -    /// <returns>A new request with fixed ids and an empty body.</returns>
+  BREAKS -    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006: this entry documents the helper, added in slice Z4 when the cases moved to the settable clock (the sibling sweep of hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
+  BREAKS -        ProxyId = "PAYTON-LEGION2",
+  BREAKS +            var envelope = sut.Sign(Operation(), "proxy-a", "proxy-b");
+  BREAKS +            var result = sut.Verify(envelope, "proxy-b");
+  BREAKS +            var envelope = sut.Sign(Operation(), "proxy-a", "proxy-b");
+  BREAKS +            var result = sut.Verify(envelope, "proxy-b");
+  BREAKS +        ProxyId = "proxy-a",
+END doc=96 blank=0 breaking=13

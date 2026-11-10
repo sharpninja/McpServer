@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Xunit;
+using static QBrainAi.Support.Mcp.Tests.Services.SessionLogResubmissionReviveTestsSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
@@ -19,14 +20,11 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// DeleteSessionAsync for canonical ids and through direct soft-delete shadow-property updates for
 /// imported provider-native ids (which session delete rejects by policy).
 /// </summary>
+/// <remarks>2026-11-07, TR-MCP-TRANSCRIPT-004; TEST-MCP-TRANSCRIPT-012; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (SubmitAsync_ImportResubmitAfterTombstone_RevivesSession) and the helpers only it uses (ImportedSessionId, ImportedRequestId, BuildImportedDto and TombstoneSessionGraph) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the helpers both halves use (WorkspacePath, Agent, OpenConnection, BuildSut and Submit) moved once into Services/SessionLogResubmissionReviveTestsSupport.cs beside this file, which the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
 public sealed class SessionLogResubmissionReviveTests
 {
-    private const string WorkspacePath = @"E:\tests\sessionlog-resubmit-revive";
-    private const string Agent = "Codex";
     private const string CanonicalSessionId = "Codex-20260714T120000Z-revive";
     private const string CanonicalRequestId = "req-20260714T120000Z-revive-turn";
-    private const string ImportedSessionId = "019f2580-48c8-7912-b6a9-27f61b18d0d3";
-    private const string ImportedRequestId = "fc_08eff9c03a00059d016a470a6942688197";
 
     /// <summary>Resubmitting a canonically named session after DeleteSessionAsync revives it with the corrected data.</summary>
     [Fact]
@@ -51,55 +49,6 @@ public sealed class SessionLogResubmissionReviveTests
         }
     }
 
-    /// <summary>Resubmitting an imported session after its rows were tombstoned revives it through the import path.</summary>
-    [Fact]
-    public async Task SubmitAsync_ImportResubmitAfterTombstone_RevivesSession()
-    {
-        using var connection = OpenConnection();
-        Submit(connection, BuildImportedDto(output: "stale output"), sourceFilePath: @"F:\imports\rollout.jsonl");
-        TombstoneSessionGraph(connection, ImportedSessionId);
-
-        var (probe, probeDb) = BuildSut(connection);
-        using (probeDb)
-            Assert.Null(await probe.GetAsync(Agent, ImportedSessionId, TestContext.Current.CancellationToken).ConfigureAwait(true));
-
-        Submit(connection, BuildImportedDto(output: "corrected output"), sourceFilePath: @"F:\imports\rollout.jsonl");
-
-        var (reader, readerDb) = BuildSut(connection);
-        using (readerDb)
-        {
-            var session = await reader.GetAsync(Agent, ImportedSessionId, TestContext.Current.CancellationToken).ConfigureAwait(true);
-            Assert.NotNull(session);
-            var turn = Assert.Single(session!.Turns ?? []);
-            Assert.Equal(ImportedRequestId, turn.RequestId);
-            Assert.Equal("corrected output", turn.Response);
-        }
-    }
-
-    private static SqliteConnection OpenConnection()
-    {
-        var connection = new SqliteConnection("Data Source=:memory:");
-        connection.Open();
-        return connection;
-    }
-
-    private static (SessionLogService Sut, McpDbContext Db) BuildSut(SqliteConnection connection)
-    {
-        var options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connection).Options;
-        var workspaceContext = new WorkspaceContext { WorkspacePath = WorkspacePath };
-        var db = new McpDbContext(options, workspaceContext);
-        db.Database.EnsureCreated();
-        var sut = new SessionLogService(db, NullLogger<SessionLogService>.Instance, Substitute.For<IChangeEventBus>(), workspaceContext);
-        return (sut, db);
-    }
-
-    private static void Submit(SqliteConnection connection, UnifiedSessionLogDto dto, string? sourceFilePath = null)
-    {
-        var (sut, db) = BuildSut(connection);
-        using (db)
-            sut.SubmitAsync(dto, sourceFilePath, contentHash: sourceFilePath is null ? null : "hash-1").GetAwaiter().GetResult();
-    }
-
     private static UnifiedSessionLogDto BuildCanonicalDto(string response) => new()
     {
         SourceType = Agent,
@@ -122,41 +71,4 @@ public sealed class SessionLogResubmissionReviveTests
             },
         ],
     };
-
-    private static UnifiedSessionLogDto BuildImportedDto(string output) => new()
-    {
-        SourceType = Agent,
-        SessionId = ImportedSessionId,
-        Title = "Imported Codex transcript",
-        Started = "2026-07-02T20:03:25Z",
-        LastUpdated = "2026-07-13T17:21:42Z",
-        Status = "completed",
-        Turns =
-        [
-            new UnifiedRequestEntryDto
-            {
-                RequestId = ImportedRequestId,
-                Timestamp = "2026-07-03T01:03:38Z",
-                QueryTitle = "shell_command",
-                Response = output,
-                Status = "completed",
-                PlanFile = "None",
-                TodoId = "None",
-            },
-        ],
-    };
-
-    /// <summary>Tombstones the session row and every turn row via the soft-delete shadow properties.</summary>
-    private static void TombstoneSessionGraph(SqliteConnection connection, string sessionId)
-    {
-        using var command = connection.CreateCommand();
-        command.CommandText =
-            "UPDATE SessionLogTurns SET IsDeleted = 1, DeletedAtUtc = @now, DeletedBy = 'test', DeleteReason = 'test-tombstone' " +
-            "WHERE SessionLogId IN (SELECT Id FROM SessionLogs WHERE SessionId = @sessionId); " +
-            "UPDATE SessionLogs SET IsDeleted = 1, DeletedAtUtc = @now, DeletedBy = 'test', DeleteReason = 'test-tombstone' " +
-            "WHERE SessionId = @sessionId;";
-        command.Parameters.AddWithValue("@now", DateTimeOffset.UtcNow.ToString("O"));
-        command.Parameters.AddWithValue("@sessionId", sessionId);
-        command.ExecuteNonQuery();
-    }
 }

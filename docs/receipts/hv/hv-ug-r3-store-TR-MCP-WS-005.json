@@ -1,0 +1,29 @@
+[
+  {
+    "type": "result",
+    "payload": {
+      "deprecated": true,
+      "result": {
+        "priority": "medium",
+        "id": "TR-MCP-WS-005",
+        "area": "MCP",
+        "acceptanceCriteria": [
+          {
+            "isSatisfied": false,
+            "text": "Agent-plugin version resolution never fails the marker: the scan of the plugin caches under the user profile (.codex/plugins/cache, .claude/plugins/cache, .grok/installed-plugins) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder); a version file (.version or a plugin manifest) that exists but cannot be read (an IO or access error) yields no version, so resolution goes on to the next file and the next candidate; and resolution falls back to the synced plugin version when nothing yields one. Any other error still propagates. Unit tests resolve against a temporary profile, never the real one (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\" and \"Fold R3-P3 in first\"; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8).",
+            "id": "AC-TR-MCP-WS-005-001"
+          }
+        ],
+        "updatedAt": "2026-10-20T22:15:12.7824580+00:00",
+        "createdAt": "2026-10-20T22:15:12.7823169+00:00",
+        "title": "Marker File Service",
+        "subarea": "WS",
+        "scopeStartLayerKey": "layer-1",
+        "description": "`MarkerFileService.WriteMarkerAsync` writes `AGENTS-README-FIRST.yaml` to the workspace root. All markers point to the same shared host port. Uses Handlebars.Net templating with full workspace context. The marker template MUST be loaded from `templates/prompt-templates.yaml` via `PromptTemplateService` (id: `default-marker-prompt`). **CRITICAL**: If the template cannot be loaded (missing file, invalid YAML, or missing ID), the service must log a critical error and shut down the server immediately. Fallback to hardcoded templates is PROHIBITED. The YAML file contains port, `baseUrl`, all endpoint paths, process PID, `startedAt` timestamp, workspace name, per-workspace auth token (`apiKey`), and a machine-readable `prompt` block. Agents should send `X-Workspace-Path` header for workspace targeting.\n**Covered by:** FR: FR-MCP-018",
+        "status": "pending"
+      },
+      "requestId": "req-20261020T221511Z-914a"
+    }
+  },
+  null
+]

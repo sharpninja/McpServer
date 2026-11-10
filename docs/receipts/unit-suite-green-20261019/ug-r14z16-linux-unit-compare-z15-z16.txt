@@ -1,0 +1,6 @@
+Now: 2026-11-06T15:15:49 key=test name only before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14z15-final-linux-unit-1 (4864) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14z16-final-linux-unit-1 (4866)
+onlyBefore=0 onlyAfter=2 common=4864
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests.Services.VoiceConversationServiceTests.VoiceSessionReuse_TraceWithAnUnreportedAwaitingRemoval_IsRejected
+QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWhoseUnreportedRemovalsAwait_IsRejected

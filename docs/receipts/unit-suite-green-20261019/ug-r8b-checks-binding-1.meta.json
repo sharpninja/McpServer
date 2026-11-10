@@ -1,0 +1,31 @@
+{
+  "name": "ug-r8b-checks-binding-1",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r8b-checks-binding-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+  "dirtyPaths": [
+    " M docs/plans/2026-10-19-unit-suite-green.md",
+    " M tests/Directory.Build.targets",
+    " M tests/QBrainAi.Repl.IntegrationTests/AuthKeyAndWorkspaceTests.cs",
+    " M tests/QBrainAi.Repl.IntegrationTests/EndToEndFlowTests.cs",
+    " M tests/QBrainAi.Repl.IntegrationTests/Iteration1IntegrationTests.cs",
+    " M tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs",
+    " M tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+    " M tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+    " M tests/QBrainAi.Repl.IntegrationTests/TrustBootstrapFlowTests.cs",
+    " M tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+    "?? docs/receipts/hv/unitgreen-r8b-trx/",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/",
+    "?? tests/TestSupport.Shared/ScratchQBrainAi.cs",
+    "?? tests/TestSupport.Shared/TemporaryInstanceChecks.cs"
+  ],
+  "startedLocal": "2026-10-27T05:44:09",
+  "startedUtc": "2026-10-27T10:44:09.4441001Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-binding-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-binding-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-binding-1.exit.txt"
+}

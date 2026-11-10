@@ -1,0 +1,118 @@
+{
+  "name": "ug-r9-mockgate-de-1",
+  "kind": "mock-gate",
+  "retrospective": true,
+  "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here.",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+  "runDirtyPaths": [
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "Test",
+    "--test-run-id",
+    "ug-r9-mockgate-de-1"
+  ],
+  "startedLocal": "2026-10-29T09:02:23",
+  "endedLocal": "2026-10-29T09:07:01",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 4606,
+  "passed": 4606,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Client.Tests",
+      "writtenLocal": "2026-10-29T09:06:39",
+      "withinRun": true,
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+      "sha256": "69B5E2FABA5D10399BE8A9113FAA483FD0F00995D863EDEC0203C4D68FB0DF9A",
+      "total": 306,
+      "passed": 306,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Cqrs.Tests",
+      "writtenLocal": "2026-10-29T09:06:42",
+      "withinRun": true,
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+      "sha256": "0695A186D865BA380292C1132B86D7B20055D81679CBD19C2E1C86A18B56A1C4",
+      "total": 33,
+      "passed": 33,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Launcher.Tests",
+      "writtenLocal": "2026-10-29T09:06:44",
+      "withinRun": true,
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+      "sha256": "C924830DBBE465DA0E2EEF230488DFE64AE7680274000715F8253023A4F74B7B",
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.McpAgent.Tests",
+      "writtenLocal": "2026-10-29T09:06:48",
+      "withinRun": true,
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "sha256": "4E36EBBBEFB609ED6DB6E3A34197D7BB4902D8F42AF0EB4BCBE1E8A33097D21D",
+      "total": 64,
+      "passed": 64,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.QBAgent.Tests",
+      "writtenLocal": "2026-10-29T09:07:00",
+      "withinRun": true,
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "sha256": "43C5AE6F8C77C3935A4E03B7382359FB8724E092D92BD13623716B4A1D4CEEF2",
+      "total": 94,
+      "passed": 94,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "writtenLocal": "2026-10-29T09:06:58",
+      "withinRun": true,
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "FEE0C0C81A0B647814BF36F94F50F477EEBE5FE6CF8E10A93F7A8E3AFAEBDC7A",
+      "total": 912,
+      "passed": 912,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "writtenLocal": "2026-10-29T09:06:35",
+      "withinRun": true,
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "FFEF548DBE08DB19D52ED4DAD2887C6A61BADBB9C880EB0124427AADD970A95C",
+      "total": 3177,
+      "passed": 3177,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "errorLines": [],
+  "metaFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-mockgate-de-1.meta.json",
+  "metaSha256": "CEC35B2CFB6991EA3BA7A48CE27486BB86A37809C3D159E851DD772FB6999CF8",
+  "writtenLocal": "2026-11-02T15:49:56",
+  "writtenBy": "ClaudeCode"
+}

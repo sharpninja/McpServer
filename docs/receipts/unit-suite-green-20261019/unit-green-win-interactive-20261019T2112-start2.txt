@@ -1,0 +1,13 @@
+RECEIPT 2026-10-19T21:13:29 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-10-19T21:13:22 host=PAYTON-LEGION2 user=kingd
+  checkout: HEAD is now at b4ad42aa test: unit tests that reach native file-system boundaries or write tracked files move to Integration (IMPL-UNITGREEN-001)
+HEAD b4ad42aaa601ed0df7e03b34203dee4f93d316a9 expected=b4ad42aaa601ed0df7e03b34203dee4f93d316a9 match=True
+RUNNER C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\run-unit-green-win-interactive-20261019T2112.ps1
+PWSH C:\Program Files\PowerShell\7-LabWsman\pwsh.exe
+ACCOUNT PAYTON-LEGION2\kingd
+TASK McpServer-UnitGreenInteractiveLane-20261019T2112 state=Running lastRun=10/19/2026 21:13:24 result=267009
+PROOF so far: START 2026-10-19T21:13:24 user=kingd session=1 interactive=True head=b4ad42aaa601ed0df7e03b34203dee4f93d316a9
+END 2026-10-19T21:13:30

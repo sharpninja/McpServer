@@ -1,0 +1,52 @@
+{
+  "name": "ug-r9-final3-linux-buildtests-1",
+  "kind": "gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "62c5882d87f3d0b5019827b1f803140cbf79ca0d",
+  "dirtyPaths": [
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-final3-linux-lane-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-final3-linux-lane-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-final3-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-final3-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-linux-lane-compare-final2-final3.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-linux-lane-compare-r8bl4-final3.txt"
+  ],
+  "command": [
+    "dotnet",
+    "test",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+    "-c",
+    "Debug",
+    "--logger",
+    "trx;LogFileName=ug-r9-final3-linux-buildtests-1.trx",
+    "--results-directory",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final3-linux-buildtests-1",
+    "--filter",
+    "Platform!=Windows"
+  ],
+  "startedLocal": "2026-11-02T13:22:44",
+  "endedLocal": "2026-11-02T13:27:15",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 522,
+  "passed": 522,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "ug-r9-final3-linux-buildtests-1",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final3-linux-buildtests-1/ug-r9-final3-linux-buildtests-1.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-final3-linux-buildtests-1/ug-r9-final3-linux-buildtests-1.trx",
+      "sha256": "A6FED9627B258A32DCBD166E2D8F85015896DDB8D0A22FA15684791915FF563C",
+      "total": 522,
+      "passed": 522,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [],
+  "writtenLocal": "2026-11-02T13:27:59",
+  "writtenBy": "ClaudeCode"
+}

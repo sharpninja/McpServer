@@ -1,0 +1,20 @@
+[
+  {
+    "type": "result",
+    "payload": {
+      "result": {
+        "items": [
+          {
+            "trId": "TR-MCP-WS-005",
+            "frId": "FR-MCP-018",
+            "createdAt": "2026-10-20T22:16:40.8296858+00:00"
+          }
+        ],
+        "totalCount": 1
+      },
+      "deprecated": true,
+      "requestId": "req-20261020T221639Z-6660"
+    }
+  },
+  null
+]

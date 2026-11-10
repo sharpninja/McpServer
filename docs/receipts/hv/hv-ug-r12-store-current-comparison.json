@@ -1,0 +1,42 @@
+[
+  {
+    "id": "TR-MCP-SERVICEUPDATE-001",
+    "receipt": "docs/receipts/unit-suite-green-20261019/ug-r12z3c-store-readback-1.json",
+    "ignoredFields": [
+      "createdAt",
+      "updatedAt"
+    ],
+    "changedFields": [],
+    "equal": true
+  },
+  {
+    "id": "TR-MCP-USECASE-018",
+    "receipt": "docs/receipts/unit-suite-green-20261019/ug-r12z3c-store-readback-1.json",
+    "ignoredFields": [
+      "createdAt",
+      "updatedAt"
+    ],
+    "changedFields": [],
+    "equal": true
+  },
+  {
+    "id": "FR-MCP-TESTRESOURCE-001",
+    "receipt": "docs/receipts/unit-suite-green-20261019/ug-r12z3c-store-readback-1.json",
+    "ignoredFields": [
+      "createdAt",
+      "updatedAt"
+    ],
+    "changedFields": [],
+    "equal": true
+  },
+  {
+    "id": "IMPL-UNITGREEN-001",
+    "receipt": "docs/receipts/unit-suite-green-20261019/ug-r12z3c-store-readback-1.json",
+    "ignoredFields": [
+      "createdAt",
+      "updatedAt"
+    ],
+    "changedFields": [],
+    "equal": true
+  }
+]

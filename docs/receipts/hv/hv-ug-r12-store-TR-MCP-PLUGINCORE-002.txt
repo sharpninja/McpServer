@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261105T075255Z-9f43
+  result:
+    id: TR-MCP-PLUGINCORE-002
+    title: core-guard.yml no-duplication job
+    description: CI enumerates lib files; any not in manifest nor PLUGIN-RESIDUAL.txt fails the build.
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: PLUGINCORE
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T07:52:57.2935445+00:00
+    updatedAt: 2026-11-05T07:52:57.2936680+00:00
+  deprecated: true
+
+---
+

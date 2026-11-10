@@ -1,0 +1,22 @@
+{
+  "name": "ug-r8-callsite-binding-1",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r8-callsite-binding-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "845f323b6b6ae13bc01b6165d6f987238c631dea",
+  "dirtyPaths": [
+    " M src/QBrainAi.Repl.Core/AgentStdioProtocol.cs",
+    " M src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs",
+    " M src/QBrainAi.Repl.Core/ReplCommandTimeout.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs"
+  ],
+  "startedLocal": "2026-10-26T15:29:34",
+  "startedUtc": "2026-10-26T20:29:34.1832661Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-callsite-binding-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-callsite-binding-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-callsite-binding-1.exit.txt"
+}

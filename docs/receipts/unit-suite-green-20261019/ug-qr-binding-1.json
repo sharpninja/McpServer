@@ -1,0 +1,145 @@
+{
+  "name": "ug-qr-binding-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "022f9cde436eadf509b47794d18c6cdc9036ad80",
+  "dirtyPaths": [
+    " M build/Build.Test.cs",
+    " M build/IntegrationLaneFilter.cs",
+    " M build/IntegrationLaneFilterContracts.cs",
+    " M build/TestProjectOwnership.cs",
+    " M build/TestProjectOwnershipContracts.cs",
+    " M tests/Build.Tests/IntegrationLaneClassFilterContract.cs",
+    " M tests/Build.Tests/IntegrationLaneClassFilterTests.cs",
+    " M tests/Build.Tests/IntegrationLaneExecutionContractTests.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    " M tests/Build.Tests/TestGroupExecutionContractTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipContract.cs",
+    " M tests/Build.Tests/TestProjectOwnershipMockGateTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-1/",
+    "?? tests/Build.Tests/UnitTestFilterContract.cs",
+    "?? tests/Build.Tests/UnitTestFilterMockGateTests.cs",
+    "?? tests/Build.Tests/UnitTestFilterTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "Build.Tests:IntegrationLaneFilterMockGateTests,IntegrationLaneFilterTests,IntegrationLaneExecutionContractTests,IntegrationLaneExecutionBindingTests,IntegrationLaneClassFilterMockGateTests,IntegrationLaneClassFilterTests,TestGroupExecutionContractTests,TestGroupExecutionBindingTests,UnitTestFilterMockGateTests,UnitTestFilterTests,TestProjectOwnershipMockGateTests,TestProjectOwnershipTests",
+    "--test-run-id",
+    "ug-qr-binding-1"
+  ],
+  "startedLocal": "2026-11-07T19:13:16",
+  "endedLocal": "2026-11-07T19:13:27",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 124,
+  "passed": 124,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-qr-binding-1/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-qr-binding-1/Build.Tests.trx",
+      "sha256": "4CE91E97B37202289142D7448B11DD37405DACE04961388BB6B10051A48B7A8F",
+      "total": 124,
+      "passed": 124,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "build/Build.Test.cs",
+      "sha256": "5737E8AA8EE9422240C6532AB2093D5EB39530A5A109543F376047F7965552E2"
+    },
+    {
+      "path": "build/IntegrationLaneFilter.cs",
+      "sha256": "B19397B3150B040AD1AAF22CC9ED0B43321A28713C2B7A0CE4CFFB19E1ACCBD9"
+    },
+    {
+      "path": "build/IntegrationLaneFilterContracts.cs",
+      "sha256": "AFA20BC2C8291A903B86DA726AC098D145BC264AE9923F59D0B11C7734133AFC"
+    },
+    {
+      "path": "build/TestProjectOwnership.cs",
+      "sha256": "FF0D713833323D2C2E1C0016FB8C90C52ADB2FDA43D0D4E039E2DF2325F21F92"
+    },
+    {
+      "path": "build/TestProjectOwnershipContracts.cs",
+      "sha256": "CFB31032AE96FC68D5E3E5AAEC1C359B6BE7581614C4AF95107643AF10B89D71"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneFilterContract.cs",
+      "sha256": "06B9394318972011461AC042933B1913058ED57A19A0645E1BFB2A6212AA8246"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+      "sha256": "4EF5ED9D2AB129FFA4E614E7F07E8A3A7717A758BDA22FE49D4FFC46CF1A386B"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneFilterTests.cs",
+      "sha256": "20CDBDC7379DD02157DBAD239F1DA6A860740D8900D4D55173C63B0F51539C51"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneExecutionContractTests.cs",
+      "sha256": "26D4BD7CCD5C5F8BBC8C68CAF20797803804A2B5A3E16EA9312A0246EB97EB75"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneClassFilterContract.cs",
+      "sha256": "A585F09C7C3E7128EAE14E704DC8DAF8851CDC83A03520693D5454CDA2467063"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneClassFilterTests.cs",
+      "sha256": "9F0CB1E787144C3F5FF4816F1AA217CA6D3DA40B231662AD64C7731EC15C0349"
+    },
+    {
+      "path": "tests/Build.Tests/TestGroupExecutionContractTests.cs",
+      "sha256": "97AAB0A34F15E7C77273D738777F3E08B8652A1ED27D1C8F8E912FC153FBCCD9"
+    },
+    {
+      "path": "tests/Build.Tests/UnitTestFilterContract.cs",
+      "sha256": "1F5D9AF69F98BE9BD84B96FCBB39026D772DD4B7557D21BE84BEB88E02B6BCDF"
+    },
+    {
+      "path": "tests/Build.Tests/UnitTestFilterMockGateTests.cs",
+      "sha256": "C11FF119CF6556F7CBCF7D1F621E14A4BD0B2999D14215EF0E183150A36F320F"
+    },
+    {
+      "path": "tests/Build.Tests/UnitTestFilterTests.cs",
+      "sha256": "1AB266268F4AB2DAB12729459018AA037AA7B4D20214E8ED06DD3CD9C15EEF98"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipContract.cs",
+      "sha256": "91E379516760F5FA3A393096DC9CD1C9EC960135ADEDB86660E99D1150F8C6C4"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipMockGateTests.cs",
+      "sha256": "DE1DCD994BD087ED0D6CC6ECBD4A57EDC3C73A78F4AF950598EE9A3BC6065398"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipTests.cs",
+      "sha256": "0942EE39500FA6DA15EF6B5DCF54E65926420CD75AEF55BED4DF3A84736D37F8"
+    }
+  ],
+  "writtenLocal": "2026-11-07T19:13:59",
+  "writtenBy": "ClaudeCode"
+}

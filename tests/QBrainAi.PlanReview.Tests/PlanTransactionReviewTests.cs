@@ -7,6 +7,13 @@ namespace QBrainAi.PlanReview.Tests;
 /// <summary>
 /// TEST-MCP-164: aiUnit plan review gate for PLAN-TURNTRANSACTIONS-001.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: TR-MCP-QUALITY-001 ac-11.
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-QUALITY-001 ac-11: cites the criterion whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class PlanTransactionReviewTests
 {
     private const string ReviewArtifactRelativePath = "artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json";

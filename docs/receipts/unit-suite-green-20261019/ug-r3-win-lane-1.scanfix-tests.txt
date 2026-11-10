@@ -1,0 +1,20 @@
+RECEIPT 2026-10-20T10:44:09 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Find-WinTrxTests.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-20T10:44:10 root=F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r3-win-lane-1 fragments=9
+Passed QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenUpsertingMarkdownThenSessionIsUpdated
+Passed QBrainAi.Support.Mcp.Tests.Services.SessionLogResubmissionReviveTests.SubmitAsync_ImportResubmitAfterTombstone_RevivesSession
+Passed QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.ReplaceTurnSectionAsync_ImportedProviderNativeIds_ReplacesSection
+Passed QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.DeleteSessionAsync_ImportedProviderNativeIds_IsRejected
+Passed QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenImportingJsonAndMarkdownThenBothAreProcessed
+Passed QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenImportingValidMarkdownThenSessionIsPersisted
+Passed QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.DeleteTurnAsync_ImportedProviderNativeIds_DeletesTurn
+Passed QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenImportingJsonSessionLogThenSessionIsPersisted
+Passed QBrainAi.Support.Mcp.Tests.Services.FederatedSessionLogServiceTests.Apply_OmittedFields_PersistsProperValue
+Passed QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.Ingest_OmittedFields_PersistsExtractorResultOrNone
+Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.FileSystemWalk_RealLinks_AreFlaggedAndNotDescended
+Passed QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ImportMissingFields_ExtractsFromTurnText
+Passed QBrainAi.Support.Mcp.Tests.Services.TranscriptSessionLogPersisterTests.Import_OmittedFields_PersistsExtractorResultOrNone
+COUNT Passed=13
+MATCHED 13 END 2026-10-20T10:44:11

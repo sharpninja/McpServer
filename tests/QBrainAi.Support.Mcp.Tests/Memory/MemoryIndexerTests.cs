@@ -1,19 +1,24 @@
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011:
+/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):
 /// S2 Green acceptance for the dedicated memory indexer, ANN/FTS fusion,
-/// and EmbeddingStatus transitions.
+/// and EmbeddingStatus transitions. The class runs in <see cref="ProcessEnvironmentCollection"/> because one of its
+/// tests writes the process environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
 /// </summary>
-public sealed class MemoryIndexerTests : IDisposable
+/// <remarks>
+/// The TEST-MCP-MEMORY-011, TR-MCP-MEMORY-SEARCH-002 and FR-MCP-MEMORY-011 citations in this file, its
+/// AC-TR-MCP-MEMORY-SEARCH-002 criteria included, are historical: those records are not in the requirements store
+/// (hostile validation finding R6-F2), so they make no active coverage claim. The active claims are the
+/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration test.
+/// <para>2026-11-07, TEST-MCP-MEMORY-011; TR-MCP-MEMORY-SEARCH-002; FR-MCP-MEMORY-011; TR-MCP-USECASE-018 AC-006; TR-MCP-USECASE-019 AC-008; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (OnnxLocal_NoCloudRequired) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_harness, Dispose and SeedAsync) moved once into the abstract base class MemoryIndexerTestsBase in Memory/MemoryIndexerTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</para>
+/// </remarks>
+[Collection(ProcessEnvironmentCollection.Name)]
+public sealed class MemoryIndexerTests : MemoryIndexerTestsBase, IDisposable
 {
-    private readonly MemoryS1Harness _harness = new();
-
-    /// <inheritdoc />
-    public void Dispose() => _harness.Dispose();
-
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-01: Indexing a memory flips EmbeddingStatus to ready (or failed with reason).</summary>
     [Fact]
     public async Task ReadyOrFailedStatus()
@@ -143,26 +148,6 @@ public sealed class MemoryIndexerTests : IDisposable
         Assert.NotEqual("ready", status);
     }
 
-    /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-09: Local ONNX path works without cloud credentials in the test host.</summary>
-    [Fact]
-    public async Task OnnxLocal_NoCloudRequired()
-    {
-        Environment.SetEnvironmentVariable("OPENAI_API_KEY", null);
-        Environment.SetEnvironmentVariable("AZURE_OPENAI_API_KEY", null);
-        var memory = await SeedAsync("onnx local embedding body").ConfigureAwait(true);
-
-        var indexed = await _harness.IndexAsync(
-            memory.Id,
-            provider: "onnx",
-            cloudEnabled: false,
-            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var status = indexed.EmbeddingStatus
-            ?? await _harness.GetEmbeddingStatusAsync(memory.Id).ConfigureAwait(true);
-
-        Assert.True(indexed.StatusCode is 200 or 201, indexed.Error);
-        Assert.Equal("ready", status);
-    }
-
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-10: Cloud embedding path is opt-in and fails closed when disabled.</summary>
     [Fact]
     public async Task CloudOptIn_FailsClosedWhenOff()
@@ -232,20 +217,5 @@ public sealed class MemoryIndexerTests : IDisposable
         Assert.Equal(2, batched.ReadyCount + batched.FailedCount);
         Assert.True(firstStatus is "ready" or "failed");
         Assert.True(secondStatus is "ready" or "failed");
-    }
-
-    private async Task<MemoryItem> SeedAsync(string content, string? workspacePath = null)
-    {
-        var added = await _harness.AddCompatAsync(new MemoryAddRequest
-        {
-            Category = "fact",
-            Scope = MemoryScope.Workspace,
-            Text = content,
-            Content = content,
-            Type = "fact",
-        }, workspacePath: workspacePath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.True(added.Success, added.Error);
-        Assert.NotNull(added.Memory);
-        return added.Memory!;
     }
 }

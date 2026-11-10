@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="645ae55e-8fab-42f3-b8ba-39e7c9e4411d" name="@LAB-OMARCHY 2026-11-07 10:05:09" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-07T10:05:09.3896563-06:00" queuing="2026-11-07T10:05:09.3896566-06:00" start="2026-11-07T10:05:07.6278316-06:00" finish="2026-11-07T10:05:09.3977259-06:00" />
+  <TestSettings name="default" id="80ce6235-22fa-4fae-91ed-70bb2f538aed">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-07_10_05_09" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="afc11835-0fec-415a-b289-f817699e9ac3" testId="30e3c15b-d493-c9c1-79f9-6123f72a57f3" testName="QBrainAi.QBAgent.IntegrationTests.Skills.AuthoredSkillsTests.AuthoredSkills_AllParseAndDiscover" computerName="LAB-OMARCHY" duration="00:00:00.0037180" startTime="2026-11-07T10:05:09.1142575-06:00" endTime="2026-11-07T10:05:09.1180760-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="afc11835-0fec-415a-b289-f817699e9ac3" />
+    <UnitTestResult executionId="62e73866-bc15-4898-8d0c-542ede8c7cce" testId="cc35f2f6-f3f4-9a0a-8214-6c9682cb31e7" testName="QBrainAi.QBAgent.IntegrationTests.Skills.AuthoredSkillsTests.AuthoredSkills_HaveBodies" computerName="LAB-OMARCHY" duration="00:00:00.0209045" startTime="2026-11-07T10:05:09.0754875-06:00" endTime="2026-11-07T10:05:09.1071269-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="62e73866-bc15-4898-8d0c-542ede8c7cce" />
+    <UnitTestResult executionId="17cf8e9c-c984-47e6-8f00-cd61ec45dbe7" testId="d59c78dd-b1d4-1465-fd5a-f2b54e300a02" testName="QBrainAi.QBAgent.IntegrationTests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines" computerName="LAB-OMARCHY" duration="00:00:00.1127445" startTime="2026-11-07T10:05:09.0754875-06:00" endTime="2026-11-07T10:05:09.1978165-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="17cf8e9c-c984-47e6-8f00-cd61ec45dbe7" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.QBAgent.IntegrationTests.Skills.AuthoredSkillsTests.AuthoredSkills_HaveBodies" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.qbagent.integrationtests/bin/debug/net10.0/qbrainai.qbagent.integrationtests.dll" id="cc35f2f6-f3f4-9a0a-8214-6c9682cb31e7">
+      <Execution id="62e73866-bc15-4898-8d0c-542ede8c7cce" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.IntegrationTests/bin/Debug/net10.0/QBrainAi.QBAgent.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.QBAgent.IntegrationTests.Skills.AuthoredSkillsTests" name="AuthoredSkills_HaveBodies" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.QBAgent.IntegrationTests.Skills.AuthoredSkillsTests.AuthoredSkills_AllParseAndDiscover" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.qbagent.integrationtests/bin/debug/net10.0/qbrainai.qbagent.integrationtests.dll" id="30e3c15b-d493-c9c1-79f9-6123f72a57f3">
+      <Execution id="afc11835-0fec-415a-b289-f817699e9ac3" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.IntegrationTests/bin/Debug/net10.0/QBrainAi.QBAgent.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.QBAgent.IntegrationTests.Skills.AuthoredSkillsTests" name="AuthoredSkills_AllParseAndDiscover" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.QBAgent.IntegrationTests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.qbagent.integrationtests/bin/debug/net10.0/qbrainai.qbagent.integrationtests.dll" id="d59c78dd-b1d4-1465-fd5a-f2b54e300a02">
+      <Execution id="17cf8e9c-c984-47e6-8f00-cd61ec45dbe7" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.IntegrationTests/bin/Debug/net10.0/QBrainAi.QBAgent.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.QBAgent.IntegrationTests.QBAgentHeartbeatOverlayTests" name="RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="30e3c15b-d493-c9c1-79f9-6123f72a57f3" executionId="afc11835-0fec-415a-b289-f817699e9ac3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cc35f2f6-f3f4-9a0a-8214-6c9682cb31e7" executionId="62e73866-bc15-4898-8d0c-542ede8c7cce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d59c78dd-b1d4-1465-fd5a-f2b54e300a02" executionId="17cf8e9c-c984-47e6-8f00-cd61ec45dbe7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.25]   Discovering: QBrainAi.QBAgent.IntegrationTests
+[xUnit.net 00:00:00.57]   Discovered:  QBrainAi.QBAgent.IntegrationTests
+[xUnit.net 00:00:00.83]   Starting:    QBrainAi.QBAgent.IntegrationTests
+[xUnit.net 00:00:01.04]   Finished:    QBrainAi.QBAgent.IntegrationTests (ID = 'e144e8d63113af2e15f7f7a10280901dc55f8d7c49745fede638eed46590db9d')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

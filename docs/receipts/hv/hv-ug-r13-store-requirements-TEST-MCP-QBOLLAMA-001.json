@@ -1,0 +1,48 @@
+{
+  "timestampUtc": "2026-11-06T06:06:58.6368702+00:00",
+  "timestampLocal": "2026-11-06T00:07:01",
+  "method": "workflow.requirements.getTest",
+  "recordId": "TEST-MCP-QBOLLAMA-001",
+  "response": {
+    "type": "result",
+    "payload": {
+      "result": {
+        "area": "MCP",
+        "priority": "medium",
+        "description": "QuadBrainOllamaEndpointIntegrationTests exercise the OpenAI-compatible QuadBrain endpoint against a real local Ollama server that OllamaServerFixture adopts or starts (FR-MCP-QBOLLAMA-002), proving FR-MCP-QBOPENAI-001 runs the normal Creativity, Logic and Arbiter workflow without faking the LLM calls, on Windows and on Linux once InstallOllama has provisioned Ollama (TR-MCP-NUKE-016).",
+        "createdAt": "2026-11-06T06:07:01.0638131+00:00",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-001",
+            "isSatisfied": false,
+            "text": "ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots (prompts \"Hello\" and \"Create Hello World in C++\"): with the local Ollama default model assigned to all four slots, each prompt triggers the normal Creativity, Logic and Arbiter workflow through POST /v1/chat/completions and returns non-empty content; every brain call uses that model at the Ollama endpoint, and the session log captures the brain outputs on the turn."
+          },
+          {
+            "id": "AC-002",
+            "isSatisfied": false,
+            "text": "QBAgentRunLoop_LocalOllamaDefaultModel_DisplaysQuadBrainResponse (prompt \"Hello\"): QBAgent displays the QuadBrain response it received, never a placeholder; its transcript names the model QuadBrain and the QBrainAi endpoint and never the Ollama model id or endpoint."
+          },
+          {
+            "id": "AC-003",
+            "isSatisfied": false,
+            "text": "ChatCompletions_OpenAiCompatibleFieldVariants_AreLoggedToSessionTurn: content, reasoning and reasoning_content outputs are persisted to the turn's processing dialog."
+          },
+          {
+            "id": "AC-004",
+            "isSatisfied": false,
+            "text": "The class runs against a real local Ollama: OllamaServerFixture adopts a server already answering or starts one from a discovered executable and stops only what it started (FR-MCP-QBOLLAMA-002); on the Linux lab host the executable is the one InstallOllama provisions (TR-MCP-NUKE-016; PLAN-SESSIONTRIAGEFIX-001 B13, triage-report-680916ed)."
+          }
+        ],
+        "testType": "unit",
+        "scopeStartLayerKey": "layer-1",
+        "title": "QuadBrain Ollama endpoint integration tests",
+        "id": "TEST-MCP-QBOLLAMA-001",
+        "notes": "Recorded 2026-10-15: the four tests and OllamaServerController cite this id, which the store never held (operator decision \"Approve all three (Recommended)\"; PLAN-SESSIONTRIAGEFIX-001 B13, triage-report-680916ed).",
+        "status": "pending",
+        "updatedAt": "2026-11-06T06:07:01.0639503+00:00"
+      },
+      "deprecated": true,
+      "requestId": "req-20261106T060659Z-6c4c"
+    }
+  }
+}

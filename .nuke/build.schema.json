@@ -39,6 +39,7 @@
         "InstallOllama",
         "InstallReplTool",
         "InstallTestDependencies",
+        "IntegrationLanePrecondition",
         "MigrationIntegrationTests",
         "NormalizeGeneratedMigrationObsoletePragmas",
         "PackageMsix",
@@ -55,6 +56,7 @@
         "SyncAgentPlugins",
         "Test",
         "TestGraphRagSmoke",
+        "TestGroups",
         "TestMultiInstance",
         "UpdateService",
         "UpdateTrustedThirdPartyService",
@@ -251,6 +253,17 @@
         "StrictUseCaseFrCoverage": {
           "type": "boolean",
           "description": "Fail when UseCaseFrLinks Realizes coverage findings are non-empty (default false)"
+        },
+        "test-groups": {
+          "type": "array",
+          "description": "TestGroups: the test groups to run, each '<test project>:<Class>[,<Class>...]' (TR-MCP-NUKE-020)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "TestDbEnvFile": {
+          "type": "string",
+          "description": "Test-database env file for Linux provider test provisioning (default ~/.config/qbrain-test/test-db.env)"
         },
         "TestRunId": {
           "type": "string",

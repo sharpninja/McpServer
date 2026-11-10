@@ -18,6 +18,15 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>QBrainAi.Support.Mcp.IntegrationTests</_Parameter1>
     </AssemblyAttribute>
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the integration-owned project that takes QBrainAi.Support.Mcp.Tests'
+         integration cases (slice S5, hostile validation finding R14-F4); its SQLite bounded-open case asserts on
+         SqliteBoundedConnectionOpener. -->
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: that project is now QBrainAi.Support.Mcp.EnvironmentIntegrationTests,
+         renamed to its root namespace (operator 2026-11-07: "Project names and root namespaces for the project should match,
+         so fix the project name."), so the grant names its new assembly. -->
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>QBrainAi.Support.Mcp.EnvironmentIntegrationTests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" />

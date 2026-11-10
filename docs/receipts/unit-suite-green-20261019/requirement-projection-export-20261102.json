@@ -1,0 +1,45 @@
+{
+  "timestampLocal": "2026-11-02T11:34:21",
+  "workspace": "/home/sharpninja/github/McpServer",
+  "method": "client.Requirements.GenerateAsync",
+  "plugin": "mcpserver-claude-code-plugin (mcpserver@mcpserver-local)",
+  "writtenBy": "ClaudeCode",
+  "credentialCheck": "current marker API key absent from every generated document (key not recorded)",
+  "files": [
+    {
+      "docType": "functional",
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Functional-Requirements.md",
+      "sha256": "DA7F8CAB66915CE4A36F1A7F6067A533950681F02DE915FA0F607A3B7A1D4885",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/requirement-projections-before-20261102T113421/Functional-Requirements.md",
+      "originalSha256": "12B786C45DABA6CB029FB60A36D7879FC254D6076B4ACAFA25B0E6B38882F45E"
+    },
+    {
+      "docType": "technical",
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Technical-Requirements.md",
+      "sha256": "5D3140981D9A22D54CEBD45F7C6368C187DA76862A7B15282CBFF870738BEC6D",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/requirement-projections-before-20261102T113421/Technical-Requirements.md",
+      "originalSha256": "519309C2E871E4717D8DC2B91FED0CF5E09ABC771002CB99978424578A2B90C2"
+    },
+    {
+      "docType": "testing",
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Testing-Requirements.md",
+      "sha256": "62B125645F152453DA2A3E9ADB24A7AA3F5930A4B61E7D4370E6FB3682DF8C05",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/requirement-projections-before-20261102T113421/Testing-Requirements.md",
+      "originalSha256": "62B125645F152453DA2A3E9ADB24A7AA3F5930A4B61E7D4370E6FB3682DF8C05"
+    },
+    {
+      "docType": "mapping",
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/TR-per-FR-Mapping.md",
+      "sha256": "F43D751587C91F1633788A500E6218EFF16243DB177A828EE26761B19FF3E1D2",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/requirement-projections-before-20261102T113421/TR-per-FR-Mapping.md",
+      "originalSha256": "DFAFC83A826DF949EF335F37F08A71215F4651F72DFEA57E35A1AB5E152719B0"
+    },
+    {
+      "docType": "matrix",
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Requirements-Matrix.md",
+      "sha256": "BE09AE9D1488B45DDECF35007301FA85B1DF4585468A3933C7E5464D3CE1898E",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/requirement-projections-before-20261102T113421/Requirements-Matrix.md",
+      "originalSha256": "A06A769CAD52BD3001ADD0D56E6723710431AAC98BCB12A8326CE267706F5EFD"
+    }
+  ]
+}

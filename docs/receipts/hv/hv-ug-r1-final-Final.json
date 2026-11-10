@@ -1,0 +1,30 @@
+{
+  "TimestampLocal": "2026-10-19T20:45:13",
+  "Head": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+  "TrackedDirty": [
+    "docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+  ],
+  "StagedDirty": [],
+  "KnownCredentialMatches": 0,
+  "ReceiptFiles": [
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r1-20261019T195131.md",
+      "Exists": true,
+      "Sha256": "BD8B4D616147AAA1EAB33376E724EE7571BE687777D62EF3DB7BBC465CE43DE8"
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r1-20261019T195131.json",
+      "Exists": true,
+      "Sha256": "B78F0AABD7BB806FF932385E3AFE261893E78B260DEEF784BE76FDBFDBD9C42C"
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-persistence-proof.json",
+      "Exists": true,
+      "Sha256": "3ACA7CEBC34F54829EE4C202AA593BDC60B59A3267FC38C6702F448EA82B098F"
+    }
+  ],
+  "PersistenceVerified": true,
+  "MatchedParts": 20,
+  "Status": "completed"
+}

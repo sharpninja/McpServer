@@ -1,0 +1,15 @@
+{
+  "gate": "unitgreen-r17",
+  "verdict": "AGREE",
+  "accuracy": 98,
+  "completeness": 98,
+  "todoId": "IMPL-UNITGREEN-001",
+  "taskCount": 75,
+  "doneCount": 71,
+  "openPositions": [12, 13, 35, 75],
+  "todoDone": false,
+  "requirementRecordsUpdated": 23,
+  "criteriaSatisfied": 54,
+  "requirementsReadback": "passed",
+  "mergePerformed": false
+}

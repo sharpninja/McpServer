@@ -40,5 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\EphemeralPostgresFixture.cs" Link="Storage\EphemeralPostgresFixture.cs" />
+    <!-- TR-MCP-NUKE-016 AC-001: the one QuadBrain Ollama model rule InstallOllama also uses (hostile validation finding R9-F5). -->
+    <Compile Include="..\..\build\QuadBrainOllamaModel.cs" Link="Shared\QuadBrainOllamaModel.cs" />
   </ItemGroup>
 </Project>

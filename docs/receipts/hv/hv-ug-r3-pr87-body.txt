@@ -1,0 +1,84 @@
+## IMPL-UNITGREEN-001: the unit suite green on both lab hosts (BDPv4: 0 failed, 0 skipped)
+
+Operator, 2026-10-19: "BDPv4 requires all unit tests be green." and "There should be ZERO platform specific UNIT tests.  If it depends on the environment, it's an integration test." Plan: `docs/plans/2026-10-19-unit-suite-green.md` (approved 14:50; amendments in sections 7 to 9 and 11; execution record in sections 10, 12 and 14 to 16; decisions in section 13).
+
+Draft until hostile validation (Codex gpt-6-astra max) returns AGREE at 98/98. No done state is claimed: every new or changed criterion is unsatisfied and every TODO task is unchecked.
+
+### Commits (over develop `3da2db93`)
+
+- `cbc74e82`: System.Security.Cryptography.Xml and Pkcs pinned to the advisory-patched 10.0.13 (TR-MCP-QUALITY-001 ac-21).
+- `28bf0b22`, `de581353`: canonical workspace-key tests, provider traits, and the host-aware `WorkspaceIdentityPath.ToNativePath` overload (FR, TR and TEST-MCP-PATHNORM-001; additive public API).
+- `a4c358ef`: narrowing to leave PLAN-C4MODEL-001's fixes to that effort (superseded by `11681680`).
+- `b2319488`: the HostileReviewWorker startup test no longer depends on Event Log write access (TR-MCP-HOSTILEREVIEW-003).
+- `11681680`: takeover of PLAN-C4MODEL-001's unit-suite code and Linux provider provisioning (TR-MCP-NUKE-018), blob-identical to `c2125c42`, by operator decision.
+- `8c2b83ab`: host-scoped MigrationIntegrationTests lane (TR-MCP-NUKE-019 AC-1 to AC-4).
+- `8a617334`: merge of develop with PR 86.
+- `b2bd50b3`: platform-dependent tests classified as integration tests, with the unit-suite guard and a strengthened skip guard. Its first guard run, `unit-green-guard-mock-20261019T1720`, was red (4692 results, 1 failed, 16 not executed); see plan section 10.
+- `4f668b76`: the plan and the PR 82 handoff correction.
+- `59249260`: the interactive desktop-spawner case fails loudly as a Windows integration test.
+- `69d8f3f5`: amendment H1, under which the Windows integration lane refuses a non-interactive session before any test (TR-MCP-NUKE-019 AC-5).
+- `12746834`: the invalid-handle final-path case runs only on Windows, without a silent return.
+- `83417029`, `6b4295b7`: docs only (the plan as built, the code-head receipts, the 19:41 decisions).
+- `49cfec92`: hostile validation round 1, findings F3 and F5 (one skip definition for both guards; interpolation holes kept as code).
+- `b4ad42aa`: round 1 finding F2 (36 native-boundary and tracked-file cases move to Integration, assertions unchanged).
+- `a94579db`: docs only (the round 1 receipts and record, the round 2 gate receipts).
+- `45a3197c`: round 2 finding R2-F2. `UnitSuitePlatformScanner` reads Roslyn syntax trees instead of regex lines; the five central Roslyn pins move from 5.3.0 to 5.9.0 (operator: "Use the latest Roslyn tools!").
+- `27c43bcc`: round 2 finding R2-F1. One repository-root locator, `tests/Shared/TestRepositoryRoot.cs`, refuses outside `Category=Integration` (operator: "Looks like an opportunity to DRY"); 34 locator copies delegate to it; the tests it refused, plus link-creating and host-state tests, move to Integration with assertions unchanged; Repl.Core.Tests and QBAgent.Tests join MigrationIntegrationTests.
+- `538d0ccf`: the user-profile scan fix (operator: "Fix scans in PR 87 (Recommended)", whose option text says "Triage b0e41c36 is closed by this PR"; this PR carries the fix for `triage-report-b0e41c36f93c4c91b1bf2524eb579ef8`). `DirectoryTreeWalker` (QBrainAi.Services) serves the marker plugin-cache scan and the session-log history scan: no directory link or other reparse point is followed, and a directory whose listing throws an IO or access error is skipped, so kingd's untrusted mount point no longer fails the marker or an import. Hermetic marker tests through an assembly fixture; the 12 import-path tests tagged Integration.
+- `56d14d7c`: a race in the new hermetic-profile check, found by the pre-HV what-if pass, fixed.
+- `6042dbb3`: the pre-existing LocalDB cold-start flake that failed the Windows lane at `56d14d7c` (operator: "Fix the flake in PR 87 (Recommended)"). The three SQL Server integration classes that duplicated the default LocalDB string share one default with a 120 s connect timeout; the override is unchanged.
+- `0210244d`: the connect timeout fixed only the connect phase; a migration command still waited past its 120 s command timeout under parallel load (lane-4). Operator: "Serialize SQL Server tests (Recommended)". The four classes that open LocalDB share one xUnit collection, so they run one after another; they stay integration tests. This commit left out the option's "with parallelization disabled" (other collections still ran beside it); corrected in `68fa7b39`.
+- `6ea425ab`: the Windows lane's lost results (operator: "Diagnose the loss in PR 87"; triage `9be3ac08` and `5c6063f5`). The ephemeral PostgreSQL fixture runs pg_ctl start and stop with `-s`, so pg_ctl no longer writes into the test process's standard output, which carries the xUnit v3 JSON messages (see "Lost Windows lane results" below).
+- `68fa7b39`: the LocalDB collection is defined with `DisableParallelization = true`, as the chosen option states ("join one xUnit collection with parallelization disabled"), found by a pre-HV check of every chosen option's text against the code.
+- `395b4cd8`: docs only (the round 2 HV receipts, the round 3 gate receipts and the plan record through `68fa7b39`).
+- `e0b078c8`: pre-HV problem R3-P3, folded in by the operator ("Fold R3-P3 in first"). A plugin version file (`.version` or a manifest) that exists but cannot be read (locked, denied, or gone between the check and the read) no longer fails the marker: it yields no version, resolution goes on to the next file and candidate and falls back to the synced version; any other error still propagates. AC-TR-MCP-WS-005-001 was strengthened first; `PluginVersionFileReadTests` (8 scripted cases with negative controls) ran green in a mock gate before the fix. This is the last code, test or build change.
+- Docs only after it (`6b89998f`): the plan's record of `e0b078c8`, its gate receipts, and the round 3 ValidateTraceability receipts as `.out.txt` copies (the repository ignores `*.log`, so `395b4cd8` did not carry the `.out.log` files its message names). `git diff --name-only e0b078c8..HEAD` lists only `docs/` paths.
+
+### Gates at `e0b078c8`
+
+- Linux Test `ug-r3-linux-test-8` (committed tree, before the push): 4479 total, 4479 passed, 0 failed, 0 not executed.
+- Windows Test `ug-r3-win-test-ssh-6` (PAYTON-LEGION2 over SSH as kingd, HEAD verified): 4479 total, 4479 passed, 0 failed, 0 not executed; per project the same counts as Linux (Support.Mcp 3097, Repl.Core 865, Client 306, QBAgent 94, McpAgent 64, Cqrs 33, Launcher 20).
+- Windows MigrationIntegrationTests from kingd's interactive desktop session `ug-r3-win-lane-8` (pinned gate runner; proof `session=1 interactive=True head=e0b078c8`; log line `Integration lane filter: Category=Integration&Platform!=Linux`): 373 passed (Support.Mcp 361, McpAgent 1, Repl.Core 3, QBAgent 2, Build.Tests 6), 0 failed, 0 not executed; by name the same 361 Support.Mcp tests as lane-7 and lane-6, which match `ug-r3-win-lane-2` and `ug-r3-win-lane-diag-1`.
+- Linux MigrationIntegrationTests `ug-r3-linux-lane-8`: 397 passed (Support.Mcp 375, McpAgent 1, Repl.Core 3, QBAgent 2, Build.Tests 16), 0 failed, 0 not executed; the same 397 names as `ug-r3-linux-lane-7`.
+- ValidateTraceability `ug-r3-traceability-7`: passed. It reads the committed `docs/Project` exports, which are stale (see Open).
+- Full Build.Tests (raw `dotnet test`) `ug-r3-build-tests-8`: 436 total, 436 passed, 0 failed, 0 not executed.
+- At `68fa7b39`, the previous code head, every gate was also green (plan section 16): Linux Test and Windows Test 4456/0/0, Windows lane `ug-r3-win-lane-7` 373/0/0 complete by name, Linux lane 397/0/0, Build.Tests 436/0/0, ValidateTraceability passed.
+- The fix check at `6ea425ab` (the lane code is unchanged since): diagnostic lane `ug-r3-win-lane-diag-3` had 0 "Received unparseable output" lines in all 5 testhost logs and Support.Mcp 361 recorded starts, 361 results and 361 ends, by name the same as lane-6; every gate was also green at `6ea425ab` (plan section 16).
+- BDPv4 mock gates of round 3, each green before its production change: `ug-r3-mockgate-1` and `-2` (scanner, 4602/0/0), `ug-r3-dry-mockgate-1` and `-2` (locator, Support.Mcp 3235 passed), `ug-r3-scan-mockgate-1` (scan fix, 4432/0/0), `ug-r3-localdb-mockgate-1` (LocalDB default, 4446/0/0), `ug-r3-sqlcollection-mockgate-1` (LocalDB collection, 4450/0/0), `ug-r3-pgctl-mockgate-1` (silent pg_ctl, 4453/0/0), `ug-r3-sqlserial-mockgate-1` (collection flag, 4456/0/0), `ug-r3-versionread-mockgate-1` (version-file read, 4468/0/0).
+- Earlier heads, recorded in plan section 16: at `538d0ccf` every gate was green, but Windows lane `ug-r3-win-lane-1` silently lost one result. At `56d14d7c` the Windows lane (`ug-r3-win-lane-2`) failed 1 of 361 with the LocalDB flake. At `6042dbb3`, lane-3 lost 2 results and lane-4 failed the same LocalDB test on a command timeout. At `0210244d`, lane-5 was green with every SQL Server test at 6 to 9 s, but it lost 1 result.
+- Receipts: `docs/receipts/unit-suite-green-20261019/`.
+
+### Lost Windows lane results
+
+- Lanes 1, 3 and 5 each dropped 1 or 2 of the 361 Support.Mcp results without any outcome. Total still equaled executed, so the TRX counters could not show the loss; each run was compared by name with a complete one.
+- Diagnosis (VSTest `--diag` through a diagnosis-only runner; no tracked change): in `ug-r3-win-lane-diag-2`, the testhost log has 361 starts, 360 results and 361 ends. Next to the lost test, xUnit logged "Received unparseable output from test process: waiting for server to start...." followed by the JSON of a test-passed message. All 50 unparseable lines of that run were pg_ctl output.
+- Cause: xUnit v3 runs each test project as its own process and sends its messages as JSON lines on that process's standard output. The fixture ran pg_ctl without output redirection, because a pipe hangs the caller, so pg_ctl's lines garbled messages. Only the Windows lane starts pg_ctl.
+- Fix and proof: pg_ctl with `-s` printed 0 characters where it had printed 54 and 58 (probe `ug-r3-win-pgctl-silent-probe-2`). After the fix, diag-3 and lane-6 are both complete by name. The follow-up triage `0f7839ef` records the cause.
+
+### Hostile validation
+
+- Round 1 (`unitgreen-r1`, HEAD `6b4295b7`): DISAGREE, 95/93, 5 PASS and 7 FAIL (F1 to F7, all implementer edits). Remediation in plan section 14.
+- Round 2 (`unitgreen-r2`, HEAD `a94579db`): DISAGREE, 96/94, 7 PASS and 6 FAIL. Findings R2-F1 (environment-dependent unit tests survived), R2-F2 (the line-based scanner missed split and qualified forms) and R2-F3 (the generated Windows runner was not analyzed). Receipts: `docs/receipts/hv/20261019T212828-unitgreen-r2.*` and `hostile-validator-unitgreen-r2-20261019T212828.*`; the full result is in reviewer turn `req-20261020T023148Z-unitgreen-r2`. The operator chose "Structural fix, round 3 (Recommended)"; plan sections 15 and 16.
+- Round 3: pending.
+
+### Requirements
+
+- TR-MCP-NUKE-019 created under FR-MCP-BUILD-001 (AC-1 to AC-5).
+- FR-MCP-USECASE-016 and -017 converted into TR-MCP-USECASE-018 and -019 under FR-MCP-USECASE-001 and deleted; TEST-MCP-USECASE-019 and -020 restated for BDPv4.
+- TR-MCP-QUALITY-001 ac-21 reopened and strengthened; TEST-MCP-PATHNORM-001 gained `unitgreen-native-host`.
+- Round 3: AC-TR-MCP-WS-005-001 (agent-plugin version resolution never fails the marker on a directory it cannot traverse or a version file it cannot read; strengthened for R3-P3 at 16:32) and AC-TR-MCP-SESSIONLOG-006-009 (the agent-history scan never fails a submit or an import), both unsatisfied.
+- After AGREE, these are set satisfied (plan section 13, D-B): TR-MCP-NUKE-019 AC-1 to AC-5, TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008, TR-MCP-QUALITY-001 ac-21, TEST-MCP-PATHNORM-001 `unitgreen-native-host`, AC-TR-MCP-WS-005-001 and AC-TR-MCP-SESSIONLOG-006-009. The other 17 USECASE criteria stay unsatisfied.
+
+### Open
+
+- The requirements wiki export fails on Linux (`triage-report-a6927fca10364155ab9992506e1abc9c`), so the generated `docs/Project` exports stay stale; they do not list the two round 3 criteria. This store holds 1 criterion for TR-MCP-SESSIONLOG-006 where the export lists 8 (`triage-report-647e35bbdf9e43f5a8752cfc32f6c7a4`).
+- Behavior change, declared: a directory link or other reparse point below a scanned profile root is no longer followed by either scan.
+- Census limit, declared: the 12 import-path tests are the ones that failed as kingd; a unit test that reaches the history scan with the real home and passes as kingd would not appear.
+- Declared, not part of this PR: a test tagged with both Platform values, or an unknown one, has no stated outcome (none exists); Build.Tests, the Validation projects and the IntegrationTests projects keep their own repository walk-ups.
+- Route: Windows evidence runs over SSH as kingd (operator 2026-10-20), by IP 10.42.0.143.
+- Hostile validation round 3.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+

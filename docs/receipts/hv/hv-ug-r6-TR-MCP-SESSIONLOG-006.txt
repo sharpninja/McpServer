@@ -1,0 +1,25 @@
+type: result
+payload:
+  requestId: req-20261026T123355Z-637c
+  result:
+    id: TR-MCP-SESSIONLOG-006
+    title: Required planFile and todoId scalars with None sentinel and backfill
+    description: >-
+      Session-log turn storage, DTOs, REST, MCP tools, and plugin wrappers SHALL expose required string fields planFile and todoId. New interactive creates/submits/beginTurn/replace-turn reject omitted, null, or empty values. Accepted planFile values are a workspace-relative path, an exact absolute path, a ~/ home-relative path, or the literal sentinel None. Accepted todoId values are a canonical MCP TODO id, ISSUE-N, or None. An EF migration adds both columns, defaults existing rows to None, then a one-time backfill scans turn contents and agent history under ~. Uncertain extractions remain None. Query/get results SHALL return both fields.
+
+      **Covered by:** FR: FR-MCP-SESSIONLOGCTX-001; TEST: TEST-MCP-SESSIONLOG-006
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: SESSIONLOG
+    acceptanceCriteria:
+    - id: AC-TR-MCP-SESSIONLOG-006-009
+      text: 'The agent-history scan under ~ (.grok, .claude, .codex, .cursor) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder), and that covers each history root itself: a history root that is a link contributes no file, the same as a link inside it, while a home folder that is itself a link is still scanned; the scan never fails a submit or an import; when nothing usable is found the turn keeps None. Tests that submit imports read the real home, so they are integration tests (operator 2026-10-20: "Fix scans in PR 87 (Recommended)"; operator 2026-10-21: "Fix both, strengthen ACs", hostile validation round 5 finding R5-F1; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8).'
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-26T12:33:56.5725661+00:00
+    updatedAt: 2026-10-26T12:33:56.5726827+00:00
+  deprecated: true
+
+---
+

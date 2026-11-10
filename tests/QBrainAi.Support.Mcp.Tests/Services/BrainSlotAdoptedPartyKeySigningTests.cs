@@ -38,6 +38,10 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <see cref="TurnTransactionCoordinator"/>, and a real <see cref="InMemorySubscriberCommitService"/> to an
 /// in-memory <see cref="McpDbContext"/>, so no signature or key material is faked.
 /// </para>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the fixture's key server reads a settable clock fixed at one instant, so the manifest expiry and future-issue checks cannot change a case's outcome (the sibling sweep of hostile validation round 12 finding R12-F2, S34 and S35); the assertions are unchanged.</description></item>
+/// </list>
 /// </remarks>
 public sealed class BrainSlotAdoptedPartyKeySigningTests
 {
@@ -207,7 +211,13 @@ public sealed class BrainSlotAdoptedPartyKeySigningTests
                 .Options;
             var db = new McpDbContext(dbOptions, workspace);
             var canonicalizer = new TransactionManifestCanonicalizer();
-            var keyServer = new InMemoryKeyServerService(Monitor(new KeyServerOptions()), canonicalizer);
+            // TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): the key server reads a settable clock fixed at one instant, so the
+        // manifest expiry and future-issue checks cannot change a case's outcome (sibling sweep of hostile validation round 12
+        // finding R12-F2, S34 and S35).
+        var keyServer = new InMemoryKeyServerService(
+            Monitor(new KeyServerOptions()),
+            canonicalizer,
+            new QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0]));
             var registry = new BrainSlotRegistryService(
                 db,
                 keyServer,

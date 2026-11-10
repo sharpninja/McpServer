@@ -1,0 +1,14 @@
+{
+  "agent": "Codex",
+  "sessionId": "Codex-20261105T064457Z-plugin-session",
+  "requestId": "req-20261105T064500Z-unitgreen-r12",
+  "turn": {
+    "requestId": "req-20261105T064500Z-unitgreen-r12",
+    "contextList": [
+      "docs/receipts/hv/hv-ug-r12-chronology-Criteria.json"
+    ],
+    "designDecisions": [
+      "R12-F3, implementer edit: the brief and projected problems item 89 say ug-r12z3-store-readback-2.json is the first retained receipt containing TR-MCP-SERVICEUPDATE-001. The committed ug-r12z3-criteria-readback-1.json already contains that record at lines 65-112, with all five older criteria and repeated-properties, readUtc 2026-11-04T21:30:16.9458765Z, before startup-health-wait. The claim is false. Plan 27.28 line 1913 also says only-that-criterion-changed for both writes rests on their transcript readbacks; the retained before/after receipts independently establish the health-wait-only delta. Correct the first-receipt statement and the per-write evidence chain across the brief, projected problems and plan. No new product AC or test is required for this evidence-record correction. The receipt chronology audit separately confirms all sixteen later mock-to-binding pairs are ordered and the claimed contract pins are unchanged where required; the slice R contract file gained the declared real bindings. No build or test was run."
+    ]
+  }
+}

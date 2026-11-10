@@ -14,6 +14,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// Requirement coverage: FR-MCP-018, FR-MCP-050, TR-MCP-TPL-005.
 /// Test data uses deterministic URLs, workspace DTO samples, and template strings so rendering and marker YAML output
 /// can be validated without external dependencies.
+/// <para>2026-11-07, FR-MCP-018; FR-MCP-050; TR-MCP-TPL-005; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (SignaturePayloadFields_MatchesDocumentedCanonicalKeyOrder) and the helpers only it uses (ReadDocumentedCanonicalKeyOrder and FindFileFromRepoRoot) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the unit cases and the class attributes are unchanged.</para>
 /// </remarks>
 public sealed class MarkerFileServiceTests
 {
@@ -26,56 +27,13 @@ public sealed class MarkerFileServiceTests
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
         .Build();
 
-    private static readonly string[] PluginVersionEnvironmentVariables =
-    [
-        "CODEX_PLUGIN_ROOT",
-        "CLAUDE_PLUGIN_ROOT",
-        "COPILOT_PLUGIN_ROOT",
-        "CLINE_PLUGIN_ROOT",
-        "GROK_PLUGIN_ROOT",
-    ];
-
-    private static void WithClearedPluginVersionEnvironment(Action action)
-    {
-        var saved = PluginVersionEnvironmentVariables.ToDictionary(
-            name => name,
-            name => Environment.GetEnvironmentVariable(name));
-
-        try
-        {
-            foreach (var name in PluginVersionEnvironmentVariables)
-                Environment.SetEnvironmentVariable(name, null);
-
-            action();
-        }
-        finally
-        {
-            foreach (var (name, value) in saved)
-                Environment.SetEnvironmentVariable(name, value);
-        }
-    }
-
     /// <summary>
-    /// Runs <paramref name="action"/> with plugin-version env vars cleared and the user-profile
-    /// cache scan redirected to an empty temp directory, so resolution sees only the inputs the
-    /// test controls regardless of plugins installed on the machine.
+    /// Test-owned plugin-version sources for a temporary workspace (FR-MCP-018 ac-1): no plugin-root variable,
+    /// the production sibling rule applied to that workspace, and no profile, so resolution sees only the folders the
+    /// test creates, without reading or changing the process environment.
     /// </summary>
-    /// <param name="action">The assertion body to run hermetically.</param>
-    private static void WithHermeticPluginVersionResolution(Action action)
-    {
-        var emptyProfile = Path.Combine(Path.GetTempPath(), $"mcp-marker-profile-{Guid.NewGuid():N}");
-        Directory.CreateDirectory(emptyProfile);
-        try
-        {
-            MarkerFileService.AgentPluginUserProfileOverride = emptyProfile;
-            WithClearedPluginVersionEnvironment(action);
-        }
-        finally
-        {
-            MarkerFileService.AgentPluginUserProfileOverride = null;
-            Directory.Delete(emptyProfile, recursive: true);
-        }
-    }
+    private static readonly AgentPluginVersionSources s_siblingOnlySources =
+        new(_ => null, MarkerFileService.SiblingPluginRoot, UserProfile: null);
 
     /// <summary>
     /// Builds a minimal template context for prompt-rendering tests.
@@ -775,19 +733,19 @@ public sealed class MarkerFileServiceTests
     }
 
     /// <summary>
-    /// TEST-MCP-PLUGIN-PSONLY-001: marker plugin contracts publish the current synced plugin version.
+    /// TEST-MCP-PLUGIN-PSONLY-001 (historical; no such record is in the requirements store, hostile validation finding
+    /// R6-F2, so this is not an active coverage claim): marker plugin contracts publish the current synced plugin
+    /// version. Resolution reads the assembly's hermetic sources (<see cref="HermeticUserProfileFixture"/>), so no
+    /// installed plugin is seen (TR-MCP-WS-005 FR-MCP-018 ac-1).
     /// </summary>
     [Fact]
     public void BuildDefaultAgentPlugins_UsesCurrentSyncedPluginVersion()
     {
-        WithHermeticPluginVersionResolution(() =>
-        {
-            var plugins = MarkerFileService.BuildDefaultAgentPlugins(@"C:\test");
+        var plugins = MarkerFileService.BuildDefaultAgentPlugins(@"C:\test");
 
-            Assert.All(
-                plugins.Agents,
-                pair => Assert.Equal("1.26.0", pair.Value.PluginVersion));
-        });
+        Assert.All(
+            plugins.Agents,
+            pair => Assert.Equal("1.26.0", pair.Value.PluginVersion));
     }
 
     /// <summary>
@@ -805,13 +763,10 @@ public sealed class MarkerFileServiceTests
 
         try
         {
-            WithHermeticPluginVersionResolution(() =>
-            {
-                var plugins = MarkerFileService.BuildDefaultAgentPlugins(workspace);
+            var plugins = MarkerFileService.BuildDefaultAgentPlugins(workspace, s_siblingOnlySources);
 
-                Assert.Equal("9.8.7", plugins.Agents["Claude"].PluginVersion);
-                Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, plugins.Agents["Codex"].PluginVersion);
-            });
+            Assert.Equal("9.8.7", plugins.Agents["Claude"].PluginVersion);
+            Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, plugins.Agents["Codex"].PluginVersion);
         }
         finally
         {
@@ -833,17 +788,14 @@ public sealed class MarkerFileServiceTests
 
         try
         {
-            WithClearedPluginVersionEnvironment(() =>
-            {
-                var baseline = MarkerFileService.BuildDefaultAgentPlugins(workspace);
-                var baselineDigest = MarkerFileService.ComputeAgentPluginsDigest(baseline);
+            var baseline = MarkerFileService.BuildDefaultAgentPlugins(workspace, s_siblingOnlySources);
+            var baselineDigest = MarkerFileService.ComputeAgentPluginsDigest(baseline);
 
-                File.WriteAllText(Path.Combine(claudePlugin, ".version"), "9.8.7");
-                var updated = MarkerFileService.BuildDefaultAgentPlugins(workspace);
-                var updatedDigest = MarkerFileService.ComputeAgentPluginsDigest(updated);
+            File.WriteAllText(Path.Combine(claudePlugin, ".version"), "9.8.7");
+            var updated = MarkerFileService.BuildDefaultAgentPlugins(workspace, s_siblingOnlySources);
+            var updatedDigest = MarkerFileService.ComputeAgentPluginsDigest(updated);
 
-                Assert.NotEqual(baselineDigest, updatedDigest);
-            });
+            Assert.NotEqual(baselineDigest, updatedDigest);
         }
         finally
         {
@@ -997,43 +949,6 @@ public sealed class MarkerFileServiceTests
     }
 
     /// <summary>
-    /// Reads the documented canonical payload key order out of <c>docs/REPL-AGENT-GUIDE.md</c>.
-    /// </summary>
-    /// <returns>The documented field names, in documented order.</returns>
-    /// <remarks>
-    /// Test data: the <c>```text</c> block that follows the "The canonical key order is:" heading in
-    /// the REPL agent guide, which is the prose contract external verifiers implement against.
-    /// </remarks>
-    private static string[] ReadDocumentedCanonicalKeyOrder()
-    {
-        var path = FindFileFromRepoRoot("docs", "REPL-AGENT-GUIDE.md");
-        var text = File.ReadAllText(path).ReplaceLineEndings("\n");
-        var headingIndex = text.IndexOf("The canonical key order is:", StringComparison.Ordinal);
-        Assert.True(headingIndex >= 0, $"'The canonical key order is:' heading not found in {path}.");
-
-        var blockStart = text.IndexOf("```text", headingIndex, StringComparison.Ordinal);
-        Assert.True(blockStart >= 0, $"Canonical key order code fence not found in {path}.");
-        blockStart = text.IndexOf('\n', blockStart) + 1;
-        var blockEnd = text.IndexOf("```", blockStart, StringComparison.Ordinal);
-        Assert.True(blockEnd > blockStart, $"Canonical key order code fence is not closed in {path}.");
-
-        var keys = new List<string>();
-        foreach (var rawLine in text[blockStart..blockEnd].Split('\n'))
-        {
-            var line = rawLine.Trim();
-            if (line.Length == 0 || line.StartsWith('#'))
-                continue;
-
-            Assert.EndsWith(@"\n", line, StringComparison.Ordinal);
-            var separator = line.IndexOf('=', StringComparison.Ordinal);
-            Assert.True(separator > 0, $"Documented payload line '{line}' is not in key=value form.");
-            keys.Add(line[..separator]);
-        }
-
-        return [.. keys];
-    }
-
-    /// <summary>
     /// Returns the indented lines of a top-level YAML block, starting after <paramref name="blockHeader"/>
     /// and stopping at the next non-indented line.
     /// </summary>
@@ -1055,26 +970,6 @@ public sealed class MarkerFileServiceTests
 
         Assert.NotEmpty(block);
         return [.. block];
-    }
-
-    /// <summary>
-    /// Locates a repository file by walking up from the test output directory.
-    /// </summary>
-    /// <param name="segments">Repo-relative path segments of the file to locate.</param>
-    /// <returns>The absolute path of the located file.</returns>
-    private static string FindFileFromRepoRoot(params string[] segments)
-    {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null)
-        {
-            var candidate = Path.Combine(dir.FullName, Path.Combine(segments));
-            if (File.Exists(candidate))
-                return candidate;
-
-            dir = dir.Parent;
-        }
-
-        throw new FileNotFoundException($"Could not locate file '{Path.Combine(segments)}' from '{AppContext.BaseDirectory}'.");
     }
 
     /// <summary>
@@ -1158,24 +1053,6 @@ public sealed class MarkerFileServiceTests
         Assert.Equal(
             "97F7A9BA06A805827EB9EB3BDBD9ADC22BDC59276A1E0A27D89478D09780003D",
             MarkerFileService.ComputeMarkerSignature(withoutPlugins));
-    }
-
-    /// <summary>
-    /// Verifies the documented canonical key order in <c>docs/REPL-AGENT-GUIDE.md</c> matches
-    /// <see cref="MarkerFileService.SignaturePayloadFields"/> exactly, so the prose spec external
-    /// verifiers implement cannot silently drift from the code.
-    /// </summary>
-    /// <remarks>
-    /// Requirement coverage: FR-MCP-140, TR-MCP-SEC-005.
-    /// Test data: the canonical key order code fence in <c>docs/REPL-AGENT-GUIDE.md</c>.
-    /// This data is used to bind the published verifier contract to the authoritative field array.
-    /// </remarks>
-    [Fact]
-    public void SignaturePayloadFields_MatchesDocumentedCanonicalKeyOrder()
-    {
-        var documented = ReadDocumentedCanonicalKeyOrder();
-
-        Assert.Equal(MarkerFileService.SignaturePayloadFields, documented);
     }
 
     /// <summary>

@@ -1,0 +1,10 @@
+{
+  "dialogItems": [
+    {
+      "timestamp": "2026-11-05T08:27:32.4034660Z",
+      "role": "model",
+      "category": "verification",
+      "content": "{\n  \"timestampUtc\": \"2026-11-05T08:27:32.3978001Z\",\n  \"timestampLocal\": \"2026-11-05T02:27:32\",\n  \"reviewerSessionId\": \"Codex-20261105T064457Z-plugin-session\",\n  \"reviewerRequestId\": \"req-20261105T064500Z-unitgreen-r12\",\n  \"historyPath\": \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r12-persist-history-full.txt\",\n  \"status\": \"in_progress\",\n  \"checks\": [\n    {\n      \"kind\": \"PROSE\",\n      \"parts\": 10,\n      \"characters\": 179241,\n      \"sha256\": \"BBAFF68BBA76A34A09FCE06C63F6ABF54F5137599B26E185577DC4844906027D\",\n      \"exactMatch\": true\n    },\n    {\n      \"kind\": \"JSON\",\n      \"parts\": 13,\n      \"characters\": 220169,\n      \"sha256\": \"55985CF7BD3440B70266F74C031D3883F4DDB0760DA437B7887E7E8F55A800EA\",\n      \"exactMatch\": true\n    }\n  ],\n  \"result\": \"Complete prose and complete JSON persisted and reassembled exactly from own-turn processingDialog\",\n  \"completion\": \"Pending terminal completeTurn; final history proof will follow\"\n}"
+    }
+  ]
+}

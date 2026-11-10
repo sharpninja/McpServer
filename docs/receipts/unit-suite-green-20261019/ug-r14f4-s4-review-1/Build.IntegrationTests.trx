@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="2d6141f6-9ce4-4a79-92c1-f9e0878862fd" name="@LAB-OMARCHY 2026-11-07 10:14:57" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-07T10:14:57.3571080-06:00" queuing="2026-11-07T10:14:57.3571082-06:00" start="2026-11-07T10:14:55.6402520-06:00" finish="2026-11-07T10:14:57.4133480-06:00" />
+  <TestSettings name="default" id="315d812a-a292-4b4d-a9a6-31bee57c5deb">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-07_10_14_57" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="df0afaf7-7dff-40fd-a1be-544a34d9ce2f" testId="2a36520c-8b4d-6046-e55a-649907fcca97" testName="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands" computerName="LAB-OMARCHY" duration="00:00:00.0347671" startTime="2026-11-07T10:14:57.2264326-06:00" endTime="2026-11-07T10:14:57.2612517-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="df0afaf7-7dff-40fd-a1be-544a34d9ce2f" />
+    <UnitTestResult executionId="71abbdde-801e-4f95-8b3a-a0c8a2339ad8" testId="ec112d92-18f6-fd08-1dda-860bf9c29ca4" testName="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;configuration&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0138808" startTime="2026-11-07T10:14:57.1773704-06:00" endTime="2026-11-07T10:14:57.1912932-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="71abbdde-801e-4f95-8b3a-a0c8a2339ad8" />
+    <UnitTestResult executionId="1e09dc81-8886-45c2-92d9-36e0056dc23c" testId="bdaf8fec-1b4b-d08a-e7e4-e69443f88834" testName="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;environment&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0176042" startTime="2026-11-07T10:14:57.1117148-06:00" endTime="2026-11-07T10:14:57.1294308-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1e09dc81-8886-45c2-92d9-36e0056dc23c" />
+    <UnitTestResult executionId="66bbc2a1-9947-4301-ada4-1086b92c1976" testId="dc43c69a-6f7e-811a-d965-1d04854e7fea" testName="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;apphost&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0766114" startTime="2026-11-07T10:14:57.0269160-06:00" endTime="2026-11-07T10:14:57.1108712-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="66bbc2a1-9947-4301-ada4-1086b92c1976" />
+    <UnitTestResult executionId="de5cfd9e-b980-4927-9cb0-179aabe872ed" testId="b146cb3d-b2f2-cb5c-8bca-93acfb15d323" testName="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination" computerName="LAB-OMARCHY" duration="00:00:00.0132994" startTime="2026-11-07T10:14:57.2052257-06:00" endTime="2026-11-07T10:14:57.2185751-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="de5cfd9e-b980-4927-9cb0-179aabe872ed" />
+    <UnitTestResult executionId="6cddd317-1970-4065-8206-94fa74d204ce" testId="f07741c1-7139-c092-71c4-e058288a12d1" testName="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False)" computerName="LAB-OMARCHY" duration="00:00:00.0016900" startTime="2026-11-07T10:14:57.1931479-06:00" endTime="2026-11-07T10:14:57.1948825-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6cddd317-1970-4065-8206-94fa74d204ce" />
+    <UnitTestResult executionId="f92fb5ea-5dbd-40b6-9867-b6595270a5b0" testId="054359e9-9a40-c302-71a4-83a1b9a8d849" testName="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;unit&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0470934" startTime="2026-11-07T10:14:57.1298496-06:00" endTime="2026-11-07T10:14:57.1770298-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f92fb5ea-5dbd-40b6-9867-b6595270a5b0" />
+    <UnitTestResult executionId="67840ea9-2ab0-4470-8bee-c9340eeb601d" testId="d6487ed1-be5b-3d69-3ef0-9cc206de5efb" testName="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks" computerName="LAB-OMARCHY" duration="00:00:00.0073900" startTime="2026-11-07T10:14:57.1972929-06:00" endTime="2026-11-07T10:14:57.2047291-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="67840ea9-2ab0-4470-8bee-c9340eeb601d" />
+    <UnitTestResult executionId="5a9b877a-12d0-429f-8151-c321c5fc1a38" testId="d548bb87-9949-e740-6e5e-d1e5244f4181" testName="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: True)" computerName="LAB-OMARCHY" duration="00:00:00.0016201" startTime="2026-11-07T10:14:57.1951728-06:00" endTime="2026-11-07T10:14:57.1968274-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5a9b877a-12d0-429f-8151-c321c5fc1a38" />
+    <UnitTestResult executionId="3d8d2e82-eda5-484f-b1fa-1e4e13951974" testId="ddaf5316-50e3-89b4-dca3-11eeac30a44b" testName="NukeBuild.IntegrationTests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess" computerName="LAB-OMARCHY" duration="00:00:00.0321202" startTime="2026-11-07T10:14:57.0269160-06:00" endTime="2026-11-07T10:14:57.0689546-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3d8d2e82-eda5-484f-b1fa-1e4e13951974" />
+    <UnitTestResult executionId="a1516965-549e-4447-94fb-e4aeafc51d8b" testId="a9cabbd6-b460-1a57-fc54-60900ae55aec" testName="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles" computerName="LAB-OMARCHY" duration="00:00:00.0068295" startTime="2026-11-07T10:14:57.2190484-06:00" endTime="2026-11-07T10:14:57.2259247-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a1516965-549e-4447-94fb-e4aeafc51d8b" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;apphost&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="dc43c69a-6f7e-811a-d965-1d04854e7fea">
+      <Execution id="66bbc2a1-9947-4301-ada4-1086b92c1976" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialApphostAndTextInputs" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.IntegrationTests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="ddaf5316-50e3-89b4-dca3-11eeac30a44b">
+      <Execution id="3d8d2e82-eda5-484f-b1fa-1e4e13951974" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.BoundedProcessTests" name="BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="2a36520c-8b4d-6046-e55a-649907fcca97">
+      <Execution id="df0afaf7-7dff-40fd-a1be-544a34d9ce2f" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.ServiceUpdateTests" name="LinuxArchive_UsesPrivateMetadataPreservingCommands" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="d6487ed1-be5b-3d69-3ef0-9cc206de5efb">
+      <Execution id="67840ea9-2ab0-4470-8bee-c9340eeb601d" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.ServiceUpdateTests" name="LinuxReplacement_DoesNotFollowSymlinks" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;unit&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="054359e9-9a40-c302-71a4-83a1b9a8d849">
+      <Execution id="f92fb5ea-5dbd-40b6-9867-b6595270a5b0" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialApphostAndTextInputs" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: True)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="d548bb87-9949-e740-6e5e-d1e5244f4181">
+      <Execution id="5a9b877a-12d0-429f-8151-c321c5fc1a38" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.ServiceUpdateTests" name="LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;environment&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="bdaf8fec-1b4b-d08a-e7e4-e69443f88834">
+      <Execution id="1e09dc81-8886-45c2-92d9-36e0056dc23c" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialApphostAndTextInputs" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="f07741c1-7139-c092-71c4-e058288a12d1">
+      <Execution id="6cddd317-1970-4065-8206-94fa74d204ce" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.ServiceUpdateTests" name="LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="b146cb3d-b2f2-cb5c-8bca-93acfb15d323">
+      <Execution id="de5cfd9e-b980-4927-9cb0-179aabe872ed" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.ServiceUpdateTests" name="LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="a9cabbd6-b460-1a57-fc54-60900ae55aec">
+      <Execution id="a1516965-549e-4447-94fb-e4aeafc51d8b" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialStageFiles" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.IntegrationTests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;configuration&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="ec112d92-18f6-fd08-1dda-860bf9c29ca4">
+      <Execution id="71abbdde-801e-4f95-8b3a-a0c8a2339ad8" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialApphostAndTextInputs" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="2a36520c-8b4d-6046-e55a-649907fcca97" executionId="df0afaf7-7dff-40fd-a1be-544a34d9ce2f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ec112d92-18f6-fd08-1dda-860bf9c29ca4" executionId="71abbdde-801e-4f95-8b3a-a0c8a2339ad8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bdaf8fec-1b4b-d08a-e7e4-e69443f88834" executionId="1e09dc81-8886-45c2-92d9-36e0056dc23c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dc43c69a-6f7e-811a-d965-1d04854e7fea" executionId="66bbc2a1-9947-4301-ada4-1086b92c1976" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b146cb3d-b2f2-cb5c-8bca-93acfb15d323" executionId="de5cfd9e-b980-4927-9cb0-179aabe872ed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f07741c1-7139-c092-71c4-e058288a12d1" executionId="6cddd317-1970-4065-8206-94fa74d204ce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="054359e9-9a40-c302-71a4-83a1b9a8d849" executionId="f92fb5ea-5dbd-40b6-9867-b6595270a5b0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d6487ed1-be5b-3d69-3ef0-9cc206de5efb" executionId="67840ea9-2ab0-4470-8bee-c9340eeb601d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d548bb87-9949-e740-6e5e-d1e5244f4181" executionId="5a9b877a-12d0-429f-8151-c321c5fc1a38" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ddaf5316-50e3-89b4-dca3-11eeac30a44b" executionId="3d8d2e82-eda5-484f-b1fa-1e4e13951974" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a9cabbd6-b460-1a57-fc54-60900ae55aec" executionId="a1516965-549e-4447-94fb-e4aeafc51d8b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="11" executed="11" passed="11" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.23]   Discovering: Build.IntegrationTests
+[xUnit.net 00:00:00.57]   Discovered:  Build.IntegrationTests
+[xUnit.net 00:00:00.82]   Starting:    Build.IntegrationTests
+[xUnit.net 00:00:01.13]   Finished:    Build.IntegrationTests (ID = 'd6cd1cdf8168ba69b9549371a3927611a64c6a4ac12ddabc3f935cfcc815c83a')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

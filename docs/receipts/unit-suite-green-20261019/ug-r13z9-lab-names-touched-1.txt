@@ -1,0 +1,11 @@
+Now: 2026-11-05T18:12:45 head=94dc5b69078f746ea6cffc3bb11c73ecb74811be range=9b099716..94dc5b69 files=379 pattern=PAYTON|LEGION|OMARCHY|kingd|sharpninja|10\.42\.0\.|F:[\\/]+GitHub|E:[\\/]+github
+KEPT tests/Build.Tests/BuildTargetTests.cs:151: Assert.Contains("sharpninja-mcpserver-plugin-core.tgz", source, StringComparison.Ordinal);
+KEPT tests/Build.Tests/BuildTargetTests.cs:477: sharpninja.mcpserver.repl     1.4.41       mcpserver-repl
+KEPT tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs:224: Assert.Contains(@"E:\github\McpServer", appsettings, StringComparison.Ordinal);
+KEPT tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs:225: Assert.DoesNotContain(@"E:\github\QBrainAi", appsettings, StringComparison.Ordinal);
+KEPT tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs:14: /// (sharpninja-mcpserver-plugin-core-0.1.0.tgz) mislabeled 0.2.0 content after a breaking-change bump.
+KEPT tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs:18: private const string StableVendorFileName = "sharpninja-mcpserver-plugin-core.tgz";
+KEPT tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs:45: var versioned = Regex.Matches(source, @"sharpninja-mcpserver-plugin-core-\d+\.\d+\.\d+\.tgz");
+KEPT tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139EighteenthEvidenceTests.cs:78: @"C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-eighteenth\final-verification\exact-final-head.yaml",
+KEPT tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs:88: Assert.Equal("kingd", GetString(brainSlots, "CliRunAs"));
+END hits=9 added=0 files-with-hits=5

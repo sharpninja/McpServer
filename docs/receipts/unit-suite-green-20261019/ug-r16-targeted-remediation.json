@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "unitgreen-targeted-evidence.v1",
+  "recordedBy": "Codex",
+  "codeHead": "167afdcb1bbe4ce8e54770fb5882cc8a48d82b01",
+  "round15Finding": [
+    "R15-F1",
+    "R15-F4"
+  ],
+  "runs": [
+    {
+      "runId": "ug-r15f1-mutation-red-1",
+      "kind": "intentional-negative-control",
+      "mutation": "The discovery composer was temporarily changed to ignore the Category=Integration discovery set. The mutation was never committed and was restored immediately after the run.",
+      "expectedExitCode": 1,
+      "observedExitCode": 1,
+      "total": 5,
+      "passed": 2,
+      "failed": 3,
+      "notExecuted": 0,
+      "startedLocal": "2026-11-09T15:10:12.4105410-06:00",
+      "finishedLocal": "2026-11-09T15:10:14.4105169-06:00",
+      "rawTrxPath": "TestResults/ug-r15f1-mutation-red-1/groups/Build.Tests/Build.Tests.trx",
+      "rawTrxSha256": "5DF24C7058689A69964C88BFCA6DF34387B8B6B1C85E8C0740E23D4B7DABA47E",
+      "selectedProjectsSha256": "8CE0908EBAA41B678D4013ECDBC2139CA47B15C89D3A9233D7F32201356F0982",
+      "rawEvidenceCommitted": false,
+      "outcomes": [
+        "FAIL OwnershipInventory_ComesFromDiscoveredCases_NotRecordedCounts",
+        "PASS DotNetListTestDiscovery_ParsesCasesAndEmptyFilterResult",
+        "PASS IntegrationOwnedProject_WithDiscoveredUnitCase_FailsLane",
+        "FAIL UnitOwnedProject_WithDiscoveredIntegrationCase_FailsTestTarget",
+        "FAIL RecordedCountDrift_IsRejected"
+      ]
+    },
+    {
+      "runId": "ug-r15r16-discovery-green-1",
+      "kind": "restored-positive-control",
+      "expectedExitCode": 0,
+      "observedExitCode": 0,
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "notExecuted": 0,
+      "startedLocal": "2026-11-09T15:12:05.3611881-06:00",
+      "finishedLocal": "2026-11-09T15:12:07.6057847-06:00",
+      "rawTrxPath": "TestResults/ug-r15r16-discovery-green-1/groups/Build.Tests/Build.Tests.trx",
+      "rawTrxSha256": "BCCC475E5DE9037F048B629A5D36DBC0699BA9C4AC50F37D42785E926086637A",
+      "selectedProjectsSha256": "D3A060AE143C667F794256FFDFD2A2FA89397E352D8687C8058555F5AD6D8F6A",
+      "rawEvidenceCommitted": false
+    },
+    {
+      "runId": "ug-r15r16-bindings-green-1",
+      "kind": "cleanup-negative-controls",
+      "expectedExitCode": 0,
+      "observedExitCode": 0,
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "notExecuted": 0,
+      "startedLocal": "2026-11-09T15:11:27.6134566-06:00",
+      "finishedLocal": "2026-11-09T15:11:29.6611876-06:00",
+      "rawTrxPath": "TestResults/ug-r15r16-bindings-green-1/groups/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+      "rawTrxSha256": "155B772505CB7FCB4049727E12357C40D2A28E7EC320180C4606D7FA471AC25E",
+      "selectedProjectsSha256": "75FD944A97A2B4F782F888506BA967110225266A206611433DF7F7AF46687FF6",
+      "rawEvidenceCommitted": false,
+      "requiredControls": [
+        "DeleteOwnedRootAsync_PersistentIOException_ThrowsAfterBoundedAttempts",
+        "DeleteOwnedRootAsync_NonIOException_IsNotRetried"
+      ]
+    }
+  ],
+  "disclosure": "The raw targeted TRX files remain in ignored TestResults storage and are not claimed as committed. This committed receipt preserves their hashes, counters, times and material outcomes. The immutable final-head manifest separately commits all 14 publication-gate TRX files."
+}

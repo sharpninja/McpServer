@@ -1,0 +1,86 @@
+{
+  "name": "ug-r9-binding-s-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "23955af0b330ec1fe167138edac1ef5ef8ff3bfd",
+  "dirtyPaths": [
+    " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+    " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-s-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-s-1/",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderBindingTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Repl.Core.Tests:TestOutputFolderContractTests,TestOutputFolderBindingTests",
+    "QBrainAi.Support.Mcp.Tests:RequirementStoredTimestampContractTests,RequirementStoredTimestampBindingTests,MemoryBenchPluginTests,MemoryBenchMultiTurnHarnessTests",
+    "--test-run-id",
+    "ug-r9-binding-s-1"
+  ],
+  "startedLocal": "2026-11-02T14:45:01",
+  "endedLocal": "2026-11-02T14:45:50",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 35,
+  "passed": 35,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-s-1/groups/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-binding-s-1/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "ADB5931045BE663409D5C89C6B662FC2B3C0B94C9E175953B99FCFF3879118A9",
+      "total": 9,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-s-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-binding-s-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "243FDB62BC19C91D1B261A9DD9258B85B32C4F17892FE09D5FD032DFF6FBEAF5",
+      "total": 26,
+      "passed": 26,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+      "sha256": "D2F393773E3271A3D6E07679AC1993C0FC3A89C562623441BDEF7331938B9108"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+      "sha256": "ECF28CAD43C89F9DE2A07E0E53922F382272F1B237F394520E79DF52C1636A4F"
+    },
+    {
+      "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+      "sha256": "255286BD71328B1AA212AA48233EE60955D483A7E67C3D6AC0900BCD4838BFD2"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderBindingTests.cs",
+      "sha256": "B294CF8E6AB29B5E048C8B823228445CE2D6D62E6B904DD0F2972F92B0FA3A23"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs",
+      "sha256": "A1621B900C0CE51CFE2F20E192A0F7B0863129A57F3A54786C39D283B21319A2"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs",
+      "sha256": "B62E6B5DB235C452D388DD7DE1C9616DC83E0CE0947902C375D76713BD84759B"
+    }
+  ],
+  "writtenLocal": "2026-11-02T14:46:34",
+  "writtenBy": "ClaudeCode"
+}

@@ -1,0 +1,2 @@
+9:  Failed NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands [22 ms]
+21:Failed!  - Failed:     1, Passed:   435, Skipped:     0, Total:   436, Duration: 5 m 31 s - Build.Tests.dll (net10.0)

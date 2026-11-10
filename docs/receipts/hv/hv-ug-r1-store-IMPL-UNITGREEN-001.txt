@@ -1,0 +1,63 @@
+type: result
+payload:
+  requestId: req-20261020T005613Z-f1ae
+  result:
+    id: IMPL-UNITGREEN-001
+    title: 'Make the unit suite green on both lab hosts (BDPv4: 0 failed, 0 skipped)'
+    section: Build
+    priority: high
+    done: false
+    note: "Session ClaudeCode-20261019T134748Z-plugin-session, turn req-20261019T190714Z-bdpv4-green-correction. Operator 2026-10-19: this effort owns every unit-suite code change (\"I don't want you and the C4 agent working on the same thing.  C4 should not be changing code, only docs.\"); PLAN-C4MODEL-001 keeps docs and TR-MCP-NUKE-017. Branch fix/unit-suite-green-20261019. Five tasks were checked before any hostile review; unchecked 2026-10-19 by operator decision (\"Uncheck them now (Recommended)\"); every task is checked only after hostile AGREE. Draft PR https://github.com/sharpninja/McpServer/pull/87."
+    description:
+    - 'Operator 2026-10-19: "BDPv4 requires all unit tests be green." and "Gotta use the recommended packages."'
+    - "Operator 2026-10-19 (day-one rule, plan section 9): \"There should be ZERO platform specific UNIT tests.  If it depends on the environment, it's an integration test.\""
+    - 'Approved plan (operator "Yes, I approve the change", 2026-10-19 14:50): groups A to F of docs/plans/2026-10-19-unit-suite-green.md; amendment G (host-scoped MigrationIntegrationTests lane, TR-MCP-NUKE-019 AC-1 to AC-4) approved 16:22 and built as 8c2b83ab; amendment H1 (Windows lane needs an interactive desktop session, TR-MCP-NUKE-019 AC-5) approved 18:47 and built as 69d8f3f5.'
+    - 'Measured at develop ace70daa: Linux 14 failed and 16 skipped; Windows restore fails NU1902/NU1903; Windows diagnosis-only run 4702 results, 19 failed, 2 not executed.'
+    technicalDetails:
+    - Branch fix/unit-suite-green-20261019 from origin/develop (ace70daa). Nuke targets only; no override in any gate.
+    - 'HV reviewer: Codex gpt-6-astra max (operator 2026-10-19).'
+    implementationTasks:
+    - task: 'Step 1 requirements: PATHNORM records and TR-MCP-QUALITY-001 criteria copied from PAYTON-LEGION2; ac-21 reopened and strengthened; TEST-MCP-PATHNORM-001 unitgreen-native-host added. Awaiting hostile validation'
+      done: false
+    - task: 'A: Xml and Pkcs 10.0.13 central pins (cbc74e82); Restore and Compile clean on Linux (unit-green-linux-a-compile-20261019T1514) and Windows with no override (unit-green-win-a-20261019T1518). Awaiting hostile validation'
+      done: false
+    - task: 'Step 2 tests and scripted data (28bf0b22): B1 ProductionGate, B2 RemoveTodoRecords x2, B3 ProcessNormalizer, D host contract and MockData, F assertion text, negative controls. Awaiting hostile validation'
+      done: false
+    - task: 'Linux mock gate unit-green-mock-20261019T1528: 4666 total, 0 failed, the 16 named Windows-only not executed (since reclassified). Awaiting hostile validation'
+      done: false
+    - task: 'D production overload and Real binding (de581353); Linux run unit-green-real-20261019T1535: 4669 total, 0 failed, 16 not executed (since reclassified). Awaiting hostile validation'
+      done: false
+    - task: 'F (b2319488): HostileReviewWorker startup test clears the Event Log provider; Windows Test unit-green-win-f-20261019T1553 4644 total, 0 failed, 0 not executed. Awaiting hostile validation'
+      done: false
+    - task: Takeover of PLAN-C4MODEL-001 unit-suite code by operator decision (11681680, blob-identical to c2125c42; C4 reverted PR 84 copies in b7618423)
+      done: false
+    - task: 'G (TR-MCP-NUKE-019, 8c2b83ab): host-scoped MigrationIntegrationTests filter; mock gate 21/21, production 24/24; Linux lane logs Platform!=Windows, Windows lane Platform!=Linux. Awaiting hostile validation'
+      done: false
+    - task: FR-MCP-USECASE-016/017 converted into TR-MCP-USECASE-018/019 under FR-MCP-USECASE-001 and deleted (operator 17:03); generated docs/Project exports refreshed by the wiki export
+      done: false
+    - task: 'Platform-dependent tests classified as integration tests (b2bd50b3): UnitSuitePlatformScanner guard with mock gate 17/17 and real binding, strengthened skip guard, Linux and Windows Test 4611/0/0 each, MigrationIntegrationTests Linux 154 and Windows 128 passed, 0 failed'
+      done: false
+    - task: 'Exit gates at the PR head: Linux and Windows Test 0 failed 0 not executed; MigrationIntegrationTests on both hosts 0 failed 0 not executed; ValidateTraceability; full Build.Tests 0 failed'
+      done: false
+    - task: Pre-HV holistic review presented to the operator; hostile validation (Codex gpt-6-astra max) AGREE at 98/98 with jsonl receipts and the full verdict in its session-log turn
+      done: false
+    - task: One PR into develop with the plan (docs/plans/2026-10-19-unit-suite-green.md) and the PR 82 handoff correction
+      done: false
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-PATHNORM-001
+    - FR-MCP-139
+    - FR-MCP-BUILD-001
+    - FR-MCP-USECASE-001
+    technicalRequirements:
+    - TR-MCP-QUALITY-001
+    - TR-MCP-PATHNORM-001
+    - TR-MCP-NUKE-018
+    - TR-MCP-NUKE-019
+    - TR-MCP-USECASE-018
+    - TR-MCP-USECASE-019
+  deprecated: true
+
+---
+
+

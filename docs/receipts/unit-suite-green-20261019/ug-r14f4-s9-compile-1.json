@@ -1,0 +1,61 @@
+{
+  "name": "ug-r14f4-s9-compile-1",
+  "kind": "compile",
+  "retrospective": false,
+  "note": "Written when the run ended, from its own meta, exit and log files (Save-CompileReceipt.ps1).",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "runHead": "908023bac78f28cec8ddb6ff3d0e9a0e89c84055",
+  "runDirtyPaths": [
+    " M build/IntegrationLaneProjects.cs",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+    " M tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionFakes.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "Compile"
+  ],
+  "startedLocal": "2026-11-07T16:26:09",
+  "endedLocal": "2026-11-07T16:28:39",
+  "exitCode": 0,
+  "status": "passed",
+  "buildSucceededLine": "Build succeeded on 11/7/2026 4:28:39 PM. ＼（＾ᴗ＾）／",
+  "errorDiagnostics": 0,
+  "warningDiagnostics": 0,
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/s9/runs/ug-r14f4-s9-compile-1.out.log",
+  "logSha256": "77DC25F58609BF3EFA232EB0BBFADC1F241FDE1B2A66D5427241E88D1136E319",
+  "sources": [
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipTests.cs",
+      "sha256": "A904C71C860A549B42D51CC215E6528EAD05E9DCCB86F7FA44179445413B3B0E"
+    },
+    {
+      "path": "build/IntegrationLaneProjects.cs",
+      "sha256": "5F6D41AF15C45DA0F41E71B69615F71562A4702AB3E56DB56168A2DF05D3486F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionFakes.cs",
+      "sha256": "1C928A5B08B0A9E6C05F0B1D907B9E72909EBF0A1CCA9DD66034B1E7D36B58F5"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "sha256": "C075500561C953F8F9D23ADA52FE72F48A76BE339CD92879DA85C2071BB35829"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "sha256": "8D81BE566B7B56185F5207FEB8BD2E83146AD71A88020F06DCED894047A69F82"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+      "sha256": "5AE80F11B9898B824EB2ABE17B12BA51EEA8EE5E4D4CE6F481504FD3ABD4C172"
+    }
+  ],
+  "metaFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/s9/runs/ug-r14f4-s9-compile-1.meta.json",
+  "metaSha256": "1947C68C1CC714A78882DC5398B1D3A68723E9DB027CA664408586149456FB39",
+  "writtenLocal": "2026-11-07T16:29:20",
+  "minutesAfterRunEnd": 0.7,
+  "writtenBy": "ClaudeCode"
+}

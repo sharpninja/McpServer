@@ -1,0 +1,22 @@
+[
+  {
+    "type": "result",
+    "payload": {
+      "deprecated": true,
+      "result": {
+        "priority": "medium",
+        "id": "FR-MCP-018",
+        "area": "MCP",
+        "acceptanceCriteria": [],
+        "updatedAt": "2026-10-20T22:15:26.7933139+00:00",
+        "createdAt": "2026-10-20T22:15:26.7931869+00:00",
+        "title": "Marker File Agent Discovery",
+        "scopeStartLayerKey": "layer-1",
+        "description": "When a workspace is started, the server shall write an `AGENTS-README-FIRST.yaml` marker file to the workspace root containing the shared host port, all endpoint paths, a machine-readable prompt, and PID. All markers point to the same port; workspace identity is resolved via the `X-Workspace-Path` header. The marker shall be removed when the workspace is stopped.\n\n**Covered by:** `MarkerFileService`, `WorkspaceProcessManager`",
+        "status": "pending"
+      },
+      "requestId": "req-20261020T221525Z-f150"
+    }
+  },
+  null
+]

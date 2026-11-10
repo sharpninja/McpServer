@@ -7,6 +7,16 @@ using Microsoft.Win32.SafeHandles;
 
 namespace QBrainAi.Support.Mcp.Tests.Infrastructure;
 
+/// <summary>
+/// TR-MCP-USECASE-019 AC-010: this part of RepositoryEvidenceTestSupport holds the Windows process helpers:
+/// WindowsSuspendedProcess, which starts a command suspended with its standard input, output and error redirected to
+/// temporary files, assigns it to a kill-on-close job object before its first thread runs, waits until the job holds no
+/// active process, terminates the job when the timeout passes, and returns the exit code and output; and the hook
+/// s_afterWindowsProcessCreationBeforeAssignment, null unless set, which runs after process creation and before job
+/// assignment. RunProcessAsync in RepositoryEvidenceTestSupport.cs uses it on Windows hosts for the git and process
+/// runs of the repository evidence tests.
+/// </summary>
+/// <remarks>2026-11-07, TR-MCP-USECASE-019 AC-010: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the code is unchanged.</remarks>
 internal static partial class RepositoryEvidenceTestSupport
 {
     private static Action? s_afterWindowsProcessCreationBeforeAssignment = null;

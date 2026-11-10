@@ -1,0 +1,37 @@
+{
+  "payload": {
+    "result": {
+      "area": "MCP",
+      "acceptanceCriteria": [
+        {
+          "text": "The target's plan is chosen per operating system: a server that already answers with the required model needs no step; otherwise an installed ollama (on PATH, or on Windows LocalAppData/Programs/Ollama/ollama.exe), else a previous portable install under the test-tools folder (ollama.exe on Windows, bin/ollama on Linux), else a download of that operating system's portable release; the plan then starts the server when it is not answering and pulls the model when it is absent (Build.Tests: OllamaInstallPlanAssertion_AcceptsPerOsPlanAndRejectsWindowsOnlyOrMissingStep, then InstallOllama_Plan_PerOperatingSystem_UsesTheShippedPlanner). The required model is QBRAINAI_QUADBRAIN_OLLAMA_MODEL when it holds a non-blank value, else MCP_QUADBRAIN_OLLAMA_MODEL when it does, else gemma4:e4b, chosen by one rule that InstallOllama and QuadBrainOllamaEndpointIntegrationTests both use, proved by a unit contract over explicit inputs (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F5).",
+          "id": "AC-001",
+          "isSatisfied": false
+        },
+        {
+          "text": "Re-running the target when the server already answers with the required model changes nothing (Build.Tests: InstallOllama_Plan_ServerAnswersWithModel_ChangesNothing over the shipped planner).",
+          "id": "AC-002",
+          "isSatisfied": false
+        },
+        {
+          "text": "On LAB-OMARCHY the target leaves a portable Ollama that OllamaServerFixture's resolver finds (TR-MCP-QBOLLAMA-002) and the required model installed, and QuadBrainOllamaEndpointIntegrationTests run (TEST-MCP-QBOLLAMA-001).",
+          "id": "AC-003",
+          "isSatisfied": false
+        }
+      ],
+      "title": "InstallOllama provisions Ollama on Windows and Linux",
+      "createdAt": "2026-11-03T12:29:46.4817102+00:00",
+      "scopeStartLayerKey": "layer-1",
+      "priority": "medium",
+      "updatedAt": "2026-11-03T12:29:46.4818401+00:00",
+      "id": "TR-MCP-NUKE-016",
+      "subarea": "NUKE",
+      "description": "The Nuke InstallOllama target provisions the local Ollama service the QuadBrain Ollama integration tests use (FR-MCP-QBOLLAMA-002), on Windows and on Linux, idempotently: when a server already answers on localhost:11434 with the required model it changes nothing; otherwise it uses an installed ollama executable (on PATH, or on Windows in Ollama's install folder LocalAppData/Programs/Ollama) or a previous portable install under the test-tools folder, else downloads that operating system's portable release into the test-tools folder (Windows: the windows-amd64 zip; Linux: the linux-amd64 archive), starts the server detached and waits until it answers, and pulls the required model (default gemma4:e4b; QBRAINAI_QUADBRAIN_OLLAMA_MODEL or MCP_QUADBRAIN_OLLAMA_MODEL overrides) when it is absent.",
+      "status": "pending",
+      "notes": "Nuke behavior is accountable through TR only (operator ruling 2026-10-10); evidence is Build.Tests, run directly as infrastructure, and the live run of the target. Created 2026-10-15 (operator decision \"Approve all three (Recommended)\"; PLAN-SESSIONTRIAGEFIX-001 B13, triage-report-680916ed)."
+    },
+    "requestId": "req-20261103T122945Z-eb25",
+    "deprecated": true
+  },
+  "type": "result"
+}

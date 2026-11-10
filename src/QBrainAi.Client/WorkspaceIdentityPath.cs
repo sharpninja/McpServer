@@ -1040,10 +1040,23 @@ public static class WorkspaceIdentityPath
     /// <param name="path">Canonical (or already native) path.</param>
     /// <param name="platform">Platform the path belongs to.</param>
     /// <returns>The host-native spelling.</returns>
-    public static string ToNativePath(string path, WorkspacePathPlatform platform)
+    public static string ToNativePath(string path, WorkspacePathPlatform platform) =>
+        ToNativePath(path, platform, SystemWorkspaceHostEnvironment.Instance);
+
+    /// <summary>
+    /// TR-MCP-PATHNORM-001 / TEST-MCP-PATHNORM-001 (criterion unitgreen-native-host): the same native
+    /// spelling decided by an injected host, so tests prove both host branches on any runner. On a
+    /// Windows host a Windows-platform path switches to backslashes; anything else is unchanged.
+    /// </summary>
+    /// <param name="path">Canonical (or already native) path.</param>
+    /// <param name="platform">Platform the path belongs to.</param>
+    /// <param name="host">Host whose operating system decides the spelling.</param>
+    /// <returns>The host-native spelling.</returns>
+    public static string ToNativePath(string path, WorkspacePathPlatform platform, IWorkspaceHostEnvironment host)
     {
         ArgumentNullException.ThrowIfNull(path);
-        return OperatingSystem.IsWindows() && platform == WorkspacePathPlatform.Windows
+        ArgumentNullException.ThrowIfNull(host);
+        return host.Platform == WorkspacePathPlatform.Windows && platform == WorkspacePathPlatform.Windows
             ? path.Replace('/', (char)92)
             : path;
     }

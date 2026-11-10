@@ -1,0 +1,58 @@
+HV_R14_RELAUNCH_FINAL json part 12/12 SHA256 A8A64CF4AC3951F711BA0663B3DEA1EEE708A71FAD5355A9C63C832D838E5F23
+-r14-relaunch-finalize.ps1'), [ref]\"'$tokens, [ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r14-relaunch-finalize.ps1 -Severity Warning,Error; if ($parseErrors.Count) { exit 1 }'",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 989,
+      "id": "item_516",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.sessionlog.appendDialog -Category decision -Text 'Final adjudication: all 61 snapshot task states and hashes match the live TODO. Map the task-specific portions of canonical requirements using task text, plan sections and changed-source attribution; do not treat fixture IDs as requirements or shared IDs as acceptance of every criterion. Tasks 12, 13 and 35 have no implementation requirement in flux and receive no verdict. Forty-five tasks receive AGREE, twelve classification/selection tasks require the current project-ownership policy decision R14-F4, and task 60 requires record corrections R14-F1/F2/F3. The current gates and Z16 fix pass. Overall DISAGREE 96/96 with five findings; no completed-task regression. This preserves per-task independence instead of failing every task because the overall records fail. Add-profile refreshed in full for the twelfth time, including eight Global and three Workspace memories.' -OutputName final-adjudication-decision -Quiet -WhatIf\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 991,
+      "id": "item_517",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.sessionlog.appendDialog -Category decision -Text 'Final adjudication: all 61 snapshot task states and hashes match the live TODO. Map the task-specific portions of canonical requirements using task text, plan sections and changed-source attribution; do not treat fixture IDs as requirements or shared IDs as acceptance of every criterion. Tasks 12, 13 and 35 have no implementation requirement in flux and receive no verdict. Forty-five tasks receive AGREE, twelve classification/selection tasks require the current project-ownership policy decision R14-F4, and task 60 requires record corrections R14-F1/F2/F3. The current gates and Z16 fix pass. Overall DISAGREE 96/96 with five findings; no completed-task regression. This preserves per-task independence instead of failing every task because the overall records fail. Add-profile refreshed in full for the twelfth time, including eight Global and three Workspace memories.' -OutputName final-adjudication-decision -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 993,
+      "id": "item_518",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.sessionlog.appendActions -Text 'Final verdict decision: DISAGREE accuracy 96 completeness 96 confidence 99. Five findings: R14-F1 early binding chronology, R14-F2 criterion attribution, R14-F3 nonexistent audit receipt, R14-F4 current project-ownership rule conflict, R14-F5 current record misattribution. Keep task verdicts independent: 45 AGREE, 13 DISAGREE, 3 out of scope. No completed-task regression. Complete claim evidence, closure and 61-task/45-change/89-requirement matrix are being persisted in full; no product or other-store change is authorized by this reviewer.' -OutputName final-adjudication-action -Quiet -WhatIf\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 995,
+      "id": "item_519",
+      "command": "/usr/bin/pwsh -NoProfile -Command \"& ./docs/receipts/hv/hv-ug-r14-relaunch-plugin.ps1 -Command Invoke -Method workflow.sessionlog.appendActions -Text 'Final verdict decision: DISAGREE accuracy 96 completeness 96 confidence 99. Five findings: R14-F1 early binding chronology, R14-F2 criterion attribution, R14-F3 nonexistent audit receipt, R14-F4 current project-ownership rule conflict, R14-F5 current record misattribution. Keep task verdicts independent: 45 AGREE, 13 DISAGREE, 3 out of scope. No completed-task regression. Complete claim evidence, closure and 61-task/45-change/89-requirement matrix are being persisted in full; no product or other-store change is authorized by this reviewer.' -OutputName final-adjudication-action -Quiet\"",
+      "exitCode": 0,
+      "status": "completed"
+    },
+    {
+      "responseLine": 997,
+      "id": "item_520",
+      "command": "/usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r14-relaunch-finalize.ps1 -Mode Prepare -WhatIf'",
+      "exitCode": 0,
+      "status": "completed"
+    }
+  ],
+  "commandLedger": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-command-ledger.jsonl",
+  "commandCoverage": "Exact completed shell commands and exit codes observed in the response JSONL through artifact preparation are embedded. Subsequent receipt persistence/readback commands remain in the complete response JSONL and reviewer ledger; they are operational verification, not new substantive review evidence.",
+  "streamPaths": [
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261106T181559-unitgreen-r14.request.jsonl",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261106T181559-unitgreen-r14.response.jsonl"
+  ],
+  "persistence": {
+    "sessionId": "Codex-20261107T002005Z-plugin-session",
+    "requestId": "req-20261107T002200Z-unitgreen-r14-relaunch",
+    "beforeVerdictReadback": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-own-session-before-final-3.txt",
+    "orderedPartsManifest": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-verdict-parts.json",
+    "historyReceipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-history-final.txt",
+    "fullReadbackReceipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-own-session-final.txt",
+    "verificationReceipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r14-relaunch-persistence-proof.json",
+    "policy": "Complete prose and full JSON are stored in ordered dialog parts, followed by completion and live readback. These paths identify verification artifacts; their contents, not this prospective statement, prove success."
+  }
+}

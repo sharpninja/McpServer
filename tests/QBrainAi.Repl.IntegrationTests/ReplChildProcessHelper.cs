@@ -1,19 +1,22 @@
 using System.Diagnostics;
 using System.Text;
-using System.Text.Json;
+using QBrainAi.TestSupport.TemporaryInstance;
 
 namespace QBrainAi.Repl.IntegrationTests;
 
 /// <summary>
-/// Helper class to launch and manage qbrain-ai-repl child processes for integration testing.
+/// Helper class to launch and manage qbrain-ai-repl child processes for integration testing. Each helper owns one
+/// temporary QBrain.AI instance (<see cref="ScratchQBrainAi"/>) and starts its REPL child against that instance's
+/// workspace and marker only, never the live server, its marker or its API key (TR-MCP-NUKE-019 AC-6;
+/// triage-report-81596036a11249d3b79afac1b53d53d9).
 /// </summary>
 public sealed class ReplChildProcessHelper : IDisposable
 {
-    private const string LiveWorkspaceDiscoveryEnvVar = "MCPSERVER_REPL_TEST_USE_LIVE_WORKSPACE_DISCOVERY";
     private static readonly TimeSpan StartupProbeTimeout = TimeSpan.FromMilliseconds(250);
     private static readonly TimeSpan ShutdownTimeout = TimeSpan.FromSeconds(2);
 
     private readonly string _agentName;
+    private ScratchQBrainAi? _instance;
     private Process? _process;
     private readonly List<string> _stdoutLines = new();
     private readonly List<string> _stderrLines = new();
@@ -79,7 +82,36 @@ public sealed class ReplChildProcessHelper : IDisposable
     public IReadOnlyList<string> LastStartArguments { get; private set; } = Array.Empty<string>();
 
     /// <summary>
-    /// Launches the qbrain-ai-repl --agent-stdio child process.
+    /// Gets the base URL of this helper's temporary instance (TR-MCP-NUKE-019 AC-6); available once
+    /// <see cref="EnsureInstanceAsync"/> or <see cref="StartAsync"/> has run.
+    /// </summary>
+    public Uri InstanceBaseUrl => _instance?.BaseUrl
+        ?? throw new InvalidOperationException("The temporary instance has not been started; call EnsureInstanceAsync or StartAsync first.");
+
+    /// <summary>
+    /// Gets the workspace path registered on this helper's temporary instance (TR-MCP-NUKE-019 AC-6), the value a
+    /// request's X-Workspace-Path names to reach that workspace; available once <see cref="EnsureInstanceAsync"/> or
+    /// <see cref="StartAsync"/> has run.
+    /// </summary>
+    public string InstanceWorkspacePath => _instance?.WorkspacePath
+        ?? throw new InvalidOperationException("The temporary instance has not been started; call EnsureInstanceAsync or StartAsync first.");
+
+    /// <summary>
+    /// Starts this helper's temporary QBrain.AI instance when it is not running yet (TR-MCP-NUKE-019 AC-6): a test-owned
+    /// workspace, marker, database and server process on a free port.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that completes when the instance answers health.</returns>
+    public async Task EnsureInstanceAsync(CancellationToken cancellationToken = default)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        cancellationToken.ThrowIfCancellationRequested();
+        _instance ??= await ScratchQBrainAi.StartAsync().ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Launches the qbrain-ai-repl --agent-stdio child process against this helper's temporary instance, and fails
+    /// before returning unless its workspace and marker lie inside that instance's root (TR-MCP-NUKE-019 AC-6).
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that completes when the process is started.</returns>
@@ -95,44 +127,15 @@ public sealed class ReplChildProcessHelper : IDisposable
             throw new InvalidOperationException("Process already started");
         }
 
-        var repoRoot = FindRepoRoot(AppContext.BaseDirectory);
-        var workspaceRoot = await ResolveWorkspaceRootAsync(repoRoot).ConfigureAwait(false);
-        var markerPath = Path.Combine(workspaceRoot, "AGENTS-README-FIRST.yaml");
-        var hostAssemblyPath = ResolveHostAssemblyPath(repoRoot);
+        await EnsureInstanceAsync(cancellationToken).ConfigureAwait(false);
+        var instance = _instance!;
+        var workspaceRoot = instance.WorkspacePath;
+        var markerPath = instance.MarkerPath;
+        var hostAssemblyPath = instance.ReplHostAssemblyPath;
 
-        var startInfo = new ProcessStartInfo
-        {
-            FileName = "dotnet",
-            WorkingDirectory = workspaceRoot,
-            UseShellExecute = false,
-            RedirectStandardInput = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            CreateNoWindow = true,
-            StandardOutputEncoding = Encoding.UTF8,
-            StandardInputEncoding = Encoding.UTF8,
-            StandardErrorEncoding = Encoding.UTF8
-        };
-        startInfo.ArgumentList.Add(hostAssemblyPath);
-        startInfo.ArgumentList.Add("--agent-stdio");
-        startInfo.ArgumentList.Add("--agent");
-        startInfo.ArgumentList.Add(_agentName);
-        startInfo.ArgumentList.Add("--workspace-path");
-        startInfo.ArgumentList.Add(workspaceRoot);
-        if (File.Exists(markerPath))
-        {
-            startInfo.ArgumentList.Add("--marker-file");
-            startInfo.ArgumentList.Add(markerPath);
-        }
-
-        startInfo.Environment["MCP_WORKSPACE_PATH"] = workspaceRoot;
-        startInfo.Environment["MCPSERVER_WORKSPACE_PATH"] = workspaceRoot;
-        startInfo.Environment["MCP_AGENT_NAME"] = _agentName;
-        startInfo.Environment["PLUGIN_AGENT_NAME"] = _agentName;
-        startInfo.Environment["MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS"] = "10";
-        startInfo.Environment["MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS"] = "8";
-        startInfo.Environment["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1";
-        startInfo.Environment["DOTNET_NOLOGO"] = "1";
+        // FR-MCP-TESTRESOURCE-001 ac-4: both consumers use the same guarded arguments, server and trust cache.
+        var startInfo = OwnedReplStart.CreateStartInfo(hostAssemblyPath, workspaceRoot, markerPath,
+            instance.RootPath, instance.BaseUrl.ToString(), _agentName);
         LastStartArguments = startInfo.ArgumentList.ToArray();
 
         _process = new Process { StartInfo = startInfo };
@@ -154,346 +157,6 @@ public sealed class ReplChildProcessHelper : IDisposable
             throw new InvalidOperationException(
                 $"qbrain-ai-repl host exited during startup with code {_process.ExitCode}.{Environment.NewLine}{BuildDiagnostics()}");
         }
-    }
-
-    private static string FindRepoRoot(string startPath)
-    {
-        var directory = new DirectoryInfo(startPath);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln"))
-                || File.Exists(Path.Combine(directory.FullName, "QBrainAi.slnx"))
-                || File.Exists(Path.Combine(directory.FullName, ".git"))
-                || Directory.Exists(Path.Combine(directory.FullName, ".git")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException($"Could not resolve repository root from '{startPath}'.");
-    }
-
-    private static async Task<string> ResolveWorkspaceRootAsync(string repoRoot)
-    {
-        if (IsLiveWorkspaceDiscoveryEnabled())
-        {
-            var registeredWorkspaceRoot = await TryResolveRegisteredWorkspaceRootAsync(repoRoot).ConfigureAwait(false);
-            if (!string.IsNullOrWhiteSpace(registeredWorkspaceRoot))
-            {
-                return registeredWorkspaceRoot;
-            }
-        }
-
-        return TryResolveSubmoduleWorkspaceRoot(repoRoot)
-            ?? TryFindMarkerRoot(repoRoot)
-            ?? repoRoot;
-    }
-
-    private static bool IsLiveWorkspaceDiscoveryEnabled()
-        => string.Equals(
-            Environment.GetEnvironmentVariable(LiveWorkspaceDiscoveryEnvVar),
-            "true",
-            StringComparison.OrdinalIgnoreCase);
-
-    private static string ResolveHostAssemblyPath(string repoRoot)
-    {
-        var outputDirectory = new DirectoryInfo(AppContext.BaseDirectory.TrimEnd(
-            Path.DirectorySeparatorChar,
-            Path.AltDirectorySeparatorChar));
-        var targetFramework = outputDirectory.Name;
-        var configuration = outputDirectory.Parent?.Name ?? "Debug";
-        var candidate = Path.Combine(
-            repoRoot,
-            "src",
-            "QBrainAi.Repl.Host",
-            "bin",
-            configuration,
-            targetFramework,
-            "QBrainAi.Repl.Host.dll");
-        if (File.Exists(candidate))
-        {
-            return candidate;
-        }
-
-        var copiedCandidate = Path.Combine(AppContext.BaseDirectory, "QBrainAi.Repl.Host.dll");
-        if (File.Exists(copiedCandidate))
-        {
-            return copiedCandidate;
-        }
-
-        throw new FileNotFoundException(
-            $"Could not find built QBrainAi.Repl.Host assembly. Build the test project before running REPL integration tests. Checked '{candidate}' and '{copiedCandidate}'.",
-            candidate);
-    }
-
-    private static async Task<string?> TryResolveRegisteredWorkspaceRootAsync(string repoRoot)
-    {
-        try
-        {
-            using var client = new HttpClient { BaseAddress = new Uri("http://localhost:7147") };
-            using var keyResponse = await client.GetAsync("/api-key").ConfigureAwait(false);
-            if (!keyResponse.IsSuccessStatusCode)
-            {
-                return null;
-            }
-
-            await using var keyStream = await keyResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
-            using var keyDocument = await JsonDocument.ParseAsync(keyStream).ConfigureAwait(false);
-            if (!keyDocument.RootElement.TryGetProperty("apiKey", out var keyElement))
-            {
-                return null;
-            }
-
-            var apiKey = keyElement.GetString();
-            if (string.IsNullOrWhiteSpace(apiKey))
-            {
-                return null;
-            }
-
-            using var workspaceRequest = new HttpRequestMessage(HttpMethod.Get, "/qbrainai/workspace");
-            workspaceRequest.Headers.Add("X-Api-Key", apiKey);
-            using var workspaceResponse = await client.SendAsync(workspaceRequest).ConfigureAwait(false);
-            if (!workspaceResponse.IsSuccessStatusCode)
-            {
-                return null;
-            }
-
-            await using var workspaceStream = await workspaceResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
-            using var workspaceDocument = await JsonDocument.ParseAsync(workspaceStream).ConfigureAwait(false);
-            if (!workspaceDocument.RootElement.TryGetProperty("items", out var items)
-                || items.ValueKind != JsonValueKind.Array)
-            {
-                return null;
-            }
-
-            var workspaces = items.EnumerateArray()
-                .Select(TryGetWorkspaceCandidate)
-                .Where(candidate => candidate is not null)
-                .Select(candidate => candidate!)
-                .ToList();
-
-            var remoteMatched = TryFindRemoteMatchedWorkspace(repoRoot, workspaces);
-            if (!string.IsNullOrWhiteSpace(remoteMatched))
-            {
-                return remoteMatched;
-            }
-
-            return workspaces
-                .Select(candidate => Path.GetFullPath(candidate.WorkspacePath))
-                .Where(path => IsSameOrAncestor(path, repoRoot))
-                .OrderByDescending(path => path.Length)
-                .FirstOrDefault();
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    private static WorkspaceCandidate? TryGetWorkspaceCandidate(JsonElement element)
-    {
-        if (!element.TryGetProperty("workspacePath", out var workspacePathElement))
-        {
-            return null;
-        }
-
-        var workspacePath = workspacePathElement.GetString();
-        if (string.IsNullOrWhiteSpace(workspacePath))
-        {
-            return null;
-        }
-
-        var gitRemoteUrl = element.TryGetProperty("gitRemoteUrl", out var gitRemoteUrlElement)
-            ? gitRemoteUrlElement.GetString()
-            : null;
-        return new WorkspaceCandidate(workspacePath, gitRemoteUrl);
-    }
-
-    private static string? TryFindRemoteMatchedWorkspace(string repoRoot, IReadOnlyList<WorkspaceCandidate> workspaces)
-    {
-        var sourceOriginUrls = GetRemoteUrls(repoRoot, "origin").ToList();
-        var sourceUrls = sourceOriginUrls.Count > 0
-            ? sourceOriginUrls
-            : GetRemoteUrls(repoRoot).ToList();
-        var normalizedSourceUrls = sourceUrls
-            .Select(NormalizeRemoteUrl)
-            .Where(url => !string.IsNullOrWhiteSpace(url))
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-        if (normalizedSourceUrls.Count == 0)
-        {
-            return null;
-        }
-
-        foreach (var workspace in workspaces)
-        {
-            var workspacePath = Path.GetFullPath(workspace.WorkspacePath);
-            var workspaceUrls = new List<string>();
-            if (!string.IsNullOrWhiteSpace(workspace.GitRemoteUrl))
-            {
-                workspaceUrls.Add(workspace.GitRemoteUrl);
-            }
-
-            workspaceUrls.AddRange(GetRemoteUrls(workspacePath, "origin"));
-            workspaceUrls.AddRange(GetRemoteUrls(workspacePath));
-
-            if (workspaceUrls
-                .Select(NormalizeRemoteUrl)
-                .Where(url => !string.IsNullOrWhiteSpace(url))
-                .Any(url => normalizedSourceUrls.Contains(url!)))
-            {
-                return workspacePath;
-            }
-        }
-
-        return null;
-    }
-
-    private static IEnumerable<string> GetRemoteUrls(string repoPath, string? remoteName = null)
-    {
-        if (!Directory.Exists(repoPath))
-        {
-            yield break;
-        }
-
-        var output = RunGit(repoPath, remoteName is null ? "remote -v" : $"remote get-url --all {remoteName}");
-        if (string.IsNullOrWhiteSpace(output))
-        {
-            yield break;
-        }
-
-        foreach (var line in output.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries))
-        {
-            var remoteUrl = line.Trim();
-            if (remoteName is null && remoteUrl.Contains('\t', StringComparison.Ordinal))
-            {
-                remoteUrl = remoteUrl.Split('\t', 2)[1].Split(' ', 2)[0];
-            }
-
-            if (!string.IsNullOrWhiteSpace(remoteUrl))
-            {
-                yield return remoteUrl;
-            }
-        }
-    }
-
-    private static string? RunGit(string workingDirectory, string arguments)
-    {
-        try
-        {
-            using var process = new Process();
-            process.StartInfo = new ProcessStartInfo
-            {
-                FileName = "git",
-                Arguments = arguments,
-                WorkingDirectory = workingDirectory,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true,
-            };
-
-            process.Start();
-            var output = process.StandardOutput.ReadToEnd();
-            if (!process.WaitForExit(5000))
-            {
-                process.Kill(entireProcessTree: true);
-                return null;
-            }
-
-            return process.ExitCode == 0 ? output : null;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    private static string? NormalizeRemoteUrl(string? remoteUrl)
-    {
-        if (string.IsNullOrWhiteSpace(remoteUrl))
-        {
-            return null;
-        }
-
-        var value = remoteUrl.Trim().Replace('\\', '/');
-        if (value.StartsWith("git@", StringComparison.OrdinalIgnoreCase))
-        {
-            var separator = value.IndexOf(':', StringComparison.Ordinal);
-            if (separator > 0)
-            {
-                value = "https://" + value[4..separator] + "/" + value[(separator + 1)..];
-            }
-        }
-
-        if (value.EndsWith(".git", StringComparison.OrdinalIgnoreCase))
-        {
-            value = value[..^4];
-        }
-
-        return value.TrimEnd('/');
-    }
-
-    private static string? TryResolveSubmoduleWorkspaceRoot(string repoRoot)
-    {
-        var gitFile = Path.Combine(repoRoot, ".git");
-        if (!File.Exists(gitFile))
-        {
-            return null;
-        }
-
-        var line = File.ReadLines(gitFile)
-            .FirstOrDefault(value => value.StartsWith("gitdir:", StringComparison.OrdinalIgnoreCase));
-        if (line is null)
-        {
-            return null;
-        }
-
-        var gitDir = line["gitdir:".Length..].Trim();
-        var absoluteGitDir = Path.IsPathFullyQualified(gitDir)
-            ? Path.GetFullPath(gitDir)
-            : Path.GetFullPath(Path.Combine(repoRoot, gitDir));
-
-        var current = new DirectoryInfo(absoluteGitDir);
-        while (current is not null)
-        {
-            if (string.Equals(current.Name, ".git", StringComparison.OrdinalIgnoreCase)
-                && current.Parent is not null
-                && File.Exists(Path.Combine(current.Parent.FullName, "AGENTS-README-FIRST.yaml")))
-            {
-                return current.Parent.FullName;
-            }
-
-            current = current.Parent;
-        }
-
-        return null;
-    }
-
-    private static string? TryFindMarkerRoot(string startPath)
-    {
-        var current = new DirectoryInfo(startPath);
-        while (current is not null)
-        {
-            if (File.Exists(Path.Combine(current.FullName, "AGENTS-README-FIRST.yaml")))
-            {
-                return current.FullName;
-            }
-
-            current = current.Parent;
-        }
-
-        return null;
-    }
-
-    private static bool IsSameOrAncestor(string candidateAncestor, string path)
-    {
-        var ancestor = Path.TrimEndingDirectorySeparator(Path.GetFullPath(candidateAncestor));
-        var descendant = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path));
-        return string.Equals(ancestor, descendant, StringComparison.OrdinalIgnoreCase)
-            || descendant.StartsWith(ancestor + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
-            || descendant.StartsWith(ancestor + Path.AltDirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -844,8 +507,6 @@ public sealed class ReplChildProcessHelper : IDisposable
         return value.StartsWith('|') || value.StartsWith('>');
     }
 
-    private sealed record WorkspaceCandidate(string WorkspacePath, string? GitRemoteUrl);
-
     /// <inheritdoc/>
     public void Dispose()
     {
@@ -869,6 +530,13 @@ public sealed class ReplChildProcessHelper : IDisposable
             {
                 // Best effort cleanup
             }
+        }
+
+        if (_instance != null)
+        {
+            // The temporary instance stops its process tree and removes its root (TR-MCP-NUKE-019 AC-6).
+            _instance.DisposeAsync().AsTask().GetAwaiter().GetResult();
+            _instance = null;
         }
 
         _disposed = true;

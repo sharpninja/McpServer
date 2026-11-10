@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Globalization;
 using System.IO;
 using System.Security.Cryptography;
@@ -11,15 +12,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using QBrainAi.TestSupport.TemporaryInstance;
 
 namespace QBrainAi.Support.Mcp.IntegrationTests;
 
-/// <summary>TR-PLANNED-CORE-013: Web application factory for MCP API integration tests.</summary>
+/// <summary>TR-PLANNED-CORE-013 (historical): Web application factory for MCP API integration tests.</summary>
 public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEntryPoint>
 {
     private static readonly string[] GuardedRepositoryPaths =
@@ -90,6 +93,8 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEn
                 { "DataFolder", _dataPath },
                 { "Mcp:RepoRoot", _workspacePath },
                 { "Mcp:DataDirectory", _dataPath },
+                { "Mcp:Parseable:FallbackLogPath", Path.Combine(_dataPath, "logs", "qbrainai-.log") },
+                { "QBrainAi:Parseable:FallbackLogPath", Path.Combine(_dataPath, "logs", "qbrainai-.log") },
                 { "Mcp:DataSource", Path.Combine(_dataPath, "mcp.db") },
                 { "Mcp:Database:Provider", "sqlite" },
                 { "Mcp:Database:Sqlite:DataSource", Path.Combine(_dataPath, "mcp.db") },
@@ -134,11 +139,21 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEn
             services.PostConfigure<TunnelOptions>(options => options.Port = _temporaryPort);
 
             if (_configureDefaultTestDatabase)
+            {
                 services.AddHostedService<TestDatabaseInitializer>();
+            }
         });
 
         if (_configureServices is not null)
             builder.ConfigureTestServices(_configureServices);
+
+        if (_configureDefaultTestDatabase)
+        {
+            // FR-MCP-TESTRESOURCE-001 ac-4 / TR-MCP-NUKE-019 AC-6: register after the test's own context
+            // replacement. Program can open the database before hosted services start, so intercept the first open.
+            builder.ConfigureTestServices(services => services.ConfigureDbContext<McpDbContext>(
+                options => options.AddInterceptors(new OwnedDatabaseConnectionGuard(_dataPath))));
+        }
     }
 
     private static void ConfigureTestDatabase(IServiceCollection services, string databasePath)
@@ -331,6 +346,35 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEn
     {
         public Task WriteProjectionAsync(IReadOnlyList<WorkspaceConfigEntry> workspaces, CancellationToken ct)
             => Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4: refuses the final provider/connection selection before either synchronous
+    /// or asynchronous connection open, including startup work before the hosted-service lifecycle.
+    /// </summary>
+    private sealed class OwnedDatabaseConnectionGuard(string ownedRoot) : DbConnectionInterceptor
+    {
+        /// <inheritdoc />
+        public override InterceptionResult ConnectionOpening(DbConnection connection, ConnectionEventData eventData, InterceptionResult result)
+        {
+            Check(connection, eventData);
+            return result;
+        }
+
+        /// <inheritdoc />
+        public override ValueTask<InterceptionResult> ConnectionOpeningAsync(DbConnection connection,
+            ConnectionEventData eventData, InterceptionResult result, CancellationToken cancellationToken = default)
+        {
+            Check(connection, eventData);
+            return ValueTask.FromResult(result);
+        }
+
+        private void Check(DbConnection connection, ConnectionEventData eventData)
+        {
+            var violation = TemporaryInstanceChecks.CheckDatabaseSelection(connection.ConnectionString, ownedRoot,
+                eventData.Context?.Database.ProviderName ?? string.Empty);
+            if (violation is not null) throw new InvalidOperationException(violation);
+        }
     }
 
     private sealed class TestDatabaseInitializer : IHostedService

@@ -12,26 +12,11 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// Apply the real SQLite migration that adds SessionLogTurns.PlanFile and TodoId.
 /// Does not use EnsureCreated as the storage gate.
 /// </summary>
-public sealed class SessionLogTurnPlanFileTodoIdMigrationApplyTests : IDisposable
+/// <remarks>2026-11-07, TR-MCP-SESSIONLOG-006-004; TEST-MCP-SESSIONLOG-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (ProviderMigrations_AddBothColumnsWithNoneDefault) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_connection, _options, .ctor and Dispose) moved once into the abstract base class SessionLogTurnPlanFileTodoIdMigrationApplyTestsBase in Storage/SessionLogTurnPlanFileTodoIdMigrationApplyTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
+public sealed class SessionLogTurnPlanFileTodoIdMigrationApplyTests : SessionLogTurnPlanFileTodoIdMigrationApplyTestsBase, IDisposable
 {
     /// <summary>Migration immediately before AddSessionLogTurnPlanFileAndTodoId on Sqlite.</summary>
     private const string PrecedingMigration = "20260808102524_AddUseCaseDiagramGraph";
-
-    private readonly SqliteConnection _connection;
-    private readonly DbContextOptions<McpDbContext> _options;
-
-    /// <summary>Opens an isolated in-memory Sqlite database for real Migrate().</summary>
-    public SessionLogTurnPlanFileTodoIdMigrationApplyTests()
-    {
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
-        _options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite(_connection, sqlite => sqlite.MigrationsAssembly("QBrainAi.Storage.SqliteMigrations"))
-            .Options;
-    }
-
-    /// <inheritdoc />
-    public void Dispose() => _connection.Dispose();
 
     /// <summary>Full migration chain from empty DB creates PlanFile and TodoId columns.</summary>
     [Fact]
@@ -60,35 +45,6 @@ public sealed class SessionLogTurnPlanFileTodoIdMigrationApplyTests : IDisposabl
             db.Database.Migrate();
             Assert.True(ColumnExists(db, "SessionLogTurns", "PlanFile"));
             Assert.True(ColumnExists(db, "SessionLogTurns", "TodoId"));
-        }
-    }
-
-    /// <summary>All three provider migration sources add both columns with default None.</summary>
-    [Fact]
-    public void ProviderMigrations_AddBothColumnsWithNoneDefault()
-    {
-        var repoSrc = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "src"));
-        var roots = new[]
-        {
-            Path.Combine(repoSrc, "QBrainAi.Storage.SqliteMigrations", "Migrations"),
-            Path.Combine(repoSrc, "QBrainAi.Storage.SqlServerMigrations", "Migrations"),
-            Path.Combine(repoSrc, "QBrainAi.Storage.PostgreSqlMigrations", "Migrations"),
-        };
-
-        foreach (var root in roots)
-        {
-            Assert.True(Directory.Exists(root), $"Missing migrations root {root}");
-            var files = Directory.GetFiles(root, "*AddSessionLogTurnPlanFileAndTodoId.cs")
-                .Where(f => !f.Contains("Designer", StringComparison.OrdinalIgnoreCase))
-                .ToArray();
-            Assert.NotEmpty(files);
-            foreach (var file in files)
-            {
-                var text = File.ReadAllText(file);
-                Assert.Contains("name: \"PlanFile\"", text, StringComparison.Ordinal);
-                Assert.Contains("name: \"TodoId\"", text, StringComparison.Ordinal);
-                Assert.Contains("defaultValue: \"None\"", text, StringComparison.Ordinal);
-            }
         }
     }
 

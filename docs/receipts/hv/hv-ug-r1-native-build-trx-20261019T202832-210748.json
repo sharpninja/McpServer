@@ -1,0 +1,12 @@
+{
+  "TimestampUtc": "2026-10-20T01:28:32.7976068Z",
+  "TimestampLocal": "2026-10-19T20:28:32",
+  "Mode": "Trx",
+  "Arguments": [
+    "./docs/receipts/hv/hv-ug-r1-buildtests-20261019T202308"
+  ],
+  "Offset": 0,
+  "Count": 250,
+  "ExitCode": 0,
+  "Output": "{\"Path\":\"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-buildtests-20261019T202308/hv-ug-r1-buildtests-20261019T202308.trx\",\"Counters\":\"<Counters total=\\\"436\\\" executed=\\\"436\\\" passed=\\\"436\\\" failed=\\\"0\\\" error=\\\"0\\\" timeout=\\\"0\\\" aborted=\\\"0\\\" inconclusive=\\\"0\\\" passedButRunAborted=\\\"0\\\" notRunnable=\\\"0\\\" notExecuted=\\\"0\\\" disconnected=\\\"0\\\" warning=\\\"0\\\" completed=\\\"0\\\" inProgress=\\\"0\\\" pending=\\\"0\\\" xmlns=\\\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\\\" />\",\"ResultCount\":436,\"Outcomes\":[{\"Outcome\":\"Passed\",\"Count\":436}],\"Start\":\"2026-10-19T20:23:10.6580136-05:00\",\"Finish\":\"2026-10-19T20:28:11.4517767-05:00\",\"Sha256\":\"22E8B2672C0DD40AE0259126E71CFD0D776A1A8FCD29C2B48A4C7FD513F63CA6\"}"
+}

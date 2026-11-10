@@ -1,0 +1,62 @@
+{
+  "name": "ug-r14f4-s5-compile-2",
+  "kind": "compile",
+  "retrospective": false,
+  "note": "Written when the run ended, from its own meta, exit and log files (Save-CompileReceipt.ps1).",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "runHead": "b05918554448c8e7996450ffedca39cb3010aafa",
+  "runDirtyPaths": [
+    " M QBrainAi.sln",
+    " M build/Build.TestDependencies.cs",
+    " M build/IntegrationLaneProjects.cs",
+    " M build/IntegrationLaneProjectsContracts.cs",
+    " M src/QBrainAi.Services/QBrainAi.Services.csproj",
+    " M src/QBrainAi.Storage/QBrainAi.Storage.csproj",
+    " M tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthSqliteTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathFacadeTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-binding-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-binding-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-intverify-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-intverify-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-mockgate-1/",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/"
+  ],
+  "command": [
+    "./build.ps1",
+    "Compile"
+  ],
+  "startedLocal": "2026-11-07T11:03:31",
+  "endedLocal": "2026-11-07T11:05:58",
+  "exitCode": 0,
+  "status": "passed",
+  "buildSucceededLine": "Build succeeded on 11/7/2026 11:05:58 AM. ＼（＾ᴗ＾）／",
+  "errorDiagnostics": 0,
+  "warningDiagnostics": 0,
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/s3-s4/runs/ug-r14f4-s5-compile-2.out.log",
+  "logSha256": "A7BAB3F711F30CADC9556A759C86613D8632EF7B0094B772B4DE7D847A67BE9F",
+  "sources": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/QBrainAi.Support.Mcp.Environment.IntegrationTests.csproj",
+      "sha256": "CE45AAB1981F4303A0678B5137EAFB66DB0CE01CFB2AC335D76E54197240462F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Storage/BugTriage139EighteenthSqliteTests.cs",
+      "sha256": "038E810C0B4774F1A9BD695AC5AF871BE69281E275DBD4462C4FD1525DB53429"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Storage/WorkspaceNativePathFacadeTests.cs",
+      "sha256": "0A55452B4E781820DD603C5728298BD128535EB955AE4EC4E2736D2A428F9CF1"
+    }
+  ],
+  "metaFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/s3-s4/runs/ug-r14f4-s5-compile-2.meta.json",
+  "metaSha256": "D6AE8BDAE239B662FD98602893BA2708F488CE425EFCE79115F6869937FAE639",
+  "writtenLocal": "2026-11-07T11:06:23",
+  "minutesAfterRunEnd": 0.42,
+  "writtenBy": "ClaudeCode"
+}

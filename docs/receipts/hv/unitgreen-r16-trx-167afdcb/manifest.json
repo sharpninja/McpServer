@@ -1,0 +1,526 @@
+{
+  "schema": "unitgreen-hv-trx-evidence.v4",
+  "createdLocal": "2026-11-09T16:01:03",
+  "todo": "IMPL-UNITGREEN-001",
+  "pullRequest": "sharpninja/McpServer#87",
+  "codeHead": "167afdcb1bbe4ce8e54770fb5882cc8a48d82b01",
+  "platformScope": "Linux only by operator directive on 2026-11-09. OS-conditional differences belong to integration tests; no Windows rerun is required for publication.",
+  "policy": "The HV request supplies retained TRX evidence. The reviewer does not build code or run tests.",
+  "approvedRunSet": "PR87 Linux-only Round 16 phase-exit set at 167afdcb: Nuke Test 4,847/0/0; MigrationIntegrationTests 748/0/0; Build.Tests 535/0/0 through the established infrastructure runner; ValidateTraceability passed with no TRX by contract. The 29 quarantined cases remain excluded. GitHub Actions, Azure, hostile-environment runs, held-out integration projects, scanner work, Windows reruns, 68 classification-only tests and 1,915 uncited methods are outside this publication gate under recorded operator decisions.",
+  "trxCount": 14,
+  "totalBytes": 9450351,
+  "runs": [
+    {
+      "runId": "ug-r16-final-linux-unit-1",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "head": "167afdcb1bbe4ce8e54770fb5882cc8a48d82b01",
+      "command": [
+        "./build.ps1",
+        "Test",
+        "--test-run-id",
+        "ug-r16-final-linux-unit-1"
+      ],
+      "startedLocal": "2026-11-09T15:17:40.4459084-06:00",
+      "endedLocal": "2026-11-09T15:19:58.3567904-06:00",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r16-final-linux-unit-1.json",
+      "receiptSha256": "5F3FE18745B5BB5B091552A78DBEA996A546BEADD6572E9AC91B1DB5E78C798C",
+      "totals": {
+        "total": 4847,
+        "passed": 4847,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": [
+        {
+          "runId": "ug-r16-final-linux-unit-1",
+          "host": "LAB-OMARCHY",
+          "kind": "unit",
+          "project": "QBrainAi.Client.Tests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.Client.Tests.trx",
+          "bytes": 441469,
+          "sha256": "1D7B20BE8F39EC2A892A71FFAC4FF75E2C250A5F261E8AFB0CE306F202363530",
+          "total": 311,
+          "passed": 311,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "runId": "ug-r16-final-linux-unit-1",
+          "host": "LAB-OMARCHY",
+          "kind": "unit",
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.Cqrs.Tests.trx",
+          "bytes": 46236,
+          "sha256": "EB4406EEBA9C36393D0FD6931C4F9E2C1BD0FC5ACEA91AC3CE9A5BEE173A5D29",
+          "total": 33,
+          "passed": 33,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "runId": "ug-r16-final-linux-unit-1",
+          "host": "LAB-OMARCHY",
+          "kind": "unit",
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.Launcher.Tests.trx",
+          "bytes": 30714,
+          "sha256": "DF8954BE5D5A4F89603232C40C8F02819E1B0D53763D3C3DC10EDCD099355013",
+          "total": 20,
+          "passed": 20,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "runId": "ug-r16-final-linux-unit-1",
+          "host": "LAB-OMARCHY",
+          "kind": "unit",
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.McpAgent.Tests.trx",
+          "bytes": 97696,
+          "sha256": "243335F402A7A0E7F8B06AFADEB6F8797BC14C87E3CDC702423A4C34F680BA73",
+          "total": 64,
+          "passed": 64,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "runId": "ug-r16-final-linux-unit-1",
+          "host": "LAB-OMARCHY",
+          "kind": "unit",
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.QBAgent.Tests.trx",
+          "bytes": 131457,
+          "sha256": "34209804A8262E647B64A48BAAB488733FFFB0B2AEFA30A19F450A819D23BF81",
+          "total": 90,
+          "passed": 90,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "runId": "ug-r16-final-linux-unit-1",
+          "host": "LAB-OMARCHY",
+          "kind": "unit",
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.Repl.Core.Tests.trx",
+          "bytes": 1571978,
+          "sha256": "16C1E6A5EEC2EEBF99D49DF53058B7952B34E7DF80D718C8B09EDC8F24892B65",
+          "total": 1035,
+          "passed": 1035,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "runId": "ug-r16-final-linux-unit-1",
+          "host": "LAB-OMARCHY",
+          "kind": "unit",
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.Support.Mcp.Tests.trx",
+          "bytes": 5140281,
+          "sha256": "21A4D2239BA4433AF5B1E6FD07E2A1A88A09EF5E0B268791066B4B91C98B50FA",
+          "total": 3294,
+          "passed": 3294,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      ]
+    },
+    {
+      "runId": "ug-r16-final-linux-lane-1",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "head": "167afdcb1bbe4ce8e54770fb5882cc8a48d82b01",
+      "command": [
+        "./build.ps1",
+        "MigrationIntegrationTests",
+        "--test-run-id",
+        "ug-r16-final-linux-lane-1"
+      ],
+      "startedLocal": "2026-11-09T15:21:52.9197217-06:00",
+      "endedLocal": "2026-11-09T15:55:30.0748242-06:00",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r16-final-linux-lane-1.json",
+      "receiptSha256": "8D0192E1ED9A1808822276F9F5C642D9340444054BA19595BBE4C61B48952E2F",
+      "totals": {
+        "total": 748,
+        "passed": 748,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": [
+        {
+          "runId": "ug-r16-final-linux-lane-1",
+          "host": "LAB-OMARCHY",
+          "kind": "integration",
+          "project": "NukeBuild.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-lane-1/NukeBuild.IntegrationTests.trx",
+          "bytes": 137237,
+          "sha256": "AC49B8E93C567AF8C98D561FED8B97C1D7A201CC763E8DF652124EE761EE1298",
+          "total": 96,
+          "passed": 96,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "runId": "ug-r16-final-linux-lane-1",
+          "host": "LAB-OMARCHY",
+          "kind": "integration",
+          "project": "QBrainAi.McpAgent.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-lane-1/QBrainAi.McpAgent.IntegrationTests.trx",
+          "bytes": 3247,
+          "sha256": "F5E6F059CBF0F39A9E7B891FA46D1222798DB07EA508A5F263474B5EFE3E0781",
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "runId": "ug-r16-final-linux-lane-1",
+          "host": "LAB-OMARCHY",
+          "kind": "integration",
+          "project": "QBrainAi.QBAgent.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-lane-1/QBrainAi.QBAgent.IntegrationTests.trx",
+          "bytes": 6212,
+          "sha256": "4BF6A83B9F83600D47EA4E4A6C075B0C382C916C6463CD15AB8695545651F661",
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "runId": "ug-r16-final-linux-lane-1",
+          "host": "LAB-OMARCHY",
+          "kind": "integration",
+          "project": "QBrainAi.Repl.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-lane-1/QBrainAi.Repl.IntegrationTests.trx",
+          "bytes": 279358,
+          "sha256": "C1EE8148A81555F44297A951A9A73D6C51C31CE8BF5F463D85608E9FF7D73A9D",
+          "total": 181,
+          "passed": 181,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "runId": "ug-r16-final-linux-lane-1",
+          "host": "LAB-OMARCHY",
+          "kind": "integration",
+          "project": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-lane-1/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+          "bytes": 778975,
+          "sha256": "E95035C9ACD1290B39DBA10FC9722D49050BB943168D42F0B811C0C91220AFDA",
+          "total": 461,
+          "passed": 461,
+          "failed": 0,
+          "notExecuted": 0
+        },
+        {
+          "runId": "ug-r16-final-linux-lane-1",
+          "host": "LAB-OMARCHY",
+          "kind": "integration",
+          "project": "QBrainAi.Support.Mcp.IntegrationTests",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-lane-1/QBrainAi.Support.Mcp.IntegrationTests.trx",
+          "bytes": 13013,
+          "sha256": "6607A7C5E7258F5C92249D8E51C644AB392994D6B18BC97715EA7502AF2CB0F4",
+          "total": 6,
+          "passed": 6,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      ]
+    },
+    {
+      "runId": "ug-r16-final-linux-buildtests-1",
+      "host": "LAB-OMARCHY",
+      "kind": "infrastructure",
+      "head": "167afdcb1bbe4ce8e54770fb5882cc8a48d82b01",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Build.Tests/Build.Tests.csproj",
+        "-c",
+        "Debug",
+        "--logger",
+        "trx;LogFileName=ug-r16-final-linux-buildtests-1.trx",
+        "--results-directory",
+        "TestResults/ug-r16-final-linux-buildtests-1/infrastructure",
+        "--filter",
+        "Platform!=Windows"
+      ],
+      "startedLocal": "2026-11-09T15:56:07.2378895-06:00",
+      "endedLocal": "2026-11-09T15:56:33.4228543-06:00",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r16-final-linux-buildtests-1.json",
+      "receiptSha256": "C20563DDED4901FE5A8714CF6723ECDB4B36EDCDA80047B597777D66286A33C0",
+      "totals": {
+        "total": 535,
+        "passed": 535,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": [
+        {
+          "runId": "ug-r16-final-linux-buildtests-1",
+          "host": "LAB-OMARCHY",
+          "kind": "infrastructure",
+          "project": "ug-r16-final-linux-buildtests-1",
+          "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-buildtests-1/ug-r16-final-linux-buildtests-1.trx",
+          "bytes": 772478,
+          "sha256": "8B4B542C8DF28C27D5C2CB6BF39B46451452CC99A46AFEC5D9CFB79E7F28B719",
+          "total": 535,
+          "passed": 535,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      ]
+    },
+    {
+      "runId": "ug-r16-final-linux-traceability-1",
+      "host": "LAB-OMARCHY",
+      "kind": "traceability",
+      "head": "167afdcb1bbe4ce8e54770fb5882cc8a48d82b01",
+      "command": [
+        "./build.ps1",
+        "ValidateTraceability"
+      ],
+      "startedLocal": "2026-11-09T15:56:51-06:00",
+      "endedLocal": "2026-11-09T15:56:52-06:00",
+      "exitCode": 0,
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r16-final-linux-traceability-1.json",
+      "receiptSha256": "1CE484BD999B7F9D0241CC41782C120DC59E317FA6A8ECED6DD7F1E1FF6F4D24",
+      "totals": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      "trx": []
+    }
+  ],
+  "files": [
+    {
+      "runId": "ug-r16-final-linux-unit-1",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "project": "QBrainAi.Client.Tests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.Client.Tests.trx",
+      "bytes": 441469,
+      "sha256": "1D7B20BE8F39EC2A892A71FFAC4FF75E2C250A5F261E8AFB0CE306F202363530",
+      "total": 311,
+      "passed": 311,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-unit-1",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "project": "QBrainAi.Cqrs.Tests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.Cqrs.Tests.trx",
+      "bytes": 46236,
+      "sha256": "EB4406EEBA9C36393D0FD6931C4F9E2C1BD0FC5ACEA91AC3CE9A5BEE173A5D29",
+      "total": 33,
+      "passed": 33,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-unit-1",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "project": "QBrainAi.Launcher.Tests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.Launcher.Tests.trx",
+      "bytes": 30714,
+      "sha256": "DF8954BE5D5A4F89603232C40C8F02819E1B0D53763D3C3DC10EDCD099355013",
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-unit-1",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "project": "QBrainAi.McpAgent.Tests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.McpAgent.Tests.trx",
+      "bytes": 97696,
+      "sha256": "243335F402A7A0E7F8B06AFADEB6F8797BC14C87E3CDC702423A4C34F680BA73",
+      "total": 64,
+      "passed": 64,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-unit-1",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "project": "QBrainAi.QBAgent.Tests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.QBAgent.Tests.trx",
+      "bytes": 131457,
+      "sha256": "34209804A8262E647B64A48BAAB488733FFFB0B2AEFA30A19F450A819D23BF81",
+      "total": 90,
+      "passed": 90,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-unit-1",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "project": "QBrainAi.Repl.Core.Tests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.Repl.Core.Tests.trx",
+      "bytes": 1571978,
+      "sha256": "16C1E6A5EEC2EEBF99D49DF53058B7952B34E7DF80D718C8B09EDC8F24892B65",
+      "total": 1035,
+      "passed": 1035,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-unit-1",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-unit-1/QBrainAi.Support.Mcp.Tests.trx",
+      "bytes": 5140281,
+      "sha256": "21A4D2239BA4433AF5B1E6FD07E2A1A88A09EF5E0B268791066B4B91C98B50FA",
+      "total": 3294,
+      "passed": 3294,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-lane-1",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "project": "NukeBuild.IntegrationTests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-lane-1/NukeBuild.IntegrationTests.trx",
+      "bytes": 137237,
+      "sha256": "AC49B8E93C567AF8C98D561FED8B97C1D7A201CC763E8DF652124EE761EE1298",
+      "total": 96,
+      "passed": 96,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-lane-1",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "project": "QBrainAi.McpAgent.IntegrationTests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-lane-1/QBrainAi.McpAgent.IntegrationTests.trx",
+      "bytes": 3247,
+      "sha256": "F5E6F059CBF0F39A9E7B891FA46D1222798DB07EA508A5F263474B5EFE3E0781",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-lane-1",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "project": "QBrainAi.QBAgent.IntegrationTests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-lane-1/QBrainAi.QBAgent.IntegrationTests.trx",
+      "bytes": 6212,
+      "sha256": "4BF6A83B9F83600D47EA4E4A6C075B0C382C916C6463CD15AB8695545651F661",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-lane-1",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "project": "QBrainAi.Repl.IntegrationTests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-lane-1/QBrainAi.Repl.IntegrationTests.trx",
+      "bytes": 279358,
+      "sha256": "C1EE8148A81555F44297A951A9A73D6C51C31CE8BF5F463D85608E9FF7D73A9D",
+      "total": 181,
+      "passed": 181,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-lane-1",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "project": "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-lane-1/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.trx",
+      "bytes": 778975,
+      "sha256": "E95035C9ACD1290B39DBA10FC9722D49050BB943168D42F0B811C0C91220AFDA",
+      "total": 461,
+      "passed": 461,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-lane-1",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "project": "QBrainAi.Support.Mcp.IntegrationTests",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-lane-1/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "bytes": 13013,
+      "sha256": "6607A7C5E7258F5C92249D8E51C644AB392994D6B18BC97715EA7502AF2CB0F4",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    {
+      "runId": "ug-r16-final-linux-buildtests-1",
+      "host": "LAB-OMARCHY",
+      "kind": "infrastructure",
+      "project": "ug-r16-final-linux-buildtests-1",
+      "path": "docs/receipts/hv/unitgreen-r16-trx-167afdcb/ug-r16-final-linux-buildtests-1/ug-r16-final-linux-buildtests-1.trx",
+      "bytes": 772478,
+      "sha256": "8B4B542C8DF28C27D5C2CB6BF39B46451452CC99A46AFEC5D9CFB79E7F28B719",
+      "total": 535,
+      "passed": 535,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "build/Build.Test.cs",
+      "sha256": "5B1603A823289FC3C4EFB7F0763FB8B0A60FE093F2CC987EFB8338729B6E50FC"
+    },
+    {
+      "path": "build/Build.TestDependencies.cs",
+      "sha256": "266F1B4E19180D451F0B1D24247DEBDB05B1BB6F523BFD60F082FE91CC3739FC"
+    },
+    {
+      "path": "build/TestProjectCaseDiscovery.cs",
+      "sha256": "73BA908DA1C72E99BC789CE55274C08A4BE1394115388C3AAEC861DE2917E848"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectCaseDiscoveryTests.cs",
+      "sha256": "5C30AFF57B74A8DAA068F1903F13DA80C54145F7FB294D8D701F284796746545"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixture.cs",
+      "sha256": "0A44BB234E508B6D39B215A976AE3D6BBEE5796F8588C5457727984AEC476043"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingModelFixtureTests.cs",
+      "sha256": "9128935B21B8491F426D72AFC96DFFB8F118EEE8E9AAF9A4BE2AF5C02A41CF98"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Indexing/EmbeddingServiceTests.cs",
+      "sha256": "7D371EDC355EA485F0710D0FC77184DFDD6633B2C8B690F8C1E3575C0F3C2550"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj",
+      "sha256": "73042F104B706C1DFA50332A8697DC6726053E91CD9E701C37EA035289B97815"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingModelAssertionContract.cs",
+      "sha256": "1E4441344C2EF0AF1DF1A605FC3A1E97FDCB582302A79E14772A75D2E392C268"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingModelAssertionContractTests.cs",
+      "sha256": "E2D08E6D483A605AA7235B71269984EC28335322890D58DC95872F2672E811CA"
+    }
+  ]
+}

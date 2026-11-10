@@ -1,0 +1,3248 @@
+{
+  "timestampUtc": "2026-11-07T01:04:32.6699910Z",
+  "selectedClasses": 556,
+  "pattern": "DateTime(?:Offset)?\\.(?:UtcNow|Now|Today)|Environment\\.(?:GetEnvironmentVariable|GetEnvironmentVariables|GetFolderPath|CurrentDirectory|MachineName|UserName)|OperatingSystem\\.Is|RuntimeInformation\\.|new (?:System\\.Threading\\.)?Timer|new PeriodicTimer|Task\\.Delay|Thread\\.Sleep",
+  "hitCount": 404,
+  "limitation": "File-level candidate search; mixed-category files and helper-only files require manual adjudication. Not a scanner coverage claim.",
+  "hits": [
+    {
+      "path": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+      "line": 53,
+      "classes": [
+        "RequirementTimestampJsonContractTests"
+      ],
+      "text": "\"read time\" => (DateTimeOffset.UtcNow, DateTimeOffset.UtcNow),"
+    },
+    {
+      "path": "tests/QBrainAi.Client.Tests/UseCaseClientTests.cs",
+      "line": 405,
+      "classes": [
+        "UseCaseClientTests"
+      ],
+      "text": "await System.Threading.Tasks.Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Cqrs.Tests/DispatcherTests.cs",
+      "line": 54,
+      "classes": [
+        "DispatcherTests"
+      ],
+      "text": "await Task.Delay(5000, context.CancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+      "line": 51,
+      "classes": [
+        "McpAgentOptionsSectionTests"
+      ],
+      "text": "var workspacePath = OperatingSystem.IsWindows() ? @\"Q:\\fixture\\McpServer\" : \"/var/lib/McpServer\";"
+    },
+    {
+      "path": "tests/QBrainAi.McpAgent.Tests/TodoWorkflowTests.cs",
+      "line": 232,
+      "classes": [
+        "TodoWorkflowTests"
+      ],
+      "text": "var completedTask = await Task.WhenAny(workflowTask, Task.Delay(TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken));"
+    },
+    {
+      "path": "tests/QBrainAi.McpAgent.Tests/TodoWorkflowTests.cs",
+      "line": 384,
+      "classes": [
+        "TodoWorkflowTests"
+      ],
+      "text": "await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);"
+    },
+    {
+      "path": "tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+      "line": 70,
+      "classes": [
+        "QBAgentHeartbeatOverlayTests"
+      ],
+      "text": "await Task.Delay(80, TestContext.Current.CancellationToken).ConfigureAwait(true);"
+    },
+    {
+      "path": "tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+      "line": 96,
+      "classes": [
+        "QBAgentHeartbeatOverlayTests"
+      ],
+      "text": "await Task.Delay(80, cancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/AuthRotationTests.cs",
+      "line": 114,
+      "classes": [
+        "AuthRotationTests"
+      ],
+      "text": "await Task.Delay(10, cancellationToken: TestContext.Current.CancellationToken);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/AuthRotationTests.cs",
+      "line": 126,
+      "classes": [
+        "AuthRotationTests"
+      ],
+      "text": "refreshedState.LastUpdated.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/AuthRotationTests.cs",
+      "line": 272,
+      "classes": [
+        "AuthRotationTests"
+      ],
+      "text": "newState.LastUpdated.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/Iteration1_IntegrationTests.cs",
+      "line": 100,
+      "classes": [
+        "Iteration1_IntegrationTests"
+      ],
+      "text": "newAuthState.LastUpdated.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/Iteration1_IntegrationTests.cs",
+      "line": 133,
+      "classes": [
+        "Iteration1_IntegrationTests"
+      ],
+      "text": "refreshedAuthState.LastValidated.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/Iteration1_IntegrationTests.cs",
+      "line": 315,
+      "classes": [
+        "Iteration1_IntegrationTests"
+      ],
+      "text": "[\"timestamp\"] = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/Iteration1_IntegrationTests.cs",
+      "line": 408,
+      "classes": [
+        "Iteration1_IntegrationTests"
+      ],
+      "text": "markerData.LastModified.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/Iteration1_IntegrationTests.cs",
+      "line": 421,
+      "classes": [
+        "Iteration1_IntegrationTests"
+      ],
+      "text": "authState.LastUpdated.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/Iteration1_IntegrationTests.cs",
+      "line": 422,
+      "classes": [
+        "Iteration1_IntegrationTests"
+      ],
+      "text": "authState.LastValidated.Returns(isValid ? DateTimeOffset.UtcNow : null);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/MarkerFileTrustTests.cs",
+      "line": 222,
+      "classes": [
+        "MarkerFileTrustTests"
+      ],
+      "text": "markerData.LastModified.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/MockTrustBootstrapServiceTests.cs",
+      "line": 288,
+      "classes": [
+        "MockTrustBootstrapServiceTests"
+      ],
+      "text": "[\"timestamp\"] = DateTimeOffset.UtcNow"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/MockTrustBootstrapServiceTests.cs",
+      "line": 319,
+      "classes": [
+        "MockTrustBootstrapServiceTests"
+      ],
+      "text": "data.LastModified.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/MockTrustBootstrapServiceTests.cs",
+      "line": 331,
+      "classes": [
+        "MockTrustBootstrapServiceTests"
+      ],
+      "text": "workspace.TrustedAt.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/OrchestrationRulesTests.cs",
+      "line": 268,
+      "classes": [
+        "OrchestrationRulesTests"
+      ],
+      "text": "await Task.Delay(10, cancellationToken: TestContext.Current.CancellationToken);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/OrchestrationRulesTests.cs",
+      "line": 340,
+      "classes": [
+        "OrchestrationRulesTests"
+      ],
+      "text": "data.LastModified.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/OrchestrationRulesTests.cs",
+      "line": 353,
+      "classes": [
+        "OrchestrationRulesTests"
+      ],
+      "text": "state.LastUpdated.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/OrchestrationRulesTests.cs",
+      "line": 354,
+      "classes": [
+        "OrchestrationRulesTests"
+      ],
+      "text": "state.LastValidated.Returns(isValid ? DateTimeOffset.UtcNow : null);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs",
+      "line": 249,
+      "classes": [
+        "ReplCommandTimeoutCallSiteTests"
+      ],
+      "text": "? Task.Delay(Timeout.Infinite, call.ArgAt<CancellationToken>(2))"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs",
+      "line": 309,
+      "classes": [
+        "ReplCommandTimeoutCallSiteTests"
+      ],
+      "text": "await Task.Delay(Timeout.Infinite, cancellationToken).ConfigureAwait(true);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequestResponseCorrelationTests.cs",
+      "line": 155,
+      "classes": [
+        "RequestResponseCorrelationTests"
+      ],
+      "text": "await Task.Delay(10, cancellationToken: TestContext.Current.CancellationToken);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 942,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "generatedAt = DateTimeOffset.UtcNow.ToString(\"o\")"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1067,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.CreatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1068,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.UpdatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1120,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.CreatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1121,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.UpdatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1173,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.CreatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1174,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.UpdatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1214,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.CreatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1242,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "result.GeneratedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1260,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "result.IngestedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1325,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.CreatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1326,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.UpdatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1354,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.CreatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1355,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.UpdatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1382,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.CreatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+      "line": 1383,
+      "classes": [
+        "RequirementsWorkflowTests"
+      ],
+      "text": "item.UpdatedAt.Returns(DateTimeOffset.UtcNow.ToString(\"o\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterContractTests.cs",
+      "line": 49,
+      "classes": [
+        "RequirementTimestampAdapterContractTests"
+      ],
+      "text": "\"read time\" => (DateTimeOffset.UtcNow.ToString(\"o\", CultureInfo.InvariantCulture), DateTimeOffset.UtcNow.ToString(\"o\", CultureInfo.InvariantCulture)),"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowProductionTests.cs",
+      "line": 407,
+      "classes": [
+        "SessionLogWorkflowProductionTests"
+      ],
+      "text": "new DialogItem(DateTimeOffset.UtcNow, \"model\", \"Analyzing requirements...\", \"reasoning\"),"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowProductionTests.cs",
+      "line": 408,
+      "classes": [
+        "SessionLogWorkflowProductionTests"
+      ],
+      "text": "new DialogItem(DateTimeOffset.UtcNow, \"tool\", \"File created\", \"tool_result\")"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowProductionTests.cs",
+      "line": 584,
+      "classes": [
+        "SessionLogWorkflowProductionTests"
+      ],
+      "text": "new DialogItem(DateTimeOffset.UtcNow, \"model\", \"Analyzing...\", \"reasoning\"),"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowProductionTests.cs",
+      "line": 585,
+      "classes": [
+        "SessionLogWorkflowProductionTests"
+      ],
+      "text": "new DialogItem(DateTimeOffset.UtcNow, \"tool\", \"File created\", \"tool_result\")"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowTests.cs",
+      "line": 990,
+      "classes": [
+        "SessionLogWorkflowTests"
+      ],
+      "text": "state.Started.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowTests.cs",
+      "line": 991,
+      "classes": [
+        "SessionLogWorkflowTests"
+      ],
+      "text": "state.LastUpdated.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowTests.cs",
+      "line": 1002,
+      "classes": [
+        "SessionLogWorkflowTests"
+      ],
+      "text": "item.Timestamp.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowTests.cs",
+      "line": 1032,
+      "classes": [
+        "SessionLogWorkflowTests"
+      ],
+      "text": "summary.Started.Returns(DateTimeOffset.UtcNow.AddHours(-2));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowTests.cs",
+      "line": 1033,
+      "classes": [
+        "SessionLogWorkflowTests"
+      ],
+      "text": "summary.LastUpdated.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/StubMarkerFileReaderTests.cs",
+      "line": 248,
+      "classes": [
+        "StubMarkerFileReaderTests"
+      ],
+      "text": "[\"timestamp\"] = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/StubMarkerFileReaderTests.cs",
+      "line": 257,
+      "classes": [
+        "StubMarkerFileReaderTests"
+      ],
+      "text": "[\"verified_at\"] = DateTimeOffset.UtcNow"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/StubMarkerFileReaderTests.cs",
+      "line": 273,
+      "classes": [
+        "StubMarkerFileReaderTests"
+      ],
+      "text": "await Task.Delay(10, cancellationToken);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/StubMarkerFileReaderTests.cs",
+      "line": 280,
+      "classes": [
+        "StubMarkerFileReaderTests"
+      ],
+      "text": "[\"rotated_at\"] = DateTimeOffset.UtcNow"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/StubMarkerFileReaderTests.cs",
+      "line": 287,
+      "classes": [
+        "StubMarkerFileReaderTests"
+      ],
+      "text": "await Task.Delay(100, cancellationToken);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/StubMarkerFileReaderTests.cs",
+      "line": 303,
+      "classes": [
+        "StubMarkerFileReaderTests"
+      ],
+      "text": "data.LastModified.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs",
+      "line": 1134,
+      "classes": [
+        "TodoWorkflowTests"
+      ],
+      "text": "timestamp = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs",
+      "line": 1157,
+      "classes": [
+        "TodoWorkflowTests"
+      ],
+      "text": "timestamp = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs",
+      "line": 1180,
+      "classes": [
+        "TodoWorkflowTests"
+      ],
+      "text": "timestamp = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs",
+      "line": 1201,
+      "classes": [
+        "TodoWorkflowTests"
+      ],
+      "text": "completedAt = DateTimeOffset.UtcNow"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs",
+      "line": 1203,
+      "classes": [
+        "TodoWorkflowTests"
+      ],
+      "text": "timestamp = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs",
+      "line": 1226,
+      "classes": [
+        "TodoWorkflowTests"
+      ],
+      "text": "timestamp = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs",
+      "line": 1251,
+      "classes": [
+        "TodoWorkflowTests"
+      ],
+      "text": "timestamp = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs",
+      "line": 1403,
+      "classes": [
+        "TodoWorkflowTests"
+      ],
+      "text": "status.LastUpdated.Returns(DateTimeOffset.UtcNow.AddHours(-1));"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs",
+      "line": 1420,
+      "classes": [
+        "TodoWorkflowTests"
+      ],
+      "text": "evt.Timestamp.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/WorkspaceSelectionTests.cs",
+      "line": 295,
+      "classes": [
+        "WorkspaceSelectionTests"
+      ],
+      "text": "result.SelectedAt.Returns(DateTimeOffset.UtcNow);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/GitHubControllerTests.cs",
+      "line": 132,
+      "classes": [
+        "GitHubControllerTests"
+      ],
+      "text": "var expiresAt = DateTimeOffset.UtcNow.AddHours(1);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+      "line": 254,
+      "classes": [
+        "IngestionAllowlistContractTests"
+      ],
+      "text": "[InlineData(\"Assert.SkipUnless(OperatingSystem.IsWindows(), \\\"w\\\");\", \"1\")]"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+      "line": 305,
+      "classes": [
+        "IngestionAllowlistContractTests"
+      ],
+      "text": "Assert.DoesNotMatch(original, \"Assert.SkipUnless(OperatingSystem.IsWindows(), \\\"w\\\");\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs",
+      "line": 121,
+      "classes": [
+        "UnitSuitePlatformScannerAliasScopeTests"
+      ],
+      "text": "public void A() { _ = OperatingSystem.IsNullOrEmpty(\"x\"); }"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 26,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "if (OperatingSystem.IsWindows()) return;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 38,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "if (OperatingSystem.IsWindows()) return;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 49,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "var s = \"OperatingSystem.IsWindows()\"; // RuntimeInformation.IsOSPlatform(x)"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 83,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "public static string Root { get; } = OperatingSystem.IsWindows() ? \"a\" : \"b\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 95,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "public bool On => OperatingSystem.IsLinux();"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 105,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "public void A() { _ = OperatingSystem.IsLinux(); }"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 110,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "public void B() { _ = OperatingSystem.IsLinux(); }"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 130,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "public void A() => Assert.True(RuntimeInformation.IsOSPlatform(OSPlatform.Linux));"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 149,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "var v = @\"OperatingSystem.IsLinux() \"\" still inside\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 150,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "var r = \"\"\"OperatingSystem.IsMacOS()\"\"\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 152,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "_ = OperatingSystem.IsLinux();"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 163,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 175,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "public void A() => Assert.True(OperatingSystem.IsLinux());"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 214,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "var a = $\"host {OperatingSystem.IsWindows()} end\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 215,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "var b = $\"text OperatingSystem.IsLinux() {{OperatingSystem.IsMacOS()}}\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 216,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "var c = $@\"{(RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? \"l\" : \"w\")}\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 217,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "var d = $$\"\"\"{{OperatingSystem.IsFreeBSD()}} {OperatingSystem.IsAndroid()}\"\"\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 218,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "var e = $\"{value:OperatingSystem.IsIOS()}\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 233,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "_ = global::System.OperatingSystem.IsMacOS();"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 269,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "Func<bool> check = OperatingSystem.IsLinux;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 271,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "_ = nameof(OperatingSystem.IsMacOS);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 292,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "public void A() { _ = OperatingSystem.IsWindows(); }"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 294,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "public void B() { _ = OperatingSystem.IsWindows(); }"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 319,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "_ = OperatingSystem.IsWindows();"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 321,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "_ = OperatingSystem.IsLinux();"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 513,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "var a = \"OperatingSystem.IsWindows() RuntimeInformation.IsOSPlatform(p)\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 516,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "var d = $\"text OperatingSystem.IsLinux() {{Assert.SkipWhen(true, w)}}\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 518,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "// OperatingSystem.IsMacOS(); Assert.SkipUnless(false, \"u\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+      "line": 520,
+      "classes": [
+        "UnitSuitePlatformScannerMockGateTests"
+      ],
+      "text": "_ = OperatingSystem.IsLinux();"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/ContextControllerTransactionGateTests.cs",
+      "line": 179,
+      "classes": [
+        "ContextControllerTransactionGateTests"
+      ],
+      "text": "IngestedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/MemoryControllerTests.cs",
+      "line": 31,
+      "classes": [
+        "MemoryControllerTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/MemoryControllerTests.cs",
+      "line": 32,
+      "classes": [
+        "MemoryControllerTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/MemoryControllerTests.cs",
+      "line": 97,
+      "classes": [
+        "MemoryControllerTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/MemoryControllerTests.cs",
+      "line": 98,
+      "classes": [
+        "MemoryControllerTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/MemoryControllerTests.cs",
+      "line": 131,
+      "classes": [
+        "MemoryControllerTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/MemoryControllerTests.cs",
+      "line": 132,
+      "classes": [
+        "MemoryControllerTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/RequirementsControllerGenerateTests.cs",
+      "line": 70,
+      "classes": [
+        "RequirementsControllerGenerateTests"
+      ],
+      "text": "GeneratedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/RequirementsControllerGenerateTests.cs",
+      "line": 79,
+      "classes": [
+        "RequirementsControllerGenerateTests"
+      ],
+      "text": "LastModifiedUtc = DateTimeOffset.UtcNow"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/TriageControllerTests.cs",
+      "line": 30,
+      "classes": [
+        "TriageControllerTests"
+      ],
+      "text": "QuietDeadlineUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/TriageControllerTests.cs",
+      "line": 46,
+      "classes": [
+        "TriageControllerTests"
+      ],
+      "text": "StartedUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/TriageControllerTests.cs",
+      "line": 56,
+      "classes": [
+        "TriageControllerTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/TriageControllerTests.cs",
+      "line": 210,
+      "classes": [
+        "TriageControllerTests"
+      ],
+      "text": "QuietDeadlineUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/TriageControllerTests.cs",
+      "line": 235,
+      "classes": [
+        "TriageControllerTests"
+      ],
+      "text": "QuietDeadlineUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/TriageControllerTests.cs",
+      "line": 267,
+      "classes": [
+        "TriageControllerTests"
+      ],
+      "text": "QuietDeadlineUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/TriageControllerTests.cs",
+      "line": 317,
+      "classes": [
+        "TriageControllerTests"
+      ],
+      "text": "QuietDeadlineUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/TriageControllerTests.cs",
+      "line": 327,
+      "classes": [
+        "TriageControllerTests"
+      ],
+      "text": "StartedUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/TriageControllerTests.cs",
+      "line": 357,
+      "classes": [
+        "TriageControllerTests"
+      ],
+      "text": "StartedUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/TurnTransactionsControllerTests.cs",
+      "line": 68,
+      "classes": [
+        "TurnTransactionsControllerTests"
+      ],
+      "text": "var cutoff = DateTimeOffset.UtcNow.AddMinutes(-10);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "line": 76,
+      "classes": [
+        "McpDatabaseEncryptionTransitionCommandTests"
+      ],
+      "text": "var previous = Environment.GetEnvironmentVariable(\"MCP_INSTANCE\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "line": 77,
+      "classes": [
+        "McpDatabaseEncryptionTransitionCommandTests"
+      ],
+      "text": "var previousModern = Environment.GetEnvironmentVariable(\"QBRAINAI_INSTANCE\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SyncStatusStoreMultiTenantTests.cs",
+      "line": 25,
+      "classes": [
+        "SyncStatusStoreMultiTenantTests"
+      ],
+      "text": "StartedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SyncStatusStoreMultiTenantTests.cs",
+      "line": 40,
+      "classes": [
+        "SyncStatusStoreMultiTenantTests"
+      ],
+      "text": "var resultA = new SyncRunResult { RunId = \"a1\", Status = \"Completed\", StartedAt = DateTime.UtcNow };"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SyncStatusStoreMultiTenantTests.cs",
+      "line": 41,
+      "classes": [
+        "SyncStatusStoreMultiTenantTests"
+      ],
+      "text": "var resultB = new SyncRunResult { RunId = \"b1\", Status = \"Failed\", StartedAt = DateTime.UtcNow };"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SyncStatusStoreMultiTenantTests.cs",
+      "line": 53,
+      "classes": [
+        "SyncStatusStoreMultiTenantTests"
+      ],
+      "text": "var global = new SyncRunResult { RunId = \"g1\", Status = \"Completed\", StartedAt = DateTime.UtcNow };"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SyncStatusStoreMultiTenantTests.cs",
+      "line": 54,
+      "classes": [
+        "SyncStatusStoreMultiTenantTests"
+      ],
+      "text": "var ws = new SyncRunResult { RunId = \"w1\", Status = \"Failed\", StartedAt = DateTime.UtcNow };"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SyncStatusStoreMultiTenantTests.cs",
+      "line": 66,
+      "classes": [
+        "SyncStatusStoreMultiTenantTests"
+      ],
+      "text": "var result = new SyncRunResult { RunId = \"ci\", Status = \"Completed\", StartedAt = DateTime.UtcNow };"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SyncStatusStoreMultiTenantTests.cs",
+      "line": 75,
+      "classes": [
+        "SyncStatusStoreMultiTenantTests"
+      ],
+      "text": "var result = new SyncRunResult { RunId = \"x\", Status = \"Completed\", StartedAt = DateTime.UtcNow };"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "line": 164,
+      "classes": [
+        "MemoryIndexerTests"
+      ],
+      "text": "var previousOpenAi = Environment.GetEnvironmentVariable(\"OPENAI_API_KEY\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "line": 165,
+      "classes": [
+        "MemoryIndexerTests"
+      ],
+      "text": "var previousAzure = Environment.GetEnvironmentVariable(\"AZURE_OPENAI_API_KEY\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "line": 225,
+      "classes": [
+        "MemoryIndexerTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "line": 226,
+      "classes": [
+        "MemoryIndexerTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIsolationTests.cs",
+      "line": 64,
+      "classes": [
+        "MemoryIsolationTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIsolationTests.cs",
+      "line": 65,
+      "classes": [
+        "MemoryIsolationTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIsolationTests.cs",
+      "line": 75,
+      "classes": [
+        "MemoryIsolationTests"
+      ],
+      "text": "AddedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIsolationTests.cs",
+      "line": 83,
+      "classes": [
+        "MemoryIsolationTests"
+      ],
+      "text": "AddedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs",
+      "line": 49,
+      "classes": [
+        "MemoryMigrationTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs",
+      "line": 50,
+      "classes": [
+        "MemoryMigrationTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPromoteTests.cs",
+      "line": 256,
+      "classes": [
+        "MemoryPromoteTests"
+      ],
+      "text": "Started = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPromoteTests.cs",
+      "line": 257,
+      "classes": [
+        "MemoryPromoteTests"
+      ],
+      "text": "LastUpdated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPromoteTests.cs",
+      "line": 267,
+      "classes": [
+        "MemoryPromoteTests"
+      ],
+      "text": "Timestamp = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryRecallTests.cs",
+      "line": 505,
+      "classes": [
+        "MemoryRecallTests"
+      ],
+      "text": "Started = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryRecallTests.cs",
+      "line": 506,
+      "classes": [
+        "MemoryRecallTests"
+      ],
+      "text": "LastUpdated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1PortMockTests.cs",
+      "line": 61,
+      "classes": [
+        "MemoryS1PortMockTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1PortMockTests.cs",
+      "line": 62,
+      "classes": [
+        "MemoryS1PortMockTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySessionLogTests.cs",
+      "line": 29,
+      "classes": [
+        "MemorySessionLogTests"
+      ],
+      "text": "Started = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySessionLogTests.cs",
+      "line": 30,
+      "classes": [
+        "MemorySessionLogTests"
+      ],
+      "text": "LastUpdated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySessionLogTests.cs",
+      "line": 39,
+      "classes": [
+        "MemorySessionLogTests"
+      ],
+      "text": "Timestamp = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryTxnTests.cs",
+      "line": 26,
+      "classes": [
+        "MemoryTxnTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryTxnTests.cs",
+      "line": 27,
+      "classes": [
+        "MemoryTxnTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 204,
+      "classes": [
+        "McpInstanceResolverTests"
+      ],
+      "text": "var previousModern = Environment.GetEnvironmentVariable(\"QBRAINAI_INSTANCE\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 205,
+      "classes": [
+        "McpInstanceResolverTests"
+      ],
+      "text": "var previousLegacy = Environment.GetEnvironmentVariable(\"MCP_INSTANCE\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 231,
+      "classes": [
+        "McpInstanceResolverTests"
+      ],
+      "text": "var previousModern = Environment.GetEnvironmentVariable(\"QBRAINAI_INSTANCE\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 232,
+      "classes": [
+        "McpInstanceResolverTests"
+      ],
+      "text": "var previousLegacy = Environment.GetEnvironmentVariable(\"MCP_INSTANCE\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+      "line": 85,
+      "classes": [
+        "ProductAliasCompatibilityTests"
+      ],
+      "text": ".ToDictionary(name => name, Environment.GetEnvironmentVariable, StringComparer.Ordinal);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Products/GetProductEffectiveRequirementsQueryHandlerTests.cs",
+      "line": 296,
+      "classes": [
+        "GetProductEffectiveRequirementsQueryHandlerTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Products/GetProductEffectiveRequirementsQueryHandlerTests.cs",
+      "line": 297,
+      "classes": [
+        "GetProductEffectiveRequirementsQueryHandlerTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Products/GetProductEffectiveRequirementsQueryHandlerTests.cs",
+      "line": 310,
+      "classes": [
+        "GetProductEffectiveRequirementsQueryHandlerTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow.ToString(\"O\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Products/GetProductEffectiveRequirementsQueryHandlerTests.cs",
+      "line": 355,
+      "classes": [
+        "GetProductEffectiveRequirementsQueryHandlerTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow.ToString(\"O\"),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Products/ProductRequirementContextSurfaceTests.cs",
+      "line": 364,
+      "classes": [
+        "ProductRequirementContextSurfaceTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Products/ProductRequirementContextSurfaceTests.cs",
+      "line": 365,
+      "classes": [
+        "ProductRequirementContextSurfaceTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Products/ProductRequirementContextSurfaceTests.cs",
+      "line": 371,
+      "classes": [
+        "ProductRequirementContextSurfaceTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow.ToString(\"O\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Products/ProductRequirementContextTests.cs",
+      "line": 158,
+      "classes": [
+        "ProductRequirementContextTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Products/ProductRequirementContextTests.cs",
+      "line": 159,
+      "classes": [
+        "ProductRequirementContextTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Products/ProductRequirementContextTests.cs",
+      "line": 165,
+      "classes": [
+        "ProductRequirementContextTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow.ToString(\"O\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryTests.cs",
+      "line": 674,
+      "classes": [
+        "RequirementsRecoveryTests",
+        "RequirementsRecoveryControllerTests"
+      ],
+      "text": "await Task.Delay(_delay, cancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+      "line": 76,
+      "classes": [
+        "RequirementStoredTimestampContractTests"
+      ],
+      "text": "\"read time\" => DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPoolSeedServiceTests.cs",
+      "line": 72,
+      "classes": [
+        "AgentPoolSeedServiceTests"
+      ],
+      "text": "DateTimeCreated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPoolSeedServiceTests.cs",
+      "line": 73,
+      "classes": [
+        "AgentPoolSeedServiceTests"
+      ],
+      "text": "DateTimeModified = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPoolServiceTests.cs",
+      "line": 355,
+      "classes": [
+        "AgentPoolServiceTests"
+      ],
+      "text": "await Task.Delay(20).ConfigureAwait(true);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentServiceRuntimeTests.cs",
+      "line": 110,
+      "classes": [
+        "AgentServiceRuntimeTests"
+      ],
+      "text": "CreatedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentServiceRuntimeTests.cs",
+      "line": 111,
+      "classes": [
+        "AgentServiceRuntimeTests"
+      ],
+      "text": "ModifiedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentServiceRuntimeTests.cs",
+      "line": 153,
+      "classes": [
+        "AgentServiceRuntimeTests"
+      ],
+      "text": "CreatedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentServiceRuntimeTests.cs",
+      "line": 154,
+      "classes": [
+        "AgentServiceRuntimeTests"
+      ],
+      "text": "ModifiedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentServiceRuntimeTests.cs",
+      "line": 165,
+      "classes": [
+        "AgentServiceRuntimeTests"
+      ],
+      "text": "AddedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotAdoptedPartyKeySigningTests.cs",
+      "line": 155,
+      "classes": [
+        "BrainSlotAdoptedPartyKeySigningTests"
+      ],
+      "text": "Sequence = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotAdoptedPartyKeySigningTests.cs",
+      "line": 288,
+      "classes": [
+        "BrainSlotAdoptedPartyKeySigningTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotChatClientFactoryTests.cs",
+      "line": 111,
+      "classes": [
+        "BrainSlotChatClientFactoryTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotChatClientFactoryTests.cs",
+      "line": 112,
+      "classes": [
+        "BrainSlotChatClientFactoryTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotInvocationTransactionTests.cs",
+      "line": 260,
+      "classes": [
+        "BrainSlotInvocationTransactionTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotInvocationTransactionTests.cs",
+      "line": 261,
+      "classes": [
+        "BrainSlotInvocationTransactionTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotInvocationTransactionTests.cs",
+      "line": 314,
+      "classes": [
+        "BrainSlotInvocationTransactionTests"
+      ],
+      "text": "await Task.Delay(Timeout.Infinite, cancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs",
+      "line": 147,
+      "classes": [
+        "BrainSlotLlmStrategyTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs",
+      "line": 148,
+      "classes": [
+        "BrainSlotLlmStrategyTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotPartyKeyReconcilerTests.cs",
+      "line": 222,
+      "classes": [
+        "BrainSlotPartyKeyReconcilerTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "line": 139,
+      "classes": [
+        "CliBrainSlotStrategyTests"
+      ],
+      "text": "var previousPluginRoot = Environment.GetEnvironmentVariable(\"GROK_PLUGIN_ROOT\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "line": 140,
+      "classes": [
+        "CliBrainSlotStrategyTests"
+      ],
+      "text": "var previousGrokHome = Environment.GetEnvironmentVariable(\"GROK_HOME\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "line": 869,
+      "classes": [
+        "CliBrainSlotStrategyTests"
+      ],
+      "text": "var common = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "line": 373,
+      "classes": [
+        "CodexCliAgentExecutionStrategyTests"
+      ],
+      "text": "WaitForCancellation ? Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken) : Task.CompletedTask;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ConfiguredTriageResearchRunnerFallbackTests.cs",
+      "line": 31,
+      "classes": [
+        "ConfiguredTriageResearchRunnerFallbackTests"
+      ],
+      "text": "QuietDeadlineUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ConfiguredTriageResearchRunnerTests.cs",
+      "line": 45,
+      "classes": [
+        "ConfiguredTriageResearchRunnerTests"
+      ],
+      "text": "QuietDeadlineUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ConfiguredTriageResearchRunnerTests.cs",
+      "line": 98,
+      "classes": [
+        "ConfiguredTriageResearchRunnerTests"
+      ],
+      "text": "QuietDeadlineUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ConfiguredTriageResearchRunnerTests.cs",
+      "line": 144,
+      "classes": [
+        "ConfiguredTriageResearchRunnerTests"
+      ],
+      "text": "QuietDeadlineUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ConfiguredTriageResearchRunnerTests.cs",
+      "line": 194,
+      "classes": [
+        "ConfiguredTriageResearchRunnerTests"
+      ],
+      "text": "QuietDeadlineUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ConfiguredTriageResearchRunnerTests.cs",
+      "line": 228,
+      "classes": [
+        "ConfiguredTriageResearchRunnerTests"
+      ],
+      "text": "QuietDeadlineUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ConfiguredTriageResearchRunnerTests.cs",
+      "line": 283,
+      "classes": [
+        "ConfiguredTriageResearchRunnerTests"
+      ],
+      "text": "QuietDeadlineUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationLocalProxyEnrollmentServiceTests.cs",
+      "line": 53,
+      "classes": [
+        "FederationLocalProxyEnrollmentServiceTests"
+      ],
+      "text": "serverTimeUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationLocalProxyEnrollmentServiceTests.cs",
+      "line": 81,
+      "classes": [
+        "FederationLocalProxyEnrollmentServiceTests"
+      ],
+      "text": "serverTimeUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationLocalProxyEnrollmentServiceTests.cs",
+      "line": 87,
+      "classes": [
+        "FederationLocalProxyEnrollmentServiceTests"
+      ],
+      "text": "recordedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationLocalProxyEnrollmentServiceTests.cs",
+      "line": 120,
+      "classes": [
+        "FederationLocalProxyEnrollmentServiceTests"
+      ],
+      "text": "serverTimeUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+      "line": 90,
+      "classes": [
+        "FederationTopologyServiceTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/Fts5SearchServiceTests.cs",
+      "line": 36,
+      "classes": [
+        "Fts5SearchServiceTests"
+      ],
+      "text": "var deletedAtUtc = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/Fts5SearchServiceTests.cs",
+      "line": 106,
+      "classes": [
+        "Fts5SearchServiceTests"
+      ],
+      "text": "IngestedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/Fts5SearchServiceTests.cs",
+      "line": 115,
+      "classes": [
+        "Fts5SearchServiceTests"
+      ],
+      "text": "IngestedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "line": 411,
+      "classes": [
+        "GitHubCliServiceTests"
+      ],
+      "text": ".Returns(new GitHubWorkspaceTokenRecord(workspacePath, \"gho_stored\", DateTimeOffset.UtcNow, null));"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagDocumentManagementTests.cs",
+      "line": 149,
+      "classes": [
+        "GraphRagDocumentManagementTests"
+      ],
+      "text": "var now = DateTime.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 78,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 79,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 101,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 102,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 131,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 132,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 139,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 140,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 148,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 149,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 186,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 187,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 194,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "line": 195,
+      "classes": [
+        "GraphRagEntityStorageTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagRelationshipStorageTests.cs",
+      "line": 44,
+      "classes": [
+        "GraphRagRelationshipStorageTests"
+      ],
+      "text": "var now = DateTime.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagRelationshipStorageTests.cs",
+      "line": 96,
+      "classes": [
+        "GraphRagRelationshipStorageTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagRelationshipStorageTests.cs",
+      "line": 97,
+      "classes": [
+        "GraphRagRelationshipStorageTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagRelationshipStorageTests.cs",
+      "line": 131,
+      "classes": [
+        "GraphRagRelationshipStorageTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagRelationshipStorageTests.cs",
+      "line": 132,
+      "classes": [
+        "GraphRagRelationshipStorageTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagRelationshipStorageTests.cs",
+      "line": 167,
+      "classes": [
+        "GraphRagRelationshipStorageTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagRelationshipStorageTests.cs",
+      "line": 168,
+      "classes": [
+        "GraphRagRelationshipStorageTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagRelationshipStorageTests.cs",
+      "line": 186,
+      "classes": [
+        "GraphRagRelationshipStorageTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagRelationshipStorageTests.cs",
+      "line": 187,
+      "classes": [
+        "GraphRagRelationshipStorageTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs",
+      "line": 73,
+      "classes": [
+        "HandoffAuditDefectTests"
+      ],
+      "text": "await Task.Delay(50, ci.Arg<CancellationToken>());"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffBoundedSourceTests.cs",
+      "line": 66,
+      "classes": [
+        "HandoffBoundedSourceTests"
+      ],
+      "text": "IngestedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffBoundedSourceTests.cs",
+      "line": 96,
+      "classes": [
+        "HandoffBoundedSourceTests"
+      ],
+      "text": "IngestedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffBoundedSourceTests.cs",
+      "line": 124,
+      "classes": [
+        "HandoffBoundedSourceTests"
+      ],
+      "text": "IngestedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+      "line": 77,
+      "classes": [
+        "HandoffContainedFileReaderTests"
+      ],
+      "text": "if (OperatingSystem.IsWindows())"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+      "line": 334,
+      "classes": [
+        "HandoffDurabilityTests"
+      ],
+      "text": "CreatedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+      "line": 335,
+      "classes": [
+        "HandoffDurabilityTests"
+      ],
+      "text": "ModifiedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+      "line": 887,
+      "classes": [
+        "HandoffDurabilityTests"
+      ],
+      "text": "await Task.Delay(10, cts.Token).ConfigureAwait(true);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+      "line": 1041,
+      "classes": [
+        "HandoffDurabilityTests"
+      ],
+      "text": "await Task.Delay(delay, cancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+      "line": 1093,
+      "classes": [
+        "HandoffDurabilityTests"
+      ],
+      "text": "=> Task.FromResult(new TodoProjectionStatusResult(\"database\", \"memory\", \"docs/todo.yaml\", true, true, false, DateTime.UtcNow.ToString(\"O\")));"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+      "line": 1096,
+      "classes": [
+        "HandoffDurabilityTests"
+      ],
+      "text": "=> Task.FromResult(new TodoProjectionRepairResult(true, null, new TodoProjectionStatusResult(\"database\", \"memory\", \"docs/todo.yaml\", true, true, false, DateTime.UtcNow.ToString(\"O\"))));"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs",
+      "line": 439,
+      "classes": [
+        "HandoffIngestionServiceTests"
+      ],
+      "text": "IngestedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HybridSearchServiceTests.cs",
+      "line": 38,
+      "classes": [
+        "HybridSearchServiceTests"
+      ],
+      "text": "IngestedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/InteractionLogSubmissionChannelTests.cs",
+      "line": 22,
+      "classes": [
+        "InteractionLogSubmissionChannelTests"
+      ],
+      "text": "TimestampUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/InteractionLogSubmissionChannelTests.cs",
+      "line": 64,
+      "classes": [
+        "InteractionLogSubmissionChannelTests"
+      ],
+      "text": "TimestampUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/InteractionLogSubmissionChannelTests.cs",
+      "line": 73,
+      "classes": [
+        "InteractionLogSubmissionChannelTests"
+      ],
+      "text": "TimestampUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/KeyedAsyncLockTests.cs",
+      "line": 25,
+      "classes": [
+        "KeyedAsyncLockTests"
+      ],
+      "text": "var early = await Task.WhenAny(second, Task.Delay(250, ct)).ConfigureAwait(true);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/KeyedAsyncLockTests.cs",
+      "line": 30,
+      "classes": [
+        "KeyedAsyncLockTests"
+      ],
+      "text": "var afterRelease = await Task.WhenAny(second, Task.Delay(2000, ct)).ConfigureAwait(true);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/KeyedAsyncLockTests.cs",
+      "line": 45,
+      "classes": [
+        "KeyedAsyncLockTests"
+      ],
+      "text": "var completed = await Task.WhenAny(acquireB, Task.Delay(2000, ct)).ConfigureAwait(true);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+      "line": 255,
+      "classes": [
+        "MarkerFileServiceTests"
+      ],
+      "text": "DateTimeCreated = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+      "line": 256,
+      "classes": [
+        "MarkerFileServiceTests"
+      ],
+      "text": "DateTimeModified = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs",
+      "line": 404,
+      "classes": [
+        "MemoryFederationStateAdapterTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow.AddMinutes(-5),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs",
+      "line": 405,
+      "classes": [
+        "MemoryFederationStateAdapterTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow.AddMinutes(-1),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessPolicySnapshotReaderContractTests.cs",
+      "line": 124,
+      "classes": [
+        "ProcessPolicySnapshotReaderContractTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessPolicySnapshotReaderContractTests.cs",
+      "line": 125,
+      "classes": [
+        "ProcessPolicySnapshotReaderContractTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessPolicySnapshotReaderContractTests.cs",
+      "line": 134,
+      "classes": [
+        "ProcessPolicySnapshotReaderContractTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow.AddDays(-1),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessPolicySnapshotReaderContractTests.cs",
+      "line": 141,
+      "classes": [
+        "ProcessPolicySnapshotReaderContractTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainLiveOrchestrationTests.cs",
+      "line": 290,
+      "classes": [
+        "QuadBrainLiveOrchestrationTests"
+      ],
+      "text": "await Task.Delay(40, cancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiStreamTests.cs",
+      "line": 57,
+      "classes": [
+        "QuadBrainOpenAiStreamTests"
+      ],
+      "text": "await Task.Delay(10, cancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 57,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "StartedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 58,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "CompletedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 117,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "StartedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 118,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "CompletedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 201,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "await Task.Delay(TimeSpan.FromMilliseconds(50), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 239,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "StartedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 240,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "CompletedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 287,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "StartedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 288,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "CompletedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 347,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "StartedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 348,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "CompletedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 420,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "StartedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 421,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "CompletedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 574,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOrchestrationServiceTests.cs",
+      "line": 575,
+      "classes": [
+        "QuadBrainOrchestrationServiceTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementAcceptanceCriteriaTests.cs",
+      "line": 61,
+      "classes": [
+        "RequirementAcceptanceCriteriaTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow.ToString(\"O\"),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementAcceptanceCriteriaTests.cs",
+      "line": 62,
+      "classes": [
+        "RequirementAcceptanceCriteriaTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow.ToString(\"O\"),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementAcceptanceCriteriaTests.cs",
+      "line": 111,
+      "classes": [
+        "RequirementAcceptanceCriteriaTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow.ToString(\"O\"),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementAcceptanceCriteriaTests.cs",
+      "line": 112,
+      "classes": [
+        "RequirementAcceptanceCriteriaTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow.ToString(\"O\"),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs",
+      "line": 105,
+      "classes": [
+        "RequirementsDatabaseDocumentServiceTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs",
+      "line": 684,
+      "classes": [
+        "RequirementsDatabaseDocumentServiceTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow.ToString(\"O\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs",
+      "line": 710,
+      "classes": [
+        "RequirementsDatabaseDocumentServiceTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow.ToString(\"O\"),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs",
+      "line": 723,
+      "classes": [
+        "RequirementsDatabaseDocumentServiceTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow.ToString(\"O\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs",
+      "line": 280,
+      "classes": [
+        "RequirementsTwelfthContainmentGateTests"
+      ],
+      "text": "var expectedNativeError = OperatingSystem.IsWindows()"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs",
+      "line": 525,
+      "classes": [
+        "RequirementsTwelfthContainmentGateTests"
+      ],
+      "text": "if (!OperatingSystem.IsWindows())"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogDenseGraphTests.cs",
+      "line": 289,
+      "classes": [
+        "SessionLogDenseGraphTests"
+      ],
+      "text": "await Task.Delay(_delay, cancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogReplaceSectionRetryableTests.cs",
+      "line": 191,
+      "classes": [
+        "SessionLogReplaceSectionRetryableTests"
+      ],
+      "text": "await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs",
+      "line": 160,
+      "classes": [
+        "SessionLogResubmissionReviveTests"
+      ],
+      "text": "command.Parameters.AddWithValue(\"@now\", DateTimeOffset.UtcNow.ToString(\"O\"));"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceAgentLinkTests.cs",
+      "line": 49,
+      "classes": [
+        "SessionLogServiceAgentLinkTests"
+      ],
+      "text": "CreatedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceAgentLinkTests.cs",
+      "line": 50,
+      "classes": [
+        "SessionLogServiceAgentLinkTests"
+      ],
+      "text": "ModifiedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceAgentLinkTests.cs",
+      "line": 75,
+      "classes": [
+        "SessionLogServiceAgentLinkTests"
+      ],
+      "text": "CreatedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceAgentLinkTests.cs",
+      "line": 76,
+      "classes": [
+        "SessionLogServiceAgentLinkTests"
+      ],
+      "text": "ModifiedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceAgentLinkTests.cs",
+      "line": 87,
+      "classes": [
+        "SessionLogServiceAgentLinkTests"
+      ],
+      "text": "CreatedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceAgentLinkTests.cs",
+      "line": 88,
+      "classes": [
+        "SessionLogServiceAgentLinkTests"
+      ],
+      "text": "ModifiedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs",
+      "line": 143,
+      "classes": [
+        "SessionLogSubmitBudgetTests"
+      ],
+      "text": "await Task.Delay(_delay, cancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs",
+      "line": 286,
+      "classes": [
+        "SessionLogTriageStoreTests"
+      ],
+      "text": "await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs",
+      "line": 23,
+      "classes": [
+        "StorageCommandBudgetTests"
+      ],
+      "text": "async ct => await Task.Delay(TimeSpan.FromMinutes(1), ct).ConfigureAwait(true),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs",
+      "line": 58,
+      "classes": [
+        "StorageCommandBudgetTests"
+      ],
+      "text": "async ct => await Task.Delay(TimeSpan.FromMinutes(1), ct).ConfigureAwait(true),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceSqliteTests.cs",
+      "line": 66,
+      "classes": [
+        "TodoExecutionServiceSqliteTests"
+      ],
+      "text": "DateTimeCreated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceSqliteTests.cs",
+      "line": 67,
+      "classes": [
+        "TodoExecutionServiceSqliteTests"
+      ],
+      "text": "DateTimeModified = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs",
+      "line": 54,
+      "classes": [
+        "TodoExecutionServiceTests"
+      ],
+      "text": "DateTimeCreated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs",
+      "line": 55,
+      "classes": [
+        "TodoExecutionServiceTests"
+      ],
+      "text": "DateTimeModified = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs",
+      "line": 689,
+      "classes": [
+        "TodoExecutionServiceTests"
+      ],
+      "text": "Started = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs",
+      "line": 690,
+      "classes": [
+        "TodoExecutionServiceTests"
+      ],
+      "text": "LastUpdated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs",
+      "line": 699,
+      "classes": [
+        "TodoExecutionServiceTests"
+      ],
+      "text": "Timestamp = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ToolBucketServiceTests.cs",
+      "line": 202,
+      "classes": [
+        "ToolBucketServiceTests"
+      ],
+      "text": "DateTimeCreated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ToolRegistryScopeTests.cs",
+      "line": 58,
+      "classes": [
+        "ToolRegistryScopeTests"
+      ],
+      "text": "DateTimeCreated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ToolRegistryScopeTests.cs",
+      "line": 131,
+      "classes": [
+        "ToolRegistryScopeTests"
+      ],
+      "text": "DateTimeCreated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ToolRegistryScopeTests.cs",
+      "line": 132,
+      "classes": [
+        "ToolRegistryScopeTests"
+      ],
+      "text": "DateTimeModified = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ToolRegistryScopeTests.cs",
+      "line": 140,
+      "classes": [
+        "ToolRegistryScopeTests"
+      ],
+      "text": "DateTimeCreated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ToolRegistryScopeTests.cs",
+      "line": 141,
+      "classes": [
+        "ToolRegistryScopeTests"
+      ],
+      "text": "DateTimeModified = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedGitHubWorkspaceTokenStoreTests.cs",
+      "line": 44,
+      "classes": [
+        "TransactionGatedGitHubWorkspaceTokenStoreTests"
+      ],
+      "text": ".Returns(new GitHubWorkspaceTokenRecord(@\"Q:\\__mcp_unit_test__\\QBrainAi\", \"token\", DateTimeOffset.UtcNow, null));"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedMemoryServiceTests.cs",
+      "line": 311,
+      "classes": [
+        "TransactionGatedMemoryServiceTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedMemoryServiceTests.cs",
+      "line": 312,
+      "classes": [
+        "TransactionGatedMemoryServiceTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs",
+      "line": 496,
+      "classes": [
+        "TransactionGatedRequirementsDocumentServiceTests"
+      ],
+      "text": "GeneratedAtUtc = generatedAtUtc ?? DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs",
+      "line": 504,
+      "classes": [
+        "TransactionGatedRequirementsDocumentServiceTests"
+      ],
+      "text": "LastModifiedUtc = generatedAtUtc ?? DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs",
+      "line": 535,
+      "classes": [
+        "TransactionGatedRequirementsDocumentServiceTests"
+      ],
+      "text": "GeneratedAtUtc = generatedAtUtc ?? DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs",
+      "line": 543,
+      "classes": [
+        "TransactionGatedRequirementsDocumentServiceTests"
+      ],
+      "text": "LastModifiedUtc = generatedAtUtc ?? DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs",
+      "line": 550,
+      "classes": [
+        "TransactionGatedRequirementsDocumentServiceTests"
+      ],
+      "text": "LastModifiedUtc = generatedAtUtc ?? DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedTodoExecutionServiceTests.cs",
+      "line": 430,
+      "classes": [
+        "TransactionGatedTodoExecutionServiceTests"
+      ],
+      "text": "TimestampUtc = DateTimeOffset.UtcNow.ToString(\"O\"),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedTodoMutationServiceTests.cs",
+      "line": 867,
+      "classes": [
+        "TransactionGatedTodoMutationServiceTests"
+      ],
+      "text": "DateTimeOffset.UtcNow.ToString(\"O\"),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedToolBucketServiceTests.cs",
+      "line": 60,
+      "classes": [
+        "TransactionGatedToolBucketServiceTests"
+      ],
+      "text": ".Returns(new BucketListResult([new BucketDto(1, \"official\", \"owner\", \"repo\", \"main\", \"/\", DateTimeOffset.UtcNow, null)], 1));"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedToolBucketServiceTests.cs",
+      "line": 87,
+      "classes": [
+        "TransactionGatedToolBucketServiceTests"
+      ],
+      "text": ".Returns(new BucketMutationResult(true, Bucket: new BucketDto(1, \"official\", \"owner\", \"repo\", \"main\", \"/\", DateTimeOffset.UtcNow, null)));"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionPubSubTests.cs",
+      "line": 215,
+      "classes": [
+        "TransactionPubSubTests"
+      ],
+      "text": "AcknowledgedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs",
+      "line": 493,
+      "classes": [
+        "TurnTransactionCoordinatorTests"
+      ],
+      "text": "await Task.Delay(TimeSpan.FromSeconds(100), callInfo.Arg<CancellationToken>()).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs",
+      "line": 536,
+      "classes": [
+        "TurnTransactionCoordinatorTests"
+      ],
+      "text": "await Task.Delay(TimeSpan.FromSeconds(100), callInfo.Arg<CancellationToken>()).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs",
+      "line": 678,
+      "classes": [
+        "TurnTransactionCoordinatorTests"
+      ],
+      "text": "IssuedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs",
+      "line": 679,
+      "classes": [
+        "TurnTransactionCoordinatorTests"
+      ],
+      "text": "ExpiresAtUtc = DateTimeOffset.UtcNow.AddMinutes(5),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs",
+      "line": 687,
+      "classes": [
+        "TurnTransactionCoordinatorTests"
+      ],
+      "text": "SignedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseAuditEmissionTests.cs",
+      "line": 163,
+      "classes": [
+        "UseCaseAuditEmissionTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow.ToString(\"O\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateContractTests.cs",
+      "line": 321,
+      "classes": [
+        "UseCaseComponentUpdateContractTests"
+      ],
+      "text": "var initialUpdatedAt = DateTimeOffset.UtcNow.AddHours(-1);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateContractTests.cs",
+      "line": 447,
+      "classes": [
+        "UseCaseComponentUpdateContractTests"
+      ],
+      "text": "db.Entry(entity).Property(\"DeletedAtUtc\").CurrentValue = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateWorkspaceResolutionContractTests.cs",
+      "line": 86,
+      "classes": [
+        "UseCaseComponentUpdateWorkspaceResolutionContractTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseCqrsTests.cs",
+      "line": 357,
+      "classes": [
+        "UseCaseCqrsTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow.ToString(\"O\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseDiagramUmlContractTests.cs",
+      "line": 89,
+      "classes": [
+        "UseCaseDiagramUmlContractTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseDiagramUmlContractTests.cs",
+      "line": 90,
+      "classes": [
+        "UseCaseDiagramUmlContractTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseExpandedScopeTests.cs",
+      "line": 155,
+      "classes": [
+        "UseCaseExpandedScopeTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow.ToString(\"O\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseExpandedScopeTests.cs",
+      "line": 186,
+      "classes": [
+        "UseCaseExpandedScopeTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow.ToString(\"O\");"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+      "line": 105,
+      "classes": [
+        "UseCaseGetWorkspaceResolutionContractTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+      "line": 106,
+      "classes": [
+        "UseCaseGetWorkspaceResolutionContractTests"
+      ],
+      "text": "UpdatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs",
+      "line": 486,
+      "classes": [
+        "WikiDumpG6OverlayTests"
+      ],
+      "text": "CreatedAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs",
+      "line": 494,
+      "classes": [
+        "WikiDumpG6OverlayTests"
+      ],
+      "text": "DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG7OverlayTests.cs",
+      "line": 152,
+      "classes": [
+        "WikiDumpG7OverlayTests"
+      ],
+      "text": "OccurredAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WindowsServiceDeploymentGuardTests.cs",
+      "line": 103,
+      "classes": [
+        "WindowsServiceDeploymentGuardTests"
+      ],
+      "text": "generatedUtc = DateTime.UtcNow.ToString(\"O\"),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs",
+      "line": 604,
+      "classes": [
+        "WorkspaceHygieneG5OverlayTests"
+      ],
+      "text": "FirstReportAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs",
+      "line": 619,
+      "classes": [
+        "WorkspaceHygieneG5OverlayTests"
+      ],
+      "text": "CreatedUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs",
+      "line": 173,
+      "classes": [
+        "WorkspacePathConsumersMockDataTests",
+        "WorkspacePathConsumersRealTests"
+      ],
+      "text": "var hostRewrite = Path.Combine(Path.GetPathRoot(Environment.CurrentDirectory)!, leaf);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePolicyServiceTests.cs",
+      "line": 49,
+      "classes": [
+        "WorkspacePolicyServiceTests"
+      ],
+      "text": "DateTimeCreated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePolicyServiceTests.cs",
+      "line": 50,
+      "classes": [
+        "WorkspacePolicyServiceTests"
+      ],
+      "text": "DateTimeModified = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePolicyServiceTests.cs",
+      "line": 85,
+      "classes": [
+        "WorkspacePolicyServiceTests"
+      ],
+      "text": "DateTimeModified = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceProcessManagerStartupTests.cs",
+      "line": 122,
+      "classes": [
+        "WorkspaceProcessManagerStartupTests"
+      ],
+      "text": "var runtime = new ServerRuntimeInfo(DateTimeOffset.UtcNow, 7147);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+      "line": 50,
+      "classes": [
+        "WorkspaceServiceAccessorTests"
+      ],
+      "text": "await Task.Delay(25, ct);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+      "line": 60,
+      "classes": [
+        "WorkspaceServiceAccessorTests"
+      ],
+      "text": "await Task.Delay(25, ct);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs",
+      "line": 96,
+      "classes": [
+        "WorkspaceServiceCrossPlatformMockDataTests",
+        "WorkspaceServiceCrossPlatformRealTests"
+      ],
+      "text": "var hostRewrite = Path.Combine(Path.GetPathRoot(Environment.CurrentDirectory)!, leaf);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadMigrationTests.cs",
+      "line": 79,
+      "classes": [
+        "AuditPayloadMigrationTests"
+      ],
+      "text": "OccurredAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+      "line": 38,
+      "classes": [
+        "BugTriage139SixteenthIdentityConsumerTests"
+      ],
+      "text": "await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken).ConfigureAwait(false);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+      "line": 222,
+      "classes": [
+        "BugTriage139SixteenthIdentityConsumerTests"
+      ],
+      "text": "var cancellationWait = Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+      "line": 258,
+      "classes": [
+        "BugTriage139SixteenthIdentityConsumerTests"
+      ],
+      "text": "Task.Delay("
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthPostgreSqlTests.cs",
+      "line": 293,
+      "classes": [
+        "BugTriage139SixteenthPostgreSqlContractTests"
+      ],
+      "text": "var deadline = DateTimeOffset.UtcNow.AddSeconds(20);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthPostgreSqlTests.cs",
+      "line": 294,
+      "classes": [
+        "BugTriage139SixteenthPostgreSqlContractTests"
+      ],
+      "text": "while (DateTimeOffset.UtcNow < deadline)"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthPostgreSqlTests.cs",
+      "line": 314,
+      "classes": [
+        "BugTriage139SixteenthPostgreSqlContractTests"
+      ],
+      "text": "await Task.Delay(TimeSpan.FromMilliseconds(25), cancellationToken).ConfigureAwait(true);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthSqliteConsumerTests.cs",
+      "line": 69,
+      "classes": [
+        "BugTriage139SixteenthSqliteConsumerTests"
+      ],
+      "text": "Task.Delay("
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthSqliteConsumerTests.cs",
+      "line": 164,
+      "classes": [
+        "BugTriage139SixteenthSqliteConsumerTests"
+      ],
+      "text": "await Task.Delay("
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/CanonicalToolBucketMigrationTests.cs",
+      "line": 163,
+      "classes": [
+        "CanonicalToolBucketMigrationTests"
+      ],
+      "text": "VALUES ({name}, 'sharpninja', 'McpServerTools', 'main', '/', {DateTimeOffset.UtcNow}, NULL, '')"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/CanonicalToolBucketMigrationTests.cs",
+      "line": 177,
+      "classes": [
+        "CanonicalToolBucketMigrationTests"
+      ],
+      "text": "VALUES ({name}, 'Download McpSession', {bucketName}, {workspaceId}, {workspacePath}, {DateTimeOffset.UtcNow}, {DateTimeOffset.UtcNow})"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/DbFkBehaviorTests.cs",
+      "line": 75,
+      "classes": [
+        "DbFkBehaviorTests"
+      ],
+      "text": "OccurredAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/DbFkBehaviorTests.cs",
+      "line": 101,
+      "classes": [
+        "DbFkBehaviorTests"
+      ],
+      "text": "OccurredAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/DbFkBehaviorTests.cs",
+      "line": 151,
+      "classes": [
+        "DbFkBehaviorTests"
+      ],
+      "text": "RecordedAtUtc = DateTimeOffset.UtcNow.ToString(\"O\"),"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/DbFkBehaviorTests.cs",
+      "line": 171,
+      "classes": [
+        "DbFkBehaviorTests"
+      ],
+      "text": "OccurredAtUtc = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EfNavigationCollectionContractTests.cs",
+      "line": 64,
+      "classes": [
+        "EfNavigationCollectionContractTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EfNavigationCollectionContractTests.cs",
+      "line": 65,
+      "classes": [
+        "EfNavigationCollectionContractTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EfNavigationCollectionContractTests.cs",
+      "line": 73,
+      "classes": [
+        "EfNavigationCollectionContractTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EfNavigationCollectionContractTests.cs",
+      "line": 74,
+      "classes": [
+        "EfNavigationCollectionContractTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EfNavigationCollectionContractTests.cs",
+      "line": 83,
+      "classes": [
+        "EfNavigationCollectionContractTests"
+      ],
+      "text": "CreatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EfNavigationCollectionContractTests.cs",
+      "line": 84,
+      "classes": [
+        "EfNavigationCollectionContractTests"
+      ],
+      "text": "UpdatedAtUtc = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EfNavigationCollectionContractTests.cs",
+      "line": 118,
+      "classes": [
+        "EfNavigationCollectionContractTests"
+      ],
+      "text": "Timestamp = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EfNavigationCollectionContractTests.cs",
+      "line": 144,
+      "classes": [
+        "EfNavigationCollectionContractTests"
+      ],
+      "text": "DateTimeCreated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EfNavigationCollectionContractTests.cs",
+      "line": 145,
+      "classes": [
+        "EfNavigationCollectionContractTests"
+      ],
+      "text": "DateTimeModified = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/McpDbContextMultiTenantTests.cs",
+      "line": 43,
+      "classes": [
+        "McpDbContextMultiTenantTests"
+      ],
+      "text": "CreatedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/McpDbContextMultiTenantTests.cs",
+      "line": 44,
+      "classes": [
+        "McpDbContextMultiTenantTests"
+      ],
+      "text": "ModifiedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/McpDbContextMultiTenantTests.cs",
+      "line": 56,
+      "classes": [
+        "McpDbContextMultiTenantTests"
+      ],
+      "text": "CreatedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/McpDbContextMultiTenantTests.cs",
+      "line": 57,
+      "classes": [
+        "McpDbContextMultiTenantTests"
+      ],
+      "text": "ModifiedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/McpDbContextMultiTenantTests.cs",
+      "line": 69,
+      "classes": [
+        "McpDbContextMultiTenantTests"
+      ],
+      "text": "CreatedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/McpDbContextMultiTenantTests.cs",
+      "line": 70,
+      "classes": [
+        "McpDbContextMultiTenantTests"
+      ],
+      "text": "ModifiedAt = DateTime.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+      "line": 223,
+      "classes": [
+        "SessionLogAgentSessionHeaderMigrationTests"
+      ],
+      "text": "if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(SqlServerTestConnection.OverrideVariable)))"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseStorageTests.cs",
+      "line": 48,
+      "classes": [
+        "UseCaseStorageTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseStorageTests.cs",
+      "line": 105,
+      "classes": [
+        "UseCaseStorageTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseStorageTests.cs",
+      "line": 132,
+      "classes": [
+        "UseCaseStorageTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseStorageTests.cs",
+      "line": 167,
+      "classes": [
+        "UseCaseStorageTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseStorageTests.cs",
+      "line": 219,
+      "classes": [
+        "UseCaseStorageTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceDiscriminatorRealTests.cs",
+      "line": 58,
+      "classes": [
+        "WorkspaceDiscriminatorRealTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+      "line": 103,
+      "classes": [
+        "WorkspaceHostEnvironmentMockDataTests",
+        "WorkspaceHostEnvironmentLinuxMockDataTests"
+      ],
+      "text": "protected override WorkspacePathPlatform RunningPlatform => OperatingSystem.IsWindows() ? WorkspacePathPlatform.Windows : WorkspacePathPlatform.CaseSensitive;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+      "line": 105,
+      "classes": [
+        "WorkspaceHostEnvironmentMockDataTests",
+        "WorkspaceHostEnvironmentLinuxMockDataTests"
+      ],
+      "text": "protected override string ExpectedCurrentDirectory => Environment.CurrentDirectory;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+      "line": 107,
+      "classes": [
+        "WorkspaceHostEnvironmentMockDataTests",
+        "WorkspaceHostEnvironmentLinuxMockDataTests"
+      ],
+      "text": "protected override string NativeSample => OperatingSystem.IsWindows() ? @\"C:\\svc\\.\\repo\" : \"/srv/./repo\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+      "line": 109,
+      "classes": [
+        "WorkspaceHostEnvironmentMockDataTests",
+        "WorkspaceHostEnvironmentLinuxMockDataTests"
+      ],
+      "text": "protected override string NativeSampleExpected => OperatingSystem.IsWindows() ? \"C:/svc/repo\" : \"/srv/repo\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs",
+      "line": 69,
+      "classes": [
+        "WorkspaceIdentityFourteenthNativeTests"
+      ],
+      "text": "var now = DateTimeOffset.UtcNow;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs",
+      "line": 105,
+      "classes": [
+        "WorkspaceIdentityFourteenthNativeTests"
+      ],
+      "text": "if (OperatingSystem.IsWindows())"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs",
+      "line": 132,
+      "classes": [
+        "WorkspaceIdentityFourteenthNativeTests"
+      ],
+      "text": "else if (OperatingSystem.IsLinux())"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs",
+      "line": 186,
+      "classes": [
+        "WorkspaceIdentityFourteenthNativeTests"
+      ],
+      "text": "var minimumInvocationIncrease = OperatingSystem.IsWindows() ? 1 : 9;"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs",
+      "line": 256,
+      "classes": [
+        "WorkspaceIdentityFourteenthNativeTests"
+      ],
+      "text": "DateTimeCreated = DateTimeOffset.UtcNow,"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+      "line": 43,
+      "classes": [
+        "WorkspacePathNormalizerRealTests"
+      ],
+      "text": "var foreign = OperatingSystem.IsWindows() ? \"/fixture/workspaces/McpServer\" : @\"C:\\Users\\fixture-user\";"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+      "line": 48,
+      "classes": [
+        "WorkspacePathNormalizerRealTests"
+      ],
+      "text": "Assert.DoesNotContain(Environment.CurrentDirectory, result, StringComparison.OrdinalIgnoreCase);"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+      "line": 134,
+      "classes": [
+        "WindowsJunctionTests"
+      ],
+      "text": "if (!OperatingSystem.IsWindows())"
+    }
+  ]
+}

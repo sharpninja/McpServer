@@ -14,6 +14,12 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// Unit tests for <see cref="TurnTransactionCoordinator"/> transaction gating.
 /// TEST-MCP-161, TEST-MCP-168, TEST-MCP-169.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the real key server of ExecuteAsync_WhenProtectDiffgramsEnabled_SendsProtectedEnvelopeToSubscriber reads a settable clock fixed at one instant, so the manifest expiry and future-issue checks cannot change its outcome (the sibling sweep of hostile validation round 12 finding R12-F2, S33); the assertions are unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed class TurnTransactionCoordinatorTests
 {
     /// <summary>Disabled coordinator bypasses transaction dependencies and preserves existing mutation behavior.</summary>
@@ -143,7 +149,13 @@ public sealed class TurnTransactionCoordinatorTests
     {
         using var encryptionKey = EncryptionKeyPair.Create();
         var canonicalizer = new TransactionManifestCanonicalizer();
-        using var keyServer = new InMemoryKeyServerService(Monitor(new KeyServerOptions()), canonicalizer);
+        // TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): the key server reads a settable clock fixed at one instant, so the
+        // manifest expiry and future-issue checks cannot change this case's outcome (sibling sweep of hostile validation
+        // round 12 finding R12-F2, S33).
+        using var keyServer = new InMemoryKeyServerService(
+            Monitor(new KeyServerOptions()),
+            canonicalizer,
+            new QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0]));
         await keyServer.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = "mcpserver", Role = "publisher" }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         await keyServer.RegisterPartyAsync(new PartyRegistrationRequest
@@ -470,6 +482,7 @@ public sealed class TurnTransactionCoordinatorTests
     }
 
     /// <summary>Subscriber timeout is mapped to degraded mode when configured.</summary>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (as appended 2026-11-03 16:37:35: a hang guard is at least 100 times the longest real or scripted delay of the awaited step): the substitute's delay rises from 30 s to 100 s. It is a hang guard: it ends on its own only when the coordinator's 1 s commit timeout (CommitTimeoutSeconds = 1, armed through CancelAfter on the token the substitute receives) fails to cancel it, and 30 s was 30 times that timeout; the second holistic read before hostile validation round 12 found it (finding C1). On a passing run the commit timeout cancels the delay at 1 s.</remarks>
     [Fact]
     public async Task ExecuteAsync_WhenSubscriberCommitTimesOut_EntersDegradedMode()
     {
@@ -477,7 +490,7 @@ public sealed class TurnTransactionCoordinatorTests
         transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
             .Returns(async callInfo =>
             {
-                await Task.Delay(TimeSpan.FromSeconds(30), callInfo.Arg<CancellationToken>()).ConfigureAwait(false);
+                await Task.Delay(TimeSpan.FromSeconds(100), callInfo.Arg<CancellationToken>()).ConfigureAwait(false);
                 return new DiffgramCommitResponse();
             });
         var coordinator = CreateCoordinator(
@@ -495,6 +508,7 @@ public sealed class TurnTransactionCoordinatorTests
     }
 
     /// <summary>Concurrent subscriber timeouts all return structured degraded results without skipped work.</summary>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (as appended 2026-11-03 16:37:35: a hang guard is at least 100 times the longest real or scripted delay of the awaited step): the substitutes' delay rises from 30 s to 100 s. It is a hang guard: it ends on its own only when the coordinator's 1 s commit timeout (CommitTimeoutSeconds = 1, armed through CancelAfter on the token each substitute receives) fails to cancel it, and 30 s was 30 times that timeout; the second holistic read before hostile validation round 12 found it (finding C1). On a passing run the commit timeout cancels each delay at 1 s.</remarks>
     [Fact]
     public async Task ExecuteAsync_WhenConcurrentSubscriberCommitsTimeOut_AllReturnCommitTimeout()
     {
@@ -519,7 +533,7 @@ public sealed class TurnTransactionCoordinatorTests
         transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
             .Returns(async callInfo =>
             {
-                await Task.Delay(TimeSpan.FromSeconds(30), callInfo.Arg<CancellationToken>()).ConfigureAwait(false);
+                await Task.Delay(TimeSpan.FromSeconds(100), callInfo.Arg<CancellationToken>()).ConfigureAwait(false);
                 return new DiffgramCommitResponse();
             });
         var audit = new InMemoryTransactionAuditWriter();

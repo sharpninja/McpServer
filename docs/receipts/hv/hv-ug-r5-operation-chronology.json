@@ -1,0 +1,2528 @@
+[
+  {
+    "Line": 981,
+    "Local": "2026-10-19T09:20:54",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/check-script.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1"
+  },
+  {
+    "Line": 985,
+    "Local": "2026-10-19T09:21:01",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/pr81-findings-20261017 -Files \"plugins/core/lib-ps/plugin-hook.ps1;plugins/core/test-fixtures/pester/SessionLogP3StopAndChild.Tests.ps1;src/QBrainAi.Services/Services/FileGitHubWorkspaceTokenStore.cs;tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg.txt -Push -WhatIf"
+  },
+  {
+    "Line": 995,
+    "Local": "2026-10-19T09:21:09",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/pr81-findings-20261017 -Files \"plugins/core/lib-ps/plugin-hook.ps1;plugins/core/test-fixtures/pester/SessionLogP3StopAndChild.Tests.ps1;src/QBrainAi.Services/Services/FileGitHubWorkspaceTokenStore.cs;tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg.txt -Push"
+  },
+  {
+    "Line": 2809,
+    "Local": "2026-10-19T10:25:07",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/pr81-findings-20261017 -Files \"src/QBrainAi.Client/WorkspacePathNormalizer.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/ScriptedWorkspacePathNormalizer.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerMockDataTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-p12.txt -Push -WhatIf"
+  },
+  {
+    "Line": 2813,
+    "Local": "2026-10-19T10:25:13",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/pr81-findings-20261017 -Files \"src/QBrainAi.Client/WorkspacePathNormalizer.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/ScriptedWorkspacePathNormalizer.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerMockDataTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-p12.txt -Push"
+  },
+  {
+    "Line": 3141,
+    "Local": "2026-10-19T10:49:35",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/pr81-findings-20261017 -Files \"docs/handoffs/pr82-review-handoff-20261019T104723.md\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-handoff.txt -Push -WhatIf"
+  },
+  {
+    "Line": 3145,
+    "Local": "2026-10-19T10:49:46",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/pr81-findings-20261017 -Files \"docs/handoffs/pr82-review-handoff-20261019T104723.md\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-handoff.txt -Push"
+  },
+  {
+    "Line": 3517,
+    "Local": "2026-10-19T11:08:30",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/pr81-findings-20261017 -Files \"tests/QBrainAi.Support.Mcp.Tests/Storage/SimulatedWorkspaceHosts.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-winhost.txt -Push"
+  },
+  {
+    "Line": 3622,
+    "Local": "2026-10-19T11:11:11",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/pr81-findings-20261017 -Files \"docs/handoffs/pr82-review-handoff-20261019T104723.md\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-handoff-2.txt -Push"
+  },
+  {
+    "Line": 3768,
+    "Local": "2026-10-19T11:52:27",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/pr81-findings-20261017 -Files \"docs/handoffs/pr82-review-handoff-20261019T104723.md\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-handoff-3.txt -Push"
+  },
+  {
+    "Line": 5338,
+    "Local": "2026-10-19T15:01:23",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/check-script.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1\""
+  },
+  {
+    "Line": 5342,
+    "Local": "2026-10-19T15:01:28",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Search-Text.ps1\" -Root \"/home/sharpninja/.claude/scratch/pr82-review-20261019\" -Pattern \"Read-Criteria\" -Include \"Set-RequirementCriterion.ps1\""
+  },
+  {
+    "Line": 5355,
+    "Local": "2026-10-19T15:01:40",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/check-script.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1\""
+  },
+  {
+    "Line": 5364,
+    "Local": "2026-10-19T15:01:45",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1\" -DataFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-quality-ac21.psd1\" -WhatIf"
+  },
+  {
+    "Line": 5365,
+    "Local": "2026-10-19T15:01:46",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1\" -DataFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-pathnorm-native-host.psd1\" -WhatIf"
+  },
+  {
+    "Line": 5391,
+    "Local": "2026-10-19T15:02:16",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/check-script.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1\""
+  },
+  {
+    "Line": 5395,
+    "Local": "2026-10-19T15:02:22",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1\" -DataFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-pathnorm-native-host.psd1\" -WhatIf"
+  },
+  {
+    "Line": 5396,
+    "Local": "2026-10-19T15:02:23",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1\" -DataFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-quality-ac21.psd1\" -WhatIf"
+  },
+  {
+    "Line": 5401,
+    "Local": "2026-10-19T15:02:36",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1\" -DataFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-quality-ac21.psd1\""
+  },
+  {
+    "Line": 5402,
+    "Local": "2026-10-19T15:02:37",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1\" -DataFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-pathnorm-native-host.psd1\""
+  },
+  {
+    "Line": 5728,
+    "Local": "2026-10-19T15:17:45",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"Directory.Packages.props\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-a.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 5733,
+    "Local": "2026-10-19T15:18:06",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"Directory.Packages.props\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-a.txt\" -Push"
+  },
+  {
+    "Line": 6093,
+    "Local": "2026-10-19T15:33:29",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-tests.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 6102,
+    "Local": "2026-10-19T15:33:37",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-tests.txt\" -Push"
+  },
+  {
+    "Line": 6306,
+    "Local": "2026-10-19T15:39:59",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"src/QBrainAi.Client/WorkspaceIdentityPath.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostRealTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-d.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 6308,
+    "Local": "2026-10-19T15:40:01",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"src/QBrainAi.Client/WorkspaceIdentityPath.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostRealTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-d.txt\" -Push"
+  },
+  {
+    "Line": 6348,
+    "Local": "2026-10-19T15:40:42",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-narrow.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 6350,
+    "Local": "2026-10-19T15:40:45",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-narrow.txt\" -Push"
+  },
+  {
+    "Line": 6382,
+    "Local": "2026-10-19T15:41:42",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/check-script.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo.ps1\""
+  },
+  {
+    "Line": 6387,
+    "Local": "2026-10-19T15:41:47",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo.ps1\" -WhatIf"
+  },
+  {
+    "Line": 6389,
+    "Local": "2026-10-19T15:41:48",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo.ps1\""
+  },
+  {
+    "Line": 6574,
+    "Local": "2026-10-19T15:52:40",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-f.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 6578,
+    "Local": "2026-10-19T15:52:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-f.txt\" -Push"
+  },
+  {
+    "Line": 7984,
+    "Local": "2026-10-19T16:43:16",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \".nuke/build.schema.json;build/Build.TestDependencies.cs;build/LinuxProviderTestProvisioner.cs;build/ProviderTestProvisioningContracts.cs;src/QBrainAi.Services/Services/GitHubCliService.cs;tests/Build.Tests/ProviderTestProvisioningContract.cs;tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs;tests/Build.Tests/ProviderTestProvisioningTests.cs;tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-takeover.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 7988,
+    "Local": "2026-10-19T16:43:24",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \".nuke/build.schema.json;build/Build.TestDependencies.cs;build/LinuxProviderTestProvisioner.cs;build/ProviderTestProvisioningContracts.cs;src/QBrainAi.Services/Services/GitHubCliService.cs;tests/Build.Tests/ProviderTestProvisioningContract.cs;tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs;tests/Build.Tests/ProviderTestProvisioningTests.cs;tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-takeover.txt\" -Push"
+  },
+  {
+    "Line": 8058,
+    "Local": "2026-10-19T16:45:31",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"build/Build.TestDependencies.cs;build/IntegrationLaneFilter.cs;build/IntegrationLaneFilterContracts.cs;tests/Build.Tests/IntegrationLaneFilterContract.cs;tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs;tests/Build.Tests/IntegrationLaneFilterTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-g.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 8078,
+    "Local": "2026-10-19T16:45:57",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"build/Build.TestDependencies.cs;build/IntegrationLaneFilter.cs;build/IntegrationLaneFilterContracts.cs;tests/Build.Tests/IntegrationLaneFilterContract.cs;tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs;tests/Build.Tests/IntegrationLaneFilterTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-g.txt\" -Push"
+  },
+  {
+    "Line": 9535,
+    "Local": "2026-10-19T17:50:26",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"build/Build.TestDependencies.cs;tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration;tests/QBrainAi.Support.Mcp.Tests/Documentation;tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services;tests/QBrainAi.Support.Mcp.Tests/Storage\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-reclass.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 9544,
+    "Local": "2026-10-19T17:50:33",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"build/Build.TestDependencies.cs;tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration;tests/QBrainAi.Support.Mcp.Tests/Documentation;tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services;tests/QBrainAi.Support.Mcp.Tests/Storage\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-reclass.txt\" -Push"
+  },
+  {
+    "Line": 9758,
+    "Local": "2026-10-19T17:56:57",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/check-script.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-2.ps1\""
+  },
+  {
+    "Line": 9765,
+    "Local": "2026-10-19T17:57:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-2.ps1\" -WhatIf"
+  },
+  {
+    "Line": 9769,
+    "Local": "2026-10-19T17:57:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-2.ps1\""
+  },
+  {
+    "Line": 9872,
+    "Local": "2026-10-19T17:59:43",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"docs/plans/2026-10-19-unit-suite-green.md;docs/handoffs/pr82-review-handoff-20261019T104723.md\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-docs.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 9883,
+    "Local": "2026-10-19T17:59:49",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"docs/plans/2026-10-19-unit-suite-green.md;docs/handoffs/pr82-review-handoff-20261019T104723.md\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-docs.txt\" -Push"
+  },
+  {
+    "Line": 9989,
+    "Local": "2026-10-19T18:21:49",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-Receipt.ps1\" -Source \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-2.ps1\" -Destination \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-3.ps1\""
+  },
+  {
+    "Line": 10010,
+    "Local": "2026-10-19T18:22:12",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/check-script.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-3.ps1\""
+  },
+  {
+    "Line": 10015,
+    "Local": "2026-10-19T18:22:18",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-3.ps1\""
+  },
+  {
+    "Line": 10075,
+    "Local": "2026-10-19T18:29:50",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-desktop.txt\" -Push"
+  },
+  {
+    "Line": 10242,
+    "Local": "2026-10-19T18:45:52",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1\" -DataFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-nuke019-ac5.psd1\" -WhatIf"
+  },
+  {
+    "Line": 10253,
+    "Local": "2026-10-19T18:46:02",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1\" -DataFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-nuke019-ac5.psd1\""
+  },
+  {
+    "Line": 10348,
+    "Local": "2026-10-19T18:55:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"build/Build.TestDependencies.cs;build/IntegrationLanePreconditionContracts.cs;build/InteractiveSessionPrecondition.cs;tests/Build.Tests/IntegrationLanePreconditionContract.cs;tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs;tests/Build.Tests/IntegrationLanePreconditionTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-h.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 10354,
+    "Local": "2026-10-19T18:55:58",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"build/Build.TestDependencies.cs;build/IntegrationLanePreconditionContracts.cs;build/InteractiveSessionPrecondition.cs;tests/Build.Tests/IntegrationLanePreconditionContract.cs;tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs;tests/Build.Tests/IntegrationLanePreconditionTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-h.txt\" -Push"
+  },
+  {
+    "Line": 10739,
+    "Local": "2026-10-19T19:15:20",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-handoff.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 10745,
+    "Local": "2026-10-19T19:15:32",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-handoff.txt\" -Push"
+  },
+  {
+    "Line": 11028,
+    "Local": "2026-10-19T19:23:31",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Get-DirListing.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\""
+  },
+  {
+    "Line": 11173,
+    "Local": "2026-10-19T19:26:02",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-TrackedCopy.ps1\""
+  },
+  {
+    "Line": 11186,
+    "Local": "2026-10-19T19:26:16",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"docs/plans/2026-10-19-unit-suite-green.md;docs/receipts/unit-suite-green-20261019\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-receipts.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 11203,
+    "Local": "2026-10-19T19:26:32",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Test-GitIgnored.ps1\""
+  },
+  {
+    "Line": 11225,
+    "Local": "2026-10-19T19:26:49",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"docs/plans/2026-10-19-unit-suite-green.md;docs/receipts/unit-suite-green-20261019\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-receipts.txt\" -Push"
+  },
+  {
+    "Line": 11441,
+    "Local": "2026-10-19T19:33:10",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Find-PlatformTraitUse.ps1\""
+  },
+  {
+    "Line": 11456,
+    "Local": "2026-10-19T19:33:29",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Find-PlatformTraitUse.ps1\""
+  },
+  {
+    "Line": 11571,
+    "Local": "2026-10-19T19:35:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Find-UseCaseFrLinks.ps1\""
+  },
+  {
+    "Line": 11583,
+    "Local": "2026-10-19T19:36:15",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Find-UseCaseFrLinks.ps1\""
+  },
+  {
+    "Line": 11623,
+    "Local": "2026-10-19T19:37:09",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-4.ps1\""
+  },
+  {
+    "Line": 11629,
+    "Local": "2026-10-19T19:37:15",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-4.ps1\" -WhatIf"
+  },
+  {
+    "Line": 11634,
+    "Local": "2026-10-19T19:37:25",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-4.ps1\""
+  },
+  {
+    "Line": 11661,
+    "Local": "2026-10-19T19:38:07",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Get-BranchCommits.ps1\""
+  },
+  {
+    "Line": 11869,
+    "Local": "2026-10-19T19:45:13",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-FileSet.ps1\""
+  },
+  {
+    "Line": 11875,
+    "Local": "2026-10-19T19:45:19",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-FileSet.ps1\" -SourceDir \"/home/sharpninja/.claude/scratch/hv-amendment-20261016-cc\" -DestinationDir \"/home/sharpninja/.claude/scratch/pr82-review-20261019\" -Names \"Invoke-HvRound.ps1;Start-CodexHvRun.ps1;Save-HvResult.ps1;Protect-HvReceipts.ps1;Watch-HvRun.ps1\" -WhatIf"
+  },
+  {
+    "Line": 11879,
+    "Local": "2026-10-19T19:45:24",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-FileSet.ps1\" -SourceDir \"/home/sharpninja/.claude/scratch/hv-amendment-20261016-cc\" -DestinationDir \"/home/sharpninja/.claude/scratch/pr82-review-20261019\" -Names \"Invoke-HvRound.ps1;Start-CodexHvRun.ps1;Save-HvResult.ps1;Protect-HvReceipts.ps1;Watch-HvRun.ps1\""
+  },
+  {
+    "Line": 11900,
+    "Local": "2026-10-19T19:45:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-HvRound.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/Start-CodexHvRun.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/Save-HvResult.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/Watch-HvRun.ps1\""
+  },
+  {
+    "Line": 11920,
+    "Local": "2026-10-19T19:46:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveRunState.ps1\""
+  },
+  {
+    "Line": 11939,
+    "Local": "2026-10-19T19:46:44",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Restore-GeneratedPaths.ps1\""
+  },
+  {
+    "Line": 12035,
+    "Local": "2026-10-19T19:50:00",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"docs/plans/2026-10-19-unit-suite-green.md\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-decisions.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 12039,
+    "Local": "2026-10-19T19:50:05",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"docs/plans/2026-10-19-unit-suite-green.md\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-decisions.txt\" -Push"
+  },
+  {
+    "Line": 12297,
+    "Local": "2026-10-19T20:51:12",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Get-TestClassFixtures.ps1\""
+  },
+  {
+    "Line": 12316,
+    "Local": "2026-10-19T20:51:54",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Get-CodexSandboxHelp.ps1\""
+  },
+  {
+    "Line": 12603,
+    "Local": "2026-10-19T21:04:20",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Add-IntegrationTraits.ps1\""
+  },
+  {
+    "Line": 12634,
+    "Local": "2026-10-19T21:04:53",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Test-DeclarationRegex.ps1\""
+  },
+  {
+    "Line": 12653,
+    "Local": "2026-10-19T21:05:14",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Add-IntegrationTraits.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/Test-DeclarationRegex.ps1\""
+  },
+  {
+    "Line": 12707,
+    "Local": "2026-10-19T21:06:19",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Wait-NukeRun.ps1\""
+  },
+  {
+    "Line": 12785,
+    "Local": "2026-10-19T21:08:47",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-r2-guard.txt\" -WhatIf"
+  },
+  {
+    "Line": 12789,
+    "Local": "2026-10-19T21:08:53",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-r2-guard.txt\""
+  },
+  {
+    "Line": 12804,
+    "Local": "2026-10-19T21:09:11",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs;tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseCqrsTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseDiagramGraphCqrsTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseExpandedScopeTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-r2-reclass.txt\" -WhatIf"
+  },
+  {
+    "Line": 12808,
+    "Local": "2026-10-19T21:09:20",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs;tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateContractTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseCqrsTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseDiagramGraphCqrsTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseExpandedScopeTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-r2-reclass.txt\" -Push"
+  },
+  {
+    "Line": 12872,
+    "Local": "2026-10-19T21:10:18",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-KingdSessionState.ps1\""
+  },
+  {
+    "Line": 12908,
+    "Local": "2026-10-19T21:11:36",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveLane.ps1\""
+  },
+  {
+    "Line": 12922,
+    "Local": "2026-10-19T21:11:54",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\""
+  },
+  {
+    "Line": 12923,
+    "Local": "2026-10-19T21:11:55",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1\" -ScriptPath \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\" -WhatIf"
+  },
+  {
+    "Line": 12938,
+    "Local": "2026-10-19T21:12:12",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1\" -ScriptPath \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\" -OutFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-win-interactive-20261019T2112-start.txt\""
+  },
+  {
+    "Line": 12945,
+    "Local": "2026-10-19T21:12:29",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1\""
+  },
+  {
+    "Line": 12961,
+    "Local": "2026-10-19T21:12:45",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1\" -ScriptPath \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\" -OutFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-win-interactive-20261019T2112-start.txt\""
+  },
+  {
+    "Line": 12974,
+    "Local": "2026-10-19T21:13:09",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\""
+  },
+  {
+    "Line": 12975,
+    "Local": "2026-10-19T21:13:10",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1\" -ScriptPath \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\" -WhatIf"
+  },
+  {
+    "Line": 12988,
+    "Local": "2026-10-19T21:13:19",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1\" -ScriptPath \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\" -OutFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-win-interactive-20261019T2112-start2.txt\""
+  },
+  {
+    "Line": 13015,
+    "Local": "2026-10-19T21:14:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1\" -Directory \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv\" -NameRegex \"unitgreen-r1|^hv-ug-r1-\" -MarkerPath \"/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml\" -BackupDir \"/home/sharpninja/.claude/receipts/McpServer/20261019T2114-unitgreen-r1-unredacted\" -WhatIf"
+  },
+  {
+    "Line": 13035,
+    "Local": "2026-10-19T21:14:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-SandboxedNukeRun.ps1\""
+  },
+  {
+    "Line": 13083,
+    "Local": "2026-10-19T21:15:36",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Test-CodexPermissionProfiles.ps1\""
+  },
+  {
+    "Line": 13111,
+    "Local": "2026-10-19T21:16:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-SandboxedNukeRun.ps1\""
+  },
+  {
+    "Line": 13155,
+    "Local": "2026-10-19T21:17:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-SandboxedNukeRun.ps1\""
+  },
+  {
+    "Line": 13228,
+    "Local": "2026-10-19T21:18:39",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-WikiExport.ps1\""
+  },
+  {
+    "Line": 13250,
+    "Local": "2026-10-19T21:19:24",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-5.ps1\""
+  },
+  {
+    "Line": 13261,
+    "Local": "2026-10-19T21:19:32",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-5.ps1\" -WhatIf"
+  },
+  {
+    "Line": 13265,
+    "Local": "2026-10-19T21:19:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-5.ps1\""
+  },
+  {
+    "Line": 13303,
+    "Local": "2026-10-19T21:20:48",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Get-ReceiptSizes.ps1\""
+  },
+  {
+    "Line": 13565,
+    "Local": "2026-10-19T21:26:37",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"docs/plans/2026-10-19-unit-suite-green.md;docs/receipts/hv;docs/receipts/unit-suite-green-20261019\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-r2-docs.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 13570,
+    "Local": "2026-10-19T21:27:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"docs/plans/2026-10-19-unit-suite-green.md;docs/receipts/hv;docs/receipts/unit-suite-green-20261019\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-r2-docs.txt\" -Push"
+  },
+  {
+    "Line": 14232,
+    "Local": "2026-10-20T07:58:21",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-UnitDependencyInventory.ps1"
+  },
+  {
+    "Line": 14279,
+    "Local": "2026-10-20T08:02:12",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TestDependencyReach.ps1"
+  },
+  {
+    "Line": 14292,
+    "Local": "2026-10-20T08:02:25",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TestDependencyReach.ps1"
+  },
+  {
+    "Line": 14337,
+    "Local": "2026-10-20T08:03:06",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TestDependencyReach.ps1"
+  },
+  {
+    "Line": 14348,
+    "Local": "2026-10-20T08:03:24",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TestDependencyReach.ps1"
+  },
+  {
+    "Line": 14392,
+    "Local": "2026-10-20T08:06:37",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-RoslynVersions.ps1"
+  },
+  {
+    "Line": 14420,
+    "Local": "2026-10-20T08:08:31",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Restore-RoslynLatest.ps1"
+  },
+  {
+    "Line": 14473,
+    "Local": "2026-10-20T08:09:54",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TestDependencyReach.ps1"
+  },
+  {
+    "Line": 14492,
+    "Local": "2026-10-20T08:10:10",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TestDependencyReach.ps1"
+  },
+  {
+    "Line": 14523,
+    "Local": "2026-10-20T08:17:32",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-InventoryCauses.ps1"
+  },
+  {
+    "Line": 14566,
+    "Local": "2026-10-20T08:18:47",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TestDependencyReach.ps1"
+  },
+  {
+    "Line": 14697,
+    "Local": "2026-10-20T08:27:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Test-RoslynPackageVersions.ps1"
+  },
+  {
+    "Line": 14790,
+    "Local": "2026-10-20T08:30:15",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TestDependencyReach.ps1"
+  },
+  {
+    "Line": 14867,
+    "Local": "2026-10-20T08:32:25",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TestDependencyReach.ps1"
+  },
+  {
+    "Line": 14927,
+    "Local": "2026-10-20T08:38:38",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TestDependencyReach.ps1"
+  },
+  {
+    "Line": 15006,
+    "Local": "2026-10-20T08:46:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'Directory.Packages.props;tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-scanner.txt -Push -WhatIf"
+  },
+  {
+    "Line": 15017,
+    "Local": "2026-10-20T08:46:23",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-WorktreeStatus.ps1"
+  },
+  {
+    "Line": 15033,
+    "Local": "2026-10-20T08:46:38",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'Directory.Packages.props;tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-scanner.txt -Push"
+  },
+  {
+    "Line": 15869,
+    "Local": "2026-10-20T09:20:10",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-RefusedTests.ps1"
+  },
+  {
+    "Line": 15915,
+    "Local": "2026-10-20T09:27:10",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-IntegrationTraits.ps1"
+  },
+  {
+    "Line": 16096,
+    "Local": "2026-10-20T09:30:18",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1"
+  },
+  {
+    "Line": 16097,
+    "Local": "2026-10-20T09:30:20",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1"
+  },
+  {
+    "Line": 16099,
+    "Local": "2026-10-20T09:30:21",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveLane.ps1"
+  },
+  {
+    "Line": 16100,
+    "Local": "2026-10-20T09:30:22",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1"
+  },
+  {
+    "Line": 16141,
+    "Local": "2026-10-20T09:33:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests;build/Build.TestDependencies.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-dry.txt -Push -WhatIf"
+  },
+  {
+    "Line": 16152,
+    "Local": "2026-10-20T09:33:12",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests;build/Build.TestDependencies.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-dry.txt -Push"
+  },
+  {
+    "Line": 16204,
+    "Local": "2026-10-20T09:34:35",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv -NameRegex 'unitgreen-r2|hv-ug-r2' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/hv-receipt-backups-r2 -WhatIf"
+  },
+  {
+    "Line": 16254,
+    "Local": "2026-10-20T09:36:12",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1"
+  },
+  {
+    "Line": 16257,
+    "Local": "2026-10-20T09:36:13",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinLaneProcesses.ps1"
+  },
+  {
+    "Line": 16279,
+    "Local": "2026-10-20T09:36:42",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1"
+  },
+  {
+    "Line": 16372,
+    "Local": "2026-10-20T09:38:36",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Compare-TrxSets.ps1"
+  },
+  {
+    "Line": 16410,
+    "Local": "2026-10-20T09:39:27",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine '-ExpectedSha 27c43bccd19a591e4ca30560b52d4c5a9e8b81c9 -WorktreeName unit-green-r3-ssh -RunId ug-r3-win-test-ssh-1 -Targets Test -WhatIf'"
+  },
+  {
+    "Line": 16428,
+    "Local": "2026-10-20T09:39:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine '-ExpectedSha 27c43bccd19a591e4ca30560b52d4c5a9e8b81c9 -WorktreeName unit-green-r3-ssh -RunId ug-r3-win-test-ssh-1 -Targets Test' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-test-ssh-1.out.txt"
+  },
+  {
+    "Line": 16517,
+    "Local": "2026-10-20T09:42:58",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinNukeTargetResult.ps1"
+  },
+  {
+    "Line": 16518,
+    "Local": "2026-10-20T09:42:59",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1"
+  },
+  {
+    "Line": 16559,
+    "Local": "2026-10-20T09:43:43",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 27c43bccd19a591e4ca30560b52d4c5a9e8b81c9 -RunId ug-r3-win-lane-1 -TaskName McpServer-UnitGreenInteractiveLane-r3' -WhatIf"
+  },
+  {
+    "Line": 16600,
+    "Local": "2026-10-20T09:48:43",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinTrxFailureStacks.ps1"
+  },
+  {
+    "Line": 16801,
+    "Local": "2026-10-20T09:55:49",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001.psd1 -WhatIf"
+  },
+  {
+    "Line": 16804,
+    "Local": "2026-10-20T09:55:50",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-sessionlog-006-009.psd1 -WhatIf"
+  },
+  {
+    "Line": 17033,
+    "Local": "2026-10-20T10:03:07",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001.psd1"
+  },
+  {
+    "Line": 17034,
+    "Local": "2026-10-20T10:03:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-sessionlog-006-009.psd1"
+  },
+  {
+    "Line": 17080,
+    "Local": "2026-10-20T10:04:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-ProfileLinks.ps1"
+  },
+  {
+    "Line": 17332,
+    "Local": "2026-10-20T10:15:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Test-WinSymbolicLinkCreation.ps1"
+  },
+  {
+    "Line": 17333,
+    "Local": "2026-10-20T10:15:52",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1"
+  },
+  {
+    "Line": 17576,
+    "Local": "2026-10-20T10:28:52",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'src/QBrainAi.Services/Services/DirectoryListingEntry.cs;src/QBrainAi.Services/Services/DirectoryTreeWalker.cs;src/QBrainAi.Services/Services/MarkerFileService.cs;src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs;tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs;tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-scanfix.txt -Push -WhatIf"
+  },
+  {
+    "Line": 17583,
+    "Local": "2026-10-20T10:29:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'src/QBrainAi.Services/Services/DirectoryListingEntry.cs;src/QBrainAi.Services/Services/DirectoryTreeWalker.cs;src/QBrainAi.Services/Services/MarkerFileService.cs;src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs;tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs;tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-scanfix.txt -Push"
+  },
+  {
+    "Line": 17604,
+    "Local": "2026-10-20T10:29:25",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine '-ExpectedSha 538d0ccf957c041f1e3886864bdf5e4ca693e9ec -WorktreeName unit-green-r3-ssh -RunId ug-r3-win-test-ssh-2 -Targets Test -WhatIf'"
+  },
+  {
+    "Line": 17615,
+    "Local": "2026-10-20T10:29:34",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine '-ExpectedSha 538d0ccf957c041f1e3886864bdf5e4ca693e9ec -WorktreeName unit-green-r3-ssh -RunId ug-r3-win-test-ssh-2 -Targets Test' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-test-ssh-2.result.txt"
+  },
+  {
+    "Line": 17678,
+    "Local": "2026-10-20T10:31:48",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TrxTests.ps1"
+  },
+  {
+    "Line": 17724,
+    "Local": "2026-10-20T10:37:12",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 538d0ccf957c041f1e3886864bdf5e4ca693e9ec -RunId ug-r3-win-lane-1 -TaskName McpUnitGreenLane-ug-r3-win-lane-1 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf' -WhatIf"
+  },
+  {
+    "Line": 17734,
+    "Local": "2026-10-20T10:37:18",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 538d0ccf957c041f1e3886864bdf5e4ca693e9ec -RunId ug-r3-win-lane-1 -TaskName McpUnitGreenLane-ug-r3-win-lane-1 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf'"
+  },
+  {
+    "Line": 17740,
+    "Local": "2026-10-20T10:37:33",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 538d0ccf957c041f1e3886864bdf5e4ca693e9ec -RunId ug-r3-win-lane-1 -TaskName McpUnitGreenLane-ug-r3-win-lane-1 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-1.start.txt"
+  },
+  {
+    "Line": 17876,
+    "Local": "2026-10-20T10:40:31",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-Text.ps1 -Root /home/sharpninja/.claude/scratch/pr82-review-20261019 -Pattern 'technicalRequirements|functionalRequirements' -Include 'Update-UnitGreenTodo*.ps1;Add-UnitGreenTodo.ps1' -MaxChars 260"
+  },
+  {
+    "Line": 17884,
+    "Local": "2026-10-20T10:41:00",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-6.ps1"
+  },
+  {
+    "Line": 17895,
+    "Local": "2026-10-20T10:41:07",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-6.ps1 -WhatIf"
+  },
+  {
+    "Line": 17902,
+    "Local": "2026-10-20T10:41:16",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-6.ps1"
+  },
+  {
+    "Line": 17978,
+    "Local": "2026-10-20T10:43:15",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-CommitFileCounts.ps1"
+  },
+  {
+    "Line": 18008,
+    "Local": "2026-10-20T10:43:58",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Find-WinTrxTests.ps1"
+  },
+  {
+    "Line": 18098,
+    "Local": "2026-10-20T10:49:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-fixture-race.txt -WhatIf"
+  },
+  {
+    "Line": 18109,
+    "Local": "2026-10-20T10:49:58",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-fixture-race.txt"
+  },
+  {
+    "Line": 18144,
+    "Local": "2026-10-20T10:54:17",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-fixture-race.txt -Push -WhatIf"
+  },
+  {
+    "Line": 18157,
+    "Local": "2026-10-20T10:54:30",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1"
+  },
+  {
+    "Line": 18163,
+    "Local": "2026-10-20T10:54:37",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 56d14d7cd7e72975b1cbf0ddcd2cc17c16763249 -WhatIf"
+  },
+  {
+    "Line": 18167,
+    "Local": "2026-10-20T10:54:55",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 56d14d7cd7e72975b1cbf0ddcd2cc17c16763249"
+  },
+  {
+    "Line": 18179,
+    "Local": "2026-10-20T10:55:05",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine '-ExpectedSha 56d14d7cd7e72975b1cbf0ddcd2cc17c16763249 -WorktreeName unit-green-r3-ssh -RunId ug-r3-win-test-ssh-3 -Targets Test -WhatIf'"
+  },
+  {
+    "Line": 18183,
+    "Local": "2026-10-20T10:55:14",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine '-ExpectedSha 56d14d7cd7e72975b1cbf0ddcd2cc17c16763249 -WorktreeName unit-green-r3-ssh -RunId ug-r3-win-test-ssh-3 -Targets Test' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-test-ssh-3.result.txt"
+  },
+  {
+    "Line": 18226,
+    "Local": "2026-10-20T11:02:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 56d14d7cd7e72975b1cbf0ddcd2cc17c16763249 -RunId ug-r3-win-lane-2 -TaskName McpUnitGreenLane-ug-r3-win-lane-2 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf'"
+  },
+  {
+    "Line": 18230,
+    "Local": "2026-10-20T11:02:19",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 56d14d7cd7e72975b1cbf0ddcd2cc17c16763249 -RunId ug-r3-win-lane-2 -TaskName McpUnitGreenLane-ug-r3-win-lane-2 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-2.start.txt"
+  },
+  {
+    "Line": 18306,
+    "Local": "2026-10-20T11:04:20",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-Text.ps1 -Root /home/sharpninja/.claude/scratch/pr82-review-20261019 -Pattern '^\\.(SYNOPSIS|PARAMETER)|^\\s+\\[Parameter|^\\s+\\[(string|switch)\\]' -Include 'Update-TrackedCopy.ps1;Protect-HvReceipts.ps1;Restore-GeneratedPaths.ps1' -Context 1 -MaxChars 220"
+  },
+  {
+    "Line": 18374,
+    "Local": "2026-10-20T11:07:07",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019 -NameRegex '^ug-r3-' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/receipts/unredacted-r3 -WhatIf"
+  },
+  {
+    "Line": 18454,
+    "Local": "2026-10-20T11:08:58",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Wait-WinLaneExit.ps1"
+  },
+  {
+    "Line": 18479,
+    "Local": "2026-10-20T11:11:07",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Compare-WinTrxRuns.ps1"
+  },
+  {
+    "Line": 18499,
+    "Local": "2026-10-20T11:11:19",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Compare-WinTrxRuns.ps1"
+  },
+  {
+    "Line": 18688,
+    "Local": "2026-10-20T12:15:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-localdb.txt -WhatIf"
+  },
+  {
+    "Line": 18693,
+    "Local": "2026-10-20T12:15:47",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-localdb.txt"
+  },
+  {
+    "Line": 18756,
+    "Local": "2026-10-20T12:20:06",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 6042dbb3551c38a740e13de28f44fe9a814e6f0a"
+  },
+  {
+    "Line": 18764,
+    "Local": "2026-10-20T12:20:18",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6042dbb3551c38a740e13de28f44fe9a814e6f0a -RunId ug-r3-win-lane-3 -TaskName McpUnitGreenLane-ug-r3-win-lane-3 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf'"
+  },
+  {
+    "Line": 18768,
+    "Local": "2026-10-20T12:20:36",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6042dbb3551c38a740e13de28f44fe9a814e6f0a -RunId ug-r3-win-lane-3 -TaskName McpUnitGreenLane-ug-r3-win-lane-3 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-3.start.txt"
+  },
+  {
+    "Line": 18965,
+    "Local": "2026-10-20T12:31:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinLocalDbState.ps1"
+  },
+  {
+    "Line": 19049,
+    "Local": "2026-10-20T13:11:34",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6042dbb3551c38a740e13de28f44fe9a814e6f0a -RunId ug-r3-win-lane-4 -TaskName McpUnitGreenLane-ug-r3-win-lane-4 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf'"
+  },
+  {
+    "Line": 19059,
+    "Local": "2026-10-20T13:11:59",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6042dbb3551c38a740e13de28f44fe9a814e6f0a -RunId ug-r3-win-lane-4 -TaskName McpUnitGreenLane-ug-r3-win-lane-4 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-4.start.txt"
+  },
+  {
+    "Line": 19113,
+    "Local": "2026-10-20T13:13:21",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv -NameRegex 'unitgreen-r2|hv-ug-r2-' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/receipts/unredacted-r2 -WhatIf"
+  },
+  {
+    "Line": 19115,
+    "Local": "2026-10-20T13:13:23",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019 -NameRegex '^ug-r3-' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/receipts/unredacted-r3 -WhatIf"
+  },
+  {
+    "Line": 19175,
+    "Local": "2026-10-20T13:18:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinTrxFailureStacks.ps1"
+  },
+  {
+    "Line": 19331,
+    "Local": "2026-10-20T13:43:26",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-sqlcollection.txt -WhatIf"
+  },
+  {
+    "Line": 19335,
+    "Local": "2026-10-20T13:43:33",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-sqlcollection.txt"
+  },
+  {
+    "Line": 19366,
+    "Local": "2026-10-20T13:48:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 0210244d27bf2b5e731e4ee40350504934e812a4"
+  },
+  {
+    "Line": 19368,
+    "Local": "2026-10-20T13:48:54",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 0210244d27bf2b5e731e4ee40350504934e812a4 -RunId ug-r3-win-lane-5 -TaskName McpUnitGreenLane-ug-r3-win-lane-5 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf'"
+  },
+  {
+    "Line": 19380,
+    "Local": "2026-10-20T13:49:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 0210244d27bf2b5e731e4ee40350504934e812a4 -RunId ug-r3-win-lane-5 -TaskName McpUnitGreenLane-ug-r3-win-lane-5 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-5.start.txt"
+  },
+  {
+    "Line": 19390,
+    "Local": "2026-10-20T13:49:36",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-DevelopDelta.ps1"
+  },
+  {
+    "Line": 19506,
+    "Local": "2026-10-20T14:07:02",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Inspect-WinLaneLoss.ps1"
+  },
+  {
+    "Line": 19603,
+    "Local": "2026-10-20T14:10:20",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneDiagRunner.ps1"
+  },
+  {
+    "Line": 19606,
+    "Local": "2026-10-20T14:10:21",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1"
+  },
+  {
+    "Line": 19619,
+    "Local": "2026-10-20T14:10:34",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneDiagRunner.ps1 -RemoteArgumentLine '-ExpectedSha 0210244d27bf2b5e731e4ee40350504934e812a4 -RunId ug-r3-win-lane-diag-1 -TaskName McpUnitGreenLane-ug-r3-win-lane-diag-1 -RunnerSha256 0000000000000000000000000000000000000000000000000000000000000000 -RunnerName Invoke-WinLaneDiagRunner.ps1 -WhatIf' -WhatIf"
+  },
+  {
+    "Line": 19625,
+    "Local": "2026-10-20T14:10:42",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneDiagRunner.ps1 -RemoteArgumentLine '-ExpectedSha 0210244d27bf2b5e731e4ee40350504934e812a4 -RunId ug-r3-win-lane-diag-1 -TaskName McpUnitGreenLane-ug-r3-win-lane-diag-1 -RunnerSha256 AAE2C39371A0567C6A8116C3C44A875AD382F579722A5FB62093689D7653296A -RunnerName Invoke-WinLaneDiagRunner.ps1 -WhatIf'"
+  },
+  {
+    "Line": 19634,
+    "Local": "2026-10-20T14:10:52",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneDiagRunner.ps1 -RemoteArgumentLine '-ExpectedSha 0210244d27bf2b5e731e4ee40350504934e812a4 -RunId ug-r3-win-lane-diag-1 -TaskName McpUnitGreenLane-ug-r3-win-lane-diag-1 -RunnerSha256 AAE2C39371A0567C6A8116C3C44A875AD382F579722A5FB62093689D7653296A -RunnerName Invoke-WinLaneDiagRunner.ps1' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-diag-1.start.txt"
+  },
+  {
+    "Line": 19673,
+    "Local": "2026-10-20T14:15:34",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Read-WinLaneDiagnostics.ps1"
+  },
+  {
+    "Line": 19712,
+    "Local": "2026-10-20T14:17:20",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneDiagRunner.ps1"
+  },
+  {
+    "Line": 19725,
+    "Local": "2026-10-20T14:17:43",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneDiagRunner.ps1 -RemoteArgumentLine '-ExpectedSha 0210244d27bf2b5e731e4ee40350504934e812a4 -RunId ug-r3-win-lane-diag-2 -TaskName McpUnitGreenLane-ug-r3-win-lane-diag-2 -RunnerSha256 0000000000000000000000000000000000000000000000000000000000000000 -RunnerName Invoke-WinLaneDiagRunner.ps1 -WhatIf' -WhatIf"
+  },
+  {
+    "Line": 19732,
+    "Local": "2026-10-20T14:18:06",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneDiagRunner.ps1 -RemoteArgumentLine '-ExpectedSha 0210244d27bf2b5e731e4ee40350504934e812a4 -RunId ug-r3-win-lane-diag-2 -TaskName McpUnitGreenLane-ug-r3-win-lane-diag-2 -RunnerSha256 A98190407B9EDC286619CDA3371550CD630A8B5E5A9872D858DE16C8C8B015BC -RunnerName Invoke-WinLaneDiagRunner.ps1 -WhatIf'"
+  },
+  {
+    "Line": 19742,
+    "Local": "2026-10-20T14:18:27",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneDiagRunner.ps1 -RemoteArgumentLine '-ExpectedSha 0210244d27bf2b5e731e4ee40350504934e812a4 -RunId ug-r3-win-lane-diag-2 -TaskName McpUnitGreenLane-ug-r3-win-lane-diag-2 -RunnerSha256 A98190407B9EDC286619CDA3371550CD630A8B5E5A9872D858DE16C8C8B015BC -RunnerName Invoke-WinLaneDiagRunner.ps1' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-diag-2.start.txt"
+  },
+  {
+    "Line": 19750,
+    "Local": "2026-10-20T14:18:56",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Read-WinVstestDiag.ps1"
+  },
+  {
+    "Line": 19791,
+    "Local": "2026-10-20T14:23:44",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Read-WinLogRange.ps1"
+  },
+  {
+    "Line": 19843,
+    "Local": "2026-10-20T14:26:13",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinUnparseableOutput.ps1"
+  },
+  {
+    "Line": 19862,
+    "Local": "2026-10-20T14:26:54",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Test-WinPgCtlSilent.ps1"
+  },
+  {
+    "Line": 19893,
+    "Local": "2026-10-20T14:27:45",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Test-WinPgCtlSilent.ps1"
+  },
+  {
+    "Line": 20001,
+    "Local": "2026-10-20T14:35:22",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-pgctl.txt -WhatIf"
+  },
+  {
+    "Line": 20005,
+    "Local": "2026-10-20T14:35:28",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-pgctl.txt"
+  },
+  {
+    "Line": 20028,
+    "Local": "2026-10-20T14:39:54",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 6ea425ab943ebdd8aad1de1c84896de92d0270d8"
+  },
+  {
+    "Line": 20029,
+    "Local": "2026-10-20T14:39:57",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6ea425ab943ebdd8aad1de1c84896de92d0270d8 -RunId ug-r3-win-lane-6 -TaskName McpUnitGreenLane-ug-r3-win-lane-6 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf'"
+  },
+  {
+    "Line": 20039,
+    "Local": "2026-10-20T14:40:09",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6ea425ab943ebdd8aad1de1c84896de92d0270d8 -RunId ug-r3-win-lane-6 -TaskName McpUnitGreenLane-ug-r3-win-lane-6 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-6.start.txt"
+  },
+  {
+    "Line": 20082,
+    "Local": "2026-10-20T14:48:18",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneDiagRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6ea425ab943ebdd8aad1de1c84896de92d0270d8 -RunId ug-r3-win-lane-diag-3 -TaskName McpUnitGreenLane-ug-r3-win-lane-diag-3 -RunnerSha256 A98190407B9EDC286619CDA3371550CD630A8B5E5A9872D858DE16C8C8B015BC -RunnerName Invoke-WinLaneDiagRunner.ps1 -WhatIf'"
+  },
+  {
+    "Line": 20083,
+    "Local": "2026-10-20T14:48:21",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneDiagRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6ea425ab943ebdd8aad1de1c84896de92d0270d8 -RunId ug-r3-win-lane-diag-3 -TaskName McpUnitGreenLane-ug-r3-win-lane-diag-3 -RunnerSha256 A98190407B9EDC286619CDA3371550CD630A8B5E5A9872D858DE16C8C8B015BC -RunnerName Invoke-WinLaneDiagRunner.ps1' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-diag-3.start.txt"
+  },
+  {
+    "Line": 20169,
+    "Local": "2026-10-20T14:51:01",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-ProfileFiles.ps1"
+  },
+  {
+    "Line": 20210,
+    "Local": "2026-10-20T14:51:48",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-ScratchListing.ps1"
+  },
+  {
+    "Line": 20316,
+    "Local": "2026-10-20T14:54:49",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine '-ExpectedSha 6ea425ab943ebdd8aad1de1c84896de92d0270d8 -WorktreeName unit-green-r3-ssh -RunId ug-r3-win-test-ssh-4 -Targets Test -WhatIf'"
+  },
+  {
+    "Line": 20326,
+    "Local": "2026-10-20T14:54:59",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine '-ExpectedSha 6ea425ab943ebdd8aad1de1c84896de92d0270d8 -WorktreeName unit-green-r3-ssh -RunId ug-r3-win-test-ssh-4 -Targets Test' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-test-ssh-4.result.txt"
+  },
+  {
+    "Line": 20635,
+    "Local": "2026-10-20T15:02:18",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-7.ps1"
+  },
+  {
+    "Line": 20642,
+    "Local": "2026-10-20T15:02:24",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-7.ps1 -WhatIf"
+  },
+  {
+    "Line": 20646,
+    "Local": "2026-10-20T15:02:32",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-7.ps1"
+  },
+  {
+    "Line": 20776,
+    "Local": "2026-10-20T15:06:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-Text.ps1"
+  },
+  {
+    "Line": 20797,
+    "Local": "2026-10-20T15:07:29",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-TranscriptFileWrites.ps1"
+  },
+  {
+    "Line": 20820,
+    "Local": "2026-10-20T15:07:52",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-TranscriptFileWrites.ps1"
+  },
+  {
+    "Line": 20868,
+    "Local": "2026-10-20T15:08:46",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths '/home/sharpninja/.claude/scratch/pr82-review-20261019/Compare-FileHashes.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/Search-TextTree.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/Search-Text.ps1'"
+  },
+  {
+    "Line": 20890,
+    "Local": "2026-10-20T15:09:09",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Compare-FileHashes.ps1"
+  },
+  {
+    "Line": 21115,
+    "Local": "2026-10-20T15:16:24",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-sqlserial.txt -WhatIf"
+  },
+  {
+    "Line": 21119,
+    "Local": "2026-10-20T15:16:29",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-sqlserial.txt"
+  },
+  {
+    "Line": 21154,
+    "Local": "2026-10-20T15:21:00",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 68fa7b393d007c0d0c466c29ae4da5738bf54af2 -WhatIf"
+  },
+  {
+    "Line": 21163,
+    "Local": "2026-10-20T15:21:05",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 68fa7b393d007c0d0c466c29ae4da5738bf54af2"
+  },
+  {
+    "Line": 21168,
+    "Local": "2026-10-20T15:21:17",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 68fa7b393d007c0d0c466c29ae4da5738bf54af2 -RunId ug-r3-win-lane-7 -TaskName McpUnitGreenLane-ug-r3-win-lane-7 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -RunnerName Invoke-WinLaneRunner.ps1 -WhatIf'"
+  },
+  {
+    "Line": 21172,
+    "Local": "2026-10-20T15:21:27",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 68fa7b393d007c0d0c466c29ae4da5738bf54af2 -RunId ug-r3-win-lane-7 -TaskName McpUnitGreenLane-ug-r3-win-lane-7 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -RunnerName Invoke-WinLaneRunner.ps1' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-7.start.txt"
+  },
+  {
+    "Line": 21289,
+    "Local": "2026-10-20T15:26:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine '-ExpectedSha 68fa7b393d007c0d0c466c29ae4da5738bf54af2 -WorktreeName unit-green-r3-ssh -RunId ug-r3-win-test-ssh-5 -Targets Test -WhatIf'"
+  },
+  {
+    "Line": 21298,
+    "Local": "2026-10-20T15:26:48",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine '-ExpectedSha 68fa7b393d007c0d0c466c29ae4da5738bf54af2 -WorktreeName unit-green-r3-ssh -RunId ug-r3-win-test-ssh-5 -Targets Test' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-test-ssh-5.result.txt"
+  },
+  {
+    "Line": 21570,
+    "Local": "2026-10-20T15:32:07",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-8.ps1"
+  },
+  {
+    "Line": 21581,
+    "Local": "2026-10-20T15:32:13",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-8.ps1 -WhatIf"
+  },
+  {
+    "Line": 21586,
+    "Local": "2026-10-20T15:32:26",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-8.ps1"
+  },
+  {
+    "Line": 21694,
+    "Local": "2026-10-20T15:35:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019 -NameRegex '^ug-r3-' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/redaction-backup-r3 -WhatIf"
+  },
+  {
+    "Line": 21705,
+    "Local": "2026-10-20T15:35:12",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv -NameRegex 'unitgreen-r2|hv-ug-r2-' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/redaction-backup-r3 -WhatIf"
+  },
+  {
+    "Line": 21748,
+    "Local": "2026-10-20T15:35:59",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/hv;docs/receipts/unit-suite-green-20261019;docs/plans/2026-10-19-unit-suite-green.md' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-docs.txt -WhatIf"
+  },
+  {
+    "Line": 21762,
+    "Local": "2026-10-20T15:36:14",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-UntrackedPaths.ps1"
+  },
+  {
+    "Line": 21780,
+    "Local": "2026-10-20T15:36:38",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/hv;docs/receipts/unit-suite-green-20261019;docs/plans/2026-10-19-unit-suite-green.md' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-docs.txt -Push"
+  },
+  {
+    "Line": 21969,
+    "Local": "2026-10-20T16:32:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001-r3p3.psd1 -WhatIf"
+  },
+  {
+    "Line": 21975,
+    "Local": "2026-10-20T16:32:18",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001-r3p3.psd1"
+  },
+  {
+    "Line": 22114,
+    "Local": "2026-10-20T16:46:18",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'src/QBrainAi.Services/Services/MarkerFileService.cs;tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-versionread.txt -WhatIf"
+  },
+  {
+    "Line": 22124,
+    "Local": "2026-10-20T16:46:24",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'src/QBrainAi.Services/Services/MarkerFileService.cs;tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-versionread.txt"
+  },
+  {
+    "Line": 22200,
+    "Local": "2026-10-20T16:50:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha e0b078c802d6456d106e6ec681d1aa93d6c4d055 -WhatIf"
+  },
+  {
+    "Line": 22211,
+    "Local": "2026-10-20T16:50:56",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha e0b078c802d6456d106e6ec681d1aa93d6c4d055"
+  },
+  {
+    "Line": 22218,
+    "Local": "2026-10-20T16:51:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha e0b078c802d6456d106e6ec681d1aa93d6c4d055 -RunId ug-r3-win-lane-8 -TaskName McpUnitGreenLane-ug-r3-win-lane-8 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -RunnerName Invoke-WinLaneRunner.ps1 -WhatIf'"
+  },
+  {
+    "Line": 22224,
+    "Local": "2026-10-20T16:51:21",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha e0b078c802d6456d106e6ec681d1aa93d6c4d055 -RunId ug-r3-win-lane-8 -TaskName McpUnitGreenLane-ug-r3-win-lane-8 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -RunnerName Invoke-WinLaneRunner.ps1' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-8.start.txt"
+  },
+  {
+    "Line": 22241,
+    "Local": "2026-10-20T16:51:54",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-9.ps1"
+  },
+  {
+    "Line": 22395,
+    "Local": "2026-10-20T16:56:42",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine '-ExpectedSha e0b078c802d6456d106e6ec681d1aa93d6c4d055 -WorktreeName unit-green-r3-ssh -RunId ug-r3-win-test-ssh-6 -Targets Test -WhatIf'"
+  },
+  {
+    "Line": 22407,
+    "Local": "2026-10-20T16:56:57",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine '-ExpectedSha e0b078c802d6456d106e6ec681d1aa93d6c4d055 -WorktreeName unit-green-r3-ssh -RunId ug-r3-win-test-ssh-6 -Targets Test' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-test-ssh-6.result.txt"
+  },
+  {
+    "Line": 22589,
+    "Local": "2026-10-20T17:01:32",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-9.ps1 -GateSummary 'Gates at the last code head e0b078c8: Linux Test ug-r3-linux-test-8 4479/0/0, Windows Test ug-r3-win-test-ssh-6 4479/0/0, Windows lane ug-r3-win-lane-8 373/0/0 complete by name, Linux lane ug-r3-linux-lane-8 397/0/0, Build.Tests ug-r3-build-tests-8 436/0/0, ValidateTraceability ug-r3-traceability-7 passed.' -WhatIf"
+  },
+  {
+    "Line": 22593,
+    "Local": "2026-10-20T17:01:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-9.ps1 -GateSummary 'Gates at the last code head e0b078c8: Linux Test ug-r3-linux-test-8 4479/0/0, Windows Test ug-r3-win-test-ssh-6 4479/0/0, Windows lane ug-r3-win-lane-8 373/0/0 complete by name, Linux lane ug-r3-linux-lane-8 397/0/0, Build.Tests ug-r3-build-tests-8 436/0/0, ValidateTraceability ug-r3-traceability-7 passed.'"
+  },
+  {
+    "Line": 22615,
+    "Local": "2026-10-20T17:02:21",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019 -NameRegex '^ug-r3-' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/redaction-backup-r3 -WhatIf"
+  },
+  {
+    "Line": 22658,
+    "Local": "2026-10-20T17:03:14",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-RenamedReceipts.ps1"
+  },
+  {
+    "Line": 22693,
+    "Local": "2026-10-20T17:03:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019 -NameRegex '^ug-r3-' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/redaction-backup-r3 -WhatIf"
+  },
+  {
+    "Line": 22714,
+    "Local": "2026-10-20T17:04:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/unit-suite-green-20261019;docs/plans/2026-10-19-unit-suite-green.md' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-docs-2.txt -Push -WhatIf"
+  },
+  {
+    "Line": 22720,
+    "Local": "2026-10-20T17:04:15",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/unit-suite-green-20261019;docs/plans/2026-10-19-unit-suite-green.md' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-docs-2.txt -Push"
+  },
+  {
+    "Line": 22818,
+    "Local": "2026-10-20T17:07:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-FileTo.ps1"
+  },
+  {
+    "Line": 22868,
+    "Local": "2026-10-20T17:07:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv -NameRegex '^unitgreen-r3-prelaunch' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/redaction-backup-r3 -WhatIf"
+  },
+  {
+    "Line": 22879,
+    "Local": "2026-10-20T17:07:57",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/hv/unitgreen-r3-prelaunch.selfreview.md;docs/receipts/hv/unitgreen-r3-prelaunch.brief.md;docs/receipts/hv/unitgreen-r3-prelaunch.projected-problems.md' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-prelaunch.txt -Push -WhatIf"
+  },
+  {
+    "Line": 22884,
+    "Local": "2026-10-20T17:08:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/hv/unitgreen-r3-prelaunch.selfreview.md;docs/receipts/hv/unitgreen-r3-prelaunch.brief.md;docs/receipts/hv/unitgreen-r3-prelaunch.projected-problems.md' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-prelaunch.txt -Push"
+  },
+  {
+    "Line": 23435,
+    "Local": "2026-10-20T18:08:49",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-ReviewerTurn.ps1"
+  },
+  {
+    "Line": 23540,
+    "Local": "2026-10-20T18:14:35",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRun.ps1"
+  },
+  {
+    "Line": 23615,
+    "Local": "2026-10-20T18:20:48",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Remove-StaleFr.ps1"
+  },
+  {
+    "Line": 23640,
+    "Local": "2026-10-20T18:22:25",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-EffectiveMention.ps1"
+  },
+  {
+    "Line": 23661,
+    "Local": "2026-10-20T18:22:57",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001-r4.psd1 -WhatIf"
+  },
+  {
+    "Line": 23672,
+    "Local": "2026-10-20T18:23:06",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001-r4.psd1"
+  },
+  {
+    "Line": 24303,
+    "Local": "2026-10-20T18:46:14",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-TextTree.ps1 -Root /home/sharpninja/.claude/scratch/pr82-review-20261019 -Pattern \"SYNOPSIS|Parameter\\(|\\[string\\]|\\[switch\\]|^\\s+[A-Z].*\\.$\" -Include \"Protect-HvReceipts.ps1\""
+  },
+  {
+    "Line": 24308,
+    "Local": "2026-10-20T18:46:21",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv -NameRegex \"(hv-ug-r3-|unitgreen-r3)\" -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/hv-originals/r3 -WhatIf"
+  },
+  {
+    "Line": 24320,
+    "Local": "2026-10-20T18:46:37",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv -NameRegex \"(hv-ug-r3-|unitgreen-r3)\" -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/hv-originals/r3"
+  },
+  {
+    "Line": 24428,
+    "Local": "2026-10-20T18:48:33",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-WorktreeStatus.ps1"
+  },
+  {
+    "Line": 24517,
+    "Local": "2026-10-20T18:50:09",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"docs/receipts/hv\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-receipts.txt -WhatIf"
+  },
+  {
+    "Line": 24521,
+    "Local": "2026-10-20T18:50:17",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"docs/receipts/hv\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-receipts.txt"
+  },
+  {
+    "Line": 24539,
+    "Local": "2026-10-20T18:50:48",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"src/QBrainAi.Services/Services/MarkerFileService.cs;src/QBrainAi.Services/Services/AgentPluginVersionSources.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs;tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs;tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-structural.txt -WhatIf"
+  },
+  {
+    "Line": 24548,
+    "Local": "2026-10-20T18:50:55",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"src/QBrainAi.Services/Services/MarkerFileService.cs;src/QBrainAi.Services/Services/AgentPluginVersionSources.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs;tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs;tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-structural.txt"
+  },
+  {
+    "Line": 24589,
+    "Local": "2026-10-20T18:51:59",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-TextTree.ps1 -Root /home/sharpninja/.claude/scratch/pr82-review-20261019 -Pattern \"Parameter\\(|\\[string\\]|\\[switch\\]|SYNOPSIS\" -Include \"Invoke-WinNukeTarget.ps1\""
+  },
+  {
+    "Line": 24618,
+    "Local": "2026-10-20T18:52:36",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-10.ps1"
+  },
+  {
+    "Line": 24721,
+    "Local": "2026-10-20T18:55:52",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-TextTree.ps1 -Root /home/sharpninja/.claude/scratch/pr82-review-20261019 -Pattern \"Parameter\\(|\\[string\\]|\\[switch\\]\" -Include \"Push-Branch.ps1\""
+  },
+  {
+    "Line": 24725,
+    "Local": "2026-10-20T18:56:04",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 801e6862d49d669808c9315a7ad43d0272b1d1f1 -WhatIf"
+  },
+  {
+    "Line": 24734,
+    "Local": "2026-10-20T18:56:10",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 801e6862d49d669808c9315a7ad43d0272b1d1f1"
+  },
+  {
+    "Line": 24740,
+    "Local": "2026-10-20T18:56:30",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine:\"-ExpectedSha 801e6862d49d669808c9315a7ad43d0272b1d1f1 -WorktreeName unit-green-r3-ssh -RunId ug-r4-win-test-ssh-1 -Targets Test -WhatIf\""
+  },
+  {
+    "Line": 24745,
+    "Local": "2026-10-20T18:56:42",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-test-ssh-1.txt -RemoteArgumentLine:\"-ExpectedSha 801e6862d49d669808c9315a7ad43d0272b1d1f1 -WorktreeName unit-green-r3-ssh -RunId ug-r4-win-test-ssh-1 -Targets Test\""
+  },
+  {
+    "Line": 24881,
+    "Local": "2026-10-20T18:59:49",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-TextTree.ps1 -Root /home/sharpninja/.claude/scratch/pr82-review-20261019 -Pattern \"Parameter\\(|\\[string\\]|\\[switch\\]|SYNOPSIS\" -Include \"Start-WinInteractiveLane.ps1;Get-WinInteractiveLane.ps1\""
+  },
+  {
+    "Line": 24964,
+    "Local": "2026-10-20T19:01:28",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine:\"-ExpectedSha 801e6862d49d669808c9315a7ad43d0272b1d1f1 -RunId ug-r4-win-lane-1 -TaskName McpUnitGreenLane-ug-r4-win-lane-1 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf\""
+  },
+  {
+    "Line": 24977,
+    "Local": "2026-10-20T19:01:42",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-lane-1.start.txt -RemoteArgumentLine:\"-ExpectedSha 801e6862d49d669808c9315a7ad43d0272b1d1f1 -RunId ug-r4-win-lane-1 -TaskName McpUnitGreenLane-ug-r4-win-lane-1 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\""
+  },
+  {
+    "Line": 25558,
+    "Local": "2026-10-20T19:59:06",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"docs/receipts/hv/unitgreen-r3-prelaunch.selfreview.md;docs/receipts/hv/20261020T170824-unitgreen-r3.selfreview.md\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-selfreview-correction.txt -WhatIf"
+  },
+  {
+    "Line": 25572,
+    "Local": "2026-10-20T19:59:13",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"docs/receipts/hv/unitgreen-r3-prelaunch.selfreview.md;docs/receipts/hv/20261020T170824-unitgreen-r3.selfreview.md\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-selfreview-correction.txt"
+  },
+  {
+    "Line": 25576,
+    "Local": "2026-10-20T19:59:23",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"src/QBrainAi.Services/Services/AgentPluginVersionSources.cs;src/QBrainAi.Services/Services/MarkerFileService.cs;tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-race.txt -WhatIf"
+  },
+  {
+    "Line": 25580,
+    "Local": "2026-10-20T19:59:30",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"src/QBrainAi.Services/Services/AgentPluginVersionSources.cs;src/QBrainAi.Services/Services/MarkerFileService.cs;tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-race.txt"
+  },
+  {
+    "Line": 25630,
+    "Local": "2026-10-20T20:04:24",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 26fc83486be252e63579cca9d53f3132672555c7 -WhatIf"
+  },
+  {
+    "Line": 25634,
+    "Local": "2026-10-20T20:04:31",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 26fc83486be252e63579cca9d53f3132672555c7"
+  },
+  {
+    "Line": 25645,
+    "Local": "2026-10-20T20:04:40",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine:\"-ExpectedSha 26fc83486be252e63579cca9d53f3132672555c7 -WorktreeName unit-green-r3-ssh -RunId ug-r4-win-test-ssh-2 -Targets Test -WhatIf\""
+  },
+  {
+    "Line": 25651,
+    "Local": "2026-10-20T20:04:53",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-test-ssh-2.txt -RemoteArgumentLine:\"-ExpectedSha 26fc83486be252e63579cca9d53f3132672555c7 -WorktreeName unit-green-r3-ssh -RunId ug-r4-win-test-ssh-2 -Targets Test\""
+  },
+  {
+    "Line": 25678,
+    "Local": "2026-10-20T20:09:39",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine:\"-ExpectedSha 26fc83486be252e63579cca9d53f3132672555c7 -RunId ug-r4-win-lane-2 -TaskName McpUnitGreenLane-ug-r4-win-lane-2 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf\""
+  },
+  {
+    "Line": 25689,
+    "Local": "2026-10-20T20:09:50",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-lane-2.start.txt -RemoteArgumentLine:\"-ExpectedSha 26fc83486be252e63579cca9d53f3132672555c7 -RunId ug-r4-win-lane-2 -TaskName McpUnitGreenLane-ug-r4-win-lane-2 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\""
+  },
+  {
+    "Line": 25935,
+    "Local": "2026-10-20T20:21:34",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-FileText.ps1"
+  },
+  {
+    "Line": 26025,
+    "Local": "2026-10-20T20:23:06",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-10.ps1"
+  },
+  {
+    "Line": 26032,
+    "Local": "2026-10-20T20:23:13",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-10.ps1 -GateSummary \"Gates at 26fc8348: Linux Test ug-r4-linux-test-2 4516/0/0; hostile-environment gate ug-r4-hostile-gate-2 4516/0/0; Windows Test ug-r4-win-test-ssh-2 4516/0/0; Windows lane ug-r4-win-lane-2 373/0/0 complete by name; Linux lane ug-r4-linux-lane-2 397/0/0; Build.Tests ug-r4-build-tests-1 436/0/0; ValidateTraceability ug-r4-traceability-1 passed.\" -WhatIf"
+  },
+  {
+    "Line": 26036,
+    "Local": "2026-10-20T20:23:22",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-10.ps1 -GateSummary \"Gates at 26fc8348: Linux Test ug-r4-linux-test-2 4516/0/0; hostile-environment gate ug-r4-hostile-gate-2 4516/0/0; Windows Test ug-r4-win-test-ssh-2 4516/0/0; Windows lane ug-r4-win-lane-2 373/0/0 complete by name; Linux lane ug-r4-linux-lane-2 397/0/0; Build.Tests ug-r4-build-tests-1 436/0/0; ValidateTraceability ug-r4-traceability-1 passed.\""
+  },
+  {
+    "Line": 26317,
+    "Local": "2026-10-20T21:24:57",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"docs/receipts/unit-suite-green-20261019\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-receipts-1.txt -WhatIf"
+  },
+  {
+    "Line": 26328,
+    "Local": "2026-10-20T21:25:04",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"docs/receipts/unit-suite-green-20261019\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-receipts-1.txt"
+  },
+  {
+    "Line": 26337,
+    "Local": "2026-10-20T21:25:18",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs;tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs;tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-ext.txt -WhatIf"
+  },
+  {
+    "Line": 26346,
+    "Local": "2026-10-20T21:25:25",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs;tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs;tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-ext.txt"
+  },
+  {
+    "Line": 26418,
+    "Local": "2026-10-20T21:30:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 97b7811491ccb3e338804a01d0bf28e4ecfe273a -WhatIf"
+  },
+  {
+    "Line": 26422,
+    "Local": "2026-10-20T21:30:47",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 97b7811491ccb3e338804a01d0bf28e4ecfe273a"
+  },
+  {
+    "Line": 26427,
+    "Local": "2026-10-20T21:30:56",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine:\"-ExpectedSha 97b7811491ccb3e338804a01d0bf28e4ecfe273a -WorktreeName unit-green-r3-ssh -RunId ug-r4-win-test-ssh-3 -Targets Test -WhatIf\""
+  },
+  {
+    "Line": 26438,
+    "Local": "2026-10-20T21:31:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-test-ssh-3.txt -RemoteArgumentLine:\"-ExpectedSha 97b7811491ccb3e338804a01d0bf28e4ecfe273a -WorktreeName unit-green-r3-ssh -RunId ug-r4-win-test-ssh-3 -Targets Test\""
+  },
+  {
+    "Line": 26476,
+    "Local": "2026-10-20T21:35:56",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine:\"-ExpectedSha 97b7811491ccb3e338804a01d0bf28e4ecfe273a -RunId ug-r4-win-lane-3 -TaskName McpUnitGreenLane-ug-r4-win-lane-3 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf\""
+  },
+  {
+    "Line": 26487,
+    "Local": "2026-10-20T21:36:07",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-lane-3.start.txt -RemoteArgumentLine:\"-ExpectedSha 97b7811491ccb3e338804a01d0bf28e4ecfe273a -RunId ug-r4-win-lane-3 -TaskName McpUnitGreenLane-ug-r4-win-lane-3 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\""
+  },
+  {
+    "Line": 26740,
+    "Local": "2026-10-20T21:48:28",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-11.ps1"
+  },
+  {
+    "Line": 26752,
+    "Local": "2026-10-20T21:48:43",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-11.ps1 -GateSummary \"Gates at 97b78114: Linux Test ug-r4-linux-test-3 4518/0/0; hostile-environment gate ug-r4-hostile-gate-3 4518/0/0; Windows Test ug-r4-win-test-ssh-3 4518/0/0; Windows lane ug-r4-win-lane-3 373/0/0 complete by name; Linux lane ug-r4-linux-lane-3 397/0/0; Build.Tests ug-r4-build-tests-2 436/0/0; ValidateTraceability ug-r4-traceability-2 passed.\" -WhatIf"
+  },
+  {
+    "Line": 26756,
+    "Local": "2026-10-20T21:48:52",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-11.ps1 -GateSummary \"Gates at 97b78114: Linux Test ug-r4-linux-test-3 4518/0/0; hostile-environment gate ug-r4-hostile-gate-3 4518/0/0; Windows Test ug-r4-win-test-ssh-3 4518/0/0; Windows lane ug-r4-win-lane-3 373/0/0 complete by name; Linux lane ug-r4-linux-lane-3 397/0/0; Build.Tests ug-r4-build-tests-2 436/0/0; ValidateTraceability ug-r4-traceability-2 passed.\""
+  },
+  {
+    "Line": 26821,
+    "Local": "2026-10-20T21:50:43",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts -NameRegex \"(unitgreen-r4-prelaunch|ug-r4-)\" -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/hv-originals/r4-prelaunch -WhatIf"
+  },
+  {
+    "Line": 26832,
+    "Local": "2026-10-20T21:50:50",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv -NameRegex \"unitgreen-r4-prelaunch\" -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/hv-originals/r4-prelaunch -WhatIf"
+  },
+  {
+    "Line": 26834,
+    "Local": "2026-10-20T21:50:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019 -NameRegex \"ug-r4-\" -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/hv-originals/r4-runs -WhatIf"
+  },
+  {
+    "Line": 26842,
+    "Local": "2026-10-20T21:51:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"docs/plans/2026-10-19-unit-suite-green.md;docs/receipts/hv;docs/receipts/unit-suite-green-20261019\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-prelaunch.txt -WhatIf"
+  },
+  {
+    "Line": 26848,
+    "Local": "2026-10-20T21:51:09",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"docs/plans/2026-10-19-unit-suite-green.md;docs/receipts/hv;docs/receipts/unit-suite-green-20261019\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-prelaunch.txt"
+  },
+  {
+    "Line": 26861,
+    "Local": "2026-10-20T21:51:16",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a -WhatIf"
+  },
+  {
+    "Line": 26865,
+    "Local": "2026-10-20T21:51:20",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a"
+  },
+  {
+    "Line": 27038,
+    "Local": "2026-10-20T23:06:35",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Read-LegionRequirementIds.ps1"
+  },
+  {
+    "Line": 27131,
+    "Local": "2026-10-21T05:13:35",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv -NameRegex \"(hv-ug-r4-|unitgreen-r4)\" -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/hv-originals/r4 -WhatIf"
+  },
+  {
+    "Line": 27155,
+    "Local": "2026-10-21T05:14:23",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"docs/receipts/hv\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-receipts-hv.txt -WhatIf"
+  },
+  {
+    "Line": 27161,
+    "Local": "2026-10-21T05:14:29",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"docs/receipts/hv\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r4-receipts-hv.txt"
+  },
+  {
+    "Line": 27314,
+    "Local": "2026-10-21T05:24:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-citation.txt -WhatIf"
+  },
+  {
+    "Line": 27326,
+    "Local": "2026-10-21T05:24:15",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files \"tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs\" -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-citation.txt"
+  },
+  {
+    "Line": 27405,
+    "Local": "2026-10-21T05:29:35",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 8c254695d886d6ff87d5caaa42b0fa6b421c9c6b -WhatIf"
+  },
+  {
+    "Line": 27409,
+    "Local": "2026-10-21T05:29:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 8c254695d886d6ff87d5caaa42b0fa6b421c9c6b"
+  },
+  {
+    "Line": 27411,
+    "Local": "2026-10-21T05:29:44",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -RemoteArgumentLine:\"-ExpectedSha 8c254695d886d6ff87d5caaa42b0fa6b421c9c6b -WorktreeName unit-green-r3-ssh -RunId ug-r5-win-test-ssh-1 -Targets Test -WhatIf\""
+  },
+  {
+    "Line": 27423,
+    "Local": "2026-10-21T05:30:05",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-win-test-ssh-1.txt -RemoteArgumentLine:\"-ExpectedSha 8c254695d886d6ff87d5caaa42b0fa6b421c9c6b -WorktreeName unit-green-r3-ssh -RunId ug-r5-win-test-ssh-1 -Targets Test\""
+  },
+  {
+    "Line": 27537,
+    "Local": "2026-10-21T05:34:02",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Find-TranscriptPath.ps1"
+  },
+  {
+    "Line": 27620,
+    "Local": "2026-10-21T05:35:30",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-win-lane-1.whatif.txt -RemoteArgumentLine:\"-ExpectedSha 8c254695d886d6ff87d5caaa42b0fa6b421c9c6b -RunId ug-r5-win-lane-1 -TaskName McpUnitGreenLane-ug-r5-win-lane-1 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf\""
+  },
+  {
+    "Line": 27624,
+    "Local": "2026-10-21T05:35:42",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-win-lane-1.start.txt -RemoteArgumentLine:\"-ExpectedSha 8c254695d886d6ff87d5caaa42b0fa6b421c9c6b -RunId ug-r5-win-lane-1 -TaskName McpUnitGreenLane-ug-r5-win-lane-1 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\""
+  },
+  {
+    "Line": 27730,
+    "Local": "2026-10-21T05:39:35",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Find-TranscriptEntryTime.ps1"
+  },
+  {
+    "Line": 27750,
+    "Local": "2026-10-21T05:40:06",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-12.ps1"
+  },
+  {
+    "Line": 27860,
+    "Local": "2026-10-21T05:43:47",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-Stamps.ps1"
+  },
+  {
+    "Line": 28005,
+    "Local": "2026-10-21T05:47:18",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-ScannerAliasTodo.ps1"
+  },
+  {
+    "Line": 28024,
+    "Local": "2026-10-21T05:47:32",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-ScannerAliasTodo.ps1"
+  },
+  {
+    "Line": 28379,
+    "Local": "2026-10-21T05:55:50",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-docfix.txt -WhatIf"
+  },
+  {
+    "Line": 28389,
+    "Local": "2026-10-21T05:55:56",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-docfix.txt"
+  },
+  {
+    "Line": 28593,
+    "Local": "2026-10-21T06:00:09",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Show-TodoTasks.ps1"
+  },
+  {
+    "Line": 28612,
+    "Local": "2026-10-21T06:00:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-12.ps1"
+  },
+  {
+    "Line": 28656,
+    "Local": "2026-10-21T06:02:45",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha ccc78b7a7624e0367725af585a5fd7c4f38b3661 -WhatIf"
+  },
+  {
+    "Line": 28663,
+    "Local": "2026-10-21T06:02:52",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha ccc78b7a7624e0367725af585a5fd7c4f38b3661"
+  },
+  {
+    "Line": 28668,
+    "Local": "2026-10-21T06:03:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-win-test-ssh-2.txt -RemoteArgumentLine:\"-ExpectedSha ccc78b7a7624e0367725af585a5fd7c4f38b3661 -WorktreeName unit-green-r3-ssh -RunId ug-r5-win-test-ssh-2 -Targets Test\""
+  },
+  {
+    "Line": 28808,
+    "Local": "2026-10-21T06:08:09",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-win-lane-2.whatif.txt -RemoteArgumentLine:\"-ExpectedSha ccc78b7a7624e0367725af585a5fd7c4f38b3661 -RunId ug-r5-win-lane-2 -TaskName McpUnitGreenLane-ug-r5-win-lane-2 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf\""
+  },
+  {
+    "Line": 28812,
+    "Local": "2026-10-21T06:08:20",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-win-lane-2.start.txt -RemoteArgumentLine:\"-ExpectedSha ccc78b7a7624e0367725af585a5fd7c4f38b3661 -RunId ug-r5-win-lane-2 -TaskName McpUnitGreenLane-ug-r5-win-lane-2 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\""
+  },
+  {
+    "Line": 28907,
+    "Local": "2026-10-21T06:09:45",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-12.ps1"
+  },
+  {
+    "Line": 29054,
+    "Local": "2026-10-21T06:28:13",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-TmpUsage.ps1"
+  },
+  {
+    "Line": 29129,
+    "Local": "2026-10-21T06:35:05",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-TmpDu.ps1"
+  },
+  {
+    "Line": 29149,
+    "Local": "2026-10-21T06:35:36",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-TmpDu.ps1"
+  },
+  {
+    "Line": 29183,
+    "Local": "2026-10-21T06:37:05",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-BuildTestsRunOnDiskTemp.ps1"
+  },
+  {
+    "Line": 29196,
+    "Local": "2026-10-21T06:37:15",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-BuildTestsRunOnDiskTemp.ps1"
+  },
+  {
+    "Line": 29438,
+    "Local": "2026-10-21T06:53:55",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-12.ps1 -GateSummary \"Gates at ccc78b7a: Linux Test ug-r5-linux-test-2 4518/0/0; hostile-environment gate ug-r5-hostile-gate-2 4518/0/0; Windows Test ug-r5-win-test-ssh-2 4518/0/0; Windows lane ug-r5-win-lane-2 373/0/0 complete by name; Linux lane ug-r5-linux-lane-2 397/0/0; Build.Tests ug-r5-build-tests-2 436/0/0 with TMPDIR on disk (operator Rerun with temp on disk (Recommended), after ug-r5-build-tests-1 failed 1 test on the /tmp user quota); ValidateTraceability ug-r5-traceability-1 passed.\" -WhatIf"
+  },
+  {
+    "Line": 29442,
+    "Local": "2026-10-21T06:54:06",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-12.ps1 -GateSummary \"Gates at ccc78b7a: Linux Test ug-r5-linux-test-2 4518/0/0; hostile-environment gate ug-r5-hostile-gate-2 4518/0/0; Windows Test ug-r5-win-test-ssh-2 4518/0/0; Windows lane ug-r5-win-lane-2 373/0/0 complete by name; Linux lane ug-r5-linux-lane-2 397/0/0; Build.Tests ug-r5-build-tests-2 436/0/0 with TMPDIR on disk (operator Rerun with temp on disk (Recommended), after ug-r5-build-tests-1 failed 1 test on the /tmp user quota); ValidateTraceability ug-r5-traceability-1 passed.\""
+  },
+  {
+    "Line": 29500,
+    "Local": "2026-10-21T06:56:34",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-GlobalMemories.ps1"
+  },
+  {
+    "Line": 29529,
+    "Local": "2026-10-21T06:57:21",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-GlobalMemory.ps1"
+  },
+  {
+    "Line": 29564,
+    "Local": "2026-10-21T06:58:25",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-GlobalMemory.ps1"
+  },
+  {
+    "Line": 29582,
+    "Local": "2026-10-21T06:59:01",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-GlobalMemory.ps1"
+  },
+  {
+    "Line": 29759,
+    "Local": "2026-10-21T07:04:21",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Compare-TextLines.ps1"
+  },
+  {
+    "Line": 29858,
+    "Local": "2026-10-21T07:13:56",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-win-test-ssh-2.whatif.txt -RemoteArgumentLine:\"-ExpectedSha ccc78b7a7624e0367725af585a5fd7c4f38b3661 -WorktreeName unit-green-r3-ssh -RunId ug-r5-win-test-ssh-2 -Targets Test -WhatIf\""
+  },
+  {
+    "Line": 29871,
+    "Local": "2026-10-21T07:14:25",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-13.ps1"
+  },
+  {
+    "Line": 29894,
+    "Local": "2026-10-21T07:15:03",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-13.ps1"
+  },
+  {
+    "Line": 29897,
+    "Local": "2026-10-21T07:15:04",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-13.ps1 -WhatIf"
+  },
+  {
+    "Line": 29907,
+    "Local": "2026-10-21T07:15:15",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-13.ps1"
+  },
+  {
+    "Line": 30159,
+    "Local": "2026-10-21T07:20:42",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019 -NameRegex '^ug-r(4-legion2|5-)' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/redaction-backup-r5 -WhatIf"
+  },
+  {
+    "Line": 30164,
+    "Local": "2026-10-21T07:20:55",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv -NameRegex 'unitgreen-r4-prelaunch|unitgreen-r4\\.selfreview' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/redaction-backup-r5 -WhatIf"
+  },
+  {
+    "Line": 30184,
+    "Local": "2026-10-21T07:21:15",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/unit-suite-green-20261019;docs/receipts/hv/unitgreen-r4-prelaunch.brief.md;docs/receipts/hv/unitgreen-r4-prelaunch.selfreview.md;docs/receipts/hv/20261020T215217-unitgreen-r4.selfreview.md;docs/plans/2026-10-19-unit-suite-green.md' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-docs-1.txt -WhatIf"
+  },
+  {
+    "Line": 30190,
+    "Local": "2026-10-21T07:21:21",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/unit-suite-green-20261019;docs/receipts/hv/unitgreen-r4-prelaunch.brief.md;docs/receipts/hv/unitgreen-r4-prelaunch.selfreview.md;docs/receipts/hv/20261020T215217-unitgreen-r4.selfreview.md;docs/plans/2026-10-19-unit-suite-green.md' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-docs-1.txt"
+  },
+  {
+    "Line": 30215,
+    "Local": "2026-10-21T07:21:49",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 3a9f8ff46690c4e35781bab444deac0d4345bbbd -WhatIf"
+  },
+  {
+    "Line": 30224,
+    "Local": "2026-10-21T07:22:02",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 3a9f8ff46690c4e35781bab444deac0d4345bbbd"
+  },
+  {
+    "Line": 30285,
+    "Local": "2026-10-21T07:24:35",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-EnvVarInventory.ps1"
+  },
+  {
+    "Line": 30331,
+    "Local": "2026-10-21T07:25:48",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide.ps1"
+  },
+  {
+    "Line": 30347,
+    "Local": "2026-10-21T07:26:08",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019 -NameRegex '\\.out\\.txt$|whatif\\.txt$' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/redaction-backup-r5 -WhatIf"
+  },
+  {
+    "Line": 30351,
+    "Local": "2026-10-21T07:26:14",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/unit-suite-green-20261019/ug-r5-docfix-run-1.out.txt;docs/receipts/unit-suite-green-20261019/ug-r5-linux-lane-1.out.txt;docs/receipts/unit-suite-green-20261019/ug-r5-traceability-1.out.txt;docs/receipts/unit-suite-green-20261019/ug-r5-win-test-ssh-2.whatif.txt' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-docs-2.txt -WhatIf"
+  },
+  {
+    "Line": 30360,
+    "Local": "2026-10-21T07:26:20",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/unit-suite-green-20261019/ug-r5-docfix-run-1.out.txt;docs/receipts/unit-suite-green-20261019/ug-r5-linux-lane-1.out.txt;docs/receipts/unit-suite-green-20261019/ug-r5-traceability-1.out.txt;docs/receipts/unit-suite-green-20261019/ug-r5-win-test-ssh-2.whatif.txt' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-docs-2.txt"
+  },
+  {
+    "Line": 30362,
+    "Local": "2026-10-21T07:26:22",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r5-hostile-wide-1 -HostileRoot /home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-wide-1 -WhatIf"
+  },
+  {
+    "Line": 30368,
+    "Local": "2026-10-21T07:26:29",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r5-hostile-wide-1 -HostileRoot /home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-wide-1"
+  },
+  {
+    "Line": 30422,
+    "Local": "2026-10-21T07:33:36",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-FileTo.ps1 -Pairs '/home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide.ps1=/home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide2.ps1' -WhatIf"
+  },
+  {
+    "Line": 30431,
+    "Local": "2026-10-21T07:33:44",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-FileTo.ps1 -Pairs '/home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide.ps1=/home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide2.ps1'"
+  },
+  {
+    "Line": 30448,
+    "Local": "2026-10-21T07:34:14",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide2.ps1"
+  },
+  {
+    "Line": 30461,
+    "Local": "2026-10-21T07:34:24",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide2.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r5-hostile-wide-2 -HostileRoot /home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-wide-2 -WhatIf"
+  },
+  {
+    "Line": 30471,
+    "Local": "2026-10-21T07:34:32",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide2.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r5-hostile-wide-2 -HostileRoot /home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-wide-2"
+  },
+  {
+    "Line": 30503,
+    "Local": "2026-10-21T07:39:49",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide2.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r5-hostile-wide-3 -HostileRoot /home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-wide-3 -WhatIf"
+  },
+  {
+    "Line": 30512,
+    "Local": "2026-10-21T07:39:56",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide2.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r5-hostile-wide-3 -HostileRoot /home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-wide-3"
+  },
+  {
+    "Line": 30562,
+    "Local": "2026-10-21T07:48:22",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-envtest.txt -WhatIf"
+  },
+  {
+    "Line": 30570,
+    "Local": "2026-10-21T07:48:29",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-envtest.txt"
+  },
+  {
+    "Line": 30612,
+    "Local": "2026-10-21T07:53:21",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 810ee8aa0fbdcc6cf64a3d9575693068d261a97c -WhatIf"
+  },
+  {
+    "Line": 30614,
+    "Local": "2026-10-21T07:53:23",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 810ee8aa0fbdcc6cf64a3d9575693068d261a97c"
+  },
+  {
+    "Line": 30615,
+    "Local": "2026-10-21T07:53:25",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-win-test-ssh-3.whatif.txt -RemoteArgumentLine:\"-ExpectedSha 810ee8aa0fbdcc6cf64a3d9575693068d261a97c -WorktreeName unit-green-r3-ssh -RunId ug-r5-win-test-ssh-3 -Targets Test -WhatIf\""
+  },
+  {
+    "Line": 30620,
+    "Local": "2026-10-21T07:53:34",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-win-test-ssh-3.txt -RemoteArgumentLine:\"-ExpectedSha 810ee8aa0fbdcc6cf64a3d9575693068d261a97c -WorktreeName unit-green-r3-ssh -RunId ug-r5-win-test-ssh-3 -Targets Test\""
+  },
+  {
+    "Line": 30622,
+    "Local": "2026-10-21T07:53:36",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide2.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r5-hostile-wide-4 -HostileRoot /home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-wide-4 -WhatIf"
+  },
+  {
+    "Line": 30631,
+    "Local": "2026-10-21T07:53:42",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide2.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r5-hostile-wide-4 -HostileRoot /home/sharpninja/.claude/scratch/pr82-review-20261019/hostile/ug-r5-hostile-wide-4"
+  },
+  {
+    "Line": 30686,
+    "Local": "2026-10-21T07:58:28",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-win-lane-3.whatif.txt -RemoteArgumentLine:\"-ExpectedSha 810ee8aa0fbdcc6cf64a3d9575693068d261a97c -RunId ug-r5-win-lane-3 -TaskName McpUnitGreenLane-ug-r5-win-lane-3 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf\""
+  },
+  {
+    "Line": 30697,
+    "Local": "2026-10-21T07:58:40",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r5-win-lane-3.start.txt -RemoteArgumentLine:\"-ExpectedSha 810ee8aa0fbdcc6cf64a3d9575693068d261a97c -RunId ug-r5-win-lane-3 -TaskName McpUnitGreenLane-ug-r5-win-lane-3 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\""
+  },
+  {
+    "Line": 30736,
+    "Local": "2026-10-21T08:02:28",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-14.ps1"
+  },
+  {
+    "Line": 30976,
+    "Local": "2026-10-21T08:07:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-14.ps1 -GateSummary \"Gates at 810ee8aa: Linux Test ug-r5-linux-test-3 4517/0/0; widened hostile-environment gate ug-r5-hostile-wide-4 4517/0/0; Windows Test ug-r5-win-test-ssh-3 4517/0/0; Windows lane ug-r5-win-lane-3 374/0/0 complete by name (the moved test present and passed); Linux lane ug-r5-linux-lane-3 398/0/0; Build.Tests ug-r5-build-tests-3 436/0/0 with TMPDIR on disk; ValidateTraceability ug-r5-traceability-2 passed.\" -WhatIf"
+  },
+  {
+    "Line": 30985,
+    "Local": "2026-10-21T08:08:00",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-14.ps1 -GateSummary \"Gates at 810ee8aa: Linux Test ug-r5-linux-test-3 4517/0/0; widened hostile-environment gate ug-r5-hostile-wide-4 4517/0/0; Windows Test ug-r5-win-test-ssh-3 4517/0/0; Windows lane ug-r5-win-lane-3 374/0/0 complete by name (the moved test present and passed); Linux lane ug-r5-linux-lane-3 398/0/0; Build.Tests ug-r5-build-tests-3 436/0/0 with TMPDIR on disk; ValidateTraceability ug-r5-traceability-2 passed.\""
+  },
+  {
+    "Line": 31077,
+    "Local": "2026-10-21T08:09:52",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-TextBlock.ps1"
+  },
+  {
+    "Line": 31176,
+    "Local": "2026-10-21T08:11:55",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019 -NameRegex '^ug-r5-' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/redaction-backup-r5 -WhatIf"
+  },
+  {
+    "Line": 31188,
+    "Local": "2026-10-21T08:12:06",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-TextTree.ps1 -Root /home/sharpninja/.claude/scratch/pr82-review-20261019 -Include 'Protect-HvReceipts.ps1' -Pattern \"(?i)regex|pattern|\\[a-z|API\""
+  },
+  {
+    "Line": 31193,
+    "Local": "2026-10-21T08:12:14",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019 -NameRegex '^ug-r5-hostile-wide-' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/redaction-backup-r5"
+  },
+  {
+    "Line": 31199,
+    "Local": "2026-10-21T08:12:24",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/unit-suite-green-20261019;docs/plans/2026-10-19-unit-suite-green.md' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-docs-3.txt -WhatIf"
+  },
+  {
+    "Line": 31212,
+    "Local": "2026-10-21T08:12:31",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/unit-suite-green-20261019;docs/plans/2026-10-19-unit-suite-green.md' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-docs-3.txt"
+  },
+  {
+    "Line": 31220,
+    "Local": "2026-10-21T08:12:39",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 8b7a49eaa3e8d4872b33d66af517acc8ad7e21ea -WhatIf"
+  },
+  {
+    "Line": 31222,
+    "Local": "2026-10-21T08:12:41",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 8b7a49eaa3e8d4872b33d66af517acc8ad7e21ea"
+  },
+  {
+    "Line": 31373,
+    "Local": "2026-10-21T11:16:35",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv -NameRegex '^unitgreen-r5-prelaunch' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /home/sharpninja/.claude/scratch/pr82-review-20261019/redaction-backup-r5 -WhatIf"
+  },
+  {
+    "Line": 31382,
+    "Local": "2026-10-21T11:16:49",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/hv/unitgreen-r5-prelaunch.brief.md;docs/receipts/hv/unitgreen-r5-prelaunch.selfreview.md;docs/receipts/hv/unitgreen-r5-prelaunch.projected-problems.md' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-prelaunch.txt -WhatIf"
+  },
+  {
+    "Line": 31384,
+    "Local": "2026-10-21T11:16:51",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'docs/receipts/hv/unitgreen-r5-prelaunch.brief.md;docs/receipts/hv/unitgreen-r5-prelaunch.selfreview.md;docs/receipts/hv/unitgreen-r5-prelaunch.projected-problems.md' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r5-prelaunch.txt"
+  },
+  {
+    "Line": 31388,
+    "Local": "2026-10-21T11:16:58",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 780b6513b4004da0b17c2359d9cb65f6a69de67e -WhatIf"
+  },
+  {
+    "Line": 31390,
+    "Local": "2026-10-21T11:16:59",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 780b6513b4004da0b17c2359d9cb65f6a69de67e"
+  },
+  {
+    "Line": 31639,
+    "Local": "2026-10-21T11:33:47",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-ProcessSurvival.ps1"
+  },
+  {
+    "Line": 31664,
+    "Local": "2026-10-21T11:34:42",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-ScopeKillPolicy.ps1"
+  }
+]

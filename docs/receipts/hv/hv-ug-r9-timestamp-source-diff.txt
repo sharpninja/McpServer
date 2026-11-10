@@ -1,0 +1,688 @@
+diff --git a/src/QBrainAi.Client/Models/RequirementsModels.cs b/src/QBrainAi.Client/Models/RequirementsModels.cs
+index 1a498db4..47d007f3 100644
+--- a/src/QBrainAi.Client/Models/RequirementsModels.cs
++++ b/src/QBrainAi.Client/Models/RequirementsModels.cs
+@@ -5,6 +5,12 @@ using System.Text.Json.Serialization;
+ namespace QBrainAi.Client.Models;
+ 
+ /// <summary>A functional requirement entry.</summary>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (createdAtUtc, updatedAtUtc) so the client reads the stored times the server sends.</description></item>
++/// </list>
++/// </remarks>
+ public sealed class FrEntry
+ {
+     /// <summary>Requirement identifier.</summary>
+@@ -50,6 +56,14 @@ public sealed class FrEntry
+     /// <summary>FR-MCP-USECASE-003: use cases linked to this FR (including Realizes).</summary>
+     [JsonPropertyName("linkedUseCases")]
+     public IReadOnlyList<LinkedUseCaseRef>? LinkedUseCases { get; set; }
++
++    /// <summary>FR-MCP-040 ac-1: the creation time stored with the requirement, or null when none is stored.</summary>
++    [JsonPropertyName("createdAtUtc")]
++    public DateTimeOffset? CreatedAtUtc { get; set; }
++
++    /// <summary>FR-MCP-040 ac-1: the update time stored with the requirement, or null when none is stored.</summary>
++    [JsonPropertyName("updatedAtUtc")]
++    public DateTimeOffset? UpdatedAtUtc { get; set; }
+ }
+ 
+ /// <summary>FR-MCP-USECASE-003: Use case linked to an FR.</summary>
+@@ -73,6 +87,12 @@ public sealed class LinkedUseCaseRef
+ }
+ 
+ /// <summary>A technical requirement entry.</summary>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (createdAtUtc, updatedAtUtc) so the client reads the stored times the server sends.</description></item>
++/// </list>
++/// </remarks>
+ public sealed class TrEntry
+ {
+     /// <summary>Requirement identifier.</summary>
+@@ -114,9 +134,23 @@ public sealed class TrEntry
+     /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</summary>
+     [JsonPropertyName("scopeEndLayerKey")]
+     public string? ScopeEndLayerKey { get; set; }
++
++    /// <summary>FR-MCP-040 ac-1: the creation time stored with the requirement, or null when none is stored.</summary>
++    [JsonPropertyName("createdAtUtc")]
++    public DateTimeOffset? CreatedAtUtc { get; set; }
++
++    /// <summary>FR-MCP-040 ac-1: the update time stored with the requirement, or null when none is stored.</summary>
++    [JsonPropertyName("updatedAtUtc")]
++    public DateTimeOffset? UpdatedAtUtc { get; set; }
+ }
+ 
+ /// <summary>A testing requirement entry.</summary>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (createdAtUtc, updatedAtUtc) so the client reads the stored times the server sends.</description></item>
++/// </list>
++/// </remarks>
+ public sealed class TestEntry
+ {
+     /// <summary>Requirement identifier.</summary>
+@@ -158,6 +192,14 @@ public sealed class TestEntry
+     /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</summary>
+     [JsonPropertyName("scopeEndLayerKey")]
+     public string? ScopeEndLayerKey { get; set; }
++
++    /// <summary>FR-MCP-040 ac-1: the creation time stored with the requirement, or null when none is stored.</summary>
++    [JsonPropertyName("createdAtUtc")]
++    public DateTimeOffset? CreatedAtUtc { get; set; }
++
++    /// <summary>FR-MCP-040 ac-1: the update time stored with the requirement, or null when none is stored.</summary>
++    [JsonPropertyName("updatedAtUtc")]
++    public DateTimeOffset? UpdatedAtUtc { get; set; }
+ }
+ 
+ /// <summary>FR-MCP-REQSCOPE-001: requirement scope layer returned by layer catalog endpoints.</summary>
+@@ -261,6 +303,12 @@ public sealed class EffectiveRequirementsResult
+ }
+ 
+ /// <summary>A functional-to-technical requirement mapping row.</summary>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc (createdAtUtc), the earliest stored creation time of the mapping's links.</description></item>
++/// </list>
++/// </remarks>
+ public sealed class FrTrMapping
+ {
+     /// <summary>Functional requirement identifier.</summary>
+@@ -278,6 +326,10 @@ public sealed class FrTrMapping
+     /// <summary>Owning workspace discriminator.</summary>
+     [JsonPropertyName("workspaceId")]
+     public string WorkspaceId { get; set; } = string.Empty;
++
++    /// <summary>FR-MCP-040 ac-1: the earliest creation time stored with the mapping's links, or null when none is stored.</summary>
++    [JsonPropertyName("createdAtUtc")]
++    public DateTimeOffset? CreatedAtUtc { get; set; }
+ }
+ 
+ /// <summary>Request payload for creating a functional requirement entry.</summary>
+diff --git a/src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs b/src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs
+index 7c6b4455..397372ef 100644
+--- a/src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs
++++ b/src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs
+@@ -630,14 +630,28 @@ public interface IFrItem
+     string? ScopeEndLayerKey { get; }
+ 
+     /// <summary>
+-    /// Gets the creation timestamp (ISO 8601).
++    /// FR-MCP-040 ac-1: gets the creation time stored with the record (ISO 8601 round-trip), or null when none is stored;
++    /// never the time of the read.
+     /// </summary>
+-    string CreatedAt { get; }
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
++    /// </list>
++    /// </remarks>
++    string? CreatedAt { get; }
+ 
+     /// <summary>
+-    /// Gets the last update timestamp (ISO 8601).
++    /// FR-MCP-040 ac-1: gets the update time stored with the record (ISO 8601 round-trip), or null when none is stored;
++    /// never the time of the read.
+     /// </summary>
+-    string UpdatedAt { get; }
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
++    /// </list>
++    /// </remarks>
++    string? UpdatedAt { get; }
+ }
+ 
+ /// <summary>
+@@ -823,14 +837,28 @@ public interface ITrItem
+     string? ScopeEndLayerKey { get; }
+ 
+     /// <summary>
+-    /// Gets the creation timestamp (ISO 8601).
++    /// FR-MCP-040 ac-1: gets the creation time stored with the record (ISO 8601 round-trip), or null when none is stored;
++    /// never the time of the read.
+     /// </summary>
+-    string CreatedAt { get; }
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
++    /// </list>
++    /// </remarks>
++    string? CreatedAt { get; }
+ 
+     /// <summary>
+-    /// Gets the last update timestamp (ISO 8601).
++    /// FR-MCP-040 ac-1: gets the update time stored with the record (ISO 8601 round-trip), or null when none is stored;
++    /// never the time of the read.
+     /// </summary>
+-    string UpdatedAt { get; }
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
++    /// </list>
++    /// </remarks>
++    string? UpdatedAt { get; }
+ }
+ 
+ /// <summary>
+@@ -1021,14 +1049,28 @@ public interface ITestItem
+     string? ScopeEndLayerKey { get; }
+ 
+     /// <summary>
+-    /// Gets the creation timestamp (ISO 8601).
++    /// FR-MCP-040 ac-1: gets the creation time stored with the record (ISO 8601 round-trip), or null when none is stored;
++    /// never the time of the read.
+     /// </summary>
+-    string CreatedAt { get; }
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
++    /// </list>
++    /// </remarks>
++    string? CreatedAt { get; }
+ 
+     /// <summary>
+-    /// Gets the last update timestamp (ISO 8601).
++    /// FR-MCP-040 ac-1: gets the update time stored with the record (ISO 8601 round-trip), or null when none is stored;
++    /// never the time of the read.
+     /// </summary>
+-    string UpdatedAt { get; }
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
++    /// </list>
++    /// </remarks>
++    string? UpdatedAt { get; }
+ }
+ 
+ /// <summary>
+@@ -1184,9 +1226,16 @@ public interface IMappingItem
+     string? TestId { get; }
+ 
+     /// <summary>
+-    /// Gets the creation timestamp (ISO 8601).
++    /// FR-MCP-040 ac-1: gets the creation time stored with the record (ISO 8601 round-trip), or null when none is stored;
++    /// never the time of the read.
+     /// </summary>
+-    string CreatedAt { get; }
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
++    /// </list>
++    /// </remarks>
++    string? CreatedAt { get; }
+ 
+     /// <summary>
+     /// Gets optional notes about this mapping.
+diff --git a/src/QBrainAi.Repl.Core/RequirementTimestampText.cs b/src/QBrainAi.Repl.Core/RequirementTimestampText.cs
+new file mode 100644
+index 00000000..535483d1
+--- /dev/null
++++ b/src/QBrainAi.Repl.Core/RequirementTimestampText.cs
+@@ -0,0 +1,21 @@
++using System.Globalization;
++
++namespace QBrainAi.Repl.Core;
++
++/// <summary>
++/// FR-MCP-040 ac-1: the one text form the REPL requirement adapters report for a stored creation or update time: ISO 8601
++/// round-trip text that keeps the stored offset, or null when nothing is stored. It never reads a clock.
++/// </summary>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added, replacing the adapters' DateTimeOffset.UtcNow so the REPL reports stored times and never the read time.</description></item>
++/// </list>
++/// </remarks>
++internal static class RequirementTimestampText
++{
++    /// <summary>Formats a stored time.</summary>
++    /// <param name="stored">The stored time, or null.</param>
++    /// <returns>The round-trip text, or null.</returns>
++    internal static string? Format(DateTimeOffset? stored) => stored?.ToString("o", CultureInfo.InvariantCulture);
++}
+diff --git a/src/QBrainAi.Repl.Core/RequirementsWorkflow.cs b/src/QBrainAi.Repl.Core/RequirementsWorkflow.cs
+index 0d4e7e91..0786cd68 100644
+--- a/src/QBrainAi.Repl.Core/RequirementsWorkflow.cs
++++ b/src/QBrainAi.Repl.Core/RequirementsWorkflow.cs
+@@ -449,12 +449,12 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
+ 
+             if (!string.IsNullOrEmpty(trId) && !string.IsNullOrEmpty(testId))
+             {
+-                items.AddRange(matchingTrIds.SelectMany(tr => matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, tr, test, null))));
++                items.AddRange(matchingTrIds.SelectMany(tr => matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, tr, test, null, mapping.CreatedAtUtc))));
+                 continue;
+             }
+ 
+-            items.AddRange(matchingTrIds.Select(tr => new MappingItemAdapter(mapping.FrId, tr, null, null)));
+-            items.AddRange(matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, null, test, null)));
++            items.AddRange(matchingTrIds.Select(tr => new MappingItemAdapter(mapping.FrId, tr, null, null, mapping.CreatedAtUtc)));
++            items.AddRange(matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, null, test, null, mapping.CreatedAtUtc)));
+         }
+ 
+         return new MappingQueryResultAdapter(items);
+@@ -537,7 +537,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
+             mapping.FrId,
+             trIds.FirstOrDefault(),
+             testIds.FirstOrDefault(),
+-            request.Notes);
++            request.Notes,
++            mapping.CreatedAtUtc);
+         return new MappingMutationResultAdapter(true, item);
+     }
+ 
+@@ -938,6 +939,13 @@ internal sealed class RequirementsSelectionState : IRequirementsSelectionState
+     public DateTimeOffset SelectedAt { get; set; } = DateTimeOffset.UtcNow;
+ }
+ 
++/// <summary>Presents a client <see cref="FrEntry"/> as an <see cref="IFrItem"/>.</summary>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>
++/// </list>
++/// </remarks>
+ internal sealed class FrItemAdapter : IFrItem
+ {
+     private readonly FrEntry _entry;
+@@ -960,8 +968,10 @@ internal sealed class FrItemAdapter : IFrItem
+     public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
+     /// <inheritdoc />
+     public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
+-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
+-    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
++    /// <inheritdoc />
++    public string? CreatedAt => RequirementTimestampText.Format(_entry.CreatedAtUtc);
++    /// <inheritdoc />
++    public string? UpdatedAt => RequirementTimestampText.Format(_entry.UpdatedAtUtc);
+ 
+     private static string ExtractArea(string id)
+     {
+@@ -995,6 +1005,13 @@ internal sealed class FrMutationResultAdapter : IFrMutationResult
+     public IFrItem Item { get; }
+ }
+ 
++/// <summary>Presents a client <see cref="TrEntry"/> as an <see cref="ITrItem"/>.</summary>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>
++/// </list>
++/// </remarks>
+ internal sealed class TrItemAdapter : ITrItem
+ {
+     private readonly TrEntry _entry;
+@@ -1018,8 +1035,10 @@ internal sealed class TrItemAdapter : ITrItem
+     public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
+     /// <inheritdoc />
+     public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
+-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
+-    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
++    /// <inheritdoc />
++    public string? CreatedAt => RequirementTimestampText.Format(_entry.CreatedAtUtc);
++    /// <inheritdoc />
++    public string? UpdatedAt => RequirementTimestampText.Format(_entry.UpdatedAtUtc);
+ 
+     private static string ExtractArea(string id)
+     {
+@@ -1059,6 +1078,13 @@ internal sealed class TrMutationResultAdapter : ITrMutationResult
+     public ITrItem Item { get; }
+ }
+ 
++/// <summary>Presents a client <see cref="TestEntry"/> as an <see cref="ITestItem"/>.</summary>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>
++/// </list>
++/// </remarks>
+ internal sealed class TestItemAdapter : ITestItem
+ {
+     private readonly TestEntry _entry;
+@@ -1082,8 +1108,10 @@ internal sealed class TestItemAdapter : ITestItem
+     public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
+     /// <inheritdoc />
+     public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
+-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
+-    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
++    /// <inheritdoc />
++    public string? CreatedAt => RequirementTimestampText.Format(_entry.CreatedAtUtc);
++    /// <inheritdoc />
++    public string? UpdatedAt => RequirementTimestampText.Format(_entry.UpdatedAtUtc);
+ 
+     private static string ExtractArea(string id)
+     {
+@@ -1117,20 +1145,29 @@ internal sealed class TestMutationResultAdapter : ITestMutationResult
+     public ITestItem Item { get; }
+ }
+ 
++/// <summary>Presents one FR-to-TR or FR-to-TEST pair of a client mapping as an <see cref="IMappingItem"/>.</summary>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: takes the mapping's stored creation time and reports it as CreatedAt instead of DateTimeOffset.UtcNow.</description></item>
++/// </list>
++/// </remarks>
+ internal sealed class MappingItemAdapter : IMappingItem
+ {
+-    public MappingItemAdapter(string? frId, string? trId, string? testId, string? notes)
++    public MappingItemAdapter(string? frId, string? trId, string? testId, string? notes, DateTimeOffset? createdAtUtc)
+     {
+         FrId = frId;
+         TrId = trId;
+         TestId = testId;
+         Notes = notes;
++        CreatedAt = RequirementTimestampText.Format(createdAtUtc);
+     }
+ 
+     public string? FrId { get; }
+     public string? TrId { get; }
+     public string? TestId { get; }
+-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
++    /// <inheritdoc />
++    public string? CreatedAt { get; }
+     public string? Notes { get; }
+ }
+ 
+diff --git a/src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs b/src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs
+index ce28e439..774aaae5 100644
+--- a/src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs
++++ b/src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs
+@@ -14,6 +14,14 @@ namespace QBrainAi.Support.Mcp.Requirements.Models;
+ /// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this FR applies.</param>
+ /// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</param>
+ /// <param name="LinkedUseCases">FR-MCP-USECASE-003: use cases linked to this FR (including Realizes), for reverse navigation.</param>
++/// <param name="CreatedAtUtc">FR-MCP-040 ac-1: the creation time stored with the row, or null when none is stored.</param>
++/// <param name="UpdatedAtUtc">FR-MCP-040 ac-1: the update time stored with the row, or null when none is stored.</param>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (optional, last) so reads carry the stored times.</description></item>
++/// </list>
++/// </remarks>
+ public sealed record FrEntry(
+     string Id,
+     string Title,
+@@ -25,7 +33,9 @@ public sealed record FrEntry(
+     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null,
+     string ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
+     string? ScopeEndLayerKey = null,
+-    IReadOnlyList<LinkedUseCaseRef>? LinkedUseCases = null);
++    IReadOnlyList<LinkedUseCaseRef>? LinkedUseCases = null,
++    DateTimeOffset? CreatedAtUtc = null,
++    DateTimeOffset? UpdatedAtUtc = null);
+ 
+ /// <summary>
+ /// FR-MCP-USECASE-003: Projection of a use case linked to an FR (id, title, link type, order).
+@@ -51,6 +61,14 @@ public sealed record LinkedUseCaseRef(
+ /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
+ /// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this TR applies.</param>
+ /// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</param>
++/// <param name="CreatedAtUtc">FR-MCP-040 ac-1: the creation time stored with the row, or null when none is stored.</param>
++/// <param name="UpdatedAtUtc">FR-MCP-040 ac-1: the update time stored with the row, or null when none is stored.</param>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (optional, last) so reads carry the stored times.</description></item>
++/// </list>
++/// </remarks>
+ public sealed record TrEntry(
+     string Id,
+     string Title,
+@@ -61,7 +79,9 @@ public sealed record TrEntry(
+     string? Notes = null,
+     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null,
+     string ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
+-    string? ScopeEndLayerKey = null);
++    string? ScopeEndLayerKey = null,
++    DateTimeOffset? CreatedAtUtc = null,
++    DateTimeOffset? UpdatedAtUtc = null);
+ 
+ /// <summary>FR-MCP-026: Testing Requirement entry parsed from Testing-Requirements.md.</summary>
+ /// <param name="Id">The TEST identifier (e.g. TEST-MCP-001).</param>
+@@ -74,6 +94,14 @@ public sealed record TrEntry(
+ /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
+ /// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies.</param>
+ /// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</param>
++/// <param name="CreatedAtUtc">FR-MCP-040 ac-1: the creation time stored with the row, or null when none is stored.</param>
++/// <param name="UpdatedAtUtc">FR-MCP-040 ac-1: the update time stored with the row, or null when none is stored.</param>
++/// <remarks>
++/// <list type="table">
++/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (optional, last) so reads carry the stored times.</description></item>
++/// </list>
++/// </remarks>
+ public sealed record TestEntry(
+     string Id,
+     string Condition,
+@@ -84,7 +112,9 @@ public sealed record TestEntry(
+     string? Notes = null,
+     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null,
+     string ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
+-    string? ScopeEndLayerKey = null);
++    string? ScopeEndLayerKey = null,
++    DateTimeOffset? CreatedAtUtc = null,
++    DateTimeOffset? UpdatedAtUtc = null);
+ 
+ /// <summary>
+ /// FR-MCP-026: Grouped FR/TR/TEST requirement entries used by atomic batch mutations.
+@@ -195,6 +225,15 @@ public sealed record FrTrMapping
+ 
+     /// <summary>The workspace discriminator that owns the row.</summary>
+     public string WorkspaceId { get; init; }
++
++    /// <summary>FR-MCP-040 ac-1: the earliest creation time stored with the mapping's links, or null when none is stored.</summary>
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added; a mapping row aggregates links, so it reports their earliest stored creation time.</description></item>
++    /// </list>
++    /// </remarks>
++    public DateTimeOffset? CreatedAtUtc { get; init; }
+ }
+ 
+ /// <summary>FR-MCP-026: Enumeration of requirements document types for generation.</summary>
+diff --git a/src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs b/src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs
+index f1f0c7f4..b1de5b0b 100644
+--- a/src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs
++++ b/src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs
+@@ -133,9 +133,19 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
+             })
+             .ToList();
+ 
+-    /// <summary>Maps a stored requirement row to an <see cref="FrEntry"/> including acceptance criteria.</summary>
+-    private static FrEntry MapFr(RequirementEntity x) =>
+-        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
++    /// <summary>
++    /// Maps a stored requirement row to an <see cref="FrEntry"/> including acceptance criteria and, per FR-MCP-040 ac-1, the
++    /// creation and update times stored with the row.
++    /// </summary>
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: maps the stored CreatedAtUtc and UpdatedAtUtc; made internal so the binding test reads the real mapper.</description></item>
++    /// </list>
++    /// </remarks>
++    internal static FrEntry MapFr(RequirementEntity x) =>
++        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey,
++            CreatedAtUtc: RequirementStoredTimestamp.Read(x.CreatedAtUtc), UpdatedAtUtc: RequirementStoredTimestamp.Read(x.UpdatedAtUtc));
+ 
+     /// <summary>
+     /// FR-MCP-USECASE-003: Loads UC links for the given FR ids using the same join as GetUseCasesForFrQuery
+@@ -192,13 +202,51 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
+             .ToArray();
+     }
+ 
+-    /// <summary>Maps a stored requirement row to a <see cref="TrEntry"/> including acceptance criteria.</summary>
+-    private static TrEntry MapTr(RequirementEntity x) =>
+-        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
++    /// <summary>Maps a stored requirement row to a <see cref="TrEntry"/> including acceptance criteria and stored times (FR-MCP-040 ac-1).</summary>
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: maps the stored CreatedAtUtc and UpdatedAtUtc; made internal so the binding test reads the real mapper.</description></item>
++    /// </list>
++    /// </remarks>
++    internal static TrEntry MapTr(RequirementEntity x) =>
++        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey,
++            CreatedAtUtc: RequirementStoredTimestamp.Read(x.CreatedAtUtc), UpdatedAtUtc: RequirementStoredTimestamp.Read(x.UpdatedAtUtc));
+ 
+-    /// <summary>Maps a stored requirement row to a <see cref="TestEntry"/> including acceptance criteria.</summary>
+-    private static TestEntry MapTest(RequirementEntity x) =>
+-        new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
++    /// <summary>Maps a stored requirement row to a <see cref="TestEntry"/> including acceptance criteria and stored times (FR-MCP-040 ac-1).</summary>
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: maps the stored CreatedAtUtc and UpdatedAtUtc; made internal so the binding test reads the real mapper.</description></item>
++    /// </list>
++    /// </remarks>
++    internal static TestEntry MapTest(RequirementEntity x) =>
++        new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey,
++            CreatedAtUtc: RequirementStoredTimestamp.Read(x.CreatedAtUtc), UpdatedAtUtc: RequirementStoredTimestamp.Read(x.UpdatedAtUtc));
++
++    /// <summary>
++    /// Builds the one mapping row of an FR from its traceability links: distinct TR and TEST targets and, per FR-MCP-040
++    /// ac-1, the earliest creation time stored with those links. Shared by every mapping read so they report the same row.
++    /// </summary>
++    /// <param name="frId">The FR identifier.</param>
++    /// <param name="links">The FR's links.</param>
++    /// <param name="workspaceId">The owning workspace.</param>
++    /// <returns>The mapping row.</returns>
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added; replaces four copies of the row construction (effective view, GetAllMappingsAsync, GetMappingAsync, BuildVisibleMappings) and adds the earliest stored link time.</description></item>
++    /// </list>
++    /// </remarks>
++    internal static FrTrMapping BuildMapping(string frId, IReadOnlyCollection<RequirementTraceabilityLinkEntity> links, string workspaceId) =>
++        new(
++            frId,
++            links.Where(link => link.TargetKind == TrKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
++            links.Where(link => link.TargetKind == TestKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
++            workspaceId)
++        {
++            CreatedAtUtc = RequirementStoredTimestamp.Earliest(links.Select(link => link.CreatedAtUtc)),
++        };
+ 
+     /// <summary>Maps a stored requirement scope layer row to the public model.</summary>
+     private static RequirementScopeLayerEntry MapLayer(RequirementScopeLayerEntity x) =>
+@@ -363,6 +411,12 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
+     }
+ 
+     /// <inheritdoc />
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: effective FR, TR and TEST rows carry their stored times, and mapping rows are built by BuildMapping.</description></item>
++    /// </list>
++    /// </remarks>
+     public async Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken ct = default)
+     {
+         await using var scope = CreateScope();
+@@ -399,11 +453,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
+         var effectiveLinks = links
+             .Where(link => effectiveKeys.Contains($"{FrKind}\0{link.FrId}") && effectiveKeys.Contains($"{link.TargetKind}\0{link.TargetId}"))
+             .GroupBy(link => link.FrId, StringComparer.OrdinalIgnoreCase)
+-            .Select(group => new FrTrMapping(
+-                group.Key,
+-                group.Where(link => link.TargetKind == TrKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+-                group.Where(link => link.TargetKind == TestKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+-                RequireWorkspaceId(ctx)))
++            .Select(group => BuildMapping(group.Key, group.ToArray(), RequireWorkspaceId(ctx)))
+             .ToArray();
+ 
+         return new EffectiveRequirementsResult(
+@@ -866,6 +916,12 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
+     }
+ 
+     /// <inheritdoc />
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: rows are built by BuildMapping, so they carry the earliest stored link time.</description></item>
++    /// </list>
++    /// </remarks>
+     public async Task<IReadOnlyList<FrTrMapping>> GetAllMappingsAsync(CancellationToken ct = default)
+     {
+         await using var scope = CreateScope();
+@@ -880,15 +936,17 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
+ 
+         return links
+             .GroupBy(x => x.FrId, StringComparer.OrdinalIgnoreCase)
+-            .Select(group => new FrTrMapping(
+-                group.Key,
+-                group.Where(x => x.TargetKind == TrKind).Select(x => x.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+-                group.Where(x => x.TargetKind == TestKind).Select(x => x.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+-                group.First().WorkspaceId))
++            .Select(group => BuildMapping(group.Key, group.ToArray(), group.First().WorkspaceId))
+             .ToArray();
+     }
+ 
+     /// <inheritdoc />
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: the row is built by BuildMapping, so it carries the earliest stored link time.</description></item>
++    /// </list>
++    /// </remarks>
+     public async Task<FrTrMapping?> GetMappingAsync(string frId, CancellationToken ct = default)
+     {
+         ValidateId(frId, nameof(frId));
+@@ -909,11 +967,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
+             return null;
+         }
+ 
+-        return new FrTrMapping(
+-            links[0].FrId,
+-            links.Where(x => x.TargetKind == TrKind).Select(x => x.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+-            links.Where(x => x.TargetKind == TestKind).Select(x => x.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+-            links[0].WorkspaceId);
++        return BuildMapping(links[0].FrId, links, links[0].WorkspaceId);
+     }
+ 
+     /// <inheritdoc />
+@@ -1777,6 +1831,16 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
+ 
+     private static string Now() => DateTime.UtcNow.ToString("O");
+ 
++    /// <summary>Builds the mapping rows of the links that are not soft-deleted, one row per FR.</summary>
++    /// <param name="ctx">The database context, for the soft-delete check.</param>
++    /// <param name="links">The traceability links.</param>
++    /// <returns>The mapping rows.</returns>
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: rows are built by BuildMapping, so they carry the earliest stored link time.</description></item>
++    /// </list>
++    /// </remarks>
+     private static IReadOnlyList<FrTrMapping> BuildVisibleMappings(
+         McpDbContext ctx,
+         IReadOnlyList<RequirementTraceabilityLinkEntity> links)
+@@ -1784,11 +1848,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
+         return links
+             .Where(link => !IsSoftDeleted(ctx, link))
+             .GroupBy(link => link.FrId, StringComparer.OrdinalIgnoreCase)
+-            .Select(group => new FrTrMapping(
+-                group.Key,
+-                group.Where(link => link.TargetKind == TrKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+-                group.Where(link => link.TargetKind == TestKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+-                group.First().WorkspaceId))
++            .Select(group => BuildMapping(group.Key, group.ToArray(), group.First().WorkspaceId))
+             .ToArray();
+     }
+ 

@@ -1,0 +1,25 @@
+{
+  "TimestampUtc": "2026-11-03T02:59:39.4431031Z",
+  "TimestampLocal": "2026-11-02T20:59:39",
+  "Verdict": "DISAGREE",
+  "Claims": 36,
+  "Pass": 23,
+  "Fail": 11,
+  "Unknown": 0,
+  "Findings": 8,
+  "Closures": 25,
+  "ExactMarkdownJsonVerdict": true,
+  "KnownMarkerKeyMatches": 0,
+  "TrackedDirtyPaths": [],
+  "GitExitCode": 0,
+  "Hashes": [
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r9-20261102T190831.md",
+      "Hash": "DDFF98F996AFAFEAB02FEBAB4484443B0B894EEAC05311515AAB582F6851E64E"
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r9-20261102T190831.json",
+      "Hash": "7B85171C3FEC51C0BAEB98C7F3FB9C3326656527B4EC13AECE980D2544006753"
+    }
+  ]
+}

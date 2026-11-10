@@ -1,0 +1,1573 @@
+2026-11-05T02:22:03 - DISAGREE. Accuracy 96, completeness 95, confidence 99. Claims: 34 PASS, 10 FAIL, zero UNKNOWN, one OVERRIDDEN and one OUT OF SCOPE. Three distinct findings require implementer edits; there are no operator-decision failures.
+
+The supplied gates genuinely passed at the last code head. That does not establish the untested isolation and recorded-age behaviors described below. Do not apply the proposed post-AGREE satisfaction or done changes on the strength of this review.
+
+Gate unitgreen-r12; PR87; IMPL-UNITGREEN-001; class 1. Reviewed HEAD 3fe29d1fd8ffc4ba993782ab810bf9d16f4f42e6, last code 52e6d627b78df808bb469269f0093d8fc1815701, base 9b099716e3f4b773787a1caef44353e112bda556. Reviewer Codex, live model gpt-6-astra, effort max, thread 01a1aa70-3c52-7311-8e8c-276da9268500, session Codex-20261105T064457Z-plugin-session, request req-20261105T064500Z-unitgreen-r12. TimestampUtc 2026-11-05T08:22:03.9585895Z.
+
+Live identity proof comes from this session rollout turn_context entries, starting at line 10, 2026-11-05T06:40:46.251Z; every inspected context reports the required model and effort. See hv-ug-r12-identity.json. Add-profile first actions read the skill and one dynamically inventoried profile file in full, plus live memories. The complete root marker was read without exposing key values. The installed Codex plugin opened this reviewer session; its cache is /tmp/hv-ug-r12-codex-01a1aa70. No build, restore, test or build target was run by the reviewer, no tracked file was edited, and no live record other than this own session was changed.
+
+Accuracy 96: reported gate heads/counts and most remediation facts verify, but universal isolation/time claims and one explicit receipt fact are wrong. Completeness 95: two settled behavioral classes lack discriminating coverage and block the intended acceptance state. Confidence 99: findings follow concrete source paths, live criteria and committed evidence. Scores assess the requested implementation/claim, not a percentage of claim rows. No deduction is made for infrastructure, scanner coverage, hostile-environment runs or operator-accepted limitations.
+
+R12-F1 - FAIL - IMPLEMENTER EDIT - Configuration-key aliases escape temporary-instance isolation.
+
+Location: tests/TestSupport.Shared/TemporaryInstanceChecks.cs:145; tests/TestSupport.Shared/TemporaryInstanceChecks.cs:160; tests/TestSupport.Shared/TemporaryInstanceChecks.cs:198; tests/TestSupport.Shared/TemporaryInstanceChecks.cs:463; tests/TestSupport.Shared/ScratchQBrainAi.cs:243; src/QBrainAi.Support.Mcp/Program.cs:114; src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:102.
+
+The inherited-environment scrub and start check recognize raw prefixes such as QBrainAi__ and Mcp__, but not equivalent colon-delimited or mixed colon/double-underscore configuration keys. An inherited QBrainAi:Database:Sqlite:ConnectionString survives the scrub and is ignored by the ownership check beside the owned QBrainAi__Database__Sqlite__ConnectionString. The .NET environment provider normalizes double underscores to colons and assigns normalized keys in enumeration order. If the inherited alias is assigned last, it supplies the database connection string. The configured connection string is used before the owned data-source fallback. Consequently the claimed refusal before access to an outside database is not established and can be bypassed.
+
+Evidence: TemporaryInstanceChecks.BuildOwnedInstanceEnvironment keeps non-product variables; IsProductVariable tests raw prefixes. CheckOwnedInstanceEnvironment does not normalize unknown aliases before accepting them. ScratchQBrainAi sets the owned underscore spelling and starts through OwnedInstanceProcess.
+
+Evidence: Program.cs adds environment configuration; McpDatabaseConfigurationResolver.ResolveSqliteConnectionString returns a configured connection string before consulting the explicit data-source fallback.
+
+Evidence: The pinned .NET 10 EnvironmentVariablesConfigurationProvider implementation, lines 65-123 and 145-152, normalizes __ to : and overwrites the normalized dictionary entry. This is a static counterexample from source, not a reviewer-executed product test.
+
+Evidence: OwnedInstanceEnvironmentTests and OwnedInstanceIsolationContractTests cover the declared prefix forms but have no colon/mixed-separator alias collision row. Passing current TRX therefore does not prove this input class.
+
+Primary source: [Microsoft .NET 10 environment configuration provider](https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/Microsoft.Extensions.Configuration.EnvironmentVariables/src/EnvironmentVariablesConfigurationProvider.cs).
+
+Affected requirements: FR-MCP-TESTRESOURCE-001 ac-4; TR-MCP-NUKE-019 AC-6. Affected claims: UG4, UG8, UG11, UG12, UG13, UG17, UG28, UG30.
+
+To PASS: Normalize configuration-key identity before deciding ownership, remove or reject every inherited alias of a product/database setting, and validate the effective selection before starting the instance. Preserve canonical/legacy and host-prefixed behavior. Add the discriminating contract rows below before the implementation, bind the same rows, and supply the required gate TRX at the resulting code head.
+
+Proposed strengthening of the existing criterion, normalized-configuration-key-ownership: Equivalent configuration-key spellings, including colon, double-underscore and mixed separators, cannot change a temporary instance from its explicitly owned database, workspace, marker or address; this holds for either enumeration order and canonical, legacy and host-prefixed forms.
+
+Proposed unit test OwnedEnvironment_NormalizedAliasesCannotOverrideDatabase: Given explicit inherited and owned maps containing colliding colon, double-underscore and mixed-separator keys in both orders, the effective database remains the owned database and unrelated variables remain intact.
+
+Proposed unit test StartCheck_RejectsUnownedNormalizedAliases: Given a direct start environment containing an unowned equivalent database key, the check refuses the start before any database access. A wrong implementation that checks only raw prefixes is rejected by the same rows.
+
+R12-F2 - FAIL - IMPLEMENTER EDIT - Four unit cases still depend on live-clock age comparisons.
+
+Location: tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs:173; tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:198; tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs:226; tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs:247; src/QBrainAi.Services/Services/SessionLogService.cs:569; src/QBrainAi.GraphRag/Services/GraphRagService.cs:967; src/QBrainAi.Services/Services/WorkspaceValidationService.cs:263.
+
+The tests manufacture recorded timestamps from the real clock and the called service compares them with another real-clock reading. QueryAsync_TurnStatusInProgressAndStaleOlderThanHours_ReturnsOnlyStaleOpenTurns uses now minus 30 hours and now minus one hour against a live 24-hour cutoff. InitializeAsync_RemovesStaleTemporaryArtifacts sets last-write time to now minus three hours against a live two-hour cutoff. Rule_InProgressTurn_OlderThan48h_UtcClock and Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded seed now minus 49 or ten hours and construct WorkspaceValidationService with TimeProvider.System. A clock change across those margins changes the asserted result. A sufficiently delayed stale-turn query also ages the recent item across the cutoff. These are age decisions, not hang guards.
+
+Evidence: All four named methods are present and Passed in both supplied 4739-case unit runs; they have no Integration classification.
+
+Evidence: SessionLogService computes its stale cutoff using DateTimeOffset.UtcNow. GraphRagService cleanup still uses DateTimeOffset.UtcNow rather than its injected CRUD clock. WorkspaceHygieneG5OverlayTests.CreateService passes TimeProvider.System to a service that already supports an injected clock.
+
+Evidence: TR-MCP-USECASE-018 AC-006 explicitly requires checked recorded times to come from test-owned scripted inputs and forbids results that change with elapsed time, scheduling or the system clock. The retained sweeps do not establish this for the age comparisons inside the called production code.
+
+Affected requirements: TR-MCP-USECASE-018 AC-006; TR-MCP-USECASE-019 AC-008. Affected claims: UG3, UG8, UG11, UG12, UG13.
+
+To PASS: Use test-owned scripted clocks for the reference time and the compared timestamps, including the called stale-query and artifact-cleanup paths. Preserve all existing assertions. Sweep other age, expiration and staleness comparisons through their production callees, not only assertions that spell out a clock read. Prove the additional contract cases and provide the resulting full gate evidence.
+
+Proposed strengthening of the existing criterion, scripted-recorded-age-boundaries: A unit-proved age, expiry or staleness decision uses a supplied scripted reference time and supplied recorded times. Its result is determined by those inputs alone, including immediately before, at and after the threshold, regardless of the system clock or time spent between steps.
+
+Proposed unit test StaleTurnQuery_UsesScriptedAsOfTime: For fixed recorded turns and a scripted as-of time, only the specified stale in-progress turns are returned at before/at/after boundaries; completed turns stay excluded and no state is closed.
+
+Proposed unit test ArtifactCleanup_UsesScriptedAgeBoundary: For supplied artifact timestamps and a scripted reference time, cleanup removes exactly the artifacts beyond the age threshold and retains the others.
+
+Proposed unit test WorkspaceHygiene_UsesScriptedStaleThreshold: Both the default and bounded override thresholds classify fixed turn timestamps against a supplied clock; out-of-range overrides remain rejected. A wrong implementation using the system clock is rejected by the contract.
+
+R12-F3 - FAIL - IMPLEMENTER EDIT - The first service-update requirement readback is misidentified.
+
+Location: docs/receipts/hv/unitgreen-r12-prelaunch.projected-problems.md:35; docs/plans/2026-10-19-unit-suite-green.md:1913; docs/receipts/unit-suite-green-20261019/ug-r12z3-criteria-readback-1.json:65; Round 12 request: requirement-record item and UG45.
+
+The request and projected problem 89 call ug-r12z3-store-readback-2.json the first receipt holding TR-MCP-SERVICEUPDATE-001. The earlier committed ug-r12z3-criteria-readback-1.json already holds that record with six criteria, including repeated-properties, at 2026-11-04T15:30:16 local. This precedes the 17:14:10 startup-health-wait write. The statement about the receipt chain is false; the actual evidence is stronger than the claimed transcript-only chain for that second write.
+
+Evidence: ug-r12z3-criteria-readback-1.json lines 65-112 contains TR-MCP-SERVICEUPDATE-001 and repeated-properties, without startup-health-wait. The receipt read time, rather than the adapter-generated record timestamps, establishes when it was read.
+
+Evidence: The later ug-r12z3-store-readback-2.json contains seven criteria. Independent canonical comparison shows that startup-health-wait is the only criterion added between these two retained readbacks. The subsequent recovery write changes only failed-update-startable.
+
+Evidence: Plan 27.28 lines 1913-1914 describes the evidence chain without acknowledging this retained intermediate record. Its phrase before these two writes is ambiguous if read as before the first write; the unambiguous first-receipt assertion in the brief and projected problems is what fails.
+
+Affected requirements: Workspace honesty and receipt-accuracy rules; UG45 evidence provenance. Affected claims: UG8, UG11, UG45.
+
+To PASS: Correct the first-receipt assertion in the request/prelaunch records and the description of the per-write comparison in plan 27.28. Identify ug-r12z3-criteria-readback-1.json as the retained post-repeated-properties, pre-startup-health-wait record and preserve the distinction between readback time and write time. No product code or new test is required for this documentation correction.
+
+Each applicable claim follows. A FAIL inherits the precise locations, evidence, implementer classification and remedy of its named finding; there are no UNKNOWN claims.
+
+UG1 - PASS. The manifest SHA-256 is 8C969A27B604CF9650EBFB86DC6984F0B2860E37A1EA78207763ACBB4583E226. All 30 TRX and four selection files match the manifest and committed blobs. Test is 4739/0/0 on each host, Linux/Windows lanes 741/0/0 and 718/0/0, raw Build.Tests 563/0/0 and 467/0/0. All results join to definitions and are Passed. Receipt commands, filters, heads, NU190x reports and traceability outputs agree. Current local gate dirty paths are untracked docs only. 52e6d627..3fe29d1f has 625 paths, all docs/. Evidence: hv-ug-r12-trx-audit.json, hv-ug-r12-Manifest-audit.json, hv-ug-r12-git-audit.json, hv-ug-r12-chronology-Meta.json, current ug-r12z3c-final-* receipts.
+
+UG2 - PASS. The retained mock/binding receipts and source pins establish the recorded order, including D/E ug-r9-mockgate-de-1, F ug-r9-mockgate-f-1, G ug-r9-mockgate-g-1 and the ac-5/ac-6 port. The retrospective receipts are labeled and derive from the run metadata, exit and TRX rather than new execution. Failed runs remain failed. Later chronology and pin checks cover 16 mock/binding pairs. This PASS is for order, not completeness of the isolation cases. Evidence: plan 26, 27.12-27.23; hv-ug-r12-Receipts-audit.json and hv-ug-r12-chronology-Pins.json.
+
+UG3 - FAIL. Four current unit cases still perform live-clock age comparisons through production code, despite their passing TRX. AC-006 requires scripted recorded-time decisions, so the day-one rule and claimed exhaustive timing closure do not hold. The repaired finite hang guards and declared conditional-wait arithmetic do not cure this different class. Evidence: R12-F2 source anchors, live TR-MCP-USECASE-018, hv-ug-r12-source-scan.json and hv-ug-r12-trx-cases.json. Findings: R12-F2.
+
+UG4 - FAIL. Seven projects, host filters and exactly the two Support integration classes are correctly selected and evidenced on both hosts. However, raw-prefix environment checks permit equivalent configuration keys to select an outside database, contradicting AC-6 before-access isolation. Evidence: current lane selections/TRX; TemporaryInstanceChecks.cs:145,160,198,463 and R12-F1. Findings: R12-F1.
+
+UG5 - PASS. The Roslyn dependency pins are 5.9.0; the current Linux four-log and Windows two-log NU190x receipts report zero entries, with the no-op restore limitation explicitly declared. The reviewed dependency/build diff introduces no vulnerability-warning suppression or audit override. Evidence: Directory.Packages.props/build dependency changes, TR-MCP-QUALITY-001 ac-21, ug-r12z3c-final-linux-nu190x.txt and ug-r12z3c-final-win-unit-1.nu190x.txt.
+
+UG6 - PASS. Native-host and simulated-host path expectations are separated. The production normalizer bindings use the same deterministic contracts; the process-host case is Integration. Current FR/TR/TEST-MCP-PATHNORM-001 and the unitgreen-native-host criterion agree with the source and supplied cases. Evidence: ExpectedWorkspaceKey, SimulatedWorkspaceHosts, WorkspacePathNormalizerContractTests/RealTests and current requirement reads.
+
+UG7 - PASS. Live canonical reads retain the stated false criteria and 46 unchecked tasks, including tasks 37-46 and correction notices. Current selected records equal the retained final readbacks after excluding the old adapter read-time fields. Both retired FRs and the named historical IDs are absent as stated; replacement edges are present in the effective view. The other follow-up TODOs remain open and BUG-TRIAGE-139 has the repointed links. The citation sweep correctly reports 12 IDs and three labeled historical absences. R12-F3 concerns receipt provenance, not a different live criterion. Evidence: hv-ug-r12-store-*.txt, hv-ug-r12-effective.txt, hv-ug-r12-store-current-comparison.json, hv-ug-r12-chronology-Criteria.json.
+
+UG8 - FAIL. The full plan was read with its amendments and supersession notes. The gate/count corrections and declared limitations largely reconcile, but its completion of owned-instance isolation and timing closure is contradicted by R12-F1/F2, and its service-update readback chain needs the R12-F3 correction. Evidence: plan 26-27.29 and the three findings. Findings: R12-F1, R12-F2, R12-F3.
+
+UG9 - PASS. The recorded takeover history, preserved prior-agent artifacts and branch ancestry agree with the plan. The review attributes implementer and reviewer identities separately and finds no replacement of prior hostile receipts. Evidence: plan takeover/history sections, first-parent history from 3da2db93, retained round request/response and verdict files.
+
+UG10 - PASS. All 108 first-parent effort commits carry the required model/agent confidence signature. GitHub reports no head_ref_force_pushed event for PR87; retained push history does not show an unauthorized force push. Changed-file secret inspection found no current marker-value occurrence; the only API-key-pattern source hits are pre-existing explicit test fixtures, redacted in reviewer output. Plan and PR lint found no table-style lines or en/em dashes. Disclosed historical script exceptions remain disclosed. TRX blobs are byte-exact. Evidence: hv-ug-r12-git-audit.json, hv-ug-r12-final-inspection-PushHistory.json, hv-ug-r12-final-checks-Secrets.json, text-lint and manifest audits. This is an evidence-based hygiene review, not a proof that an arbitrary unrecognized string can never be a secret.
+
+UG11 - FAIL. The self-review, all six holistic reports, projected problems and full PR body were read. Their open-item disclosures do not include the two remaining behavior gaps, and projected problem 89 explicitly misidentifies the first service-update readback. The handoff now correctly points to the single D-B statement. Evidence: 20261105T004043-unitgreen-r12.selfreview.md, unitgreen-r12-prelaunch.projected-problems.md:35, PR87 body snapshot and R12-F1/F2/F3. Findings: R12-F1, R12-F2, R12-F3.
+
+UG12 - FAIL. D-B still proposes satisfying the isolation and unit-independence criteria and eventually checking every task, although R12-F1 and R12-F2 leave them unproved. Keep those criteria and associated completion tasks unset until fixed and evidenced. The explicit deferrals are otherwise accurate: startup-health-wait stays out; repeated-properties and the operator-limited six-row failed-update-startable remain eligible only within that scope; FR-MCP-040 waits for post-merge server/REPL deployment and a live read; NUKE-016 AC-001 is not set; the four follow-up TODOs remain open. Findings: R12-F1, R12-F2.
+
+UG13 - FAIL. All three stopped-round-11 source defects and the specifically corrected round-9/round-10 examples are repaired. R8B-F3 is not closed as a class because equivalent environment keys escape the ownership rule. R10-F3 is not closed as a sibling sweep because four recorded-age unit cases retain live clocks. The closure list distinguishes repaired original examples from these remaining defects; scanner portions stay overridden. Findings: R12-F1, R12-F2.
+
+UG14 - PASS. The user-profile/version source seam receives explicit environment, sibling and profile sources. The scripted source-only resolution and wrong-source controls remain, with the real filesystem binding classified appropriately. Evidence: AgentPluginVersionSources.cs, AgentPluginVersionSourcesTests.cs, MarkerFileService changed resolution methods and current TRX.
+
+UG15 - PASS. The shared SQL Server connection rule, one nonparallel LocalDB collection, PostgreSQL invocation corrections and retained failure attribution agree with the approved requirements. Windows lane evidence includes the applicable SQL Server cases, all Passed; the unrelated error-1223 cause remains honestly unknown and out of scope. Evidence: SqlServerTestConnectionTests/helper, collection definitions, provider fixture changes, current Windows lane TRX, FR-MCP-TESTRESOURCE-001 ac-5 through ac-8.
+
+UG16 - PASS. The Windows lane result is a complete seven-TRX set with 718 passed results and 716 unique names. Case-sensitive comparisons retain the previous complete sets plus the declared additions and moved cases; there is no missing-result regression. Evidence: hv-ug-r12-Comparisons-audit.json, ug-r12z3c-final-win-lane-1 start/result receipts and manifest.
+
+UG17 - FAIL. The operator option texts and subsequent supersessions were checked against the transcript, plan and stores. The option to strengthen and fix inherited-database isolation still lacks the normalized-alias behavior in R12-F1. Other departures, counts and later scope changes are declared, and scanner source history ends before the override. Evidence: hv-ug-r12-operator-decisions.json, plan 26.1/26.3/27.1 and R12-F1. Findings: R12-F1.
+
+UG18 - OVERRIDDEN. UnitSuitePlatformScanner code, tests, documentation and coverage assertions are excluded by the explicit operator override. No finding or score depends on them.
+
+UG19 - PASS. The handoff race corrections retain their synchronization and assertions; the renewed lease assertion now uses the exact scripted expiry. The memory binding names present and mapped FR/TR/TEST-MCP-MEMORY-002. Evidence: HandoffDurabilityTests, memory binding source and live mapping reads, current unit/lane TRX.
+
+UG20 - OUT OF SCOPE. Hostile-environment runs are excluded by the 2026-10-27 operator rulings. Their absence has no score effect.
+
+UG21 - PASS. The reachability slice retains positive root/ancestor traversal with explicit negative controls and real filesystem/link bindings. The moved FR and remaining TR criteria agree with those outcomes. Evidence: DirectoryTreeWalker, DirectoryListingService, SessionLogContextExtractor, reachability contract/binding sources, FR-MCP-018 ac-1 and FR-MCP-SESSIONLOGCTX-001 criterion 008.
+
+UG22 - PASS. The four CLI temporary-folder resolver call paths use CliTempVariables with all five primary/fallback names owned and restored; the related process-environment tests are serialized. The named moved cases are present in the supplied host evidence. Evidence: CliTempVariables.cs/Tests, CLI strategy test call sites and FR-MCP-TESTRESOURCE-001 ac-10.
+
+UG23 - PASS. The command-timeout parse rule is a pure explicit-input rule, with bounded invalid input handling and both real call sites using the seam. Contract controls and bindings remain in current TRX. Evidence: ReplCommandTimeout.cs/Tests, command dispatcher and stdio host changes, current REPL requirement reads.
+
+UG24 - PASS. The Windows junction fixture builds the mount-point reparse buffer and calls the native API without spawning a process. Its contract checks pinned bytes, offsets, lengths and nulls; Windows integration bindings and corresponding platform tags remain. Evidence: WindowsJunction.cs, reparse-buffer contract tests and FR-MCP-TESTRESOURCE-001 ac-11.
+
+UG25 - PASS. The four former TR-MCP-REPL-008 criteria are now FR-MCP-REPL-007 ac-1 through ac-4 as declared. Marker walking and cache verification take the owned filesystem/cache boundary; the same inherited contract binds to the real resolver. The physical parent walk is restored as Integration. Evidence: MarkerIsolationContractTests/BindingTests, MarkerFileClientOptionsResolver, PhysicalMarkerFileSystem and live FR/TR reads.
+
+UG26 - PASS. The d43c1d12 merge changes 99 docs-only paths. The merge base is develop 9b099716, the requested triple-dot diff contains this effort, and the read-only merge-tree check is clean. No ClineQb implementation is present. Manifest classification covers all 23 projects and explains the operator-excluded projects/cases. Citation checks preserve historical labels. The old WS criterion moved to FR-MCP-018 rather than being silently satisfied under a removed ID. Evidence: git/manifest/project audits, live requirements and plan 25/27.1.
+
+UG27 - PASS. The environment delta overload takes both maps explicitly, and the original overload delegates with the process environment. Equal and changed values are independently asserted, including wrong implementations; the integration case owns and restores GH_TOKEN under the process-environment collection. This explicit-baseline fix is distinct from R12-F1. Evidence: DesktopProcessSpawner.ExtractEnvironment, its contract/binding and integration test, FR-MCP-047 ac-1, D/E receipts and current TRX.
+
+UG28 - FAIL. The expected starter is used by ScratchQBrainAi and its REPL consumers; the in-process guard and stdio changes are present. Their tested database-selection rows pass, but not every inherited setting is recognized. The normalized alias counterexample violates the universal ownership/refusal claim. Evidence: TemporaryInstanceChecks, OwnedInstanceProcess, OwnedDatabaseGuard, ScratchQBrainAi and R12-F1. Findings: R12-F1.
+
+UG29 - PASS. The selector returns seven projects and only the two approved Support integration class names. Class filters use identifier validation and compose the host filter with dotted class-name terms. The target logs each filter, and both lane TRX contain exactly the approved six Support integration cases. Evidence: IntegrationLaneProjects, IntegrationLaneClassFilter, IntegrationLaneExecution, F mock/binding receipts and selected-projects/TRX files.
+
+UG30 - FAIL. The I-O chronology, criterion placement, cache boundary, composition, scrub and citation corrections are retained as recorded. Slice I still does not meet its owned-environment guarantee for equivalent configuration keys. The 417-candidate inventory and four explicitly retained lab exceptions remain out of scope as approved. Evidence: plan 27.1-27.18, source-identifier-audit-20261102.json, source/contracts and R12-F1. Findings: R12-F1.
+
+UG31 - PASS. TestGroups composes the same lane pieces, applies the opposite-platform exclusion, rejects unknown/empty groups and missing executed classes, and rejects failure/skip counters. Class membership joins executed results to definitions by test ID and compares the actual class. The bootstrap mock preceded the target and later bindings use it; the intentionally failing negative run is retained as negative evidence. Evidence: Build.TestGroups.cs, TestGroupExecution.cs, Q/T contracts and ug-r9-negative-q-1.
+
+UG32 - PASS. The slice R engine-setting distinction is implemented and its 22-row contract retains discriminating controls; the later binding-only additions explain the changed source hash. The stdio case passes both lanes. GitHubCliService has the four reviewed normalization uses and the allowlist is unchanged. The Windows-only failed binding is explicitly not evidence; the missing no-direct-GetFullPath criterion remains declared. Evidence: OwnedInstanceProviderSettingContractTests, TemporaryInstanceChecks.CheckDatabaseSelection, GitHubCliService and R receipts.
+
+UG33 - PASS. The stored timestamp mapping and exact parser are used across server DTOs, typed client and current REPL source. Earliest mapping creation, absent timestamps and UTC-without-offset behavior are covered by independent positive/wrong-reader rows. The old installed REPL adapter explains the observed read-time getters; no live acceptance is claimed, and FR-MCP-040 stays unset pending deployment of both components and a live read. Evidence: RequirementStoredTimestamp.cs, contracts/bindings, requirement adapter diff and ug-r12z3c-repl-tool-version-1.txt.
+
+UG34 - PASS. The reconciliation receipt retains full getter records for nine deletions and the restored/mapped edges have record-level cross-references. The effective live view confirms the edges and absences. BUG-TRIAGE-139 no longer links the retired FRs; TR retirement notes and MEMORY-PROCESS-014 state the rule, with the restoration cause labeled inference. Traceability receipts pass. Evidence: traceability-reconcile-20261102T111536.json, hv-ug-r12-final-checks-Reconciliation.json, live effective/TODO/memory reads.
+
+UG35 - PASS. The output rule has 39 rows, 16 wrong checks and two positive controls after X/Y. It now rejects device paths, syntax mismatches and Windows segment/server/share aliases while preserving declared lexical limits. The benchmark outputs use checked owned temporary folders and retain their assertions. Current lanes report no tracked benchmark change. Evidence: TestOutputFolderContractTests/BindingTests, TemporaryInstanceChecks.CheckTestOutputFolder, S/T/U/X/Y receipts and current gate metadata.
+
+UG36 - PASS. The Q/R/P/S/T members and test classes carry the reviewed XML documentation and dated change logs, with the 38 missing-member retrofit retained. Canonical IDs are present or expressly historical rather than silently treated as acceptance. The later two startup-health constants without individual change logs are declared in 27.29 and are outside this claim of the Q-T retrofit. Evidence: changed-source diff, citation sweep, plan 27.20/27.22 and current store reads.
+
+UG37 - PASS. The six slice T criterion changes, including the separately approved ac-4 sibling, match readbacks. Mock 64/0/0 precedes binding 142/0/0 with contract hashes unchanged and the intended production hashes changed. Executed-class joins, exact nonce JSON comparison, syntax-aware path comparison, stored-date parsing and shared Ollama model selection remain. Evidence: ug-r10-mockgate-t-1/ug-r10-binding-t-1, hv-ug-r12-chronology-Pins.json and the six contract/source families.
+
+UG38 - PASS. Slice U mock 56/0/0 and binding 347/0/0 retain the five contracts and ScriptedPathIdentity hashes while changing the intended four files. Exact date formats reject partial dates and fraction-year tricks; path roots participate in identity; the six named time cases use scripted values. The failed CS1673 compile and missing readback dry run are declared. R12-F2 is an additional sibling, not a failure of these six repaired examples. Evidence: U criterion/readback/compile/mock/binding receipts and current source.
+
+UG39 - PASS. Slice V mock 11/0/0 precedes binding 167/0/0 with the new contract/time-provider files unchanged. GraphRag and memory CRUD stamps use the injected clock; the specifically named timestamp cases assert fixed/scripted instants. The earlier sweep gaps and stale comment corrections are declared. This PASS does not extend to GraphRag cleanup or the age-query siblings in R12-F2. Evidence: V receipts, StampedTimeContractTests, ScriptedTimeProvider and service/test diffs.
+
+UG40 - PASS. Slice W is tests only. The lease waits for a written renewal and asserts its exact scripted expiry. The heartbeat and file-watcher cases moved to Integration without losing assertions; each host lost exactly those two unit names and gained them in the lane. Binding 32/0/0 and the historical sweep correction are retained. Evidence: W comparison/binding receipts, HandoffDurabilityTests, QBAgentHeartbeatOverlayTests and SessionLogFileWatcherTests.
+
+UG41 - PASS. Round 11 ended on the reported usage limit without a complete verdict artifact; its partial issues are not an accepted verdict. X adds 12 output rows, despite the disclosed commit-message 13, and has mock 17/0/0 then binding 70/0/0 with pinned contract-side files unchanged. Device/syntax/segment refusal, callback cancellation correction and historical citation labeling are present. PR ready history is 2026-11-03T09:59:32 local with no later draft conversion. Evidence: X receipts/source, retained r11 stream and hv-ug-r12-pr87-ready.jsonl.
+
+UG42 - PASS. The first holistic read has 33 findings. The two approved Y appends and TODO correction agree with live/readback evidence. Mock 18/0/0 then binding 124/0/0 preserve contract-side hashes; UNC server/share aliases are now refused. The two 10-second hang guards and the incomplete original margin pass are accurately declared. Unit comparison adds one wrong-check case and retains all earlier names. Evidence: Y receipts, output contract/check and plan 27.25.
+
+UG43 - PASS. The second read has 22 findings. Z writes no criterion; the three-record comparison is accurately scoped. Six bounds were raised under the then-declared largest-timer measure, with the later sum shortfall explicitly corrected in Z2. PathSeparators is shared; behavior is otherwise unchanged. Binding 151/0/0, retrospective timing notes and both 4739-name comparisons reconcile. Evidence: plan 27.26, Z sweep/configured-duration/binding/compare receipts and source diff.
+
+UG44 - PASS. The third read has 25 findings. The 12:20:22 sum clause, task 44 and correction notice match the store. The Z2 bound changes and declared 265-ms overcount/seven-case count correction reconcile with the sources and later Z3 refinement. Binding 36/0/0 and both unchanged 4739-name comparisons are retained. Configured-duration rows were judged as declared; R12-F2 concerns an unhandled recorded-age class outside that duration list. Evidence: plan 27.27, Z2 criterion/binding/sweep/compare receipts.
+
+UG45 - FAIL. The reader, five 36-second waits, startup-health helper, generic path scrub and their mock/binding chronology match the supplied evidence. The outage/deploy logs and approved startup-health limitations are declared, and no score is lost for keeping that criterion out of D-B. However, this claim explicitly calls store-readback-2 the first service-update receipt, contradicted by criteria-readback-1. Evidence: Z3 contracts/receipts, deploy .out.txt copies and R12-F3. Findings: R12-F3.
+
+UG46 - PASS. The fifth and sixth reads each have 24 findings. Recovery criterion precedes mock 8/0/0 and binding 97/0/0 with contract hash unchanged. At 52e6d627, failure after completed replacement restores then retargets/reloads only as needed; earlier failure and Windows/success paths remain as declared. All 14 new cases pass both Build.Tests sets. The six-row scope, non-ExecStart/drop-in/start-limit what-ifs and misleading recovery-error text were explicitly accepted by the operator, so they are not new failures. The corrected b3f26862 retrospective lane receipt and bounded receipt-head sweep agree with their stated coverage. Evidence: ServiceRecoveryContractTests, ServiceUpdateTests, LinuxServiceHelper, Z3c receipts and operator transcript answers at 2026-11-05T00:12:32 local.
+
+Mandatory attack surfaces were scored separately:
+
+Surface 1, Requested claims and evidence: FAIL, accuracy 96, completeness 95. Gate provenance is verified, but universal isolation/unit-independence claims and the first-readback statement fail R12-F1/F2/F3.
+
+Surface 2, Workspace rules: FAIL, accuracy 97, completeness 97. The remaining live-clock unit outcomes violate the settled AC-006/day-one rule. Historical disclosed conduct and infrastructure problems are not independent deductions.
+
+Surface 3, Requirements, criteria and BDPv4: FAIL, accuracy 96, completeness 95. Criterion placement, readbacks, mappings and mock-before-binding chronology reconcile, but contract coverage omits the alias and recorded-age behaviors in R12-F1/F2.
+
+Surface 4, Plan holistically: FAIL, accuracy 96, completeness 95. The plan preserves the agreed scope and declarations, but its exit/D-B claims are premature and the service-update evidence chain is misstated.
+
+Closure and regression checks: the stopped round 11 itself supplied no completed verdict. These are this review findings on the current code and retained evidence.
+
+R11-F1 - PASS. Device paths and mixed syntax are refused; Windows segment aliases and later UNC server/share aliases are covered by the 39-row output contract and real binding. TemporaryInstanceChecks.cs and X/Y receipts.
+
+R11-F2 - PASS. StubMarkerFileReaderTests now cancels only after the asserted callback; the prior 100-ms race is gone. The bounded completion guard is distinct and its margin is retained in the timing receipt.
+
+R11-F3 - PASS. SessionLogFileWatcherTests explicitly labels TR-PLANNED-CORE-013 historical; the current changed-line citation sweep preserves that label.
+
+R10-F1 - PASS. RequirementStoredTimestamp.Read uses exact complete-date formats, rejecting partial dates and embedded year digits; U contracts and current host TRX cover the repair.
+
+R10-F2 - PASS. PathIdentity retains explicit root kind and identity, including forward/mixed UNC spellings; containment/output contracts preserve distinct-root rejection and syntax-sensitive comparison.
+
+R10-F3 - FAIL. The original six time cases and later CRUD siblings are repaired, but the required sibling closure is incomplete: the four recorded-age unit cases in R12-F2 still depend on live clocks.
+
+R9-F1 - PASS. TestGroupExecution joins executed results to definitions by test ID and checks the terminal class name; unexecuted definitions/display-name mentions do not count.
+
+R9-F2 - PASS. CheckHealthAnswer parses JSON and compares the entire nonce field ordinally; missing/malformed/longer/other-field values are rejected.
+
+R9-F3 - PASS. The generated-output comparison uses the path syntax, case and root identity, with later device/segment refinements and binding rows.
+
+R9-F4 - PASS. Exact stored-date parsing never supplies a missing date from the live clock; invalid rows return null and mapping selection ignores them.
+
+R9-F5 - PASS. InstallOllama and the integration cases use the same canonical-first, legacy-second model rule; contract and source-binding cases remain Passed.
+
+R9-F6 - PASS. Handoff points to the single D-B statement, task 32 cites binding-r-2 and preserves r-1 as failed, and propagation-search evidence is retained. R12-F3 is a distinct later provenance defect.
+
+R9-F7 - PASS. Current gate metadata explicitly allows declared untracked docs receipts rather than claiming an entirely clean tree; no code/test/build dirt is shown.
+
+R9-F8 - PASS. The 38-member Q/R/P/S XML documentation retrofit and T change logs are present with canonical citations.
+
+R8B-F1 - PASS. The delta comparison takes an explicit baseline; GH_TOKEN integration ownership/restoration and nonparallel process-environment collection are present.
+
+R8B-F2 - PASS. The seven-project lane includes exactly the two approved Support integration classes; all six selected cases are Passed on both hosts.
+
+R8B-F3 - FAIL. The prefix scrub/start check handles the named raw forms but misses normalized configuration aliases. R12-F1 leaves the outside-database prevention claim incomplete.
+
+R7-F1 - PASS. One bounded command-timeout parse rule and both call-site seams remain, with deterministic positive/wrong-input contracts and current Passed cases.
+
+R6-F1 - PASS. The four CLI temporary resolvers are exercised inside the owned primary/fallback variable scope, with restoration and serialization.
+
+R6-F2 - PASS. The changed missing-ID citations remain labeled historical; current active citations resolve through canonical requirement reads.
+
+R5-F1 - PASS. Root/ancestor reachability contracts and real-link integration bindings retain positive traversal and rejection controls under the moved FR/remaining TR criteria.
+
+R5-F2 - PASS. The specifically named canonical/legacy environment cases retain their variable ownership and collection fixes. R12-F1 is a separate unhandled alias class, not a regression in those cases.
+
+R4-F1 - OVERRIDDEN. Scanner alias-resolution code, coverage and documentation are excluded by the operator override.
+
+R4-F2 - PASS. Historical head/task-count corrections remain in the plan and TODO notices; current 46-task and final-head metadata reconcile.
+
+R4-F3 - PASS. The memory binding cites existing and mapped FR/TR/TEST-MCP-MEMORY-002.
+
+R3-F1 - PASS. The plugin-version source seam retains explicit test-owned sources and the real filesystem integration binding.
+
+R3-F2 - OVERRIDDEN. The scanner-mediated portion is excluded; no scanner remedy or deduction is made.
+
+R3-F3 - PASS. FR-MCP-USECASE-016/017 are absent through dedicated getters and effective view, with replacement TR/TEST mappings and retirement notices present.
+
+R3-F4 - PASS. The historical self-review/head correction is preserved; current code head and docs-only descendants are correctly identified. New missing disclosures are separately failed in UG11.
+
+R2-F1 - PASS. The originally identified native/environment call paths remain classified as Integration or behind explicit deterministic seams, preserving their assertions.
+
+R2-F2 - OVERRIDDEN. Scanner-mediated closure is excluded by the operator override.
+
+R2-F3 - PASS. Historical scripting/audit exceptions remain disclosed; the final scored gate evidence is independently retained and checked.
+
+F1 - PASS. The original guard mock failure remains a failed historical run, not retroactively green evidence; its declared 4692 total, 4675 passed, one failed and 16 not executed is preserved. Scanner corrections are overridden.
+
+F2 - PASS. The original native filesystem/SQLite cases and named siblings remain Integration or use deterministic seams, with applicable lane assertions retained.
+
+F3 - OVERRIDDEN. The scanner/skip-syntax coverage portion and its descriptive claims are excluded as directed.
+
+F4 - PASS. The current Windows lane has complete interactive-session/head/filter proof and 718 Passed results, replacing the original unrun gate.
+
+F5 - OVERRIDDEN. Scanner project-selection change-detection coverage is excluded, as in the retained closure history.
+
+F6 - PASS. The historical Bash ls exception is explicitly disclosed and is not rewritten as compliant PowerShell execution.
+
+F7 - PASS. The original missing-Windows-evidence and unconditional-satisfaction wording is corrected and current criteria/tasks remain false. The new D-B insufficiencies are separately failed in UG12.
+
+operatorOverriddenObservations: empty. Scanner coverage was not scored. UG18 is OVERRIDDEN and UG20 is OUT OF SCOPE. The approved recovery limits and startup-health deferral are not failures.
+
+What-if review: Isolation: follow inherited colon/mixed configuration keys through scrub, process launch, provider normalization and database selection. R12-F1 is the failed path.
+
+What-if review: Clock and scheduling: follow stored timestamp/age values through actual service cutoffs, not only direct test assertions. R12-F2 is the failed path; correctly isolated CRUD and lease cases remain passed.
+
+What-if review: Malformed and boundary inputs: re-attack exact date formats, result-definition joins, nonce fields, explicit roots, device paths, UNC aliases, timeout parse limits and output containment using source and supplied contract rows.
+
+What-if review: Crash and recovery: inspect each of the six service-recovery rows and the failure before/after replacement split. Accept only the operator-declared scope for additional unit-file/start-limit/reload what-ifs; do not reopen those decisions.
+
+What-if review: Platform and selection: compare both host unit-name sets and applicable lane names, retained class filters, zero-selected checks and project exclusions; do not infer cross-platform proof from one host.
+
+What-if review: Lifecycle and acceptance: criteria/tasks are still false. No AGREE-triggered satisfaction, merge, deployment or done state is authorized by this DISAGREE. The live-timestamp deployment read remains a future step.
+
+What-if review: Evidence ordering: compare committed hashes, source pins, criterion delta snapshots, run metadata and retrospective labels. R12-F3 corrects a false first-receipt claim rather than inventing absent evidence.
+
+Verified gate totals, in total/passed/failed/not-executed order:
+
+ug-r12z3c-final-linux-buildtests-1: 563/563/0/0, 1 TRX.
+
+ug-r12z3c-final-linux-lane-1: 741/741/0/0, 7 TRX.
+
+ug-r12z3c-final-linux-unit-1: 4739/4739/0/0, 7 TRX.
+
+ug-r12z3c-final-win-buildtests-1: 467/467/0/0, 1 TRX.
+
+ug-r12z3c-final-win-lane-1: 718/718/0/0, 7 TRX.
+
+ug-r12z3c-final-win-unit-1: 4739/4739/0/0, 7 TRX.
+
+The 30 supplied TRX and four selected-projects files match their committed bytes and manifest hashes. The seven unit projects have the same 4739 names on both hosts. The lane unique-name counts, 739 and 716, differ from result counts because the retained TRX contain duplicate display names; comparisons preserve this distinction.
+
+MEMORY-PROCESS-013: infrastructure failures do not force DISAGREE, lower scores or block acceptance when sufficient substantive evidence exists. Operational issues are separate; no such issue is a finding in this verdict.
+
+Operational issue, no product-score deduction: The older REPL route did not support the attempted direct session GetAsync. QueryAsync supplied history successfully; own-session persistence was retried and verified.
+
+Operational issue, no product-score deduction: The default gh shim attempted unavailable version resolution. The already-installed gh binary was used successfully.
+
+Operational issue, no product-score deduction: Reviewer inspection scripts had corrected parser/argument/lookup and audit-shape mistakes; their exact nonzero exits remain in CommandsAndExitCodes. No product code or test was executed to work around them.
+
+Operational issue, no product-score deduction: Some large tool reads were truncated; required file sections were reread in bounded display chunks. This is an output-display strategy, not a review time or evidence-size limit.
+
+Operational issue, no product-score deduction: One commentary timestamp was entered from the immediately preceding tool observation rather than a fresh measured value; artifact timestamps are measured. This has no product-score effect.
+
+Review boundary: Static counterexamples and supplied execution evidence only, as policy 7.9 requires. The reviewer did not build, restore or independently execute product tests.
+
+Review boundary: Stored requirement createdAt/updatedAt from the installed pre-slice-P REPL are read-time values; chronology relies on retained write/read receipts and transcript events instead.
+
+Review boundary: No PR review comments were used. No scanner code/coverage judgment or hostile-environment requirement was introduced.
+
+Review boundary: The scanner and hostile-environment exclusions, held-out integration scope, Azure exclusions and accepted startup-health/recovery limitations are applied exactly as directed.
+
+Review boundary: Historical accepted disclosures are evaluated for accurate representation rather than converted into new conduct-only blockers.
+
+Review boundary: Complete response JSONL continues to grow until this turn finishes; it is not prematurely represented as a finalized hash.
+
+Evidence index, under /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv: hv-ug-r12-identity.json; hv-ug-r12-trx-audit.json; hv-ug-r12-trx-cases.json; hv-ug-r12-Manifest-audit.json; hv-ug-r12-Comparisons-audit.json; hv-ug-r12-Receipts-audit.json; hv-ug-r12-chronology-Pins.json; hv-ug-r12-chronology-Criteria.json; hv-ug-r12-chronology-Projects.json; hv-ug-r12-chronology-Meta.json; hv-ug-r12-git-audit.json; hv-ug-r12-final-inspection-PushHistory.json; hv-ug-r12-final-checks-Secrets.json; hv-ug-r12-final-checks-Reconciliation.json; hv-ug-r12-source-scan.json; hv-ug-r12-effective.txt; hv-ug-r12-store-current-comparison.json; hv-ug-r12-operator-decisions.json; hv-ug-r12-pr87.json; hv-ug-r12-pr87-ready.jsonl; hv-ug-r12-commands.jsonl. Live canonical record snapshots use hv-ug-r12-store-<ID>.txt. The commands and byte-complete request/response stream are retained alongside them.
+
+Request JSONL: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261105T004043-unitgreen-r12.request.jsonl
+Response JSONL: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261105T004043-unitgreen-r12.response.jsonl
+Complete prose receipt: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r12-20261105T004043.md
+Complete JSON receipt: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r12-20261105T004043.json
+Persistence proof: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r12-persistence-proof.json
+Reviewer session: Codex-20261105T064457Z-plugin-session
+Reviewer request: req-20261105T064500Z-unitgreen-r12
+
+The complete prose and complete JSON are stored as ordered parts in this own review turn. The separate proof queries history and verifies the concatenated text byte-for-byte, then records completion. No summary substitutes for the complete result.
+
+Command audit: All completed shell command events through response JSONL line 985 when this artifact was assembled. Final persistence/readback commands necessarily follow assembly and remain byte-complete in the response stream and their separate persistence proof; no uncompleted command is assigned a success exit.
+
+Response line 5, exit 0: /usr/bin/pwsh -NoProfile -Command "Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw; "'$profileFiles = @(Get-ChildItem -LiteralPath '"'/home/sharpninja/.claude/profile' -File -Filter '*.md' | Where-Object Name -ne 'SKILL.md' | Sort-Object Name); Write-Output ('PROFILE_FILE_COUNT=' + "'$profileFiles.Count); foreach ($profileFile in $profileFiles) { Write-Output ('"'PROFILE_FILE=' + "'$profileFile.FullName); Get-Content -LiteralPath $profileFile.FullName -Raw }'
+
+Response line 7, exit 0: /usr/bin/pwsh -NoProfile -Command "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -First 245"
+
+Response line 9, exit 0: /usr/bin/pwsh -NoProfile -Command "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 245"
+
+Response line 14, exit 0: /usr/bin/pwsh -NoProfile -Command '$parseTokens = $null; $parseErrors = $null; [System.Management.Automation.Language.Parser]::ParseFile('"'/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r12-bootstrap.ps1', [ref]"'$parseTokens, [ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path '"'/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r12-bootstrap.ps1' -Severity Warning,Error"
+
+Response line 16, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-bootstrap.ps1' -Stage Marker"
+
+Response line 19, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-bootstrap.ps1' -Stage PluginDocs"
+
+Response line 20, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-bootstrap.ps1' -Stage Identity"
+
+Response line 22, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-bootstrap.ps1' -Stage Identity"
+
+Response line 24, exit 0: /usr/bin/pwsh -NoProfile -Command "Get-Content -LiteralPath '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/session/SKILL.md' -Tail 70"
+
+Response line 28, exit 0: /usr/bin/pwsh -NoProfile -Command '$parseTokens = $null; $parseErrors = $null; [System.Management.Automation.Language.Parser]::ParseFile('"'./docs/receipts/hv/hv-ug-r12-inspect.ps1', [ref]"'$parseTokens, [ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path '"'./docs/receipts/hv/hv-ug-r12-inspect.ps1' -Severity Warning,Error"
+
+Response line 31, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Proof"
+
+Response line 32, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/Invoke-CodexMcpPlugin.ps1','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/session-start.ps1'"
+
+Response line 35, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib' -Pattern 'workflow.sessionlog.bootstrap|workflow.sessionlog.openSession|PLUGIN_SESSION|MCP_SESSION_ID|CODEX_THREAD_ID|queryHistory|workflow.memory.list'"
+
+Response line 37, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/mcp-status.ps1'"
+
+Response line 39, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1' -Start 1970 -Count 185"
+
+Response line 41, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/plugin-hook.ps1','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1' -Pattern 'function Invoke-WorkflowOpenSession|function Invoke-SessionStart|bootstrap|model|sourceType'"
+
+Response line 43, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1' -Start 257 -Count 150"
+
+Response line 45, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/plugin-hook.ps1' -Start 410 -Count 75"
+
+Response line 49, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-plugin.ps1'"
+
+Response line 51, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Init -WhatIf"
+
+Response line 53, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Init"
+
+Response line 56, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './AGENTS.md','./CLAUDE.md','./.github/copilot-instructions.md'"
+
+Response line 57, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Memory -Scope Global -Receipt memories-global"
+
+Response line 61, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-plugin.ps1'"
+
+Response line 64, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './docs/Development-Process-draft-v4.md','./docs/receipts/hv/20261105T004043-unitgreen-r12.selfreview.md'"
+
+Response line 65, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Memory -Scope Workspace -Receipt memories-workspace"
+
+Response line 67, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './docs/receipts/hv/unitgreen-r12-trx-52e6d627/manifest.json' -Count 110"
+
+Response line 69, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './docs/receipts/hv/hv-ug-r12-memories-workspace.txt'"
+
+Response line 71, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Status -Receipt plugin-status"
+
+Response line 76, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-evidence.ps1'"
+
+Response line 79, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Inventory"
+
+Response line 80, exit 1: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Trx"
+
+Response line 82, exit 1: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Github"
+
+Response line 84, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/requirements/SKILL.md' -Count 160"
+
+Response line 88, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-evidence.ps1'"
+
+Response line 93, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Memories"
+
+Response line 94, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Tools"
+
+Response line 95, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Invoke -Method workflow.requirements.getTr -Id TR-MCP-USECASE-018 -Receipt store-TR-MCP-USECASE-018"
+
+Response line 96, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Trx"
+
+Response line 98, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths './docs/plans/2026-10-19-unit-suite-green.md' -Pattern '"'^#{1,4} '"'"
+
+Response line 103, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-store.ps1'"
+
+Response line 106, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode InventorySummary"
+
+Response line 108, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './docs/plans/2026-10-19-unit-suite-green.md' -Count 202"
+
+Response line 110, exit 1: /usr/bin/pwsh -NoProfile -Command "& '/home/sharpninja/tools/gh' --version"
+
+Response line 112, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.local/bin/gh','/home/sharpninja/tools/gh' -Count 25"
+
+Response line 114, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './docs/plans/2026-10-19-unit-suite-green.md' -Start 100 -Count 49"
+
+Response line 118, exit 0: /usr/bin/pwsh -NoProfile -Command '$parseTokens = $null; $parseErrors = $null; [System.Management.Automation.Language.Parser]::ParseFile('"'./docs/receipts/hv/hv-ug-r12-inspect.ps1', [ref]"'$parseTokens, [ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path '"'./docs/receipts/hv/hv-ug-r12-inspect.ps1' -Severity Warning,Error"
+
+Response line 120, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Files -Paths '/home/sharpninja/.local/share/mise/installs' -Arguments '-g','gh','--hidden','--no-ignore'"
+
+Response line 124, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-evidence.ps1'"
+
+Response line 126, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Github"
+
+Response line 128, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './build/LinuxServiceHelper.cs' -Count 240"
+
+Response line 131, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './tests/TestSupport.Shared/TemporaryInstanceChecks.cs' -Count 240"
+
+Response line 133, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths './tests' -Pattern 'DateTime(Offset)?\\.(UtcNow|Now|Today)|Stopwatch|CancelAfter|SpinUntil|WaitForExit|WaitAny|WaitOne|Task\\.Delay|Thread\\.Sleep'"
+
+Response line 134, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-store.ps1'"
+
+Response line 136, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './tests/TestSupport.Shared/TemporaryInstanceChecks.cs' -Start 240 -Count 290"
+
+Response line 138, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './tests/TestSupport.Shared/OwnedInstanceProcess.cs','./tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs' -Count 230"
+
+Response line 140, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths './tests/TestSupport.Shared/ScratchQBrainAi.cs','./src' -Pattern 'QBrainAi:Database|Mcp:Database|AddEnvironmentVariables|DatabaseProvider|ConnectionStrings'"
+
+Response line 143, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.claude/skills/add-profile/SKILL.md','/home/sharpninja/.claude/profile/PROFILE-MERGED.md'"
+
+Response line 145, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 100 -Count 100"
+
+Response line 147, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Memory -Scope Global -Receipt 'global-reload-2'"
+
+Response line 149, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 200 -Count 94"
+
+Response line 151, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Memory -Scope Workspace -Receipt 'workspace-reload-2'"
+
+Response line 153, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Files -Paths '/home/sharpninja/.claude/profile' -Arguments '-g','*.md'; & './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './docs/receipts/hv/hv-ug-r12-global-reload-2.txt','./docs/receipts/hv/hv-ug-r12-workspace-reload-2.txt'"
+
+Response line 155, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './docs/receipts/hv/hv-ug-r12-inspect.ps1','./docs/receipts/hv/hv-ug-r12-evidence.ps1' -Count 100"
+
+Response line 159, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-evidence.ps1'"
+
+Response line 161, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Memories -MemoryReceipts './docs/receipts/hv/hv-ug-r12-global-reload-2.txt'"
+
+Response line 163, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Memories -MemoryReceipts './docs/receipts/hv/hv-ug-r12-workspace-reload-2.txt'"
+
+Response line 168, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs'"
+
+Response line 169, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.Support.Mcp/Program.cs' -Start 70 -Count 100"
+
+Response line 170, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/TestSupport.Shared/ScratchQBrainAi.cs' -Start 370 -Count 180"
+
+Response line 174, exit 1: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.Support.Mcp/Options/McpInstanceResolver.cs' -Start 1 -Count 150"
+
+Response line 175, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/TestSupport.Shared/ScratchQBrainAi.cs' -Start 190 -Count 175"
+
+Response line 176, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-store.ps1' -Read -Ids 'TR-MCP-NUKE-019','FR-MCP-TESTRESOURCE-001','TR-MCP-USECASE-018','TR-MCP-USECASE-019'"
+
+Response line 178, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths 'src' -Pattern 'class McpInstanceResolver|ProjectCanonicalSectionOverLegacy|GetRequestedInstanceName'"
+
+Response line 182, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 203 -Count 95"
+
+Response line 184, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 298 -Count 115"
+
+Response line 187, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 413 -Count 82"
+
+Response line 189, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.Services/Options/McpInstanceResolver.cs' -Start 1 -Count 100"
+
+Response line 191, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './docs/receipts/hv/hv-ug-r12-plugin.ps1'"
+
+Response line 193, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/session/SKILL.md' -Pattern 'appendDialog|appendActions|queryHistory|updateTurn' "
+
+Response line 195, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/session/SKILL.md' -Start 145 -Count 86"
+
+Response line 197, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 495 -Count 77"
+
+Response line 201, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-log.ps1'"
+
+Response line 203, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-log.ps1' -Note 'Verified all 30 supplied TRX hashes and committed blobs, all counters, zero failures/skips, identical 4739 unit names on both hosts. Live stores read and retained. Profile reload read 1 file, 12 Global and 3 Workspace memories, excluding PROCESS-007. Investigating a source-level isolation gap: colon-delimited environment keys survive the prefix scrub; no product code or tests executed.' -Evidence 'docs/receipts/hv/hv-ug-r12-trx-audit.json' -Order 2 -Receipt evidence-initial -WhatIf"
+
+Response line 205, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-log.ps1' -Note 'Verified all 30 supplied TRX hashes and committed blobs, all counters, zero failures/skips, identical 4739 unit names on both hosts. Live stores read and retained. Profile reload read 1 file, 12 Global and 3 Workspace memories, excluding PROCESS-007. Investigating a source-level isolation gap: colon-delimited environment keys survive the prefix scrub; no product code or tests executed.' -Evidence 'docs/receipts/hv/hv-ug-r12-trx-audit.json' -Order 2 -Receipt evidence-initial"
+
+Response line 207, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-log.ps1' -Note 'Read .NET runtime v10.0.0 EnvironmentVariablesConfigurationProvider source. It normalizes double underscores to colons but accepts existing colon-delimited names, compares configuration keys ignoring case and overwrites duplicate normalized keys during enumeration. This is the authoritative engine behavior used to inspect the owned-instance environment scrub; no standalone experiment or test run performed.' -WebUrl 'https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/Microsoft.Extensions.Configuration.EnvironmentVariables/src/EnvironmentVariablesConfigurationProvider.cs' -Evidence 'tests/TestSupport.Shared/TemporaryInstanceChecks.cs' -Order 3 -Receipt config-source"
+
+Response line 209, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 573 -Count 87"
+
+Response line 211, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 660 -Count 97"
+
+Response line 213, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 758 -Count 74"
+
+Response line 215, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Invoke -Method 'workflow.sessionlog.queryHistory' -Agent Codex -Limit 1 -Receipt own-history-first"
+
+Response line 217, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 832 -Count 95"
+
+Response line 219, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 928 -Count 102"
+
+Response line 222, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1030 -Count 85"
+
+Response line 224, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/requirements/SKILL.md' -Start 160 -Count 185"
+
+Response line 226, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1115 -Count 74"
+
+Response line 228, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/requirements/SKILL.md' -Start 345 -Count 204"
+
+Response line 230, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1189 -Count 66"
+
+Response line 232, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Invoke -Method 'workflow.requirements.effective' -Receipt 'effective'"
+
+Response line 234, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1255 -Count 80"
+
+Response line 238, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-plugin.ps1'; & './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './docs/receipts/hv/hv-ug-r12-store.ps1' -Count 120"
+
+Response line 240, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/unit-suite-green-20261019/ug-r12z3c-store-readback-1.json' -Count 30; & './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1336 -Count 60"
+
+Response line 242, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Invoke -Method 'workflow.requirements.listMappings' -Receipt 'mappings' -Quiet"
+
+Response line 246, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-audit.ps1'"
+
+Response line 250, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1396 -Count 55"
+
+Response line 251, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Git"
+
+Response line 252, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Effective -Ids 'FR-MCP-USECASE-016','FR-MCP-USECASE-017','FR-MCP-BUILD-001','FR-MCP-USECASE-001','FR-MCP-SERVICEUPDATE-001','FR-MCP-MEMORY-002'"
+
+Response line 254, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Git -Arguments 'diff','--stat','9b099716...3fe29d1fd8ffc4ba993782ab810bf9d16f4f42e6','--','src','build','Directory.Packages.props'; & './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1451 -Count 65"
+
+Response line 257, exit 0: /usr/bin/pwsh -NoProfile -Command "Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw; Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -First 100"
+
+Response line 259, exit 0: /usr/bin/pwsh -NoProfile -Command "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 100 -First 100"
+
+Response line 261, exit 0: /usr/bin/pwsh -NoProfile -Command "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 200 -First 94"
+
+Response line 263, exit 0: /usr/bin/pwsh -NoProfile -Command "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 294; Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile/' -Filter '*.md' | Select-Object Name,Length"
+
+Response line 265, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Memory -Scope Global -Receipt 'memory-reload3-global' -Quiet"
+
+Response line 267, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Memory -Scope Workspace -Receipt 'memory-reload3-workspace' -Quiet"
+
+Response line 269, exit 1: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Memories -MemoryReceipts './docs/receipts/hv/hv-ug-r12-memory-reload3-global.json' -MemoryScope Global"
+
+Response line 271, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './docs/receipts/hv/hv-ug-r12-plugin.ps1','./docs/receipts/hv/hv-ug-r12-evidence.ps1' -Start 1 -Count 85"
+
+Response line 274, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Memories -MemoryReceipts './docs/receipts/hv/hv-ug-r12-memory-reload3-global.txt' -MemoryScope Global"
+
+Response line 275, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Memories -MemoryReceipts './docs/receipts/hv/hv-ug-r12-memory-reload3-workspace.txt' -MemoryScope Workspace"
+
+Response line 279, exit 1: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/TestSupport.Shared/OwnedInstanceIsolationContractTests.cs' -Start 231 -Count 156"
+
+Response line 280, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1516 -Count 72"
+
+Response line 283, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1588 -Count 60"
+
+Response line 284, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Files -Path tests -Pattern 'OwnedInstance|ServiceRecovery|RequirementStoredTimestamp|TestOutputFolder|ServiceStartup|ServiceUnitProperties'"
+
+Response line 287, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs' -Start 231 -Count 156"
+
+Response line 288, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1648 -Count 60"
+
+Response line 291, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs' -Start 1 -Count 200"
+
+Response line 292, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1708 -Count 49"
+
+Response line 295, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs' -Start 200 -Count 160"
+
+Response line 296, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1757 -Count 48"
+
+Response line 300, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'build/LinuxServiceHelper.cs' -Start 240 -Count 210"
+
+Response line 301, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1805 -Count 46"
+
+Response line 304, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1851 -Count 49"
+
+Response line 305, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'build/LinuxServiceHelper.cs' -Start 450 -Count 204"
+
+Response line 308, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths 'docs/receipts/unit-suite-green-20261019/ug-r12z3-timing-sweep.txt' -Pattern 'ORDER|CANCEL-INPUT|HANG-GUARD|FAKE-TIME'"
+
+Response line 309, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1900 -Count 53"
+
+Response line 312, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1953 -Count 30"
+
+Response line 313, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths 'docs/receipts/unit-suite-green-20261019/ug-r12z3-timing-sweep.txt' -Pattern 'class=ORDER'"
+
+Response line 317, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Git -Arguments @('diff','9b099716...3fe29d1','--','build/LinuxServiceHelper.cs')"
+
+Response line 318, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1983 -Count 24"
+
+Response line 319, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/Build.Tests/ServiceRecoveryContractTests.cs' -Start 1 -Count 240"
+
+Response line 323, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/hv/20261105T004043-unitgreen-r12.selfreview.md' -Start 1 -Count 19"
+
+Response line 324, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-30-unit-suite-green-handoff.md' -Start 1 -Count 90"
+
+Response line 325, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 358 -Count 1; & './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-19-unit-suite-green.md' -Start 1364 -Count 3"
+
+Response line 328, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './docs/receipts/hv/hv-ug-r12-audit.ps1' -Start 1 -Count 150"
+
+Response line 329, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-30-unit-suite-green-handoff.md' -Start 23 -Count 5; & './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-30-unit-suite-green-handoff.md' -Start 64 -Count 61; & './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/hv/20261105T004043-unitgreen-r12.selfreview.md' -Start 13 -Count 2"
+
+Response line 333, exit 1: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-deep-audit.ps1'"
+
+Response line 337, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-deep-audit.ps1'"
+
+Response line 339, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-deep-audit.ps1' -Mode StoreCompare -Paths 'docs/receipts/unit-suite-green-20261019/ug-r12z3c-store-readback-1.json' -Receipt 'store-current-comparison' -WhatIf"
+
+Response line 341, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-deep-audit.ps1' -Mode StoreCompare -Paths 'docs/receipts/unit-suite-green-20261019/ug-r12z3c-store-readback-1.json' -Receipt 'store-current-comparison'; & './docs/receipts/hv/hv-ug-r12-deep-audit.ps1' -Mode Transcript -Pattern 'Strengthen|Declare|Fix it|ready for review|Keep, out|UTC|ZERO platform|scanner work|scope creep|rece?ipt|gate on me|Timestamps|Use dedicated|ignore review|before HV|if you surface|coming back|hv.*order' -Receipt 'operator-decisions' -Count 0 -WhatIf"
+
+Response line 344, exit 1: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths 'docs/context','/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0' -Pattern 'Patch.*Session|PatchRequest|patchTurn|designDecisions.*client|SessionLog.*Patch' -Arguments @('-g','*.md')"
+
+Response line 345, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Records -Ids 'FR-MCP-TESTRESOURCE-001','TR-MCP-SERVICEUPDATE-001'"
+
+Response line 348, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/hv/unitgreen-r12-prelaunch.projected-problems.md' -Start 1 -Count 50"
+
+Response line 349, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths 'src/QBrainAi.Repl.Core','src/QBrainAi.Client' -Pattern 'PatchAsync|UpdateRequestAsync|PatchRequestAsync|designDecisions' -Arguments @('-g','*Session*')"
+
+Response line 352, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.Client/SessionLogClient.cs' -Start 205 -Count 130; & './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths './docs/receipts/hv/hv-ug-r12-log.ps1' -Start 1 -Count 100"
+
+Response line 353, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-deep-audit.ps1' -Mode Transcript -Pattern 'Strengthen|Declare|Fix it|ready for review|Keep, out|UTC|ZERO platform|scanner work|scope creep|rece?ipt|gate on me|Timestamps|Use dedicated|ignore review|before HV|if you surface|coming back|hv.*order' -Receipt 'operator-decisions' -Count 0"
+
+Response line 355, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0','docs/context','src/QBrainAi.Repl.Core' -Pattern 'client.invoke|client\\.sessionLog|sessionLog\\.patch|PatchTurnAsync' -Arguments @('-g','*.md','-g','*.cs')"
+
+Response line 357, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-log.ps1' -Category decision -Order 4 -Receipt 'isolation-key-decision' -Evidence 'tests/TestSupport.Shared/TemporaryInstanceChecks.cs' -Note 'Confirmed a material isolation gap by static source review: IsProductVariable recognizes double-underscore configuration prefixes but not literal colon hierarchical keys. BuildOwnedInstanceEnvironment retains inherited QBrainAi:Database:Sqlite:ConnectionString and the start check ignores it, alongside the owned double-underscore spelling. The .NET 10 environment provider normalizes both to the same key and overwrites by enumeration order. The contracts contain no colon-form rows. Classify as an implementer fix under FR-MCP-TESTRESOURCE-001 ac-4 and TR-MCP-NUKE-019 AC-6, not an operator decision. Reject treating two passing lab lanes as proof of all inherited-map inputs. No product execution or test run was used. Proposed remedy: normalize configuration-key aliases before ownership checks and add independent map-based contract and negative-control rows for both canonical/legacy spellings and both enumeration orders.' -WhatIf"
+
+Response line 359, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-log.ps1' -Category decision -Order 4 -Receipt 'isolation-key-decision' -Evidence 'tests/TestSupport.Shared/TemporaryInstanceChecks.cs' -Note 'Confirmed a material isolation gap by static source review: IsProductVariable recognizes double-underscore configuration prefixes but not literal colon hierarchical keys. BuildOwnedInstanceEnvironment retains inherited QBrainAi:Database:Sqlite:ConnectionString and the start check ignores it, alongside the owned double-underscore spelling. The .NET 10 environment provider normalizes both to the same key and overwrites by enumeration order. The contracts contain no colon-form rows. Classify as an implementer fix under FR-MCP-TESTRESOURCE-001 ac-4 and TR-MCP-NUKE-019 AC-6, not an operator decision. Reject treating two passing lab lanes as proof of all inherited-map inputs. No product execution or test run was used. Proposed remedy: normalize configuration-key aliases before ownership checks and add independent map-based contract and negative-control rows for both canonical/legacy spellings and both enumeration orders.'"
+
+Response line 363, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/hv/unitgreen-r12-prelaunch.projected-problems.md' -Start 30 -Count 6"
+
+Response line 364, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs' -Start 423 -Count 85; & './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/plans/2026-10-30-unit-suite-green-handoff.md' -Start 98 -Count 4"
+
+Response line 367, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'build/TestGroupExecution.cs','build/Build.TestGroups.cs' -Start 1 -Count 230"
+
+Response line 368, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.Support.Mcp/Services/RequirementStoredTimestamp.cs' -Start 1 -Count 130; & './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths 'src/QBrainAi.Repl.Core' -Pattern 'clientMethod|clientName' -Arguments @('-g','*Dispatcher*')"
+
+Response line 371, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/hv/unitgreen-r12-prelaunch.projected-problems.md' -Start 51 -Count 20"
+
+Response line 372, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.Client/SessionLogClient.cs' -Start 1 -Count 100; & './docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Files -Path src -Pattern 'RequirementStoredTimestamp.cs'"
+
+Response line 376, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-log.ps1'"
+
+Response line 378, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-log.ps1' -Category decision -Order 5 -Receipt 'scope-and-key-isolation' -Evidence 'docs/receipts/hv/hv-ug-r12-store-current-comparison.json' -WebUrl 'https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/Microsoft.Extensions.Configuration.EnvironmentVariables/src/EnvironmentVariablesConfigurationProvider.cs' -Note 'The latest four retained store records exactly match my live getters after excluding their disclosed read-time createdAt and updatedAt fields. The explicit operator decisions govern declared health-wait and recovery limits, so I will not reopen those settled choices as new findings. The newly confirmed colon-key environment isolation gap is distinct and remains an implementer edit under ac-4 and AC-6. Required profile reload completed: one profile file, 12 included Global memories, three Workspace memories, PROCESS-007 excluded.' -WhatIf"
+
+Response line 380, exit 1: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-log.ps1' -Category decision -Order 5 -Receipt 'scope-and-key-isolation' -Evidence 'docs/receipts/hv/hv-ug-r12-store-current-comparison.json' -WebUrl 'https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/Microsoft.Extensions.Configuration.EnvironmentVariables/src/EnvironmentVariablesConfigurationProvider.cs' -Note 'The latest four retained store records exactly match my live getters after excluding their disclosed read-time createdAt and updatedAt fields. The explicit operator decisions govern declared health-wait and recovery limits, so I will not reopen those settled choices as new findings. The newly confirmed colon-key environment isolation gap is distinct and remains an implementer edit under ac-4 and AC-6. Required profile reload completed: one profile file, 12 included Global memories, three Workspace memories, PROCESS-007 excluded.'"
+
+Response line 384, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-audit.ps1','./docs/receipts/hv/hv-ug-r12-source-scan.ps1'"
+
+Response line 386, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-source-scan.ps1' -WhatIf"
+
+Response line 388, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-source-scan.ps1'"
+
+Response line 391, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs' -Start 1 -Count 100; & './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/hv/unitgreen-r12-prelaunch.projected-problems.md' -Start 72 -Count 15"
+
+Response line 392, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Rows -Path 'docs/receipts/hv/hv-ug-r12-source-scan.json' -Pattern '\"unitMethod\":true.*(Environment\\.|OperatingSystem\\.|RuntimeInformation)' -Count 55"
+
+Response line 396, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths './docs/receipts/hv/hv-ug-r12-log.ps1'"
+
+Response line 398, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-log.ps1' -Category decision -Order 6 -Receipt 'scope-patch-retry' -Evidence 'docs/receipts/hv/hv-ug-r12-store-current-comparison.json' -Note 'Honor the settled operator exclusions and keep the colon-key isolation defect as an implementer finding under ac-4 and AC-6. The installed older REPL has no SessionLog.GetAsync, so the own-turn readback uses its supported QueryAsync before the additive PatchTurnAsync. This adapter limitation is an operational issue and does not affect product scores.' -WhatIf"
+
+Response line 402, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Pr -Start 1 -Count 25"
+
+Response line 403, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Rows -Path 'docs/receipts/hv/hv-ug-r12-source-scan.json' -Pattern '\"unitMethod\":true.*DateTime' -Count 40"
+
+Response line 404, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-log.ps1' -Category decision -Order 6 -Receipt 'scope-patch-retry' -Evidence 'docs/receipts/hv/hv-ug-r12-store-current-comparison.json' -Note 'Honor the settled operator exclusions and keep the colon-key isolation defect as an implementer finding under ac-4 and AC-6. The installed older REPL has no SessionLog.GetAsync, so the own-turn readback uses its supported QueryAsync before the additive PatchTurnAsync. This adapter limitation is an operational issue and does not affect product scores.'"
+
+Response line 407, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Pr -Start 26 -Count 70"
+
+Response line 408, exit 0: /usr/bin/pwsh -NoProfile -Command "& './docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Rows -Path 'docs/receipts/hv/hv-ug-r12-source-scan.json' -Pattern '\"unitMethod\":true.*DateTime' -Start 81 -Count 60"
+
+Response line 410, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths /home/sharpninja/.claude/skills/add-profile/SKILL.md'
+
+Response line 413, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths /home/sharpninja/.claude/profile/PROFILE-MERGED.md -Start 1 -Count 130'
+
+Response line 414, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Files -Path /home/sharpninja/.claude/profile -Pattern '\\.md"'$'"'"
+
+Response line 416, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths /home/sharpninja/.claude/profile/PROFILE-MERGED.md -Start 131 -Count 130'
+
+Response line 418, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths /home/sharpninja/.claude/profile/PROFILE-MERGED.md -Start 261 -Count 128'
+
+Response line 420, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-plugin.ps1 -Action Status -Receipt memory-reload4-status'
+
+Response line 422, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-plugin.ps1 -Action Memory -Scope Global -Receipt memory-reload4-global -Quiet'
+
+Response line 424, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-evidence.ps1 -Mode Memories -MemoryReceipts docs/receipts/hv/hv-ug-r12-memory-reload4-global.txt -MemoryScope Global'
+
+Response line 426, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-plugin.ps1 -Action Memory -Scope Workspace -Receipt memory-reload4-workspace -Quiet'
+
+Response line 428, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-evidence.ps1 -Mode Memories -MemoryReceipts docs/receipts/hv/hv-ug-r12-memory-reload4-workspace.txt -MemoryScope Workspace'
+
+Response line 430, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-evidence.ps1 -Mode Memories -MemoryReceipts docs/receipts/hv/hv-ug-r12-memory-reload4-workspace.txt -MemoryScope Workspace'
+
+Response line 435, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/unitgreen-r12-prelaunch.projected-problems.md -Start 71 -Count 1'
+
+Response line 436, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Pr -Start 96 -Count 85'
+
+Response line 437, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Files -Path tests -Pattern 'GraphRagServiceTests|WorkspaceHygieneG5OverlayTests'"
+
+Response line 441, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs -Start 185 -Count 100'
+
+Response line 442, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs -Start 170 -Count 90'
+
+Response line 443, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Pr -Start 181 -Count 90'
+
+Response line 447, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-deep-audit.ps1 -Start 1 -Count 220'
+
+Response line 448, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-source-scan.json -Pattern 'UtcNow|DateTime.Now|DateTimeOffset.Now' -Start 41 -Count 40"
+
+Response line 449, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-source-scan.json -Pattern 'UtcNow|DateTime.Now|DateTimeOffset.Now' -Start 141 -Count 40"
+
+Response line 454, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3-conditional-sweep.md'
+
+Response line 455, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-audit.ps1 -Start 1 -Count 175'
+
+Response line 456, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Files -Path docs/receipts/hv -Pattern 'hostile-validator-unitgreen.*json"'$|holistic-findings'"'"
+
+Response line 460, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/unitgreen-r12-prelaunch.holistic-findings-6.md'
+
+Response line 461, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-source-scan.json -Pattern '(?=.*\"unitMethod\":true)(?=.*(?:UtcNow|DateTime.Now|DateTimeOffset.Now))' -Start 41 -Count 40"
+
+Response line 462, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-source-scan.json -Pattern '(?=.*\"unitMethod\":true)(?=.*(?:UtcNow|DateTime.Now|DateTimeOffset.Now))' -Start 141 -Count 45"
+
+Response line 466, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/unitgreen-r12-trx-52e6d627/manifest.json -Start 1 -Count 125'
+
+Response line 467, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3c-mockgate-1.json'
+
+Response line 468, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs -Start 160 -Count 65'
+
+Response line 473, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths src -Pattern 'StaleOlderThanHours|staleCutoff|DateTimeOffset.UtcNow.AddHours'"
+
+Response line 474, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs -Start 1 -Count 80'
+
+Response line 475, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Cases -Pattern 'SessionLogTriageStoreTests.QueryAsync_TurnStatusInProgressAndStaleOlderThanHours'"
+
+Response line 476, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-source-scan.json -Pattern '(?=.*\"unitMethod\":true)(?=.*(?:UtcNow|DateTime.Now|DateTimeOffset.Now))' -Start 156 -Count 12"
+
+Response line 480, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths src/QBrainAi.Services/Services/SessionLogService.cs -Start 552 -Count 80'
+
+Response line 481, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3-timing-sweep.txt -Pattern 'SessionLogTriage|recorded|HANG-GUARD|FAKE-TIME'"
+
+Response line 482, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Records -Ids TR-MCP-USECASE-018'
+
+Response line 486, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-log.ps1'
+
+Response line 487, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths src/QBrainAi.Services -Pattern 'CleanupStale|stale.*cutoff|DateTime.UtcNow.AddHours|StaleTurnThresholdHours|session_stale_in_progress'"
+
+Response line 488, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Cases -Pattern 'GraphRagServiceTests.InitializeAsync_RemovesStale|WorkspaceHygieneG5OverlayTests.Rule_(InProgressTurn|StaleThresholdOverride)'"
+
+Response line 492, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths src/QBrainAi.Services/Services/WorkspaceValidationService.cs -Start 250 -Count 30'
+
+Response line 493, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths src -Pattern 'CleanupStale|LastWriteTimeUtc|_timeProvider.GetUtcNow' "
+
+Response line 494, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-deep-audit.ps1 -Mode TextLint -Paths docs/plans/2026-10-19-unit-suite-green.md -Receipt format-lint -WhatIf'
+
+Response line 498, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs -Pattern 'CreateService|TimeProvider|_time'"
+
+Response line 499, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths src/QBrainAi.GraphRag/Services/GraphRagService.cs -Start 960 -Count 55'
+
+Response line 500, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-deep-audit.ps1 -Mode TextLint -Paths docs/plans/2026-10-19-unit-suite-green.md -Receipt format-lint'
+
+Response line 502, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-log.ps1 -Category decision -Order 7 -Receipt clock-age-finding -Evidence tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs -Note 'Confirmed R12-F2: four unit cases still classify recorded timestamps against the real clock. SessionLogTriageStoreTests lines 173-197 seeds recent/stale times from UtcNow while SessionLogService lines 569-607 reads UtcNow again; the recent exclusion changes after elapsed time or a clock change. GraphRagServiceTests lines 198-202 similarly compares the file stamp through GraphRagService line 994; WorkspaceHygieneG5OverlayTests lines 226-253 calls TimeProvider.System at 409. Both supplied unit TRX contain all four. TR-MCP-USECASE-018 AC-006 explicitly requires scripted inputs and immunity to a system-clock change for recorded-time checks. This is an implementer fix under the existing criterion, not an operator scope choice. Rejected treating the green runs or a large clock margin as proof of clock independence. Propose deterministic age-boundary contracts and production binding with a scripted clock; no tests were run.' -WhatIf"
+
+Response line 504, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-log.ps1 -Category decision -Order 7 -Receipt clock-age-finding -Evidence tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs -Note 'Confirmed R12-F2: four unit cases still classify recorded timestamps against the real clock. SessionLogTriageStoreTests lines 173-197 seeds recent/stale times from UtcNow while SessionLogService lines 569-607 reads UtcNow again; the recent exclusion changes after elapsed time or a clock change. GraphRagServiceTests lines 198-202 similarly compares the file stamp through GraphRagService line 994; WorkspaceHygieneG5OverlayTests lines 226-253 calls TimeProvider.System at 409. Both supplied unit TRX contain all four. TR-MCP-USECASE-018 AC-006 explicitly requires scripted inputs and immunity to a system-clock change for recorded-time checks. This is an implementer fix under the existing criterion, not an operator scope choice. Rejected treating the green runs or a large clock margin as proof of clock independence. Propose deterministic age-boundary contracts and production binding with a scripted clock; no tests were run.'"
+
+Response line 509, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-receipt-audit.ps1'
+
+Response line 511, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-receipt-audit.ps1 -Mode Receipts -WhatIf'
+
+Response line 514, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/unitgreen-r12-prelaunch.holistic-findings-2.md -Start 1 -Count 110'
+
+Response line 515, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/unitgreen-r12-prelaunch.holistic-findings.md -Start 1 -Count 110'
+
+Response line 518, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/unitgreen-r12-prelaunch.holistic-findings-2.md -Start 111 -Count 50'
+
+Response line 519, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/unitgreen-r12-prelaunch.holistic-findings-3.md -Start 1 -Count 110'
+
+Response line 523, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-receipt-audit.ps1'
+
+Response line 527, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-receipt-audit.ps1 -Mode Receipts -WhatIf'
+
+Response line 528, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/unitgreen-r12-prelaunch.holistic-findings-3.md -Start 111 -Count 70'
+
+Response line 529, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/unitgreen-r12-prelaunch.holistic-findings-4.md -Start 1 -Count 120'
+
+Response line 532, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/unitgreen-r12-prelaunch.holistic-findings-4.md -Start 121 -Count 35'
+
+Response line 533, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/unitgreen-r12-prelaunch.holistic-findings-5.md -Start 1 -Count 125'
+
+Response line 537, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Json -Path docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-de-1.json -Keys trx'
+
+Response line 538, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-operator-decisions.json -Pattern '2026-11-0[345]' -Start 1 -Count 16"
+
+Response line 539, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-receipt-audit.ps1 -Mode Receipts'
+
+Response line 542, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Json -Path docs/receipts/hv/hostile-validator-unitgreen-r8b-20261028T222504.json -Keys closure'
+
+Response line 546, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-audit.ps1'
+
+Response line 548, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-receipt-audit.ps1'
+
+Response line 552, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-operator-decisions.json -RecordKind answer -Pattern '2026-11-0[345]' -Start 3 -Count 8"
+
+Response line 553, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-Receipts-audit.json -Pattern '\"name\":\"ug-r12z3c-mockgate-1\"' -Start 1 -Count 1"
+
+Response line 554, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-receipt-audit.ps1 -Mode Receipts -WhatIf'
+
+Response line 556, exit 1: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Git -Arguments diff,--stat,9b099716...3fe29d1fd8ffc4ba993782ab810bf9d16f4f42e6,--,src,build'
+
+Response line 558, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-inspect.ps1 -Start 1 -Count 130'
+
+Response line 562, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-inspect.ps1'
+
+Response line 566, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Git -ArgumentText 'diff|--stat|9b099716...3fe29d1fd8ffc4ba993782ab810bf9d16f4f42e6|--|src|build'"
+
+Response line 567, exit 0: /usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Records -Ids IMPL-UNITGREEN-001'
+
+Response line 568, exit 0: /usr/bin/pwsh -NoProfile -Command "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-operator-decisions.json -Pattern '(?=.*\"kind\":\"answer\")(?=.*2026-11-0[345])' -Start 3 -Count 8"
+
+Response line 570, exit 0: /usr/bin/pwsh -NoProfile -Command 'Get-Content -Raw /home/sharpninja/.claude/skills/add-profile/SKILL.md'
+
+Response line 572, exit 0: /usr/bin/pwsh -NoProfile -Command "Get-ChildItem /home/sharpninja/.claude/profile -File -Filter *.md | Where-Object Name -NotLike '*SKILL*' | Select-Object Name,Length; Get-Content /home/sharpninja/.claude/profile/PROFILE-MERGED.md -TotalCount 130"
+
+Response line 574, exit 0: /usr/bin/pwsh -NoProfile -Command 'Get-Content /home/sharpninja/.claude/profile/PROFILE-MERGED.md | Select-Object -Skip 130 -First 130'
+
+Response line 576, exit 0: /usr/bin/pwsh -NoProfile -Command 'Get-Content /home/sharpninja/.claude/profile/PROFILE-MERGED.md | Select-Object -Skip 260'
+
+Response line 578, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-plugin.ps1 -Action Memory -Scope Global -Receipt memory-reload5-global -Quiet'
+
+Response line 580, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths /home/sharpninja/.claude/profile/PROFILE-MERGED.md -Start 230 -Count 105'
+
+Response line 582, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-plugin.ps1 -Action Memory -Scope Workspace -Receipt memory-reload5-workspace -Quiet'
+
+Response line 584, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-evidence.ps1 -Mode Memories -MemoryReceipts ./docs/receipts/hv/hv-ug-r12-memory-reload5-global.txt -MemoryScope Global'
+
+Response line 586, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-evidence.ps1 -Mode Memories -MemoryReceipts ./docs/receipts/hv/hv-ug-r12-memory-reload5-workspace.txt -MemoryScope Workspace'
+
+Response line 588, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-evidence.ps1 -Mode Memories -MemoryReceipts ./docs/receipts/hv/hv-ug-r12-memory-reload5-workspace.txt -MemoryScope Workspace'
+
+Response line 593, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-audit.ps1 -Count 165'
+
+Response line 594, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-receipt-audit.ps1 -Mode Comparisons -WhatIf'
+
+Response line 595, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-receipt-audit.ps1 -Mode Receipts'
+
+Response line 599, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-audit.ps1'
+
+Response line 602, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-receipt-audit.ps1 -Start 1 -Count 240'
+
+Response line 603, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Records -Ids IMPL-UNITGREEN-001 -Start 14 -Count 17'
+
+Response line 607, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-receipt-audit.ps1'
+
+Response line 609, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-receipt-audit.ps1 -Mode Manifest -WhatIf'
+
+Response line 611, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-receipt-audit.ps1 -Mode Comparisons -WhatIf'
+
+Response line 613, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-receipt-audit.ps1 -Mode Manifest'
+
+Response line 615, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Git -ArgumentText 'diff|--name-only|9b099716...3fe29d1f|--|src|build'"
+
+Response line 617, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3c-final-win-unit-1.result.txt -Count 200'
+
+Response line 621, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3c-final-win-lane-1.result.txt -Count 145'
+
+Response line 622, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Git -ArgumentText 'diff|9b099716...3fe29d1f|--|build/Build.TestDependencies.cs|build/IntegrationLaneClassFilter.cs|build/IntegrationLaneExecution.cs|build/IntegrationLaneFilter.cs|build/IntegrationLaneProjects.cs|build/InteractiveSessionPrecondition.cs'"
+
+Response line 623, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-receipt-audit.ps1 -Mode Comparisons'
+
+Response line 628, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths build/Build.TestDependencies.cs -Start 230 -Count 75'
+
+Response line 629, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Git -ArgumentText 'diff|9b099716...3fe29d1f|--|src/QBrainAi.Services/Services/DirectoryTreeWalker.cs|src/QBrainAi.Services/Services/DirectoryListingEntry.cs|src/QBrainAi.Services/Services/AgentPluginVersionSources.cs'"
+
+Response line 630, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Records -Ids TR-MCP-NUKE-020,TR-MCP-QUALITY-001 -Start 1 -Count 2'
+
+Response line 633, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Git -ArgumentText 'diff|9b099716...3fe29d1f|--|src/QBrainAi.Services/Services/MarkerFileService.cs|src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs|src/QBrainAi.Services/Services/DesktopProcessSpawner.cs|src/QBrainAi.Client/WorkspaceIdentityPath.cs'"
+
+Response line 634, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Records -Ids FR-MCP-PATHNORM-001,TR-MCP-PATHNORM-001,TEST-MCP-PATHNORM-001 -Count 1'
+
+Response line 637, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Git -ArgumentText 'diff|9b099716...3fe29d1f|--|src/QBrainAi.Repl.Host/IMarkerFileSystem.cs|src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs|src/QBrainAi.Repl.Host/PhysicalMarkerFileSystem.cs|src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj|src/QBrainAi.Repl.Core/ReplCommandTimeout.cs|src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs|src/QBrainAi.Repl.Core/AgentStdioProtocol.cs'"
+
+Response line 638, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3c-final-win-buildtests-1.result.txt,docs/receipts/unit-suite-green-20261019/ug-r12z3c-final-linux-traceability-1.meta.json,docs/receipts/unit-suite-green-20261019/ug-r12z3c-final-linux-traceability-1.out.txt,docs/receipts/unit-suite-green-20261019/ug-r12z3c-final-linux-nu190x.txt,docs/receipts/unit-suite-green-20261019/ug-r12z3c-final-win-unit-1.nu190x.txt -Count 180'
+
+Response line 641, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Git -ArgumentText 'diff|9b099716...3fe29d1f|--|src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs|src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs|src/QBrainAi.Client/Models/RequirementsModels.cs|src/QBrainAi.Repl.Core/RequirementsWorkflow.cs|src/QBrainAi.Repl.Core/RequirementTimestampText.cs|src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs'"
+
+Response line 642, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Records -Ids FR-MCP-040,FR-MCP-047,TR-MCP-REPL-001,TR-MCP-REPL-008,FR-MCP-REPL-007,FR-MCP-REPL-008 -Count 1'
+
+Response line 644, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths docs/plans/2026-10-19-unit-suite-green.md -Pattern 'D-B|AC-001|post-AGREE|set satisfied'"
+
+Response line 646, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Git -ArgumentText 'diff|9b099716...3fe29d1f|--|src/QBrainAi.GraphRag/Services/GraphRagService.cs|src/QBrainAi.Services/Services/MemoryService.cs|src/QBrainAi.Services/Services/SessionLogService.cs|src/QBrainAi.Services/Services/GitHubCliService.cs|src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs'"
+
+Response line 651, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs -Start 349 -Count 50'
+
+Response line 652, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Git -ArgumentText 'diff|9b099716...3fe29d1f|--|src/QBrainAi.Services/Services/GitHubCliService.cs|src/QBrainAi.Services/Services/MemoryService.cs|src/QBrainAi.Services/Services/SessionLogService.cs'"
+
+Response line 653, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/plans/2026-10-19-unit-suite-green.md -Start 1494 -Count 17'
+
+Response line 654, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths src/QBrainAi.Repl.Host/IMarkerFileSystem.cs -Start 25 -Count 20'
+
+Response line 656, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-Comparisons-audit.json -Start 1 -Count 54'
+
+Response line 658, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths tests,build,Directory.Packages.props -Pattern 'NuGetAudit|NU190[1-4]|Microsoft.CodeAnalysis.*Version=|NoWarn.*NU190|RestoreIgnoreFailedSources'"
+
+Response line 662, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths tests/Build.Tests/ServiceUnitPropertiesContractTests.cs,tests/Build.Tests/ServiceStartupHealthContractTests.cs -Count 250'
+
+Response line 663, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-deep-audit.ps1 -Start 1 -Count 150'
+
+Response line 664, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Json -Path docs/receipts/unit-suite-green-20261019/ug-r12z3c-mockgate-1.json -Keys name,head,command,startedLocal,endedLocal,sourceHashes,note,retrospective'
+
+Response line 667, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/ug-r11-criteria-u-readback-1.json -Count 45'
+
+Response line 669, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/unitgreen-r12-trx-52e6d627/manifest.json -Start 1 -Count 85'
+
+Response line 671, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Files -Paths tests -Pattern '*ContractTests.cs'"
+
+Response line 674, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Records -Ids FR-MCP-MEMORY-001,FR-MCP-MEMORY-002,TR-MCP-MEMORY-002,TEST-MCP-MEMORY-002,TEST-HANDOFF-004,TEST-HANDOFF-005,TEST-HANDOFF-006,TEST-HANDOFF-007,TEST-MCP-TRIAGE-003,TEST-MCP-TRIAGE-005,TR-MCP-FED-PATH-001,FR-MCP-FED-PATH-001,TR-MCP-NUKE-018 -Keys description -Count 1'
+
+Response line 675, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Records -Ids FR-MCP-018,FR-MCP-SESSIONLOGCTX-001,TR-MCP-WS-005,TR-MCP-SESSIONLOG-006,FR-MCP-QBOPENAI-001,TEST-MCP-QBOPENAI-001,TEST-MCP-QBOLLAMA-001,TEST-MCP-TRANSCRIPT-008 -Count 1'
+
+Response line 679, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths build/LinuxProviderTestProvisioner.cs -Start 1 -Count 230'
+
+Response line 680, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths build/ProvisioningDownload.cs,build/OllamaDetachedLaunch.cs,build/QuadBrainOllamaModel.cs -Count 240'
+
+Response line 681, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Records -Ids IMPL-SCANNERALIAS-001,IMPL-TXNINTEGRATION-001,PLAN-AZURERETIRE-001,PLAN-LINKVALIDATOR-001,BUG-TRIAGE-139 -Keys description -Start 1 -Count 7'
+
+Response line 685, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-chronology.ps1'
+
+Response line 690, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-chronology.ps1 -Mode Projects -WhatIf'
+
+Response line 691, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-chronology.ps1 -Mode Meta -WhatIf'
+
+Response line 692, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-chronology.ps1 -Mode Pins -WhatIf'
+
+Response line 693, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-chronology.ps1 -Mode Criteria -WhatIf'
+
+Response line 695, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths '/home/sharpninja/.claude/skills/add-profile/SKILL.md','/home/sharpninja/.claude/profile/PROFILE-MERGED.md'"
+
+Response line 699, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 99 -Count 192"
+
+Response line 700, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-evidence.ps1 -Mode InventorySummary'
+
+Response line 701, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-plugin.ps1 -Action Memory -Scope Global -Receipt hv-ug-r12-memory-reload6-global.txt -Quiet'
+
+Response line 705, exit 1: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-evidence.ps1 -Mode Memories -Path docs/receipts/hv/hv-ug-r12-memory-reload6-global.txt'
+
+Response line 706, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-bootstrap.ps1 -Count 100'
+
+Response line 707, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-plugin.ps1 -Action Memory -Scope Workspace -Receipt hv-ug-r12-memory-reload6-workspace.txt -Quiet'
+
+Response line 709, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-evidence.ps1 -Count 75'
+
+Response line 711, exit 1: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-evidence.ps1 -Mode Memories -MemoryReceipts docs/receipts/hv/hv-ug-r12-memory-reload6-global.txt,docs/receipts/hv/hv-ug-r12-memory-reload6-workspace.txt'
+
+Response line 713, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-plugin.ps1 -Count 140'
+
+Response line 715, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-evidence.ps1 -Mode Memories -MemoryReceipts docs/receipts/hv/hv-ug-r12-hv-ug-r12-memory-reload6-global.txt.txt,docs/receipts/hv/hv-ug-r12-hv-ug-r12-memory-reload6-workspace.txt.txt'
+
+Response line 719, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths docs/plans/2026-10-19-unit-suite-green.md -Pattern 'mockgate-g|binding-g|mockgate-r|binding-r|mockgate-2|binding-3'"
+
+Response line 720, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-chronology.ps1'
+
+Response line 724, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-chronology.ps1'
+
+Response line 729, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-chronology.ps1 -Mode Meta -WhatIf'
+
+Response line 730, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-chronology.ps1 -Mode Projects -WhatIf'
+
+Response line 731, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-chronology.ps1 -Mode Pins -WhatIf'
+
+Response line 732, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-chronology.ps1 -Mode Criteria -WhatIf'
+
+Response line 734, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-chronology.ps1 -Mode Pins'
+
+Response line 736, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-chronology.ps1 -Mode Criteria'
+
+Response line 738, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-chronology.ps1 -Mode Projects'
+
+Response line 740, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-chronology.ps1 -Mode Meta'
+
+Response line 742, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3-criteria-readback-1.json -Pattern 'SERVICEUPDATE|repeated-properties|startup-health|records|record|readUtc'"
+
+Response line 746, exit 1: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths docs/plans/2026-10-19-unit-suite-green.md,docs/receipts/hv/20261105T004043-unitgreen-r12.selfreview.md,docs/receipts/hv/unitgreen-r12-prelaunch.projected-problems.md,docs/receipts/hv/hv-ug-r12-pr.json -Pattern 'first receipt|before.*write|after.*write|SERVICEUPDATE-001'"
+
+Response line 747, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3-criteria-readback-1.json -Start 60 -Count 55'
+
+Response line 748, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-source-scan.json -UnitOnly -Pattern 'Environment\\.|OperatingSystem|RuntimeInformation' -Count 100"
+
+Response line 752, exit 1: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths docs/plans/2026-10-19-unit-suite-green.md -Pattern 'first receipt that holds|no readback before|first saved|No before-readback'"
+
+Response line 753, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths build/LinuxProviderTestProvisioner.cs -Start 230 -Count 100'
+
+Response line 754, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs,build/Build.UpdateService.cs'
+
+Response line 758, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3-timing-sweep.txt'
+
+Response line 759, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/plans/2026-10-19-unit-suite-green.md -Start 1940 -Count 66'
+
+Response line 760, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-log.ps1,docs/receipts/hv/hv-ug-r12-audit.ps1 -Count 60'
+
+Response line 765, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3-timing-sweep.txt -Start 84 -Count 70'
+
+Response line 766, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/plans/2026-10-19-unit-suite-green.md -Start 1900 -Count 30'
+
+Response line 767, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3-timing-sweep.txt -Start 24 -Count 60'
+
+Response line 769, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/plans/2026-10-19-unit-suite-green.md -Start 1910 -Count 10'
+
+Response line 773, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths src/QBrainAi.Support.Mcp/Program.cs -Start 85 -Count 60'
+
+Response line 774, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths src -Pattern 'AddEnvironmentVariables|class ProductConfiguration|class ProductEnvironment'"
+
+Response line 775, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths tests/TestSupport.Shared/TemporaryInstanceChecks.cs -Start 140 -Count 108'
+
+Response line 779, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths src/QBrainAi.Support.Mcp -Pattern 'ProjectCanonicalSectionOverLegacy|GetRequestedInstanceName'"
+
+Response line 780, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths tests/TestSupport.Shared/ScratchQBrainAi.cs -Start 215 -Count 78'
+
+Response line 781, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Files -Path tests -Pattern 'CliTempVariables|Junction|DirectoryTree|PluginVersion|Marker.*Contract|TimeoutCall|Reachability|NativePath'"
+
+Response line 785, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3-timing-sweep.txt -Start 154 -Count 33'
+
+Response line 786, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths src -Pattern 'class McpDatabaseConfigurationResolver|class McpInstanceResolver'"
+
+Response line 787, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs,tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs,tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs'
+
+Response line 789, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-log.ps1 -Order 8 -Category decision -Receipt record-chain -Evidence docs/receipts/hv/hv-ug-r12-chronology-Criteria.json -Note 'R12-F3, implementer edit: the brief and projected problems item 89 say ug-r12z3-store-readback-2.json is the first retained receipt containing TR-MCP-SERVICEUPDATE-001. The committed ug-r12z3-criteria-readback-1.json already contains that record at lines 65-112, with all five older criteria and repeated-properties, readUtc 2026-11-04T21:30:16.9458765Z, before startup-health-wait. The claim is false. Plan 27.28 line 1913 also says only-that-criterion-changed for both writes rests on their transcript readbacks; the retained before/after receipts independently establish the health-wait-only delta. Correct the first-receipt statement and the per-write evidence chain across the brief, projected problems and plan. No new product AC or test is required for this evidence-record correction. The receipt chronology audit separately confirms all sixteen later mock-to-binding pairs are ordered and the claimed contract pins are unchanged where required; the slice R contract file gained the declared real bindings. No build or test was run.' -WhatIf"
+
+Response line 791, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-log.ps1 -Order 8 -Category decision -Receipt record-chain -Evidence docs/receipts/hv/hv-ug-r12-chronology-Criteria.json -Note 'R12-F3, implementer edit: the brief and projected problems item 89 say ug-r12z3-store-readback-2.json is the first retained receipt containing TR-MCP-SERVICEUPDATE-001. The committed ug-r12z3-criteria-readback-1.json already contains that record at lines 65-112, with all five older criteria and repeated-properties, readUtc 2026-11-04T21:30:16.9458765Z, before startup-health-wait. The claim is false. Plan 27.28 line 1913 also says only-that-criterion-changed for both writes rests on their transcript readbacks; the retained before/after receipts independently establish the health-wait-only delta. Correct the first-receipt statement and the per-write evidence chain across the brief, projected problems and plan. No new product AC or test is required for this evidence-record correction. The receipt chronology audit separately confirms all sixteen later mock-to-binding pairs are ordered and the claimed contract pins are unchanged where required; the slice R contract file gained the declared real bindings. No build or test was run.'"
+
+Response line 795, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs -Count 160'
+
+Response line 796, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs -Start 80 -Count 65'
+
+Response line 797, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Search -Paths tests -Pattern 'CliTempVariables.Run|WindowsJunction.Create|cmd.exe.*mklink|mklink /J'"
+
+Response line 801, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/ug-r12z3c-secret-scan.txt,docs/receipts/unit-suite-green-20261019/ug-r12z3c-secret-scan-flagged-paths.txt'
+
+Response line 802, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/unit-suite-green-20261019/traceability-reconcile-20261102T111536.json -Count 90'
+
+Response line 803, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Records -Ids FR-MCP-079,TEST-MCP-USECASE-019,TEST-MCP-USECASE-020 -Keys description,notes'
+
+Response line 807, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs -Start 160 -Count 190'
+
+Response line 808, exit 1: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-store.ps1 -Read -Ids FR-MCP-074,TR-MCP-CI-001,FR-MCP-PLUGINCORE-002,TR-MCP-PLUGINCORE-002,TEST-MCP-PLUGINCORE-002,FR-MCP-USECASE-018,TR-MCP-USECASE-020,TEST-MCP-USECASE-021,FR-TIMER-001,TR-TIMER-LIFECYCLE-001,TEST-TIMER-001,TEST-MCP-SERVICEUPDATE-001'
+
+Response line 810, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-store.ps1 -Count 100'
+
+Response line 813, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Test-TreeSecrets.ps1'
+
+Response line 815, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1'
+
+Response line 817, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths docs/receipts/hv/hv-ug-r12-inspect.ps1 -Start 1 -Count 110'
+
+Response line 818, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-store.ps1 -Ids FR-MCP-074,TR-MCP-CI-001,FR-MCP-PLUGINCORE-002,TR-MCP-PLUGINCORE-002,TEST-MCP-PLUGINCORE-002,FR-MCP-USECASE-018,TR-MCP-USECASE-020,TEST-MCP-USECASE-021,FR-TIMER-001,TR-TIMER-LIFECYCLE-001,TEST-TIMER-001,TEST-MCP-SERVICEUPDATE-001'
+
+Response line 821, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Read -Paths tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs -Count 130'
+
+Response line 822, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-operator-decisions.json -RecordKind answer -Count 10'
+
+Response line 826, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-final-checks.ps1'
+
+Response line 831, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Protocol -WhatIf'
+
+Response line 832, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Reconciliation -WhatIf'
+
+Response line 833, exit 0: /usr/bin/pwsh -NoProfile -Command "& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Effective -Ids 'NONE'"
+
+Response line 834, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Secrets -WhatIf'
+
+Response line 838, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-final-checks.ps1'
+
+Response line 842, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-final-checks.ps1'
+
+Response line 846, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Decisions -Start 1 -Count 15'
+
+Response line 847, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Reconciliation -WhatIf'
+
+Response line 848, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Secrets -WhatIf'
+
+Response line 850, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Decisions -Start 16 -Count 15'
+
+Response line 854, exit 1: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-final-checks.ps1'
+
+Response line 856, exit 1: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Decisions -Start 31 -Count 15'
+
+Response line 860, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-final-checks.ps1'
+
+Response line 863, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Decisions -Start 31 -Count 15'
+
+Response line 864, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Secrets -WhatIf'
+
+Response line 866, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Decisions -Start 46 -Count 9'
+
+Response line 870, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-inspect.ps1 -Kind Analyze -Paths docs/receipts/hv/hv-ug-r12-final-checks.ps1'
+
+Response line 874, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-audit.ps1 -Mode Rows -Path docs/receipts/hv/hv-ug-r12-operator-decisions.json -RecordKind answer -Start 5 -Count 1'
+
+Response line 875, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Reconciliation'
+
+Response line 876, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Secrets -WhatIf'
+
+Response line 878, exit 0: /usr/bin/pwsh -NoProfile -Command '& ./docs/receipts/hv/hv-ug-r12-final-checks.ps1 -Mode Protocol'
+
+Response line 880, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.claude/skills/add-profile/SKILL.md','/home/sharpninja/.claude/profile/PROFILE-MERGED.md'"
+
+Response line 882, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 67 -Count 124"
+
+Response line 884, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 191 -Count 115"
+
+Response line 886, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Memory -Scope Global -Receipt memory-reload7-global -Quiet"
+
+Response line 888, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-plugin.ps1' -Action Memory -Scope Workspace -Receipt memory-reload7-workspace -Quiet"
+
+Response line 890, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-evidence.ps1' -Mode Memories -MemoryReceipts 'docs/receipts/hv/hv-ug-r12-memory-reload7-global.txt','docs/receipts/hv/hv-ug-r12-memory-reload7-workspace.txt'"
+
+Response line 895, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/unit-suite-green-20261019/ug-r12z3c-final-win-lane-1.start.txt'"
+
+Response line 896, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-final-checks.ps1' -Mode Decisions -Start 55 -Count 9"
+
+Response line 897, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-final-checks.ps1' -Mode Secrets"
+
+Response line 900, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/hv/hv-ug-r12-audit.ps1','docs/receipts/hv/hv-ug-r12-final-checks.ps1' -Start 1 -Count 110"
+
+Response line 901, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/unit-suite-green-20261019/ug-r12z3-configured-durations.txt' -Start 1 -Count 85"
+
+Response line 903, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/unit-suite-green-20261019/ug-r12z3-configured-durations.txt' -Start 86 -Count 86"
+
+Response line 905, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-deep-audit.ps1' -Mode EarlierVerdicts -WhatIf"
+
+Response line 907, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/unit-suite-green-20261019/ug-r12z3-configured-durations.txt' -Start 172 -Count 85"
+
+Response line 909, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths 'docs/receipts/hv/hv-ug-r12-deep-audit.ps1' -Pattern 'EarlierVerdicts|closure|Paths|param'; & 'docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Files -Path 'docs/receipts/hv' -Pattern '"'^hostile-validator-unitgreen-r8b.*json$|hv-ug-r12-.*earlier'"'"
+
+Response line 914, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Git -ArgumentText 'log|--format=%h %aI %s|3da2db93..3fe29d1f|--|tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs'"
+
+Response line 915, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-deep-audit.ps1' -Mode EarlierVerdicts -Paths 'docs/receipts/hv/hostile-validator-unitgreen-r8b-20261028T222504.json' -Receipt hv-ug-r12-closure-history.json -WhatIf"
+
+Response line 916, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Files -Path tests -Pattern 'AgentPluginVersionSourcesTests|MarkerIsolationContractTests|OpenAi.*Contract|Marker.*Binding|PathNorm|CliTemp'; & 'docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Files -Path build -Pattern 'OllamaInstallLayout'"
+
+Response line 920, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs' -Start 20 -Count 19; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs' -Start 109 -Count 51"
+
+Response line 921, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs' -Start 131 -Count 120; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'build/OllamaInstallLayout.cs','build/OllamaInstallLayoutContracts.cs'"
+
+Response line 922, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Json -Path 'docs/receipts/hv/hostile-validator-unitgreen-r8b-20261028T222504.json' -Keys 'Closure'"
+
+Response line 926, exit 1: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths 'docs/receipts/hv/hv-ug-r12-commands.jsonl' -Pattern 'MarkerIsolationBinding|WorkspacePathNormalizer|Takeover|SqlServerTestConnection|OutputFolderBinding' "
+
+Response line 927, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths 'tests' -Pattern 'FR-MCP-QBOPENAI-001.*ac-[567]|class.*Arbiter|class.*RoundBudget' "
+
+Response line 928, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Rows -Path 'docs/receipts/hv/hv-ug-r12-operator-decisions.json' -RecordKind answer -Pattern '53680|53691|54252|55555|65641|65789' -Count 12"
+
+Response line 931, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs' -Start 950 -Count 160"
+
+Response line 932, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs','tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs','tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationBindingTests.cs'"
+
+Response line 935, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs' -Start 1110 -Count 278"
+
+Response line 936, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/hv/hv-ug-r12-identity.json','docs/receipts/hv/hv-ug-r12-log.ps1'; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths 'docs/receipts/hv/unitgreen-r12-prelaunch.projected-problems.md','docs/plans/2026-10-19-unit-suite-green.md' -Pattern 'first receipt|first readback|only that criterion changed|readback-2|readback before'"
+
+Response line 941, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Proof; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Git -ArgumentText 'diff|--name-only|HEAD'; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Git -ArgumentText 'rev-parse|HEAD'"
+
+Response line 942, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/unit-suite-green-20261019/ug-r12z3-criteria-readback-1.json' -Start 65 -Count 49; & 'docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Files -Path 'docs/receipts/hv' -Pattern '"'^hv-ug-r12-.*(proof|trx-summary|case|surface|receipt)'"'"
+
+Response line 943, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Records -Ids 'TR-MCP-USECASE-018','TR-MCP-NUKE-019','FR-MCP-TESTRESOURCE-001'"
+
+Response line 945, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs' -Start 165 -Count 43; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs' -Start 170 -Count 42; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs' -Start 209 -Count 49; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/hv/hv-ug-r12-plugin.ps1' -Start 1 -Count 125"
+
+Response line 947, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Files -Path 'docs/receipts/hv' -Pattern '"'^hv-ug-r12-(pr|github|timeline|identity|.*trx.*summary|chronology).*'"'; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/hv/hv-ug-r12-evidence.ps1' -Start 150 -Count 95; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0' -Pattern 'completeTurn.*response|completeTurn|dialogItems' "
+
+Response line 949, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/hv/hv-ug-r12-evidence.ps1' -Start 70 -Count 37; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/session/SKILL.md' -Start 210 -Count 60; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1' -Start 2718 -Count 62"
+
+Response line 953, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths 'docs/receipts/hv/hv-ug-r12-final-inspection.ps1'"
+
+Response line 955, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-final-inspection.ps1' -Mode PushHistory -WhatIf; & 'docs/receipts/hv/hv-ug-r12-final-inspection.ps1' -Mode Stream -WhatIf"
+
+Response line 957, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-final-inspection.ps1' -Mode PushHistory; & 'docs/receipts/hv/hv-ug-r12-final-inspection.ps1' -Mode Stream"
+
+Response line 960, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-log.ps1' -Category decision -Order 9 -Receipt verdict-decision -Note 'Substantive review decision: DISAGREE, accuracy 96, completeness 95, confidence 99. Three implementer findings: R12-F1 normalized environment aliases escape owned-instance isolation; R12-F2 four stale-age unit cases retain live-clock dependence; R12-F3 the first TR-MCP-SERVICEUPDATE-001 readback is misidentified. Claims UG3, UG4, UG8, UG11, UG12, UG13, UG17, UG28, UG30 and UG45 fail; 34 pass; zero unknown; UG18 overridden and UG20 out of scope. Actual gate results and supplied hashes pass. Operator-approved startup-health and recovery limitations remain accepted as scoped. No infrastructure failure lowers a score. The complete claim and closure text is being assembled for the mandatory final receipts and complete own-turn persistence.' -Evidence 'docs/receipts/hv/hv-ug-r12-chronology-Criteria.json' -WhatIf"
+
+Response line 962, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-log.ps1' -Category decision -Order 9 -Receipt verdict-decision -Note 'Substantive review decision: DISAGREE, accuracy 96, completeness 95, confidence 99. Three implementer findings: R12-F1 normalized environment aliases escape owned-instance isolation; R12-F2 four stale-age unit cases retain live-clock dependence; R12-F3 the first TR-MCP-SERVICEUPDATE-001 readback is misidentified. Claims UG3, UG4, UG8, UG11, UG12, UG13, UG17, UG28, UG30 and UG45 fail; 34 pass; zero unknown; UG18 overridden and UG20 out of scope. Actual gate results and supplied hashes pass. Operator-approved startup-health and recovery limitations remain accepted as scoped. No infrastructure failure lowers a score. The complete claim and closure text is being assembled for the mandatory final receipts and complete own-turn persistence.' -Evidence 'docs/receipts/hv/hv-ug-r12-chronology-Criteria.json'"
+
+Response line 967, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Files -Path src -Pattern 'McpDatabaseConfigurationResolver.cs|WorkspaceValidationService.cs|RequirementStoredTimestamp.cs'; & 'docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Files -Path tests -Pattern 'OwnedEnvironment|OwnedInstanceIsolation|TestOutputFolderBinding' ; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'docs/receipts/hv/hv-ug-r12-trx-audit.json' -Start 1 -Count 12"
+
+Response line 969, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Files -Path src -Pattern '/(SessionLogService|GraphRagService).cs"'$'"'; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths tests -Pattern 'class OwnedEnvironment|class.*Owned.*Contract|class.*Environment.*Contract'; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs' -Start 90 -Count 45"
+
+Response line 971, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-audit.ps1' -Mode Files -Path src -Pattern '"'^(SessionLogService|GraphRagService).cs$'"'; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths tests -Pattern 'BuildOwnedEnvironment|class TemporaryInstanceChecksTests'; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.Services/Services/WorkspaceValidationService.cs' -Start 260 -Count 15"
+
+Response line 973, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'tests/TestSupport.Shared/TemporaryInstanceChecks.cs' -Start 136 -Count 100; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Search -Paths 'tests/QBrainAi.Repl.Core.Tests/TestSupport' -Pattern 'class.*Environment|BuildEnvironment|BuildChild|Build.*Environment'"
+
+Response line 975, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.Services/Services/SessionLogService.cs' -Start 569 -Count 40; & 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Read -Paths 'src/QBrainAi.GraphRag/Services/GraphRagService.cs' -Start 967 -Count 37"
+
+Response line 981, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-inspect.ps1' -Kind Analyze -Paths 'docs/receipts/hv/hv-ug-r12-verdict.ps1'"
+
+Response line 983, exit 0: /usr/bin/pwsh -NoProfile -Command "& 'docs/receipts/hv/hv-ug-r12-verdict.ps1' -WhatIf"
+
+=== VERDICT JSON ===
+
+{
+  "overallVerdict": "DISAGREE",
+  "accuracy": 96,
+  "completeness": 95,
+  "confidence": 99,
+  "passCount": 34,
+  "failCount": 10,
+  "unknownCount": 0,
+  "failList": [
+    {
+      "id": "R12-F1",
+      "classification": "IMPLEMENTER EDIT",
+      "severity": "high",
+      "title": "Configuration-key aliases escape temporary-instance isolation",
+      "locations": [
+        "tests/TestSupport.Shared/TemporaryInstanceChecks.cs:145",
+        "tests/TestSupport.Shared/TemporaryInstanceChecks.cs:160",
+        "tests/TestSupport.Shared/TemporaryInstanceChecks.cs:198",
+        "tests/TestSupport.Shared/TemporaryInstanceChecks.cs:463",
+        "tests/TestSupport.Shared/ScratchQBrainAi.cs:243",
+        "src/QBrainAi.Support.Mcp/Program.cs:114",
+        "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:102"
+      ],
+      "defect": "The inherited-environment scrub and start check recognize raw prefixes such as QBrainAi__ and Mcp__, but not equivalent colon-delimited or mixed colon/double-underscore configuration keys. An inherited QBrainAi:Database:Sqlite:ConnectionString survives the scrub and is ignored by the ownership check beside the owned QBrainAi__Database__Sqlite__ConnectionString. The .NET environment provider normalizes double underscores to colons and assigns normalized keys in enumeration order. If the inherited alias is assigned last, it supplies the database connection string. The configured connection string is used before the owned data-source fallback. Consequently the claimed refusal before access to an outside database is not established and can be bypassed.",
+      "evidence": [
+        "TemporaryInstanceChecks.BuildOwnedInstanceEnvironment keeps non-product variables; IsProductVariable tests raw prefixes. CheckOwnedInstanceEnvironment does not normalize unknown aliases before accepting them. ScratchQBrainAi sets the owned underscore spelling and starts through OwnedInstanceProcess.",
+        "Program.cs adds environment configuration; McpDatabaseConfigurationResolver.ResolveSqliteConnectionString returns a configured connection string before consulting the explicit data-source fallback.",
+        "The pinned .NET 10 EnvironmentVariablesConfigurationProvider implementation, lines 65-123 and 145-152, normalizes __ to : and overwrites the normalized dictionary entry. This is a static counterexample from source, not a reviewer-executed product test.",
+        "OwnedInstanceEnvironmentTests and OwnedInstanceIsolationContractTests cover the declared prefix forms but have no colon/mixed-separator alias collision row. Passing current TRX therefore does not prove this input class."
+      ],
+      "sourceUrl": "https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/Microsoft.Extensions.Configuration.EnvironmentVariables/src/EnvironmentVariablesConfigurationProvider.cs",
+      "requirements": [
+        "FR-MCP-TESTRESOURCE-001 ac-4",
+        "TR-MCP-NUKE-019 AC-6"
+      ],
+      "makePass": "Normalize configuration-key identity before deciding ownership, remove or reject every inherited alias of a product/database setting, and validate the effective selection before starting the instance. Preserve canonical/legacy and host-prefixed behavior. Add the discriminating contract rows below before the implementation, bind the same rows, and supply the required gate TRX at the resulting code head.",
+      "proposedAcceptanceCriteria": [
+        {
+          "name": "normalized-configuration-key-ownership",
+          "statement": "Equivalent configuration-key spellings, including colon, double-underscore and mixed separators, cannot change a temporary instance from its explicitly owned database, workspace, marker or address; this holds for either enumeration order and canonical, legacy and host-prefixed forms."
+        }
+      ],
+      "proposedTests": [
+        {
+          "name": "OwnedEnvironment_NormalizedAliasesCannotOverrideDatabase",
+          "statement": "Given explicit inherited and owned maps containing colliding colon, double-underscore and mixed-separator keys in both orders, the effective database remains the owned database and unrelated variables remain intact."
+        },
+        {
+          "name": "StartCheck_RejectsUnownedNormalizedAliases",
+          "statement": "Given a direct start environment containing an unowned equivalent database key, the check refuses the start before any database access. A wrong implementation that checks only raw prefixes is rejected by the same rows."
+        }
+      ],
+      "affectedClaims": [
+        "UG4",
+        "UG8",
+        "UG11",
+        "UG12",
+        "UG13",
+        "UG17",
+        "UG28",
+        "UG30"
+      ],
+      "operatorDecision": null
+    },
+    {
+      "id": "R12-F2",
+      "classification": "IMPLEMENTER EDIT",
+      "severity": "high",
+      "title": "Four unit cases still depend on live-clock age comparisons",
+      "locations": [
+        "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs:173",
+        "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:198",
+        "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs:226",
+        "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs:247",
+        "src/QBrainAi.Services/Services/SessionLogService.cs:569",
+        "src/QBrainAi.GraphRag/Services/GraphRagService.cs:967",
+        "src/QBrainAi.Services/Services/WorkspaceValidationService.cs:263"
+      ],
+      "defect": "The tests manufacture recorded timestamps from the real clock and the called service compares them with another real-clock reading. QueryAsync_TurnStatusInProgressAndStaleOlderThanHours_ReturnsOnlyStaleOpenTurns uses now minus 30 hours and now minus one hour against a live 24-hour cutoff. InitializeAsync_RemovesStaleTemporaryArtifacts sets last-write time to now minus three hours against a live two-hour cutoff. Rule_InProgressTurn_OlderThan48h_UtcClock and Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded seed now minus 49 or ten hours and construct WorkspaceValidationService with TimeProvider.System. A clock change across those margins changes the asserted result. A sufficiently delayed stale-turn query also ages the recent item across the cutoff. These are age decisions, not hang guards.",
+      "evidence": [
+        "All four named methods are present and Passed in both supplied 4739-case unit runs; they have no Integration classification.",
+        "SessionLogService computes its stale cutoff using DateTimeOffset.UtcNow. GraphRagService cleanup still uses DateTimeOffset.UtcNow rather than its injected CRUD clock. WorkspaceHygieneG5OverlayTests.CreateService passes TimeProvider.System to a service that already supports an injected clock.",
+        "TR-MCP-USECASE-018 AC-006 explicitly requires checked recorded times to come from test-owned scripted inputs and forbids results that change with elapsed time, scheduling or the system clock. The retained sweeps do not establish this for the age comparisons inside the called production code."
+      ],
+      "requirements": [
+        "TR-MCP-USECASE-018 AC-006",
+        "TR-MCP-USECASE-019 AC-008"
+      ],
+      "makePass": "Use test-owned scripted clocks for the reference time and the compared timestamps, including the called stale-query and artifact-cleanup paths. Preserve all existing assertions. Sweep other age, expiration and staleness comparisons through their production callees, not only assertions that spell out a clock read. Prove the additional contract cases and provide the resulting full gate evidence.",
+      "proposedAcceptanceCriteria": [
+        {
+          "name": "scripted-recorded-age-boundaries",
+          "statement": "A unit-proved age, expiry or staleness decision uses a supplied scripted reference time and supplied recorded times. Its result is determined by those inputs alone, including immediately before, at and after the threshold, regardless of the system clock or time spent between steps."
+        }
+      ],
+      "proposedTests": [
+        {
+          "name": "StaleTurnQuery_UsesScriptedAsOfTime",
+          "statement": "For fixed recorded turns and a scripted as-of time, only the specified stale in-progress turns are returned at before/at/after boundaries; completed turns stay excluded and no state is closed."
+        },
+        {
+          "name": "ArtifactCleanup_UsesScriptedAgeBoundary",
+          "statement": "For supplied artifact timestamps and a scripted reference time, cleanup removes exactly the artifacts beyond the age threshold and retains the others."
+        },
+        {
+          "name": "WorkspaceHygiene_UsesScriptedStaleThreshold",
+          "statement": "Both the default and bounded override thresholds classify fixed turn timestamps against a supplied clock; out-of-range overrides remain rejected. A wrong implementation using the system clock is rejected by the contract."
+        }
+      ],
+      "affectedClaims": [
+        "UG3",
+        "UG8",
+        "UG11",
+        "UG12",
+        "UG13"
+      ],
+      "operatorDecision": null
+    },
+    {
+      "id": "R12-F3",
+      "classification": "IMPLEMENTER EDIT",
+      "severity": "medium",
+      "title": "The first service-update requirement readback is misidentified",
+      "locations": [
+        "docs/receipts/hv/unitgreen-r12-prelaunch.projected-problems.md:35",
+        "docs/plans/2026-10-19-unit-suite-green.md:1913",
+        "docs/receipts/unit-suite-green-20261019/ug-r12z3-criteria-readback-1.json:65",
+        "Round 12 request: requirement-record item and UG45"
+      ],
+      "defect": "The request and projected problem 89 call ug-r12z3-store-readback-2.json the first receipt holding TR-MCP-SERVICEUPDATE-001. The earlier committed ug-r12z3-criteria-readback-1.json already holds that record with six criteria, including repeated-properties, at 2026-11-04T15:30:16 local. This precedes the 17:14:10 startup-health-wait write. The statement about the receipt chain is false; the actual evidence is stronger than the claimed transcript-only chain for that second write.",
+      "evidence": [
+        "ug-r12z3-criteria-readback-1.json lines 65-112 contains TR-MCP-SERVICEUPDATE-001 and repeated-properties, without startup-health-wait. The receipt read time, rather than the adapter-generated record timestamps, establishes when it was read.",
+        "The later ug-r12z3-store-readback-2.json contains seven criteria. Independent canonical comparison shows that startup-health-wait is the only criterion added between these two retained readbacks. The subsequent recovery write changes only failed-update-startable.",
+        "Plan 27.28 lines 1913-1914 describes the evidence chain without acknowledging this retained intermediate record. Its phrase before these two writes is ambiguous if read as before the first write; the unambiguous first-receipt assertion in the brief and projected problems is what fails."
+      ],
+      "requirements": [
+        "Workspace honesty and receipt-accuracy rules",
+        "UG45 evidence provenance"
+      ],
+      "makePass": "Correct the first-receipt assertion in the request/prelaunch records and the description of the per-write comparison in plan 27.28. Identify ug-r12z3-criteria-readback-1.json as the retained post-repeated-properties, pre-startup-health-wait record and preserve the distinction between readback time and write time. No product code or new test is required for this documentation correction.",
+      "proposedAcceptanceCriteria": [],
+      "proposedTests": [],
+      "affectedClaims": [
+        "UG8",
+        "UG11",
+        "UG45"
+      ],
+      "operatorDecision": null
+    }
+  ],
+  "unknownList": [],
+  "implementerFixes": [
+    "R12-F1",
+    "R12-F2",
+    "R12-F3"
+  ],
+  "operatorDecisionFails": [],
+  "operatorOverriddenObservations": [],
+  "closure": [
+    {
+      "id": "R11-F1",
+      "verdict": "PASS",
+      "evidence": "Device paths and mixed syntax are refused; Windows segment aliases and later UNC server/share aliases are covered by the 39-row output contract and real binding. TemporaryInstanceChecks.cs and X/Y receipts."
+    },
+    {
+      "id": "R11-F2",
+      "verdict": "PASS",
+      "evidence": "StubMarkerFileReaderTests now cancels only after the asserted callback; the prior 100-ms race is gone. The bounded completion guard is distinct and its margin is retained in the timing receipt."
+    },
+    {
+      "id": "R11-F3",
+      "verdict": "PASS",
+      "evidence": "SessionLogFileWatcherTests explicitly labels TR-PLANNED-CORE-013 historical; the current changed-line citation sweep preserves that label."
+    },
+    {
+      "id": "R10-F1",
+      "verdict": "PASS",
+      "evidence": "RequirementStoredTimestamp.Read uses exact complete-date formats, rejecting partial dates and embedded year digits; U contracts and current host TRX cover the repair."
+    },
+    {
+      "id": "R10-F2",
+      "verdict": "PASS",
+      "evidence": "PathIdentity retains explicit root kind and identity, including forward/mixed UNC spellings; containment/output contracts preserve distinct-root rejection and syntax-sensitive comparison."
+    },
+    {
+      "id": "R10-F3",
+      "verdict": "FAIL",
+      "evidence": "The original six time cases and later CRUD siblings are repaired, but the required sibling closure is incomplete: the four recorded-age unit cases in R12-F2 still depend on live clocks."
+    },
+    {
+      "id": "R9-F1",
+      "verdict": "PASS",
+      "evidence": "TestGroupExecution joins executed results to definitions by test ID and checks the terminal class name; unexecuted definitions/display-name mentions do not count."
+    },
+    {
+      "id": "R9-F2",
+      "verdict": "PASS",
+      "evidence": "CheckHealthAnswer parses JSON and compares the entire nonce field ordinally; missing/malformed/longer/other-field values are rejected."
+    },
+    {
+      "id": "R9-F3",
+      "verdict": "PASS",
+      "evidence": "The generated-output comparison uses the path syntax, case and root identity, with later device/segment refinements and binding rows."
+    },
+    {
+      "id": "R9-F4",
+      "verdict": "PASS",
+      "evidence": "Exact stored-date parsing never supplies a missing date from the live clock; invalid rows return null and mapping selection ignores them."
+    },
+    {
+      "id": "R9-F5",
+      "verdict": "PASS",
+      "evidence": "InstallOllama and the integration cases use the same canonical-first, legacy-second model rule; contract and source-binding cases remain Passed."
+    },
+    {
+      "id": "R9-F6",
+      "verdict": "PASS",
+      "evidence": "Handoff points to the single D-B statement, task 32 cites binding-r-2 and preserves r-1 as failed, and propagation-search evidence is retained. R12-F3 is a distinct later provenance defect."
+    },
+    {
+      "id": "R9-F7",
+      "verdict": "PASS",
+      "evidence": "Current gate metadata explicitly allows declared untracked docs receipts rather than claiming an entirely clean tree; no code/test/build dirt is shown."
+    },
+    {
+      "id": "R9-F8",
+      "verdict": "PASS",
+      "evidence": "The 38-member Q/R/P/S XML documentation retrofit and T change logs are present with canonical citations."
+    },
+    {
+      "id": "R8B-F1",
+      "verdict": "PASS",
+      "evidence": "The delta comparison takes an explicit baseline; GH_TOKEN integration ownership/restoration and nonparallel process-environment collection are present."
+    },
+    {
+      "id": "R8B-F2",
+      "verdict": "PASS",
+      "evidence": "The seven-project lane includes exactly the two approved Support integration classes; all six selected cases are Passed on both hosts."
+    },
+    {
+      "id": "R8B-F3",
+      "verdict": "FAIL",
+      "evidence": "The prefix scrub/start check handles the named raw forms but misses normalized configuration aliases. R12-F1 leaves the outside-database prevention claim incomplete."
+    },
+    {
+      "id": "R7-F1",
+      "verdict": "PASS",
+      "evidence": "One bounded command-timeout parse rule and both call-site seams remain, with deterministic positive/wrong-input contracts and current Passed cases."
+    },
+    {
+      "id": "R6-F1",
+      "verdict": "PASS",
+      "evidence": "The four CLI temporary resolvers are exercised inside the owned primary/fallback variable scope, with restoration and serialization."
+    },
+    {
+      "id": "R6-F2",
+      "verdict": "PASS",
+      "evidence": "The changed missing-ID citations remain labeled historical; current active citations resolve through canonical requirement reads."
+    },
+    {
+      "id": "R5-F1",
+      "verdict": "PASS",
+      "evidence": "Root/ancestor reachability contracts and real-link integration bindings retain positive traversal and rejection controls under the moved FR/remaining TR criteria."
+    },
+    {
+      "id": "R5-F2",
+      "verdict": "PASS",
+      "evidence": "The specifically named canonical/legacy environment cases retain their variable ownership and collection fixes. R12-F1 is a separate unhandled alias class, not a regression in those cases."
+    },
+    {
+      "id": "R4-F1",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner alias-resolution code, coverage and documentation are excluded by the operator override."
+    },
+    {
+      "id": "R4-F2",
+      "verdict": "PASS",
+      "evidence": "Historical head/task-count corrections remain in the plan and TODO notices; current 46-task and final-head metadata reconcile."
+    },
+    {
+      "id": "R4-F3",
+      "verdict": "PASS",
+      "evidence": "The memory binding cites existing and mapped FR/TR/TEST-MCP-MEMORY-002."
+    },
+    {
+      "id": "R3-F1",
+      "verdict": "PASS",
+      "evidence": "The plugin-version source seam retains explicit test-owned sources and the real filesystem integration binding."
+    },
+    {
+      "id": "R3-F2",
+      "verdict": "OVERRIDDEN",
+      "evidence": "The scanner-mediated portion is excluded; no scanner remedy or deduction is made."
+    },
+    {
+      "id": "R3-F3",
+      "verdict": "PASS",
+      "evidence": "FR-MCP-USECASE-016/017 are absent through dedicated getters and effective view, with replacement TR/TEST mappings and retirement notices present."
+    },
+    {
+      "id": "R3-F4",
+      "verdict": "PASS",
+      "evidence": "The historical self-review/head correction is preserved; current code head and docs-only descendants are correctly identified. New missing disclosures are separately failed in UG11."
+    },
+    {
+      "id": "R2-F1",
+      "verdict": "PASS",
+      "evidence": "The originally identified native/environment call paths remain classified as Integration or behind explicit deterministic seams, preserving their assertions."
+    },
+    {
+      "id": "R2-F2",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner-mediated closure is excluded by the operator override."
+    },
+    {
+      "id": "R2-F3",
+      "verdict": "PASS",
+      "evidence": "Historical scripting/audit exceptions remain disclosed; the final scored gate evidence is independently retained and checked."
+    },
+    {
+      "id": "F1",
+      "verdict": "PASS",
+      "evidence": "The original guard mock failure remains a failed historical run, not retroactively green evidence; its declared 4692 total, 4675 passed, one failed and 16 not executed is preserved. Scanner corrections are overridden."
+    },
+    {
+      "id": "F2",
+      "verdict": "PASS",
+      "evidence": "The original native filesystem/SQLite cases and named siblings remain Integration or use deterministic seams, with applicable lane assertions retained."
+    },
+    {
+      "id": "F3",
+      "verdict": "OVERRIDDEN",
+      "evidence": "The scanner/skip-syntax coverage portion and its descriptive claims are excluded as directed."
+    },
+    {
+      "id": "F4",
+      "verdict": "PASS",
+      "evidence": "The current Windows lane has complete interactive-session/head/filter proof and 718 Passed results, replacing the original unrun gate."
+    },
+    {
+      "id": "F5",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner project-selection change-detection coverage is excluded, as in the retained closure history."
+    },
+    {
+      "id": "F6",
+      "verdict": "PASS",
+      "evidence": "The historical Bash ls exception is explicitly disclosed and is not rewritten as compliant PowerShell execution."
+    },
+    {
+      "id": "F7",
+      "verdict": "PASS",
+      "evidence": "The original missing-Windows-evidence and unconditional-satisfaction wording is corrected and current criteria/tasks remain false. The new D-B insufficiencies are separately failed in UG12."
+    }
+  ],
+  "headSha": "3fe29d1fd8ffc4ba993782ab810bf9d16f4f42e6",
+  "receiptPaths": [
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r12-20261105T004043.md",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r12-20261105T004043.json"
+  ],
+  "reviewerSessionId": "Codex-20261105T064457Z-plugin-session",
+  "reviewerRequestId": "req-20261105T064500Z-unitgreen-r12"
+}

@@ -1,0 +1,39 @@
+{
+  "name": "ug-r14f4-final-linux-traceability-2",
+  "target": "ValidateTraceability",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r14f4-final-linux-traceability-2"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "03eea74797827aacf7030ac577cc19d46ebee5d2",
+  "dirtyPaths": [
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-2.tempdir.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2.filters.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2.filters.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-buildtests-2.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-buildtests-2.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-2.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-2.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-2.start.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-traceability-2.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-traceability-2.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-2.filters.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-2.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-2.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-2.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-2.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-2/"
+  ],
+  "startedLocal": "2026-11-07T20:23:17",
+  "startedUtc": "2026-11-08T02:23:17.1223599Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-traceability-2.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-traceability-2.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-traceability-2.exit.txt"
+}

@@ -1,0 +1,304 @@
+Receipt head sweep by ClaudeCode (Find-ReceiptHeadMismatch.ps1), 2026-11-05T00:15:43 local; receipts=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019 runs=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9
+MATCH ug-r10-binding-t-1.json head=a98250179d67af8712ad8eb032e333440ba11fd9
+MATCH ug-r10-final-linux-buildtests-1.json head=6082b11691e8f2e0ab44119ff1f53485d77b9861
+MATCH ug-r10-final-linux-lane-1.json head=6082b11691e8f2e0ab44119ff1f53485d77b9861
+MATCH ug-r10-final-linux-traceability-1.meta.json head=6082b11691e8f2e0ab44119ff1f53485d77b9861
+MATCH ug-r10-final-linux-unit-1.json head=6082b11691e8f2e0ab44119ff1f53485d77b9861
+MATCH ug-r10-mockgate-t-1.json head=a98250179d67af8712ad8eb032e333440ba11fd9
+MATCH ug-r11-binding-u-1.json head=4e4a227ad63ab789aad4b4c5eb977bc9319e83f2
+MATCH ug-r11-binding-v-1.json head=2e1210150ae009162b047c604b56b75426c4d428
+MATCH ug-r11-binding-w-1.json head=cb174ac807c8e60b7a38a30bc216a651ed72c6c7
+MATCH ug-r11-final-linux-lane-1.json head=2e1210150ae009162b047c604b56b75426c4d428
+MATCH ug-r11-final-linux-unit-1.json head=2e1210150ae009162b047c604b56b75426c4d428
+MATCH ug-r11-mockgate-u-1.json head=4e4a227ad63ab789aad4b4c5eb977bc9319e83f2
+MATCH ug-r11-mockgate-v-1.json head=2e1210150ae009162b047c604b56b75426c4d428
+MATCH ug-r11v-final-linux-unit-1.json head=cb174ac807c8e60b7a38a30bc216a651ed72c6c7
+MATCH ug-r11w-final-linux-buildtests-1.json head=1f51d4b28862d505dea846899ab20ae23a8b13dc
+MATCH ug-r11w-final-linux-lane-1.json head=1f51d4b28862d505dea846899ab20ae23a8b13dc
+MATCH ug-r11w-final-linux-traceability-1.meta.json head=1f51d4b28862d505dea846899ab20ae23a8b13dc
+MATCH ug-r11w-final-linux-unit-1.json head=1f51d4b28862d505dea846899ab20ae23a8b13dc
+MATCH ug-r11x-binding-1.json head=142a93f0d5246f3224f601499073c96eeac072f3
+MATCH ug-r11x-final-linux-buildtests-1.json head=11406fdf2560d89e470779b2c6e4cb34dbf4c40a
+MATCH ug-r11x-final-linux-lane-1.json head=11406fdf2560d89e470779b2c6e4cb34dbf4c40a
+MATCH ug-r11x-final-linux-traceability-1.meta.json head=11406fdf2560d89e470779b2c6e4cb34dbf4c40a
+MATCH ug-r11x-final-linux-unit-1.json head=11406fdf2560d89e470779b2c6e4cb34dbf4c40a
+MATCH ug-r11x-mockgate-1.json head=142a93f0d5246f3224f601499073c96eeac072f3
+MATCH ug-r12y-binding-1.json head=11406fdf2560d89e470779b2c6e4cb34dbf4c40a
+MATCH ug-r12y-final-linux-buildtests-1.json head=ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8
+MATCH ug-r12y-final-linux-lane-1.json head=ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8
+MATCH ug-r12y-final-linux-traceability-1.meta.json head=ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8
+MATCH ug-r12y-final-linux-unit-1.json head=ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8
+MATCH ug-r12y-mockgate-1.json head=11406fdf2560d89e470779b2c6e4cb34dbf4c40a
+MATCH ug-r12z-binding-1.json head=ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8
+MATCH ug-r12z-final-linux-buildtests-1.json head=a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf
+MATCH ug-r12z-final-linux-lane-1.json head=a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf
+MATCH ug-r12z-final-linux-traceability-1.meta.json head=a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf
+MATCH ug-r12z-final-linux-unit-1.json head=a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf
+MATCH ug-r12z2-binding-1.json head=a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf
+MATCH ug-r12z2-final-linux-buildtests-1.json head=121992b38ce4e2e0d97673d77106b3826c76fb38
+MATCH ug-r12z2-final-linux-lane-1.json head=121992b38ce4e2e0d97673d77106b3826c76fb38
+MATCH ug-r12z2-final-linux-traceability-1.meta.json head=121992b38ce4e2e0d97673d77106b3826c76fb38
+MATCH ug-r12z2-final-linux-unit-1.json head=121992b38ce4e2e0d97673d77106b3826c76fb38
+MATCH ug-r12z3-binding-1.json head=121992b38ce4e2e0d97673d77106b3826c76fb38
+MATCH ug-r12z3-binding-2.json head=121992b38ce4e2e0d97673d77106b3826c76fb38
+MATCH ug-r12z3-binding-3.json head=b3f26862801cbf2d96ed4a3cdea7473fc653580b
+MISMATCH ug-r12z3-final-linux-lane-1.json receiptHead=52e6d627b78df808bb469269f0093d8fc1815701 runHead=b3f26862801cbf2d96ed4a3cdea7473fc653580b receiptWritten=2026-11-04T19:43:00
+MATCH ug-r12z3-final-linux-lane-1.retrospective.json head=b3f26862801cbf2d96ed4a3cdea7473fc653580b retrospective=True
+MATCH ug-r12z3-final-linux-unit-1.json head=b3f26862801cbf2d96ed4a3cdea7473fc653580b
+MATCH ug-r12z3-mockgate-1.json head=121992b38ce4e2e0d97673d77106b3826c76fb38
+MATCH ug-r12z3-mockgate-2.json head=b3f26862801cbf2d96ed4a3cdea7473fc653580b
+MATCH ug-r12z3b-final-linux-buildtests-1.json head=4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6
+MATCH ug-r12z3b-final-linux-lane-1.json head=4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6
+MATCH ug-r12z3b-final-linux-traceability-1.meta.json head=4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6
+MATCH ug-r12z3b-final-linux-unit-1.json head=4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6
+MATCH ug-r12z3c-binding-1.json head=4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6
+MATCH ug-r12z3c-final-linux-buildtests-1.json head=52e6d627b78df808bb469269f0093d8fc1815701
+MATCH ug-r12z3c-final-linux-lane-1.json head=52e6d627b78df808bb469269f0093d8fc1815701
+MATCH ug-r12z3c-final-linux-traceability-1.meta.json head=52e6d627b78df808bb469269f0093d8fc1815701
+MATCH ug-r12z3c-final-linux-unit-1.json head=52e6d627b78df808bb469269f0093d8fc1815701
+MATCH ug-r12z3c-mockgate-1.json head=4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6
+NOMETA ug-r3-build-tests-1.meta.json name=ug-r3-build-tests-1 head=27c43bccd19a591e4ca30560b52d4c5a9e8b81c9
+NOMETA ug-r3-build-tests-2.meta.json name=ug-r3-build-tests-2 head=538d0ccf957c041f1e3886864bdf5e4ca693e9ec
+NOMETA ug-r3-build-tests-3.meta.json name=ug-r3-build-tests-3 head=56d14d7cd7e72975b1cbf0ddcd2cc17c16763249
+NOMETA ug-r3-build-tests-4.meta.json name=ug-r3-build-tests-4 head=6042dbb3551c38a740e13de28f44fe9a814e6f0a
+NOMETA ug-r3-build-tests-5.meta.json name=ug-r3-build-tests-5 head=0210244d27bf2b5e731e4ee40350504934e812a4
+NOMETA ug-r3-build-tests-6.meta.json name=ug-r3-build-tests-6 head=6ea425ab943ebdd8aad1de1c84896de92d0270d8
+NOMETA ug-r3-build-tests-7.meta.json name=ug-r3-build-tests-7 head=68fa7b393d007c0d0c466c29ae4da5738bf54af2
+NOMETA ug-r3-build-tests-8.meta.json name=ug-r3-build-tests-8 head=e0b078c802d6456d106e6ec681d1aa93d6c4d055
+NOMETA ug-r3-dry-binding-1.meta.json name=ug-r3-dry-binding-1 head=45a3197c9afda2f7c7d87e7d986908f885c20b02
+NOMETA ug-r3-dry-binding-2.meta.json name=ug-r3-dry-binding-2 head=45a3197c9afda2f7c7d87e7d986908f885c20b02
+NOMETA ug-r3-dry-mockgate-1.meta.json name=ug-r3-dry-mockgate-1 head=45a3197c9afda2f7c7d87e7d986908f885c20b02
+NOMETA ug-r3-dry-mockgate-2.meta.json name=ug-r3-dry-mockgate-2 head=45a3197c9afda2f7c7d87e7d986908f885c20b02
+NOMETA ug-r3-linux-lane-1.meta.json name=ug-r3-linux-lane-1 head=27c43bccd19a591e4ca30560b52d4c5a9e8b81c9
+NOMETA ug-r3-linux-lane-2.meta.json name=ug-r3-linux-lane-2 head=538d0ccf957c041f1e3886864bdf5e4ca693e9ec
+NOMETA ug-r3-linux-lane-3.meta.json name=ug-r3-linux-lane-3 head=56d14d7cd7e72975b1cbf0ddcd2cc17c16763249
+NOMETA ug-r3-linux-lane-4.meta.json name=ug-r3-linux-lane-4 head=6042dbb3551c38a740e13de28f44fe9a814e6f0a
+NOMETA ug-r3-linux-lane-5.meta.json name=ug-r3-linux-lane-5 head=0210244d27bf2b5e731e4ee40350504934e812a4
+NOMETA ug-r3-linux-lane-6.meta.json name=ug-r3-linux-lane-6 head=6ea425ab943ebdd8aad1de1c84896de92d0270d8
+NOMETA ug-r3-linux-lane-7.meta.json name=ug-r3-linux-lane-7 head=68fa7b393d007c0d0c466c29ae4da5738bf54af2
+NOMETA ug-r3-linux-lane-8.meta.json name=ug-r3-linux-lane-8 head=e0b078c802d6456d106e6ec681d1aa93d6c4d055
+NOMETA ug-r3-linux-test-1.meta.json name=ug-r3-linux-test-1 head=27c43bccd19a591e4ca30560b52d4c5a9e8b81c9
+NOMETA ug-r3-linux-test-2.meta.json name=ug-r3-linux-test-2 head=538d0ccf957c041f1e3886864bdf5e4ca693e9ec
+NOMETA ug-r3-linux-test-3.meta.json name=ug-r3-linux-test-3 head=56d14d7cd7e72975b1cbf0ddcd2cc17c16763249
+NOMETA ug-r3-linux-test-4.meta.json name=ug-r3-linux-test-4 head=6042dbb3551c38a740e13de28f44fe9a814e6f0a
+NOMETA ug-r3-linux-test-5.meta.json name=ug-r3-linux-test-5 head=0210244d27bf2b5e731e4ee40350504934e812a4
+NOMETA ug-r3-linux-test-6.meta.json name=ug-r3-linux-test-6 head=6ea425ab943ebdd8aad1de1c84896de92d0270d8
+NOMETA ug-r3-linux-test-7.meta.json name=ug-r3-linux-test-7 head=68fa7b393d007c0d0c466c29ae4da5738bf54af2
+NOMETA ug-r3-linux-test-8.meta.json name=ug-r3-linux-test-8 head=e0b078c802d6456d106e6ec681d1aa93d6c4d055
+NOMETA ug-r3-localdb-mockgate-1.meta.json name=ug-r3-localdb-mockgate-1 head=56d14d7cd7e72975b1cbf0ddcd2cc17c16763249
+NOMETA ug-r3-mockgate-1.meta.json name=ug-r3-mockgate-1 head=a94579db927f25a0cbddd07d639f3054f2ee72e8
+NOMETA ug-r3-mockgate-2.meta.json name=ug-r3-mockgate-2 head=a94579db927f25a0cbddd07d639f3054f2ee72e8
+NOMETA ug-r3-pgctl-mockgate-1.meta.json name=ug-r3-pgctl-mockgate-1 head=0210244d27bf2b5e731e4ee40350504934e812a4
+NOMETA ug-r3-scan-binding-1.meta.json name=ug-r3-scan-binding-1 head=27c43bccd19a591e4ca30560b52d4c5a9e8b81c9
+NOMETA ug-r3-scan-mockgate-1.meta.json name=ug-r3-scan-mockgate-1 head=27c43bccd19a591e4ca30560b52d4c5a9e8b81c9
+NOMETA ug-r3-sqlcollection-mockgate-1.meta.json name=ug-r3-sqlcollection-mockgate-1 head=6042dbb3551c38a740e13de28f44fe9a814e6f0a
+NOMETA ug-r3-sqlserial-mockgate-1.meta.json name=ug-r3-sqlserial-mockgate-1 head=6ea425ab943ebdd8aad1de1c84896de92d0270d8
+NOMETA ug-r3-traceability-1.meta.json name=ug-r3-traceability-1 head=538d0ccf957c041f1e3886864bdf5e4ca693e9ec
+NOMETA ug-r3-traceability-2.meta.json name=ug-r3-traceability-2 head=56d14d7cd7e72975b1cbf0ddcd2cc17c16763249
+NOMETA ug-r3-traceability-3.meta.json name=ug-r3-traceability-3 head=6042dbb3551c38a740e13de28f44fe9a814e6f0a
+NOMETA ug-r3-traceability-4.meta.json name=ug-r3-traceability-4 head=0210244d27bf2b5e731e4ee40350504934e812a4
+NOMETA ug-r3-traceability-5.meta.json name=ug-r3-traceability-5 head=6ea425ab943ebdd8aad1de1c84896de92d0270d8
+NOMETA ug-r3-traceability-6.meta.json name=ug-r3-traceability-6 head=68fa7b393d007c0d0c466c29ae4da5738bf54af2
+NOMETA ug-r3-traceability-7.meta.json name=ug-r3-traceability-7 head=e0b078c802d6456d106e6ec681d1aa93d6c4d055
+NOMETA ug-r3-versionread-binding-1.meta.json name=ug-r3-versionread-binding-1 head=395b4cd89726e921af481d4c8c056bf8fa535ae6
+NOMETA ug-r3-versionread-mockgate-1.meta.json name=ug-r3-versionread-mockgate-1 head=395b4cd89726e921af481d4c8c056bf8fa535ae6
+NOMETA ug-r4-binding-1.meta.json name=ug-r4-binding-1 head=64fc4b1400ac5bc7526c472f8efeacb91980f2a6
+NOMETA ug-r4-build-tests-1.meta.json name=ug-r4-build-tests-1 head=26fc83486be252e63579cca9d53f3132672555c7
+NOMETA ug-r4-build-tests-2.meta.json name=ug-r4-build-tests-2 head=97b7811491ccb3e338804a01d0bf28e4ecfe273a
+NOMETA ug-r4-ext-binding-1.meta.json name=ug-r4-ext-binding-1 head=26fc83486be252e63579cca9d53f3132672555c7
+NOMETA ug-r4-ext-mockgate-1.meta.json name=ug-r4-ext-mockgate-1 head=26fc83486be252e63579cca9d53f3132672555c7
+NOMETA ug-r4-hostile-control-1.meta.json name=ug-r4-hostile-control-1 head=64fc4b1400ac5bc7526c472f8efeacb91980f2a6
+NOMETA ug-r4-hostile-gate-1.meta.json name=ug-r4-hostile-gate-1 head=801e6862d49d669808c9315a7ad43d0272b1d1f1
+NOMETA ug-r4-hostile-gate-2.meta.json name=ug-r4-hostile-gate-2 head=26fc83486be252e63579cca9d53f3132672555c7
+NOMETA ug-r4-hostile-gate-3.meta.json name=ug-r4-hostile-gate-3 head=97b7811491ccb3e338804a01d0bf28e4ecfe273a
+NOMETA ug-r4-linux-lane-1.meta.json name=ug-r4-linux-lane-1 head=801e6862d49d669808c9315a7ad43d0272b1d1f1
+NOMETA ug-r4-linux-lane-2.meta.json name=ug-r4-linux-lane-2 head=26fc83486be252e63579cca9d53f3132672555c7
+NOMETA ug-r4-linux-lane-3.meta.json name=ug-r4-linux-lane-3 head=97b7811491ccb3e338804a01d0bf28e4ecfe273a
+NOMETA ug-r4-linux-test-1.meta.json name=ug-r4-linux-test-1 head=801e6862d49d669808c9315a7ad43d0272b1d1f1
+NOMETA ug-r4-linux-test-2.meta.json name=ug-r4-linux-test-2 head=26fc83486be252e63579cca9d53f3132672555c7
+NOMETA ug-r4-linux-test-3.meta.json name=ug-r4-linux-test-3 head=97b7811491ccb3e338804a01d0bf28e4ecfe273a
+NOMETA ug-r4-mockgate-1.meta.json name=ug-r4-mockgate-1 head=64fc4b1400ac5bc7526c472f8efeacb91980f2a6
+NOMETA ug-r4-precommit-lane-1.meta.json name=ug-r4-precommit-lane-1 head=801e6862d49d669808c9315a7ad43d0272b1d1f1
+NOMETA ug-r4-precommit-lane-2.meta.json name=ug-r4-precommit-lane-2 head=26fc83486be252e63579cca9d53f3132672555c7
+NOMETA ug-r4-race-binding-1.meta.json name=ug-r4-race-binding-1 head=801e6862d49d669808c9315a7ad43d0272b1d1f1
+NOMETA ug-r4-race-mockgate-1.meta.json name=ug-r4-race-mockgate-1 head=801e6862d49d669808c9315a7ad43d0272b1d1f1
+NOMETA ug-r4-race-mockgate-2.meta.json name=ug-r4-race-mockgate-2 head=801e6862d49d669808c9315a7ad43d0272b1d1f1
+NOMETA ug-r4-traceability-1.meta.json name=ug-r4-traceability-1 head=26fc83486be252e63579cca9d53f3132672555c7
+NOMETA ug-r4-traceability-2.meta.json name=ug-r4-traceability-2 head=97b7811491ccb3e338804a01d0bf28e4ecfe273a
+NOMETA ug-r5-build-tests-1.meta.json name=ug-r5-build-tests-1 head=ccc78b7a7624e0367725af585a5fd7c4f38b3661
+NOMETA ug-r5-build-tests-2.meta.json name=ug-r5-build-tests-2 head=ccc78b7a7624e0367725af585a5fd7c4f38b3661
+NOMETA ug-r5-build-tests-3.meta.json name=ug-r5-build-tests-3 head=810ee8aa0fbdcc6cf64a3d9575693068d261a97c
+NOMETA ug-r5-citation-run-1.meta.json name=ug-r5-citation-run-1 head=094e47f4e0e8074c027e68f25d26482ce68b331e
+NOMETA ug-r5-docfix-run-1.meta.json name=ug-r5-docfix-run-1 head=8c254695d886d6ff87d5caaa42b0fa6b421c9c6b
+NOMETA ug-r5-hostile-gate-1.meta.json name=ug-r5-hostile-gate-1 head=8c254695d886d6ff87d5caaa42b0fa6b421c9c6b
+NOMETA ug-r5-hostile-gate-2.meta.json name=ug-r5-hostile-gate-2 head=ccc78b7a7624e0367725af585a5fd7c4f38b3661
+NOMETA ug-r5-hostile-wide-1.meta.json name=ug-r5-hostile-wide-1 head=5b818847b4e598b4e85ac6567041b847b0385950
+NOMETA ug-r5-hostile-wide-2.meta.json name=ug-r5-hostile-wide-2 head=5b818847b4e598b4e85ac6567041b847b0385950
+NOMETA ug-r5-hostile-wide-3.meta.json name=ug-r5-hostile-wide-3 head=5b818847b4e598b4e85ac6567041b847b0385950
+NOMETA ug-r5-hostile-wide-4.meta.json name=ug-r5-hostile-wide-4 head=810ee8aa0fbdcc6cf64a3d9575693068d261a97c
+NOMETA ug-r5-linux-lane-1.meta.json name=ug-r5-linux-lane-1 head=8c254695d886d6ff87d5caaa42b0fa6b421c9c6b
+NOMETA ug-r5-linux-lane-2.meta.json name=ug-r5-linux-lane-2 head=ccc78b7a7624e0367725af585a5fd7c4f38b3661
+NOMETA ug-r5-linux-lane-3.meta.json name=ug-r5-linux-lane-3 head=810ee8aa0fbdcc6cf64a3d9575693068d261a97c
+NOMETA ug-r5-linux-test-1.meta.json name=ug-r5-linux-test-1 head=8c254695d886d6ff87d5caaa42b0fa6b421c9c6b
+NOMETA ug-r5-linux-test-2.meta.json name=ug-r5-linux-test-2 head=ccc78b7a7624e0367725af585a5fd7c4f38b3661
+NOMETA ug-r5-linux-test-3.meta.json name=ug-r5-linux-test-3 head=810ee8aa0fbdcc6cf64a3d9575693068d261a97c
+NOMETA ug-r5-precommit-lane-1.meta.json name=ug-r5-precommit-lane-1 head=094e47f4e0e8074c027e68f25d26482ce68b331e
+NOMETA ug-r5-precommit-lane-2.meta.json name=ug-r5-precommit-lane-2 head=8c254695d886d6ff87d5caaa42b0fa6b421c9c6b
+NOMETA ug-r5-precommit-lane-3.meta.json name=ug-r5-precommit-lane-3 head=5b818847b4e598b4e85ac6567041b847b0385950
+NOMETA ug-r5-traceability-1.meta.json name=ug-r5-traceability-1 head=ccc78b7a7624e0367725af585a5fd7c4f38b3661
+NOMETA ug-r5-traceability-2.meta.json name=ug-r5-traceability-2 head=810ee8aa0fbdcc6cf64a3d9575693068d261a97c
+NOMETA ug-r6-build-tests-1.meta.json name=ug-r6-build-tests-1 head=c84183016a032bd522f5ae085a90d7c912bef810
+NOMETA ug-r6-compile-1.meta.json name=ug-r6-compile-1 head=c3625a64222c558b16c564e62ec2b5d600801e77
+NOMETA ug-r6-compile-2.meta.json name=ug-r6-compile-2 head=c3625a64222c558b16c564e62ec2b5d600801e77
+NOMETA ug-r6-env-binding-1.meta.json name=ug-r6-env-binding-1 head=9933796c53433a55d11cf14a96be97438a087b0f
+NOMETA ug-r6-envcoll-mockgate-1.meta.json name=ug-r6-envcoll-mockgate-1 head=9933796c53433a55d11cf14a96be97438a087b0f
+NOMETA ug-r6-hostile-probe-1.meta.json name=ug-r6-hostile-probe-1 head=9933796c53433a55d11cf14a96be97438a087b0f
+NOMETA ug-r6-hostile-wide-1.meta.json name=ug-r6-hostile-wide-1 head=9933796c53433a55d11cf14a96be97438a087b0f
+NOMETA ug-r6-hostile-wide-2.meta.json name=ug-r6-hostile-wide-2 head=c84183016a032bd522f5ae085a90d7c912bef810
+NOMETA ug-r6-hostile-wide-3.meta.json name=ug-r6-hostile-wide-3 head=44e9d810d88c0e34239ae31eef2683a614d392f7
+NOMETA ug-r6-linux-lane-1.meta.json name=ug-r6-linux-lane-1 head=c84183016a032bd522f5ae085a90d7c912bef810
+NOMETA ug-r6-linux-test-1.meta.json name=ug-r6-linux-test-1 head=9933796c53433a55d11cf14a96be97438a087b0f
+NOMETA ug-r6-linux-test-2.meta.json name=ug-r6-linux-test-2 head=c84183016a032bd522f5ae085a90d7c912bef810
+NOMETA ug-r6-precommit-lane-1.meta.json name=ug-r6-precommit-lane-1 head=c3625a64222c558b16c564e62ec2b5d600801e77
+NOMETA ug-r6-precommit-lane-2.meta.json name=ug-r6-precommit-lane-2 head=9933796c53433a55d11cf14a96be97438a087b0f
+NOMETA ug-r6-reach-binding-1.meta.json name=ug-r6-reach-binding-1 head=c3625a64222c558b16c564e62ec2b5d600801e77
+NOMETA ug-r6-reach-mockgate-1.meta.json name=ug-r6-reach-mockgate-1 head=c3625a64222c558b16c564e62ec2b5d600801e77
+NOMETA ug-r6-traceability-1.meta.json name=ug-r6-traceability-1 head=c84183016a032bd522f5ae085a90d7c912bef810
+NOMETA ug-r7-binding-1.meta.json name=ug-r7-binding-1 head=3a607fb17dba72c6c7f920a6067b1ca191ec86fb
+NOMETA ug-r7-build-tests-1.meta.json name=ug-r7-build-tests-1 head=6a87791d9363bb972feb6a4539339fac0c1a1915
+NOMETA ug-r7-build-tests-2.meta.json name=ug-r7-build-tests-2 head=c31f36d81dc87509b605175c5ced0d3b0f08180c
+NOMETA ug-r7-chain-binding-1.meta.json name=ug-r7-chain-binding-1 head=6a87791d9363bb972feb6a4539339fac0c1a1915
+NOMETA ug-r7-chain-mockgate-1.meta.json name=ug-r7-chain-mockgate-1 head=6a87791d9363bb972feb6a4539339fac0c1a1915
+NOMETA ug-r7-clitemp-mockgate-1.meta.json name=ug-r7-clitemp-mockgate-1 head=3a607fb17dba72c6c7f920a6067b1ca191ec86fb
+NOMETA ug-r7-hostile-v5-file-1.meta.json name=ug-r7-hostile-v5-file-1 head=6a87791d9363bb972feb6a4539339fac0c1a1915
+NOMETA ug-r7-hostile-v5-file-2.meta.json name=ug-r7-hostile-v5-file-2 head=c31f36d81dc87509b605175c5ced0d3b0f08180c
+NOMETA ug-r7-hostile-v5-file-negative-1.meta.json name=ug-r7-hostile-v5-file-negative-1 head=3a607fb17dba72c6c7f920a6067b1ca191ec86fb
+NOMETA ug-r7-hostile-v5-file-negative-2.meta.json name=ug-r7-hostile-v5-file-negative-2 head=3a607fb17dba72c6c7f920a6067b1ca191ec86fb
+NOMETA ug-r7-hostile-v5-folder-1.meta.json name=ug-r7-hostile-v5-folder-1 head=6a87791d9363bb972feb6a4539339fac0c1a1915
+NOMETA ug-r7-hostile-v5-folder-2.meta.json name=ug-r7-hostile-v5-folder-2 head=c31f36d81dc87509b605175c5ced0d3b0f08180c
+NOMETA ug-r7-linux-lane-1.meta.json name=ug-r7-linux-lane-1 head=6a87791d9363bb972feb6a4539339fac0c1a1915
+NOMETA ug-r7-linux-lane-2.meta.json name=ug-r7-linux-lane-2 head=c31f36d81dc87509b605175c5ced0d3b0f08180c
+NOMETA ug-r7-linux-test-1.meta.json name=ug-r7-linux-test-1 head=6a87791d9363bb972feb6a4539339fac0c1a1915
+NOMETA ug-r7-linux-test-2.meta.json name=ug-r7-linux-test-2 head=c31f36d81dc87509b605175c5ced0d3b0f08180c
+NOMETA ug-r7-precommit-lane-1.meta.json name=ug-r7-precommit-lane-1 head=3a607fb17dba72c6c7f920a6067b1ca191ec86fb
+NOMETA ug-r7-precommit-lane-2.meta.json name=ug-r7-precommit-lane-2 head=6a87791d9363bb972feb6a4539339fac0c1a1915
+NOMETA ug-r7-traceability-1.meta.json name=ug-r7-traceability-1 head=6a87791d9363bb972feb6a4539339fac0c1a1915
+NOMETA ug-r7-traceability-2.meta.json name=ug-r7-traceability-2 head=c31f36d81dc87509b605175c5ced0d3b0f08180c
+NOMETA ug-r8-build-tests-1.meta.json name=ug-r8-build-tests-1 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-build-tests-2.meta.json name=ug-r8-build-tests-2 head=ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d
+NOMETA ug-r8-callsite-binding-1.meta.json name=ug-r8-callsite-binding-1 head=845f323b6b6ae13bc01b6165d6f987238c631dea
+NOMETA ug-r8-callsite-mockgate-1.meta.json name=ug-r8-callsite-mockgate-1 head=845f323b6b6ae13bc01b6165d6f987238c631dea
+NOMETA ug-r8-gate-v6-file-1.meta.json name=ug-r8-gate-v6-file-1 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-gate-v6-folder-1.meta.json name=ug-r8-gate-v6-folder-1 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-gate-v6-locale-1.meta.json name=ug-r8-gate-v6-locale-1 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-gate-v6-max-1.meta.json name=ug-r8-gate-v6-max-1 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-gate-v6-min-1.meta.json name=ug-r8-gate-v6-min-1 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-gate-v6-zero-1.meta.json name=ug-r8-gate-v6-zero-1 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-gate-v6b-file-1.meta.json name=ug-r8-gate-v6b-file-1 head=7ab3c1c40bc226056f7c20f1db6963e12311a313
+NOMETA ug-r8-gate-v6b-folder-1.meta.json name=ug-r8-gate-v6b-folder-1 head=7ab3c1c40bc226056f7c20f1db6963e12311a313
+NOMETA ug-r8-gate-v6c-file-1.meta.json name=ug-r8-gate-v6c-file-1 head=ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d
+NOMETA ug-r8-gate-v6c-folder-1.meta.json name=ug-r8-gate-v6c-folder-1 head=ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d
+NOMETA ug-r8-gate-v6c-locale-1.meta.json name=ug-r8-gate-v6c-locale-1 head=ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d
+NOMETA ug-r8-gate-v6c-max-1.meta.json name=ug-r8-gate-v6c-max-1 head=ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d
+NOMETA ug-r8-gate-v6c-min-1.meta.json name=ug-r8-gate-v6c-min-1 head=ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d
+NOMETA ug-r8-gate-v6c-zero-1.meta.json name=ug-r8-gate-v6c-zero-1 head=ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d
+NOMETA ug-r8-hostile-v6-locale-1.meta.json name=ug-r8-hostile-v6-locale-1 head=8b97aa4bee778273688e53a64a737c3170a41823
+NOMETA ug-r8-hostile-v6-max-1.meta.json name=ug-r8-hostile-v6-max-1 head=8b97aa4bee778273688e53a64a737c3170a41823
+NOMETA ug-r8-hostile-v6-max-2.meta.json name=ug-r8-hostile-v6-max-2 head=8b97aa4bee778273688e53a64a737c3170a41823
+NOMETA ug-r8-hostile-v6-min-1.meta.json name=ug-r8-hostile-v6-min-1 head=8b97aa4bee778273688e53a64a737c3170a41823
+NOMETA ug-r8-hostile-v6-zero-1.meta.json name=ug-r8-hostile-v6-zero-1 head=8b97aa4bee778273688e53a64a737c3170a41823
+NOMETA ug-r8-junction-binding-1.meta.json name=ug-r8-junction-binding-1 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-junction-mockgate-1.meta.json name=ug-r8-junction-mockgate-1 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-linux-lane-1.meta.json name=ug-r8-linux-lane-1 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-linux-lane-2.meta.json name=ug-r8-linux-lane-2 head=ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d
+NOMETA ug-r8-linux-test-1.meta.json name=ug-r8-linux-test-1 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-linux-test-2.meta.json name=ug-r8-linux-test-2 head=7ab3c1c40bc226056f7c20f1db6963e12311a313
+NOMETA ug-r8-linux-test-3.meta.json name=ug-r8-linux-test-3 head=ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d
+NOMETA ug-r8-precommit-lane-1.meta.json name=ug-r8-precommit-lane-1 head=8b97aa4bee778273688e53a64a737c3170a41823
+NOMETA ug-r8-precommit-lane-2.meta.json name=ug-r8-precommit-lane-2 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-precommit-lane-3.meta.json name=ug-r8-precommit-lane-3 head=7ab3c1c40bc226056f7c20f1db6963e12311a313
+NOMETA ug-r8-precommit-lane-4.meta.json name=ug-r8-precommit-lane-4 head=845f323b6b6ae13bc01b6165d6f987238c631dea
+NOMETA ug-r8-sibling-binding-1.meta.json name=ug-r8-sibling-binding-1 head=7ab3c1c40bc226056f7c20f1db6963e12311a313
+NOMETA ug-r8-timeout-binding-1.meta.json name=ug-r8-timeout-binding-1 head=8b97aa4bee778273688e53a64a737c3170a41823
+NOMETA ug-r8-timeout-mockgate-1.meta.json name=ug-r8-timeout-mockgate-1 head=8b97aa4bee778273688e53a64a737c3170a41823
+NOMETA ug-r8-traceability-1.meta.json name=ug-r8-traceability-1 head=f5cda3c15455b8f42f97bb35768c142757323378
+NOMETA ug-r8-traceability-2.meta.json name=ug-r8-traceability-2 head=ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d
+NOMETA ug-r8b-build-tests-1.meta.json name=ug-r8b-build-tests-1 head=3e487b6b9e520bd8bd7cba836cdb0bea8716fd48
+NOMETA ug-r8b-build-tests-2.meta.json name=ug-r8b-build-tests-2 head=433ce1919d04bb6c5bb3c95a60c6b5df656d59fb
+NOMETA ug-r8b-build-tests-3.meta.json name=ug-r8b-build-tests-3 head=a78640baacb867cdea182f316ef06ee019d489d9
+NOMETA ug-r8b-checks-binding-1.meta.json name=ug-r8b-checks-binding-1 head=2175d827fa6bf4bcbca05e23fae75aaf6b889737
+NOMETA ug-r8b-checks-binding-2.meta.json name=ug-r8b-checks-binding-2 head=2175d827fa6bf4bcbca05e23fae75aaf6b889737
+NOMETA ug-r8b-checks-mockgate-1.meta.json name=ug-r8b-checks-mockgate-1 head=2175d827fa6bf4bcbca05e23fae75aaf6b889737
+NOMETA ug-r8b-citations-buildtests-1.meta.json name=ug-r8b-citations-buildtests-1 head=3e487b6b9e520bd8bd7cba836cdb0bea8716fd48
+NOMETA ug-r8b-citations-buildtests-2.meta.json name=ug-r8b-citations-buildtests-2 head=3e487b6b9e520bd8bd7cba836cdb0bea8716fd48
+NOMETA ug-r8b-citations-compile-1.meta.json name=ug-r8b-citations-compile-1 head=3e487b6b9e520bd8bd7cba836cdb0bea8716fd48
+NOMETA ug-r8b-download-binding-1.meta.json name=ug-r8b-download-binding-1 head=2f67921357bff28a636fc5824d70422dbb1f168d
+NOMETA ug-r8b-download-mockgate-1.meta.json name=ug-r8b-download-mockgate-1 head=2f67921357bff28a636fc5824d70422dbb1f168d
+NOMETA ug-r8b-download-mockgate-2.meta.json name=ug-r8b-download-mockgate-2 head=2f67921357bff28a636fc5824d70422dbb1f168d
+NOMETA ug-r8b-expanded-lane-1.meta.json name=ug-r8b-expanded-lane-1 head=d5a23364daa20da6e23a89e020ddc65ec810773c
+NOMETA ug-r8b-expanded-lane-2.meta.json name=ug-r8b-expanded-lane-2 head=d5a23364daa20da6e23a89e020ddc65ec810773c
+NOMETA ug-r8b-expanded-lane-3.meta.json name=ug-r8b-expanded-lane-3 head=d5a23364daa20da6e23a89e020ddc65ec810773c
+NOMETA ug-r8b-label-compile-1.meta.json name=ug-r8b-label-compile-1 head=fbc2da860e83c095433c51f8c7bec3c6038bdba6
+NOMETA ug-r8b-laneprojects-binding-1.meta.json name=ug-r8b-laneprojects-binding-1 head=d5a23364daa20da6e23a89e020ddc65ec810773c
+NOMETA ug-r8b-laneprojects-binding-2.meta.json name=ug-r8b-laneprojects-binding-2 head=d5a23364daa20da6e23a89e020ddc65ec810773c
+NOMETA ug-r8b-laneprojects-mockgate-1.meta.json name=ug-r8b-laneprojects-mockgate-1 head=d5a23364daa20da6e23a89e020ddc65ec810773c
+NOMETA ug-r8b-laneprojects-mockgate-2.meta.json name=ug-r8b-laneprojects-mockgate-2 head=d5a23364daa20da6e23a89e020ddc65ec810773c
+NOMETA ug-r8b-linux-lane-1.meta.json name=ug-r8b-linux-lane-1 head=4fab4424c0ebcd961e5135e393eace47771dd62c
+NOMETA ug-r8b-linux-lane-2.meta.json name=ug-r8b-linux-lane-2 head=3e487b6b9e520bd8bd7cba836cdb0bea8716fd48
+NOMETA ug-r8b-linux-lane-3.meta.json name=ug-r8b-linux-lane-3 head=433ce1919d04bb6c5bb3c95a60c6b5df656d59fb
+NOMETA ug-r8b-linux-lane-4.meta.json name=ug-r8b-linux-lane-4 head=a78640baacb867cdea182f316ef06ee019d489d9
+NOMETA ug-r8b-linux-test-1.meta.json name=ug-r8b-linux-test-1 head=2f67921357bff28a636fc5824d70422dbb1f168d
+NOMETA ug-r8b-linux-test-2.meta.json name=ug-r8b-linux-test-2 head=4fab4424c0ebcd961e5135e393eace47771dd62c
+NOMETA ug-r8b-linux-test-3.meta.json name=ug-r8b-linux-test-3 head=3e487b6b9e520bd8bd7cba836cdb0bea8716fd48
+NOMETA ug-r8b-linux-test-4.meta.json name=ug-r8b-linux-test-4 head=433ce1919d04bb6c5bb3c95a60c6b5df656d59fb
+NOMETA ug-r8b-linux-test-5.meta.json name=ug-r8b-linux-test-5 head=a78640baacb867cdea182f316ef06ee019d489d9
+NOMETA ug-r8b-linux-test-6.meta.json name=ug-r8b-linux-test-6 head=a78640baacb867cdea182f316ef06ee019d489d9
+NOMETA ug-r8b-markerwalk-binding-1.meta.json name=ug-r8b-markerwalk-binding-1 head=4fab4424c0ebcd961e5135e393eace47771dd62c
+NOMETA ug-r8b-markerwalk-mockgate-1.meta.json name=ug-r8b-markerwalk-mockgate-1 head=4fab4424c0ebcd961e5135e393eace47771dd62c
+NOMETA ug-r8b-ollama-binding-1.meta.json name=ug-r8b-ollama-binding-1 head=8c651f13036db0aa2b90413770377cc66cb419d6
+NOMETA ug-r8b-ollama-mockgate-1.meta.json name=ug-r8b-ollama-mockgate-1 head=8c651f13036db0aa2b90413770377cc66cb419d6
+NOMETA ug-r8b-precommit-lane-b1.meta.json name=ug-r8b-precommit-lane-b1 head=8c651f13036db0aa2b90413770377cc66cb419d6
+NOMETA ug-r8b-precommit-lane-c1.meta.json name=ug-r8b-precommit-lane-c1 head=2175d827fa6bf4bcbca05e23fae75aaf6b889737
+NOMETA ug-r8b-restart-binding-1.meta.json name=ug-r8b-restart-binding-1 head=d5a23364daa20da6e23a89e020ddc65ec810773c
+NOMETA ug-r8b-restart-mockgate-1.meta.json name=ug-r8b-restart-mockgate-1 head=d5a23364daa20da6e23a89e020ddc65ec810773c
+NOMETA ug-r8b-restart-mockgate-2.meta.json name=ug-r8b-restart-mockgate-2 head=d5a23364daa20da6e23a89e020ddc65ec810773c
+NOMETA ug-r8b-traceability-1.meta.json name=ug-r8b-traceability-1 head=3e487b6b9e520bd8bd7cba836cdb0bea8716fd48
+NOMETA ug-r8b-traceability-2.meta.json name=ug-r8b-traceability-2 head=433ce1919d04bb6c5bb3c95a60c6b5df656d59fb
+NOMETA ug-r8b-traceability-3.meta.json name=ug-r8b-traceability-3 head=a78640baacb867cdea182f316ef06ee019d489d9
+MATCH ug-r9-binding-p-1.json head=679eb7881d0342a58ef446be5084b703c0cee7c4
+MATCH ug-r9-binding-q-1.json head=679eb7881d0342a58ef446be5084b703c0cee7c4
+MATCH ug-r9-binding-q-2.json head=679eb7881d0342a58ef446be5084b703c0cee7c4
+MATCH ug-r9-binding-r-1.json head=679eb7881d0342a58ef446be5084b703c0cee7c4
+MATCH ug-r9-binding-r-2.json head=679eb7881d0342a58ef446be5084b703c0cee7c4
+MATCH ug-r9-binding-s-1.json head=23955af0b330ec1fe167138edac1ef5ef8ff3bfd
+MATCH ug-r9-final-linux-lane-1.incomplete.json head=765490a9035878c7888c911776289880493dacab
+MATCH ug-r9-final2-linux-lane-1.json head=611a5dc556b5d0b6ce22b98c3103a9f873e34ac5
+MATCH ug-r9-final2-linux-unit-1.json head=611a5dc556b5d0b6ce22b98c3103a9f873e34ac5
+MATCH ug-r9-final3-linux-buildtests-1.json head=62c5882d87f3d0b5019827b1f803140cbf79ca0d
+MATCH ug-r9-final3-linux-lane-1.json head=62c5882d87f3d0b5019827b1f803140cbf79ca0d
+MATCH ug-r9-final3-linux-traceability-1.meta.json head=62c5882d87f3d0b5019827b1f803140cbf79ca0d
+MATCH ug-r9-final3-linux-unit-1.json head=62c5882d87f3d0b5019827b1f803140cbf79ca0d
+MATCH ug-r9-final4-linux-buildtests-1.json head=878c366faadc955d79d7e8e3f6b39f063107bb5b
+MATCH ug-r9-final4-linux-lane-1.json head=878c366faadc955d79d7e8e3f6b39f063107bb5b
+MATCH ug-r9-final4-linux-traceability-1.meta.json head=878c366faadc955d79d7e8e3f6b39f063107bb5b
+MATCH ug-r9-final4-linux-unit-1.json head=878c366faadc955d79d7e8e3f6b39f063107bb5b
+MATCH ug-r9-mockgate-p-1.json head=679eb7881d0342a58ef446be5084b703c0cee7c4
+MATCH ug-r9-mockgate-q-1.json head=679eb7881d0342a58ef446be5084b703c0cee7c4
+MATCH ug-r9-mockgate-q-2.json head=679eb7881d0342a58ef446be5084b703c0cee7c4
+MATCH ug-r9-mockgate-r-1.json head=679eb7881d0342a58ef446be5084b703c0cee7c4
+MATCH ug-r9-mockgate-s-1.json head=23955af0b330ec1fe167138edac1ef5ef8ff3bfd
+MATCH ug-r9-negative-q-1.json head=679eb7881d0342a58ef446be5084b703c0cee7c4
+MATCH ug-r9-traceability-d3g8-1.json head=679eb7881d0342a58ef446be5084b703c0cee7c4
+NOMETA unit-green-final-buildtests-20261019T1918.meta.json name=unit-green-final-buildtests-20261019T1918 head=127468345afcc7a24e6a254f712d6b75a54713e8
+NOMETA unit-green-final-int-20261019T1915.meta.json name=unit-green-final-int-20261019T1915 head=127468345afcc7a24e6a254f712d6b75a54713e8
+NOMETA unit-green-final-traceability-20261019T1918.meta.json name=unit-green-final-traceability-20261019T1918 head=127468345afcc7a24e6a254f712d6b75a54713e8
+NOMETA unit-green-handoff-20261019T1909.meta.json name=unit-green-handoff-20261019T1909 head=69d8f3f5b19b070f9059a096f344c44bbd359d47
+NOMETA unit-green-r2-buildtests-20261019T2120.meta.json name=unit-green-r2-buildtests-20261019T2120 head=b4ad42aaa601ed0df7e03b34203dee4f93d316a9
+NOMETA unit-green-r2-guard-compile-20261019T2100.meta.json name=unit-green-r2-guard-compile-20261019T2100 head=6b4295b790e0e2cde7113f3be4bb83bc66343016
+NOMETA unit-green-r2-guard-mockgate-20261019T2103.meta.json name=unit-green-r2-guard-mockgate-20261019T2103 head=6b4295b790e0e2cde7113f3be4bb83bc66343016
+NOMETA unit-green-r2-int-20261019T2118.meta.json name=unit-green-r2-int-20261019T2118 head=b4ad42aaa601ed0df7e03b34203dee4f93d316a9
+NOMETA unit-green-r2-sandbox-test-20261019T2116.meta.json name=unit-green-r2-sandbox-test-20261019T2116 head=b4ad42aaa601ed0df7e03b34203dee4f93d316a9
+NOMETA unit-green-r2-sandbox-test-20261019T2117.meta.json name=unit-green-r2-sandbox-test-20261019T2117 head=b4ad42aaa601ed0df7e03b34203dee4f93d316a9
+NOMETA unit-green-r2-test-20261019T2110.meta.json name=unit-green-r2-test-20261019T2110 head=b4ad42aaa601ed0df7e03b34203dee4f93d316a9
+NOMETA unit-green-r2-traceability-20261019T2120.meta.json name=unit-green-r2-traceability-20261019T2120 head=b4ad42aaa601ed0df7e03b34203dee4f93d316a9
+END 2026-11-05T00:15:44 match=81 mismatch=1 nometa=220 skippedWithoutNameOrHead=90

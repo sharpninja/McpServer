@@ -7,12 +7,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Options;
 
 /// <summary>
-/// TR-MCP-QBRAIN-004 and TR-MCP-QBRAIN-005: product route and configuration aliases.
+/// TR-MCP-QBRAIN-004 and TR-MCP-QBRAIN-005: product route and configuration aliases. The class runs in
+/// <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
 /// </summary>
+/// <remarks>2026-11-07, TR-MCP-QBRAIN-004; TR-MCP-QBRAIN-005; TR-MCP-USECASE-018 AC-006; TR-MCP-USECASE-019 AC-008; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (ProjectCanonicalSection_EnvironmentAndCommandLineBeatFileQBrainAi) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the unit cases and the class attributes are unchanged.</remarks>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class ProductAliasCompatibilityTests
 {
     /// <summary>
@@ -43,60 +48,21 @@ public sealed class ProductAliasCompatibilityTests
         using var configuration = new ConfigurationManager();
         configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
-            ["Mcp:RepoRoot"] = @"E:\github\McpServer",
+            ["Mcp:RepoRoot"] = @"Q:\fixture\McpServer",
             ["Mcp:Port"] = "7000",
             ["Mcp:TodoFilePath"] = "docs/Project/TODO.yaml",
             ["QBrainAi:Port"] = "7147",
-            ["QBrainAi:Workspaces:0:WorkspacePath"] = @"E:\github\McpServer",
+            ["QBrainAi:Workspaces:0:WorkspacePath"] = @"Q:\fixture\McpServer",
             ["QBrainAi:Workspaces:0:Name"] = "McpServer",
         });
 
         McpInstanceResolver.ProjectCanonicalSectionOverLegacy(configuration);
 
         Assert.Equal("7147", configuration["Mcp:Port"]);
-        Assert.Equal(@"E:\github\McpServer", configuration["Mcp:RepoRoot"]);
+        Assert.Equal(@"Q:\fixture\McpServer", configuration["Mcp:RepoRoot"]);
         Assert.Equal("docs/Project/TODO.yaml", configuration["Mcp:TodoFilePath"]);
-        Assert.Equal(@"E:\github\McpServer", configuration["Mcp:Workspaces:0:WorkspacePath"]);
+        Assert.Equal(@"Q:\fixture\McpServer", configuration["Mcp:Workspaces:0:WorkspacePath"]);
         Assert.Equal("McpServer", configuration["Mcp:Workspaces:0:Name"]);
-    }
-
-    /// <summary>
-    /// TR-MCP-QBRAIN-005: operator Mcp environment and command-line values beat file and image QBrainAi values.
-    /// </summary>
-    [Fact]
-    public void ProjectCanonicalSection_EnvironmentAndCommandLineBeatFileQBrainAi()
-    {
-        var envName = "Mcp__ProjectionProbe";
-        var cliName = "QBrainAi__ProjectionCliProbe";
-        var previousEnv = Environment.GetEnvironmentVariable(envName);
-        var previousCli = Environment.GetEnvironmentVariable(cliName);
-        try
-        {
-            Environment.SetEnvironmentVariable(envName, "/myrepo");
-            Environment.SetEnvironmentVariable(cliName, "/fromenv");
-            using var configuration = new ConfigurationManager();
-            configuration.AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                ["QBrainAi:ProjectionProbe"] = "/workspace",
-                ["Mcp:ProjectionProbe"] = "/legacy",
-                ["QBrainAi:ProjectionCliProbe"] = "/workspace",
-                ["Mcp:Port"] = "7000",
-                ["QBrainAi:Port"] = "7147",
-            });
-            configuration.AddEnvironmentVariables();
-            configuration.AddCommandLine(["--Mcp:ProjectionCliProbe=/fromcli", "--Mcp:Port=9"]);
-            McpInstanceResolver.ProjectCanonicalSectionOverLegacy(configuration);
-
-            Assert.Equal("/myrepo", configuration["Mcp:ProjectionProbe"]);
-            Assert.Equal("/fromcli", configuration["Mcp:ProjectionCliProbe"]);
-            Assert.Equal("9", configuration["Mcp:Port"]);
-            Assert.Equal("/myrepo", McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName: null, "ProjectionProbe"));
-        }
-        finally
-        {
-            Environment.SetEnvironmentVariable(envName, previousEnv);
-            Environment.SetEnvironmentVariable(cliName, previousCli);
-        }
     }
 
     /// <summary>
@@ -272,9 +238,9 @@ public sealed class ProductAliasCompatibilityTests
     [Theory]
     [InlineData("QBrainAi", @"E:\other", true)]
     [InlineData("McpServer", @"E:\other", true)]
-    [InlineData("notes", @"E:\github\McpServer", true)]
-    [InlineData("notes", @"E:\github\QBrainAi", true)]
-    [InlineData("notes", @"E:\github\Other", false)]
+    [InlineData("notes", @"Q:\fixture\McpServer", true)]
+    [InlineData("notes", @"Q:\fixture\QBrainAi", true)]
+    [InlineData("notes", @"Q:\fixture\Other", false)]
     public void ProductWorkspace_AcceptsCanonicalAndLegacyNames(string name, string path, bool expected)
     {
         Assert.Equal(expected, ProductWorkspaceIdentity.IsProductWorkspace(name, path));

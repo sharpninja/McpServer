@@ -1,0 +1,62 @@
+using QBrainAi.Support.Mcp.Services;
+
+namespace QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory;
+
+/// <summary>
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): CI gate and non-Grok optionality.
+/// </summary>
+/// <remarks>2026-11-07, FR-MCP-MEMORY-018; TEST-MCP-MEMORY-018; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: moved whole from QBrainAi.Support.Mcp.Tests (Memory/MemoryBenchCiTests.cs) into the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests, so the unit-owned project holds only unit cases (slice S6, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"); MemoryBenchCatalog is linked into this assembly; only the namespace changed.</remarks>
+public sealed class MemoryBenchCiTests
+{
+    /// <summary>AC-FR-MCP-MEMORY-018-29: Gate mode is off by default and fails when enabled on a miss.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
+    [Fact]
+    public void GateMode_Configurable()
+    {
+        var reportOnly = MemoryBenchCatalog.RunGrokStub(gateEnabled: false);
+        Assert.False(reportOnly.GateEnabled);
+        var gatedPass = MemoryBenchCatalog.RunGrokStub(gateEnabled: true);
+        Assert.True(gatedPass.GateEnabled);
+
+        var failing = new MemoryBenchCellResult
+        {
+            Plugin = "grok",
+            PromptId = "PREF-001",
+            Condition = "with_memory",
+            TokensIn = 1,
+            TokensOut = 1,
+            TokensTotal = 2,
+            TokenSource = MemoryBenchTokenSources.Estimator,
+            Pass = false,
+        };
+        var gated = new MemoryBenchRunResult
+        {
+            Cells = [failing],
+            GateEnabled = true,
+        };
+        MemoryBenchResultSchema.ValidateBeforeWrite(gated);
+        Assert.True(gated.GateEnabled);
+        Assert.False(failing.Pass);
+
+        var source = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "build", "Build.BenchMemory.cs"));
+        Assert.Contains("MemoryBenchGate", source, StringComparison.Ordinal);
+        Assert.Contains("Memory:Bench:Gate", File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "benchmarks", "README.md")), StringComparison.Ordinal);
+    }
+
+    /// <summary>AC-FR-MCP-MEMORY-018-48: Non-Grok bench cells are optional until H7a AGREE.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
+    [Fact]
+    public void NonGrok_OptionalUntilH7a()
+    {
+        var gate = MemoryBenchValueGate.Load(MemoryBenchCatalog.FindRepoRoot());
+        Assert.True(gate.Agree);
+        Assert.False(gate.NonGrokCiRequired);
+        var source = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "build", "Build.BenchMemory.cs"));
+        Assert.Contains("FullyQualifiedName~MemoryBench", source, StringComparison.Ordinal);
+        Assert.DoesNotContain("ClaudeCode_CompletesFullPack", source, StringComparison.Ordinal);
+        Assert.Contains("blocked until H7a", source, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("readonly string Plugin = \"grok\"", source, StringComparison.Ordinal);
+    }
+}

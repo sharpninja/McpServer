@@ -1,0 +1,8 @@
+RECEIPT 2026-10-20T10:16:04 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Test-WinSymbolicLinkCreation.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+PROBE 2026-10-20T10:16:06 user=kingd
+DEVELOPER_MODE AllowDevelopmentWithoutDevLicense=1
+CREATE_SYMLINK ok attributes=Directory, ReparsePoint linkTarget=C:\Users\kingd\AppData\Local\Temp\mcp-link-probe-b9b592d0124c4c14810d8011d9a38cc9\real enumeratedType=DirectoryInfo enumeratedReparse=True
+END 2026-10-20T10:16:06 removed=True

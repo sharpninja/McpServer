@@ -1,0 +1,1731 @@
+[
+  {
+    "set": "unitgreen-r9-trx-878c366f",
+    "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r9-final4-linux-buildtests-1"
+    ],
+    "total": 522,
+    "unique": 522,
+    "previousSet": null,
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r9-trx-878c366f",
+    "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r9-final4-linux-lane-1"
+    ],
+    "total": 738,
+    "unique": 736,
+    "previousSet": null,
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r9-trx-878c366f",
+    "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r9-final4-linux-unit-1"
+    ],
+    "total": 4704,
+    "unique": 4704,
+    "previousSet": null,
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r9-trx-878c366f",
+    "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r9-final4-win-buildtests-1"
+    ],
+    "total": 427,
+    "unique": 427,
+    "previousSet": null,
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r9-trx-878c366f",
+    "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r9-final4-win-lane-1"
+    ],
+    "total": 715,
+    "unique": 713,
+    "previousSet": null,
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r9-trx-878c366f",
+    "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r9-final4-win-unit-1"
+    ],
+    "total": 4704,
+    "unique": 4704,
+    "previousSet": null,
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r10-trx-6082b116",
+    "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r10-final-linux-buildtests-1"
+    ],
+    "total": 529,
+    "unique": 529,
+    "previousSet": "unitgreen-r9-trx-878c366f",
+    "added": [
+      "NukeBuild.Tests.QuadBrainOllamaModelBindingTests.BothConsumers_UseTheSharedRule",
+      "NukeBuild.Tests.QuadBrainOllamaModelBindingTests.SharedRule_SatisfiesMockGatedContract",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.ScriptedSelection_SatisfiesEveryRow",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"legacy first\")",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"legacy only\")",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"no trim\")",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"skips only an unset canonical value\")"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r10-trx-6082b116",
+    "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r10-final-linux-lane-1"
+    ],
+    "total": 739,
+    "unique": 737,
+    "previousSet": "unitgreen-r9-trx-878c366f",
+    "added": [
+      "NukeBuild.Tests.QuadBrainOllamaModelBindingTests.BothConsumers_UseTheSharedRule"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r10-trx-6082b116",
+    "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r10-final-linux-unit-1"
+    ],
+    "total": 4711,
+    "unique": 4711,
+    "previousSet": "unitgreen-r9-trx-878c366f",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksBindingTests.SharedChecks_SatisfyTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksBindingTests.TemporaryInstanceConsumer_UsesExplicitOwnedWorkspaceAndMarker",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongHealthChecks_AreRejectedInsidePassingHarness(wrong: \"any field\", failingRow: \"200 with the nonce in another field\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongHealthChecks_AreRejectedInsidePassingHarness(wrong: \"nonce substring\", failingRow: \"200 with a longer nonce\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"ignores case everywhere\", failingRow: \"a POSIX marker differing only in case is another r\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"ordinal only\", failingRow: \"owned layout in another case on Windows\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores case everywhere\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ordinal only\")",
+      "QBrainAi.Support.Mcp.Tests.Requirements.RequirementStoredTimestampContractTests.WrongReaders_AreRejected(fault: \"date filled from the clock\")"
+    ],
+    "removed": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.SharedChecks_SatisfyTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.TemporaryInstanceConsumer_UsesExplicitOwnedWorkspaceAndMarker"
+    ]
+  },
+  {
+    "set": "unitgreen-r10-trx-6082b116",
+    "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r10-final-win-buildtests-1"
+    ],
+    "total": 433,
+    "unique": 433,
+    "previousSet": "unitgreen-r9-trx-878c366f",
+    "added": [
+      "NukeBuild.Tests.QuadBrainOllamaModelBindingTests.SharedRule_SatisfiesMockGatedContract",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.ScriptedSelection_SatisfiesEveryRow",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"legacy first\")",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"legacy only\")",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"no trim\")",
+      "NukeBuild.Tests.QuadBrainOllamaModelContractTests.WrongSelections_AreRejected(fault: \"skips only an unset canonical value\")"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r10-trx-6082b116",
+    "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r10-final-win-lane-1"
+    ],
+    "total": 716,
+    "unique": 714,
+    "previousSet": "unitgreen-r9-trx-878c366f",
+    "added": [
+      "NukeBuild.Tests.QuadBrainOllamaModelBindingTests.BothConsumers_UseTheSharedRule"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r10-trx-6082b116",
+    "head": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r10-final-win-unit-1"
+    ],
+    "total": 4711,
+    "unique": 4711,
+    "previousSet": "unitgreen-r9-trx-878c366f",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksBindingTests.SharedChecks_SatisfyTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksBindingTests.TemporaryInstanceConsumer_UsesExplicitOwnedWorkspaceAndMarker",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongHealthChecks_AreRejectedInsidePassingHarness(wrong: \"any field\", failingRow: \"200 with the nonce in another field\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongHealthChecks_AreRejectedInsidePassingHarness(wrong: \"nonce substring\", failingRow: \"200 with a longer nonce\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"ignores case everywhere\", failingRow: \"a POSIX marker differing only in case is another r\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"ordinal only\", failingRow: \"owned layout in another case on Windows\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores case everywhere\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ordinal only\")",
+      "QBrainAi.Support.Mcp.Tests.Requirements.RequirementStoredTimestampContractTests.WrongReaders_AreRejected(fault: \"date filled from the clock\")"
+    ],
+    "removed": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.SharedChecks_SatisfyTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.TemporaryInstanceConsumer_UsesExplicitOwnedWorkspaceAndMarker"
+    ]
+  },
+  {
+    "set": "unitgreen-r11-trx-1f51d4b2",
+    "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r11w-final-linux-buildtests-1"
+    ],
+    "total": 529,
+    "unique": 529,
+    "previousSet": "unitgreen-r10-trx-6082b116",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r11-trx-1f51d4b2",
+    "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r11w-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r10-trx-6082b116",
+    "added": [
+      "QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines",
+      "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r11-trx-1f51d4b2",
+    "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r11w-final-linux-unit-1"
+    ],
+    "total": 4733,
+    "unique": 4733,
+    "previousSet": "unitgreen-r10-trx-6082b116",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.RequirementsWorkflowTests.CurrentSelection_HasTimestamp_ReturnsScriptedTimestamp",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.ScriptedClock_RefusesAReadPastItsScript",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.ScriptedClock_SatisfiesTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.SteppingClock_YieldsExactSteps",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.ScriptedReferenceClock_SatisfiesEveryRow",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"read time\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"shifted\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"stale\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"swapped\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"ignores the root\", failingRow: \"a single-rooted marker under a UNC root is another\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"UNC compared ordinally\", failingRow: \"owned UNC layout in another case and separators\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores the root\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"UNC compared ordinally\")",
+      "QBrainAi.Support.Mcp.Tests.Requirements.RequirementStoredTimestampContractTests.WrongReaders_AreRejected(fault: \"year in the text\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.Constructor_EmptyScript_IsRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.Constructor_NonUtcTime_IsRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.GetUtcNow_PastTheScript_IsRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.GetUtcNow_ReturnsTheScriptInOrder",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.LocalTimeZone_IsUtc",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.TimestampAndTimers_AreRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.ScriptedReferenceStamper_SatisfiesEveryRow",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"swapped\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"system clock\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"update keeps the old update time\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"update rewrites the creation time\")"
+    ],
+    "removed": [
+      "QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines",
+      "QBrainAi.Repl.Core.Tests.RequirementsWorkflowTests.CurrentSelection_HasTimestamp_ReturnsRecentTimestamp",
+      "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport"
+    ]
+  },
+  {
+    "set": "unitgreen-r11-trx-1f51d4b2",
+    "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r11w-final-win-buildtests-1"
+    ],
+    "total": 433,
+    "unique": 433,
+    "previousSet": "unitgreen-r10-trx-6082b116",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r11-trx-1f51d4b2",
+    "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r11w-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r10-trx-6082b116",
+    "added": [
+      "QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines",
+      "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r11-trx-1f51d4b2",
+    "head": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r11w-final-win-unit-1"
+    ],
+    "total": 4733,
+    "unique": 4733,
+    "previousSet": "unitgreen-r10-trx-6082b116",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.RequirementsWorkflowTests.CurrentSelection_HasTimestamp_ReturnsScriptedTimestamp",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.ScriptedClock_RefusesAReadPastItsScript",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.ScriptedClock_SatisfiesTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.SteppingClock_YieldsExactSteps",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.ScriptedReferenceClock_SatisfiesEveryRow",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"read time\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"shifted\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"stale\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: \"swapped\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"ignores the root\", failingRow: \"a single-rooted marker under a UNC root is another\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: \"UNC compared ordinally\", failingRow: \"owned UNC layout in another case and separators\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores the root\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"UNC compared ordinally\")",
+      "QBrainAi.Support.Mcp.Tests.Requirements.RequirementStoredTimestampContractTests.WrongReaders_AreRejected(fault: \"year in the text\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.Constructor_EmptyScript_IsRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.Constructor_NonUtcTime_IsRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.GetUtcNow_PastTheScript_IsRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.GetUtcNow_ReturnsTheScriptInOrder",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.LocalTimeZone_IsUtc",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.TimestampAndTimers_AreRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.ScriptedReferenceStamper_SatisfiesEveryRow",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"swapped\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"system clock\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"update keeps the old update time\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: \"update rewrites the creation time\")"
+    ],
+    "removed": [
+      "QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines",
+      "QBrainAi.Repl.Core.Tests.RequirementsWorkflowTests.CurrentSelection_HasTimestamp_ReturnsRecentTimestamp",
+      "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport"
+    ]
+  },
+  {
+    "set": "unitgreen-r12-trx-11406fdf",
+    "head": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r11x-final-linux-buildtests-1"
+    ],
+    "total": 529,
+    "unique": 529,
+    "previousSet": "unitgreen-r11-trx-1f51d4b2",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-11406fdf",
+    "head": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r11x-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r11-trx-1f51d4b2",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-11406fdf",
+    "head": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r11x-final-linux-unit-1"
+    ],
+    "total": 4738,
+    "unique": 4738,
+    "previousSet": "unitgreen-r11-trx-1f51d4b2",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.StatedSyntaxRule_SatisfiesEveryRow",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"accepts device paths\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"compares across path syntaxes\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores Windows segment aliases\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"Windows segment rules on POSIX paths\")"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-11406fdf",
+    "head": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r11x-final-win-buildtests-1"
+    ],
+    "total": 433,
+    "unique": 433,
+    "previousSet": "unitgreen-r11-trx-1f51d4b2",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-11406fdf",
+    "head": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r11x-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r11-trx-1f51d4b2",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-11406fdf",
+    "head": "11406fdf2560d89e470779b2c6e4cb34dbf4c40a",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r11x-final-win-unit-1"
+    ],
+    "total": 4738,
+    "unique": 4738,
+    "previousSet": "unitgreen-r11-trx-1f51d4b2",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.StatedSyntaxRule_SatisfiesEveryRow",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"accepts device paths\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"compares across path syntaxes\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores Windows segment aliases\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"Windows segment rules on POSIX paths\")"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-ec58cf4a",
+    "head": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r12y-final-linux-buildtests-1"
+    ],
+    "total": 529,
+    "unique": 529,
+    "previousSet": "unitgreen-r12-trx-11406fdf",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-ec58cf4a",
+    "head": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r12y-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r12-trx-11406fdf",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-ec58cf4a",
+    "head": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r12y-final-linux-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-11406fdf",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores UNC server and share aliases\")"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-ec58cf4a",
+    "head": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r12y-final-win-buildtests-1"
+    ],
+    "total": 433,
+    "unique": 433,
+    "previousSet": "unitgreen-r12-trx-11406fdf",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-ec58cf4a",
+    "head": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r12y-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r12-trx-11406fdf",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-ec58cf4a",
+    "head": "ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r12y-final-win-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-11406fdf",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: \"ignores UNC server and share aliases\")"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-a4e8d45f",
+    "head": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r12z-final-linux-buildtests-1"
+    ],
+    "total": 529,
+    "unique": 529,
+    "previousSet": "unitgreen-r12-trx-ec58cf4a",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-a4e8d45f",
+    "head": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r12z-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r12-trx-ec58cf4a",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-a4e8d45f",
+    "head": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r12z-final-linux-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-ec58cf4a",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-a4e8d45f",
+    "head": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r12z-final-win-buildtests-1"
+    ],
+    "total": 433,
+    "unique": 433,
+    "previousSet": "unitgreen-r12-trx-ec58cf4a",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-a4e8d45f",
+    "head": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r12z-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r12-trx-ec58cf4a",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-a4e8d45f",
+    "head": "a4e8d45f9bb86f9b79199708e8a0f47b0c5243bf",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r12z-final-win-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-ec58cf4a",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-121992b3",
+    "head": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r12z2-final-linux-buildtests-1"
+    ],
+    "total": 529,
+    "unique": 529,
+    "previousSet": "unitgreen-r12-trx-a4e8d45f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-121992b3",
+    "head": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r12z2-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r12-trx-a4e8d45f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-121992b3",
+    "head": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r12z2-final-linux-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-a4e8d45f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-121992b3",
+    "head": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r12z2-final-win-buildtests-1"
+    ],
+    "total": 433,
+    "unique": 433,
+    "previousSet": "unitgreen-r12-trx-a4e8d45f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-121992b3",
+    "head": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r12z2-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r12-trx-a4e8d45f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-121992b3",
+    "head": "121992b38ce4e2e0d97673d77106b3826c76fb38",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r12z2-final-win-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-a4e8d45f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-4920a8ea",
+    "head": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r12z3b-final-linux-buildtests-1"
+    ],
+    "total": 549,
+    "unique": 549,
+    "previousSet": "unitgreen-r12-trx-121992b3",
+    "added": [
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.OldWindow_FailsOnlyTheSlowStartRow",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.ReferenceWait_MeetsEveryRow",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 0)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 1)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 2)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 3)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 4)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.DefectReader_FailsOnlyTheRepeatedRows",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.ReferenceReader_MeetsEveryRow",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 0)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 1)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 2)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 3)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 4)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 5)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RequiresTheEnvironmentFileOfTheSecondShowLine",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxStartupHealth_StopsAtOnceForAnInactiveUnit",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxStartupHealth_WaitsAsTheContractRows",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_ReadsRepeatedShowLinesAsTheContractRows",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_PreservesEveryEnvironmentFileOfRepeatedShowLines"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-4920a8ea",
+    "head": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r12z3b-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r12-trx-121992b3",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-4920a8ea",
+    "head": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r12z3b-final-linux-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-121992b3",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-4920a8ea",
+    "head": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r12z3b-final-win-buildtests-1"
+    ],
+    "total": 453,
+    "unique": 453,
+    "previousSet": "unitgreen-r12-trx-121992b3",
+    "added": [
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.OldWindow_FailsOnlyTheSlowStartRow",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.ReferenceWait_MeetsEveryRow",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 0)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 1)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 2)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 3)",
+      "NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 4)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.DefectReader_FailsOnlyTheRepeatedRows",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.ReferenceReader_MeetsEveryRow",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 0)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 1)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 2)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 3)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 4)",
+      "NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 5)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RequiresTheEnvironmentFileOfTheSecondShowLine",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxStartupHealth_StopsAtOnceForAnInactiveUnit",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxStartupHealth_WaitsAsTheContractRows",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_ReadsRepeatedShowLinesAsTheContractRows",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_PreservesEveryEnvironmentFileOfRepeatedShowLines"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-4920a8ea",
+    "head": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r12z3b-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r12-trx-121992b3",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-4920a8ea",
+    "head": "4920a8ea7d0e329f5f7cefb62088b8ddbc3a6ab6",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r12z3b-final-win-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-121992b3",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-52e6d627",
+    "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r12z3c-final-linux-buildtests-1"
+    ],
+    "total": 563,
+    "unique": 563,
+    "previousSet": "unitgreen-r12-trx-4920a8ea",
+    "added": [
+      "NukeBuild.Tests.ServiceRecoveryContractTests.OldRecovery_FailsOnlyTheLegacyRows",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.ReferenceRecovery_MeetsEveryRow",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 0)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 1)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 2)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 3)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 4)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 5)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 0)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 1)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 2)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 3)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 4)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 5)"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-52e6d627",
+    "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r12z3c-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r12-trx-4920a8ea",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-52e6d627",
+    "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r12z3c-final-linux-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-4920a8ea",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-52e6d627",
+    "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r12z3c-final-win-buildtests-1"
+    ],
+    "total": 467,
+    "unique": 467,
+    "previousSet": "unitgreen-r12-trx-4920a8ea",
+    "added": [
+      "NukeBuild.Tests.ServiceRecoveryContractTests.OldRecovery_FailsOnlyTheLegacyRows",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.ReferenceRecovery_MeetsEveryRow",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 0)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 1)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 2)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 3)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 4)",
+      "NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 5)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 0)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 1)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 2)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 3)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 4)",
+      "NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 5)"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-52e6d627",
+    "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r12z3c-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r12-trx-4920a8ea",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r12-trx-52e6d627",
+    "head": "52e6d627b78df808bb469269f0093d8fc1815701",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r12z3c-final-win-unit-1"
+    ],
+    "total": 4739,
+    "unique": 4739,
+    "previousSet": "unitgreen-r12-trx-4920a8ea",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-1bb0d61f",
+    "head": "1bb0d61f52302e8f4f9051ea2d3a4a834bf2c92b",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r13z4b-final-linux-buildtests-1"
+    ],
+    "total": 563,
+    "unique": 563,
+    "previousSet": "unitgreen-r12-trx-52e6d627",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-1bb0d61f",
+    "head": "1bb0d61f52302e8f4f9051ea2d3a4a834bf2c92b",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r13z4b-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r12-trx-52e6d627",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-1bb0d61f",
+    "head": "1bb0d61f52302e8f4f9051ea2d3a4a834bf2c92b",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r13z4b-final-linux-unit-1"
+    ],
+    "total": 4820,
+    "unique": 4820,
+    "previousSet": "unitgreen-r12-trx-52e6d627",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.EveryKeyIdentityRow_RejectsAWrongResponse",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.Oracle_ReadsSpellingsAsOneKeyInEnumerationOrder",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.OwnedEnvironment_NormalizedAliasesCannotOverrideDatabase",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.RawPrefixBuilder_LeavesAnAliasTheCheckRefuses",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.ScriptedKeyIdentity_SatisfiesTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.StartCheck_RejectsUnownedNormalizedAliases",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"both separators, no host prefixes\", failingRow: \"host-prefixed colon and mixed spellings\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"drops the owned settings\", failingRow: \"unrelated colon and mixed keys are kept\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"keeps the endpoint section\", failingRow: \"spellings of the workspace, port and endpoint sett\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"raw prefixes only\", failingRow: \"a colon spelling of the canonical connection strin\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"raw prefixes only\", failingRow: \"a mixed spelling with the colon first\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"raw prefixes only\", failingRow: \"spellings of an owned key in another case and sepa\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"removes every key with a separator\", failingRow: \"unrelated colon and mixed keys are kept\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"no rule for two names\", failingRow: \"two owned names for one key\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"provider rule on double underscores only\", failingRow: \"an owned colon provider naming another engine\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"raw prefixes only\", failingRow: \"an owned colon provider naming another engine\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"raw prefixes only\", failingRow: \"an unowned colon spelling of the database\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"raw prefixes only\", failingRow: \"an unowned host-prefixed colon spelling\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"refuses every colon key\", failingRow: \"an owned colon provider naming SQLite\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"refuses every colon key\", failingRow: \"an unrelated colon key\")",
+      "QBrainAi.Support.Mcp.Tests.Controllers.TransactionSecurityControllerTests.ManifestExpiry_UsesScriptedClock",
+      "QBrainAi.Support.Mcp.Tests.Controllers.TransactionSecurityControllerTests.ManifestFutureIssue_UsesScriptedClock",
+      "QBrainAi.Support.Mcp.Tests.Memory.MemoryConsolidateJobTests.ConsolidationLockTakeover_UsesScriptedClock",
+      "QBrainAi.Support.Mcp.Tests.Services.FederationEnvelopeSignerTests.EnvelopeExpiry_UsesScriptedClock",
+      "QBrainAi.Support.Mcp.Tests.Services.FederationEnvelopeSignerTests.EnvelopeFutureIssue_UsesScriptedClock",
+      "QBrainAi.Support.Mcp.Tests.Services.GraphRagServiceTests.ArtifactCleanup_UsesScriptedAgeBoundary",
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffDurabilityTests.ProcessingLeaseTakeover_UsesScriptedClock",
+      "QBrainAi.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.StaleTurnQuery_UsesScriptedAsOfTime",
+      "QBrainAi.Support.Mcp.Tests.Services.WorkspaceHygieneG5OverlayTests.WorkspaceHygiene_UsesScriptedStaleThreshold",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.AsynchronousAssertion_MatchesTheSynchronousOne",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D1 stale in-progress turn query\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D2 temporary artifact cleanup\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D3 hygiene stale turn, default threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D3 hygiene stale turn, override threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D4 federation envelope future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D5 transaction manifest future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D7 consolidation lock takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D1 stale in-progress turn query\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D2 temporary artifact cleanup\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D3 hygiene stale turn, default threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D3 hygiene stale turn, override threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D4 federation envelope expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D4 federation envelope future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D5 transaction manifest expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D5 transaction manifest future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D6 handoff processing lease takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D7 consolidation lock takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D1 stale in-progress turn query\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D2 temporary artifact cleanup\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D3 hygiene stale turn, default threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D3 hygiene stale turn, override threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D4 federation envelope expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D4 federation envelope future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D5 transaction manifest expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D5 transaction manifest future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D6 handoff processing lease takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D7 consolidation lock takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D1 stale in-progress turn query\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D2 temporary artifact cleanup\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D3 hygiene stale turn, default threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D3 hygiene stale turn, override threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D4 federation envelope expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D4 federation envelope future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D5 transaction manifest expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D5 transaction manifest future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D6 handoff processing lease takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D7 consolidation lock takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.Rows_SitAtTheThresholdAndOneStepEitherSide",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D1 stale in-progress turn query\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D2 temporary artifact cleanup\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D3 hygiene stale turn, default threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D3 hygiene stale turn, override threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D4 federation envelope expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D4 federation envelope future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D5 transaction manifest expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D5 transaction manifest future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D6 handoff processing lease takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D7 consolidation lock takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProviderTests.NonUtcInstants_AreRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProviderTests.Reads_ReturnTheSetInstantUntilChanged",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProviderTests.StopwatchAndTimers_AreRefused"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-1bb0d61f",
+    "head": "1bb0d61f52302e8f4f9051ea2d3a4a834bf2c92b",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r13z4b-final-win-buildtests-1"
+    ],
+    "total": 467,
+    "unique": 467,
+    "previousSet": "unitgreen-r12-trx-52e6d627",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-1bb0d61f",
+    "head": "1bb0d61f52302e8f4f9051ea2d3a4a834bf2c92b",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r13z4b-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r12-trx-52e6d627",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-1bb0d61f",
+    "head": "1bb0d61f52302e8f4f9051ea2d3a4a834bf2c92b",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r13z4b-final-win-unit-1"
+    ],
+    "total": 4820,
+    "unique": 4820,
+    "previousSet": "unitgreen-r12-trx-52e6d627",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.EveryKeyIdentityRow_RejectsAWrongResponse",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.Oracle_ReadsSpellingsAsOneKeyInEnumerationOrder",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.OwnedEnvironment_NormalizedAliasesCannotOverrideDatabase",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.RawPrefixBuilder_LeavesAnAliasTheCheckRefuses",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.ScriptedKeyIdentity_SatisfiesTheContract",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.StartCheck_RejectsUnownedNormalizedAliases",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"both separators, no host prefixes\", failingRow: \"host-prefixed colon and mixed spellings\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"drops the owned settings\", failingRow: \"unrelated colon and mixed keys are kept\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"keeps the endpoint section\", failingRow: \"spellings of the workspace, port and endpoint sett\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"raw prefixes only\", failingRow: \"a colon spelling of the canonical connection strin\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"raw prefixes only\", failingRow: \"a mixed spelling with the colon first\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"raw prefixes only\", failingRow: \"spellings of an owned key in another case and sepa\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"removes every key with a separator\", failingRow: \"unrelated colon and mixed keys are kept\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"no rule for two names\", failingRow: \"two owned names for one key\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"provider rule on double underscores only\", failingRow: \"an owned colon provider naming another engine\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"raw prefixes only\", failingRow: \"an owned colon provider naming another engine\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"raw prefixes only\", failingRow: \"an unowned colon spelling of the database\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"raw prefixes only\", failingRow: \"an unowned host-prefixed colon spelling\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"refuses every colon key\", failingRow: \"an owned colon provider naming SQLite\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"refuses every colon key\", failingRow: \"an unrelated colon key\")",
+      "QBrainAi.Support.Mcp.Tests.Controllers.TransactionSecurityControllerTests.ManifestExpiry_UsesScriptedClock",
+      "QBrainAi.Support.Mcp.Tests.Controllers.TransactionSecurityControllerTests.ManifestFutureIssue_UsesScriptedClock",
+      "QBrainAi.Support.Mcp.Tests.Memory.MemoryConsolidateJobTests.ConsolidationLockTakeover_UsesScriptedClock",
+      "QBrainAi.Support.Mcp.Tests.Services.FederationEnvelopeSignerTests.EnvelopeExpiry_UsesScriptedClock",
+      "QBrainAi.Support.Mcp.Tests.Services.FederationEnvelopeSignerTests.EnvelopeFutureIssue_UsesScriptedClock",
+      "QBrainAi.Support.Mcp.Tests.Services.GraphRagServiceTests.ArtifactCleanup_UsesScriptedAgeBoundary",
+      "QBrainAi.Support.Mcp.Tests.Services.HandoffDurabilityTests.ProcessingLeaseTakeover_UsesScriptedClock",
+      "QBrainAi.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.StaleTurnQuery_UsesScriptedAsOfTime",
+      "QBrainAi.Support.Mcp.Tests.Services.WorkspaceHygieneG5OverlayTests.WorkspaceHygiene_UsesScriptedStaleThreshold",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.AsynchronousAssertion_MatchesTheSynchronousOne",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D1 stale in-progress turn query\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D2 temporary artifact cleanup\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D3 hygiene stale turn, default threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D3 hygiene stale turn, override threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D4 federation envelope future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D5 transaction manifest future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionIgnoringTheThreshold_IsRejected(name: \"D7 consolidation lock takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D1 stale in-progress turn query\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D2 temporary artifact cleanup\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D3 hygiene stale turn, default threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D3 hygiene stale turn, override threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D4 federation envelope expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D4 federation envelope future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D5 transaction manifest expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D5 transaction manifest future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D6 handoff processing lease takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionOnAnotherClock_IsRejected(name: \"D7 consolidation lock takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D1 stale in-progress turn query\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D2 temporary artifact cleanup\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D3 hygiene stale turn, default threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D3 hygiene stale turn, override threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D4 federation envelope expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D4 federation envelope future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D5 transaction manifest expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D5 transaction manifest future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D6 handoff processing lease takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheBoundarySwapped_IsRejected(name: \"D7 consolidation lock takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D1 stale in-progress turn query\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D2 temporary artifact cleanup\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D3 hygiene stale turn, default threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D3 hygiene stale turn, override threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D4 federation envelope expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D4 federation envelope future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D5 transaction manifest expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D5 transaction manifest future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D6 handoff processing lease takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.DecisionWithTheComparisonInverted_IsRejected(name: \"D7 consolidation lock takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.Rows_SitAtTheThresholdAndOneStepEitherSide",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D1 stale in-progress turn query\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D2 temporary artifact cleanup\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D3 hygiene stale turn, default threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D3 hygiene stale turn, override threshold\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D4 federation envelope expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D4 federation envelope future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D5 transaction manifest expiry\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D5 transaction manifest future issue\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D6 handoff processing lease takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.ScriptedDecision_SatisfiesTheContract(name: \"D7 consolidation lock takeover\")",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProviderTests.NonUtcInstants_AreRefused",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProviderTests.Reads_ReturnTheSetInstantUntilChanged",
+      "QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProviderTests.StopwatchAndTimers_AreRefused"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-a3caa21d",
+    "head": "a3caa21d67e85f464cc4e6b62b04e2b3bb9ca708",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r13z5-final-linux-buildtests-1"
+    ],
+    "total": 563,
+    "unique": 563,
+    "previousSet": "unitgreen-r13-trx-1bb0d61f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-a3caa21d",
+    "head": "a3caa21d67e85f464cc4e6b62b04e2b3bb9ca708",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r13z5-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r13-trx-1bb0d61f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-a3caa21d",
+    "head": "a3caa21d67e85f464cc4e6b62b04e2b3bb9ca708",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r13z5-final-linux-unit-1"
+    ],
+    "total": 4832,
+    "unique": 4832,
+    "previousSet": "unitgreen-r13-trx-1bb0d61f",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.OwnedSpellingBuilder_LeavesNamesTheCheckRefuses",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.ReplStart_KeepsUnrelatedNamesExactly",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"collapses case variants\", failingRow: \"unrelated names that differ only in case are kept\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"keeps other spellings of owned settings\", failingRow: \"another case of an owned setting is replaced\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"keeps other spellings of owned settings\", failingRow: \"another separator spelling of an owned setting is \"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"owned settings matched by name, not key\", failingRow: \"another separator spelling of an owned setting is \"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"two-name rule matches case\", failingRow: \"two names of an owned product key that differ only\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"two-name rule on every name\", failingRow: \"unrelated names that differ only in case\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"two-name rule on product keys only\", failingRow: \"two names of an owned setting that differ only in \"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"two-name rule on product keys only\", failingRow: \"two separator spellings of an owned setting\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongReplStarts_AreRejectedInsidePassingHarness(wrong: \"builds the REPL child ignoring case\", failingRow: \"unrelated names that differ only in case reach the\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongReplStarts_AreRejectedInsidePassingHarness(wrong: \"reads the start environment ignoring case\", failingRow: \"unrelated names that differ only in case reach the\"···)"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-a3caa21d",
+    "head": "a3caa21d67e85f464cc4e6b62b04e2b3bb9ca708",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r13z5-final-win-buildtests-1"
+    ],
+    "total": 467,
+    "unique": 467,
+    "previousSet": "unitgreen-r13-trx-1bb0d61f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-a3caa21d",
+    "head": "a3caa21d67e85f464cc4e6b62b04e2b3bb9ca708",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r13z5-final-win-lane-2"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r13-trx-1bb0d61f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-a3caa21d",
+    "head": "a3caa21d67e85f464cc4e6b62b04e2b3bb9ca708",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r13z5-final-win-unit-1"
+    ],
+    "total": 4832,
+    "unique": 4832,
+    "previousSet": "unitgreen-r13-trx-1bb0d61f",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.OwnedSpellingBuilder_LeavesNamesTheCheckRefuses",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.ReplStart_KeepsUnrelatedNamesExactly",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"collapses case variants\", failingRow: \"unrelated names that differ only in case are kept\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"keeps other spellings of owned settings\", failingRow: \"another case of an owned setting is replaced\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"keeps other spellings of owned settings\", failingRow: \"another separator spelling of an owned setting is \"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"owned settings matched by name, not key\", failingRow: \"another separator spelling of an owned setting is \"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"two-name rule matches case\", failingRow: \"two names of an owned product key that differ only\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"two-name rule on every name\", failingRow: \"unrelated names that differ only in case\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"two-name rule on product keys only\", failingRow: \"two names of an owned setting that differ only in \"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"two-name rule on product keys only\", failingRow: \"two separator spellings of an owned setting\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongReplStarts_AreRejectedInsidePassingHarness(wrong: \"builds the REPL child ignoring case\", failingRow: \"unrelated names that differ only in case reach the\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongReplStarts_AreRejectedInsidePassingHarness(wrong: \"reads the start environment ignoring case\", failingRow: \"unrelated names that differ only in case reach the\"···)"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-88c5abcc",
+    "head": "88c5abccee5f92b785f1368fdaace50dc0d4e2c2",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r13z6-final-linux-buildtests-1"
+    ],
+    "total": 563,
+    "unique": 563,
+    "previousSet": "unitgreen-r13-trx-a3caa21d",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-88c5abcc",
+    "head": "88c5abccee5f92b785f1368fdaace50dc0d4e2c2",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r13z6-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r13-trx-a3caa21d",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-88c5abcc",
+    "head": "88c5abccee5f92b785f1368fdaace50dc0d4e2c2",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r13z6-final-linux-unit-1"
+    ],
+    "total": 4838,
+    "unique": 4838,
+    "previousSet": "unitgreen-r13-trx-a3caa21d",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"owned settings matched without host prefixes\", failingRow: \"a host-prefixed spelling of an owned setting is re\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"owned settings matched without host prefixes\", failingRow: \"an unprefixed spelling of an owned host-prefixed s\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"removes every host-prefixed name\", failingRow: \"unrelated host-prefixed names are kept\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"two-name rule on owned keys without host prefixes\", failingRow: \"two cases of an unprefixed spelling of an owned ho\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"two-name rule strips host prefixes\", failingRow: \"owned settings under both host prefixes\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongReplStarts_AreRejectedInsidePassingHarness(wrong: \"matches the REPL's own keys without host prefixes\", failingRow: \"an unprefixed spelling of the REPL's host setting \"···)"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-88c5abcc",
+    "head": "88c5abccee5f92b785f1368fdaace50dc0d4e2c2",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r13z6-final-win-buildtests-1"
+    ],
+    "total": 467,
+    "unique": 467,
+    "previousSet": "unitgreen-r13-trx-a3caa21d",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-88c5abcc",
+    "head": "88c5abccee5f92b785f1368fdaace50dc0d4e2c2",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r13z6-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r13-trx-a3caa21d",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-88c5abcc",
+    "head": "88c5abccee5f92b785f1368fdaace50dc0d4e2c2",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r13z6-final-win-unit-1"
+    ],
+    "total": 4838,
+    "unique": 4838,
+    "previousSet": "unitgreen-r13-trx-a3caa21d",
+    "added": [
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"owned settings matched without host prefixes\", failingRow: \"a host-prefixed spelling of an owned setting is re\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"owned settings matched without host prefixes\", failingRow: \"an unprefixed spelling of an owned host-prefixed s\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: \"removes every host-prefixed name\", failingRow: \"unrelated host-prefixed names are kept\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"two-name rule on owned keys without host prefixes\", failingRow: \"two cases of an unprefixed spelling of an owned ho\"···)",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: \"two-name rule strips host prefixes\", failingRow: \"owned settings under both host prefixes\")",
+      "QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongReplStarts_AreRejectedInsidePassingHarness(wrong: \"matches the REPL's own keys without host prefixes\", failingRow: \"an unprefixed spelling of the REPL's host setting \"···)"
+    ],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-1d77a79c",
+    "head": "1d77a79c4e1e78a4c8e164a49779393721a95061",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r13z7-final-linux-buildtests-1"
+    ],
+    "total": 563,
+    "unique": 563,
+    "previousSet": "unitgreen-r13-trx-88c5abcc",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-1d77a79c",
+    "head": "1d77a79c4e1e78a4c8e164a49779393721a95061",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r13z7-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r13-trx-88c5abcc",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-1d77a79c",
+    "head": "1d77a79c4e1e78a4c8e164a49779393721a95061",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r13z7-final-linux-unit-1"
+    ],
+    "total": 4838,
+    "unique": 4838,
+    "previousSet": "unitgreen-r13-trx-88c5abcc",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-1d77a79c",
+    "head": "1d77a79c4e1e78a4c8e164a49779393721a95061",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r13z7-final-win-buildtests-1"
+    ],
+    "total": 467,
+    "unique": 467,
+    "previousSet": "unitgreen-r13-trx-88c5abcc",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-1d77a79c",
+    "head": "1d77a79c4e1e78a4c8e164a49779393721a95061",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r13z7-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r13-trx-88c5abcc",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-1d77a79c",
+    "head": "1d77a79c4e1e78a4c8e164a49779393721a95061",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r13z7-final-win-unit-1"
+    ],
+    "total": 4838,
+    "unique": 4838,
+    "previousSet": "unitgreen-r13-trx-88c5abcc",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-becb0742",
+    "head": "becb0742693de240dce596a8eec4eb41c99a7c1d",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r13z8b-final-linux-buildtests-1"
+    ],
+    "total": 563,
+    "unique": 563,
+    "previousSet": "unitgreen-r13-trx-1d77a79c",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-becb0742",
+    "head": "becb0742693de240dce596a8eec4eb41c99a7c1d",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r13z8b-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r13-trx-1d77a79c",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-becb0742",
+    "head": "becb0742693de240dce596a8eec4eb41c99a7c1d",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r13z8b-final-linux-unit-1"
+    ],
+    "total": 4838,
+    "unique": 4838,
+    "previousSet": "unitgreen-r13-trx-1d77a79c",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-becb0742",
+    "head": "becb0742693de240dce596a8eec4eb41c99a7c1d",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r13z8b-final-win-buildtests-1"
+    ],
+    "total": 467,
+    "unique": 467,
+    "previousSet": "unitgreen-r13-trx-1d77a79c",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-becb0742",
+    "head": "becb0742693de240dce596a8eec4eb41c99a7c1d",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r13z8b-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r13-trx-1d77a79c",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-becb0742",
+    "head": "becb0742693de240dce596a8eec4eb41c99a7c1d",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r13z8b-final-win-unit-1"
+    ],
+    "total": 4838,
+    "unique": 4838,
+    "previousSet": "unitgreen-r13-trx-1d77a79c",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-94dc5b69",
+    "head": "94dc5b69078f746ea6cffc3bb11c73ecb74811be",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r13z9-final-linux-buildtests-1"
+    ],
+    "total": 563,
+    "unique": 563,
+    "previousSet": "unitgreen-r13-trx-becb0742",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-94dc5b69",
+    "head": "94dc5b69078f746ea6cffc3bb11c73ecb74811be",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r13z9-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r13-trx-becb0742",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-94dc5b69",
+    "head": "94dc5b69078f746ea6cffc3bb11c73ecb74811be",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r13z9-final-linux-unit-1"
+    ],
+    "total": 4838,
+    "unique": 4838,
+    "previousSet": "unitgreen-r13-trx-becb0742",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-94dc5b69",
+    "head": "94dc5b69078f746ea6cffc3bb11c73ecb74811be",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r13z9-final-win-buildtests-1"
+    ],
+    "total": 467,
+    "unique": 467,
+    "previousSet": "unitgreen-r13-trx-becb0742",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-94dc5b69",
+    "head": "94dc5b69078f746ea6cffc3bb11c73ecb74811be",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r13z9-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r13-trx-becb0742",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-94dc5b69",
+    "head": "94dc5b69078f746ea6cffc3bb11c73ecb74811be",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r13z9-final-win-unit-1"
+    ],
+    "total": 4838,
+    "unique": 4838,
+    "previousSet": "unitgreen-r13-trx-becb0742",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-baff082f",
+    "head": "baff082f23c87fdbbec0cd20dbc41569f7b1cf3a",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r13z10-final-linux-buildtests-1"
+    ],
+    "total": 563,
+    "unique": 563,
+    "previousSet": "unitgreen-r13-trx-94dc5b69",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-baff082f",
+    "head": "baff082f23c87fdbbec0cd20dbc41569f7b1cf3a",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r13z10-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r13-trx-94dc5b69",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-baff082f",
+    "head": "baff082f23c87fdbbec0cd20dbc41569f7b1cf3a",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r13z10-final-linux-unit-1"
+    ],
+    "total": 4838,
+    "unique": 4838,
+    "previousSet": "unitgreen-r13-trx-94dc5b69",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-baff082f",
+    "head": "baff082f23c87fdbbec0cd20dbc41569f7b1cf3a",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r13z10-final-win-buildtests-1"
+    ],
+    "total": 467,
+    "unique": 467,
+    "previousSet": "unitgreen-r13-trx-94dc5b69",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-baff082f",
+    "head": "baff082f23c87fdbbec0cd20dbc41569f7b1cf3a",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r13z10-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r13-trx-94dc5b69",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-baff082f",
+    "head": "baff082f23c87fdbbec0cd20dbc41569f7b1cf3a",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r13z10-final-win-unit-1"
+    ],
+    "total": 4838,
+    "unique": 4838,
+    "previousSet": "unitgreen-r13-trx-94dc5b69",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-53a210ca",
+    "head": "53a210ca4e521474685f2e3e1558b5cf88a5d535",
+    "group": "LAB-OMARCHY, infrastructure",
+    "runIds": [
+      "ug-r13z11-final-linux-buildtests-1"
+    ],
+    "total": 563,
+    "unique": 563,
+    "previousSet": "unitgreen-r13-trx-baff082f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-53a210ca",
+    "head": "53a210ca4e521474685f2e3e1558b5cf88a5d535",
+    "group": "LAB-OMARCHY, integration",
+    "runIds": [
+      "ug-r13z11-final-linux-lane-1"
+    ],
+    "total": 741,
+    "unique": 739,
+    "previousSet": "unitgreen-r13-trx-baff082f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-53a210ca",
+    "head": "53a210ca4e521474685f2e3e1558b5cf88a5d535",
+    "group": "LAB-OMARCHY, unit",
+    "runIds": [
+      "ug-r13z11-final-linux-unit-1"
+    ],
+    "total": 4838,
+    "unique": 4838,
+    "previousSet": "unitgreen-r13-trx-baff082f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-53a210ca",
+    "head": "53a210ca4e521474685f2e3e1558b5cf88a5d535",
+    "group": "PAYTON-LEGION2, infrastructure",
+    "runIds": [
+      "ug-r13z11-final-win-buildtests-1"
+    ],
+    "total": 467,
+    "unique": 467,
+    "previousSet": "unitgreen-r13-trx-baff082f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-53a210ca",
+    "head": "53a210ca4e521474685f2e3e1558b5cf88a5d535",
+    "group": "PAYTON-LEGION2, integration",
+    "runIds": [
+      "ug-r13z11-final-win-lane-1"
+    ],
+    "total": 718,
+    "unique": 716,
+    "previousSet": "unitgreen-r13-trx-baff082f",
+    "added": [],
+    "removed": []
+  },
+  {
+    "set": "unitgreen-r13-trx-53a210ca",
+    "head": "53a210ca4e521474685f2e3e1558b5cf88a5d535",
+    "group": "PAYTON-LEGION2, unit",
+    "runIds": [
+      "ug-r13z11-final-win-unit-1"
+    ],
+    "total": 4838,
+    "unique": 4838,
+    "previousSet": "unitgreen-r13-trx-baff082f",
+    "added": [],
+    "removed": []
+  }
+]

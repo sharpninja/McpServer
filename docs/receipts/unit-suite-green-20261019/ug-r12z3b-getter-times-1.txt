@@ -1,0 +1,6 @@
+Requirement getter time check by ClaudeCode (Get-RequirementTimes.ps1), started 2026-11-04T18:01:52 local; ids=FR-MCP-040;TR-MCP-SERVICEUPDATE-001; reads through the plugin (workflow.requirements.getFr, getTr, getTest), read only.
+READ pass=1 returnedLocal=2026-11-04T18:01:56 FR-MCP-040 createdAt=2026-11-05T00:01:55.8456982+00:00 updatedAt=2026-11-05T00:01:55.8458087+00:00
+READ pass=1 returnedLocal=2026-11-04T18:02:00 TR-MCP-SERVICEUPDATE-001 createdAt=2026-11-05T00:02:00.5493329+00:00 updatedAt=2026-11-05T00:02:00.5494420+00:00
+READ pass=2 returnedLocal=2026-11-04T18:02:07 FR-MCP-040 createdAt=2026-11-05T00:02:07.3016871+00:00 updatedAt=2026-11-05T00:02:07.3018127+00:00
+READ pass=2 returnedLocal=2026-11-04T18:02:13 TR-MCP-SERVICEUPDATE-001 createdAt=2026-11-05T00:02:12.6059038+00:00 updatedAt=2026-11-05T00:02:12.6060518+00:00
+END 2026-11-04T18:02:13 local

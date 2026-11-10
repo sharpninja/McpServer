@@ -1,0 +1,1213 @@
+{
+  "EffectiveKeys": [
+    "currentLayer",
+    "testing",
+    "mappings",
+    "functional",
+    "technical"
+  ],
+  "Records": [
+    {
+      "Key": "FR-MCP-018",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:36.5399771+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:36.5398365+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Marker File Agent Discovery",
+        "id": "FR-MCP-018",
+        "description": "When a workspace is started, the server shall write an `AGENTS-README-FIRST.yaml` marker file to the workspace root containing the shared host port, all endpoint paths, a machine-readable prompt, and PID. All markers point to the same port; workspace identity is resolved via the `X-Workspace-Path` header. The marker shall be removed when the workspace is stopped.\n\n**Covered by:** `MarkerFileService`, `WorkspaceProcessManager`",
+        "acceptanceCriteria": [],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "FR-MCP-BUILD-001",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:33.6940505+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:33.6938848+00:00",
+        "status": "pending",
+        "priority": "high",
+        "title": "Tooling for repeatable builds",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-1",
+            "isSatisfied": false,
+            "text": "The same sources build the same way on every supported host through the project's build tooling, with the behavior each TR-MCP-NUKE-* requirement specifies; verified by running ./build.ps1 -WhatIf (TR-MCP-NUKE-005), which exits zero on a conforming tree."
+          }
+        ],
+        "id": "FR-MCP-BUILD-001",
+        "description": "The project SHALL provide tooling for repeatable builds.",
+        "notes": "Operator, 2026-10-10T20:08:04Z, verbatim: \"FR: Project will provide tooling for repeatable builds.\" and \"Now, the TR are implementation detail of the FR.\" The Nuke build (build/, ./build.ps1) is that tooling; its behavior is specified only in TRs under this FR (TR-MCP-NUKE-*), consistent with \"NUKE is only accountable through TR.\" Build.Tests is the infrastructure suite that verifies those TRs, not application unit tests; no TEST record.",
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "FR-MCP-MEMORY-002",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:39.4172815+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:39.4171408+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Memory CRUD tools",
+        "id": "FR-MCP-MEMORY-002",
+        "description": "The QBrain.AI SHALL expose add, list, update, and remove operations for raw-text memories through REST, typed client, MCP stdio, and REPL workflow surfaces.",
+        "acceptanceCriteria": [
+          {
+            "id": "",
+            "isSatisfied": true,
+            "text": "Add creates a memory and returns ID, text, scope, category, version, and timestamps."
+          },
+          {
+            "id": "",
+            "isSatisfied": true,
+            "text": "List returns the effective memory set for the active workspace by default."
+          },
+          {
+            "id": "",
+            "isSatisfied": true,
+            "text": "Update replaces raw text, increments version, and can change scope under validated rules."
+          },
+          {
+            "id": "",
+            "isSatisfied": true,
+            "text": "Remove soft-deletes a memory by ID."
+          },
+          {
+            "id": "",
+            "isSatisfied": true,
+            "text": "Invalid IDs, duplicate active IDs, invalid scopes, empty text, and unauthorized scope changes return clear errors."
+          }
+        ],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "FR-MCP-MEMORY-010",
+      "Record": null
+    },
+    {
+      "Key": "FR-MCP-PATHNORM-001",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:31.6641841+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:31.6639925+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Persist workspace paths with forward slashes and platform tag",
+        "id": "FR-MCP-PATHNORM-001",
+        "description": "Operator directive (PLAN-PATHNORM-001, decision D1 2026-10-07: delivered in P1). Persisted workspace paths, storage keys and identity hashes use '/' as the separator for all platforms; the windows: (case-insensitive) / case-sensitive: tag is kept; Windows-origin paths are detected by drive letter (C:/) or UNC (//server/share), not by separator; the UNC leading '//' is preserved; paths are converted to '\\' only at OS boundaries that require it (\\\\?\\ long-path prefixes, cmd.exe arguments, native APIs). AC1: C:\\Users\\kingd, C:/Users/kingd and c:/users/KINGD produce one storage key. AC2: \\\\srv\\share\\x and //srv/share/x produce one storage key that still starts with //. AC3: Existing stores are converted by the --workspace-path-rekey maintenance command (decisions D5-D7 2026-10-07): after it runs no Windows-shaped workspace value contains a backslash, per-table and per-workspace row counts are unchanged, and foreign keys validate; the server refuses to start against an unconverted store (no dual-key lookup). AC4: Native file operations on Windows receive backslash paths where the OS requires them.",
+        "acceptanceCriteria": [],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "FR-MCP-SESSIONLOGCTX-001",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:37.9644771+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:37.9643509+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Session turns record current plan file and MCP TODO id",
+        "id": "FR-MCP-SESSIONLOGCTX-001",
+        "description": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output. When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive). The first persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId. planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected. Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields. Existing rows SHALL be backfilled from turn contents and agent history under ~. Import, transcript ingest, and federation apply SHALL persist a validated pair (None if extraction finds nothing). Children: AC-FR-MCP-SESSIONLOGCTX-001-001, AC-FR-MCP-SESSIONLOGCTX-001-002, AC-FR-MCP-SESSIONLOGCTX-001-003, AC-FR-MCP-SESSIONLOGCTX-001-004, AC-FR-MCP-SESSIONLOGCTX-001-005, AC-FR-MCP-SESSIONLOGCTX-001-006, AC-FR-MCP-SESSIONLOGCTX-001-007.",
+        "acceptanceCriteria": [
+          {
+            "id": "",
+            "isSatisfied": false,
+            "text": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output."
+          },
+          {
+            "id": "",
+            "isSatisfied": false,
+            "text": "When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive)."
+          },
+          {
+            "id": "",
+            "isSatisfied": false,
+            "text": "The first ordinary persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId and insert no turn row. A canceled or cancelled supersession may omit the pair, stores the exact sentinel None for each missing value, and a durable reopen preserves that bounded exception."
+          },
+          {
+            "id": "",
+            "isSatisfied": false,
+            "text": "planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected."
+          },
+          {
+            "id": "",
+            "isSatisfied": false,
+            "text": "Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields."
+          },
+          {
+            "id": "",
+            "isSatisfied": false,
+            "text": "Existing rows SHALL be backfilled from turn contents and agent history under ~. Uncertain results stay None. Invented ids/paths are forbidden."
+          },
+          {
+            "id": "",
+            "isSatisfied": false,
+            "text": "Import, transcript ingest, and federation apply SHALL persist a validated planFile and todoId (None if extraction finds nothing). Null is never stored."
+          }
+        ],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "FR-MCP-USECASE-001",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:35.1066406+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:35.1065267+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "CRUD workspace-scoped use cases",
+        "id": "FR-MCP-USECASE-001",
+        "description": "The server shall support create, read, update, and soft-delete of workspace-scoped use cases with header fields: title, brief description, precondition, postcondition, scope, and priority. Default queries exclude soft-deleted rows. Multi-tenant isolation via WorkspaceId is required.",
+        "acceptanceCriteria": [],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "FR-MCP-USECASE-016",
+      "Record": null
+    },
+    {
+      "Key": "FR-MCP-USECASE-017",
+      "Record": null
+    },
+    {
+      "Key": "IMPL-SCANNERALIAS-001",
+      "Record": {
+        "dependsOn": [
+          "IMPL-UNITGREEN-001"
+        ],
+        "done": false,
+        "section": "Build",
+        "technicalRequirements": [
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019"
+        ],
+        "implementationTasks": [
+          {
+            "done": false,
+            "task": "Operator chooses the approach for alias chains and static imports of an alias (the options of 2026-10-20T23:08:10 or another)."
+          },
+          {
+            "done": false,
+            "task": "Decision-complete BDPv4 plan for the chosen approach, approved by the operator before any code."
+          },
+          {
+            "done": false,
+            "task": "Implement per the approved plan with its gates and hostile validation at 98/98; then remove the declared limit from the scanner documentation."
+          }
+        ],
+        "priority": "medium",
+        "title": "Unit-suite platform scanner: resolve alias chains and static imports of an alias",
+        "id": "IMPL-SCANNERALIAS-001",
+        "description": [
+          "Hostile validation round 4 of IMPL-UNITGREEN-001 (gate unitgreen-r4, finding R4-F1, the third scanner finding in a row after R2-F2 and R3-F2): UnitSuitePlatformScanner keeps the rightmost name of an alias target and follows one alias step, so an alias whose target is another alias (using OS = System.OperatingSystem; using Host = OS; then Host.IsWindows()) and a using static that names an alias (using static OS; then IsWindows()) are not resolved; both compile.",
+          "Operator 2026-10-21T05:10:50 local, asked 2026-10-20T23:08:10 with the options \"Compiler semantic model (Recommended)\", \"Follow alias chains, fail closed\" and \"Declare the limit, no fix\": \"Declare the limit, no fix\" (no scanner code change; the plan, PR body and brief declare the limit; the scanner task stays open).",
+          "Operator 2026-10-21T05:43:12 local (asked 05:42:10): \"Correct the doc comments (Recommended)\" (the scanner documentation states the limit) and \"New TODO for the scanner\" (this TODO holds the scanner alias work, so IMPL-UNITGREEN-001 can be marked done after hostile AGREE)."
+        ],
+        "functionalRequirements": [
+          "FR-MCP-USECASE-001"
+        ],
+        "technicalDetails": [
+          "Declared limit as stated in tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs (class summary) and UnitSuitePlatformScannerAliasScopeTests.cs on branch fix/unit-suite-green-20261019 (PR 87).",
+          "At 8c254695 no test file uses either form: the only using static lines in tests/ are scripted scanner sources inside string literals, and the only alias with a single-name target, using Abstractions = Xunit;, names a namespace.",
+          "TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 state the outcome (no unit test depends on the platform), not the scanner."
+        ],
+        "note": "Created from session ClaudeCode-20261019T134748Z-plugin-session, turn req-20261021T104348Z-scanner-docs-new-todo; parent TODO IMPL-UNITGREEN-001, PR sharpninja/McpServer#87."
+      }
+    },
+    {
+      "Key": "IMPL-UNITGREEN-001",
+      "Record": {
+        "dependsOn": [],
+        "done": false,
+        "section": "Build",
+        "technicalRequirements": [
+          "TR-MCP-QUALITY-001",
+          "TR-MCP-PATHNORM-001",
+          "TR-MCP-NUKE-018",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019",
+          "TR-MCP-WS-005",
+          "TR-MCP-SESSIONLOG-006"
+        ],
+        "implementationTasks": [
+          {
+            "done": false,
+            "task": "Step 1 requirements: PATHNORM records and TR-MCP-QUALITY-001 criteria copied from PAYTON-LEGION2; ac-21 reopened and strengthened; TEST-MCP-PATHNORM-001 unitgreen-native-host added. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "A: Xml and Pkcs 10.0.13 central pins (cbc74e82); Restore and Compile clean on Linux (unit-green-linux-a-compile-20261019T1514) and Windows with no override (unit-green-win-a-20261019T1518). Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Step 2 tests and scripted data (28bf0b22): B1 ProductionGate, B2 RemoveTodoRecords x2, B3 ProcessNormalizer, D host contract and MockData, F assertion text, negative controls. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Linux mock gate unit-green-mock-20261019T1528: 4666 total, 0 failed, the 16 named Windows-only not executed (since reclassified). Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "D production overload and Real binding (de581353); Linux run unit-green-real-20261019T1535: 4669 total, 0 failed, 16 not executed (since reclassified). Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "F (b2319488): HostileReviewWorker startup test clears the Event Log provider; Windows Test unit-green-win-f-20261019T1553 4644 total, 0 failed, 0 not executed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Takeover of PLAN-C4MODEL-001 unit-suite code by operator decision (11681680, blob-identical to c2125c42; C4 reverted PR 84 copies in b7618423)"
+          },
+          {
+            "done": false,
+            "task": "G (TR-MCP-NUKE-019, 8c2b83ab): host-scoped MigrationIntegrationTests filter; mock gate 21/21, production 24/24; Linux lane logs Platform!=Windows, Windows lane Platform!=Linux. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "FR-MCP-USECASE-016/017 converted into TR-MCP-USECASE-018/019 under FR-MCP-USECASE-001 and deleted (operator 17:03); the requirements wiki export is blocked on Linux (triage-report-a6927fca10364155ab9992506e1abc9c; retried 19:19:13 and 21:18:51), so under goal item 4 the stale docs/Project exports are declared in the PR and the HV brief instead of refreshed (CORRECTED 2026-10-21 before HV round 5: the export fails on its Azure-specific cleanup path, azure/Architecture; operator 2026-10-21T06:54:47 \"Azure is no longer in the picture.  Create a global memory not to gate on azure related errors.\" (MEMORY-PROCESS-009), so the failure and the stale exports are recorded information, not a declared blocker or gate)"
+          },
+          {
+            "done": false,
+            "task": "Platform- and environment-dependent tests classified as integration tests: b2bd50b3 (UnitSuitePlatformScanner guard and strengthened skip guard; its first guard run unit-green-guard-mock-20261019T1720 was red: 4692 results, 1 failed, 16 not executed); hostile validation round 1 remediation 49cfec92 (one skip definition, interpolation holes; mock gate unit-green-r2-guard-mockgate-20261019T2103 4624/0/0) and b4ad42aa (36 native-boundary and tracked-file cases moved); Linux and Windows Test 4588/0/0 at b4ad42aa"
+          },
+          {
+            "done": false,
+            "task": "Exit gates at the PR head: Linux and Windows Test 0 failed 0 not executed; MigrationIntegrationTests on both hosts 0 failed 0 not executed; ValidateTraceability; full Build.Tests 0 failed"
+          },
+          {
+            "done": false,
+            "task": "Pre-HV holistic review presented to the operator; hostile validation (Codex gpt-6-astra max) AGREE at 98/98 with jsonl receipts and the full verdict in its session-log turn"
+          },
+          {
+            "done": false,
+            "task": "One PR into develop with the plan (docs/plans/2026-10-19-unit-suite-green.md) and the PR 82 handoff correction"
+          },
+          {
+            "done": false,
+            "task": "Hostile validation round 2 structural fix (operator 2026-10-20 \"Structural fix, round 3 (Recommended)\"): R2-F2 UnitSuitePlatformScanner reads Roslyn syntax trees and the central Roslyn pins are 5.9.0 (45a3197c; mock gates ug-r3-mockgate-1 and -2 4602/0/0); R2-F1 one repository-root locator refused outside Category=Integration and classification by dependency (27c43bcc; mock gates ug-r3-dry-mockgate-1 and -2, binding ug-r3-dry-binding-2 4431/0/0); R2-F3 the Windows lane runner is static, analyzed and verified by SHA-256. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "User-profile scan fix (operator 2026-10-20 \"Fix scans in PR 87 (Recommended)\"; triage-report-b0e41c36f93c4c91b1bf2524eb579ef8): AC-TR-MCP-WS-005-001 and AC-TR-MCP-SESSIONLOG-006-009; DirectoryTreeWalker shared by the marker plugin-cache scan and the session-log history scan; hermetic marker tests; 12 import-path tests tagged Integration; mock gate ug-r3-scan-mockgate-1 4432/0/0, binding ug-r3-scan-binding-1 4444/0/0 (538d0ccf), Windows Test as kingd ug-r3-win-test-ssh-2 4444/0/0. Awaiting hostile validation (CORRECTED 2026-10-21 before HV round 5: these hermetic marker tests were built on the round 3 profile-only seam, AgentPluginUserProfileOverride, which round 4 replaced with AgentPluginVersionSourcesOverride, task 18; the scan fix itself is unchanged)"
+          },
+          {
+            "done": false,
+            "task": "Windows integration lane fixes (TR-MCP-NUKE-019 AC-2): the pre-existing LocalDB cold-start flake (operator 2026-10-20 \"Fix the flake in PR 87 (Recommended)\"; 6042dbb3, one SQL Server test default with a 120 s connect timeout; mock gate ug-r3-localdb-mockgate-1 4446/0/0) and its command timeout under parallel load (operator \"Serialize SQL Server tests (Recommended)\"; 0210244d, the four LocalDB classes in one xUnit collection, mock gate ug-r3-sqlcollection-mockgate-1 4450/0/0; 68fa7b39, the collection defined with DisableParallelization = true as the option text says, mock gate ug-r3-sqlserial-mockgate-1 4456/0/0); the lost results (operator \"Diagnose the loss in PR 87\"; triage 9be3ac08 and 5c6063f5, follow-up 0f7839ef): pg_ctl wrote into the xUnit v3 message stream, fixed by pg_ctl -s (6ea425ab; mock gate ug-r3-pgctl-mockgate-1 4453/0/0; diagnostic lane ug-r3-win-lane-diag-3 with 0 unparseable lines). Gates at the last code head 68fa7b39: Linux Test ug-r3-linux-test-7 4456/0/0, Windows Test ug-r3-win-test-ssh-5 4456/0/0, Windows lane ug-r3-win-lane-7 373/0/0 complete by name, Linux lane ug-r3-linux-lane-7 397/0/0, Build.Tests ug-r3-build-tests-7 436/0/0, ValidateTraceability ug-r3-traceability-6 passed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Pre-HV problem R3-P3 folded in (operator 2026-10-20 \"Fold R3-P3 in first\"; AC-TR-MCP-WS-005-001 replaced and read back at 16:32): a plugin version file (.version or a manifest) that exists but cannot be read yields no version, so resolution goes on and falls back to the synced version, and any other error propagates; PluginVersionFileReadTests (8 scripted cases, negative controls) green in mock gate ug-r3-versionread-mockgate-1 4468/0/0 before the fix; TryReadAgentPluginVersion takes a read delegate (e0b078c8); binding ug-r3-versionread-binding-1 4479/0/0. Gates at the last code head e0b078c8: Linux Test ug-r3-linux-test-8 4479/0/0, Windows Test ug-r3-win-test-ssh-6 4479/0/0, Windows lane ug-r3-win-lane-8 373/0/0 complete by name, Linux lane ug-r3-linux-lane-8 397/0/0, Build.Tests ug-r3-build-tests-8 436/0/0, ValidateTraceability ug-r3-traceability-7 passed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Hostile validation round 3 (unitgreen-r3, DISAGREE 97/96, findings R3-F1 to R3-F4) remediated as the operator chose on 2026-10-20 (\"Structural fix, round 4 (Recommended)\"): R3-F1, one source seam (AgentPluginVersionSources: plugin-root variables, workspace sibling folder, profile caches) set once by the assembly fixture and passed explicitly by resolution tests, AC-TR-MCP-WS-005-001 strengthened and read back at 18:23:07, hostile-environment gate negative control ug-r4-hostile-control-1 at e0b078c8 4479 total 19 failed; R3-F2, scanner aliases and static imports resolved in lexical scope; AgentPluginVersionSourcesTests and UnitSuitePlatformScannerAliasScopeTests green in mock gate ug-r4-mockgate-1 4500/0/0 before production, binding ug-r4-binding-1 4513/0/0, commit 801e6862; R3-F3, FR-MCP-USECASE-017 deleted again through workflow.requirements.deleteFr and absent from getFr and the effective view; R3-F4, the round 3 self-review sentence corrected in its copies (c31c2918). At 801e6862 Windows Test failed HandoffDurabilityTests.ApproveAsync_LeaseExpiresDuringLiveCreate_SecondInstanceWins (one in-memory connection shared by concurrent contexts, triage-report-9b96ada18d72483dad2a3113e455c01b) and both integration lanes failed the Path.GetFullPath ratchet (my move of a reviewed call into AgentPluginVersionSources.cs); operator \"Fix the race in PR 87 (Recommended)\": HandoffTestDatabaseTests (harness assertion, positive and negative controls) green in mock gate ug-r4-race-mockgate-2 4515/0/0, HandoffDurabilityTests on an own connection per context to a temporary database file, ProcessAgentPluginVersionSources and SiblingPluginRoot back in MarkerFileService, binding ug-r4-race-binding-1 4516/0/0, pre-commit lane 397/0/0, commit 26fc8348. Gates at 26fc8348: Linux Test ug-r4-linux-test-2 4516/0/0; hostile-environment gate ug-r4-hostile-gate-2 4516/0/0; Windows Test ug-r4-win-test-ssh-2 4516/0/0; Windows lane ug-r4-win-lane-2 373/0/0 complete by name; Linux lane ug-r4-linux-lane-2 397/0/0; Build.Tests ug-r4-build-tests-1 436/0/0; ValidateTraceability ug-r4-traceability-1 passed. Awaiting hostile validation (CORRECTED 2026-10-21 after round 4, finding R4-F1: the lexical scope holds within the declared limit of task 20; an alias whose target is another alias and a using static that names an alias are not resolved, recorded in TODO IMPL-SCANNERALIAS-001; no further scanner work by operator override)"
+          },
+          {
+            "done": false,
+            "task": "Sibling sweep of the race class (one in-memory SqliteConnection handed to contexts that run concurrently; triage-report-9b96ada18d72483dad2a3113e455c01b) before HV round 4 found HandoffAuditDefectTests and MemoryS1Harness (MemoryConcurrencyTests, MemoryConsolidateJobTests, MemoryConsolidateTests, MemoryMigrationTests); operator 2026-10-20 \"Extend fix, then round 4 (Recommended)\": mock gate ug-r4-ext-mockgate-1 4516/0/0 before either harness changed, both on one temporary SQLite file without pooling (own connection per context, assertions unchanged, still unit tests), the HandoffTestDatabaseTests assertion bound to each factory, binding ug-r4-ext-binding-1 4518/0/0, pre-commit lane ug-r4-precommit-lane-2 397/0/0, commit 97b78114. Gates at 97b78114: Linux Test ug-r4-linux-test-3 4518/0/0; hostile-environment gate ug-r4-hostile-gate-3 4518/0/0; Windows Test ug-r4-win-test-ssh-3 4518/0/0; Windows lane ug-r4-win-lane-3 373/0/0 complete by name; Linux lane ug-r4-linux-lane-3 397/0/0; Build.Tests ug-r4-build-tests-2 436/0/0; ValidateTraceability ug-r4-traceability-2 passed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "HV round 4 closure (gate unitgreen-r4, DISAGREE 97/97). R4-F1, the third scanner finding in a row after R2-F2 and R3-F2: UnitSuitePlatformScanner resolves a using alias whose target names a type and a using static that names a type, each in its lexical scope, but not an alias whose target is another alias (an alias chain) or a using static that names an alias. Operator 2026-10-21T05:10:50 \"Declare the limit, no fix\": no scanner behavior change; the plan (section 18), the PR body and the HV brief declare the limit; no test file uses either form (the only using static lines in tests/ are scripted scanner sources inside string literals; the only alias with a single-name target, using Abstractions = Xunit;, names a namespace). Operator 2026-10-21T05:43:12 \"Correct the doc comments (Recommended)\": the scanner documentation states the limit (documentation comments only; no behavior, case or assertion changed); and \"New TODO for the scanner\": the scanner alias work is TODO IMPL-SCANNERALIAS-001 (depends on this TODO), so this TODO can be marked done after hostile AGREE. Operator 2026-10-21T06:06:46: \"I don't want any more scanner work.  None.  Add an operator override to the HV.\": no further scanner work; the round 5 HV brief carries the override (the scanner and statements of its coverage are not scored; the no-platform-dependent-unit-test outcome still is). R4-F3 fixed in 8c254695 (the memory binding cites FR-MCP-MEMORY-002, TR-MCP-MEMORY-002 and TEST-MCP-MEMORY-002; TEST-MCP-MEMORY-010 is absent from both stores). R4-F2: the round 4 brief and self-review corrected with notices. Gates at ccc78b7a: Linux Test ug-r5-linux-test-2 4518/0/0; hostile-environment gate ug-r5-hostile-gate-2 4518/0/0; Windows Test ug-r5-win-test-ssh-2 4518/0/0; Windows lane ug-r5-win-lane-2 373/0/0 complete by name; Linux lane ug-r5-linux-lane-2 397/0/0; Build.Tests ug-r5-build-tests-2 436/0/0 with TMPDIR on disk (operator Rerun with temp on disk (Recommended), after ug-r5-build-tests-1 failed 1 test on the /tmp user quota); ValidateTraceability ug-r5-traceability-1 passed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Hostile-environment gate widened before HV round 5 (operator 2026-10-21T07:23 on the gate scope: \"If it needs to be done, do it.\"): every environment variable the 7 unit projects or production read by literal name, plus both forms of the 25 ProductEnvironment.GetLegacy names (QBRAINAI_ wins over MCP_), about 90 in all, scripted to hostile values (PATH, TMPDIR, NUGET_PACKAGES and DOTNET_CLI_HOME left real); Start-HostileNukeRunWide2.ps1. Negative control at 5b818847 (code ccc78b7a): ug-r5-hostile-wide-1 and -2 each 4518 total, 1 failed, McpDatabaseEncryptionTransitionCommandTests.TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted, which set only MCP_INSTANCE while QBRAINAI_INSTANCE wins. Test-only fix 810ee8aa: the test is Category=Integration (day-one rule) and clears QBRAINAI_INSTANCE for its duration, assertions unchanged; widened gate on the content ug-r5-hostile-wide-3 4517/0/0, pre-commit lane ug-r5-precommit-lane-3 398/0/0, committed-tree Linux Test ug-r5-linux-test-3 4517/0/0. Gates at 810ee8aa: Linux Test ug-r5-linux-test-3 4517/0/0; widened hostile-environment gate ug-r5-hostile-wide-4 4517/0/0; Windows Test ug-r5-win-test-ssh-3 4517/0/0; Windows lane ug-r5-win-lane-3 374/0/0 complete by name (the moved test present and passed); Linux lane ug-r5-linux-lane-3 398/0/0; Build.Tests ug-r5-build-tests-3 436/0/0 with TMPDIR on disk; ValidateTraceability ug-r5-traceability-2 passed. Awaiting hostile validation"
+          }
+        ],
+        "priority": "high",
+        "title": "Make the unit suite green on both lab hosts (BDPv4: 0 failed, 0 skipped)",
+        "id": "IMPL-UNITGREEN-001",
+        "description": [
+          "Operator 2026-10-19: \"BDPv4 requires all unit tests be green.\" and \"Gotta use the recommended packages.\"",
+          "Operator 2026-10-19 (day-one rule, plan section 9): \"There should be ZERO platform specific UNIT tests.  If it depends on the environment, it's an integration test.\"",
+          "Approved plan (operator \"Yes, I approve the change\", 2026-10-19 14:50): groups A to F of docs/plans/2026-10-19-unit-suite-green.md; amendment G (host-scoped MigrationIntegrationTests lane, TR-MCP-NUKE-019 AC-1 to AC-4) approved 16:22 and built as 8c2b83ab; amendment H1 (Windows lane needs an interactive desktop session, TR-MCP-NUKE-019 AC-5) approved 18:47 and built as 69d8f3f5.",
+          "Measured at develop ace70daa: Linux 14 failed and 16 skipped; Windows restore fails NU1902/NU1903; Windows diagnosis-only run 4702 results, 19 failed, 2 not executed."
+        ],
+        "functionalRequirements": [
+          "FR-MCP-PATHNORM-001",
+          "FR-MCP-139",
+          "FR-MCP-BUILD-001",
+          "FR-MCP-USECASE-001",
+          "FR-MCP-018",
+          "FR-MCP-SESSIONLOGCTX-001"
+        ],
+        "technicalDetails": [
+          "Branch fix/unit-suite-green-20261019 from origin/develop (ace70daa). Nuke targets only; no override in any gate.",
+          "HV reviewer: Codex gpt-6-astra max (operator 2026-10-19).",
+          "Windows evidence route since 2026-10-20: SSH as kingd (operator \"Please use ssh with the kingd key for execution on Legion2\"), by IP 10.42.0.143 (operator \"Use IP addresses, not hostnames\"); the integration lane runs in kingd's interactive desktop session through a one-shot Interactive-logon task."
+        ],
+        "note": "Session ClaudeCode-20261019T134748Z-plugin-session, turn req-20261019T190714Z-bdpv4-green-correction. Operator 2026-10-19: this effort owns every unit-suite code change (\"I don't want you and the C4 agent working on the same thing.  C4 should not be changing code, only docs.\"); PLAN-C4MODEL-001 keeps docs and TR-MCP-NUKE-017. Branch fix/unit-suite-green-20261019. Five tasks were checked before any hostile review; unchecked 2026-10-19 by operator decision (\"Uncheck them now (Recommended)\"); every task is checked only after hostile AGREE. Draft PR https://github.com/sharpninja/McpServer/pull/87."
+      }
+    },
+    {
+      "Key": "mapping-FR-MCP-018",
+      "Record": {
+        "items": [
+          {
+            "createdAt": "2026-10-21T16:25:13.5477900+00:00",
+            "frId": "FR-MCP-018",
+            "trId": "TR-MCP-WS-005"
+          }
+        ],
+        "totalCount": 1
+      }
+    },
+    {
+      "Key": "mapping-FR-MCP-BUILD-001",
+      "Record": {
+        "items": [
+          {
+            "createdAt": "2026-10-21T16:25:09.2510425+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-001"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2517174+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-002"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2518560+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-005"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2519432+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-006"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2520225+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-007"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2521099+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-008"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2521836+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-009"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2522770+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-010"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2523523+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-011"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2524365+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-012"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2525099+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-015"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2525823+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-016"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2526563+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-017"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2527303+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-018"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:09.2528036+00:00",
+            "frId": "FR-MCP-BUILD-001",
+            "trId": "TR-MCP-NUKE-019"
+          }
+        ],
+        "totalCount": 15
+      }
+    },
+    {
+      "Key": "mapping-FR-MCP-MEMORY-002",
+      "Record": {
+        "items": [
+          {
+            "createdAt": "2026-10-21T16:25:16.3715162+00:00",
+            "frId": "FR-MCP-MEMORY-002",
+            "trId": "TR-MCP-MEMORY-002"
+          },
+          {
+            "frId": "FR-MCP-MEMORY-002",
+            "testId": "TEST-MCP-MEMORY-002",
+            "createdAt": "2026-10-21T16:25:16.3721555+00:00"
+          }
+        ],
+        "totalCount": 2
+      }
+    },
+    {
+      "Key": "mapping-FR-MCP-PATHNORM-001",
+      "Record": {
+        "items": [
+          {
+            "createdAt": "2026-10-21T16:25:12.0940299+00:00",
+            "frId": "FR-MCP-PATHNORM-001",
+            "trId": "TR-MCP-PATHNORM-001"
+          },
+          {
+            "frId": "FR-MCP-PATHNORM-001",
+            "testId": "TEST-MCP-PATHNORM-001",
+            "createdAt": "2026-10-21T16:25:12.0946459+00:00"
+          }
+        ],
+        "totalCount": 2
+      }
+    },
+    {
+      "Key": "mapping-FR-MCP-SESSIONLOGCTX-001",
+      "Record": {
+        "items": [
+          {
+            "createdAt": "2026-10-21T16:25:14.9490821+00:00",
+            "frId": "FR-MCP-SESSIONLOGCTX-001",
+            "trId": "TR-MCP-SESSIONLOG-006"
+          },
+          {
+            "frId": "FR-MCP-SESSIONLOGCTX-001",
+            "testId": "TEST-MCP-SESSIONLOG-006",
+            "createdAt": "2026-10-21T16:25:14.9497982+00:00"
+          }
+        ],
+        "totalCount": 2
+      }
+    },
+    {
+      "Key": "mapping-FR-MCP-USECASE-001",
+      "Record": {
+        "items": [
+          {
+            "createdAt": "2026-10-21T16:25:10.6457130+00:00",
+            "frId": "FR-MCP-USECASE-001",
+            "trId": "TR-MCP-USECASE-001"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:10.6463634+00:00",
+            "frId": "FR-MCP-USECASE-001",
+            "trId": "TR-MCP-USECASE-002"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:10.6464799+00:00",
+            "frId": "FR-MCP-USECASE-001",
+            "trId": "TR-MCP-USECASE-003"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:10.6465665+00:00",
+            "frId": "FR-MCP-USECASE-001",
+            "trId": "TR-MCP-USECASE-005"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:10.6466436+00:00",
+            "frId": "FR-MCP-USECASE-001",
+            "trId": "TR-MCP-USECASE-018"
+          },
+          {
+            "createdAt": "2026-10-21T16:25:10.6467185+00:00",
+            "frId": "FR-MCP-USECASE-001",
+            "trId": "TR-MCP-USECASE-019"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "testId": "TEST-MCP-USECASE-001",
+            "createdAt": "2026-10-21T16:25:10.6467958+00:00"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "testId": "TEST-MCP-USECASE-002",
+            "createdAt": "2026-10-21T16:25:10.6468776+00:00"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "testId": "TEST-MCP-USECASE-004",
+            "createdAt": "2026-10-21T16:25:10.6469617+00:00"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "testId": "TEST-MCP-USECASE-019",
+            "createdAt": "2026-10-21T16:25:10.6470445+00:00"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "testId": "TEST-MCP-USECASE-020",
+            "createdAt": "2026-10-21T16:25:10.6471224+00:00"
+          }
+        ],
+        "totalCount": 11
+      }
+    },
+    {
+      "Key": "mapping-FR-MCP-USECASE-016",
+      "Record": {
+        "items": [],
+        "totalCount": 0
+      }
+    },
+    {
+      "Key": "mapping-FR-MCP-USECASE-017",
+      "Record": {
+        "items": [],
+        "totalCount": 0
+      }
+    },
+    {
+      "Key": "TEST-HANDOFF-004",
+      "Record": {
+        "updatedAt": "2026-10-21T16:25:00.3801205+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:25:00.3799959+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Test TEST-HANDOFF-004",
+        "testType": "unit",
+        "id": "TEST-HANDOFF-004",
+        "description": "Cover draft validation, field-specific diagnostics, DraftOnly, RequireReview, CreateWhenConfident, low confidence, and ambiguous handoffs.",
+        "acceptanceCriteria": [],
+        "area": "HANDOFF"
+      }
+    },
+    {
+      "Key": "TEST-HANDOFF-005",
+      "Record": {
+        "updatedAt": "2026-10-21T16:25:01.8164698+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:25:01.8163430+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Test TEST-HANDOFF-005",
+        "testType": "unit",
+        "id": "TEST-HANDOFF-005",
+        "description": "Cover exclusive TODO-service persistence, exact-one creation, deterministic replay, ID collisions, approval races, and TODO-service failure.",
+        "acceptanceCriteria": [],
+        "area": "HANDOFF"
+      }
+    },
+    {
+      "Key": "TEST-HANDOFF-006",
+      "Record": {
+        "updatedAt": "2026-10-21T16:25:03.3257885+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:25:03.3256532+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Test TEST-HANDOFF-006",
+        "testType": "unit",
+        "id": "TEST-HANDOFF-006",
+        "description": "Cover API, client, REPL, Director, MCP-tool, and plugin-skill inventory and invocation parity, including workspace isolation.",
+        "acceptanceCriteria": [],
+        "area": "HANDOFF"
+      }
+    },
+    {
+      "Key": "TEST-HANDOFF-007",
+      "Record": {
+        "updatedAt": "2026-10-21T16:25:04.8366071+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:25:04.8364758+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Test TEST-HANDOFF-007",
+        "testType": "unit",
+        "id": "TEST-HANDOFF-007",
+        "description": "Cover normalized run storage, diagnostic persistence, cancellation, and the prohibition on logging credentials or raw source content.",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-001",
+            "isSatisfied": false,
+            "text": "Sqlite_HandoffMigration_DowngradeAndReupgrade, PostgreSql_HandoffMigration_DowngradeAndReupgrade and SqlServer_HandoffMigration_DowngradeAndReupgrade: on a clean database migrated only up to AddHandoffIngestionStorage, a downgrade to the immediately preceding migration removes AddHandoffIngestionStorage from the applied migrations and a re-upgrade restores it; proven first by HandoffCycleAssertion_AcceptsReversibleCycleAndRejectsMissingOrForwardOnlyCrossing over applied-migration lists (negative controls: the handoff migration still applied after the downgrade, absent after the re-upgrade, and a downgrade target older than 20260929140000_VersionedAuditPayloads) (PLAN-SESSIONTRIAGEFIX-001 B12, triage-report-61c2a2b2)."
+          },
+          {
+            "id": "AC-002",
+            "isSatisfied": false,
+            "text": "The same tests then migrate the database to head, where a handoff ingestion run and its diagnostic persist and read back (PLAN-SESSIONTRIAGEFIX-001 B12)."
+          },
+          {
+            "id": "AC-003",
+            "isSatisfied": false,
+            "text": "VersionedAuditPayloads_DownIsForwardOnly_OnEveryProvider: 20260929140000_VersionedAuditPayloads' Down raises NotSupportedException on SQLite, PostgreSQL and SQL Server, the forward-only boundary that migration declares, so no downgrade test crosses it (PLAN-SESSIONTRIAGEFIX-001 B12)."
+          }
+        ],
+        "area": "HANDOFF"
+      }
+    },
+    {
+      "Key": "TEST-MCP-MEMORY-002",
+      "Record": {
+        "updatedAt": "2026-10-21T16:25:06.3735811+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:25:06.3734295+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Test TEST-MCP-MEMORY-002",
+        "testType": "unit",
+        "id": "TEST-MCP-MEMORY-002",
+        "description": "CRUD behavior tests SHALL prove add, list, update, remove, soft-delete omission, scope preservation, scope changes, invalid ID, invalid text, invalid category, and invalid scope failures.",
+        "acceptanceCriteria": [],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "TEST-MCP-MEMORY-010",
+      "Record": null
+    },
+    {
+      "Key": "TEST-MCP-PATHNORM-001",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:58.9429067+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:58.9427941+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Test TEST-MCP-PATHNORM-001",
+        "testType": "unit",
+        "acceptanceCriteria": [
+          {
+            "id": "unitgreen-native-host",
+            "isSatisfied": false,
+            "text": "The native-boundary (ToNativePath) behavior for a non-Windows host is proven on every test host, Windows included, against a simulated host, without a host-conditional skip; the Windows-host cases keep running on a Windows host."
+          }
+        ],
+        "id": "TEST-MCP-PATHNORM-001",
+        "description": "Per BDP v4 (MockData fixture green before production code, then Real fixture). Storage-key equivalence: C:\\Users\\kingd, C:/Users/kingd, c:/users/KINGD -> one key windows:C:/USERS/KINGD; \\\\srv\\share\\x and //srv/share/x -> one key keeping leading //; \\\\?\\C:\\x -> C:/x. Remote-path detection treats //srv/share as remote. ToNativePath returns backslash paths on Windows. Rekey: value mapping f(x) touches only Windows-shaped values and is idempotent; planner builds the mapping and statement plan from a scripted snapshot; executors per provider (SQLite in-memory; SQL Server and PostgreSQL provider fixtures) rewrite all workspace columns and recompute hashed values with FK validation; report counts unchanged per table and per workspace; startup guard rejects an unconverted store; rehearsal on a restored copy of McpServer_PAYTON_LEGION2 recorded as receipts. GlobalWorkspaceId for (PAYTON-LEGION2, F:/GitHub/McpServer) is stable across both input separators.",
+        "notes": "P1.5 2026-10-16: WorkspacePathRekeyTests cover literal Policy A normalization, collision preflight, no-backup/failed-backup refusal, read-only dry-run on explicit separate copies, transaction rollback and FK graph validation, repeat no-op, derived triage/handoff/federation identities, unchanged manual triage hashes, and startup guard. Command parser rejects missing/same copy database. Reports contain only keys/counts and retained-manual-key notice. Disposable fixtures only; no live apply.",
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "TEST-MCP-USECASE-019",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:56.0312404+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:56.0311108+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Test TEST-MCP-USECASE-019",
+        "testType": "unit",
+        "id": "TEST-MCP-USECASE-019",
+        "description": "For every fifteenth-review behavior (TR-MCP-USECASE-018), write the consumer test and the real-service, kernel, provider, or adversarial test with scripted data first and prove them against that data in a green mock gate with negative controls before production changes (BDPv4: no red tests); then bind the same cases to production and prove focused and cumulative GREEN with exact zero-failure, zero-skip, zero-abort, and zero-inconclusive accounting from C:-physical artifacts. Platform-specific cases are integration tests that run in their host's lane (TR-MCP-NUKE-019).",
+        "acceptanceCriteria": [],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "TEST-MCP-USECASE-020",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:57.4892810+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:57.4891364+00:00",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Test TEST-MCP-USECASE-020",
+        "testType": "unit",
+        "id": "TEST-MCP-USECASE-020",
+        "description": "For each sixteenth-review finding (TR-MCP-USECASE-019), write the consumer-facing test and the real operating-system, mount, provider, process, or evidence-boundary test with scripted data first and prove them against that data in a green mock gate with negative controls before production changes (BDPv4: no red tests); then bind the same cases to production and prove focused and cumulative GREEN from C:-physical artifacts with exact zero-failure, zero-skip, zero-abort, zero-inconclusive, and expected-minimum accounting. Platform-specific cases are integration tests that run in their host's lane (TR-MCP-NUKE-019).",
+        "acceptanceCriteria": [],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "TR-MCP-MEMORY-002",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:54.1465340+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:54.1464003+00:00",
+        "subarea": "MEMORY",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Provider memory migrations",
+        "id": "TR-MCP-MEMORY-002",
+        "description": "Add provider migrations for SQLite, SQL Server, and PostgreSQL. Each migration creates the memory table, unique ID constraint, scope and workspace indexes, category/update-time indexes, soft-delete metadata, and provider-appropriate constraints or service-level validation for Global rows with null `WorkspaceId` and Workspace rows with required `WorkspaceId`.\n**Covered by:** FR: FR-MCP-MEMORY-002; TEST: TEST-MCP-MEMORY-002",
+        "acceptanceCriteria": [],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "TR-MCP-NUKE-018",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:49.5814020+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:49.5812833+00:00",
+        "subarea": "NUKE",
+        "status": "pending",
+        "priority": "high",
+        "title": "InstallTestDependencies provisions provider test servers on Linux",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-1",
+            "isSatisfied": false,
+            "text": "On Linux, when MCP_TEST_POSTGRES_CONNECTION or MCP_TEST_SQLSERVER_CONNECTION is not already set, InstallTestDependencies loads it from the test-database env file (default ~/.config/qbrain-test/test-db.env, overridable by the --test-db-env-file parameter) and exports it to the test processes the build starts; a variable already set is adopted unchanged."
+          },
+          {
+            "id": "AC-2",
+            "isSatisfied": false,
+            "text": "It starts the containers qbrain-test-postgres and qbrain-test-sqlserver when they exist but are stopped, and never creates, stops, removes, or reconfigures any other container."
+          },
+          {
+            "id": "AC-3",
+            "isSatisfied": false,
+            "text": "Before tests run it verifies that each endpoint named by a connection string accepts TCP connections, and fails with a clear message (no skip) when the env file, a variable, a container, or an endpoint is missing or unreachable."
+          },
+          {
+            "id": "AC-4",
+            "isSatisfied": false,
+            "text": "Connection-string values never appear in logs, exception messages, or committed files; only variable names, file paths, container names and host:port endpoints are reported."
+          },
+          {
+            "id": "AC-5",
+            "isSatisfied": false,
+            "text": "On Windows, the existing LocalDB and PostgreSQL binaries provisioning is unchanged."
+          },
+          {
+            "id": "AC-6",
+            "isSatisfied": false,
+            "text": "MigrationIntegrationTests on Linux runs the Category=Integration provider tests against those endpoints and fails, never skips, when provisioning fails."
+          }
+        ],
+        "id": "TR-MCP-NUKE-018",
+        "description": "On Linux, InstallTestDependencies supplies the PostgreSQL and SQL Server endpoints of the Category=Integration provider tests from the host test-database env file and the dedicated qbrain-test containers (operator decision 2026-10-11, BUG-BASELINE-005), and exports them to the test processes the build starts; Windows provisioning is unchanged.",
+        "notes": "PLAN-C4MODEL-001. Operator answers 2026-10-19: \"Fix all 14 in this plan\", \"Fix 10 here; 4 via PR 82/83\", \"Trait + Linux provisioning (Recommended)\". Host facts 2026-10-19: env file /home/sharpninja/.config/qbrain-test/test-db.env (mode 600) defines MCP_TEST_POSTGRES_CONNECTION and MCP_TEST_SQLSERVER_CONNECTION; containers qbrain-test-postgres (55432) and qbrain-test-sqlserver (51433) run on LAB-OMARCHY.",
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "TR-MCP-NUKE-019",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:42.2043266+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:42.2041817+00:00",
+        "subarea": "NUKE",
+        "status": "pending",
+        "priority": "high",
+        "title": "MigrationIntegrationTests selects host-specific integration cases by the Platform trait",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-1",
+            "isSatisfied": false,
+            "text": "On a Windows host the target runs Category=Integration cases except those tagged Platform=Linux; on a Linux host it runs them except those tagged Platform=Windows; untagged integration cases run on both."
+          },
+          {
+            "id": "AC-2",
+            "isSatisfied": false,
+            "text": "Every case tagged Platform=Linux or Platform=Windows runs and passes in its own host's MigrationIntegrationTests, so the two lab hosts together execute every integration case, each host at 0 failed and 0 not executed."
+          },
+          {
+            "id": "AC-3",
+            "isSatisfied": false,
+            "text": "The run log names the selection filter (filter text only)."
+          },
+          {
+            "id": "AC-4",
+            "isSatisfied": false,
+            "text": "Provisioning is unchanged: TR-MCP-NUKE-018 on Linux, LocalDB and PostgreSQL binaries on Windows."
+          },
+          {
+            "id": "AC-5",
+            "isSatisfied": false,
+            "text": "On a Windows host, MigrationIntegrationTests runs its test processes in an interactive desktop session of the logged-on user, so a Windows case that needs an interactive session (Environment.UserInteractive is true) executes and passes; a run that cannot reach an interactive session fails before any test runs and names the missing session, and never reports such a case as passed, skipped, or not executed."
+          }
+        ],
+        "id": "TR-MCP-NUKE-019",
+        "description": "MigrationIntegrationTests runs the Category=Integration cases that belong to the host it runs on: tests tagged Platform=Linux run only on Linux hosts, tests tagged Platform=Windows only on Windows hosts, and untagged integration tests on both. Unit tests contain no platform-specific cases (operator 2026-10-19: \"There should be ZERO platform specific UNIT tests.  If it depends on the environment, it's an integration test.\"). Provisioning stays as TR-MCP-NUKE-018 and the Windows LocalDB and PostgreSQL binaries define it.",
+        "notes": "IMPL-UNITGREEN-001 plan amendment G, approved by the operator 2026-10-19 (\"Yes, I approve the change\"). Implementation detail of FR-MCP-BUILD-001; no TEST record. Built tests first in Build.Tests (pure filter function, scripted cases, negative controls), then bound in build/Build.TestDependencies.cs. Build.Tests runs directly with dotnet test as the infrastructure check (operator 2026-10-11 and 2026-10-19).",
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "TR-MCP-PATHNORM-001",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:48.1801219+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:48.1800046+00:00",
+        "subarea": "PATHNORM",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Forward-slash storage keys, rekey maintenance command and startup guard",
+        "acceptanceCriteria": [
+          {
+            "id": "p15-policy-a",
+            "isSatisfied": false,
+            "text": "Reuse P1.4 Windows lexical normalization, preserve case, and reject distinct old keys converging before any database mutation."
+          },
+          {
+            "id": "p15-safety",
+            "isSatisfied": false,
+            "text": "Apply requires successful verified backup; all database changes and FK validation occur in one transaction; repeat apply is a no-op."
+          },
+          {
+            "id": "p15-preview",
+            "isSatisfied": false,
+            "text": "Dry-run inventory and planning run only on a database copy; report mappings, table and workspace counts, and retained manual triage hashes without secrets."
+          },
+          {
+            "id": "p15-guard",
+            "isSatisfied": false,
+            "text": "HTTP and STDIO startup refuse legacy Windows workspace ids and point to --workspace-path-rekey."
+          },
+          {
+            "id": "p15-derived",
+            "isSatisfied": false,
+            "text": "Recompute only derivable triage, handoff, and federation identities; repoint children; preserve manual triage hashes and rewrite token-store keys with file backup."
+          }
+        ],
+        "id": "TR-MCP-PATHNORM-001",
+        "description": "WorkspaceIdentityPath.NormalizeLexicalPath emits '/' for Windows paths (UNC keeps leading '//'; \\\\?\\ device prefixes stripped to drive or // form); BuildStorageKey becomes windows:C:/USERS/KINGD style. IsRemoteWindowsPath, IsNormalizedPathWithinRoot and NormalizeLocalAdministrativeShareAlias accept both separators. A ToNativePath helper produces backslash paths only for Win32 CreateFile/GetFinalPathNameByHandle, \\\\?\\ long-path prefixes and cmd.exe arguments. Persisted data is rewritten by an explicit maintenance command --workspace-path-rekey (decision D5, 2026-10-07) modelled on McpDatabaseEncryptionTransitionCommand: required backup unless --dry-run, report with old->new mapping and before/after counts; one transaction per database with foreign keys deferred or suspended and fully re-validated (decision D6: SQLite defer_foreign_keys, SQL Server NOCHECK then WITH CHECK CHECK, PostgreSQL DEFERRABLE + SET CONSTRAINTS ALL DEFERRED); set-based UPDATE per workspace column from a mapping table limited to Windows-shaped values; C# recomputation of hashed values (federation GlobalWorkspaceId/CanonicalWorkspaceId and hub hash-keyed Workspaces rows, TriageGroups GroupKey/GroupId with repointed children, HandoffIngestionRuns ReplayIdentity); FileGitHubWorkspaceTokenStore keys rewritten. No legacy dual-key lookup (decision D7): a startup guard refuses to start while any Windows-shaped workspace id still contains a backslash. Enrolled proxies are re-enrolled once after deploy (only PAYTON-LEGION2 today). Plan: docs/plans/2026-10-07-federation-fixes.md section 4c.",
+        "notes": "P1.5 operator decisions 2026-10-16: Policy A uses existing Windows lexical normalizer including device-prefix stripping and case preservation. Distinct old keys converging abort before mutation. Manual triage keys are SHA-256(workspacePath|manual|random GUID); retain their GroupKey/GroupId because GUID is not stored. Only recompute derived identities verified from persisted inputs. Worktree-only implementation and disposable fixture/copy tests; no live apply, service operations, deploy, or merge. Current task explicitly requests requirements/tests first (red), then implementation.",
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "TR-MCP-QUALITY-001",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:46.7118816+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:46.7117647+00:00",
+        "subarea": "QUALITY",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Warning suppression decision register and aiUnit audit",
+        "id": "TR-MCP-QUALITY-001",
+        "description": "Warning remediation must distinguish approved suppressions from required fixes through structured acceptance criteria, durable TODO state, suppression inventory validation, and a dedicated aiUnit governance review.\n**Covered by:** FR: FR-MCP-139; TEST: TEST-MCP-AIUNIT-002",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-1",
+            "isSatisfied": true,
+            "evidence": "config/warning-suppression-approvals.json contains scoped CA1416 approvals for Windows-only service/event-log and platform-gated code paths.",
+            "text": "CA1416 is approved only for Windows only code paths with explicit platform justification and a review condition that removes the suppression if the code becomes cross platform."
+          },
+          {
+            "id": "ac-2",
+            "isSatisfied": true,
+            "evidence": "config/warning-suppression-approvals.json and ContextChunkEntity.Embedding justify byte[] as EF Core BLOB storage contract.",
+            "text": "CA1819 is approved where returning arrays is intentional for DTO or API shape and the suppression includes justification."
+          },
+          {
+            "id": "ac-3",
+            "isSatisfied": true,
+            "evidence": "config/warning-suppression-approvals.json and WarningSuppressionValidationTargetTests CA2227 allowed-scope check.",
+            "text": "Current CA2227 suppressions are approved only for non observable JSON, YAML, options binding DTOs, and EF navigation collections. Observable collections must be repopulated in place and not suppressed."
+          },
+          {
+            "id": "ac-4",
+            "isSatisfied": true,
+            "evidence": "src/McpServer.Support.Mcp/Logging/ParseableEventFormatter.cs, src/McpServer.Services/Ingestion/MarkdownSessionLogParser.cs, src/McpServer.Storage/Indexing/EmbeddingService.cs, tests/McpServer.Support.Mcp.Tests/Indexing/EmbeddingServiceTests.cs",
+            "text": "CA1308 is not approved. Code must use explicit mapping or invariant case insensitive comparison rather than lower case normalization."
+          },
+          {
+            "id": "ac-5",
+            "isSatisfied": true,
+            "evidence": "Directory.Build.props, build/_build.csproj, lib/NSubstitute/NSubstitute.csproj, tests/Build.Tests/Build.Tests.csproj, solution build on 2026-07-07",
+            "text": "CS8632 is not approved. Every project must enable nullable annotations and CS8632 NoWarn entries must be removed."
+          },
+          {
+            "id": "ac-6",
+            "isSatisfied": true,
+            "evidence": "Directory.Build.props and dotnet build McpServer.sln -c Debug -v minimal passed with zero warnings and zero errors on 2026-07-07",
+            "text": "TreatWarningsAsErrors false is not approved. The build project warning bypass must remain removed after warning clean validation."
+          },
+          {
+            "id": "ac-7",
+            "isSatisfied": true,
+            "evidence": "tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj, tests/McpServer.Support.Mcp.IntegrationTests/McpServer.Support.Mcp.IntegrationTests.csproj, solution build on 2026-07-07",
+            "text": "Stale ASP0019 suppressions are not approved. ASP0019 NoWarn entries must remain removed when no IHeaderDictionary Add usage remains."
+          },
+          {
+            "id": "ac-8",
+            "isSatisfied": true,
+            "evidence": "ValidateWarningSuppressions passes after CA1848, CS8602, and Storage migration obsolete pragma removals; approval register contains only scoped approved suppressions.",
+            "text": "Every warning suppression or warning bypass not explicitly approved by this TR must remain open remediation work until fixed and validated."
+          },
+          {
+            "id": "ac-9",
+            "isSatisfied": true,
+            "evidence": "tests/McpServer.Review.Tests/AiReviewTests.cs and build/Build.AiWarningSuppressionReview.cs",
+            "text": "The aiUnit warning suppression governance prompt audits the suppression decisions, TODO state, requirements traceability, generated exports, and source suppression inventory."
+          },
+          {
+            "id": "ac-10",
+            "isSatisfied": true,
+            "evidence": "test project NoWarn entries, cancellable async call updates, dotnet build McpServer.sln -c Debug -v minimal, WorkspacePolicyDirectiveParserTests focused run",
+            "text": "xUnit1051 is not approved. Test projects must pass TestContext cancellation tokens to cancellable async APIs instead of suppressing the analyzer."
+          },
+          {
+            "id": "ac-11",
+            "isSatisfied": true,
+            "evidence": "tests/McpServer.PlanReview.Tests/McpServer.PlanReview.Tests.csproj and tests/McpServer.PlanReview.Tests/PlanTransactionReviewTests.cs",
+            "text": "xUnit1041 is not approved. xUnit v3 tests must use supported fixture and output helper patterns instead of suppressing constructor injection diagnostics."
+          },
+          {
+            "id": "ac-12",
+            "isSatisfied": true,
+            "evidence": "src/McpServer.ServiceDefaults/Extensions.cs and src/McpServer.ServiceDefaults/GlobalExceptionHandlerMiddleware.cs",
+            "text": "CA1812 is not approved. Middleware and DI activated types must be made visible to analyzers through real construction or removed."
+          },
+          {
+            "id": "ac-13",
+            "isSatisfied": true,
+            "evidence": ".editorconfig CA1848 severity override removed; config/warning-suppression-approvals.json CA1848 approval removed; repository suppression scan for CA1848 returns zero matches.",
+            "text": "CA1848 is not approved. No editorconfig, project, pragma, or attribute suppression may remain for LoggerMessage guidance."
+          },
+          {
+            "id": "ac-14",
+            "isSatisfied": true,
+            "evidence": "tests/McpServer.Support.Mcp.Tests/Middleware/FederationMiddlewareTests.cs and Support.Mcp.Tests project build",
+            "text": "CA2000 is not approved. Disposal warnings must be fixed or proven stale by removing the suppression and building clean."
+          },
+          {
+            "id": "ac-15",
+            "isSatisfied": true,
+            "evidence": "src/McpServer.Storage/Migrations/20260212160034_AddSessionLogTables.cs and Storage project build",
+            "text": "CA1861 is not approved. Constant array arguments must be hoisted rather than suppressed."
+          },
+          {
+            "id": "ac-16",
+            "isSatisfied": true,
+            "evidence": "session log migration files 20260212160034, 20260212165804, 20260212170806, and 20260212172109 plus Storage project build",
+            "text": "CA1062 is not approved. Public migration methods must validate migrationBuilder arguments rather than suppressing the rule."
+          },
+          {
+            "id": "ac-17",
+            "isSatisfied": true,
+            "evidence": "src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj and Support.Mcp project build",
+            "text": "CS0436 is not approved. Type conflict NoWarn entries must be removed once the conflict is no longer present."
+          },
+          {
+            "id": "ac-18",
+            "isSatisfied": false,
+            "evidence": "REOPENED 2026-09-09T17:07:12Z: generated migration 612/618 pragmas recurred on candidate 808ec049 and current develop. Historical evidence retained. Storage migration designer and snapshot 612/618 pragmas removed; W18 warning-suppression test now scans src/McpServer.Storage/Migrations plus provider migration roots.",
+            "text": "CS0618 is not approved. Obsolete APIs must be replaced with current APIs and covered by focused regression tests."
+          },
+          {
+            "id": "ac-19",
+            "isSatisfied": true,
+            "evidence": "src/McpServer.ServiceDefaults/RailwayConnectionStringBuilder.cs, src/McpServer.ServiceDefaults/PostgresConnectionStringResolver.cs, ServiceDefaults build, and resolver tests",
+            "text": "CA1055 is not approved. String return APIs must not advertise URI semantics."
+          },
+          {
+            "id": "ac-20",
+            "isSatisfied": true,
+            "evidence": "Directory.Packages.props stable Microsoft Agents versions, lib/NSubstitute.6.0.0/nsubstitute.nuspec, src/McpServer.McpAgent/McpServer.McpAgent.csproj, and dotnet pack McpServer.McpAgent",
+            "text": "NU5104 is not approved. Stable packages must not depend on prerelease packages or deprecated package metadata."
+          },
+          {
+            "id": "ac-21",
+            "isSatisfied": false,
+            "evidence": "REOPENED 2026-10-19 (operator: \"Gotta use the recommended packages.\"): develop ace70daa pins System.Security.Cryptography.Xml 10.0.10 (Directory.Packages.props:91), which brings System.Security.Cryptography.Pkcs 10.0.10; on PAYTON-LEGION2 the restore of build/_build.csproj fails NU1902 (GHSA-2fmv-rv2c-59x7) and NU1903 (GHSA-846f-f764-76mx, GHSA-7hqp-7c5m-4vq6, GHSA-c399-9853-6jmj, GHSA-r955-8q5j-3h83), run unit-green-win-baseline-20261019T1433. All five advisories name 10.0.13. Text strengthened from \"NU1901 and NU1903 are not approved. Vulnerable package advisories must be resolved by dependency updates and a clean vulnerability scan.\" Historical evidence retained: Directory.Packages.props transitive pins, Directory.Build.props suppression removal, and dotnet list McpServer.sln package --vulnerable --include-transitive.",
+            "text": "NU1901, NU1902, NU1903, and NU1904 are not approved. Vulnerable package advisories must be resolved by updating to the patched versions the advisories name, with a clean NuGet vulnerability audit on every lab host (LAB-OMARCHY and PAYTON-LEGION2), never by suppression, audit settings, or a build override."
+          },
+          {
+            "id": "ac-22",
+            "isSatisfied": true,
+            "evidence": "Directory.Build.props suppression removed; config/warning-suppression-approvals.json stale approval removed; default publish probes passed for McpServer.Support.Mcp, McpServer.Repl.Host, McpServer.QBAgent, McpServer.McpAgent.SampleHost, and McpServer.Launcher on 2026-07-13; ValidateWarningSuppressions passed; WarningSuppression Build.Tests passed 18/0/0; inventory contains zero ErrorOnDuplicatePublishOutputFiles occurrences.",
+            "text": "ErrorOnDuplicatePublishOutputFiles=false is not approved. Duplicate publish output enforcement must remain enabled unless a scoped approval names the exact affected projects and review condition."
+          },
+          {
+            "id": "ac-23",
+            "isSatisfied": false,
+            "text": "Correction of generated migration CS0612/CS0618 pragma pairs uses an explicit opt-in Nuke NormalizeGeneratedMigrationObsoletePragmas target. Compile, Test, and ValidateWarningSuppressions never invoke normalization or mutate source. Validation remains read-only and fails when exact generated-migration pragma pairs are present."
+          }
+        ],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "TR-MCP-SESSIONLOG-006",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:52.4676021+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:52.4674648+00:00",
+        "subarea": "SESSIONLOG",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Required planFile and todoId scalars with None sentinel and backfill",
+        "id": "TR-MCP-SESSIONLOG-006",
+        "description": "Session-log turn storage, DTOs, REST, MCP tools, and plugin wrappers SHALL expose required string fields planFile and todoId. New interactive creates/submits/beginTurn/replace-turn reject omitted, null, or empty values. Accepted planFile values are a workspace-relative path, an exact absolute path, a ~/ home-relative path, or the literal sentinel None. Accepted todoId values are a canonical MCP TODO id, ISSUE-N, or None. An EF migration adds both columns, defaults existing rows to None, then a one-time backfill scans turn contents and agent history under ~. Uncertain extractions remain None. Query/get results SHALL return both fields.\n**Covered by:** FR: FR-MCP-SESSIONLOGCTX-001; TEST: TEST-MCP-SESSIONLOG-006",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-TR-MCP-SESSIONLOG-006-009",
+            "isSatisfied": false,
+            "text": "The agent-history scan under ~ (.grok, .claude, .codex, .cursor) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder) and never fails a submit or an import; when nothing usable is found the turn keeps None. Tests that submit imports read the real home, so they are integration tests (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\"; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8)."
+          }
+        ],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "TR-MCP-USECASE-018",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:43.6926691+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:43.6925454+00:00",
+        "subarea": "USECASE",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Cross-platform bounded native I/O and deterministic evidence",
+        "id": "TR-MCP-USECASE-018",
+        "description": "Use searchable Linux directory modes and descriptor-relative restoration. Isolate potentially blocking physical identity and SQLite pre-handle opens behind finitely owned platform cancellation mechanisms. Classify cancellation from direct operation evidence, and resolve repository fixtures from deterministic assembly metadata rather than mapped caller paths.\nConverted from FR-MCP-USECASE-016 on 2026-10-19 (operator: \"If it is in a FR, then that FR needs to be converted to a TR\"; answers \"Merge into its TR (Recommended)\" and \"FR-001, delete FRs (Recommended)\"). FR-MCP-USECASE-016 stated: Use-case persistence and its supporting contained rollback, physical workspace identity, SQLite opening, cancellation classification, and repository evidence paths shall remain safe and finitely completing on every supported platform, including deterministic CI builds, while preserving exact provider failures and truthful supersession evidence.\n**Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-019",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-001",
+            "isSatisfied": false,
+            "text": "Linux rollback directories retain owner search and execute permission, nested restoration reproduces file contents and mode, and all mutations remain contained."
+          },
+          {
+            "id": "AC-002",
+            "isSatisfied": false,
+            "text": "Physical workspace identity resolution completes within a finite bound on Windows and non-Windows without caller-thread blocking, cancellation gaps, abandoned workers, or silent platform returns."
+          },
+          {
+            "id": "AC-003",
+            "isSatisfied": false,
+            "text": "SQLite connection opening is finitely bounded before native-handle publication on every supported platform and leaves no worker, handle, callback, interrupt, pool, or lifecycle leak."
+          },
+          {
+            "id": "AC-004",
+            "isSatisfied": false,
+            "text": "Only outcomes precisely attributable to requested cancellation become OperationCanceledException; independent I/O, disposal, and provider failures retain their original type and details."
+          },
+          {
+            "id": "AC-005",
+            "isSatisfied": false,
+            "text": "Repository and Agent Help fixtures discover their root from true external deterministic builds with mapped CallerFilePath and no MCP_REPOSITORY_ROOT override."
+          },
+          {
+            "id": "AC-006",
+            "isSatisfied": false,
+            "text": "Every supported platform executes an applicable native contract assertion in the integration lane: platform-specific tests are Category=Integration tests, tagged Platform=Linux or Platform=Windows when they apply to one host, that run in their host's MigrationIntegrationTests (TR-MCP-NUKE-019) and neither skip nor silently return; no unit test depends on the platform."
+          },
+          {
+            "id": "AC-007",
+            "isSatisfied": false,
+            "text": "The rejected fourteenth receipt is preserved with an explicit supersession notice, and the fifteenth evidence records every failed, inconclusive, and passing run with independently verified hashes and command mappings."
+          }
+        ],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "TR-MCP-USECASE-019",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:45.1665186+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:45.1663927+00:00",
+        "subarea": "USECASE",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Race-safe physical I/O, causal cancellation, and immutable evidence",
+        "id": "TR-MCP-USECASE-019",
+        "description": "Resolve and validate physical filesystem identity through interruptible native handles or isolated workers whose public deadlines and accounting remain truthful; bind SQLite opening to the validated object without lexical races; attribute PostgreSQL cancellation to the actual caller cancel request; compose platform-native tests and process containment without pass-through fallbacks; and generate exact-final-HEAD evidence through a mechanically verified immutable workflow.\nConverted from FR-MCP-USECASE-017 on 2026-10-19 (operator: \"If it is in a FR, then that FR needs to be converted to a TR\"; answers \"Merge into its TR (Recommended)\" and \"FR-001, delete FRs (Recommended)\"). FR-MCP-USECASE-017 stated: Use-case persistence and its filesystem, provider, process, platform-test, and evidence boundaries shall close physical alias and replacement races, complete publicly within finite contracts, preserve truthful worker and provider causality, execute applicable native contracts, and report only exact immutable evidence while retaining every previously approved control.\n**Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-020",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-001",
+            "isSatisfied": false,
+            "text": "Linux preflight classifies each path prefix with statx(AT_SYMLINK_NOFOLLOW) and reads link targets with readlink, so a symbolic link to any path inside a userspace or network mount (not only its root) is rejected from the mount table without sending that mount a request (BUG-BASELINE-009 C1; BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkBelowFuseRoot_IsRejectedWithoutEnteringTheMount)."
+          },
+          {
+            "id": "AC-002",
+            "isSatisfied": false,
+            "text": "The SQLite caller-side data-source preflight runs off the caller's thread under the open's single finite deadline and the caller's cancellation: OpenAsync returns its task at once, a preflight that does not return fails the open with TimeoutException at the bound, no open worker starts, and the preflight stays counted (ActivePreflightCount) until it actually returns (BUG-BASELINE-009 C2; SqliteBoundedOpenFourteenthTests.OpenAsync_PreflightHeldAtBoundary_TimesOutWithoutBlockingTheCaller)."
+          },
+          {
+            "id": "AC-003",
+            "isSatisfied": false,
+            "text": "Linux workspace identity resolution resolves symbolic-link prefixes through the mount table before its anchored RESOLVE_NO_XDEV lookup, so an absolute alias within a nested approved mount (for example /tmp) resolves like the data-file and SQLite opens instead of failing with a mount transition (BUG-BASELINE-009 C3; WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers)."
+          },
+          {
+            "id": "AC-004",
+            "isSatisfied": false,
+            "text": "A bounded traversal or file worker that uses the export root descriptor holds a reference on it from before it starts until it actually exits, so disposing the root at the public deadline defers the close: on Linux the root descriptor stays open while the worker runs and closes after it exits; on Windows the open root still blocks rename (BUG-BASELINE-009, operator decision 2026-10-11 \"Fix it now\"; BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting)."
+          },
+          {
+            "id": "AC-005",
+            "isSatisfied": false,
+            "text": "Physical workspace identity rejects safe lexical paths whose physical target is on an unsafe mount, remains safe across symlink or mount replacement timing, completes publicly within its deadline, and reports any unstoppable worker as active until it actually exits."
+          },
+          {
+            "id": "AC-006",
+            "isSatisfied": false,
+            "text": "SQLite data-source validation and pre-handle opening resist safe-link and check-to-open replacement, use no ineffective Thread.Interrupt dependency for native Linux I/O, finish cleanup within a finite deadline, and preserve exact lifecycle, handle, worker, and exception state."
+          },
+          {
+            "id": "AC-007",
+            "isSatisfied": false,
+            "text": "PostgreSQL SQLSTATE 57014 is translated to caller cancellation only with causal evidence produced by the caller-triggered cancellation mechanism; statement timeout and administrative cancellation remain PostgresException even during concurrent token cancellation."
+          },
+          {
+            "id": "AC-008",
+            "isSatisfied": false,
+            "text": "Platform-specific tests are Category=Integration tests, tagged with the Platform trait of the host they apply to, that run only in that host's MigrationIntegrationTests (TR-MCP-NUKE-019), prove real execution and inventory counts, and never pass through source inspection, skip, silent return, abort, inconclusive outcome, or a below-minimum count; no unit test depends on the platform."
+          },
+          {
+            "id": "AC-009",
+            "isSatisfied": false,
+            "text": "Containment race coverage requires at least one successful contained read and write while proving no escape or corruption, and deterministic total-rejection tests prove that rejecting every attempt cannot satisfy the success gate."
+          },
+          {
+            "id": "AC-010",
+            "isSatisfied": false,
+            "text": "Windows descendant cleanup establishes containment at process creation or proves an equivalent race-free boundary before descendants can escape, and timeout or cancellation terminates immediate descendants finitely without regressing non-Windows process-group cleanup."
+          },
+          {
+            "id": "AC-011",
+            "isSatisfied": false,
+            "text": "Historical rejected receipts remain intact but are explicitly superseded; final evidence identifies the exact immutable tested SHA, contains executable commands or a mechanically complete ledger, independently reconciles hashes, mappings and totals, and limits conclusions to the proven local and retained-evidence boundary."
+          },
+          {
+            "id": "AC-012",
+            "isSatisfied": false,
+            "text": "All current and prior requirements pass focused and cumulative Windows, native Linux/FUSE/non-root, SQLite, LocalDB, fresh PostgreSQL, deterministic external, BDPv4, build, traceability, Release, repository, history, harness, and EOL gates from C:-physical outputs with exact zero failures and zero skips."
+          }
+        ],
+        "area": "MCP"
+      }
+    },
+    {
+      "Key": "TR-MCP-WS-005",
+      "Record": {
+        "updatedAt": "2026-10-21T16:24:51.0006258+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-10-21T16:24:51.0004896+00:00",
+        "subarea": "WS",
+        "status": "pending",
+        "priority": "medium",
+        "title": "Marker File Service",
+        "id": "TR-MCP-WS-005",
+        "description": "`MarkerFileService.WriteMarkerAsync` writes `AGENTS-README-FIRST.yaml` to the workspace root. All markers point to the same shared host port. Uses Handlebars.Net templating with full workspace context. The marker template MUST be loaded from `templates/prompt-templates.yaml` via `PromptTemplateService` (id: `default-marker-prompt`). **CRITICAL**: If the template cannot be loaded (missing file, invalid YAML, or missing ID), the service must log a critical error and shut down the server immediately. Fallback to hardcoded templates is PROHIBITED. The YAML file contains port, `baseUrl`, all endpoint paths, process PID, `startedAt` timestamp, workspace name, per-workspace auth token (`apiKey`), and a machine-readable `prompt` block. Agents should send `X-Workspace-Path` header for workspace targeting.\n**Covered by:** FR: FR-MCP-018",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-TR-MCP-WS-005-001",
+            "isSatisfied": false,
+            "text": "Agent-plugin version resolution never fails the marker: the scan of the plugin caches under the user profile (.codex/plugins/cache, .claude/plugins/cache, .grok/installed-plugins) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder); a version file (.version or a plugin manifest) that exists but cannot be read (an IO or access error) yields no version, so resolution goes on to the next file and the next candidate; and resolution falls back to the synced plugin version when nothing yields one. Any other error still propagates. Unit tests take every plugin-version input (the agent plugin-root environment variables, the workspace sibling plugin folder and the user profile caches) from test-owned data, never from the process environment, the machine or the real profile, and a full unit run under a hostile environment (every plugin-root variable and HOME pointed at scripted bad data) stays 0 failed (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\", \"Fold R3-P3 in first\" and \"Structural fix, round 4 (Recommended)\"; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8)."
+          }
+        ],
+        "area": "MCP"
+      }
+    }
+  ]
+}

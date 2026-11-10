@@ -1,0 +1,20 @@
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2391:        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.appendActions')
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2394:    if (-not (Assert-ReplCallerRequestMatches -Method 'workflow.sessionlog.appendActions' -ParamsYaml $ParamsYaml)) {
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2397:    if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.appendActions')) {
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2428:        $script:ReplPersistVerbMethod = 'workflow.sessionlog.appendActions'
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2446:                [Console]::Error.WriteLine("workflow.sessionlog.appendActions queued for '$reqId'. Failsafe retained; primary persistence was not claimed.")
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2449:            [Console]::Error.WriteLine("workflow.sessionlog.appendActions did not persist '$reqId' and no failsafe was retained.")
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2628:        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.updateTurn')
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2631:    if (-not (Assert-ReplCallerRequestMatches -Method 'workflow.sessionlog.updateTurn' -ParamsYaml $ParamsYaml)) {
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2634:    if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.updateTurn')) {
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2684:        $script:ReplPersistVerbMethod = 'workflow.sessionlog.updateTurn'
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2708:        [Console]::Error.WriteLine("workflow.sessionlog.updateTurn failed for '$reqId': $_")
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2717:        [Console]::Error.WriteLine("workflow.sessionlog.updateTurn queued for '$reqId'. Failsafe retained; primary persistence was not claimed.")
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:2720:    [Console]::Error.WriteLine("workflow.sessionlog.updateTurn did not persist '$reqId' and no failsafe was retained.")
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:3082:        'workflow.sessionlog.openSession'     { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowOpenSession -ParamsYaml $ParamsYaml); return }
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:3083:        'workflow.sessionlog.updateTurn'      { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowUpdateTurn -ParamsYaml $ParamsYaml); return }
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:3084:        'workflow.sessionlog.appendActions'   { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowAppendActions -ParamsYaml $ParamsYaml); return }
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:3149:        'workflow.sessionlog.beginTurn', 'workflow.sessionlog.openSession',
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:3150:        'workflow.sessionlog.updateTurn', 'workflow.sessionlog.appendActions',
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:3174:        $requestId = if ($Method -in @('workflow.sessionlog.openSession', 'workflow.sessionlog.setSessionTitle')) { '' } else { Get-ReplTurnCacheField -Field 'turnRequestId' }
+

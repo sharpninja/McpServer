@@ -16,6 +16,14 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <see cref="WikiDumpTablePolicyRegistry"/> and <see cref="WikiDumpService"/>.
 /// TEST-MCP-WIKIEXPORT-003.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-WIKIEXPORT-003, FR-MCP-WIKIEXPORT-004 and
+/// FR-MCP-WIKIEXPORT-005 (every criterion of each; they carry no criterion ids).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-WIKIEXPORT-003 through FR-MCP-WIKIEXPORT-005 (criteria without ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class WikiDumpG7OverlayTests : IDisposable
 {
     private const string SecretSentinel = "supersecretvalue123456";
@@ -135,6 +143,15 @@ public sealed class WikiDumpG7OverlayTests : IDisposable
         Assert.DoesNotContain(SecretSentinel, canonical, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// TEST-MCP-AUDIT-003; FR-MCP-AUDIT-001 (its first criterion, which carries no criterion id): a data audit row of
+    /// the workspace does not reach the exported wiki dump (its snapshot sentinel is absent from the dump JSON), and
+    /// the dump policy registry marks both audit tables, DataAuditLogs and TodoAuditHistory, OMIT-LOCAL. Data: the
+    /// class fixture (an in-memory SQLite McpDbContext over a temporary workspace folder) seeded with one
+    /// DataAuditLogEntity whose CurrentSnapshotJson holds the sentinel local-audit-only-92841, exported through the
+    /// ExportAsync helper with IncludeDump true.
+    /// </summary>
+    /// <remarks>2026-11-07, TEST-MCP-AUDIT-003; FR-MCP-AUDIT-001: documented in slice S9 of hostile validation finding R14-F4, because it had no XML documentation (CLAUDE.md: what is tested, the data or fixtures used, the requirement ids validated); the test code is unchanged.</remarks>
     [Fact]
     public async Task Dump_AuditRecordsStayLocal()
     {

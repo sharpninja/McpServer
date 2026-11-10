@@ -18,8 +18,30 @@ namespace QBrainAi.Support.Mcp.Services;
 /// <summary>
 /// In-memory voice conversation orchestration service backed by Copilot CLI and MCP todo services.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): every time the service reads (the recorded idle times, the transcript stamps and the reference time of the idle-cleanup and device-lookup decisions) and the idle-cleanup timer now come from one clock, an optional <see cref="TimeProvider"/> that defaults to <see cref="TimeProvider.System"/>, because hostile validation round 13 finding R13-F1 found that a unit test's session-reuse assertion depended on a real cleanup timer and the live clock. With the system clock the behavior, the 60-second cleanup schedule and the strict idle comparison are unchanged.</description></item>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006: the entry above says every time the service reads comes from the clock; more exactly, every UTC instant the service records or compares does (17 reads: the recorded idle time, written in twelve places, the five transcript stamps, and the reference time of the device-lookup and idle-cleanup decisions), while the turn latency stays a <see cref="Stopwatch"/> duration that no idle decision and no unit assertion reads, because the fifteenth holistic read before hostile validation round 14 (findings c3 and g1) found the wider statement false. Documentation only; no behavior change.</description></item>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): the idle-cleanup timer callback keeps the task of the pass it starts, read by unit tests through the internal <see cref="IdleCleanupPass"/>, because the eighteenth holistic read before hostile validation round 14 (finding G1) found that the tests could not observe directly that a triggered pass had finished. The pass still runs without being awaited; what it does is unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed partial class VoiceConversationService : IVoiceConversationService, IDisposable
 {
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: how long after creation the idle cleanup first runs, and how often it runs after that.
+    /// </summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: named for the schedule the constructor arms (60 seconds, unchanged), so the unit binding of hostile validation round 13 finding R13-F1 can pin the schedule the production code asks its clock for.</remarks>
+    internal static readonly TimeSpan IdleCleanupInterval = TimeSpan.FromSeconds(60);
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: the task of the latest idle-cleanup pass the timer started (a completed task before the
+    /// first pass), so a unit test that triggers the cleanup can observe directly that the pass has finished before it
+    /// reads the pass's decisions.
+    /// </summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): added for the eighteenth holistic read before hostile validation round 14, finding G1; read only by the unit tests, through the assembly's existing InternalsVisibleTo grant.</remarks>
+    internal Task IdleCleanupPass => Volatile.Read(ref _idleCleanupPass);
+
     private readonly ConcurrentDictionary<string, VoiceSessionState> _sessions = new(StringComparer.OrdinalIgnoreCase);
     private readonly IAgentCliClient _copilotClient;
     private readonly IAgentExecutionStrategyResolver _strategyResolver;
@@ -33,11 +55,41 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     private readonly IOptionsMonitor<TodoPromptOptions> _todoPromptOptions;
     private readonly IHostEnvironment _hostEnvironment;
     private readonly ILogger<VoiceConversationService> _logger;
-    private readonly Timer _idleCleanupTimer;
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: the clock every UTC instant the service records or compares comes from (the turn latency
+    /// is a <see cref="Stopwatch"/> duration instead).
+    /// </summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added so the recorded idle times and the reference time of the idle decisions come from one clock that a unit test scripts (hostile validation round 13 finding R13-F1). 2026-11-06, TR-MCP-USECASE-018 AC-006: summary narrowed from "every time the service reads" to the UTC instants it records or compares, because the turn latency is a Stopwatch duration (fifteenth holistic read before hostile validation round 14, finding g1); no behavior change.</remarks>
+    private readonly TimeProvider _time;
+
+    /// <summary>TR-MCP-USECASE-018 AC-006: the recurring idle-cleanup timer, created through <see cref="_time"/>.</summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: now an <see cref="ITimer"/> created by the service's clock instead of a <see cref="System.Threading.Timer"/>, so a unit test controls when the cleanup runs (hostile validation round 13 finding R13-F1); the schedule is unchanged.</remarks>
+    private readonly ITimer _idleCleanupTimer;
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: the task of the latest idle-cleanup pass the timer started; a completed task before the
+    /// first pass.
+    /// </summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): added so a unit test can observe directly that a pass it triggered has finished, because the eighteenth holistic read before hostile validation round 14 (finding G1) found that the tests could see only the kinds of awaiting resource they counted; the timer callback discarded the task before. What a pass does is unchanged.</remarks>
+    private Task _idleCleanupPass = Task.CompletedTask;
 
     /// <summary>
     /// Creates a new <see cref="VoiceConversationService"/>.
     /// </summary>
+    /// <param name="copilotClient">The Copilot CLI client.</param>
+    /// <param name="serviceProvider">The service provider the strategy resolver, TODO services and scope factory come from.</param>
+    /// <param name="workspaceAccessor">The workspace service accessor.</param>
+    /// <param name="configuration">The application configuration.</param>
+    /// <param name="options">The voice conversation options.</param>
+    /// <param name="todoPromptOptions">The TODO prompt options.</param>
+    /// <param name="hostEnvironment">The host environment.</param>
+    /// <param name="logger">The logger.</param>
+    /// <param name="loggerFactory">The logger factory.</param>
+    /// <param name="time">The clock every UTC instant the service records or compares, and its idle-cleanup timer, come from; null uses <see cref="TimeProvider.System"/>.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="copilotClient"/>, <paramref name="serviceProvider"/>, <paramref name="workspaceAccessor"/>, <paramref name="configuration"/>, <paramref name="options"/>, <paramref name="todoPromptOptions"/>, <paramref name="hostEnvironment"/> or <paramref name="logger"/> is null; or, on Windows only, <paramref name="loggerFactory"/> is null, reported with the parameter name factory by the logger-factory extension that creates the desktop launcher's logger (the factory is not read on other platforms).</exception>
+    /// <exception cref="InvalidOperationException"><paramref name="serviceProvider"/> does not provide the strategy resolver, the TODO creation or update service, or the scope factory.</exception>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): added the optional <paramref name="time"/> parameter and arms the idle-cleanup timer through it with the unchanged 60-second schedule (<see cref="IdleCleanupInterval"/>), because hostile validation round 13 finding R13-F1 found that a unit test could not control the real timer or the live clock its idle decision read. Dependency injection keeps the system clock: the parameter is optional and a registered <see cref="TimeProvider"/> is <see cref="TimeProvider.System"/>. 2026-11-06, TR-MCP-USECASE-018 AC-006: the <paramref name="time"/> description narrowed to the UTC instants the service records or compares, and the exceptions the constructor throws documented, because the fifteenth holistic read before hostile validation round 14 (findings g1 and g2) found the wider description false and the exceptions missing; no behavior change. 2026-11-06, TR-MCP-USECASE-018 AC-006: the NullReferenceException a null <paramref name="loggerFactory"/> raises on Windows documented, because the sixteenth holistic read before hostile validation round 14 (finding g1) found the exception list covering eight of the nine required arguments; no behavior change. 2026-11-06, TR-MCP-USECASE-018 AC-006: a null <paramref name="loggerFactory"/> on Windows is now documented as the <see cref="ArgumentNullException"/> it raises (parameter name factory, from LoggerFactoryExtensions.CreateLogger), and the NullReferenceException entry of the previous change is removed, because the seventeenth holistic read before hostile validation round 14 (finding g1) found that entry named an exception the code does not raise (probe of Microsoft.Extensions.Logging.Abstractions 10.0.9, the pinned version); no behavior change.</remarks>
     public VoiceConversationService(
         IAgentCliClient copilotClient,
         IServiceProvider serviceProvider,
@@ -47,7 +99,8 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         IOptionsMonitor<TodoPromptOptions> todoPromptOptions,
         IHostEnvironment hostEnvironment,
         ILogger<VoiceConversationService> logger,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory,
+        TimeProvider? time = null)
     {
         _copilotClient = copilotClient ?? throw new ArgumentNullException(nameof(copilotClient));
         ArgumentNullException.ThrowIfNull(serviceProvider);
@@ -61,21 +114,23 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         _todoPromptOptions = todoPromptOptions ?? throw new ArgumentNullException(nameof(todoPromptOptions));
         _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _time = time ?? TimeProvider.System;
 
         if (OperatingSystem.IsWindows())
             _desktopLauncher = new DesktopProcessLauncher(loggerFactory.CreateLogger<DesktopProcessLauncher>());
 
-        _idleCleanupTimer = new Timer(OnIdleCleanupTick, null, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(60));
+        _idleCleanupTimer = _time.CreateTimer(OnIdleCleanupTick, null, IdleCleanupInterval, IdleCleanupInterval);
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the creation and reuse time, which the idle-cleanup decision compares, is read from the service's clock instead of <see cref="DateTimeOffset.UtcNow"/> (hostile validation round 13 finding R13-F1).</remarks>
     public async Task<VoiceSessionCreateResponse> CreateSessionAsync(VoiceSessionCreateRequest? request, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         EnsureEnabled();
 
         var opts = _options.CurrentValue;
-        var now = DateTimeOffset.UtcNow;
+        var now = _time.GetUtcNow();
         var requestedModel = string.IsNullOrWhiteSpace(request?.AgentModel) ? opts.CopilotModel : request.AgentModel.Trim();
         var configuredExecutionStrategy = string.IsNullOrWhiteSpace(request?.ExecutionStrategy)
             ? opts.DefaultExecutionStrategy
@@ -168,6 +223,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the session's recorded idle time and the transcript stamps are read from the service's clock instead of <see cref="DateTimeOffset.UtcNow"/> (hostile validation round 13 finding R13-F1).</remarks>
     public async Task<VoiceTurnResponse?> SubmitTurnAsync(string sessionId, VoiceTurnRequest request, CancellationToken cancellationToken = default)
     {
         EnsureEnabled();
@@ -192,7 +248,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             state.IsTurnActive = true;
             state.Status = "thinking";
             state.LastError = null;
-            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+            state.LastUpdatedUtc = _time.GetUtcNow();
             state.TurnCounter++;
             turnId = $"turn-{state.TurnCounter.ToString("0000", CultureInfo.InvariantCulture)}";
             state.LastTurnId = turnId;
@@ -202,7 +258,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
 
             AddTranscriptEntryIfEnabled(state, new VoiceTranscriptEntryDto
             {
-                TimestampUtc = DateTimeOffset.UtcNow.ToString("O"),
+                TimestampUtc = _time.GetUtcNow().ToString("O"),
                 TurnId = turnId,
                 Role = "user",
                 Category = "transcript",
@@ -243,7 +299,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             state.IsTurnActive = false;
             state.Status = execution.Status is "completed" or "interrupted" ? "idle" : "error";
             state.LastError = execution.Error;
-            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+            state.LastUpdatedUtc = _time.GetUtcNow();
 
             state.LastTurnToolCalls.Clear();
             foreach (var item in execution.ToolCalls)
@@ -253,7 +309,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             {
                 AddTranscriptEntryIfEnabled(state, new VoiceTranscriptEntryDto
                 {
-                    TimestampUtc = DateTimeOffset.UtcNow.ToString("O"),
+                    TimestampUtc = _time.GetUtcNow().ToString("O"),
                     TurnId = turnId,
                     Role = "assistant",
                     Category = execution.Status == "error" ? "error" : "transcript",
@@ -282,6 +338,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the session's recorded idle time is read from the service's clock instead of <see cref="DateTimeOffset.UtcNow"/> (hostile validation round 13 finding R13-F1).</remarks>
     public Task<VoiceInterruptResponse?> InterruptAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         EnsureEnabled();
@@ -298,7 +355,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             {
                 interrupted = true;
                 state.Status = "interrupting";
-                state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+                state.LastUpdatedUtc = _time.GetUtcNow();
                 state.ActiveTurnCts.Cancel();
             }
         }
@@ -312,6 +369,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the session's recorded idle time is read from the service's clock instead of <see cref="DateTimeOffset.UtcNow"/> (hostile validation round 13 finding R13-F1).</remarks>
     public async Task<bool> SendEscapeAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         EnsureEnabled();
@@ -326,11 +384,12 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             return false;
 
         await session.SendEscapeAsync(cancellationToken).ConfigureAwait(false);
-        state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+        state.LastUpdatedUtc = _time.GetUtcNow();
         return true;
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the session's recorded idle time is read from the service's clock instead of <see cref="DateTimeOffset.UtcNow"/> (hostile validation round 13 finding R13-F1).</remarks>
     public async Task<bool> SendSessionMessageAsync(string sessionId, string message, CancellationToken cancellationToken = default)
     {
         EnsureEnabled();
@@ -351,7 +410,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         try
         {
             var response = await session.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+            state.LastUpdatedUtc = _time.GetUtcNow();
             return response.State == AgentCliResultState.Success;
         }
         catch (Exception ex) when (ex is IOException or ObjectDisposedException or InvalidOperationException)
@@ -365,6 +424,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the session's recorded idle time, which a status read refreshes, is read from the service's clock instead of <see cref="DateTimeOffset.UtcNow"/> (hostile validation round 13 finding R13-F1).</remarks>
     public Task<VoiceSessionStatusDto?> GetStatusAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         EnsureEnabled();
@@ -376,7 +436,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
 
         lock (state.SyncRoot)
         {
-            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+            state.LastUpdatedUtc = _time.GetUtcNow();
             return Task.FromResult<VoiceSessionStatusDto?>(new VoiceSessionStatusDto
             {
                 SessionId = state.SessionId,
@@ -462,13 +522,14 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the reference time of the idle skip (a session is skipped when now minus its recorded idle time is more than the timeout) is read from the service's clock instead of <see cref="DateTimeOffset.UtcNow"/> (hostile validation round 13 finding R13-F1); the strict comparison is unchanged.</remarks>
     public VoiceSessionStatusDto? FindSessionByDevice(string deviceId)
     {
         EnsureEnabled();
         ArgumentException.ThrowIfNullOrWhiteSpace(deviceId);
 
         var idleTimeout = _options.CurrentValue.SessionIdleTimeoutMinutes;
-        var now = DateTimeOffset.UtcNow;
+        var now = _time.GetUtcNow();
 
         foreach (var state in _sessions.Values)
         {
@@ -534,6 +595,13 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     /// <summary>
     /// Producer that writes streaming events to the channel. Handles try/catch internally.
     /// </summary>
+    /// <param name="state">The session state.</param>
+    /// <param name="sessionId">The session id.</param>
+    /// <param name="userText">The user's transcript text.</param>
+    /// <param name="writer">The channel the events are written to.</param>
+    /// <param name="cancellationToken">The caller's cancellation token.</param>
+    /// <returns>A task that completes when the producer finishes and the channel is completed.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the session's recorded idle time and the transcript stamps are read from the service's clock instead of <see cref="DateTimeOffset.UtcNow"/> (hostile validation round 13 finding R13-F1); parameters documented in the same change (MEMORY-FACT-008).</remarks>
     private async Task ProduceStreamingTurnAsync(
         VoiceSessionState state,
         string sessionId,
@@ -559,7 +627,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             state.IsTurnActive = true;
             state.Status = "thinking";
             state.LastError = null;
-            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+            state.LastUpdatedUtc = _time.GetUtcNow();
             state.TurnCounter++;
             turnId = $"turn-{state.TurnCounter.ToString("0000", CultureInfo.InvariantCulture)}";
             state.LastTurnId = turnId;
@@ -569,7 +637,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
 
             AddTranscriptEntryIfEnabled(state, new VoiceTranscriptEntryDto
             {
-                TimestampUtc = DateTimeOffset.UtcNow.ToString("O"),
+                TimestampUtc = _time.GetUtcNow().ToString("O"),
                 TurnId = turnId,
                 Role = "user",
                 Category = "transcript",
@@ -637,7 +705,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             var status = finalEvent?.Status ?? finalEvent?.Type ?? "error";
             state.Status = status is "completed" or "interrupted" ? "idle" : "error";
             state.LastError = finalEvent?.Type == "error" ? finalEvent.Message : null;
-            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+            state.LastUpdatedUtc = _time.GetUtcNow();
 
             state.LastTurnToolCalls.Clear();
             foreach (var item in toolRecords)
@@ -655,7 +723,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             {
                 AddTranscriptEntryIfEnabled(state, new VoiceTranscriptEntryDto
                 {
-                    TimestampUtc = DateTimeOffset.UtcNow.ToString("O"),
+                    TimestampUtc = _time.GetUtcNow().ToString("O"),
                     TurnId = turnId,
                     Role = "assistant",
                     Category = finalEvent?.Type == "error" ? "error" : "transcript",
@@ -684,6 +752,13 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
 
 public sealed partial class VoiceConversationService
 {
+    /// <summary>Runs one non-streaming voice turn through the session's execution strategy, including tool calls.</summary>
+    /// <param name="state">The session state.</param>
+    /// <param name="turnId">The turn id.</param>
+    /// <param name="userText">The user's transcript text.</param>
+    /// <param name="cancellationToken">The turn's cancellation token.</param>
+    /// <returns>The turn's result.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the transcript stamps it writes are read from the service's clock instead of <see cref="DateTimeOffset.UtcNow"/> (hostile validation round 13 finding R13-F1); documented in the same change (MEMORY-FACT-008).</remarks>
     private async Task<VoiceTurnExecutionResult> ExecuteTurnAsync(
         VoiceSessionState state,
         string turnId,
@@ -830,7 +905,7 @@ public sealed partial class VoiceConversationService
                     {
                         AddTranscriptEntryIfEnabled(state, new VoiceTranscriptEntryDto
                         {
-                            TimestampUtc = DateTimeOffset.UtcNow.ToString("O"),
+                            TimestampUtc = _time.GetUtcNow().ToString("O"),
                             TurnId = turnId,
                             Role = "tool",
                             Category = toolOutcome.Record.Status == "executed" ? "tool_result" : "tool_call",
@@ -1256,6 +1331,10 @@ public sealed partial class VoiceConversationService
 
 public sealed partial class VoiceConversationService
 {
+    /// <summary>Adds a transcript entry when transcript logging is on, and refreshes the session's recorded idle time.</summary>
+    /// <param name="state">The session state.</param>
+    /// <param name="entry">The transcript entry.</param>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the recorded idle time is read from the service's clock instead of <see cref="DateTimeOffset.UtcNow"/> (hostile validation round 13 finding R13-F1); documented in the same change (MEMORY-FACT-008).</remarks>
     private void AddTranscriptEntryIfEnabled(VoiceSessionState state, VoiceTranscriptEntryDto entry)
     {
         if (!_options.CurrentValue.LogTranscripts)
@@ -1264,7 +1343,7 @@ public sealed partial class VoiceConversationService
         lock (state.SyncRoot)
         {
             state.Transcript.Add(entry);
-            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+            state.LastUpdatedUtc = _time.GetUtcNow();
         }
     }
 
@@ -1843,18 +1922,26 @@ public sealed partial class VoiceConversationService
     /// <summary>
     /// Periodically scans for idle sessions and performs graceful shutdown.
     /// </summary>
+    /// <param name="state">The timer state (unused).</param>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: now the callback of the timer the service's clock creates, so a unit test runs it only where its scripted trace triggers it (hostile validation round 13 finding R13-F1); what it does is unchanged. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): the pass's task is now kept in <see cref="_idleCleanupPass"/> instead of discarded, so a unit test can observe that the pass finished (eighteenth holistic read before hostile validation round 14, finding G1); the pass still runs without being awaited, as before.</remarks>
     private void OnIdleCleanupTick(object? state)
     {
-        _ = CleanupIdleSessionsAsync();
+        Volatile.Write(ref _idleCleanupPass, CleanupIdleSessionsAsync());
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: removes every session that is not in a turn and whose idle age (now minus its recorded
+    /// idle time) is more than the configured timeout, after sending a live interactive session its shutdown command.
+    /// </summary>
+    /// <returns>A task that completes when the scan and its removals finish; failures are logged, not thrown.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the reference time is read from the service's clock instead of <see cref="DateTimeOffset.UtcNow"/>, so the decision is determined by scripted times in unit tests (hostile validation round 13 finding R13-F1); the strict comparison is unchanged. Documented in the same change (MEMORY-FACT-008).</remarks>
     private async Task CleanupIdleSessionsAsync()
     {
         try
         {
             var opts = _options.CurrentValue;
             var timeout = opts.SessionIdleTimeoutMinutes;
-            var now = DateTimeOffset.UtcNow;
+            var now = _time.GetUtcNow();
             var staleIds = new List<string>();
 
             foreach (var kvp in _sessions)
@@ -1910,6 +1997,7 @@ public sealed partial class VoiceConversationService
     /// <summary>
     /// Disposes the idle cleanup timer.
     /// </summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: the timer it disposes is now the one the service's clock created (hostile validation round 13 finding R13-F1).</remarks>
     public void Dispose()
     {
         _idleCleanupTimer.Dispose();

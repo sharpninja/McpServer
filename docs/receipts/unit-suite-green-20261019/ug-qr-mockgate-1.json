@@ -1,0 +1,101 @@
+{
+  "name": "ug-qr-mockgate-1",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "022f9cde436eadf509b47794d18c6cdc9036ad80",
+  "dirtyPaths": [
+    " M tests/Build.Tests/IntegrationLaneExecutionContractTests.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    " M tests/Build.Tests/TestGroupExecutionContractTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipContract.cs",
+    " M tests/Build.Tests/TestProjectOwnershipMockGateTests.cs",
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-1/",
+    "?? tests/Build.Tests/UnitTestFilterContract.cs",
+    "?? tests/Build.Tests/UnitTestFilterMockGateTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "Build.Tests:IntegrationLaneFilterMockGateTests,IntegrationLaneExecutionContractTests,TestGroupExecutionContractTests,UnitTestFilterMockGateTests,TestProjectOwnershipMockGateTests",
+    "--test-run-id",
+    "ug-qr-mockgate-1"
+  ],
+  "startedLocal": "2026-11-07T18:53:06",
+  "endedLocal": "2026-11-07T18:53:18",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 86,
+  "passed": 86,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-qr-mockgate-1/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-1/Build.Tests.trx",
+      "sha256": "7479C64CC8BA8589C1ABCEEF303DBA860675F19DD0E3AB4BC5C2A16E1DE70481",
+      "total": 86,
+      "passed": 86,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/Build.Tests/IntegrationLaneFilterContract.cs",
+      "sha256": "06B9394318972011461AC042933B1913058ED57A19A0645E1BFB2A6212AA8246"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+      "sha256": "4EF5ED9D2AB129FFA4E614E7F07E8A3A7717A758BDA22FE49D4FFC46CF1A386B"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneExecutionContractTests.cs",
+      "sha256": "26D4BD7CCD5C5F8BBC8C68CAF20797803804A2B5A3E16EA9312A0246EB97EB75"
+    },
+    {
+      "path": "tests/Build.Tests/TestGroupExecutionContractTests.cs",
+      "sha256": "97AAB0A34F15E7C77273D738777F3E08B8652A1ED27D1C8F8E912FC153FBCCD9"
+    },
+    {
+      "path": "tests/Build.Tests/UnitTestFilterContract.cs",
+      "sha256": "1F5D9AF69F98BE9BD84B96FCBB39026D772DD4B7557D21BE84BEB88E02B6BCDF"
+    },
+    {
+      "path": "tests/Build.Tests/UnitTestFilterMockGateTests.cs",
+      "sha256": "C11FF119CF6556F7CBCF7D1F621E14A4BD0B2999D14215EF0E183150A36F320F"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipContract.cs",
+      "sha256": "91E379516760F5FA3A393096DC9CD1C9EC960135ADEDB86660E99D1150F8C6C4"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipMockGateTests.cs",
+      "sha256": "DE1DCD994BD087ED0D6CC6ECBD4A57EDC3C73A78F4AF950598EE9A3BC6065398"
+    },
+    {
+      "path": "build/Build.Test.cs",
+      "sha256": "F311263B9F145CCFB8B6E948F907A36AA5D9AE0FFFF23B375B8754C82B118472"
+    },
+    {
+      "path": "build/IntegrationLaneFilter.cs",
+      "sha256": "3CCA0E895BD864CACC35B137D27C4C314B2954E3CD32B74FDE1D93EA620DF1F5"
+    },
+    {
+      "path": "build/TestProjectOwnership.cs",
+      "sha256": "67043AACAEB415A4366709F925D047B8A2F25C19BF3A259199726D49E53B2DD2"
+    },
+    {
+      "path": "build/TestProjectOwnershipContracts.cs",
+      "sha256": "36CB4E83CFF292CE77C51F5D3AA82A77CC24885C4270AE5905EA40DFEFA9A4AB"
+    }
+  ],
+  "writtenLocal": "2026-11-07T18:54:26",
+  "writtenBy": "ClaudeCode"
+}

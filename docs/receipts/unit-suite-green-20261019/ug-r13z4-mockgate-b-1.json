@@ -1,0 +1,84 @@
+{
+  "name": "ug-r13z4-mockgate-b-1",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "2103243cfb4155e201b0fe1fd257ebc093800d86",
+  "dirtyPaths": [
+    " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-binding-a-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-a-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r13z4-serviceupdate-chain-1.txt",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Support.Mcp.Tests:AgeBoundaryContractTests,SettableTimeProviderTests",
+    "--test-run-id",
+    "ug-r13z4-mockgate-b-1"
+  ],
+  "startedLocal": "2026-11-05T03:21:55",
+  "endedLocal": "2026-11-05T03:22:13",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 52,
+  "passed": 52,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r13z4-mockgate-b-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z4-mockgate-b-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "A65011908CD232794A401AB7B8877E58BEF2F881BDBA4C65FFD332E6343F01F0",
+      "total": 52,
+      "passed": 52,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs",
+      "sha256": "31889ACEEEF324389C0433518A854F43A40116BD02FF5AE455921BD22F97FF07"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs",
+      "sha256": "6AFF438D1C56512C7D5B47814C2774CF0DFD6AC84630E636E8031FE9CEABA5E3"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs",
+      "sha256": "A14459AC3417BAA962E2F11AF82E33076D5665695336BA0BE8C0917FA7369FF5"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "sha256": "8E72D6649583097751564F4D4617F7E73803D9FD915924BBCEFEB8A4FC7A86A1"
+    },
+    {
+      "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+      "sha256": "EB2811E30605A26ACEA1294CC7E5EB253797A7DD649208CF011102F4ED766964"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/FederationEnvelopeSigner.cs",
+      "sha256": "444D3D07E7FF6C7E0126250322B3F085E6999826E8239192792F28A6489ACBE2"
+    },
+    {
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs",
+      "sha256": "B0526F4124C91BC1BE4893F3F7EDD31560A0DFCEB9BC158E74729CE894AE4C94"
+    },
+    {
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs",
+      "sha256": "2BA37B4762588BBF61C6089316C7CAC3C5472C1B2DE33724037638A1FA9B8C11"
+    }
+  ],
+  "writtenLocal": "2026-11-05T03:22:44",
+  "writtenBy": "ClaudeCode"
+}

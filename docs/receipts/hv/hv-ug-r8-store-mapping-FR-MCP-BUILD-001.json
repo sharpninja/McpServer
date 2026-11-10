@@ -1,0 +1,94 @@
+{
+  "TimestampLocal": "2026-10-27T03:52:14",
+  "Method": "workflow.requirements.listMappings",
+  "Params": {
+    "frId": "FR-MCP-BUILD-001"
+  },
+  "Response": {
+    "type": "result",
+    "payload": {
+      "deprecated": true,
+      "result": {
+        "totalCount": 15,
+        "items": [
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5625208+00:00",
+            "trId": "TR-MCP-NUKE-001"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5634865+00:00",
+            "trId": "TR-MCP-NUKE-002"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5636597+00:00",
+            "trId": "TR-MCP-NUKE-005"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5637932+00:00",
+            "trId": "TR-MCP-NUKE-006"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5639142+00:00",
+            "trId": "TR-MCP-NUKE-007"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5640326+00:00",
+            "trId": "TR-MCP-NUKE-008"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5641468+00:00",
+            "trId": "TR-MCP-NUKE-009"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5642860+00:00",
+            "trId": "TR-MCP-NUKE-010"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5643925+00:00",
+            "trId": "TR-MCP-NUKE-011"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5645213+00:00",
+            "trId": "TR-MCP-NUKE-012"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5646328+00:00",
+            "trId": "TR-MCP-NUKE-015"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5647315+00:00",
+            "trId": "TR-MCP-NUKE-016"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5648359+00:00",
+            "trId": "TR-MCP-NUKE-017"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5649291+00:00",
+            "trId": "TR-MCP-NUKE-018"
+          },
+          {
+            "frId": "FR-MCP-BUILD-001",
+            "createdAt": "2026-10-27T08:52:17.5650033+00:00",
+            "trId": "TR-MCP-NUKE-019"
+          }
+        ]
+      },
+      "requestId": "req-20261027T085215Z-afe3"
+    }
+  }
+}

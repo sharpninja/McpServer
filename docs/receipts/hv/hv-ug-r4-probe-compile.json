@@ -1,0 +1,5 @@
+{
+  "Compiled": true,
+  "Source": "using OS = System.OperatingSystem;\nnamespace N {\n    using static OS;\n    public class StaticAliasTests {\n        [Fact] public void Check() { _ = IsWindows(); }\n    }\n}\n\nnamespace AliasChain {\n    using Host = OS;\n    public class ChainedAliasTests {\n        [Fact] public void Check() { _ = Host.IsWindows(); }\n    }\n}\npublic sealed class FactAttribute : System.Attribute {}",
+  "AssemblySourceSha256": "F8EEC0DB1D6CFC1E3E72BB91C2135BA3A033AF60005FBA9CBAD6F597C949D48B"
+}

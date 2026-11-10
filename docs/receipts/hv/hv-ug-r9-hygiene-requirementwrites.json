@@ -1,0 +1,272 @@
+[
+  {
+    "TranscriptLine": 62794,
+    "Timestamp": "2026-10-29T13:52:04.589Z",
+    "Evidence": "READBACK TR-MCP-NUKE-019: criteria=4 changed=[AC-6] targetMatches=True ok=True"
+  },
+  {
+    "TranscriptLine": 62795,
+    "Timestamp": "2026-10-29T13:52:18.344Z",
+    "Evidence": "READBACK TR-MCP-NUKE-019: criteria=4 changed=[AC-2] targetMatches=True ok=True"
+  },
+  {
+    "TranscriptLine": 62796,
+    "Timestamp": "2026-10-29T13:52:35.153Z",
+    "Evidence": "READBACK TR-MCP-USECASE-018: criteria=7 changed=[AC-006] targetMatches=True ok=True"
+  },
+  {
+    "TranscriptLine": 62797,
+    "Timestamp": "2026-10-29T13:52:49.047Z",
+    "Evidence": "READBACK TR-MCP-USECASE-019: criteria=11 changed=[AC-008] targetMatches=True ok=True"
+  },
+  {
+    "TranscriptLine": 65855,
+    "Timestamp": "2026-10-29T17:24:16.016Z",
+    "Evidence": "READBACK FR-MCP-QBOPENAI-001: criteria=6 changed=[,,,ac-5] targetMatches=True ok=False"
+  },
+  {
+    "TranscriptLine": 65857,
+    "Timestamp": "2026-10-29T17:25:15.077Z",
+    "Evidence": "READBACK FR-MCP-FED-PATH-001: criteria=5 changed=[AC5] targetMatches=True ok=True"
+  },
+  {
+    "TranscriptLine": 65858,
+    "Timestamp": "2026-10-29T17:25:27.662Z",
+    "Evidence": "READBACK TR-MCP-NUKE-019: criteria=4 changed=[AC-2] targetMatches=True ok=True"
+  },
+  {
+    "TranscriptLine": 65859,
+    "Timestamp": "2026-10-29T17:25:40.365Z",
+    "Evidence": "READBACK TR-MCP-NUKE-019: criteria=4 changed=[AC-3] targetMatches=True ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK FR-MCP-TESTRESOURCE-001: criteria=4 storedEqualsSent=True changed=[3:ac-4] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK TR-MCP-NUKE-019: criteria=4 storedEqualsSent=True changed=[3:AC-6] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK TR-MCP-NUKE-019: criteria=4 storedEqualsSent=True changed=[2:AC-3] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK FR-MCP-047: criteria=1 storedEqualsSent=True changed=[0:ac-1] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK TR-MCP-USECASE-018: criteria=7 storedEqualsSent=True changed=[5:AC-006] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK TR-MCP-USECASE-019: criteria=11 storedEqualsSent=True changed=[7:AC-008] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK FR-MCP-REPL-001: criteria=1 storedEqualsSent=True changed=[0:ac-1] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK FR-MCP-REPL-007: criteria=1 storedEqualsSent=True changed=[0:ac-1] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK FR-MCP-REPL-007: criteria=2 storedEqualsSent=True changed=[1:ac-2] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK FR-MCP-REPL-007: criteria=3 storedEqualsSent=True changed=[2:ac-3] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK FR-MCP-REPL-007: criteria=4 storedEqualsSent=True changed=[3:ac-4] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK FR-MCP-018: criteria=1 storedEqualsSent=True changed=[0:ac-1] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK TR-MCP-WS-005: criteria=2 storedEqualsSent=True changed=[1:AC-TR-MCP-WS-005-002] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK FR-MCP-SESSIONLOGCTX-001: criteria=8 storedEqualsSent=True changed=[7:AC-FR-MCP-SESSIONLOGCTX-001-008] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK TR-MCP-SESSIONLOG-006: criteria=2 storedEqualsSent=True changed=[1:AC-TR-MCP-SESSIONLOG-006-010] ok=True"
+  },
+  {
+    "TranscriptLine": 67072,
+    "Timestamp": "2026-10-30T19:28:10.718Z",
+    "Evidence": "    READBACK FR-MCP-QBOPENAI-001: criteria=7 storedEqualsSent=True changed=[5:ac-6] ok=True"
+  },
+  {
+    "TranscriptLine": 67120,
+    "Timestamp": "2026-10-30T19:29:40.069Z",
+    "Evidence": "READBACK TR-MCP-REPL-001: criteria=1 removedGone=True othersChanged=[] ok=True"
+  },
+  {
+    "TranscriptLine": 67121,
+    "Timestamp": "2026-10-30T19:29:51.094Z",
+    "Evidence": "READBACK TR-MCP-REPL-008: criteria=0 removedGone=True othersChanged=[] ok=True"
+  },
+  {
+    "TranscriptLine": 67122,
+    "Timestamp": "2026-10-30T19:30:02.695Z",
+    "Evidence": "READBACK TR-MCP-WS-005: criteria=1 removedGone=True othersChanged=[] ok=True"
+  },
+  {
+    "TranscriptLine": 67123,
+    "Timestamp": "2026-10-30T19:30:13.692Z",
+    "Evidence": "READBACK TR-MCP-SESSIONLOG-006: criteria=1 removedGone=True othersChanged=[] ok=True"
+  },
+  {
+    "TranscriptLine": 67411,
+    "Timestamp": "2026-10-30T19:40:19.592Z",
+    "Evidence": "READBACK FR-MCP-TESTRESOURCE-001: criteria=5 storedEqualsSent=True changed=[4:ac-5] ok=True"
+  },
+  {
+    "TranscriptLine": 67487,
+    "Timestamp": "2026-10-30T19:43:58.288Z",
+    "Evidence": "    READBACK FR-MCP-TESTRESOURCE-001: criteria=5 storedEqualsSent=True changed=[3:ac-4] ok=True"
+  },
+  {
+    "TranscriptLine": 67487,
+    "Timestamp": "2026-10-30T19:43:58.288Z",
+    "Evidence": "    READBACK FR-MCP-TESTRESOURCE-001: criteria=6 storedEqualsSent=True changed=[5:ac-6] ok=True"
+  },
+  {
+    "TranscriptLine": 67487,
+    "Timestamp": "2026-10-30T19:43:58.288Z",
+    "Evidence": "    READBACK FR-MCP-TESTRESOURCE-001: criteria=7 storedEqualsSent=True changed=[6:ac-7] ok=True"
+  },
+  {
+    "TranscriptLine": 67487,
+    "Timestamp": "2026-10-30T19:43:58.288Z",
+    "Evidence": "    READBACK FR-MCP-TESTRESOURCE-001: criteria=8 storedEqualsSent=True changed=[7:ac-8] ok=True"
+  },
+  {
+    "TranscriptLine": 67487,
+    "Timestamp": "2026-10-30T19:43:58.288Z",
+    "Evidence": "    READBACK FR-MCP-TESTRESOURCE-001: criteria=9 storedEqualsSent=True changed=[8:ac-9] ok=True"
+  },
+  {
+    "TranscriptLine": 67487,
+    "Timestamp": "2026-10-30T19:43:58.288Z",
+    "Evidence": "    READBACK FR-MCP-TESTRESOURCE-001: criteria=10 storedEqualsSent=True changed=[9:ac-10] ok=True"
+  },
+  {
+    "TranscriptLine": 67487,
+    "Timestamp": "2026-10-30T19:43:58.288Z",
+    "Evidence": "    READBACK FR-MCP-TESTRESOURCE-001: criteria=11 storedEqualsSent=True changed=[10:ac-11] ok=True"
+  },
+  {
+    "TranscriptLine": 67487,
+    "Timestamp": "2026-10-30T19:43:58.288Z",
+    "Evidence": "    READBACK FR-MCP-TESTRESOURCE-001: criteria=12 storedEqualsSent=True changed=[11:ac-12] ok=True"
+  },
+  {
+    "TranscriptLine": 69411,
+    "Timestamp": "2026-11-02T16:08:43.829Z",
+    "Evidence": "52\t    Write-Output ('READBACK TR-MCP-NUKE-019 ok={0} title={1} ACs={2}' -f (Test-Ok $r), (Get-CcValue $result 'title'), @(Get-CcValue $result 'acceptanceCriteria' | Where-Object { $null -ne $_ }).Count)"
+  },
+  {
+    "TranscriptLine": 69446,
+    "Timestamp": "2026-11-02T16:10:13.435Z",
+    "Evidence": "READBACK TR-MCP-NUKE-020 ok=True title=Targeted test-group runs ACs=3 mappedInListing=True"
+  },
+  {
+    "TranscriptLine": 69446,
+    "Timestamp": "2026-11-02T16:10:13.435Z",
+    "Evidence": "[2026-11-02T10:10:13] VERDICT CREATED failures=0"
+  },
+  {
+    "TranscriptLine": 69453,
+    "Timestamp": "2026-11-02T16:10:24.745Z",
+    "Evidence": "READBACK FR-MCP-040: criteria=1 storedEqualsSent=True changed=[0:ac-1] ok=True"
+  },
+  {
+    "TranscriptLine": 70187,
+    "Timestamp": "2026-11-02T16:48:43.236Z",
+    "Evidence": "READBACK TR-MCP-NUKE-020: criteria=4 storedEqualsSent=True changed=[3:AC-4] ok=True"
+  },
+  {
+    "TranscriptLine": 70193,
+    "Timestamp": "2026-11-02T16:49:11.644Z",
+    "Evidence": "READBACK TR-MCP-NUKE-020: criteria=5 storedEqualsSent=True changed=[4:AC-5] ok=True"
+  },
+  {
+    "TranscriptLine": 70836,
+    "Timestamp": "2026-11-02T17:21:59.610Z",
+    "Evidence": "  READBACK FR-MCP-USECASE-016 present=False"
+  },
+  {
+    "TranscriptLine": 70836,
+    "Timestamp": "2026-11-02T17:21:59.610Z",
+    "Evidence": "  READBACK FR-MCP-USECASE-017 present=False"
+  },
+  {
+    "TranscriptLine": 70836,
+    "Timestamp": "2026-11-02T17:21:59.610Z",
+    "Evidence": "  READBACK FR-MCP-FED-BACKFILL-001 present=False"
+  },
+  {
+    "TranscriptLine": 70836,
+    "Timestamp": "2026-11-02T17:21:59.610Z",
+    "Evidence": "  READBACK TR-MCP-FED-BACKFILL-001 present=False"
+  },
+  {
+    "TranscriptLine": 70836,
+    "Timestamp": "2026-11-02T17:21:59.610Z",
+    "Evidence": "  READBACK FR-MCP-FED-ROUTE-001 present=False"
+  },
+  {
+    "TranscriptLine": 70836,
+    "Timestamp": "2026-11-02T17:21:59.610Z",
+    "Evidence": "  READBACK TR-MCP-FED-ROUTE-001 present=False"
+  },
+  {
+    "TranscriptLine": 70836,
+    "Timestamp": "2026-11-02T17:21:59.610Z",
+    "Evidence": "  READBACK FR-MCP-FED-WSSYNC-001 present=False"
+  },
+  {
+    "TranscriptLine": 70836,
+    "Timestamp": "2026-11-02T17:21:59.610Z",
+    "Evidence": "  READBACK TR-MCP-FED-WSSYNC-001 present=False"
+  },
+  {
+    "TranscriptLine": 70836,
+    "Timestamp": "2026-11-02T17:21:59.610Z",
+    "Evidence": "  READBACK FR-WF-005 present=False"
+  },
+  {
+    "TranscriptLine": 73774,
+    "Timestamp": "2026-11-02T20:34:32.204Z",
+    "Evidence": "READBACK FR-MCP-040: criteria=1 storedEqualsSent=True changed=[0:ac-1] ok=True"
+  },
+  {
+    "TranscriptLine": 76024,
+    "Timestamp": "2026-11-03T01:02:54.573Z",
+    "Evidence": "READBACK FR-MCP-QBOPENAI-001: criteria=7 storedEqualsSent=True changed=[5:ac-6] ok=True"
+  }
+]

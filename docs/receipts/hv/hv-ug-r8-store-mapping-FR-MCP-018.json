@@ -1,0 +1,24 @@
+{
+  "TimestampLocal": "2026-10-27T03:52:23",
+  "Method": "workflow.requirements.listMappings",
+  "Params": {
+    "frId": "FR-MCP-018"
+  },
+  "Response": {
+    "type": "result",
+    "payload": {
+      "deprecated": true,
+      "result": {
+        "totalCount": 1,
+        "items": [
+          {
+            "frId": "FR-MCP-018",
+            "createdAt": "2026-10-27T08:52:25.8112224+00:00",
+            "trId": "TR-MCP-WS-005"
+          }
+        ]
+      },
+      "requestId": "req-20261027T085224Z-453f"
+    }
+  }
+}

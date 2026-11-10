@@ -1,0 +1,46 @@
+{
+  "timestampUtc": "2026-11-06T06:17:13.8764028+00:00",
+  "timestampLocal": "2026-11-06T00:17:16",
+  "method": "workflow.requirements.getFr",
+  "recordId": "FR-MCP-SERVICEUPDATE-001",
+  "response": {
+    "payload": {
+      "requestId": "req-20261106T061714Z-8d2e",
+      "result": {
+        "createdAt": "2026-11-06T06:17:16.3564214+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "area": "MCP",
+        "acceptanceCriteria": [
+          {
+            "text": "UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.",
+            "id": "",
+            "isSatisfied": false
+          },
+          {
+            "text": "Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.",
+            "id": "",
+            "isSatisfied": false
+          },
+          {
+            "text": "Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.",
+            "id": "",
+            "isSatisfied": false
+          },
+          {
+            "text": "Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.",
+            "id": "",
+            "isSatisfied": false
+          }
+        ],
+        "status": "pending",
+        "title": "Cross-platform service update preserving live state",
+        "updatedAt": "2026-11-06T06:17:16.3565550+00:00",
+        "id": "FR-MCP-SERVICEUPDATE-001",
+        "description": "The existing Nuke UpdateService target detects Windows or Linux and updates the selected service while preserving the live configuration and file data strategy. Linux updates an existing systemd service without rewriting its operator configuration.",
+        "priority": "medium"
+      },
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

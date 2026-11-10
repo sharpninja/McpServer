@@ -1,0 +1,61 @@
+{
+  "name": "ug-r9-mockgate-q-1",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "679eb7881d0342a58ef446be5084b703c0cee7c4",
+  "dirtyPaths": [
+    " M docs/plans/2026-10-19-unit-suite-green.md",
+    "?? tests/Build.Tests/TestGroupExecutionContractTests.cs"
+  ],
+  "command": [
+    "dotnet",
+    "test",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+    "-c",
+    "Debug",
+    "--logger",
+    "trx;LogFileName=ug-r9-mockgate-q-1.trx",
+    "--results-directory",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-mockgate-q-1",
+    "--filter",
+    "FullyQualifiedName~.TestGroupExecutionContractTests.|FullyQualifiedName~.IntegrationLaneClassFilterMockGateTests.|FullyQualifiedName~.IntegrationLaneClassFilterTests.|FullyQualifiedName~.IntegrationLaneExecutionContractTests.|FullyQualifiedName~.IntegrationLaneExecutionBindingTests."
+  ],
+  "startedLocal": "2026-11-02T10:18:21",
+  "endedLocal": "2026-11-02T10:18:27",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 36,
+  "passed": 36,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "ug-r9-mockgate-q-1",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-mockgate-q-1/ug-r9-mockgate-q-1.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-q-1/ug-r9-mockgate-q-1.trx",
+      "sha256": "5D3829A44B080A83EDC3EC4A4A94742B8EBFC7D8956A7887B2DA7A517ACEDAB9",
+      "total": 36,
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/Build.Tests/TestGroupExecutionContractTests.cs",
+      "sha256": "A07286F1D2A193CD9BE47BB9CBFFC215A2A3B49F56912431C363C62F79A338D4"
+    },
+    {
+      "path": "build/IntegrationLaneClassFilter.cs",
+      "sha256": "3DB560F752C2B3684289958917F01B8E04EB849B068AB6A7C899DC12A7D912C4"
+    },
+    {
+      "path": "build/IntegrationLaneExecution.cs",
+      "sha256": "232BCC0A9FEA6B018B189FF868419AEB19AED76C5D6B8E7434DD352EE1248580"
+    }
+  ],
+  "writtenLocal": "2026-11-02T10:19:43",
+  "writtenBy": "ClaudeCode"
+}

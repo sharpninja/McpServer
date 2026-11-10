@@ -1,0 +1,4 @@
+Now: 2026-11-05T18:40:54 key=test name only before=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r13z8b-final-win-buildtests-1/build-tests (467) after=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r13z9-final-win-buildtests-1/build-tests (467)
+onlyBefore=0 onlyAfter=0 common=467
+--- only in before ---
+--- only in after ---

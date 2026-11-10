@@ -1,0 +1,15 @@
+Now: 2026-11-03T09:49:09 key=test name only before=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r11-final-win-unit-1 (4724) after=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r11v-final-win-unit-1 (4735)
+onlyBefore=0 onlyAfter=11 common=4724
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.Constructor_EmptyScript_IsRefused
+QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.Constructor_NonUtcTime_IsRefused
+QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.GetUtcNow_PastTheScript_IsRefused
+QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.GetUtcNow_ReturnsTheScriptInOrder
+QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.LocalTimeZone_IsUtc
+QBrainAi.Support.Mcp.Tests.TestSupport.ScriptedTimeProviderTests.TimestampAndTimers_AreRefused
+QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.ScriptedReferenceStamper_SatisfiesEveryRow
+QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: "swapped")
+QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: "system clock")
+QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: "update keeps the old update time")
+QBrainAi.Support.Mcp.Tests.TestSupport.StampedTimeContractTests.WrongStampers_AreRejected(fault: "update rewrites the creation time")

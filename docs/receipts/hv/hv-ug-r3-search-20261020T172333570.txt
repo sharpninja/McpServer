@@ -1,0 +1,108 @@
+rg: src/QBrainAi.Support.Mcp/Services/SessionLogService.cs: No such file or directory (os error 2)
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:19:        var result = _sut.Extract(new SessionLogTurnEntity(), workspacePath: @"F:\ws", userProfilePath: IsolatedHome());
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:31:        var result = _sut.Extract(turn, @"F:\ws", IsolatedHome());
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:41:        var result = _sut.Extract(turn, @"F:\ws", IsolatedHome());
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:51:        var result = _sut.Extract(turn, @"F:\ws", IsolatedHome());
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:57:    public void Extract_ExactPathUnderUserProfileHistory_UsedWhenTurnHasNoPlan()
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:66:            var result = _sut.Extract(turn, @"F:\ws", home, agentSessionId: "agent-abc");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:86:            var result = _sut.Extract(turn, @"F:\ws", home);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:101:        var result = _sut.Extract(turn, @"F:\ws", IsolatedHome());
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:110:        var result = _sut.Extract(turn, @"F:\ws", IsolatedHome());
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:121:        var result = _sut.Extract(turn, @"F:\ws", IsolatedHome());
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:130:        var result = _sut.Extract(turn, @"F:\ws", IsolatedHome());
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:35:        // WorkspaceContext so SubmitAsync stamps WorkspaceId on every row; the
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:51:        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:71:        await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:75:        var id = await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:94:    public async Task SubmitAsync_ExistingRelationalSession_UpsertsTurnsByRequestIdWithoutDuplicateInsert()
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:108:            await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:117:            await sut.SubmitAsync(restored, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:144:    public async Task SubmitAsync_ExistingRelationalSession_PreservesAbsentDurableTurnsAndChildren()
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:158:            await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:166:            await sut.SubmitAsync(restored, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:188:    public async Task SubmitAsync_WithAgentRuntimeHeaderFields_PersistsAndReturnsThem()
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:197:        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:233:        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:255:        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:271:        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:286:        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "q1")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:287:        await _sut.SubmitAsync(CreateTestDto("Copilot", BuildSessionId("Copilot", "q2")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:304:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:317:        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-1")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:318:        await _sut.SubmitAsync(CreateTestDto("Copilot", BuildSessionId("Copilot", "agent-2")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:333:        await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "mixed-codex")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:334:        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "mixed-cursor")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:335:        await _sut.SubmitAsync(CreateTestDto("Cline", BuildSessionId("Cline", "mixed-cline")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:336:        await _sut.SubmitAsync(CreateTestDto("McpAgent", BuildSessionId("McpAgent", "mixed-mcpagent")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:354:        await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "agent-codex")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:355:        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-cursor")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:356:        await _sut.SubmitAsync(CreateTestDto("McpAgent", BuildSessionId("McpAgent", "agent-mcpagent")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:372:        await primary.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "primary-workspace")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:376:        await other.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "other-workspace")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:396:        await _sut.SubmitAsync(olderStartedRecent, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:401:        await _sut.SubmitAsync(newerStartedStale, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:415:        await _sut.SubmitAsync(early, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:420:        await _sut.SubmitAsync(late, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:438:            await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:452:        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "clamp")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:465:        await _sut.SubmitAsync(match, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:470:        await _sut.SubmitAsync(miss, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:499:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:524:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:541:        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", claudeSession), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:553:        await _sut.SubmitAsync(CreateTestDto("QBAgent", qbSession), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:570:        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:578:        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:586:        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:594:        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:604:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:624:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:631:        var ex = await Record.ExceptionAsync(() => _sut.SubmitAsync(session, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:647:        await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:660:        var id = await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:670:        var id = await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:678:        await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:699:        var id = await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:706:        await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:718:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:750:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:783:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:795:    /// TR-MCP-MT-004: SubmitAsync must stamp the resolved workspace context onto the
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:800:    public async Task SubmitAsync_StampsWorkspaceIdOnSessionEntity()
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:805:        var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:820:    public async Task SubmitAsync_StampsWorkspaceIdOnEveryChildEntity()
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:841:        var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:873:    public async Task SubmitAsync_WithNullWorkspaceContext_KeepsWorkspaceIdEmpty()
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:884:        var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:911:        await sut.SubmitAsync(CreateTestDto("Codex", sessionId), contentHash: "hash-stale-query", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:951:        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1009:        await sut.SubmitAsync(CreateTestDto("Codex", primarySessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1014:        await sut.SubmitAsync(CreateTestDto("Cursor", otherSessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1042:        await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1086:        await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1141:        await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1175:        await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1235:        await sut.SubmitAsync(CreateTestDto(qbAgentSourceType, sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1265:        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1311:        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1354:            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1400:            await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1443:    public async Task SubmitAsync_BareStatusUpdate_PreservesTurnsAndCommits(bool driftChildStamps)
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1452:            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId, title: "Before close"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1481:            await sut2.SubmitAsync(bareClose, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1513:            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1547:            await sutW1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1553:            await sutW2.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1597:            await sut1.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1633:    public async Task SubmitAsync_PartialSessionPayload_PreservesOmittedSessionScalars()
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1644:            await sut1.SubmitAsync(full, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1650:            await sut2.SubmitAsync(new UnifiedSessionLogDto
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1671:    public async Task SubmitAsync_SparseTurnInSessionPayload_PreservesOmittedTurnFields()
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1685:            await sut1.SubmitAsync(full, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1691:            await sut2.SubmitAsync(new UnifiedSessionLogDto
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1722:    /// SubmitAsync with an original title, then explicitly retitled.
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1728:        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId, title: "Original session title"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1747:        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1775:        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:1853:                    await seed.SubmitAsync(
+

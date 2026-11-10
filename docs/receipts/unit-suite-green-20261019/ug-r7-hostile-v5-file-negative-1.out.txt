@@ -1,0 +1,3 @@
+/home/sharpninja/github/McpServer/.worktrees/ug-r7-negative-20261026/build/_build.csproj : error NU1900: Warning As Error: Error occurred while getting package vulnerability data: Could not find a part of the path '/home/sharpninja/.claude/scratch/pr82-review-20261019/hostile-r7/ug-r7-hostile-v5-file-negative-1/files/xdg_data_home/NuGet/http-cache/670c1461c29885f9aa22c281d8b7da90845b38e4$ps:_api.nuget.org_v3_index.json'.
+
+The build failed. Fix the build errors and run again.

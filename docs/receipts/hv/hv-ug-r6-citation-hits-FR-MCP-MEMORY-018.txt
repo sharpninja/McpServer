@@ -1,0 +1,66 @@
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchConflictTests.cs:4:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-13: Conflict prompts prefer the newer seeded memory.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchConflictTests.cs:8:    /// <summary>AC-FR-MCP-MEMORY-018-13: with_memory prefers pnpm; without_memory does not assert it.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchSafetyTests.cs:4:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-12: Negative prompts must not hallucinate memory.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchSafetyTests.cs:8:    /// <summary>AC-FR-MCP-MEMORY-018-12: NEG-001 forbids invented favorites in both conditions.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs:6:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: CI gate and non-Grok optionality.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs:10:    /// <summary>AC-FR-MCP-MEMORY-018-29: Gate mode is off by default and fails when enabled on a miss.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs:45:    /// <summary>AC-FR-MCP-MEMORY-018-48: Non-Grok bench cells are optional until H7a AGREE.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs:4:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Token-first summary tables.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs:8:    /// <summary>AC-FR-MCP-MEMORY-018-24: Summary compares with_memory vs without_memory pass rates.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs:23:    /// <summary>AC-FR-MCP-MEMORY-018-38: Summary table includes the required token columns.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs:39:    /// <summary>AC-FR-MCP-MEMORY-018-40: Headline numbers are macro mean tokens_total.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:6:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-16..23: Each plugin completes the full pack after H7a.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:10:    /// <summary>AC-FR-MCP-MEMORY-018-16: Grok completes every prompt × both conditions with tokens_*.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:16:    /// <summary>AC-FR-MCP-MEMORY-018-17: Claude Code completes the full pack after H7a AGREE.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:22:    /// <summary>AC-FR-MCP-MEMORY-018-18: Claude Cowork completes the full pack after H7a AGREE.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:28:    /// <summary>AC-FR-MCP-MEMORY-018-19: Cline completes the full pack after H7a AGREE.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:34:    /// <summary>AC-FR-MCP-MEMORY-018-20: Cline v2 completes the full pack after H7a AGREE.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:40:    /// <summary>AC-FR-MCP-MEMORY-018-21: Codex completes the full pack after H7a AGREE.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:46:    /// <summary>AC-FR-MCP-MEMORY-018-22: Copilot completes the full pack after H7a AGREE.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:52:    /// <summary>AC-FR-MCP-MEMORY-018-23: OpenCode completes the full pack after H7a AGREE.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:58:    /// <summary>AC-FR-MCP-MEMORY-018-09 / H7b: Stub -Plugin all writes per-cell tokens for all eight plugins.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs:6:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-46 / FR-MCP-MEMORY-018-49:
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs:16:    /// <summary>AC-FR-MCP-MEMORY-018-46: Integration tests use the Grok lane as the pilot host.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs:30:    /// <summary>AC-FR-MCP-MEMORY-018-49: Grok remember→recall/injection path records tokens as primary.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs:6:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Canonical pack existence and schema.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs:10:    /// <summary>AC-FR-MCP-MEMORY-018-01: Pack file lives at the canonical path and is versioned.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs:23:    /// <summary>AC-FR-MCP-MEMORY-018-02: Pack covers the eight required prompt classes.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs:34:    /// <summary>AC-FR-MCP-MEMORY-018-03: Each prompt has the required entry fields.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs:51:    /// <summary>AC-FR-MCP-MEMORY-018-04: Pack declares paired without_memory / with_memory conditions.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs:62:    /// <summary>AC-FR-MCP-MEMORY-018-30: Fixtures use synthetic BENCH-* tokens, not real secrets.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchToolUseTests.cs:4:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-15: Recall tools are the with_memory path when injection hosts differ.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchToolUseTests.cs:8:    /// <summary>AC-FR-MCP-MEMORY-018-15: with_memory uses memory_recall; without_memory does not.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs:6:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: H7a value-gate policy.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs:10:    /// <summary>AC-FR-MCP-MEMORY-018-47: Other plugins stay blocked until H7a AGREE.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs:28:    /// <summary>AC-FR-MCP-MEMORY-018-50: H-done defaults to H7a; H7b is follow-on.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchInjectionTests.cs:4:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-14: REQUIRED MEMORIES appears only with_memory.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchInjectionTests.cs:8:    /// <summary>AC-FR-MCP-MEMORY-018-14: Injection header is present only when memory is on.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:6:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Token accounting is the primary bench metric.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:10:    /// <summary>AC-FR-MCP-MEMORY-018-11: Mean/median tokens are reported per plugin × condition.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:20:    /// <summary>AC-FR-MCP-MEMORY-018-34: Token source is host-reported or a named estimator.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:36:    /// <summary>AC-FR-MCP-MEMORY-018-35: tokens_total equals tokens_in + tokens_out.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:52:    /// <summary>AC-FR-MCP-MEMORY-018-36: Injection tokens are charged only on with_memory cells.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:65:    /// <summary>AC-FR-MCP-MEMORY-018-37: Tool payloads are counted with the same rule on both conditions.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:78:    /// <summary>AC-FR-MCP-MEMORY-018-39: Per-prompt token delta is with_memory minus without_memory.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:91:    /// <summary>AC-FR-MCP-MEMORY-018-41: Failed correctness still records tokens and drops efficiency use.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:117:    /// <summary>AC-FR-MCP-MEMORY-018-42: Efficiency ratio is labeled secondary and does not replace tokens.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:131:    /// <summary>AC-FR-MCP-MEMORY-018-43: Stub/recorded cells still emit token fields.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:145:    /// <summary>AC-FR-MCP-MEMORY-018-44: NEG/SAFE record tokens and mandatory pass/fail under both conditions.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchIsolationTests.cs:6:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-28: Bench workspace isolation.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchIsolationTests.cs:10:    /// <summary>AC-FR-MCP-MEMORY-018-28: Pack run cannot read or mutate the primary workspace.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:7:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Harness conditions, metrics, isolation, and modes. The class runs in
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:14:    /// <summary>AC-FR-MCP-MEMORY-018-05: without_memory has no injection and no successful recall tools.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:29:    /// <summary>AC-FR-MCP-MEMORY-018-06: with_memory seeds, injects, and exposes recall tools.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:42:    /// <summary>AC-FR-MCP-MEMORY-018-07: Default path is Grok first; others stay opt-in until H7a.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:59:    /// <summary>AC-FR-MCP-MEMORY-018-08: Each cell records transcript, tools, injection, tokens, latency, score, pass.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:77:    /// <summary>AC-FR-MCP-MEMORY-018-09: Result artifacts include per-cell tokens and a token summary table.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:97:    /// <summary>AC-FR-MCP-MEMORY-018-25: Stub/recorded mode does not require cloud credentials.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:116:    /// <summary>AC-FR-MCP-MEMORY-018-26: Live/stub/recorded modes are tagged on the result.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:149:    /// <summary>AC-FR-MCP-MEMORY-018-27: Seeds are Workspace-scoped in a disposable bench workspace and cleaned up.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:164:    /// <summary>AC-FR-MCP-MEMORY-018-31: Stub re-run on the same pack is byte-stable for scores and tokens.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs:4:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Benchmark docs contracts.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs:8:    /// <summary>AC-FR-MCP-MEMORY-018-32: README documents one-plugin and all-eight runs.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs:21:    /// <summary>AC-FR-MCP-MEMORY-018-33: USER-GUIDE or MCP-SERVER links the pack.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs:33:    /// <summary>AC-FR-MCP-MEMORY-018-45: README states tokens are primary; pass/fail is correctness/safety.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchScoringTests.cs:6:/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-10: Deterministic or locked auto-rubric scoring.
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchScoringTests.cs:10:    /// <summary>AC-FR-MCP-MEMORY-018-10: exact/contains are deterministic; rubric uses a locked checklist.</summary>

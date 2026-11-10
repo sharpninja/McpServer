@@ -1,0 +1,20 @@
+{
+  "name": "unit-green-handoff-20261019T1909",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "unit-green-handoff-20261019T1909"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+  "dirtyPaths": [
+    " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs"
+  ],
+  "startedLocal": "2026-10-19T19:09:03",
+  "startedUtc": "2026-10-20T00:09:03.0976498Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-handoff-20261019T1909.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-handoff-20261019T1909.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-handoff-20261019T1909.exit.txt"
+}

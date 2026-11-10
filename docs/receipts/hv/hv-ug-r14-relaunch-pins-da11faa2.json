@@ -1,0 +1,64 @@
+[
+  {
+    "receipt": "docs/receipts/unit-suite-green-20261019/ug-r14z16-compile-1.json",
+    "name": "ug-r14z16-compile-1",
+    "start": "2026-11-06T14:55:13",
+    "end": "2026-11-06T14:57:47",
+    "written": "2026-11-06T14:58:22",
+    "passed": null,
+    "failed": null,
+    "skipped": null,
+    "commit": "da11faa2",
+    "pins": [
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs",
+        "expectedHash": "FFDEA373324186B3A18C330629CE1E53309F666AFDCD8D39AAB260B21871D50A",
+        "blobHash": "FFDEA373324186B3A18C330629CE1E53309F666AFDCD8D39AAB260B21871D50A",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+        "expectedHash": "A6966C223F381BCB944B4013C2860AE07A2B6133A74018BADBB91B210AE98E28",
+        "blobHash": "A6966C223F381BCB944B4013C2860AE07A2B6133A74018BADBB91B210AE98E28",
+        "matches": true
+      },
+      {
+        "path": "src/QBrainAi.Services/Services/VoiceConversationService.cs",
+        "expectedHash": "334C4960858878447EEDA66165F4AD2BE1112D3BFAEBAB04EC77E3808E2987A8",
+        "blobHash": "334C4960858878447EEDA66165F4AD2BE1112D3BFAEBAB04EC77E3808E2987A8",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "receipt": "docs/receipts/unit-suite-green-20261019/ug-r14z16-binding-1.json",
+    "name": "ug-r14z16-binding-1",
+    "start": "2026-11-06T14:58:44",
+    "end": "2026-11-06T14:59:36",
+    "written": "2026-11-06T14:59:58",
+    "passed": 108,
+    "failed": 0,
+    "skipped": 0,
+    "commit": "da11faa2",
+    "pins": [
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs",
+        "expectedHash": "FFDEA373324186B3A18C330629CE1E53309F666AFDCD8D39AAB260B21871D50A",
+        "blobHash": "FFDEA373324186B3A18C330629CE1E53309F666AFDCD8D39AAB260B21871D50A",
+        "matches": true
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+        "expectedHash": "A6966C223F381BCB944B4013C2860AE07A2B6133A74018BADBB91B210AE98E28",
+        "blobHash": "A6966C223F381BCB944B4013C2860AE07A2B6133A74018BADBB91B210AE98E28",
+        "matches": true
+      },
+      {
+        "path": "src/QBrainAi.Services/Services/VoiceConversationService.cs",
+        "expectedHash": "334C4960858878447EEDA66165F4AD2BE1112D3BFAEBAB04EC77E3808E2987A8",
+        "blobHash": "334C4960858878447EEDA66165F4AD2BE1112D3BFAEBAB04EC77E3808E2987A8",
+        "matches": true
+      }
+    ]
+  }
+]

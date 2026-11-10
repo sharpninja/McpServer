@@ -1,0 +1,19 @@
+{
+  "name": "ug-r7-traceability-1",
+  "target": "ValidateTraceability",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r7-traceability-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "6a87791d9363bb972feb6a4539339fac0c1a1915",
+  "dirtyPaths": [
+    " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+  ],
+  "startedLocal": "2026-10-26T10:24:05",
+  "startedUtc": "2026-10-26T15:24:05.6293922Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r7/ug-r7-traceability-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r7/ug-r7-traceability-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r7/ug-r7-traceability-1.exit.txt"
+}

@@ -11,24 +11,9 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// TEST-MCP-PRODUCT-005 / TR-MCP-PRODUCT-MODEL-001: Products tables appear after Migrate().
 /// Phase 1 red until the AddProductsStorage migration exists.
 /// </summary>
-public sealed class ProductMigrationApplyTests : IDisposable
+/// <remarks>2026-11-07, TEST-MCP-PRODUCT-005; TR-MCP-PRODUCT-MODEL-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (AddProductsStorageMigration_Source_ExistsForAllProviders_AndHasNoSessionLogsTableOps) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_connection, _options, .ctor and Dispose) moved once into the abstract base class ProductMigrationApplyTestsBase in Storage/ProductMigrationApplyTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
+public sealed class ProductMigrationApplyTests : ProductMigrationApplyTestsBase, IDisposable
 {
-    private readonly SqliteConnection _connection;
-    private readonly DbContextOptions<McpDbContext> _options;
-
-    /// <summary>Opens an isolated in-memory Sqlite database for real Migrate().</summary>
-    public ProductMigrationApplyTests()
-    {
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
-        _options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite(_connection, sqlite => sqlite.MigrationsAssembly("QBrainAi.Storage.SqliteMigrations"))
-            .Options;
-    }
-
-    /// <inheritdoc />
-    public void Dispose() => _connection.Dispose();
-
     /// <summary>Full migrate from empty creates Products and ProductWorkspaceMemberships.</summary>
     [Fact]
     public void Migrate_FromEmpty_CreatesProductTables()
@@ -64,36 +49,6 @@ public sealed class ProductMigrationApplyTests : IDisposable
             Assert.True(TableExists(db, "Products"));
             Assert.True(TableExists(db, "ProductWorkspaceMemberships"));
             Assert.True(ColumnExists(db, "SessionLogs", "AgentExecutablePath"));
-        }
-    }
-
-    /// <summary>
-    /// TEST-MCP-PRODUCT-005: AddProductsStorage migration sources exist for every provider
-    /// and do not alter SessionLogs.
-    /// </summary>
-    [Fact]
-    public void AddProductsStorageMigration_Source_ExistsForAllProviders_AndHasNoSessionLogsTableOps()
-    {
-        var repoSrc = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "src"));
-        var roots = new[]
-        {
-            Path.Combine(repoSrc, "QBrainAi.Storage.SqliteMigrations", "Migrations"),
-            Path.Combine(repoSrc, "QBrainAi.Storage.SqlServerMigrations", "Migrations"),
-            Path.Combine(repoSrc, "QBrainAi.Storage.PostgreSqlMigrations", "Migrations"),
-        };
-
-        foreach (var root in roots)
-        {
-            Assert.True(Directory.Exists(root), $"Missing migrations root {root}");
-            var files = Directory.GetFiles(root, "*AddProductsStorage.cs")
-                .Where(f => !f.Contains("Designer", StringComparison.OrdinalIgnoreCase))
-                .ToArray();
-            Assert.NotEmpty(files);
-            foreach (var file in files)
-            {
-                var text = File.ReadAllText(file);
-                Assert.DoesNotContain("SessionLogs", text, StringComparison.Ordinal);
-            }
         }
     }
 

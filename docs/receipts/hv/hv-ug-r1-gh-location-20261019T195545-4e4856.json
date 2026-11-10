@@ -1,0 +1,16 @@
+{
+  "TimestampUtc": "2026-10-20T00:55:45.2838197Z",
+  "TimestampLocal": "2026-10-19T19:55:45",
+  "Mode": "Files",
+  "Arguments": [
+    "/home/sharpninja/.local/share/mise/installs",
+    "/usr/bin",
+    "/home/sharpninja/.local/bin",
+    "-g",
+    "gh"
+  ],
+  "Offset": 0,
+  "Count": 250,
+  "ExitCode": 0,
+  "Output": "/home/sharpninja/.local/bin/gh\n/home/sharpninja/.local/share/mise/installs/gh/2.102.0/gh_2.102.0_linux_amd64/bin/gh\n/home/sharpninja/.local/share/mise/installs/gh/2.101.0/gh_2.101.0_linux_amd64/bin/gh"
+}

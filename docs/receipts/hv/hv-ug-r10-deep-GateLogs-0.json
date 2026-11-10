@@ -1,0 +1,74 @@
+[
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r10-final-linux-buildtests-1.out.log",
+    "Sha256": "2E7F3892E924046F08AD71CCBDF7AE445F338B5BAA8E1932C8D59F51E10C92F4",
+    "Nu190x": 0,
+    "AuditOverride": 0,
+    "Filters": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r10-final-linux-lane-1.err.log",
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "Nu190x": 0,
+    "AuditOverride": 0,
+    "Filters": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r10-final-linux-lane-1.out.log",
+    "Sha256": "A0EF099AAF7C6260CC760724B0A152912F8881F5CFE79A46BB915366DD631412",
+    "Nu190x": 0,
+    "AuditOverride": 0,
+    "Filters": [
+      "22:31:52 [INF] Integration lane filter for QBrainAi.Support.Mcp.Tests: Category=Integration&Platform!=Windows",
+      "22:31:52 [INF] Integration lane filter for QBrainAi.McpAgent.Tests: Category=Integration&Platform!=Windows",
+      "22:31:52 [INF] Integration lane filter for QBrainAi.Repl.Core.Tests: Category=Integration&Platform!=Windows",
+      "22:31:52 [INF] Integration lane filter for QBrainAi.QBAgent.Tests: Category=Integration&Platform!=Windows",
+      "22:31:52 [INF] Integration lane filter for Build.Tests: Category=Integration&Platform!=Windows",
+      "22:31:52 [INF] Integration lane filter for QBrainAi.Repl.IntegrationTests: Category=Integration&Platform!=Windows",
+      "22:31:52 [INF] Integration lane filter for QBrainAi.Support.Mcp.IntegrationTests: Category=Integration&Platform!=Windows&(FullyQualifiedName~.RequirementScopeLayerReplIntegrationTests.|FullyQualifiedName~.QuadBrainOllamaEndpointIntegrationTests.)",
+      "22:31:52 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx",
+      "22:34:28 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/QBrainAi.McpAgent.Tests --logger trx;LogFileName=QBrainAi.McpAgent.Tests.trx",
+      "22:34:34 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/QBrainAi.Repl.Core.Tests --logger trx;LogFileName=QBrainAi.Repl.Core.Tests.trx",
+      "22:34:42 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/QBrainAi.QBAgent.Tests --logger trx;LogFileName=QBrainAi.QBAgent.Tests.trx",
+      "22:34:50 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/Build.Tests --logger trx;LogFileName=Build.Tests.trx",
+      "22:39:24 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/QBrainAi.Repl.IntegrationTests --logger trx;LogFileName=QBrainAi.Repl.IntegrationTests.trx",
+      "23:00:06 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj --filter Category=Integration&Platform!=Windows&(FullyQualifiedName~.RequirementScopeLayerReplIntegrationTests.|FullyQualifiedName~.QuadBrainOllamaEndpointIntegrationTests.) --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-lane-1/provider/QBrainAi.Support.Mcp.IntegrationTests --logger trx;LogFileName=QBrainAi.Support.Mcp.IntegrationTests.trx"
+    ]
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r10-final-linux-traceability-1.err.log",
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "Nu190x": 0,
+    "AuditOverride": 0,
+    "Filters": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r10-final-linux-traceability-1.out.log",
+    "Sha256": "E22E3BE9E5AB163C1D929083A681280D462C0718892E66C79D5295ADEA989D13",
+    "Nu190x": 0,
+    "AuditOverride": 0,
+    "Filters": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r10-final-linux-unit-1.err.log",
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "Nu190x": 0,
+    "AuditOverride": 0,
+    "Filters": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r10-final-linux-unit-1.out.log",
+    "Sha256": "F777B2F11ACA2DFE8AFA3E3585966CEFDBF43121FAE423DD6490C2438CB9C7D9",
+    "Nu190x": 0,
+    "AuditOverride": 0,
+    "Filters": [
+      "22:29:07 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-unit-1/unit/QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx --logger console;verbosity=detailed",
+      "22:30:46 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-unit-1/unit/QBrainAi.Client.Tests --logger trx;LogFileName=QBrainAi.Client.Tests.trx --logger console;verbosity=detailed",
+      "22:30:50 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-unit-1/unit/QBrainAi.Cqrs.Tests --logger trx;LogFileName=QBrainAi.Cqrs.Tests.trx --logger console;verbosity=detailed",
+      "22:30:52 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-unit-1/unit/QBrainAi.Launcher.Tests --logger trx;LogFileName=QBrainAi.Launcher.Tests.trx --logger console;verbosity=detailed",
+      "22:30:55 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-unit-1/unit/QBrainAi.McpAgent.Tests --logger trx;LogFileName=QBrainAi.McpAgent.Tests.trx --logger console;verbosity=detailed",
+      "22:30:58 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-unit-1/unit/QBrainAi.Repl.Core.Tests --logger trx;LogFileName=QBrainAi.Repl.Core.Tests.trx --logger console;verbosity=detailed",
+      "22:31:08 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-final-linux-unit-1/unit/QBrainAi.QBAgent.Tests --logger trx;LogFileName=QBrainAi.QBAgent.Tests.trx --logger console;verbosity=detailed"
+    ]
+  }
+]

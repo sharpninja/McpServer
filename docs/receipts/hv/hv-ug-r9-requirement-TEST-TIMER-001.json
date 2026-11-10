@@ -1,0 +1,47 @@
+{
+  "TimestampLocal": "2026-11-02T19:31:37",
+  "TimestampUtc": "2026-11-03T01:31:37.2093850Z",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-TIMER-001"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "Run the same scenario and assertions against independently scripted ITimerService/ITimerHandle mocks and both real services. Correct mock and deliberate negative responses must yield a green outer mock gate before product edits. Cover blocked cancellation registration, overlapping Restart against Stop and Dispose, new run after Stop, final Dispose, repeated shutdown, and reentrant calls.",
+          "updatedAt": "2026-11-03T01:31:39.5367785+00:00",
+          "status": "pending",
+          "id": "TEST-TIMER-001",
+          "createdAt": "2026-11-03T01:31:39.5366560+00:00",
+          "title": "Discriminating shared timer shutdown contract",
+          "priority": "high",
+          "scopeStartLayerKey": "layer-1",
+          "area": "TIMER",
+          "testType": "unit",
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "text": "Mock contract gate passes with zero failures/skips and rejects forbidden restart, stale token, and restart-after-dispose behaviors as expected negative controls.",
+              "id": "test-timer-001-ac-001"
+            },
+            {
+              "isSatisfied": false,
+              "text": "The same contract tests pass against Core and UI.Core, and all four reproduced race cases no longer require external rescue.",
+              "id": "test-timer-001-ac-002"
+            },
+            {
+              "isSatisfied": false,
+              "text": "Full five-project Manager suites, extension tests, and deployment-script tests have zero failures/skips before acceptance; deferred Claude HV must review all changed code/tests/docs before Phase 2 closure.",
+              "id": "test-timer-001-ac-003"
+            }
+          ]
+        },
+        "requestId": "req-20261103T013138Z-f4d2",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

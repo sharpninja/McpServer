@@ -1,0 +1,185 @@
+[
+  {
+    "type": "compacted:",
+    "count": 5,
+    "fields": [
+      "message",
+      "replacement_history",
+      "replacement_history_metadata",
+      "retained_context",
+      "window_number",
+      "first_window_id",
+      "previous_window_id",
+      "window_id",
+      "compaction_response_id",
+      "latest_token_usage_record",
+      "resume_metadata"
+    ]
+  },
+  {
+    "type": "event_msg:item_completed",
+    "count": 614,
+    "fields": [
+      "type",
+      "thread_id",
+      "turn_id",
+      "item",
+      "started_at_ms",
+      "completed_at_ms"
+    ]
+  },
+  {
+    "type": "event_msg:task_started",
+    "count": 1,
+    "fields": [
+      "type",
+      "turn_attribution",
+      "turn_id",
+      "root_turn_id",
+      "started_at",
+      "model_context_window",
+      "collaboration_mode_kind"
+    ]
+  },
+  {
+    "type": "event_msg:thread_settings_applied",
+    "count": 6,
+    "fields": [
+      "type",
+      "thread_id",
+      "thread_settings"
+    ]
+  },
+  {
+    "type": "event_msg:token_count",
+    "count": 220,
+    "fields": [
+      "type",
+      "info",
+      "rate_limits"
+    ]
+  },
+  {
+    "type": "response_item:additional_tools",
+    "count": 1,
+    "fields": [
+      "type",
+      "id",
+      "role",
+      "tools"
+    ]
+  },
+  {
+    "type": "response_item:custom_tool_call",
+    "count": 215,
+    "fields": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "type": "response_item:custom_tool_call_output",
+    "count": 214,
+    "fields": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "type": "response_item:message",
+    "count": 30,
+    "fields": [
+      "type",
+      "id",
+      "role",
+      "content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "type": "response_item:reasoning",
+    "count": 159,
+    "fields": [
+      "type",
+      "id",
+      "summary",
+      "encrypted_content",
+      "internal_chat_message_metadata_passthrough"
+    ]
+  },
+  {
+    "type": "session_meta:",
+    "count": 1,
+    "fields": [
+      "creator_user_id",
+      "creator_account_id",
+      "session_id",
+      "id",
+      "timestamp",
+      "cwd",
+      "runtime_workspace_roots",
+      "originator",
+      "cli_version",
+      "source",
+      "thread_source",
+      "model_provider",
+      "base_instructions",
+      "history_mode",
+      "context_window",
+      "git"
+    ]
+  },
+  {
+    "type": "token_usage_record:",
+    "count": 220,
+    "fields": [
+      "thread_id",
+      "turn_id",
+      "session_id",
+      "root_turn_id",
+      "response_id",
+      "usage",
+      "turn_token_usage",
+      "thread_token_usage"
+    ]
+  },
+  {
+    "type": "turn_context:",
+    "count": 6,
+    "fields": [
+      "turn_id",
+      "root_turn_id",
+      "disabled_plugin_ids",
+      "cwd",
+      "approval_policy",
+      "approvals_reviewer",
+      "sandbox_policy",
+      "permission_profile",
+      "file_system_sandbox_policy",
+      "model",
+      "comp_hash",
+      "collaboration_mode",
+      "multi_agent_version",
+      "realtime_active",
+      "cyber_access_program",
+      "effort",
+      "summary"
+    ]
+  },
+  {
+    "type": "world_state:",
+    "count": 6,
+    "fields": [
+      "full",
+      "state"
+    ]
+  }
+]

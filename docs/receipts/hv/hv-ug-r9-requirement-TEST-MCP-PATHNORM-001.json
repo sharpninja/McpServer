@@ -1,0 +1,38 @@
+{
+  "TimestampLocal": "2026-11-02T19:16:29",
+  "TimestampUtc": "2026-11-03T01:16:29.3619807Z",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-MCP-PATHNORM-001"
+  },
+  "Data": [
+    {
+      "payload": {
+        "deprecated": true,
+        "result": {
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "id": "unitgreen-native-host",
+              "text": "The native-boundary (ToNativePath) behavior for a non-Windows host is proven against a simulated host, on Windows as well, without a host-conditional skip; the Windows-host cases keep running on a Windows host."
+            }
+          ],
+          "testType": "unit",
+          "updatedAt": "2026-11-03T01:16:31.7038362+00:00",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "createdAt": "2026-11-03T01:16:31.7036893+00:00",
+          "status": "pending",
+          "id": "TEST-MCP-PATHNORM-001",
+          "description": "Per BDP v4 (MockData fixture green before production code, then Real fixture). Storage-key equivalence: C:\\Users\\kingd, C:/Users/kingd, c:/users/KINGD -> one key windows:C:/USERS/KINGD; \\\\srv\\share\\x and //srv/share/x -> one key keeping leading //; \\\\?\\C:\\x -> C:/x. Remote-path detection treats //srv/share as remote. ToNativePath returns backslash paths on Windows. Rekey: value mapping f(x) touches only Windows-shaped values and is idempotent; planner builds the mapping and statement plan from a scripted snapshot; executors per provider (SQLite in-memory; SQL Server and PostgreSQL provider fixtures) rewrite all workspace columns and recompute hashed values with FK validation; report counts unchanged per table and per workspace; startup guard rejects an unconverted store; rehearsal on a restored copy of McpServer_PAYTON_LEGION2 recorded as receipts. GlobalWorkspaceId for (PAYTON-LEGION2, F:/GitHub/McpServer) is stable across both input separators.",
+          "notes": "P1.5 2026-10-16: WorkspacePathRekeyTests cover literal Policy A normalization, collision preflight, no-backup/failed-backup refusal, read-only dry-run on explicit separate copies, transaction rollback and FK graph validation, repeat no-op, derived triage/handoff/federation identities, unchanged manual triage hashes, and startup guard. Command parser rejects missing/same copy database. Reports contain only keys/counts and retained-manual-key notice. Disposable fixtures only; no live apply.",
+          "title": "Test TEST-MCP-PATHNORM-001",
+          "priority": "medium"
+        },
+        "requestId": "req-20261103T011630Z-2bbb"
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

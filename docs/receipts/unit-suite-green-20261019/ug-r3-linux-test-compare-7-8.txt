@@ -1,0 +1,28 @@
+Now: 2026-10-20T16:50:41 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-linux-test-7 (4454) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-linux-test-8 (4477)
+onlyBefore=0 onlyAfter=23 common=4454
+onlyAfter QBrainAi.Support.Mcp.Tests=23
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ProductionRead_UnexpectedReadError_Propagates
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: "empty-and-malformed-fall-through")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: "every-file-unreadable")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: "manifest-locked-next-manifest")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: "no-version-files")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: "version-file-denied-nothing-else")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: "version-file-locked-manifest-next")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: "version-file-vanished")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: "version-file")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: "empty-and-malformed-fall-through")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: "every-file-unreadable")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: "manifest-locked-next-manifest")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: "no-version-files")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: "version-file-denied-nothing-else")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: "version-file-locked-manifest-next")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: "version-file-vanished")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: "version-file")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedFiles_RecordReadsAndReportUnscriptedFilesAbsent
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedTheory_CoversEveryCase
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.UnexpectedReadError_EscapesTheScriptedFiles
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.WrongReadNegativeControls_AreRejectedInsidePassingHarness
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_EveryVersionFileUnreadable_FallsBackToTheSyncedVersion
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_UnreadableVersionFile_ResolvesTheNextReadableVersion

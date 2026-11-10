@@ -1,0 +1,26 @@
+{
+  "timestampUtc": "2026-11-06T06:06:42.7296408+00:00",
+  "timestampLocal": "2026-11-06T00:06:45",
+  "method": "workflow.requirements.getTr",
+  "recordId": "TR-MCP-MEMORY-002",
+  "response": {
+    "type": "result",
+    "payload": {
+      "result": {
+        "area": "MCP",
+        "priority": "medium",
+        "description": "Add provider migrations for SQLite, SQL Server, and PostgreSQL. Each migration creates the memory table, unique ID constraint, scope and workspace indexes, category/update-time indexes, soft-delete metadata, and provider-appropriate constraints or service-level validation for Global rows with null `WorkspaceId` and Workspace rows with required `WorkspaceId`.\n**Covered by:** FR: FR-MCP-MEMORY-002; TEST: TEST-MCP-MEMORY-002",
+        "updatedAt": "2026-11-06T06:06:45.3463264+00:00",
+        "acceptanceCriteria": [],
+        "scopeStartLayerKey": "layer-1",
+        "title": "Provider memory migrations",
+        "id": "TR-MCP-MEMORY-002",
+        "createdAt": "2026-11-06T06:06:45.3461721+00:00",
+        "status": "pending",
+        "subarea": "MEMORY"
+      },
+      "deprecated": true,
+      "requestId": "req-20261106T060643Z-3a9f"
+    }
+  }
+}

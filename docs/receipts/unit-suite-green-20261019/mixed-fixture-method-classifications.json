@@ -1,0 +1,154 @@
+{
+  "count": 21,
+  "timestampLocal": "2026-10-30T19:43:40",
+  "acceptance": "pending; not a test gate",
+  "methods": [
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryTests.cs",
+      "method": "ApplyAsync_HungSave_IsRetryable503",
+      "reason": "asserts an elapsed wall-clock bound on actual scheduling and timer execution",
+      "class": "RequirementsRecoveryTests",
+      "sourceSha256": "AD34FB4852445BB97E4132130A2C1E2A6B1D0BF2148FFFAD3EF707A2DADAD78D"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs",
+      "method": "GetStatusAsync_WhenTrackedProcessExited_ReturnsExitError",
+      "reason": "starts and observes a native child process",
+      "class": "FrpTunnelProviderTests",
+      "sourceSha256": "47EFC5348B0E5309D8C322104AA69CC8E7CB29FBBF335D835B72F564F781E610"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs",
+      "method": "Dispose_WhenTempConfigExists_DeletesFileAndClearsConfigPath",
+      "reason": "creates and deletes a physical temporary config file",
+      "class": "FrpTunnelProviderTests",
+      "sourceSha256": "47EFC5348B0E5309D8C322104AA69CC8E7CB29FBBF335D835B72F564F781E610"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+      "method": "ReadAsync_OpenShare_BlocksWritesAndDeletes",
+      "reason": "opens a physical file and exercises native sharing and deletion semantics",
+      "class": "HandoffContainedFileReaderTests",
+      "sourceSha256": "105FCDD13EF789B15E5964B9C60385DA8E81DBCAD182528B7358CB3B09128246"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+      "method": "ReadAsync_LongContainedPath_Succeeds",
+      "reason": "creates and reads a physical long path",
+      "class": "HandoffContainedFileReaderTests",
+      "sourceSha256": "105FCDD13EF789B15E5964B9C60385DA8E81DBCAD182528B7358CB3B09128246"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogDenseGraphTests.cs",
+      "method": "UpsertTurnAsync_SlowGraphLoad_FailsRetryableWithoutPersisting",
+      "reason": "asserts an elapsed wall-clock bound on actual scheduling and timer execution",
+      "class": "SessionLogDenseGraphTests",
+      "sourceSha256": "92CDAE748E4B79331CF0FDF7784876D3BD6857701899ED3FA43B47C525C604F7"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogReplaceSectionRetryableTests.cs",
+      "method": "ReplaceTurnSectionAsync_HungSaveChanges_FailsFastWithRetryableUnavailable",
+      "reason": "asserts an elapsed wall-clock bound on actual scheduling and timer execution",
+      "class": "SessionLogReplaceSectionRetryableTests",
+      "sourceSha256": "3D84C7863A3280EA0876CF0775FED839B119E31A10FB1430AC706C81B9744C13"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs",
+      "method": "SubmitAsync_SaveLongerThanFiveSeconds_CompletesUnderDefaultBudget",
+      "reason": "asserts an elapsed wall-clock bound on actual scheduling and timer execution",
+      "class": "SessionLogSubmitBudgetTests",
+      "sourceSha256": "57D202C2D294FCDAC89DBD18304060C9B2014A4DB7E46EBDD223526A69B5005A"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs",
+      "method": "SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable",
+      "reason": "asserts an elapsed wall-clock bound on actual scheduling and timer execution",
+      "class": "SessionLogTriageStoreTests",
+      "sourceSha256": "5E22EBF7471718A15A62F1324198498B3626E444E8F22FBD4A165A3833259E91"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs",
+      "method": "ExecuteAsync_HungWork_FailsWithinEightSeconds",
+      "reason": "asserts an elapsed wall-clock bound on actual scheduling and timer execution",
+      "class": "StorageCommandBudgetTests",
+      "sourceSha256": "089E2F926DF903D706A4F038AB2717BB6DB0DA6FD3F91C744C2E5F391DB298C7"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs",
+      "method": "ExecuteAsync_ExplicitBudget_ExpiresAtThatBudget",
+      "reason": "asserts an elapsed wall-clock bound on actual scheduling and timer execution",
+      "class": "StorageCommandBudgetTests",
+      "sourceSha256": "089E2F926DF903D706A4F038AB2717BB6DB0DA6FD3F91C744C2E5F391DB298C7"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs",
+      "method": "SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable",
+      "reason": "asserts an elapsed wall-clock bound on actual scheduling and timer execution",
+      "class": "TriageServiceTests",
+      "sourceSha256": "01127489A6908CFC5B8B5894C20C753ACCEBC2A454782B4117E9BAD9DFE29ABC"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs",
+      "method": "NgrokProvider_GetStatusAsync_WhenTrackedProcessExited_ReturnsDetailedExitError",
+      "reason": "starts and observes a native child process",
+      "class": "TunnelProviderTests",
+      "sourceSha256": "B0BB22319E1A3377B49A078281D44B8F60E619F24EC6B92637D5660A5B770AE4"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs",
+      "method": "NgrokProvider_GetStatusAsync_WhenRunningWithStartupTimeoutError_PreservesDiagnosticError",
+      "reason": "binds status to the actual current process",
+      "class": "TunnelProviderTests",
+      "sourceSha256": "B0BB22319E1A3377B49A078281D44B8F60E619F24EC6B92637D5660A5B770AE4"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs",
+      "method": "CloudflareProvider_GetStatusAsync_WhenTrackedProcessExited_ReturnsDetailedExitError",
+      "reason": "starts and observes a native child process",
+      "class": "TunnelProviderTests",
+      "sourceSha256": "B0BB22319E1A3377B49A078281D44B8F60E619F24EC6B92637D5660A5B770AE4"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs",
+      "method": "CloudflareProvider_GetStatusAsync_WhenRunningWithStartupTimeoutError_PreservesDiagnosticError",
+      "reason": "binds status to the actual current process",
+      "class": "TunnelProviderTests",
+      "sourceSha256": "B0BB22319E1A3377B49A078281D44B8F60E619F24EC6B92637D5660A5B770AE4"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthSqliteTests.cs",
+      "method": "OpenAsync_Timeout_CallerIsRestoredReusableAndDisposableBeforeWorkerRelease",
+      "reason": "asserts an elapsed wall-clock bound on actual scheduling and timer execution",
+      "class": "BugTriage139EighteenthSqliteTests",
+      "sourceSha256": "5A630E4A0DD91F23D7AECD52E107563AF9DEEB1CA7CD301997A5E19A9FF6CFE8"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthSqliteConsumerTests.cs",
+      "method": "OpenAsync_UnstoppablePreHandleWorker_IsBoundedAndTruthfullyCounted",
+      "reason": "asserts an elapsed wall-clock bound on actual scheduling and timer execution",
+      "class": "BugTriage139SixteenthSqliteConsumerTests",
+      "sourceSha256": "B14E1FFABCAF070398386CE5270FF3DADE57A480DD3DA9341421551EB8F475C4"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs",
+      "method": "OpenAsync_PreflightHeldAtBoundary_TimesOutWithoutBlockingTheCaller",
+      "reason": "asserts an elapsed wall-clock bound on actual scheduling and timer execution",
+      "class": "SqliteBoundedOpenFourteenthTests",
+      "sourceSha256": "44B1E4AC99B6EB7532F621F8EFC01225D15649EC94722FB7DCB8B0F9D850D54B"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs",
+      "method": "OpenAsync_NativeLockAtOpen_TimesOutAndJoinsWorker",
+      "reason": "asserts an elapsed wall-clock bound on actual scheduling and timer execution",
+      "class": "SqliteBoundedOpenFourteenthTests",
+      "sourceSha256": "44B1E4AC99B6EB7532F621F8EFC01225D15649EC94722FB7DCB8B0F9D850D54B"
+    },
+    {
+      "file": "tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+      "method": "SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient",
+      "reason": "reads the skill from the physical repository checkout",
+      "class": "HandoffSkillDelegationTests",
+      "sourceSha256": "6A92961830964A88EBC23541581356D92DE649C76684C79779BD2C13B596B583"
+    }
+  ]
+}

@@ -1,0 +1,3484 @@
+{
+  "timestampLocal": "2026-11-02T08:53:09",
+  "name": "ug-r9-final-linux-lane-1",
+  "head": "765490a9035878c7888c911776289880493dacab",
+  "host": "LAB-OMARCHY",
+  "status": "incomplete_stopped",
+  "passing": false,
+  "exitCode": null,
+  "terminationCause": "unknown",
+  "exitFileExists": false,
+  "recordedProcesses": [
+    {
+      "id": 1582329,
+      "present": false
+    },
+    {
+      "id": 1582353,
+      "present": false
+    },
+    {
+      "id": 1582416,
+      "present": false
+    },
+    {
+      "id": 1582502,
+      "present": false
+    },
+    {
+      "id": 1582622,
+      "present": false
+    },
+    {
+      "id": 1608232,
+      "present": false
+    },
+    {
+      "id": 1609105,
+      "present": false
+    },
+    {
+      "id": 1609118,
+      "present": false
+    },
+    {
+      "id": 1609167,
+      "present": false
+    }
+  ],
+  "run": {
+    "name": "ug-r9-final-linux-lane-1",
+    "target": "MigrationIntegrationTests",
+    "extraArgs": [
+      "MigrationIntegrationTests",
+      "--test-run-id",
+      "ug-r9-final-linux-lane-1"
+    ],
+    "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+    "head": "765490a9035878c7888c911776289880493dacab",
+    "dirtyPaths": [],
+    "startedLocal": "2026-10-30T20:34:17",
+    "startedUtc": "2026-10-31T01:34:17.5410723Z",
+    "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final-linux-lane-1.out.log",
+    "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final-linux-lane-1.err.log",
+    "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final-linux-lane-1.exit.txt"
+  },
+  "expectedProjects": [
+    "QBrainAi.Support.Mcp.Tests",
+    "QBrainAi.McpAgent.Tests",
+    "QBrainAi.Repl.Core.Tests",
+    "QBrainAi.QBAgent.Tests",
+    "Build.Tests",
+    "QBrainAi.Repl.IntegrationTests",
+    "QBrainAi.Support.Mcp.IntegrationTests"
+  ],
+  "trxFound": 5,
+  "missingProjects": [
+    "QBrainAi.Repl.IntegrationTests",
+    "QBrainAi.Support.Mcp.IntegrationTests"
+  ],
+  "observedTotal": 553.0,
+  "observedPassed": 549.0,
+  "observedFailed": 4.0,
+  "observedSkipped": 0.0,
+  "trx": [
+    {
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final-linux-lane-1/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-final-linux-lane-1.incomplete/QBrainAi.Support.Mcp.Tests.trx",
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "sha256": "9916F7F8CA378F28774DF6E970683D954399E4B3A25A7A101C1D426577ACC139",
+      "total": 453,
+      "passed": 451,
+      "failed": 2,
+      "skipped": 0,
+      "cases": [
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_UniqueOccurrence_Replaces",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchValueGateTests.HDone_DefaultRequiresH7a_H7bFollowOn",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.SqliteBoundedOpenFourteenthTests.OpenAsync_RepeatedPoolingModes_PreserveStateAndInterruptLifetime(pooling: True)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.WorkspacePathConsumersMockDataTests.RepoFiles_ForeignWorkspace_WriteFailsAndCreatesNothing",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.EfficiencyRatio_SecondaryOnly",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_QUADBRAIN_CLI_TEMP\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.UseCaseDiagramGraphCqrsTests.PutGraph_EmitsAuditLogRows",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.UnitTestClasses_HaveNoPlatformDependence",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Options.ProductAliasCompatibilityTests.ProjectCanonicalSection_EnvironmentAndCommandLineBeatFileQBrainAi",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_Fifo_IsIgnoredWithoutBlocking",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchToolUseTests.RecallUsedWhenNoInjection",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_RecursionDepthLimit_Throws",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_WithoutDocFxSection_ReturnsEmptyDocFxWorkflows",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnsureDirectory_ParentMovedOutsideBeforeCreate_IsDeniedByLandlock",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewWorker_InvalidOptions_FailStartup",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnScoringTests.NegativeRefuse_FailsOnInvention",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsFourteenthLinuxNativeTests.OpenFileForRead_LinuxFifoWithoutWriter_IsRejectedWithinBound",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnPackTests.PairedConditionsAndTokenFields",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ReadAsync_PathTraversal_ReturnsNull",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.TestRepositoryRootPolicyTests.Resolve_InAnIntegrationTest_ReturnsTheCheckoutRoot",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.QuadBrainSlotConfigurationTests.QuadBrainSlotGenerator_UsesConvertToYaml",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.SoftDeleted_NotListed",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_ObservesExactCallerCancellation",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.TriageConfigurationContractTests.AppSettings_PrimaryTriageAgentUsesGrokCli(segments: [\"appsettings.Staging.yaml\"])",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"platform\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchValueGateTests.GrokH7a_RequiresAgreeBeforeOtherPlugins",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchDocsTests.Readme_RunInstructions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.AllEight_WritesMultiTurnStubArtifacts",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.GrokFirst_OthersOptInUntilValueGate",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.OpenExportRoot_MissingRoot_FailsClosedWithoutLandlock",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogSubmitBudgetTests.ShippedAppSettings_AndHosts_RegisterThirtySecondSubmitBudget",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Web.UseCaseUiAssetTests.UseCaseUi_AppJs_CallsLiveRestEndpoints",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.RecordsPerTurnAndPerJobTokens",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests.Auth_SameAsMcpserver",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathLinuxFacadeTests.ToNativePath_TwoArguments_UsesLinuxHost(path: \"/fixture/repo\", platform: CaseSensitive)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchScoringTests.DeterministicOrDocumentedRubric",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnsureDirectory_MissingNestedDirectory_FailsClosedBeforeMutation",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedOutputPath",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthPostgreSqlBoundaryTests.FreshPostgreSql_AdministrativeCancellationConcurrentWithCallerCancellation_IsPreserved",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.ProductMigrationApplyTests.AddProductsStorageMigration_Source_ExistsForAllProviders_AndHasNoSessionLogsTableOps",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.UseCaseExpandedScopeTests.Approval_Approve_IncrementsVersion",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Web.UseCaseUiAssetTests.UseCaseUi_IndexHtml_ExistsAndReferencesRestApi",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.TurnTransactionPlanArtifactTests.TransactionPlanRequirements_AreConcreteAndMapped",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_DirectorySwap_DoesNotTraverseExternalJunction",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_ParentMovedAfterResolution_RejectsWithoutExternalArtifact",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ReadAsync_GlobAllowlist_DeniesExtensionMismatchWithinAllowedTree",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.WriteAsync_AllowedPath_WritesAndAudits",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.Filters_Respected",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.WritesResultArtifacts_WithTokenSummary",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.AllEight_WritesStubArtifacts",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogTurnContextBackfillTests.RunAsync_UsesAgentHistoryUnderFakeHome_WhenTurnTextHasNoTodo",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_CODEX_TRIAGE_TEMP\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogTurnContextExtractorTests.Extract_ExactPathUnderUserProfileHistory_UsedWhenTurnHasNoPlan",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchDocsTests.Readme_GrokIsPilot",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.TurnTransactionPlanArtifactTests.ImportedPlan_ReferencesImplementedTransactionComponentsAndTests",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenImportingJsonSessionLogThenSessionIsPersisted",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests.G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.NoSecretsInDom",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_OpenShare_BlocksWritesAndDeletes",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"docs/Missing.md\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]]], expectedMessage: \"source\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.Rerun_DeterministicStub",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchReportTests.SummaryComparesConditions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.GuardProjectSelection_MatchesTheUnitTestTarget",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogSanitizerRegistrationTests.Program_RegistersSessionLogSanitizerAsOutermostHttpDecorator",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.Revert_WithinThreeActions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Web.UseCaseUiAssetTests.UseCaseUi_ExposesStructurePanelsForActorsFlowsStepsLinks",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_PathTraversal_Rejected",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Requirements.RequirementsRecoveryMigrationTests.Discovers_AddRequirementsRecoveryRuns_OnAllProviders",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: \"BUG-TRIAGE-139-sixteenth-remediation.md\", expectedSha256: \"CB3D04D459ED657F7DB579F712C72552638233C9695888E2FC\"···)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests.GetRequestedInstanceName_FallsBackToLegacyEnvironmentVariable",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests.Assets_InPublishOutput",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_ONESHOT_TEMP\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests.Canvas_Editor_SerializesGraphWithCoordinates",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"arguments\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_DocFxWorkflowThroughReparsePoint_ThrowsActionableValidation",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.Rerun_DeterministicStub",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.DeleteFileIfExists_NestedStaleFile_DeletesUnderLandlock",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_WritesCanonicalFilesToWorkspace",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthPostgreSqlBoundaryTests.FreshPostgreSql_ExactCallerTokenCancellation_RemainsCancellation",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchSafetyTests.NegativePrompts_NoHallucinatedMemory",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests.TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.UseCaseDiagramGraphCqrsTests.PutGraph_MissingNodeRef_FailsValidation",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryPluginSyncTests.NonGrok_BlockedUntilH7a",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.RecordsPerCellMetrics_IncludingTokens",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.WorkspaceIdentity_AliasReplacement_IsRejectedByAtomicNoCrossDeviceResolver",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.DeleteSessionAsync_ImportedProviderNativeIds_IsRejected",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchDocsTests.Readme_TokensArePrimaryMetric",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RestoreWriteAsync_WhenFileChangedAfterWrite_RefusesOverwrite",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: \"BUG-TRIAGE-139-ninth-remediation.md\", expectedSha256: \"CC453A428796AE4BFB97C395502F7D082145A2DA2FEE0E9CA2\"···)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchInjectionTests.InjectionPresentOnlyWithMemory",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests.MissingAsset_NotFalse200",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathLinuxFacadeTests.ToNativePath_TwoArguments_UsesLinuxHost(path: \"//srv/share/x\", platform: Windows)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenImportingJsonAndMarkdownThenBothAreProcessed",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.StorageCommandBudgetTests.ExecuteAsync_ExplicitBudget_ExpiresAtThatBudget",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.PerPrompt_TokenDelta",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_WritesPromptFileUnderConfiguredTempAndSetsTempEnv",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentRealTests.NormalizeNativePath_CollapsesToCanonicalForm",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.FileGitHubWorkspaceTokenStoreTests.UpsertAsync_WhenStoreLockIsHeld_WaitsForRelease",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.ReportsMeanMedianTokens_ByPluginAndCondition",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerProcessTests.ProcessNormalizer_ForeignAbsolutePath_IsNotReRooted",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.LeadingSeparatorPath_IsNotReinterpretedAsRepoRelative",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.SqliteBoundedOpenFourteenthTests.OpenAsync_NativeLockAtOpen_TimesOutAndJoinsWorker",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateContractTests.RealHandlers_RejectInvalidAndOutOfScopeTargetsWithoutMutation",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ListAsync_GlobAllowlist_RootIncludesRelevantAncestorDirectoriesOnly",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Web.UseCaseUiAssetTests.UseCaseUi_HasBuiltInDiagramViewAndEditSurface",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.UseCaseDiagramGraphCqrsTests.GetGraph_AfterSoftDelete_NotFound",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.CreateEmpty_Blocked",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.McpStdio.MemoryContractArtifactTests.StdioToolContract_IncludesMemoryToolsAndScopes",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Codex_WritesOutputFileUnderConfiguredTemp",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.CorrectnessGate_TokensStillRecorded",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests.Csp_MatchesSiblingUis",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FifteenthHarnessTests.DeterministicBuild_EmbedsRepositoryRootAndCopiesAgentHelpFixtures",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: \"BUG-TRIAGE-139-fifteenth-remediation.md\", expectedSha256: \"04BA22D37B5F29042A45B6D9A55FCE11EE23F4C33148B19BCD\"···)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.IndependentSuppressionFlags",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_NonexistentFile_Fails",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests.Canvas_Palette_OffersRequiredTools",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.Grok_CompletesFullPack_Required",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogDenseGraphTests.UpsertTurnAsync_SlowGraphLoad_FailsRetryableWithoutPersisting",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_Success_AuditsAndPublishesUpdated",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.WritesMultiturnArtifacts",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.ResolveTempDirectory_HonorsConfiguredEnvVar_WithoutWindowsServiceAcl",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_CancelledAfterFirstYield_StopsWithoutMaterializingAllPaths",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.WithoutMemory_ReplaysHistory_NoInjectionOrTools",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.WithMemory_SeededAndToolsAvailable",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.WorkspaceIdentity_UnstoppableUnixHelper_RemainsObservableAfterPublicTimeout",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_ReplaceAll_ReplacesEvery",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchReportTests.SummaryTable_TokenColumns",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.UseCaseMigrationApplyTests.AddUseCaseSupportMigration_Source_HasNoSessionLogsTableOps",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthSqliteConsumerTests.OpenAsync_UnstoppablePreHandleWorker_IsBoundedAndTruthfullyCounted",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: \"BUG-TRIAGE-139-eleventh-remediation.md\", expectedSha256: \"5B9F17C95CBD6EF471F8DC8B9D3F59CD587DE481E452A0647C\"···)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchCiTests.GateMode_Configurable",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchConflictTests.PrefersNewerSeeded",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryMcpSchemaTests.UnknownFields_Policy",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"missing\"]]], expectedMessage: \"navigation\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentRealTests.Platform_IsRunningPlatform",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnPackTests.JobsHaveEstablishThenRequiredQuery",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPackTests.CoversEightPromptClasses",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.McpStdio.TranscriptMcpStdioHostTests.SessionLogNormalizePath_ThroughStdioHost_ResolvesToolGraphAndWritesArtifacts",
+          "outcome": "Failed",
+          "message": "System.InvalidOperationException : The temporary instance's database provider 'database' is not SQLite.",
+          "stack": "   at QBrainAi.TestSupport.TemporaryInstance.OwnedInstanceProcess.ReplaceEnvironment(IDictionary`2 environment, IReadOnlyDictionary`2 settings, String ownedRoot) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/TestSupport.Shared/OwnedInstanceProcess.cs:line 49\n   at QBrainAi.TestSupport.TemporaryInstance.OwnedInstanceProcess.ApplyOwnedEnvironment(ProcessStartInfo startInfo, IReadOnlyDictionary`2 settings, String ownedRoot) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/TestSupport.Shared/OwnedInstanceProcess.cs:line 26\n   at QBrainAi.Support.Mcp.Tests.McpStdio.TranscriptMcpStdioHostTests.StartStdioHost(String executablePath, String repositoryRoot, String dataRoot, String dbPath) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:line 153\n   at QBrainAi.Support.Mcp.Tests.McpStdio.TranscriptMcpStdioHostTests.SessionLogNormalizePath_ThroughStdioHost_ResolvesToolGraphAndWritesArtifacts() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:line 43\n--- End of stack trace from previous location ---"
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.Cline_CompletesFullPack_AfterGrokValueGate",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogReplaceSectionRetryableTests.ReplaceTurnSectionAsync_HungSaveChanges_FailsFastWithRetryableUnavailable",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkBelowFuseRoot_IsRejectedWithoutEnteringTheMount",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.DesktopProcessSpawnerTests.ExtractEnvironment_RemovesServiceDefaultsAndKeepsExplicitDeltas",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.WorkspaceIdentity_SafeSymlinkIntoFuse_IsRejectedByAtomicNoCrossDeviceResolver",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.ClineV2_CompletesFullPack_AfterGrokValueGate",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.FederatedSessionLogServiceTests.Apply_OmittedFields_PersistsProperValue",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentRealTests.CurrentDirectory_IsProcessWorkingDirectory",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ReadAsync_DisallowedPath_ReturnsNull",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryIntegrationTests.Grok_RememberRecall_EndToEnd",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.WorkspacePathConsumersRealTests.RepoFiles_ForeignWorkspace_WriteFailsAndCreatesNothing",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenUpsertingMarkdownThenSessionIsUpdated",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryMigrationTests.Applies_OnAllProviders",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_SameOldAndNew_Fails",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.NoHits_EmptyNotError",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.UseCaseCqrsTests.DeleteUseCase_SoftDeletes_HidesFromGetAndList",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139FifteenthLinuxNativeTests.WorkspaceIdentity_NativeCancellationWindow_CompletesWithoutWorkerLeak",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.EmptyState_Message",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"/outside/docfx\", ···]]]], expectedMessage: \"outputRoot\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.UseCaseDiagramGraphCqrsTests.GetGraph_WhenNoneSaved_ReturnsEmptySchemaV1",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Codex_ReturnsAssistantTextFromJsonlNotRawEvents",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_RepeatedQuickProcessesDoNotRaceJobAttachment",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_GetStatusAsync_WhenTrackedProcessExited_ReturnsDetailedExitError",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.McpStdio.MemoryContractArtifactTests.MemoryContextDocumentation_IncludesImportAndAttributionRules",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffIngestionServiceTests.IngestAsync_ReparseEscape_IsRejected",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.TriageConfigurationContractTests.AppSettings_PrimaryTriageAgentUsesGrokCli(segments: [\"src\", \"QBrainAi.Support.Mcp\", \"appsettings.Staging.yaml\"])",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.WorkspaceServiceCrossPlatformRealTests.Init_ForeignPlatformWorkspace_CreatesNothingOnHost",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateContractTests.CorrectRealHandlers_SatisfyIdentityPreservingContract",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryOnboardingDocsTests.MarkerTemplate_DocumentsNewAndOld",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.UseCaseDiagramGraphCqrsTests.PutGraph_InvalidEdgeType_FailsValidation",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.TriageConfigurationContractTests.AppSettings_PrimaryTriageAgentUsesGrokCli(segments: [\"appsettings.yaml\"])",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthPostgreSqlBoundaryTests.FreshPostgreSql_StatementTimeoutConcurrentWithCallerCancellation_IsPreserved",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Requirements.RequirementsRecoveryTests.ApplyAsync_HungSave_IsRetryable503",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.DeleteFileIfExists_NestedParentMovedOutsideBeforeUnlink_IsDeniedByLandlock",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: \"BUG-TRIAGE-139-tenth-remediation.md\", expectedSha256: \"5AB2C2A2600A85DE6F7DB8A8F50E38226A0693EA89698F26FA\"···)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchIsolationTests.NoPrimaryWorkspaceBleed",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.McpStdio.HandoffMcpToolTests.PublicSurfaces_ExposeIngestGetAndApprove",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.UseCaseGetWorkspaceResolutionContractTests.ProductionGate_EquivalentRawPath_UsesCanonicalWorkspace",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.FederationTopologyServiceLinuxTests.EnrollAsync_PersistsProxyAndWorkspaceInventory",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests.Canvas_Index_ReferencesCanvasEditorScript",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryApiIdempotencyTests.DocumentedBehavior",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_WithValidDocFxWorkflow_ReturnsNormalizedWorkflow",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.WorkspaceHygieneG5OverlayTests.ValidationService_UsesLiveTriageDomainAndBatchedQueries",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.ResultSchema_Validated",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPackTests.NoRealSecretsInFixtures",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.OpenFileForWrite_ParentRenamedOutsideRoot_RejectsWithoutExternalArtifact",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_UnknownPrimary_IsRefusedWithoutChanges",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchCiTests.NonGrok_OptionalUntilH7a",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsAgentHelpSection",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.SqliteBoundedOpenFourteenthTests.OpenAsync_PreflightHeldAtBoundary_TimesOutWithoutBlockingTheCaller",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_ExplicitOverride_IsAdoptedWithoutLocalProvisioning",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffDeadContractInventoryTests.SourceAndSchema_DoNotReintroduceReplayOfRunIdOrApproved",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"timeout\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ImportMissingFields_ExtractsFromTurnText",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"], [[\"id\"] = \"functional\", [\"title\"] = \"Functional\", [\"source\"] = \"generated:functional\", [\"target\"] = \"Functional.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]]], expectedMessage: \"does not reference document\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.Latency_OptionalBudget",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedPathWithParentSegment_IsRejected",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.Injection_CountedOnlyWithMemory",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139FifteenthSharedTests.ContainedRestoration_NestedDirectoriesRestoreContentsModeAndContainment",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryPluginSyncTests.ChecklistReceipt_GrokBeforeOthers",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnScoringTests.QueryScoring_SameGoldForBothConditions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.PlatformNativeTests_AreCompiledAndDiscoverableOnlyForCurrentPlatform",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.DeleteTurnAsync_ImportedProviderNativeIds_DeletesTurn",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Codex_PrefersJsonlAssistantTextOverOutputFileToolCallJson",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_GetStatusAsync_WhenTrackedProcessExited_ReturnsDetailedExitError",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryIndexerTests.OnnxLocal_NoCloudRequired",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.UnitProjects_HoldNoRepositoryLocatorBesideTheSharedOne",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests.SqlServerMigration_UpAddsColumns_DownDropsThem",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_LongContainedPath_Succeeds",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.ClaudeCode_CompletesFullPack_AfterGrokValueGate",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.WithoutMemory_NoEffectiveInjectionOrTools",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ListAsync_NonexistentPath_ReturnsEmpty",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthIdentityConsumerLinuxTests.OpaqueWorkspaceIdentity_DoesNotEnterNativeBoundary",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.WriteAsync_DisallowedPath_ReturnsFailure",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiDeployDocsTests.NamesUpdateService",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.McpStdio.MemoryContractArtifactTests.DefaultMarkerPrompt_IncludesMcpMemoryGuidance",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.SignaturePayloadFields_MatchesDocumentedCanonicalKeyOrder",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_GetStatusAsync_WhenRunningWithStartupTimeoutError_PreservesDiagnosticError",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.ForeignMemory_FailClosed",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ReadAsync_GlobAllowlist_RequiresActualPatternMatch",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests.Canvas_AppJs_WiresDiagramGraphRest",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.StubMode_NoCloudRequired",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogResubmissionReviveTests.SubmitAsync_ImportResubmitAfterTombstone_RevivesSession",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthSqliteTests.OpenAsync_Timeout_CallerIsRestoredReusableAndDisposableBeforeWorkerRelease",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthIdentityConsumerTests.SynchronousIdentitySurface_LocalSymbolicLink_RemainsLexical",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathLinuxFacadeTests.ToNativePath_TwoArguments_UsesLinuxHost(path: \"C:/\", platform: Windows)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_MissingOldString_Fails",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryMigrationTests.SchemaRecreate_Works",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogSubmitBudgetTests.SubmitAsync_SaveLongerThanFiveSeconds_CompletesUnderDefaultBudget",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests.PostgreSqlMigration_UpAddsColumns_DownDropsThem",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"../Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]]], expectedMessage: \"target\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.OpenExportRoot_MissingRootAndAncestors_IsCreatedUnderLandlock",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingServiceTests.GenerateEmbedding_LongInput_TruncatesCorrectly",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ListAsync_ValidDirectory_ReturnsEntries",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_DelayedFuseChildMount_IsRejectedBeforeTraversal",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.PluginAdapterInterface",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.UseCaseDiagramGraphCqrsTests.PutGraph_ThenGet_RoundTrips",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.AppSettingsYaml_ContainsRequiredRepoAllowlistPatterns",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Ingestion.ImportRecoveryEnvelopeTests.IngestPath_ReplaysPendingEnvelopeThroughPersister_DeletesOnlyEnvelope",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_AggregateByteLimit_Throws",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.GitHubCliServiceLinuxTests.ListIssuesAsync_WithForeignWorkspaceAndNoRepository_IsRefused",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryIntegrationTests.UseGrokLane_AsPilot",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_PerFileByteLimit_Throws",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsDocFxWorkflowRunnerTests.RunAsync_WhenOutputContainsReparsePointEscape_Throws",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.CaptureForWriteAsync_ExistingPath_ReturnsSnapshot",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_UsesIsolatedCwdNotConfiguredRepoRoot",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.SqliteOpen_SeparateApprovedLocalMount_IsAccepted",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemorySurfaceParityTests.McpAndRest_EquivalentStore",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.GrokFirst_OthersOptInUntilValueGate",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.WorkspaceIdentity_SeparateApprovedLocalMount_IsAccepted",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyLinuxTests.ReadInitialResponseAsync_OffWindows_RunsCodexExecDirectly",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnsureDirectory_MissingNestedDirectory_IsCreatedUnderLandlock",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ReadAsync_PathThroughSymlinkOutsideRepo_ReturnsNull",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_InvalidWikiYaml_FailsBeforeWriting",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryOnboardingDocsTests.Examples_ListNewVerbs",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsByrdV4HundredPercentTestGate",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.Defines_InOutTotal",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenImportingValidMarkdownThenSessionIsPersisted",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffWorkspacePathsTests.Canonicalize_RelativeAndNested_MatchGetFullPath",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.ResultSchema_RequiresTokenFields",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.TurnTransactionPlanArtifactTests.ImportedPlan_PreservesAllSixMermaidDiagramIds",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.AppSettingsTemplate_ContainsHubSpokeFederationShape",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_DisallowedPath_Rejected",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"], [[\"document\"] = \"home\"]]], expectedMessage: \"references document\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.BrainSlotCredentialResolverTests.ResolveAsync_WithEnvironmentReference_ReturnsTrimmedSecret",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqlitePinnedDataSource_SupportsTransactionsAndReopen",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.NativeLinuxGate_EffectiveUserId_IsNonRoot",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.WithMemory_InjectsCompactRecall_DoesNotReplayEstablishTranscript",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingServiceTests.GenerateEmbedding_DifferentInput_ReturnsDifferentVectors",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementBeforePhysicalResolution_IsRejected",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.Search_OnlyActiveWorkspace",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.FileSystemReach_RealRootAndAncestorLinks_AreNotReachable",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.EnumerateFiles_FileCountLimit_Throws",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.SqliteBoundedOpenFourteenthTests.OpenAsync_RepeatedPoolingModes_PreserveStateAndInterruptLifetime(pooling: False)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_GetStatusAsync_WhenRunningWithStartupTimeoutError_PreservesDiagnosticError",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsFederationTopologyDiagnostics",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.Copilot_CompletesFullPack_AfterGrokValueGate",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RestoreWriteAsync_NewFileSnapshot_DeletesCreatedFile",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingServiceTests.GenerateEmbedding_SameInput_ReturnsDeterministicOutput",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.ReplaceTurnSectionAsync_ImportedProviderNativeIds_ReplacesSection",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [[\"schema\"] = \"wrong/v1\"], expectedMessage: \"schema\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Indexing.EmbeddingServiceTests.GenerateEmbedding_WithModel_ReturnsNonZeroVector",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: \"BUG-TRIAGE-139-fourteenth-remediation.md\", expectedSha256: \"3B09DF63D5860DEC2A96E7589CB528586CBB6726130E1BFB5C\"···)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.TranscriptSessionLogPersisterTests.Import_OmittedFields_PersistsExtractorResultOrNone",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnPackTests.PackFile_ExistsAndVersioned",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.CiTarget_BenchMemory",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetRealTests.IdentityFiles_HaveNoDirectGetFullPath",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryPluginSyncTests.ImplementGrokPlugin_BeforeOthers",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:unknown\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]]], expectedMessage: \"generated\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.Results_GitignorePolicy",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FifteenthHarnessTests.PlatformNativeTests_CompiledInventoryMatchesHost",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.PostgreSqlAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.McpStdio.BrainSlotToolAbsenceTests.StdioToolContract_ContainsNoBrainSlotTools",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.Edit_UsesSameCqrsPath",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \" \", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"executable\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.Escape_ClosesPanel",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_CaseDistinctHomeFiles_RemovesOnlyStaleName",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnPackTests.QueryTurns_DoNotRestateFacts",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsDecisionCompletePlanHandoffGuidance",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryToolsDiscoveryTests.StdioAndHttp_SameVerbSet",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.SafetyPrompts_TokensAndPassFail",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsAvailableCapabilitiesSection",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnsureDirectory_SymlinkPlantedAtMissingSegment_IsNeverFollowed",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.FileGitHubWorkspaceTokenStoreTests.UpsertAsync_HardensStoreAndLockFilePermissions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.NoPythonProductPath",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RestoreWriteAsync_ExistingSnapshot_RestoresPriorContent",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryOnboardingDocsTests.GiveYourselfMemory_SampleExists",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.McpStdio.HandoffMcpToolTests.PluginSync_HandoffSkill_MatchesCoreArtifact",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_CODEX_ONESHOT_TEMP\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.StubMode_RequiresTokenFields",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···], [[\"id\"] = \"DOCS\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"duplicates workflow id\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.QuadBrainSlotConfigurationTests.QuadBrainSlotAssignments_ContainRequestedRuntimeAndModelMappings",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthIdentityConsumerLinuxTests.PersistedOpaqueWorkspaceId_UsesLexicalIdentityWithoutPhysicalResolver",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"], [[\"id\"] = \"home\", [\"title\"] = \"Home Again\", [\"source\"] = \"generated:functional\", [\"target\"] = \"Home-Again.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]]], expectedMessage: \"duplicates\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GetStatusAsync_WhenTrackedProcessExited_ReturnsExitError",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.Ingest_OmittedFields_PersistsExtractorResultOrNone",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.WorkspaceServiceCrossPlatformMockDataTests.Init_ForeignPlatformWorkspace_CreatesNothingOnHost",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchDocsTests.UserGuide_LinksPack",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidWikiYaml_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\", [\"platforms\"] = [\"mobile\"]]], [\"navigation\"] = [[[\"document\"] = \"home\"]]], expectedMessage: \"platform\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: \"BUG-TRIAGE-139-twelfth-remediation.md\", expectedSha256: \"3F40F3195168574A52A27030902B22F62917683ED6BB8E8041\"···)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests.DeepLink_DetailOrFailClosed",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_EmptyOldString_Fails",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.Source_HostReportedOrDocumentedEstimator",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_ExpectedOccurrencesMismatch_Fails",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.UseCaseCqrsTests.GetUseCaseDiagram_ReturnsScopedMermaidUml",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139FifteenthLinuxNativeTests.SqliteOpen_KernelWaitThenIndependentDisposalFailure_PreservesExactException",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.Seeds_WorkspaceScopedCleanup",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathLinuxFacadeTests.ToNativePath_TwoArguments_UsesLinuxHost(path: \"//srv/share/x\", platform: CaseSensitive)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.TestSources_DoNotDeclareSkippedXunitTests",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPackTests.EntrySchema_Complete",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.FileGitHubWorkspaceTokenStoreTests.DeleteAsync_RemovesTokenRecord",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.CiSummary_TokensFirst",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogSanitizerRegistrationTests.McpStdioHost_RegistersSessionLogSanitizerAsOutermostStdioDecorator",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryPluginSyncTests.GrokFirst_ThenOthersAfterValueGate",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.FileGitHubWorkspaceTokenStoreTests.UpsertAsync_SecondWriteReplacesToken",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_PreCancelled_DoesNotStartNativeResolution",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryPluginSyncTests.MissingVerb_FailsValidation",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.Opencode_CompletesFullPack_AfterGrokValueGate",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139FifteenthLinuxNativeTests.SqliteOpen_PlatformNativePreHandleWait_IsBoundedWithoutLeaks",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests.Canvas_EditorScript_ExposesInteractionApis",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.Dispose_WhenTempConfigExists_DeletesFileAndClearsConfigPath",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.CallsOnlyPublicRest",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnDocsTests.Readme_DocumentsV2AsRealEfficiencyBench",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.TriageConfigurationContractTests.AppSettings_PrimaryTriageAgentUsesGrokCli(segments: [\"src\", \"QBrainAi.Support.Mcp\", \"appsettings.yaml\"])",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathLinuxFacadeTests.ToNativePath_TwoArguments_UsesLinuxHost(path: \"C:/fixture/repo\", platform: Windows)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchReportTests.Headline_MacroMeanTokens",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.ClaudeCowork_CompletesFullPack_AfterGrokValueGate",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RestoreFileAsync_RollsBackUnixPermissionsThroughPinnedAuthority",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPackTests.PackFile_ExistsAndVersioned",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.PostgresRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnPackTests.CoversRequiredJobClasses",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"api-a\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···], [[\"id\"] = \"api-b\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"duplicate target root\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_MarksExportedMarkdownFilesReadOnly",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.LandlockConfinement_DeniesDirectoryCreationOutsideItsHierarchy",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.BrainSlotLlmStrategyTests.Factory_CreateStrategy_ExistsWithoutNewAgentSdk",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \" \"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"arguments\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetRealTests.AllOtherFiles_StayWithinReviewedAllowlist",
+          "outcome": "Failed",
+          "message": "New or increased Path.GetFullPath use. If it resolves a request-supplied workspace path, route it through IWorkspacePathNormalizer; if it is host-native file access, review and update the allowlist:\nsrc/QBrainAi.Services/Services/GitHubCliService.cs: 5 (allowed 4)",
+          "stack": "   at QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetContractTests.AllOtherFiles_StayWithinReviewedAllowlist() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:line 134\n   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)\n   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)"
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithoutDumpFlag_UnchangedBehavior",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_NestedStaleCleanup_DeletesStaleUnderLandlock",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathLinuxFacadeTests.ToNativePath_TwoArguments_UsesLinuxHost(path: \"C:\\\\already\\\\native\", platform: Windows)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.MultiFact_WithoutMemoryQuery_CostsMoreThanWithMemoryQuery",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.EditAsync_Ambiguous_FailsWithoutReplaceAll",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.FileGitHubWorkspaceTokenStoreTests.UpsertAndGetAsync_RoundTripsToken",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateDocument_ShippedFileBackedService_RendersLiveHandoffFamily",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.DefaultPlugin_IsGrok",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests.GetRequestedInstanceName_PrefersQBrainAiEnvironmentVariable",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.JobSuccess_RequiresAllRequiredQueryTurns",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests.Canvas_HasUmlCanvasElement",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.ReadAsync_AllowedPath_ReturnsContent",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedPathInsideRoot_AcrossRepoOperations_ResolvesRepoRelative",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_GROK_ONESHOT_TEMP\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.FileSystemWalk_RealLinks_AreFlaggedAndNotDescended",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_NestedStaleCleanup_IsRejectedBeforeGeneratedWrite",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.CurrentEvidenceIndex_RecordsSupersessionOwnershipAndExactLedgerPath",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.LiveMode_Tagged",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReview_SurfaceParity_RestReplDirectorPlugin",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.ToolPayloads_CountedConsistently",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.ConfigurablePathIntegrationTests.VectorIndexService_SaveAsync_UsesConfiguredRelativeIndexPath",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.SessionLogTurnPlanFileTodoIdMigrationApplyTests.ProviderMigrations_AddBothColumnsWithNoneDefault",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkIntoFuse_IsRejectedBeforeWorker",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.AsyncConsumers_AwaitBoundedPhysicalIdentityResolution",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.Codex_CompletesFullPack_AfterGrokValueGate",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.PostgresRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPackTests.PairedConditions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Configuration.ConfigurablePathIntegrationTests.RepoIngestor_ResolvesRelativeRepoRoot_AgainstCurrentDirectory",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"../outside\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"workingDirectory\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.WorkspaceHygieneG5OverlayTests.Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.LandlockConfinement_RuleSetupFailure_NeverRunsTheOperation",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests.ServedAtMemoryPath",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.PackSchema_Validated",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.TransactionGatedSessionLogServiceTests.TransactionGatedSessionLogServiceSource_DoesNotUseBulkPhysicalDeletes",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Services.StorageCommandBudgetTests.ExecuteAsync_HungWork_FailsWithinEightSeconds",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        }
+      ]
+    },
+    {
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final-linux-lane-1/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-final-linux-lane-1.incomplete/QBrainAi.McpAgent.Tests.trx",
+      "project": "QBrainAi.McpAgent.Tests",
+      "sha256": "EEC7C8BB6027C18C28AE29E55FBE89BC320E69083670A1DB953F995572867310",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "cases": [
+        {
+          "name": "QBrainAi.McpAgent.Tests.McpAgentOptionsLegacySectionHostTests.AddQBrainAiMcpAgent_BindsLegacyMcpServerSection",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        }
+      ]
+    },
+    {
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final-linux-lane-1/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-final-linux-lane-1.incomplete/QBrainAi.Repl.Core.Tests.trx",
+      "project": "QBrainAi.Repl.Core.Tests",
+      "sha256": "C70247CCD8504EB532717D78E301ED4AF67A6E9D4796D8ED1ACED37FF63DD249",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "cases": [
+        {
+          "name": "QBrainAi.Repl.Core.Tests.MemorySchemaContractTests.CanonicalYamlSchema_ContainsMemoryWorkflowRules",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        }
+      ]
+    },
+    {
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final-linux-lane-1/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-final-linux-lane-1.incomplete/QBrainAi.QBAgent.Tests.trx",
+      "project": "QBrainAi.QBAgent.Tests",
+      "sha256": "FF54074F6162796B1CB93FA35A73DC813F1E945CF311F954F6D582422996B9D1",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "cases": [
+        {
+          "name": "QBrainAi.QBAgent.Tests.Skills.AuthoredSkillsTests.AuthoredSkills_AllParseAndDiscover",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "QBrainAi.QBAgent.Tests.Skills.AuthoredSkillsTests.AuthoredSkills_HaveBodies",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        }
+      ]
+    },
+    {
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final-linux-lane-1/provider/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-final-linux-lane-1.incomplete/Build.Tests.trx",
+      "project": "Build.Tests",
+      "sha256": "920916AAC45E698A0B2F9E8B0D38445ED20D13ECC538BC5E8D1D38F95ABFC4C1",
+      "total": 95,
+      "passed": 93,
+      "failed": 2,
+      "skipped": 0,
+      "cases": [
+        {
+          "name": "NukeBuild.Tests.HandoffD3D5OverlayTests.D3_ValidateTraceability_ShippedValidator_PassesOnLiveDocsProject",
+          "outcome": "Failed",
+          "message": "C3 FR gaps: mapping=[FR-MCP-074,FR-MCP-FED-BACKFILL-001,FR-MCP-FED-ROUTE-001,FR-MCP-FED-WSSYNC-001,FR-MCP-PLUGINCORE-002,FR-MCP-SERVICEUPDATE-001,FR-MCP-USECASE-016,FR-MCP-USECASE-017,FR-MCP-USECASE-018,FR-TIMER-001,FR-WF-005] matrix=[]",
+          "stack": "   at NukeBuild.Tests.HandoffD3D5OverlayTests.D3_ValidateTraceability_ShippedValidator_PassesOnLiveDocsProject() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/HandoffD3D5OverlayTests.cs:line 64\n   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)\n   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)"
+        },
+        {
+          "name": "NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.GeneratedMigrationFiles_DoNotContainObsoleteWarningPragmas(project: SQL Server)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildTargetTests.SyncAgentPlugins_EnsuresNodeCoreNpmCiBeforeNpmRunBuild",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.McpAgent)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.TrCoverageConsistencyTests.CfgProviderFactoryTrExists_AndIsComplete",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.QBrainAiRebrandPhase1Tests.ReplNodeCallers_ResolveLegacyCommand",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildTargetTests.SyncAgentPlugins_RefreshesWorkspaceStagedPackageBeforeSiblingDiscovery",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.QBrainAiRebrandPhase1Tests.PersistedStateAndHostNames_Stay",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.Cqrs)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.QBrainAiRebrandPhase1Tests.RepositoryUrl_KeepsLiveGitHubName",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.GeneratedMigrationFiles_DoNotContainObsoleteWarningPragmas(project: PostgreSQL)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoCA1031Suppressions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.PowerShellInvocationTests.BuildTests_PwshProcessStartInfo_UsesNonInteractiveFlags",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.PowerShellInvocationTests.DeploymentGuidance_PwshCommandsUseNonInteractiveFlags",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.IntegrationLaneDetachedWorkerTests.LinuxWorker_ClosesParentPipesAndKeepsLogging",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Catalog_HasExactlyEightEnabledScenarios",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Solution_ContainsQBrainAiPluginIntegrationTestsProject",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.NukeParametersTests.NukeParameters_Solution_NamesExistingSolutionFile",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: \"unit\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.DocsSyncG8OverlayTests.G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.WarningSuppressionApprovalValidatorTests.ApprovalRegister_ContainsOnlyScopedCurrentApprovalsAndMatchesCurrentOccurrences",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.QBrainAiRebrandPhase1Tests.Inventory_EveryRowHasClosedAction",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.DocsSyncG8OverlayTests.G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.QBAgent)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.IntegrationLaneProjectsTests.ProductionSelector_OnTheSolutionFile_SelectsTheLaneProjects",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoCA1054OrCA1056Suppressions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildTargetTests.Build_SourceProjects_DoNotPinDivergentVersionMetadata",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildTargetTests.BuildTargets_UseGitVersionForCompileAndReplTool",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.Cqrs.Mvvm)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoCA1515Suppressions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.QBrainAiRebrandPhase1Tests.Packages_NewIdsAndLegacyFacades",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.HandoffD3D5OverlayTests.D3_NukeValidateTraceabilityTarget_InvokesShippedValidatorOnDocsProject",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.DocsSyncG8OverlayTests.G8_NukeSyncAgentPluginsTarget_InvokesCoreSyncScript",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoCS1591Suppressions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildTargetTests.SyncAgentPlugins_RefreshesNodeCoreVendorPackageBeforeCaches",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: \"configuration\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.SyncAgentPluginsVendorNameTests.SyncAgentPlugins_VendorStep_HasNoVersionedTarballLiteral",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.SyncAgentPluginsVendorNameTests.SyncAgentPlugins_VendorStep_AssertsPackedVersionAgainstPackageJson",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(project: SQL Server)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: \"apphost\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildProjectSetTests.RestoreAndCompile_UseTheSharedProjectSet",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: \"environment\")",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.YamlObjectMutationTests.FinalResponse_UsesYamlSerializerForCompleteTurnParams",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.SyncAgentPluginsVendorNameTests.SyncAgentPlugins_VendorStep_UsesStableVersionlessName",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.IntegrationLaneProjectsTests.SolutionRow_IsTheSolutionFile",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.YamlObjectMutationTests.PluginCoreSyncManifest_UsesYamlSerializerInsteadOfLineAssembly",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.GeneratedMigrationFiles_DoNotContainObsoleteWarningPragmas(project: SQLite)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(project: SQLite)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildTargetTests.ResolveNuGetPackageVersion_ReturnsExplicitParameter",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.Repl.Core)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.QBrainAiRebrandPhase1Tests.Tokens_KeepNamespaceAndPackageSpellingsApart",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.SyncAgentPluginsChecksumTests.SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.QBrainAiRebrandPhase1Tests.Routes_KeepProtocolEndpointAndAliasProductPrefix",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoCA1849Suppressions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.Launcher)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.GeneratedMigrationFiles_RecordProviderIdentitySymbols(project: PostgreSQL)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.QBrainAiRebrandPhase1Tests.ReviewAliases_KeepLegacyColumnAndCheckoutPath",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.QuadBrainDescriptorAbsenceTests.McpsRegistry_ContainsNoBrainSlotToolDescriptors",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.QBrainAiRebrandPhase1Tests.SolutionAndProjects_UseQBrainAiRoot",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.DocsSyncG8OverlayTests.G8_ValidateTraceability_ShippedValidator_PassesOnLiveDocsProject",
+          "outcome": "Failed",
+          "message": "C3 FR gaps: mapping=[FR-MCP-074,FR-MCP-FED-BACKFILL-001,FR-MCP-FED-ROUTE-001,FR-MCP-FED-WSSYNC-001,FR-MCP-PLUGINCORE-002,FR-MCP-SERVICEUPDATE-001,FR-MCP-USECASE-016,FR-MCP-USECASE-017,FR-MCP-USECASE-018,FR-TIMER-001,FR-WF-005] matrix=[]",
+          "stack": "   at NukeBuild.Tests.DocsSyncG8OverlayTests.G8_ValidateTraceability_ShippedValidator_PassesOnLiveDocsProject() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/DocsSyncG8OverlayTests.cs:line 44\n   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)\n   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)"
+        },
+        {
+          "name": "NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoCA3003Suppressions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.DocsSyncG8OverlayTests.G8_NukeValidateTraceabilityTarget_InvokesShippedValidator",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.GeneratedMigrationFiles_RecordProviderIdentitySymbols(project: SQLite)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(project: PostgreSQL)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildProjectSetTests.GetBuildProjectFiles_CoversEverySourceAndTestProject_ExceptBuildTests",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.TrCoverageConsistencyTests.CompletedTrs_MustNotNameProviderSpecificTypes_WhenCfg007Complete",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.McpAgent.SampleHost)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.NukeTarget_SkipIsFailure",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.RequirementsWikiPublishScriptTests.PublishRequirementsWiki_AzureOutput_AppendsAzureUserDocumentationLinks",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.IntegrationLaneProjectsTests.SupportIntegrationClasses_AreDeclaredOnceAndTaggedIntegration",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildTargetTests.QBAgentProject_IsConfiguredAsDotNetTool",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: True)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildTargetTests.UpdateService_StagesBaselineConfigurationBeforeStoppingWindowsService",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.YamlObjectMutationTests.YamlMutationHelper_RoundTripsNestedKeysBySerializer",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.TrCoverageConsistencyTests.TrsNotMarkedComplete_AreIgnoredByRegression",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildTargetTests.PackQBAgentTool_DoesNotDependOnSolutionCompile",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.QBrainAiRebrandPhase1Tests.DisplayDockerAndServiceDefaults_UseQBrainNames",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.GeneratedMigrationFiles_RecordProviderIdentitySymbols(project: SQL Server)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildTargetTests.DeployQBAgentTool_DependsOnPackQBAgentTool_NotCompile",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.RequirementsWikiPublishScriptTests.PublishRequirementsWiki_GitHubOutput_AppendsGitHubUserDocumentationLinks",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.PowerShellInvocationTests.BuildBootstrap_RelaunchesWithNonInteractivePowerShellFlags",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.DocsSyncG8OverlayTests.G8_NukeValidateConfigTarget_InvokesShippedValidator",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.Repl.Host)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasOnlySerializerCompatibilityCA2227Suppressions",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.YamlObjectMutationTests.YamlMutationGuidance_IsPublishedToAgentSurfaces",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.BuildTargetTests.CopyBrainSlotRuntimeConfig_CopiesAssignmentFileToDeploymentConfigPath",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False)",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.WarningSuppressionValidationTargetTests.Scan_CurrentRepository_HasNoGeneratedMigrationObsoleteWarningPragmas",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        },
+        {
+          "name": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.TestTarget_ExcludesPluginIntegrationFromUnitInventory",
+          "outcome": "Passed",
+          "message": "",
+          "stack": ""
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final-linux-lane-1.meta.json",
+      "sha256": "E0D284E9B58689597A556AADAE7D73659E6D30BA689DECFBFDAA0A0E91E81C17",
+      "length": 773
+    },
+    {
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final-linux-lane-1.out.log",
+      "sha256": "906B2C07AE9B01A2E49B5B0505190C061D5FDD7E0ABC62E2A119A604652026D9",
+      "length": 29917
+    },
+    {
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final-linux-lane-1.err.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "length": 0
+    }
+  ],
+  "independentReview": "pending",
+  "auditSessionId": "Codex-20261030T202533Z-plugin-session",
+  "auditRequestId": "req-20261102T145208Z-claude-handoff-bd9cb7"
+}

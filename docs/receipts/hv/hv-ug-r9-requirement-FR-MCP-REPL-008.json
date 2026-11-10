@@ -1,0 +1,54 @@
+{
+  "TimestampLocal": "2026-11-02T19:17:37",
+  "TimestampUtc": "2026-11-03T01:17:37.2971994Z",
+  "Method": "workflow.requirements.getFr",
+  "Params": {
+    "id": "FR-MCP-REPL-008"
+  },
+  "Data": [
+    {
+      "payload": {
+        "deprecated": true,
+        "result": {
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": true,
+              "evidence": "plugins/core/lib-sh/repl-invoke.sh; plugins/core/lib-ps/repl-invoke.ps1; plugins/core/lib-sh/repl-daemon.js; plugins/core/lib-node/src/transport/repl-bridge.ts",
+              "id": "",
+              "text": "Every plugin REPL launcher passes --agent, including the default agent value."
+            },
+            {
+              "isSatisfied": true,
+              "evidence": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs; tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs",
+              "id": "",
+              "text": "Verified marker cache entries are keyed by canonical agent identity and workspace."
+            },
+            {
+              "isSatisfied": true,
+              "evidence": "tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs; tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs",
+              "id": "",
+              "text": "Named-agent child process invocation is covered by integration tests."
+            },
+            {
+              "isSatisfied": false,
+              "id": "ac-4",
+              "text": "The REPL verified-marker cache uses QBRAINAI_REPL_CACHE_DIR when set, otherwise MCP_REPL_CACHE_DIR, through ProductEnvironment alias precedence; when neither is set it uses the user-profile cache. A child process can therefore isolate all verified-marker cache reads and writes in its owned root. The path selection is proved by unit tests over explicit settings and profile values. Operator 2026-10-30: Product env override (Recommended), RINT-10."
+            }
+          ],
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "createdAt": "2026-11-03T01:17:39.5687460+00:00",
+          "status": "pending",
+          "id": "FR-MCP-REPL-008",
+          "description": "Agent REPL callers must identify the invoking agent on every qbrain-ai-repl invocation so session, cache, and verified marker state are isolated per agent and workspace.",
+          "updatedAt": "2026-11-03T01:17:39.5688673+00:00",
+          "title": "Per-agent REPL isolation",
+          "priority": "medium"
+        },
+        "requestId": "req-20261103T011738Z-a982"
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

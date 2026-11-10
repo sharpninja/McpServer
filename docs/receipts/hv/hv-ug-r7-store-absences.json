@@ -1,0 +1,58 @@
+[
+  {
+    "Id": "FR-MCP-USECASE-016",
+    "Method": "workflow.requirements.getFr",
+    "DedicatedGetter": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261026T173224Z-8fd1\n  code: not_found\n  message: FR 'FR-MCP-USECASE-016' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n",
+    "EffectiveMatches": 0,
+    "TimestampLocal": "2026-10-26T12:32:26"
+  },
+  {
+    "Id": "FR-MCP-USECASE-017",
+    "Method": "workflow.requirements.getFr",
+    "DedicatedGetter": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261026T173228Z-4baf\n  code: not_found\n  message: FR 'FR-MCP-USECASE-017' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n",
+    "EffectiveMatches": 0,
+    "TimestampLocal": "2026-10-26T12:32:29"
+  },
+  {
+    "Id": "TEST-MCP-MEMORY-010",
+    "Method": "workflow.requirements.getTest",
+    "DedicatedGetter": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261026T173231Z-384d\n  code: not_found\n  message: TEST 'TEST-MCP-MEMORY-010' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n",
+    "EffectiveMatches": 0,
+    "TimestampLocal": "2026-10-26T12:32:33"
+  },
+  {
+    "Id": "TEST-MCP-QBCLI-001",
+    "Method": "workflow.requirements.getTest",
+    "DedicatedGetter": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261026T173234Z-609b\n  code: not_found\n  message: TEST 'TEST-MCP-QBCLI-001' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n",
+    "EffectiveMatches": 0,
+    "TimestampLocal": "2026-10-26T12:32:35"
+  },
+  {
+    "Id": "FR-MCP-MEMORY-018",
+    "Method": "workflow.requirements.getFr",
+    "DedicatedGetter": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261026T173237Z-b9c2\n  code: not_found\n  message: FR 'FR-MCP-MEMORY-018' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n",
+    "EffectiveMatches": 0,
+    "TimestampLocal": "2026-10-26T12:32:39"
+  },
+  {
+    "Id": "TEST-MCP-MEMORY-018",
+    "Method": "workflow.requirements.getTest",
+    "DedicatedGetter": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261026T173240Z-95f2\n  code: not_found\n  message: TEST 'TEST-MCP-MEMORY-018' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n",
+    "EffectiveMatches": 0,
+    "TimestampLocal": "2026-10-26T12:32:43"
+  },
+  {
+    "Id": "TEST-MCP-PLUGIN-PSONLY-001",
+    "Method": "workflow.requirements.getTest",
+    "DedicatedGetter": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261026T173245Z-2f3b\n  code: not_found\n  message: TEST 'TEST-MCP-PLUGIN-PSONLY-001' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n",
+    "EffectiveMatches": 0,
+    "TimestampLocal": "2026-10-26T12:32:46"
+  },
+  {
+    "Id": "TR-MCP-MEMORY-SEARCH-002",
+    "Method": "workflow.requirements.getTr",
+    "DedicatedGetter": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261026T173248Z-da21\n  code: not_found\n  message: TR 'TR-MCP-MEMORY-SEARCH-002' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n",
+    "EffectiveMatches": 0,
+    "TimestampLocal": "2026-10-26T12:32:49"
+  }
+]

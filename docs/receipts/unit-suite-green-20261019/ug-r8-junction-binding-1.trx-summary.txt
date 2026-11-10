@@ -1,0 +1,8 @@
+RECEIPT ug-r8-junction-binding-1 (TRX summary of /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8-junction-binding-1, written 2026-10-26T16:28:30)
+unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx: total=306 executed=306 passed=306 failed=0 notExecuted=0
+unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx: total=33 executed=33 passed=33 failed=0 notExecuted=0
+unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx: total=20 executed=20 passed=20 failed=0 notExecuted=0
+unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx: total=64 executed=64 passed=64 failed=0 notExecuted=0
+unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx: total=94 executed=94 passed=94 failed=0 notExecuted=0
+unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx: total=869 executed=869 passed=869 failed=0 notExecuted=0
+unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx: total=3172 executed=3172 passed=3172 failed=0 notExecuted=0

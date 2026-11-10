@@ -1,0 +1,53 @@
+{
+  "TimestampLocal": "2026-11-02T19:31:27",
+  "TimestampUtc": "2026-11-03T01:31:27.1124182Z",
+  "Method": "workflow.requirements.getTr",
+  "Params": {
+    "id": "TR-MCP-USECASE-020"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "Implement workspace- and parent-scoped CQRS mutations for existing actor, flow, and step components, exposed consistently through REST, typed client, source-generated JSON, and MCP tool surfaces.",
+          "updatedAt": "2026-11-03T01:31:29.3794702+00:00",
+          "status": "pending",
+          "id": "TR-MCP-USECASE-020",
+          "createdAt": "2026-11-03T01:31:29.3793594+00:00",
+          "title": "Identity-preserving use-case component update pipeline",
+          "priority": "high",
+          "notes": "Implements FR-MCP-USECASE-018 and provides the supported path needed for UC-125 correction.",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "subarea": "USECASE",
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "text": "CQRS update commands scope every actor, flow, and step lookup by workspace and complete parent identity, use tracked in-place mutations, and return not-found for mismatches.",
+              "id": "AC-TR-USECASE-020-1"
+            },
+            {
+              "isSatisfied": false,
+              "text": "Actor updates validate name and actor type, flow updates validate flow type, name, and positive sequence, and step updates validate positive order, nonempty action, and an actor associated with the same use case when ActorId is supplied.",
+              "id": "AC-TR-USECASE-020-2"
+            },
+            {
+              "isSatisfied": false,
+              "text": "REST routes, the typed client, generated JSON metadata, and MCP tools expose update-actor, update-flow, and update-step with cancellation and classified failures.",
+              "id": "AC-TR-USECASE-020-3"
+            },
+            {
+              "isSatisfied": false,
+              "text": "Each successful component update advances UseCaseEntity.UpdatedAtUtc, emits the established use-case mutation audit signal, and leaves approval/version and unrelated aggregate data unchanged.",
+              "id": "AC-TR-USECASE-020-4"
+            }
+          ]
+        },
+        "requestId": "req-20261103T013128Z-086b",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

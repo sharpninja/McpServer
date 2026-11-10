@@ -1,0 +1,34 @@
+{
+  "timestampUtc": "2026-11-06T06:17:03.4069397+00:00",
+  "timestampLocal": "2026-11-06T00:17:05",
+  "method": "workflow.requirements.getTr",
+  "recordId": "TR-MCP-FED-PATH-001",
+  "response": {
+    "payload": {
+      "requestId": "req-20261106T061704Z-a1ce",
+      "result": {
+        "notes": "Registered in this workspace store 2026-10-19 by operator decision (\"Create the records here now\"). Statement and FR criteria verbatim from docs/plans/2026-10-07-federation-fixes.md:53-59 (approved 2026-10-07; first registered in the Windows lab host's McpServer store). Architecture Amendment 1 H0 import must merge with these records.",
+        "scopeStartLayerKey": "layer-1",
+        "area": "MCP",
+        "acceptanceCriteria": [
+          {
+            "evidence": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs (CombineResolvesRootRelativeWindowsSegmentAgainstDrive, CombineResolvesRootRelativeWindowsSegmentAgainstUncShare); WorkspacePathNormalizerMockDataTests.cs (RootRelativeNegativeControls_AreRejectedInsidePassingHarness); PR 82 commits f6768359 and dcd0269a",
+            "text": "IWorkspacePathNormalizer.Combine treats a segment with one leading backslash as root-relative on Windows: it keeps the current root's volume, the drive (C:/) or the UNC server and share (//srv/share/), and replaces the rest of the path, on a Linux hub and a Windows host (PR 81 finding P12, PR 82 review).",
+            "id": "AC1",
+            "isSatisfied": false
+          }
+        ],
+        "status": "pending",
+        "title": "Single request-path normalization entry point",
+        "updatedAt": "2026-11-06T06:17:05.8199961+00:00",
+        "id": "TR-MCP-FED-PATH-001",
+        "description": "Introduce a single request-path normalization entry point (IWorkspacePathNormalizer backed by WorkspaceIdentityPath) with an injectable host-platform abstraction; all resolvers listed in section 1.2 use it. No direct Path.GetFullPath on request-supplied workspace paths outside it (enforced by an architecture test).",
+        "subarea": "FED",
+        "priority": "medium",
+        "createdAt": "2026-11-06T06:17:05.8198735+00:00"
+      },
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

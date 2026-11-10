@@ -14,6 +14,7 @@
     <McpRepositoryRoot>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\..'))</McpRepositoryRoot>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Microsoft.Data.Sqlite" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit.v3" />
@@ -30,6 +31,9 @@
     <ProjectReference Include="..\QBrainAi.ProcessTree.TestHelper\QBrainAi.ProcessTree.TestHelper.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Shared\TestRepositoryRoot.cs" Link="Shared\TestRepositoryRoot.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Using Include="Xunit" />
     <AssemblyMetadata Include="McpRepositoryRoot" Value="$(McpRepositoryRoot)" />
     <None Update="Fixtures\AgentHelp\**\*"
@@ -41,24 +45,7 @@
     <EmbeddedResource Include="..\..\templates\prompt-templates.yaml"
                       LogicalName="TriagePromptTemplate.prompt-templates.yaml" />
   </ItemGroup>
-  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-    <Compile Remove="Storage\BugTriage139FifteenthLinuxNativeTests.cs" />
-    <Compile Remove="Storage\BugTriage139SixteenthLinuxTests.cs" />
-    <Compile Remove="Storage\BugTriage139EighteenthLinuxTests.cs" />
-    <Compile Remove="Services\RequirementsFourteenthLinuxNativeTests.cs" />
-  </ItemGroup>
-  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-    <Compile Remove="Storage\BugTriage139FifteenthWindowsNativeTests.cs" />
-    <Compile Remove="Storage\BugTriage139SixteenthIdentityWindowsTests.cs" />
-    <Compile Remove="Documentation\BugTriage139SixteenthWindowsProcessTests.cs" />
-  </ItemGroup>
-  <ItemGroup Condition="!$([MSBuild]::IsOSPlatform('Windows')) And !$([MSBuild]::IsOSPlatform('Linux'))">
-    <Compile Remove="Storage\BugTriage139FifteenthWindowsNativeTests.cs" />
-    <Compile Remove="Storage\BugTriage139FifteenthLinuxNativeTests.cs" />
-    <Compile Remove="Storage\BugTriage139SixteenthIdentityWindowsTests.cs" />
-    <Compile Remove="Storage\BugTriage139SixteenthLinuxTests.cs" />
-    <Compile Remove="Storage\BugTriage139EighteenthLinuxTests.cs" />
-    <Compile Remove="Services\RequirementsFourteenthLinuxNativeTests.cs" />
-    <Compile Remove="Documentation\BugTriage139SixteenthWindowsProcessTests.cs" />
-  </ItemGroup>
+  <!-- 2026-11-07, TEST-MCP-USECASE-018; TEST-MCP-USECASE-020; TR-MCP-NUKE-019 AC-7: the OS-conditional compile block that
+       governed the seven platform-native files moved whole to QBrainAi.Support.Mcp.EnvironmentIntegrationTests with those
+       files and the harnesses that count them (slice S8, hostile validation finding R14-F4); their copies here are empty. -->
 </Project>

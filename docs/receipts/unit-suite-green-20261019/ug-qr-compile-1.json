@@ -1,0 +1,101 @@
+{
+  "name": "ug-qr-compile-1",
+  "kind": "compile",
+  "retrospective": false,
+  "note": "Written when the run ended, from its own meta, exit and log files (Save-CompileReceipt.ps1).",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "runHead": "022f9cde436eadf509b47794d18c6cdc9036ad80",
+  "runDirtyPaths": [
+    " M build/Build.Test.cs",
+    " M build/IntegrationLaneFilter.cs",
+    " M build/IntegrationLaneFilterContracts.cs",
+    " M build/TestProjectOwnership.cs",
+    " M build/TestProjectOwnershipContracts.cs",
+    " M tests/Build.Tests/IntegrationLaneClassFilterContract.cs",
+    " M tests/Build.Tests/IntegrationLaneClassFilterTests.cs",
+    " M tests/Build.Tests/IntegrationLaneExecutionContractTests.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    " M tests/Build.Tests/TestGroupExecutionContractTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipContract.cs",
+    " M tests/Build.Tests/TestProjectOwnershipMockGateTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-1/",
+    "?? tests/Build.Tests/UnitTestFilterContract.cs",
+    "?? tests/Build.Tests/UnitTestFilterMockGateTests.cs",
+    "?? tests/Build.Tests/UnitTestFilterTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "Compile"
+  ],
+  "startedLocal": "2026-11-07T19:10:08",
+  "endedLocal": "2026-11-07T19:12:45",
+  "exitCode": 0,
+  "status": "passed",
+  "buildSucceededLine": "Build succeeded on 11/7/2026 7:12:45 PM. ＼（＾ᴗ＾）／",
+  "errorDiagnostics": 0,
+  "warningDiagnostics": 0,
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/quarantine/runs/ug-qr-compile-1.out.log",
+  "logSha256": "270C7546621512C0E81B2A3A2024542FD19F695CA261E3E9A26F7EDE5727ABF2",
+  "sources": [
+    {
+      "path": "build/Build.Test.cs",
+      "sha256": "5737E8AA8EE9422240C6532AB2093D5EB39530A5A109543F376047F7965552E2"
+    },
+    {
+      "path": "build/IntegrationLaneFilter.cs",
+      "sha256": "B19397B3150B040AD1AAF22CC9ED0B43321A28713C2B7A0CE4CFFB19E1ACCBD9"
+    },
+    {
+      "path": "build/IntegrationLaneFilterContracts.cs",
+      "sha256": "AFA20BC2C8291A903B86DA726AC098D145BC264AE9923F59D0B11C7734133AFC"
+    },
+    {
+      "path": "build/TestProjectOwnership.cs",
+      "sha256": "FF0D713833323D2C2E1C0016FB8C90C52ADB2FDA43D0D4E039E2DF2325F21F92"
+    },
+    {
+      "path": "build/TestProjectOwnershipContracts.cs",
+      "sha256": "CFB31032AE96FC68D5E3E5AAEC1C359B6BE7581614C4AF95107643AF10B89D71"
+    },
+    {
+      "path": "tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+      "sha256": "600316F3D6A0F5A6BA91260F97ABD7CA7F1C65BAE11268E42D4B5AD3EBC1B412"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "sha256": "1821D8FA1F0E6DD26AC30B799A0A895D3001FA216D0A48BA63E2E37D0A7BB5B1"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "sha256": "D34844251FE1143CC019100A3BBEC889E455E48E68BAA4A07B8FAA123FE7D08A"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "sha256": "5F99A3E61DC5083E82CF4C001A88AAB133E2773F64ED15DCBFE3F732474154BA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs",
+      "sha256": "695D464C38B3764C4657388BD438FB6E050C480A959BF892ABFD0FB68BCA331A"
+    }
+  ],
+  "metaFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/quarantine/runs/ug-qr-compile-1.meta.json",
+  "metaSha256": "62093E15FA96E760564FDAEB4C094219B87CE1514838F3F91CAE0076D578F64E",
+  "writtenLocal": "2026-11-07T19:13:01",
+  "minutesAfterRunEnd": 0.28,
+  "writtenBy": "ClaudeCode"
+}

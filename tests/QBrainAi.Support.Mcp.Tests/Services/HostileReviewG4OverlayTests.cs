@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using ModelContextProtocol.Server;
 using NSubstitute;
 using Xunit;
@@ -29,34 +30,18 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <see cref="HostileReviewWorkflow"/>, and public submit/status/get/query surfaces.
 /// TEST-MCP-HOSTILEREVIEW-001 through 006.
 /// </summary>
-public sealed class HostileReviewG4OverlayTests : IDisposable
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-HOSTILEREVIEW-001, FR-MCP-HOSTILEREVIEW-002,
+/// FR-MCP-HOSTILEREVIEW-003, FR-MCP-HOSTILEREVIEW-004, FR-MCP-HOSTILEREVIEW-005 and FR-MCP-HOSTILEREVIEW-006 (every
+/// criterion of each; they carry no criterion ids).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-HOSTILEREVIEW-001 through FR-MCP-HOSTILEREVIEW-006 (criteria without ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// <item><term>2026-11-07</term><description>TEST-MCP-HOSTILEREVIEW-001; FR-MCP-HOSTILEREVIEW-001; FR-MCP-HOSTILEREVIEW-002; FR-MCP-HOSTILEREVIEW-003; FR-MCP-HOSTILEREVIEW-004; FR-MCP-HOSTILEREVIEW-005; FR-MCP-HOSTILEREVIEW-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 2 Category=Integration cases (HostileReview_SurfaceParity_RestReplDirectorPlugin and HostileReviewWorker_InvalidOptions_FailStartup) and the helpers only they use (FindRepoRoot and RecordingHostileReviewHandler) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_workspace, _connection, _options, .ctor, Dispose, CreateService, CreateDb, SeedTodo and Request) moved once into the abstract base class HostileReviewG4OverlayTestsBase in Services/HostileReviewG4OverlayTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</description></item>
+/// </list>
+/// </remarks>
+public sealed class HostileReviewG4OverlayTests : HostileReviewG4OverlayTestsBase, IDisposable
 {
-    private readonly string _workspace;
-    private readonly SqliteConnection _connection;
-    private readonly DbContextOptions<McpDbContext> _options;
-
-    /// <summary>Isolated in-memory SQLite workspace with a seeded TODO row.</summary>
-    public HostileReviewG4OverlayTests()
-    {
-        _workspace = Path.Combine(Path.GetTempPath(), "hr-g4", Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(_workspace);
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
-        _options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(_connection).Options;
-        using var db = CreateDb();
-        db.Database.EnsureCreated();
-        SeedTodo(db, "MCP-HOSTILEREVIEW-001");
-        db.SaveChanges();
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        _connection.Dispose();
-        if (Directory.Exists(_workspace))
-            Directory.Delete(_workspace, recursive: true);
-    }
-
     /// <summary>TEST-MCP-HOSTILEREVIEW-001: SQLite round-trip of HostileReviewRequestEntity.</summary>
     [Fact]
     public async Task HostileReviewEntity_RoundTrip_SqlitePgSqlServer()
@@ -287,129 +272,6 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
         Assert.Equal(before, after);
     }
 
-    /// <summary>TEST-MCP-HOSTILEREVIEW-006: REST, REPL, Director, and plugin expose submit/status/get/query only.</summary>
-    [Fact]
-    public async Task HostileReview_SurfaceParity_RestReplDirectorPlugin()
-    {
-        var rest = typeof(HostileReviewController).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
-            .Select(method => method.Name)
-            .ToArray();
-        Assert.Contains("SubmitAsync", rest);
-        Assert.Contains("StatusAsync", rest);
-        Assert.Contains("GetAsync", rest);
-        Assert.Contains("QueryAsync", rest);
-        Assert.DoesNotContain(rest, name => name.Contains("Cancel", StringComparison.OrdinalIgnoreCase) || name.Contains("Repair", StringComparison.OrdinalIgnoreCase) || name.Contains("Apply", StringComparison.OrdinalIgnoreCase));
-        Assert.DoesNotContain(typeof(IHostileReviewService).GetMethods(), method => method.Name == "AcceptReviewerOutputAsync");
-        Assert.Contains(typeof(IHostileReviewWorker).GetMethods(), method => method.Name == "AcceptReviewerOutputAsync");
-
-        Assert.Equal("workflow.hostileReview.submit", HostileReviewCommandShapes.SubmitMethod);
-        Assert.Equal("workflow.hostileReview.status", HostileReviewCommandShapes.StatusMethod);
-        Assert.Equal("workflow.hostileReview.get", HostileReviewCommandShapes.GetMethod);
-        Assert.Equal("workflow.hostileReview.query", HostileReviewCommandShapes.QueryMethod);
-
-        Assert.Equal("hostile-review-submit", HostileReviewDirectorCommands.Submit);
-        Assert.Equal("hostile-review-status", HostileReviewDirectorCommands.Status);
-        Assert.Equal("hostile-review-get", HostileReviewDirectorCommands.Get);
-        Assert.Equal("hostile-review-query", HostileReviewDirectorCommands.Query);
-
-        var toolNames = typeof(FwhMcpTools).GetMethods(BindingFlags.Instance | BindingFlags.Public)
-            .Select(method => method.GetCustomAttribute<McpServerToolAttribute>()?.Name)
-            .Where(name => !string.IsNullOrWhiteSpace(name))
-            .ToArray();
-        Assert.Contains("hostile_review_submit", toolNames);
-        Assert.Contains("hostile_review_status", toolNames);
-        Assert.Contains("hostile_review_get", toolNames);
-        Assert.Contains("hostile_review_query", toolNames);
-        Assert.DoesNotContain(toolNames, name => name is not null && name.StartsWith("hostile_review_", StringComparison.Ordinal) && name is not "hostile_review_submit" and not "hostile_review_status" and not "hostile_review_get" and not "hostile_review_query");
-
-        var skill = File.ReadAllText(Path.Combine(FindRepoRoot(), "plugins", "core", "skills", "hostile-review", "SKILL.md"));
-        Assert.Contains("workflow.hostileReview.submit", skill, StringComparison.Ordinal);
-        Assert.Contains("workflow.hostileReview.status", skill, StringComparison.Ordinal);
-        Assert.Contains("workflow.hostileReview.get", skill, StringComparison.Ordinal);
-        Assert.Contains("workflow.hostileReview.query", skill, StringComparison.Ordinal);
-        Assert.Contains("Queue-and-record", skill, StringComparison.Ordinal);
-        Assert.DoesNotContain("workflow.hostileReview.repair", skill, StringComparison.Ordinal);
-        Assert.DoesNotContain("workflow.hostileReview.apply", skill, StringComparison.Ordinal);
-
-        var handler = new RecordingHostileReviewHandler();
-        using var http = new HttpClient(handler);
-        var workflow = new HostileReviewWorkflow(new HostileReviewClient(http, new QBrainAiClientOptions
-        {
-            BaseUrl = new Uri("http://localhost:7147"),
-            ApiKey = "test-key",
-        }));
-        var dispatcher = new ReplCommandDispatcher(
-            Substitute.For<IGenericClientPassthrough>(),
-            hostileReviewWorkflow: workflow);
-
-        var submitEnvelope = await dispatcher.DispatchAsync(Request(HostileReviewCommandShapes.SubmitMethod, new Dictionary<string, object?>
-        {
-            ["targetType"] = "code",
-            ["mode"] = "adversarial",
-            ["scopeStatement"] = "parity",
-            ["requestingAgent"] = "repl",
-            ["workspacePath"] = _workspace,
-        }), TestContext.Current.CancellationToken);
-        Assert.Equal("result", submitEnvelope.Type);
-
-        var statusEnvelope = await dispatcher.DispatchAsync(Request(HostileReviewCommandShapes.StatusMethod, new Dictionary<string, object?>
-        {
-            ["requestId"] = "hr-parity",
-        }), TestContext.Current.CancellationToken);
-        Assert.Equal("result", statusEnvelope.Type);
-
-        var getEnvelope = await dispatcher.DispatchAsync(Request(HostileReviewCommandShapes.GetMethod, new Dictionary<string, object?>
-        {
-            ["requestId"] = "hr-parity",
-        }), TestContext.Current.CancellationToken);
-        Assert.Equal("result", getEnvelope.Type);
-
-        var queryEnvelope = await dispatcher.DispatchAsync(Request(HostileReviewCommandShapes.QueryMethod, new Dictionary<string, object?>
-        {
-            ["model"] = "gpt-6-astra",
-            ["effort"] = "xhigh",
-        }), TestContext.Current.CancellationToken);
-        Assert.Equal("result", queryEnvelope.Type);
-
-        Assert.Contains(handler.Paths, path => path.Contains("/qbrainai/hostile-review/submit", StringComparison.Ordinal));
-        Assert.Contains(handler.Paths, path => path.Contains("/qbrainai/hostile-review/hr-parity/status", StringComparison.Ordinal));
-        Assert.Contains(handler.Paths, path => path.Equals("/qbrainai/hostile-review/hr-parity", StringComparison.Ordinal));
-        Assert.Contains(handler.Paths, path => path.Contains("/qbrainai/hostile-review/query", StringComparison.Ordinal));
-        Assert.DoesNotContain(handler.Paths, path => path.Contains("repair", StringComparison.OrdinalIgnoreCase) || path.Contains("apply", StringComparison.OrdinalIgnoreCase));
-
-        var executor = new HostileReviewDirectorExecutor(CreateService());
-        var submitCommand = new HostileReviewSubmitDirectorCommand(executor)
-        {
-            TargetType = "code",
-            Mode = "adversarial",
-            ScopeStatement = "director parity",
-            RequestingAgent = "director",
-            WorkspacePath = _workspace,
-        };
-        await submitCommand.PrimaryCommand.ExecuteAsync(TestContext.Current.CancellationToken);
-        var directorSubmit = Assert.IsType<HostileReviewResult>(submitCommand.Result);
-        Assert.True(directorSubmit.Success, directorSubmit.Error);
-        Assert.Equal("Queued", directorSubmit.Status);
-
-        var statusCommand = new HostileReviewStatusDirectorCommand(executor) { RequestId = directorSubmit.RequestId };
-        await statusCommand.PrimaryCommand.ExecuteAsync(TestContext.Current.CancellationToken);
-        var directorStatus = Assert.IsType<HostileReviewResult>(statusCommand.Result);
-        Assert.Equal(directorSubmit.RequestId, directorStatus.RequestId);
-
-        var getCommand = new HostileReviewGetDirectorCommand(executor) { RequestId = directorSubmit.RequestId };
-        await getCommand.PrimaryCommand.ExecuteAsync(TestContext.Current.CancellationToken);
-        Assert.Equal(directorSubmit.RequestId, Assert.IsType<HostileReviewResult>(getCommand.Result).RequestId);
-
-        var queryCommand = new HostileReviewQueryDirectorCommand(executor)
-        {
-            RequestingAgent = "director",
-            TargetType = "code",
-        };
-        await queryCommand.PrimaryCommand.ExecuteAsync(TestContext.Current.CancellationToken);
-        var directorQuery = Assert.IsAssignableFrom<IReadOnlyList<HostileReviewResult>>(queryCommand.Result);
-        Assert.Contains(directorQuery, item => item.RequestId == directorSubmit.RequestId);
-    }
-
     /// <summary>TR-MCP-HOSTILEREVIEW-002: HostileReview one-shot context is protected through AgentPoolService.</summary>
     [Fact]
     public async Task HostileReviewProtectedContext_NoRawPromptInPublishedSurface()
@@ -456,43 +318,6 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
         Assert.All(queue, item => Assert.DoesNotContain(raw, item.RenderedPrompt ?? string.Empty, StringComparison.Ordinal));
     }
 
-    /// <summary>TR-MCP-HOSTILEREVIEW-003: invalid worker options fail host startup validation.</summary>
-    [Fact]
-    public async Task HostileReviewWorker_InvalidOptions_FailStartup()
-    {
-        var builder = Host.CreateApplicationBuilder();
-        builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
-        {
-            ["Mcp:HostileReviewWorker:LeaseDuration"] = "00:01:00",
-            ["Mcp:HostileReviewWorker:RenewalInterval"] = "00:01:00",
-            ["Mcp:HostileReviewWorker:AgentName"] = "Astra",
-            ["Mcp:HostileReviewWorker:RequiredModel"] = "gpt-6-astra",
-            ["Mcp:HostileReviewWorker:RequiredEffort"] = "xhigh",
-        });
-        builder.Services.AddHostileReviewServices();
-        using var host = builder.Build();
-        var ex = await Assert.ThrowsAnyAsync<Exception>(() => host.StartAsync(TestContext.Current.CancellationToken));
-        Assert.Contains("HostileReviewWorker", ex.ToString(), StringComparison.Ordinal);
-    }
-
-    private HostileReviewService CreateService()
-        => new(CreateDb(), new HostileReviewWorkerOptions());
-
-    private McpDbContext CreateDb()
-        => new(_options, new WorkspaceContext { WorkspacePath = _workspace });
-
-    private void SeedTodo(McpDbContext db, string id, string? title = null, string? workspaceId = null)
-    {
-        db.TodoItems.Add(new TodoItemEntity
-        {
-            Id = id,
-            Title = title ?? id,
-            Section = "overlay",
-            Priority = "high",
-            WorkspaceId = workspaceId ?? _workspace,
-        });
-    }
-
     private HostileReviewSubmitRequest ValidRequest(string targetType = "code", string agent = "agent-a")
         => new()
         {
@@ -518,52 +343,4 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
                 EnoughContext = true,
             },
         };
-
-    private static IYamlEnvelope Request(string method, Dictionary<string, object?> args)
-        => new YamlEnvelope
-        {
-            Type = "request",
-            Payload = new RequestPayload
-            {
-                RequestId = "req-g4-hostile-review-parity",
-                Method = method,
-                Params = args,
-            },
-        };
-
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "AGENTS.md"))
-                && Directory.Exists(Path.Combine(directory.FullName, "docs", "Project")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
-
-    /// <summary>Records hostile-review HTTP paths for shipped workflow proof.</summary>
-    private sealed class RecordingHostileReviewHandler : HttpMessageHandler
-    {
-        public List<string> Paths { get; } = [];
-
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            var path = request.RequestUri?.AbsolutePath ?? string.Empty;
-            Paths.Add(path);
-            var body = path.Contains("/query", StringComparison.Ordinal)
-                ? """[{"success":true,"httpStatus":200,"requestId":"hr-parity","status":"Queued"}]"""
-                : """{"success":true,"httpStatus":200,"requestId":"hr-parity","status":"Queued"}""";
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(body, Encoding.UTF8, "application/json"),
-            });
-        }
-    }
 }

@@ -1,0 +1,25 @@
+[
+  {
+    "type": "result",
+    "payload": {
+      "result": {
+        "items": [
+          {
+            "trId": "TR-MCP-PATHNORM-001",
+            "frId": "FR-MCP-PATHNORM-001",
+            "createdAt": "2026-10-20T22:16:38.0231760+00:00"
+          },
+          {
+            "testId": "TEST-MCP-PATHNORM-001",
+            "createdAt": "2026-10-20T22:16:38.0237844+00:00",
+            "frId": "FR-MCP-PATHNORM-001"
+          }
+        ],
+        "totalCount": 2
+      },
+      "deprecated": true,
+      "requestId": "req-20261020T221636Z-3fca"
+    }
+  },
+  null
+]

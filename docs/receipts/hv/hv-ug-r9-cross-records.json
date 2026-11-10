@@ -1,0 +1,364 @@
+{
+  "ExpectedAbsences": [
+    {
+      "Id": "FR-MCP-USECASE-016",
+      "EffectiveMatches": 0
+    },
+    {
+      "Id": "FR-MCP-USECASE-017",
+      "EffectiveMatches": 0
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-010",
+      "EffectiveMatches": 0
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "EffectiveMatches": 0
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "EffectiveMatches": 0
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "EffectiveMatches": 0
+    },
+    {
+      "Id": "TEST-MCP-PLUGIN-PSONLY-001",
+      "EffectiveMatches": 0
+    },
+    {
+      "Id": "TR-MCP-MEMORY-SEARCH-002",
+      "EffectiveMatches": 0
+    }
+  ],
+  "Todos": [
+    {
+      "Id": "IMPL-UNITGREEN-001",
+      "Done": false,
+      "Tasks": 35,
+      "Checked": 0,
+      "FunctionalRequirements": [
+        "FR-MCP-PATHNORM-001",
+        "FR-MCP-139",
+        "FR-MCP-BUILD-001",
+        "FR-MCP-USECASE-001",
+        "FR-MCP-018",
+        "FR-MCP-SESSIONLOGCTX-001",
+        "FR-MCP-QBOPENAI-001",
+        "FR-MCP-FED-PATH-001",
+        "FR-MCP-TESTRESOURCE-001",
+        "FR-MCP-047",
+        "FR-MCP-REPL-001",
+        "FR-MCP-REPL-007",
+        "FR-MCP-REPL-008",
+        "FR-MCP-040"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-QUALITY-001",
+        "TR-MCP-PATHNORM-001",
+        "TR-MCP-NUKE-018",
+        "TR-MCP-NUKE-019",
+        "TR-MCP-USECASE-018",
+        "TR-MCP-USECASE-019",
+        "TR-MCP-WS-005",
+        "TR-MCP-SESSIONLOG-006",
+        "TR-MCP-REPL-001",
+        "TR-MCP-REPL-008",
+        "TR-MCP-NUKE-020"
+      ],
+      "DependsOn": []
+    },
+    {
+      "Id": "IMPL-SCANNERALIAS-001",
+      "Done": false,
+      "Tasks": 3,
+      "Checked": 0,
+      "FunctionalRequirements": [
+        "FR-MCP-USECASE-001"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-USECASE-018",
+        "TR-MCP-USECASE-019"
+      ],
+      "DependsOn": [
+        "IMPL-UNITGREEN-001"
+      ]
+    },
+    {
+      "Id": "IMPL-TXNINTEGRATION-001",
+      "Done": false,
+      "Tasks": 4,
+      "Checked": 0,
+      "FunctionalRequirements": [
+        "FR-MCP-BUILD-001",
+        "FR-MCP-173",
+        "FR-MCP-QBOPENAI-001"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-NUKE-019"
+      ],
+      "DependsOn": [
+        "IMPL-UNITGREEN-001",
+        "PLAN-SESSIONTRIAGEFIX-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-139",
+      "Done": true,
+      "Tasks": 189,
+      "Checked": 131,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-USECASE-015",
+        "FR-MCP-USECASE-001"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-USECASE-017",
+        "TR-MCP-USECASE-019"
+      ],
+      "DependsOn": []
+    },
+    {
+      "Id": "PLAN-AZURERETIRE-001",
+      "Done": false,
+      "Tasks": 2,
+      "Checked": 0,
+      "FunctionalRequirements": [
+        "FR-MCP-074"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-CI-001"
+      ],
+      "DependsOn": []
+    },
+    {
+      "Id": "PLAN-LINKVALIDATOR-001",
+      "Done": false,
+      "Tasks": 3,
+      "Checked": 0,
+      "FunctionalRequirements": [],
+      "TechnicalRequirements": [],
+      "DependsOn": []
+    }
+  ],
+  "Mappings": [
+    {
+      "testIds": [],
+      "frId": "FR-MCP-018",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-WS-005"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-REQ-003"
+      ],
+      "frId": "FR-MCP-040",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-REQ-002",
+        "TR-MCP-REQ-003"
+      ]
+    },
+    {
+      "testIds": [],
+      "frId": "FR-MCP-047",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-DESKTOP-001"
+      ]
+    },
+    {
+      "testIds": [],
+      "frId": "FR-MCP-074",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-CI-001"
+      ]
+    },
+    {
+      "testIds": [],
+      "frId": "FR-MCP-BUILD-001",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-NUKE-001",
+        "TR-MCP-NUKE-002",
+        "TR-MCP-NUKE-005",
+        "TR-MCP-NUKE-006",
+        "TR-MCP-NUKE-007",
+        "TR-MCP-NUKE-008",
+        "TR-MCP-NUKE-009",
+        "TR-MCP-NUKE-010",
+        "TR-MCP-NUKE-011",
+        "TR-MCP-NUKE-012",
+        "TR-MCP-NUKE-015",
+        "TR-MCP-NUKE-016",
+        "TR-MCP-NUKE-017",
+        "TR-MCP-NUKE-018",
+        "TR-MCP-NUKE-019",
+        "TR-MCP-NUKE-020"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-FED-PATH-001"
+      ],
+      "frId": "FR-MCP-FED-PATH-001",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-FED-PATH-001"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-MEMORY-002"
+      ],
+      "frId": "FR-MCP-MEMORY-002",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-MEMORY-002"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-PATHNORM-001"
+      ],
+      "frId": "FR-MCP-PATHNORM-001",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-PATHNORM-001"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-PLUGINCORE-002"
+      ],
+      "frId": "FR-MCP-PLUGINCORE-002",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-PLUGINCORE-002"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-QBINT-001",
+        "TEST-MCP-QBLIVEINT-001",
+        "TEST-MCP-QBOPENAI-001"
+      ],
+      "frId": "FR-MCP-QBOPENAI-001",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-QBOPENAI-001"
+      ]
+    },
+    {
+      "testIds": [],
+      "frId": "FR-MCP-REPL-001",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-REPL-001",
+        "TR-MCP-REPL-002"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-REPL-007-1",
+        "TEST-MCP-REPL-007-2",
+        "TEST-MCP-REPL-007-3"
+      ],
+      "frId": "FR-MCP-REPL-007",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-REPL-008"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-PLUGIN-012",
+        "TEST-MCP-PLUGIN-013",
+        "TEST-MCP-REPL-018"
+      ],
+      "frId": "FR-MCP-REPL-008",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-PLUGIN-012",
+        "TR-MCP-PLUGIN-013",
+        "TR-MCP-REPL-009"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-SERVICEUPDATE-001"
+      ],
+      "frId": "FR-MCP-SERVICEUPDATE-001",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-SERVICEUPDATE-001"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-SESSIONLOG-006"
+      ],
+      "frId": "FR-MCP-SESSIONLOGCTX-001",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-SESSIONLOG-006"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-164",
+        "TEST-MCP-TESTRESOURCE-001"
+      ],
+      "frId": "FR-MCP-TESTRESOURCE-001",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-TESTRESOURCE-001"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-USECASE-001",
+        "TEST-MCP-USECASE-002",
+        "TEST-MCP-USECASE-004",
+        "TEST-MCP-USECASE-019",
+        "TEST-MCP-USECASE-020"
+      ],
+      "frId": "FR-MCP-USECASE-001",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-USECASE-001",
+        "TR-MCP-USECASE-002",
+        "TR-MCP-USECASE-003",
+        "TR-MCP-USECASE-005",
+        "TR-MCP-USECASE-018",
+        "TR-MCP-USECASE-019"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-MCP-USECASE-021"
+      ],
+      "frId": "FR-MCP-USECASE-018",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-MCP-USECASE-020"
+      ]
+    },
+    {
+      "testIds": [
+        "TEST-TIMER-001"
+      ],
+      "frId": "FR-TIMER-001",
+      "workspaceId": "/home/sharpninja/github/McpServer",
+      "trIds": [
+        "TR-TIMER-LIFECYCLE-001"
+      ]
+    }
+  ]
+}

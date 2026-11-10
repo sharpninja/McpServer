@@ -1,0 +1,27 @@
+{
+  "name": "ug-r14f4-final-linux-traceability-1",
+  "target": "ValidateTraceability",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r14f4-final-linux-traceability-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "5ce7fa56c26e4a0672fffba6984273f998db454b",
+  "dirtyPaths": [
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-1.tempdir.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-buildtests-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-lane-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-lane-1.start.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-traceability-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-final-win-unit-1.result.txt"
+  ],
+  "startedLocal": "2026-11-07T18:08:19",
+  "startedUtc": "2026-11-08T00:08:19.8808584Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-traceability-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-traceability-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r14f4-final-linux-traceability-1.exit.txt"
+}

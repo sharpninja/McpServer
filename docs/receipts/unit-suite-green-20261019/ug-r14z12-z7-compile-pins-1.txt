@@ -1,0 +1,31 @@
+RECEIPT started=2026-11-06T02:33:25 ended=2026-11-06T02:33:26 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Test-ReceiptPinsAgainstCommit.ps1 sha256=3A7147D68EDF08C6581BF3BD869A5EAC5E9B3846EB1AA2DF5DE3761C6E403529
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Receipt | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z7-compile-1.json | -Commit | 1d77a79c
+HEAD 4e992d30ff705c0b02e060cb3aad65013c5e956f
+Now: 2026-11-06T02:33:26 receipt=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z7-compile-1.json commit=1d77a79c
+name: ug-r13z7-compile-1
+runHead: 88c5abccee5f92b785f1368fdaace50dc0d4e2c2
+startedLocal: 11/5/2026 2:15:57 PM
+endedLocal: 11/5/2026 2:18:02 PM
+writtenLocal: 11/5/2026 2:18:48 PM
+FIELD sources entries=18
+COMMIT 1d77a79c4e1e78a4c8e164a49779393721a95061
+MATCH src/QBrainAi.GraphRag/Services/GraphRagService.cs pinned=BB7F784F blob=BB7F784F
+MATCH src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs pinned=D24532A5 blob=D24532A5
+MATCH src/QBrainAi.Services/Services/FederationEnvelopeSigner.cs pinned=5FAC84E3 blob=5FAC84E3
+MATCH src/QBrainAi.Services/Services/MemoryService.cs pinned=467F63CA blob=467F63CA
+MATCH src/QBrainAi.Services/Services/SessionLogService.cs pinned=A6BBAEE7 blob=A6BBAEE7
+MATCH src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs pinned=25B1E3E7 blob=25B1E3E7
+MATCH tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs pinned=2369E3E8 blob=2369E3E8
+MATCH tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs pinned=CD7784DD blob=CD7784DD
+MATCH tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs pinned=A60BACFE blob=A60BACFE
+MATCH tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs pinned=6E4309A5 blob=6E4309A5
+MATCH tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs pinned=59DA46D7 blob=59DA46D7
+MATCH tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedClock.cs pinned=CDB8CAFD blob=CDB8CAFD
+MATCH tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs pinned=C1A47FCC blob=C1A47FCC
+MATCH tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs pinned=48532F47 blob=48532F47
+MATCH tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs pinned=48BEF7E5 blob=48BEF7E5
+MATCH tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs pinned=CB5EEB80 blob=CB5EEB80
+MATCH tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs pinned=C8BA0486 blob=C8BA0486
+MATCH tests/TestSupport.Shared/TemporaryInstanceChecks.cs pinned=5A37EF10 blob=5A37EF10
+END pins=18 match=18 differ=0

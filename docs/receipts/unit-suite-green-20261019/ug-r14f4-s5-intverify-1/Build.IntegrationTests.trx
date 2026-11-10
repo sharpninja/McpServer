@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="f9430c65-0e5e-44e9-925c-7b9578e76511" name="@LAB-OMARCHY 2026-11-07 10:56:25" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-07T10:56:25.7517903-06:00" queuing="2026-11-07T10:56:25.7517904-06:00" start="2026-11-07T10:56:24.1239857-06:00" finish="2026-11-07T10:56:25.7579984-06:00" />
+  <TestSettings name="default" id="372c2174-66a7-4716-93c1-5c7496267a71">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-07_10_56_25" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="25576b15-8d58-4985-ad17-c1391aa0836e" testId="f2198df8-3157-6e8c-f652-77bc88e311b2" testName="NukeBuild.IntegrationTests.IntegrationLaneProjectsTests.SupportIntegrationClasses_AreDeclaredOnceAndTaggedIntegration" computerName="LAB-OMARCHY" duration="00:00:00.0162123" startTime="2026-11-07T10:56:25.5431748-06:00" endTime="2026-11-07T10:56:25.5594354-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="25576b15-8d58-4985-ad17-c1391aa0836e" />
+    <UnitTestResult executionId="b6e56430-e133-491f-8976-1fa977a3b4c3" testId="0a53d6f8-e2d1-f6c1-f8bf-13fdd0ba78a2" testName="NukeBuild.IntegrationTests.IntegrationLaneProjectsTests.ProductionSelector_OnTheSolutionFile_SelectsTheLaneProjects" computerName="LAB-OMARCHY" duration="00:00:00.0311183" startTime="2026-11-07T10:56:25.4930462-06:00" endTime="2026-11-07T10:56:25.5340091-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6e56430-e133-491f-8976-1fa977a3b4c3" />
+    <UnitTestResult executionId="33886863-c04b-4257-b74e-c177a34baf24" testId="25580ab0-cefb-31f2-44e9-a6dce7de6dc5" testName="NukeBuild.IntegrationTests.IntegrationLaneProjectsTests.SolutionRow_IsTheSolutionFile" computerName="LAB-OMARCHY" duration="00:00:00.0014858" startTime="2026-11-07T10:56:25.5411890-06:00" endTime="2026-11-07T10:56:25.5427664-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="33886863-c04b-4257-b74e-c177a34baf24" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.IntegrationTests.IntegrationLaneProjectsTests.SupportIntegrationClasses_AreDeclaredOnceAndTaggedIntegration" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="f2198df8-3157-6e8c-f652-77bc88e311b2">
+      <Execution id="25576b15-8d58-4985-ad17-c1391aa0836e" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.IntegrationLaneProjectsTests" name="SupportIntegrationClasses_AreDeclaredOnceAndTaggedIntegration" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.IntegrationTests.IntegrationLaneProjectsTests.SolutionRow_IsTheSolutionFile" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="25580ab0-cefb-31f2-44e9-a6dce7de6dc5">
+      <Execution id="33886863-c04b-4257-b74e-c177a34baf24" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.IntegrationLaneProjectsTests" name="SolutionRow_IsTheSolutionFile" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.IntegrationTests.IntegrationLaneProjectsTests.ProductionSelector_OnTheSolutionFile_SelectsTheLaneProjects" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.integrationtests/bin/debug/net10.0/build.integrationtests.dll" id="0a53d6f8-e2d1-f6c1-f8bf-13fdd0ba78a2">
+      <Execution id="b6e56430-e133-491f-8976-1fa977a3b4c3" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.IntegrationTests/bin/Debug/net10.0/Build.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.IntegrationTests.IntegrationLaneProjectsTests" name="ProductionSelector_OnTheSolutionFile_SelectsTheLaneProjects" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="f2198df8-3157-6e8c-f652-77bc88e311b2" executionId="25576b15-8d58-4985-ad17-c1391aa0836e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0a53d6f8-e2d1-f6c1-f8bf-13fdd0ba78a2" executionId="b6e56430-e133-491f-8976-1fa977a3b4c3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="25580ab0-cefb-31f2-44e9-a6dce7de6dc5" executionId="33886863-c04b-4257-b74e-c177a34baf24" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.22]   Discovering: Build.IntegrationTests
+[xUnit.net 00:00:00.58]   Discovered:  Build.IntegrationTests
+[xUnit.net 00:00:00.82]   Starting:    Build.IntegrationTests
+[xUnit.net 00:00:00.97]   Finished:    Build.IntegrationTests (ID = 'd6cd1cdf8168ba69b9549371a3927611a64c6a4ac12ddabc3f935cfcc815c83a')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

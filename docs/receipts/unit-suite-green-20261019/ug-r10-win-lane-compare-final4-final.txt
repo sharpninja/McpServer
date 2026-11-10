@@ -1,0 +1,6 @@
+Now: 2026-11-02T23:07:40 before=/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r9-final4-win-lane-1 (713) after=/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r10-final-win-lane-1 (714)
+onlyBefore=0 onlyAfter=1 common=713
+onlyAfter Build.Tests=1
+--- only in before ---
+--- only in after ---
+Build.Tests | NukeBuild.Tests.QuadBrainOllamaModelBindingTests.BothConsumers_UseTheSharedRule

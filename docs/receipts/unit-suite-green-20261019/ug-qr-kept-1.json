@@ -1,0 +1,115 @@
+{
+  "name": "ug-qr-kept-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "022f9cde436eadf509b47794d18c6cdc9036ad80",
+  "dirtyPaths": [
+    " M build/Build.Test.cs",
+    " M build/IntegrationLaneFilter.cs",
+    " M build/IntegrationLaneFilterContracts.cs",
+    " M build/TestProjectOwnership.cs",
+    " M build/TestProjectOwnershipContracts.cs",
+    " M tests/Build.Tests/IntegrationLaneClassFilterContract.cs",
+    " M tests/Build.Tests/IntegrationLaneClassFilterTests.cs",
+    " M tests/Build.Tests/IntegrationLaneExecutionContractTests.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    " M tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    " M tests/Build.Tests/TestGroupExecutionContractTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipContract.cs",
+    " M tests/Build.Tests/TestProjectOwnershipMockGateTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+    " M tests/QBrainAi.Support.Mcp.EnvironmentIntegrationTests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-binding-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-binding-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-qr-mockgate-2/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-win-recheck-1/",
+    "?? tests/Build.Tests/UnitTestFilterContract.cs",
+    "?? tests/Build.Tests/UnitTestFilterMockGateTests.cs",
+    "?? tests/Build.Tests/UnitTestFilterTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.QBAgent.Tests:QBAgentHeartbeatOverlayTests",
+    "QBrainAi.Support.Mcp.Tests:McpInstanceResolverTests,CliBrainSlotStrategyTests,GitHubCliServiceTests,SessionLogServiceReplaceDeleteTests",
+    "--test-run-id",
+    "ug-qr-kept-1"
+  ],
+  "startedLocal": "2026-11-07T19:14:10",
+  "endedLocal": "2026-11-07T19:15:19",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 79,
+  "passed": 79,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.QBAgent.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-qr-kept-1/groups/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-qr-kept-1/QBrainAi.QBAgent.Tests.trx",
+      "sha256": "919DD26A5532A4EE1837760A92F038A98A822C6EC2C619850C5579C700F05CAC",
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-qr-kept-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-qr-kept-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "1ADDCEDCD515DEE212E99FDDB4CB03F688DF5656868BCE6D688B0F2ADFE09E51",
+      "total": 75,
+      "passed": 75,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.QBAgent.Tests/QBAgentHeartbeatOverlayTests.cs",
+      "sha256": "600316F3D6A0F5A6BA91260F97ABD7CA7F1C65BAE11268E42D4B5AD3EBC1B412"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "sha256": "1821D8FA1F0E6DD26AC30B799A0A895D3001FA216D0A48BA63E2E37D0A7BB5B1"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "sha256": "D34844251FE1143CC019100A3BBEC889E455E48E68BAA4A07B8FAA123FE7D08A"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "sha256": "5F99A3E61DC5083E82CF4C001A88AAB133E2773F64ED15DCBFE3F732474154BA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs",
+      "sha256": "695D464C38B3764C4657388BD438FB6E050C480A959BF892ABFD0FB68BCA331A"
+    },
+    {
+      "path": "build/TestGroupExecution.cs",
+      "sha256": "FE72D08B93F50475E7AB805E1DA28F655053077FF7EFD08D3FE9247294912327"
+    },
+    {
+      "path": "build/IntegrationLaneFilter.cs",
+      "sha256": "B19397B3150B040AD1AAF22CC9ED0B43321A28713C2B7A0CE4CFFB19E1ACCBD9"
+    }
+  ],
+  "writtenLocal": "2026-11-07T19:16:00",
+  "writtenBy": "ClaudeCode"
+}

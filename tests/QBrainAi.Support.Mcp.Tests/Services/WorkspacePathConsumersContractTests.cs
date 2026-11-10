@@ -19,13 +19,10 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// simulated Linux hub or Windows host, so results do not depend on the test runner's OS.
 /// BDP v4 (plan section 2a): MockData fixture then Real fixture.
 /// </summary>
-public abstract class WorkspacePathConsumersContractTests
+/// <remarks>2026-11-07, TEST-MCP-FED-PATH-001; FR-MCP-FED-PATH-001-AC4; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit contract of this pair (ClaudeCode decision on the S7 leftover). Its Category=Integration case (RepoFiles_ForeignWorkspace_WriteFailsAndCreatesNothing), which checks the real filesystem under both fixtures, moved unchanged with the RepoFileService section to the abstract contract of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests, whose MockData and Real fixtures of the same names run it there (slice S8, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"), so this unit-owned project holds only unit cases; the host constant and the normalizer hook both contracts use (WindowsHost and Normalizer) moved once into the abstract base class WorkspacePathConsumersContractTestsBase in Services/WorkspacePathConsumersContractTestsBase.cs beside this file, which both contracts derive from and the integration project links (DRY); the unit cases are unchanged.</remarks>
+public abstract class WorkspacePathConsumersContractTests : WorkspacePathConsumersContractTestsBase
 {
     private const WorkspacePathPlatform LinuxHub = WorkspacePathPlatform.CaseSensitive;
-    private const WorkspacePathPlatform WindowsHost = WorkspacePathPlatform.Windows;
-
-    /// <summary>Normalizer for a simulated host of the given platform.</summary>
-    protected abstract IWorkspacePathNormalizer Normalizer(WorkspacePathPlatform hostPlatform);
 
     // ---- HandoffWorkspacePaths (every MCP tool workspace override flows through it) ----
 
@@ -34,8 +31,8 @@ public abstract class WorkspacePathConsumersContractTests
     public void Handoff_WindowsHost_PosixPath_IsNotReRooted()
     {
         Assert.Equal(
-            "/home/sharpninja/github/McpServer",
-            HandoffWorkspacePaths.Canonicalize("/home/sharpninja/github/McpServer", Normalizer(WindowsHost)));
+            "/fixture/workspaces/McpServer",
+            HandoffWorkspacePaths.Canonicalize("/fixture/workspaces/McpServer", Normalizer(WindowsHost)));
     }
 
     /// <summary>
@@ -47,7 +44,7 @@ public abstract class WorkspacePathConsumersContractTests
     {
         var linux = Normalizer(LinuxHub);
 
-        Assert.Equal("C:/Users/kingd", HandoffWorkspacePaths.Canonicalize(@"C:\Users\kingd", linux));
+        Assert.Equal("C:/Users/fixture-user", HandoffWorkspacePaths.Canonicalize(@"C:\Users\fixture-user", linux));
         Assert.Equal("/opt/mcpserver/app/ws", HandoffWorkspacePaths.Canonicalize("ws", linux));
     }
 
@@ -61,10 +58,10 @@ public abstract class WorkspacePathConsumersContractTests
     public void Token_WindowsHost_PosixWorkspace_ResolvesUnmangled()
     {
         var sut = new WorkspaceTokenService(Normalizer(WindowsHost));
-        var token = sut.GenerateToken("/home/sharpninja/github/McpServer");
+        var token = sut.GenerateToken("/fixture/workspaces/McpServer");
 
-        Assert.Equal("/home/sharpninja/github/McpServer", sut.ResolveWorkspaceByToken(token));
-        Assert.True(sut.ValidateToken("/home/sharpninja/github/McpServer/", token));
+        Assert.Equal("/fixture/workspaces/McpServer", sut.ResolveWorkspaceByToken(token));
+        Assert.True(sut.ValidateToken("/fixture/workspaces/McpServer/", token));
     }
 
     // ---- SessionLogWorkspaceAttributionValidator ----
@@ -74,8 +71,8 @@ public abstract class WorkspacePathConsumersContractTests
     /// the root is outside the workspace (Windows host: C:\home\...; Linux hub: /opt/.../C:\...).
     /// </summary>
     [Theory]
-    [InlineData(WindowsHost, "/home/sharpninja/github/RideAudit", @"C:\home\sharpninja\github\RideAudit\src\a.cs")]
-    [InlineData(LinuxHub, @"C:\Users\kingd\repo", @"/opt/mcpserver/app/C:\Users\kingd\repo/src/a.cs")]
+    [InlineData(WindowsHost, "/fixture/workspaces/ExampleWorkspace", @"C:\fixture\workspaces\ExampleWorkspace\src\a.cs")]
+    [InlineData(LinuxHub, @"C:\Users\fixture-user\repo", @"/opt/mcpserver/app/C:\Users\fixture-user\repo/src/a.cs")]
     public void Attribution_HostRewriteOfForeignRoot_IsOutside(WorkspacePathPlatform host, string root, string hostRewrite)
     {
         Assert.Throws<ArgumentException>(() =>
@@ -84,8 +81,8 @@ public abstract class WorkspacePathConsumersContractTests
 
     /// <summary>FR-MCP-FED-PATH-001: relative and absolute paths under a foreign root are inside.</summary>
     [Theory]
-    [InlineData(WindowsHost, "/home/sharpninja/github/RideAudit", "/home/sharpninja/github/RideAudit/src/a.cs")]
-    [InlineData(LinuxHub, @"C:\Users\kingd\repo", "C:/Users/kingd/repo/src/a.cs")]
+    [InlineData(WindowsHost, "/fixture/workspaces/ExampleWorkspace", "/fixture/workspaces/ExampleWorkspace/src/a.cs")]
+    [InlineData(LinuxHub, @"C:\Users\fixture-user\repo", "C:/Users/fixture-user/repo/src/a.cs")]
     public void Attribution_PathsUnderForeignRoot_AreInside(WorkspacePathPlatform host, string root, string absolute)
     {
         SessionLogWorkspaceAttributionValidator.ValidatePaths(
@@ -98,8 +95,8 @@ public abstract class WorkspacePathConsumersContractTests
 
     /// <summary>FR-MCP-FED-PATH-001: a sibling of a foreign root is outside.</summary>
     [Theory]
-    [InlineData(WindowsHost, "/home/sharpninja/github/RideAudit", "/home/sharpninja/github/RideAuditOther/a.cs")]
-    [InlineData(LinuxHub, @"C:\Users\kingd\repo", @"C:\Users\kingd\repoOther\a.cs")]
+    [InlineData(WindowsHost, "/fixture/workspaces/ExampleWorkspace", "/fixture/workspaces/ExampleWorkspaceOther/a.cs")]
+    [InlineData(LinuxHub, @"C:\Users\fixture-user\repo", @"C:\Users\fixture-user\repoOther\a.cs")]
     public void Attribution_SiblingOfForeignRoot_IsOutside(WorkspacePathPlatform host, string root, string sibling)
     {
         Assert.Throws<ArgumentException>(() =>
@@ -113,8 +110,8 @@ public abstract class WorkspacePathConsumersContractTests
     /// separators (no "/home/x\docs\sessions", no "C:\x/docs/sessions").
     /// </summary>
     [Theory]
-    [InlineData(WindowsHost, "/home/sharpninja/github/RideAudit", "/home/sharpninja/github/RideAudit/docs/sessions", "/home/sharpninja/github/RideAudit/docs/external")]
-    [InlineData(LinuxHub, @"C:\Users\kingd\repo", "C:/Users/kingd/repo/docs/sessions", "C:/Users/kingd/repo/docs/external")]
+    [InlineData(WindowsHost, "/fixture/workspaces/ExampleWorkspace", "/fixture/workspaces/ExampleWorkspace/docs/sessions", "/fixture/workspaces/ExampleWorkspace/docs/external")]
+    [InlineData(LinuxHub, @"C:\Users\fixture-user\repo", "C:/Users/fixture-user/repo/docs/sessions", "C:/Users/fixture-user/repo/docs/external")]
     public void DerivedPaths_ForeignWorkspace_UseWorkspaceSyntax(WorkspacePathPlatform host, string root, string sessions, string external)
     {
         var ctx = new WorkspaceContext();
@@ -134,12 +131,12 @@ public abstract class WorkspacePathConsumersContractTests
     [Fact]
     public async Task Middleware_ForeignWorkspaceHeader_DerivesPathsInWorkspaceSyntax()
     {
-        const string foreign = "/home/sharpninja/github/RideAudit";
+        const string foreign = "/fixture/workspaces/ExampleWorkspace";
         var workspaceService = Substitute.For<IWorkspaceService>();
         workspaceService.GetAsync(foreign, Arg.Any<CancellationToken>()).Returns(new WorkspaceDto
         {
             WorkspacePath = foreign,
-            Name = "RideAudit",
+            Name = "ExampleWorkspace",
             TodoPath = "docs/todo.yaml",
             StatusPrompt = "",
             ImplementPrompt = "",
@@ -153,47 +150,13 @@ public abstract class WorkspacePathConsumersContractTests
         await middleware.InvokeAsync(http, wsContext, new WorkspaceTokenService(Normalizer(WindowsHost)), workspaceService, null, Normalizer(WindowsHost));
 
         Assert.Equal(foreign, wsContext.WorkspacePath);
-        Assert.Equal("/home/sharpninja/github/RideAudit/docs/sessions", wsContext.SessionsPath);
-        Assert.Equal("/home/sharpninja/github/RideAudit/docs/external", wsContext.ExternalDocsPath);
-    }
-
-    // ---- RepoFileService ----
-
-    /// <summary>
-    /// FR-MCP-FED-PATH-001-AC4: repo writes for a foreign-platform workspace fail and create
-    /// nothing at a host re-rooting of the path.
-    /// </summary>
-    [Fact]
-    public async Task RepoFiles_ForeignWorkspace_WriteFailsAndCreatesNothing()
-    {
-        const string leaf = "__mcp_unit_test__repo";
-        var hostRewrite = Path.Combine(Path.GetPathRoot(Environment.CurrentDirectory)!, leaf);
-        var sut = new RepoFileService(
-            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Path.GetTempPath() }),
-            new WorkspaceContext { WorkspacePath = "/" + leaf },
-            Substitute.For<IWriteAuditLog>(),
-            NullLogger<RepoFileService>.Instance,
-            Substitute.For<IChangeEventBus>(),
-            Normalizer(WindowsHost));
-
-        try
-        {
-            var write = await sut.WriteAsync("notes.md", "x", TestContext.Current.CancellationToken);
-            var read = await sut.ReadAsync("notes.md", TestContext.Current.CancellationToken);
-
-            Assert.False(write.Written);
-            Assert.Null(read);
-            Assert.False(Directory.Exists(hostRewrite), $"Repo write created {hostRewrite}");
-        }
-        finally
-        {
-            if (Directory.Exists(hostRewrite))
-                Directory.Delete(hostRewrite, recursive: true);
-        }
+        Assert.Equal("/fixture/workspaces/ExampleWorkspace/docs/sessions", wsContext.SessionsPath);
+        Assert.Equal("/fixture/workspaces/ExampleWorkspace/docs/external", wsContext.ExternalDocsPath);
     }
 }
 
 /// <summary>BDP v4 step 2: consumer path contracts against scripted normalizer data.</summary>
+/// <remarks>2026-11-07, TEST-MCP-FED-PATH-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the integration case this fixture inherited (RepoFiles_ForeignWorkspace_WriteFailsAndCreatesNothing) now runs from the fixture of the same name in QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S8, hostile validation finding R14-F4); this fixture runs the unit cases of its contract, unchanged.</remarks>
 public sealed class WorkspacePathConsumersMockDataTests : WorkspacePathConsumersContractTests
 {
     /// <inheritdoc />
@@ -202,6 +165,7 @@ public sealed class WorkspacePathConsumersMockDataTests : WorkspacePathConsumers
 }
 
 /// <summary>BDP v4 step 3: consumer path contracts against the production normalizer.</summary>
+/// <remarks>2026-11-07, TEST-MCP-FED-PATH-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the integration case this fixture inherited (RepoFiles_ForeignWorkspace_WriteFailsAndCreatesNothing) now runs from the fixture of the same name in QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S8, hostile validation finding R14-F4); this fixture runs the unit cases of its contract, unchanged.</remarks>
 public sealed class WorkspacePathConsumersRealTests : WorkspacePathConsumersContractTests
 {
     /// <inheritdoc />

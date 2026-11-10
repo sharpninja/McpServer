@@ -1,0 +1,12 @@
+{
+  "TimestampUtc": "2026-10-20T01:31:38.7080714Z",
+  "TimestampLocal": "2026-10-19T20:31:38",
+  "Mode": "Read",
+  "Arguments": [
+    "docs/receipts/hv/hv-ug-r1-final-Ledger.json"
+  ],
+  "Offset": 0,
+  "Count": 35,
+  "ExitCode": 0,
+  "Output": "FILE: docs/receipts/hv/hv-ug-r1-final-Ledger.json; LINES: 1425\n1: [\n2:   {\n3:     \"TimestampUtc\": \"2026-10-20T00:51:41.33Z\",\n4:     \"Tool\": \"exec\",\n5:     \"Commands\": [\n6:       \"Get-Content -Raw /home/sharpninja/.claude/skills/add-profile/SKILL.md; Get-ChildItem -LiteralPath /home/sharpninja/.claude/profile -File -Filter *.md | Where-Object { $_.Name -ne 'SKILL.md' } | Sort-Object Name | ForEach-Object { Write-Output ('PROFILE_FILE: ' + $_.FullName); Get-Content -Raw -LiteralPath $_.FullName }; Write-Output ('PROFILE_FILE_COUNT: ' + @(Get-ChildItem -LiteralPath /home/sharpninja/.claude/profile -File -Filter *.md | Where-Object { $_.Name -ne 'SKILL.md' }).Count)\"\n7:     ],\n8:     \"ExitCodes\": [],\n9:     \"Running\": false,\n10:     \"ResultLength\": 1,\n11:     \"Invocation\": null,\n12:     \"Error\": null\n13:   },\n14:   {\n15:     \"TimestampUtc\": \"2026-10-20T00:51:57.241Z\",\n16:     \"Tool\": \"exec\",\n17:     \"Commands\": [\n18:       \"$profileLines = Get-Content -LiteralPath /home/sharpninja/.claude/profile/PROFILE-MERGED.md; Write-Output ('PROFILE_LINES: ' + $profileLines.Count); $profileLines | Select-Object -Skip 110 -First 155; Get-Content -Raw /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/enforcement/SKILL.md; Get-Content -Raw /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/session/SKILL.md; Get-Date -Format s\"\n19:     ],\n20:     \"ExitCodes\": [],\n21:     \"Running\": false,\n22:     \"ResultLength\": 1,\n23:     \"Invocation\": null,\n24:     \"Error\": null\n25:   },\n26:   {\n27:     \"TimestampUtc\": \"2026-10-20T00:52:22.562Z\",\n28:     \"Tool\": \"exec\",\n29:     \"Commands\": [\n30:       \"$parseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-bootstrap.ps1',[ref]$null,[ref]$parseErrors); $parseErrors; Invoke-ScriptAnalyzer -Path /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-bootstrap.ps1 -Severity Warning,Error\"\n31:     ],\n32:     \"ExitCodes\": [],\n33:     \"Running\": false,\n34:     \"ResultLength\": 2,\n35:     \"Invocation\": null,"
+}
