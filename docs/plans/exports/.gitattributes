@@ -1,0 +1,2 @@
+# Preserve exported PDF bytes; text normalization corrupts binary artifacts.
+*.pdf binary -eol

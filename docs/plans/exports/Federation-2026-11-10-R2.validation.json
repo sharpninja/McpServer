@@ -1,0 +1,62 @@
+{
+  "workflowCount": 15,
+  "pageCount": 87,
+  "missingBaselineCases": [],
+  "sourceBlocksChecked": 536,
+  "baselineRequirementIds": 18,
+  "agent": "Codex",
+  "pdfSha256": "6CB9929D1554473BDB8318CB51F80DDC09B47FBFD69ECB16A3248AADCAD55692",
+  "textOutsidePage": [],
+  "missingCaptions": [],
+  "independentHv": "Not rerun",
+  "captionsChecked": 58,
+  "largeDiagramPages": 2,
+  "auditDispositions": 32,
+  "missingBaselineIds": [],
+  "visualInspection": "Sampled diagram, offline/convergence, schema barrier, audit, hub restore, contracts and evidence pages; diagrams use actual A2 dimensions and are unclipped. Full-page text bounds and all58 caption/source checks passed. U13 A-only network correction rechecked in final source and viewport run.",
+  "missingAuditDispositions": [],
+  "checkedAt": "2026-11-10T20:34:46.8109195-06:00",
+  "missingBlocks": [],
+  "currentUniqueCriteria": 99,
+  "brokenInternalLinks": [],
+  "embeddedWalkthroughFrames": 58,
+  "priorPdfSha256": "D8D31D3AE5AA47341487F54D9542F6D50854D070F15635130149682D9FEEB5B0",
+  "unexpectedLocalLinks": [],
+  "contradictionMatches": [],
+  "baselineNamedCases": 74,
+  "attachmentsVerified": 12,
+  "attachmentHashMismatches": [],
+  "visualPages": [
+    4,
+    5,
+    44,
+    46,
+    55,
+    57,
+    60,
+    64,
+    76,
+    87
+  ],
+  "viewportChecks": {
+    "result": "PASS",
+    "widths": [
+      320,
+      736
+    ],
+    "states": 116
+  },
+  "pageAllocation": {
+    "contracts": 16,
+    "workflowsAndInventory": 7,
+    "plan": 9,
+    "architecture": 14,
+    "completeVisualWalkthrough": 33,
+    "dslSource": 3,
+    "coverAndContents": 2,
+    "scopeCoverage": 2,
+    "evidence": 1
+  },
+  "auditedRequirementIdsChecked": 52,
+  "missingAuditedRequirementIds": []
+}

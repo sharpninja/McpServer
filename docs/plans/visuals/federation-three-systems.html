@@ -47,14 +47,14 @@
       s('A and B accept H1 through their own local workers.',{h:'H1',a:'H1',b:'H1',remote:'H1'})
     ]},
     {name:'U04 · Three simultaneous commits',steps:[
-      s('All three commit independent, nonconflicting edits.',{h:'H1',a:'A1',b:'B1'}),
-      s('A publishes first. H and B retain their local commits.',{h:'H1',a:'A1',b:'B1',remote:'A1',queue:'H, B'}),
-      s('B merges A1 + B1 into M1, then publishes.',{h:'H1',a:'A1',b:'M1',remote:'M1',queue:'H, A'}),
+      s('All three commit independent, nonconflicting edits.',{h:'H1',a:'A1',b:'B1',hs:'Publish pending',as:'Publish pending',bs:'Publish pending'}),
+      s('A publishes first. H and B retain their local commits.',{h:'H1',a:'A1',b:'B1',remote:'A1',hs:'Publish pending',bs:'Publish pending',queue:'H, B'}),
+      s('B merges A1 + B1 into M1, then publishes.',{h:'H1',a:'A1',b:'M1',remote:'M1',hs:'Publish pending',queue:'H, A'}),
       s('H merges H1 + M1 into M2, then publishes.',{h:'M2',a:'A1',b:'M1',remote:'M2',queue:'A, B'}),
       s('All accept M2; A1, B1 and H1 remain in its ancestry.',{h:'M2',a:'M2',b:'M2',remote:'M2'})
     ]},
     {name:'U05 · Same-field conflict and review',steps:[
-      s('A1 and B1 change the same field differently.',{a:'A1',b:'B1'}),
+      s('A1 and B1 change the same field differently.',{a:'A1',b:'B1',as:'Publish pending',bs:'Publish pending'}),
       s('A1 publishes. B detects a conflict and retains B1.',{h:'A1',a:'A1',b:'B1',remote:'A1',bs:'Needs review',queue:'B: needs review'}),
       s('An authorized review creates resolution commit M1.',{h:'A1',a:'A1',b:'M1',remote:'A1',bs:'Publish pending',queue:'B: resolution'}),
       s('M1 publishes and propagates; both histories survive.',{h:'M1',a:'M1',b:'M1',remote:'M1'})
@@ -73,7 +73,7 @@
       s('A valid merge M1 can now publish and propagate.',{h:'M1',a:'M1',b:'M1',remote:'M1'})
     ]},
     {name:'U08 · Feature branch and explicit merge',steps:[
-      s('A commits F1 on feature/search; main stays C0.',{a:'feature: F1',as:'main: C0'}),
+      s('A commits F1 on feature/search; main stays C0.',{a:'feature: F1',as:'F1 pending; main C0'}),
       s('Feature history is shared; main is still unchanged.',{a:'feature: F1',b:'feature: F1',as:'main: C0',bs:'main: C0',remote:'main C0 / feature F1'}),
       s('B commits F2 on the feature branch and publishes.',{a:'feature: F1',b:'feature: F2',as:'main: C0',bs:'main: C0',remote:'main C0 / feature F2',queue:'feature subscribers'}),
       s('An explicit reviewed merge produces main M1.',{h:'M1',a:'M1',b:'M1',remote:'main M1 / feature F2'})
@@ -98,11 +98,11 @@
     ]},
     {name:'U12 · Two agents on one node',steps:[
       s('Agent 1 owns the edit lease on A/main.',{as:'Agent 1 draft'}),
-      s('Agent 2 must read or use another branch.',{as:'Agent 2: read only'}),
+      s('Agent 2 must read or use another branch.',{as:'Agent 1 draft; A2 reads'}),
       s('Agent 1 previews and commits its own working changes.',{a:'A1',as:'Publish pending'})
     ]},
     {name:'U13 · Audit delivery without a commit',steps:[
-      s('A edits locally while disconnected. Audit E1 is permanent locally; main stays C0.',{offline:true,as:'Draft; audit pending'}),
+      s('A edits locally while disconnected. Audit E1 is permanent locally; main stays C0.',{offlineA:true,as:'Draft; audit pending'}),
       s('Reconnect sends E1 to the append-only hub audit store independently of any Dolt commit.',{as:'Draft; audit received',queue:'Audit receipt E1'}),
       s('A retries after a lost reply: one E1 remains at the hub, A keeps its ledger, and all heads remain C0.',{as:'Draft retained',queue:'Audit acknowledged'})
     ]},
@@ -128,7 +128,7 @@
   function draw(){
     const st=cases[ci].steps[si],w=Math.max(300,graph.clientWidth),n=(w-30)/2,hx=w/2,ay=235,nw=Math.min(n,245),ax=10+n/2,bx=w-10-n/2;
     const box=(x,y,width,labels)=>`<rect class="fed-node" x="${x-width/2}" y="${y}" width="${width}" height="105" rx="8"/>${labels.map((t,i)=>`<text text-anchor="middle" x="${x}" y="${y+24+i*23}">${esc(t)}</text>`).join('')}`;
-    graph.innerHTML=`<svg class="fed-network" role="img" aria-label="${esc(st.text)}" viewBox="0 0 ${w} 365" width="${w}" height="365"><title>${esc(cases[ci].name)}</title><desc>${esc(st.text)} Hub working head ${esc(st.h)}. A ${esc(st.a)}. B ${esc(st.b)}. Shared remote ${esc(st.remote)}.</desc><path class="fed-edge" d="M ${hx-45} 120 L ${ax} ${ay} M ${hx+45} 120 L ${bx} ${ay}" ${st.offline?'stroke-dasharray="5 5"':''}/>${box(hx,15,Math.min(w-20,290),['H · LAB-OMARCHY','Local: '+st.h,st.hs,'Remote: '+st.remote])}<text text-anchor="middle" class="fed-secondary" x="${hx}" y="158">${st.offline?'A/B disconnected; H local':'Through guarded gateway ↕'}</text><text text-anchor="middle" x="${hx}" y="185">Control: ${esc(st.queue)}</text>${box(ax,ay,nw,['A · LEGION2','Local: '+st.a,st.as])}${box(bx,ay,nw,['B · TEST PEER','Local: '+st.b,st.bs])}</svg>`;
+    graph.innerHTML=`<svg class="fed-network" role="img" aria-label="${esc(st.text)}" viewBox="0 0 ${w} 365" width="${w}" height="365"><title>${esc(cases[ci].name)}</title><desc>${esc(st.text)} Hub working head ${esc(st.h)}. A ${esc(st.a)}. B ${esc(st.b)}. Shared remote ${esc(st.remote)}.</desc><path class="fed-edge" d="M ${hx-45} 120 L ${ax} ${ay}" ${(st.offline||st.offlineA)?'stroke-dasharray="5 5"':''}/><path class="fed-edge" d="M ${hx+45} 120 L ${bx} ${ay}" ${st.offline?'stroke-dasharray="5 5"':''}/>${box(hx,15,Math.min(w-20,290),['H · LAB-OMARCHY','Local: '+st.h,st.hs,'Remote: '+st.remote])}<text text-anchor="middle" class="fed-secondary" x="${hx}" y="158">${st.offline?'A/B disconnected; H local':st.offlineA?'A disconnected; H/B linked':'Through guarded gateway ↕'}</text><text text-anchor="middle" x="${hx}" y="185">Control: ${esc(st.queue)}</text>${box(ax,ay,nw,['A · LEGION2','Local: '+st.a,st.as])}${box(bx,ay,nw,['B · TEST PEER','Local: '+st.b,st.bs])}</svg>`;
     select.value=String(ci);prev.disabled=si===0;next.disabled=si===cases[ci].steps.length-1;
     stepLabel.textContent=`${si+1} / ${cases[ci].steps.length}`;detail.textContent=st.text;
   }

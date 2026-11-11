@@ -42,7 +42,7 @@ A publishes A1 but loses the success response. H has A1 and unsatisfied subscrip
 
 ### U10: migrate an existing project
 
-Both real lab stores are SQLite. The migration tool additionally supports PostgreSQL and SQL Server fixture sources. It plans those sources, inventories local-only versus shared data, detects legacy-ID collisions and checks the Dolt schema. Ph3 delivers seed and TODO recovery export; Ph6 adds join only after branch/commit/publication/review exist. Exactly one seed establishes C0 per project. Other nodes clone C0 and import their frozen legacy differences on migration branches descended from C0, then merge/review them normally. Verification accounts for source rows already in C0, mapped deltas and explicitly reviewed exclusions/deletions. Include TODO/generic audit history in the independent hub backfill and verify every durable receipt. Detect same-work/different-ID duplicates for review and preserve permanent origin-scoped aliases, without rewriting historical text. A failed verification leaves the original provider active. No unrelated root histories or implicit deletion of seed rows are allowed. Requirements: FR-MCP-182,184,186,187.
+Both real lab stores are SQLite. The migration tool additionally supports PostgreSQL and SQL Server fixture sources. It plans those sources, inventories local-only versus shared data, detects legacy-ID collisions and checks the Dolt schema. Ph3 delivers seed and all-domain/all-branch project recovery export (including the TODO subset); Ph6 adds join only after branch/commit/publication/review exist. Exactly one seed establishes C0 per project. Other nodes clone C0 and import their frozen legacy differences on migration branches descended from C0, then merge/review them normally. Verification accounts for source rows already in C0, mapped deltas and explicitly reviewed exclusions/deletions. Include TODO/generic audit history in the independent hub backfill and verify every durable receipt. Detect same-work/different-ID duplicates for review and preserve permanent origin-scoped aliases, without rewriting historical text. A failed verification leaves the original provider active. No unrelated root histories or implicit deletion of seed rows are allowed. Requirements: FR-MCP-182,184,186,187.
 
 Same-identity rows with different legacy contents require a recorded keep-seed/take-join/manual-value review before the join commit, even if Dolt would merge cleanly. Verify the immutable migration commit and the reviewed main result; keep destination writes closed until integration and verification finish.
 
@@ -77,67 +77,111 @@ The IDs below are the intended canonical records; the registration receipt estab
 
 ### FR-MCP-174: autonomous local execution
 
-Every node, including the hub, performs authorized local business operations and persists results without hub connectivity. Phase: Ph2. Workflows: U02,U03,U06. Tests: NodeWorksWithHubUnavailable; HubUsesSameLocalExecution; OfflineLocalReadAfterWrite.
+Every node, including the hub, performs authorized local business operations and persists results without hub connectivity.
+
+Phase: Ph2. Workflows: U02, U03, U06. Tests: NodeWorksWithHubUnavailable; HubUsesSameLocalExecution; OfflineLocalReadAfterWrite.
 
 ### FR-MCP-175: explicit version commits and publication boundary
 
-Only an explicit version-history commit triggers publication; drafts and SQL saves remain local. Commit retries recover the same history identity. Phase: Ph4. Workflows: U02,U07,U09. Tests: SaveDoesNotPublish; VersionCommitTriggersSync; HubRequestDoesNotCommitDraft; OfflineCommitDiscoveredAfterRestart.
+Only an explicit version-history commit triggers publication; drafts and SQL saves remain local. Commit retries recover the same history identity.
+
+Phase: Ph4. Workflows: U02, U07, U09. Tests: SaveDoesNotPublish; VersionCommitTriggersSync; HubRequestDoesNotCommitDraft; OfflineCommitDiscoveredAfterRestart.
 
 ### FR-MCP-176: logical project enrollment and initial clone
 
-Nodes enroll a logical project under immutable shared identity while retaining host-local paths and refusing destructive clones. Phase: Ph2/Ph5. Workflows: U01. Tests: DifferentHostPathsSameProject; CloneRefusesNonemptyTarget; UnauthorizedProjectDenied.
+Nodes enroll a logical project under immutable shared identity while retaining host-local paths and refusing destructive clones.
+
+Server: project discovery, scoped enrollment and structured refusal diagnostics. Plugin: project discovery/selection, enrollment progress and explicit actionable diagnostics.
+
+Phase: Ph2/Ph5. Workflows: U01. Tests: DifferentHostPathsSameProject; CloneRefusesNonemptyTarget; UnauthorizedProjectDenied; PluginEnrollmentDiagnostics.
 
 ### FR-MCP-177: branches across server and plugin context
 
-First-release project branches support isolated work, explicit sharing and reviewed merge; session selection never leaks between connections. Phase: Ph2/Ph4/Ph6. Workflows: U08,U12. Tests: PooledConnectionDoesNotLeakBranch; FeaturePublicationLeavesMainUnchanged; BranchMergeRequiresExpectedHeads.
+First-release project branches support isolated work, explicit sharing and reviewed merge; session selection never leaks between connections.
+
+Phase: Ph2/Ph4/Ph6. Workflows: U08, U12. Tests: PooledConnectionDoesNotLeakBranch; FeaturePublicationLeavesMainUnchanged; BranchMergeRequiresExpectedHeads.
 
 ### FR-MCP-178: bidirectional committed-history exchange
 
-Exchange committed history bidirectionally through guarded publication, preserving every accepted ancestor and the hub independent working copy. Phase: Ph5/Ph6. Workflows: U03,U04,U08. Tests: ThreeWriterCleanConvergence; HubDraftDoesNotBlockRemote; ConcurrentPublishPreservesBothHistories.
+Exchange committed history bidirectionally through guarded publication, preserving every accepted ancestor and the hub independent working copy.
+
+Phase: Ph5/Ph6. Workflows: U03, U04, U08. Tests: ThreeWriterCleanConvergence; HubDraftDoesNotBlockRemote; ConcurrentPublishPreservesBothHistories.
 
 ### FR-MCP-179: hub control table and polling
 
-Use a durable hub subscription table with polling, generation and worker fencing, plus a fresh hub epoch after restore. Phase: Ph5. Workflows: U02,U06,U09,U15. Tests: PollReadDoesNotAcknowledge; AckOldGenerationPreservesNewRequest; MissedNotificationReconciles; HubRestoreFromOlderBackup.
+Use a durable hub subscription table with polling, generation and worker fencing, plus a fresh hub epoch after restore.
+
+Phase: Ph5. Workflows: U02, U06, U09, U15. Tests: PollReadDoesNotAcknowledge; AckOldGenerationPreservesNewRequest; MissedNotificationReconciles; HubRestoreFromOlderBackup.
 
 ### FR-MCP-180: reviewed conflicts and valid merges
 
-Conflicts and invalid merges preserve valid live data, require authorized review and remain visible with ageing while unrelated publication continues. Phase: Ph6/Ph7. Workflows: U05,U07,U08. Tests: SameCellConflictNeedsReview; DeleteUpdateNeedsReview; CleanMergeCanFailDomainValidation; StaleReviewRejected; ReviewAgeVisible; UnrelatedPublicationContinues; SafeTodoMergeRules.
+Conflicts and invalid merges preserve valid live data, require authorized review and remain visible with ageing while unrelated publication continues.
+
+Phase: Ph6/Ph7. Workflows: U05, U07, U08. Tests: SameCellConflictNeedsReview; DeleteUpdateNeedsReview; CleanMergeCanFailDomainValidation; StaleReviewRejected; ReviewAgeVisible; UnrelatedPublicationContinues; SafeTodoMergeRules.
 
 ### FR-MCP-181: recovery without lost or repeated work
 
-Recover synchronization, receipts and restored hub state without losing local work, inventing success or replaying business effects. Phase: Ph5/Ph6. Workflows: U06,U07,U09,U15. Tests: LostPushAckDoesNotDuplicateCommit; OldWorkerEpochCannotReportSuccess; DirtyBranchDefersApply; IncompatibleSchemaDoesNotApply.
+Recover synchronization, receipts and restored hub state without losing local work, inventing success or replaying business effects.
+
+Server: durable operation resume/status/safe cancellation. Plugin: expose resume, status and cancel with completed-versus-pending effects; never claim cancellation reverses published history.
+
+Phase: Ph5/Ph6. Workflows: U06, U07, U09, U15. Tests: LostPushAckDoesNotDuplicateCommit; OldWorkerEpochCannotReportSuccess; DirtyBranchDefersApply; IncompatibleSchemaDoesNotApply; PluginRecoveryControls.
 
 ### FR-MCP-182: collision-resistant and preserved identity
 
-Prevent generated-ID collisions, preserve permanent legacy aliases, detect duplicate work and atomically reserve human-assigned IDs. Phase: Ph2/Ph3/Ph5/Ph6. Workflows: U01,U10,U14. Tests: TwoNodesCreateDistinctIds; BranchRevertDoesNotReuseSequence; LegacyCollisionPreservesReferences; LegacyIdsRemainValid; DifferentIdsSameTodoDetected; SimultaneousHumanIdReservation; OfflineHumanIdPublicationDenied.
+Prevent generated-ID collisions, preserve permanent legacy aliases, detect duplicate work and atomically reserve human-assigned IDs.
+
+Server: provenance, scoped aliases, collision evidence and reservation outcomes. Plugin: expose provenance/collision diagnostics and the authorized resolution path without rewriting historical references.
+
+Phase: Ph2/Ph3/Ph5/Ph6. Workflows: U01, U10, U14. Tests: TwoNodesCreateDistinctIds; BranchRevertDoesNotReuseSequence; LegacyCollisionPreservesReferences; LegacyIdsRemainValid; DifferentIdsSameTodoDetected; SimultaneousHumanIdReservation; OfflineHumanIdPublicationDenied; PluginIdentityDiagnostics.
 
 ### FR-MCP-183: first-party plugin federation contract
 
-Expose consistent typed federation, review, identity, audit, migration and maintenance workflows through every first-party plugin. Phase: Ph7. Workflows: U01,U02,U05,U07,U08,U11,U12,U13,U14,U15. Tests: EveryPluginUsesSameContract; OldServerReportsUnsupportedCapability; ReconnectRevalidatesContext; StaleBranchReportedNotDeleted.
+Expose consistent typed federation, review, identity, audit, migration and maintenance workflows through every first-party plugin.
+
+Phase: Ph7. Workflows: U01, U02, U05, U07, U08, U11, U12, U13, U14, U15. Tests: EveryPluginUsesSameContract; OldServerReportsUnsupportedCapability; ReconnectRevalidatesContext; StaleBranchReportedNotDeleted.
 
 ### FR-MCP-184: portable data versus host-local state
 
-Separate versioned project content from operational state while delivering permanent audit to the hub independently of commits and excluding secrets. Phase: Ph2/Ph3/Ph5/Ph7. Workflows: U10,U13. Tests: CloneOmitsSecrets; AuditReachesHub; AuditRetryIdempotent; AuditBackfillVerified; FullProjectSessionGraphPreserved; AcceptedHeadRebuildsBranchIndex; BackgroundWritersDoNotDirtyVersionedBranch; SecondAgentLoggingNeedsNoLease; CommitPreviewBlocksSecret; ReceiptsAndLogsContainNoCredentials.
+Separate versioned project content from operational state while delivering permanent audit to the hub independently of commits and excluding secrets.
+
+Phase: Ph2/Ph3/Ph5/Ph7. Workflows: U10, U13. Tests: CloneOmitsSecrets; AuditReachesHub; AuditRetryIdempotent; AuditBackfillVerified; FullProjectSessionGraphPreserved; AcceptedHeadRebuildsBranchIndex; BackgroundWritersDoNotDirtyVersionedBranch; SecondAgentLoggingNeedsNoLease; CommitPreviewBlocksSecret; ReceiptsAndLogsContainNoCredentials.
 
 ### FR-MCP-185: scoped authorization and offline behavior
 
-Reuse integrated IdentityServer for single-user node ownership, per-node client credentials, project scopes and revocation; preserve authorized offline work. Phase: Ph0/Ph2/Ph5. Workflows: U01,U06,U13. Tests: RawRemoteCannotBypassPublicationPolicy; ForeignProjectCloneDenied; RevokedNodeCannotPublish; OfflineLocalAuthorizationStillApplies; LocalAppUserCannotPush; RevokedCredentialFailsFetchAndPublish; SqlPortUnreachableAcrossLink; UnknownCertificatePinRejected.
+Reuse integrated IdentityServer for single-user node ownership, per-node client credentials, project scopes and revocation; preserve authorized offline work.
+
+Server: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization.
+
+Phase: Ph0/Ph2/Ph5. Workflows: U01, U06, U13. Tests: RawRemoteCannotBypassPublicationPolicy; ForeignProjectCloneDenied; RevokedNodeCannotPublish; OfflineLocalAuthorizationStillApplies; LocalAppUserCannotPush; RevokedCredentialFailsFetchAndPublish; SqlPortUnreachableAcrossLink; UnknownCertificatePinRejected; PluginLeastPrivilegeDenial.
 
 ### FR-MCP-186: Dolt fourth-provider support and schema migration
 
-Support Dolt as the fourth provider with dedicated schema migration, controlled schema-history distribution, Windows/Linux lifecycle and original-provider regressions. Phase: Ph0/Ph1/Ph6/Ph8. Workflows: U11. Tests: FourProvidersResolve; DoltBaselineAndUpgrade; OriginalProviderMigrationsUnchanged; UnsupportedSchemaRejected; VersionedProjectNotMigratedAtStartup; OldSchemaUnpublishedCommitMergesAfterUpgrade; FeatureBranchSchemaCatchUp; DirtyDraftBlocksBinaryUpgrade; ContractBlockedUntilLocalBranchesAttested; DeploymentPreflightBlocksDirtyOrUnattestedBranch; WindowsWriterLockAndRestart.
+Support Dolt as the fourth provider with dedicated schema migration, controlled schema-history distribution, Windows/Linux lifecycle and original-provider regressions.
+
+Phase: Ph0/Ph1/Ph6/Ph8. Workflows: U11. Tests: FourProvidersResolve; DoltBaselineAndUpgrade; OriginalProviderMigrationsUnchanged; UnsupportedSchemaRejected; VersionedProjectNotMigratedAtStartup; OldSchemaUnpublishedCommitMergesAfterUpgrade; FeatureBranchSchemaCatchUp; DirtyDraftBlocksBinaryUpgrade; ContractBlockedUntilLocalBranchesAttested; DeploymentPreflightBlocksDirtyOrUnattestedBranch; WindowsWriterLockAndRestart; RealHostAcceptanceMatrix.
 
 ### FR-MCP-187: original-provider-to-Dolt migration tool
 
-Migrate all three original providers using verified seed then reviewed join, permanent identities, audit backfill and a source-retaining TODO-to-SQLite recovery export. Phase: Ph3 seed/export; Ph6 join. Workflows: U10,U14. Tests: ThreeSourceProviderRoundTrip; ResumeAfterBatchCommit; ChangedSnapshotRejected; FailedVerifyCannotCutover; SourceRetainedAfterCutover; MigrationJoinPreservesCommonAncestor; MigrationJoinDivergentRowRequiresReview; JoinCutoverRequiresReviewedMain; DoltTodoExportPreservesNewWrites; SeedPhaseRejectsJoin.
+Migrate all three original providers using verified seed then reviewed join, permanent identities, audit backfill and a source-retaining all-domain/all-branch project-to-SQLite recovery export.
+
+Phase: Ph3 seed/export; Ph6 join. Workflows: U10, U14. Tests: ThreeSourceProviderRoundTrip; ResumeAfterBatchCommit; ChangedSnapshotRejected; FailedVerifyCannotCutover; SourceRetainedAfterCutover; MigrationJoinPreservesCommonAncestor; MigrationJoinDivergentRowRequiresReview; JoinCutoverRequiresReviewedMain; DoltTodoExportPreservesNewWrites; SeedPhaseRejectsJoin; FullProjectRecoveryPreservesAllDomains.
 
 ### FR-MCP-188: imported state does not repeat external effects
 
-Imported project or audit state never replays external effects and general federation remains outside QuadBrain-only keyserver gating. Phase: Ph2/Ph6. Workflows: U04,U09,U13. Tests: ImportDoesNotSendExternalAction; RetryDoesNotRepeatEffect; ImportedOperationalRowsRemainInert; FederationBypassesQuadBrainKeyserver.
+Imported project or audit state never replays external effects and general federation remains outside QuadBrain-only keyserver gating.
+
+Server: synchronization applies data without executing external operations. Plugin: distinguish history/data synchronization from separately authorized external effects in preview, status and receipts.
+
+Phase: Ph2/Ph6. Workflows: U04, U09, U13. Tests: ImportDoesNotSendExternalAction; RetryDoesNotRepeatEffect; ImportedOperationalRowsRemainInert; FederationBypassesQuadBrainKeyserver; PluginEffectBoundary.
 
 ### FR-MCP-189: safe shared-host editing and commit ownership
 
-Enforce branch edit ownership and fenced live-write serialization so no agent or sync worker captures or overwrites another agent draft. Phase: Ph2/Ph4/Ph6. Workflows: U07,U12. Tests: CommitCannotCaptureOtherAgentDraft; ExpiredLeaseFenced; PreviewChangeRequiresReview; LeaseLostDuringWriteRejected; CommitRetryReturnsSameHash; IncomingMergeCannotRaceAdmittedEdit.
+Enforce branch edit ownership and fenced live-write serialization so no agent or sync worker captures or overwrites another agent draft.
+
+Server: editing owner, request/release and fenced takeover contracts. Plugin: display editing owner, request/release context and offer another branch without capturing another agent draft.
+
+Phase: Ph2/Ph4/Ph6. Workflows: U07, U12. Tests: CommitCannotCaptureOtherAgentDraft; ExpiredLeaseFenced; PreviewChangeRequiresReview; LeaseLostDuringWriteRejected; CommitRetryReturnsSameHash; IncomingMergeCannotRaceAdmittedEdit; PluginEditingOwnership.
 
 ## Planning boundaries
 

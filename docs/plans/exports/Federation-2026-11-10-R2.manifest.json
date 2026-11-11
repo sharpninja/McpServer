@@ -1,0 +1,117 @@
+{
+  "expectedStates": 58,
+  "compiledAt": "2026-11-10T20:34:40.9845836-06:00",
+  "sourceEdits": true,
+  "topologyFigures": 2,
+  "sources": [
+    {
+      "sha256": "48CA541C64B286CFB9C2A8F1849959788B9653E4D8D1EECC84D89F81D64B6918",
+      "path": "docs/plans/2026-11-10-federation-dolt-architecture.md"
+    },
+    {
+      "sha256": "3A3902F380A1824177B6AC1E20E15E413751133D7D4F09C8C903AF9D33889BDE",
+      "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md"
+    },
+    {
+      "sha256": "DE6766ACFC239274FFB7FD09946918E41054042CA9C2894EE7AF0364D5703CCB",
+      "path": "docs/plans/2026-11-10-federation-three-system-workflows.md"
+    },
+    {
+      "sha256": "5BEED78A9B49B7ACE4E243040D38CE55FEFA9273413148886296C81B5B59C537",
+      "path": "docs/plans/2026-11-10-federation-current-contracts.md"
+    },
+    {
+      "sha256": "E5ACE2EAECCF956F828510D3CD79E4537AE64AD43C5208EADB9BFAE5E0368380",
+      "path": "docs/plans/2026-11-10-federation-reconciliation.md"
+    },
+    {
+      "sha256": "7F6E43241B585EF06E67A5397117C7585E671BA749D69801CA6AE808BDEEB584",
+      "path": "docs/plans/visuals/federation-three-systems.html"
+    },
+    {
+      "sha256": "6ACEBA9801599640F22ED1C0760899622B12DBB48DEFD32FA87688119FC62141",
+      "path": "docs/plans/federation/workspace.dsl"
+    },
+    {
+      "sha256": "BC7D643DF1E6E59FF894F0A1E1B477F4CB2EC10D068BEF163379973CC8A768AB",
+      "path": "docs/plans/federation/diagrams/structurizr-Containers.svg"
+    },
+    {
+      "sha256": "D3869CF727946492EA342ECE6403E0B841859FB136279CDA0A1EA08D1DE696E1",
+      "path": "docs/plans/federation/diagrams/structurizr-Deployment.svg"
+    },
+    {
+      "sha256": "6B13E58FFB6DF9395216627AE5D6F72B501C466F2E6113634B087A8C331908BF",
+      "path": "docs/plans/federation/contracts.json"
+    }
+  ],
+  "expectedWorkflows": 15,
+  "attachments": [
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-architecture.md",
+      "filename": "2026-11-10-federation-dolt-architecture.md",
+      "sha256": "48CA541C64B286CFB9C2A8F1849959788B9653E4D8D1EECC84D89F81D64B6918"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+      "filename": "2026-11-10-federation-dolt-bdpv4.md",
+      "sha256": "3A3902F380A1824177B6AC1E20E15E413751133D7D4F09C8C903AF9D33889BDE"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-three-system-workflows.md",
+      "filename": "2026-11-10-federation-three-system-workflows.md",
+      "sha256": "DE6766ACFC239274FFB7FD09946918E41054042CA9C2894EE7AF0364D5703CCB"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-current-contracts.md",
+      "filename": "2026-11-10-federation-current-contracts.md",
+      "sha256": "5BEED78A9B49B7ACE4E243040D38CE55FEFA9273413148886296C81B5B59C537"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-reconciliation.md",
+      "filename": "2026-11-10-federation-reconciliation.md",
+      "sha256": "E5ACE2EAECCF956F828510D3CD79E4537AE64AD43C5208EADB9BFAE5E0368380"
+    },
+    {
+      "path": "docs/plans/visuals/federation-three-systems.html",
+      "filename": "federation-three-systems.html",
+      "sha256": "7F6E43241B585EF06E67A5397117C7585E671BA749D69801CA6AE808BDEEB584"
+    },
+    {
+      "path": "docs/plans/federation/workspace.dsl",
+      "filename": "workspace.dsl",
+      "sha256": "6ACEBA9801599640F22ED1C0760899622B12DBB48DEFD32FA87688119FC62141"
+    },
+    {
+      "path": "docs/plans/federation/diagrams/structurizr-Containers.svg",
+      "filename": "structurizr-Containers.svg",
+      "sha256": "BC7D643DF1E6E59FF894F0A1E1B477F4CB2EC10D068BEF163379973CC8A768AB"
+    },
+    {
+      "path": "docs/plans/federation/diagrams/structurizr-Deployment.svg",
+      "filename": "structurizr-Deployment.svg",
+      "sha256": "D3869CF727946492EA342ECE6403E0B841859FB136279CDA0A1EA08D1DE696E1"
+    },
+    {
+      "path": "docs/plans/federation/contracts.json",
+      "filename": "contracts.json",
+      "sha256": "6B13E58FFB6DF9395216627AE5D6F72B501C466F2E6113634B087A8C331908BF"
+    },
+    {
+      "path": "docs/receipts/federation/20261110-revision-audit.md",
+      "filename": "20261110-revision-audit.md",
+      "sha256": "B992E3B419BF914577AF589103048BB7C11D9C6E0F12E1B75D1CE0918061A934"
+    },
+    {
+      "path": "docs/receipts/federation/20261110-revision-audit-dispositions.md",
+      "filename": "20261110-revision-audit-dispositions.md",
+      "sha256": "ECC42C4722A4FE03D11F7A3A81AAD50AC92C54B02DB3D91FFCA8CF03BA366534"
+    }
+  ],
+  "pdfSha256": "6CB9929D1554473BDB8318CB51F80DDC09B47FBFD69ECB16A3248AADCAD55692",
+  "priorPdf": {
+    "path": "docs/plans/exports/Federation-2026-11-10.pdf",
+    "commit": "46a5959c",
+    "sha256": "D8D31D3AE5AA47341487F54D9542F6D50854D070F15635130149682D9FEEB5B0"
+  }
+}

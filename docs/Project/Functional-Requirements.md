@@ -1331,14 +1331,13 @@ Scope: layer-1+
 - [ ] WorkspaceService.Init never creates a directory from a foreign-platform path.
 - [ ] When the workspace path belongs to the other platform and no Mcp:GitHub:Repository is configured, a GitHub CLI operation never starts gh and returns a failure that names the foreign workspace and the missing Mcp:GitHub:Repository setting; with a repository configured, gh runs with --repo and no working directory (operator 2026-10-29: "gh foreign-workspace AC (Recommended)"; holistic review findings SRC-1 and SRC-4).
 
-## FR-MCP-FED-ROUTE-001 Federation project routing fails closed
+## FR-MCP-FED-ROUTE-001: Federation project routing fails closed
 
+Status: pending. Revision audit amended 2026-11-10.
 Current versioned control/remote endpoints resolve immutable ProjectId and authenticated NodeId membership; local paths are host-specific mappings, never authority or fallback to the hub primary workspace. Preserve the old proxy-header routing contract only for explicitly configured legacy DirectProxy paths.
 
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
-
 **Acceptance Criteria:**
-- [ ] review20261110-1: Given A is enrolled in Atlas, when its control request omits ProjectId or requests another project, then400 project_required or403 unauthorized_project returns no default-workspace data.
+- [ ] review20261110-1: Given A is enrolled in Atlas, when its control request omits ProjectId or requests another project, then400 invalid_request or403 unauthorized_project returns no default-workspace data.
 - [ ] review20261110-2: Given legacy proxy routing is explicitly selected, when valid normalized path or GlobalWorkspaceId is supplied, then both resolve the same scoped workspace.
 
 ## FR-MCP-FED-WSSYNC-001 Portable project configuration and local machine boundaries
@@ -3298,22 +3297,20 @@ Scope: layer-1+
 - [ ] When the hourly cap is exceeded, a new dispatch for that agent fails closed and the TODO stays pending or failed, not silently running.
 - [ ] Clearing caps restores unlimited dispatch for that agent.
 
-## FR-MCP-174 autonomous local execution
+## FR-MCP-174: autonomous local execution
 
+Status: pending. Revision audit amended 2026-11-10.
 Every node, including the hub, performs authorized local business operations and persists results without hub connectivity.
-
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
 
 **Acceptance Criteria:**
 - [ ] ac-NodeWorksWithHubUnavailable: Given A/main=C0 and the hub link is down, when A changes TODO T1.title from old to local, then the local API succeeds, a local reread returns local, and no hub request or history commit occurs.
 - [ ] ac-HubUsesSameLocalExecution: Given H/main=C0 and the gateway is stopped, when H edits T1.title, then H persists it locally while remote/main remains C0.
 - [ ] ac-OfflineLocalReadAfterWrite: Given the prior offline edit, when the application and Dolt restart, then T1.title remains local and main remains C0 until an explicit version commit.
 
-## FR-MCP-175 explicit version commits and publication boundary
+## FR-MCP-175: explicit version commits and publication boundary
 
+Status: pending. Revision audit amended 2026-11-10.
 Only an explicit version-history commit triggers publication; drafts and SQL saves remain local. Commit retries recover the same history identity.
-
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
 
 **Acceptance Criteria:**
 - [ ] ac-SaveDoesNotPublish: Given main=C0 and remote=C0, when SaveChanges persists T1.title=draft, then main and remote stay C0 and no publication intent is emitted.
@@ -3321,44 +3318,43 @@ Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and d
 - [ ] ac-HubRequestDoesNotCommitDraft: Given B has a draft and desired head A1, when B polls, then outcome=waiting_local_work, B/main=C0 and the draft value is unchanged.
 - [ ] ac-OfflineCommitDiscoveredAfterRestart: Given A1 committed while disconnected and a crash before intent persistence, when A restarts, then history scanning rediscovers A1 exactly once and publishes it after reconnect.
 
-## FR-MCP-176 logical project enrollment and initial clone
+## FR-MCP-176: logical project enrollment and initial clone
 
+Status: pending. Revision audit amended 2026-11-10.
 Nodes enroll a logical project under immutable shared identity while retaining host-local paths and refusing destructive clones.
 
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
+Server: project discovery, scoped enrollment and structured refusal diagnostics. Plugin: project discovery/selection, enrollment progress and explicit actionable diagnostics.
 
 **Acceptance Criteria:**
 - [ ] ac-DifferentHostPathsSameProject: Given LAB path /home/sharpninja/github/McpServer and LEGION path F:/github/McpServer, when both enroll as ProjectId Atlas, then both reference Atlas and retain their distinct local paths.
 - [ ] ac-CloneRefusesNonemptyTarget: Given target has TODO X, when clone is requested, then409 target_not_empty leaves X and all target files unchanged.
 - [ ] ac-UnauthorizedProjectDenied: Given node A has only Atlas membership, when it enrolls or clones SecretProject, then403 unauthorized_project returns no rows, objects or project existence details.
+- [ ] ac-PluginEnrollmentDiagnostics: Given Atlas is discoverable but A has a nonempty destination, when each plugin selects Atlas and attempts enrollment/clone, then it displays ProjectId, selected branch and409 target_not_empty with remediation; no database is overwritten and no different project is selected.
 
-## FR-MCP-177 branches across server and plugin context
+## FR-MCP-177: branches across server and plugin context
 
+Status: pending. Revision audit amended 2026-11-10.
 First-release project branches support isolated work, explicit sharing and reviewed merge; session selection never leaks between connections.
-
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
 
 **Acceptance Criteria:**
 - [ ] ac-PooledConnectionDoesNotLeakBranch: Given main T1.title=main and feature/search T1.title=feature, when alternating pooled reads run100 times, then each returns only its selected value.
 - [ ] ac-FeaturePublicationLeavesMainUnchanged: Given main=C0 and feature/search=F1, when F1 publishes, then remote feature=F1 and all main heads remain C0.
 - [ ] ac-BranchMergeRequiresExpectedHeads: Given a preview for main=C0 and feature=F1 but feature advances to F2, when merge submits the old preview, then409 head_changed creates no commit and changes no ref.
 
-## FR-MCP-178 bidirectional committed-history exchange
+## FR-MCP-178: bidirectional committed-history exchange
 
+Status: pending. Revision audit amended 2026-11-10.
 Exchange committed history bidirectionally through guarded publication, preserving every accepted ancestor and the hub independent working copy.
-
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
 
 **Acceptance Criteria:**
 - [ ] ac-ThreeWriterCleanConvergence: Given C0 contains T1.title=old,T1.description=old,T2.priority=low, when A1 changes title=A, B1 changes description=B and H1 changes T2.priority=high, then merges M1(A1,B1), M2(M1,H1) converge all heads to M2 with values A,B,high and all three commits in ancestry.
 - [ ] ac-HubDraftDoesNotBlockRemote: Given H has an uncommitted title draft at C0, when A publishes A1, then remote=A1, H remains C0 with its draft, and B can accept A1.
 - [ ] ac-ConcurrentPublishPreservesBothHistories: Given A1 and B1 descend from C0, when both accept requests expect C0, then one succeeds and the other receives409 head_changed; after merge M1 publishes, both A1 and B1 remain ancestors.
 
-## FR-MCP-179 hub control table and polling
+## FR-MCP-179: hub control table and polling
 
+Status: pending. Revision audit amended 2026-11-10.
 Use a durable hub subscription table with polling, generation and worker fencing, plus a fresh hub epoch after restore.
-
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
 
 **Acceptance Criteria:**
 - [ ] ac-PollReadDoesNotAcknowledge: Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6.
@@ -3366,11 +3362,10 @@ Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and d
 - [ ] ac-MissedNotificationReconciles: Given remote=A1 but control still names C0 after a crash, when reconciliation runs, then it records A1 and advances desired generation without producing another commit.
 - [ ] ac-HubRestoreFromOlderBackup: Given a node remembers epoch E1 generation90 and the hub restores a backup at generation40, when the hub reopens, then epoch E2 differs from E1; E1 reports fail409 hub_epoch_changed and no head is force-reset. Node A1 is retained until verified ancestry recovery republishes missing history.
 
-## FR-MCP-180 reviewed conflicts and valid merges
+## FR-MCP-180: reviewed conflicts and valid merges
 
+Status: pending. Revision audit amended 2026-11-10.
 Conflicts and invalid merges preserve valid live data, require authorized review and remain visible with ageing while unrelated publication continues.
-
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
 
 **Acceptance Criteria:**
 - [ ] ac-SameCellConflictNeedsReview: Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten.
@@ -3381,23 +3376,26 @@ Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and d
 - [ ] ac-UnrelatedPublicationContinues: Given Atlas/main is blocked by review R1, when Atlas/feature publishes F2 and another project publishes X1, then both succeed while Atlas/main remains unchanged.
 - [ ] ac-SafeTodoMergeRules: Given A changes title and B changes description with no domain violation, when merge runs, then both values survive; competing priority or completion edits produce needs_review instead of choosing a timestamp winner.
 
-## FR-MCP-181 recovery without lost or repeated work
+## FR-MCP-181: recovery without lost or repeated work
 
+Status: pending. Revision audit amended 2026-11-10.
 Recover synchronization, receipts and restored hub state without losing local work, inventing success or replaying business effects.
 
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
+Server: durable operation resume/status/safe cancellation. Plugin: expose resume, status and cancel with completed-versus-pending effects; never claim cancellation reverses published history.
 
 **Acceptance Criteria:**
 - [ ] ac-LostPushAckDoesNotDuplicateCommit: Given remote accepted A1 and reply was lost, when request R1 retries, then it returns A1 and the existing receipt; no A2 commit is created.
 - [ ] ac-OldWorkerEpochCannotReportSuccess: Given worker epoch changes4 to5, when epoch4 reports success, then409 stale_worker_epoch leaves current receipt and desired state unchanged.
 - [ ] ac-DirtyBranchDefersApply: Given B/main=C0 with title=draft, when A1 is fetched, then outcome=waiting_local_work, main stays C0 and title remains draft; at15min status/inbox shows the age warning.
 - [ ] ac-IncompatibleSchemaDoesNotApply: Given B supports schema1 and incoming S1 requires schema2, when sync runs, then409 incompatible_schema leaves B's live data/head unchanged and records the required version.
+- [ ] ac-PluginRecoveryControls: Given operation R1 published A1 but its local reply was lost, when a plugin resumes, reads status and requests cancellation, then it shows publishedHead=A1 and a durable cancellation outcome for remaining work; it never claims A1 was rolled back or creates a second commit.
 
-## FR-MCP-182 collision-resistant and preserved identity
+## FR-MCP-182: collision-resistant and preserved identity
 
+Status: pending. Revision audit amended 2026-11-10.
 Prevent generated-ID collisions, preserve permanent legacy aliases, detect duplicate work and atomically reserve human-assigned IDs.
 
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
+Server: provenance, scoped aliases, collision evidence and reservation outcomes. Plugin: expose provenance/collision diagnostics and the authorized resolution path without rewriting historical references.
 
 **Acceptance Criteria:**
 - [ ] ac-TwoNodesCreateDistinctIds: Given tags LA and LG and both counters start1, when both create a TODO, then generated IDs differ and both records survive reconciliation.
@@ -3407,12 +3405,12 @@ Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and d
 - [ ] ac-DifferentIdsSameTodoDetected: Given LAB TODO-7 and LEGION TODO-91 share normalized title Fix login, description and dependency set, when migration plan runs, then it emits a duplicate candidate with both IDs and evidence; until explicit review, neither is merged or deleted.
 - [ ] ac-SimultaneousHumanIdReservation: Given human ID IMPL-UNITGREEN-001 is unreserved, when two nodes reserve it concurrently, then exactly one receives201 and the other409 human_id_reserved; retry by the winning requestId returns the same reservation.
 - [ ] ac-OfflineHumanIdPublicationDenied: Given an offline-created provisional TODO requesting an unreserved human ID, when it reconnects and publishes, then409 human_id_unreserved retains the local record until reservation or reviewed alias resolution.
+- [ ] ac-PluginIdentityDiagnostics: Given LAB TODO-7 and LEGION TODO-91 are a duplicate candidate, when each plugin opens identity review, then both origin IDs, canonical/provisional IDs, similarity evidence and reservation outcome are visible; no alias or row changes before an authorized decision.
 
-## FR-MCP-183 first-party plugin federation contract
+## FR-MCP-183: first-party plugin federation contract
 
+Status: pending. Revision audit amended 2026-11-10.
 Expose consistent typed federation, review, identity, audit, migration and maintenance workflows through every first-party plugin.
-
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
 
 **Acceptance Criteria:**
 - [ ] ac-EveryPluginUsesSameContract: Given one fixture for commit R1, conflict R2 and migration R3, when each installed first-party plugin calls its wrapper, then normalized IDs, heads, error codes and audit agent identity match the typed client result.
@@ -3420,11 +3418,10 @@ Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and d
 - [ ] ac-ReconnectRevalidatesContext: Given a cached leaseFence4 and session branch feature, when reconnect discovers fence5, then the plugin retains visible context but refuses writes with lease_lost until reacquired.
 - [ ] ac-StaleBranchReportedNotDeleted: Given a branch observation is older than24h, when status is displayed, then stale=true and observedUtc are visible; the branch, drafts and refs are not deleted.
 
-## FR-MCP-184 portable data versus host-local state
+## FR-MCP-184: portable data versus host-local state
 
+Status: pending. Revision audit amended 2026-11-10.
 Separate versioned project content from operational state while delivering permanent audit to the hub independently of commits and excluding secrets.
-
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
 
 **Acceptance Criteria:**
 - [ ] ac-CloneOmitsSecrets: Given credentials and local machine paths exist in operational storage, when a project is cloned, then none appears in its versioned tables or history.
@@ -3436,16 +3433,17 @@ Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and d
 - [ ] ac-BackgroundWritersDoNotDirtyVersionedBranch: Given main=C0 is clean, when heartbeat, audit and automatic session capture run, then Dolt working-set fingerprint remains unchanged.
 - [ ] ac-SecondAgentLoggingNeedsNoLease: Given agent1 owns the editing lease, when agent2 logs a session action, then its local audit persists without acquiring or changing agent1's lease.
 - [ ] ac-CommitPreviewBlocksSecret: Given a promoted snapshot contains a fixture secret detected by the configured detector, when commit preview runs, then422 secret_detected creates no commit and outputs no secret value.
-- [ ] ac-ReceiptsAndLogsContainNoCredentials: Given unique canary values are injected through protected secret references, when commands, retries and failures execute on both hosts, then scanning argv, receipts, logs, chat/audit payloads and generated files finds zero canary values.
+- [ ] ac-ReceiptsAndLogsContainNoCredentials: Given unique fixture canaries are injected through protected secret references, when commands, retries and failures execute on both hosts, then scans of argv, receipts, logs, chat/audit payloads, memory stores, generated files, Git staged blobs/new commits and Dolt working sets/new history find zero canary values. Scanner diagnostics and rejected commit previews also contain zero values; no secret is added to history to test the detector.
 
-## FR-MCP-185 scoped authorization and offline behavior
+## FR-MCP-185: scoped authorization and offline behavior
 
+Status: pending. Revision audit amended 2026-11-10.
 Reuse integrated IdentityServer for single-user node ownership, per-node client credentials, project scopes and revocation; preserve authorized offline work.
 
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
+Server: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization.
 
 **Acceptance Criteria:**
-- [ ] ac-RawRemoteCannotBypassPublicationPolicy: Given valid A read credentials, when A attempts direct backend access or public-main push, then the backend is unreachable across the link or403 publication_required; remote/main remains C0.
+- [ ] ac-RawRemoteCannotBypassPublicationPolicy: Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0.
 - [ ] ac-ForeignProjectCloneDenied: Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects.
 - [ ] ac-RevokedNodeCannotPublish: Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged.
 - [ ] ac-OfflineLocalAuthorizationStillApplies: Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403.
@@ -3453,12 +3451,12 @@ Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and d
 - [ ] ac-RevokedCredentialFailsFetchAndPublish: Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation.
 - [ ] ac-SqlPortUnreachableAcrossLink: Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds.
 - [ ] ac-UnknownCertificatePinRejected: Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission.
+- [ ] ac-PluginLeastPrivilegeDenial: Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs.
 
-## FR-MCP-186 Dolt fourth-provider support and schema migration
+## FR-MCP-186: Dolt fourth-provider support and schema migration
 
+Status: pending. Revision audit amended 2026-11-10.
 Support Dolt as the fourth provider with dedicated schema migration, controlled schema-history distribution, Windows/Linux lifecycle and original-provider regressions.
-
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
 
 **Acceptance Criteria:**
 - [ ] ac-FourProvidersResolve: Given keys sqlite,postgresql,sqlserver,dolt, when runtime and design-time factories resolve them, then each selects its own strategy/migration history; unknown key returns unsupported_provider.
@@ -3472,12 +3470,12 @@ Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and d
 - [ ] ac-ContractBlockedUntilLocalBranchesAttested: Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current.
 - [ ] ac-DeploymentPreflightBlocksDirtyOrUnattestedBranch: Given a ready public main but an unattested local feature, when deployment runs, then no binary/service/schema change occurs; explicit branch attestation is required.
 - [ ] ac-WindowsWriterLockAndRestart: Given one Windows worker owns Atlas, when a second process starts or the owner crashes, then concurrent ownership is denied and restart recovers only after the OS releases its lock; committed rows and unpublished heads survive.
+- [ ] ac-RealHostAcceptanceMatrix: Given isolated disposable Atlas stores on LAB and LEGION and FED-ATLAS-H/A/B fixtures, when Ph8 partitions/reconnects each control, publication/history, audit and identity path and restarts each application/worker, Dolt, gateway, identity and control/audit component at commit/publication/report boundaries, then every matrix row records exact heads/ancestor sets/rows/drafts/refs/epoch and audit receipts matching the workflow outcome, with zero missing provider/migration/recovery rows. Missing any component/path row fails acceptance; unrelated live projects retain their provider mappings and data.
 
-## FR-MCP-187 original-provider-to-Dolt migration tool
+## FR-MCP-187: original-provider-to-Dolt migration tool
 
-Migrate all three original providers using verified seed then reviewed join, permanent identities, audit backfill and a source-retaining TODO-to-SQLite recovery export.
-
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
+Status: pending. Revision audit amended 2026-11-10.
+Migrate all three original providers using verified seed then reviewed join, permanent identities, audit backfill and a source-retaining all-domain/all-branch project-to-SQLite recovery export.
 
 **Acceptance Criteria:**
 - [ ] ac-ThreeSourceProviderRoundTrip: Given the same fixture in SQLite,PostgreSQL,SQL Server, when seed migration runs, then counts, typed hashes, IDs, nulls, Unicode, decimals, UTC precision and FK relationships match in Dolt.
@@ -3489,25 +3487,29 @@ Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and d
 - [ ] ac-MigrationJoinDivergentRowRequiresReview: Given seed T1.title=A and frozen join T1.title=B, when join planning runs, then an explicit keep/take/manual decision is required before J1 even if Dolt would fast-forward.
 - [ ] ac-JoinCutoverRequiresReviewedMain: Given J1 is verified but main integration is unresolved, when cutover runs, then409 migration_verification_failed preserves source routing; only verified reviewed M1 permits cutover.
 - [ ] ac-DoltTodoExportPreservesNewWrites: Given A1 adds TODO T2 after cutover, when export-sqlite targets A1, then the new SQLite DB contains T2 and all TODO children/aliases with matching hashes, while the original source remains unchanged.
-- [ ] ac-SeedPhaseRejectsJoin: Given only Ph3 is implemented, when mode=join is requested, then409 unsupported_capability creates no target commit or routing change.
+- [ ] ac-SeedPhaseRejectsJoin: Given only Ph3 is implemented, when mode=join is requested, then501 unsupported_capability creates no target commit or routing change.
+- [ ] ac-FullProjectRecoveryPreservesAllDomains: Given Atlas has main=A1 with post-cutover TODO T1, requirement R1/mapping, use case U1/actor/flow/step, memory W1, portable setting K1 and promoted session S1/turn/action, plus unpublished feature=F1 and draft T2.title=draft, when export-project freezes both branches and verifies fresh SQLite snapshots plus operational backup, then all IDs/typed values/links/soft deletes match each captured working set, feature still resolves F1, T2 remains draft without a new Dolt commit, audit receipts reconcile, the retained Dolt archive contains A1/F1 ancestry and original SQLite bytes are unchanged. Omit W1 or feature in a negative control: migration_verification_failed prevents routing switch.
 
-## FR-MCP-188 imported state does not repeat external effects
+## FR-MCP-188: imported state does not repeat external effects
 
+Status: pending. Revision audit amended 2026-11-10.
 Imported project or audit state never replays external effects and general federation remains outside QuadBrain-only keyserver gating.
 
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
+Server: synchronization applies data without executing external operations. Plugin: distinguish history/data synchronization from separately authorized external effects in preview, status and receipts.
 
 **Acceptance Criteria:**
 - [ ] ac-ImportDoesNotSendExternalAction: Given A1 records an already-sent GitHub update, when B integrates A1, then B state includes the result and outbound GitHub/email invocation count is0.
 - [ ] ac-RetryDoesNotRepeatEffect: Given accepted commit A1 and effect E1, when sync retries10 times, then the effect ledger still has one E1 and no new external dispatch occurs.
 - [ ] ac-ImportedOperationalRowsRemainInert: Given audit backfill contains command names and receipt payloads, when the hub ingests them, then they are stored as evidence and no business command executes.
 - [ ] ac-FederationBypassesQuadBrainKeyserver: Given QuadBrain coordinator is degraded but local authorization passes, when federation commit/control/audit operations execute, then none invokes the keyserver and valid local work succeeds.
+- [ ] ac-PluginEffectBoundary: Given incoming A1 contains a TODO completed state and inert historical external-action metadata, when the plugin shows synchronization success, then it labels data received with zero external operations executed; requesting an external operation requires a separate explicit authorized command and its own receipt.
 
-## FR-MCP-189 safe shared-host editing and commit ownership
+## FR-MCP-189: safe shared-host editing and commit ownership
 
+Status: pending. Revision audit amended 2026-11-10.
 Enforce branch edit ownership and fenced live-write serialization so no agent or sync worker captures or overwrites another agent draft.
 
-Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and dispositions preserved in [federation reconciliation](../plans/2026-11-10-federation-reconciliation.md).
+Server: editing owner, request/release and fenced takeover contracts. Plugin: display editing owner, request/release context and offer another branch without capturing another agent draft.
 
 **Acceptance Criteria:**
 - [ ] ac-CommitCannotCaptureOtherAgentDraft: Given agent1 owns a draft, when agent2 commits the same branch, then409 branch_busy creates no commit and the draft remains agent1-owned.
@@ -3516,3 +3518,5 @@ Status: pending. Scope: layer-1+. Amended 2026-11-10; original obligations and d
 - [ ] ac-LeaseLostDuringWriteRejected: Given a write admitted under fence4, when expiry occurs mid-transaction, then that write finishes under the gate before fence5 takeover; a later fence4 write is rejected.
 - [ ] ac-CommitRetryReturnsSameHash: Given request R1 created A1 and reply was lost, when R1 retries after restart, then A1 is returned by its commit trailer and history contains no duplicate commit.
 - [ ] ac-IncomingMergeCannotRaceAdmittedEdit: Given an edit holds the branch gate, when the integration worker requests a live head move, then it waits; after the edit finishes, fingerprint revalidation detects the draft and returns waiting_local_work without overwriting it.
+- [ ] ac-PluginEditingOwnership: Given agent1 owns A/main fence4 with a draft, when agent2 views context and requests editing, then it sees the owner and branch, receives409 branch_busy, and may select a separate feature branch; owner release/takeover requires explicit authorization and preserves the main draft without commit or discard.
+

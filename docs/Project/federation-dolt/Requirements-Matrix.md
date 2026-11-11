@@ -22,3 +22,5 @@ All amended federation criteria remain pending. Existing source satisfaction fla
 ## Current scope
 
 The applicable gap-check requirements and exclusions are in [the current-scope coverage index](../../plans/2026-11-10-federation-reconciliation.md). The original host-source census is audit evidence, not release scope. Exact current ACs remain in the canonical records.
+
+Revision audit amendment: 51 canonical records updated and response values verified; 99 unique release criteria remain pending. Six restored plugin bindings complete in Ph7; full project/branch recovery in Ph3, repeated at Ph8; HubRestoreFromOlderBackup first owned by Ph5. Receipt: ../../receipts/federation/20261110-revision-audit-canonical.json.
