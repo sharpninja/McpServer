@@ -541,3 +541,6 @@ todo-bootstrap.marker
 
 # Workspace cache
 cache/
+
+# Local Claude Code session config and permissions (not tracked)
+.claude/
