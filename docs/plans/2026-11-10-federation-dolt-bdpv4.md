@@ -150,3 +150,303 @@ The historical reviewer saw an isolated approved packet, lacked live operator de
 The supplied revision audit compared the original 76-page PDF with the 48-page revision: 15 findings addressed, two partial, plus lost obligations and new inconsistencies. Its report and this revision's item-by-item dispositions are retained as receipts. The earlier source-to-PDF checks could not prove preservation of obligations removed from the source. This revision requires both a retention/disposition check and PDF inclusion checks. The exact original 39-page PDF remains unavailable; no comparison to that artifact is claimed.
 
 Future independent HV must receive the exact current source packet, rendered PDF and embedded-source hashes, the applicable operator decisions and audit dispositions, with full secret-safe request/response receipts. It must separately assess restored content and contradictions; old 98/98 cannot transfer to a new packet. No HV is launched or passed merely by editing this plan.
+
+## 15. Amendment 2026-11-11: Task-Workflow breakdown (Plan, Task Groups, Tasks)
+
+Status: additive amendment requested by Payton on 2026-11-11 (t613u, t617u, t619u). It restates sections 5 to 13 as one Plan, ordered Task Groups and Tasks using the model in [Architecture: TODO Plans, Tasks, Task Groups, and Session Work Dispatch](https://github.com/sharpninja/McpServer/blob/worktree-session-20261009/docs/architecture/Task-Workflow-Architecture.md) (PLAN-TODOTASK-001) as if that system were already built. Nothing above is removed or changed; where this section and sections 1 to 14 differ, sections 1 to 14 remain the authority for scope and acceptance. No implementation, HV run, commit or deployment is implied by this amendment.
+
+### 15.1 Model applied
+
+- Plan: the Dolt federation plan is one Plan, a TODO specialized with ItemKind=plan: `PLAN-FEDDOLT-001`, Reference `docs/plans/2026-11-10-federation-dolt-bdpv4.md`.
+- Task: a unit of work and a child of the Plan TODO, with FR/AC coverage (FrAcSelection) and TR constraints. States are Planning, Ready, Started, Success and Failure. Failure is remediated back to Planning with a recorded reason; Success is immutable. A Task may span several handler calls and session turns.
+- Task Group: a TODO-defined group that orders its member Tasks by group ordinal. Group status is calculated, never stored, in this order: Failing (any member Failure), Blocked (any non-Success member has an incomplete dependency), Completed (nonempty and every member Success), Unstarted (empty or all Planning/Ready), otherwise Incomplete.
+- Dependencies: typed Task or Group targets. A Group target is complete only when that group calculates Completed. A Task starts (implementation) only when every direct prerequisite is complete and its group barrier (architecture 3.5.11) is Open; dependencies do not gate design and mock work. Cross-group order is expressed by the first Tasks of each group depending on the prior Group.
+- Dispatch: groups are delegated to an agent session and dispatched FIFO by receipt order; NextGroupTask starts at most one Started Task per group, skipping Success, Failure, Planning and blocked members.
+- AC identity: AC rows are never deleted and recreated to implement an edit; FR/AC citations below use the canonical AC names from [current contracts](2026-11-10-federation-current-contracts.md).
+- Byrd gate: each phase keeps its exit gate from section 4 as an explicit Task immediately before the group HV gate.
+- Source of both group gates: [Task-Workflow-Architecture.md](https://github.com/sharpninja/McpServer/blob/worktree-session-20261009/docs/architecture/Task-Workflow-Architecture.md) sections 3.5.11, 3.5.12 and 8.6 (amendment 2026-11-11, uncommitted on branch worktree-session-20261009). This plan applies those architecture rules; it does not define a Federation-only gate.
+
+### 15.2 Group gates from the architecture
+
+1. Design and mock-green barrier, Task-Workflow-Architecture.md section 3.5.11 GroupImplementationBarrierPolicy (operator rule 2026-11-11): within a Task Group no Task may start implementation (Ready to Started) until every member is designed and its contract unit tests are green against mocks with a negative control; Planning to Ready requires that current-version evidence. Design and mock work may proceed in parallel and is not gated by dependencies; implementation may not. The barrier is calculated (Open when every member is Ready, Started or Success) and is separate from and earlier than the HV gate. Mock suites run when a member's design is complete; the full suite runs once at slice or phase exit.
+2. Group completion HV gate, Task-Workflow-Architecture.md section 3.5.12 GroupCompletionHvGatePolicy (operator rule 2026-11-11): the last member of every group is its HV gate Task, depending on all other members; reviewer from a different agent family and model family; AGREE at max(configured threshold, 0.98) for both scores (98/98); the group calculates Completed only after the gate succeeds, so nothing depending on the group starts earlier; DISAGREE fails the gate and findings against Success work become correction Tasks (correctsTaskId) before the gate, then the gate is remediated and re-run. Delivery order: section 8.6.
+
+### 15.3 Dispatch order
+
+1. `GRP-FEDPH0-001` Ph0 feasibility and exact dependency selection (plan section 5). Prerequisite group: none. Calculated status at filing: Blocked.
+2. `GRP-FEDPH1-001` Ph1 fourth provider and schema migrations (plan section 6). Prerequisite group: GRP-FEDPH0-001. Calculated status at filing: Blocked.
+3. `GRP-FEDPH2-001` Ph2 project routing, data boundaries and editing ownership (plan section 7). Prerequisite group: GRP-FEDPH1-001. Calculated status at filing: Blocked.
+4. `GRP-FEDPH3-001` Ph3 seed migration and project recovery export (plan section 8). Prerequisite group: GRP-FEDPH2-001. Calculated status at filing: Blocked.
+5. `GRP-FEDPH4-001` Ph4 explicit history commits and local publication intent (plan section 9). Prerequisite group: GRP-FEDPH3-001. Calculated status at filing: Blocked.
+6. `GRP-FEDPH5-001` Ph5 hub control table and publication (plan section 10). Prerequisite group: GRP-FEDPH4-001. Calculated status at filing: Blocked.
+7. `GRP-FEDPH6-001` Ph6 incoming integration, review and recovery (plan section 11). Prerequisite group: GRP-FEDPH5-001. Calculated status at filing: Blocked.
+8. `GRP-FEDPH6-002` Ph6 join migration and cutover readiness (plan section 11). Prerequisite group: GRP-FEDPH6-001. Calculated status at filing: Blocked.
+9. `GRP-FEDPH7-001` Ph7 server and plugin workflows (plan section 12). Prerequisite group: GRP-FEDPH6-002. Calculated status at filing: Blocked.
+10. `GRP-FEDPH8-001` Ph8 two-host acceptance and three-peer fixture (plan section 13). Prerequisite group: GRP-FEDPH7-001. Calculated status at filing: Blocked.
+11. `GRP-FEDCUT-001` Held live cutover (requires explicit DEPLOY HOLD release) (plan section 13). Prerequisite group: GRP-FEDPH8-001. Calculated status at filing: Blocked.
+
+Initial states at filing: every Task is Planning, because no Task yet has design and mock-green evidence (3.5.11); every group's implementation barrier is Closed. Design and mock work may begin now for any member of any group, in parallel; no member may start implementation until its own group's barrier opens and its dependencies are complete. Calculated group status at filing is Blocked for every group, because each has a non-Success member with an incomplete dependency (3.5.4). No Task is Ready, Started, Success or Failure.
+
+### 15.4 Groups and Tasks
+
+#### GRP-FEDPH0-001: Ph0 feasibility and exact dependency selection
+
+Group key `ph0-feasibility`; phase Ph0; plan section 5. Prove Dolt/EF10/provider/remote fit and produce accepted B1-B12 blocking outputs before any production integration. Disposable harness only.
+
+- `TASK-FEDPH0-001` (group ordinal 1): B1: pin Dolt, EF10 MySQL-protocol provider, driver and container images; host inventory. Initial state: Planning. Depends on: none.
+  - FR/AC: FR-MCP-186: FourProvidersResolve.
+  - TR: TR-MCP-FEDERATION-013. TEST: TEST-MCP-234.
+- `TASK-FEDPH0-002` (group ordinal 2): Dolt compatibility harness: model, CRUD/LINQ, migrations, branch isolation, commit boundary. Initial state: Planning. Depends on: TASK-FEDPH0-001.
+  - FR/AC: FR-MCP-186: DoltBaselineAndUpgrade; FR-MCP-177: PooledConnectionDoesNotLeakBranch; FR-MCP-175: SaveDoesNotPublish.
+  - TR: TR-MCP-FEDERATION-002, TR-MCP-FEDERATION-004, TR-MCP-FEDERATION-013. TEST: TEST-MCP-223, TEST-MCP-225, TEST-MCP-234. Classes: DoltProviderCompatibilityTests, DoltBranchIsolationTests, DoltCommitBoundaryTests.
+- `TASK-FEDPH0-003` (group ordinal 3): Dolt remote authorization and guarded publication proof. Initial state: Planning. Depends on: TASK-FEDPH0-001.
+  - FR/AC: FR-MCP-185: RawRemoteCannotBypassPublicationPolicy.
+  - TR: TR-MCP-FEDERATION-012. TEST: TEST-MCP-233. Classes: DoltRemoteAuthorizationTests.
+- `TASK-FEDPH0-004` (group ordinal 4): B2-B4: writer/entity classification, context topology, node-tagged ID grammar. Initial state: Planning. Depends on: none.
+  - FR/AC: FR-MCP-184: BackgroundWritersDoNotDirtyVersionedBranch; FR-MCP-182: TwoNodesCreateDistinctIds, LegacyIdsRemainValid.
+  - TR: TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-011. TEST: TEST-MCP-230, TEST-MCP-232.
+- `TASK-FEDPH0-005` (group ordinal 5): B5: identity evidence on restored Duende 7.4 (absorbs MCP-FEDIDENTITY-001 design inputs). Initial state: Planning. Depends on: none.
+  - FR/AC: FR-MCP-185: RevokedNodeCannotPublish, LocalAppUserCannotPush.
+  - TR: TR-MCP-FEDERATION-012. TEST: TEST-MCP-233.
+  - Linked TODO: MCP-FEDIDENTITY-001.
+- `TASK-FEDPH0-006` (group ordinal 6): B6-B9: merge/conflict semantics, schema distribution, migration manifest, write gate. Initial state: Planning. Depends on: TASK-FEDPH0-002.
+  - FR/AC: FR-MCP-180: SameCellConflictNeedsReview; FR-MCP-186: ContractBlockedUntilLocalBranchesAttested; FR-MCP-187: SeedPhaseRejectsJoin; FR-MCP-189: LeaseLostDuringWriteRejected.
+  - TR: TR-MCP-FEDERATION-007, TR-MCP-FEDERATION-013, TR-MCP-FEDERATION-014, TR-MCP-FEDERATION-016. TEST: TEST-MCP-228, TEST-MCP-234, TEST-MCP-235, TEST-MCP-237.
+- `TASK-FEDPH0-007` (group ordinal 7): B10-B12: operating limits, polling thresholds, refs/GC/restore epoch and secret safety. Initial state: Planning. Depends on: TASK-FEDPH0-002, TASK-FEDPH0-003.
+  - FR/AC: FR-MCP-179: HubRestoreFromOlderBackup; FR-MCP-184: ReceiptsAndLogsContainNoCredentials; FR-MCP-185: UnknownCertificatePinRejected.
+  - TR: TR-MCP-FEDERATION-006, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-012. TEST: TEST-MCP-227, TEST-MCP-232, TEST-MCP-233.
+- `TASK-FEDPH0-008` (group ordinal 8): Ph0 exit: B1-B12 operator acceptance, coverage binding, Build.Tests inventory, three-peer fixture proof. Initial state: Planning. Depends on: TASK-FEDPH0-001, TASK-FEDPH0-002, TASK-FEDPH0-003, TASK-FEDPH0-004, TASK-FEDPH0-005, TASK-FEDPH0-006, TASK-FEDPH0-007.
+  - FR/AC: FR-MCP-186: RealHostAcceptanceMatrix.
+  - TR: TR-MCP-FEDERATION-013. TEST: TEST-MCP-234.
+- `TASK-FEDPH0-009` (group ordinal 9): Ph0 group HV gate: Ph0 feasibility and exact dependency selection. Initial state: Planning. Depends on: TASK-FEDPH0-008.
+  - FR/AC: FR-MCP-186: FourProvidersResolve, DoltBaselineAndUpgrade, ContractBlockedUntilLocalBranchesAttested, RealHostAcceptanceMatrix; FR-MCP-177: PooledConnectionDoesNotLeakBranch; FR-MCP-175: SaveDoesNotPublish; FR-MCP-185: RawRemoteCannotBypassPublicationPolicy, RevokedNodeCannotPublish, LocalAppUserCannotPush, UnknownCertificatePinRejected; FR-MCP-184: BackgroundWritersDoNotDirtyVersionedBranch, ReceiptsAndLogsContainNoCredentials; FR-MCP-182: TwoNodesCreateDistinctIds, LegacyIdsRemainValid; FR-MCP-180: SameCellConflictNeedsReview; FR-MCP-187: SeedPhaseRejectsJoin; FR-MCP-189: LeaseLostDuringWriteRejected; FR-MCP-179: HubRestoreFromOlderBackup.
+  - TR: TR-MCP-FEDERATION-002, TR-MCP-FEDERATION-004, TR-MCP-FEDERATION-006, TR-MCP-FEDERATION-007, TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-012, TR-MCP-FEDERATION-013, TR-MCP-FEDERATION-014, TR-MCP-FEDERATION-016. TEST: TEST-MCP-223, TEST-MCP-225, TEST-MCP-227, TEST-MCP-228, TEST-MCP-230, TEST-MCP-232, TEST-MCP-233, TEST-MCP-234, TEST-MCP-235, TEST-MCP-237.
+
+#### GRP-FEDPH1-001: Ph1 fourth provider and schema migrations
+
+Group key `ph1-provider`; phase Ph1; plan section 6. Add canonical dolt provider and QBrainAi.Storage.DoltMigrations; preserve SQLite, PostgreSQL and SQL Server.
+
+- `TASK-FEDPH1-001` (group ordinal 1): Canonical dolt provider kind, factory, options, health and setup tooling. Initial state: Planning. Depends on: GRP-FEDPH0-001.
+  - FR/AC: FR-MCP-186: FourProvidersResolve, UnsupportedSchemaRejected.
+  - TR: TR-MCP-FEDERATION-013. TEST: TEST-MCP-234. Classes: DoltProviderResolutionTests, FourProviderContractTests.
+- `TASK-FEDPH1-002` (group ordinal 2): QBrainAi.Storage.DoltMigrations baseline and startup exclusion for versioned projects. Initial state: Planning. Depends on: TASK-FEDPH1-001.
+  - FR/AC: FR-MCP-186: DoltBaselineAndUpgrade, OriginalProviderMigrationsUnchanged, VersionedProjectNotMigratedAtStartup.
+  - TR: TR-MCP-FEDERATION-013. TEST: TEST-MCP-234. Classes: DoltMigrationTests.
+- `TASK-FEDPH1-003` (group ordinal 3): Nuke TestFederationProviders target carrying the Ph0 contracts. Initial state: Planning. Depends on: GRP-FEDPH0-001.
+  - FR/AC: FR-MCP-186: FourProvidersResolve.
+  - TR: TR-MCP-FEDERATION-013. TEST: TEST-MCP-234. Classes: DoltProviderCompatibilityTests, DoltRemoteAuthorizationTests, DoltBranchIsolationTests, DoltCommitBoundaryTests.
+- `TASK-FEDPH1-004` (group ordinal 4): Ph1 exit gate on LAB and LEGION (provider and migration slice). Initial state: Planning. Depends on: TASK-FEDPH1-002, TASK-FEDPH1-003.
+  - FR/AC: FR-MCP-186: FourProvidersResolve, UnsupportedSchemaRejected, DoltBaselineAndUpgrade, OriginalProviderMigrationsUnchanged, VersionedProjectNotMigratedAtStartup.
+  - TR: TR-MCP-FEDERATION-013. TEST: TEST-MCP-234.
+- `TASK-FEDPH1-005` (group ordinal 5): Ph1 group HV gate: Ph1 fourth provider and schema migrations. Initial state: Planning. Depends on: TASK-FEDPH1-004.
+  - FR/AC: FR-MCP-186: FourProvidersResolve, UnsupportedSchemaRejected, DoltBaselineAndUpgrade, OriginalProviderMigrationsUnchanged, VersionedProjectNotMigratedAtStartup.
+  - TR: TR-MCP-FEDERATION-013. TEST: TEST-MCP-234.
+
+#### GRP-FEDPH2-001: Ph2 project routing, data boundaries and editing ownership
+
+Group key `ph2-routing`; phase Ph2; plan section 7. Autonomous local execution on every node including the hub; branch-scoped contexts; node-tagged IDs; fenced edit leases; identity owner binding.
+
+- `TASK-FEDPH2-001` (group ordinal 1): Immutable ProjectId enrollment mapping, per-project provider, local execution without LocalProxy. Initial state: Planning. Depends on: GRP-FEDPH1-001.
+  - FR/AC: FR-MCP-174: NodeWorksWithHubUnavailable, HubUsesSameLocalExecution, OfflineLocalReadAfterWrite; FR-MCP-176: DifferentHostPathsSameProject.
+  - TR: TR-MCP-FEDERATION-001, TR-MCP-FEDERATION-003. TEST: TEST-MCP-222, TEST-MCP-224. Classes: FederationLocalExecutionTests.
+- `TASK-FEDPH2-002` (group ordinal 2): Full table classification and branch-scoped DbContext/query/index keys. Initial state: Planning. Depends on: TASK-FEDPH2-001.
+  - FR/AC: FR-MCP-177: PooledConnectionDoesNotLeakBranch; FR-MCP-184: CloneOmitsSecrets, BackgroundWritersDoNotDirtyVersionedBranch, SecondAgentLoggingNeedsNoLease.
+  - TR: TR-MCP-FEDERATION-004, TR-MCP-FEDERATION-011. TEST: TEST-MCP-225, TEST-MCP-232. Classes: ProjectBranchContextTests, FederationDataBoundaryTests.
+- `TASK-FEDPH2-003` (group ordinal 3): Two-character node-tagged local ID allocation and scoped permanent aliases. Initial state: Planning. Depends on: TASK-FEDPH2-002.
+  - FR/AC: FR-MCP-182: TwoNodesCreateDistinctIds, BranchRevertDoesNotReuseSequence, LegacyIdsRemainValid.
+  - TR: TR-MCP-FEDERATION-009. TEST: TEST-MCP-230. Classes: NodeTaggedIdentityTests.
+- `TASK-FEDPH2-004` (group ordinal 4): Fenced branch edit leases. Initial state: Planning. Depends on: TASK-FEDPH2-002.
+  - FR/AC: FR-MCP-189: CommitCannotCaptureOtherAgentDraft, ExpiredLeaseFenced, LeaseLostDuringWriteRejected.
+  - TR: TR-MCP-FEDERATION-016. TEST: TEST-MCP-237. Classes: BranchEditLeaseTests.
+- `TASK-FEDPH2-005` (group ordinal 5): Identity owner binding and host user management (folds MCP-FEDIDENTITY-001). Initial state: Planning. Depends on: TASK-FEDPH2-001.
+  - FR/AC: FR-MCP-185: OfflineLocalAuthorizationStillApplies, ForeignProjectCloneDenied.
+  - TR: TR-MCP-FEDERATION-012. TEST: TEST-MCP-233. Classes: FederationLocalExecutionTests.
+  - Linked TODO: MCP-FEDIDENTITY-001.
+- `TASK-FEDPH2-006` (group ordinal 6): Hub-bound audit/outbox obligation and federation effect boundary. Initial state: Planning. Depends on: TASK-FEDPH2-002.
+  - FR/AC: FR-MCP-184: AuditReachesHub; FR-MCP-188: FederationBypassesQuadBrainKeyserver, ImportedOperationalRowsRemainInert.
+  - TR: TR-MCP-AUDIT-004, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-015. TEST: TEST-MCP-232, TEST-MCP-236. Classes: FederationDataBoundaryTests.
+- `TASK-FEDPH2-007` (group ordinal 7): Ph2 exit gate on LAB and LEGION (routing and boundary slice). Initial state: Planning. Depends on: TASK-FEDPH2-001, TASK-FEDPH2-002, TASK-FEDPH2-003, TASK-FEDPH2-004, TASK-FEDPH2-005, TASK-FEDPH2-006.
+  - FR/AC: FR-MCP-174: NodeWorksWithHubUnavailable, HubUsesSameLocalExecution, OfflineLocalReadAfterWrite; FR-MCP-176: DifferentHostPathsSameProject; FR-MCP-177: PooledConnectionDoesNotLeakBranch; FR-MCP-184: CloneOmitsSecrets, BackgroundWritersDoNotDirtyVersionedBranch, SecondAgentLoggingNeedsNoLease, AuditReachesHub; FR-MCP-182: TwoNodesCreateDistinctIds, BranchRevertDoesNotReuseSequence, LegacyIdsRemainValid; FR-MCP-189: CommitCannotCaptureOtherAgentDraft, ExpiredLeaseFenced, LeaseLostDuringWriteRejected; FR-MCP-185: OfflineLocalAuthorizationStillApplies, ForeignProjectCloneDenied; FR-MCP-188: FederationBypassesQuadBrainKeyserver, ImportedOperationalRowsRemainInert.
+  - TR: TR-MCP-FEDERATION-001, TR-MCP-FEDERATION-003, TR-MCP-FEDERATION-004, TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-012, TR-MCP-FEDERATION-015, TR-MCP-FEDERATION-016. TEST: TEST-MCP-222, TEST-MCP-224, TEST-MCP-225, TEST-MCP-230, TEST-MCP-232, TEST-MCP-233, TEST-MCP-236, TEST-MCP-237.
+- `TASK-FEDPH2-008` (group ordinal 8): Ph2 group HV gate: Ph2 project routing, data boundaries and editing ownership. Initial state: Planning. Depends on: TASK-FEDPH2-007.
+  - FR/AC: FR-MCP-174: NodeWorksWithHubUnavailable, HubUsesSameLocalExecution, OfflineLocalReadAfterWrite; FR-MCP-176: DifferentHostPathsSameProject; FR-MCP-177: PooledConnectionDoesNotLeakBranch; FR-MCP-184: CloneOmitsSecrets, BackgroundWritersDoNotDirtyVersionedBranch, SecondAgentLoggingNeedsNoLease, AuditReachesHub; FR-MCP-182: TwoNodesCreateDistinctIds, BranchRevertDoesNotReuseSequence, LegacyIdsRemainValid; FR-MCP-189: CommitCannotCaptureOtherAgentDraft, ExpiredLeaseFenced, LeaseLostDuringWriteRejected; FR-MCP-185: OfflineLocalAuthorizationStillApplies, ForeignProjectCloneDenied; FR-MCP-188: FederationBypassesQuadBrainKeyserver, ImportedOperationalRowsRemainInert.
+  - TR: TR-MCP-FEDERATION-001, TR-MCP-FEDERATION-003, TR-MCP-FEDERATION-004, TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-012, TR-MCP-FEDERATION-015, TR-MCP-FEDERATION-016. TEST: TEST-MCP-222, TEST-MCP-224, TEST-MCP-225, TEST-MCP-230, TEST-MCP-232, TEST-MCP-233, TEST-MCP-236, TEST-MCP-237.
+
+#### GRP-FEDPH3-001: Ph3 seed migration and project recovery export
+
+Group key `ph3-seed`; phase Ph3; plan section 8. Shared migration planner, seed-only runs and verified all-domain recovery export; targets isolated; no publication or join.
+
+- `TASK-FEDPH3-001` (group ordinal 1): Migration planner, immutable source manifest, duplicate-candidate review and permanent aliases. Initial state: Planning. Depends on: GRP-FEDPH2-001.
+  - FR/AC: FR-MCP-187: ChangedSnapshotRejected; FR-MCP-182: LegacyCollisionPreservesReferences, DifferentIdsSameTodoDetected.
+  - TR: TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-014. TEST: TEST-MCP-230, TEST-MCP-235. Classes: MigrationPlannerTests, MigrationIdentityMappingTests.
+- `TASK-FEDPH3-002` (group ordinal 2): Seed run/resume/verify/status/abort from SQLite, PostgreSQL and SQL Server. Initial state: Planning. Depends on: TASK-FEDPH3-001.
+  - FR/AC: FR-MCP-187: ThreeSourceProviderRoundTrip, ResumeAfterBatchCommit, FailedVerifyCannotCutover, SourceRetainedAfterCutover, SeedPhaseRejectsJoin.
+  - TR: TR-MCP-FEDERATION-014. TEST: TEST-MCP-235. Classes: MigrationResumeTests, MigrationVerificationTests, ThreeProviderToDoltMigrationTests.
+- `TASK-FEDPH3-003` (group ordinal 3): Audit backfill preparation for every historical TODO/generic audit row. Initial state: Planning. Depends on: TASK-FEDPH3-001.
+  - FR/AC: FR-MCP-184: FullProjectSessionGraphPreserved.
+  - TR: TR-MCP-FEDERATION-011. TEST: TEST-MCP-232. Classes: MigrationVerificationTests.
+- `TASK-FEDPH3-004` (group ordinal 4): Frozen-head Dolt-to-SQLite project recovery export. Initial state: Planning. Depends on: TASK-FEDPH3-002.
+  - FR/AC: FR-MCP-187: DoltTodoExportPreservesNewWrites, FullProjectRecoveryPreservesAllDomains.
+  - TR: TR-MCP-FEDERATION-014. TEST: TEST-MCP-235. Classes: TodoRecoveryExportTests, ProjectRecoveryExportTests.
+- `TASK-FEDPH3-005` (group ordinal 5): Ph3 exit gate on LAB and LEGION (seed and export slice). Initial state: Planning. Depends on: TASK-FEDPH3-001, TASK-FEDPH3-002, TASK-FEDPH3-003, TASK-FEDPH3-004.
+  - FR/AC: FR-MCP-187: ChangedSnapshotRejected, ThreeSourceProviderRoundTrip, ResumeAfterBatchCommit, FailedVerifyCannotCutover, SourceRetainedAfterCutover, SeedPhaseRejectsJoin, DoltTodoExportPreservesNewWrites, FullProjectRecoveryPreservesAllDomains; FR-MCP-182: LegacyCollisionPreservesReferences, DifferentIdsSameTodoDetected; FR-MCP-184: FullProjectSessionGraphPreserved.
+  - TR: TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-014. TEST: TEST-MCP-230, TEST-MCP-232, TEST-MCP-235.
+- `TASK-FEDPH3-006` (group ordinal 6): Ph3 group HV gate: Ph3 seed migration and project recovery export. Initial state: Planning. Depends on: TASK-FEDPH3-005.
+  - FR/AC: FR-MCP-187: ChangedSnapshotRejected, ThreeSourceProviderRoundTrip, ResumeAfterBatchCommit, FailedVerifyCannotCutover, SourceRetainedAfterCutover, SeedPhaseRejectsJoin, DoltTodoExportPreservesNewWrites, FullProjectRecoveryPreservesAllDomains; FR-MCP-182: LegacyCollisionPreservesReferences, DifferentIdsSameTodoDetected; FR-MCP-184: FullProjectSessionGraphPreserved.
+  - TR: TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-014. TEST: TEST-MCP-230, TEST-MCP-232, TEST-MCP-235.
+
+#### GRP-FEDPH4-001: Ph4 explicit history commits and local publication intent
+
+Group key `ph4-commits`; phase Ph4; plan section 9. Commits, not saves, create history and trigger sync; branch lifecycle; publication intent recovery.
+
+- `TASK-FEDPH4-001` (group ordinal 1): Status/diff/history/commit preview and idempotent explicit commit. Initial state: Planning. Depends on: GRP-FEDPH3-001.
+  - FR/AC: FR-MCP-175: SaveDoesNotPublish, VersionCommitTriggersSync, HubRequestDoesNotCommitDraft; FR-MCP-189: CommitRetryReturnsSameHash, PreviewChangeRequiresReview; FR-MCP-184: CommitPreviewBlocksSecret.
+  - TR: TR-MCP-FEDERATION-002, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-016. TEST: TEST-MCP-223, TEST-MCP-232, TEST-MCP-237. Classes: FederationCommitTests.
+- `TASK-FEDPH4-002` (group ordinal 2): Branch lifecycle across server context. Initial state: Planning. Depends on: TASK-FEDPH4-001.
+  - FR/AC: FR-MCP-177: FeaturePublicationLeavesMainUnchanged, BranchMergeRequiresExpectedHeads; FR-MCP-183: StaleBranchReportedNotDeleted.
+  - TR: TR-MCP-FEDERATION-004, TR-MCP-FEDERATION-010. TEST: TEST-MCP-225, TEST-MCP-231. Classes: FederationBranchLifecycleTests.
+- `TASK-FEDPH4-003` (group ordinal 3): Local unpublished-head scanning and publication intent recovery. Initial state: Planning. Depends on: TASK-FEDPH4-001.
+  - FR/AC: FR-MCP-175: OfflineCommitDiscoveredAfterRestart.
+  - TR: TR-MCP-FEDERATION-002. TEST: TEST-MCP-223. Classes: PublicationIntentRecoveryTests.
+- `TASK-FEDPH4-004` (group ordinal 4): Ph4 exit gate on LAB and LEGION (commit and branch slice). Initial state: Planning. Depends on: TASK-FEDPH4-001, TASK-FEDPH4-002, TASK-FEDPH4-003.
+  - FR/AC: FR-MCP-175: SaveDoesNotPublish, VersionCommitTriggersSync, HubRequestDoesNotCommitDraft, OfflineCommitDiscoveredAfterRestart; FR-MCP-189: CommitRetryReturnsSameHash, PreviewChangeRequiresReview; FR-MCP-184: CommitPreviewBlocksSecret; FR-MCP-177: FeaturePublicationLeavesMainUnchanged, BranchMergeRequiresExpectedHeads; FR-MCP-183: StaleBranchReportedNotDeleted.
+  - TR: TR-MCP-FEDERATION-002, TR-MCP-FEDERATION-004, TR-MCP-FEDERATION-010, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-016. TEST: TEST-MCP-223, TEST-MCP-225, TEST-MCP-231, TEST-MCP-232, TEST-MCP-237.
+- `TASK-FEDPH4-005` (group ordinal 5): Ph4 group HV gate: Ph4 explicit history commits and local publication intent. Initial state: Planning. Depends on: TASK-FEDPH4-004.
+  - FR/AC: FR-MCP-175: SaveDoesNotPublish, VersionCommitTriggersSync, HubRequestDoesNotCommitDraft, OfflineCommitDiscoveredAfterRestart; FR-MCP-189: CommitRetryReturnsSameHash, PreviewChangeRequiresReview; FR-MCP-184: CommitPreviewBlocksSecret; FR-MCP-177: FeaturePublicationLeavesMainUnchanged, BranchMergeRequiresExpectedHeads; FR-MCP-183: StaleBranchReportedNotDeleted.
+  - TR: TR-MCP-FEDERATION-002, TR-MCP-FEDERATION-004, TR-MCP-FEDERATION-010, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-016. TEST: TEST-MCP-223, TEST-MCP-225, TEST-MCP-231, TEST-MCP-232, TEST-MCP-237.
+
+#### GRP-FEDPH5-001: Ph5 hub control table and publication
+
+Group key `ph5-hub`; phase Ph5; plan section 10. Hub shared remote, enrollment, guarded publication, SyncSubscription control table, polling, audit ingestion and human-ID reservation.
+
+- `TASK-FEDPH5-001` (group ordinal 1): Hub shared remote provisioning, node enrollment and project/branch subscription. Initial state: Planning. Depends on: GRP-FEDPH4-001.
+  - FR/AC: FR-MCP-176: CloneRefusesNonemptyTarget, UnauthorizedProjectDenied; FR-MCP-185: ForeignProjectCloneDenied, RevokedNodeCannotPublish.
+  - TR: TR-MCP-FEDERATION-003, TR-MCP-FEDERATION-012. TEST: TEST-MCP-224, TEST-MCP-233. Classes: FederationEnrollmentTests.
+- `TASK-FEDPH5-002` (group ordinal 2): IdentityServer clients/scopes, gateway introspection and credential containment. Initial state: Planning. Depends on: TASK-FEDPH5-001.
+  - FR/AC: FR-MCP-185: LocalAppUserCannotPush, RevokedCredentialFailsFetchAndPublish, SqlPortUnreachableAcrossLink, UnknownCertificatePinRejected, RawRemoteCannotBypassPublicationPolicy.
+  - TR: TR-MCP-FEDERATION-012. TEST: TEST-MCP-233. Classes: FederationEnrollmentTests, FederationPublicationTests.
+- `TASK-FEDPH5-003` (group ordinal 3): Candidate upload, validation and expected-head guarded publication. Initial state: Planning. Depends on: TASK-FEDPH5-002.
+  - FR/AC: FR-MCP-178: HubDraftDoesNotBlockRemote, ConcurrentPublishPreservesBothHistories; FR-MCP-181: LostPushAckDoesNotDuplicateCommit.
+  - TR: TR-MCP-FEDERATION-005, TR-MCP-FEDERATION-008. TEST: TEST-MCP-226, TEST-MCP-229. Classes: FederationPublicationTests.
+- `TASK-FEDPH5-004` (group ordinal 4): SyncSubscription control table, polling/reporting, worker epochs and restore epoch. Initial state: Planning. Depends on: TASK-FEDPH5-003.
+  - FR/AC: FR-MCP-179: PollReadDoesNotAcknowledge, AckOldGenerationPreservesNewRequest, MissedNotificationReconciles, HubRestoreFromOlderBackup; FR-MCP-181: OldWorkerEpochCannotReportSuccess.
+  - TR: TR-MCP-FEDERATION-006, TR-MCP-FEDERATION-008. TEST: TEST-MCP-227, TEST-MCP-229. Classes: FederationControlTableTests, FederationPollingTests.
+- `TASK-FEDPH5-005` (group ordinal 5): Audit batch ingestion with idempotent receipts and human-ID reservation. Initial state: Planning. Depends on: TASK-FEDPH5-002.
+  - FR/AC: FR-MCP-184: AuditReachesHub, AuditRetryIdempotent; FR-MCP-182: SimultaneousHumanIdReservation, OfflineHumanIdPublicationDenied.
+  - TR: TR-MCP-AUDIT-004, TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-011. TEST: TEST-MCP-230, TEST-MCP-232. Classes: FederationControlTableTests.
+- `TASK-FEDPH5-006` (group ordinal 6): Ph5 exit gate on LAB and LEGION (hub and publication slice). Initial state: Planning. Depends on: TASK-FEDPH5-001, TASK-FEDPH5-002, TASK-FEDPH5-003, TASK-FEDPH5-004, TASK-FEDPH5-005.
+  - FR/AC: FR-MCP-176: CloneRefusesNonemptyTarget, UnauthorizedProjectDenied; FR-MCP-185: ForeignProjectCloneDenied, RevokedNodeCannotPublish, LocalAppUserCannotPush, RevokedCredentialFailsFetchAndPublish, SqlPortUnreachableAcrossLink, UnknownCertificatePinRejected, RawRemoteCannotBypassPublicationPolicy; FR-MCP-178: HubDraftDoesNotBlockRemote, ConcurrentPublishPreservesBothHistories; FR-MCP-181: LostPushAckDoesNotDuplicateCommit, OldWorkerEpochCannotReportSuccess; FR-MCP-179: PollReadDoesNotAcknowledge, AckOldGenerationPreservesNewRequest, MissedNotificationReconciles, HubRestoreFromOlderBackup; FR-MCP-184: AuditReachesHub, AuditRetryIdempotent; FR-MCP-182: SimultaneousHumanIdReservation, OfflineHumanIdPublicationDenied.
+  - TR: TR-MCP-FEDERATION-003, TR-MCP-FEDERATION-005, TR-MCP-FEDERATION-006, TR-MCP-FEDERATION-008, TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-012. TEST: TEST-MCP-224, TEST-MCP-226, TEST-MCP-227, TEST-MCP-229, TEST-MCP-230, TEST-MCP-232, TEST-MCP-233.
+- `TASK-FEDPH5-007` (group ordinal 7): Ph5 group HV gate: Ph5 hub control table and publication. Initial state: Planning. Depends on: TASK-FEDPH5-006.
+  - FR/AC: FR-MCP-176: CloneRefusesNonemptyTarget, UnauthorizedProjectDenied; FR-MCP-185: ForeignProjectCloneDenied, RevokedNodeCannotPublish, LocalAppUserCannotPush, RevokedCredentialFailsFetchAndPublish, SqlPortUnreachableAcrossLink, UnknownCertificatePinRejected, RawRemoteCannotBypassPublicationPolicy; FR-MCP-178: HubDraftDoesNotBlockRemote, ConcurrentPublishPreservesBothHistories; FR-MCP-181: LostPushAckDoesNotDuplicateCommit, OldWorkerEpochCannotReportSuccess; FR-MCP-179: PollReadDoesNotAcknowledge, AckOldGenerationPreservesNewRequest, MissedNotificationReconciles, HubRestoreFromOlderBackup; FR-MCP-184: AuditReachesHub, AuditRetryIdempotent; FR-MCP-182: SimultaneousHumanIdReservation, OfflineHumanIdPublicationDenied.
+  - TR: TR-MCP-FEDERATION-003, TR-MCP-FEDERATION-005, TR-MCP-FEDERATION-006, TR-MCP-FEDERATION-008, TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-012. TEST: TEST-MCP-224, TEST-MCP-226, TEST-MCP-227, TEST-MCP-229, TEST-MCP-230, TEST-MCP-232, TEST-MCP-233.
+
+#### GRP-FEDPH6-001: Ph6 incoming integration, review and recovery
+
+Group key `ph6-integration`; phase Ph6; plan section 11. Temporary integration branches, clean-merge validation, reviewed conflicts, dirty deferral, schema catch-up, recovery and effect isolation.
+
+- `TASK-FEDPH6-001` (group ordinal 1): Temporary integration branches, clean-merge validation and gated live-branch apply. Initial state: Planning. Depends on: GRP-FEDPH5-001.
+  - FR/AC: FR-MCP-178: ThreeWriterCleanConvergence; FR-MCP-180: CleanMergeCanFailDomainValidation; FR-MCP-189: IncomingMergeCannotRaceAdmittedEdit.
+  - TR: TR-MCP-FEDERATION-005, TR-MCP-FEDERATION-007, TR-MCP-FEDERATION-016. TEST: TEST-MCP-226, TEST-MCP-228, TEST-MCP-237. Classes: FederationMergeReviewTests.
+- `TASK-FEDPH6-002` (group ordinal 2): Head-bound conflict review. Initial state: Planning. Depends on: TASK-FEDPH6-001.
+  - FR/AC: FR-MCP-180: SameCellConflictNeedsReview, DeleteUpdateNeedsReview, StaleReviewRejected, ReviewAgeVisible, UnrelatedPublicationContinues, SafeTodoMergeRules.
+  - TR: TR-MCP-FEDERATION-007. TEST: TEST-MCP-228. Classes: FederationMergeReviewTests.
+- `TASK-FEDPH6-003` (group ordinal 3): Dirty working-set deferral and schema catch-up. Initial state: Planning. Depends on: TASK-FEDPH6-001.
+  - FR/AC: FR-MCP-181: DirtyBranchDefersApply, IncompatibleSchemaDoesNotApply; FR-MCP-186: OldSchemaUnpublishedCommitMergesAfterUpgrade, FeatureBranchSchemaCatchUp, DirtyDraftBlocksBinaryUpgrade, ContractBlockedUntilLocalBranchesAttested.
+  - TR: TR-MCP-FEDERATION-008, TR-MCP-FEDERATION-013. TEST: TEST-MCP-229, TEST-MCP-234. Classes: FederationDirtyWorkingSetTests.
+- `TASK-FEDPH6-004` (group ordinal 4): Recovery pins/receipts, maintenance preflight/attest/status, derived-state refresh. Initial state: Planning. Depends on: TASK-FEDPH6-002, TASK-FEDPH6-003.
+  - FR/AC: FR-MCP-181: LostPushAckDoesNotDuplicateCommit; FR-MCP-179: HubRestoreFromOlderBackup; FR-MCP-184: AcceptedHeadRebuildsBranchIndex.
+  - TR: TR-MCP-FEDERATION-006, TR-MCP-FEDERATION-008, TR-MCP-FEDERATION-011. TEST: TEST-MCP-227, TEST-MCP-229, TEST-MCP-232. Classes: FederationRecoveryTests.
+- `TASK-FEDPH6-005` (group ordinal 5): Imported state does not repeat external effects. Initial state: Planning. Depends on: TASK-FEDPH6-001.
+  - FR/AC: FR-MCP-188: ImportDoesNotSendExternalAction, RetryDoesNotRepeatEffect, ImportedOperationalRowsRemainInert.
+  - TR: TR-MCP-FEDERATION-015. TEST: TEST-MCP-236. Classes: FederationEffectIsolationTests.
+- `TASK-FEDPH6-006` (group ordinal 6): Ph6 integration slice gate (targeted classes plus TestFederationProviders). Initial state: Planning. Depends on: TASK-FEDPH6-001, TASK-FEDPH6-002, TASK-FEDPH6-003, TASK-FEDPH6-004, TASK-FEDPH6-005.
+  - FR/AC: FR-MCP-180: SameCellConflictNeedsReview; FR-MCP-181: DirtyBranchDefersApply.
+  - TR: TR-MCP-FEDERATION-007, TR-MCP-FEDERATION-008. TEST: TEST-MCP-228, TEST-MCP-229.
+- `TASK-FEDPH6-007` (group ordinal 7): Ph6 group HV gate: Ph6 incoming integration, review and recovery. Initial state: Planning. Depends on: TASK-FEDPH6-006.
+  - FR/AC: FR-MCP-178: ThreeWriterCleanConvergence; FR-MCP-180: CleanMergeCanFailDomainValidation, SameCellConflictNeedsReview, DeleteUpdateNeedsReview, StaleReviewRejected, ReviewAgeVisible, UnrelatedPublicationContinues, SafeTodoMergeRules; FR-MCP-189: IncomingMergeCannotRaceAdmittedEdit; FR-MCP-181: DirtyBranchDefersApply, IncompatibleSchemaDoesNotApply, LostPushAckDoesNotDuplicateCommit; FR-MCP-186: OldSchemaUnpublishedCommitMergesAfterUpgrade, FeatureBranchSchemaCatchUp, DirtyDraftBlocksBinaryUpgrade, ContractBlockedUntilLocalBranchesAttested; FR-MCP-179: HubRestoreFromOlderBackup; FR-MCP-184: AcceptedHeadRebuildsBranchIndex; FR-MCP-188: ImportDoesNotSendExternalAction, RetryDoesNotRepeatEffect, ImportedOperationalRowsRemainInert.
+  - TR: TR-MCP-FEDERATION-005, TR-MCP-FEDERATION-006, TR-MCP-FEDERATION-007, TR-MCP-FEDERATION-008, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-013, TR-MCP-FEDERATION-015, TR-MCP-FEDERATION-016. TEST: TEST-MCP-226, TEST-MCP-227, TEST-MCP-228, TEST-MCP-229, TEST-MCP-232, TEST-MCP-234, TEST-MCP-236, TEST-MCP-237.
+
+#### GRP-FEDPH6-002: Ph6 join migration and cutover readiness
+
+Group key `ph6-join`; phase Ph6; plan section 11. Clone-plus-delta join path using Ph4 commits, Ph5 publication and Ph6 review.
+
+- `TASK-FEDPH6J-001` (group ordinal 1): Join mode: clone C0, stage decisions, import J1, review/merge to M1. Initial state: Planning. Depends on: GRP-FEDPH6-001.
+  - FR/AC: FR-MCP-187: MigrationJoinPreservesCommonAncestor, MigrationJoinDivergentRowRequiresReview, JoinCutoverRequiresReviewedMain.
+  - TR: TR-MCP-FEDERATION-014. TEST: TEST-MCP-235. Classes: MigrationJoinTests, MigrationCutoverTests.
+- `TASK-FEDPH6J-002` (group ordinal 2): Audit backfill verification. Initial state: Planning. Depends on: TASK-FEDPH6J-001.
+  - FR/AC: FR-MCP-184: AuditBackfillVerified.
+  - TR: TR-MCP-FEDERATION-011. TEST: TEST-MCP-232. Classes: MigrationJoinTests.
+- `TASK-FEDPH6J-003` (group ordinal 3): Ph6 exit gate on LAB and LEGION (full phase including GRP-FEDPH6-001). Initial state: Planning. Depends on: TASK-FEDPH6J-001, TASK-FEDPH6J-002.
+  - FR/AC: FR-MCP-187: MigrationJoinPreservesCommonAncestor, MigrationJoinDivergentRowRequiresReview, JoinCutoverRequiresReviewedMain; FR-MCP-184: AuditBackfillVerified.
+  - TR: TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-014. TEST: TEST-MCP-232, TEST-MCP-235.
+- `TASK-FEDPH6J-004` (group ordinal 4): Ph6 group HV gate: Ph6 join migration and cutover readiness. Initial state: Planning. Depends on: TASK-FEDPH6J-003.
+  - FR/AC: FR-MCP-187: MigrationJoinPreservesCommonAncestor, MigrationJoinDivergentRowRequiresReview, JoinCutoverRequiresReviewedMain; FR-MCP-184: AuditBackfillVerified.
+  - TR: TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-014. TEST: TEST-MCP-232, TEST-MCP-235.
+
+#### GRP-FEDPH7-001: Ph7 server and plugin workflows
+
+Group key `ph7-surfaces`; phase Ph7; plan section 12. Typed client, REST/MCP/REPL adapters and audited first-party plugin wrappers with shared conformance fixtures.
+
+- `TASK-FEDPH7-001` (group ordinal 1): Plugin repo/version inventory and typed DTO/client methods. Initial state: Planning. Depends on: GRP-FEDPH6-002.
+  - FR/AC: FR-MCP-183: OldServerReportsUnsupportedCapability, ReconnectRevalidatesContext.
+  - TR: TR-MCP-FEDERATION-010. TEST: TEST-MCP-231. Classes: FederationClientContractTests.
+- `TASK-FEDPH7-002` (group ordinal 2): REST, MCP and REPL adapters for every federation workflow. Initial state: Planning. Depends on: TASK-FEDPH7-001.
+  - FR/AC: FR-MCP-183: EveryPluginUsesSameContract.
+  - TR: TR-MCP-FEDERATION-010. TEST: TEST-MCP-231. Classes: FederationMcpToolTests, FederationReplContractTests.
+- `TASK-FEDPH7-003` (group ordinal 3): First-party plugin wrappers and shared conformance fixtures. Initial state: Planning. Depends on: TASK-FEDPH7-002.
+  - FR/AC: FR-MCP-176: PluginEnrollmentDiagnostics; FR-MCP-182: PluginIdentityDiagnostics; FR-MCP-185: PluginLeastPrivilegeDenial; FR-MCP-181: PluginRecoveryControls; FR-MCP-188: PluginEffectBoundary; FR-MCP-189: PluginEditingOwnership.
+  - TR: TR-MCP-FEDERATION-003, TR-MCP-FEDERATION-008, TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-012, TR-MCP-FEDERATION-015, TR-MCP-FEDERATION-016. TEST: TEST-MCP-224, TEST-MCP-229, TEST-MCP-230, TEST-MCP-233, TEST-MCP-236, TEST-MCP-237. Classes: FederationPluginConformanceTests.
+- `TASK-FEDPH7-004` (group ordinal 4): Review and wait-age surfacing with 15 minute warning and 24 hour escalation. Initial state: Planning. Depends on: TASK-FEDPH7-002.
+  - FR/AC: FR-MCP-180: ReviewAgeVisible.
+  - TR: TR-MCP-FEDERATION-007. TEST: TEST-MCP-228. Classes: FederationClientContractTests.
+- `TASK-FEDPH7-005` (group ordinal 5): Ph7 exit gate on LAB and LEGION (client and plugin slice). Initial state: Planning. Depends on: TASK-FEDPH7-001, TASK-FEDPH7-002, TASK-FEDPH7-003, TASK-FEDPH7-004.
+  - FR/AC: FR-MCP-183: OldServerReportsUnsupportedCapability, ReconnectRevalidatesContext, EveryPluginUsesSameContract; FR-MCP-176: PluginEnrollmentDiagnostics; FR-MCP-182: PluginIdentityDiagnostics; FR-MCP-185: PluginLeastPrivilegeDenial; FR-MCP-181: PluginRecoveryControls; FR-MCP-188: PluginEffectBoundary; FR-MCP-189: PluginEditingOwnership; FR-MCP-180: ReviewAgeVisible.
+  - TR: TR-MCP-FEDERATION-003, TR-MCP-FEDERATION-007, TR-MCP-FEDERATION-008, TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-010, TR-MCP-FEDERATION-012, TR-MCP-FEDERATION-015, TR-MCP-FEDERATION-016. TEST: TEST-MCP-224, TEST-MCP-228, TEST-MCP-229, TEST-MCP-230, TEST-MCP-231, TEST-MCP-233, TEST-MCP-236, TEST-MCP-237.
+- `TASK-FEDPH7-006` (group ordinal 6): Ph7 group HV gate: Ph7 server and plugin workflows. Initial state: Planning. Depends on: TASK-FEDPH7-005.
+  - FR/AC: FR-MCP-183: OldServerReportsUnsupportedCapability, ReconnectRevalidatesContext, EveryPluginUsesSameContract; FR-MCP-176: PluginEnrollmentDiagnostics; FR-MCP-182: PluginIdentityDiagnostics; FR-MCP-185: PluginLeastPrivilegeDenial; FR-MCP-181: PluginRecoveryControls; FR-MCP-188: PluginEffectBoundary; FR-MCP-189: PluginEditingOwnership; FR-MCP-180: ReviewAgeVisible.
+  - TR: TR-MCP-FEDERATION-003, TR-MCP-FEDERATION-007, TR-MCP-FEDERATION-008, TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-010, TR-MCP-FEDERATION-012, TR-MCP-FEDERATION-015, TR-MCP-FEDERATION-016. TEST: TEST-MCP-224, TEST-MCP-228, TEST-MCP-229, TEST-MCP-230, TEST-MCP-231, TEST-MCP-233, TEST-MCP-236, TEST-MCP-237.
+
+#### GRP-FEDPH8-001: Ph8 two-host acceptance and three-peer fixture
+
+Group key `ph8-acceptance`; phase Ph8; plan section 13. Real-host acceptance on LAB-OMARCHY and PAYTON-LEGION2 plus FED-ATLAS-H/A/B fixture; cutover preparation only.
+
+- `TASK-FEDPH8-001` (group ordinal 1): Three-logical-peer fixture run of U01-U15 from the accepted integration SHA. Initial state: Planning. Depends on: GRP-FEDPH7-001.
+  - FR/AC: FR-MCP-178: ThreeWriterCleanConvergence; FR-MCP-186: RealHostAcceptanceMatrix.
+  - TR: TR-MCP-FEDERATION-005, TR-MCP-FEDERATION-013. TEST: TEST-MCP-226, TEST-MCP-234.
+- `TASK-FEDPH8-002` (group ordinal 2): Two-real-host acceptance matrix on LAB and LEGION. Initial state: Planning. Depends on: GRP-FEDPH7-001.
+  - FR/AC: FR-MCP-186: RealHostAcceptanceMatrix, DeploymentPreflightBlocksDirtyOrUnattestedBranch, WindowsWriterLockAndRestart; FR-MCP-179: HubRestoreFromOlderBackup; FR-MCP-185: SqlPortUnreachableAcrossLink, UnknownCertificatePinRejected; FR-MCP-184: ReceiptsAndLogsContainNoCredentials.
+  - TR: TR-MCP-FEDERATION-006, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-012, TR-MCP-FEDERATION-013. TEST: TEST-MCP-227, TEST-MCP-232, TEST-MCP-233, TEST-MCP-234.
+- `TASK-FEDPH8-003` (group ordinal 3): Partition and restart fault matrix. Initial state: Planning. Depends on: TASK-FEDPH8-001, TASK-FEDPH8-002.
+  - FR/AC: FR-MCP-181: LostPushAckDoesNotDuplicateCommit; FR-MCP-174: NodeWorksWithHubUnavailable.
+  - TR: TR-MCP-FEDERATION-001, TR-MCP-FEDERATION-008. TEST: TEST-MCP-222, TEST-MCP-229.
+- `TASK-FEDPH8-004` (group ordinal 4): Four-provider regression, three-source migration, reviewed join, recovery export and isolated restore receipts. Initial state: Planning. Depends on: TASK-FEDPH8-001, TASK-FEDPH8-002.
+  - FR/AC: FR-MCP-187: ThreeSourceProviderRoundTrip, FullProjectRecoveryPreservesAllDomains; FR-MCP-186: OriginalProviderMigrationsUnchanged.
+  - TR: TR-MCP-FEDERATION-013, TR-MCP-FEDERATION-014. TEST: TEST-MCP-234, TEST-MCP-235.
+- `TASK-FEDPH8-005` (group ordinal 5): Cutover preparation under DEPLOY HOLD (no live change). Initial state: Planning. Depends on: TASK-FEDPH8-004.
+  - FR/AC: FR-MCP-187: SourceRetainedAfterCutover.
+  - TR: TR-MCP-FEDERATION-014. TEST: TEST-MCP-235.
+- `TASK-FEDPH8-006` (group ordinal 6): Ph8 exit gate on LAB and LEGION (release candidate). Initial state: Planning. Depends on: TASK-FEDPH8-001, TASK-FEDPH8-002, TASK-FEDPH8-003, TASK-FEDPH8-004, TASK-FEDPH8-005.
+  - FR/AC: FR-MCP-178: ThreeWriterCleanConvergence; FR-MCP-186: RealHostAcceptanceMatrix, DeploymentPreflightBlocksDirtyOrUnattestedBranch, WindowsWriterLockAndRestart, OriginalProviderMigrationsUnchanged; FR-MCP-179: HubRestoreFromOlderBackup; FR-MCP-185: SqlPortUnreachableAcrossLink, UnknownCertificatePinRejected; FR-MCP-184: ReceiptsAndLogsContainNoCredentials; FR-MCP-181: LostPushAckDoesNotDuplicateCommit; FR-MCP-174: NodeWorksWithHubUnavailable; FR-MCP-187: ThreeSourceProviderRoundTrip, FullProjectRecoveryPreservesAllDomains, SourceRetainedAfterCutover.
+  - TR: TR-MCP-FEDERATION-001, TR-MCP-FEDERATION-005, TR-MCP-FEDERATION-006, TR-MCP-FEDERATION-008, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-012, TR-MCP-FEDERATION-013, TR-MCP-FEDERATION-014. TEST: TEST-MCP-222, TEST-MCP-226, TEST-MCP-227, TEST-MCP-229, TEST-MCP-232, TEST-MCP-233, TEST-MCP-234, TEST-MCP-235.
+- `TASK-FEDPH8-007` (group ordinal 7): Ph8 group HV gate: Ph8 two-host acceptance and three-peer fixture. Initial state: Planning. Depends on: TASK-FEDPH8-006.
+  - FR/AC: FR-MCP-178: ThreeWriterCleanConvergence; FR-MCP-186: RealHostAcceptanceMatrix, DeploymentPreflightBlocksDirtyOrUnattestedBranch, WindowsWriterLockAndRestart, OriginalProviderMigrationsUnchanged; FR-MCP-179: HubRestoreFromOlderBackup; FR-MCP-185: SqlPortUnreachableAcrossLink, UnknownCertificatePinRejected; FR-MCP-184: ReceiptsAndLogsContainNoCredentials; FR-MCP-181: LostPushAckDoesNotDuplicateCommit; FR-MCP-174: NodeWorksWithHubUnavailable; FR-MCP-187: ThreeSourceProviderRoundTrip, FullProjectRecoveryPreservesAllDomains, SourceRetainedAfterCutover.
+  - TR: TR-MCP-FEDERATION-001, TR-MCP-FEDERATION-005, TR-MCP-FEDERATION-006, TR-MCP-FEDERATION-008, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-012, TR-MCP-FEDERATION-013, TR-MCP-FEDERATION-014. TEST: TEST-MCP-222, TEST-MCP-226, TEST-MCP-227, TEST-MCP-229, TEST-MCP-232, TEST-MCP-233, TEST-MCP-234, TEST-MCP-235.
+
+#### GRP-FEDCUT-001: Held live cutover (requires explicit DEPLOY HOLD release)
+
+Group key `held-cutover`; phase Ph8; plan section 13. Staged live cutover after Ph8 acceptance and an explicit operator release for this exact rollout.
+
+- `TASK-FEDCUT-001` (group ordinal 1): Cut over the first host and observe a 48-hour soak. Initial state: Planning. Depends on: GRP-FEDPH8-001.
+  - FR/AC: FR-MCP-186: DeploymentPreflightBlocksDirtyOrUnattestedBranch; FR-MCP-184: AuditReachesHub.
+  - TR: TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-013. TEST: TEST-MCP-232, TEST-MCP-234.
+- `TASK-FEDCUT-002` (group ordinal 2): Cut over the second host and final acceptance. Initial state: Planning. Depends on: TASK-FEDCUT-001.
+  - FR/AC: FR-MCP-178: ThreeWriterCleanConvergence; FR-MCP-187: SourceRetainedAfterCutover.
+  - TR: TR-MCP-FEDERATION-005, TR-MCP-FEDERATION-014. TEST: TEST-MCP-226, TEST-MCP-235.
+- `TASK-FEDCUT-003` (group ordinal 3): Ph8 group HV gate: Held live cutover (requires explicit DEPLOY HOLD release). Initial state: Planning. Depends on: TASK-FEDCUT-002.
+  - FR/AC: FR-MCP-186: DeploymentPreflightBlocksDirtyOrUnattestedBranch; FR-MCP-184: AuditReachesHub; FR-MCP-178: ThreeWriterCleanConvergence; FR-MCP-187: SourceRetainedAfterCutover.
+  - TR: TR-MCP-FEDERATION-005, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-013, TR-MCP-FEDERATION-014. TEST: TEST-MCP-226, TEST-MCP-232, TEST-MCP-234, TEST-MCP-235.
+
+### 15.5 Simulated queue in the current TODO store
+
+Until PLAN-TODOTASK-001 ships, the queue is simulated with ordinary MCP TODOs in workspace F:\GitHub\McpServer on PAYTON-LEGION2 (LAB-OMARCHY to follow when reachable): one Plan TODO, one TODO per Task Group and one TODO per Task, all with section Federation and priority high. Each description carries ItemKind, parent TODO, group and ordinals, Task status, eligibility, typed dependencies, FR/AC coverage and TR constraints; `dependsOn` mirrors the typed dependencies; `note` carries the simulated status. TODO done stays false until a Task reaches Success; a Group TODO is marked done only when its calculated status is Completed. Old forwarding-era TODOs IMPL-FEDPATH-001, IMPL-FEDROUTE-001, IMPL-FEDWSSYNC-001 and IMPL-FEDBACKFILL-001 are not part of this Plan; MCP-FEDIDENTITY-001 is linked from TASK-FEDPH0-005 and TASK-FEDPH2-005.

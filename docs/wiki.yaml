@@ -240,6 +240,27 @@ documents:
     platforms:
       - github
       - azure
+  - id: arch-sessionturn-review-agentcontext
+    title: 'Architecture: Turn Logging, Turn Reviews, and Stateless Agent Context'
+    source: docs/architecture/SessionTurn-Review-AgentContext-Architecture.md
+    target: SessionTurn-Review-AgentContext-Architecture.md
+    platforms:
+      - github
+      - azure
+  - id: arch-sessionturn-amendment-1-durable-hv
+    title: 'Architecture Amendment 1: Durable Multi-Agent Hostile Validation'
+    source: docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md
+    target: SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md
+    platforms:
+      - github
+      - azure
+  - id: arch-xunit-v3-test-guidance
+    title: 'xUnit.net v3 Test Architecture Guidance'
+    source: docs/architecture/xUnit-v3-Test-Architecture-Guidance.md
+    target: xUnit-v3-Test-Architecture-Guidance.md
+    platforms:
+      - github
+      - azure
   - id: project-readme
     title: Project README
     source: README.md
@@ -368,6 +389,9 @@ navigation:
       - document: context-memory
       - document: benchmarks-memory
       - document: context-federation
+      - document: arch-sessionturn-review-agentcontext
+      - document: arch-sessionturn-amendment-1-durable-hv
+      - document: arch-xunit-v3-test-guidance
       - document: context-api-capabilities
       - document: context-compliance-rules
       - document: context-module-bootstrap
