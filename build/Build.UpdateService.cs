@@ -39,6 +39,11 @@ partial class Build
     /// FR-MCP-SERVICEUPDATE-001: update the MCP Windows or Linux service while preserving live configuration and file data.
     /// Requires elevation (Administrator). Invoke via: sudo --chdir . pwsh -NoProfile -ExecutionPolicy Bypass -File ./build.ps1 UpdateService
     /// </summary>
+    /// <remarks>
+    /// 2026-11-10, TR-MCP-SERVICEUPDATE-001 ready-to-run-publish and TEST-MCP-SERVICEUPDATE-001
+    /// ready-to-run-publish: the Windows and Linux RID-specific server publishes now enable ReadyToRun; the launcher
+    /// publish remains unchanged because it is not the service executable.
+    /// </remarks>
     public Target UpdateService => _ => _
         .Description("Update the Windows or Linux service, preserving live configuration and data")
         .Executes(() =>
@@ -113,6 +118,7 @@ partial class Build
                     .EnableSelfContained()
                     .SetRuntime("win-x64")
                     .SetProperty("PublishSingleFile", "true")
+                    .SetProperty("PublishReadyToRun", "true")
                     .SetProperty("IncludeNativeLibrariesForSelfExtract", "true")
                     .SetProperty("PackageVersion", deploymentVersion)
                     .SetProperty("Version", deploymentVersion)
@@ -266,6 +272,7 @@ partial class Build
                 .EnableSelfContained()
                 .SetRuntime(platform.RuntimeIdentifier)
                 .SetProperty("PublishSingleFile", "true")
+                .SetProperty("PublishReadyToRun", "true")
                 .SetProperty("IncludeNativeLibrariesForSelfExtract", "true")
                 .SetProperty("PackageVersion", version)
                 .SetProperty("Version", version)

@@ -241,6 +241,39 @@ public sealed class BuildTargetTests
             "Backup must complete before published files replace the live installation.");
     }
 
+    /// <summary>UpdateService publishes the server as ReadyToRun for both supported operating-system paths.</summary>
+    /// <remarks>
+    /// 2026-11-10, TR-MCP-SERVICEUPDATE-001 ready-to-run-publish and TEST-MCP-SERVICEUPDATE-001
+    /// ready-to-run-publish: requires the ReadyToRun property independently in the Windows and Linux server publish
+    /// blocks while rejecting it from the launcher-only block.
+    /// </remarks>
+    [Trait("Category", "Integration")]
+    [Fact]
+    public void UpdateService_PublishesServerAsReadyToRunOnWindowsAndLinux()
+    {
+        var repoRoot = FindRepositoryRoot();
+        var source = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.UpdateService.cs"));
+        const string readyToRun = ".SetProperty(\"PublishReadyToRun\", \"true\")";
+
+        var windowsStart = source.IndexOf("// Publish main server", StringComparison.Ordinal);
+        var launcherStart = source.IndexOf("// Publish launcher sidecar", windowsStart, StringComparison.Ordinal);
+        var launcherEnd = source.IndexOf("var baselineConfigPath", launcherStart, StringComparison.Ordinal);
+        var linuxStart = source.IndexOf("DotNetPublish(settings => settings", launcherEnd, StringComparison.Ordinal);
+        var linuxEnd = source.IndexOf("var helper = new LinuxServiceHelper", linuxStart, StringComparison.Ordinal);
+
+        Assert.True(windowsStart >= 0 && launcherStart > windowsStart, "Windows service publish block was not found.");
+        Assert.True(launcherEnd > launcherStart, "Launcher publish block was not found.");
+        Assert.True(linuxStart > launcherEnd && linuxEnd > linuxStart, "Linux service publish block was not found.");
+
+        var windowsPublish = source[windowsStart..launcherStart];
+        var launcherPublish = source[launcherStart..launcherEnd];
+        var linuxPublish = source[linuxStart..linuxEnd];
+
+        Assert.Contains(readyToRun, windowsPublish, StringComparison.Ordinal);
+        Assert.Contains(readyToRun, linuxPublish, StringComparison.Ordinal);
+        Assert.DoesNotContain(readyToRun, launcherPublish, StringComparison.Ordinal);
+    }
+
     private static string FindRepositoryRoot()
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
