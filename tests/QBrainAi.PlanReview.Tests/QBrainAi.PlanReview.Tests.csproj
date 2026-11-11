@@ -18,9 +18,6 @@
     <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="SharpNinja.aiUnit" />
-    <!-- Exclude v2 xunit packages pulled transitively to prevent CS0433 duplicate with v3 (following pattern in Build.Tests and other v3 suites) -->
-    <PackageReference Include="xunit.extensibility.core" PrivateAssets="all" ExcludeAssets="compile;build;buildTransitive" />
-    <PackageReference Include="xunit.extensibility.execution" PrivateAssets="all" ExcludeAssets="compile;build;buildTransitive" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />
