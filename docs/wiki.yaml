@@ -240,6 +240,20 @@ documents:
     platforms:
       - github
       - azure
+  - id: arch-task-workflow
+    title: 'Architecture: TODO Plans, Tasks, Task Groups, and Session Work Dispatch'
+    source: docs/architecture/Task-Workflow-Architecture.md
+    target: Task-Workflow-Architecture.md
+    platforms:
+      - github
+      - azure
+  - id: arch-sessionturn-review-agentcontext
+    title: 'Architecture: Turn Logging, Turn Reviews, and Stateless Agent Context'
+    source: docs/architecture/SessionTurn-Review-AgentContext-Architecture.md
+    target: SessionTurn-Review-AgentContext-Architecture.md
+    platforms:
+      - github
+      - azure
   - id: project-readme
     title: Project README
     source: README.md
@@ -368,6 +382,8 @@ navigation:
       - document: context-memory
       - document: benchmarks-memory
       - document: context-federation
+      - document: arch-task-workflow
+      - document: arch-sessionturn-review-agentcontext
       - document: context-api-capabilities
       - document: context-compliance-rules
       - document: context-module-bootstrap

@@ -330,6 +330,29 @@ flowchart TD
     None --> Empty(["Return NoWork only after acknowledged commit"])
 ```
 
+#### 3.5.11 GroupImplementationBarrierPolicy
+
+Operator rule (Payton Byrd, 2026-11-11): within a Task Group, no Task may start implementation until every Task in that group is designed and the unit tests for every Task in that group are green against mocks. This is a group-wide barrier. Design and mock unit work may proceed in parallel across members; implementation may not begin for any member until the barrier opens. The policy applies Byrd Development Process v4 (section 8.1: interfaces and contract fixtures, then the mock contract gate, then implementation) at Task Group granularity. It is separate from, and earlier than, the group completion HV gate in 3.5.12. This subsection is an additive amendment; it refines the existing rules below without removing them.
+
+- **Design and mock evidence.** A Task is designed and mock-green when its definition (title, description, FR/AC coverage, TR constraints, ordinals and dependencies) is complete; its interfaces, DTOs, command/query records and contract cases are defined; a test-owned fake implements its acceptance criteria; its contract unit tests pass against that fake with zero failures and zero skips; and the same tests fail against a deliberately wrong fake (negative control). The proposed append-only `TaskDesignEvidenceEntity` records TaskId, the Task definition `Version` it was produced for, suite identity, command, head or tree, total/passed/failed/skipped counts, negative-control outcome, author Session/Turn and RecordedAtUtc. Evidence for an older definition version does not count.
+- **Where design happens.** Design and mock work happens while the Task is Planning and is not an attempt. The existing transition `Planning -> Ready: definition reviewed` (3.5.3) now requires current-version design and mock evidence; `ChangeWorkTaskReadinessCommand` refuses Planning to Ready without it with 422 `DesignEvidenceMissing` and no state change. The existing rule that a definition edit returns a Ready Task to Planning also invalidates its evidence by version. Task statuses remain exactly Planning, Ready, Started, Success and Failure; the barrier is not a sixth status.
+- **Verification-only members.** Members whose only work is verification (a phase exit gate or the group HV gate Task of 3.5.12) have no implementation stage. Their design evidence is the reviewed definition of their pass criteria and evidence inputs; they have no mock suite, and they reach Ready on that review alone.
+- **Barrier calculation.** Like Group status, the barrier is calculated over complete membership and never stored. It is Open when every member is Ready, Started or Success; otherwise it is Closed. A newly added member, or a Failure remediated back to Planning, closes the barrier until that member is Ready again. A closed barrier never reopens or edits Success work and does not abort an already Started attempt.
+- **Dispatch effect.** `Ready -> Started` is the start of implementation. TaskSequencingPolicy (3.5.9) and `NextGroupTaskCommand` start a member only when the barrier is Open and every direct prerequisite is complete (3.5.4). While the barrier is Closed the command returns NoTask with reason code `ImplementationBarrierClosed` for the group, persisted with the operation receipt and without state change. Task and Group dependency edges keep gating implementation start; they do not gate design, so members of one group, and of later groups, may be designed and mock-green while earlier work is still implementing. The at-most-one Started Task per group rule is unchanged.
+- **Group status.** GroupStatusPolicy (3.5.4) is unchanged. A group whose barrier is Closed and that has no Failure or blocked member calculates Unstarted or Incomplete as before; the barrier state is reported beside the status in `TaskGroupDto` as `implementationBarrier: Open|Closed` with the count of members still lacking design evidence.
+- **Testing cadence.** Mock suites run when a member's design is complete, and the complete current-plus-prior suite runs once at slice or phase exit (8.3). Tests are not rerun after each edit.
+
+#### 3.5.12 GroupCompletionHvGatePolicy
+
+Operator rule (Payton Byrd, 2026-11-11): this architecture previously defined no hostile validation (HV) gate. HV now runs at the completion of every Task Group. This subsection is an additive amendment.
+
+- **Gate member.** Every Task Group has exactly one HV gate Task. It is the last member by group ordinal and has a Task dependency on every other member. `AssignTaskGroupCommand` refuses a group without exactly one HV gate member with 400 `ValidationFailed` and reason `HvGateMissing`.
+- **Reviewer independence.** The reviewer must come from a different agent family and a different model family from every author of the group's member attempts. Model family is taken from session metadata and the commit `Signed:` line using the prefixes openai, anthropic and xai; an unknown family is refused, never assumed independent.
+- **Scores and verdict.** The reviewer scores accuracy-and-correctness (combined) and completeness on 0 to 1. AGREE requires both at or above max(configured threshold, 0.98), that is 98/98. Input is the exact member evidence: heads or trees, commands, TRX, total/failed/skipped counts, AC-to-evidence mapping, negative controls, the group definition and the governing plan section. Request, response and verdict receipts are stored secret-safe.
+- **Completion.** AGREE completes the HV gate attempt with Success and its verdict as evidence. Because Completed requires every member Success (3.5.4), the group calculates Completed only after the gate, and no Task or Group that depends on this group may start before then.
+- **DISAGREE.** DISAGREE, or a refused reviewer, completes the gate attempt with Failure and the findings as its reason, so the group calculates Failing. Successful members stay immutable: each finding against Success work becomes a new correction Task (`correctsTaskId` set to the affected Task) inserted before the gate ordinal. Correction Tasks for HV findings are the one permitted addition to a sealed group; the insertion is audited with the verdict reference and reopens the implementation barrier (3.5.11) until those Tasks are designed and mock-green. After the corrections succeed, the gate is remediated (Failure to Planning with the verdict reference as the reason) and HV runs again on the new evidence.
+- **Plan level.** A Plan is complete only when every one of its groups is Completed. No plan-level HV replaces the group gates; a separate plan or release review may be added by its owning plan.
+
 ## 4. Phase A: stable definitions, Plans, requirement identity and context
 
 ### 4.1 Components and data
@@ -3619,6 +3642,16 @@ flowchart TD
 - Close/interupt a Session with active assignments. Show retained history; explicitly fail interrupted Started work through the authorized recovery path, release the assignment and reassign at the new queue tail. Do not expire ownership silently.
 - Simulate a lost acknowledgement after a committed request and a storage failure before commit. Same-operation retry must distinguish the outcomes without duplicate work. Agents reconcile an old Started replay with current attempt status/checkpoints before re-executing external effects.
 - Remove a referenced GraphRAG source after attaching it and simulate one lookup timeout. The TODO remains readable with Missing/Unavailable entries; reference identity, ordering and successful historical snapshots stay intact.
+
+### 8.6 Task Group gates (amendment 2026-11-11)
+
+Every Task Group delivered under this architecture, including the slices in 8.2 when they are tracked as Tasks, passes two group gates in this order:
+
+1. **Design and mock-green barrier (3.5.11).** All members are designed and their contract unit tests are green against mocks, with negative controls, before any member starts implementation. Design and mock work may run in parallel; implementation may not start while the barrier is Closed.
+2. **Implementation in group order.** After the barrier opens, members start one at a time in group ordinal order as their dependencies complete, wiring real behavior into the same contract cases. The full current-plus-prior suite and the gate commands of 8.3 run once at slice or phase exit, not after each edit.
+3. **Group completion HV gate (3.5.12).** The last member is the HV gate Task: a reviewer from a different agent family and model family, AGREE at 98/98 or higher. The group calculates Completed only after the gate succeeds; DISAGREE produces correction Tasks and a re-run.
+
+These gates do not start agents, change deployment state or authorize skipping any gate in 8.3 or 8.4.
 
 ## 9. Diagram index
 
