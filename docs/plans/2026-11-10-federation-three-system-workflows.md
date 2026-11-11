@@ -139,13 +139,13 @@ Phase: Ph2/Ph3/Ph5/Ph6. Workflows: U01, U10, U14. Tests: TwoNodesCreateDistinctI
 
 Expose consistent typed federation, review, identity, audit, migration and maintenance workflows through every first-party plugin.
 
-Phase: Ph7. Workflows: U01, U02, U05, U07, U08, U11, U12, U13, U14, U15. Tests: EveryPluginUsesSameContract; OldServerReportsUnsupportedCapability; ReconnectRevalidatesContext; StaleBranchReportedNotDeleted.
+Phase: Ph4/Ph7. Workflows: U01, U02, U05, U07, U08, U11, U12, U13, U14, U15. Tests: EveryPluginUsesSameContract; OldServerReportsUnsupportedCapability; ReconnectRevalidatesContext; StaleBranchReportedNotDeleted.
 
 ### FR-MCP-184: portable data versus host-local state
 
 Separate versioned project content from operational state while delivering permanent audit to the hub independently of commits and excluding secrets.
 
-Phase: Ph2/Ph3/Ph5/Ph7. Workflows: U10, U13. Tests: CloneOmitsSecrets; AuditReachesHub; AuditRetryIdempotent; AuditBackfillVerified; FullProjectSessionGraphPreserved; AcceptedHeadRebuildsBranchIndex; BackgroundWritersDoNotDirtyVersionedBranch; SecondAgentLoggingNeedsNoLease; CommitPreviewBlocksSecret; ReceiptsAndLogsContainNoCredentials.
+Phase: Ph2/Ph3/Ph4/Ph5/Ph6/Ph7. Workflows: U10, U13. Tests: CloneOmitsSecrets; AuditReachesHub; AuditRetryIdempotent; AuditBackfillVerified; FullProjectSessionGraphPreserved; AcceptedHeadRebuildsBranchIndex; BackgroundWritersDoNotDirtyVersionedBranch; SecondAgentLoggingNeedsNoLease; CommitPreviewBlocksSecret; ReceiptsAndLogsContainNoCredentials.
 
 ### FR-MCP-185: scoped authorization and offline behavior
 

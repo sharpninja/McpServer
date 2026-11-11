@@ -36,7 +36,7 @@ Baseline: commit `46a5959c` and its 48-page PDF remain intact. R2 is a separatel
 
 ## D. Revision defects
 
-- D1 — One normative failure mapping in TR-010. Publication bypass with sufficient publish rights is409 publication_required; insufficient scope is403 unauthorized_project. Missing ProjectId is400 invalid_request. Unimplemented seed join is501 unsupported_capability. Architecture points to the normative mapping rather than offering a conflicting subset.
+- D1 — One normative failure mapping in TR-010. Publication bypass with sufficient publish rights is409 publication_required; insufficient scope is403 unauthorized_project. Missing ProjectId is400 invalid_request. Unimplemented seed join is501 unsupported_capability. Architecture points to the normative mapping rather than offering a conflicting subset. R3 addendum (2026-11-11): the enumerated mapping was completed by adding request_id_conflict, audit_id_conflict and the 409-form of waiting_local_work, which were used in criteria text but missing from the enumeration; the single normative mapping is now exhaustive and the D1 resolution holds in full.
 - D2 — Removed the local-only audit migration sentence; local retention AND hub backfill are explicit.
 - D3 — Uniform FED-ATLAS-B in architecture and U01-U15. Plan distinguishes logical H/A/B from the two physical acceptance hosts.
 - D4 — Same correction as B1/A16; no corrected narrative substitutes for missing cards.
