@@ -1,0 +1,49 @@
+{
+  "sources": [
+    {
+      "sha256": "7324F621131778252EFA510DD03296EDAA6BDC1B85ADC3D8C5B5F7D0DE88CE8E",
+      "path": "docs/plans/2026-11-10-federation-dolt-architecture.md"
+    },
+    {
+      "sha256": "D8104EEA6D8F8636309B6C759B2575A67040756A1FB4D3AD9691C4AB19DCD6BA",
+      "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md"
+    },
+    {
+      "sha256": "8F1FAB68A109287F5D316734A4A3F287FA559692F2C2553965DD5110E9F26B7A",
+      "path": "docs/plans/2026-11-10-federation-three-system-workflows.md"
+    },
+    {
+      "sha256": "744C046EF1ECF7E0BA4EFABD076777175B59DB4239228034B9D4960A7CEAC196",
+      "path": "docs/plans/2026-11-10-federation-current-contracts.md"
+    },
+    {
+      "sha256": "E5ACE2EAECCF956F828510D3CD79E4537AE64AD43C5208EADB9BFAE5E0368380",
+      "path": "docs/plans/2026-11-10-federation-reconciliation.md"
+    },
+    {
+      "sha256": "DF268499050B726C913BD9015B8D76FBA8220FB64A3F79907208A56F9516F018",
+      "path": "docs/plans/visuals/federation-three-systems.html"
+    },
+    {
+      "sha256": "6ACEBA9801599640F22ED1C0760899622B12DBB48DEFD32FA87688119FC62141",
+      "path": "docs/plans/federation/workspace.dsl"
+    },
+    {
+      "sha256": "BC7D643DF1E6E59FF894F0A1E1B477F4CB2EC10D068BEF163379973CC8A768AB",
+      "path": "docs/plans/federation/diagrams/structurizr-Containers.svg"
+    },
+    {
+      "sha256": "D3869CF727946492EA342ECE6403E0B841859FB136279CDA0A1EA08D1DE696E1",
+      "path": "docs/plans/federation/diagrams/structurizr-Deployment.svg"
+    },
+    {
+      "sha256": "48849C74DFDB18F783C3EA26AE32406A6936AAFB7A2102FC82742B7EC55316DC",
+      "path": "docs/plans/federation/contracts.json"
+    }
+  ],
+  "topologyFigures": 2,
+  "compiledAt": "2026-11-10T19:24:01.9724434-06:00",
+  "expectedStates": 2,
+  "sourceEdits": false,
+  "expectedWorkflows": 15
+}

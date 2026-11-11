@@ -407,12 +407,12 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-133 | 🔲 Planned | Voter-history endpoint tests |
 | TEST-MCP-134 | 🔲 Planned | One-vote-per-user tests |
 | TEST-MCP-135 | 🔲 Planned | Current vote state endpoint tests |
-| FR-MCP-103 | 🟡 Partial | Hub-and-spoke federation |
-| TR-MCP-FED-001 | 🟡 Partial | Hub proxy federation contract |
-| TEST-MCP-136 | 🟡 Partial | Hub-and-spoke federation tests |
-| FR-MCP-MEMORY-008 | 🟡 Partial | Federated memory state |
-| TR-MCP-FED-MEMORY-001 | 🟡 Partial | Memory federation adapter contract |
-| TEST-MCP-MEMORY-FED-001 | 🟡 Partial | Memory federation tests |
+| FR-MCP-103 | Pending amended acceptance | Autonomous committed-history federation; see federation-dolt/Requirements-Matrix.md |
+| TR-MCP-FED-001 | Pending amended acceptance | Autonomous federation transport and compatibility contract; see federation-dolt/Requirements-Matrix.md |
+| TEST-MCP-136 | Pending amended acceptance | Autonomous federation and explicit legacy-mode tests; see federation-dolt/Requirements-Matrix.md |
+| FR-MCP-MEMORY-008 | Pending amended acceptance | Versioned workspace memory federation; see federation-dolt/Requirements-Matrix.md |
+| TR-MCP-FED-MEMORY-001 | Pending amended acceptance | Memory scope and history contract; see federation-dolt/Requirements-Matrix.md |
+| TEST-MCP-MEMORY-FED-001 | Pending amended acceptance | Versioned memory acceptance tests; see federation-dolt/Requirements-Matrix.md |
 | FR-MCP-109 | ✅ Complete | Requirements batch mutation |
 | TR-MCP-BATCH-109 | ✅ Complete | Requirements batch endpoint and workflow support |
 | TR-MCP-SCHEMA-109 | ✅ Complete | REPL request schema enforcement |
@@ -561,7 +561,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-122 | ✅ Complete | Functional-Requirements.md, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactionPlanArtifactTests |
 | FR-MCP-123 | ✅ Complete | Functional-Requirements.md, TurnTransactions-Architecture-Round1.md, TurnTransactions-Design-Round2.md, PlanTransactionReviewTests, TurnTransactionPlanArtifactTests |
 | FR-MCP-124 | ✅ Complete | Functional-Requirements.md |
-| FR-MCP-125 | ✅ Complete | Functional-Requirements.md, TurnTransactions-Design-Round2.md, Testing-Requirements.md, TurnTransactionPlanArtifactTests |
+| FR-MCP-125 | Pending amended acceptance | Legacy federation compatibility without general keyserver gating; see federation-dolt/Requirements-Matrix.md |
 | FR-MCP-126 | ✅ Complete | Functional-Requirements.md, PlanTransactionReviewTests |
 | FR-MCP-127 | ✅ Complete | Functional-Requirements.md, TurnTransactionPlanArtifactTests, SeparateTransactionServiceIntegrationTests, TurnTransactionCoordinatorTests |
 | FR-MCP-128 | ✅ Complete | Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionPlanArtifactTests |
@@ -581,7 +581,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-SUBSCRIBER-001 | ✅ Complete | TransactionSecurityServices, TransactionSecurityStateStores, SubscriberController, SubscriberClient, QBrainAi.Subscriber Program, TransactionSecurityControllerTests, DiffgramEncryptionIntegrationTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
 | TR-MCP-TXN-001 | ✅ Complete | TransactionSecurityModels, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TurnTransactionCoordinator, TransactionPubSubServices, TransactionSecurityStateStores, TurnTransactionFederationOperationApplyService, TransactionPubSubReplayWorker, TransactionGatedMemoryService, TransactionalTodoWorkflow, ITodoCompensationService, EfTodoService, FederatedTodoService, TransactionGatedTodoMutationService, TransactionGatedRepoFileService, TransactionGatedPromptTemplateService, TransactionGatedRequirementsDocumentService, TransactionGatedRequirementsAnalysisService, TransactionGatedTodoExecutionService, TransactionGatedSessionLogService, TransactionGatedToolRegistryService, TransactionGatedToolBucketService, TransactionGatedGraphRagService, TransactionGatedGitHubCliService, TransactionGatedGitHubWorkspaceTokenStore, TransactionGatedIssueTodoSyncService, TransactionGatedVoiceConversationService, TransactionGatedAgentPoolService, IClientMutationPolicy, KnownUnsafeClientMutationPolicy, GenericClientPassthrough, ReplCommandDispatcher, FederationController, TurnTransactionsController, MemoryController, TodoController, RepoController, PromptTemplateController, RequirementsController, SessionLogController, ToolRegistryController, GraphRagController, GitHubController, ContextController, VoiceController, AgentPoolController, QBrainAiMcpTools, FwhMcpTools.Todo, FwhMcpTools.GitHub, FwhMcpTools.Requirements, FwhMcpTools.SessionLog, FwhMcpTools.Context, McpStdioHost, Program.cs, ServiceCollectionExtensions.cs, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionCoordinatorTests, TransactionPubSubTests, TransactionPubSubReplayWorkerTests, ClientMutationPolicyTests, FederationControllerTests, FederationControllerPushTests, RequirementsControllerTransactionGateTests, ContextControllerTransactionGateTests, TransactionGatedVoiceConversationServiceTests, TransactionGatedAgentPoolServiceTests, VoiceControllerTests, TransactionGatedMemoryServiceTests, TransactionalTodoWorkflowTests, TransactionGatedTodoMutationServiceTests, TransactionGatedRepoFileServiceTests, TransactionGatedPromptTemplateServiceTests, TransactionGatedRequirementsDocumentServiceTests, TransactionGatedRequirementsAnalysisServiceTests, TransactionGatedTodoExecutionServiceTests, TransactionGatedSessionLogServiceTests, TransactionGatedToolRegistryServiceTests, TransactionGatedToolBucketServiceTests, TransactionGatedGraphRagServiceTests, TransactionGatedGitHubCliServiceTests, TransactionGatedGitHubWorkspaceTokenStoreTests, TransactionGatedIssueTodoSyncServiceTests, TransactionGatedStdioRoutingTests, GitHubControllerTests, TurnTransactionsControllerTests, MemoryControllerTests, MemoryMcpToolTests, TodoControllerTests, TodoExecutionMcpToolTests, GraphRagControllerAdHocTests, GraphRagMcpToolTests, SessionLogControllerTests, SessionLogReplaceDeleteControllerTests, ToolRegistryScopeTests, ToolBucketServiceTests, RepoFileServiceTests, PromptTemplateServiceTests, RequirementsDatabaseDocumentServiceTests, TodoExecutionServiceTests, EfTodoServiceTests, DurableTransactionSecurityStorageTests, FederationOperationApplyServiceTests, SeparateTransactionServiceIntegrationTests |
 | TR-MCP-TXNAUDIT-001 | ✅ Complete | Technical-Requirements.md, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionPlanArtifactTests, TransactionPubSubReplayWorkerTests, DurableTransactionSecurityStorageTests |
-| TR-MCP-TXNCOMPAT-001 | ✅ Complete | Technical-Requirements.md |
+| TR-MCP-TXNCOMPAT-001 | Pending amended acceptance | Federation and QuadBrain trust separation; see federation-dolt/Requirements-Matrix.md |
 | TR-MCP-TXNBYRD-001 | ✅ Complete | Technical-Requirements.md, TurnTransactions-Design-Round2.md, Testing-Requirements.md, TurnTransactionPlanArtifactTests |
 | TR-MCP-TXNAIUNIT-001 | ✅ Complete | Technical-Requirements.md |
 | TR-MCP-TXNDIAGRAMS-001 | ✅ Complete | Technical-Requirements.md, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactionPlanArtifactTests, SeparateTransactionServiceIntegrationTests, DiffgramEncryptionIntegrationTests |
@@ -1313,7 +1313,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-REQRECOVERY-001 | Tracked | Functional-Requirements.md |
 | TR-MCP-REQRECOVERY-001 | Tracked | Technical-Requirements.md |
 | TEST-MCP-REQRECOVERY-001 | Tracked | Testing-Requirements.md |
-| FR-MCP-AUDIT-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-AUDIT-001 | Pending amended acceptance | Permanent audit with append-only hub delivery; see federation-dolt/Requirements-Matrix.md |
 | FR-MCP-SERVICEUPDATE-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-SESSIONLIFE-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-SESSIONLIFE-002 | Tracked | Functional-Requirements.md |
@@ -1323,7 +1323,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-TESTRESOURCE-001 | Tracked | Functional-Requirements.md |
 | TR-MCP-AUDIT-002 | Tracked | Technical-Requirements.md |
 | TR-MCP-AUDIT-003 | Tracked | Technical-Requirements.md |
-| TR-MCP-AUDIT-004 | Tracked | Technical-Requirements.md |
+| TR-MCP-AUDIT-004 | Pending amended acceptance | Append-only unversioned audit delivery and export policy; see federation-dolt/Requirements-Matrix.md |
 | TR-MCP-SERVICEUPDATE-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-SESSIONLIFE-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-SESSIONLIFE-002 | Tracked | Technical-Requirements.md |
@@ -1333,7 +1333,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-TESTRESOURCE-001 | Tracked | Technical-Requirements.md |
 | TEST-MCP-AUDIT-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-AUDIT-002 | Tracked | Testing-Requirements.md |
-| TEST-MCP-AUDIT-003 | Tracked | Testing-Requirements.md |
+| TEST-MCP-AUDIT-003 | Pending amended acceptance | Audit delivery, secret exclusion and backfill verification; see federation-dolt/Requirements-Matrix.md |
 | TEST-MCP-SERVICEUPDATE-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-SESSIONLIFE-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-SESSIONLIFE-002 | Tracked | Testing-Requirements.md |
@@ -1445,10 +1445,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-TIMER-LIFECYCLE-001 | Tracked | Technical-Requirements.md |
 | TEST-MCP-ACKRECOVERY-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-AUDITACTION-001 | Tracked | Testing-Requirements.md |
-| TEST-MCP-FED-BACKFILL-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-FED-BACKFILL-001 | Pending amended acceptance | Complete seed/join/audit backfill tests; see federation-dolt/Requirements-Matrix.md |
 | TEST-MCP-FED-PATH-001 | Tracked | Testing-Requirements.md |
-| TEST-MCP-FED-ROUTE-001 | Tracked | Testing-Requirements.md |
-| TEST-MCP-FED-WSSYNC-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-FED-ROUTE-001 | Pending amended acceptance | Project isolation and legacy routing tests; see federation-dolt/Requirements-Matrix.md |
+| TEST-MCP-FED-WSSYNC-001 | Pending amended acceptance | Portable configuration and drift tests; see federation-dolt/Requirements-Matrix.md |
 | TEST-MCP-HVPIPE-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-HVPIPE-002 | Tracked | Testing-Requirements.md |
 | TEST-MCP-HVPIPE-003 | Tracked | Testing-Requirements.md |
@@ -1477,3 +1477,63 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-VERIFYPOLICY-001 | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-024 | Tracked | Testing-Requirements.md |
 | TEST-TIMER-001 | Tracked | Testing-Requirements.md |
+
+
+
+## Federation reconciliation 2026-11-10
+
+Current phase and workflow ownership for all amended records: [federation matrix](federation-dolt/Requirements-Matrix.md). Applicable requirements and scope boundaries: [current-scope coverage](../plans/2026-11-10-federation-reconciliation.md). All amended criteria remain pending.
+- FR-MCP-174: pending amended acceptance; see federation matrix.
+- FR-MCP-175: pending amended acceptance; see federation matrix.
+- FR-MCP-176: pending amended acceptance; see federation matrix.
+- FR-MCP-177: pending amended acceptance; see federation matrix.
+- FR-MCP-178: pending amended acceptance; see federation matrix.
+- FR-MCP-179: pending amended acceptance; see federation matrix.
+- FR-MCP-180: pending amended acceptance; see federation matrix.
+- FR-MCP-181: pending amended acceptance; see federation matrix.
+- FR-MCP-182: pending amended acceptance; see federation matrix.
+- FR-MCP-183: pending amended acceptance; see federation matrix.
+- FR-MCP-184: pending amended acceptance; see federation matrix.
+- FR-MCP-185: pending amended acceptance; see federation matrix.
+- FR-MCP-186: pending amended acceptance; see federation matrix.
+- FR-MCP-187: pending amended acceptance; see federation matrix.
+- FR-MCP-188: pending amended acceptance; see federation matrix.
+- FR-MCP-189: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-001: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-002: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-003: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-004: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-005: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-006: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-007: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-008: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-009: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-011: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-012: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-013: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-014: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-015: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-016: pending amended acceptance; see federation matrix.
+- TEST-MCP-222: pending amended acceptance; see federation matrix.
+- TEST-MCP-223: pending amended acceptance; see federation matrix.
+- TEST-MCP-224: pending amended acceptance; see federation matrix.
+- TEST-MCP-225: pending amended acceptance; see federation matrix.
+- TEST-MCP-226: pending amended acceptance; see federation matrix.
+- TEST-MCP-227: pending amended acceptance; see federation matrix.
+- TEST-MCP-228: pending amended acceptance; see federation matrix.
+- TEST-MCP-229: pending amended acceptance; see federation matrix.
+- TEST-MCP-230: pending amended acceptance; see federation matrix.
+- TEST-MCP-231: pending amended acceptance; see federation matrix.
+- TEST-MCP-232: pending amended acceptance; see federation matrix.
+- TEST-MCP-233: pending amended acceptance; see federation matrix.
+- TEST-MCP-234: pending amended acceptance; see federation matrix.
+- TEST-MCP-235: pending amended acceptance; see federation matrix.
+- TEST-MCP-236: pending amended acceptance; see federation matrix.
+- TEST-MCP-237: pending amended acceptance; see federation matrix.
+- TR-MCP-FEDERATION-010: pending amended acceptance; see federation matrix.
+- FR-MCP-FED-BACKFILL-001: pending amended acceptance; see federation matrix.
+- FR-MCP-FED-ROUTE-001: pending amended acceptance; see federation matrix.
+- FR-MCP-FED-WSSYNC-001: pending amended acceptance; see federation matrix.
+- TR-MCP-FED-BACKFILL-001: pending amended acceptance; see federation matrix.
+- TR-MCP-FED-WSSYNC-001: pending amended acceptance; see federation matrix.
+- TR-MCP-FED-ROUTE-001: pending amended acceptance; see federation matrix.

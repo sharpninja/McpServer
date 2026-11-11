@@ -1,0 +1,60 @@
+digraph {
+  compound=true
+  graph [fontname="Arial", rankdir=LR, ranksep=1.0, nodesep=1.0]
+  node [fontname="Arial", shape=box, margin="0.4,0.3"]
+  edge [fontname="Arial"]
+  label=<<br /><font point-size="34">Deployment View: QBrain.AI Federation - Lab target</font>>
+
+  subgraph cluster_37 {
+    margin=25
+    label=<<font point-size="24">LAB-OMARCHY</font><br /><font point-size="19">[Deployment Node: Linux]</font>>
+    labelloc=b
+    color="#39747c"
+    fontcolor="#173647"
+    fillcolor="#ffffff"
+
+    38 [id=38,shape=rect, label=<<font point-size="34">H local application<br />and worker</font><br /><font point-size="19">[Container: .NET / existing host]</font><br /><br /><font point-size="24">LAB working peer; gated<br />live-branch writes; outbound<br />sync and audit</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    39 [id=39,shape=rect, label=<<font point-size="34">H project working<br />database</font><br /><font point-size="19">[Container: Dolt SQL / loopback 3306]</font><br /><br /><font point-size="24">Independent drafts and<br />versioned project history</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    41 [id=41,shape=rect, label=<<font point-size="34">H operational store</font><br /><font point-size="19">[Container: SQLite or supported provider]</font><br /><br /><font point-size="24">Local audit, leases, ID<br />allocation and durable<br />outboxes</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    43 [id=43,shape=rect, label=<<font point-size="34">Federation gateway<br />and publication API</font><br /><font point-size="19">[Container: HTTPS / 10.42.0.214:7447]</font><br /><br /><font point-size="24">IdentityServer introspection;<br />per-project remote relay;<br />candidate validation; only<br />publisher of public refs</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    45 [id=45,shape=rect, label=<<font point-size="34">Shared<br />committed-history<br />remote</font><br /><font point-size="19">[Container: Dolt remotesapi / loopback 7448]</font><br /><br /><font point-size="24">Separate from H working copy;<br />backend reachable only by<br />gateway</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    47 [id=47,shape=rect, label=<<font point-size="34">Hub control store</font><br /><font point-size="19">[Container: Unversioned relational database]</font><br /><br /><font point-size="24">Enrollment, subscriptions,<br />receipts, aliases and restore<br />epoch</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    49 [id=49,shape=rect, label=<<font point-size="34">Hub append-only audit<br />store</font><br /><font point-size="19">[Container: Unversioned relational database]</font><br /><br /><font point-size="24">Idempotent node audit records<br />and durable receipts; never<br />branchable</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    51 [id=51,shape=rect, label=<<font point-size="34">Existing<br />IdentityServer</font><br /><font point-size="19">[Container: Duende / HTTPS gateway /connect]</font><br /><br /><font point-size="24">Per-node client credentials,<br />owner binding, project scopes<br />and revocation</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    53 [id=53,shape=rect, label=<<font point-size="34">LAB backup set</font><br /><font point-size="19">[Container: Protected local backup files]</font><br /><br /><font point-size="24">Project refs, controls, audit,<br />IdentityServer and restore<br />manifests</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+  }
+
+  subgraph cluster_60 {
+    margin=25
+    label=<<font point-size="24">PAYTON-LEGION2</font><br /><font point-size="19">[Deployment Node: Windows]</font>>
+    labelloc=b
+    color="#39747c"
+    fontcolor="#173647"
+    fillcolor="#ffffff"
+
+    61 [id=61,shape=rect, label=<<font point-size="34">A local application<br />and worker</font><br /><font point-size="19">[Container: .NET / Windows service]</font><br /><br /><font point-size="24">PAYTON-LEGION2; outbound<br />federation only</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    63 [id=63,shape=rect, label=<<font point-size="34">A project working<br />database</font><br /><font point-size="19">[Container: Native Windows Dolt / loopback 3306]</font><br /><br /><font point-size="24">Independent drafts and<br />versioned project history</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    65 [id=65,shape=rect, label=<<font point-size="34">A operational store</font><br /><font point-size="19">[Container: SQLite or supported provider]</font><br /><br /><font point-size="24">Local audit, leases, IDs,<br />aliases and durable outboxes</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    67 [id=67,shape=rect, label=<<font point-size="34">LEGION backup set</font><br /><font point-size="19">[Container: F:/ protected backup files]</font><br /><br /><font point-size="24">Retained read-only SQLite<br />sources, project refs and<br />operational state</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+  }
+
+  38 -> 39 [id=40, label=<<font point-size="24">Gated local reads/writes</font><br /><font point-size="19">[MySQL loopback]</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  38 -> 41 [id=42, label=<<font point-size="24">Audit/outbox/lease<br />persistence</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  38 -> 43 [id=44, label=<<font point-size="24">Poll, upload candidate,<br />accept request, fetch,<br />audit push</font><br /><font point-size="19">[TLS / IdentityServer token]</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  43 -> 45 [id=46, label=<<font point-size="24">Validated public-ref<br />publication and guarded<br />object relay</font><br /><font point-size="19">[Private remotesapi]</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  43 -> 47 [id=48, label=<<font point-size="24">Generations, project<br />authorization and receipts</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  43 -> 49 [id=50, label=<<font point-size="24">Append deduplicated audit<br />records and return<br />receipts</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  43 -> 51 [id=52, label=<<font point-size="24">Token introspection and<br />enrollment owner<br />authorization</font><br /><font point-size="19">[Loopback / existing identity integration]</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  39 -> 53 [id=54, label=<<font point-size="24">Consistent checkpoint</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  41 -> 53 [id=55, label=<<font point-size="24">Consistent checkpoint</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  45 -> 53 [id=56, label=<<font point-size="24">Committed refs and objects</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  47 -> 53 [id=57, label=<<font point-size="24">Checkpoint with restore<br />epoch manifest</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  49 -> 53 [id=58, label=<<font point-size="24">Ledger and receipt<br />checkpoint</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  51 -> 53 [id=59, label=<<font point-size="24">Protected identity<br />recovery data</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  61 -> 43 [id=62, label=<<font point-size="24">Poll, upload candidate,<br />accept request, fetch,<br />audit push</font><br /><font point-size="19">[TLS / IdentityServer token]</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  61 -> 63 [id=64, label=<<font point-size="24">Gated local reads/writes</font><br /><font point-size="19">[MySQL loopback]</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  61 -> 65 [id=66, label=<<font point-size="24">Audit/outbox/lease<br />persistence</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  63 -> 67 [id=68, label=<<font point-size="24">Consistent checkpoint</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  65 -> 67 [id=69, label=<<font point-size="24">Consistent checkpoint</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+
+}

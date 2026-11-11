@@ -1,0 +1,54 @@
+{
+  "visualInspection": "Passed representative current-contract, API and migration-acceptance pages. Contract placeholders protected from Markdown attribute parsing; literal endpoint/identity token checks pass.",
+  "pdfSha256": "D8D31D3AE5AA47341487F54D9542F6D50854D070F15635130149682D9FEEB5B0",
+  "missingBlocks": [],
+  "workflowCount": 15,
+  "sourceHashes": [
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-architecture.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-three-system-workflows.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-current-contracts.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-reconciliation.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plans/visuals/federation-three-systems.html",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plans/federation/workspace.dsl",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plans/federation/diagrams/structurizr-Containers.svg",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plans/federation/diagrams/structurizr-Deployment.svg",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plans/federation/contracts.json",
+      "unchanged": true
+    }
+  ],
+  "sourceBlocksChecked": 482,
+  "textOutsidePage": [],
+  "pageCount": 48,
+  "embeddedWalkthroughFrames": 2,
+  "literalPlaceholdersChecked": 6,
+  "literalPlaceholdersMissing": []
+}

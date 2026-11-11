@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-11-10T12:53:20.5094704-06:00",
+  "agent": "Codex",
+  "kind": "planning-artifact-validation",
+  "visualWorkflows": 12,
+  "statesPerWidth": 45,
+  "widths": [
+    320,
+    736
+  ],
+  "stateChecks": 90,
+  "screenshotInspected": true,
+  "brokenRelativeDocumentLinks": 0,
+  "requirements": 48,
+  "traceabilityMappings": 16,
+  "productionTestsRun": false,
+  "files": [
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-architecture.md",
+      "sha256": "63F6FB99A2461DD7EC82A129382233B10A723233AAFCA84149F676292B4D76DB"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+      "sha256": "B261AD0B609FD1A9DD4244F639BBD059E1B39017D90AA9F3BF5023B93DC9D73A"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-three-system-workflows.md",
+      "sha256": "CFC0D6C59162CCB5AD39320873B76712C585D8B66F7D49AF707BD774D1B4871B"
+    },
+    {
+      "path": "docs/plans/visuals/federation-three-systems.html",
+      "sha256": "116E78C95B1CF4CB1554313A401D01C5682471F192A8377A234A2AC3D0D1F77F"
+    }
+  ]
+}

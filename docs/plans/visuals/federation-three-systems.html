@@ -1,0 +1,142 @@
+<div id="federation-three-systems">
+  <h3>Atlas: one project, three independent systems</h3>
+  <div class="viz-controls">
+    <label class="form-label" for="fed-case">Workflow
+      <select class="form-select" id="fed-case"></select>
+    </label>
+  </div>
+  <div id="fed-graph"></div>
+  <div class="viz-row">
+    <button class="btn" type="button" id="fed-prev">Previous</button>
+    <span class="tabular-nums" id="fed-step"></span>
+    <button class="btn btn-primary" type="button" id="fed-next">Next</button>
+  </div>
+  <p id="fed-detail" aria-live="polite"></p>
+  <span class="text-small">Illustrative commits · H: LAB-OMARCHY · A: PAYTON-LEGION2 · B: isolated test peer FED-ATLAS-B</span>
+</div>
+<style>
+#federation-three-systems { color:var(--foreground); }
+#federation-three-systems #fed-graph { width:100%; }
+#federation-three-systems .fed-network { display:block;width:100%; }
+#federation-three-systems .fed-node { fill:var(--muted);stroke:var(--border);stroke-width:1; }
+#federation-three-systems .fed-edge { fill:none;stroke:var(--muted-foreground);stroke-width:1.5; }
+#federation-three-systems .fed-network text { fill:var(--foreground);font-family:inherit;font-size:var(--font-size-base); }
+#federation-three-systems .fed-network .fed-secondary { fill:var(--muted-foreground); }
+</style>
+<script>
+(() => {
+  const root=document.getElementById('federation-three-systems');
+  const base={h:'C0',a:'C0',b:'C0',remote:'C0',queue:'None',hs:'Clean',as:'Clean',bs:'Clean',offline:false};
+  const s=(text,values={})=>({...base,...values,text});
+  const cases=[
+    {name:'U01 · Enroll and clone',steps:[
+      s('H registers Atlas; A and B have not cloned it.',{a:'Not cloned',b:'Not cloned',as:'Enrolled',bs:'Enrolled'}),
+      s('A clones the authorized project history.',{b:'Not cloned',bs:'Enrolled'}),
+      s('B clones C0; all three can work independently.')
+    ]},
+    {name:'U02 · Node edit, commit, synchronize',steps:[
+      s('A saves a draft. No history commit or sync request.',{as:'Uncommitted draft'}),
+      s('A explicitly commits A1; publication becomes pending.',{a:'A1',as:'Publish pending'}),
+      s('A1 is published. H and B have pending requests.',{a:'A1',remote:'A1',queue:'H, B'}),
+      s('H and B accept A1; all three include the change.',{h:'A1',a:'A1',b:'A1',remote:'A1'})
+    ]},
+    {name:'U03 · Work on the hub',steps:[
+      s('H edits its working copy; the shared remote stays clean.',{hs:'Uncommitted draft'}),
+      s('H explicitly commits H1.',{h:'H1',hs:'Publish pending'}),
+      s('H publishes H1; A and B receive requests.',{h:'H1',remote:'H1',queue:'A, B'}),
+      s('A and B accept H1 through their own local workers.',{h:'H1',a:'H1',b:'H1',remote:'H1'})
+    ]},
+    {name:'U04 · Three simultaneous commits',steps:[
+      s('All three commit independent, nonconflicting edits.',{h:'H1',a:'A1',b:'B1'}),
+      s('A publishes first. H and B retain their local commits.',{h:'H1',a:'A1',b:'B1',remote:'A1',queue:'H, B'}),
+      s('B merges A1 + B1 into M1, then publishes.',{h:'H1',a:'A1',b:'M1',remote:'M1',queue:'H, A'}),
+      s('H merges H1 + M1 into M2, then publishes.',{h:'M2',a:'A1',b:'M1',remote:'M2',queue:'A, B'}),
+      s('All accept M2; A1, B1 and H1 remain in its ancestry.',{h:'M2',a:'M2',b:'M2',remote:'M2'})
+    ]},
+    {name:'U05 · Same-field conflict and review',steps:[
+      s('A1 and B1 change the same field differently.',{a:'A1',b:'B1'}),
+      s('A1 publishes. B detects a conflict and retains B1.',{h:'A1',a:'A1',b:'B1',remote:'A1',bs:'Needs review',queue:'B: needs review'}),
+      s('An authorized review creates resolution commit M1.',{h:'A1',a:'A1',b:'M1',remote:'A1',bs:'Publish pending',queue:'B: resolution'}),
+      s('M1 publishes and propagates; both histories survive.',{h:'M1',a:'M1',b:'M1',remote:'M1'})
+    ]},
+    {name:'U06 · Offline commits and reconnect',steps:[
+      s('A and B lose the hub link. H retains access to its own gateway and remote.',{offline:true,hs:'Local work',as:'Offline work',bs:'Offline work'}),
+      s('H publishes H1 locally. A1 and B1 remain unpublished on disconnected nodes.',{offline:true,h:'H1',a:'A1',b:'B1',remote:'H1',as:'Publish pending',bs:'Publish pending',queue:'A, B'}),
+      s('Reconnect: A merges A1 with H1 into M1 and publishes. B1 is still pending.',{h:'H1',a:'M1',b:'B1',remote:'M1',bs:'Publish pending',queue:'H, B'}),
+      s('B merges B1 with M1 into M2 and publishes; H and A must catch up.',{h:'H1',a:'M1',b:'M2',remote:'M2',queue:'H, A'}),
+      s('H and A accept M2; its ancestry preserves H1, A1, B1 and M1.',{h:'M2',a:'M2',b:'M2',remote:'M2'})
+    ]},
+    {name:'U07 · Incoming history meets a draft',steps:[
+      s('B has a draft when A publishes A1.',{h:'A1',a:'A1',bs:'Uncommitted draft',remote:'A1',queue:'B'}),
+      s('B fetches history but waits; its draft stays untouched.',{h:'A1',a:'A1',bs:'Waiting local work',remote:'A1',queue:'B: waiting'}),
+      s('B explicitly commits B1 when ready.',{h:'A1',a:'A1',b:'B1',remote:'A1',bs:'Ready to reconcile',queue:'B'}),
+      s('A valid merge M1 can now publish and propagate.',{h:'M1',a:'M1',b:'M1',remote:'M1'})
+    ]},
+    {name:'U08 · Feature branch and explicit merge',steps:[
+      s('A commits F1 on feature/search; main stays C0.',{a:'feature: F1',as:'main: C0'}),
+      s('Feature history is shared; main is still unchanged.',{a:'feature: F1',b:'feature: F1',as:'main: C0',bs:'main: C0',remote:'main C0 / feature F1'}),
+      s('B commits F2 on the feature branch and publishes.',{a:'feature: F1',b:'feature: F2',as:'main: C0',bs:'main: C0',remote:'main C0 / feature F2',queue:'feature subscribers'}),
+      s('An explicit reviewed merge produces main M1.',{h:'M1',a:'M1',b:'M1',remote:'main M1 / feature F2'})
+    ]},
+    {name:'U09 · Lost publication acknowledgement',steps:[
+      s('The hub accepts A1, but A misses the response.',{a:'A1',as:'Outcome unknown',remote:'A1',queue:'H, B'}),
+      s('A restarts and checks the remote head and durable receipt.',{a:'A1',as:'Publication verified',remote:'A1',queue:'H, B'}),
+      s('H and B accept A1; no duplicate commit or external action.',{h:'A1',a:'A1',b:'A1',remote:'A1'})
+    ]},
+    {name:'U10 · Migrate existing providers',steps:[
+      s('Both real lab sources are SQLite; B is a disposable SQLite fixture. Other providers have separate migration tests.',{h:'SQLite source',a:'SQLite source',b:'SQLite fixture',remote:'Not initialized'}),
+      s('One seed creates C0; A and B clone its common history.',{h:'C0',a:'C0',b:'C0',remote:'C0',as:'Legacy delta staged',bs:'Legacy delta staged'}),
+      s('Review legacy divergences before creating join commits.',{h:'C0',a:'C0',b:'C0',remote:'C0',as:'Legacy review',bs:'Legacy review'}),
+      s('Reviewed joins converge at M1; retain all source backups.',{h:'M1',a:'M1',b:'M1',remote:'M1'})
+    ]},
+    {name:'U11 · Schema compatibility barrier',steps:[
+      s('H maintenance publishes S1. B retains an unpublished B1 on the older schema.',{h:'S1',a:'S1',b:'B1',remote:'S1',bs:'Publish pending',queue:'B'}),
+      s('B refuses unsupported S1. Its B1 history stays intact.',{h:'S1',a:'S1',b:'B1',remote:'S1',bs:'Incompatible schema',queue:'B: upgrade needed'}),
+      s('After draft disposition, branch attestation and approved binary upgrade, B merges B1 plus S1 into M1 and validates.',{h:'S1',a:'S1',b:'M1',remote:'S1',bs:'Publish pending',queue:'B'}),
+      s('B publishes M1; H and A receive catch-up requests.',{h:'S1',a:'S1',b:'M1',remote:'M1',queue:'H, A'}),
+      s('All accept M1, preserving both B1 data and S1 schema ancestry.',{h:'M1',a:'M1',b:'M1',remote:'M1'})
+    ]},
+    {name:'U12 · Two agents on one node',steps:[
+      s('Agent 1 owns the edit lease on A/main.',{as:'Agent 1 draft'}),
+      s('Agent 2 must read or use another branch.',{as:'Agent 2: read only'}),
+      s('Agent 1 previews and commits its own working changes.',{a:'A1',as:'Publish pending'})
+    ]},
+    {name:'U13 · Audit delivery without a commit',steps:[
+      s('A edits locally while disconnected. Audit E1 is permanent locally; main stays C0.',{offline:true,as:'Draft; audit pending'}),
+      s('Reconnect sends E1 to the append-only hub audit store independently of any Dolt commit.',{as:'Draft; audit received',queue:'Audit receipt E1'}),
+      s('A retries after a lost reply: one E1 remains at the hub, A keeps its ledger, and all heads remain C0.',{as:'Draft retained',queue:'Audit acknowledged'})
+    ]},
+    {name:'U14 · Duplicate identity and aliases',steps:[
+      s('Migration finds LAB TODO-7 and LEGION TODO-91 describing the same work; evidence goes to review.',{hs:'TODO-7',as:'TODO-91',queue:'Duplicate review'}),
+      s('An authorized decision maps both origin-scoped IDs to one canonical record. Historical text is not rewritten.',{hs:'Alias TODO-7',as:'Alias TODO-91',queue:'Aliases recorded'}),
+      s('Concurrent reservation of a human ID grants one owner; the other node retains its provisional ID for review.',{as:'Reservation granted',bs:'ID review required',queue:'Human ID conflict'})
+    ]},
+    {name:'U15 · Restore an older hub backup',steps:[
+      s('A1 was published and acknowledged under hub epoch E1.',{h:'A1',a:'A1',b:'A1',remote:'A1',queue:'E1: generation 90'}),
+      s('Restore recovers only C0. Before reopening, H creates epoch E2; nodes retain A1.',{a:'A1',b:'A1',remote:'C0',queue:'E2: reconcile'}),
+      s('An E1 report is rejected. A uploads retained A1 for ancestry validation; no node resets to C0.',{a:'A1',b:'A1',remote:'C0',as:'Recovery upload',queue:'Old epoch rejected'}),
+      s('Validated A1 is republished under E2. Audit receipts are independently reconciled and missing records resent.',{h:'A1',a:'A1',b:'A1',remote:'A1',queue:'E2: reconciled'})
+    ]}
+  ];
+  const select=root.querySelector('#fed-case'),prev=root.querySelector('#fed-prev'),next=root.querySelector('#fed-next');
+  const graph=root.querySelector('#fed-graph'),stepLabel=root.querySelector('#fed-step'),detail=root.querySelector('#fed-detail');
+  cases.forEach((item,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent=item.name;select.append(option);});
+  let ci=0,si=0;
+  const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function restore(state){const p=state?.privateContent;if(p&&Number.isInteger(p.caseIndex)&&p.caseIndex>=0&&p.caseIndex<cases.length){ci=p.caseIndex;si=Math.max(0,Math.min(Number(p.stepIndex)||0,cases[ci].steps.length-1));}}
+  restore(window.openai?.widgetState);
+  function draw(){
+    const st=cases[ci].steps[si],w=Math.max(300,graph.clientWidth),n=(w-30)/2,hx=w/2,ay=235,nw=Math.min(n,245),ax=10+n/2,bx=w-10-n/2;
+    const box=(x,y,width,labels)=>`<rect class="fed-node" x="${x-width/2}" y="${y}" width="${width}" height="105" rx="8"/>${labels.map((t,i)=>`<text text-anchor="middle" x="${x}" y="${y+24+i*23}">${esc(t)}</text>`).join('')}`;
+    graph.innerHTML=`<svg class="fed-network" role="img" aria-label="${esc(st.text)}" viewBox="0 0 ${w} 365" width="${w}" height="365"><title>${esc(cases[ci].name)}</title><desc>${esc(st.text)} Hub working head ${esc(st.h)}. A ${esc(st.a)}. B ${esc(st.b)}. Shared remote ${esc(st.remote)}.</desc><path class="fed-edge" d="M ${hx-45} 120 L ${ax} ${ay} M ${hx+45} 120 L ${bx} ${ay}" ${st.offline?'stroke-dasharray="5 5"':''}/>${box(hx,15,Math.min(w-20,290),['H · LAB-OMARCHY','Local: '+st.h,st.hs,'Remote: '+st.remote])}<text text-anchor="middle" class="fed-secondary" x="${hx}" y="158">${st.offline?'A/B disconnected; H local':'Through guarded gateway ↕'}</text><text text-anchor="middle" x="${hx}" y="185">Control: ${esc(st.queue)}</text>${box(ax,ay,nw,['A · LEGION2','Local: '+st.a,st.as])}${box(bx,ay,nw,['B · TEST PEER','Local: '+st.b,st.bs])}</svg>`;
+    select.value=String(ci);prev.disabled=si===0;next.disabled=si===cases[ci].steps.length-1;
+    stepLabel.textContent=`${si+1} / ${cases[ci].steps.length}`;detail.textContent=st.text;
+  }
+  function save(){const api=window.openai;if(api?.setWidgetState)api.setWidgetState({modelContent:{workflow:cases[ci].name,step:si+1,description:cases[ci].steps[si].text},privateContent:{caseIndex:ci,stepIndex:si}}).catch(()=>{});}
+  select.addEventListener('change',()=>{ci=Number(select.value);si=0;draw();save();});
+  prev.addEventListener('click',()=>{if(si>0){si--;draw();save();}});
+  next.addEventListener('click',()=>{if(si<cases[ci].steps.length-1){si++;draw();save();}});
+  window.addEventListener('openai:set_globals',event=>{if(event.detail?.globals?.widgetState){restore(event.detail.globals.widgetState);draw();}});
+  new ResizeObserver(draw).observe(graph);draw();
+})();
+</script>

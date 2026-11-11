@@ -1,0 +1,16 @@
+{
+  "uniqueGwtCases": 91,
+  "canonicalRecordsCompared": 68,
+  "canonicalCriteriaCompared": 307.0,
+  "referencedIds": 223,
+  "sourceRecords": 388,
+  "donorTodos": 6,
+  "originalAcOccurrences": 778,
+  "implementationTests": "Not applicable to planning-only change",
+  "independentHv": "Not rerun",
+  "validatedAt": "2026-11-10T14:08:30.6290058-06:00",
+  "workflows": 15,
+  "agent": "Codex",
+  "errors": [],
+  "legacyMappingsRestored": 3
+}

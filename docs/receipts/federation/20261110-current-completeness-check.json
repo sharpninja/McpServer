@@ -1,0 +1,468 @@
+{
+  "changedBlockDispositions": [
+    {
+      "file": "2026-11-10-federation-dolt-architecture.md",
+      "block": 8,
+      "disposition": "Architecture2: replaced bypassing topology with Structurizr gateway/identity/control/audit/backup views."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-architecture.md",
+      "block": 12,
+      "disposition": "Architecture2/11 and contract11: permanent local audit retained and hub delivery added."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-architecture.md",
+      "block": 19,
+      "disposition": "Architecture3 and contract16: live writer gate retained; isolated worker rights clarified."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-architecture.md",
+      "block": 22,
+      "disposition": "Architecture3/12 and contract9: tagged allocation retained; historical reference rewriting replaced with permanent aliases."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-architecture.md",
+      "block": 26,
+      "disposition": "Architecture4 and contract5: protected public refs retained; node upload repository isolated."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-architecture.md",
+      "block": 30,
+      "disposition": "Architecture4/13: every worker uses authenticated gateway, outbound-only node connections retained."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-architecture.md",
+      "block": 33,
+      "disposition": "Architecture5 and contract6: subscription fields/generation semantics retained, HubEpoch added."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-architecture.md",
+      "block": 34,
+      "disposition": "Architecture5 and contracts6/8: worker fencing and non-success outcomes retained across restore epochs."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-architecture.md",
+      "block": 44,
+      "disposition": "Architecture7/13 and contracts10/12: plugin errors/local authorization retained; existing IdentityServer revocation made explicit."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-architecture.md",
+      "block": 66,
+      "disposition": "Architecture9 and contract14: replaced no-reverse-tool boundary with required TODO-to-SQLite recovery export and source retention."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-architecture.md",
+      "block": 68,
+      "disposition": "Architecture10: Windows native lifecycle, real link addresses and loopback SQL correct deployment assumptions."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-architecture.md",
+      "block": 69,
+      "disposition": "Architecture10/13 and contract12: credential containment/worker authority retained; gateway relay is an explicit Ph0 proof."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 5,
+      "disposition": "Plan1/Ph8: real two-host acceptance plus named three-peer fixture replaces imaginary third host."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 6,
+      "disposition": "Plan1: scope retained; U13-U15 add audit, aliases and restore."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 8,
+      "disposition": "Plan2: dependency sequence revised to Ph3 seed/export and Ph6 reviewed join."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 12,
+      "disposition": "Plan3: relevant donor checks retained, unrelated branch names/history omitted."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 20,
+      "disposition": "PlanPh0: model/provider/merge/auth checks retained and evidenced on both OSs."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 23,
+      "disposition": "PlanPh0: all twelve blocking outputs remain; current applicable coverage replaces bulk historical input."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 24,
+      "disposition": "PlanPh0 B1-B12: all prior gates retained with audit, Windows, restore and identity additions."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 31,
+      "disposition": "PlanPh2: ownership/partition tests retained; audit delivered outside project history."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 34,
+      "disposition": "PlanPh3/Ph6 and architecture9: typed migration commands retained, seed/join dependency split explicit."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 35,
+      "disposition": "Restored explicit Ph3 fixture matrix and crash points; repeated for Ph6 joins in current acceptance specification."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 36,
+      "disposition": "PlanPh6: divergent join review, immutable source accounting and final-main verification retained."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 37,
+      "disposition": "PlanPh3/Ph8: source retention, disposable tests and pre/post-write recovery retained; TODO export added."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 42,
+      "disposition": "PlanPh5: guarded publication/subscriptions/fences retained; IdentityServer/audit/reservations/epochs added."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 48,
+      "disposition": "PlanPh7: typed server/client/plugin parity retained; identity/audit/alias/maintenance interfaces added."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 51,
+      "disposition": "PlanPh8: three-writer scenario retained through provisioned fixture and real LAB/LEGION link tests."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 52,
+      "disposition": "PlanPh8: inventory/common-root/cutover checks retained; recovery export and48-hour soak added."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 53,
+      "disposition": "PlanPh8: preflight/SSH/deployment gating retained; explicit DEPLOY HOLD release added."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 55,
+      "disposition": "Workflow inventory/current coverage: same48 release IDs and pending status retained; receipts omitted from main narrative."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 56,
+      "disposition": "Coverage index and current compatibility criteria: applicable regressions retained, superseded LocalProxy rules excluded."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 57,
+      "disposition": "Plan14:98/98 target retained, reviewer must be a different agent family; historical verdicts are not current approval."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 58,
+      "disposition": "Plan14: canonical update/readback/export and ValidateTraceability discipline explicitly retained."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 60,
+      "disposition": "Historical review round narrative removed; substantive gates preserved in plan phases/contracts."
+    },
+    {
+      "file": "2026-11-10-federation-dolt-bdpv4.md",
+      "block": 61,
+      "disposition": "Historical review round narrative removed; live writer gate, maintenance and branch attestation remain in current plan."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 2,
+      "disposition": "Workflow introduction: illustrative peer now explicitly labeled disposable test peer."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 15,
+      "disposition": "U06: H retains local remote access; A/B unpublished commits converge via M1 then M2."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 23,
+      "disposition": "U10: all source providers retained; real hosts corrected to SQLite; audit and aliases added."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 26,
+      "disposition": "U11: schema gating retained and B1+S1=M1 ancestry made explicit."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 33,
+      "disposition": "Current contract 1: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 35,
+      "disposition": "Current contract 2: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 37,
+      "disposition": "Current contract 3: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 39,
+      "disposition": "Current contract 4: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 41,
+      "disposition": "Current contract 5: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 43,
+      "disposition": "Current contract 6: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 45,
+      "disposition": "Current contract 7: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 47,
+      "disposition": "Current contract 8: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 49,
+      "disposition": "Current contract 9: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 51,
+      "disposition": "Current contract 10: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 53,
+      "disposition": "Current contract 11: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 55,
+      "disposition": "Current contract 12: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 57,
+      "disposition": "Current contract 13: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 59,
+      "disposition": "Current contract 14: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 61,
+      "disposition": "Current contract 15: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 63,
+      "disposition": "Current contract 16: server/plugin obligation and all prior test names retained in architecture/workflow/current specification; applicable reviewed amendments replace old wording."
+    },
+    {
+      "file": "2026-11-10-federation-three-system-workflows.md",
+      "block": 66,
+      "disposition": "Plan14/current coverage: preserve canonical IDs, plugin update/readback and phase-exit export; no duplicate requirement set."
+    }
+  ],
+  "baseline": "Hash-verified r4 source packet",
+  "baselineBlocks": 139,
+  "releaseContracts": 16,
+  "at": "2026-11-10T19:22:19.1797212-06:00",
+  "unchangedBlocks": 83,
+  "splitCriterion": "CloneOmitsAuditAndSecrets -> CloneOmitsSecrets + AuditReachesHub + AuditBackfillVerified",
+  "exact39PagePdfLocated": false,
+  "releaseCriteria": 91,
+  "baselineTestNames": 74,
+  "reviewLimit": "Author comparison against recovered sources and supplied17 findings; not independent HV or proof of production feasibility.",
+  "baselineHashes": [
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-architecture.md",
+      "matches": true,
+      "expected": "63F6FB99A2461DD7EC82A129382233B10A723233AAFCA84149F676292B4D76DB",
+      "actual": "63F6FB99A2461DD7EC82A129382233B10A723233AAFCA84149F676292B4D76DB"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+      "matches": true,
+      "expected": "B261AD0B609FD1A9DD4244F639BBD059E1B39017D90AA9F3BF5023B93DC9D73A",
+      "actual": "B261AD0B609FD1A9DD4244F639BBD059E1B39017D90AA9F3BF5023B93DC9D73A"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-three-system-workflows.md",
+      "matches": true,
+      "expected": "CFC0D6C59162CCB5AD39320873B76712C585D8B66F7D49AF707BD774D1B4871B",
+      "actual": "CFC0D6C59162CCB5AD39320873B76712C585D8B66F7D49AF707BD774D1B4871B"
+    }
+  ],
+  "reviewFindingLocations": [
+    {
+      "id": 1,
+      "proof": [
+        "AuditReachesHub",
+        "AuditBackfillVerified",
+        "audit_id_conflict"
+      ],
+      "location": "Architecture11; contracts11/14; Ph2/Ph3/Ph5"
+    },
+    {
+      "id": 2,
+      "proof": [
+        "FR-MCP-103",
+        "TR-MCP-FED-001",
+        "LocalProxy middleware is not invoked"
+      ],
+      "location": "Current-scope coverage; contract1; Ph2"
+    },
+    {
+      "id": 3,
+      "proof": [
+        "MCP-FEDIDENTITY-001",
+        "ownerSubjectId",
+        "reference access tokens"
+      ],
+      "location": "Architecture13; contract12; Ph2/Ph5/Ph7"
+    },
+    {
+      "id": 4,
+      "proof": [
+        "structurizr-Containers.svg",
+        "structurizr-Deployment.svg"
+      ],
+      "location": "Architecture2 embedded Structurizr container/deployment views"
+    },
+    {
+      "id": 5,
+      "proof": [
+        "FED-ATLAS-H",
+        "FED-ATLAS-A",
+        "FED-ATLAS-B"
+      ],
+      "location": "Ph0/Ph8 named fixture and two-host deployment"
+    },
+    {
+      "id": 6,
+      "proof": [
+        "Given A/main=C0",
+        "POST publication/accept",
+        "Stable failure mapping"
+      ],
+      "location": "Current contracts1-16 and applicable acceptance supplement"
+    },
+    {
+      "id": 7,
+      "proof": [
+        "SeedPhaseRejectsJoin",
+        "## 11. Ph6:"
+      ],
+      "location": "Ph3 seed/export; Ph6 join"
+    },
+    {
+      "id": 8,
+      "proof": [
+        "DifferentIdsSameTodoDetected",
+        "SimultaneousHumanIdReservation",
+        "ambiguous_legacy_id"
+      ],
+      "location": "Architecture12; contract9; U14"
+    },
+    {
+      "id": 9,
+      "proof": [
+        "ReviewAgeVisible",
+        "UnrelatedPublicationContinues",
+        "SafeTodoMergeRules"
+      ],
+      "location": "Architecture12; contract7; Ph7"
+    },
+    {
+      "id": 10,
+      "proof": [
+        "native Windows",
+        "WindowsWriterLockAndRestart",
+        "B1-B12"
+      ],
+      "location": "Architecture10; contract13; Ph0/Ph8"
+    },
+    {
+      "id": 11,
+      "proof": [
+        "DoltTodoExportPreservesNewWrites",
+        "48-hour soak",
+        "read-only"
+      ],
+      "location": "Architecture9; contract14; Ph3/Ph8"
+    },
+    {
+      "id": 12,
+      "proof": [
+        "10.42.0.214",
+        "10.42.0.143",
+        "SqlPortUnreachableAcrossLink",
+        "QBrain Lab Federation Root CA"
+      ],
+      "location": "Architecture10; contract12"
+    },
+    {
+      "id": 13,
+      "proof": [
+        "ReceiptsAndLogsContainNoCredentials",
+        "argv"
+      ],
+      "location": "Architecture10; contracts10/11"
+    },
+    {
+      "id": 14,
+      "proof": [
+        "planning baseline",
+        "agent family other than the author"
+      ],
+      "location": "Cover and Plan14"
+    },
+    {
+      "id": 15,
+      "proof": [
+        "DEPLOY HOLD",
+        "SSH to LEGION2 as kingd"
+      ],
+      "location": "Ph8"
+    },
+    {
+      "id": 16,
+      "proof": [
+        "A merges H1+A1 into M1",
+        "B merges M1+B1 into M2",
+        "B1",
+        "Both real lab stores are SQLite"
+      ],
+      "location": "U06/U10/U11"
+    },
+    {
+      "id": 17,
+      "proof": [
+        "HubRestoreFromOlderBackup",
+        "hub_epoch_changed"
+      ],
+      "location": "Architecture5; contracts6/8; U15"
+    }
+  ],
+  "currentGapCriteria": 34,
+  "author": "Codex",
+  "errors": []
+}

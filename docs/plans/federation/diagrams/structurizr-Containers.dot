@@ -1,0 +1,54 @@
+digraph {
+  compound=true
+  graph [fontname="Arial", rankdir=LR, ranksep=1.0, nodesep=1.0]
+  node [fontname="Arial", shape=box, margin="0.4,0.3"]
+  edge [fontname="Arial"]
+  label=<<br /><font point-size="34">Container View: QBrain.AI Federation</font>>
+
+  1 [id=1,shape=rect, label=<<font point-size="34">Operator and plugins</font><br /><font point-size="19">[Person]</font><br /><br /><font point-size="24">Explicit commits, branch work<br />and reviewed reconciliation</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+
+  subgraph cluster_2 {
+    margin=25
+    label=<<font point-size="24"><br />QBrain.AI Federation</font><br /><font point-size="19">[Software System]</font>>
+    labelloc=b
+    color="#444444"
+    fontcolor="#444444"
+    fillcolor="#444444"
+
+    10 [id=10,shape=rect, label=<<font point-size="34">Existing<br />IdentityServer</font><br /><font point-size="19">[Container: Duende / HTTPS gateway /connect]</font><br /><br /><font point-size="24">Per-node client credentials,<br />owner binding, project scopes<br />and revocation</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    11 [id=11,shape=rect, label=<<font point-size="34">A local application<br />and worker</font><br /><font point-size="19">[Container: .NET / Windows service]</font><br /><br /><font point-size="24">PAYTON-LEGION2; outbound<br />federation only</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    12 [id=12,shape=rect, label=<<font point-size="34">A project working<br />database</font><br /><font point-size="19">[Container: Native Windows Dolt / loopback 3306]</font><br /><br /><font point-size="24">Independent drafts and<br />versioned project history</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    13 [id=13,shape=rect, label=<<font point-size="34">A operational store</font><br /><font point-size="19">[Container: SQLite or supported provider]</font><br /><br /><font point-size="24">Local audit, leases, IDs,<br />aliases and durable outboxes</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    14 [id=14,shape=rect, label=<<font point-size="34">LAB backup set</font><br /><font point-size="19">[Container: Protected local backup files]</font><br /><br /><font point-size="24">Project refs, controls, audit,<br />IdentityServer and restore<br />manifests</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    15 [id=15,shape=rect, label=<<font point-size="34">LEGION backup set</font><br /><font point-size="19">[Container: F:/ protected backup files]</font><br /><br /><font point-size="24">Retained read-only SQLite<br />sources, project refs and<br />operational state</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    3 [id=3,shape=rect, label=<<font point-size="34">H local application<br />and worker</font><br /><font point-size="19">[Container: .NET / existing host]</font><br /><br /><font point-size="24">LAB working peer; gated<br />live-branch writes; outbound<br />sync and audit</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    4 [id=4,shape=rect, label=<<font point-size="34">H project working<br />database</font><br /><font point-size="19">[Container: Dolt SQL / loopback 3306]</font><br /><br /><font point-size="24">Independent drafts and<br />versioned project history</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    5 [id=5,shape=rect, label=<<font point-size="34">H operational store</font><br /><font point-size="19">[Container: SQLite or supported provider]</font><br /><br /><font point-size="24">Local audit, leases, ID<br />allocation and durable<br />outboxes</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    6 [id=6,shape=rect, label=<<font point-size="34">Federation gateway<br />and publication API</font><br /><font point-size="19">[Container: HTTPS / 10.42.0.214:7447]</font><br /><br /><font point-size="24">IdentityServer introspection;<br />per-project remote relay;<br />candidate validation; only<br />publisher of public refs</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    7 [id=7,shape=rect, label=<<font point-size="34">Shared<br />committed-history<br />remote</font><br /><font point-size="19">[Container: Dolt remotesapi / loopback 7448]</font><br /><br /><font point-size="24">Separate from H working copy;<br />backend reachable only by<br />gateway</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    8 [id=8,shape=rect, label=<<font point-size="34">Hub control store</font><br /><font point-size="19">[Container: Unversioned relational database]</font><br /><br /><font point-size="24">Enrollment, subscriptions,<br />receipts, aliases and restore<br />epoch</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+    9 [id=9,shape=rect, label=<<font point-size="34">Hub append-only audit<br />store</font><br /><font point-size="19">[Container: Unversioned relational database]</font><br /><br /><font point-size="24">Idempotent node audit records<br />and durable receipts; never<br />branchable</font>>, style=filled, color="#39747c", fillcolor="#eef5f7", fontcolor="#173647"]
+  }
+
+  1 -> 3 [id=16, label=<<font point-size="24">Local work and explicit<br />commits</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  1 -> 11 [id=18, label=<<font point-size="24">Local work and explicit<br />commits</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  3 -> 4 [id=19, label=<<font point-size="24">Gated local reads/writes</font><br /><font point-size="19">[MySQL loopback]</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  3 -> 5 [id=20, label=<<font point-size="24">Audit/outbox/lease<br />persistence</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  11 -> 12 [id=21, label=<<font point-size="24">Gated local reads/writes</font><br /><font point-size="19">[MySQL loopback]</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  11 -> 13 [id=22, label=<<font point-size="24">Audit/outbox/lease<br />persistence</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  3 -> 6 [id=23, label=<<font point-size="24">Poll, upload candidate,<br />accept request, fetch,<br />audit push</font><br /><font point-size="19">[TLS / IdentityServer token]</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  11 -> 6 [id=24, label=<<font point-size="24">Poll, upload candidate,<br />accept request, fetch,<br />audit push</font><br /><font point-size="19">[TLS / IdentityServer token]</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  6 -> 10 [id=25, label=<<font point-size="24">Token introspection and<br />enrollment owner<br />authorization</font><br /><font point-size="19">[Loopback / existing identity integration]</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  6 -> 7 [id=26, label=<<font point-size="24">Validated public-ref<br />publication and guarded<br />object relay</font><br /><font point-size="19">[Private remotesapi]</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  6 -> 8 [id=27, label=<<font point-size="24">Generations, project<br />authorization and receipts</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  6 -> 9 [id=28, label=<<font point-size="24">Append deduplicated audit<br />records and return<br />receipts</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  4 -> 14 [id=29, label=<<font point-size="24">Consistent checkpoint</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  5 -> 14 [id=30, label=<<font point-size="24">Consistent checkpoint</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  7 -> 14 [id=31, label=<<font point-size="24">Committed refs and objects</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  8 -> 14 [id=32, label=<<font point-size="24">Checkpoint with restore<br />epoch manifest</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  9 -> 14 [id=33, label=<<font point-size="24">Ledger and receipt<br />checkpoint</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  10 -> 14 [id=34, label=<<font point-size="24">Protected identity<br />recovery data</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  12 -> 15 [id=35, label=<<font point-size="24">Consistent checkpoint</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+  13 -> 15 [id=36, label=<<font point-size="24">Consistent checkpoint</font>>, style="dashed", color="#444444", fontcolor="#444444"]
+
+}

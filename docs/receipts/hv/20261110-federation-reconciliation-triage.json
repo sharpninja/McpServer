@@ -1,0 +1,6 @@
+{
+  "status": "collecting",
+  "reportId": "triage-report-5b4f4f06a84b48c69ea79fe311a173ca",
+  "reason": "Batch create failed to restore soft-deleted IDs; single create succeeded.",
+  "groupId": "triage-group-f7b4e55654205da5"
+}

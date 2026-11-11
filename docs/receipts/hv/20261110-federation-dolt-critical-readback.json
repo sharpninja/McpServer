@@ -1,0 +1,44 @@
+[
+  {
+    "id": "FR-MCP-186",
+    "status": "pending",
+    "criteria": [
+      "ac-FourProvidersResolve",
+      "ac-DoltBaselineAndUpgrade",
+      "ac-OriginalProviderMigrationsUnchanged",
+      "ac-UnsupportedSchemaRejected",
+      "ac-VersionedProjectNotMigratedAtStartup",
+      "ac-OldSchemaUnpublishedCommitMergesAfterUpgrade",
+      "ac-FeatureBranchSchemaCatchUp",
+      "ac-DirtyDraftBlocksBinaryUpgrade",
+      "ac-ContractBlockedUntilLocalBranchesAttested",
+      "ac-DeploymentPreflightBlocksDirtyOrUnattestedBranch"
+    ]
+  },
+  {
+    "id": "FR-MCP-187",
+    "status": "pending",
+    "criteria": [
+      "ac-ThreeSourceProviderRoundTrip",
+      "ac-ResumeAfterBatchCommit",
+      "ac-ChangedSnapshotRejected",
+      "ac-FailedVerifyCannotCutover",
+      "ac-SourceRetainedAfterCutover",
+      "ac-MigrationJoinPreservesCommonAncestor",
+      "ac-MigrationJoinDivergentRowRequiresReview",
+      "ac-JoinCutoverRequiresReviewedMain"
+    ]
+  },
+  {
+    "id": "FR-MCP-189",
+    "status": "pending",
+    "criteria": [
+      "ac-CommitCannotCaptureOtherAgentDraft",
+      "ac-ExpiredLeaseFenced",
+      "ac-PreviewChangeRequiresReview",
+      "ac-LeaseLostDuringWriteRejected",
+      "ac-CommitRetryReturnsSameHash",
+      "ac-IncomingMergeCannotRaceAdmittedEdit"
+    ]
+  }
+]

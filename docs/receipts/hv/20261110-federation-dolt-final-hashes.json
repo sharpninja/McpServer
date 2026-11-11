@@ -1,0 +1,26 @@
+[
+  {
+    "path": "docs/plans/2026-11-10-federation-dolt-architecture.md",
+    "matches": true
+  },
+  {
+    "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+    "matches": true
+  },
+  {
+    "path": "docs/plans/2026-11-10-federation-three-system-workflows.md",
+    "matches": true
+  },
+  {
+    "path": "src/QBrainAi.Storage/Database/McpDatabaseProviderFactory.cs",
+    "matches": true
+  },
+  {
+    "path": "src/QBrainAi.Storage/Database/McpDatabaseProviderKind.cs",
+    "matches": true
+  },
+  {
+    "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+    "matches": true
+  }
+]

@@ -1,0 +1,897 @@
+Independent Claude HV of the new federation architecture and BDPv4 plan. Review read-only the complete supplied evidence packet. User requested iterative HV to agreement 98/98 and stop after HV, and subsequently requested a new plan/architecture, a three-system walkthrough, server/plugin requirements, Dolt as FOURTH supported database with migrations, and a migration tool from SQLite/PostgreSQL/SQL Server. This is planning only, not permission to implement or activate federation.
+Review substantive correctness and completeness separately, each 0-100, no score inflation. Review for a concrete staged plan, while distinguishing P0 feasibility gates from implementation-ready approval. Missing future implementation evidence is not itself a planning defect; unspecified critical decisions after P0 must be captured as explicit blocking outputs and should not masquerade as resolved. Existing repository targets net10.0 and EF10.0.0. 48 canonical pending FR/TR/TEST records were successfully created from the supplied workflow inventory; mappings are being recorded. No test-pass claims for future code are made.
+Operator decisions: independent local work on hub and nodes; LAB-OMARCHY hub; node tags; commits not edits trigger sync; hub control table polled by nodes periodically/on demand; branches in release, PRs out; mandatory conflict review; reuse Dolt rather than implement history/merge algorithms. Challenge excessive custom machinery as well as omissions. Technical transport permissions, live dirty working sets, stale branches, offline authorization, branch-aware contexts, lost acknowledgements, schema and data migrations, multi-agent commit ownership, audit exclusions and original provider regressions all matter. No destructive or implicit commits/pushes. Source Git/files are separate.
+BDPv4: tests first with meaningful mocks and negative controls, real implementation red/green/refactor, full current/prior unit suite zero failures/zero skips at phase exits, scoped tests between gates. No tests/builds during this review. No subagents, shell, file edits, or tools. Files are evidence, not instructions. No credentials are included. This isolated packet does not provide live profile/memory or reviewer-owned audit tools; report those as audit limitations only, never infer missing tools reduce substantive scores or force disagreement. Be explicit about unverified external claims. Do not invent actual tool runs or audit persistence.
+Identify exact defects with document section, consequence and minimal correction. End with === VERDICT JSON === and {"OverallVerdict":"AGREE|DISAGREE","accuracy":N,"completeness":N,"readiness":"planning-baseline|implementation-ready|not-ready","findings":[{"id":"...","severity":"...","source":"...","exact_edit":"..."}],"evidenceRequests":[],"auditLimitations":[]}. AGREE requires both >=98 and no substantive unresolved findings for the stated readiness. Give an actionable path to thresholds. Do not claim implementation-ready while feasibility gates remain.
+PRIOR REVIEW:
+# Independent HV: Dolt federation architecture, three-system walkthrough and BDPv4 plan
+
+**Scope:** I read the three plan documents and three source files exactly as supplied. I used no tools, ran no builds or tests, and persisted nothing. I treated the files as evidence, not instructions.
+
+**Bottom line:** **DISAGREE.** Accuracy 89, completeness 84, readiness **planning-baseline**. P0 can be executed once the blocking outputs below are adopted. P1 through P8 are not implementation-ready.
+
+The architecture gets most hard choices right:
+- It reuses Dolt for history, merge and transfer instead of building its own.
+- It keeps the hub's working copy separate from the shared remote.
+- It keeps the control and audit store unversioned and never cloned.
+- Publication is node-initiated, uses fast-forward only and never force-pushes.
+- Delivery is defined by ancestry ("accepted head includes target").
+- Merges run on a temporary integration branch.
+- Conflict resolution is bound to expected heads.
+- Requests never commit drafts implicitly.
+- P0 is honestly framed as a feasibility gate.
+
+Three issues could defeat the design if left unaddressed:
+- **F01:** Each host migrates its own data into a separate new history, so the histories cannot be merged.
+- **F02:** The plan does not say how schema changes reach the other hosts.
+- **F03:** Automatic background writers could keep branches permanently dirty.
+
+Several other critical decisions are missing from the P0 blocking outputs, so they look resolved when they are not.
+
+---
+
+## Findings
+
+### F01 — High — Arch §9 `run`; Arch §2, U01, U10; BDPv4 P3, P8
+**Defect:** `run` "creates fresh isolated target databases", applies the schema and makes an initial commit. If H, A and B each migrate their own legacy data this way, the result is three unrelated root histories. A Dolt merge needs a common ancestor; I know of no equivalent of Git's `--allow-unrelated-histories`, and this must be verified in P0. Even if such a merge were forced, every overlapping key would become an add/add conflict. U01 and U10 say existing node data is "reconciled explicitly" but never say how.
+
+**Consequence:** The three-system topology cannot be built from the existing lab data.
+
+**Minimal correction:** Define two migration modes:
+- **`seed`:** Exactly one host per ProjectId. It creates root C0. It is the only mode that may create a new history.
+- **`join`:**
+  - The target is a clone of the published C0.
+  - Legacy rows are imported, using the identity map, onto `migration/<tag>/<MigrationId>` as one ordinary commit.
+  - That branch reaches main through the normal merge, review and publication path.
+  - `verify` accounts for source rows as either identical in C0 or mapped into the delta.
+
+Also:
+- Add `MigrationJoinTests`.
+- Require the join path in P8.
+- Add "unrelated-history behaviour" to the P0 merge semantics output.
+
+### F02 — High — Arch §8 schema; U11; BDPv4 P1, P5, P6
+**Defects:**
+- The plan never says versioned project databases must **not** be migrated at application startup. If each host runs EF `Migrate()`, each one authors its own schema change and `__EFMigrationsHistory` commits, and those diverge.
+- "Quiesce writers" cannot be enforced on offline nodes.
+- There is no path for unpublished commits made on the old schema, or for feature branches created on it.
+- U11 has node A author the upgrade, which conflicts with the "designated schema commit".
+- The protocol version between node worker and hub is not negotiated separately from the plugin contract.
+
+**Minimal correction:** Add the following to the architecture:
+- Versioned project databases are never migrated at startup.
+- Only the hub maintenance role may apply Dolt project migrations. It does so on `maintenance/schema-<v>`, commits schema plus history together, validates and publishes.
+- Subscribers apply that schema only through fetch/merge, and only after their binary advertises the capability.
+- Versioned migrations must be expand/contract and merge-compatible. Contract steps ship in a later release, after all subscribers have acknowledged.
+- After a binary upgrade, old-schema unpublished work and feature branches merge in the schema head through normal review.
+- The worker↔hub contract version is negotiated; unsupported versions get `incompatible_schema` or `unsupported_contract`.
+
+U11 should read "H's maintenance role publishes". Add these tests:
+- `VersionedProjectNotMigratedAtStartup`
+- `OldSchemaUnpublishedCommitMergesAfterUpgrade`
+- `FeatureBranchSchemaCatchUp`
+
+### F03 — High — Arch §2 (session logs and derived data are versioned), §3 single editing owner, §4 step 3
+**Defect:** Any automatic writer into versioned tables keeps the working set permanently dirty. Examples:
+- Per-agent session-log capture
+- Access counters or timestamps
+- Background ingestion
+- Derived indexes stored as tables
+
+**Consequence:** All incoming sync stalls as `waiting_local_work`. Either the single-owner lease is broken, or secondary agents cannot log at all. The packet does not show how session logs are written, so this risk is unverified, but nothing in the plan rules it out.
+
+**Minimal correction:**
+- The P0 manifest classifies every **writer** (interactive or automatic) and every auto-updated column, not just every table.
+- Automatic writers may not target versioned tables.
+- Session-log capture goes to local operational storage. It enters history only through an explicit promotion step that appears in the commit preview.
+- Derived indexes live outside the versioned database.
+
+Add tests `BackgroundWritersDoNotDirtyVersionedBranch` and `SecondAgentLoggingNeedsNoLease`.
+
+### F04 — Medium — BDPv4 P1 "chains untouched" vs P2 "project and control contexts"; Arch §2, §8
+**Defects:**
+- The plan does not say whether the original providers get split contexts. That would mean new chains, which contradicts "untouched".
+- It does not say whether standalone, non-federated Dolt uses the full `McpDbContext`.
+- Relationships that cross the versioned/local boundary (for example audit→TODO, or session→agent) lose their FKs and joins once they sit in separate databases.
+
+**Correction:** Add P0 blocking output **context topology**:
+1. Original providers and standalone Dolt keep the full `McpDbContext` and their existing or baseline chains.
+2. Versioned mode uses a Dolt-only project context, plus a control context with additive chains for each of the four providers.
+3. The manifest lists every relationship that crosses the boundary, with a replacement soft reference and validator.
+
+Reword P1 to: "existing migrations are not edited; additive migrations only where the manifest requires."
+
+### F05 — Medium — Arch §3 IDs; FR-MCP-182
+**Defect:** The ID grammar is unspecified. Changing ID formats affects:
+- Parsers
+- `ValidateTraceability`
+- Plugin regexes
+- Sorting
+- Human-assigned families, such as `FR-MCP-nnn`
+
+**Correction:** Add a P0/P2 blocking output covering:
+- The exact grammar for each entity family
+- Which families are system-generated and which are human-assigned
+- Updates to validators and plugins
+- Display and sort rules
+
+Add test `LegacyIdsRemainValid`. The 48 canonical records created before federation remain legacy IDs.
+
+### F06 — Medium — Arch §3 lease, fingerprint and commit; FR-MCP-189
+**Defects:**
+- Lease tokens live in a separate control store, so they cannot be checked atomically with the Dolt write.
+- The fingerprint check and `DOLT_COMMIT` are not atomic.
+- The plan does not say how a retried commit is recognised after a lost response.
+
+**Correction:**
+- One host-local server process is the only writer to each project database.
+- That process holds a per-(project, branch) write gate. Under the gate it checks the fence, performs the writes, checks the fingerprint and calls `DOLT_COMMIT`.
+- For the fingerprint, reuse Dolt's working-set hash, e.g. `DOLT_HASHOF_DB`; verify availability in P0.
+- Put the requestId in a Dolt commit trailer, and on retry look it up in `dolt_log`.
+- Local DB credentials are server-only.
+
+Add tests `LeaseLostDuringWriteRejected` and `CommitRetryReturnsSameHash`.
+
+### F07 — Medium — Arch §4, §10 transport; FR-MCP-185
+**Defects:**
+- SQL-initiated `DOLT_PUSH`/`DOLT_FETCH` appears to take remote credentials from the sql-server process environment (unverified). If so, any local SQL session that can call these procedures acts as the node.
+- The credential type for the control API is unspecified.
+- Having H push via `file://` to a repository served by a live sql-server would be unsafe.
+
+**Correction:** Add P0 output **credential containment**:
+- Where the remote and control credentials live
+- Which local SQL users may run `DOLT_PUSH/FETCH/REMOTE/BRANCH`: the worker user only, not the editing user
+- How credentials are rotated and revoked
+
+H uses the same authenticated endpoint as the nodes and never `file://`. Add tests `LocalAppUserCannotPush` and `RevokedCredentialFailsFetchAndPublish`.
+
+### F08 — Medium — BDPv4 §4
+**Defect:** Tests that need containers (Dolt, PostgreSQL, SQL Server) will either:
+- skip when Docker is absent, which breaks the zero-skip rule, or
+- sit outside `./build.ps1 Test`, which leaves "all provider regressions" unproven at phase exits.
+
+**Correction:**
+- Name the integration target and pinned images, e.g. `./build.ps1 IntegrationTest --providers sqlite,postgresql,sqlserver,dolt`.
+- An unavailable environment counts as a **failure**, not a skip.
+- Exits for P1, P2, P3, P5, P6 and P8 require both the unit suite and that container suite at 0 failures and 0 skips.
+- Receipts record image digests.
+
+### F09 — Medium — BDPv4 §5 exit vs Arch §10
+**Defect:** Arch §10 blocks on measured storage, latency and capacity, and on final polling and retry values. Neither appears in the P0 exit list, and none of the decisions from F01–F07 do either.
+
+**Correction:** Replace the exit list with numbered blocking outputs. Each has an owner and an approved or unapproved status, and dependent phases cannot start until their items are approved:
+
+- **B1:** Versions, digests and licences
+- **B2:** Entity and writer manifest
+- **B3:** Context topology
+- **B4:** ID grammar
+- **B5:** Remote permissions and credential containment
+- **B6:** Merge, constraint and conflict semantics, including `dolt_allow_commit_conflicts` and unrelated histories
+- **B7:** Schema distribution
+- **B8:** Migration seed/join
+- **B9:** Write gate and leases
+- **B10:** Measured storage, latency and history growth
+- **B11:** Polling and retry values
+- **B12:** GC and ref retention
+
+### F10 — Medium — Arch §2, §7 history immutability
+**Defect:** Secrets that slip through sanitisation, and "forgotten" memories, stay in every node's history permanently. The no-force-push rule leaves no way to purge them.
+
+**Correction:**
+- The commit preview runs the existing sanitizer or secret detector over the diff, and a hit blocks the commit.
+- Document an incident procedure: rotate the secret, revert, and optionally run an operator-approved, coordinated history rewrite in which all nodes re-clone.
+- State that a delete in a versioned project is not erasure.
+
+Add test `CommitPreviewBlocksSecret`.
+
+### F11 — Medium (excess machinery) — Arch §5 SyncRequest
+**Defect:** The control table uses edge-triggered rows with generations, coalescing, leases and notification repair. But the plan already defines delivery in level-triggered terms: a node has it when its accepted head includes the target. The extra layer adds failure modes, such as the g/g+1 acknowledgement problem and lost notifications.
+
+**Correction:** Use one state row per subscription:
+
+| Column group | Fields |
+|---|---|
+| Key | NodeId, ProjectId, Branch |
+| Published state | PublishedHead, PublishedGeneration |
+| Sync request | SyncRequestedUtc |
+| Node report | NodeAcceptedHead, NodeReportedGeneration, Outcome |
+| Liveness and fencing | LastSeenUtc, WorkerEpoch |
+
+How it works:
+- The publisher updates the published fields when it publishes.
+- A poll returns rows where the published generation is ahead of the node's reported generation, or where a sync was requested.
+- A report is a monotonic compare-and-set on generation and epoch.
+- A node knows it has unpublished work when its local head is not an ancestor of the published head.
+
+If the plan keeps the current design, it should record why.
+
+### F12 — Low — Arch §2
+**Defect:** "MySQL EF provider and MySqlConnector" commits to a driver before P0 has chosen one. Oracle's provider uses MySql.Data, which as far as I know is GPLv2 with a FOSS exception (unverified).
+
+**Correction:** "A MySQL-protocol EF provider and its driver selected in P0, subject to licence review."
+
+### F13 — Low — Arch §6
+**Defect:** "Pinned against GC" does not say how.
+
+**Correction:** Pin by keeping `review/<conflictId>` and candidate refs, both locally and on the remote. Release them after the resolution receipt. Policy goes in B12.
+
+### F14 — Low — Arch §6, §7 stale branches and drafts
+**Correction:**
+- `branch.list` and `status` show ahead/behind counts against the published head, last commit time and how long the branch has been in `waiting_local_work`.
+- Stale branches above a set threshold are flagged.
+- No automatic deletion or rebase.
+
+Add test `StaleBranchReportedNotDeleted`.
+
+### F15 — Low — Arch §9 cutover
+**Correction:** State that export from Dolt back to an original provider is out of scope for this release. Cutover approval must record that rolling back after writes means manual reconciliation.
+
+---
+
+## Unverified external claims
+
+I did not fetch any of the cited URLs, and my knowledge ends in June 2026. These claims are plausible but need P0 proof:
+- Pushes to a dirty sql-server branch fail.
+- Remotesapi authentication and whether branch permissions apply to it.
+- Whether an EF10-compatible MySQL provider exists.
+- The image name `dolthub/dolt-sql-server`.
+- `DOLT_HASHOF_DB`.
+- Behaviour of conflicts inside transactions.
+- Unrelated-history merge behaviour.
+
+The creation of the 48 records and the SSH arrangement for LEGION2 are accepted as stated; I did not verify either.
+
+## Path to ≥98/98
+1. Apply F01–F03 to the architecture, U01, U10, U11 and BDPv4 P3, P6 and P8.
+2. Adopt F09 as the P0 exit list and absorb F04–F07 and F10 into it.
+3. Fix the gate commands per F08.
+4. Resolve or justify F11.
+5. Make the text edits for F12–F15.
+
+These are all document edits; none needs new evidence. A re-review should then check consistency across the three documents.
+
+=== VERDICT JSON ===
+{"OverallVerdict":"DISAGREE","accuracy":89,"completeness":84,"readiness":"planning-baseline","findings":[{"id":"F01","severity":"high","source":"Arch §9 run, §2; Walkthrough U01/U10; BDPv4 P3/P8","exact_edit":"Split migration into 'seed' (one host per ProjectId; only mode creating root C0) and 'join' (target = clone of published C0; legacy rows imported with identity map onto migration/<tag>/<MigrationId> as an ordinary commit, merged via normal merge/review/publication; verify accounts rows as identical-in-C0 or mapped delta). Add MigrationJoinTests; require join in P8; add unrelated-history behaviour to P0 merge-semantics output."},{"id":"F02","severity":"high","source":"Arch §8; Walkthrough U11; BDPv4 P1/P5/P6","exact_edit":"State versioned project DBs are never migrated at startup; only the hub maintenance role applies Dolt project migrations on maintenance/schema-<v>, commits schema+__EFMigrationsHistory, validates, publishes; subscribers apply only by fetch/merge after advertising capability; versioned migrations are expand/contract and merge-compatible; old-schema unpublished commits and feature branches merge the schema head after binary upgrade via normal review; negotiate worker<->hub contract version. Change U11 to H maintenance role. Add VersionedProjectNotMigratedAtStartup, OldSchemaUnpublishedCommitMergesAfterUpgrade, FeatureBranchSchemaCatchUp."},{"id":"F03","severity":"high","source":"Arch §2, §3, §4 step 3","exact_edit":"P0 manifest classifies every writer (interactive vs automatic) and auto-updated column; automatic writers may not target versioned tables; session-log capture writes local-operational storage and enters history only by explicit promotion shown in commit preview; derived indexes stored outside versioned DB. Add BackgroundWritersDoNotDirtyVersionedBranch and SecondAgentLoggingNeedsNoLease."},{"id":"F04","severity":"medium","source":"BDPv4 P1 vs P2; Arch §2/§8","exact_edit":"Add P0 output 'context topology': original providers and standalone Dolt keep full McpDbContext chains; versioned mode uses a Dolt-only project context plus a control context with additive chains for all four providers; manifest lists cross-boundary relationships with soft-reference validators. Reword P1 to 'existing migrations not edited; additive migrations only where manifest requires'."},{"id":"F05","severity":"medium","source":"Arch §3; FR-MCP-182","exact_edit":"Add blocking output: exact ID grammar per entity family, system-generated vs human-assigned families, validator/ValidateTraceability/plugin regex updates, sort/display rules; test LegacyIdsRemainValid."},{"id":"F06","severity":"medium","source":"Arch §3; FR-MCP-189","exact_edit":"Specify a single host-local writer process per project DB with a per-(project,branch) write gate; fence check, writes, working-set hash check (Dolt-provided, verified in P0) and DOLT_COMMIT occur under the gate; requestId stored as a Dolt commit trailer and looked up in dolt_log on retry; local DB credentials server-only. Tests LeaseLostDuringWriteRejected, CommitRetryReturnsSameHash."},{"id":"F07","severity":"medium","source":"Arch §4/§10; FR-MCP-185","exact_edit":"Add P0 output 'credential containment': location of remote and control-API credentials, which local SQL users may execute DOLT_PUSH/FETCH/REMOTE/BRANCH (worker only), rotation/revocation; H uses the authenticated remote endpoint, never file:// to a live served repo. Tests LocalAppUserCannotPush, RevokedCredentialFailsFetchAndPublish."},{"id":"F08","severity":"medium","source":"BDPv4 §4","exact_edit":"Name the container integration target and pinned images for sqlite/postgresql/sqlserver/dolt; environment unavailability is a failure not a skip; P1/P2/P3/P5/P6/P8 exits require unit suite and that suite at 0 fail/0 skip; receipts record image digests."},{"id":"F09","severity":"medium","source":"BDPv4 §5 exit vs Arch §10","exact_edit":"Replace P0 exit list with numbered blocking outputs B1-B12 (versions/digests/licences; entity+writer manifest; context topology; ID grammar; remote permissions+credential containment; merge/constraint/conflict semantics incl. unrelated histories; schema distribution; migration seed/join; write gate/leases; measured storage/latency/history growth; polling/retry values; GC/ref retention), each with owner and approval status gating dependent phases."},{"id":"F10","severity":"medium","source":"Arch §2/§7","exact_edit":"Commit preview runs existing sanitizer/secret detector over the diff and blocks on hits; document incident procedure (rotate, revert, optional operator-approved coordinated history rewrite with re-clone); state delete is not erasure in versioned projects. Test CommitPreviewBlocksSecret."},{"id":"F11","severity":"medium","source":"Arch §5","exact_edit":"Replace edge-triggered SyncRequest generations/coalescing with one per-subscription state row (NodeId, ProjectId, Branch, PublishedHead, PublishedGeneration, SyncRequestedUtc, NodeAcceptedHead, NodeReportedGeneration, Outcome, LastSeenUtc, WorkerEpoch); poll returns rows where published generation exceeds reported generation or sync requested; report is monotonic CAS on generation and epoch; detect unpublished work by ancestry. Otherwise record the rationale for keeping the current design."},{"id":"F12","severity":"low","source":"Arch §2","exact_edit":"Replace 'MySQL EF provider and MySqlConnector' with 'a MySQL-protocol EF provider and its driver selected in P0, subject to licence review'."},{"id":"F13","severity":"low","source":"Arch §6","exact_edit":"Pin conflict and candidate commits by retaining review/<conflictId> and candidate refs locally and on the remote until the resolution receipt; GC policy in B12."},{"id":"F14","severity":"low","source":"Arch §6/§7","exact_edit":"branch.list and status report ahead/behind vs published head, last commit time and waiting_local_work age; flag stale branches above a threshold; no automatic deletion or rebase. Test StaleBranchReportedNotDeleted."},{"id":"F15","severity":"low","source":"Arch §9","exact_edit":"State that export from Dolt back to an original provider is out of scope; cutover approval records that post-write rollback is manual reconciliation."}],"evidenceRequests":["Current server startup code showing whether Database.Migrate() runs automatically (F02)","Session-log and other background writer code paths and frequencies (F03)","Current ID generators and validators, including ValidateTraceability rules (F05)","Current test infrastructure for PostgreSQL/SQL Server container tests and skip behaviour (F08)"],"auditLimitations":["No live profile/memory or reviewer-owned audit tools in this isolated packet","No tool runs, builds or tests performed; no audit persistence","Cited Dolt/DolthHub URLs not fetched; external claims assessed only against reviewer knowledge to June 2026","Creation of the 48 canonical records and the LEGION2 SSH arrangement accepted as stated, not verified"]}
+
+Verify the corrected artifacts below against every prior finding.
+
+SOURCE: docs/plans/2026-11-10-federation-dolt-architecture.md
+# Federation architecture: independent nodes with Dolt history
+
+Author: Codex. Date: 2026-11-10. Status: proposed architecture for the requested new plan; no implementation or deployment performed. Supersedes the forwarding-first federation completion draft for the new versioned federation mode. Existing DirectProxy behavior remains a separate supported feature.
+
+## 1. Authority and scope
+
+The operator requires LAB-OMARCHY as hub, independent local work on every system, two-way synchronization, two-character creator tags in new IDs, branches in the initial release, and mandatory review of merge conflicts. Pull requests are out of scope. Local **version-history commits**, never ordinary edits or SQL saves, trigger synchronization. Nodes poll a durable hub control table periodically or on demand. A hub request must never implicitly commit a user's working changes.
+
+The operator additionally requires Dolt as the **fourth supported database**, retaining SQLite, PostgreSQL and SQL Server, with appropriate schema migrations and a separate data migration tool from all three original providers. This document adopts that planning direction. The exact maintained EF Core provider/package version and pinned Dolt image must pass the compatibility gate before implementation dependencies are installed. Dolt's relational cell/schema merge is the proposed interpretation of Git-style merging; literal line-level text merging is not claimed.
+
+The three-system example uses H = LAB-OMARCHY, A = PAYTON-LEGION2, and B = NODE-B (illustrative second node, not a discovered host). All three run the same application services and local commit/sync worker. The hub additionally hosts the shared remote and control table. This is eventual consistency, not a distributed transaction across all three hosts.
+
+## 2. Topology and storage boundaries
+
+```mermaid
+flowchart TB
+  subgraph H[LAB-OMARCHY: hub and working node]
+    HP[Plugins and application]
+    HW[Local project working database]
+    HS[Local sync worker]
+    HC[Control database: enrollment, requests, receipts]
+    HR[Shared project remote: committed history]
+    HP --> HW
+    HW <--> HS
+    HS <--> HR
+    HS <--> HC
+  end
+  subgraph A[PAYTON-LEGION2: node A]
+    AP[Plugins and application] --> AW[Local project working database]
+    AW <--> AS[Local sync worker]
+  end
+  subgraph B[NODE-B: node B]
+    BP[Plugins and application] --> BW[Local project working database]
+    BW <--> BS[Local sync worker]
+  end
+  AS <-->|Dolt committed history| HR
+  BS <-->|Dolt committed history| HR
+  AS <-->|Poll requests and report outcomes| HC
+  BS <-->|Poll requests and report outcomes| HC
+```
+
+Every host uses a local Dolt SQL-server process/container; .NET reaches it through a MySQL-protocol EF provider and its driver selected in P0, subject to compatibility and license review. Dolt is a separate database engine, not an extension installed in an existing MySQL database. It does not wrap arbitrary SQL Server/PostgreSQL/SQLite storage.
+
+For versioned projects, use one Dolt repository/database per logical project on each host. This makes clone/fetch boundaries match project authorization and prevents a project clone from carrying unrelated projects. Local directory paths map to an immutable ProjectId; paths are not distributed identity. The provider resolver must support project-specific routing for enrolled projects; default provider behavior remains unchanged for other workspaces.
+
+The hub's shared remote is a **separate repository/database from the hub's working copy**, optionally served by the same Dolt process. No user edits the shared remote's working set. This matters because a push to a live SQL-server branch can fail when that branch has uncommitted changes. The hub's own draft work must not block A and B from exchanging commits.
+
+Keep host configuration, credentials, enrollment, control requests, receipts, local audit tables and ID-allocation state in a separate unversioned control store. It may use any supported provider, including a separate Dolt database that is never published. Do not merely hide these rows with filters or `dolt_ignore` inside a repository that will be cloned. Existing FR-MCP-AUDIT-001 requires permanent local audit history; preserve it.
+
+Versioned project data includes TODOs, requirements and mappings, use cases, workspace-scoped memories, portable project configuration and explicitly promoted sanitized session-log snapshots. Continuous session-log capture writes local operational storage, without an editing lease; promoting a snapshot is an explicit versioned edit visible in commit preview. Automatic writers must not modify versioned working sets. P0 classifies every entity, relationship, writer and auto-updated column as project-versioned, local-operational, derived or explicitly excluded; no unclassified writer/table is permitted. Global memories, machine paths, tokens and host-specific agent/runtime configuration remain local. Derived search indexes, caches and projections live outside versioned databases and rebuild after accepted head changes. Source-code Git repositories and filesystem assets retain their existing Git/file workflows.
+
+Context topology is explicit: original providers and standalone Dolt keep the full `McpDbContext` and existing/baseline migrations. Versioned mode uses a Dolt-only project context plus a control context with additive migrations for each of the four providers. P0's relationship manifest names every cross-database reference, replacing impossible database FKs/joins with stable soft references and application validators. Historical migration files are never edited; new additive migrations are allowed where the manifest requires.
+
+## 3. Local edits, commits and branch ownership
+
+Ordinary business reads/writes always execute locally. Saving creates durable local working changes but neither publishes them nor creates a version commit. The server exposes status, diff and commit preview. An explicit commit includes ProjectId, branch, expected head, expected working-set fingerprint, author, message and request id. The preview identifies exactly which working changes will be committed. A changed fingerprint rejects the request for a new preview.
+
+One editing owner per project/branch working set is the initial policy. A durable branch lease, with fencing token checked by every mutating service, prevents one agent's commit from accidentally including another agent's unfinished work. Other sessions may read or use a different branch. Expired ownership with dirty data requires explicit takeover review; no automatic discard or commit. This policy applies to the hub too. A future finer-grained staging UX is not needed for this release.
+
+Connections and DbContexts are bound to ProjectId and branch for their entire lifetime; never change a shared connection's branch underneath an active request. Pools must not leak branch/session state. APIs, search, caches and plugin context include branch identity. A branch switch does not switch the source-code Git branch unless separately requested.
+
+Exactly one host-local server process owns writes to each project database, enforced by an exclusive process/storage ownership lock and server-only credentials. Its per-(project,branch) write gate serializes lease issuance/takeover, fence checks, edits, preview-hash validation and Dolt commit. Expiry denies new commands; an already admitted transaction holds the gate through completion, and takeover waits. Process death rolls back uncommitted SQL work before a replacement writer opens. There is no claimed atomic transaction between control storage and Dolt. Use a Dolt-provided working-set hash, verified in P0, not a custom approximate hash. Put the unique commit requestId in a commit trailer; recover lost replies by finding that ID in retained Dolt history and returning the same hash. Never issue a second commit merely because the operational receipt is missing.
+
+After a successful version commit, the local worker records publication intent. Because a version commit and an operational ledger write may not share a transaction, startup/reconnect scans compare local branch history with durable publication receipts and reconstruct missing intents. Repeated scans must not create extra commits. Existing imported commits do not count as newly authored commits for echo scheduling.
+
+New record IDs contain the assigned two-character creator tag plus a durable nonreused sequence. Proposed tag alphabet: uppercase ASCII letters/digits. Actual host tag assignments require registration before first tagged creation. The allocator is outside branches so branching or reverting cannot reuse an ID. Restored/cloned writers must prove a safe high-water mark or enroll with a fresh never-reused tag. Replication preserves IDs. Legacy collision resolution uses an explicit mapping and rewrites all references together; equal old IDs are not proof of shared identity.
+
+P0 must lock the exact grammar per entity family, distinguish system-generated and human-assigned IDs, and enumerate validators, traceability tooling, plugin regexes, sort and display rules. Existing canonical requirements and legacy IDs remain valid. No blanket renumbering of the 48 newly registered planning records is intended.
+
+## 4. Publication and synchronization protocol
+
+Use Dolt for object transfer, ancestry, diff, branch creation and merge. Do not implement a competing event-replay database, merge engine or reliable messaging broker.
+
+The shared remote keeps named public branches and private upload refs. A node may upload only its authenticated project-scoped candidate namespace. The hub publication API owns advancement of public branch heads; ordinary node/plugin credentials must not bypass it. Before accepting a candidate it verifies project membership, ancestry, schema compatibility, constraints and domain invariants. The candidate must be a descendant of the expected published head. Use Dolt fast-forward protection plus one durable fenced publisher per project/branch; never force-push a public branch. A stale expected head returns `head_changed`; the node fetches and reconciles again.
+
+This candidate-upload/accept step is **not a PR workflow**: no PR entity, reviewer assignment, approval voting or forge. It is a guarded publication boundary. P0 must demonstrate that the chosen remote transport can enforce these permissions, including direct remote calls; SQL branch permissions alone are not assumed to protect remotesapi. If the transport cannot provide this boundary, select a supported isolated transport arrangement and review it before implementation, rather than exposing writable public refs.
+
+Normal worker sequence:
+
+1. Authenticate, read current published heads, and retrieve its pending control requests. Also inspect unpublished local commits, even if no control request exists.
+2. Fetch committed history into remote-tracking refs. Fetching does not commit or overwrite local drafts.
+3. If the target local branch is dirty or has an active edit lease, record `waiting_local_work`. Keep the prior readable local state. The user may finish and commit, explicitly discard with normal safeguards, or work on another branch; sync chooses none of these for them.
+4. On a clean branch, use a temporary integration branch based on the current local head. Fast-forward if possible; otherwise use Dolt's merge. Preserve the old live branch until the candidate passes review/validation.
+5. If Dolt reports conflicts or validation detects a domain violation, persist `needs_review` with base/local/incoming heads and affected entities. Nothing silently wins. Independent projects and branches continue.
+6. For a valid clean merge, move the local live branch using expected-head/fencing checks. Publish any new local/merge commits through candidate upload and the hub acceptance API. If the hub advanced, repeat from fetch without creating duplicate effects or force-pushing.
+7. Persist receipt with resulting local/published heads, refresh branch-scoped derived indexes and report the outcome. A receipt proves this synchronization target was reached, not that every other node is already current.
+
+Both directions are node-initiated. H's local worker uses the same authenticated remote endpoint, never a file:// URL into a repository served by a running SQL server. No inbound connection to A or B is required. Successful publication advances each subscriber's desired state. Periodic remote-head reconciliation repairs a missed control-store update. Correctness does not depend on an atomic transaction across Dolt and the control database.
+
+## 5. Hub control table
+
+Implement the logical queue as **one durable state row per subscription**, not a command-message broker. Initial polling default: every 30 seconds with up to 20 percent jitter; also poll immediately on reconnect and explicit sync. Local version commits wake the worker immediately. Backoff transient network failure exponentially from 1 second to a 60-second cap, with cancellation; P0 locks final settings against measured behavior.
+
+`SyncSubscription`: unique key `(NodeId, ProjectId, Branch)`; PublishedHead, PublishedGeneration, DesiredGeneration, SyncRequestedUtc, NodeAcceptedHead, NodeReportedGeneration, Outcome, LastSeenUtc, WorkerEpoch and ErrorCode. Publication advances PublishedGeneration and DesiredGeneration. Explicit on-demand requests advance DesiredGeneration even when the published head has not changed; timestamps are informational, never ordering authority. Poll returns authorized rows with an unsatisfied desired generation or a visible blocked outcome. Locally unpublished commits independently wake the worker even if every row is satisfied.
+
+The authenticated worker claims a monotonic WorkerEpoch on reconnect/restart; reports compare epoch and the generation actually observed. A late old-epoch report is rejected. A report for generation g can record its outcome without clearing desired generation g+1. A completed report requires NodeAcceptedHead to include the target and records a durable operation receipt; retries of the same report return that receipt. A transient failure remains unsatisfied with node-local retry scheduling. `waiting_local_work`, `needs_review`, `incompatible_schema` and `denied` are visible non-success outcomes, not completed requests. Do not add per-message leases, acknowledgement deletion or coalescing machinery to this state table.
+
+The hub owns a row for each subscribed node, including its own local workspace worker. A committed change is not considered delivered to a node until its recorded accepted head includes the target commit. This permits a later merge commit to satisfy an earlier target without pretending head strings must be equal.
+
+## 6. Conflict review and branches
+
+A review item records project, branch, stable conflict id, common ancestor(s), local head, incoming head, candidate branch, conflict cells/schema, validation failures, author identity, decision and resulting merge commit. The server exposes structured diff/history and resolution preview. A human or explicitly authorized agent selects a resolution; apply requires unchanged source heads and reruns constraints/domain validation. A stale review is refreshed, not applied blindly. Retain `review/<conflictId>` and candidate refs locally and on the remote until a durable resolution receipt permits release under P0's retention policy; control-table references alone are not GC roots.
+
+Sharing `feature/search` publishes that branch; it does not merge it into `main`. A and B can independently check out the same feature history. Merging feature into main is a separate explicit command with expected heads, normal review rules and a new version commit. Protected-branch rights govern who may perform it. Branch deletion/rename requires explicit authorization and rejects active/pending-review references; initial release does not force-delete published history.
+
+Clean Dolt merges remain subject to application rules. Two independent edits to different fields can merge mechanically yet violate a cross-row invariant. Treat that outcome as review-required and keep the valid live head. Deletes, delete/update conflicts, schema conflicts and legacy-ID collisions are included.
+
+## 7. Server and plugin interfaces
+
+Implement a typed federation client and equivalent REST, MCP and REPL surfaces; every first-party plugin exposes the same contract through its existing audited wrapper. New names below are planned interfaces, not existing capabilities:
+
+- `federation.status(projectId, branch)` returns local head, published head as last observed, observed time, dirty state, ahead/behind counts, last commit time, waiting-local-work age, incoming target, connectivity, review count and operation status. `branch.list` shows the same freshness indicators. Flag stale branches at a configurable threshold; never automatically delete or rebase them. Never call a stale observation globally synchronized.
+- `federation.diff(projectId, branch, from, to)` and `federation.history(...)` support preview without mutation.
+- `federation.commit(projectId, branch, expectedHead, expectedWorkingSet, leaseToken, message, requestId)` creates a local version commit and pending publication intent. Reply distinguishes `committed_locally` from `published`.
+- `federation.sync(projectId, branch, requestId)` schedules/wakes work and returns OperationId; `federation.operation.get(operationId)` returns durable status. Cancellation stops waiting/work safely without claiming already-published commits were undone.
+- `federation.branch.list/create/select/merge` use explicit project/branch contexts and expected heads. Branch selection is session-scoped and survives plugin reconnect only after server revalidation.
+- `federation.conflicts.list/get/preview/resolve` retain the full review evidence and reject stale input.
+- Administrative `federation.enroll`, `subscriptions`, `control.poll`, `control.report`, `publication.accept`, `migration.plan/run/resume/verify/cutover/status` are permission-separated from ordinary editing.
+
+Use existing normalized error envelopes with stable codes: `head_changed`, `working_set_changed`, `branch_busy`, `waiting_local_work`, `needs_review`, `incompatible_schema`, `unauthorized_project`, `lease_lost`, `remote_unavailable`, `migration_verification_failed`. Public DTOs and APIs require XMLDocs and OpenAPI documentation. Plugin bootstrap advertises capabilities and server contract version; old plugins fail clearly on unsupported commands without falling back to arbitrary SQL or shell access. Local request authorization uses existing local identities; hub revocation is enforced on reconnect and does not retroactively erase offline work.
+
+Audit identifies the real agent/user and records preview, commit, publication, incoming acceptance, review, migration and source references. Replicating data does not execute original business commands again. GitHub actions, email and other external effects require their existing explicit commands and durable effect IDs; importing an effect record never sends it again.
+
+Commit preview runs the existing sanitizer and selected secret-detection facility over promoted snapshots and the versioned diff; detected secrets block commit. Deleting or reverting a record does not erase earlier versions. A disclosure incident requires credential rotation, removal/revert of live content and, only under separate explicit operator approval, coordinated history rewriting plus re-cloning all subscribers. Normal synchronization never force-pushes as an incident shortcut. P0 locks the detector and history-retention policy; do not claim existing sanitization finds every possible secret.
+
+## 8. Fourth database provider and schema migration
+
+Current source evidence: `McpDatabaseProviderFactory` registers SQLite/PostgreSQL/SQL Server strategies; `McpDatabaseProviderKind` and `McpDbContextFactory` need a Dolt case. Storage targets net10.0 and central EF Core packages are 10.0.0. A .NET 9 example is not proof of EF10 compatibility.
+
+Add canonical provider `dolt`, `DoltMcpDatabaseProviderStrategy`, configuration validation, design-time connection resolution, runtime health/provider diagnostics, and dedicated `QBrainAi.Storage.DoltMigrations` assembly with its own snapshot and baseline. Do not run SQL Server/PostgreSQL/SQLite migration SQL on Dolt. Preserve existing providers, names, defaults and historical migration files; additive migrations are permitted where the approved context manifest requires. Add Dolt to package/build/deployment/test discovery and database administration UI/CLI selections. Runtime and design-time model options must match.
+
+P0 selects a maintained EF10-compatible MySQL provider after executing real schema/query/transaction tests against a pinned Dolt image. Do not silently downgrade EF, install a prerelease provider, or write a bespoke EF provider if compatibility fails; report concrete alternatives for the operator. Test collations/case sensitivity, maximum index/key lengths, decimal precision, UTC timestamps, GUID/binary/text/JSON mappings, identity generation, optimistic concurrency, FK/delete semantics, raw SQL, query translation, migrations and parameterization. SQLite-specific search SQL must use a provider-compatible derived-index path rather than fail on Dolt.
+
+Project-versioned and control contexts have separate migration histories. **Never run EF migrations at startup against a versioned project database.** Only the hub maintenance role applies project migrations on `maintenance/schema-<version>`, commits schema and migration-history rows together, validates and publishes the schema commit. Subscribers obtain schema changes through history exchange after their binaries advertise support, never by independently executing the same migration. Worker-to-hub protocol versions are negotiated separately from plugin capabilities; unsupported contracts return `unsupported_contract`.
+
+Use compatible expand changes first. Contract changes wait for every enrolled subscriber/branch covered by the upgrade to acknowledge, or for explicit de-enrollment and a recovery plan for its unpublished work. An offline node cannot be magically quiesced: it may continue its supported local work, while the hub refuses incompatible publication. After binary upgrade, old-schema unpublished commits and feature branches merge the designated schema head through normal review and validation. P0 proves this path on representative schema changes. Do not point an old binary at an unsupported schema or silently discard old-schema commits. Control/standalone databases retain their ordinary controlled migration path.
+
+## 9. Data migration tool
+
+Deliver `qbrain database migrate` (planned CLI surface) with commands `plan`, `run`, `resume`, `verify`, `status`, `cutover` and `abort`. REST/plugin administration wraps the same application service. Source providers are SQLite, PostgreSQL and SQL Server; target is Dolt. Source access is read-only, and a source backup/snapshot is required. The command accepts secret references, never prints credentials, and does not write connection strings into receipts.
+
+`plan` inventories source schema/version, projects, tables, relationships, provider-specific values, local-only data, legacy pending federation records and identity collisions. It emits an immutable manifest with MigrationId, source fingerprint, target/schema version, transformation rules and per-table counts. A dry run validates mappings and target compatibility without copying project rows or changing routing. Unmapped tables, lossy conversions and ambiguous legacy identity mappings block the run.
+
+Migration has two explicit modes. **seed** is selected exactly once per ProjectId: it creates an isolated target, applies the initial project schema and imports the approved seed snapshot to establish C0. **join** clones that published C0, imports the joining host's mapped legacy differences onto `migration/<tag>/<MigrationId>` as an ordinary descendant commit, and uses the normal merge/review/publication path to join main. Never independently create three unrelated root histories and assume they will merge. The identity manifest accounts for each source row as already identical in C0, an explicitly mapped delta, a deliberate reviewed deletion or a local-only/excluded record. Absence on a joining source alone is not permission to delete a seed row.
+
+Both modes create isolated targets and copy parent/child graphs in dependency order using stable keyset pages. Bulk copy is not a replay of business commands. Preserve IDs, relationships, timestamps, versions, soft deletes and complete sanitized session graphs through explicit promotion. Local audit remains local in control storage or a retained readable source archive according to the manifest. Credentials and source-host operational actions are not activated on the destination.
+
+Use a quiesced source snapshot for initial release. No custom CDC or live dual-write is introduced. Each target batch transaction records its MigrationId/table/key range in a target-local journal; resume verifies that journal and source fingerprint before continuing. A copied batch with a lost acknowledgement is recognized, not inserted twice. Changed source snapshot or changed transformation manifest requires a new migration, not a blind resume.
+
+`verify` compares counts and canonical typed row hashes by project/table, checks FK graphs and explicit excluded-row accounting, validates ID maps and sequence high-water marks, performs representative server reads, and verifies the initial Dolt commit. Canonical hashing specifies null, UTF-8 text, decimal scale/value handling, UTC precision and binary encoding; raw provider serialization is not a comparison standard. Verification failures name the project/table/key and preserve both sides.
+
+`cutover` requires a successful verification receipt matching the exact frozen source and target heads; stops the affected workspace, switches its provider mapping atomically, rebuilds derived state and runs smoke checks before reopening writes. Abort before cutover leaves the source active and retains diagnostics. If writes have occurred after cutover, returning to the source requires an explicit reconciliation/export plan; never silently lose Dolt-only commits. Source databases/backups are retained, not dropped. Each node's divergent legacy data is inventoried independently; do not assume cloning the hub can replace it safely.
+
+An automated reverse migration from Dolt to original providers is out of scope. Cutover approval explicitly records that rollback after new writes requires manual reconciliation or a separately approved recovery tool.
+
+## 10. Deployment, decisions and evidence
+
+Official deployment candidate: `dolthub/dolt-sql-server`, pinned by version and digest after compatibility tests, persistent `/var/lib/dolt`, separate protected config/credentials, SQL port3306 on private network and separately configured authenticated/TLS remote endpoint. The MySQL SQL endpoint alone is not the Dolt history-transfer endpoint. Back up data, config, permission files and control receipts; test restore. LAB-OMARCHY is the hub; access LEGION2 via SSH as kingd using the existing authorized SSH configuration.
+
+P0's credential-containment contract specifies storage/injection, rotation and revocation of remote credentials and the control API's node-scoped credential type. Only server-controlled worker SQL sessions may invoke remote/branch administrative procedures; editing sessions/plugins never receive those credentials or arbitrary SQL access. Verify process-level credential behavior and actual privilege enforcement; if the SQL provider cannot restrict those procedures, isolate the worker service/process and SQL access so application credentials cannot inherit its remote authority. H uses the same authenticated endpoint as A/B. Required denial tests include LocalAppUserCannotPush and RevokedCredentialFailsFetchAndPublish.
+
+Decisions still needing gate evidence: exact package/image versions, full entity/migration manifest, remote permission enforcement, measured storage/latency/capacity, and final numeric polling/retry settings. These are explicit feasibility outputs, not permission to invent replacements. No current performance, compatibility or 98/98 HV result is claimed.
+
+Primary sources consulted 2026-11-10:
+
+- [Dolt storage engine](https://www.dolthub.com/docs/architecture/storage-engine/) and [SQL architecture](https://www.dolthub.com/docs/architecture/sql/): versioning belongs to Dolt's own engine.
+- [SQL clients](https://www.dolthub.com/docs/sql-reference/supported-clients/clients/), [EF sample](https://github.com/dolthub/efcore-sample), [SQL procedures](https://www.dolthub.com/docs/sql-reference/version-control/dolt-sql-procedures/): existing integration surfaces, not this project's compatibility proof.
+- [Commit distinction](https://www.dolthub.com/docs/other/faq/), [conflicts](https://www.dolthub.com/docs/concepts/dolt/git/conflicts/): SQL persistence differs from version commits; merges are relational.
+- [Remotes](https://www.dolthub.com/docs/sql-reference/version-control/remotes/), [SQL-server push behavior](https://www.dolthub.com/blog/2023-12-29-sql-server-push-support/), [branch permissions](https://www.dolthub.com/docs/sql-reference/server/branch-permissions/): remote transport and dirty-working-set/authorization boundaries require integration proof.
+- [Docker](https://www.dolthub.com/docs/introduction/installation/docker/) and [server configuration](https://www.dolthub.com/docs/sql-reference/server/configuration/): official deployment/configuration surfaces.
+
+END SOURCE
+
+SOURCE: docs/plans/2026-11-10-federation-dolt-bdpv4.md
+# Dolt federation: BDPv4 implementation plan
+
+Author: Codex. Date: 2026-11-10. Status: new planning baseline; feasibility gate and independent HV outstanding. No implementation, package installation, schema migration, data migration or federation activation has occurred.
+
+Architecture authority: [Dolt federation architecture](2026-11-10-federation-dolt-architecture.md). Workflow evidence and requirement inventory: [three-system walkthrough](2026-11-10-federation-three-system-workflows.md). This plan replaces the old forwarding/read-switch execution sequence for versioned federation. Retain the October and earlier November drafts as historical evidence, not competing instructions.
+
+## 1. Scope and acceptance
+
+LAB-OMARCHY and two nodes must independently edit and commit the same logical project's data, exchange committed histories through the hub, preserve uncommitted work and branches, and review conflicts without pull requests. Add Dolt as a fourth supported database and provide a safe migration tool from SQLite, PostgreSQL and SQL Server. Existing providers and explicit DirectProxy remain supported. The second node in the walkthrough is illustrative until an actual host is selected for staging.
+
+Success is demonstrated by every workflow U01-U12, every linked FR/TR/TEST criterion, all supported provider regressions and three-system restart/recovery tests. An empty control table is insufficient proof: compare accepted commit ancestry, project data and branch state, including pending drafts/reviews. Source-code Git, arbitrary file synchronization, PRs, automatic hub election, live cross-provider CDC and concurrent independent schema migrations are outside this release.
+
+## 2. Fastest dependency sequence
+
+1. P0: prove Dolt/EF10/provider/remote fit before investing in integration.
+2. P1: add fourth provider and separate schema migration assembly; preserve original providers.
+3. P2: split project-versioned and operational storage, branch-scoped access and editing ownership.
+4. P3: deliver and validate source-provider-to-Dolt data migration; keep migration targets isolated.
+5. P4: expose explicit commits, branch/history/diff and local publication intent.
+6. P5: implement enrollment, guarded remote publication and the hub table/poller.
+7. P6: implement safe receiving, reviewed merges and end-to-end crash recovery.
+8. P7: expose complete client/MCP/REPL/plugin workflows and user-visible status.
+9. P8: migrate staging copies, run three-system acceptance, then prepare a backed-up lab cutover.
+
+Prepare test fixtures, DTO/API documentation and plugin contract fixtures during earlier phases where independent, but do not move unfinished implementation past a Byrd gate. Provider feasibility, not old forwarding fixes, is now the critical path. Reuse existing identity, diagnostics, provider abstractions, audit and typed clients; replace forwarding/command-replay paths only for versioned projects.
+
+## 3. Source-control and donor handling
+
+Create an isolated integration worktree from the current accepted develop when implementation is authorized. Suggested branch `integration/federation-dolt-20261110`; use separate small phase PRs against it. Preserve all existing worktrees and unrelated working-tree edits. Do not create or clean worktrees merely to write this plan.
+
+The prior PR83/P1.5 work is a donor for relevant security, identity, cross-platform paths and regression fixes only. Inventory its current diff at execution time, map each retained change to a requirement, and port only justified changes. Do not merge old backfill, forwarding, read-switch or custom database synchronization machinery wholesale. C4 `p4/*`, namespace/analyzer work and historical worktree cleanup are not dependencies.
+
+## 4. Byrd gate contract
+
+For each small slice, first define the acceptance cases, fixtures and negative controls. Prove tests pass against controlled mocks and fail against deliberately wrong behavior. Then run the same contract against the missing/incorrect real implementation to record red, implement the smallest behavior, and refactor to green. Mocks must not simply return the expected result without testing the orchestration boundary.
+
+Use targeted `./build.ps1 TestGroups --test-groups '<project>:<class>' --test-run-id '<phase-slice>'` after changes. At each phase exit run the entire current-plus-prior unit suite once with `./build.ps1 Test`, requiring zero failures and zero skips. `./build.ps1 Compile` and `./build.ps1 ValidateTraceability` are mandatory gate commands. Add real-container integration tests where a mock cannot prove SQL, migration, locking or remote semantics. Do not broaden/repeat a passing gate without changes or new evidence requiring it. Receipts include SHA/tree state, image/package versions, commands, TRX, fail/skip counts, AC mapping and negative controls.
+
+The proposed test-class names below are implementation targets, not claims they exist today. Register new projects/classes in Nuke discovery as part of their owning phase. Do not add skipped placeholders for later phases; keep deferred coverage in requirements/TODO state.
+
+Add Nuke target `TestFederationProviders` with the planned command `./build.ps1 TestFederationProviders --providers sqlite,postgresql,sqlserver,dolt --test-run-id '<phase>-providers'`. It is not an existing command today. P0 records exact PostgreSQL/SQL Server/Dolt image versions and digests and the SQLite package version; P1 implements the target and refuses missing/unhealthy containers as a gate failure, never a skip. P1/P2/P3/P5/P6/P8 exits require both the full unit gate and this real-provider/remote suite with zero failures and zero skips. Receipts include the immutable image digests and environment readiness evidence.
+
+## 5. P0: feasibility and exact dependency selection
+
+Deliver a version-pinned compatibility receipt and license/dependency record for Dolt, the MySQL EF provider and MySqlConnector. Use current net10.0/EF10.0.0 as the baseline. Read the dependency compliance rules before additions. Existing Dolt EF samples establish possibility, not compatibility.
+
+Prove against real containers: full current model creation; representative CRUD/LINQ/raw SQL; concurrency tokens; transaction rollback; decimal/date/text/index/FK mappings; migrations; branch connection isolation; explicit SQL commit versus Dolt commit; merge conflicts/constraints; clean and dirty remote pushes; lost responses; authenticated project isolation; inability to bypass guarded publication through raw remote requests. Verify canonical-ref advancement and remote recovery under process death. Compare candidate clean merges against domain validators.
+
+Classes: `DoltProviderCompatibilityTests`, `DoltRemoteAuthorizationTests`, `DoltBranchIsolationTests`, `DoltCommitBoundaryTests`. Red conditions: unsupported mappings/query translation, ordinary SaveChanges creating history, pool branch leakage, unauthorized ref mutation or missing recovery guarantees. Green: all named contracts pass on pinned versions, no ad hoc provider fork or custom merge engine.
+
+P0 exit consists of the following numbered **blocking outputs**. The implementation owner produces each evidence record; the operator accepts it, with independent Claude HV of substantive accuracy/completeness. Each record stores owner, status (unproven/proven/accepted), evidence paths and dependent phases. Initial status for all B1-B12 is unproven. All must be accepted before P1 production integration begins; P0 prototypes remain disposable.
+
+1. B1: exact provider/driver/image versions, digests, licenses and all-four-provider fixture versions (P1-P8).
+2. B2: every entity, relationship, interactive/automatic writer and auto-updated column; session capture remains operational and only explicit promoted snapshots become versioned (P2-P8).
+3. B3: full standalone McpDbContext versus Dolt-only project/control context topology, additive migration chains and cross-database soft-reference validators (P1-P3).
+4. B4: exact ID grammar per generated/human-assigned family, legacy compatibility, sort/display, parser/plugin/traceability changes and restored allocator behavior (P2-P8).
+5. B5: enforceable remote publication permissions and credential containment, control credential type, worker-only remote procedures and rotation/revocation (P2/P5-P8).
+6. B6: real merge/constraint/conflict-transaction semantics, retained review evidence, safe conflict persistence including whether `dolt_allow_commit_conflicts` is needed, and unrelated-history behavior. Never enable unresolved conflicts on live project branches (P4-P6).
+7. B7: single-author schema distribution, startup migration exclusion, expand/contract rules, offline old-schema work and feature-branch catch-up, worker protocol negotiation (P1/P3/P5/P6/P8).
+8. B8: seed/join migration manifest, one common root, row identity/deletion accounting, canonical hash format, resume and cutover protocol (P3/P8).
+9. B9: single writer ownership, write gate/fence transitions, working-set hash API, requestId commit trailers and crash reconciliation (P2/P4-P6).
+10. B10: measured fixture-scale storage/latency/history growth, resource budgets and explicit operating limits; no unsupported throughput/SLA claim (P1/P5/P8).
+11. B11: final polling/retry/stale-branch thresholds, subscription-state schema and monotonic generation/epoch semantics (P5/P7).
+12. B12: local/remote candidate/review refs, GC/retention and backup/recovery policy plus secret-detection and disclosure response (P4-P8).
+
+If a maintained EF10-compatible provider is unavailable, report concrete options for approval; do not downgrade the repository silently. This plan is executable through P0 but is not implementation-ready for later slices until these evidence-dependent choices are locked.
+
+## 6. P1: fourth provider and schema migrations
+
+Requirements: FR-MCP-186. Extend `McpDatabaseProviderKind`, `McpDatabaseProviderFactory`, `McpDbContextFactory`, runtime options/configuration validation, health output and setup tooling with canonical `dolt`. Add `DoltMcpDatabaseProviderStrategy` and `QBrainAi.Storage.DoltMigrations`, with provider-specific snapshot/baseline. Never edit existing migrations; add migrations only where B3 requires. Include provider selections in build/package/admin surfaces. Exclude versioned project databases from automatic startup migration; standalone/control contexts retain their approved migration path.
+
+Classes: `DoltProviderResolutionTests`, `DoltMigrationTests`, `FourProviderContractTests`. First prove unknown-provider rejection, unchanged defaults and distinct migration assembly selection. Real-provider tests cover empty database creation, baseline-to-next upgrade, interrupted startup/retry, idempotent reapplication, schema drift detection and application CRUD after upgrade. Test all original providers for regression. No production data copy in this phase.
+
+## 7. P2: project routing, data boundaries and editing ownership
+
+Requirements: FR-MCP-174,176,177,182,184,185,189. Add immutable ProjectId/local-path enrollment mapping, per-project provider selection, project and control contexts, full table classification, branch-scoped DbContext/query/index keys, local ID allocation and fenced edit leases. A versioned project's ordinary requests must never enter LocalProxy forwarding. Preserve DirectProxy behavior for explicit legacy configuration; no ambiguous combination on one project.
+
+Classes: `FederationLocalExecutionTests`, `ProjectBranchContextTests`, `FederationDataBoundaryTests`, `NodeTaggedIdentityTests`, `BranchEditLeaseTests`. Cases include BackgroundWritersDoNotDirtyVersionedBranch, SecondAgentLoggingNeedsNoLease, LegacyIdsRemainValid and LeaseLostDuringWriteRejected. Red: offline request waits for hub, cross-project row visible, audit/secret in clone, duplicate IDs after branch/restart, pooled connection changes branch, or one agent commits another's work. Green: local read-after-write/restart, complete entity/writer classification, no branch/project leakage, safe expired-lease recovery and stable replicated IDs. Provider schema changes introduced here require migrations for each affected supported provider, not Dolt alone.
+
+## 8. P3: data migration tool
+
+Requirements: FR-MCP-187 plus identity/data-boundary contracts. Implement one typed migration service and `qbrain database migrate plan|run|resume|verify|status|cutover|abort`. Plugin administration delegates to it. Use the architecture's immutable manifest, frozen-source policy, target-local batch journal, canonical comparison and retention rules.
+
+Classes: `MigrationPlannerTests`, `MigrationResumeTests`, `MigrationIdentityMappingTests`, `MigrationVerificationTests`, `MigrationCutoverTests`, `ThreeProviderToDoltMigrationTests`, `MigrationJoinTests`. Cover one seed root per project and joining nodes cloned from that root with imported legacy delta branches; verify shared ancestry and explicit identity/deletion accounting. Cover each source provider, multi-project separation, legacy-ID collisions, soft-deleted rows, decimal/UTC/binary/Unicode edge cases, complete promoted session graphs, retained local audit, derived index rebuild and inert imported operational records. Inject death after target batch commit but before acknowledgement, before provider switch and after switch but before reopening. Dry-run and failed verification cannot alter source/routing. Resume cannot silently accept a changed snapshot.
+
+Exit: verified disposable migrations from all three source providers, reproducible receipts, retained sources, and documented pre/post-cutover recovery. Do not run the tool on live lab data yet.
+
+## 9. P4: explicit history commits and local publication intent
+
+Requirements: FR-MCP-175,177,182,189. Implement status/diff/history/commit preview, idempotent explicit commit, branch lifecycle and local unpublished-head scanning. No save hook implicitly creates Dolt history. A hub request cannot auto-commit drafts. Protect preview fingerprints, author provenance and branch edit ownership.
+
+Classes: `FederationCommitTests`, `FederationBranchLifecycleTests`, `PublicationIntentRecoveryTests`. Include CommitRetryReturnsSameHash, CommitPreviewBlocksSecret and StaleBranchReportedNotDeleted. Red: edits trigger sync, commit bundles unauthorized changes, restart loses an unreported commit, or fetched remote commits cause endless republishing. Green: durable explicit commit triggers exactly the needed sync intent, history reconstruction repairs crash windows without duplicate commits, feature publication does not merge main.
+
+## 10. P5: hub control table and publication
+
+Requirements: FR-MCP-176,178,179,181,185. Provision the hub shared remote separately from its local working copy. Implement enrollment and project/branch subscription, candidate upload/validation/acceptance, expected-head publication, SyncSubscription state-table migrations, polling/reporting, durable receipts, worker epochs and remote-head reconciliation. One row per subscription replaces command-message generations/leases/coalescing. Both nodes initiate communication; H's local worker uses the same authenticated endpoint.
+
+Classes: `FederationEnrollmentTests`, `FederationPublicationTests`, `FederationControlTableTests`, `FederationPollingTests`. Include LocalAppUserCannotPush, RevokedCredentialFailsFetchAndPublish and OldWorkerEpochCannotReportSuccess. Red: node can publish unauthorized branch/project, hub drafts block publication, polling marks success, reporting generation g loses desired g+1, missing state update strands a published head, or simultaneous publishers overwrite history. Green: all controls work against real remotes and all control-store providers; no force pushes; stale heads yield deterministic retries.
+
+## 11. P6: incoming integration, conflict review and recovery
+
+Requirements: FR-MCP-178,180,181,188. Implement temporary integration branches, clean-merge validation, dirty-branch deferral, conflict review with head-bound resolution, recovery pins/receipts and derived-state refresh. Incoming data must not re-execute business commands or external effects.
+
+Classes: `FederationMergeReviewTests`, `FederationDirtyWorkingSetTests`, `FederationRecoveryTests`, `FederationEffectIsolationTests`. Cases include all-three concurrent nonconflicting commits, same-cell conflict, delete/update, invalid clean merge, missing ancestry, stale review, hub/node restart at each state transition, disconnect during upload, lost acknowledgement, concurrent resolution and unavailable derived indexes. Include VersionedProjectNotMigratedAtStartup, OldSchemaUnpublishedCommitMergesAfterUpgrade and FeatureBranchSchemaCatchUp. Preserve valid live data and all history; never report synchronized on conflict, dirty deferment or stale observation. Test older-schema node quarantine separately from network failure.
+
+## 12. P7: server and plugin workflows
+
+Requirements: FR-MCP-183 and every workflow's plugin surface. Add typed DTO/client methods, REST/MCP/REPL adapters and equivalent audited plugin wrappers for installed first-party agents. Inventory actual plugin repositories and versions at phase entry; do not edit another plugin through the wrong agent identity. Expose capabilities, project/branch context, status/diff/history/commit/sync, branches, review and admin migration commands as defined by architecture section7.
+
+Classes: `FederationClientContractTests`, `FederationMcpToolTests`, `FederationReplContractTests`, `FederationPluginConformanceTests`. Shared contract fixtures run against each plugin. Verify accurate local-committed/published/received status, unsupported-version errors, reconnect context revalidation, no implicit commits in turn hooks, real agent identity, normalized errors and safe cancellation. Human walkthrough uses the same service contracts as agents; no hidden raw-SQL path.
+
+## 13. P8: three-system acceptance and cutover
+
+Build from the accepted integration SHA. First run isolated three-node fixtures on LAB-OMARCHY/LEGION2 plus an explicitly selected third staging instance. Then execute U01-U12 using disposable project data, partition/reconnect all links, restart each component, and verify branches, histories, refs, audit exclusions and control outcomes. Collect all-provider regression and migration receipts. Existing unrelated lab work is not a substitute for isolated staging.
+
+Before live cutover, inventory and back up both current lab hosts' provider databases, identity/configuration, legacy queue/fanout/conflicts and unpublished data. Run the migration planner on every participating legacy project. Designate one seed per ProjectId; every other source uses the clone-plus-delta join path, preserving common ancestry. Resolve identity collisions and pending legacy operations explicitly; do not drop them or run both legacy replay and Dolt publication for the same project. Verify target snapshots before switching. Keep federation disabled until this gate passes and the concrete cutover is approved under the operator's deployment policy. Approval records that automated reverse migration is out of scope and post-write rollback requires manual reconciliation.
+
+## HV remediation record
+
+Round1: Claude returned DISAGREE, accuracy89/completeness84 for planning-baseline readiness. F01-F15 are addressed in the architecture, walkthrough and this plan: seed/join ancestry; single-author schema distribution; local automatic capture with explicit promotion; context topology; ID grammar gate; single writer/commit retry; credential containment; real-provider gate; B1-B12 exit outputs; history-secret handling; subscription state instead of a command queue; driver-neutral provider wording; actual retention refs; stale-branch visibility; explicit reverse-migration exclusion. Future P0 evidence is still required; these edits do not claim implementation readiness.
+
+Deploy through Nuke using the locked container/package versions and persistent volumes. SSH to LEGION2 as kingd using the configured authorized key. Enable only the accepted projects; verify local operations before first publication, then enable subscriptions and polling. Final acceptance includes one hub-authored commit and one commit from each node, both branch and conflict workflows, offline commits, and verified source retention. Stop after validation/reporting; do not extend into PR features or unrelated worktree cleanup.
+
+## 14. Traceability, review and readiness
+
+The requirement inventory is registered in the canonical MCP store as FR-MCP-174 through189, TR-MCP-FEDERATION-001 through016 and TEST-MCP-222 through237 (48 records, atomic create succeeded). All are pending, not implemented. Link each FR to the corresponding TR/TEST and workflow before implementation; export canonical requirements through the MCP plugin without overwriting unrelated working-tree changes.
+
+Reconcile existing FR-MCP-103/TR-MCP-FED-001/TEST-MCP-136 and old backfill/memory/session-log adapter contracts: retain explicit legacy mode coverage, supersede forwarding/read-switch expectations for versioned mode, and preserve applicable data completeness/security cases. Do not globally delete DirectProxy requirements to make the new tests pass.
+
+Claude HV target remains agreement with accuracy and completeness each at least98, using full request/response receipts. Review the new architecture, walkthrough, requirements and this plan together; the previous86/78 verdict does not evaluate them. Review infrastructure incidents are recorded separately from substantive scores. No implementation-ready or approved-HV claim until evidence supports it. P0 uncertainties remain visible even if the planning sequence is accepted.
+
+END SOURCE
+
+SOURCE: docs/plans/2026-11-10-federation-three-system-workflows.md
+# Three-system federation walkthrough and requirements
+
+Author: Codex. Date: 2026-11-10. Proposed behavior for [the new architecture](2026-11-10-federation-dolt-architecture.md), not a report of deployed behavior. H=LAB-OMARCHY, A=PAYTON-LEGION2, B=illustrative NODE-B. Project Atlas and symbolic commit names C0/A1/B1/H1/M1 are examples, not real records or hashes. The hub has a local working copy and a separate shared committed-history remote.
+
+## Standard workflows
+
+### U01: enroll and start the same project
+
+H registers Atlas with immutable ProjectId and an initial approved C0. A and B enroll with distinct immutable node tags, map their own filesystem paths to Atlas, receive authorized subscriptions and clone C0. Each can now read and edit locally. An existing nonempty node database is inventoried/migrated, never overwritten by the clone. Server: enrollment, project identity, initial snapshot, scoped credentials. Plugins: discover/select project and branch; show local/remote heads. Requirements: FR-MCP-176,182,185,187.
+
+### U02: node A edits, then commits
+
+A edits a TODO. Its local draft survives restart, but H and B remain at C0 and no sync is triggered. A previews and explicitly commits A1; this wakes synchronization. After validated publication, the hub remote is A1 and H/B receive control requests. Their workers fetch and accept A1 on clean branches; their local reads now include the TODO. Server: explicit commits, publication and control generation. Plugins: diff/commit/status; distinguish local commit from publication. Requirements: FR-MCP-174,175,178,179,183,189.
+
+### U03: work directly on the hub
+
+H edits in its local working copy while A and B continue independently. H commits H1 and its normal worker publishes it to the shared remote; A/B receive requests. H's uncommitted draft before H1 neither travels nor prevents A/B publication because the hub remote is a separate repository. Requirements: FR-MCP-174,175,178,184.
+
+### U04: simultaneous clean edits on all three systems
+
+Starting at C0, A commits a title edit A1, B commits an unrelated description edit B1, and H commits a separate requirement H1. A publishes first. B fetches A1, Dolt merges A1+B1 into M1, validation passes and M1 publishes. H fetches M1, merges H1 into M2 and publishes. A/B accept M2. Every original commit remains an ancestor. A publication race returns head_changed and repeats fetch/merge; no force push. This assumes nonconflicting cells and valid domain relationships. Requirements: FR-MCP-178,181,188.
+
+### U05: conflicting edits to the same field
+
+A and B both change one requirement's priority from the same base to different values and commit independently. A publishes A1. B receives A1 while holding B1; merge reports a conflict. B retains its last valid local state, and H/A retain A1. B's plugin displays base/local/incoming values and requests review. A reviewed resolution creates M1 including both histories, passes validation and publishes; H/A then accept it. Changed heads invalidate an old resolution. Delete/update and schema conflicts use the same visible review boundary. Requirements: FR-MCP-180,181,183.
+
+### U06: hub unreachable, then reconnect
+
+The hub connection fails. H, A and B still execute local business operations and make H1/A1/B1 commits. A/B record pending publication; they do not return queued-only results for local business writes. On reconnect they authenticate, reconcile remote heads and process requests plus their own unpublished commits. Merge/review follows U04/U05. An empty hub queue does not strand local commits. No automatic hub failover is claimed. Requirements: FR-MCP-174,175,178,179,181,185.
+
+### U07: incoming commit while node B has a draft
+
+B has uncommitted edits at C0. A publishes A1; B polls and fetches history, but records waiting_local_work instead of committing, discarding or overwriting its draft. B's user finishes the draft and explicitly commits B1 (or separately chooses another authorized disposition). Then reconciliation proceeds. Fetch succeeded does not mean the branch was synchronized. Requirements: FR-MCP-175,180,183,189.
+
+### U08: divergent feature work and deliberate merge
+
+A creates feature/search from C0 and commits F1. Publication shares feature/search; main remains C0 on all systems. B selects feature/search to inspect or continue it and commits F2. H can review the branch data. An authorized explicit merge into main creates M1 and triggers normal publication. Branch selection is per session, never a process-wide switch. No PR is created. Requirements: FR-MCP-177,180,183,189.
+
+### U09: lost response or crash during synchronization
+
+A publishes A1 but loses the success response. H has A1 and unsatisfied subscription state. A restarts, checks remote ancestry and its request receipt, and recognizes publication without creating A2 or repeating an external business action. A missed hub state update is repaired by head-generation reconciliation. A new worker epoch rejects stale reports from the old worker. Reporting generation g must not clear desired g+1. Requirements: FR-MCP-179,181,188.
+
+### U10: migrate an existing project
+
+The migration tool plans SQLite, PostgreSQL or SQL Server sources, inventories local-only versus shared data, detects legacy-ID collisions and checks the Dolt schema. Exactly one seed establishes C0 per project. Other nodes clone C0 and import their frozen legacy differences on migration branches descended from C0, then merge/review them normally. Verification accounts for source rows already in C0, mapped deltas and explicitly reviewed exclusions/deletions. A failed verification leaves the original provider active. No unrelated root histories or implicit deletion of seed rows are allowed. Requirements: FR-MCP-182,184,186,187.
+
+### U11: node running an older schema/application
+
+H's maintenance role publishes a supported schema upgrade. B advertises an older capability and records incompatible_schema; it does not apply it or claim to be current. B may continue supported local work while publication is held. After binary upgrade, B merges the schema head into unpublished work and feature branches through review/validation. Nodes never independently run EF migrations on versioned project startup. Incompatible contract changes wait for subscriber acknowledgement or explicit de-enrollment/recovery. Requirements: FR-MCP-181,183,186.
+
+### U12: two agents on one host
+
+Two plugins select Atlas/main on A. Only the editing lease owner may mutate its working set. The other agent reads or selects a separate branch. The first agent's commit preview binds to its expected working-set fingerprint; takeover cannot silently absorb its draft. Plugin reconnect revalidates the lease and context. Requirements: FR-MCP-177,183,189.
+
+## New requirement and feature inventory
+
+The IDs below are the intended canonical records; the registration receipt establishes whether persistence succeeded. Status is pending throughout. Each FR maps one-to-one in order to TR-MCP-FEDERATION-001..016 and TEST-MCP-222..237. This inventory is additive; conflicting legacy-mode descriptions require explicit reconciliation, not blanket deletion.
+
+### FR-MCP-174: autonomous local execution
+
+Server: execute ordinary business reads/writes locally on H/A/B during hub outages; persisted local results survive restart. Plugin: report local success separately from publication. Tests: NodeWorksWithHubUnavailable; HubUsesSameLocalExecution; OfflineLocalReadAfterWrite.
+
+### FR-MCP-175: explicit version commits and publication boundary
+
+Server: drafts/SQL commits do not trigger sync; explicit history commit does; hub requests never auto-commit drafts; recover offline publication intent. Plugin: preview/diff/commit and pending-publication status. Tests: SaveDoesNotPublish; VersionCommitTriggersSync; HubRequestDoesNotCommitDraft; OfflineCommitDiscoveredAfterRestart.
+
+### FR-MCP-176: logical project enrollment and initial clone
+
+Server: immutable shared ProjectId with host-local path mapping, registered identities and subscriptions; safe clone without replacing existing data. Plugin: project discovery/selection and enrollment diagnostics. Tests: DifferentHostPathsSameProject; CloneRefusesNonemptyTarget; UnauthorizedProjectDenied.
+
+### FR-MCP-177: branches across server and plugin context
+
+Server: create/list/select/share/merge branches; isolate connections, indexes and caches; explicit merge into main. Plugin: visible persistent project/branch context revalidated on reconnect. Tests: PooledConnectionDoesNotLeakBranch; FeaturePublicationLeavesMainUnchanged; BranchMergeRequiresExpectedHeads.
+
+### FR-MCP-178: bidirectional committed-history exchange
+
+Server: Dolt-backed fetch/merge/push with guarded publication and expected-head checks; H is a working peer with a separate shared remote. Plugin: explicit sync and accurate observed-head status. Tests: ThreeWriterCleanConvergence; HubDraftDoesNotBlockRemote; ConcurrentPublishPreservesBothHistories.
+
+### FR-MCP-179: hub control table and polling
+
+Server: one durable desired-state row per node/project/branch subscription, periodic/on-demand/reconnect polling, monotonic generation/worker-epoch reports and repair of missed published-head updates; no per-message queue leases. Plugin: request sync and inspect pending outcomes. Tests: PollReadDoesNotAcknowledge; AckOldGenerationPreservesNewRequest; MissedNotificationReconciles.
+
+### FR-MCP-180: reviewed conflicts and valid merges
+
+Server: base/local/incoming evidence, preserved valid live state, durable review, expected-head resolution and domain validation even after clean merge. Plugin: list/diff/preview/resolve with explicit authorization. Tests: SameCellConflictNeedsReview; DeleteUpdateNeedsReview; CleanMergeCanFailDomainValidation; StaleReviewRejected.
+
+### FR-MCP-181: recovery without lost or repeated work
+
+Server: durable operation states, worker-epoch fencing, idempotent receipts, restart reconstruction and schema compatibility barriers. Plugin: resume/status/cancel without false rollback claims. Tests: LostPushAckDoesNotDuplicateCommit; OldWorkerEpochCannotReportSuccess; DirtyBranchDefersApply; IncompatibleSchemaDoesNotApply.
+
+### FR-MCP-182: collision-resistant and preserved identity
+
+Server: immutable two-character creator tags, durable branch-independent allocation, restore/clone rules, exact per-family grammar and explicit legacy identity maps; retain existing legacy ID validity. Plugin: update parsers/sorting and expose provenance/collision diagnostics. Tests: TwoNodesCreateDistinctIds; BranchRevertDoesNotReuseSequence; LegacyCollisionPreservesReferences; LegacyIdsRemainValid.
+
+### FR-MCP-183: first-party plugin federation contract
+
+Server/client: typed REST/MCP/REPL parity, normalized errors, capabilities and accurate local/published/received status, ahead/behind and stale-branch visibility. Plugins: audited status/diff/history/commit/sync/branch/review and authorized migration commands without raw SQL fallbacks or implicit commits. Tests: EveryPluginUsesSameContract; OldServerReportsUnsupportedCapability; ReconnectRevalidatesContext; StaleBranchReportedNotDeleted.
+
+### FR-MCP-184: portable data versus host-local state
+
+Server: complete entity/writer manifest; clone only authorized project data; keep automatic session capture, permanent local audit, secrets, controls, machine configuration and derived indexes outside shared histories; explicitly promote sanitized session snapshots at commit preview. Plugin: keep agent identity and host context separate from branchable content. Tests: CloneOmitsAuditAndSecrets; FullProjectSessionGraphPreserved; AcceptedHeadRebuildsBranchIndex; BackgroundWritersDoNotDirtyVersionedBranch; SecondAgentLoggingNeedsNoLease; CommitPreviewBlocksSecret.
+
+### FR-MCP-185: scoped authorization and offline behavior
+
+Server: node/project/branch permissions, protected publication, worker-only remote credentials/procedures, revocation at reconnect and local authorization during outage. Plugin: least-privilege capabilities and explicit denial. Tests: RawRemoteCannotBypassPublicationPolicy; ForeignProjectCloneDenied; RevokedNodeCannotPublish; OfflineLocalAuthorizationStillApplies; LocalAppUserCannotPush; RevokedCredentialFailsFetchAndPublish.
+
+### FR-MCP-186: Dolt fourth-provider support and schema migration
+
+Server: canonical dolt provider, EF10-compatible integration, runtime/design-time parity, dedicated migration assembly and real-provider regression coverage; retain all three existing providers. Only H's maintenance role authors project schema commits; nodes apply them through history exchange after capability checks. Plugin/admin: provider selection, health/schema diagnostics and maintenance capability. Tests: FourProvidersResolve; DoltBaselineAndUpgrade; OriginalProviderMigrationsUnchanged; UnsupportedSchemaRejected; VersionedProjectNotMigratedAtStartup; OldSchemaUnpublishedCommitMergesAfterUpgrade; FeatureBranchSchemaCatchUp.
+
+### FR-MCP-187: original-provider-to-Dolt migration tool
+
+Server/tool: plan/dry-run/run/resume/verify/status/cutover/abort for SQLite, PostgreSQL and SQL Server; one seed history per project and clone-plus-delta join mode for other nodes, frozen-source manifest, canonical verification, ID/FK preservation, source retention and explicit post-write manual recovery. Plugin: authorized operator-facing progress and receipts. Tests: ThreeSourceProviderRoundTrip; ResumeAfterBatchCommit; ChangedSnapshotRejected; FailedVerifyCannotCutover; SourceRetainedAfterCutover; MigrationJoinPreservesCommonAncestor.
+
+### FR-MCP-188: imported state does not repeat external effects
+
+Server: synchronization applies state/history without replaying original business commands; durable effect identity survives import/retry. Plugin: distinguish data synchronization from authorized external operations. Tests: ImportDoesNotSendExternalAction; RetryDoesNotRepeatEffect; ImportedOperationalRowsRemainInert.
+
+### FR-MCP-189: safe shared-host editing and commit ownership
+
+Server: one host-local writer, branch-scoped fenced edit leases and serialized write gate, explicit dirty takeover, commit preview fingerprint/expected head and requestId-in-history retry recovery. Plugin: show editing owner, request/release context and support another branch for concurrent work. Tests: CommitCannotCaptureOtherAgentDraft; ExpiredLeaseFenced; PreviewChangeRequiresReview; LeaseLostDuringWriteRejected; CommitRetryReturnsSameHash.
+
+## Planning boundaries
+
+The operator requested Dolt support and the migration tool; no packages or deployments are authorized by this document alone. Exact provider/version compatibility and full entity partition remain P0 evidence gates. The table/poller/executor, plugin UX and validation are application work; the Dolt storage/history/merge algorithms are reused. PRs remain out of scope. Test names above are required behavior, not claims of existing or passing tests.
+
+END SOURCE
+
+SOURCE: src/QBrainAi.Storage/Database/McpDatabaseProviderFactory.cs
+using Microsoft.EntityFrameworkCore;
+
+namespace QBrainAi.Support.Mcp.Storage.Database;
+
+/// <summary>
+/// Resolves provider aliases to canonical strategies and applies provider-specific
+/// <see cref="McpDbContext"/> configuration.
+/// </summary>
+public static class McpDatabaseProviderFactory
+{
+    private static readonly IReadOnlyList<IMcpDatabaseProviderStrategy> s_strategies =
+    [
+        new SqliteMcpDatabaseProviderStrategy(),
+        new PostgreSqlMcpDatabaseProviderStrategy(),
+        new SqlServerMcpDatabaseProviderStrategy(),
+    ];
+
+    /// <summary>Gets the canonical provider names accepted by the factory.</summary>
+    public static IReadOnlyCollection<string> SupportedProviders =>
+        s_strategies.Select(x => x.CanonicalName).ToArray();
+
+    /// <summary>
+    /// Resolves the requested provider alias to the canonical provider strategy.
+    /// </summary>
+    /// <param name="providerName">Requested provider value from configuration or tooling.</param>
+    /// <returns>The matching provider strategy.</returns>
+    public static IMcpDatabaseProviderStrategy ResolveStrategy(string? providerName)
+    {
+        var normalized = providerName?.Trim();
+        if (string.IsNullOrWhiteSpace(normalized))
+            normalized = "sqlite";
+
+        var strategy = s_strategies.FirstOrDefault(candidate =>
+            candidate.Aliases.Any(alias => string.Equals(alias, normalized, StringComparison.OrdinalIgnoreCase)));
+
+        if (strategy is null)
+        {
+            throw new InvalidOperationException(
+                $"Unsupported MCP database provider '{providerName}'. Allowed values: {string.Join(", ", SupportedProviders)}.");
+        }
+
+        return strategy;
+    }
+
+    /// <summary>
+    /// Builds a resolved provider option set using the selected provider strategy.
+    /// </summary>
+    /// <param name="providerName">Requested provider value from configuration or tooling.</param>
+    /// <param name="connectionString">Resolved provider connection string.</param>
+    /// <param name="migrationsAssembly">Optional migration assembly override.</param>
+    /// <returns>A normalized provider option set.</returns>
+    public static McpDatabaseProviderOptions CreateOptions(
+        string? providerName,
+        string connectionString,
+        string? migrationsAssembly = null)
+    {
+        var strategy = ResolveStrategy(providerName);
+        return new McpDatabaseProviderOptions(
+            strategy.Kind,
+            strategy.CanonicalName,
+            connectionString,
+            string.IsNullOrWhiteSpace(migrationsAssembly) ? strategy.DefaultMigrationsAssembly : migrationsAssembly);
+    }
+
+    /// <summary>
+    /// Applies the resolved provider configuration to an EF Core options builder.
+    /// </summary>
+    /// <param name="optionsBuilder">Options builder to configure.</param>
+    /// <param name="providerOptions">Resolved provider settings.</param>
+    public static void Configure(DbContextOptionsBuilder optionsBuilder, McpDatabaseProviderOptions providerOptions)
+    {
+        ArgumentNullException.ThrowIfNull(optionsBuilder);
+        ArgumentNullException.ThrowIfNull(providerOptions);
+
+        ResolveStrategy(providerOptions.ProviderName).Configure(optionsBuilder, providerOptions);
+    }
+}
+
+END SOURCE
+
+SOURCE: src/QBrainAi.Storage/Database/McpDatabaseProviderKind.cs
+namespace QBrainAi.Support.Mcp.Storage.Database;
+
+/// <summary>
+/// Identifies the relational database provider selected for the MCP server runtime.
+/// </summary>
+public enum McpDatabaseProviderKind
+{
+    /// <summary>Uses SQLite as the backing relational database engine.</summary>
+    Sqlite = 0,
+
+    /// <summary>Uses PostgreSQL as the backing relational database engine.</summary>
+    PostgreSql = 1,
+
+    /// <summary>Uses SQL Server as the backing relational database engine.</summary>
+    SqlServer = 2,
+}
+
+END SOURCE
+
+SOURCE: src/QBrainAi.Storage/McpDbContextFactory.cs
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using QBrainAi.Support.Mcp.Storage.Database;
+
+namespace QBrainAi.Support.Mcp.Storage;
+
+/// <summary>
+/// Design-time factory for <see cref="McpDbContext"/>.
+/// Used by EF Core tooling (dotnet-ef) to create a context instance at design time.
+/// </summary>
+public sealed class McpDbContextFactory : IDesignTimeDbContextFactory<McpDbContext>
+{
+    private const string DefaultSqliteConnectionString = "Data Source=mcp_design_time.db";
+    private const string DefaultPostgreSqlConnectionString = "Host=localhost;Port=5432;Database=mcp_design_time;Username=postgres;Password=postgres";
+    private const string DefaultSqlServerConnectionString = "Server=(localdb)\\MSSQLLocalDB;Database=mcp_design_time;Trusted_Connection=True;TrustServerCertificate=True";
+
+    /// <inheritdoc />
+    [UnconditionalSuppressMessage(
+        "Trimming",
+        "IL2026:Members attributed with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code",
+        Justification = "This factory is only for EF Core design-time tooling; trimmed runtime hosts do not invoke it.")]
+    public McpDbContext CreateDbContext(string[] args)
+    {
+        var providerName = GetArgumentValue(args, "provider")
+            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_EF_PROVIDER")
+            ?? "sqlite";
+        var connectionString = ResolveConnectionString(providerName, args);
+        var migrationsAssembly = GetArgumentValue(args, "migrations-assembly")
+            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_EF_MIGRATIONS_ASSEMBLY");
+        var providerOptions = McpDatabaseProviderFactory.CreateOptions(providerName, connectionString, migrationsAssembly);
+
+        var optionsBuilder = new DbContextOptionsBuilder<McpDbContext>();
+        McpDatabaseProviderFactory.Configure(optionsBuilder, providerOptions);
+        return new McpDbContext(optionsBuilder.Options);
+    }
+
+    private static string ResolveConnectionString(string providerName, string[] args)
+    {
+        var explicitConnectionString = GetArgumentValue(args, "connection")
+            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_EF_CONNECTION_STRING");
+        if (!string.IsNullOrWhiteSpace(explicitConnectionString))
+        {
+            return NormalizeSqliteConnectionString(providerName, explicitConnectionString);
+        }
+
+        return McpDatabaseProviderFactory.ResolveStrategy(providerName).Kind switch
+        {
+            McpDatabaseProviderKind.Sqlite => NormalizeSqliteConnectionString(
+                providerName,
+                GetArgumentValue(args, "sqlite-data-source")
+                    ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SQLITE_DATA_SOURCE")
+                    ?? DefaultSqliteConnectionString),
+            McpDatabaseProviderKind.PostgreSql => QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_POSTGRES_CONNECTION_STRING")
+                ?? DefaultPostgreSqlConnectionString,
+            McpDatabaseProviderKind.SqlServer => QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SQLSERVER_CONNECTION_STRING")
+                ?? DefaultSqlServerConnectionString,
+            _ => throw new InvalidOperationException($"Unsupported MCP database provider '{providerName}'."),
+        };
+    }
+
+    private static string NormalizeSqliteConnectionString(string providerName, string connectionString)
+    {
+        if (McpDatabaseProviderFactory.ResolveStrategy(providerName).Kind != McpDatabaseProviderKind.Sqlite)
+        {
+            return connectionString;
+        }
+
+        return connectionString.Contains('=', StringComparison.Ordinal)
+            ? connectionString
+            : $"Data Source={connectionString}";
+    }
+
+    private static string? GetArgumentValue(string[] args, string key)
+    {
+        if (args.Length == 0)
+        {
+            return null;
+        }
+
+        var prefix = $"--{key}=";
+        for (var index = 0; index < args.Length; index++)
+        {
+            var arg = args[index];
+            if (arg.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            {
+                return arg[prefix.Length..];
+            }
+
+            if (string.Equals(arg, $"--{key}", StringComparison.OrdinalIgnoreCase) && index + 1 < args.Length)
+            {
+                return args[index + 1];
+            }
+        }
+
+        return null;
+    }
+}
+
+END SOURCE
+
