@@ -14,7 +14,9 @@
 
 ## Outstanding work index
 
-**Current top priority (updated 2026-11-11): Dolt versioned federation.** Plan-readiness passed independent hostile validation at AGREE 98/98 (rounds R2-R5, reviewer Claude Opus, different family from the Codex author); DEPLOY HOLD and all Ph0 B1-B12 feasibility gates remain open and operator-owned, and no package is installed. See [`docs/handoffs/federation-dolt-handoff-20261111T120903.md`](federation-dolt-handoff-20261111T120903.md). This supersedes item 3 below (the 2026-10-16 forwarding-first federation fixes) for the versioned-federation mode; the explicit DirectProxy forwarding remains a separate supported feature.
+**The current branch handoff is [`docs/handoffs/HANDOFF.md`](HANDOFF.md)** - one handoff per branch, replaced in place (operator convention, 2026-11-11). The dated per-effort files below are history.
+
+**Current top priority (updated 2026-11-11): Dolt versioned federation.** Plan-readiness passed independent hostile validation at AGREE 98/98 (rounds R2-R5, reviewer Claude Opus, different family from the Codex author); DEPLOY HOLD and all Ph0 B1-B12 feasibility gates remain open and operator-owned, and no package is installed. See `HANDOFF.md`. This supersedes item 3 below (the 2026-10-16 forwarding-first federation fixes) for the versioned-federation mode; the explicit DirectProxy forwarding remains a separate supported feature.
 
 Open and unverified items only, newest first. Each row links to its handoff path on the branch that holds it (item 7 links the copy on `grok/session-lifecycle`, one of eleven old branches). Links resolve while those branches exist.
 
