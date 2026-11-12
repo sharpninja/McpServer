@@ -1,6 +1,6 @@
 # QuadBrain User Guide
 
-QuadBrain is McpServer's multi-model decision engine. It combines four specialized "brains" into a
+QuadBrain is QBrainAi's multi-model decision engine. It combines four specialized "brains" into a
 single committed answer and exposes that answer through an OpenAI-compatible chat-completions endpoint,
 so any OpenAI client (including [QBAgent](QBAGENT.md)) can use QuadBrain as a drop-in model.
 
@@ -175,22 +175,22 @@ definition is invalid.
 
 ### REST API
 
-Manage slots at runtime under `/mcpserver/brain-slots` (requires the workspace token):
+Manage slots at runtime under `/qbrainai/brain-slots` (requires the workspace token):
 
-- `PUT /mcpserver/brain-slots/{slotId}` - create or update a slot (body is the upsert request).
-- `POST /mcpserver/brain-slots/{slotId}/enable?replaceExisting=true` - enable a slot.
-- `POST /mcpserver/brain-slots/{slotId}/disable` - disable a slot.
-- `GET /mcpserver/brain-slots` - list slots (credentials never returned).
-- `GET /mcpserver/brain-slots/{slotId}` - get one slot.
-- `DELETE /mcpserver/brain-slots/{slotId}` - soft-delete a slot.
-- `GET /mcpserver/brain-slots/status` - quad readiness.
+- `PUT /qbrainai/brain-slots/{slotId}` - create or update a slot (body is the upsert request).
+- `POST /qbrainai/brain-slots/{slotId}/enable?replaceExisting=true` - enable a slot.
+- `POST /qbrainai/brain-slots/{slotId}/disable` - disable a slot.
+- `GET /qbrainai/brain-slots` - list slots (credentials never returned).
+- `GET /qbrainai/brain-slots/{slotId}` - get one slot.
+- `DELETE /qbrainai/brain-slots/{slotId}` - soft-delete a slot.
+- `GET /qbrainai/brain-slots/status` - quad readiness.
 
 The same operations are available over the MCP STDIO/transport surface and the typed
-`SharpNinja.McpServer.Client` (`BrainSlotClient`).
+`QBrainAI.Client` (`BrainSlotClient`).
 
 ### Readiness
 
-`GET /mcpserver/brain-slots/status` reports whether the quad is ready:
+`GET /qbrainai/brain-slots/status` reports whether the quad is ready:
 
 ```json
 {
@@ -208,12 +208,12 @@ endpoint, and an active trusted-party signing key. The quad is ready only when a
 
 Besides the OpenAI surface, the quad can be driven directly:
 
-- `POST /mcpserver/brain-slots/orchestrate` - run the full four-role loop and return the structured
+- `POST /qbrainai/brain-slots/orchestrate` - run the full four-role loop and return the structured
   `QuadBrainOrchestrationResponse` (status, final `output`, per-role results, transaction ids).
-- `POST /mcpserver/brain-slots/aot/reconcile` - run Arbiter-of-Truth reconciliation over supplied role
+- `POST /qbrainai/brain-slots/aot/reconcile` - run Arbiter-of-Truth reconciliation over supplied role
   evidence.
-- `POST /mcpserver/brain-slots/{slotId}/invoke` - invoke a single brain slot.
-- `POST /mcpserver/brain-slots/weights/update` - apply a durable, audited orchestration-weight update.
+- `POST /qbrainai/brain-slots/{slotId}/invoke` - invoke a single brain slot.
+- `POST /qbrainai/brain-slots/weights/update` - apply a durable, audited orchestration-weight update.
 
 Weight updates are safety-gated: the request must carry `aotApproved`, `adminApproved`,
 `safetyGatesPassed`, a `reasonText`, and (optionally) `expectedVersions` for optimistic concurrency. The
@@ -249,11 +249,11 @@ version mismatch is rejected.
 
 ## 8. Troubleshooting
 
-- **`quadReady` is false.** Check `GET /mcpserver/brain-slots/status` `validationErrors`/`missingRoles`.
+- **`quadReady` is false.** Check `GET /qbrainai/brain-slots/status` `validationErrors`/`missingRoles`.
   Common causes: a role has no enabled slot, an unresolved credential reference, a disallowed endpoint, or a
   missing trusted-party signing key.
 - **`/v1` returns an empty assistant message.** The loop rejected (for example the quad is not ready, a role
-  produced no output, or execution is disabled). Use `POST /mcpserver/brain-slots/orchestrate` to see the
+  produced no output, or execution is disabled). Use `POST /qbrainai/brain-slots/orchestrate` to see the
   rejection `reason`.
 - **`/v1` returns `500` with `{"error":{"type":"server_error"}}`.** An orchestration/provider/storage error
   occurred; check the server log for the inner exception.
@@ -265,4 +265,4 @@ version mismatch is rejected.
 ## See also
 
 - [QBAgent User Guide](QBAGENT.md) - an agent that uses QuadBrain as its model and executes its tool calls.
-- [User Guide](USER-GUIDE.md) - the full McpServer configuration and REST reference.
+- [User Guide](USER-GUIDE.md) - the full QBrainAi configuration and REST reference.

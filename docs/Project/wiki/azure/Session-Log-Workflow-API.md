@@ -1,6 +1,6 @@
 # Session Log Workflow API Reference
 
-This document describes the iteration 2 public interfaces for Session Log workflow operations in `McpServer.Repl.Core`.
+This document describes the iteration 2 public interfaces for Session Log workflow operations in `QBrainAi.Repl.Core`.
 
 ## Overview
 
@@ -166,13 +166,13 @@ never targets an imported session.
 ### REST endpoints
 
 ```
-PATCH  /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}                       # additive merge
-PUT    /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}                       # replace whole turn
-PUT    /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/sections/{section}    # replace one section
-DELETE /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/sections/{section}/items/{itemKey}
-DELETE /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/sections/{section}    # clear section
-DELETE /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}                       # delete turn
-DELETE /mcpserver/sessionlog/{agent}/{sessionId}                                   # delete session
+PATCH  /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}                       # additive merge
+PUT    /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}                       # replace whole turn
+PUT    /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/sections/{section}    # replace one section
+DELETE /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/sections/{section}/items/{itemKey}
+DELETE /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/sections/{section}    # clear section
+DELETE /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}                       # delete turn
+DELETE /qbrainai/sessionlog/{agent}/{sessionId}                                   # delete session
 ```
 
 The replace/section bodies are a `UnifiedRequestEntryDto`; for a section PUT only
@@ -483,8 +483,8 @@ Valid dialog item roles:
 
 ## Files Created
 
-- `src/McpServer.Repl.Core/ISessionLogWorkflow.cs` — Core workflow interface with state tracking
-- `src/McpServer.Repl.Core/SessionLogCommandShapes.cs` — YAML command shapes and parameter/result interfaces
-- `src/McpServer.Repl.Core/SessionLogErrorEnvelope.cs` — Structured error envelopes and codes
+- `src/QBrainAi.Repl.Core/ISessionLogWorkflow.cs` — Core workflow interface with state tracking
+- `src/QBrainAi.Repl.Core/SessionLogCommandShapes.cs` — YAML command shapes and parameter/result interfaces
+- `src/QBrainAi.Repl.Core/SessionLogErrorEnvelope.cs` — Structured error envelopes and codes
 
 All interfaces are fully documented with XMLDocs, including canonical identifier rules, turn lifecycle state transitions, error scenarios, and YAML examples.

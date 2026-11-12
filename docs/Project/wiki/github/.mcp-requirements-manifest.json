@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "github",
-  "generatedAtUtc": "2026-09-28T17:04:34.8206147+00:00",
+  "generatedAtUtc": "2026-11-12T02:58:19.1225705+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -37,6 +37,11 @@
     "Action-Types.md",
     "MCP-Memories.md",
     "Federation.md",
+    "SessionTurn-Review-AgentContext-Architecture.md",
+    "SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+    "xUnit-v3-Test-Architecture-Guidance.md",
+    "Task-Workflow-Architecture.md",
+    "Federation-Dolt-BDPv4-Plan.md",
     "Project-Readme.md",
     "Documentation-Index.md",
     "Claude-Hook-Validation-Skill.md",
@@ -47,6 +52,7 @@
     "Session-Log-Workflow-API.md",
     "Scratch-Workspace-Integration-Tests.md",
     "Memory-Benchmarks.md",
-    "Setup/Frontier-Agent-Setup-Prompt-Draft.md"
+    "Setup/Frontier-Agent-Setup-Prompt-Draft.md",
+    "Operations/Permanent-Local-Audit-Storage.md"
   ]
 }

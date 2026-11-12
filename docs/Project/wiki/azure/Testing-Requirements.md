@@ -1,4 +1,4 @@
-# Testing Requirements (MCP Server)
+# Testing Requirements (QBrain.AI)
 
 ## TEST-GRAPHRAG-ADHOC
 
@@ -727,13 +727,10 @@ Current vote state endpoint: `GET /questions/{id}/votes` returns one row per act
 
 ### TEST-MCP-136
 
-Hub-and-spoke federation tests cover config role defaults, durable proxy/workspace/operation storage, hub enrollment and status, LocalProxy /mcp-transport routing, operation headers, queued write fallback, replay candidate persistence, stale-version conflict creation, and provider migration compilation.
+Test local read/write/restart during outage, version commit publication, project isolation and reviewed convergence using TEST-MCP-222..237. Retain explicit DirectProxy loop-protection and route tests. Replace LocalProxy hub-authority, queued-write and read-switch assertions for Dolt mode.
 
 **Acceptance Criteria:**
-- [ ] Adapter diagnostics tests fail if any required domain is uncovered or reports incorrect local-only/apply-supported status.
-- [ ] Proxy tests prove live-forwarded domains keep working and only replayable mutating requests are queued during hub outage.
-- [ ] Topology tests prove stale base-version operations create conflicts and suppress fanout.
-- [ ] Replay and fanout tests prove signed envelopes are verified before local apply.
+- [ ] Given a local commit during outage, when reconnect runs, then history is exchanged without replaying the original command.
 
 ### TEST-MCP-137
 
@@ -742,18 +739,31 @@ Given templates/prompt-templates.yaml, when the marker-template contract tests r
 
 ### TEST-MCP-138
 
-Unit tests must fail red until WorkspaceService is database-authoritative and DbForeignKeyContractTests prove every WorkspaceId entity has a Workspaces FK with non-cascade delete behavior.
+Unit and provider tests must fail red until WorkspaceService is database-authoritative and DbFkContractTests prove every WorkspaceId entity has a canonical Workspaces FK with non-cascade delete behavior. Non-memory FKs are required; MemoryEntity and MemoryIndexEntity use optional FKs because Global scope stores null WorkspaceId. Provider tests must prove the same physical constraints.
 
+**Acceptance Criteria:**
+- [ ] DbFkContractTests fails when a non-memory WorkspaceId entity lacks a required non-cascade Workspaces FK.
+- [ ] Memory relationship tests prove optional Workspaces FKs accept Global null, reject orphan non-null workspace IDs, and preserve parent/index ownership consistency.
+- [ ] SQLite, PostgreSQL, and SQL Server migrated physical schemas expose the expected FK nullability and delete action with existing rows preserved.
 
 ### TEST-MCP-139
 
 Unit tests must fail red until persistent delete paths preserve rows through soft-delete metadata and every mutable entity writes DataAuditLog rows for create, update, and soft-delete operations.
 
+**Acceptance Criteria:**
+- [ ] A negative-control model with Cascade fails the memory relationship contract; the real EF model uses Restrict or NoAction.
+- [ ] Provider tests soft-delete a memory and prove its version and index rows remain queryable for audit and recovery.
+- [ ] Migrated SQLite, PostgreSQL, and SQL Server schemas have non-cascade MemoryId FKs and preserve seeded row counts.
 
 ### TEST-MCP-140
 
 Unit and provider tests must fail red until TODO requirement links and requirement traceability links enforce FKs, missing requirements are backfilled, and SQLite, SQL Server, and PostgreSQL migrations preserve data.
 
+**Acceptance Criteria:**
+- [ ] Unit tests fail when TODO requirement links omit a durable TODO or Requirements FK.
+- [ ] Unit tests fail when FR/TR/TEST traceability links omit source or target Requirements FKs.
+- [ ] Provider migrations backfill missing requirement anchors and preserve existing TODO, requirement, and traceability rows.
+- [ ] SQLite, SQL Server, and PostgreSQL migrations enforce the physical FKs without data loss.
 
 ### TEST-MCP-141
 
@@ -923,7 +933,8 @@ Deferred-scope documentation tests SHALL prove remaining future autonomous Quad-
 aiUnit plan review tests SHALL validate committed aiUnit run-log evidence for PLAN-TURNTRANSACTIONS-001 and fail on critical/high findings.
 
 **Acceptance Criteria:**
-- [x] `PlanTransactionReviewTests` validates `artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json`, reviewed scope, pass status, and absence of critical/high findings.
+- [x] PlanTransactionReviewTests validates the original committed aiUnit JSON run log for PLAN-TURNTRANSACTIONS-001, its reviewed scope, pass status, and absence of critical or high findings. (evidence: Git commit dd502e001f4ea9c4b7c175cee9d8c0b27b7b56cf blob 8f046a33caf8c0e04d74ac7f67628df5e86145e1; tests/McpServer.PlanReview.Tests/TestResults/original-runlog-green.trx (1 passed, 0 failed, 0 skipped))
+- [x] The byte-identical original run log is copied as a test resource and read from test output; running the test does not use a repository path or write docs/reviews. (evidence: tests/McpServer.PlanReview.Tests/Fixtures/README.md; SHA-256 D826A458802C3252EEE88D898D633E610331506D186350D54E71573686B51878; original-runlog-green.trx)
 
 ### TEST-MCP-165
 
@@ -1184,6 +1195,19 @@ Committed, bypassed (disabled/non-mutating), aborted, rejected on key-server sig
 
 
 
+## TEST-MCP-ACKRECOVERY
+
+### TEST-MCP-ACKRECOVERY-001
+
+Applicable regression matrix is authoritative: complete client/REPL core, all platform-applicable session service/controller checks, preserved Grok tests, deployment helpers and relevant HTTP integration. Baseline failures remain visible with source-backed applicability and portable replacements. Independent predeploy HV. Verified marker/bootstrap after restart; real begin/actions/dialog/title/complete/next prompt; explicit stale supersession preserves all terminal data; no new failsafe records. Archive and drain historical failsafes, restore historical response snapshots, verify all exact IDs.
+
+**Acceptance Criteria:**
+- [x] Compatible deployed server and typed REPL return valid persisted and retitled receipts through unchanged plugin. (evidence: MCP lifecycle and terminal history recovery accepted by final HV AGREE, 10 PASS/0 FAIL/0 UNKNOWN, accuracy 99 and completeness 98. Request /home/sharpninja/.config/powershell/Snippets/docs/receipts/hv/20261006T210700Z-resolution-final.request.jsonl; response /home/sharpninja/.config/powershell/Snippets/docs/receipts/hv/20261006T210700Z-resolution-final.response.jsonl; full verdict /home/sharpninja/.config/powershell/Snippets/docs/receipts/hv/20261006T210700Z-resolution-final.verdict.md. Completed MCP review Codex-20261006T210855Z-hv-resolution-final / req-20261006T210855Z-hv-resolution-final, exact body verified. Live receipt /home/sharpninja/.config/powershell/Snippets/.mcpServer/receipts/resolution/live/result.json; history and queue /home/sharpninja/.config/powershell/Snippets/.mcpServer/receipts/resolution/reconciliation-result.json. Nuke short startup health window remains separately triaged as triage-group-521951095c164f2e; Nuke UpdateService gate is not claimed successful. The exact Nuke-deployed candidate was recovered by normal service start and verified healthy.)
+- [x] Atomic server protection preserves terminal response/status/title/data under stale supersession, including concurrent completion. (evidence: MCP lifecycle and terminal history recovery accepted by final HV AGREE, 10 PASS/0 FAIL/0 UNKNOWN, accuracy 99 and completeness 98. Request /home/sharpninja/.config/powershell/Snippets/docs/receipts/hv/20261006T210700Z-resolution-final.request.jsonl; response /home/sharpninja/.config/powershell/Snippets/docs/receipts/hv/20261006T210700Z-resolution-final.response.jsonl; full verdict /home/sharpninja/.config/powershell/Snippets/docs/receipts/hv/20261006T210700Z-resolution-final.verdict.md. Completed MCP review Codex-20261006T210855Z-hv-resolution-final / req-20261006T210855Z-hv-resolution-final, exact body verified. Live receipt /home/sharpninja/.config/powershell/Snippets/.mcpServer/receipts/resolution/live/result.json; history and queue /home/sharpninja/.config/powershell/Snippets/.mcpServer/receipts/resolution/reconciliation-result.json. Nuke short startup health window remains separately triaged as triage-group-521951095c164f2e; Nuke UpdateService gate is not claimed successful. The exact Nuke-deployed candidate was recovered by normal service start and verified healthy.)
+- [x] Normal live lifecycle opens, updates, retitles, completes and starts next turn without new failsafes. (evidence: MCP lifecycle and terminal history recovery accepted by final HV AGREE, 10 PASS/0 FAIL/0 UNKNOWN, accuracy 99 and completeness 98. Request /home/sharpninja/.config/powershell/Snippets/docs/receipts/hv/20261006T210700Z-resolution-final.request.jsonl; response /home/sharpninja/.config/powershell/Snippets/docs/receipts/hv/20261006T210700Z-resolution-final.response.jsonl; full verdict /home/sharpninja/.config/powershell/Snippets/docs/receipts/hv/20261006T210700Z-resolution-final.verdict.md. Completed MCP review Codex-20261006T210855Z-hv-resolution-final / req-20261006T210855Z-hv-resolution-final, exact body verified. Live receipt /home/sharpninja/.config/powershell/Snippets/.mcpServer/receipts/resolution/live/result.json; history and queue /home/sharpninja/.config/powershell/Snippets/.mcpServer/receipts/resolution/reconciliation-result.json. Nuke short startup health window remains separately triaged as triage-group-521951095c164f2e; Nuke UpdateService gate is not claimed successful. The exact Nuke-deployed candidate was recovered by normal service start and verified healthy.)
+- [x] Retained failsafes are drained and previously verified terminal history is restored; restart trust and private marker readability verified. (evidence: MCP lifecycle and terminal history recovery accepted by final HV AGREE, 10 PASS/0 FAIL/0 UNKNOWN, accuracy 99 and completeness 98. Request /home/sharpninja/.config/powershell/Snippets/docs/receipts/hv/20261006T210700Z-resolution-final.request.jsonl; response /home/sharpninja/.config/powershell/Snippets/docs/receipts/hv/20261006T210700Z-resolution-final.response.jsonl; full verdict /home/sharpninja/.config/powershell/Snippets/docs/receipts/hv/20261006T210700Z-resolution-final.verdict.md. Completed MCP review Codex-20261006T210855Z-hv-resolution-final / req-20261006T210855Z-hv-resolution-final, exact body verified. Live receipt /home/sharpninja/.config/powershell/Snippets/.mcpServer/receipts/resolution/live/result.json; history and queue /home/sharpninja/.config/powershell/Snippets/.mcpServer/receipts/resolution/reconciliation-result.json. Nuke short startup health window remains separately triaged as triage-group-521951095c164f2e; Nuke UpdateService gate is not claimed successful. The exact Nuke-deployed candidate was recovered by normal service start and verified healthy.)
+
+
 ## TEST-MCP-AIUNIT
 
 ### TEST-MCP-AIUNIT-001
@@ -1208,6 +1232,34 @@ aiUnit must independently review warning suppression governance decisions, requi
 - [x] The aiUnit review can be invoked directly through the AiWarningSuppressionReview NUKE target. (evidence: build/Build.AiWarningSuppressionReview.cs)
 - [ ] A completed warning remediation closeout must include the aiUnit review result or documented blocker before PLAN-WARNREMEDIATION-001 is marked done.
 - [ ] Named tests exist: Build_HasNormalizeGeneratedMigrationObsoletePragmasTarget; NormalizeGeneratedMigrationTarget_UsesMockCatalogAndAtomicWriter; NormalizeGeneratedMigrationObsoletePragmas_ReplacesOnlyExactPairsWithBlankLines; NormalizeGeneratedMigrationObsoletePragmas_IgnoresNonGeneratedAndNonMigrationFiles; NormalizeGeneratedMigrationObsoletePragmas_IsIdempotent; ValidateWarningSuppressions_GeneratedMigrationPragmas_FailsReadOnlyWithoutMutation.
+
+
+## TEST-MCP-AUDIT
+
+### TEST-MCP-AUDIT-001
+
+AuditPayloadMigrationTests and AuditPayloadProviderMigrationTests apply the real SQLite, PostgreSQL, and SQL Server migrations in scratch databases, verify legacy text reads and all four compressed payload round trips, and confirm the new migration ID is applied.
+
+
+### TEST-MCP-AUDIT-002
+
+DbFkBehaviorTests reject tracked audit updates. SqlServerAuditPayloadMigrationTests assert seven SQL Server runtime-role DENY permissions. AuditPayloadMigrationTests verify AutoMigrate false rejects pending schema and accepts migrated schema.
+
+
+### TEST-MCP-AUDIT-003
+
+AuditReachesHub, AuditRetryIdempotent and AuditBackfillVerified exercise permanent node and hub ledgers. CloneOmitsSecrets verifies project history exclusions; wiki export remains free of operational audit. Preserve exact compression and runtime-role tests in TEST-MCP-AUDIT-001/002.
+
+**Acceptance Criteria:**
+- [ ] Given source has100 TODO audit and20 generic audit records, when backfill verifies, then all120 matching hashes and receipts exist at the hub; missing one blocks cutover.
+
+
+## TEST-MCP-AUDITACTION
+
+### TEST-MCP-AUDITACTION-001
+
+Exercise real SessionLogService writes and readback: valid tool_execution metadata and tool_call/tool_result dialog survive without design-decision promotion; malformed order/description/status selected for persistence reject on submit/upsert/replace/section paths before any tracked or persisted mutation; mixed batches remain atomic; unrelated legacy/custom actions remain accepted. Use SQLite persistence so a later save cannot accidentally commit a rejected mutation. P1 named cases: DuplicateRequestIds_LastWinsBeforeActionValidation checks both new/existing sessions and invalid winners/losers; LateSnapshot_InvalidActionsRemainIgnored checks retained terminal history; ZeroExecutionOrder_RoundTripsWithoutPositionalRewrite checks the zero boundary; OtherSection_IgnoresUnwrittenActions checks section isolation. InvalidLaterTurn_RejectsWholeSubmission checks atomic rejection for new and existing sessions; InvalidResubmission_LeavesDeletedSessionDeleted checks rejected tombstone recovery, including readback after clearing the change tracker.
+
 
 
 ## TEST-MCP-AUTH
@@ -1297,6 +1349,44 @@ Pester proves Test-ReplFailsafeBackendUnreachable is true for backend_unavailabl
 - [ ] Named tests cover TEST-MCP-FAILSAFE-001 acceptance criteria
 
 
+## TEST-MCP-FED-BACKFILL
+
+### TEST-MCP-FED-BACKFILL-001
+
+Cover all explicitly classified domains, idempotent batch resume, no business-command fanout, typed hash parity, full session graph, identity aliases and audit receipts. Remove legacy local-read/hub-write and read-switch assertions in Dolt mode.
+
+**Acceptance Criteria:**
+- [ ] Given100 source TODO rows and120 audit records, when migration repeats after acknowledgement loss, then destination counts remain100/120, original timestamps/IDs resolve and external dispatch count is0.
+
+
+## TEST-MCP-FED-PATH
+
+### TEST-MCP-FED-PATH-001
+
+Unit matrix {host: Windows, simulated Linux} x {input: C:\x, C:/x, \\srv\sh\x, //srv/sh/x, /home/x, relative, mixed separators} for IWorkspacePathNormalizer: foreign-platform inputs are never prefixed with the process cwd and keep their platform. TriageService on simulated Linux: submit with C:\Users\kingd stores OriginalWorkspacePath C:/Users/kingd (no /opt/... prefix), getReport and queryGroups by the original path succeed. WorkspaceService.Init on simulated Linux with a Windows path does not create directories. Architecture test: no direct Path.GetFullPath on request-supplied workspace paths under src/ outside the allowlist. Mocks first: host-platform and file-system abstractions mocked.
+
+
+
+## TEST-MCP-FED-ROUTE
+
+### TEST-MCP-FED-ROUTE-001
+
+Test missing/foreign project denial, different-host paths mapping to one logical project, token-to-project authorization and legacy fail-closed path/hash routing. Current ordinary TODO traffic is local, not forwarded.
+
+**Acceptance Criteria:**
+- [ ] Given A Atlas and B SecretProject, when A supplies B path or hash, then403 unauthorized_project sends no B rows and performs no mutation.
+
+
+## TEST-MCP-FED-WSSYNC
+
+### TEST-MCP-FED-WSSYNC-001
+
+Test explicit committed portable configuration, host-value exclusion, hub-owned scope-layer drift and old legacy payload compatibility. Replace blanket equality of every host field and heartbeat-driven versioned mutation.
+
+**Acceptance Criteria:**
+- [ ] Given H layer release and A layer draft, when A heartbeats, then H remains release and drift=true; only a separately authorized policy commit changes it.
+
+
 ## TEST-MCP-FILETOOLS
 
 ### TEST-MCP-FILETOOLS-001
@@ -1384,6 +1474,15 @@ Typed AgentHelpClient methods dispatch to the expected /mcpserver/agent-help RES
 REPL contract tests prove workflow.agenthelp.createSession, workflow.agenthelp.submitTurn, and workflow.agenthelp.getStatus dispatch through typed REPL workflow code, build caller-linkage seed metadata, and return standard result/error envelopes.
 
 
+### TEST-MCP-HELP-009
+
+Independent fixture matrix and shared assertions validate AC-HELP-PATH-01 through 03: strategy defaults, aliases/casing, null/empty/whitespace overrides, and exact explicit path precedence. Correct mocks pass and wrong paths are rejected within green tests before production binding. Production-bound tests capture options from the real conversation service through a fake execution strategy. Live helper smoke test must return a substantive response.
+
+**Acceptance Criteria:**
+- [ ] With no nonblank agentPath override, Agent Help supplies a strategy-appropriate executable: codex for codex-cli, copilot for copilot-cli, grok for grok-cli/grok-build, while generic one-shot execution retains cline.
+- [ ] A nonblank caller agentPath is preserved exactly and takes precedence over the strategy default.
+- [ ] Null, empty and whitespace overrides and case-insensitive strategy names are handled consistently; the codex-cli path must never silently resolve to cline solely because of the generic options default.
+
 
 ## TEST-MCP-HELP-SEC
 
@@ -1469,6 +1568,277 @@ HostileReview_Default_DoesNotMutateProductFiles; HostileReview_SurfaceParity_Res
 **Acceptance Criteria:**
 - [x] Named tests exist: HostileReview_Default_DoesNotMutateProductFiles; HostileReview_SurfaceParity_RestReplDirectorPlugin. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 - [x] Every status surface accepts only a request identity and performs no mutation. Mutation-shaped status input is rejected. The registered inventory remains exactly submit/status/get/query. Internal lifecycle cancellation creates no additional public operation. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+
+
+## TEST-MCP-HVPIPE
+
+### TEST-MCP-HVPIPE-001
+
+Named tests of FR-MCP-HVPIPE-001: HostileValidationOptionsMissingUnknownOrDuplicateReviewerFailsStartup; ReviewerSeedingInsertsFiveOnceNeverOverwrites; ReviewerAdapterDefaultsToHighestEffortAndCliDefaultModel; UpdateReviewerStaleStateVersion409NothingChanged; UpdateReviewerLaunchChangeUnverifiedNotifiesAndRequestsProbe; ReviewerSurfacesParityGoldenContract.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-001-AC001: HostileValidationOptionsMissingUnknownOrDuplicateReviewerFailsStartup.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-001-AC002: ReviewerSeedingInsertsFiveOnceNeverOverwrites.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-001-AC003: ReviewerAdapterDefaultsToHighestEffortAndCliDefaultModel.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-001-AC004: UpdateReviewerStaleStateVersion409NothingChanged.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-001-AC005: UpdateReviewerLaunchChangeUnverifiedNotifiesAndRequestsProbe.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-001-AC006: ReviewerSurfacesParityGoldenContract.
+
+### TEST-MCP-HVPIPE-002
+
+Named tests of FR-MCP-HVPIPE-002: AgentIdentityGoldenContractTests; SubmitterAliasesNeverAssignedClaudeFamily; FinalVerificationSubmitterReviewerRefusedNotIndependent; SubmitterExclusionUsesTurnAgentNeverFreeText; RoundRobinAssignsInPoolOrderAfterCursor; RoundRobinCursorSurvivesRestart; RoundRobinConcurrentSubmissionsConsecutiveReviewersThreeProviders; ClaimReassignsWhenAssigneeNoLongerEligible; AuthorAgentNeverAssignedAndRefusedByVerification; ClaimReassignmentSkipsFullReviewerAndAllFullWritesNothing; ClaimSkipsRequestWhoseEligibleAssigneeIsFull.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-002-AC001: AgentIdentityGoldenContractTests.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-002-AC002: SubmitterAliasesNeverAssignedClaudeFamily; FinalVerificationSubmitterReviewerRefusedNotIndependent.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-002-AC003: SubmitterExclusionUsesTurnAgentNeverFreeText.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-002-AC004: RoundRobinAssignsInPoolOrderAfterCursor.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-002-AC005: RoundRobinCursorSurvivesRestart.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-002-AC006: RoundRobinConcurrentSubmissionsConsecutiveReviewersThreeProviders.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-002-AC007: ClaimReassignsWhenAssigneeNoLongerEligible.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-002-AC008: AuthorAgentNeverAssignedAndRefusedByVerification.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-002-AC009: ClaimReassignmentSkipsFullReviewerAndAllFullWritesNothing; ClaimSkipsRequestWhoseEligibleAssigneeIsFull.
+
+### TEST-MCP-HVPIPE-003
+
+Named tests of FR-MCP-HVPIPE-003: ReviewerBecomesOnlineOnlyByPassingProbe; ProbePassedReviewerOnlineResolvedModelAndEffort; ProbeFailuresOfflineWithCodeAndIncident; ProbeEvidenceCorruptServerIncidentReadinessUnchanged; NonceRepeatNoSecondProbe; NonceDisabledReviewer409; WorkerStartupProbesUnverifiedEnabledReviewersOnly; WorkerRestartNeverRetriesSettledProbe; StaleProbeNeverQualifiesNewConfiguration; StaleProbeFailureShutdownOrExpiryLeavesNewConfigurationUnchanged; ProbeFailureOfflineWithIncidentAndShutdownRequestsProbeAgain.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-003-AC001: ReviewerBecomesOnlineOnlyByPassingProbe.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-003-AC002: ProbePassedReviewerOnlineResolvedModelAndEffort.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-003-AC003: ProbeFailuresOfflineWithCodeAndIncident; ProbeEvidenceCorruptServerIncidentReadinessUnchanged.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-003-AC004: NonceRepeatNoSecondProbe.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-003-AC005: NonceDisabledReviewer409.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-003-AC006: WorkerStartupProbesUnverifiedEnabledReviewersOnly; WorkerRestartNeverRetriesSettledProbe.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-003-AC007: StaleProbeNeverQualifiesNewConfiguration; StaleProbeFailureShutdownOrExpiryLeavesNewConfigurationUnchanged.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-003-AC008: ProbeFailureOfflineWithIncidentAndShutdownRequestsProbeAgain.
+
+### TEST-MCP-HVPIPE-004
+
+Named tests of FR-MCP-HVPIPE-004: ScopeResolutionTurnRangeAndSessionMembers; ScopeResolutionSubmittingTurnExcludedOrRefused; ScopeResolutionOverMaxRefusedNeverTruncated; SessionScopeSnapshotAtAdmissionLaterTurnNotMember; UnnecessaryTurnIncludedAssessedAndReviewed; ScopeResolutionInvalidRangeOrSession400.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-004-AC001: ScopeResolutionTurnRangeAndSessionMembers.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-004-AC002: ScopeResolutionSubmittingTurnExcludedOrRefused.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-004-AC003: ScopeResolutionOverMaxRefusedNeverTruncated.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-004-AC004: SessionScopeSnapshotAtAdmissionLaterTurnNotMember.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-004-AC005: UnnecessaryTurnIncludedAssessedAndReviewed.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-004-AC006: ScopeResolutionInvalidRangeOrSession400.
+
+### TEST-MCP-HVPIPE-005
+
+Named tests of FR-MCP-HVPIPE-005: AdmissionRefusalListsEveryAffectedTurn; AdmissionConcurrentOverlapOneWinsThreeProviders; AdmissionNoEligibleReviewer409WithReviewerContext; HvSubmitVerbNoReviewerAddsContext; SubmitIdempotencyKeyReplayAndReuse; SubmitRequestShapeHasNoForceFlag.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-005-AC001: AdmissionRefusalListsEveryAffectedTurn.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-005-AC002: AdmissionConcurrentOverlapOneWinsThreeProviders.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-005-AC003: AdmissionNoEligibleReviewer409WithReviewerContext.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-005-AC004: HvSubmitVerbNoReviewerAddsContext.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-005-AC005: SubmitIdempotencyKeyReplayAndReuse.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-005-AC006: SubmitRequestShapeHasNoForceFlag.
+
+### TEST-MCP-HVPIPE-006
+
+Named tests of FR-MCP-HVPIPE-006: RequirementReferenceExtractorFindsResolvesAndOrders; RequirementReferenceUnresolvedListedNeverRefused; SubmitContextTooLongOrUnknownFormat400; ContextSecretRedactedInBriefAndReads.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-006-AC001: RequirementReferenceExtractorFindsResolvesAndOrders.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-006-AC002: RequirementReferenceUnresolvedListedNeverRefused.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-006-AC003: SubmitContextTooLongOrUnknownFormat400.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-006-AC004: ContextSecretRedactedInBriefAndReads.
+
+### TEST-MCP-HVPIPE-007
+
+Named tests of FR-MCP-HVPIPE-007: SubmitWakesWorkerAutoStart; ClaimConcurrentWorkersOneRunPerRequestThreeProviders; LeaseExpiryAbandonsFencesAndRequeues; LeaseExpiryEndsRequestLikeFailedRun; StaleFenceEveryWorkerWriteRefusedNothingChanged; SweepFinalizesFinalizingRequestOnce; GracefulShutdownNotCountedNoIncident; WorkerClaimsOnlyItsWorkspace; WorkerDeathEndsReviewerTreeAndRequeues; RunStartRecordedBeforeBriefAndCrashRecovered; RunStartAndHeartbeatRetryableConflictRepeated; SecondSweepSkipsRunAlreadyTakenOver; LateSweepNeverRevivesCompletedRequest.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-007-AC001: SubmitWakesWorkerAutoStart.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-007-AC002: ClaimConcurrentWorkersOneRunPerRequestThreeProviders.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-007-AC003: LeaseExpiryAbandonsFencesAndRequeues; LeaseExpiryEndsRequestLikeFailedRun.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-007-AC004: StaleFenceEveryWorkerWriteRefusedNothingChanged.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-007-AC005: SweepFinalizesFinalizingRequestOnce.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-007-AC006: GracefulShutdownNotCountedNoIncident.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-007-AC007: WorkerClaimsOnlyItsWorkspace.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-007-AC008: WorkerDeathEndsReviewerTreeAndRequeues.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-007-AC009: RunStartRecordedBeforeBriefAndCrashRecovered; RunStartAndHeartbeatRetryableConflictRepeated.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-007-AC010: SecondSweepSkipsRunAlreadyTakenOver.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-007-AC011: LateSweepNeverRevivesCompletedRequest.
+
+### TEST-MCP-HVPIPE-008
+
+Named tests of FR-MCP-HVPIPE-008: OutputLinesAppendedWithinFlushIntervalInOrder; OutputFlushedAtByteThreshold; LiveOutputLineObservableBeforeReviewerExits; ReviewerRunHasNoTimeLimit; CancelQueuedImmediateRunningAtNextHeartbeat; CancelVersusFinalizeOneCommitsThreeProviders; CancelTerminalOrFinalizing409; ReviewerRunLeavesSameAgentLiveSessionUnchanged; ReviewerRunCannotChangeWorkspaceFilesPerAdapter; ReviewerClosesOwnTurnAndExitsUnderStopGate; ReviewerStopEndsWholeProcessTree; CancelCommittedBeforeCloseWinsOverFinalizing.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-008-AC001: OutputLinesAppendedWithinFlushIntervalInOrder.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-008-AC002: OutputFlushedAtByteThreshold.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-008-AC003: LiveOutputLineObservableBeforeReviewerExits.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-008-AC004: ReviewerRunHasNoTimeLimit.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-008-AC005: CancelQueuedImmediateRunningAtNextHeartbeat.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-008-AC006: CancelVersusFinalizeOneCommitsThreeProviders.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-008-AC007: CancelTerminalOrFinalizing409.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-008-AC008: ReviewerRunLeavesSameAgentLiveSessionUnchanged.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-008-AC009: ReviewerRunCannotChangeWorkspaceFilesPerAdapter.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-008-AC010: ReviewerClosesOwnTurnAndExitsUnderStopGate.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-008-AC011: ReviewerStopEndsWholeProcessTree.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-008-AC012: CancelCommittedBeforeCloseWinsOverFinalizing.
+
+### TEST-MCP-HVPIPE-009
+
+Named tests of FR-MCP-HVPIPE-009: ReviewerFailureOfflineWithIncident; IncidentFiledThroughTriageWithDedupeKey; RepeatedFailureSameTriageGroup; IncidentFilingRetriedUntilFiled; AttemptsExhaustedRequestFailedTurnsReleased; ServerFailureIncidentReviewerUnchanged; IncidentFilingNeverCallsTriageWhileLedgerUnavailable; FailAttemptRefusalEndsAttemptWithoutStateClaim; WorkerIterationStopsWhenIncidentFilingAuditUnavailable.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-009-AC001: ReviewerFailureOfflineWithIncident.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-009-AC002: IncidentFiledThroughTriageWithDedupeKey.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-009-AC003: RepeatedFailureSameTriageGroup.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-009-AC004: IncidentFilingRetriedUntilFiled.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-009-AC005: AttemptsExhaustedRequestFailedTurnsReleased.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-009-AC006: ServerFailureIncidentReviewerUnchanged.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-009-AC007: IncidentFilingNeverCallsTriageWhileLedgerUnavailable.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-009-AC008: FailAttemptRefusalEndsAttemptWithoutStateClaim; WorkerIterationStopsWhenIncidentFilingAuditUnavailable.
+
+### TEST-MCP-HVPIPE-010
+
+Named tests of FR-MCP-HVPIPE-010: FinalizeStoresPerTurnScoresAndSeparateHolistic; FinalizeIncompleteOutputRefusedNothingCommitted; OverallVerdictHolisticBelow098Disagree; VerdictAgreeWithFailFindingRefused; HolisticScoresNeverComputedFromTurnScores; ForgedWorkerRecordInMessageTextIgnored; ReviewerRecordsExtractedOnceFromAssembledMessagesPerCli; ExitZeroWithoutReviewerRecordsIsNotAReview; ReviewerTurnMustBeCompletedChoreHoldingEveryRecord; OverallVerdictOnePredicateOverTurnsHolisticResponsesFindings; OverallVerdictBindsAdmittedResponsesNotLaterState.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-010-AC001: FinalizeStoresPerTurnScoresAndSeparateHolistic.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-010-AC002: FinalizeIncompleteOutputRefusedNothingCommitted.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-010-AC003: OverallVerdictHolisticBelow098Disagree; VerdictAgreeWithFailFindingRefused.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-010-AC004: HolisticScoresNeverComputedFromTurnScores.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-010-AC005: ForgedWorkerRecordInMessageTextIgnored.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-010-AC006: ReviewerRecordsExtractedOnceFromAssembledMessagesPerCli.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-010-AC007: ExitZeroWithoutReviewerRecordsIsNotAReview.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-010-AC008: ReviewerTurnMustBeCompletedChoreHoldingEveryRecord.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-010-AC009: OverallVerdictOnePredicateOverTurnsHolisticResponsesFindings.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-010-AC010: OverallVerdictBindsAdmittedResponsesNotLaterState.
+
+### TEST-MCP-HVPIPE-011
+
+Named tests of FR-MCP-HVPIPE-011: EvidenceStoredGzipOnlyRoundTripExact; FinalizeCorruptOrTruncatedLogRefused; CompressionRoundTripFailureNothingSaved; AppendEvidenceCorruptFailsRunAsServerFault; ResponseLogDownloadMultiMemberGzipMatchesChain; OutputHasNoSizeLimitNeverTruncated; ResultEvidenceDigestExcludesItselfAndRoundTrips; ResultCompressionFailureFailsRunAsServerFault; CorruptStoredPayloadReadAnswersEvidenceCorrupt; CorruptRequestEvidenceAtBriefFailsRunAsServerFault.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-011-AC001: EvidenceStoredGzipOnlyRoundTripExact.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-011-AC002: FinalizeCorruptOrTruncatedLogRefused.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-011-AC003: CompressionRoundTripFailureNothingSaved; AppendEvidenceCorruptFailsRunAsServerFault.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-011-AC004: ResponseLogDownloadMultiMemberGzipMatchesChain.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-011-AC005: OutputHasNoSizeLimitNeverTruncated.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-011-AC006: ResultEvidenceDigestExcludesItselfAndRoundTrips.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-011-AC007: ResultCompressionFailureFailsRunAsServerFault.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-011-AC008: CorruptStoredPayloadReadAnswersEvidenceCorrupt.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-011-AC009: CorruptRequestEvidenceAtBriefFailsRunAsServerFault.
+
+### TEST-MCP-HVPIPE-012
+
+Named tests of FR-MCP-HVPIPE-012: FinalizeFaultAfterEachWriteNothingVisibleThreeProviders; FrozenTurnEveryWritePathRefused; EndedRequestReleasesTurns; FinalizeTwiceSecondReturnsStoredNothingWritten; FinalizeSnapshotChangedRefused; FinalizeReplacesOtherPendingHvReviewKeepsStatus; MigrationMarksHvReviewedTurnsFinalThreeProviders; LateVerificationFailureCannotUndoCommittedFinalization; FinalizerPropagatesEveryFailRunOutcome.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-012-AC001: FinalizeFaultAfterEachWriteNothingVisibleThreeProviders.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-012-AC002: FrozenTurnEveryWritePathRefused.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-012-AC003: EndedRequestReleasesTurns.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-012-AC004: FinalizeTwiceSecondReturnsStoredNothingWritten.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-012-AC005: FinalizeSnapshotChangedRefused.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-012-AC006: FinalizeReplacesOtherPendingHvReviewKeepsStatus.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-012-AC007: MigrationMarksHvReviewedTurnsFinalThreeProviders.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-012-AC008: LateVerificationFailureCannotUndoCommittedFinalization.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-012-AC009: FinalizerPropagatesEveryFailRunOutcome.
+
+### TEST-MCP-HVPIPE-013
+
+Named tests of FR-MCP-HVPIPE-013: SelfReviewVariedAdmissionAssignmentAndBriefIdentical; SelfReviewVariedVerdictIdentical; HostileValidationNeverReadsAgentReview.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-013-AC001: SelfReviewVariedAdmissionAssignmentAndBriefIdentical.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-013-AC002: SelfReviewVariedVerdictIdentical.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-013-AC003: HostileValidationNeverReadsAgentReview.
+
+### TEST-MCP-HVPIPE-014
+
+Named tests of FR-MCP-HVPIPE-014: FinalizeNeverChangesTodos; HostileValidationHasNoTodoWriteDependency.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-014-AC001: FinalizeNeverChangesTodos.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-014-AC002: HostileValidationHasNoTodoWriteDependency.
+
+### TEST-MCP-HVPIPE-015
+
+Named tests of FR-MCP-HVPIPE-015: ResultDocumentCompleteAndDelineated; ResultBeforeCompletion409; RunningRequestsQueryAndLastOutput; HvSurfacesParityGoldenContract.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-015-AC001: ResultDocumentCompleteAndDelineated.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-015-AC002: ResultBeforeCompletion409.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-015-AC003: RunningRequestsQueryAndLastOutput.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-015-AC004: HvSurfacesParityGoldenContract.
+
+### TEST-MCP-HVPIPE-016
+
+Named tests of FR-MCP-HVPIPE-016: OutputStreamReconnectExactlyMissedEvents; EtaReportedOrUnknownNeverEstimated; OutputStreamContinuesAcrossAttempts; OutputStreamMalformedLastEventId400; OutputStreamAfterRemoval410.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-016-AC001: OutputStreamReconnectExactlyMissedEvents.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-016-AC002: EtaReportedOrUnknownNeverEstimated.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-016-AC003: OutputStreamContinuesAcrossAttempts.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-016-AC004: OutputStreamMalformedLastEventId400.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-016-AC005: OutputStreamAfterRemoval410.
+
+### TEST-MCP-HVPIPE-017
+
+Named tests of FR-MCP-HVPIPE-017: NotificationOutboxCommittedWithChangeGapFree; NotificationStreamReconnectNoLossNoDuplicate; HvWatcherDeliversOwnCompletionOnce; HvWatcherIgnoresOtherSessionsRequests; HvWatcherCursorAndInboxOneReplaceCrashSafe; HvWatcherInboxesCompletionBeforeSubmitReturns; HvWatcherRedeliversUndeliveredEntryWithSequence.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-017-AC001: NotificationOutboxCommittedWithChangeGapFree.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-017-AC002: NotificationStreamReconnectNoLossNoDuplicate.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-017-AC003: HvWatcherDeliversOwnCompletionOnce.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-017-AC004: HvWatcherIgnoresOtherSessionsRequests.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-017-AC005: HvWatcherCursorAndInboxOneReplaceCrashSafe.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-017-AC006: HvWatcherInboxesCompletionBeforeSubmitReturns.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-017-AC007: HvWatcherRedeliversUndeliveredEntryWithSequence.
+
+### TEST-MCP-HVPIPE-018
+
+Named tests of FR-MCP-HVPIPE-018: EveryHvMutationHasLedgerRows; AuditUnavailableEveryHvCommandRefusedNothingWritten; EvidenceReadsAuditedOrRefused; InternalEvidenceReadsAuditedOrRefused; AuditFailureDuringRunHardStop; EvidenceRemovalLeavesAuditLedgerUnchanged.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-018-AC001: EveryHvMutationHasLedgerRows.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-018-AC002: AuditUnavailableEveryHvCommandRefusedNothingWritten.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-018-AC003: EvidenceReadsAuditedOrRefused; InternalEvidenceReadsAuditedOrRefused.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-018-AC004: AuditFailureDuringRunHardStop.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-018-AC005: EvidenceRemovalLeavesAuditLedgerUnchanged.
+
+### TEST-MCP-HVPIPE-019
+
+Named tests of FR-MCP-HVPIPE-019: NoAutomaticEvidenceRemoval; RemoveEvidenceKeepsResultAndHashes; RemoveEvidenceActiveRequest409; RemovedEvidenceRead410WithHashes; RemovedEvidenceEveryReadSurfaceAnswersRemoved.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-019-AC001: NoAutomaticEvidenceRemoval.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-019-AC002: RemoveEvidenceKeepsResultAndHashes.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-019-AC003: RemoveEvidenceActiveRequest409.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-019-AC004: RemovedEvidenceRead410WithHashes.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-019-AC005: RemovedEvidenceEveryReadSurfaceAnswersRemoved.
+
+### TEST-MCP-HVPIPE-020
+
+Named tests of FR-MCP-HVPIPE-020: HvSurfacesParityGoldenContract; HvInternalUnitsHaveNoPublicSurface; HvSubmitVerbBindsTurnStableKey; HvSubmitVerbRetryableNotQueued; ReplPolicyHostileValidationClassification; HvSubmitKeyBoundedAndCoversInvocationIdentity.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-020-AC001: HvSurfacesParityGoldenContract.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-020-AC002: HvInternalUnitsHaveNoPublicSurface.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-020-AC003: HvSubmitVerbBindsTurnStableKey.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-020-AC004: HvSubmitVerbRetryableNotQueued.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-020-AC005: ReplPolicyHostileValidationClassification.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-020-AC006: HvSubmitKeyBoundedAndCoversInvocationIdentity.
+
+### TEST-MCP-HVPIPE-021
+
+Named tests of FR-MCP-HVPIPE-021: FinalizeGradesLinkedResponsesInSameTransaction; FinalizeModeOffResponsesNotGraded; ResponseTransitionClosesHvItemOnly; ModelGradeHasNoPublicSurface; ResponseGradeFailingFindingsKeptWithRemediation; ResponseClosedMidReviewGradeKeptNotApplied; ModelGradeInternalUnitInsideFinalization.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-021-AC001: FinalizeGradesLinkedResponsesInSameTransaction.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-021-AC002: FinalizeModeOffResponsesNotGraded.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-021-AC003: ResponseTransitionClosesHvItemOnly.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-021-AC004: ModelGradeHasNoPublicSurface.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-021-AC005: ResponseGradeFailingFindingsKeptWithRemediation.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-021-AC006: ResponseClosedMidReviewGradeKeptNotApplied.
+- [ ] Named tests exist and prove FR-MCP-HVPIPE-021-AC007: ModelGradeInternalUnitInsideFinalization.
 
 
 ## TEST-MCP-HYGIENE
@@ -1585,17 +1955,18 @@ Agent plugin validation SHALL prove each supported plugin exposes memory tools a
 
 ### TEST-MCP-MEMORY-FED-001
 
-Memory federation tests SHALL prove memory adapter diagnostics, /mcpserver/memory domain inference, explicit-ID queued create eligibility, no-ID create rejection, queued memory update/delete replay metadata, signed envelope apply, stale base-version conflict behavior, fanout row creation, recipient apply, workspace ownership enforcement, invalid payload conflicts, version behavior, timestamp preservation, and idempotent soft-delete semantics.
+Test scoped memory/version round trip, local offline CRUD, explicit-commit boundary, delete/update review and global-memory exclusion; retain legacy mode tests under explicit configuration.
 
 **Acceptance Criteria:**
-- [ ] Registry coverage includes memory as covered, non-local-only, and apply-supported.
-- [ ] Proxy tests prove explicit-ID memory creates queue and no-ID memory creates do not queue.
-- [ ] Proxy tests prove memory update/delete operations queue with domain memory and the path resource ID.
-- [ ] Adapter tests prove create preserves ID, scope, workspace ownership, category, raw text, timestamps, and version.
-- [ ] Adapter tests prove update increments version and preserves workspace ownership.
-- [ ] Adapter tests prove delete soft-deletes and replayed delete is idempotent.
-- [ ] Adapter tests prove cross-workspace operations, invalid JSON, and invalid IDs conflict without mutation.
-- [ ] Federation operation tests prove signed memory envelopes apply, stale versions conflict without overwrite, and hub fanout can be applied by a recipient.
+- [ ] Given different same-base edits to M1.text, when sync merges, then needs_review returns base/local/incoming values and retains the valid local head.
+
+
+## TEST-MCP-PATHNORM
+
+### TEST-MCP-PATHNORM-001
+
+Per BDP v4 (MockData fixture green before production code, then Real fixture). Storage-key equivalence: C:\Users\kingd, C:/Users/kingd, c:/users/KINGD -> one key windows:C:/USERS/KINGD; \\srv\share\x and //srv/share/x -> one key keeping leading //; \\?\C:\x -> C:/x. Remote-path detection treats //srv/share as remote. ToNativePath returns backslash paths on Windows. Rekey: value mapping f(x) touches only Windows-shaped values and is idempotent; planner builds the mapping and statement plan from a scripted snapshot; executors per provider (SQLite in-memory; SQL Server and PostgreSQL provider fixtures) rewrite all workspace columns and recompute hashed values with FK validation; report counts unchanged per table and per workspace; startup guard rejects an unconverted store; rehearsal on a restored copy of McpServer_PAYTON_LEGION2 recorded as receipts. GlobalWorkspaceId for (PAYTON-LEGION2, F:/GitHub/McpServer) is stable across both input separators.
+
 
 
 ## TEST-MCP-PLUGIN
@@ -1698,6 +2069,7 @@ A shared deterministic Theory and companion AiTheory matrix must exercise the re
 - [x] A legacy PLUGIN_ROOT_OVERRIDE value is injected and proven unable to alter the expected cache path. (evidence: tests/McpServer.PluginIntegration.Tests; overlay G2 Codex extra-high AGREE)
 - [x] The focused target and each plugin native suite complete with zero failures and zero skips. (evidence: tests/McpServer.PluginIntegration.Tests; overlay G2 Codex extra-high AGREE)
 - [x] Retain P1-P20 names from the incorporated catalog. Eight production-entrypoint rows and eight real aiUnit rows are discovered. Failed and skipped counts are zero. Direct-client-only or prewritten-success fixtures fail the gate. (evidence: tests/McpServer.PluginIntegration.Tests; overlay G2 Codex extra-high AGREE)
+- [ ] All eight production-entrypoint rows execute a dense existing-session update and an induced retryable persistence failure followed by recovery, assert the same normalized outcome fields, and independently prove either exact durable readback or retained then drained recovery work with zero failures and zero skips.
 
 
 ## TEST-MCP-PRODUCT
@@ -1830,6 +2202,16 @@ Integration coverage that drives the real orchestration through POST /v1/chat/co
 
 ## TEST-MCP-QBOLLAMA
 
+### TEST-MCP-QBOLLAMA-001
+
+QuadBrainOllamaEndpointIntegrationTests exercise the OpenAI-compatible QuadBrain endpoint against a real local Ollama server that OllamaServerFixture adopts or starts (FR-MCP-QBOLLAMA-002), proving FR-MCP-QBOPENAI-001 runs the normal Creativity, Logic and Arbiter workflow without faking the LLM calls, on Windows and on Linux once InstallOllama has provisioned Ollama (TR-MCP-NUKE-016).
+
+**Acceptance Criteria:**
+- [ ] ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots (prompts "Hello" and "Create Hello World in C++"): with the local Ollama default model assigned to all four slots, each prompt triggers the normal Creativity, Logic and Arbiter workflow through POST /v1/chat/completions and returns non-empty content; every brain call uses that model at the Ollama endpoint, and the session log captures the brain outputs on the turn.
+- [ ] QBAgentRunLoop_LocalOllamaDefaultModel_DisplaysQuadBrainResponse (prompt "Hello"): QBAgent displays the QuadBrain response it received, never a placeholder; its transcript names the model QuadBrain and the QBrainAi endpoint and never the Ollama model id or endpoint.
+- [ ] ChatCompletions_OpenAiCompatibleFieldVariants_AreLoggedToSessionTurn: content, reasoning and reasoning_content outputs are persisted to the turn's processing dialog.
+- [ ] The class runs against a real local Ollama: OllamaServerFixture adopts a server already answering or starts one from a discovered executable and stops only what it started (FR-MCP-QBOLLAMA-002); on LAB-OMARCHY the executable is the one InstallOllama provisions (TR-MCP-NUKE-016; PLAN-SESSIONTRIAGEFIX-001 B13, triage-report-680916ed).
+
 ### TEST-MCP-QBOLLAMA-002
 
 Validates FR-MCP-QBOLLAMA-002 and TR-MCP-QBOLLAMA-002 through fake-driven unit tests of OllamaServerController that run in the default gate without a real Ollama binary. Cases: (1) a probe that succeeds immediately reports WasAlreadyRunning true and StartedByController false and never invokes the launcher; (2) StopAsync after that case does not terminate the pre-existing server; (3) a probe that fails then succeeds invokes the launcher exactly once, reports StartedByController true, and polls until reachable; (4) a resolver returning no executable throws an InvalidOperationException whose message names the InstallOllama target and never invokes the launcher; (5) a probe that never succeeds throws after the configured timeout and terminates the process the controller started, leaving no orphan; (6) StopAsync is idempotent and terminates a controller-started process exactly once across repeated calls.
@@ -1854,6 +2236,77 @@ An inbound OpenAI ChatCompletion request maps to QuadBrain orchestration and ret
 
 Unit tests prove (1) full orchestration reports started then completed for Creativity, Logic, and ArbiterOfTruth with role output on completed, and Creativity/Logic started events occur before Arbiter started; (2) stream=true SSE contains quadbrain.role events for those reports before the final assistant chunk; (3) QBAgent SSE client prints Creativity started and Creativity completed with output from a canned SSE body without waiting for [DONE] to print the first role line. Tests use mocks or in-memory HTTP, not the Windows service.
 
+
+
+## TEST-MCP-QBRAIN
+
+### TEST-MCP-QBRAIN-001
+
+Locked tokens. Namespaces and assemblies use QBrainAi. Package ids use the QBrainAI prefix. QBAgent and qbagent stay.
+
+**Acceptance Criteria:**
+- [ ] No C# namespace declaration uses QBrainAI or QBrain.AI.
+- [ ] QBrainAi.QBAgent is present and qbagent remains the QBAgent tool command.
+
+### TEST-MCP-QBRAIN-002
+
+Solution, project folders, and RootNamespace use QBrainAi. NukeBuild.Tests and _build stay.
+
+**Acceptance Criteria:**
+- [ ] QBrainAi.sln exists and McpServer.sln does not.
+- [ ] tests/Build.Tests keeps RootNamespace NukeBuild.Tests.
+- [ ] build/_build.csproj is still _build.
+
+### TEST-MCP-QBRAIN-003
+
+New package ids and 1.x SharpNinja.McpServer.* facades. qbrain-ai-repl is canonical and mcpserver-repl remains on the facade. NuGet push of QBrainAI.* stays gated.
+
+**Acceptance Criteria:**
+- [ ] The seven published projects use QBrainAI package ids.
+- [ ] Seven facade projects keep the old SharpNinja.McpServer package ids.
+- [ ] The workflow skips pushing QBrainAI packages unless the Phase 4 gate is set.
+
+### TEST-MCP-QBRAIN-004
+
+Phase 1 does not rename the GitHub repository. RepositoryUrl still points at the live repo.
+
+**Acceptance Criteria:**
+- [ ] Packed project RepositoryUrl values still contain SharpNinja/McpServer or sharpninja/McpServer.
+
+### TEST-MCP-QBRAIN-005
+
+/qbrainai and /mcpserver both declared for a representative controller. /mcp-transport unchanged. QBrainAi config wins over Mcp. QBRAINAI_* env wins over MCP_*. MCP_UNTRUSTED stays.
+
+**Acceptance Criteria:**
+- [ ] Todo route templates include qbrainai/todo and mcpserver/todo.
+- [ ] MapMcp still uses /mcp-transport.
+- [ ] GetEffectiveMcpValue prefers QBrainAi and falls back to Mcp.
+- [ ] GetRequestedInstanceName prefers QBRAINAI_INSTANCE and falls back to MCP_INSTANCE.
+
+### TEST-MCP-QBRAIN-006
+
+Docker names use qbrain-ai. Service script defaults use QBrainAi, QBrain.AI, and C:\ProgramData\QBrainAi. Octopus deploy stays off. McpServer_Omarchy and PAYTON-LEGION2 remain.
+
+**Acceptance Criteria:**
+- [ ] docker-compose.mcp.yml uses image qbrain-ai:latest.
+- [ ] Manage-McpService.ps1 defaults match the new service name, display name, and install path.
+- [ ] azure-pipelines.yml does not deploy unless AllowLegionDeploy is true.
+
+### TEST-MCP-QBRAIN-007
+
+Inventory TSV classifies every hit. Persisted names mcp.db, .mcpServer, and McpDbContext remain. No new EF table-rename migration is added for the rebrand.
+
+**Acceptance Criteria:**
+- [ ] docs/receipts/qbrain-ai-rebrand-phase1-inventory.tsv has a class and a closed action on every row.
+- [ ] Source still contains mcp.db, .mcpServer, and class McpDbContext.
+
+### TEST-MCP-QBRAIN-008
+
+Requirements ids are stored before the rename, and Phase 1 is not claimed done without the astra hostile-validation receipt.
+
+**Acceptance Criteria:**
+- [ ] The five FR and eight TR headings exist in the requirements documents.
+- [ ] No docs/receipts/hv file in this change records OverallVerdict AGREE for Phase 1.
 
 
 ## TEST-MCP-QBSEED
@@ -2233,6 +2686,16 @@ Full client.triage.* and workflow.triage.* REPL surface works with correct envel
 - [ ] REPL tests cover passthrough, typed workflow routing, deprecated metadata, and errors.
 
 
+## TEST-MCP-REQ
+
+### TEST-MCP-REQ-003
+
+Validates TR-MCP-REQ-003 AC-001 under FR-MCP-040: getTr and getTest report each record's stored createdAt and updatedAt, never the time of the read (PLAN-SESSIONTRIAGEFIX-001 B2, triage-report-b72cfaf4; operator decision 2026-10-16 "Create TEST-MCP-REQ-003 (Recommended)").
+
+**Acceptance Criteria:**
+- [ ] TR-MCP-REQ-003 AC-001: RequirementsDatabaseDocumentServiceTests.GetById_ReturnsTheStoredTimestamps (QBrainAi.Support.Mcp.Tests); RequirementsLegacyIdAndGenerateDocumentTests mock gate StoredTimestampAssertion_AcceptsStoredValuesAndRejectsReadTime and binding GetItems_ReportTheStoredTimestamps (QBrainAi.Repl.Core.Tests) pass.
+
+
 ## TEST-MCP-REQAC
 
 ### TEST-MCP-REQAC-001
@@ -2338,12 +2801,64 @@ Verifies generateDocument accepts format=markdown for docType=matrix (and other 
 
 
 
+## TEST-MCP-REQRECOVERY
+
+### TEST-MCP-REQRECOVERY-001
+
+Provider-backed and production-entrypoint tests must prove deterministic dry-run, atomic mixed apply, rollback, stale-precondition rejection, idempotent replay, concurrency safety, exact audit readback, and synchronized supported-plugin behavior.
+
+**Acceptance Criteria:**
+- [ ] A mixed create, update, delete, acceptance-criteria, mapping-upsert, and mapping-delete plan commits once and exact post-query state and counts match the approved dry-run.
+- [ ] Injected validation and persistence failures at each operation class leave the effective requirements, criteria, mappings, idempotency state, and audit state byte-equivalent to the pre-state.
+- [ ] Stale pre-state hash, duplicate operations, missing references, and idempotency-key content mismatch are rejected before mutation with stable classified errors.
+- [ ] Dry-run is mutation-free, identical replay returns the original receipt, and repeated post-state queries contain no duplicates or drift.
+- [ ] Two concurrent plans using the same pre-state prove that at most one commits and the loser receives a stale-precondition outcome without partial state.
+- [ ] All supported production plugin entrypoints that advertise requirements operations execute the canonical dry-run and apply fixtures with identical normalized results, zero failures, and zero skips.
+- [ ] A zero-skip matrix executes mixed commit, validation rollback, persistence rollback, stale precondition, idempotent replay, and concurrent-plan cases against SQLite, SQL Server, and PostgreSQL. Every provider row proves exact raw and effective post-state plus audit and idempotency state.
+- [ ] Layered fixtures containing inherited, shadowed, and out-of-bounds records prove that dry-run binds every scope and layer field, apply writes only the target layer, and any change to bound raw state, effective state, layer metadata, or scope bounds produces a no-mutation stale-precondition result.
+
+
 ## TEST-MCP-REQWS
 
 ### TEST-MCP-REQWS-001
 
 Explicit workspacePath override for requirements document generation (follow-up to triage-report-f77331f9a33e4bd0ae4f55f0470743ed). RequirementsClientTests verify GenerateAsync with a workspacePath override replaces the client-bound X-Workspace-Path header for that call only and the bound header is preserved without an override. RequirementsWorkflowWorkspaceOverrideTests verify the real RequirementsWorkflow forwards the override to the generate request, preserves the bound workspace when absent, and the ReplCommandDispatcher forwards the workspacePath param from workflow.requirements.generateDocument envelopes to the workflow. Cross-workspace override without the target workspace's API key fails with 401 (per-workspace keys) instead of silently exporting the session-bound workspace's requirements. Evidence 2026-07-14: red before implementation, Client 23/23 and Repl.Core 810/810 green after; deployed in service and mcpserver-repl 1.4.15+.
 
+
+
+## TEST-MCP-RUNAS
+
+### TEST-MCP-RUNAS-001
+
+Test AC1-AC7 using TDD before implementation. Unit tests first: helper-only selection/excluded callers, precedence, override/key/env rejection, pinned-path/models/finite positive <=120s timeout, local/Windows regression, identity mismatch/fail closed, framing/multibyte limits, SO_PEERCRED and exact workspace policy, 8 backlog/8 admitted/1 active/no queue, absolute deadlines, 4096 UUID/10m epoch replay and stalled-reader bounded cleanup, explicit per-transient-unit fixed environment. Real UID/systemd/socket integration: sharpninja Grok answer/auth/hooks, prompt 0700/0600 ownership, normal-exit leftovers, double fork/reparent/inherited pipes, disconnect/cancel/timeout/output limit, worker crash/sweep, manager absence/cleanup failure and cgroup-empty deadline receipts. Nuke failure/restart injection at every journal transition, both binary hashes, first-install cleanup, config/data preservation, linger and unit state rollback, RecoveryFailed admission stopped. Full current/prior unit suites zero failures/skips, independent phase reviews and durable full receipts. Final defaults-only actual helper completed answer correlated to invocation sharpninja UID and MCP mcpserver NNP unchanged; never accept echo/progress/launch-only. All gates remain unexecuted/unsatisfied. AC1: Helper-only Grok router forwards configured sharpninja identity/socket with AgentHelp.RunAs precedence and TodoPromptOptions.RunAs fallback. Reject session identity overrides. Empty Linux RunAs/local Windows retain semantics; voice/TODO/triage/persistent QuadBrain and other callers never reach worker; unsupported strategy plus effective RunAs fails closed.
+AC2: Real Grok UID resolves to actual sharpninja policy UID (1000 here), MCP UID remains mcpserver and NoNewPrivileges=true throughout. No HOME-only impersonation, secret copy, sudo expansion or privilege weakening. Reject identity mismatch/unavailable worker without server-UID fallback.
+AC3: Authenticate SO_PEERCRED before parse on restricted socket; exact workspace/executable/model policy. Reject ModelApiKey, nonempty AgentParameters/environment maps, identity override and nonpinned path; diagnostics exclude values. Bound protocol/admission/replay/backpressure; apply fixed HOME/PATH/XDG_RUNTIME_DIR/DBUS environment to each transient unit, not inherited manager state; read-only real authentication/answer preflight.
+AC4: Agent Helper invoked using deployed defaults only, no session RunAs/path/model/strategy overrides, reaches completed with expected FINAL ANSWER from real Grok. Correlate helper turn and worker epoch/invocation started/exit/UID/cleanup receipts; echo, progress-only, fallback or incomplete answers fail.
+AC5: Per-invocation systemd user transient cgroup lifetime terminates leftover/double-fork/reparented descendants and removes owned private prompt files on normal exit, cancellation, disconnect, timeout, output limit, exception, shutdown and worker crash/restart. Empty-cgroup and file-removal proof required; cleanup failure makes worker unhealthy and blocks admission.
+AC6: Exclusive-lock journaled Nuke/pkexec deployment stages and verifies worker before MCP, preserves unrelated config/data, backs up/restores both binary trees/manifests/units/drop-ins/policy/YAML and active/enabled/masked plus linger states. Inject failures/restarts at every transition; incomplete journal recovered before update. RecoveryFailed retains backups and stopped admission; rollback never claims helper goal fixed.
+AC7: TDD red evidence before code; full current/prior applicable unit suites and required integration/deployment scopes have zero failures and zero skips. Independent phase reviews with durable full request/response JSONL and logged verdict/readback, final accuracy/completeness >=98 before any done state. Explicit operator architecture approval required before implementation; no approval or implementation is claimed by this capture.
+
+**Acceptance Criteria:**
+- [ ] AC1: Helper-only Grok router forwards configured sharpninja identity/socket with AgentHelp.RunAs precedence and TodoPromptOptions.RunAs fallback. Reject session identity overrides. Empty Linux RunAs/local Windows retain semantics; voice/TODO/triage/persistent QuadBrain and other callers never reach worker; unsupported strategy plus effective RunAs fails closed. (evidence: Unsatisfied: proposed architecture; implementation, explicit approval and execution evidence outstanding.)
+- [ ] AC2: Real Grok UID resolves to actual sharpninja policy UID (1000 here), MCP UID remains mcpserver and NoNewPrivileges=true throughout. No HOME-only impersonation, secret copy, sudo expansion or privilege weakening. Reject identity mismatch/unavailable worker without server-UID fallback. (evidence: Unsatisfied: proposed architecture; implementation, explicit approval and execution evidence outstanding.)
+- [ ] AC3: Authenticate SO_PEERCRED before parse on restricted socket; exact workspace/executable/model policy. Reject ModelApiKey, nonempty AgentParameters/environment maps, identity override and nonpinned path; diagnostics exclude values. Bound protocol/admission/replay/backpressure; apply fixed HOME/PATH/XDG_RUNTIME_DIR/DBUS environment to each transient unit, not inherited manager state; read-only real authentication/answer preflight. (evidence: Unsatisfied: proposed architecture; implementation, explicit approval and execution evidence outstanding.)
+- [ ] AC4: Agent Helper invoked using deployed defaults only, no session RunAs/path/model/strategy overrides, reaches completed with expected FINAL ANSWER from real Grok. Correlate helper turn and worker epoch/invocation started/exit/UID/cleanup receipts; echo, progress-only, fallback or incomplete answers fail. (evidence: Unsatisfied: proposed architecture; implementation, explicit approval and execution evidence outstanding.)
+- [ ] AC5: Per-invocation systemd user transient cgroup lifetime terminates leftover/double-fork/reparented descendants and removes owned private prompt files on normal exit, cancellation, disconnect, timeout, output limit, exception, shutdown and worker crash/restart. Empty-cgroup and file-removal proof required; cleanup failure makes worker unhealthy and blocks admission. (evidence: Unsatisfied: proposed architecture; implementation, explicit approval and execution evidence outstanding.)
+- [ ] AC6: Exclusive-lock journaled Nuke/pkexec deployment stages and verifies worker before MCP, preserves unrelated config/data, backs up/restores both binary trees/manifests/units/drop-ins/policy/YAML and active/enabled/masked plus linger states. Inject failures/restarts at every transition; incomplete journal recovered before update. RecoveryFailed retains backups and stopped admission; rollback never claims helper goal fixed. (evidence: Unsatisfied: proposed architecture; implementation, explicit approval and execution evidence outstanding.)
+- [ ] AC7: TDD red evidence before code; full current/prior applicable unit suites and required integration/deployment scopes have zero failures and zero skips. Independent phase reviews with durable full request/response JSONL and logged verdict/readback, final accuracy/completeness >=98 before any done state. Explicit operator architecture approval required before implementation; no approval or implementation is claimed by this capture. (evidence: Unsatisfied: proposed architecture; implementation, explicit approval and execution evidence outstanding.)
+
+
+## TEST-MCP-SERVICEUPDATE
+
+### TEST-MCP-SERVICEUPDATE-001
+
+Mocks-first ordering/failure/path tests, Windows defaults regression, preservation policy tests, real temporary tar metadata smoke, full unit gates, independent review and local Nuke service update verification per docs/plans/2026-09-28-cross-platform-update-service.md.
+
+**Acceptance Criteria:**
+- [ ] UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.
+- [ ] Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
+- [ ] Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
+- [ ] Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
 
 
 ## TEST-MCP-SESSIONATTR
@@ -2405,6 +2920,8 @@ Schema guard, DbUpdateException details.inner, uniqueness retry, contention vers
 - [ ] Import recovery tests start from canonical and reconstructed bundles and cover missing source, traversal, reparse escape, malformed schema, size bounds, cancellation, concurrent replay, content-hash drift, and delete-only-after-verified-persistence.
 - [ ] Provider-specific uniqueness and schema tests use disposable databases and leave no remnant; an approved prior migration is not reopened solely because infrastructure is degraded.
 - [ ] The accepted cumulative test scope exits with zero failures, zero skips, no missing reports, and no zero-discovery projects.
+- [ ] Provider-backed tests seed a dense session graph, update it through SubmitAsync, and prove bounded completion, exact child-collection readback, and no Cartesian query shape. Concurrent same-session submissions prove bounded retry or classified retryable failure with no partial or duplicate rows.
+- [ ] A zero-skip matrix executes dense SubmitAsync and concurrent same-session updates against SQLite, SQL Server, and PostgreSQL. The SQL Server row covers error 1205 deadlock and five-second command-budget expiry, proves one normalized retryable outcome without false primary success or partial state, then proves exact readback after successful retry.
 
 ### TEST-MCP-SESSIONLIFE-005
 
@@ -2460,6 +2977,20 @@ Validates AC-FR-MCP-SESSIONLOGCTX-001-001 through 007 and AC-TR-MCP-SESSIONLOG-0
 - [ ] Sanitizer clones new fields covered by SessionLogSanitizerTests.
 
 
+## TEST-MCP-SESSIONLOG-FED
+
+### TEST-MCP-SESSIONLOG-FED-001
+
+Unit tests (SessionLogFederationStateAdapter with a SQLite store and the local session-log service) SHALL prove TR-MCP-FED-SESSIONLOG-001: full-graph equality with the local read, apply round trip, sanitizer parity, local-only snapshot, and unchanged missing-session and version behavior, each with a negative control that a partial or unsanitized payload fails.
+
+**Acceptance Criteria:**
+- [ ] TR-MCP-FED-SESSIONLOG-001 AC-001: full-graph equality; negative control: the pre-change 8-field turn payload fails the comparison.
+- [ ] TR-MCP-FED-SESSIONLOG-001 AC-002: apply round trip to an empty store.
+- [ ] TR-MCP-FED-SESSIONLOG-001 AC-003: sanitizer parity; negative control: an unsanitized payload fails.
+- [ ] TR-MCP-FED-SESSIONLOG-001 AC-004: no federation data call while snapshotting (a federation data client double records zero calls).
+- [ ] TR-MCP-FED-SESSIONLOG-001 AC-005: missing and soft-deleted sessions, and explicit version unchanged.
+
+
 ## TEST-MCP-SESSIONLOGSAN
 
 ### TEST-MCP-SESSIONLOGSAN-001
@@ -2507,6 +3038,19 @@ Pester proves the TEMP alignment helper sets TEMP and TMP to the workspace volum
 
 **Acceptance Criteria:**
 - [ ] Named tests cover TEST-MCP-TEMPVOL-001 acceptance criteria
+
+
+## TEST-MCP-TESTRESOURCE
+
+### TEST-MCP-TESTRESOURCE-001
+
+Tests prove packaged fixture inputs and isolated generated artifacts work without repository-root lookup, while source-contract tests retain live-source validation. Run focused mock-validation, real-red/real-green, and applicable full suites.
+
+**Acceptance Criteria:**
+- [ ] Focused fixture tests run from test output with the checkout root unavailable and still load exact packaged bytes.
+- [ ] Writer tests use an injected disposable output directory and prove no generated file appears under repository docs/reviews or fixture source paths.
+- [ ] A source inventory finds no remaining fixture-input or generated-output path that walks to the repository root in applicable test code.
+- [ ] Focused build/source-contract tests still validate current repository and sibling plugin source, including checksum drift when present.
 
 
 ## TEST-MCP-TODO-CLOSE
@@ -2849,6 +3393,19 @@ GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a 
 - [ ] GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.
 
 
+## TEST-MCP-TRIM
+
+### TEST-MCP-TRIM-001
+
+ProcessRunnerDependencyTests verifies all five public runner types belong to McpServer.Common.AgentCli; QBAgent runtime dependency graph excludes McpServer.Services, McpServer.Storage and Entity Framework; Services type forwards preserve old qualified names. Existing mocked git/bash and full unit suites remain passing. Trim analysis records only the actual remaining client-side warnings, with no added suppression.
+
+**Acceptance Criteria:**
+- [ ] Runner implementation, options, interface, request and result reside in Common.AgentCli with unchanged namespaces and signatures.
+- [ ] QBAgent dependency graph excludes server Services, Storage and EF assemblies.
+- [ ] Services forwards all moved public types, and existing mock-backed process/tool unit tests remain green.
+- [ ] Trim inventory is reduced from verified diagnostics only, with no new suppression or relaxed assertions.
+
+
 ## TEST-MCP-USECASE
 
 ### TEST-MCP-USECASE-001
@@ -2980,6 +3537,25 @@ For each sixteenth-review finding, preserve a failing consumer-facing test and a
 - [ ] Focused RED and GREEN, external deterministic 20/20, Agent Help 18/18, SQLite, LocalDB, fresh PostgreSQL, full BDPv4, build.ps1 Compile/Test/ValidateTraceability, exact-final-HEAD 12-project Release, repository/history/harness/EOL, cleanup, and all seven-current plus ten-prior maps pass exactly as required.
 - [ ] A generated-migration inventory proves the exact 23 historical SQL Server OPENJSON backfills remain byte-immutable and the test-only command interceptor scopes bounded plans to that inventory; a real LocalDB provider run completes within the finite 300-second allowance, preserves values, and leaves no database remnant.
 - [ ] Consumer and real Windows boundary tests persist and read acceptance criteria with opaque ws:test-style workspace identifiers without native path errors, while existing rooted-path cancellation, alias, and mount tests continue to require physical resolution.
+
+### TEST-MCP-USECASE-021
+
+Prove identity-preserving actor, flow, and step editing through discriminating independent fakes before production, then bind the same assertions to CQRS, REST, client, MCP, persistence, and authenticated readback.
+
+**Acceptance Criteria:**
+- [ ] Before production edits, contract tests pass against correct independent fake editor responses and prove inside the passing harness that wrong IDs, parent IDs, fields, and mutation counts are rejected.
+- [ ] The same contract cases and assertions pass against the real CQRS handlers for actor, flow, and step updates, including validation, missing, cross-workspace, and parent-mismatch cases.
+- [ ] Controller tests prove the three update routes and classified 400/404 responses; typed-client tests prove HTTP methods, paths, payloads, cancellation, and response deserialization; MCP-tool tests prove dispatcher inputs and serialized results.
+- [ ] A persistence test proves IDs and row counts are unchanged, aggregate approval/version and unrelated data are unchanged, UpdatedAtUtc advances, and authenticated readback returns the edited values.
+- [ ] Focused tests, the full applicable unit suite, Compile, and ValidateTraceability complete with zero failures and zero skips before deployment.
+
+
+## TEST-MCP-VERIFYPOLICY
+
+### TEST-MCP-VERIFYPOLICY-001
+
+Prove exact argv/selectors round-trip, deterministic challenge-independent digest, key rotation, tamper/wrong-workspace/replayed-challenge rejection, malformed fields and escaping paths rejection. Exercise server configuration selection, updated policy reads, unavailable/ambiguous config, anonymous-token refusal including explicit workspace routing, and actual typed HTTP client decoding. Verify REPL and Node plugin consumers propagate typed failures and never accept unsigned or cross-workspace data.
+
 
 
 ## TEST-MCP-VERIFYWRAP
@@ -3189,6 +3765,29 @@ When PUT is used on the turn-append route instead of POST, the endpoint returns 
 **Acceptance Criteria:**
 - [x] PUT request returns 405 Method Not Allowed
 - [x] Response includes Allow: POST header
+
+### TEST-SUPPORT-024
+
+Validates FR-SUPPORT-016 ac-1 to ac-4 and ac-6 to ac-8 and TR-SUPPORT-CORE-016 ac-1: SessionLogServiceReplaceDeleteTests for the existing behavior, and the PLAN-SESSIONTRIAGEFIX-001 A7, A8 and A9 tests (SessionLogServiceTests, SessionLogClientRequestBodyTests, SessionLogControllerDeleteItemTests, and SessionLogDeleteItemRoutingTests on a temporary instance).
+
+**Acceptance Criteria:**
+- [ ] FR-SUPPORT-016 ac-1 to ac-4 and TR-SUPPORT-CORE-016 ac-1: SessionLogServiceReplaceDeleteTests ReplaceTurnAsync_ClearsOmittedScalarsAndCollections, ReplaceTurnAsync_PreservesWorkspaceStampOnChildren, ReplaceTurnSectionAsync_ReplacesOnlyNamedSection, ReplaceTurnSectionAsync_EmptyPayload_ClearsSection, ClearTurnSectionAsync_RemovesAllItemsInSection, UpsertTurnAsync_StaysAdditive_DoesNotRemoveExistingItems, DeleteTurnItemAsync_StringSection_RemovesByValue, DeleteTurnItemAsync_Commit_RemovesBySha, DeleteTurnItemAsync_Action_RemovesByOrder, DeleteTurnItemAsync_UnknownKey_ReturnsFalse and ReplaceTurnSectionAsync_UnknownSection_Throws pass.
+- [ ] FR-SUPPORT-016 ac-6 (PLAN-SESSIONTRIAGEFIX-001 A7): the ordinal mock gate and the three ordinal and delete cases named there pass.
+- [ ] FR-SUPPORT-016 ac-7 (PLAN-SESSIONTRIAGEFIX-001 A8): the client mock gate and request case, the two controller cases and the two routing cases on a temporary instance named there pass.
+- [ ] FR-SUPPORT-016 ac-8 (PLAN-SESSIONTRIAGEFIX-001 A9): the null-element mock gate and the null-list, null-submit and empty-list cases named there pass.
+- [ ] FR-SUPPORT-016 ac-6 for concurrent writes and TR-SUPPORT-CORE-016 ac-4: the mock gate ConcurrentTurnWriteOutcomeAssertion_AcceptsDistinctOrRetryableRefusalAndRejectsDuplicateOrPartialWrite (QBrainAi.Support.Mcp.Tests; it also rejects two first inserts stored as two turn rows), then TurnWrites_InterleavedOnOneTurn_StoreDistinctOrdinalsOrRefuseRetryably (a file SQLite database; the second writer runs between the first writer's read and save, for a PATCH, a dialog append and a section replace), TurnWrites_TwoFirstInsertsOfOneRequestId_LeaveOneTurnRow (two PATCHes that each create the same new turn, interleaved the same way: one turn row remains, holding both writes' items with distinct ordinals) and SessionLogConcurrentTurnWriteIntegrationTests (concurrent dialog appends to one turn on SQLite, PostgreSQL and SQL Server temporary instances, every refusal retryable and retried, every stored ordinal distinct) pass; for ac-4's retry, the mock gate UniqueRaceAssertion_AcceptsOneRetriedUpdateAndRejectsMissingRetryOrDuplicate (SessionLogServiceTests), then UpsertTurnAsync_UniqueSessionLogTurnsRace_RetriesOnceAndUpdates, which forces the unique violation inside the service's own transaction and commits the winning row after the rollback, passes: the retry runs once, in a fresh transaction, and updates that row, leaving one turn row (no caller reaches this path in production today, because UpsertTurnAsync serializes its read and write whenever no transaction is open and no caller holds one) (PLAN-SESSIONTRIAGEFIX-001 A7 follow-up; operator decision 2026-10-16 "Keep retry, revert ac-1 (Recommended)").
+
+
+## TEST-TIMER
+
+### TEST-TIMER-001
+
+Run the same scenario and assertions against independently scripted ITimerService/ITimerHandle mocks and both real services. Correct mock and deliberate negative responses must yield a green outer mock gate before product edits. Cover blocked cancellation registration, overlapping Restart against Stop and Dispose, new run after Stop, final Dispose, repeated shutdown, and reentrant calls.
+
+**Acceptance Criteria:**
+- [ ] Mock contract gate passes with zero failures/skips and rejects forbidden restart, stale token, and restart-after-dispose behaviors as expected negative controls.
+- [ ] The same contract tests pass against Core and UI.Core, and all four reproduced race cases no longer require external rescue.
+- [ ] Full five-project Manager suites, extension tests, and deployment-script tests have zero failures/skips before acceptance; deferred Claude HV must review all changed code/tests/docs before Phase 2 closure.
 
 
 ## TEST-TRIAGE

@@ -6,7 +6,7 @@ This guide is for operators and agents that need the audited MCP workflow surfac
 
 The workspace marker file, `AGENTS-README-FIRST.yaml`, is the runtime source of truth. Its `agent_plugins` section declares the required plugin policy, per-agent plugin names, startup commands, unavailable failure codes, tool expectations, and local root hints.
 
-Agents must verify marker signature and health nonce first. During bootstrap, acquire the matching plugin through the MCP Server tool registry before relying on local root hints: search `/mcpserver/tools/search?keyword=<plugin_name>` for an exact `name` match, install it from `/mcpserver/tools/buckets/official/install?toolName=<plugin_name>` if it is missing, then execute the returned `commandTemplate` with the target parent directory. If the matching plugin remains unavailable after registry acquisition, the agent must stop MCP mutations, record `MCP_PLUGIN_UNAVAILABLE:<Agent>` when a trusted session-log path is available, and continue only with non-MCP local diagnosis.
+Agents must verify marker signature and health nonce first. During bootstrap, acquire the matching plugin through the QBrain.AI tool registry before relying on local root hints: search `/qbrainai/tools/search?keyword=<plugin_name>` for an exact `name` match, install it from `/qbrainai/tools/buckets/official/install?toolName=<plugin_name>` if it is missing, then execute the returned `commandTemplate` with the target parent directory. If the matching plugin remains unavailable after registry acquisition, the agent must stop MCP mutations, record `MCP_PLUGIN_UNAVAILABLE:<Agent>` when a trusted session-log path is available, and continue only with non-MCP local diagnosis.
 
 ## Available Agent Plugins
 
@@ -68,7 +68,7 @@ Agents must verify marker signature and health nonce first. During bootstrap, ac
 - OpenCode uses `mcpserver-opencode-plugin`.
   - Repository: https://github.com/sharpninja/mcpserver-opencode-plugin
   - Typical local root: `F:\GitHub\mcpserver-opencode-plugin`
-  - Runtime: OpenCode plugin SDK (createMcpServerPlugin), built with `npm run build`. Shares the ReplBridge + marker-resolver + cache core.
+  - Runtime: OpenCode plugin SDK (createQBrainAiPlugin), built with `npm run build`. Shares the ReplBridge + marker-resolver + cache core.
   - Memory: `skills/memory/SKILL.md` + root `memory-descriptor.json`. Always-on required-memory injection on the documented host path (`hooks/scripts/memory-context.ps1` and `src/memory-context.ts`).
   - Research: `docs/research/perplexity-research-policy.md` and `docs/research/research-to-plan-workflow.md`.
 
@@ -95,7 +95,7 @@ Every official plugin now has:
 - root `memory-descriptor.json`
 - always-on required-memory injection at a host-supported request boundary, or a documented host path
 
-Canonical McpServer payloads (for sync) live under `plugins/core/hosts/{id}/` and are applied with `plugins/core/sync/apply-memory-s7b-hosts.ps1`. Sibling plugin-repo PRs that landed this surface:
+Canonical QBrainAi payloads (for sync) live under `plugins/core/hosts/{id}/` and are applied with `plugins/core/sync/apply-memory-s7b-hosts.ps1`. Sibling plugin-repo PRs that landed this surface:
 
 - Memory skill/descriptor: claude-code #3, claude-cowork #2, cline #2, cline-v2 #2, copilot #2, codex #2, opencode #2. Grok already had the S5 skill; grok #4 wired injection.
 - Required-memory injection: claude-code #4, claude-cowork #3, cline #3, cline-v2 #3, grok #4, copilot #3, codex #3, opencode #3.
@@ -104,7 +104,7 @@ Empty Effective set still renders `REQUIRED MEMORIES` / `- None`. See `docs/cont
 
 ## Perplexity research policy
 
-All eight plugin repos now include `docs/research/perplexity-research-policy.md` and `docs/research/research-to-plan-workflow.md` (merged PRs: claude-code #2, claude-cowork #1, cline #1, cline-v2 #1, grok #3, copilot #1, codex #1, opencode #1). Perplexity is the preferred external research provider for planning and substantive documentation. Ordinary McpServer tool execution does not require `PERPLEXITY_API_KEY`.
+All eight plugin repos now include `docs/research/perplexity-research-policy.md` and `docs/research/research-to-plan-workflow.md` (merged PRs: claude-code #2, claude-cowork #1, cline #1, cline-v2 #1, grok #3, copilot #1, codex #1, opencode #1). Perplexity is the preferred external research provider for planning and substantive documentation. Ordinary QBrainAi tool execution does not require `PERPLEXITY_API_KEY`.
 
 ## Codex Quick Check
 
@@ -124,7 +124,7 @@ See `docs/USER-GUIDE.md` section 7f and `docs/MCP-SERVER.md` QuadBrain-only keys
 
 ## REPL Relationship
 
-`mcpserver-repl --agent-stdio` is the protocol host used by plugins and by implementation diagnostics. It is not a substitute for the required per-agent plugin during normal audited work. Direct REPL use is acceptable for plugin implementation, plugin troubleshooting, and fallback diagnosis after plugin verification fails.
+`qbrain-ai-repl --agent-stdio` is the protocol host used by plugins and by implementation diagnostics. It is not a substitute for the required per-agent plugin during normal audited work. Direct REPL use is acceptable for plugin implementation, plugin troubleshooting, and fallback diagnosis after plugin verification fails.
 
 When direct `--agent-stdio` is used, send one single-line JSON request envelope per stdin line. Do not send formatted YAML or wrap multiple requests in `type: batch`; unsupported batch envelopes are rejected with `unsupported_batch_envelope`.
 

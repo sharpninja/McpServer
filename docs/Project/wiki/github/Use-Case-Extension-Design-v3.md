@@ -1,4 +1,4 @@
-# McpServer Use Case Extension – Design & Implementation Package v3.0
+# QBrainAi Use Case Extension – Design & Implementation Package v3.0
 
 **Date:** 2026-08-08  
 **Author:** GrokCode (post-failure audit replan)  
@@ -38,7 +38,7 @@ Salvage of existing code is allowed only after the corresponding slice’s red t
 ### 1.2 Product intent (locked)
 
 - Default UC↔FR `LinkType`: **Realizes**
-- Naming: `UseCase*`, route `/mcpserver/usecases`, MCP tools `usecase_*`, client `UseCases`
+- Naming: `UseCase*`, route `/qbrainai/usecases`, MCP tools `usecase_*`, client `UseCases`
 - FR identity: **string** `RequirementEntity.Id` where `Kind = fr` (never bigint)
 - Application pattern: **CQRS** (`ICommand` / `IQuery` / handlers / `Dispatcher` / `Result<T>`)
 - Mermaid remains **primary** diagram format; **at least one non-Mermaid** format is in scope (operator)
@@ -56,7 +56,7 @@ Must remain true for any Use Case work:
 - Append-only audit on mutable domain (TR-MCP-DB-004)
 - Multi-provider EF (TR-MCP-CFG-007): SQLite, PostgreSQL, SQL Server
 - CQRS (FR-MCP-029, TR-MCP-CQRS-*)
-- Auth middleware for `/mcpserver/*` (FR-MCP-013, TR-MCP-AUTH-*)
+- Auth middleware for `/qbrainai/*` (FR-MCP-013, TR-MCP-AUTH-*)
 - Dual surface REST + MCP + typed client (TR-MCP-API / TR-MCP-CLIENT patterns)
 - DI ownership (TR-MCP-ARCH-002)
 
@@ -87,7 +87,7 @@ All IDs must be created in the **MCP requirements store**, mapped FR→TR→TEST
 |----|--------|----------------------|
 | TR-MCP-USECASE-001 | Storage | 4NF entities; soft-delete; workspace FK/filter; **multi-provider migrations that apply cleanly** on empty and production-shaped DBs; migrations **must not** re-add unrelated columns already present (e.g. SessionLogs agent fields) |
 | TR-MCP-USECASE-002 | CQRS | Commands/queries/handlers registered; `AddCqrsDispatcher` + Use Case handlers on HTTP and STDIO hosts |
-| TR-MCP-USECASE-003 | REST | Thin `/mcpserver/usecases` controller; Result→HTTP mapping |
+| TR-MCP-USECASE-003 | REST | Thin `/qbrainai/usecases` controller; Result→HTTP mapping |
 | TR-MCP-USECASE-004 | Diagram service | DI-owned pure generator; mermaid + one extra format; unknown format validation |
 | TR-MCP-USECASE-005 | MCP + client + plugins | `usecase_*` STDIO tools; `UseCaseClient` DTO parity with live JSON; plugin-core tools + agent skills; REPL `client.UseCases` allow-list |
 | TR-MCP-USECASE-006 | Projection, coverage, audit | FR get/list `linkedUseCases`; coverage DTO; **every mutable Use Case mutation emits TR-MCP-DB-004 audit rows** |

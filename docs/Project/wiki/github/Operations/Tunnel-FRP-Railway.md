@@ -2,7 +2,7 @@
 
 This runbook documents how to expose a local MCP server through FRP using:
 
-- local `frpc` managed by `McpServer.Support.Mcp` (`Mcp:Tunnel:Provider = "frp"`)
+- local `frpc` managed by `QBrainAi.Support.Mcp` (`Mcp:Tunnel:Provider = "frp"`)
 - self-hosted `frps` running on Railway
 
 This is the recommended path when you want a self-hosted reverse proxy instead of ngrok or cloudflared.

@@ -20,7 +20,7 @@ This skill is triggered by the workspace marker file during Claude Code plugin b
 Use this skill when:
 
 - `AGENTS-README-FIRST.yaml` or another marker file says to validate Claude hook wiring.
-- Claude Code has the McpServer plugin installed but does not reliably open MCP turns or run stop gates.
+- Claude Code has the QBrainAi plugin installed but does not reliably open MCP turns or run stop gates.
 - Active Claude settings may not include MCP `UserPromptSubmit`, `Stop`, or `PostToolUse` hooks.
 
 ## Action

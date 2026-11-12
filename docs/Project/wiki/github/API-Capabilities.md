@@ -4,7 +4,7 @@ Load this file when you need endpoint details, protocol information, or workspac
 
 ## Protocols
 
-- **REST API**: All `/mcpserver/*` endpoints (requires `X-Api-Key` header). Full OpenAPI spec at `GET /swagger/v1/swagger.json`. Interactive Swagger UI at `/swagger`.
+- **REST API**: All `/qbrainai/*` endpoints (requires `X-Api-Key` header). Full OpenAPI spec at `GET /swagger/v1/swagger.json`. Interactive Swagger UI at `/swagger`.
 - **MCP Streamable HTTP**: `POST /mcp-transport` - Model Context Protocol transport for tool-calling agents. No API key required.
 - **Health Check**: `GET /health` - liveness. Observed payload keys: `status`, `version`, `checks`, `nonce`, `storage`. A caller `nonce` query is echoed exactly. `storage` is `reachable` or `unreachable`. No API key required.
 
@@ -28,18 +28,18 @@ To detect a stale marker without auth:
 
 ## Available Endpoints
 
-- **Context Search**: `POST /mcpserver/context/search` - semantic + full-text hybrid search over indexed project documents
-- **Context Pack**: `POST /mcpserver/context/pack` - retrieve ordered context chunks for a topic
-- **Context Sources**: `GET /mcpserver/context/sources` - list all indexed document sources
-- **Website Ingestion**: `POST /mcpserver/context/ingest-website` - ingest one URL (optionally bounded same-host crawl) directly into context store with SSRF and byte/page limits
-- **Todo Management**: `GET/POST/PUT/DELETE /mcpserver/todo` - query, create, update, delete project tasks
-- **Repo Files**: `GET /mcpserver/repo/file`, `POST /mcpserver/repo/file`, `GET /mcpserver/repo/list` - read, write, and list repository files
-- **GitHub Integration**: `/mcpserver/gh/issues`, `/mcpserver/gh/pulls`, `/mcpserver/gh/labels` - issue, PR, and label management
-- **Tool Registry**: `GET /mcpserver/tools/search` - discover available tools; `GET/POST /mcpserver/tools` - manage tool definitions
-- **Session Log**: `POST /mcpserver/sessionlog`, `GET /mcpserver/sessionlog` - session logging; `PATCH` (additive merge) / `PUT` (replace turn or section) / `DELETE` (remove turn, section, item, or session) under `/{agent}/{sessionId}/{requestId}` - see [session-log-workflow-api.md](session-log-workflow-api.md#replacing-and-removing-data-patch--put--delete)
-- **Federation**: `GET /mcpserver/federation/status` - role, hub URL, proxy id, queue depth, fanout depth, stale-read status, conflicts; `/mcpserver/federation/proxies`, `/workspaces`, `/queue`, `/conflicts`, `/adapters`, `/operations`, `/envelopes`, and `/sync` support hub-spoke enrollment, signed operation replay, diagnostics, and fanout
+- **Context Search**: `POST /qbrainai/context/search` - semantic + full-text hybrid search over indexed project documents
+- **Context Pack**: `POST /qbrainai/context/pack` - retrieve ordered context chunks for a topic
+- **Context Sources**: `GET /qbrainai/context/sources` - list all indexed document sources
+- **Website Ingestion**: `POST /qbrainai/context/ingest-website` - ingest one URL (optionally bounded same-host crawl) directly into context store with SSRF and byte/page limits
+- **Todo Management**: `GET/POST/PUT/DELETE /qbrainai/todo` - query, create, update, delete project tasks
+- **Repo Files**: `GET /qbrainai/repo/file`, `POST /qbrainai/repo/file`, `GET /qbrainai/repo/list` - read, write, and list repository files
+- **GitHub Integration**: `/qbrainai/gh/issues`, `/qbrainai/gh/pulls`, `/qbrainai/gh/labels` - issue, PR, and label management
+- **Tool Registry**: `GET /qbrainai/tools/search` - discover available tools; `GET/POST /qbrainai/tools` - manage tool definitions
+- **Session Log**: `POST /qbrainai/sessionlog`, `GET /qbrainai/sessionlog` - session logging; `PATCH` (additive merge) / `PUT` (replace turn or section) / `DELETE` (remove turn, section, item, or session) under `/{agent}/{sessionId}/{requestId}` - see [session-log-workflow-api.md](session-log-workflow-api.md#replacing-and-removing-data-patch--put--delete)
+- **Federation**: `GET /qbrainai/federation/status` - role, hub URL, proxy id, queue depth, fanout depth, stale-read status, conflicts; `/qbrainai/federation/proxies`, `/workspaces`, `/queue`, `/conflicts`, `/adapters`, `/operations`, `/envelopes`, and `/sync` support hub-spoke enrollment, signed operation replay, diagnostics, and fanout
 - **MCP Protocol**: `/mcp-transport` - Model Context Protocol streamable HTTP transport endpoint
-- **Memory**: `GET/POST/PUT/DELETE /mcpserver/memory`, `POST /mcpserver/memory/remember|recall|explore|consolidate|promote`, `GET /mcpserver/memory/{id}/versions`, `POST /mcpserver/memory/{id}/revert`. STDIO tools `memory_*`. First-party UI at `/memory/`. See [memory.md](memory.md).
+- **Memory**: `GET/POST/PUT/DELETE /qbrainai/memory`, `POST /qbrainai/memory/remember|recall|explore|consolidate|promote`, `GET /qbrainai/memory/{id}/versions`, `POST /qbrainai/memory/{id}/revert`. STDIO tools `memory_*`. First-party UI at `/memory/`. See [memory.md](memory.md).
 
 ## Server Health
 

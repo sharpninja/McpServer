@@ -7,13 +7,13 @@ Load this file when implementing, testing, or diagnosing MCP server federation.
 - `Standalone`: serve local workspaces only.
 - `DirectProxy`: existing point-to-point proxy mode using configured targets and workspace routes.
 - `Hub`: authoritative server for enrolled proxies, global workspace inventory, operation intake, sync fanout, queue status, and conflicts.
-- `LocalProxy`: local server that forwards `/mcpserver/*` and `/mcp-transport` requests to `HubBaseUrl`, excluding local health/readiness/marker/federation diagnostics. Supported mutating REST requests are queued when the hub is unavailable; raw `/mcp-transport` streams are not accepted into the offline queue.
+- `LocalProxy`: local server that forwards `/qbrainai/*` and `/mcp-transport` requests to `HubBaseUrl`, excluding local health/readiness/marker/federation diagnostics. Supported mutating REST requests are queued when the hub is unavailable; raw `/mcp-transport` streams are not accepted into the offline queue.
 
 For implementation and validation, `PAYTON-DESKTOP` is the default hub machine and `PAYTON-LEGION2` is the default local proxy machine. Treat these as environment defaults, not hard-coded product constants.
 
 ## Required Status Surface
 
-Use `GET /mcpserver/federation/status` or the corresponding client/plugin wrapper. Agents should report these fields when topology matters:
+Use `GET /qbrainai/federation/status` or the corresponding client/plugin wrapper. Agents should report these fields when topology matters:
 
 - `role`
 - `configuredRole`
@@ -36,20 +36,20 @@ Agents should retrieve federation status through their required plugin or typed 
 
 ## Hub Endpoints
 
-- `POST /mcpserver/federation/proxies/enroll`: enroll or update a LocalProxy and its hosted workspaces.
-- `POST /mcpserver/federation/proxies/{proxyId}/heartbeat`: update proxy liveness and workspace inventory.
-- `GET /mcpserver/federation/proxies`: list enrolled proxies.
-- `POST /mcpserver/federation/proxies/{proxyId}/workspaces`: register one hosted workspace.
-- `GET /mcpserver/federation/workspaces`: list global or per-proxy workspaces.
-- `POST /mcpserver/federation/operations`: accept or idempotently replay a proxy operation.
-- `POST /mcpserver/federation/envelopes`: accept a signed proxy operation envelope.
-- `POST /mcpserver/federation/operations/{operationId}/ack`: acknowledge replay or fanout.
-- `GET /mcpserver/federation/queue`: inspect queued operation, fanout, and conflict counts.
-- `GET /mcpserver/federation/conflicts`: list open or historical conflicts.
-- `POST /mcpserver/federation/conflicts/{conflictId}/resolve`: resolve a conflict, defaulting to hub-wins.
-- `GET /mcpserver/federation/sync`: stream hub fanout rows for a proxy after a sequence.
-- `POST /mcpserver/federation/sync/{sequence}/ack`: acknowledge one recipient-specific fanout row.
-- `GET /mcpserver/federation/adapters`: inspect mutable state adapter coverage, local-only exemptions, and whether signed apply is supported for each domain.
+- `POST /qbrainai/federation/proxies/enroll`: enroll or update a LocalProxy and its hosted workspaces.
+- `POST /qbrainai/federation/proxies/{proxyId}/heartbeat`: update proxy liveness and workspace inventory.
+- `GET /qbrainai/federation/proxies`: list enrolled proxies.
+- `POST /qbrainai/federation/proxies/{proxyId}/workspaces`: register one hosted workspace.
+- `GET /qbrainai/federation/workspaces`: list global or per-proxy workspaces.
+- `POST /qbrainai/federation/operations`: accept or idempotently replay a proxy operation.
+- `POST /qbrainai/federation/envelopes`: accept a signed proxy operation envelope.
+- `POST /qbrainai/federation/operations/{operationId}/ack`: acknowledge replay or fanout.
+- `GET /qbrainai/federation/queue`: inspect queued operation, fanout, and conflict counts.
+- `GET /qbrainai/federation/conflicts`: list open or historical conflicts.
+- `POST /qbrainai/federation/conflicts/{conflictId}/resolve`: resolve a conflict, defaulting to hub-wins.
+- `GET /qbrainai/federation/sync`: stream hub fanout rows for a proxy after a sequence.
+- `POST /qbrainai/federation/sync/{sequence}/ack`: acknowledge one recipient-specific fanout row.
+- `GET /qbrainai/federation/adapters`: inspect mutable state adapter coverage, local-only exemptions, and whether signed apply is supported for each domain.
 
 ## Headers
 
@@ -68,8 +68,8 @@ LocalProxy writes are optimistic until acknowledged by the hub. If the hub is un
 
 Memory writes are queueable only for deterministic operations:
 
-- `POST /mcpserver/memory` queues only when the JSON body supplies an explicit valid `MEMORY-*` id. Creates without an explicit id are forwarded live when the hub is reachable but are not accepted into the offline queue.
-- `PUT /mcpserver/memory/{id}`, `PATCH /mcpserver/memory/{id}`, and `DELETE /mcpserver/memory/{id}` queue with domain `memory` and `{id}` as the resource id.
+- `POST /qbrainai/memory` queues only when the JSON body supplies an explicit valid `MEMORY-*` id. Creates without an explicit id are forwarded live when the hub is reachable but are not accepted into the offline queue.
+- `PUT /qbrainai/memory/{id}`, `PATCH /qbrainai/memory/{id}`, and `DELETE /qbrainai/memory/{id}` queue with domain `memory` and `{id}` as the resource id.
 
 Queue-exempt domains include `context_metadata`, `github_metadata`, `repo_file_changes`, `marker_state`, `mcp_transport`, and `unknown`. These are either derived/local-only, externally sourced, security-sensitive, or too broad to replay safely from an opaque offline operation body.
 

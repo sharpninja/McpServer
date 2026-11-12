@@ -15,18 +15,18 @@ Before triage was used as the default incidental-defect path, plugin failures te
 - The user’s active work was delayed by unrelated infrastructure repairs.
 - Obscure plugin defects were not captured with enough context to reproduce and harden them later.
 
-The triage system changed the failure mode. Agents were instructed to submit plugin and MCP Server failures through the triage tool, write failsafe YAML for the local failure record, and then continue the active task unless triage itself was unavailable.
+The triage system changed the failure mode. Agents were instructed to submit plugin and QBrain.AI failures through the triage tool, write failsafe YAML for the local failure record, and then continue the active task unless triage itself was unavailable.
 
 ## Triage Workflow
 
 The effective workflow had four parts.
 
-1. Detect an incidental MCP Server or plugin failure during normal work.
+1. Detect an incidental QBrain.AI or plugin failure during normal work.
 2. Submit a triage report with the failing command or endpoint, observed error, workspace path, component, and relevant plugin or agent identity.
 3. Keep a local failsafe YAML record for the failure, regardless of whether triage submission succeeds.
 4. Continue the active user request after successful triage submission. If triage submission fails, stop and notify the user because the reporting path is unavailable.
 
-On the server side, reports were grouped into workspace-scoped triage groups. MCP Server related failures, including plugin failures, were grouped into the `McpServer` workspace when that workspace exists. Related reports reset the quiet window so the triage agent can process a batch rather than a single incomplete symptom.
+On the server side, reports were grouped into workspace-scoped triage groups. QBrain.AI related failures, including plugin failures, were grouped into the `QBrainAi` workspace when that workspace exists. Related reports reset the quiet window so the triage agent can process a batch rather than a single incomplete symptom.
 
 ## Edge Cases Surfaced
 
@@ -76,7 +76,7 @@ Examples of improved requirement shape.
 - If triage submission fails, the agent must stop and notify the user rather than silently falling back to raw REST or alternate reporting.
 - Plugin version and marker metadata must be generated from current state, not stale template text.
 - Plugins must reprocess marker files when marker timestamps change before a request.
-- REPL parity must include REST, `McpServerClient`, `client.*` passthrough, typed `workflow.*` wrappers, YAML validation, error envelopes, and status discoverability.
+- REPL parity must include REST, `QBrainAiClient`, `client.*` passthrough, typed `workflow.*` wrappers, YAML validation, error envelopes, and status discoverability.
 - PowerShell-only plugin runtime behavior must be proven with Pester parity before Bash or Node paths are removed.
 - Triage runs must capture exact command lines, streamed stdout or stderr, result JSON, status, and failure details.
 
@@ -120,6 +120,6 @@ The strongest result was not only the fixes themselves. The stronger result was 
 - Edge cases become requirements.
 - Requirements receive acceptance criteria.
 - Acceptance criteria receive tests.
-- Plugin and MCP Server quality can improve without relying on memory of one-off failures.
+- Plugin and QBrain.AI quality can improve without relying on memory of one-off failures.
 
 This case study should be used as the model for future plugin hardening work. When a plugin defect appears obscure, intermittent, or host-specific, it belongs in triage with enough evidence to reproduce the edge case and enough follow-through to convert the lesson into requirements, acceptance criteria, and tests.

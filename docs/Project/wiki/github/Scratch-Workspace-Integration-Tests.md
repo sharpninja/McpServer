@@ -1,6 +1,6 @@
 # Scratch Workspace Integration Tests
 
-Use this pattern when an integration test must exercise a real MCP Server process
+Use this pattern when an integration test must exercise a real QBrain.AI process
 against an isolated workspace, especially when the test must prove behavior that
 depends on the generated `AGENTS-README-FIRST.yaml` marker file.
 
@@ -30,7 +30,7 @@ port, or cached plugin state.
 
 ## SQLite Workspace Seeding
 
-The workspace must be staged in SQLite before the MCP Server process starts.
+The workspace must be staged in SQLite before the QBrain.AI process starts.
 The startup marker writer reads configured workspaces from server state and then
 writes a marker for each enabled workspace.
 
@@ -38,7 +38,7 @@ Recommended setup:
 
 1. Allocate `<scratchRoot>/data/mcp.db`.
 2. Build `DbContextOptions<McpDbContext>` with SQLite and the
-   `McpServer.Storage.SqliteMigrations` migrations assembly.
+   `QBrainAi.Storage.SqliteMigrations` migrations assembly.
 3. Call `Database.MigrateAsync()` before inserting rows.
 4. Insert a `WorkspaceEntity` row with:
    - `WorkspaceId`: normalized absolute scratch workspace path.
@@ -56,7 +56,7 @@ Do not patch production startup marker generation to make the test pass.
 
 ## Server Startup
 
-Start the real `McpServer.Support.Mcp` process against the scratch root.
+Start the real `QBrainAi.Support.Mcp` process against the scratch root.
 
 1. Allocate a random high port. Check that the port is free immediately before
    launch, but still treat binding as race-prone and fail with server diagnostics
@@ -66,7 +66,7 @@ Start the real `McpServer.Support.Mcp` process against the scratch root.
    - the scratch SQLite database,
    - `Mcp:Database:Provider = sqlite`,
    - `Mcp:Database:Sqlite:DataSource = <scratchRoot>/data/mcp.db`,
-   - `Mcp:DatabaseMigrationsAssembly = McpServer.Storage.SqliteMigrations`,
+   - `Mcp:DatabaseMigrationsAssembly = QBrainAi.Storage.SqliteMigrations`,
    - `Mcp:RepoRoot = <scratchWorkspace>`,
    - `Mcp:TodoStorage:Provider = database`,
    - requirements paths under the scratch workspace,
@@ -97,7 +97,7 @@ Use `FileSystemWatcher`:
    non-empty `apiKey`, a usable `baseUrl`, and the scratch workspace path when
    that field is present.
 
-This gate proves the same startup contract future agents rely on: MCP Server
+This gate proves the same startup contract future agents rely on: QBrain.AI
 writes the marker for each enabled configured workspace on startup.
 
 ## REPL and Client Calls
@@ -107,7 +107,7 @@ After marker gating:
 1. Read endpoint and auth data from the generated marker. Do not use cached
    bearer state, the live developer marker, hard-coded port `7147`, or a guessed
    localhost URL.
-2. For REPL tests, launch `McpServer.Repl.Host` with:
+2. For REPL tests, launch `QBrainAi.Repl.Host` with:
    - `--agent-stdio`,
    - `--workspace-path <scratchWorkspace>`,
    - `--marker-file <scratchWorkspace>/AGENTS-README-FIRST.yaml`.
