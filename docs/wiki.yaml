@@ -261,6 +261,20 @@ documents:
     platforms:
       - github
       - azure
+  - id: arch-task-workflow
+    title: 'Architecture: TODO Plans, Tasks, Task Groups, and Session Work Dispatch'
+    source: docs/architecture/Task-Workflow-Architecture.md
+    target: Task-Workflow-Architecture.md
+    platforms:
+      - github
+      - azure
+  - id: plan-federation-dolt-bdpv4
+    title: 'Dolt federation: BDPv4 implementation plan'
+    source: docs/plans/2026-11-10-federation-dolt-bdpv4.md
+    target: Federation-Dolt-BDPv4-Plan.md
+    platforms:
+      - github
+      - azure
   - id: project-readme
     title: Project README
     source: README.md
@@ -392,6 +406,8 @@ navigation:
       - document: arch-sessionturn-review-agentcontext
       - document: arch-sessionturn-amendment-1-durable-hv
       - document: arch-xunit-v3-test-guidance
+      - document: arch-task-workflow
+      - document: plan-federation-dolt-bdpv4
       - document: context-api-capabilities
       - document: context-compliance-rules
       - document: context-module-bootstrap
