@@ -3695,6 +3695,12 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Valid research output creates one backlog TODO and failed output creates none.
 
+## TR-MCP-TRIAGE-004-REKEY-CANONICAL-20261115
+
+**TR-MCP-TRIAGE-004** — Placeholder requirement backfilled for TODO link TR-MCP-TRIAGE-004.
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-TRIAGE-005
 
 **Triage Grok runner omits CLI-rejected flags** — The triage Grok CLI runner SHALL NOT pass --model auto or --effort max, both of which the Grok CLI rejects at startup. AC1: BuildGrokArgumentList omits --model when the model is the 'auto' sentinel. AC2: effort is pinned to 'high' (HighestEffort), never 'max'. Guards BUG-TRIAGE-076 via TEST-MCP-BUGTRIAGE-043.

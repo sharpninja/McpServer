@@ -2591,6 +2591,11 @@ Scope: layer-1+
 - [ ] Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status.
 - [ ] MCP Server core and MCP Server plugin bugs are grouped into the registered McpServer workspace when that workspace exists; otherwise they stay in the submitting workspace.
 
+## FR-MCP-TRIAGE-002-REKEY-CANONICAL-20261115 FR-MCP-TRIAGE-002
+
+Placeholder requirement backfilled for TODO link FR-MCP-TRIAGE-002.
+Scope: layer-1+
+
 ## FR-MCP-TRIAGE-003 REPL triage parity
 
 The REPL exposes the complete triage surface through client passthrough and typed workflow wrappers.

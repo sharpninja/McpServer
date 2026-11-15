@@ -21,6 +21,7 @@
 - [Handoff Ingestion](Handoff-Ingestion.md)
 - [QBrain.AI Guide](MCP-SERVER.md)
 - [Permanent local audit storage](Operations/permanent-local-audit-sqlserver.md)
+- [Workspace path rekey](workspace-path-rekey.md)
 - [QuadBrain User Guide](QUADBRAIN.md)
 - [QBAgent User Guide](QBAGENT.md)
 - [FAQ](FAQ.md)

@@ -379,7 +379,9 @@ Source: `src/QBrainAi.Client/` - see the [package README](https://github.com/sha
 
 ## Health, storage, and errors
 
-`GET /health` is liveness. Observed live payload on `1.4.39+c59185ad0bcc518fd673a2f8b418d30739765f19`: `status` Healthy, `version`, `checks`, `nonce` echo, `storage` reachable. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
+`GET /health` is liveness. Observed live payload on `1.4.40+6136f91cb6392cde7b545debb30ea5deebea3d3f`: `status` Healthy, `version`, `checks`, `nonce` echo, `storage` reachable. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
+
+Startup refuses a database that still contains legacy Windows workspace keys. Keep the service offline and use the backup-gated `--workspace-path-rekey` maintenance command before normal startup. See [Workspace path rekey](workspace-path-rekey.md) for rehearsal, apply, and validation steps.
 
 ## Session log sanitization and incremental persist
 
@@ -399,6 +401,7 @@ Mutating `/qbrainai/*` failures, MCP tool errors, REPL `type: error` payloads, a
 - User documentation: `USER-GUIDE.md`
 - Documentation index: `README.md`
 - FAQ: `FAQ.md`
+- Workspace path rekey: `workspace-path-rekey.md`
 
 ## Frontier agent setup prompt (draft)
 

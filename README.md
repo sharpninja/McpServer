@@ -2,7 +2,7 @@
 
 Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orchestration, session logging, durable agent memory, repository operations, GitHub automation, GraphRAG, host-local Products for shared requirements, and agent orchestration over HTTP and MCP STDIO transports.
 
-**Versioning:** `GitVersion.yml` sets the next version to **1.4.39**. The deployed service version is reported by `/health`; a source checkout may be ahead of or behind that deployment. `/health` echoes a caller nonce for liveness and reports storage as `reachable` or `unreachable`.
+**Versioning:** `GitVersion.yml` sets the next version to **1.4.40**. The deployed service version is reported by `/health`; a source checkout may be ahead of or behind that deployment. `/health` echoes a caller nonce for liveness and reports storage as `reachable` or `unreachable`.
 
 ## Key Features
 
@@ -15,6 +15,7 @@ Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orche
 - **Products** - host-local `PROD-*` workspace groups that share FR/TR/TEST/layers into effective queries and `product-requirements` context without copying rows
 - **Use cases** - workspace-scoped use-case modeling with FR Realizes links, coverage, UML canvas graph (schema v1), sequence diagrams, first-party UI at `/usecases/`, REST + MCP + typed client
 - **Multi-provider storage** - SQLite, SQL Server, and PostgreSQL with startup migrations enabled by default; `Mcp:Database:AutoMigrate=false` requires an administrator to apply pending migrations before startup
+- **Workspace path rekey** - offline, backup-gated maintenance for converting stored Windows workspace keys to canonical forward-slash paths before normal startup
 - **REPL CLI tool** - `qbrain-ai-repl` for interactive use and agent STDIO access via single-line JSON request envelopes
 - **Agent memory** - workspace-scoped remember/recall/explore/promote/consolidate/revert plus compat CRUD. All eight official plugins inject a raw `REQUIRED MEMORIES` block at host-supported request boundaries. Default CI bench stays Grok; `./build.ps1 BenchMemory -Plugin all` is unblocked after H7a `agree:true`. Multi-turn v2 uses tokens as the primary metric (`docs/benchmarks/`).
 - **Typed .NET client** - `QBrainAI.Client` NuGet package covering all API endpoints
@@ -212,7 +213,7 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 | **Azure Pipelines** | `azure-pipelines.yml` | Build, test, publish, MSIX, docs lint, docs build, NuGet publish; optional Octopus LEGION2 release when `OCTOPUS_API_KEY` is set |
 | **GitHub Actions** | `.github/workflows/build.yml` | Build & test, validate, package, MSIX, publish |
 
-Versioning uses GitVersion (`GitVersion.yml`, `next-version: 1.4.39`). See `docs/AZURE-PIPELINES.md` for pipeline variables and the optional Octopus Deploy integration.
+Versioning uses GitVersion (`GitVersion.yml`, `next-version: 1.4.40`). See `docs/AZURE-PIPELINES.md` for pipeline variables and the optional Octopus Deploy integration.
 
 ## Client Library
 
@@ -300,6 +301,7 @@ failure names the `InstallOllama` target, which stages the portable binaries and
 | [Release Checklist](docs/RELEASE-CHECKLIST.md) | Pre-release verification |
 | [Azure Pipelines](docs/AZURE-PIPELINES.md) | CI/CD variables and retention |
 | [Permanent local audit storage](docs/Operations/permanent-local-audit-sqlserver.md) | Audit migration, SQL Server runtime role, and local-only export policy |
+| [Workspace path rekey](docs/workspace-path-rekey.md) | Offline backup, rehearsal, apply, and validation workflow for canonical workspace keys |
 
 ## License
 

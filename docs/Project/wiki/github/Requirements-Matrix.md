@@ -1495,6 +1495,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-FED-BACKFILL-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-FED-ROUTE-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-FED-WSSYNC-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-TRIAGE-002-REKEY-CANONICAL-20261115 | Tracked | Functional-Requirements.md |
 | FR-WF-005 | Tracked | Functional-Requirements.md |
 | [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
@@ -1517,4 +1518,5 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-FEDERATION-016 | Tracked | Technical-Requirements.md |
 | TR-MCP-FED-ROUTE-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-FED-WSSYNC-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-TRIAGE-004-REKEY-CANONICAL-20261115 | Tracked | Technical-Requirements.md |
 | TEST-MCP-HELP-009 | Tracked | Testing-Requirements.md |

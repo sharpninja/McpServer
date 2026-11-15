@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "github",
-  "generatedAtUtc": "2026-11-12T02:58:19.1225705+00:00",
+  "generatedAtUtc": "2026-11-15T16:58:37.9342555+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -53,6 +53,7 @@
     "Scratch-Workspace-Integration-Tests.md",
     "Memory-Benchmarks.md",
     "Setup/Frontier-Agent-Setup-Prompt-Draft.md",
-    "Operations/Permanent-Local-Audit-Storage.md"
+    "Operations/Permanent-Local-Audit-Storage.md",
+    "Operations/Workspace-Path-Rekey.md"
   ]
 }

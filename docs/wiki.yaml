@@ -255,7 +255,7 @@ documents:
       - github
       - azure
   - id: arch-xunit-v3-test-guidance
-    title: 'xUnit.net v3 Test Architecture Guidance'
+    title: xUnit.net v3 Test Architecture Guidance
     source: docs/architecture/xUnit-v3-Test-Architecture-Guidance.md
     target: xUnit-v3-Test-Architecture-Guidance.md
     platforms:
@@ -359,6 +359,13 @@ documents:
     platforms:
       - github
       - azure
+  - id: ops-workspace-path-rekey
+    title: Workspace Path Rekey
+    source: docs/workspace-path-rekey.md
+    target: Operations/Workspace-Path-Rekey.md
+    platforms:
+      - github
+      - azure
 navigation:
   - document: home
   - title: Requirements
@@ -429,5 +436,6 @@ navigation:
       - document: ops-tunnel-frp-railway
       - document: ops-tunnel-ngrok
       - document: ops-permanent-local-audit
+      - document: ops-workspace-path-rekey
 docfx:
   workflows: []
