@@ -5,7 +5,7 @@
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory)][ValidateSet('claude-code', 'cowork', 'claude-cowork', 'codex', 'copilot', 'grok')]
+    [Parameter(Mandatory)][ValidateSet('claude-code', 'cowork', 'claude-cowork', 'codex', 'copilot', 'grok', 'grok-bot')]
     [string]$HostName,
 
     [Parameter(Mandatory)][string]$PluginRoot
@@ -84,6 +84,7 @@ if ($HostName -ne 'codex') {
 
     $rootExpression = switch ($HostName) {
         'grok' { '${GROK_PLUGIN_ROOT:-${PLUGIN_ROOT:-$CLAUDE_PLUGIN_ROOT}}' }
+        'grok-bot' { '${GROK_PLUGIN_ROOT:-${PLUGIN_ROOT:-$CLAUDE_PLUGIN_ROOT}}' }
         'copilot' { '${COPILOT_PLUGIN_ROOT:-${PLUGIN_ROOT:-$CLAUDE_PLUGIN_ROOT}}' }
         'cowork' { '${COWORK_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}' }
         'claude-cowork' { '${COWORK_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}' }

@@ -17,6 +17,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$null = $IncludePs # Compatibility switch is intentionally accepted; PowerShell is always synced.
 $coreRoot = Split-Path -Parent $PSScriptRoot
 
 if (-not (Test-Path $PluginRoot)) {
@@ -48,7 +49,7 @@ function Read-CoreManifest {
     return (ConvertFrom-Yaml -Yaml ([System.IO.File]::ReadAllText($Path)) -Ordered -ErrorAction Stop)
 }
 
-function Get-CoreManifestFileKeys {
+function Get-CoreManifestFileKey {
     param($ManifestDocument)
 
     if ($null -eq $ManifestDocument) {
@@ -64,8 +65,8 @@ function Get-CoreManifestFileKeys {
     return @($ManifestDocument['files'].Keys)
 }
 
-function Remove-PreviousCoreFiles {
-    foreach ($relativePath in Get-CoreManifestFileKeys (Read-CoreManifest -Path $manifest)) {
+function Invoke-PreviousCoreFileCleanup {
+    foreach ($relativePath in Get-CoreManifestFileKey (Read-CoreManifest -Path $manifest)) {
         if ($relativePath -notlike 'lib/*') {
             continue
         }
@@ -96,7 +97,7 @@ function Remove-PreviousCoreFiles {
     }
 }
 
-Remove-PreviousCoreFiles
+Invoke-PreviousCoreFileCleanup
 
 $manifestFiles = [ordered]@{}
 

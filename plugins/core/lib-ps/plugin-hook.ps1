@@ -30,13 +30,123 @@ $script:ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 # variable a terminating error.
 $script:HookInputCached = $false
 $script:CachedHookInput = ''
+$script:ProfileReloadAdditionalContext = ''
 $env:MCP_PLUGIN_HOST = $HostName
 . (Join-Path $script:ScriptDir 'plugin-env.ps1')
 . (Join-Path $script:ScriptDir 'resolve-cache-dir.ps1')
 . (Join-Path $script:ScriptDir 'marker-resolver.ps1')
 . (Join-Path $script:ScriptDir 'yaml-object-mutation.ps1')
+. (Join-Path $script:ScriptDir 'plan-todo-map.ps1')
+. (Join-Path $script:ScriptDir 'repl-params-transfer.ps1')
 . (Join-Path $script:ScriptDir 'agent-runtime-header.ps1')
+. (Join-Path $script:ScriptDir 'profile-reload.ps1')
 Import-McpYamlSerializer
+
+function Get-PluginHookDeadline {
+    <#
+    .SYNOPSIS
+        TR-MCP-REPL-012 AC-001 (D1, triage-report-124a374c): this hook's deadline in Unix milliseconds: the hook
+        process's start time plus the timeout the plugin's generated hooks.json registers for the hook's script,
+        less a three-second margin for writing the hook's result (measured 2026-10-14: up to 2.2 s from the
+        deadline to process exit under load). $null when hooks.json is missing or unreadable or registers no
+        timeout for the hook.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$HooksJsonPath,
+        [Parameter(Mandatory)][string]$HookName,
+        [Parameter(Mandatory)][datetime]$ProcessStartUtc
+    )
+
+    if (-not (Test-Path -LiteralPath $HooksJsonPath -PathType Leaf)) { return $null }
+    try {
+        $document = [System.IO.File]::ReadAllText($HooksJsonPath) | ConvertFrom-Json -Depth 20 -ErrorAction Stop
+    } catch {
+        return $null
+    }
+    $hooksProperty = if ($null -ne $document) { $document.PSObject.Properties['hooks'] } else { $null }
+    if (-not $hooksProperty -or $null -eq $hooksProperty.Value) { return $null }
+
+    # Property lookups through PSObject keep this safe under Set-StrictMode -Version Latest.
+    $scriptPattern = '[\\/]hooks[\\/]scripts[\\/]' + [regex]::Escape($HookName) + '\.ps1'
+    foreach ($hookEvent in $hooksProperty.Value.PSObject.Properties) {
+        foreach ($group in @($hookEvent.Value)) {
+            $groupHooks = if ($null -ne $group) { $group.PSObject.Properties['hooks'] } else { $null }
+            if (-not $groupHooks) { continue }
+            foreach ($hook in @($groupHooks.Value)) {
+                if ($null -eq $hook) { continue }
+                $command = $hook.PSObject.Properties['command']
+                $timeoutProperty = $hook.PSObject.Properties['timeout']
+                $timeout = 0
+                if ($command -and $timeoutProperty -and [string]$command.Value -match $scriptPattern -and
+                    [int]::TryParse([string]$timeoutProperty.Value, [ref]$timeout) -and $timeout -gt 0) {
+                    return ([DateTimeOffset]$ProcessStartUtc.ToUniversalTime()).ToUnixTimeMilliseconds() + ([long]$timeout * 1000) - 3000
+                }
+            }
+        }
+    }
+    return $null
+}
+
+function Test-PluginHookOwnsProcess {
+    <#
+    .SYNOPSIS
+        TR-MCP-REPL-012 AC-001 (D1; operator decision 2026-10-15 "Scope D1 to the hook process"): whether this process
+        was started for the hook, that is, one of its command-line arguments is the hook's entry script under the plugin
+        root: hooks/scripts/<HookName>.ps1, lib/<HookName>.ps1 (hosts that keep their entries in lib/), or
+        lib/plugin-hook.ps1 started directly; or names the running plugin-hook.ps1 itself (HookScriptPath), which can
+        live outside the plugin root, as the plugin core's own does. A hook script run inside a process started for
+        something else, such as a test runner, does not own that process, so no host timeout applies to it.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$PluginRoot,
+        [Parameter(Mandatory)][string]$HookName,
+        [string[]]$CommandLineArgs = [Environment]::GetCommandLineArgs(),
+        [string]$HookScriptPath
+    )
+
+    $comparison = if ($IsWindows) { [System.StringComparison]::OrdinalIgnoreCase } else { [System.StringComparison]::Ordinal }
+    $entries = @(
+        [System.IO.Path]::Combine($PluginRoot, 'hooks', 'scripts', "$HookName.ps1"),
+        [System.IO.Path]::Combine($PluginRoot, 'lib', "$HookName.ps1"),
+        [System.IO.Path]::Combine($PluginRoot, 'lib', 'plugin-hook.ps1')
+    ) + @($HookScriptPath | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }) | ForEach-Object { [System.IO.Path]::GetFullPath($_) }
+    foreach ($argument in @($CommandLineArgs)) {
+        if ([string]::IsNullOrWhiteSpace($argument) -or $argument.StartsWith('-')) { continue }
+        $fullPath = $null
+        try { $fullPath = [System.IO.Path]::GetFullPath($argument) } catch { continue }
+        foreach ($entry in $entries) {
+            if ([string]::Equals($fullPath, $entry, $comparison)) { return $true }
+        }
+    }
+    return $false
+}
+
+function Register-PluginHookDeadline {
+    <#
+    .SYNOPSIS
+        TR-MCP-REPL-012 AC-001 (D1): publishes this hook's deadline in MCP_HOOK_DEADLINE_UTC_MS, measured from this
+        process's start, for repl-invoke.ps1 and the child processes the hook starts, when this process was started for
+        the hook (Test-PluginHookOwnsProcess); a hook script run inside another process publishes nothing. An earlier
+        deadline already published by an enclosing hook is kept while it is still ahead; a deadline that has passed is
+        stale and is replaced. Without a registered timeout nothing is published. The generated hook entry restores the
+        variable when it returns.
+    #>
+    param([Parameter(Mandatory)][string]$HookName, [string]$HookScriptPath)
+
+    $pluginRoot = [string]$env:MCP_PLUGIN_ROOT
+    if ([string]::IsNullOrWhiteSpace($pluginRoot)) { return }
+    if (-not (Test-PluginHookOwnsProcess -PluginRoot $pluginRoot -HookName $HookName -HookScriptPath $HookScriptPath)) { return }
+    $processStartUtc = [System.Diagnostics.Process]::GetCurrentProcess().StartTime.ToUniversalTime()
+    $deadline = Get-PluginHookDeadline -HooksJsonPath (Join-Path (Join-Path $pluginRoot 'hooks') 'hooks.json') -HookName $HookName -ProcessStartUtc $processStartUtc
+    if ($null -eq $deadline) { return }
+    $existing = 0L
+    if ([long]::TryParse([string]$env:MCP_HOOK_DEADLINE_UTC_MS, [ref]$existing) -and
+        $existing -gt [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() -and $existing -lt $deadline) { return }
+    $env:MCP_HOOK_DEADLINE_UTC_MS = [string]$deadline
+}
+
+# TR-MCP-REPL-012 AC-001 (D1): every server call this hook makes ends before the hook's registered budget runs out.
+Register-PluginHookDeadline -HookName $HookName -HookScriptPath $PSCommandPath
 
 function ConvertTo-PluginParamsYaml {
     param([Parameter(Mandatory)]$Params)
@@ -59,7 +169,45 @@ function New-PluginSessionId {
 
 function Write-PluginJson {
     param([Parameter(Mandatory)]$Value)
+
+    # FR-MCP-190: every UserPromptSubmit result can carry one pending profile
+    # reload instruction without duplicating the many session-log output paths.
+    if ($HookName -eq 'user-prompt-submit' -and
+        -not [string]::IsNullOrWhiteSpace($script:ProfileReloadAdditionalContext) -and
+        $Value -is [System.Collections.IDictionary] -and
+        $Value.Contains('hookSpecificOutput') -and
+        $Value['hookSpecificOutput'] -is [System.Collections.IDictionary]) {
+        $hookOutput = $Value['hookSpecificOutput']
+        $existing = if ($hookOutput.Contains('additionalContext')) { [string]$hookOutput['additionalContext'] } else { '' }
+        $hookOutput['additionalContext'] = if ([string]::IsNullOrWhiteSpace($existing)) {
+            $script:ProfileReloadAdditionalContext
+        } else {
+            "$existing $($script:ProfileReloadAdditionalContext)"
+        }
+        $script:ProfileReloadAdditionalContext = ''
+    }
     $Value | ConvertTo-Json -Depth 20 -Compress
+}
+
+function Write-PluginSessionStartOutput {
+    <#
+    .SYNOPSIS
+        Emits an empty status result or schema-valid SessionStart context.
+    .DESCRIPTION
+        Change log: 2026-11-14 - Added FR-MCP-190 immediate compact reload output.
+    #>
+    param([string]$AdditionalContext)
+
+    if ([string]::IsNullOrWhiteSpace($AdditionalContext)) {
+        Write-PluginJson ([ordered]@{})
+        return
+    }
+    Write-PluginJson ([ordered]@{
+        hookSpecificOutput = [ordered]@{
+            hookEventName = 'SessionStart'
+            additionalContext = $AdditionalContext
+        }
+    })
 }
 
 function Stop-PluginUnavailable {
@@ -214,13 +362,7 @@ function Invoke-PluginRepl {
 
     $script:LastPluginReplExitCode = 0
     if ($env:MCP_PLUGIN_REPL_LOG) {
-        $entry = @(
-            "method: $Method"
-            'params: |'
-            (($ParamsYaml -replace "`r`n", "`n" -replace "`r", "`n") -split "`n" | ForEach-Object { "  $_" })
-            '---'
-        ) -join "`n"
-        Add-Content -LiteralPath $env:MCP_PLUGIN_REPL_LOG -Value $entry
+        Write-McpReplLogEntry -Path $env:MCP_PLUGIN_REPL_LOG -Method $Method -ParamsYaml $ParamsYaml
         if ($env:MCP_PLUGIN_REPL_RESPONSE) {
             Write-Output $env:MCP_PLUGIN_REPL_RESPONSE
         }
@@ -254,21 +396,31 @@ function Invoke-PluginOpenSession {
         (Get-Location).ProviderPath
     ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
     if ($workspace) { $psi.WorkingDirectory = $workspace }
-    foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {
-        $psi.ArgumentList.Add($argument)
+    # Params travel in a file, never on the child command line (32,767-character limit on Windows).
+    $paramsTransfer = New-McpReplParamsTransfer -ParamsText $ParamsYaml
+    try {
+        foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync') + @($paramsTransfer.Arguments)) {
+            $psi.ArgumentList.Add($argument)
+        }
+        $process = [System.Diagnostics.Process]::Start($psi)
+        $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+        $stderrTask = $process.StandardError.ReadToEndAsync()
+        $process.WaitForExit()
+        try { $null = $stdoutTask.GetAwaiter().GetResult() } catch { }
+        try { $null = $stderrTask.GetAwaiter().GetResult() } catch { }
     }
-    $process = [System.Diagnostics.Process]::Start($psi)
-    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
-    $stderrTask = $process.StandardError.ReadToEndAsync()
-    $process.WaitForExit()
-    try { $null = $stdoutTask.GetAwaiter().GetResult() } catch { }
-    try { $null = $stderrTask.GetAwaiter().GetResult() } catch { }
+    finally {
+        Remove-McpReplParamsTransfer -Transfer $paramsTransfer
+    }
     $script:LastPluginReplExitCode = [int]$process.ExitCode
     return ($process.ExitCode -eq 0)
 }
 
 function Start-PluginSession {
-    param([string]$StartPath)
+    param(
+        [string]$StartPath,
+        [string]$AdditionalContext
+    )
 
     $start = Get-PluginStartPath -PreferredPath $StartPath
     if (-not [string]::IsNullOrWhiteSpace($start)) {
@@ -303,7 +455,7 @@ function Start-PluginSession {
             $untrustedState['markerLastWriteUtc'] = $markerSnapshot.markerLastWriteUtc
         }
         Write-McpYamlObject -Path $sessionFile -Document $untrustedState
-        Write-PluginJson ([ordered]@{})
+        Write-PluginSessionStartOutput -AdditionalContext $AdditionalContext
         return
     }
 
@@ -349,7 +501,7 @@ function Start-PluginSession {
         agentExecutableVersion = [string]$agentHeaders.agentExecutableVersion
     }
     Write-McpYamlObject -Path $sessionFile -Document $sessionState
-    Write-PluginJson ([ordered]@{})
+    Write-PluginSessionStartOutput -AdditionalContext $AdditionalContext
 }
 
 function ConvertTo-PluginAgentKey {
@@ -368,6 +520,8 @@ function ConvertTo-PluginAgentKey {
         'grok' { return 'grok' }
         'grokcode' { return 'grok' }
         'grok-code' { return 'grok' }
+        'grokbot' { return 'grok' }
+        'grok-bot' { return 'grok' }
         'cline' { return 'cline' }
         'cline-v2' { return 'cline' }
         'opencode' { return 'opencode' }
@@ -690,6 +844,21 @@ function Ensure-PluginMarkerFresh {
     }
 }
 
+function Test-PluginPromptIsHostEvent {
+    <#
+    .SYNOPSIS
+        TR-MCP-PLUGIN-013 AC-003 (D4, triage-report-5c7278cd): true when a UserPromptSubmit prompt is made only of host events, Claude
+        Code task notifications (<task-notification>...</task-notification>) and subagent hand-backs (<agent-message ...>...</agent-message>),
+        with nothing but whitespace around them. Such a prompt is not an operator request. Any other text, an unclosed block, or an empty
+        prompt makes it a request.
+    #>
+    param([AllowEmptyString()][string]$Prompt)
+
+    if ([string]::IsNullOrWhiteSpace($Prompt)) { return $false }
+    $rest = [regex]::Replace($Prompt, '(?s)<task-notification>.*?</task-notification>|<agent-message(?:\s[^>]*)?>.*?</agent-message>', '')
+    return ($rest.Length -lt $Prompt.Length) -and [string]::IsNullOrWhiteSpace($rest)
+}
+
 function Test-PluginPromptIsBackgroundAgent {
     <#
     .SYNOPSIS
@@ -722,38 +891,81 @@ function Test-PluginPromptIsBackgroundAgent {
     return $false
 }
 
-function Get-PluginRootTurnIsolationDecision {
+function Resolve-PluginBackgroundScope {
     <#
     .SYNOPSIS
-        FR-MCP-TRIAGEPLUGIN-001: reuse or skip-open when a background prompt would clobber the root turn.
+        TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3, triage-report-061f30e9): the background scope of the host this hook runs
+        for, its key (Get-McpBackgroundScopeKey over the payload's session_id and the agentSessionId the root's session-state.yaml records)
+        and its cache folder under the root cache; $null for the root host. FR-MCP-TRIAGEPLUGIN-001: the root turn stays the root's.
     #>
     param(
-        $OpenTurn,
-        [string]$IncomingPrompt,
+        [Parameter(Mandatory)][string]$CacheDir,
         [string]$Payload
     )
 
-    if ($null -eq $OpenTurn) { return 'open-new' }
+    $sessionFile = Join-Path $CacheDir 'session-state.yaml'
+    $rootAgentSessionId = if (Test-Path -LiteralPath $sessionFile) { [string](Get-YamlScalar -Path $sessionFile -Key 'agentSessionId') } else { '' }
+    $key = Get-McpBackgroundScopeKey -PayloadSessionId (Get-HookPayloadValue -Payload $Payload -Name 'session_id') -RootAgentSessionId $rootAgentSessionId
+    if (-not $key) { return $null }
+    return [pscustomobject]@{ Key = $key; Dir = (Join-McpBackgroundScopePath -CacheDir $CacheDir -Key $key) }
+}
 
-    $status = ''
-    $requestId = ''
-    if ($OpenTurn -is [System.Collections.IDictionary]) {
-        if ($OpenTurn.Contains('status')) { $status = [string]$OpenTurn['status'] }
-        if ($OpenTurn.Contains('turnRequestId')) { $requestId = [string]$OpenTurn['turnRequestId'] }
+function Initialize-PluginBackgroundScope {
+    <#
+    .SYNOPSIS
+        TR-MCP-PLUGIN-013 AC-005 (D3): prepares a background host's cache folder for a turn in the root's session. Its session-state.yaml
+        becomes a copy of the root's (the same session, marker proof and title, so the turn lands in the root's session and never retitles
+        it) plus the scope key. Returns the root's session id and the id of the turn the root's current-turn.yaml names, open or completed.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$RootCacheDir,
+        [Parameter(Mandatory)]$Scope
+    )
+
+    [void][System.IO.Directory]::CreateDirectory($Scope.Dir)
+    $rootState = Read-McpYamlObject -Path (Join-Path $RootCacheDir 'session-state.yaml')
+    $scopeState = [ordered]@{}
+    foreach ($name in @($rootState.Keys)) { $scopeState[$name] = $rootState[$name] }
+    if (-not $scopeState.Contains('title') -or [string]::IsNullOrWhiteSpace([string]$scopeState['title'])) {
+        $scopeState['title'] = "background scope of $([string]$rootState['sessionId'])"
     }
-    if ([string]::IsNullOrWhiteSpace($requestId)) { return 'open-new' }
-    if (-not (Test-PluginPromptIsBackgroundAgent -Prompt $IncomingPrompt -Payload $Payload)) {
-        return 'open-new'
-    }
-    if ($status -eq 'in_progress') { return 'reuse' }
-    if ($status -eq 'completed') { return 'isolate-skip' }
-    return 'open-new'
+    $scopeState['backgroundScopeKey'] = [string]$Scope.Key
+    Write-McpYamlObject -Path (Join-Path $Scope.Dir 'session-state.yaml') -Document $scopeState
+    $rootTurnFile = Join-Path $RootCacheDir 'current-turn.yaml'
+    $rootTurnId = if (Test-Path -LiteralPath $rootTurnFile) { [string](Get-YamlScalar -Path $rootTurnFile -Key 'turnRequestId') } else { '' }
+    return [pscustomobject]@{ SessionId = [string]$rootState['sessionId']; RootTurnId = $rootTurnId }
 }
 
 function Open-PluginTurn {
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
     Set-PluginWorkspaceIdentity -ResolvedPath $startPath
     $cacheDir = Get-PluginCacheDir -StartPath $startPath
+    $payload = Read-HookInput
+    $profileReload = Invoke-McpProfileReloadCheck -CacheDir $cacheDir -HostName $HostName -Payload $payload
+    $script:ProfileReloadAdditionalContext = [string]$profileReload.AdditionalContext
+
+    # TR-MCP-PLUGIN-013 AC-003 (D4, triage-report-5c7278cd): a task notification or subagent hand-back is not an operator request. It
+    # opens no turn and supersedes nothing, so the operator's open turn stays current; this runs before the marker refresh so an event
+    # costs no server call. Read-HookInput is memoized, so the turn path below reads the same payload.
+    $eventPrompt = Get-HookPayloadValue -Payload $payload -Name 'prompt'
+    if (Test-PluginPromptIsHostEvent -Prompt $eventPrompt) {
+        $currentTurnFile = Join-Path $cacheDir 'current-turn.yaml'
+        $currentRequestId = if (Test-Path -LiteralPath $currentTurnFile) { [string](Get-YamlScalar -Path $currentTurnFile -Key 'turnRequestId') } else { '' }
+        Write-PluginJson ([ordered]@{
+            hookSpecificOutput = [ordered]@{
+                hookEventName = 'UserPromptSubmit'
+                status = 'system-event'
+                turnRequestId = $currentRequestId
+                additionalContext = if ($currentRequestId) {
+                    "Host event (task notification or subagent hand-back): no session log turn was opened; turn $currentRequestId is unchanged."
+                } else {
+                    'Host event (task notification or subagent hand-back): no session log turn was opened.'
+                }
+            }
+        })
+        return
+    }
+
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
     Ensure-PluginMarkerFresh -StartPath $startPath | Out-Null
     if (Test-Path -LiteralPath $sessionFile) {
@@ -786,12 +998,25 @@ function Open-PluginTurn {
         }
     }
 
-    $payload = Read-HookInput
     $prompt = Get-HookPayloadValue -Payload $payload -Name 'prompt'
     if (-not $prompt) { $prompt = 'Continuation or hook-triggered turn.' }
     $title = (($prompt -split "`r?`n")[0]).Trim()
     if (-not $title) { $title = 'Continuation turn' }
     if ($title.Length -gt 60) { $title = $title.Substring(0, 60) }
+
+    # TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3, triage-report-061f30e9): a background or hostile-agent brief from a host whose
+    # identity differs from the root's opens and logs its own turn in the root's session, kept in its own cache folder, so the root's
+    # current-turn.yaml and turn are never reused, skipped, superseded or rewritten. A brief with the root's own identity is the root's prompt.
+    $backgroundScope = $null
+    $backgroundContext = $null
+    if (Test-PluginPromptIsBackgroundAgent -Prompt $prompt -Payload $payload) {
+        $backgroundScope = Resolve-PluginBackgroundScope -CacheDir $cacheDir -Payload $payload
+    }
+    if ($backgroundScope) {
+        $backgroundContext = Initialize-PluginBackgroundScope -RootCacheDir $cacheDir -Scope $backgroundScope
+        $cacheDir = $backgroundScope.Dir
+        $sessionFile = Join-Path $cacheDir 'session-state.yaml'
+    }
 
     # Double hook registration (plugin hooks.json plus the settings.json bridge) delivers the
     # same prompt twice per user message; reuse the turn the first delivery opened instead of
@@ -834,23 +1059,6 @@ function Open-PluginTurn {
                 return
             }
 
-            $isolation = Get-PluginRootTurnIsolationDecision -OpenTurn $openTurn -IncomingPrompt $prompt -Payload $payload
-            if ($isolation -eq 'reuse' -or $isolation -eq 'isolate-skip') {
-                Write-PluginJson ([ordered]@{
-                    hookSpecificOutput = [ordered]@{
-                        hookEventName = 'UserPromptSubmit'
-                        status = $(if ($isolation -eq 'reuse') { 'turn-already-open' } else { 'root-turn-isolated' })
-                        turnRequestId = $openRequestId
-                        isolation = $isolation
-                        additionalContext = if ($isolation -eq 'reuse') {
-                            "session log turn $openRequestId remains active. Background UserPromptSubmit did not supersede the root work turn."
-                        } else {
-                            "root session log turn $openRequestId is completed. Background UserPromptSubmit did not rewrite current-turn.yaml."
-                        }
-                    }
-                })
-                return
-            }
         }
     }
 
@@ -864,14 +1072,28 @@ function Open-PluginTurn {
 
     $turnRequestId = 'req-{0}-prompt-{1:x4}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), (Get-Random -Maximum 0xffff)
     $turnContext = Resolve-PluginTurnPlanContext
-    $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
+    $beginParams = [ordered]@{
         requestId = $turnRequestId
         queryTitle = $title
         queryText = $prompt
         planFile = $turnContext.planFile
         todoId = $turnContext.todoId
-    })
-    $beginOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.beginTurn' -ParamsYaml $paramsYaml
+    }
+    if ($backgroundContext) {
+        # TR-MCP-PLUGIN-013 AC-005 (D3): the background turn's first write names its root session and root turn.
+        $rootIds = @("root session: $($backgroundContext.SessionId)")
+        if ($backgroundContext.RootTurnId) { $rootIds += "root turn: $($backgroundContext.RootTurnId)" }
+        $beginParams['contextList'] = $rootIds
+        $beginParams['tags'] = @('background-agent')
+    }
+    $paramsYaml = ConvertTo-PluginParamsYaml $beginParams
+    $priorCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+    if ($backgroundScope) { $env:MCP_CACHE_DIR_OVERRIDE = $backgroundScope.Dir }
+    try {
+        $beginOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.beginTurn' -ParamsYaml $paramsYaml
+    } finally {
+        if ($backgroundScope) { $env:MCP_CACHE_DIR_OVERRIDE = $priorCacheOverride }
+    }
     if ($script:LastPluginReplExitCode -ne 0) {
         Write-PluginJson ([ordered]@{
             hookSpecificOutput = [ordered]@{
@@ -928,6 +1150,11 @@ function Open-PluginTurn {
         turnRequestId = $turnRequestId
         additionalContext = $additionalContext
     }
+    if ($backgroundScope) {
+        $rootTurnText = if ($backgroundContext.RootTurnId) { "root turn $($backgroundContext.RootTurnId) is unchanged" } else { 'the root has no current turn' }
+        $hookOutput['backgroundScope'] = [string]$backgroundScope.Key
+        $hookOutput['additionalContext'] = "$additionalContext Background agent turn in the root session; $rootTurnText."
+    }
     if ($openStatus -eq 'turn-opened-degraded') {
         $hookOutput['recoveryArtifactPath'] = [string]$recoveryArtifactPath
     }
@@ -936,198 +1163,15 @@ function Open-PluginTurn {
     })
 }
 
-function Get-PluginMapValue {
-    param($Map, [string]$Key)
-
-    if ($null -eq $Map -or [string]::IsNullOrWhiteSpace($Key)) { return $null }
-    if ($Map -is [System.Collections.IDictionary]) {
-        if ($Map.Contains($Key)) { return $Map[$Key] }
-        return $null
-    }
-
-    $property = $Map.PSObject.Properties[$Key]
-    if ($property) { return $property.Value }
-    return $null
-}
-
-function Test-PluginStopEvidenceKnown {
-    <#
-    .SYNOPSIS
-        True when a cache file carries build or audit evidence keys.
-    #>
-    param([Parameter(Mandatory)][string]$Path)
-
-    if (-not (Test-Path -LiteralPath $Path)) { return $false }
-    $document = Read-McpYamlObject -Path $Path
-    if ($document -isnot [System.Collections.IDictionary]) { return $false }
-    foreach ($key in @('codeEdits', 'lastBuildStatus', 'auditActions', 'auditFiles', 'auditDialog', 'auditDecisions', 'auditCommits')) {
-        if ($document.Contains($key)) { return $true }
-    }
-    return $false
-}
-
-function Get-PluginStopEnforcementDecision {
-    <#
-    .SYNOPSIS
-        FR-MCP-SESSIONLIFE-004: failed-build and incomplete-audit before any allow or recency write.
-    .DESCRIPTION
-        Returns 'allow' for an operator override, a block reason, or $null when the evidence does not block.
-    #>
-    param(
-        [Parameter(Mandatory)][string]$EvidencePath,
-        [Parameter(Mandatory)][string]$CacheDir
-    )
-
-    if (-not (Test-Path -LiteralPath $EvidencePath)) { return $null }
-
-    $edits = 0
-    $editsText = Get-YamlScalar -Path $EvidencePath -Key 'codeEdits'
-    if ($editsText) {
-        $parsedEdits = 0
-        if ([int]::TryParse($editsText, [ref]$parsedEdits)) { $edits = $parsedEdits }
-    }
-    $buildStatus = Get-YamlScalar -Path $EvidencePath -Key 'lastBuildStatus'
-    if ($edits -gt 0 -and $buildStatus -eq 'failed') {
-        $acceptFailure = Join-Path $CacheDir 'turn-accept-failure.marker'
-        if (Test-Path -LiteralPath $acceptFailure) {
-            Remove-Item -LiteralPath $acceptFailure -Force
-            return 'allow'
-        }
-
-        return "Last build in this turn failed after $edits code edit(s)."
-    }
-
-    $auditActions = Get-YamlScalar -Path $EvidencePath -Key 'auditActions'
-    $auditFiles = Get-YamlScalar -Path $EvidencePath -Key 'auditFiles'
-    $auditDialog = Get-YamlScalar -Path $EvidencePath -Key 'auditDialog'
-    $auditDecisions = Get-YamlScalar -Path $EvidencePath -Key 'auditDecisions'
-    $auditCommits = Get-YamlScalar -Path $EvidencePath -Key 'auditCommits'
-    $hasAuditSchema = $null -ne $auditActions -or $null -ne $auditFiles -or $null -ne $auditDialog -or $null -ne $auditDecisions -or $null -ne $auditCommits
-    if ($edits -gt 0 -and $hasAuditSchema) {
-        $auditTotal = [int](($auditActions ?? '0')) + [int](($auditFiles ?? '0')) + [int](($auditDialog ?? '0')) + [int](($auditDecisions ?? '0')) + [int](($auditCommits ?? '0'))
-        if ($auditTotal -le 0) {
-            $acceptAudit = Join-Path $CacheDir 'turn-accept-incomplete-audit.marker'
-            if (Test-Path -LiteralPath $acceptAudit) {
-                Remove-Item -LiteralPath $acceptAudit -Force
-                return 'allow'
-            }
-
-            return 'audit is incomplete for a completed code-edit turn'
-        }
-    }
-
-    return $null
-}
-
-function Test-PluginPathMatch {
-    param([string]$Left, [string]$Right)
-
-    if ([string]::IsNullOrWhiteSpace($Left) -or [string]::IsNullOrWhiteSpace($Right)) { return $false }
-    $leftText = $Left.Trim().Trim('"').TrimEnd('\', '/')
-    $rightText = $Right.Trim().Trim('"').TrimEnd('\', '/')
-    if ([string]::Equals($leftText, $rightText, [System.StringComparison]::Ordinal)) { return $true }
-    try {
-        if ((Test-Path -LiteralPath $leftText) -and (Test-Path -LiteralPath $rightText)) {
-            $resolvedLeft = (Resolve-Path -LiteralPath $leftText).ProviderPath.TrimEnd('\', '/')
-            $resolvedRight = (Resolve-Path -LiteralPath $rightText).ProviderPath.TrimEnd('\', '/')
-            return [string]::Equals($resolvedLeft, $resolvedRight, [System.StringComparison]::Ordinal)
-        }
-    } catch {
-    }
-
-    return $false
-}
-
-function Get-PluginTurnPersistenceProof {
-    <#
-    .SYNOPSIS
-        FR-MCP-SESSIONLIFE-004: exact-turn proof through client.SessionLog.GetAsync.
-    .DESCRIPTION
-        Calls the typed session client once via the plugin bridge. Only an exact
-        completed identity is Kind Reconcile. Missing, unavailable, workspace
-        mismatch, and identity mismatch fail closed.
-    #>
-    param(
-        [string]$WorkspacePath,
-        [string]$Agent,
-        [string]$SessionId,
-        [string]$RequestId
-    )
-
-    $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
-        agent = $Agent
-        sessionId = $SessionId
-        requestId = $RequestId
-        workspacePath = $WorkspacePath
-    })
-    $raw = $null
-    try {
-        $raw = @(Invoke-PluginRepl -Method 'client.SessionLog.GetAsync' -ParamsYaml $paramsYaml)
-    } catch {
-        # No proof document. Keep the historical stale pin instead of inventing a server outcome.
-        return [pscustomobject]@{ Kind = 'Active' }
-    }
-
-    $text = ($raw | ForEach-Object { [string]$_ }) -join "`n"
-    if ([string]::IsNullOrWhiteSpace($text)) {
-        return [pscustomobject]@{ Kind = 'Active' }
-    }
-
-    $document = $null
-    try {
-        $document = ConvertFrom-Yaml -Yaml $text -Ordered -ErrorAction Stop
-    } catch {
-        return [pscustomobject]@{ Kind = 'Active' }
-    }
-
-    $payload = Get-PluginMapValue -Map $document -Key 'payload'
-    $result = Get-PluginMapValue -Map $payload -Key 'result'
-    if ($null -eq $result) {
-        return [pscustomobject]@{ Kind = 'Active' }
-    }
-
-    $proofWorkspace = [string](Get-PluginMapValue -Map $result -Key 'workspacePath')
-    $workspaceCandidates = @($WorkspacePath, $env:MCP_WORKSPACE_PATH, $env:MCPSERVER_WORKSPACE_PATH) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
-    $workspaceMatch = $false
-    foreach ($candidate in $workspaceCandidates) {
-        if (Test-PluginPathMatch -Left $proofWorkspace -Right $candidate) { $workspaceMatch = $true; break }
-    }
-    if (-not $workspaceMatch) {
-        return [pscustomobject]@{ Kind = 'Block'; Reason = 'authoritative turn workspace does not match the local workspace' }
-    }
-
-    $proofAgent = [string](Get-PluginMapValue -Map $result -Key 'sourceType')
-    $proofSession = [string](Get-PluginMapValue -Map $result -Key 'sessionId')
-    $proofRequest = [string](Get-PluginMapValue -Map $result -Key 'requestId')
-    $agentMatch = [string]::Equals($proofAgent.Trim(), ([string]$Agent).Trim(), [System.StringComparison]::OrdinalIgnoreCase)
-    $sessionMatch = [string]::Equals($proofSession.Trim(), ([string]$SessionId).Trim(), [System.StringComparison]::Ordinal)
-    $requestMatch = [string]::Equals($proofRequest.Trim(), ([string]$RequestId).Trim(), [System.StringComparison]::Ordinal)
-    if (-not $agentMatch -or -not $sessionMatch -or -not $requestMatch) {
-        return [pscustomobject]@{ Kind = 'Block'; Reason = "identity-changed: authoritative turn '$proofRequest' is not local turn '$RequestId'" }
-    }
-
-    $outcome = ([string](Get-PluginMapValue -Map $result -Key 'outcome')).Trim()
-    $serverStatus = ([string](Get-PluginMapValue -Map $result -Key 'serverStatus')).Trim()
-    if ($outcome -eq 'Missing') {
-        return [pscustomobject]@{ Kind = 'Block'; Reason = "authoritative turn is missing for $RequestId" }
-    }
-    if ($outcome -eq 'Unavailable') {
-        return [pscustomobject]@{ Kind = 'Block'; Reason = "authoritative session query is unavailable for $RequestId" }
-    }
-    if ($outcome -eq 'Active') {
-        return [pscustomobject]@{ Kind = 'Active' }
-    }
-    if ($outcome -eq 'Completed' -and $serverStatus -eq 'completed') {
-        return [pscustomobject]@{ Kind = 'Reconcile' }
-    }
-
-    return [pscustomobject]@{ Kind = 'Block'; Reason = 'authoritative session query is unavailable' }
-}
-
 function Close-PluginTurnIfNeeded {
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
     Set-PluginWorkspaceIdentity -ResolvedPath $startPath
     $cacheDir = Get-PluginCacheDir -StartPath $startPath
+    # TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3): a background host's Stop completes its own turn, kept in its own cache
+    # folder, and never the root's.
+    $backgroundScope = Resolve-PluginBackgroundScope -CacheDir $cacheDir -Payload (Read-HookInput)
+    if ($backgroundScope -and -not (Test-Path -LiteralPath (Join-Path $backgroundScope.Dir 'current-turn.yaml'))) { $backgroundScope = $null }
+    if ($backgroundScope) { $cacheDir = $backgroundScope.Dir }
     $turnFile = Join-Path $cacheDir 'current-turn.yaml'
     if ($env:CLAUDE_STOP_HOOK_ACTIVE -eq 'true') {
         Write-PluginJson ([ordered]@{})
@@ -1141,50 +1185,25 @@ function Close-PluginTurnIfNeeded {
         $timestampText = Get-YamlScalar -Path $sessionFile -Key 'timestamp'
         $updatedText = Get-YamlScalar -Path $sessionFile -Key 'lastUpdated'
         $timestampStale = $false
-        $timestampKnown = $false
         $updatedStale = $true
         $parsedTimestamp = [datetime]::MinValue
         if ($timestampText -and [datetime]::TryParse($timestampText.Trim('"'), [ref]$parsedTimestamp)) {
-            $timestampKnown = $true
             $timestampStale = $parsedTimestamp.ToUniversalTime() -lt $cutoff
         }
         $parsedUpdated = [datetime]::MinValue
         if ($updatedText -and [datetime]::TryParse($updatedText.Trim('"'), [ref]$parsedUpdated)) {
             $updatedStale = $parsedUpdated.ToUniversalTime() -lt $cutoff
         }
-        # A present timestamp that cannot be parsed is unknown age. A fresh
-        # lastUpdated does not clear a stale or unknown timestamp pin.
+        # A fresh lastUpdated does not clear a stale timestamp pin.
         if ($timestampText) {
-            $sessionAgeStale = (-not $timestampKnown) -or $timestampStale
+            $sessionAgeStale = $timestampStale
         } else {
             $sessionAgeStale = $updatedStale
         }
     }
 
-    $evidencePath = $null
-    if (Test-Path -LiteralPath $turnFile) {
-        $evidencePath = $turnFile
-    } elseif (Test-Path -LiteralPath $sessionFile) {
-        $evidencePath = $sessionFile
-    }
-    if ($evidencePath) {
-        $enforcement = Get-PluginStopEnforcementDecision -EvidencePath $evidencePath -CacheDir $cacheDir
-        if ($enforcement -eq 'allow') {
-            Write-PluginJson ([ordered]@{})
-            return
-        }
-        if ($enforcement) {
-            Write-PluginJson ([ordered]@{ decision = 'block'; reason = $enforcement })
-            return
-        }
-    }
-
     if (-not (Test-Path -LiteralPath $turnFile)) {
         if ($sessionAgeStale -and (Test-Path -LiteralPath $sessionFile)) {
-            if (-not (Test-PluginStopEvidenceKnown -Path $sessionFile)) {
-                Write-PluginJson ([ordered]@{ decision = 'block'; reason = 'unknown failed-build and audit state cannot authorize a clean allow' })
-                return
-            }
             Set-YamlScalar -Path $sessionFile -Key 'lastUpdated' -Value ((Get-Date).ToUniversalTime().ToString('o'))
         }
         Write-PluginJson ([ordered]@{})
@@ -1194,26 +1213,7 @@ function Close-PluginTurnIfNeeded {
     $status = Get-YamlScalar -Path $turnFile -Key 'status'
     if ($sessionAgeStale -and $status -eq 'in_progress') {
         $requestId = Get-YamlScalar -Path $turnFile -Key 'turnRequestId'
-        $sessionId = Get-YamlScalar -Path $sessionFile -Key 'sessionId'
-        if (-not $sessionId) { $sessionId = Get-YamlScalar -Path $turnFile -Key 'sessionId' }
-        $agent = Get-YamlScalar -Path $sessionFile -Key 'agent'
-        if (-not $agent) { $agent = $env:MCP_AGENT_NAME }
-        $workspace = Get-YamlScalar -Path $sessionFile -Key 'workspacePath'
-        if (-not $workspace) { $workspace = $env:MCP_WORKSPACE_PATH }
-        $proof = Get-PluginTurnPersistenceProof -WorkspacePath $workspace -Agent $agent -SessionId $sessionId -RequestId $requestId
-        if ($proof.Kind -eq 'Reconcile') {
-            Set-YamlScalar -Path $turnFile -Key 'status' -Value 'completed'
-            if (Test-Path -LiteralPath $sessionFile) {
-                Set-YamlScalar -Path $sessionFile -Key 'lastUpdated' -Value ((Get-Date).ToUniversalTime().ToString('o'))
-            }
-            Write-PluginJson ([ordered]@{})
-            return
-        }
-        if ($proof.Kind -eq 'Active') {
-            Write-PluginJson ([ordered]@{ decision = 'block'; reason = "stale cached session cannot be reused for $requestId" })
-            return
-        }
-        Write-PluginJson ([ordered]@{ decision = 'block'; reason = [string]$proof.Reason })
+        Write-PluginJson ([ordered]@{ decision = 'block'; reason = "stale cached session cannot be reused for $requestId" })
         return
     }
     if ($sessionAgeStale -and (Test-Path -LiteralPath $sessionFile)) {
@@ -1241,7 +1241,8 @@ function Close-PluginTurnIfNeeded {
         $stopText = (Get-YamlScalar -Path $turnFile -Key 'queryText') ?? ''
         $stopFirstLine = @($stopTitle, $stopText) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
         $stopIsSystemEvent = $stopFirstLine -match '^\s*<(task-notification|user_query|command-name|command-message|command-args|local-command-[a-z-]+)>'
-        if ($stopIsSystemEvent -or ($stopEdits -le 0 -and $stopAuditTotal -le 0)) {
+        # A background agent's turn is a real request (D3), so its Stop closes it even when no work was recorded in it.
+        if (-not $backgroundScope -and ($stopIsSystemEvent -or ($stopEdits -le 0 -and $stopAuditTotal -le 0))) {
             Write-PluginJson ([ordered]@{})
             return
         }
@@ -1250,7 +1251,13 @@ function Close-PluginTurnIfNeeded {
         $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
             response = $response
         })
-        $completeOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $paramsYaml
+        $priorCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        if ($backgroundScope) { $env:MCP_CACHE_DIR_OVERRIDE = $backgroundScope.Dir }
+        try {
+            $completeOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $paramsYaml
+        } finally {
+            if ($backgroundScope) { $env:MCP_CACHE_DIR_OVERRIDE = $priorCacheOverride }
+        }
         if ($script:LastPluginReplExitCode -ne 0) {
             Write-PluginJson ([ordered]@{ decision = 'block'; reason = 'workflow.sessionlog.completeTurn failed; current turn remains in_progress'; output = (($completeOutput | Out-String).Trim()) })
             return
@@ -1604,25 +1611,7 @@ function Get-PlanTodoMapPath {
 }
 
 function Get-LastPlanTodoMapEntry {
-    $mapPath = Get-PlanTodoMapPath
-    if (-not (Test-Path -LiteralPath $mapPath)) { return $null }
-    $lines = [System.IO.File]::ReadAllLines($mapPath)
-    $planFile = $null
-    $todoId = $null
-    for ($i = 0; $i -lt $lines.Length; $i++) {
-        if ($lines[$i] -match '^\s*-\s*planFile:\s*(.+)$') {
-            $planFile = $Matches[1].Trim().Trim('"')
-            $todoId = $null
-            for ($j = $i + 1; $j -lt [Math]::Min($lines.Length, $i + 4); $j++) {
-                if ($lines[$j] -match '^\s*todoId:\s*(.+)$') {
-                    $todoId = $Matches[1].Trim().Trim('"')
-                    break
-                }
-            }
-        }
-    }
-    if ([string]::IsNullOrWhiteSpace($planFile)) { return $null }
-    return [ordered]@{ planFile = $planFile; todoId = $todoId }
+    return (Get-LastPlanTodoMapEntryFromFile -MapPath (Get-PlanTodoMapPath))
 }
 
 function Resolve-PluginTurnPlanContext {
@@ -1685,13 +1674,7 @@ function Invoke-PlanApprovedHook {
     $output = @(Invoke-PluginRepl -Method 'client.Todo.CreateAsync' -ParamsYaml $paramsYaml)
     $todoId = Get-TodoIdFromReplOutput -Output $output
     if ($todoId) {
-        $mapPath = Get-PlanTodoMapPath
-        $entry = @(
-            'entries:'
-            "  - planFile: $planFile"
-            "    todoId: $todoId"
-        ) -join "`n"
-        [System.IO.File]::WriteAllText($mapPath, $entry + "`n")
+        [void](Write-PlanTodoMapEntry -MapPath (Get-PlanTodoMapPath) -PlanFile $planFile -TodoId $todoId)
     }
 
     Write-PostToolUseOutput -Status 'created'
@@ -1700,20 +1683,7 @@ function Invoke-PlanApprovedHook {
 function Find-PlanTodoId {
     param([Parameter(Mandatory)][string]$PlanFile)
 
-    $mapPath = Get-PlanTodoMapPath
-    if (-not (Test-Path -LiteralPath $mapPath)) { return $null }
-    $lines = [System.IO.File]::ReadAllLines($mapPath)
-    for ($i = 0; $i -lt $lines.Length; $i++) {
-        if ($lines[$i] -match '^\s*-\s*planFile:\s*(.+)$' -and $Matches[1].Trim().Trim('"') -eq $PlanFile) {
-            for ($j = $i + 1; $j -lt [Math]::Min($lines.Length, $i + 4); $j++) {
-                if ($lines[$j] -match '^\s*todoId:\s*(.+)$') {
-                    return $Matches[1].Trim().Trim('"')
-                }
-            }
-        }
-    }
-
-    return $null
+    return (Find-PlanTodoIdInMap -MapPath (Get-PlanTodoMapPath) -PlanFile $PlanFile)
 }
 
 function Invoke-PlanModifiedHook {
@@ -1751,10 +1721,27 @@ if (-not (Confirm-PowerShellMcpRuntime)) {
 }
 
 switch ($HookName) {
-    'session-start' { Start-PluginSession -StartPath $WorkspacePath }
+    'session-start' {
+        $payload = Read-HookInput
+        $additionalContext = ''
+        if (Test-McpProfileReloadCompactionPayload -Payload $payload) {
+            $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
+            $cacheDir = Get-PluginCacheDir -StartPath $startPath
+            $reload = Initialize-McpProfileReloadCompaction -CacheDir $cacheDir -HostName $HostName -InjectionAvailable -Source 'session-start-compact'
+            $additionalContext = [string]$reload.AdditionalContext
+        }
+        Start-PluginSession -StartPath $WorkspacePath -AdditionalContext $additionalContext
+    }
     'session-end' { Invoke-CacheFlushHook }
     'pre-compact' { Invoke-CacheFlushHook }
-    'post-compact' { Start-PluginSession -StartPath $WorkspacePath }
+    # TR-MCP-PLUGIN-012 AC-003 (D2, triage-report-d9bd6fc3): PostCompact starts no session. The SessionStart hook that follows a
+    # compaction (source compact) starts the one session; a second start here minted an empty twin session at every compaction.
+    'post-compact' {
+        $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
+        $cacheDir = Get-PluginCacheDir -StartPath $startPath
+        $null = Initialize-McpProfileReloadCompaction -CacheDir $cacheDir -HostName $HostName -Source 'post-compact'
+        Write-PluginJson ([ordered]@{})
+    }
     'user-prompt-submit' { Open-PluginTurn }
     'stop-gate' { Close-PluginTurnIfNeeded }
     'code-verify' { Invoke-CodeVerify }

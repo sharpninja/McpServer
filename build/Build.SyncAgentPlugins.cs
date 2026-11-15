@@ -24,6 +24,7 @@ partial class Build
         "mcpserver-cline-v2-plugin",
         "mcpserver-codex-plugin",
         "mcpserver-copilot-plugin",
+        "mcpserver-grok-bot-plugin",
         "mcpserver-grok-plugin",
         "mcpserver-opencode-plugin"
     ];
@@ -211,6 +212,7 @@ partial class Build
             "mcpserver-claude-cowork-plugin" => "claude-cowork",
             "mcpserver-codex-plugin" => "codex",
             "mcpserver-copilot-plugin" => "copilot",
+            "mcpserver-grok-bot-plugin" => "grok-bot",
             "mcpserver-grok-plugin" => "grok",
             _ => null
         };
