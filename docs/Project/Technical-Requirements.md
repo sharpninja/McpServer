@@ -4949,3 +4949,10 @@ Versioned APIs require ProjectId and derive NodeId from IdentityServer client me
 **Acceptance Criteria:**
 - [ ] review20261110-1: Given a federation hop with unresolved workspace in legacy mode, when routed, then a4xx diagnostic is returned and no primary workspace fallback occurs.
 
+
+## TR-MCP-PATHNORM-001
+
+**Raw database rekey before canonical query conversion** — P1.5 implements docs/plans/2026-10-07-federation-fixes.md execution contract. Enumerate raw persisted identity columns through DbConnection, never EF query conversion. Normalize Windows paths with existing WorkspaceIdentity/P1.4 lexical logic, Ordinal case-preserving convergence checks including canonical targets. Plan all raw and derived key changes before DML. Successful provider backup precedes transactional DML; constraints are deferred/suspended and fully restored/validated; exception/cancellation rolls back. Preserve manual triage ids whose original digest cannot be reproduced from stored fingerprints. Guard HTTP/STDIO before migration/backfill/query paths using raw reads. Scoped Xml/Pkcs dependency security fixes retain NuGet audit and warnings-as-errors.
+**Covered by:** FR: FR-MCP-PATHNORM-001; TEST: TEST-MCP-PATHNORM-001
+**Status:** pending
+Scope: layer-1+

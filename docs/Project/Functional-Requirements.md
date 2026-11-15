@@ -3520,3 +3520,8 @@ Server: editing owner, request/release and fenced takeover contracts. Plugin: di
 - [ ] ac-IncomingMergeCannotRaceAdmittedEdit: Given an edit holds the branch gate, when the integration worker requests a live head move, then it waits; after the edit finishes, fingerprint revalidation detects the draft and returns waiting_local_work without overwriting it.
 - [ ] ac-PluginEditingOwnership: Given agent1 owns A/main fence4 with a draft, when agent2 views context and requests editing, then it sees the owner and branch, receives409 branch_busy, and may select a separate feature branch; owner release/takeover requires explicit authorization and preserves the main draft without commit or discard.
 
+
+## FR-MCP-PATHNORM-001 Canonical workspace identities and explicit P1.5 rekey
+
+P1.5 acceptance criteria (pending validation): reuse P1.4 Windows lexical normalization preserving case; reject every distinct-old-key convergence before any mutation; preserve opaque/global/POSIX ids. Maintenance command requires verified backup for apply, uses one database transaction with rollback and row/FK/uniqueness validation, and is idempotent. Dry-run connects only to an explicitly named database copy distinct from configured store, changes no data, and reports old-to-new mappings and per-table/workspace counts without secrets. Rekey workspace columns plus reproducible triage, handoff, and federation keys and references. Manual triage GroupKey/GroupId remain unchanged and are counted in the report. Token-store keys use a retained backup. Startup refuses legacy keys before canonical EF queries, migrations or backfills and points to --workspace-path-rekey. Deployment and live database migration remain held.
+Scope: layer-1+
