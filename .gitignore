@@ -517,6 +517,9 @@ _publish/
 _publish-launcher/
 _site/
 
+# Nuke-generated execution plans and temporary artifacts
+.nuke/temp/
+
 # Local scratch files
 _tmp*
 _temp*
