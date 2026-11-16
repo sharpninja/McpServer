@@ -1,0 +1,14 @@
+{
+  "measuredTime": "2026-11-16T12:11:46-06:00",
+  "syncRunName": "20261116T120952",
+  "ledgerRows": 69,
+  "requirementRecordsUpdated": 27,
+  "batchSize": 10,
+  "batchesCompleted": 3,
+  "allBatchesVerified": true,
+  "remoteCopiesRetained": [
+    "/tmp/mcpserver-reconciliation-20261116T120952-batch-001.params.yaml",
+    "/tmp/mcpserver-reconciliation-20261116T120952-batch-002.params.yaml",
+    "/tmp/mcpserver-reconciliation-20261116T120952-batch-003.params.yaml"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "measuredTime": "2026-11-16T13:39:35-06:00",
+  "verifyOnly": true,
+  "databaseMutationReplayed": false,
+  "recoveredAfterVerifierFailure": true,
+  "targetCount": 3,
+  "targetedMappingCount": 4,
+  "mappingsMatch": true,
+  "exactSemanticMatch": true,
+  "localEffectiveRequestId": "req-20261116T193914Z-98df",
+  "remoteReadbackRequestId": "req-20261116T193922Z-dbee",
+  "updateRequestId": null,
+  "updateRequestIdUnavailableReason": "The original updateBatch completed before the first-run verifier threw on an empty difference collection; no database write was replayed.",
+  "localPayloadSha256": "963FB192E2AEE1A79717471C91FA16A1FE86D1BDE4878C4C35D609D1DAA8A654",
+  "roundTripPayloadSha256": "963FB192E2AEE1A79717471C91FA16A1FE86D1BDE4878C4C35D609D1DAA8A654",
+  "verification": [
+    {
+      "kind": "functional",
+      "id": "FR-MCP-190",
+      "exactSemanticMatch": true,
+      "acceptanceCriterionIds": [
+        "ac-fr-mcp-190-immediate",
+        "ac-fr-mcp-190-threshold",
+        "ac-fr-mcp-190-exactly-once",
+        "ac-fr-mcp-190-unknown-usage",
+        "ac-fr-mcp-190-hosts"
+      ]
+    },
+    {
+      "kind": "technical",
+      "id": "TR-MCP-PROFILE-001",
+      "exactSemanticMatch": true,
+      "acceptanceCriterionIds": [
+        "ac-tr-mcp-profile-001-provider",
+        "ac-tr-mcp-profile-001-host-map",
+        "ac-tr-mcp-profile-001-dynamic-window",
+        "ac-tr-mcp-profile-001-fallback",
+        "ac-tr-mcp-profile-001-arm-only",
+        "ac-tr-mcp-profile-001-sync",
+        "ac-tr-mcp-profile-001-codex-hooks"
+      ]
+    },
+    {
+      "kind": "testing",
+      "id": "TEST-MCP-238",
+      "exactSemanticMatch": true,
+      "acceptanceCriterionIds": [
+        "ac-test-mcp-238-hosts",
+        "ac-test-mcp-238-immediate",
+        "ac-test-mcp-238-fallback",
+        "ac-test-mcp-238-below-threshold",
+        "ac-test-mcp-238-threshold",
+        "ac-test-mcp-238-claude",
+        "ac-test-mcp-238-unavailable",
+        "ac-test-mcp-238-fixed-window",
+        "ac-test-mcp-238-postcompact",
+        "ac-test-mcp-238-sync",
+        "ac-test-mcp-238-negative-controls"
+      ]
+    }
+  ]
+}

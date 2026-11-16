@@ -1,0 +1,30 @@
+{
+  "collectedAtLocal": "2026-11-16T13:41:46",
+  "files": [
+    {
+      "name": "deterministic-decision-ledger.json",
+      "sha256": "21AEA53090A9818DADA7B47B408808A314838A58E4FABC3F8D21DC62433B4FC7",
+      "length": 638
+    },
+    {
+      "name": "legion2-requirements.json",
+      "sha256": "AB7ACB1401921E788B12FE9BB3DDD29C33BE4080F888D08538592983BA03209D",
+      "length": 1917139
+    },
+    {
+      "name": "omarchy-requirements.json",
+      "sha256": "1C5862958D6D6E5D18BAD3247A235418B120B80EC8E1C3FE600A4F90D8182589",
+      "length": 2023529
+    },
+    {
+      "name": "semantic-diff.json",
+      "sha256": "AF0844AD7B36C78D92FAD250E500D8CB6321C39201F1DB3F9B67C3981B1C05A4",
+      "length": 2045943
+    },
+    {
+      "name": "summary.json",
+      "sha256": "DE7567074EFA1620C0C3805246BDD83966BFAEEBAA3E5FD18CF822AEE6F22667",
+      "length": 1331
+    }
+  ]
+}

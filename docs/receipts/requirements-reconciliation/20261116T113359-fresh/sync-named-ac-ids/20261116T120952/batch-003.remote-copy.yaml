@@ -1,0 +1,85 @@
+records:
+- kind: fr
+  id: FR-WEB-014
+  acceptanceCriteria:
+  - id: ac-1
+    isSatisfied: false
+    text: Two agents in one workspace can show two different providers and models.
+  - id: ac-2
+    isSatisfied: false
+    text: Changing an agent model persists and is used on the next start.
+  - id: ""
+    isSatisfied: false
+    text: mcp-web does not add a billed proxy; it uses operator-configured provider credentials already known to QBrain.AI.
+- kind: tr
+  id: TR-MCP-AGENT-016
+  acceptanceCriteria:
+  - id: ac-1
+    isSatisfied: true
+    text: Coding-agent DTOs are public, XML-documented, and use System.Text.Json property names compatible with Microsoft Agent Framework function invocation.
+  - id: ac-2
+    isSatisfied: true
+    text: The adapter preserves caller metadata and appends coding-agent fields including taskKind, executionProfile, and sourceType.
+  - id: ""
+    isSatisfied: true
+    text: The adapter fails through the typed QuadBrainOrchestrationResponse status/reason contract returned by QBrain.AI and does not synthesize implicit fallback model output.
+  - id: ac-4
+    isSatisfied: true
+    text: Existing non-ACID hosted-agent registration remains backward compatible aside from the additional Quad Brain coding tool.
+  - id: ac-5
+    isSatisfied: true
+    text: All new public APIs have XMLDocs and are covered by focused tests.
+- kind: tr
+  id: TR-MCP-QBRAIN-004
+  acceptanceCriteria:
+  - id: tr-mcp-qbrain-004-ac-001
+    isSatisfied: false
+    text: No cloud phase renames a GitHub repository.
+  - id: ""
+    isSatisfied: false
+    text: Package RepositoryUrl values still point at sharpninja/QBrainAi.
+- kind: test
+  id: TEST-MCP-QBRAIN-002
+  acceptanceCriteria:
+  - id: ""
+    isSatisfied: false
+    text: QBrainAi.sln exists and QBrainAi.sln does not.
+  - id: ""
+    isSatisfied: false
+    text: The build's infrastructure test project keeps RootNamespace NukeBuild.Tests.
+  - id: test-mcp-qbrain-002-ac-003
+    isSatisfied: false
+    text: build/_build.csproj is still _build.
+- kind: test
+  id: TEST-MCP-QBRAIN-003
+  acceptanceCriteria:
+  - id: test-mcp-qbrain-003-ac-001
+    isSatisfied: false
+    text: The seven published projects use QBrainAI package ids.
+  - id: ""
+    isSatisfied: false
+    text: Seven facade projects keep the old SharpNinja.QBrainAi package ids.
+- kind: test
+  id: TEST-MCP-QBRAIN-005
+  acceptanceCriteria:
+  - id: ""
+    isSatisfied: false
+    text: Todo route templates include qbrainai/todo and qbrainai/todo.
+  - id: test-mcp-qbrain-005-ac-002
+    isSatisfied: false
+    text: MapMcp still uses /mcp-transport.
+  - id: test-mcp-qbrain-005-ac-003
+    isSatisfied: false
+    text: GetEffectiveMcpValue prefers QBrainAi and falls back to Mcp.
+  - id: test-mcp-qbrain-005-ac-004
+    isSatisfied: false
+    text: GetRequestedInstanceName prefers QBRAINAI_INSTANCE and falls back to MCP_INSTANCE.
+- kind: test
+  id: TEST-MCP-QBRAIN-006
+  acceptanceCriteria:
+  - id: test-mcp-qbrain-006-ac-001
+    isSatisfied: false
+    text: docker-compose.mcp.yml uses image qbrain-ai:latest.
+  - id: test-mcp-qbrain-006-ac-002
+    isSatisfied: false
+    text: Manage-McpService.ps1 defaults match the new service name, display name, and install path.

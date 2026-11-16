@@ -1,0 +1,175 @@
+records:
+- kind: fr
+  id: FR-MCP-107
+  acceptanceCriteria:
+  - id: FR-MCP-107-AC001
+    isSatisfied: false
+    text: Each cumulative validation run uses an explicit unique run ID and deterministic TestResults/<runId> outputs; reports from another run or an earlier candidate cannot satisfy the current gate.
+  - id: FR-MCP-107-AC002
+    isSatisfied: false
+    text: Nuke Test and provider targets emit the selected-project inventory and exactly one fresh per-project TRX for every selected project without silently changing exclusions; missing, duplicate, or zero-discovery project results fail the gate.
+  - id: ""
+    isSatisfied: false
+    text: The session-lifecycle unit gate runs the complete Pester directory, Nuke Test, and the non-integration scope of the build's infrastructure tests, records structured Pester counters and each command result, and does not allow a later successful command to hide an earlier failure.
+  - id: FR-MCP-107-AC004
+    isSatisfied: false
+    text: Validation rejects stale, missing, duplicate, skipped, notExecuted, failed, empty, zero-discovery, and Pester failed-block or failed-container reports using run-start, source-file, tool-version, and candidate-source manifests.
+  - id: ""
+    isSatisfied: false
+    text: The build's infrastructure tests contain concrete red cases for fresh-run inventory acceptance, missing and duplicate reports, stale evidence, zero discovery, skips and notExecuted results, Pester failed blocks or containers, candidate-source drift, and earlier-command failure masking.
+- kind: fr
+  id: FR-MCP-132
+  acceptanceCriteria:
+  - id: ""
+    isSatisfied: true
+    text: All /qbrainai/* endpoints return 401 Unauthorized for unknown, stale, or missing API key
+  - id: ac-2
+    isSatisfied: true
+    text: 503 Service Unavailable returned only when per-workspace auth-token subsystem not initialized
+  - id: ac-3
+    isSatisfied: true
+    text: Every 503 includes Retry-After header and JSON body
+  - id: ac-4
+    isSatisfied: true
+    text: Rotated/stale API key surfaces as 401, never as blanket 503
+- kind: fr
+  id: FR-MCP-133
+  acceptanceCriteria:
+  - id: ac-1
+    isSatisfied: true
+    text: /ready endpoint checks workspace/token subsystem readiness
+  - id: ac-2
+    isSatisfied: true
+    text: /ready reports Unhealthy when no enabled workspace registered
+  - id: ac-3
+    isSatisfied: true
+    text: /ready reports Unhealthy when primary workspace has no seeded auth token
+  - id: ""
+    isSatisfied: true
+    text: /ready never reports Healthy while /qbrainai/* would return 503
+- kind: fr
+  id: FR-MCP-137
+  acceptanceCriteria:
+  - id: ac-1
+    isSatisfied: true
+    text: Hosted agent exposes model-visible mcp_quadbrain_coding_execute tool
+  - id: ""
+    isSatisfied: true
+    text: Tool calls QBrainAiClient.BrainSlots.OrchestrateAsync with coding metadata
+  - id: ac-3
+    isSatisfied: true
+    text: Tool never bypasses Quad Brain transaction/admission contract
+  - id: ac-4
+    isSatisfied: true
+    text: ACID profile includes Quad Brain coding tool while excluding generic passthrough, shell, write, desktop, todo, and graphrag mutation tools
+  - id: ac-5
+    isSatisfied: true
+    text: Host code can execute same coding-agent path through typed runtime method
+- kind: fr
+  id: FR-MCP-PLUGININT-001
+  acceptanceCriteria:
+  - evidence: the plugin integration suite and the plugin session-log integration target tests of the build's infrastructure suite, which cite this requirement in their XML documentation; overlay G2 Codex extra-high AGREE
+    id: ""
+    isSatisfied: true
+    text: Every supported plugin has a scenario that bootstraps a session, begins a turn, appends representative action and dialog data, completes the turn, and verifies durable server-visible content.
+  - evidence: the plugin integration suite and the plugin session-log integration target tests of the build's infrastructure suite, which cite this requirement in their XML documentation; overlay G2 Codex extra-high AGREE
+    id: ""
+    isSatisfied: true
+    text: Each scenario resolves cache state only under {workspace}/.mcpServer/{agent}.
+  - evidence: the plugin integration suite and the plugin session-log integration target tests of the build's infrastructure suite, which cite this requirement in their XML documentation; overlay G2 Codex extra-high AGREE
+    id: ""
+    isSatisfied: true
+    text: Setting PLUGIN_ROOT_OVERRIDE cannot redirect session or turn cache state.
+  - evidence: the plugin integration suite and the plugin session-log integration target tests of the build's infrastructure suite, which cite this requirement in their XML documentation; overlay G2 Codex extra-high AGREE
+    id: ""
+    isSatisfied: true
+    text: The deterministic workflow assertions and companion aiUnit semantic assertions execute for all eight plugin scenarios.
+  - evidence: the plugin integration suite and the plugin session-log integration target tests of the build's infrastructure suite, which cite this requirement in their XML documentation; overlay G2 Codex extra-high AGREE
+    id: ""
+    isSatisfied: true
+    text: The validation target reports zero failed and zero skipped tests and identifies the exact plugin source revision used by each scenario.
+  - evidence: the plugin integration suite and the plugin session-log integration target tests of the build's infrastructure suite, which cite this requirement in their XML documentation; overlay G2 Codex extra-high AGREE
+    id: ""
+    isSatisfied: true
+    text: Every one of the eight catalog rows executes its production plugin entrypoint for bootstrap, begin, append dialog, append actions, complete, failed submit, and retry. Direct QBrainAi.Client calls do not satisfy plugin invocation. Persisted state is independently queried after process success. The aiUnit assertion invokes the configured aiUnit evaluator against a redacted execution receipt and fails closed on malformed, skipped, unavailable, or synthetic output.
+  - id: ac-7
+    isSatisfied: false
+    text: For each server-side session persistence contract changed by this remediation, all eight supported production plugin entrypoints normalize primary success, retryable degraded or queued state, and terminal failure identically. Process exit alone never proves persistence; primary success requires exact server readback.
+- kind: fr
+  id: FR-MCP-QBOPENAI-001
+  acceptanceCriteria:
+  - id: ac-1
+    isSatisfied: true
+    text: An inbound OpenAI chat request maps the role-tagged transcript onto QuadBrain orchestration and returns the Arbiter output as the assistant message.
+  - id: ac-2
+    isSatisfied: true
+    text: Tool definitions in the request flow through and the response emits assistant tool_calls when QuadBrain elects to call a tool.
+  - id: ac-3
+    isSatisfied: true
+    text: Bearer-auth (Authorization Bearer with X-Api-Key fallback) is validated via WorkspaceTokenService; invalid or missing yields 401.
+  - id: ac-4
+    isSatisfied: true
+    text: QBAgent wires a standard OpenAI IChatClient to the v1 endpoint and runs the Agent Framework tool loop with action tools under the non-ACID profile.
+  - id: ac-5
+    isSatisfied: true
+    text: 'With no tools in the request and no tool_choice, an Arbiter reply that is not an arbiter envelope is the final answer after one orchestration round and is returned as the assistant message with finish reason stop; an explicit continue envelope still asks for another round (PLAN-SESSIONTRIAGEFIX-001 B13; operator decision 2026-10-15 "Both rules (Recommended)"). A tool_choice of auto with no tools counts as no tool_choice, and a committed Arbiter output that is empty is answered with the no-decision message after one round (operator 2026-10-29: "QuadBrain ACs (Recommended)"; holistic review finding SRC-3).'
+  - id: ac-6
+    isSatisfied: true
+    text: 'When the round budget (8 orchestration rounds) ends without a final envelope, the response carries the last Arbiter output formatted for display as the assistant message with finish reason stop, never empty content; a last output whose display formatting leaves nothing (an Arbiter envelope without displayable content, or any other output that formats to nothing), and a budget that ends after an internal-tool round, are answered as ac-7 states (PLAN-SESSIONTRIAGEFIX-001 B13; operator decision 2026-10-15 "Both rules (Recommended)"; operator 2026-10-30: "F2: ac-6 vs ac-7 (Recommended)"; operator 2026-11-02: "Strengthen ac-6 (Recommended)").'
+  - id: ac-7
+    isSatisfied: true
+    text: "The assistant content is never an Arbiter envelope without displayable content: when display formatting of the answer leaves nothing, the content is a plain message naming the round budget and the last intent, and when the round budget ends after an internal-tool round, the content is that round's internal tool results (operator 2026-10-29: \"QuadBrain ACs (Recommended)\"; holistic review finding SRC-2)."
+- kind: fr
+  id: FR-MCP-QBRAIN-001
+  acceptanceCriteria:
+  - id: fr-mcp-qbrain-001-ac-001
+    isSatisfied: false
+    text: A reader of the live README title sees QBrain.AI.
+  - id: fr-mcp-qbrain-001-ac-002
+    isSatisfied: false
+    text: The Windows service DisplayName is QBrain.AI where the service is installed under the new name.
+  - id: ""
+    isSatisfied: false
+    text: Live product titles no longer use "QBrain.AI" for this product.
+  - id: fr-mcp-qbrain-001-ac-004
+    isSatisfied: false
+    text: Historical receipts are not rewritten to satisfy this requirement.
+- kind: fr
+  id: FR-MCP-QBRAIN-002
+  acceptanceCriteria:
+  - id: fr-mcp-qbrain-002-ac-001
+    isSatisfied: false
+    text: Live docs that describe the wire protocol still say Model Context Protocol where they mean the protocol.
+  - id: ""
+    isSatisfied: false
+    text: /mcp-transport remains the MCP endpoint and is not redirected onto a QBrain.AI path.
+  - id: fr-mcp-qbrain-002-ac-003
+    isSatisfied: false
+    text: Bare "MCP" in protocol sentences is classified and left in place. It is not bulk-replaced.
+- kind: fr
+  id: FR-MCP-QBRAIN-003
+  acceptanceCriteria:
+  - id: fr-mcp-qbrain-003-ac-001
+    isSatisfied: false
+    text: Live docs still describe QuadBrain as the feature and QBrain.AI as the product.
+  - id: ""
+    isSatisfied: false
+    text: The tool command qbagent still exists.
+  - id: ""
+    isSatisfied: false
+    text: The namespace segment QBAgent remains QBAgent after the product root changes.
+- kind: fr
+  id: FR-MCP-QBRAIN-004
+  acceptanceCriteria:
+  - id: fr-mcp-qbrain-004-ac-001
+    isSatisfied: false
+    text: A 1.x request to the old product HTTP prefix still succeeds for the representative route covered by tests.
+  - id: fr-mcp-qbrain-004-ac-002
+    isSatisfied: false
+    text: A 1.x configuration that contains only the old config section still boots.
+  - id: ""
+    isSatisfied: false
+    text: A 1.x package reference to each published SharpNinja.QBrainAi.* id still compiles against the moved public types via the type-forward package.
+  - id: fr-mcp-qbrain-004-ac-004
+    isSatisfied: false
+    text: 2.0 is the version where those aliases are allowed to stop. They are not removed inside 1.x.

@@ -62,6 +62,12 @@ public sealed class AgentService : IAgentService
     }
 
     /// <inheritdoc />
+    /// <remarks>
+    /// Change log: 2026-11-16 - FR-MCP-027, TR-MCP-AGENT-003,
+    /// TEST-MCP-033, AC-AGENT-UPSERT-RELATIONAL: replacement model rows are
+    /// explicitly deleted and recreated with their required owner keys so an
+    /// existing definition can be updated on relational providers.
+    /// </remarks>
     public async Task<AgentMutationResult> UpsertDefinitionAsync(AgentDefinitionRequest request, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -75,8 +81,8 @@ public sealed class AgentService : IAgentService
             existing.DefaultLaunchCommand = request.DefaultLaunchCommand;
             existing.DefaultInstructionFile = request.DefaultInstructionFile;
             await _db.Entry(existing).Collection(x => x.Models).LoadAsync(ct).ConfigureAwait(false);
-            existing.Models.Clear();
-            foreach (var row in ToModelRows(request.DefaultModels))
+            _db.AgentDefinitionModels.RemoveRange(existing.Models);
+            foreach (var row in ToModelRows(request.DefaultModels, existing.Id, existing.WorkspaceId))
                 existing.Models.Add(row);
             existing.DefaultBranchStrategy = request.DefaultBranchStrategy;
             existing.DefaultSeedPrompt = request.DefaultSeedPrompt;
@@ -90,7 +96,7 @@ public sealed class AgentService : IAgentService
                 DisplayName = request.DisplayName,
                 DefaultLaunchCommand = request.DefaultLaunchCommand,
                 DefaultInstructionFile = request.DefaultInstructionFile,
-                Models = ToModelRows(request.DefaultModels),
+                Models = ToModelRows(request.DefaultModels, request.Id, string.Empty),
                 DefaultBranchStrategy = request.DefaultBranchStrategy,
                 DefaultSeedPrompt = request.DefaultSeedPrompt,
                 IsBuiltIn = false,
@@ -572,9 +578,21 @@ public sealed class AgentService : IAgentService
     private const string ModelOverrideListType = "ModelOverride";
     private const string InstructionFileOverrideListType = "InstructionFileOverride";
 
-    /// <summary>Builds ordered 4NF default-model rows; parent key flows from EF graph fixup.</summary>
-    private static List<AgentDefinitionModelEntity> ToModelRows(IEnumerable<string>? models)
-        => (models ?? []).Select((model, i) => new AgentDefinitionModelEntity { Ordinal = i, Model = model }).ToList();
+    /// <summary>
+    /// Builds ordered 4NF default-model rows with explicit parent keys so both
+    /// insert and replacement operations satisfy relational constraints.
+    /// </summary>
+    private static List<AgentDefinitionModelEntity> ToModelRows(
+        IEnumerable<string>? models,
+        string agentDefinitionId,
+        string workspaceId)
+        => (models ?? []).Select((model, i) => new AgentDefinitionModelEntity
+        {
+            AgentDefinitionId = agentDefinitionId,
+            WorkspaceId = workspaceId,
+            Ordinal = i,
+            Model = model,
+        }).ToList();
 
     /// <summary>Builds the 4NF override-list rows; row presence per list type is the override signal.</summary>
     private static List<AgentWorkspaceListItemEntity> ToOverrideRows(IEnumerable<string>? modelsOverride, IEnumerable<string>? instructionFilesOverride)

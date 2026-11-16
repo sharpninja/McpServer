@@ -1,0 +1,18 @@
+{
+  "createdAtLocal": "2026-11-16T12:13:10",
+  "baseline": {
+    "legion2RequestId": "req-20261116T181249Z-f3db",
+    "omarchyRequestId": "req-20261116T181255Z-162f",
+    "divergentEntryCount": 1127
+  },
+  "operatorDecision": {
+    "decision": "Preserve named LEGION2 IDs",
+    "appliesTo": "Acceptance criteria whose non-ID fields match exactly and whose LEGION2 ID is named while the OMARCHY ID is blank.",
+    "source": "Operator response to the 2026-11-15 requirements-reconciliation clarification."
+  },
+  "rows": [],
+  "checks": {
+    "allRowsUseLockedDisposition": true,
+    "frSupport010CDivergent": false
+  }
+}

@@ -1,0 +1,102 @@
+records:
+- kind: fr
+  id: FR-MCP-190
+  title: Reload the operator profile after context compaction
+  description: Every official agent plugin shall request the host-specific add-profile action immediately after context compaction and exactly once more when measured post-compaction context usage first reaches 70 percent.
+  status: pending
+  priority: high
+  area: MCP
+  notes: Restored on 2026-11-15 because the profile-reload implementation already cited this canonical ID.
+  acceptanceCriteria:
+  - id: ac-fr-mcp-190-immediate
+    isSatisfied: false
+    text: After a compaction event, the plugin returns the host-specific add-profile instruction at the earliest supported injection boundary.
+  - id: ac-fr-mcp-190-threshold
+    isSatisfied: false
+    text: After the immediate reload, the plugin remains armed and returns one additional add-profile instruction when measured usage first reaches at least 70 percent of the active context window.
+  - id: ac-fr-mcp-190-exactly-once
+    isSatisfied: false
+    text: The threshold instruction fires exactly once for each compaction cycle and then disarms.
+  - id: ac-fr-mcp-190-unknown-usage
+    isSatisfied: false
+    text: Missing or malformed context-usage evidence leaves the threshold armed and does not fabricate a context window.
+  - id: ac-fr-mcp-190-hosts
+    isSatisfied: false
+    text: All nine official plugins resolve their supported host-specific add-profile instruction.
+  scopeStartLayerKey: layer-1
+- kind: tr
+  id: TR-MCP-PROFILE-001
+  title: Plugin-owned profile reload lifecycle
+  description: Plugin core shall implement host-specific post-compaction profile reload state, dynamic context-usage measurement, exactly-once threshold delivery, and reproducible Codex hook registration without starting or mutating session-log state from the standalone hook.
+  status: pending
+  priority: high
+  area: MCP
+  notes: Restored on 2026-11-15 from the existing plugin implementation and TEST-MCP-238 contract suite.
+  acceptanceCriteria:
+  - id: ac-tr-mcp-profile-001-provider
+    isSatisfied: false
+    text: A shared PowerShell provider in plugin core owns compaction initialization, persistent cache state, usage parsing, and reload delivery.
+  - id: ac-tr-mcp-profile-001-host-map
+    isSatisfied: false
+    text: The provider maps every official plugin host to its supported add-profile invocation syntax.
+  - id: ac-tr-mcp-profile-001-dynamic-window
+    isSatisfied: false
+    text: Codex and Claude usage are measured against a positive context window supplied by host evidence; no fixed one-million-token assumption is permitted.
+  - id: ac-tr-mcp-profile-001-fallback
+    isSatisfied: false
+    text: A schema-capable compact event injects immediately; hosts that cannot inject retain a pending immediate instruction for the next prompt.
+  - id: ac-tr-mcp-profile-001-arm-only
+    isSatisfied: false
+    text: PostCompact processing arms reload state only and does not start a session or inject unsupported context.
+  - id: ac-tr-mcp-profile-001-sync
+    isSatisfied: false
+    text: The production provider is synchronized byte-identically into all nine official plugin repositories.
+  - id: ac-tr-mcp-profile-001-codex-hooks
+    isSatisfied: false
+    text: Codex user-hook registration is reproducible through object-first JSON mutation and preserves a backup of the prior configuration.
+  subarea: PROFILE
+  scopeStartLayerKey: layer-1
+- kind: test
+  id: TEST-MCP-238
+  title: Plugin-owned profile reload contract suite
+  description: The 11-case Pester contract suite shall prove profile-reload behavior against a mock-first provider and the production provider, including host mapping, immediate and fallback delivery, dynamic thresholds, unavailable evidence, arm-only lifecycle behavior, repository synchronization, and discriminating negative controls.
+  status: pending
+  priority: high
+  area: MCP
+  notes: Implemented at plugins/core/test-fixtures/pester/ProfileReload.Tests.ps1 with mock fixtures under plugins/core/test-fixtures/pester/fixtures; restored to the live requirements store on 2026-11-15.
+  acceptanceCriteria:
+  - id: ac-test-mcp-238-hosts
+    isSatisfied: false
+    text: The suite verifies host-specific add-profile instructions for all nine official plugins.
+  - id: ac-test-mcp-238-immediate
+    isSatisfied: false
+    text: The suite verifies immediate compact-start injection and retention of the threshold arm.
+  - id: ac-test-mcp-238-fallback
+    isSatisfied: false
+    text: The suite verifies next-prompt fallback when compact context injection is unavailable.
+  - id: ac-test-mcp-238-below-threshold
+    isSatisfied: false
+    text: The suite verifies silence below 70 percent using the Codex-reported 258400-token context window.
+  - id: ac-test-mcp-238-threshold
+    isSatisfied: false
+    text: The suite verifies one firing at or above 70 percent followed by disarm.
+  - id: ac-test-mcp-238-claude
+    isSatisfied: false
+    text: The suite verifies Claude assistant usage parsing with a dynamically supplied context window.
+  - id: ac-test-mcp-238-unavailable
+    isSatisfied: false
+    text: The suite verifies unavailable usage or context-window evidence leaves state armed.
+  - id: ac-test-mcp-238-fixed-window
+    isSatisfied: false
+    text: The suite rejects a fixed one-million-token assumption and the retired coordination-memory identifier.
+  - id: ac-test-mcp-238-postcompact
+    isSatisfied: false
+    text: The suite verifies PostCompact remains arm-only and cannot start a session or inject context.
+  - id: ac-test-mcp-238-sync
+    isSatisfied: false
+    text: The production-bound suite verifies byte-identical provider synchronization across all nine plugin repositories.
+  - id: ac-test-mcp-238-negative-controls
+    isSatisfied: false
+    text: The suite includes discriminating negative controls for threshold and context-window drift.
+  testType: unit
+  scopeStartLayerKey: layer-1

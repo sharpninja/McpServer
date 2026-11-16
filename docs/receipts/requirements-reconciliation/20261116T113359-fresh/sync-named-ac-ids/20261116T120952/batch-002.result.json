@@ -1,0 +1,25 @@
+{
+  "batch": 2,
+  "measuredTime": "2026-11-16T12:11:29-06:00",
+  "recordCount": 10,
+  "ids": [
+    "FR-MCP-QBRAIN-005",
+    "FR-MCP-REPL-008",
+    "FR-MCP-REPL-011",
+    "FR-MCP-SESSIONLIFE-002",
+    "FR-MCP-SESSIONLOGCTX-001",
+    "FR-MCP-TESTRESOURCE-001",
+    "FR-MCP-TRIAGE-002",
+    "FR-MCP-TRIAGE-003",
+    "FR-MCP-TRIAGEREQ-001",
+    "FR-SUPPORT-013"
+  ],
+  "paramsPath": "F:\\GitHub\\McpServer\\docs\\receipts\\requirements-reconciliation\\20261116T113359-fresh\\sync-named-ac-ids\\20261116T120952\\batch-002.params.yaml",
+  "remotePath": "/tmp/mcpserver-reconciliation-20261116T120952-batch-002.params.yaml",
+  "localSha256": "227ADF8F9EC1F690FDCD890BB548B7F34DCAE9B6ADCCF8CD091CBEA4353E6C72",
+  "roundTripSha256": "227ADF8F9EC1F690FDCD890BB548B7F34DCAE9B6ADCCF8CD091CBEA4353E6C72",
+  "updateRequestId": "req-20261116T181110Z-52a7",
+  "readbackRequestId": "req-20261116T181115Z-00e5",
+  "verified": true,
+  "remoteStderr": ""
+}

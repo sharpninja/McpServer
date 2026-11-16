@@ -1,0 +1,48 @@
+{
+  "generatedAtLocal": "2026-11-15T15:28:11",
+  "rowCount": 3160,
+  "uniqueEntries": 1118,
+  "newerCounts": [
+    {
+      "category": "indeterminate",
+      "count": 158
+    },
+    {
+      "category": "LEGION2",
+      "count": 21
+    },
+    {
+      "category": "LEGION2 only",
+      "count": 25
+    },
+    {
+      "category": "OMARCHY",
+      "count": 2804
+    },
+    {
+      "category": "OMARCHY only",
+      "count": 152
+    }
+  ],
+  "statusCounts": [
+    {
+      "category": "UNKNOWN",
+      "count": 3160
+    }
+  ],
+  "sourceHashes": [
+    {
+      "file": "decision-ledger.json",
+      "sha256": "15E5141BAEF53A9ADE2A1A18F61E54D35F8A648753CC8AEB1217366357F7C459"
+    },
+    {
+      "file": "legion2-sql-timestamps.json",
+      "sha256": "3F83E2F7A41D4FC2E4D83DAC5C9504E64EEF1A848E318714C67FDB8D135DC57E"
+    },
+    {
+      "file": "omarchy-sql-timestamps.json",
+      "sha256": "28247CA02ACBB7AD99114E2D542C86B9D9EDB16BA9334D6C35A146402CB25F2B"
+    }
+  ],
+  "note": "SQL ordering is evidence of stored edit time, not proof that a value is the governing approved decision. Mapping recency is indeterminate because links lack UpdatedAtUtc."
+}

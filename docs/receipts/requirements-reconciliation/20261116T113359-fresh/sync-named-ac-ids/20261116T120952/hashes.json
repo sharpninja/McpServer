@@ -1,0 +1,55 @@
+{
+  "measuredTime": "2026-11-16T12:11:46-06:00",
+  "files": [
+    {
+      "name": "batch-001.params.yaml",
+      "length": 11316,
+      "sha256": "FCDDC7FA9C6ED29CC8E78AB1DB7B12E63FD5BF09C09EB9DD3D3579CE9B3F9F22"
+    },
+    {
+      "name": "batch-001.remote-copy.yaml",
+      "length": 11316,
+      "sha256": "FCDDC7FA9C6ED29CC8E78AB1DB7B12E63FD5BF09C09EB9DD3D3579CE9B3F9F22"
+    },
+    {
+      "name": "batch-001.result.json",
+      "length": 925,
+      "sha256": "8A0F641685678C2E09ADF16B408BC978C9EA5E12F770BE55E8CE4A3A262F13A9"
+    },
+    {
+      "name": "batch-002.params.yaml",
+      "length": 22714,
+      "sha256": "227ADF8F9EC1F690FDCD890BB548B7F34DCAE9B6ADCCF8CD091CBEA4353E6C72"
+    },
+    {
+      "name": "batch-002.remote-copy.yaml",
+      "length": 22714,
+      "sha256": "227ADF8F9EC1F690FDCD890BB548B7F34DCAE9B6ADCCF8CD091CBEA4353E6C72"
+    },
+    {
+      "name": "batch-002.result.json",
+      "length": 962,
+      "sha256": "823999D33DC321E5929644AAA6BD26F6164930CF954FD17927A727A096141EC9"
+    },
+    {
+      "name": "batch-003.params.yaml",
+      "length": 3279,
+      "sha256": "B47A4DAD1D52635F06B27CF329D443BE16FC99454686EF9916F7216D9B4C1D5A"
+    },
+    {
+      "name": "batch-003.remote-copy.yaml",
+      "length": 3279,
+      "sha256": "B47A4DAD1D52635F06B27CF329D443BE16FC99454686EF9916F7216D9B4C1D5A"
+    },
+    {
+      "name": "batch-003.result.json",
+      "length": 869,
+      "sha256": "9E562B0A144CEAC56B2C6412A4C2BF70B92041B09F53A8BAD5CEBB39BA403659"
+    },
+    {
+      "name": "sync-summary.json",
+      "length": 486,
+      "sha256": "9FAF4B01B7215D05CEAB098DA3C0595A78948710281B080475188F211E51927B"
+    }
+  ]
+}

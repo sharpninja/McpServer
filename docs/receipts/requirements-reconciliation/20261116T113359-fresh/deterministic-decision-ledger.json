@@ -1,0 +1,571 @@
+{
+  "createdAtLocal": "2026-11-16T11:40:44",
+  "baseline": {
+    "legion2RequestId": "req-20261116T174017Z-4eae",
+    "omarchyRequestId": "req-20261116T174025Z-8c81",
+    "divergentEntryCount": 1127
+  },
+  "operatorDecision": {
+    "decision": "Preserve named LEGION2 IDs",
+    "appliesTo": "Acceptance criteria whose non-ID fields match exactly and whose LEGION2 ID is named while the OMARCHY ID is blank.",
+    "source": "Operator response to the 2026-11-15 requirements-reconciliation clarification."
+  },
+  "rows": [
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-107",
+      "text": "Each cumulative validation run uses an explicit unique run ID and deterministic TestResults/<runId> outputs; reports from another run or an earlier candidate cannot satisfy the current gate.",
+      "legion2Id": "FR-MCP-107-AC001",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-107",
+      "text": "Nuke Test and provider targets emit the selected-project inventory and exactly one fresh per-project TRX for every selected project without silently changing exclusions; missing, duplicate, or zero-discovery project results fail the gate.",
+      "legion2Id": "FR-MCP-107-AC002",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-107",
+      "text": "Validation rejects stale, missing, duplicate, skipped, notExecuted, failed, empty, zero-discovery, and Pester failed-block or failed-container reports using run-start, source-file, tool-version, and candidate-source manifests.",
+      "legion2Id": "FR-MCP-107-AC004",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-132",
+      "text": "503 Service Unavailable returned only when per-workspace auth-token subsystem not initialized",
+      "legion2Id": "ac-2",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-132",
+      "text": "Every 503 includes Retry-After header and JSON body",
+      "legion2Id": "ac-3",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-132",
+      "text": "Rotated/stale API key surfaces as 401, never as blanket 503",
+      "legion2Id": "ac-4",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-133",
+      "text": "/ready endpoint checks workspace/token subsystem readiness",
+      "legion2Id": "ac-1",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-133",
+      "text": "/ready reports Unhealthy when no enabled workspace registered",
+      "legion2Id": "ac-2",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-133",
+      "text": "/ready reports Unhealthy when primary workspace has no seeded auth token",
+      "legion2Id": "ac-3",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-137",
+      "text": "ACID profile includes Quad Brain coding tool while excluding generic passthrough, shell, write, desktop, todo, and graphrag mutation tools",
+      "legion2Id": "ac-4",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-137",
+      "text": "Host code can execute same coding-agent path through typed runtime method",
+      "legion2Id": "ac-5",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-137",
+      "text": "Hosted agent exposes model-visible mcp_quadbrain_coding_execute tool",
+      "legion2Id": "ac-1",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-137",
+      "text": "Tool never bypasses Quad Brain transaction/admission contract",
+      "legion2Id": "ac-3",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-PLUGININT-001",
+      "text": "For each server-side session persistence contract changed by this remediation, all eight supported production plugin entrypoints normalize primary success, retryable degraded or queued state, and terminal failure identically. Process exit alone never proves persistence; primary success requires exact server readback.",
+      "legion2Id": "ac-7",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBOPENAI-001",
+      "text": "An inbound OpenAI chat request maps the role-tagged transcript onto QuadBrain orchestration and returns the Arbiter output as the assistant message.",
+      "legion2Id": "ac-1",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBOPENAI-001",
+      "text": "Bearer-auth (Authorization Bearer with X-Api-Key fallback) is validated via WorkspaceTokenService; invalid or missing yields 401.",
+      "legion2Id": "ac-3",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBOPENAI-001",
+      "text": "QBAgent wires a standard OpenAI IChatClient to the v1 endpoint and runs the Agent Framework tool loop with action tools under the non-ACID profile.",
+      "legion2Id": "ac-4",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBOPENAI-001",
+      "text": "Tool definitions in the request flow through and the response emits assistant tool_calls when QuadBrain elects to call a tool.",
+      "legion2Id": "ac-2",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBRAIN-001",
+      "text": "A reader of the live README title sees QBrain.AI.",
+      "legion2Id": "fr-mcp-qbrain-001-ac-001",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBRAIN-001",
+      "text": "Historical receipts are not rewritten to satisfy this requirement.",
+      "legion2Id": "fr-mcp-qbrain-001-ac-004",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBRAIN-001",
+      "text": "The Windows service DisplayName is QBrain.AI where the service is installed under the new name.",
+      "legion2Id": "fr-mcp-qbrain-001-ac-002",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBRAIN-002",
+      "text": "Bare \"MCP\" in protocol sentences is classified and left in place. It is not bulk-replaced.",
+      "legion2Id": "fr-mcp-qbrain-002-ac-003",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBRAIN-002",
+      "text": "Live docs that describe the wire protocol still say Model Context Protocol where they mean the protocol.",
+      "legion2Id": "fr-mcp-qbrain-002-ac-001",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBRAIN-003",
+      "text": "Live docs still describe QuadBrain as the feature and QBrain.AI as the product.",
+      "legion2Id": "fr-mcp-qbrain-003-ac-001",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBRAIN-004",
+      "text": "2.0 is the version where those aliases are allowed to stop. They are not removed inside 1.x.",
+      "legion2Id": "fr-mcp-qbrain-004-ac-004",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBRAIN-004",
+      "text": "A 1.x configuration that contains only the old config section still boots.",
+      "legion2Id": "fr-mcp-qbrain-004-ac-002",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBRAIN-004",
+      "text": "A 1.x request to the old product HTTP prefix still succeeds for the representative route covered by tests.",
+      "legion2Id": "fr-mcp-qbrain-004-ac-001",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-QBRAIN-005",
+      "text": "The hostname PAYTON-LEGION2 and the lab name LAB-OMARCHY still appear where they identify that host and that lab.",
+      "legion2Id": "fr-mcp-qbrain-005-ac-003",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-REPL-008",
+      "text": "Every plugin REPL launcher passes --agent, including the default agent value.",
+      "legion2Id": "ac-1",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-REPL-011",
+      "text": "A backend-rejected record does not block newer records, and a structurally unreplayable or exhausted record is quarantined with diagnostics rather than deleted or retried forever.",
+      "legion2Id": "FR-MCP-REPL-011-AC003",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-REPL-011",
+      "text": "A recovery record is deleted only after the backend confirms durable persistence for the exact workspace, agent, session, and request.",
+      "legion2Id": "FR-MCP-REPL-011-AC002",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-REPL-011",
+      "text": "Each session-log submit is written to the workspace and agent scoped failsafe queue before backend submission, and both automatic proven-reachable replay and explicit drain process records oldest first.",
+      "legion2Id": "FR-MCP-REPL-011-AC001",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-REPL-011",
+      "text": "Plugin status reports the real pending and quarantined queue depth for the active workspace and agent.",
+      "legion2Id": "FR-MCP-REPL-011-AC004",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-SESSIONLIFE-002",
+      "text": "Explicit metadata updates both cache and outgoing persistence. Omission after binding is allowed only after durable identity is proven for the exact workspace, agent, session, and request.",
+      "legion2Id": "FR-MCP-SESSIONLIFE-002-AC003",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-SESSIONLIFE-002",
+      "text": "First persistence resolves planFile and todoId using explicit request values, then verified cache values, then the exact sentinel None, and stores a non-null pair.",
+      "legion2Id": "FR-MCP-SESSIONLIFE-002-AC001",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-SESSIONLIFE-002",
+      "text": "Ordinary raw first persistence rejects omitted, null, empty, or whitespace metadata; canceled or cancelled supersession may omit it and stores None, and a durable reopen preserves that omission contract.",
+      "legion2Id": "FR-MCP-SESSIONLIFE-002-AC002",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-SESSIONLIFE-002",
+      "text": "The three governing contract documents consistently describe explicit/cache/None precedence, ordinary first-persist rejection, canceled/cancelled supersession, and durable-reopen omission.",
+      "legion2Id": "FR-MCP-SESSIONLIFE-002-AC005",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-SESSIONLOGCTX-001",
+      "text": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output.",
+      "legion2Id": "AC-FR-MCP-SESSIONLOGCTX-001-001",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-SESSIONLOGCTX-001",
+      "text": "Existing rows SHALL be backfilled from turn contents and agent history under ~. Uncertain results stay None. Invented ids/paths are forbidden.",
+      "legion2Id": "AC-FR-MCP-SESSIONLOGCTX-001-006",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-SESSIONLOGCTX-001",
+      "text": "Import, transcript ingest, and federation apply SHALL persist a validated planFile and todoId (None if extraction finds nothing). Null is never stored.",
+      "legion2Id": "AC-FR-MCP-SESSIONLOGCTX-001-007",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-SESSIONLOGCTX-001",
+      "text": "planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected.",
+      "legion2Id": "AC-FR-MCP-SESSIONLOGCTX-001-004",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-SESSIONLOGCTX-001",
+      "text": "Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields.",
+      "legion2Id": "AC-FR-MCP-SESSIONLOGCTX-001-005",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-SESSIONLOGCTX-001",
+      "text": "The first ordinary persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId and insert no turn row. A canceled or cancelled supersession may omit the pair, stores the exact sentinel None for each missing value, and a durable reopen preserves that bounded exception.",
+      "legion2Id": "AC-FR-MCP-SESSIONLOGCTX-001-003",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-SESSIONLOGCTX-001",
+      "text": "When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive).",
+      "legion2Id": "AC-FR-MCP-SESSIONLOGCTX-001-002",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-TESTRESOURCE-001",
+      "text": "Fixture inputs for applicable tests are packaged as resources in their owning test projects and load without using a checkout-root path.",
+      "legion2Id": "ac-fr-mcp-testresource-001-fixtures",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-TESTRESOURCE-001",
+      "text": "Tests whose subject is the live repository or sibling plugin source retain their real-source integrity checks; the no-repo-path rule does not replace those checks with synthetic fixtures.",
+      "legion2Id": "ac-fr-mcp-testresource-001-source-contract",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-TRIAGE-002",
+      "text": "A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON.",
+      "legion2Id": "FR-MCP-TRIAGE-002-AC003",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-TRIAGE-002",
+      "text": "Groups are deterministic and workspace-isolated.",
+      "legion2Id": "FR-MCP-TRIAGE-002-AC001",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-TRIAGE-002",
+      "text": "New matching reports reset the 15-minute quiet window.",
+      "legion2Id": "FR-MCP-TRIAGE-002-AC002",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-TRIAGE-002",
+      "text": "Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status.",
+      "legion2Id": "FR-MCP-TRIAGE-002-AC004",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-TRIAGE-003",
+      "text": "workflow.triage.* routes through typed workflow classes and returns deprecated metadata consistent with existing workflow namespaces.",
+      "legion2Id": "FR-MCP-TRIAGE-003-AC002",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-TRIAGE-003",
+      "text": "YAML validation, error envelopes, and request/response shapes are covered.",
+      "legion2Id": "FR-MCP-TRIAGE-003-AC003",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-MCP-TRIAGEREQ-001",
+      "text": "Every TR id returned by listTr is retrievable and mutable via getTr, updateTr, and deleteTr. createTr and batch create still reject non-canonical TR ids.",
+      "legion2Id": "ac-1",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-SUPPORT-013",
+      "text": "Terminal-turn audit-evidence gate enforced only for QBAgent (ACID hosted-agent), not standard agents",
+      "legion2Id": "ac-4",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-SUPPORT-013",
+      "text": "Unsupported verbs return 405 Method Not Allowed with Allow header",
+      "legion2Id": "ac-3",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-WEB-014",
+      "text": "Changing an agent model persists and is used on the next start.",
+      "legion2Id": "ac-2",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "functional",
+      "requirementId": "FR-WEB-014",
+      "text": "Two agents in one workspace can show two different providers and models.",
+      "legion2Id": "ac-1",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "technical",
+      "requirementId": "TR-MCP-AGENT-016",
+      "text": "All new public APIs have XMLDocs and are covered by focused tests.",
+      "legion2Id": "ac-5",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "technical",
+      "requirementId": "TR-MCP-AGENT-016",
+      "text": "Coding-agent DTOs are public, XML-documented, and use System.Text.Json property names compatible with Microsoft Agent Framework function invocation.",
+      "legion2Id": "ac-1",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "technical",
+      "requirementId": "TR-MCP-AGENT-016",
+      "text": "Existing non-ACID hosted-agent registration remains backward compatible aside from the additional Quad Brain coding tool.",
+      "legion2Id": "ac-4",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "technical",
+      "requirementId": "TR-MCP-AGENT-016",
+      "text": "The adapter preserves caller metadata and appends coding-agent fields including taskKind, executionProfile, and sourceType.",
+      "legion2Id": "ac-2",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "technical",
+      "requirementId": "TR-MCP-QBRAIN-004",
+      "text": "No cloud phase renames a GitHub repository.",
+      "legion2Id": "tr-mcp-qbrain-004-ac-001",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "testing",
+      "requirementId": "TEST-MCP-QBRAIN-002",
+      "text": "build/_build.csproj is still _build.",
+      "legion2Id": "test-mcp-qbrain-002-ac-003",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "testing",
+      "requirementId": "TEST-MCP-QBRAIN-003",
+      "text": "The seven published projects use QBrainAI package ids.",
+      "legion2Id": "test-mcp-qbrain-003-ac-001",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "testing",
+      "requirementId": "TEST-MCP-QBRAIN-005",
+      "text": "GetEffectiveMcpValue prefers QBrainAi and falls back to Mcp.",
+      "legion2Id": "test-mcp-qbrain-005-ac-003",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "testing",
+      "requirementId": "TEST-MCP-QBRAIN-005",
+      "text": "GetRequestedInstanceName prefers QBRAINAI_INSTANCE and falls back to MCP_INSTANCE.",
+      "legion2Id": "test-mcp-qbrain-005-ac-004",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "testing",
+      "requirementId": "TEST-MCP-QBRAIN-005",
+      "text": "MapMcp still uses /mcp-transport.",
+      "legion2Id": "test-mcp-qbrain-005-ac-002",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "testing",
+      "requirementId": "TEST-MCP-QBRAIN-006",
+      "text": "docker-compose.mcp.yml uses image qbrain-ai:latest.",
+      "legion2Id": "test-mcp-qbrain-006-ac-001",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    },
+    {
+      "kind": "testing",
+      "requirementId": "TEST-MCP-QBRAIN-006",
+      "text": "Manage-McpService.ps1 defaults match the new service name, display name, and install path.",
+      "legion2Id": "test-mcp-qbrain-006-ac-002",
+      "omarchyId": "",
+      "disposition": "preserve_named_legion2_id"
+    }
+  ],
+  "checks": {
+    "allRowsUseLockedDisposition": true,
+    "frSupport010CDivergent": false
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "files": [
+    {
+      "path": "F:\\GitHub\\McpServer\\docs\\receipts\\requirements-reconciliation\\20261115T140309\\legion2-requirements.json",
+      "length": 1538771,
+      "sha256": "E6C1EFB671C1CB4C43B264E5F61DD6FDE9C474E5DC5C5EAC689B1C48C2BB707A"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\docs\\receipts\\requirements-reconciliation\\20261115T140309\\omarchy-requirements.json",
+      "length": 1683159,
+      "sha256": "221E6E4F2CABA6D4DCC712C942D1414E24546FA8EB8279C9C65408861B62B92C"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\docs\\receipts\\requirements-reconciliation\\20261115T140309\\semantic-diff.json",
+      "length": 2291088,
+      "sha256": "4A045371441F29EF52070894868A913F51F8202716016341BE341ACAA363B47C"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\docs\\receipts\\requirements-reconciliation\\20261115T140309\\session-provenance-candidates.json",
+      "length": 33014243,
+      "sha256": "D437CB12AAB9AB67BF64609142176E309666A6D3917A6C7877D5E7875C959B69"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\docs\\receipts\\requirements-reconciliation\\20261115T140309\\summary.json",
+      "length": 32074,
+      "sha256": "65E8EC9FB7957591CD6608ABB6CF939F9D3D6DD10D4C593C100C4123C474CFF6"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\docs\\receipts\\requirements-reconciliation\\20261115T140309\\hashes.json",
+      "length": 1282,
+      "sha256": "925F71CABB2DCB142974D0CFEE63DD563BBD242607123472800814CCC627891E"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\docs\\receipts\\requirements-reconciliation\\20261115T140309\\semantic-diff-refined.json",
+      "length": 2272913,
+      "sha256": "974A3D55620F94CE114F97DC1E7BB834178B9AB691FB9C808CD38CD713AE614A"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\docs\\receipts\\requirements-reconciliation\\20261115T140309\\session-provenance-candidates-refined.json",
+      "length": 32341370,
+      "sha256": "C957C4ACCB45FBF866BE66D1283EFA75B82D6F151F7A93AC82125AB932CD1634"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\docs\\receipts\\requirements-reconciliation\\20261115T140309\\summary-refined.json",
+      "length": 13356,
+      "sha256": "F1E4F6BC59FE14C3E428D012D6F8312C599582ED6B726A16F61DE1B5516A9169"
+    }
+  ]
+}

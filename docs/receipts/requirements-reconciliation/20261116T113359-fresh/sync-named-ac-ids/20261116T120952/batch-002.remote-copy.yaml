@@ -1,0 +1,187 @@
+records:
+- kind: fr
+  id: FR-MCP-QBRAIN-005
+  acceptanceCriteria:
+  - id: ""
+    isSatisfied: false
+    text: Existing files under docs/receipts/** are not rewritten. New inventory and hostile-validation receipts may be added.
+  - id: ""
+    isSatisfied: false
+    text: Existing FR-MCP-*, TR-MCP-*, and TEST-MCP-* IDs are not renamed. The QBrain ids are additions.
+  - id: fr-mcp-qbrain-005-ac-003
+    isSatisfied: false
+    text: The hostname PAYTON-LEGION2 and the lab name LAB-OMARCHY still appear where they identify that host and that lab.
+- kind: fr
+  id: FR-MCP-REPL-008
+  acceptanceCriteria:
+  - evidence: plugins/core/lib-sh/repl-invoke.sh; plugins/core/lib-ps/repl-invoke.ps1; plugins/core/lib-sh/repl-daemon.js; plugins/core/lib-node/src/transport/repl-bridge.ts
+    id: ac-1
+    isSatisfied: true
+    text: Every plugin REPL launcher passes --agent, including the default agent value.
+  - evidence: src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs; the REPL integration suite's marker-file client options resolver tests, which cite this requirement in their XML documentation
+    id: ""
+    isSatisfied: true
+    text: Verified marker cache entries are keyed by canonical agent identity and workspace.
+  - evidence: the REPL integration suite's child-process helper and its marker-file client options resolver tests, which cite this requirement in their XML documentation
+    id: ""
+    isSatisfied: true
+    text: Named-agent child process invocation is covered by integration tests.
+  - id: ac-4
+    isSatisfied: true
+    text: 'The REPL verified-marker cache uses QBRAINAI_REPL_CACHE_DIR when set, otherwise MCP_REPL_CACHE_DIR, through ProductEnvironment alias precedence; when neither is set it uses the user-profile cache. A child process can therefore isolate all verified-marker cache reads and writes in its owned root. The path selection is proved by unit tests over explicit settings and profile values. Operator 2026-10-30: Product env override (Recommended), RINT-10.'
+- kind: fr
+  id: FR-MCP-REPL-011
+  acceptanceCriteria:
+  - id: FR-MCP-REPL-011-AC001
+    isSatisfied: false
+    text: Each session-log submit is written to the workspace and agent scoped failsafe queue before backend submission, and both automatic proven-reachable replay and explicit drain process records oldest first.
+  - id: FR-MCP-REPL-011-AC002
+    isSatisfied: false
+    text: A recovery record is deleted only after the backend confirms durable persistence for the exact workspace, agent, session, and request.
+  - id: FR-MCP-REPL-011-AC003
+    isSatisfied: false
+    text: A backend-rejected record does not block newer records, and a structurally unreplayable or exhausted record is quarantined with diagnostics rather than deleted or retried forever.
+  - id: FR-MCP-REPL-011-AC004
+    isSatisfied: false
+    text: Plugin status reports the real pending and quarantined queue depth for the active workspace and agent.
+  - id: ""
+    isSatisfied: false
+    text: Drain submission uses the 120-second default helper budget and honors a larger REPL_TIMEOUT; an ordinary two-second nested helper budget is not applied to replay. Inside a hook the hook's deadline caps every replay and the drain starts no record with under one second left (TR-MCP-REPL-012 AC-001, TR-MCP-REPL-016 AC-002). Automatic nested drain defers while a REPL call is in flight and runs once the invoked method has completed (TR-MCP-REPL-016 AC-001), and a timeout abort leaves drainAttempts and completion latch unchanged.
+- kind: fr
+  id: FR-MCP-SESSIONLIFE-002
+  acceptanceCriteria:
+  - id: FR-MCP-SESSIONLIFE-002-AC001
+    isSatisfied: false
+    text: First persistence resolves planFile and todoId using explicit request values, then verified cache values, then the exact sentinel None, and stores a non-null pair.
+  - id: FR-MCP-SESSIONLIFE-002-AC002
+    isSatisfied: false
+    text: Ordinary raw first persistence rejects omitted, null, empty, or whitespace metadata; canceled or cancelled supersession may omit it and stores None, and a durable reopen preserves that omission contract.
+  - id: FR-MCP-SESSIONLIFE-002-AC003
+    isSatisfied: false
+    text: Explicit metadata updates both cache and outgoing persistence. Omission after binding is allowed only after durable identity is proven for the exact workspace, agent, session, and request.
+  - id: ""
+    isSatisfied: false
+    text: "Freshness validation rejects workspace, agent, or request drift and never rewrites or rebinds an already cached session identifier from a marker or inherited process value; a session rotation alone is not drift: the turn stays fresh in the session it was opened in, and only an empty cached turn session id takes the active one (amended 2026-10-15, PLAN-SESSIONTRIAGEFIX-001 C10 follow-up, operator decision \"Fix them in this plan\"; matches TR-MCP-PLUGIN-012 AC1; proved by the Claude Code plugin's current-turn session rebind Pester tests, which cite this requirement)."
+  - id: FR-MCP-SESSIONLIFE-002-AC005
+    isSatisfied: false
+    text: The three governing contract documents consistently describe explicit/cache/None precedence, ordinary first-persist rejection, canceled/cancelled supersession, and durable-reopen omission.
+- kind: fr
+  id: FR-MCP-SESSIONLOGCTX-001
+  acceptanceCriteria:
+  - id: AC-FR-MCP-SESSIONLOGCTX-001-001
+    isSatisfied: false
+    text: Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output.
+  - id: AC-FR-MCP-SESSIONLOGCTX-001-002
+    isSatisfied: false
+    text: When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive).
+  - id: AC-FR-MCP-SESSIONLOGCTX-001-003
+    isSatisfied: false
+    text: The first ordinary persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId and insert no turn row. A canceled or cancelled supersession may omit the pair, stores the exact sentinel None for each missing value, and a durable reopen preserves that bounded exception.
+  - id: AC-FR-MCP-SESSIONLOGCTX-001-004
+    isSatisfied: false
+    text: planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected.
+  - id: AC-FR-MCP-SESSIONLOGCTX-001-005
+    isSatisfied: false
+    text: Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields.
+  - id: AC-FR-MCP-SESSIONLOGCTX-001-006
+    isSatisfied: false
+    text: Existing rows SHALL be backfilled from turn contents and agent history under ~. Uncertain results stay None. Invented ids/paths are forbidden.
+  - id: AC-FR-MCP-SESSIONLOGCTX-001-007
+    isSatisfied: false
+    text: Import, transcript ingest, and federation apply SHALL persist a validated planFile and todoId (None if extraction finds nothing). Null is never stored.
+  - id: AC-FR-MCP-SESSIONLOGCTX-001-008
+    isSatisfied: true
+    text: 'The agent-history scan under ~ (.grok, .claude, .codex, .cursor) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder), and that covers each history root itself: a history root that is a link contributes no file, the same as a link inside it, while a home folder that is itself a link is still scanned; the scan never fails a submit or an import; when nothing usable is found the turn keeps None (operator 2026-10-20: "Fix scans in PR 87 (Recommended)"; operator 2026-10-21: "Fix both, strengthen ACs", hostile validation round 5 finding R5-F1; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8). Moved from AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-29: "Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR."); its real file-system binding is AC-TR-MCP-SESSIONLOG-006-010.'
+- kind: fr
+  id: FR-MCP-TESTRESOURCE-001
+  acceptanceCriteria:
+  - id: ac-fr-mcp-testresource-001-fixtures
+    isSatisfied: false
+    text: Fixture inputs for applicable tests are packaged as resources in their owning test projects and load without using a checkout-root path.
+  - id: ""
+    isSatisfied: true
+    text: "Generated test artifacts are written only to test-owned disposable output locations, not to repository fixture or documentation paths. The location is compared with the checkout by path segment under the path's own syntax: a Windows-form path (a drive letter or a backslash) ignores case, drive letter included, and a POSIX path compares ordinally; a case alias of the checkout or of a folder inside it is refused, and a distinct sibling is accepted (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F3). A path's root is part of its identity: a UNC path (two leading separators of either kind, then a server and a share) is in Windows form and compares its server, its share and its segments ignoring case, so a forward-slash, backslash or mixed-separator UNC alias of the checkout or of a folder inside it is refused, and a path under another root kind, server, share or drive letter is a different location (hostile validation round 10 finding R10-F2; strengthened between rounds under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\", 2026-11-03). That holds only within one path syntax: a folder is another location only when it and the checkout are both POSIX paths or both Windows paths (a drive letter or a UNC share), and a folder in the other syntax is refused, because on a POSIX host a path with two leading separators names the POSIX root and on Windows a single-rooted path names the current drive. A Windows device path (beginning \\\\?\\, \\\\.\\ or \\??\\, with either separator) and a Windows folder with a segment that ends in a dot or a space or holds a colon are refused too, because Windows resolves each to a location that may lie inside the checkout (findings of the hostile validation round 11 that stopped without a verdict, 2026-11-03; strengthened under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\"). The UNC server and share names are held to the same segment rule: a UNC folder whose server or share name ends in a dot or a space or holds a colon is refused, because Windows may resolve it to the checkout's server or share (holistic read before hostile validation round 12, finding D3; operator 2026-11-03: \"Strengthen + fix (Recommended)\")."
+  - id: ac-fr-mcp-testresource-001-source-contract
+    isSatisfied: false
+    text: Tests whose subject is the live repository or sibling plugin source retain their real-source integrity checks; the no-repo-path rule does not replace those checks with synthetic fixtures.
+  - id: ac-4
+    isSatisfied: true
+    text: "A test-owned temporary QBrain.AI instance uses the database inside its owned root: no inherited setting, in configuration or the process environment and in the canonical (QBrainAi, QBRAINAI_), legacy (Mcp, MCP_) or host-prefixed (DOTNET_, ASPNETCORE_) form, nor a connection-string or content-root variable, selects another database for it (a connection string, a data source, a database provider or an instance name), and a database selection outside the owned root is refused. Every consumer of a temporary instance takes its workspace, marker and server address from that instance, and no inherited setting overrides them. These are the unit-proved rules TR-MCP-NUKE-019 AC-6 relies on (operator 2026-10-29: \"Strengthen ACs, fix both (Recommended)\", \"Run the 2 classes, AC first (Recommended)\" and \"Lane ACs (Recommended)\"; operator 2026-10-30: \"FR-MCP-TESTRESOURCE-001 (Recommended)\"; hostile validation findings R8B-F2 and R8B-F3; holistic review findings PLAN-6, PLAN-7, RINT-1, RINT-2 and RINT-3). A REPL host started for a temporary instance names both a workspace and a marker, each strictly inside the instance's owned root, compared by path segment with either separator under the path's own syntax (a Windows-form path ignores case, drive letter included; a POSIX path compares ordinally; operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\", the sibling of hostile validation finding R9-F3) and with no '.' or '..' segment; the checkout's marker, another or sibling root, a parent-segment escape, the root itself as the marker, and a missing argument or value are refused (operator 2026-10-26: \"if you surface new AC, add them without waiting for approval\"; the start-argument rows of the temporary-instance check tests, which cite this criterion, already prove it). Strict containment in the owned root also requires the same root: the same root kind (UNC, drive letter or POSIX) and the same root identity (server and share, or drive letter, compared ignoring case); a single-rooted path under a UNC owned root, a path on another server, share or drive, and a UNC path under a POSIX owned root are refused for the database, the workspace, the marker and the trust cache (hostile validation round 10 finding R10-F2; strengthened between rounds under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\", 2026-11-03). A setting is identified by its configuration key, not by its spelling: .NET configuration reads a process-environment name with a double underscore standing for the ':' delimiter and case ignored, and a DOTNET_ or ASPNETCORE_ prefix places the rest of the name in the host's configuration, so every colon, double-underscore or mixed-separator spelling of a key, alone or host-prefixed, sets that key. No inherited spelling of a product key or of the host's endpoint section (Kestrel), in either enumeration order of the inherited environment, changes the instance's effective database, workspace, marker or server address; unrelated variables are kept unchanged; and a start environment is refused before the instance starts when it holds a product key the instance did not set, under any spelling, or two names of one product key that differ only in separators or case (hostile validation round 12 finding R12-F1; strengthened between rounds under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\", 2026-11-05). A name is matched exactly, as the process environment holds it: two inherited names that differ only in case are two variables, and each unrelated one is kept with its own value. An inherited name that sets the same configuration key as one of the instance's own settings, under any spelling, is a competing value for that setting, not an unrelated variable: the instance's setting replaces it, and a start environment that holds two names of a key the instance sets that differ only in separators or case is refused, as two names of one product key are (seventh holistic read before hostile validation round 13, finding g1; strengthened between rounds under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\", 2026-11-05)."
+  - id: ac-5
+    isSatisfied: true
+    text: 'A SQL Server migration test that fails reports the first command or connection failure the migration met, with any later failure (for example the migration-lock release error) attached, never the later failure alone (operator 2026-10-29: "Diagnose and fix in PR 87 (Recommended)"; operator 2026-10-30: "Scope it to SQL Server"; holistic review finding LANE-1).'
+  - id: ac-6
+    isSatisfied: true
+    text: "The temporary PostgreSQL cluster a test fixture creates is started and stopped by pg_ctl calls that wait for the operation to finish (-w) and print only errors (-s). Both are options of the pg_ctl call itself, not text inside the server options. The start call keeps the cluster's port, its localhost-only listener and its server log file (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; serves TR-MCP-NUKE-019 AC-2)."
+  - id: ac-7
+    isSatisfied: true
+    text: 'The test classes that open connections to the shared SQL Server LocalDB instance belong to one test collection whose definition disables parallelization, so they run one at a time and never beside another collection (operator 2026-10-30: "State rules on TESTRESOURCE (Recommended)"; serves TR-MCP-NUKE-019 AC-2).'
+  - id: ac-8
+    isSatisfied: true
+    text: 'The default server connection the SQL Server integration test classes share, used when no other server is named, is the default LocalDB instance ((localdb)\MSSQLLocalDB) with integrated security, a trusted server certificate, no database and a 120 second connect timeout. A server connection named in its place is used unchanged, with no timeout, flag or database added; a blank value counts as no server named (operator 2026-10-30: "State rules on TESTRESOURCE (Recommended)"; operator 2026-10-26: "if you surface new AC, add them without waiting for approval" for the blank-value clause; serves TR-MCP-NUKE-019 AC-2).'
+  - id: ac-9
+    isSatisfied: true
+    text: 'Each test class that writes the process environment belongs to a test collection whose definition disables parallelization, so no two of them, and no other test, run while one of them has a variable changed (operator 2026-10-30: "State rules on TESTRESOURCE (Recommended)"; serves TR-MCP-USECASE-018 AC-006).'
+  - id: ac-10
+    isSatisfied: true
+    text: "The CLI temporary-folder variables the test support sets and restores are the names the CLI strategies' fallback chains read, once each: MCPSERVER_QUADBRAIN_CLI_TEMP, MCPSERVER_ONESHOT_TEMP, MCPSERVER_CODEX_ONESHOT_TEMP, MCPSERVER_CODEX_TRIAGE_TEMP and MCPSERVER_GROK_ONESHOT_TEMP. Its check of a test's variables accepts them only when two things hold. During the test, the name the strategy under test reads first points at the test folder and every other name at a different, test-owned fallback folder. After the test, every name holds the value it held before, an unset name still unset. It refuses a name that is missing, unset or pointed at the wrong folder, a fallback folder equal to the test folder, a first name outside the list, and a name left changed or newly set (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; serves TR-MCP-USECASE-018 AC-006)."
+  - id: ac-11
+    isSatisfied: true
+    text: 'The reparse data a test fixture passes to the operating-system call that makes a directory junction is the documented mount-point reparse buffer for the target. Field by field: the mount-point tag, a data length that excludes the header, the \??\ substitute name and the print name, each followed by a null, with the offsets and lengths that locate them. For a pinned target it matches the documented bytes exactly (operator 2026-10-30: "State rules on TESTRESOURCE (Recommended)"; serves TR-MCP-USECASE-019 AC-008).'
+  - id: ac-12
+    isSatisfied: true
+    text: "An integration case accepts its temporary instance's health answer only when the status is 200 and the answer's nonce field equals the whole nonce the request sent, compared ordinally; a longer or shorter nonce, the requested text in another field, and a missing or malformed nonce field are refused (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F2). It refuses a non-200 status even when the nonce is echoed, a body without the nonce, an empty body, no body, a body that echoes a different nonce, and a request that sent no nonce (operator 2026-10-30: \"State rules on TESTRESOURCE (Recommended)\"; operator 2026-10-26: \"if you surface new AC, add them without waiting for approval\" for the no-nonce clause; serves TR-MCP-NUKE-019 AC-6)."
+- kind: fr
+  id: FR-MCP-TRIAGE-002
+  acceptanceCriteria:
+  - id: FR-MCP-TRIAGE-002-AC001
+    isSatisfied: false
+    text: Groups are deterministic and workspace-isolated.
+  - id: FR-MCP-TRIAGE-002-AC002
+    isSatisfied: false
+    text: New matching reports reset the 15-minute quiet window.
+  - id: FR-MCP-TRIAGE-002-AC003
+    isSatisfied: false
+    text: A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON.
+  - id: FR-MCP-TRIAGE-002-AC004
+    isSatisfied: false
+    text: Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status.
+  - id: ""
+    isSatisfied: false
+    text: QBrain.AI core and QBrain.AI plugin bugs are grouped into the registered QBrainAi workspace when that workspace exists; otherwise they stay in the submitting workspace.
+- kind: fr
+  id: FR-MCP-TRIAGE-003
+  acceptanceCriteria:
+  - id: ""
+    isSatisfied: false
+    text: client.triage.* works through generic passthrough after adding QBrainAiClient.Triage.
+  - id: FR-MCP-TRIAGE-003-AC002
+    isSatisfied: false
+    text: workflow.triage.* routes through typed workflow classes and returns deprecated metadata consistent with existing workflow namespaces.
+  - id: FR-MCP-TRIAGE-003-AC003
+    isSatisfied: false
+    text: YAML validation, error envelopes, and request/response shapes are covered.
+- kind: fr
+  id: FR-MCP-TRIAGEREQ-001
+  acceptanceCriteria:
+  - id: ac-1
+    isSatisfied: false
+    text: Every TR id returned by listTr is retrievable and mutable via getTr, updateTr, and deleteTr. createTr and batch create still reject non-canonical TR ids.
+  - id: ac-2
+    isSatisfied: false
+    text: Every FR and TEST id returned by listFr and listTest is retrievable and mutable through getFr, updateFr, deleteFr, getTest, updateTest, deleteTest and the FR, TEST and mixed update batches, including stored legacy ids outside the canonical create format (for example FR-SUPPORT-010A and TEST-SUPPORT-010A-1); createFr, createTest and the create batches still reject non-canonical ids, and an empty id is refused before any request (PLAN-SESSIONTRIAGEFIX-001 B7, triage-report-3bd514bb).
+- kind: fr
+  id: FR-SUPPORT-013
+  acceptanceCriteria:
+  - id: ""
+    isSatisfied: false
+    text: GET /qbrainai/sessionlog/{agent}/{sessionId} returns single-record fetch under tenancy
+  - id: ""
+    isSatisfied: false
+    text: POST /qbrainai/sessionlog/{agent}/{sessionId}/turn appends turn by RequestId
+  - id: ac-3
+    isSatisfied: false
+    text: Unsupported verbs return 405 Method Not Allowed with Allow header
+  - id: ac-4
+    isSatisfied: false
+    text: Terminal-turn audit-evidence gate enforced only for QBAgent (ACID hosted-agent), not standard agents

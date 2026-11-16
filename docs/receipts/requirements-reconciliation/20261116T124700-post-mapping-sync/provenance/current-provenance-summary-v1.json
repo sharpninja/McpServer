@@ -1,0 +1,251 @@
+{
+  "generatedAtLocal": "2026-11-16T12:51:22-06:00",
+  "currentSnapshotDirectory": "F:\\GitHub\\McpServer\\docs\\receipts\\requirements-reconciliation\\20261116T124700-post-mapping-sync",
+  "currentSemanticDiffSha256": "1C6B535C4E01D0393F3267F6DE8A18379606A00FFDD0A26951861D13977308E5",
+  "currentEntryCount": 1010,
+  "currentFieldCount": 2697,
+  "originEvidenceMatchedEntries": 1010,
+  "originEvidenceGapEntries": 0,
+  "legacyFieldEvidenceMatchedRows": 2697,
+  "legacyFieldEvidenceGapRows": 0,
+  "sqlNewerCounts": [
+    {
+      "value": "indeterminate",
+      "count": 120
+    },
+    {
+      "value": "LEGION2",
+      "count": 4
+    },
+    {
+      "value": "OMARCHY",
+      "count": 886
+    }
+  ],
+  "originBasisCounts": [
+    {
+      "value": "bulk-document-commit",
+      "count": 301
+    },
+    {
+      "value": "exact-plan-reference-and-bulk-document-commit",
+      "count": 310
+    },
+    {
+      "value": "exact-plan-reference-and-focused-document-commit",
+      "count": 145
+    },
+    {
+      "value": "focused-document-commit",
+      "count": 250
+    },
+    {
+      "value": "no-plan-or-document-commit-match",
+      "count": 4
+    }
+  ],
+  "largestPlanGroups": [
+    {
+      "plan": "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md",
+      "count": 123
+    },
+    {
+      "plan": "docs/plans/2026-10-19-unit-suite-green.md",
+      "count": 59
+    },
+    {
+      "plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+      "count": 55
+    },
+    {
+      "plan": "docs/plans/PLAN-WEB-ORCH-001.md",
+      "count": 36
+    },
+    {
+      "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+      "count": 32
+    },
+    {
+      "plan": "docs/Project/QBrain-AI-Rebrand-Implementation-Plan-2026-10-05.md",
+      "count": 18
+    },
+    {
+      "plan": "docs/plans/PLAN-PLUGINHANDOFF-001-completion-20260906.md",
+      "count": 18
+    },
+    {
+      "plan": "docs/plans/triage-cluster-002.md",
+      "count": 13
+    },
+    {
+      "plan": "docs/plans/triage-cluster-001.md",
+      "count": 12
+    },
+    {
+      "plan": "docs/handoffs/sessionturn-review-plan-20261009T022141Z.md",
+      "count": 9
+    },
+    {
+      "plan": "docs/plans/mcp-products-001.md",
+      "count": 8
+    },
+    {
+      "plan": "docs/plans/plan-agent-plugin-operational-parity-v1.0.md",
+      "count": 7
+    },
+    {
+      "plan": "docs/Project/Quad-Model-Transactional-Diffgram-Plan.md",
+      "count": 7
+    },
+    {
+      "plan": "docs/plans/2026-10-07-federation-fixes.md",
+      "count": 6
+    },
+    {
+      "plan": "docs/Project/Phase-F-Live-QuadBrain-Loop-Plan.md",
+      "count": 5
+    },
+    {
+      "plan": "docs/reviews/aiunit-review-plan-20260612T060729.901Z.md",
+      "count": 5
+    },
+    {
+      "plan": "docs/plans/2026-11-10-federation-completion-bdpv4.md",
+      "count": 4
+    },
+    {
+      "plan": "docs/plans/2026-10-20-plugin-engineering-policy.md",
+      "count": 4
+    },
+    {
+      "plan": "docs/plans/plan-todo-workspace-scoped-v1.0.md",
+      "count": 3
+    },
+    {
+      "plan": "docs/receipts/sessionlife-completion/20260928-p1-behavior-red/history-r1/docs/receipts/sessionlife-completion/20260928-p1-behavior-red/p1-behavior-red-test-plan.md",
+      "count": 3
+    }
+  ],
+  "largestOriginCommitGroups": [
+    {
+      "commit": "55fae924c5a9e6fce3f0a5ba1d006754aa727dde",
+      "count": 92,
+      "subject": "feat(g1): integrate bounded FS, trim cleanup, and pin-first export",
+      "prNumber": ""
+    },
+    {
+      "commit": "765490a9035878c7888c911776289880493dacab",
+      "count": 70,
+      "subject": "fix: isolate unit suite and lane resources",
+      "prNumber": "87"
+    },
+    {
+      "commit": "99ee81eedbf4a74cbe2a71656b169075bf1b2ccd",
+      "count": 35,
+      "subject": "feat(quadbrain): global brain definitions + per-session instances; QBEXEC completion; user docs",
+      "prNumber": ""
+    },
+    {
+      "commit": "c56f391a04c5858485251560a3bee95c695f5d9b",
+      "count": 35,
+      "subject": "feat(agent-help): add conversation API, REPL workflow, and traceability backfill",
+      "prNumber": ""
+    },
+    {
+      "commit": "c217d7a081c1ab4945e44eac381d8b9bea2a2df4",
+      "count": 34,
+      "subject": "feat(transcripts): add multi-agent transcript ingestion",
+      "prNumber": ""
+    },
+    {
+      "commit": "1ffdcb5e9ad33f79f77dec14892f6e0dd52d8e75",
+      "count": 34,
+      "subject": "docs: correct agent runtime header docs and capture header requirements",
+      "prNumber": "40"
+    },
+    {
+      "commit": "c659ebc9a63319cfa9a6d798f32303c6999b6c84",
+      "count": 34,
+      "subject": "fix: generate requirements matrix exports",
+      "prNumber": "38"
+    },
+    {
+      "commit": "c5ac01c70235e7ec06f83bb0d17c738367d0a087",
+      "count": 32,
+      "subject": "docs: capture defect requirements",
+      "prNumber": ""
+    },
+    {
+      "commit": "46a5959c1ec121c96446f171d3656b30cda195e9",
+      "count": 32,
+      "subject": "docs(federation): preserve current Dolt architecture and planning artifacts",
+      "prNumber": ""
+    },
+    {
+      "commit": "c81abaf0193c393bfecffc07015962424a601dfe",
+      "count": 31,
+      "subject": "feat(triage): unified errors, session-log persist, hook isolation",
+      "prNumber": "41"
+    },
+    {
+      "commit": "bf000bb7fc495b6011eb5888a8c9293c992eb305",
+      "count": 29,
+      "subject": "feat(products,handoff): ship products + handoff; refresh docs and wiki",
+      "prNumber": "41"
+    },
+    {
+      "commit": "9855402b0df90fb06284840fd5f50977a444927e",
+      "count": 26,
+      "subject": "docs: register QBrain.AI rebrand FR, TR, and TEST ids",
+      "prNumber": "77"
+    },
+    {
+      "commit": "802a16fd9e1cc0352f258c328b15d7f55cd7db5f",
+      "count": 25,
+      "subject": "fix(triage): remediate all 16 BUG-TRIAGE items (070-085) under BDPv4",
+      "prNumber": ""
+    },
+    {
+      "commit": "bf48f255c493b810513b90e878887c74fcad10a4",
+      "count": 24,
+      "subject": "feat: add brain slots and auth readiness",
+      "prNumber": ""
+    },
+    {
+      "commit": "910a444959969a87099b800b4b6fe12c77c0aece",
+      "count": 24,
+      "subject": "docs: refresh 1.4.30, wiki export, session-log persist/sanitizer",
+      "prNumber": "41"
+    },
+    {
+      "commit": "d6b092afbe297416f7e48326caa9dc403495483b",
+      "count": 24,
+      "subject": "feat: validate session turn closes",
+      "prNumber": ""
+    },
+    {
+      "commit": "16dff4d6675d6324c19949864a4fed01ad973cb0",
+      "count": 24,
+      "subject": "fix: repair unit regressions and session-log lifecycle contracts",
+      "prNumber": ""
+    },
+    {
+      "commit": "0334399dc6e1f7073e74ed63979b8c314015fba1",
+      "count": 22,
+      "subject": "chore(requirements): reconcile all requirements into the MCP Server as source of truth",
+      "prNumber": ""
+    },
+    {
+      "commit": "bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+      "count": 21,
+      "subject": "feat(usecase): UML domain, canvas graph, docs refresh",
+      "prNumber": "40"
+    },
+    {
+      "commit": "6f883f0d224675429da7badc601c6c07c4ed5f36",
+      "count": 21,
+      "subject": "Apply CA code fixes, batch 1: fixer pass and CA1707 test renames",
+      "prNumber": ""
+    }
+  ]
+}

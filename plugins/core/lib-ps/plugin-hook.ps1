@@ -36,8 +36,6 @@ $env:MCP_PLUGIN_HOST = $HostName
 . (Join-Path $script:ScriptDir 'resolve-cache-dir.ps1')
 . (Join-Path $script:ScriptDir 'marker-resolver.ps1')
 . (Join-Path $script:ScriptDir 'yaml-object-mutation.ps1')
-. (Join-Path $script:ScriptDir 'plan-todo-map.ps1')
-. (Join-Path $script:ScriptDir 'repl-params-transfer.ps1')
 . (Join-Path $script:ScriptDir 'agent-runtime-header.ps1')
 . (Join-Path $script:ScriptDir 'profile-reload.ps1')
 Import-McpYamlSerializer
@@ -362,7 +360,13 @@ function Invoke-PluginRepl {
 
     $script:LastPluginReplExitCode = 0
     if ($env:MCP_PLUGIN_REPL_LOG) {
-        Write-McpReplLogEntry -Path $env:MCP_PLUGIN_REPL_LOG -Method $Method -ParamsYaml $ParamsYaml
+        $entry = @(
+            "method: $Method"
+            'params: |'
+            (($ParamsYaml -replace "`r`n", "`n" -replace "`r", "`n") -split "`n" | ForEach-Object { "  $_" })
+            '---'
+        ) -join "`n"
+        Add-Content -LiteralPath $env:MCP_PLUGIN_REPL_LOG -Value $entry
         if ($env:MCP_PLUGIN_REPL_RESPONSE) {
             Write-Output $env:MCP_PLUGIN_REPL_RESPONSE
         }
@@ -396,22 +400,15 @@ function Invoke-PluginOpenSession {
         (Get-Location).ProviderPath
     ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
     if ($workspace) { $psi.WorkingDirectory = $workspace }
-    # Params travel in a file, never on the child command line (32,767-character limit on Windows).
-    $paramsTransfer = New-McpReplParamsTransfer -ParamsText $ParamsYaml
-    try {
-        foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync') + @($paramsTransfer.Arguments)) {
-            $psi.ArgumentList.Add($argument)
-        }
-        $process = [System.Diagnostics.Process]::Start($psi)
-        $stdoutTask = $process.StandardOutput.ReadToEndAsync()
-        $stderrTask = $process.StandardError.ReadToEndAsync()
-        $process.WaitForExit()
-        try { $null = $stdoutTask.GetAwaiter().GetResult() } catch { }
-        try { $null = $stderrTask.GetAwaiter().GetResult() } catch { }
+    foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {
+        $psi.ArgumentList.Add($argument)
     }
-    finally {
-        Remove-McpReplParamsTransfer -Transfer $paramsTransfer
-    }
+    $process = [System.Diagnostics.Process]::Start($psi)
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    $process.WaitForExit()
+    try { $null = $stdoutTask.GetAwaiter().GetResult() } catch { }
+    try { $null = $stderrTask.GetAwaiter().GetResult() } catch { }
     $script:LastPluginReplExitCode = [int]$process.ExitCode
     return ($process.ExitCode -eq 0)
 }
@@ -894,7 +891,7 @@ function Test-PluginPromptIsBackgroundAgent {
 function Resolve-PluginBackgroundScope {
     <#
     .SYNOPSIS
-        TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3, triage-report-061f30e9): the background scope of the host this hook runs
+        FR-MCP-TRIAGEPLUGIN-001 / TR-MCP-TRIAGEPLUGIN-001 / TEST-MCP-TRIAGEPLUGIN-001 (triage-report-061f30e9): the background scope of the host this hook runs
         for, its key (Get-McpBackgroundScopeKey over the payload's session_id and the agentSessionId the root's session-state.yaml records)
         and its cache folder under the root cache; $null for the root host. FR-MCP-TRIAGEPLUGIN-001: the root turn stays the root's.
     #>
@@ -913,7 +910,7 @@ function Resolve-PluginBackgroundScope {
 function Initialize-PluginBackgroundScope {
     <#
     .SYNOPSIS
-        TR-MCP-PLUGIN-013 AC-005 (D3): prepares a background host's cache folder for a turn in the root's session. Its session-state.yaml
+        FR-MCP-TRIAGEPLUGIN-001 / TR-MCP-TRIAGEPLUGIN-001 / TEST-MCP-TRIAGEPLUGIN-001: prepares a background host's cache folder for a turn in the root's session. Its session-state.yaml
         becomes a copy of the root's (the same session, marker proof and title, so the turn lands in the root's session and never retitles
         it) plus the scope key. Returns the root's session id and the id of the turn the root's current-turn.yaml names, open or completed.
     #>
@@ -1004,7 +1001,7 @@ function Open-PluginTurn {
     if (-not $title) { $title = 'Continuation turn' }
     if ($title.Length -gt 60) { $title = $title.Substring(0, 60) }
 
-    # TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3, triage-report-061f30e9): a background or hostile-agent brief from a host whose
+    # FR-MCP-TRIAGEPLUGIN-001 / TR-MCP-TRIAGEPLUGIN-001 / TEST-MCP-TRIAGEPLUGIN-001 (triage-report-061f30e9): a background or hostile-agent brief from a host whose
     # identity differs from the root's opens and logs its own turn in the root's session, kept in its own cache folder, so the root's
     # current-turn.yaml and turn are never reused, skipped, superseded or rewritten. A brief with the root's own identity is the root's prompt.
     $backgroundScope = $null
@@ -1080,7 +1077,7 @@ function Open-PluginTurn {
         todoId = $turnContext.todoId
     }
     if ($backgroundContext) {
-        # TR-MCP-PLUGIN-013 AC-005 (D3): the background turn's first write names its root session and root turn.
+        # FR-MCP-TRIAGEPLUGIN-001 / TR-MCP-TRIAGEPLUGIN-001 / TEST-MCP-TRIAGEPLUGIN-001: the background turn's first write names its root session and root turn.
         $rootIds = @("root session: $($backgroundContext.SessionId)")
         if ($backgroundContext.RootTurnId) { $rootIds += "root turn: $($backgroundContext.RootTurnId)" }
         $beginParams['contextList'] = $rootIds
@@ -1164,10 +1161,12 @@ function Open-PluginTurn {
 }
 
 function Close-PluginTurnIfNeeded {
+    # 2026-11-16 FR-MCP-TRIAGEPLUGIN-001 / TR-MCP-TRIAGEPLUGIN-001 / TEST-MCP-TRIAGEPLUGIN-001:
+    # resolve background scope before selecting the turn that the stop gate evaluates.
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
     Set-PluginWorkspaceIdentity -ResolvedPath $startPath
     $cacheDir = Get-PluginCacheDir -StartPath $startPath
-    # TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3): a background host's Stop completes its own turn, kept in its own cache
+    # FR-MCP-TRIAGEPLUGIN-001 / TR-MCP-TRIAGEPLUGIN-001 / TEST-MCP-TRIAGEPLUGIN-001: a background host's Stop completes its own turn, kept in its own cache
     # folder, and never the root's.
     $backgroundScope = Resolve-PluginBackgroundScope -CacheDir $cacheDir -Payload (Read-HookInput)
     if ($backgroundScope -and -not (Test-Path -LiteralPath (Join-Path $backgroundScope.Dir 'current-turn.yaml'))) { $backgroundScope = $null }
@@ -1611,7 +1610,25 @@ function Get-PlanTodoMapPath {
 }
 
 function Get-LastPlanTodoMapEntry {
-    return (Get-LastPlanTodoMapEntryFromFile -MapPath (Get-PlanTodoMapPath))
+    $mapPath = Get-PlanTodoMapPath
+    if (-not (Test-Path -LiteralPath $mapPath)) { return $null }
+    $lines = [System.IO.File]::ReadAllLines($mapPath)
+    $planFile = $null
+    $todoId = $null
+    for ($i = 0; $i -lt $lines.Length; $i++) {
+        if ($lines[$i] -match '^\s*-\s*planFile:\s*(.+)$') {
+            $planFile = $Matches[1].Trim().Trim('"')
+            $todoId = $null
+            for ($j = $i + 1; $j -lt [Math]::Min($lines.Length, $i + 4); $j++) {
+                if ($lines[$j] -match '^\s*todoId:\s*(.+)$') {
+                    $todoId = $Matches[1].Trim().Trim('"')
+                    break
+                }
+            }
+        }
+    }
+    if ([string]::IsNullOrWhiteSpace($planFile)) { return $null }
+    return [ordered]@{ planFile = $planFile; todoId = $todoId }
 }
 
 function Resolve-PluginTurnPlanContext {
@@ -1674,7 +1691,13 @@ function Invoke-PlanApprovedHook {
     $output = @(Invoke-PluginRepl -Method 'client.Todo.CreateAsync' -ParamsYaml $paramsYaml)
     $todoId = Get-TodoIdFromReplOutput -Output $output
     if ($todoId) {
-        [void](Write-PlanTodoMapEntry -MapPath (Get-PlanTodoMapPath) -PlanFile $planFile -TodoId $todoId)
+        $mapPath = Get-PlanTodoMapPath
+        $entry = @(
+            'entries:'
+            "  - planFile: $planFile"
+            "    todoId: $todoId"
+        ) -join "`n"
+        [System.IO.File]::WriteAllText($mapPath, $entry + "`n")
     }
 
     Write-PostToolUseOutput -Status 'created'
@@ -1683,7 +1706,19 @@ function Invoke-PlanApprovedHook {
 function Find-PlanTodoId {
     param([Parameter(Mandatory)][string]$PlanFile)
 
-    return (Find-PlanTodoIdInMap -MapPath (Get-PlanTodoMapPath) -PlanFile $PlanFile)
+    $mapPath = Get-PlanTodoMapPath
+    if (-not (Test-Path -LiteralPath $mapPath)) { return $null }
+    $lines = [System.IO.File]::ReadAllLines($mapPath)
+    for ($i = 0; $i -lt $lines.Length; $i++) {
+        if ($lines[$i] -match '^\s*-\s*planFile:\s*(.+)$' -and $Matches[1].Trim().Trim('"') -eq $PlanFile) {
+            for ($j = $i + 1; $j -lt [Math]::Min($lines.Length, $i + 4); $j++) {
+                if ($lines[$j] -match '^\s*todoId:\s*(.+)$') {
+                    return $Matches[1].Trim().Trim('"')
+                }
+            }
+        }
+    }
+    return $null
 }
 
 function Invoke-PlanModifiedHook {

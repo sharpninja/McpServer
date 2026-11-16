@@ -1,0 +1,20 @@
+{
+  "measuredTime": "2026-11-16T13:39:35-06:00",
+  "files": [
+    {
+      "name": "recovery-verification-summary.json",
+      "length": 2174,
+      "sha256": "13448CA17DA85D16399BD4FBE0E67F26A959B5A840CEC963119705A2F797444F"
+    },
+    {
+      "name": "update-batch.params.yaml",
+      "length": 6019,
+      "sha256": "963FB192E2AEE1A79717471C91FA16A1FE86D1BDE4878C4C35D609D1DAA8A654"
+    },
+    {
+      "name": "update-batch.remote-copy.yaml",
+      "length": 6019,
+      "sha256": "963FB192E2AEE1A79717471C91FA16A1FE86D1BDE4878C4C35D609D1DAA8A654"
+    }
+  ]
+}

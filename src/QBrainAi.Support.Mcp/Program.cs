@@ -2,7 +2,6 @@
 
 using System.Globalization;
 using System.Net;
-using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Runtime.Versioning;
 using System.Text;
@@ -594,7 +593,7 @@ builder.Services.AddAuthorization(options =>
 
         policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
         policy.RequireAuthenticatedUser();
-        policy.RequireAssertion(ctx => HasAnyRole(ctx.User, "agent-manager", "admin"));
+        policy.RequireAssertion(ctx => AgentManagerRoleAuthorization.HasAnyRole(ctx.User, "agent-manager", "admin"));
     });
 });
 
@@ -1226,28 +1225,6 @@ static void EnsureSerilogFileDirectory(string filePath)
         Directory.CreateDirectory(directory);
 }
 
-static bool HasAnyRole(ClaimsPrincipal user, params string[] requiredRoles)
-{
-    if (user.Identity?.IsAuthenticated != true)
-        return false;
-
-    var required = new HashSet<string>(requiredRoles, StringComparer.OrdinalIgnoreCase);
-    foreach (var claim in user.Claims)
-    {
-        if (!string.Equals(claim.Type, "realm_roles", StringComparison.OrdinalIgnoreCase) &&
-            !string.Equals(claim.Type, "roles", StringComparison.OrdinalIgnoreCase) &&
-            !string.Equals(claim.Type, ClaimTypes.Role, StringComparison.OrdinalIgnoreCase))
-        {
-            continue;
-        }
-
-        if (ContainsRequiredRole(claim.Value, required))
-            return true;
-    }
-
-    return false;
-}
-
 static string? ResolvePrimaryApiKeyWorkspacePath(IConfiguration configuration, IHostEnvironment environment, string? instanceName, IServiceProvider? services = null)
 {
     // Prefer the DB-registered primary workspace (workspaces live in the DB now, not appsettings).
@@ -1286,44 +1263,4 @@ static string NormalizeWorkspacePathForToken(string workspacePath, string conten
         : Path.GetFullPath(Path.Combine(contentRootPath, trimmed));
 
     return absolute.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-}
-
-static bool ContainsRequiredRole(string? claimValue, ISet<string> requiredRoles)
-{
-    if (string.IsNullOrWhiteSpace(claimValue))
-        return false;
-
-    var trimmed = claimValue.Trim();
-    if (requiredRoles.Contains(trimmed))
-        return true;
-
-    if (trimmed.StartsWith("[", StringComparison.Ordinal))
-    {
-        try
-        {
-            using var doc = JsonDocument.Parse(trimmed);
-            if (doc.RootElement.ValueKind == JsonValueKind.Array)
-            {
-                foreach (var element in doc.RootElement.EnumerateArray())
-                {
-                    var role = element.GetString();
-                    if (!string.IsNullOrWhiteSpace(role) && requiredRoles.Contains(role))
-                        return true;
-                }
-            }
-        }
-        catch (JsonException ex)
-        {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
-        }
-    }
-
-    foreach (var token in trimmed.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-    {
-        var normalized = token.Trim('"');
-        if (requiredRoles.Contains(normalized))
-            return true;
-    }
-
-    return false;
 }

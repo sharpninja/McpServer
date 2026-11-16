@@ -1,4 +1,4 @@
-# Requirements Matrix (MCP Server)
+# Requirements Matrix (QBrain.AI)
 
 Traceability policy: see `Requirements-Traceability-Policy.md`.
 
@@ -1396,7 +1396,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-API-001 | Tracked | Technical-Requirements.md |
 | TR-API-002 | Tracked | Technical-Requirements.md |
 | TR-MCP-ACKRECOVERY-001 | Tracked | Technical-Requirements.md |
-| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 | TR-MCP-AUDITACTION-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-DB-DTO-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-FED-PATH-001 | Tracked | Technical-Requirements.md |
@@ -1477,63 +1476,50 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-VERIFYPOLICY-001 | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-024 | Tracked | Testing-Requirements.md |
 | TEST-TIMER-001 | Tracked | Testing-Requirements.md |
-
-
-
-## Federation reconciliation 2026-11-10
-
-Current phase and workflow ownership for all amended records: [federation matrix](federation-dolt/Requirements-Matrix.md). Applicable requirements and scope boundaries: [current-scope coverage](../plans/2026-11-10-federation-reconciliation.md). All amended criteria remain pending.
-- FR-MCP-174: pending amended acceptance; see federation matrix.
-- FR-MCP-175: pending amended acceptance; see federation matrix.
-- FR-MCP-176: pending amended acceptance; see federation matrix.
-- FR-MCP-177: pending amended acceptance; see federation matrix.
-- FR-MCP-178: pending amended acceptance; see federation matrix.
-- FR-MCP-179: pending amended acceptance; see federation matrix.
-- FR-MCP-180: pending amended acceptance; see federation matrix.
-- FR-MCP-181: pending amended acceptance; see federation matrix.
-- FR-MCP-182: pending amended acceptance; see federation matrix.
-- FR-MCP-183: pending amended acceptance; see federation matrix.
-- FR-MCP-184: pending amended acceptance; see federation matrix.
-- FR-MCP-185: pending amended acceptance; see federation matrix.
-- FR-MCP-186: pending amended acceptance; see federation matrix.
-- FR-MCP-187: pending amended acceptance; see federation matrix.
-- FR-MCP-188: pending amended acceptance; see federation matrix.
-- FR-MCP-189: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-001: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-002: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-003: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-004: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-005: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-006: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-007: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-008: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-009: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-011: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-012: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-013: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-014: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-015: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-016: pending amended acceptance; see federation matrix.
-- TEST-MCP-222: pending amended acceptance; see federation matrix.
-- TEST-MCP-223: pending amended acceptance; see federation matrix.
-- TEST-MCP-224: pending amended acceptance; see federation matrix.
-- TEST-MCP-225: pending amended acceptance; see federation matrix.
-- TEST-MCP-226: pending amended acceptance; see federation matrix.
-- TEST-MCP-227: pending amended acceptance; see federation matrix.
-- TEST-MCP-228: pending amended acceptance; see federation matrix.
-- TEST-MCP-229: pending amended acceptance; see federation matrix.
-- TEST-MCP-230: pending amended acceptance; see federation matrix.
-- TEST-MCP-231: pending amended acceptance; see federation matrix.
-- TEST-MCP-232: pending amended acceptance; see federation matrix.
-- TEST-MCP-233: pending amended acceptance; see federation matrix.
-- TEST-MCP-234: pending amended acceptance; see federation matrix.
-- TEST-MCP-235: pending amended acceptance; see federation matrix.
-- TEST-MCP-236: pending amended acceptance; see federation matrix.
-- TEST-MCP-237: pending amended acceptance; see federation matrix.
-- TR-MCP-FEDERATION-010: pending amended acceptance; see federation matrix.
-- FR-MCP-FED-BACKFILL-001: pending amended acceptance; see federation matrix.
-- FR-MCP-FED-ROUTE-001: pending amended acceptance; see federation matrix.
-- FR-MCP-FED-WSSYNC-001: pending amended acceptance; see federation matrix.
-- TR-MCP-FED-BACKFILL-001: pending amended acceptance; see federation matrix.
-- TR-MCP-FED-WSSYNC-001: pending amended acceptance; see federation matrix.
-- TR-MCP-FED-ROUTE-001: pending amended acceptance; see federation matrix.
+| FR-MCP-174 | Tracked | Functional-Requirements.md |
+| FR-MCP-175 | Tracked | Functional-Requirements.md |
+| FR-MCP-176 | Tracked | Functional-Requirements.md |
+| FR-MCP-177 | Tracked | Functional-Requirements.md |
+| FR-MCP-178 | Tracked | Functional-Requirements.md |
+| FR-MCP-179 | Tracked | Functional-Requirements.md |
+| FR-MCP-180 | Tracked | Functional-Requirements.md |
+| FR-MCP-181 | Tracked | Functional-Requirements.md |
+| FR-MCP-182 | Tracked | Functional-Requirements.md |
+| FR-MCP-183 | Tracked | Functional-Requirements.md |
+| FR-MCP-184 | Tracked | Functional-Requirements.md |
+| FR-MCP-185 | Tracked | Functional-Requirements.md |
+| FR-MCP-186 | Tracked | Functional-Requirements.md |
+| FR-MCP-187 | Tracked | Functional-Requirements.md |
+| FR-MCP-188 | Tracked | Functional-Requirements.md |
+| FR-MCP-189 | Tracked | Functional-Requirements.md |
+| FR-MCP-190 | Tracked | Functional-Requirements.md |
+| FR-MCP-FED-BACKFILL-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-FED-ROUTE-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-FED-WSSYNC-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-TRIAGE-002-REKEY-CANONICAL-20261115 | Tracked | Functional-Requirements.md |
+| FR-WF-005 | Tracked | Functional-Requirements.md |
+| [] | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+| TR-MCP-FED-BACKFILL-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-003 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-004 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-005 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-006 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-007 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-008 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-009 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-010 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-011 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-012 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-013 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-014 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-015 | Tracked | Technical-Requirements.md |
+| TR-MCP-FEDERATION-016 | Tracked | Technical-Requirements.md |
+| TR-MCP-FED-ROUTE-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-FED-WSSYNC-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-PROFILE-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-TRIAGE-004-REKEY-CANONICAL-20261115 | Tracked | Technical-Requirements.md |
+| TEST-MCP-238 | Tracked | Testing-Requirements.md |
+| TEST-MCP-HELP-009 | Tracked | Testing-Requirements.md |

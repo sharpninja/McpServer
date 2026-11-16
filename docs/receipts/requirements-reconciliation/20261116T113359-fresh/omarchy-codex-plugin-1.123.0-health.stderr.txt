@@ -1,0 +1,2 @@
+[31;1mInvoke-CodexMcpPlugin.ps1: [31;1mThe term '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.123.0/lib/repl-params-transfer.ps1' is not recognized as a name of a cmdlet, function, script file, or executable program.[0m
+[31;1m[31;1mCheck the spelling of the name, or if a path was included, verify that the path is correct and try again.[0m

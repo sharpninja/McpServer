@@ -1,0 +1,11 @@
+{
+  "generatedAtLocal": "2026-11-15T15:56:25",
+  "tablePath": "F:\\GitHub\\McpServer\\docs\\receipts\\requirements-reconciliation\\20261115T140309\\unreconcilable-entries-for-review-v3.csv",
+  "rowCount": 3160,
+  "uniqueEntries": 1118,
+  "nearbyCodexOrClaudeTurnRows": 413,
+  "noNearbyIdBearingTurnRows": 2403,
+  "uniqueSearchedIdsWithNoHitOnAnyMachine": 4,
+  "tableSha256": "2C664B8EB3FCE4CF32EE959C5A3E8A79DDB60FA25323540787163D179DDB7A91",
+  "status": "Provenance leads indexed; governing decisions not yet adjudicated"
+}

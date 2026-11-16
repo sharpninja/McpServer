@@ -1,4 +1,5 @@
 # TEST-MCP-TRIAGEPLUGIN-001..005: plugin root session, cache resolve, beginTurn degraded, completeTurn rebind.
+# 2026-11-16 TEST-MCP-TRIAGEPLUGIN-001: prove the background-scope hook dependency is present after plugin-core synchronization.
 #Requires -Version 7.0
 
 Describe 'TRIAGEPLUGIN identity and timeouts' {
@@ -285,6 +286,60 @@ payload:
         $classified.retryable | Should -BeTrue
         $classified.preserved | Should -BeTrue
         $classified.code | Should -Not -Be 'internal_server_error'
+    }
+
+    It 'TEST-MCP-TRIAGEPLUGIN-001 background scope loads its resolver dependency before stop-gate execution' {
+        $resolveFunction = [regex]::Match(
+            $script:PluginHookSource,
+            '(?ms)^function Resolve-PluginBackgroundScope \{.*?^\}').Value
+        $resolveFunction | Should -Not -BeNullOrEmpty
+
+        $probe = @'
+param(
+    [string]$ResolvePath,
+    [string]$FunctionText,
+    [string]$CacheDir,
+    [bool]$LoadDependency
+)
+if ($LoadDependency) { . $ResolvePath }
+function Get-YamlScalar { return 'root-session' }
+function Get-HookPayloadValue { return 'background-session' }
+Invoke-Expression $FunctionText
+Resolve-PluginBackgroundScope -CacheDir $CacheDir -Payload '{}'
+'@
+        $resolvePath = Join-Path $script:LibRoot 'resolve-cache-dir.ps1'
+        $cache = Join-Path $TestDrive 'background-scope-contract'
+
+        $negative = [powershell]::Create()
+        try {
+            $null = $negative.AddScript($probe).
+                AddArgument($resolvePath).
+                AddArgument($resolveFunction).
+                AddArgument($cache).
+                AddArgument($false)
+            $null = @($negative.Invoke())
+            $negative.HadErrors | Should -BeTrue -Because 'the control must reject a hook whose resolver dependency is absent'
+            [string]($negative.Streams.Error -join "`n") | Should -Match 'Get-McpBackgroundScopeKey'
+        }
+        finally {
+            $negative.Dispose()
+        }
+
+        $positive = [powershell]::Create()
+        try {
+            $null = $positive.AddScript($probe).
+                AddArgument($resolvePath).
+                AddArgument($resolveFunction).
+                AddArgument($cache).
+                AddArgument($true)
+            $result = @($positive.Invoke()) | Select-Object -Last 1
+            $positive.HadErrors | Should -BeFalse
+            [string]$result.Key | Should -Be 'background-session'
+            [string]$result.Dir | Should -Be (Join-Path (Join-Path $cache 'background') 'background-session')
+        }
+        finally {
+            $positive.Dispose()
+        }
     }
 
     It 'UserPromptSubmit.BackgroundPrompt_DoesNotSupersedeRootInProgressTurn' {

@@ -67,6 +67,54 @@ function Join-McpWorkspaceCachePath {
     return (Join-Path (Join-Path $WorkspacePath '.mcpServer') (Get-McpCacheAgentKey))
 }
 
+function Get-McpBackgroundScopeKey {
+    <#
+    .SYNOPSIS
+        FR-MCP-TRIAGEPLUGIN-001 / TR-MCP-TRIAGEPLUGIN-001 / TEST-MCP-TRIAGEPLUGIN-001: returns the identity of a background host.
+    .DESCRIPTION
+        Prefers MCP_SUBAGENT_ID, then GROK_SUBAGENT_ID, then the hook payload's
+        session_id. Returns no key when the candidate matches the root agentSessionId.
+    #>
+    [CmdletBinding()]
+    param(
+        [string]$PayloadSessionId,
+        [string]$RootAgentSessionId
+    )
+
+    $key = @($env:MCP_SUBAGENT_ID, $env:GROK_SUBAGENT_ID, $PayloadSessionId) |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
+    if ([string]::IsNullOrWhiteSpace($key)) { return $null }
+    $key = $key.Trim()
+    if (-not [string]::IsNullOrWhiteSpace($RootAgentSessionId) -and
+        [string]::Equals($key, $RootAgentSessionId.Trim(), [System.StringComparison]::Ordinal)) {
+        return $null
+    }
+    return $key
+}
+
+function Join-McpBackgroundScopePath {
+    <#
+    .SYNOPSIS
+        FR-MCP-TRIAGEPLUGIN-001 / TR-MCP-TRIAGEPLUGIN-001 / TEST-MCP-TRIAGEPLUGIN-001: returns one background host's cache path.
+    .DESCRIPTION
+        Builds <cache>/background/<key>. Unsafe or overlong keys are normalized
+        and suffixed with a hash of the original so distinct keys remain distinct.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$CacheDir,
+        [Parameter(Mandatory)][string]$Key
+    )
+
+    $safe = ($Key -replace '[^A-Za-z0-9._-]+', '-').Trim('-', '.')
+    if ($safe -cne $Key -or $safe.Length -gt 96) {
+        $hash = [System.Convert]::ToHexString([System.Security.Cryptography.SHA256]::HashData([System.Text.Encoding]::UTF8.GetBytes($Key))).Substring(0, 12).ToLowerInvariant()
+        if ($safe.Length -gt 80) { $safe = $safe.Substring(0, 80) }
+        $safe = if ($safe) { "$safe-$hash" } else { $hash }
+    }
+    return (Join-Path (Join-Path $CacheDir 'background') $safe)
+}
+
 function Get-McpWorkspaceFromEnvironment {
     $configured = @(
         $env:MCPSERVER_WORKSPACE_PATH,

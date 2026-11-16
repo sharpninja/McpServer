@@ -1,0 +1,29 @@
+{
+  "generatedAtLocal": "2026-11-16T08:54:01",
+  "unresolvedEntries": 1051,
+  "documentHistoryCommits": 157,
+  "numberedPrMerges": 53,
+  "planFilesScanned": 142,
+  "originBasisCounts": [
+    {
+      "basis": "bulk-document-commit",
+      "count": 311
+    },
+    {
+      "basis": "exact-plan-reference-and-bulk-document-commit",
+      "count": 324
+    },
+    {
+      "basis": "exact-plan-reference-and-focused-document-commit",
+      "count": 152
+    },
+    {
+      "basis": "focused-document-commit",
+      "count": 260
+    },
+    {
+      "basis": "no-plan-or-document-commit-match",
+      "count": 4
+    }
+  ]
+}

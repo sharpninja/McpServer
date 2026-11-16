@@ -1,0 +1,60 @@
+{
+  "collectedAtLocal": "2026-11-16T13:41:45",
+  "localPlugin": {
+    "name": "mcpserver-codex-plugin",
+    "root": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-codex-plugin\\mcpserver\\1.122.0",
+    "markerTrusted": true,
+    "healthNonceVerified": true,
+    "requestId": "req-20261116T194053Z-adfd"
+  },
+  "remotePlugin": {
+    "name": "mcpserver-codex-plugin",
+    "status": "available",
+    "agent": "Codex",
+    "hasSession": true,
+    "hasCurrentTurn": true,
+    "requirementsNamespace": true,
+    "requestId": "req-20261116T194111Z-930a",
+    "stderr": ""
+  },
+  "counts": {
+    "legion2": {
+      "functional": 420,
+      "technical": 569,
+      "testing": 641,
+      "mappings": 419
+    },
+    "omarchy": {
+      "functional": 420,
+      "technical": 569,
+      "testing": 641,
+      "mappings": 419
+    },
+    "divergentEntries": 1007,
+    "acceptanceCriteriaIdDifferences": 0
+  },
+  "differencesByDisposition": [
+    {
+      "disposition": "field_mismatch",
+      "count": 1007
+    }
+  ],
+  "differencesByKind": [
+    {
+      "kind": "functional",
+      "count": 218
+    },
+    {
+      "kind": "mappings",
+      "count": 21
+    },
+    {
+      "kind": "technical",
+      "count": 481
+    },
+    {
+      "kind": "testing",
+      "count": 287
+    }
+  ]
+}

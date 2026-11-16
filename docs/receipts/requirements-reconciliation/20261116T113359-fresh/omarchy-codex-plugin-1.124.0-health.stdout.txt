@@ -1,0 +1,16 @@
+type: result
+payload:
+  requestId: req-20261116T180858Z-6222
+  result:
+    status: Healthy
+    version: 1.4.40+68c2d9001e490f7cb76d60eb56032cbfea389f0c
+    checks:
+    - name: self
+      status: Healthy
+      duration: 0.0007
+    - name: upstream
+      status: Healthy
+      description: Federation enabled — no upstream target configured.
+      duration: 0.0012
+
+---
