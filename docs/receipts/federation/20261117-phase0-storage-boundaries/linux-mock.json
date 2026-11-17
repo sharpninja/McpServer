@@ -1,0 +1,113 @@
+{
+  "timestampLocal": "2026-11-17T14:17:50",
+  "task": "TASK-FEDPH0-002",
+  "requirements": [
+    "FR-MCP-175:ac-SaveDoesNotPublish",
+    "FR-MCP-177:ac-PooledConnectionDoesNotLeakBranch",
+    "FR-MCP-186:ac-DoltBaselineAndUpgrade",
+    "TEST-MCP-223",
+    "TEST-MCP-225",
+    "TEST-MCP-234"
+  ],
+  "executionExitCode": 0,
+  "executionExitSource": "Captured from completed original SSH invocation",
+  "inspection": {
+    "timestampLocal": "2026-11-17T14:17:20",
+    "host": "LAB-OMARCHY",
+    "os": "Omarchy",
+    "worktree": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117",
+    "commit": "5432362fe5bfb54519382b552602e6db7b863b7f",
+    "runId": "20261117T141439-fedph0-storage-linux-mock",
+    "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0StorageBoundaryMockGateTests --test-run-id 20261117T141439-fedph0-storage-linux-mock",
+    "exitCode": null,
+    "sdk": "10.0.403",
+    "powerShell": "7.7.0",
+    "total": 606,
+    "passed": 606,
+    "failed": 0,
+    "notExecuted": 0,
+    "expectedNegativeControls": 603,
+    "trx": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/TestResults/20261117T141439-fedph0-storage-linux-mock/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+    "trxSha256": "9B0AD195B46153A28B02483667C2181092CE7D7651A8A55CD49574985418FD86",
+    "nukeLog": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/.nuke/temp/build.2026-11-17_14-14-56.log",
+    "nukeLogSha256": "1B6C0475B225B0E03DDDDB475411F61E7A1E9AC0C9CEEFC51AB6AC4C0D50CC88",
+    "sourceHashes": [
+      {
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ProviderResolutionContract.cs",
+        "sha256": "49C718A54C58F304297BAB1B4D3DF07C279E27F7030FDA4FDAAE3F7F7AF556A9"
+      },
+      {
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ProviderResolutionMockGateTests.cs",
+        "sha256": "4CB25A91E848C028981566F6435453AB2F564E4F26AA1A4DD49FC41AC3BCDBB8"
+      },
+      {
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0StorageBoundaryContract.cs",
+        "sha256": "C8CC85C4121F519BA8535E5B93DB750AE912B14F499F5A7857B5D121B17BA271"
+      },
+      {
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0StorageBoundaryMockGateTests.cs",
+        "sha256": "3E8BDBA1F5D9D8E82F76C07817CD4A89CCE921A435DB227D31D450EB31D455E0"
+      }
+    ],
+    "gitStatus": [],
+    "binding": "scripted mock only",
+    "b1Status": "unproven",
+    "productionChanges": false,
+    "deployHold": true
+  },
+  "copies": [
+    {
+      "sha256": "9B0AD195B46153A28B02483667C2181092CE7D7651A8A55CD49574985418FD86",
+      "name": "linux-mock.trx",
+      "remote": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/TestResults/20261117T141439-fedph0-storage-linux-mock/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "1B6C0475B225B0E03DDDDB475411F61E7A1E9AC0C9CEEFC51AB6AC4C0D50CC88",
+      "name": "linux-mock.nuke.txt",
+      "remote": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/.nuke/temp/build.2026-11-17_14-14-56.log"
+    }
+  ],
+  "sourceComparisons": [
+    {
+      "windowsRawSha256": "63D629730B931D6F970C25A498533F448DB154F00424D98C9DCB35DD919A29A5",
+      "windowsLfNormalizedSha256": "49C718A54C58F304297BAB1B4D3DF07C279E27F7030FDA4FDAAE3F7F7AF556A9",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "49C718A54C58F304297BAB1B4D3DF07C279E27F7030FDA4FDAAE3F7F7AF556A9",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0ProviderResolutionContract.cs"
+    },
+    {
+      "windowsRawSha256": "1442E330B10CB36BC2B4652E6612BE4A8262C19CFDC1CC9C83E98CEE57341FF6",
+      "windowsLfNormalizedSha256": "4CB25A91E848C028981566F6435453AB2F564E4F26AA1A4DD49FC41AC3BCDBB8",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "4CB25A91E848C028981566F6435453AB2F564E4F26AA1A4DD49FC41AC3BCDBB8",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0ProviderResolutionMockGateTests.cs"
+    },
+    {
+      "windowsRawSha256": "7F0C0556BBF48640FDA1C8D995C491DA94BA797EF6552266C5C17F7BAEDF593E",
+      "windowsLfNormalizedSha256": "C8CC85C4121F519BA8535E5B93DB750AE912B14F499F5A7857B5D121B17BA271",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "C8CC85C4121F519BA8535E5B93DB750AE912B14F499F5A7857B5D121B17BA271",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0StorageBoundaryContract.cs"
+    },
+    {
+      "windowsRawSha256": "C7F798867BA5E46940E2DCF82A2C57C50EDC32B22DA71A63B8FEBED70519A1F7",
+      "windowsLfNormalizedSha256": "3E8BDBA1F5D9D8E82F76C07817CD4A89CCE921A435DB227D31D450EB31D455E0",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "3E8BDBA1F5D9D8E82F76C07817CD4A89CCE921A435DB227D31D450EB31D455E0",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0StorageBoundaryMockGateTests.cs"
+    }
+  ],
+  "lfNormalizedSourceEqualityVerified": true,
+  "rawSourceEqualityVerified": false,
+  "mockOnly": true,
+  "phase0ExitAccepted": false,
+  "deployHold": true
+}
