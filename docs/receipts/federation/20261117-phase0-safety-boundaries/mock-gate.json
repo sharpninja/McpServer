@@ -1,0 +1,93 @@
+{
+  "timestampLocal": "2026-11-17T16:39:03",
+  "tasks": [
+    "TASK-FEDPH0-006"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T163800-fedph0-safety-boundaries-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0SafetyBoundaryMockGateTests --test-run-id 20261117T163800-fedph0-safety-boundaries-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 56,
+  "passed": 56,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 5,
+  "expectedNegativeControls": 51,
+  "coverage": [
+    {
+      "ac": "ac-SameCellConflictNeedsReview",
+      "test": "TEST-MCP-228",
+      "satisfied": false,
+      "fr": "FR-MCP-180",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-007",
+      "text": "Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten."
+    },
+    {
+      "ac": "ac-ContractBlockedUntilLocalBranchesAttested",
+      "test": "TEST-MCP-234",
+      "satisfied": false,
+      "fr": "FR-MCP-186",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-013",
+      "text": "Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current."
+    },
+    {
+      "ac": "ac-SeedPhaseRejectsJoin",
+      "test": "TEST-MCP-235",
+      "satisfied": false,
+      "fr": "FR-MCP-187",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-014",
+      "text": "Given only Ph3 is implemented, when mode=join is requested, then501 unsupported_capability creates no target commit or routing change."
+    },
+    {
+      "ac": "ac-LeaseLostDuringWriteRejected",
+      "test": "TEST-MCP-237",
+      "satisfied": false,
+      "fr": "FR-MCP-189",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-016",
+      "text": "Given a write admitted under fence4, when expiry occurs mid-transaction, then that write finishes under the gate before fence5 takeover; a later fence4 write is rejected."
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0SafetyBoundaryContract.cs",
+      "sha256": "A4561A9F12EC2482B8BF7C9B300BE0F0A23936C1FE469A69C92B5A5833C2A165",
+      "lfNormalizedSha256": "40D82017D48A535B9CA1E58AF58099FF0CCB072EE51B627E0EF2EB6F12D3C577"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0SafetyBoundaryMockGateTests.cs",
+      "sha256": "AFE9B8ACFD4CA9257691117B6CA2968EBD630D9F7E0F181243657F4D8A4B44E4",
+      "lfNormalizedSha256": "4A31401F1CF445448DEBEBB91AC27831D9DD276FC3DE0EDA7ECEACF213028294"
+    }
+  ],
+  "copies": [
+    {
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T163800-fedph0-safety-boundaries-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "706D7C7047977E3B8E7440DDA7D6765A112B1D25033FA9942094FB51BDAAC2C4",
+      "name": "windows-mock.trx"
+    },
+    {
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_16-38-14.log",
+      "sha256": "24335AC04083AABDE20AF8E68EB311F355D17489A1DD15ECEF9699B78F933133",
+      "name": "windows-mock.nuke.txt"
+    }
+  ],
+  "pending": [
+    "Real merge, constraint and conflict-transaction semantics with retained review evidence",
+    "Full schema distribution, expand/contract, draft disposition and branch attestation design",
+    "Seed/join/recovery manifests, aliases, common root and legacy-divergence review",
+    "Real concurrent host-owner gate, crash reconciliation and requestId trailer proof",
+    "Remaining group designs/mocks, real binding and phase-exit acceptance"
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
