@@ -1,0 +1,99 @@
+{
+  "timestampLocal": "2026-11-17T14:11:53",
+  "task": "TASK-FEDPH0-002",
+  "group": "GRP-FEDPH0-001",
+  "taskStatus": "Planning",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "coverage": [
+    {
+      "ac": "ac-SaveDoesNotPublish",
+      "scenario": "AssertSaveDoesNotPublish",
+      "canonicalText": "Given main=C0 and remote=C0, when SaveChanges persists T1.title=draft, then main and remote stay C0 and no publication intent is emitted.",
+      "fr": "FR-MCP-175",
+      "criterionSatisfied": false,
+      "test": "TEST-MCP-223",
+      "binding": "scripted mock only"
+    },
+    {
+      "ac": "ac-PooledConnectionDoesNotLeakBranch",
+      "scenario": "AssertPooledBranchIsolation",
+      "canonicalText": "Given main T1.title=main and feature/search T1.title=feature, when alternating pooled reads run100 times, then each returns only its selected value.",
+      "fr": "FR-MCP-177",
+      "criterionSatisfied": false,
+      "test": "TEST-MCP-225",
+      "binding": "scripted mock only"
+    },
+    {
+      "ac": "ac-DoltBaselineAndUpgrade",
+      "scenario": "AssertBaselineAndUpgrade",
+      "canonicalText": "Given empty standalone Dolt then baseline schema1, when baseline and additive schema2 apply, then CRUD succeeds, data remains intact and repeated apply makes no further changes.",
+      "fr": "FR-MCP-186",
+      "criterionSatisfied": false,
+      "test": "TEST-MCP-234",
+      "binding": "scripted mock only"
+    }
+  ],
+  "runId": "20261117T141024-fedph0-storage-mock",
+  "host": "PAYTON-LEGION2",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0StorageBoundaryMockGateTests --test-run-id 20261117T141024-fedph0-storage-mock",
+  "total": 606,
+  "passed": 606,
+  "failed": 0,
+  "skipped": 0,
+  "positiveScenarios": 3,
+  "expectedNegativeControls": 603,
+  "negativeControlBreakdown": {
+    "migrationAndCrud": 96,
+    "pooledReads": 500,
+    "saveBoundary": 7
+  },
+  "sourceHashes": [
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0StorageBoundaryContract.cs",
+      "sha256": "7F0C0556BBF48640FDA1C8D995C491DA94BA797EF6552266C5C17F7BAEDF593E",
+      "lfNormalizedSha256": "C8CC85C4121F519BA8535E5B93DB750AE912B14F499F5A7857B5D121B17BA271"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0StorageBoundaryMockGateTests.cs",
+      "sha256": "C7F798867BA5E46940E2DCF82A2C57C50EDC32B22DA71A63B8FEBED70519A1F7",
+      "lfNormalizedSha256": "3E8BDBA1F5D9D8E82F76C07817CD4A89CCE921A435DB227D31D450EB31D455E0"
+    }
+  ],
+  "copies": [
+    {
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T141024-fedph0-storage-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "7E5627BDCAE96EAABD25C5A0410C29B8AD971AC684320442A8E1BEDE77669E14",
+      "name": "windows-storage-mock.trx"
+    },
+    {
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_14-10-28.log",
+      "sha256": "4B3134F2652AB4CCA5E2E5F5CA5EFA058774CC76185CC9E1B0B8B297A485F181",
+      "name": "windows-storage-mock.nuke.txt"
+    },
+    {
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/phase0-storage-initial-compiler-failure.log",
+      "sha256": "161928016D5AF324FFE6DA9210ED47B5F73E973C99D72BF49E49D3F47C0CC1CD",
+      "name": "initial-compiler-failure.txt"
+    }
+  ],
+  "priorFailure": {
+    "originalRetained": true,
+    "cause": "C#14 field keyword used as accessor-local enumeration variable",
+    "resolution": "Renamed accessor variables corruptField; immediate code-verify succeeded and Nuke group passed",
+    "kind": "Compiler"
+  },
+  "pending": [
+    "Real disposable provider/database binding after entire group mock barrier opens",
+    "Full current model, mappings, LINQ/raw SQL, concurrency, rollback, indexes/FKs and transaction observations",
+    "Remaining Phase0 group member designs and mock gates",
+    "Two-host real-provider runtime and full phase-exit gates",
+    "Independent phase-exit hostile review and operator B1-B12 acceptance"
+  ],
+  "productionImplementationChanged": false,
+  "taskCompleted": false,
+  "phase0ExitAccepted": false
+}
