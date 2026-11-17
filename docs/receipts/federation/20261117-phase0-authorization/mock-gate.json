@@ -1,0 +1,100 @@
+{
+  "timestampLocal": "2026-11-17T16:19:37",
+  "tasks": [
+    "TASK-FEDPH0-003",
+    "TASK-FEDPH0-005"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T161800-fedph0-authorization-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0AuthorizationMockGateTests --test-run-id 20261117T161800-fedph0-authorization-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 275,
+  "passed": 275,
+  "failed": 0,
+  "skipped": 0,
+  "positiveScenarioCases": 14,
+  "antiOverconstraintCases": 1,
+  "expectedNegativeControls": 260,
+  "coverage": [
+    {
+      "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0.",
+      "binding": "Scripted mock only",
+      "satisfied": false,
+      "id": "ac-RawRemoteCannotBypassPublicationPolicy"
+    },
+    {
+      "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects.",
+      "binding": "Scripted mock only",
+      "satisfied": false,
+      "id": "ac-ForeignProjectCloneDenied"
+    },
+    {
+      "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged.",
+      "binding": "Scripted mock only",
+      "satisfied": false,
+      "id": "ac-RevokedNodeCannotPublish"
+    },
+    {
+      "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs.",
+      "binding": "Scripted mock only",
+      "satisfied": false,
+      "id": "ac-LocalAppUserCannotPush"
+    },
+    {
+      "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation.",
+      "binding": "Scripted mock only",
+      "satisfied": false,
+      "id": "ac-RevokedCredentialFailsFetchAndPublish"
+    },
+    {
+      "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403.",
+      "binding": "Scripted mock only",
+      "satisfied": false,
+      "id": "ac-OfflineLocalAuthorizationStillApplies"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0AuthorizationContract.cs",
+      "sha256": "476A2AD782F4A785DA579EF4EB1CCEA139D0CF104C989D17E6C3E4B3C4AF8363",
+      "lfNormalizedSha256": "671997D5E3F42F9E6B3DD79B83355F63550D02C52F45F09708C2A5799747E707"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0AuthorizationMockGateTests.cs",
+      "sha256": "C37DE34923971245A721FE3FE35CD8C8614D2AC8011D720D9652E31CC7B43014",
+      "lfNormalizedSha256": "F8582B267E052A34132A1DA77DD15AB35097A48D6D9BB7E93558144A38A014B6"
+    }
+  ],
+  "copies": [
+    {
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T161800-fedph0-authorization-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "7A04A53CCEF9DC9EAF719D1A0341FA49EB48310BFBC53363D42551AB52D4D595",
+      "name": "windows-mock.trx"
+    },
+    {
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_16-17-46.log",
+      "sha256": "424E1D5BEAFE938E689FCC3CC98A2EF311DAE0534EE3D91AD0443D63DF307711",
+      "name": "windows-mock.nuke.txt"
+    }
+  ],
+  "judgments": [
+    "Zero transfer asserted only where approved AC requires it; commit-time revocation may follow upload",
+    "No numeric SQL error invented; unspecified local error details are allowed",
+    "Refs and effects reread independently from protocol outcome"
+  ],
+  "pending": [
+    "Exact restored Duende 7.4 patch issuance/introspection/grant removal/revocation proof",
+    "Per-request no-positive-cache and token relay including redirects/object URLs",
+    "SQL cross-link isolation, TLS pin/SAN and plugin least privilege",
+    "Remaining Phase0 group designs and mock gates",
+    "Real binding after entire group mock gate; full phase-exit gates and HV"
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
