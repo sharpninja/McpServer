@@ -1,0 +1,84 @@
+{
+  "timestampLocal": "2026-11-17T17:58:10",
+  "tasks": [
+    "TASK-FEDPH0-007"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T175730-fedph0-recovery-security-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0RecoverySecurityMockGateTests --test-run-id 20261117T175730-fedph0-recovery-security-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 287,
+  "passed": 287,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 7,
+  "expectedNegativeControls": 280,
+  "coverage": [
+    {
+      "ac": "ac-HubRestoreFromOlderBackup",
+      "test": "TEST-MCP-227",
+      "satisfied": false,
+      "fr": "FR-MCP-179",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-006",
+      "text": "Given a node remembers epoch E1 generation90 and the hub restores a backup at generation40, when the hub reopens, then epoch E2 differs from E1; E1 reports fail409 hub_epoch_changed and no head is force-reset. Node A1 is retained until verified ancestry recovery republishes missing history."
+    },
+    {
+      "ac": "ac-ReceiptsAndLogsContainNoCredentials",
+      "test": "TEST-MCP-232",
+      "satisfied": false,
+      "fr": "FR-MCP-184",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-011",
+      "text": "Given unique fixture canaries are injected through protected secret references, when commands, retries and failures execute on both hosts, then scans of argv, receipts, logs, chat/audit payloads, memory stores, generated files, Git staged blobs/new commits and Dolt working sets/new history find zero canary values. Scanner diagnostics and rejected commit previews also contain zero values; no secret is added to history to test the detector."
+    },
+    {
+      "ac": "ac-UnknownCertificatePinRejected",
+      "test": "TEST-MCP-233",
+      "satisfied": false,
+      "fr": "FR-MCP-185",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-012",
+      "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0RecoverySecurityContract.cs",
+      "sha256": "6207D7BD3BE98A610199793CADFA4F3CBCD097BEF2A9EEF2D5BBDFB5CDF14860",
+      "lfNormalizedSha256": "60E9F403461B05C293A3DA108161037EDF44D4ECCE918D4B966BB021137AB8DA"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0RecoverySecurityMockGateTests.cs",
+      "sha256": "26503D769786086408E575B1024B81910A228B3CB276E387B2B3066C2FC35EEB",
+      "lfNormalizedSha256": "8253BB3871EAE579C00ADAB3F08D442B0112379AFF881BCF15D6BFFE800F5885"
+    }
+  ],
+  "copies": [
+    {
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T175730-fedph0-recovery-security-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "30951C4B80E2B18D953188408A508D27616482FB2A0F459108759C295A5018C9",
+      "name": "windows-mock.trx"
+    },
+    {
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_17-57-34.log",
+      "sha256": "1E344890FCAB51D7D2CF16192B95DB922246F78128E7A22AF387C18684CC7575",
+      "name": "windows-mock.nuke.txt"
+    }
+  ],
+  "pending": [
+    "Partial design and mock evidence only; Task007 and all B1-B12 remain unaccepted.",
+    "Bind unchanged scenarios to disposable real restore, TLS and protected-reference/capture adapters on both hosts.",
+    "Prove B10 measured scale/storage/history/resource budgets and B11 polling/retry/convergence behavior.",
+    "Complete B12 candidate/review ref retention/GC, hub restore epoch listeners and loopback/CA/pin/secret disclosure proof.",
+    "Complete all nine group member designs and mock coverage before any member implementation; full two-host exit gates and independent HV pending."
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
