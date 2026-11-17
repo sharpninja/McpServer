@@ -1,0 +1,46 @@
+{
+  "finalSourceHashes": [
+    {
+      "sha256": "63D629730B931D6F970C25A498533F448DB154F00424D98C9DCB35DD919A29A5",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ProviderResolutionContract.cs"
+    },
+    {
+      "sha256": "1442E330B10CB36BC2B4652E6612BE4A8262C19CFDC1CC9C83E98CEE57341FF6",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ProviderResolutionMockGateTests.cs"
+    }
+  ],
+  "runs": [
+    {
+      "runId": "20261117T134200-fedph0-b1-mock",
+      "host": "PAYTON-LEGION2",
+      "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0ProviderResolutionMockGateTests --test-run-id 20261117T134200-fedph0-b1-mock",
+      "trx": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T134200-fedph0-b1-mock/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "trxSha256": "0D9520D5E190736F506C47FC877EA8D89655C1086FC6FA10E01821E62481EC27",
+      "total": 67,
+      "passed": 67,
+      "failed": 0,
+      "notExecuted": 0,
+      "expectedNegativeControls": 60
+    },
+    {
+      "runId": "20261117T134400-fedph0-b1-mock",
+      "host": "PAYTON-LEGION2",
+      "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0ProviderResolutionMockGateTests --test-run-id 20261117T134400-fedph0-b1-mock",
+      "trx": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T134400-fedph0-b1-mock/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "trxSha256": "0EDCA886A6B8A263863F8497D22A4EB82B391A7139803FC85422935375CD12AE",
+      "total": 75,
+      "passed": 75,
+      "failed": 0,
+      "notExecuted": 0,
+      "expectedNegativeControls": 68
+    }
+  ],
+  "requirements": [
+    "FR-MCP-186:ac-FourProvidersResolve",
+    "TR-MCP-FEDERATION-013",
+    "TEST-MCP-234"
+  ],
+  "finalOutcome": "75passed/0failed/0skipped,68expected-negative-controls",
+  "binding": "scripted mock only",
+  "realProviderAcceptance": false
+}

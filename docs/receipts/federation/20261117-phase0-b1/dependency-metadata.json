@@ -1,0 +1,352 @@
+{
+  "timestampLocal": "2026-11-17T13:47:08",
+  "packageCandidates": [
+    {
+      "id": "Microting.EntityFrameworkCore.MySql",
+      "version": "10.0.0-preview.1",
+      "authors": "Laurents Meyer, Caleb Lloyd, Yuko Zheng",
+      "license": "MIT",
+      "repository": {
+        "url": "https://github.com/microting/Pomelo.EntityFrameworkCore.MySql",
+        "commit": "9bdd75c6b5b486c54b436faef5b4013eb30aeacc",
+        "branch": ""
+      },
+      "dependencyGroups": [
+        {
+          "targetFramework": "net10.0",
+          "dependencies": [
+            {
+              "version": "[10.0.0, 10.0.999]",
+              "id": "Microsoft.EntityFrameworkCore.Relational"
+            },
+            {
+              "version": "2.5.0",
+              "id": "MySqlConnector"
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://api.nuget.org/v3-flatcontainer/microting.entityframeworkcore.mysql/10.0.0-preview.1/microting.entityframeworkcore.mysql.nuspec"
+    },
+    {
+      "id": "Microting.EntityFrameworkCore.MySql",
+      "version": "10.0.0-preview.2",
+      "authors": "Laurents Meyer, Caleb Lloyd, Yuko Zheng",
+      "license": "MIT",
+      "repository": {
+        "url": "https://github.com/microting/Pomelo.EntityFrameworkCore.MySql",
+        "commit": "b8a143b5c0d6447a4e46f792c2d40664c07ae3b3",
+        "branch": ""
+      },
+      "dependencyGroups": [
+        {
+          "targetFramework": "net10.0",
+          "dependencies": [
+            {
+              "version": "[10.0.1, 10.0.999]",
+              "id": "Microsoft.EntityFrameworkCore.Relational"
+            },
+            {
+              "version": "2.5.0",
+              "id": "MySqlConnector"
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://api.nuget.org/v3-flatcontainer/microting.entityframeworkcore.mysql/10.0.0-preview.2/microting.entityframeworkcore.mysql.nuspec"
+    },
+    {
+      "id": "Microting.EntityFrameworkCore.MySql",
+      "version": "10.0.0-preview.3",
+      "authors": "Laurents Meyer, Caleb Lloyd, Yuko Zheng",
+      "license": "MIT",
+      "repository": {
+        "url": "https://github.com/microting/Pomelo.EntityFrameworkCore.MySql",
+        "commit": "b1228e016fd72d477e44a1ae7d649b69535ce870",
+        "branch": ""
+      },
+      "dependencyGroups": [
+        {
+          "targetFramework": "net10.0",
+          "dependencies": [
+            {
+              "version": "[10.0.1, 10.0.999]",
+              "id": "Microsoft.EntityFrameworkCore.Relational"
+            },
+            {
+              "version": "2.5.0",
+              "id": "MySqlConnector"
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://api.nuget.org/v3-flatcontainer/microting.entityframeworkcore.mysql/10.0.0-preview.3/microting.entityframeworkcore.mysql.nuspec"
+    },
+    {
+      "id": "Microting.EntityFrameworkCore.MySql",
+      "version": "10.0.14",
+      "authors": "Laurents Meyer, Caleb Lloyd, Yuko Zheng",
+      "license": "MIT",
+      "repository": {
+        "url": "https://github.com/microting/Pomelo.EntityFrameworkCore.MySql",
+        "commit": "90cb82903918a35b3c1c4dd16b2a20a8b3dd628d",
+        "branch": ""
+      },
+      "dependencyGroups": [
+        {
+          "targetFramework": "net10.0",
+          "dependencies": [
+            {
+              "version": "[10.0.14, 10.0.999]",
+              "id": "Microsoft.EntityFrameworkCore.Relational"
+            },
+            {
+              "version": "2.6.2",
+              "id": "MySqlConnector"
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://api.nuget.org/v3-flatcontainer/microting.entityframeworkcore.mysql/10.0.14/microting.entityframeworkcore.mysql.nuspec"
+    }
+  ],
+  "driverCandidate": {
+    "id": "MySqlConnector",
+    "version": "2.6.2",
+    "authors": "Bradley Grainger",
+    "license": "MIT",
+    "sourceUrl": "https://api.nuget.org/v3-flatcontainer/mysqlconnector/2.6.2/mysqlconnector.nuspec",
+    "repository": {
+      "commit": "775689bb3e1ab55d16171e0795264fa746e364c4",
+      "url": "https://github.com/mysql-net/MySqlConnector.git"
+    },
+    "dependencyGroups": [
+      {
+        "targetFramework": "net10.0",
+        "dependencies": [
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.Logging.Abstractions"
+          },
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.DependencyInjection.Abstractions"
+          }
+        ]
+      },
+      {
+        "targetFramework": ".NETFramework4.6.2",
+        "dependencies": [
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.Logging.Abstractions"
+          },
+          {
+            "version": "8.0.1",
+            "id": "System.Diagnostics.DiagnosticSource"
+          },
+          {
+            "version": "4.6.3",
+            "id": "System.Threading.Tasks.Extensions"
+          },
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.DependencyInjection.Abstractions"
+          }
+        ]
+      },
+      {
+        "targetFramework": ".NETFramework4.7.1",
+        "dependencies": [
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.Logging.Abstractions"
+          },
+          {
+            "version": "8.0.1",
+            "id": "System.Diagnostics.DiagnosticSource"
+          },
+          {
+            "version": "4.6.3",
+            "id": "System.Threading.Tasks.Extensions"
+          },
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.DependencyInjection.Abstractions"
+          }
+        ]
+      },
+      {
+        "targetFramework": ".NETFramework4.8",
+        "dependencies": [
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.Logging.Abstractions"
+          },
+          {
+            "version": "8.0.1",
+            "id": "System.Diagnostics.DiagnosticSource"
+          },
+          {
+            "version": "4.6.3",
+            "id": "System.Threading.Tasks.Extensions"
+          },
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.DependencyInjection.Abstractions"
+          }
+        ]
+      },
+      {
+        "targetFramework": "net6.0",
+        "dependencies": [
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.Logging.Abstractions"
+          },
+          {
+            "version": "8.0.1",
+            "id": "System.Diagnostics.DiagnosticSource"
+          },
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.DependencyInjection.Abstractions"
+          }
+        ]
+      },
+      {
+        "targetFramework": "net8.0",
+        "dependencies": [
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.Logging.Abstractions"
+          },
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.DependencyInjection.Abstractions"
+          }
+        ]
+      },
+      {
+        "targetFramework": "net9.0",
+        "dependencies": [
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.Logging.Abstractions"
+          },
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.DependencyInjection.Abstractions"
+          }
+        ]
+      },
+      {
+        "targetFramework": ".NETStandard2.0",
+        "dependencies": [
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.Logging.Abstractions"
+          },
+          {
+            "version": "8.0.1",
+            "id": "System.Diagnostics.DiagnosticSource"
+          },
+          {
+            "version": "4.6.3",
+            "id": "System.Threading.Tasks.Extensions"
+          },
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.DependencyInjection.Abstractions"
+          }
+        ]
+      },
+      {
+        "targetFramework": ".NETStandard2.1",
+        "dependencies": [
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.Logging.Abstractions"
+          },
+          {
+            "version": "8.0.1",
+            "id": "System.Diagnostics.DiagnosticSource"
+          },
+          {
+            "version": "8.0.2",
+            "id": "Microsoft.Extensions.DependencyInjection.Abstractions"
+          }
+        ]
+      }
+    ]
+  },
+  "doltRelease": {
+    "assets": [
+      {
+        "name": "dolt-2.7.4-1.aarch64.rpm",
+        "size": 40953165,
+        "digest": "sha256:25ace93a6d79e6bdb7b55ac4b31a9795f879b110503218888ab78d6dfa5ea9e7",
+        "browser_download_url": "https://github.com/dolthub/dolt/releases/download/v2.7.4/dolt-2.7.4-1.aarch64.rpm"
+      },
+      {
+        "name": "dolt-2.7.4-1.x86_64.rpm",
+        "size": 44235404,
+        "digest": "sha256:611841c044e3d741fe9815488d9bc7140fb690e44fa754f60b645aac0a7b5504",
+        "browser_download_url": "https://github.com/dolthub/dolt/releases/download/v2.7.4/dolt-2.7.4-1.x86_64.rpm"
+      },
+      {
+        "name": "dolt-darwin-amd64.tar.gz",
+        "size": 43813252,
+        "digest": "sha256:cd8db0c3d2766167b5ac0f41fd29493d9e7cb90520a90406a89351ab7e5652e4",
+        "browser_download_url": "https://github.com/dolthub/dolt/releases/download/v2.7.4/dolt-darwin-amd64.tar.gz"
+      },
+      {
+        "name": "dolt-darwin-arm64.tar.gz",
+        "size": 41279152,
+        "digest": "sha256:490aadba28ce1c7846b8ecff8ac21da8bf758f6f94aae96c88f7a9908ea27017",
+        "browser_download_url": "https://github.com/dolthub/dolt/releases/download/v2.7.4/dolt-darwin-arm64.tar.gz"
+      },
+      {
+        "name": "dolt-linux-amd64.tar.gz",
+        "size": 44178850,
+        "digest": "sha256:bfadc7c38c3883309770691445bf963be84c99ea4274f782b398be21e837c85c",
+        "browser_download_url": "https://github.com/dolthub/dolt/releases/download/v2.7.4/dolt-linux-amd64.tar.gz"
+      },
+      {
+        "name": "dolt-linux-arm64.tar.gz",
+        "size": 40901417,
+        "digest": "sha256:a4a91a24d0d26641e12576796b42a0b98edf8cf6b05f2828151730723cdc5bb3",
+        "browser_download_url": "https://github.com/dolthub/dolt/releases/download/v2.7.4/dolt-linux-arm64.tar.gz"
+      },
+      {
+        "name": "dolt-windows-amd64.7z",
+        "size": 23412960,
+        "digest": "sha256:0a8e0e1220156d40aeeeb213d099345e751bdf142b86203be1a64aa2669debe3",
+        "browser_download_url": "https://github.com/dolthub/dolt/releases/download/v2.7.4/dolt-windows-amd64.7z"
+      },
+      {
+        "name": "dolt-windows-amd64.msi",
+        "size": 45924352,
+        "digest": "sha256:b556da930201148740efc3065fa59d285a378de1855b8965269f816e948538c8",
+        "browser_download_url": "https://github.com/dolthub/dolt/releases/download/v2.7.4/dolt-windows-amd64.msi"
+      },
+      {
+        "name": "dolt-windows-amd64.zip",
+        "size": 40242547,
+        "digest": "sha256:e23523e25f865eb7d8aa98bc5e318d377342172643dfded0b5e8d6c30d0355be",
+        "browser_download_url": "https://github.com/dolthub/dolt/releases/download/v2.7.4/dolt-windows-amd64.zip"
+      },
+      {
+        "name": "install.sh",
+        "size": 3225,
+        "digest": "sha256:268a75b02101ae36dc898fe6c297dc51be10c1405b72edd11f3fc0db012576d1",
+        "browser_download_url": "https://github.com/dolthub/dolt/releases/download/v2.7.4/install.sh"
+      }
+    ],
+    "tag": "v2.7.4",
+    "sourceUrl": "https://github.com/dolthub/dolt/releases/tag/v2.7.4",
+    "apiSourceUrl": "https://api.github.com/repos/dolthub/dolt/releases/tags/v2.7.4",
+    "publishedAt": "2026-11-16T18:15:12Z"
+  },
+  "adoption": "None. Metadata research only; compatibility and host acceptance remain unproven."
+}

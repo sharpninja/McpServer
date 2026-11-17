@@ -1,0 +1,37 @@
+{
+  "candidates": {
+    "dolt": "2.7.4",
+    "provider": "Microting.EntityFrameworkCore.MySql10.0.0-preview.1",
+    "driver": "MySqlConnector2.6.2",
+    "compatibility": "not run",
+    "packageRestoreAudit": "not run"
+  },
+  "observations": [
+    "No Dolt executable on PATH or running process at either inventory snapshot",
+    "LEGION Docker engine image query was unavailable; no engine started",
+    "No new packages/images/services installed or started",
+    "Initial missing-parent write and initial incorrect planned-case arithmetic corrected explicitly in MCP audit",
+    "Image helper initial Get-Command returned multiple executables; fixed explicit first selection and reran parser/PSSA0 before registry inspection"
+  ],
+  "stage": "DesignAndMock",
+  "task": "TASK-FEDPH0-001",
+  "phase0ExitAccepted": false,
+  "taskStatus": "Planning",
+  "parentPlan": "PLAN-FEDDOLT-001",
+  "pending": [
+    "Verify package bytes, complete origin/license review and transitive audit before adoption",
+    "Bind same assertions to disposable real factories and database behavior after group mock barrier opens",
+    "Complete native Windows hosting/service/account/recovery/data ACL/child lifecycle evidence",
+    "Prove LAB Dolt mount and pinned image runtime",
+    "Complete all remaining Phase0 member designs and mock gates; all production barriers remain closed",
+    "B2-B12 outputs and two-host phase-exit gates remain unproven"
+  ],
+  "b1Status": "unproven",
+  "baseline": {
+    "efCore": "10.0.0",
+    "adoptedDependencyChanges": [],
+    "targetFramework": "net10.0"
+  },
+  "timestampLocal": "2026-11-17T13:48:31",
+  "deployHold": true
+}

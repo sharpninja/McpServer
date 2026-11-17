@@ -1,0 +1,203 @@
+{
+  "omarchy": {
+    "timestampLocal": "2026-11-17T13:31:13",
+    "hostName": "LAB-OMARCHY",
+    "scriptSha256": "A3BBDC8A5CC554226F50A8430753B307365463CD635D117144957E9994ABAF7F",
+    "os": "Omarchy",
+    "architecture": "X64",
+    "powerShell": "7.7.0",
+    "workspace": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117",
+    "tools": [
+      {
+        "name": "dotnet",
+        "installed": true,
+        "path": "/home/sharpninja/tools/dotnet",
+        "version": "10.0.403",
+        "exitCode": 0
+      },
+      {
+        "name": "dolt",
+        "installed": false,
+        "path": null,
+        "version": null,
+        "exitCode": null
+      },
+      {
+        "name": "docker",
+        "installed": true,
+        "path": "/usr/bin/docker",
+        "version": "Docker version 29.9.2, build a82e528901",
+        "exitCode": 0
+      }
+    ],
+    "doltServices": [],
+    "linuxDoltDirectory": {
+      "exists": false,
+      "path": "/var/lib/dolt"
+    },
+    "doltProcesses": [],
+    "containerImages": [
+      {
+        "images": [],
+        "filter": "*dolt*",
+        "errorText": null,
+        "exitCode": 0
+      },
+      {
+        "images": [
+          {
+            "Containers": "1",
+            "CreatedAt": "2026-11-09 13:49:56 -0600 CST",
+            "CreatedSince": "8 days ago",
+            "Digest": "sha256:8a63f6137994efa82f1436066c0cf2f6f974f151cade8a2cb2fc3c97a4160e9a",
+            "ID": "sha256:8a63f6137994efa82f1436066c0cf2f6f974f151cade8a2cb2fc3c97a4160e9a",
+            "Repository": "payton-qbrain-postgres-benchmark",
+            "SharedSize": "N/A",
+            "Size": "4.27GB",
+            "Tag": "full-source",
+            "UniqueSize": "N/A"
+          },
+          {
+            "Containers": "2",
+            "CreatedAt": "2026-11-09 13:10:13 -0600 CST",
+            "CreatedSince": "8 days ago",
+            "Digest": "sha256:ca4eb7c59b383a1ebe2c7541a062fbfa7a66468391ddf19f19781d9d9e216f8f",
+            "ID": "sha256:ca4eb7c59b383a1ebe2c7541a062fbfa7a66468391ddf19f19781d9d9e216f8f",
+            "Repository": "payton-qbrain-postgres-benchmark",
+            "SharedSize": "N/A",
+            "Size": "2.89GB",
+            "Tag": "toolchain",
+            "UniqueSize": "N/A"
+          },
+          {
+            "Containers": "3",
+            "CreatedAt": "2026-11-09 12:39:22 -0600 CST",
+            "CreatedSince": "8 days ago",
+            "Digest": "sha256:97b070239283ef7ebd53bc80440dacda46bfbf6576856a358be670c288cfb50b",
+            "ID": "sha256:97b070239283ef7ebd53bc80440dacda46bfbf6576856a358be670c288cfb50b",
+            "Repository": "payton-qbrain-postgres-benchmark",
+            "SharedSize": "N/A",
+            "Size": "1.37GB",
+            "Tag": "git-97b0702",
+            "UniqueSize": "N/A"
+          },
+          {
+            "Containers": "3",
+            "CreatedAt": "2026-11-09 12:39:22 -0600 CST",
+            "CreatedSince": "8 days ago",
+            "Digest": "sha256:97b070239283ef7ebd53bc80440dacda46bfbf6576856a358be670c288cfb50b",
+            "ID": "sha256:97b070239283ef7ebd53bc80440dacda46bfbf6576856a358be670c288cfb50b",
+            "Repository": "payton-qbrain-postgres-benchmark",
+            "SharedSize": "N/A",
+            "Size": "1.37GB",
+            "Tag": "single",
+            "UniqueSize": "N/A"
+          },
+          {
+            "Containers": "1",
+            "CreatedAt": "2026-11-05 01:30:24 -0600 CST",
+            "CreatedSince": "12 days ago",
+            "Digest": "sha256:f9a7b9ebf6f56201f949db745e47bc423c0f0f8294bafe991cc10bf74b029657",
+            "ID": "sha256:f9a7b9ebf6f56201f949db745e47bc423c0f0f8294bafe991cc10bf74b029657",
+            "Repository": "postgres",
+            "SharedSize": "N/A",
+            "Size": "639MB",
+            "Tag": "16",
+            "UniqueSize": "N/A"
+          },
+          {
+            "Containers": "11",
+            "CreatedAt": "2026-10-21 17:57:32 -0500 CDT",
+            "CreatedSince": "3 weeks ago",
+            "Digest": "sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b",
+            "ID": "sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b",
+            "Repository": "postgres",
+            "SharedSize": "N/A",
+            "Size": "424MB",
+            "Tag": "17-alpine",
+            "UniqueSize": "N/A"
+          },
+          {
+            "Containers": "3",
+            "CreatedAt": "2026-08-13 14:15:37 -0500 CDT",
+            "CreatedSince": "3 months ago",
+            "Digest": "sha256:e38411452a464af89e5adadb8d223bf53b898d47d6ef918b2d58c08707350449",
+            "ID": "sha256:e38411452a464af89e5adadb8d223bf53b898d47d6ef918b2d58c08707350449",
+            "Repository": "postgres",
+            "SharedSize": "N/A",
+            "Size": "643MB",
+            "Tag": "<none>",
+            "UniqueSize": "N/A"
+          }
+        ],
+        "filter": "*postgres*",
+        "errorText": null,
+        "exitCode": 0
+      },
+      {
+        "images": [],
+        "filter": "*mssql*",
+        "errorText": null,
+        "exitCode": 0
+      }
+    ],
+    "scope": "Read-only discovery. No workload start, image pull, dependency installation, service or database mutation."
+  },
+  "snapshotOnly": true,
+  "legion": {
+    "timestampLocal": "2026-11-17T13:31:06",
+    "hostName": "PAYTON-LEGION2",
+    "scriptSha256": "A3BBDC8A5CC554226F50A8430753B307365463CD635D117144957E9994ABAF7F",
+    "os": "Microsoft Windows 10.0.26300",
+    "architecture": "X64",
+    "powerShell": "7.6.9",
+    "workspace": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117",
+    "tools": [
+      {
+        "name": "dotnet",
+        "installed": true,
+        "path": "C:\\Program Files\\dotnet\\dotnet.exe",
+        "version": "10.0.404",
+        "exitCode": 0
+      },
+      {
+        "name": "dolt",
+        "installed": false,
+        "path": null,
+        "version": null,
+        "exitCode": null
+      },
+      {
+        "name": "docker",
+        "installed": true,
+        "path": "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe",
+        "version": "Docker version 29.8.2, build 7fc2dff",
+        "exitCode": 0
+      }
+    ],
+    "doltServices": [],
+    "linuxDoltDirectory": null,
+    "doltProcesses": [],
+    "containerImages": [
+      {
+        "images": [],
+        "exitCode": 1,
+        "filter": "*dolt*",
+        "errorText": "failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+      },
+      {
+        "images": [],
+        "exitCode": 1,
+        "filter": "*postgres*",
+        "errorText": "failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+      },
+      {
+        "images": [],
+        "exitCode": 1,
+        "filter": "*mssql*",
+        "errorText": "failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+      }
+    ],
+    "scope": "Read-only discovery. No workload start, image pull, dependency installation, service or database mutation."
+  }
+}
