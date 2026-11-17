@@ -1,0 +1,159 @@
+{
+  "timestampLocal": "2026-11-17T16:32:58",
+  "tasks": [
+    "TASK-FEDPH0-004"
+  ],
+  "executionExitCode": 0,
+  "inspection": {
+    "timestampLocal": "2026-11-17T16:31:53",
+    "host": "LAB-OMARCHY",
+    "os": "Omarchy",
+    "worktree": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117",
+    "commit": "5434950da385d01f2e1cb0baa054fe9cd23e7d0b",
+    "runId": "20261117T163100-fedph0-identity-isolation-linux-mock",
+    "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0IdentityIsolationMockGateTests --test-run-id 20261117T163100-fedph0-identity-isolation-linux-mock",
+    "exitCode": 0,
+    "sdk": "10.0.403",
+    "powerShell": "7.7.0",
+    "total": 136,
+    "passed": 136,
+    "failed": 0,
+    "notExecuted": 0,
+    "expectedNegativeControls": 132,
+    "trx": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/TestResults/20261117T163100-fedph0-identity-isolation-linux-mock/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+    "trxSha256": "04C160793DD220F566FA28125021568CC7EB1927B8EDB0FF11F3FAAE40F458D2",
+    "nukeLog": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/.nuke/temp/build.2026-11-17_16-31-02.log",
+    "nukeLogSha256": "638C82FA4AC877FA475F69E5386B8123D19F038AF0605CE404E16FC0506075CD",
+    "sourceHashes": [
+      {
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AuthorizationContract.cs",
+        "sha256": "671997D5E3F42F9E6B3DD79B83355F63550D02C52F45F09708C2A5799747E707"
+      },
+      {
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AuthorizationMockGateTests.cs",
+        "sha256": "F8582B267E052A34132A1DA77DD15AB35097A48D6D9BB7E93558144A38A014B6"
+      },
+      {
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityIsolationContract.cs",
+        "sha256": "2DB8563682C7379A1571A5BF99B638247576A33A3321A0C07512B0B61EC4BD5F"
+      },
+      {
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityIsolationMockGateTests.cs",
+        "sha256": "B014616E33E6E3419D2065A6222BAE4A816D83C312653243B5DEDF3AE6734162"
+      },
+      {
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ProviderResolutionContract.cs",
+        "sha256": "49C718A54C58F304297BAB1B4D3DF07C279E27F7030FDA4FDAAE3F7F7AF556A9"
+      },
+      {
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ProviderResolutionMockGateTests.cs",
+        "sha256": "4CB25A91E848C028981566F6435453AB2F564E4F26AA1A4DD49FC41AC3BCDBB8"
+      },
+      {
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0StorageBoundaryContract.cs",
+        "sha256": "C8CC85C4121F519BA8535E5B93DB750AE912B14F499F5A7857B5D121B17BA271"
+      },
+      {
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0StorageBoundaryMockGateTests.cs",
+        "sha256": "3E8BDBA1F5D9D8E82F76C07817CD4A89CCE921A435DB227D31D450EB31D455E0"
+      }
+    ],
+    "gitStatus": [],
+    "binding": "scripted mock only",
+    "b1Status": "unproven",
+    "productionChanges": false,
+    "deployHold": true
+  },
+  "copies": [
+    {
+      "sha256": "04C160793DD220F566FA28125021568CC7EB1927B8EDB0FF11F3FAAE40F458D2",
+      "name": "linux-mock.trx",
+      "remote": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/TestResults/20261117T163100-fedph0-identity-isolation-linux-mock/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "638C82FA4AC877FA475F69E5386B8123D19F038AF0605CE404E16FC0506075CD",
+      "name": "linux-mock.nuke.txt",
+      "remote": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/.nuke/temp/build.2026-11-17_16-31-02.log"
+    }
+  ],
+  "sourceComparisons": [
+    {
+      "windowsRawSha256": "476A2AD782F4A785DA579EF4EB1CCEA139D0CF104C989D17E6C3E4B3C4AF8363",
+      "windowsLfNormalizedSha256": "671997D5E3F42F9E6B3DD79B83355F63550D02C52F45F09708C2A5799747E707",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "671997D5E3F42F9E6B3DD79B83355F63550D02C52F45F09708C2A5799747E707",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0AuthorizationContract.cs"
+    },
+    {
+      "windowsRawSha256": "C37DE34923971245A721FE3FE35CD8C8614D2AC8011D720D9652E31CC7B43014",
+      "windowsLfNormalizedSha256": "F8582B267E052A34132A1DA77DD15AB35097A48D6D9BB7E93558144A38A014B6",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "F8582B267E052A34132A1DA77DD15AB35097A48D6D9BB7E93558144A38A014B6",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0AuthorizationMockGateTests.cs"
+    },
+    {
+      "windowsRawSha256": "834EB93E3096904D4E47908AF9F6BEB7F7B5C15FC34B86490D61F2F9DD4B883E",
+      "windowsLfNormalizedSha256": "2DB8563682C7379A1571A5BF99B638247576A33A3321A0C07512B0B61EC4BD5F",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "2DB8563682C7379A1571A5BF99B638247576A33A3321A0C07512B0B61EC4BD5F",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityIsolationContract.cs"
+    },
+    {
+      "windowsRawSha256": "1BD513139A66AE4EC7297856DC5A899DD197EC288B1935438C57FFAD0502C700",
+      "windowsLfNormalizedSha256": "B014616E33E6E3419D2065A6222BAE4A816D83C312653243B5DEDF3AE6734162",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "B014616E33E6E3419D2065A6222BAE4A816D83C312653243B5DEDF3AE6734162",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityIsolationMockGateTests.cs"
+    },
+    {
+      "windowsRawSha256": "63D629730B931D6F970C25A498533F448DB154F00424D98C9DCB35DD919A29A5",
+      "windowsLfNormalizedSha256": "49C718A54C58F304297BAB1B4D3DF07C279E27F7030FDA4FDAAE3F7F7AF556A9",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "49C718A54C58F304297BAB1B4D3DF07C279E27F7030FDA4FDAAE3F7F7AF556A9",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0ProviderResolutionContract.cs"
+    },
+    {
+      "windowsRawSha256": "1442E330B10CB36BC2B4652E6612BE4A8262C19CFDC1CC9C83E98CEE57341FF6",
+      "windowsLfNormalizedSha256": "4CB25A91E848C028981566F6435453AB2F564E4F26AA1A4DD49FC41AC3BCDBB8",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "4CB25A91E848C028981566F6435453AB2F564E4F26AA1A4DD49FC41AC3BCDBB8",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0ProviderResolutionMockGateTests.cs"
+    },
+    {
+      "windowsRawSha256": "7F0C0556BBF48640FDA1C8D995C491DA94BA797EF6552266C5C17F7BAEDF593E",
+      "windowsLfNormalizedSha256": "C8CC85C4121F519BA8535E5B93DB750AE912B14F499F5A7857B5D121B17BA271",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "C8CC85C4121F519BA8535E5B93DB750AE912B14F499F5A7857B5D121B17BA271",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0StorageBoundaryContract.cs"
+    },
+    {
+      "windowsRawSha256": "C7F798867BA5E46940E2DCF82A2C57C50EDC32B22DA71A63B8FEBED70519A1F7",
+      "windowsLfNormalizedSha256": "3E8BDBA1F5D9D8E82F76C07817CD4A89CCE921A435DB227D31D450EB31D455E0",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "3E8BDBA1F5D9D8E82F76C07817CD4A89CCE921A435DB227D31D450EB31D455E0",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0StorageBoundaryMockGateTests.cs"
+    }
+  ],
+  "lfNormalizedSourceEqualityVerified": true,
+  "rawSourceEqualityVerified": false,
+  "mockOnly": true,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false,
+  "deployHold": true
+}
