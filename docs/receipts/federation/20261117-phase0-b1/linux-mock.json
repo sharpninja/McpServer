@@ -1,0 +1,83 @@
+{
+  "timestampLocal": "2026-11-17T14:02:32",
+  "task": "TASK-FEDPH0-001",
+  "requirements": [
+    "FR-MCP-186:ac-FourProvidersResolve",
+    "TEST-MCP-234"
+  ],
+  "executionExitCode": 0,
+  "executionExitSource": "Captured from completed original SSH invocation",
+  "inspection": {
+    "timestampLocal": "2026-11-17T14:00:52",
+    "host": "LAB-OMARCHY",
+    "os": "Omarchy",
+    "worktree": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117",
+    "commit": "592f5236ce92940a83b98447da789078a1665ca3",
+    "runId": "20261117T135817-fedph0-b1-linux-mock",
+    "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0ProviderResolutionMockGateTests --test-run-id 20261117T135817-fedph0-b1-linux-mock",
+    "exitCode": null,
+    "sdk": "10.0.403",
+    "powerShell": "7.7.0",
+    "total": 75,
+    "passed": 75,
+    "failed": 0,
+    "notExecuted": 0,
+    "expectedNegativeControls": 68,
+    "trx": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/TestResults/20261117T135817-fedph0-b1-linux-mock/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+    "trxSha256": "0BAE03CC06D59DFA6F4228BDB4DEBEACF48D0705582A916AE8638BAD6ACC7D81",
+    "nukeLog": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/.nuke/temp/build.2026-11-17_13-58-58.log",
+    "nukeLogSha256": "911CD06477125676A37082BC0207ACFB31B55CD8D4676F3807465EB04F51EF95",
+    "sourceHashes": [
+      {
+        "sha256": "49C718A54C58F304297BAB1B4D3DF07C279E27F7030FDA4FDAAE3F7F7AF556A9",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ProviderResolutionContract.cs"
+      },
+      {
+        "sha256": "4CB25A91E848C028981566F6435453AB2F564E4F26AA1A4DD49FC41AC3BCDBB8",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ProviderResolutionMockGateTests.cs"
+      }
+    ],
+    "gitStatus": [],
+    "binding": "scripted mock only",
+    "b1Status": "unproven",
+    "productionChanges": false,
+    "deployHold": true
+  },
+  "copies": [
+    {
+      "sha256": "0BAE03CC06D59DFA6F4228BDB4DEBEACF48D0705582A916AE8638BAD6ACC7D81",
+      "name": "linux-mock.trx",
+      "remote": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/TestResults/20261117T135817-fedph0-b1-linux-mock/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "911CD06477125676A37082BC0207ACFB31B55CD8D4676F3807465EB04F51EF95",
+      "name": "linux-mock.nuke.txt",
+      "remote": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/.nuke/temp/build.2026-11-17_13-58-58.log"
+    }
+  ],
+  "sourceComparisons": [
+    {
+      "windowsRawSha256": "63D629730B931D6F970C25A498533F448DB154F00424D98C9DCB35DD919A29A5",
+      "windowsLfNormalizedSha256": "49C718A54C58F304297BAB1B4D3DF07C279E27F7030FDA4FDAAE3F7F7AF556A9",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "49C718A54C58F304297BAB1B4D3DF07C279E27F7030FDA4FDAAE3F7F7AF556A9",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0ProviderResolutionContract.cs"
+    },
+    {
+      "windowsRawSha256": "1442E330B10CB36BC2B4652E6612BE4A8262C19CFDC1CC9C83E98CEE57341FF6",
+      "windowsLfNormalizedSha256": "4CB25A91E848C028981566F6435453AB2F564E4F26AA1A4DD49FC41AC3BCDBB8",
+      "exactRawBytesEqual": false,
+      "lfNormalizedBytesEqual": true,
+      "transformation": "UTF8 CRLF to LF only",
+      "linuxRawSha256": "4CB25A91E848C028981566F6435453AB2F564E4F26AA1A4DD49FC41AC3BCDBB8",
+      "windowsPath": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0ProviderResolutionMockGateTests.cs"
+    }
+  ],
+  "lfNormalizedSourceEqualityVerified": true,
+  "rawSourceEqualityVerified": false,
+  "mockOnly": true,
+  "phase0ExitAccepted": false,
+  "deployHold": true
+}
