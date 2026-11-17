@@ -1,0 +1,61 @@
+{
+  "dependsOn": [],
+  "technicalRequirements": [
+    "TR-MCP-AUDIT-004",
+    "TR-MCP-FEDERATION-001",
+    "TR-MCP-FEDERATION-002",
+    "TR-MCP-FEDERATION-003",
+    "TR-MCP-FEDERATION-004",
+    "TR-MCP-FEDERATION-005",
+    "TR-MCP-FEDERATION-006",
+    "TR-MCP-FEDERATION-007",
+    "TR-MCP-FEDERATION-008",
+    "TR-MCP-FEDERATION-009",
+    "TR-MCP-FEDERATION-010",
+    "TR-MCP-FEDERATION-011",
+    "TR-MCP-FEDERATION-012",
+    "TR-MCP-FEDERATION-013",
+    "TR-MCP-FEDERATION-014",
+    "TR-MCP-FEDERATION-015",
+    "TR-MCP-FEDERATION-016"
+  ],
+  "priority": "high",
+  "functionalRequirements": [
+    "FR-MCP-174",
+    "FR-MCP-175",
+    "FR-MCP-176",
+    "FR-MCP-177",
+    "FR-MCP-178",
+    "FR-MCP-179",
+    "FR-MCP-180",
+    "FR-MCP-181",
+    "FR-MCP-182",
+    "FR-MCP-183",
+    "FR-MCP-184",
+    "FR-MCP-185",
+    "FR-MCP-186",
+    "FR-MCP-187",
+    "FR-MCP-188",
+    "FR-MCP-189"
+  ],
+  "description": [
+    "ItemKind: Plan (simulated; PLAN-TODOTASK-001 Plans specialize the TODO entity).",
+    "Reference: docs/plans/2026-11-10-federation-dolt-bdpv4.md on origin/develop, amendment section 15 (uncommitted worktree F:\\GitHub\\McpServer\\.worktrees\\federation-task-breakdown-20261111).",
+    "Task Groups in dispatch order: GRP-FEDPH0-001, GRP-FEDPH1-001, GRP-FEDPH2-001, GRP-FEDPH3-001, GRP-FEDPH4-001, GRP-FEDPH5-001, GRP-FEDPH6-001, GRP-FEDPH6-002, GRP-FEDPH7-001, GRP-FEDPH8-001, GRP-FEDCUT-001.",
+    "Tasks: 67 children of this TODO; all Planning at filing (no design and mock-green evidence yet); every group barrier Closed.",
+    "Gate 1: Design and mock-green barrier, Task-Workflow-Architecture.md section 3.5.11 GroupImplementationBarrierPolicy (operator rule 2026-11-11): within a Task Group no Task may start implementation (Ready to Started) until every member is designed and its contract unit tests are green against mocks with a negative control; Planning to Ready requires that current-version evidence. Design and mock work may proceed in parallel and is not gated by dependencies; implementation may not. The barrier is calculated (Open when every member is Ready, Started or Success) and is separate from and earlier than the HV gate. Mock suites run when a member's design is complete; the full suite runs once at slice or phase exit.",
+    "Gate 2: Group completion HV gate, Task-Workflow-Architecture.md section 3.5.12 GroupCompletionHvGatePolicy (operator rule 2026-11-11): the last member of every group is its HV gate Task, depending on all other members; reviewer from a different agent family and model family; AGREE at max(configured threshold, 0.98) for both scores (98/98); the group calculates Completed only after the gate succeeds, so nothing depending on the group starts earlier; DISAGREE fails the gate and findings against Success work become correction Tasks (correctsTaskId) before the gate, then the gate is remediated and re-run. Delivery order: section 8.6.",
+    "DEPLOY HOLD stands; nothing here authorizes implementation, HV runs, commits or deployment."
+  ],
+  "done": false,
+  "note": "PlanStatus=Planning (calculated from groups)",
+  "section": "Federation",
+  "implementationTasks": [],
+  "id": "PLAN-FEDDOLT-001",
+  "technicalDetails": [
+    "Simulation: Group and Task records are TODOs; dependsOn mirrors typed Task/Group dependency targets; note carries simulated status; done stays false until Success (Task) or calculated Completed (Group).",
+    "Group status order: Failing, Blocked, Completed, Unstarted, Incomplete (calculated).",
+    "Supersedes forwarding-era IMPL-FEDPATH-001, IMPL-FEDROUTE-001, IMPL-FEDWSSYNC-001, IMPL-FEDBACKFILL-001 for versioned federation; links MCP-FEDIDENTITY-001."
+  ],
+  "title": "Plan: Dolt federation BDPv4 as Task Groups and Tasks (simulated Task-Workflow queue)"
+}

@@ -1,0 +1,36 @@
+{
+  "title": "Ph4 group HV gate: Ph4 explicit history commits and local publication intent",
+  "technicalRequirements": [
+    "TR-MCP-FEDERATION-002",
+    "TR-MCP-FEDERATION-004",
+    "TR-MCP-FEDERATION-010",
+    "TR-MCP-FEDERATION-011",
+    "TR-MCP-FEDERATION-016"
+  ],
+  "description": [
+    "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH4-001 (groupOrdinal 5).",
+    "Task status: Planning. Eligibility: canStart=false, reasons=ImplementationBarrierClosed, DependencyIncomplete, incompleteDependencyCount=1. Design and mock-green work may proceed now; Planning to Ready requires that evidence (architecture 3.5.11).",
+    "Depends on (typed Task/Group targets): TASK-FEDPH4-004.",
+    "FR/AC coverage: FR-MCP-175: SaveDoesNotPublish, VersionCommitTriggersSync, HubRequestDoesNotCommitDraft, OfflineCommitDiscoveredAfterRestart; FR-MCP-189: CommitRetryReturnsSameHash, PreviewChangeRequiresReview; FR-MCP-184: CommitPreviewBlocksSecret; FR-MCP-177: FeaturePublicationLeavesMainUnchanged, BranchMergeRequiresExpectedHeads; FR-MCP-183: StaleBranchReportedNotDeleted.",
+    "TR constraints: TR-MCP-FEDERATION-002, TR-MCP-FEDERATION-004, TR-MCP-FEDERATION-010, TR-MCP-FEDERATION-011, TR-MCP-FEDERATION-016. TEST: TEST-MCP-223, TEST-MCP-225, TEST-MCP-231, TEST-MCP-232, TEST-MCP-237.",
+    "Work: Group completion HV gate per docs/architecture/Task-Workflow-Architecture.md (branch worktree-session-20261009) section 3.5.12 GroupCompletionHvGatePolicy (operator rule 2026-11-11). Last member by group ordinal; depends on every other member. Reviewer differs from every member author in BOTH agent family and model family (session metadata and the Signed: line; prefixes openai, anthropic, xai; unknown is refused). Accuracy-and-correctness and completeness on 0 to 1; AGREE requires both at max(configured threshold, 0.98) or higher (98/98). Input: exact member evidence (head or tree, commands, TRX, total/failed/skipped counts, AC-to-evidence map, negative controls), this group definition and the plan section. Receipts secret-safe under docs/receipts/hv. AGREE: Success, and only then does the group calculate Completed and dependent Tasks/Groups become startable. DISAGREE or refused reviewer: Failure (group Failing); each finding against Success work becomes a new correction Task (correctsTaskId) inserted before this gate, which reopens the 3.5.11 barrier; after corrections succeed this gate is remediated (Failure to Planning) and HV re-runs. Verification-only member: Ready once its pass criteria are reviewed (3.5.11). HV is not started by filing this Task.",
+    "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15."
+  ],
+  "section": "Federation",
+  "priority": "high",
+  "note": "TaskStatus=Planning; Stage=DesignAndMock; ImplementationBarrier=Closed",
+  "technicalDetails": [],
+  "functionalRequirements": [
+    "FR-MCP-175",
+    "FR-MCP-189",
+    "FR-MCP-184",
+    "FR-MCP-177",
+    "FR-MCP-183"
+  ],
+  "implementationTasks": [],
+  "done": false,
+  "id": "TASK-FEDPH4-005",
+  "dependsOn": [
+    "TASK-FEDPH4-004"
+  ]
+}

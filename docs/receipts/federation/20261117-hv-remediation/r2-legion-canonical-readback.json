@@ -1,0 +1,67 @@
+{
+  "canonicalSessionId": "Codex-20261116T174245Z-plugin-session",
+  "agent": "Codex",
+  "finding": "R2 U01",
+  "queueStatus": {
+    "quarantineCount": 14,
+    "pendingCount": 0,
+    "quarantineDir": "F:\\GitHub\\McpServer\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXE1jcFNlcnZlcg\\pending\\quarantine",
+    "failsafeDir": "F:\\GitHub\\McpServer\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXE1jcFNlcnZlcg\\pending"
+  },
+  "limitation": "Current readback confirms persisted canonical turn and queue state. Historical drain is corroborated by its persisted action, not a fabricated fresh replay.",
+  "workspace": "F:/GitHub/McpServer",
+  "historicalDrainAction": {
+    "order": 3,
+    "description": "Invalid RequestId queue repair: preserved both original YAML captures byte-for-byte (SHA256 in docs/receipts/federation/20261117-failsafe-repair/preservation.json), verified existing canonical Phase0 turn contains request and stop decision, then supported workflow.failsafe.drain maxRecords2 maxAttempts2 quarantined2 replayed0 failed0. Live failsafe status pending0 quarantine14. Originals retained; no fabricated successful replay.",
+    "filePath": "docs/receipts/federation/20261117-failsafe-repair/preservation.json",
+    "type": "design_decision",
+    "status": "completed"
+  },
+  "timestampLocal": "2026-11-17T13:16:11",
+  "canonicalTurn": {
+    "queryTitle": "Begin federation Phase0 under workspace and global procedures",
+    "actions": [
+      {
+        "order": 2,
+        "description": "Created isolated branch codex/federation-phase0-20261117 and worktree from develop HEAD911cb810fbf1e005e2cbbbc426daeea7300319a2. Git completed checkout; progress on stderr was surfaced by PowerShell as errors, so independent status verification follows. Existing worktrees and untracked reconciliation receipts retained.",
+        "filePath": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117",
+        "type": "command",
+        "status": "completed"
+      }
+    ],
+    "queryText": "Begin Phase 0. Ensure all workspace and global procedures are followed, especially session logging.",
+    "contextList": [
+      "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+      "docs/plans/2026-11-10-federation-dolt-architecture.md"
+    ],
+    "planFile": "None",
+    "timestamp": "2026-11-17T13:38:37.0000000+00:00",
+    "processingDialog": [
+      {
+        "content": "OK, stop. All reqs must be clearly defined in the plan and the QBrain records written from the Plan. If Req defs are missing, locate them in chats and logs and fix the plan.",
+        "role": "user",
+        "timestamp": "2026-11-17T13:44:38.5176962+00:00",
+        "category": "observation"
+      },
+      {
+        "content": "Operator stopped Phase0 execution and redirected to plan-first requirement definitions. Preserve worktree and all existing evidence. No code, tests, dependency installations, Dolt processes, or production changes started. Scope is federation plan FR/TR/TEST/AC/mappings, not the unrelated global reconciliation backlog. Recover governing definitions and decisions from source chats/logs where plan definitions are absent; do not write placeholder or invented criteria. Only after definitions are explicit in the plan, populate corresponding QBrain records through Codex plugin, preserving canonical IDs and acceptance-criterion identity. This is assistant interpretation of the new instruction, not claimed prior operator approval for any unresolved choice.",
+        "role": "model",
+        "timestamp": "2026-11-17T13:44:38.5177786+00:00",
+        "category": "decision"
+      }
+    ],
+    "status": "completed",
+    "tokenCount": 0,
+    "model": "codex",
+    "tags": [
+      "Federation",
+      "Phase0",
+      "BDPv4",
+      "FR-MCP-186"
+    ],
+    "todoId": "None",
+    "requestId": "req-20261117T133836Z-begin-federation-phase0",
+    "interpretation": "Operator authorizes beginning Phase0 only, following the existing Plan and TaskGroup mock-first gates, preserving stop on unrelated reconciliation and DEPLOY HOLD.",
+    "response": "Phase0 execution stopped at operator instruction. Worktree codex/federation-phase0-20261117 created at HEAD911cb810. Found FR-MCP-186 returns placeholder with no AC through both getFr and listFr on Legion2. Existing testing plan draft explicitly warned of this binding discrepancy. No tests, installs, instances or product edits started. New request replaces execution with plan-first federation requirement definition and scoped QBrain synchronization."
+  }
+}

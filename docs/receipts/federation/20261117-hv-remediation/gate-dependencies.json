@@ -1,0 +1,257 @@
+{
+  "changes": [
+    {
+      "id": "TASK-FEDCUT-003",
+      "beforeDependencies": [
+        "TASK-FEDCUT-002"
+      ],
+      "missing": [
+        "TASK-FEDCUT-001"
+      ],
+      "old": "- `TASK-FEDCUT-003` (group ordinal 3): Ph8 group HV gate: Held live cutover (requires explicit DEPLOY HOLD release). Initial state: Planning. Depends on: TASK-FEDCUT-002.",
+      "new": "- `TASK-FEDCUT-003` (group ordinal 3): Ph8 group HV gate: Held live cutover (requires explicit DEPLOY HOLD release). Initial state: Planning. Depends on: TASK-FEDCUT-001, TASK-FEDCUT-002.",
+      "group": "GRP-FEDCUT-001",
+      "dependencies": [
+        "TASK-FEDCUT-001",
+        "TASK-FEDCUT-002"
+      ]
+    },
+    {
+      "id": "TASK-FEDPH0-009",
+      "beforeDependencies": [
+        "TASK-FEDPH0-008"
+      ],
+      "missing": [
+        "TASK-FEDPH0-001",
+        "TASK-FEDPH0-002",
+        "TASK-FEDPH0-003",
+        "TASK-FEDPH0-004",
+        "TASK-FEDPH0-005",
+        "TASK-FEDPH0-006",
+        "TASK-FEDPH0-007"
+      ],
+      "old": "- `TASK-FEDPH0-009` (group ordinal 9): Ph0 group HV gate: Ph0 feasibility and exact dependency selection. Initial state: Planning. Depends on: TASK-FEDPH0-008.",
+      "new": "- `TASK-FEDPH0-009` (group ordinal 9): Ph0 group HV gate: Ph0 feasibility and exact dependency selection. Initial state: Planning. Depends on: TASK-FEDPH0-001, TASK-FEDPH0-002, TASK-FEDPH0-003, TASK-FEDPH0-004, TASK-FEDPH0-005, TASK-FEDPH0-006, TASK-FEDPH0-007, TASK-FEDPH0-008.",
+      "group": "GRP-FEDPH0-001",
+      "dependencies": [
+        "TASK-FEDPH0-001",
+        "TASK-FEDPH0-002",
+        "TASK-FEDPH0-003",
+        "TASK-FEDPH0-004",
+        "TASK-FEDPH0-005",
+        "TASK-FEDPH0-006",
+        "TASK-FEDPH0-007",
+        "TASK-FEDPH0-008"
+      ]
+    },
+    {
+      "id": "TASK-FEDPH1-005",
+      "beforeDependencies": [
+        "TASK-FEDPH1-004"
+      ],
+      "missing": [
+        "TASK-FEDPH1-001",
+        "TASK-FEDPH1-002",
+        "TASK-FEDPH1-003"
+      ],
+      "old": "- `TASK-FEDPH1-005` (group ordinal 5): Ph1 group HV gate: Ph1 fourth provider and schema migrations. Initial state: Planning. Depends on: TASK-FEDPH1-004.",
+      "new": "- `TASK-FEDPH1-005` (group ordinal 5): Ph1 group HV gate: Ph1 fourth provider and schema migrations. Initial state: Planning. Depends on: TASK-FEDPH1-001, TASK-FEDPH1-002, TASK-FEDPH1-003, TASK-FEDPH1-004.",
+      "group": "GRP-FEDPH1-001",
+      "dependencies": [
+        "TASK-FEDPH1-001",
+        "TASK-FEDPH1-002",
+        "TASK-FEDPH1-003",
+        "TASK-FEDPH1-004"
+      ]
+    },
+    {
+      "id": "TASK-FEDPH2-008",
+      "beforeDependencies": [
+        "TASK-FEDPH2-007"
+      ],
+      "missing": [
+        "TASK-FEDPH2-001",
+        "TASK-FEDPH2-002",
+        "TASK-FEDPH2-003",
+        "TASK-FEDPH2-004",
+        "TASK-FEDPH2-005",
+        "TASK-FEDPH2-006"
+      ],
+      "old": "- `TASK-FEDPH2-008` (group ordinal 8): Ph2 group HV gate: Ph2 project routing, data boundaries and editing ownership. Initial state: Planning. Depends on: TASK-FEDPH2-007.",
+      "new": "- `TASK-FEDPH2-008` (group ordinal 8): Ph2 group HV gate: Ph2 project routing, data boundaries and editing ownership. Initial state: Planning. Depends on: TASK-FEDPH2-001, TASK-FEDPH2-002, TASK-FEDPH2-003, TASK-FEDPH2-004, TASK-FEDPH2-005, TASK-FEDPH2-006, TASK-FEDPH2-007.",
+      "group": "GRP-FEDPH2-001",
+      "dependencies": [
+        "TASK-FEDPH2-001",
+        "TASK-FEDPH2-002",
+        "TASK-FEDPH2-003",
+        "TASK-FEDPH2-004",
+        "TASK-FEDPH2-005",
+        "TASK-FEDPH2-006",
+        "TASK-FEDPH2-007"
+      ]
+    },
+    {
+      "id": "TASK-FEDPH3-006",
+      "beforeDependencies": [
+        "TASK-FEDPH3-005"
+      ],
+      "missing": [
+        "TASK-FEDPH3-001",
+        "TASK-FEDPH3-002",
+        "TASK-FEDPH3-003",
+        "TASK-FEDPH3-004"
+      ],
+      "old": "- `TASK-FEDPH3-006` (group ordinal 6): Ph3 group HV gate: Ph3 seed migration and project recovery export. Initial state: Planning. Depends on: TASK-FEDPH3-005.",
+      "new": "- `TASK-FEDPH3-006` (group ordinal 6): Ph3 group HV gate: Ph3 seed migration and project recovery export. Initial state: Planning. Depends on: TASK-FEDPH3-001, TASK-FEDPH3-002, TASK-FEDPH3-003, TASK-FEDPH3-004, TASK-FEDPH3-005.",
+      "group": "GRP-FEDPH3-001",
+      "dependencies": [
+        "TASK-FEDPH3-001",
+        "TASK-FEDPH3-002",
+        "TASK-FEDPH3-003",
+        "TASK-FEDPH3-004",
+        "TASK-FEDPH3-005"
+      ]
+    },
+    {
+      "id": "TASK-FEDPH4-005",
+      "beforeDependencies": [
+        "TASK-FEDPH4-004"
+      ],
+      "missing": [
+        "TASK-FEDPH4-001",
+        "TASK-FEDPH4-002",
+        "TASK-FEDPH4-003"
+      ],
+      "old": "- `TASK-FEDPH4-005` (group ordinal 5): Ph4 group HV gate: Ph4 explicit history commits and local publication intent. Initial state: Planning. Depends on: TASK-FEDPH4-004.",
+      "new": "- `TASK-FEDPH4-005` (group ordinal 5): Ph4 group HV gate: Ph4 explicit history commits and local publication intent. Initial state: Planning. Depends on: TASK-FEDPH4-001, TASK-FEDPH4-002, TASK-FEDPH4-003, TASK-FEDPH4-004.",
+      "group": "GRP-FEDPH4-001",
+      "dependencies": [
+        "TASK-FEDPH4-001",
+        "TASK-FEDPH4-002",
+        "TASK-FEDPH4-003",
+        "TASK-FEDPH4-004"
+      ]
+    },
+    {
+      "id": "TASK-FEDPH5-007",
+      "beforeDependencies": [
+        "TASK-FEDPH5-006"
+      ],
+      "missing": [
+        "TASK-FEDPH5-001",
+        "TASK-FEDPH5-002",
+        "TASK-FEDPH5-003",
+        "TASK-FEDPH5-004",
+        "TASK-FEDPH5-005"
+      ],
+      "old": "- `TASK-FEDPH5-007` (group ordinal 7): Ph5 group HV gate: Ph5 hub control table and publication. Initial state: Planning. Depends on: TASK-FEDPH5-006.",
+      "new": "- `TASK-FEDPH5-007` (group ordinal 7): Ph5 group HV gate: Ph5 hub control table and publication. Initial state: Planning. Depends on: TASK-FEDPH5-001, TASK-FEDPH5-002, TASK-FEDPH5-003, TASK-FEDPH5-004, TASK-FEDPH5-005, TASK-FEDPH5-006.",
+      "group": "GRP-FEDPH5-001",
+      "dependencies": [
+        "TASK-FEDPH5-001",
+        "TASK-FEDPH5-002",
+        "TASK-FEDPH5-003",
+        "TASK-FEDPH5-004",
+        "TASK-FEDPH5-005",
+        "TASK-FEDPH5-006"
+      ]
+    },
+    {
+      "id": "TASK-FEDPH6-007",
+      "beforeDependencies": [
+        "TASK-FEDPH6-006"
+      ],
+      "missing": [
+        "TASK-FEDPH6-001",
+        "TASK-FEDPH6-002",
+        "TASK-FEDPH6-003",
+        "TASK-FEDPH6-004",
+        "TASK-FEDPH6-005"
+      ],
+      "old": "- `TASK-FEDPH6-007` (group ordinal 7): Ph6 group HV gate: Ph6 incoming integration, review and recovery. Initial state: Planning. Depends on: TASK-FEDPH6-006.",
+      "new": "- `TASK-FEDPH6-007` (group ordinal 7): Ph6 group HV gate: Ph6 incoming integration, review and recovery. Initial state: Planning. Depends on: TASK-FEDPH6-001, TASK-FEDPH6-002, TASK-FEDPH6-003, TASK-FEDPH6-004, TASK-FEDPH6-005, TASK-FEDPH6-006.",
+      "group": "GRP-FEDPH6-001",
+      "dependencies": [
+        "TASK-FEDPH6-001",
+        "TASK-FEDPH6-002",
+        "TASK-FEDPH6-003",
+        "TASK-FEDPH6-004",
+        "TASK-FEDPH6-005",
+        "TASK-FEDPH6-006"
+      ]
+    },
+    {
+      "id": "TASK-FEDPH6J-004",
+      "beforeDependencies": [
+        "TASK-FEDPH6J-003"
+      ],
+      "missing": [
+        "TASK-FEDPH6J-001",
+        "TASK-FEDPH6J-002"
+      ],
+      "old": "- `TASK-FEDPH6J-004` (group ordinal 4): Ph6 group HV gate: Ph6 join migration and cutover readiness. Initial state: Planning. Depends on: TASK-FEDPH6J-003.",
+      "new": "- `TASK-FEDPH6J-004` (group ordinal 4): Ph6 group HV gate: Ph6 join migration and cutover readiness. Initial state: Planning. Depends on: TASK-FEDPH6J-001, TASK-FEDPH6J-002, TASK-FEDPH6J-003.",
+      "group": "GRP-FEDPH6-002",
+      "dependencies": [
+        "TASK-FEDPH6J-001",
+        "TASK-FEDPH6J-002",
+        "TASK-FEDPH6J-003"
+      ]
+    },
+    {
+      "id": "TASK-FEDPH7-006",
+      "beforeDependencies": [
+        "TASK-FEDPH7-005"
+      ],
+      "missing": [
+        "TASK-FEDPH7-001",
+        "TASK-FEDPH7-002",
+        "TASK-FEDPH7-003",
+        "TASK-FEDPH7-004"
+      ],
+      "old": "- `TASK-FEDPH7-006` (group ordinal 6): Ph7 group HV gate: Ph7 server and plugin workflows. Initial state: Planning. Depends on: TASK-FEDPH7-005.",
+      "new": "- `TASK-FEDPH7-006` (group ordinal 6): Ph7 group HV gate: Ph7 server and plugin workflows. Initial state: Planning. Depends on: TASK-FEDPH7-001, TASK-FEDPH7-002, TASK-FEDPH7-003, TASK-FEDPH7-004, TASK-FEDPH7-005.",
+      "group": "GRP-FEDPH7-001",
+      "dependencies": [
+        "TASK-FEDPH7-001",
+        "TASK-FEDPH7-002",
+        "TASK-FEDPH7-003",
+        "TASK-FEDPH7-004",
+        "TASK-FEDPH7-005"
+      ]
+    },
+    {
+      "id": "TASK-FEDPH8-007",
+      "beforeDependencies": [
+        "TASK-FEDPH8-006"
+      ],
+      "missing": [
+        "TASK-FEDPH8-001",
+        "TASK-FEDPH8-002",
+        "TASK-FEDPH8-003",
+        "TASK-FEDPH8-004",
+        "TASK-FEDPH8-005"
+      ],
+      "old": "- `TASK-FEDPH8-007` (group ordinal 7): Ph8 group HV gate: Ph8 two-host acceptance and three-peer fixture. Initial state: Planning. Depends on: TASK-FEDPH8-006.",
+      "new": "- `TASK-FEDPH8-007` (group ordinal 7): Ph8 group HV gate: Ph8 two-host acceptance and three-peer fixture. Initial state: Planning. Depends on: TASK-FEDPH8-001, TASK-FEDPH8-002, TASK-FEDPH8-003, TASK-FEDPH8-004, TASK-FEDPH8-005, TASK-FEDPH8-006.",
+      "group": "GRP-FEDPH8-001",
+      "dependencies": [
+        "TASK-FEDPH8-001",
+        "TASK-FEDPH8-002",
+        "TASK-FEDPH8-003",
+        "TASK-FEDPH8-004",
+        "TASK-FEDPH8-005",
+        "TASK-FEDPH8-006"
+      ]
+    }
+  ],
+  "afterSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "groups": 11,
+  "newDirectEdges": 45,
+  "timestampLocal": "2026-11-17T10:43:47",
+  "beforeSha256": "918E6F71CF587B85A9D27BDF40E094EDD10627D140B3BB709F8124D791527373",
+  "requirementChanges": 0,
+  "sourceFinding": "R1 F01",
+  "statusChanges": 0,
+  "architecture": "docs/architecture/Task-Workflow-Architecture.md:349"
+}

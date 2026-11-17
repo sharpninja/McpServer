@@ -1,0 +1,114 @@
+{
+  "hostName": "LAB-OMARCHY",
+  "applied": false,
+  "updates": 15,
+  "planSha256": "793E435123B9B375ECC9A52086FEA52E7CC8FCDEF92874DEC3C4AFD3770D7CE4",
+  "deltas": [
+    {
+      "descriptionChanged": true,
+      "id": "TR-MCP-FEDERATION-010",
+      "newOrChangedCriteria": 0,
+      "unchangedCriteriaPreserved": 4,
+      "titleChanged": false
+    },
+    {
+      "descriptionChanged": false,
+      "id": "FR-MCP-077",
+      "newOrChangedCriteria": 3,
+      "unchangedCriteriaPreserved": 0,
+      "titleChanged": false
+    },
+    {
+      "descriptionChanged": true,
+      "id": "FR-MCP-173",
+      "newOrChangedCriteria": 0,
+      "unchangedCriteriaPreserved": 5,
+      "titleChanged": false
+    },
+    {
+      "descriptionChanged": true,
+      "id": "FR-MCP-SESSIONLOGCTX-001",
+      "newOrChangedCriteria": 0,
+      "unchangedCriteriaPreserved": 8,
+      "titleChanged": false
+    },
+    {
+      "descriptionChanged": false,
+      "id": "TEST-MCP-AUDIT-001",
+      "newOrChangedCriteria": 1,
+      "unchangedCriteriaPreserved": 0,
+      "titleChanged": true
+    },
+    {
+      "descriptionChanged": false,
+      "id": "TEST-MCP-AUDIT-002",
+      "newOrChangedCriteria": 3,
+      "unchangedCriteriaPreserved": 0,
+      "titleChanged": true
+    },
+    {
+      "descriptionChanged": true,
+      "id": "TEST-MCP-FED-PATH-001",
+      "newOrChangedCriteria": 0,
+      "unchangedCriteriaPreserved": 1,
+      "titleChanged": false
+    },
+    {
+      "descriptionChanged": false,
+      "id": "TEST-MCP-PATHNORM-001",
+      "newOrChangedCriteria": 0,
+      "unchangedCriteriaPreserved": 1,
+      "titleChanged": true
+    },
+    {
+      "descriptionChanged": false,
+      "id": "TEST-MCP-SESSIONLOGSAN-001",
+      "newOrChangedCriteria": 4,
+      "unchangedCriteriaPreserved": 0,
+      "titleChanged": true
+    },
+    {
+      "descriptionChanged": true,
+      "id": "TEST-MCP-SESSIONLOGSAN-002",
+      "newOrChangedCriteria": 2,
+      "unchangedCriteriaPreserved": 0,
+      "titleChanged": true
+    },
+    {
+      "descriptionChanged": false,
+      "id": "TR-MCP-AUDIT-002",
+      "newOrChangedCriteria": 2,
+      "unchangedCriteriaPreserved": 0,
+      "titleChanged": false
+    },
+    {
+      "descriptionChanged": false,
+      "id": "TR-MCP-AUDIT-003",
+      "newOrChangedCriteria": 2,
+      "unchangedCriteriaPreserved": 0,
+      "titleChanged": false
+    },
+    {
+      "descriptionChanged": true,
+      "id": "TR-MCP-FED-PATH-001",
+      "newOrChangedCriteria": 0,
+      "unchangedCriteriaPreserved": 1,
+      "titleChanged": false
+    },
+    {
+      "descriptionChanged": false,
+      "id": "TR-MCP-SESSIONLOGSAN-001",
+      "newOrChangedCriteria": 6,
+      "unchangedCriteriaPreserved": 0,
+      "titleChanged": false
+    },
+    {
+      "descriptionChanged": true,
+      "id": "TR-MCP-SESSIONLOGSAN-002",
+      "newOrChangedCriteria": 2,
+      "unchangedCriteriaPreserved": 0,
+      "titleChanged": true
+    }
+  ],
+  "missingMappings": 16
+}

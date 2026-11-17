@@ -1,0 +1,20 @@
+{
+  "visualInspection": {
+    "result": "Selected rendered pages inspected: legible, no observed clipping or overlap. Not an assertion that all175pages were viewed.",
+    "pages": [
+      1,
+      9,
+      16,
+      40,
+      175
+    ]
+  },
+  "pdfPath": "docs/plans/exports/Federation-2026-11-17-current.pdf",
+  "attachmentsVerified": 21,
+  "finding": "R1-F02",
+  "pdfSha256": "410F8F48A267BBB357F47F1E10DB68C827DD28B8A56B5E858737B77764B007A6",
+  "implementationAccepted": false,
+  "pages": 175,
+  "timestampLocal": "2026-11-17T11:03:50",
+  "rendering": "Native Edge headless plus installed Poppler; no further tool installation needed"
+}

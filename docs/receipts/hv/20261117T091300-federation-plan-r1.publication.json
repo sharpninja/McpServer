@@ -1,0 +1,66 @@
+{
+  "timestampLocal": "2026-11-17T10:40:10",
+  "redaction": "Only actual marker API-key value; no error/failure field removal",
+  "files": [
+    {
+      "publicationSha256": "12A7D6424B4075207E2D194333A64C223490446B6B1D32D7D317490AAA15750F",
+      "credentialOccurrences": 2,
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-publication/20261117T091300-federation-plan-r1/20261117T091300-federation-plan-r1.response.jsonl",
+      "source": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.response.jsonl",
+      "sourceSha256": "DBCD9FE8074115B620F99A1523FA1DA50B6BDE657FFDE1BACD8B4DDDC716451A",
+      "derivedFrom": "",
+      "errorAndFailureFieldsPreserved": true
+    },
+    {
+      "publicationSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "credentialOccurrences": 0,
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-publication/20261117T091300-federation-plan-r1/20261117T091300-federation-plan-r1.stderr.txt",
+      "source": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.stderr.txt",
+      "sourceSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "derivedFrom": "",
+      "errorAndFailureFieldsPreserved": true
+    },
+    {
+      "publicationSha256": "CE5AEF8CBC279235847805766C5EF2DC6C63426B79C660F73A990625C825038C",
+      "credentialOccurrences": 0,
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-publication/20261117T091300-federation-plan-r1/20261117T091300-federation-plan-r1.verdict.md",
+      "source": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.verdict.md",
+      "sourceSha256": "2D9FA92E45FE609FC5605B3CA77B990840B04F5F5803B5D86DB38A4DC73AB42E",
+      "derivedFrom": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.response.jsonl",
+      "errorAndFailureFieldsPreserved": true
+    },
+    {
+      "publicationSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "credentialOccurrences": 0,
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-publication/20261117T091300-federation-plan-r1/20261117T091300-federation-plan-r1.empty-launch-093502.response.jsonl",
+      "source": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.empty-launch-093502.response.jsonl",
+      "sourceSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "derivedFrom": "",
+      "errorAndFailureFieldsPreserved": true
+    },
+    {
+      "publicationSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "credentialOccurrences": 0,
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-publication/20261117T091300-federation-plan-r1/20261117T091300-federation-plan-r1.empty-launch-093502.stderr.txt",
+      "source": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.empty-launch-093502.stderr.txt",
+      "sourceSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "derivedFrom": "",
+      "errorAndFailureFieldsPreserved": true
+    },
+    {
+      "publicationSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "credentialOccurrences": 0,
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-publication/20261117T091300-federation-plan-r1/20261117T091300-federation-plan-r1.empty-launch-093502.verdict.md",
+      "source": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.empty-launch-093502.verdict.md",
+      "sourceSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "derivedFrom": "",
+      "errorAndFailureFieldsPreserved": true
+    }
+  ]
+}

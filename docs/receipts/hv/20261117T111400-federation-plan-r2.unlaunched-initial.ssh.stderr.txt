@@ -1,0 +1,6 @@
+[31;1mException: [0m/home/sharpninja/github/McpServer/.mcpServer/codex/Start-FederationPlanHvR2.ps1:48
+[36;1mLine |[0m
+[36;1m[36;1m  48 | [0m … eta.prompt){[36;1mthrow 'Stored request prompt differs from launcher input'[0m …
+[36;1m     | [31;1m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[36;1m[31;1m[31;1m[36;1m     | [31;1mStored request prompt differs from launcher input[0m
+[36;1m[31;1m[31;1m[36;1m[31;1m[0m

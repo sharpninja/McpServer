@@ -1,0 +1,5 @@
+{
+  "legion2EdgeChanges": 0,
+  "omarchyEdgeChanges": 0,
+  "explanation": "The first mapping checker incorrectly required one combined FR/TR/TEST row. The API returns separate FR/TR and FR/TEST edges. All16core relationships existed before the32idempotentupsert calls. No new mapping edges resulted. The original failed-check receipt is retained, superseded by verification-v2.json."
+}

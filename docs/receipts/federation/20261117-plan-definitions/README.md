@@ -1,0 +1,27 @@
+# Federation plan requirement definitions and QBrain population
+
+This receipt covers the operator's 2026-11-17 instruction to stop Phase 0, define every applicable federation requirement in the plan, recover missing definitions from chats/logs, and populate QBrain from that plan. It does not reconcile the unrelated workspace-wide backlog or certify implementation readiness.
+
+The plan amendment is section 16 of docs/plans/2026-11-10-federation-dolt-bdpv4.md, on codex/federation-phase0-20261117 at base 911cb810fbf1e005e2cbbbc426daeea7300319a2. Definition-population plan SHA256: 0777A48FB9C0953159922EAE0D3AE44371E30DBE1FDCAED9C3EEDAF76F150189. Current pre-HV plan SHA256: 918E6F71CF587B85A9D27BDF40E094EDD10627D140B3BB709F8124D791527373. original-phase-plan.md retains the original. plan-requirements.json is the applied payload; plan-requirements-final-v2.json reflects subsequent catalog-count wording and EOF whitespace cleanup, with the same requirement definitions.
+
+The 68 current/amended definitions come from the federation-dolt requirement projections at the base head. Originating OMARCHY QBrain session: Codex-20261110T152714Z-plugin-session. Actual operator requests req-20261110T181140Z-prompt-61a6, req-20261110T182914Z-prompt-45d8, req-20261110T182958Z-prompt-4aa8 and req-20261110T183020Z-prompt-3f53 establish the workflow requirements, new plan, fourth Dolt provider/migrations and source-provider data migration. req-20261111T010827Z-prompt-e501 excludes irrelevant historical bulk. The detailed contracts are authored planning work, not attributed verbatim to the operator.
+
+The additional 18 scoped dependency definitions come from the retained 20261116T161236-post-handoff-007 host snapshots and 20261110-source-reconciliation.json. PR82 path behavior is corroborated by f676835997df7d398928a58c146cff24b97f0c28 and dcd0269acd232a74037c01ae02a2da77b2fd9b0a. The full-session-snapshot source's older operator quotation is explicitly marked as record attribution rather than an independently recovered raw-chat quote. Seven prose-only records now have structured criteria representing the same obligations; ac-catalog-* identities are authored by this amendment, and sanitizer AC1/AC2 were already named in source prose.
+
+Fresh live preimages found all86IDs on each host. Atomic Codex-plugin updateBatch calls applied49records on LEGION2 and15 on OMARCHY. No requirement was created/deleted/rekeyed. Unrelated metadata and unchanged criterion satisfaction/evidence were preserved. New/changed criteria remain unsatisfied:223LEGION2,25OMARCHY. Preimages, preview deltas, apply summaries and independent readbacks are retained here.
+
+Correction: the original mapping checker expected a combined triple. The API returns separate FR-to-TR and FR-to-TEST edges. All16core relationships existed before the32idempotent createMapping upsert calls; comparison of before/after edges confirms0edgechanges on each host. verification.json retains the invalid first-check findings; verification-v2.json supersedes it and reports0findings across86definitions/392criteria/16core relationships on each host. mapping-check-correction.json records the mistake without removing the original evidence.
+
+PowerShell parser and PSScriptAnalyzer Warning/Error checks succeeded before operational scripts ran; mutation scripts were dry-run first. Several analyzer/module/console communication attempts failed and are described in the session log; those failures are not passing evidence. The corrected readback verifier returned parser0/analyzer0. git diff --check passed after EOF cleanup.
+
+Phase0 remains stopped. No product tests, product implementation, deployment, or requirement/TODO completion state change was performed. The prior R5 review does not cover this catalog amendment; independent hostile validation has not run for this amendment.
+
+Audit: Codex-20261116T174245Z-plugin-session / req-20261117T134448Z-federation-plan-requirements. All work is attributed to Codex; the operator's requests and the assistant's derived judgments are distinguished.
+
+## 2026-11-17 pre-HV artifact disposition
+
+plan-requirements-hv-r1-current.json identifies the current plan hash. Its 86 definitions and 392 criteria are identical to plan-requirements-final-v2.json. The plan's intervening edits correct process wording only: green mock gates with negative controls, the operator-accepted patchable EF10 provider fork, and the current cross-machine GPT-5.6-SOL Max reviewer rule. No QBrain definition writes were needed for these wording edits.
+
+plan-requirements-hv-r1.json is a superseded intermediate payload that was never applied. It briefly contained an incorrect FR-MCP-174 reference in the retained FR-MCP-077 criterion; the source's FR-MCP-103 reference was restored before the current payload was generated. legion2-pre-hv-r1.json is a live capture taken during that preparation, not evidence that the intermediate payload was applied. Earlier payloads and checks remain evidence of their respective preparation stages; only verification-v2.json plus the corresponding final-v2 catalog establishes the previously completed readback comparison.
+
+The new HV round is tracked separately under docs/receipts/hv/20261117T091300-federation-plan-r1.*. A prepared request is not a launched or accepted review. Phase 0 remains paused pending its accepted verdict and the operator-requested commit/origin sync.

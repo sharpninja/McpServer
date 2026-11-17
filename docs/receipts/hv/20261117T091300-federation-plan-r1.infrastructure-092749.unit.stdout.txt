@@ -1,0 +1,36 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+​
+​
+╬═══════════════
+║ TestGroups
+╬══════
+​
+09:27:52 [INF] Test group filter for Build.Tests: Platform!=Linux&(FullyQualifiedName~.BoundedProcessTests.|FullyQualifiedName~.BuildTargetTests.|FullyQualifiedName~.ConfigValidatorTests.|FullyQualifiedName~.DocumentationGuidanceTests.|FullyQualifiedName~.GitVersionBumperTests.|FullyQualifiedName~.IntegrationLaneClassFilterMockGateTests.|FullyQualifiedName~.IntegrationLaneClassFilterTests.|FullyQualifiedName~.IntegrationLaneExecutionBindingTests.|FullyQualifiedName~.IntegrationLaneExecutionContractTests.|FullyQualifiedName~.IntegrationLaneFilterMockGateTests.|FullyQualifiedName~.IntegrationLaneFilterTests.|FullyQualifiedName~.IntegrationLanePreconditionMockGateTests.|FullyQualifiedName~.IntegrationLanePreconditionTests.|FullyQualifiedName~.IntegrationLaneProjectsMockGateTests.|FullyQualifiedName~.IntegrationLaneProjectsTests.|FullyQualifiedName~.MsixHelperTests.|FullyQualifiedName~.OllamaInstallLayoutMockGateTests.|FullyQualifiedName~.OllamaInstallLayoutTests.|FullyQualifiedName~.PluginParentResolutionTests.|FullyQualifiedName~.ProviderTestProvisioningMockGateTests.|FullyQualifiedName~.ProviderTestProvisioningTests.|FullyQualifiedName~.ProvisioningDownloadMockGateTests.|FullyQualifiedName~.ProvisioningDownloadTests.|FullyQualifiedName~.QuadBrainOllamaModelBindingTests.|FullyQualifiedName~.QuadBrainOllamaModelContractTests.|FullyQualifiedName~.ServiceRecoveryContractTests.|FullyQualifiedName~.ServiceStartupHealthContractTests.|FullyQualifiedName~.ServiceUnitPropertiesContractTests.|FullyQualifiedName~.ServiceUpdateTests.|FullyQualifiedName~.SessionLifeUnitGateConsumerTests.|FullyQualifiedName~.SessionLifeUnitGateValidatorTests.|FullyQualifiedName~.SyncAgentPluginsPackNameTests.|FullyQualifiedName~.TestGroupExecutionBindingTests.|FullyQualifiedName~.TestGroupExecutionContractTests.|FullyQualifiedName~.TestProjectCaseDiscoveryTests.|FullyQualifiedName~.TestProjectOwnershipMockGateTests.|FullyQualifiedName~.TestProjectOwnershipTests.|FullyQualifiedName~.TraceabilityValidatorTests.|FullyQualifiedName~.TrimArtifactCleanupTests.|FullyQualifiedName~.UnitTestFilterMockGateTests.|FullyQualifiedName~.UnitTestFilterTests.|FullyQualifiedName~.WarningSuppressionApprovalValidatorTests.|FullyQualifiedName~.WarningSuppressionScannerTests.|FullyQualifiedName~.WarningSuppressionValidationTargetTests.)
+09:27:53 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\Build.Tests\Build.Tests.csproj --configuration Debug --filter Platform!=Linux&(FullyQualifiedName~.BoundedProcessTests.|FullyQualifiedName~.BuildTargetTests.|FullyQualifiedName~.ConfigValidatorTests.|FullyQualifiedName~.DocumentationGuidanceTests.|FullyQualifiedName~.GitVersionBumperTests.|FullyQualifiedName~.IntegrationLaneClassFilterMockGateTests.|FullyQualifiedName~.IntegrationLaneClassFilterTests.|FullyQualifiedName~.IntegrationLaneExecutionBindingTests.|FullyQualifiedName~.IntegrationLaneExecutionContractTests.|FullyQualifiedName~.IntegrationLaneFilterMockGateTests.|FullyQualifiedName~.IntegrationLaneFilterTests.|FullyQualifiedName~.IntegrationLanePreconditionMockGateTests.|FullyQualifiedName~.IntegrationLanePreconditionTests.|FullyQualifiedName~.IntegrationLaneProjectsMockGateTests.|FullyQualifiedName~.IntegrationLaneProjectsTests.|FullyQualifiedName~.MsixHelperTests.|FullyQualifiedName~.OllamaInstallLayoutMockGateTests.|FullyQualifiedName~.OllamaInstallLayoutTests.|FullyQualifiedName~.PluginParentResolutionTests.|FullyQualifiedName~.ProviderTestProvisioningMockGateTests.|FullyQualifiedName~.ProviderTestProvisioningTests.|FullyQualifiedName~.ProvisioningDownloadMockGateTests.|FullyQualifiedName~.ProvisioningDownloadTests.|FullyQualifiedName~.QuadBrainOllamaModelBindingTests.|FullyQualifiedName~.QuadBrainOllamaModelContractTests.|FullyQualifiedName~.ServiceRecoveryContractTests.|FullyQualifiedName~.ServiceStartupHealthContractTests.|FullyQualifiedName~.ServiceUnitPropertiesContractTests.|FullyQualifiedName~.ServiceUpdateTests.|FullyQualifiedName~.SessionLifeUnitGateConsumerTests.|FullyQualifiedName~.SessionLifeUnitGateValidatorTests.|FullyQualifiedName~.SyncAgentPluginsPackNameTests.|FullyQualifiedName~.TestGroupExecutionBindingTests.|FullyQualifiedName~.TestGroupExecutionContractTests.|FullyQualifiedName~.TestProjectCaseDiscoveryTests.|FullyQualifiedName~.TestProjectOwnershipMockGateTests.|FullyQualifiedName~.TestProjectOwnershipTests.|FullyQualifiedName~.TraceabilityValidatorTests.|FullyQualifiedName~.TrimArtifactCleanupTests.|FullyQualifiedName~.UnitTestFilterMockGateTests.|FullyQualifiedName~.UnitTestFilterTests.|FullyQualifiedName~.WarningSuppressionApprovalValidatorTests.|FullyQualifiedName~.WarningSuppressionScannerTests.|FullyQualifiedName~.WarningSuppressionValidationTargetTests.) --verbosity minimal --results-directory F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\TestResults\20261117T092100-federation-plan-baseline\groups\Build.Tests --logger trx;LogFileName=Build.Tests.trx
+09:27:53 [DBG]   Determining projects to restore...
+09:27:54 [DBG]   All projects are up-to-date for restore.
+09:27:54 [DBG]   _build -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\build\bin\Debug\_build.dll
+09:27:55 [DBG]   Build.Tests -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll
+09:27:55 [DBG] Test run for F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll (.NETCoreApp,Version=v10.0)
+09:27:55 [DBG] A total of 1 test files matched the specified pattern.
+09:28:20 [DBG] Results File: F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\TestResults\20261117T092100-federation-plan-baseline\groups\Build.Tests\Build.Tests.trx
+09:28:20 [DBG] 
+09:28:20 [DBG] Passed!  - Failed:     0, Passed:   540, Skipped:     0, Total:   540, Duration: 23 s - Build.Tests.dll (net10.0)
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+TestGroups         Succeeded       0:27
+───────────────────────────────────────
+Total                              0:27
+═══════════════════════════════════════
+​
+Build succeeded on 11/17/2026 9:28:20 AM. ＼（＾ᴗ＾）／

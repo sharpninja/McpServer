@@ -1,0 +1,12 @@
+{
+  "checkedCount": 68,
+  "passCount": 68,
+  "failCount": 0,
+  "sourceFileCount": 3,
+  "failures": [],
+  "sourceFiles": [
+    "docs/Project/federation-dolt/Functional-Requirements.md",
+    "docs/Project/federation-dolt/Technical-Requirements.md",
+    "docs/Project/federation-dolt/Testing-Requirements.md"
+  ]
+}

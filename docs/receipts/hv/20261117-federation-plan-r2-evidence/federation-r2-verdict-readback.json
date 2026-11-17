@@ -1,0 +1,28 @@
+{
+  "generatedAtLocal": "2026-11-17T13:05:17",
+  "queryRequestId": "req-20261117T190502Z-149c",
+  "reviewerSessionId": "Codex-20261117T173304Z-federation-plan-r2-hv",
+  "reviewerRequestId": "req-20261117T173304Z-federation-plan-r2-hv",
+  "turnStatus": "completed",
+  "sourceVerdictPath": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-independent-verdict.md",
+  "sourceVerdictSha256": "3D31E0B30541129FAA85B85CE77AA8DA26A93E53C2DBBCBC8DE5A2CD5601EDD8",
+  "reconstructedVerdictSha256": "3D31E0B30541129FAA85B85CE77AA8DA26A93E53C2DBBCBC8DE5A2CD5601EDD8",
+  "exactTextMatch": true,
+  "chunkCount": 9,
+  "chunkIndexes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "sourceCharacterCount": 102278,
+  "reconstructedCharacterCount": 102278,
+  "actionCount": 18,
+  "dialogCount": 30,
+  "proofDialogCount": 1
+}

@@ -1,0 +1,131 @@
+{
+  "pdfPath": "docs/plans/exports/Federation-2026-11-17-current.pdf",
+  "attachmentsVerified": 21,
+  "pdfInfo": [
+    "Title:           Federation current planning packet",
+    "Creator:         Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0",
+    "Producer:        Skia/PDF m157",
+    "CreationDate:    Tue Nov 17 10:53:00 2026 Central Standard Time",
+    "ModDate:         Tue Nov 17 10:53:00 2026 Central Standard Time",
+    "Custom Metadata: no",
+    "Metadata Stream: no",
+    "Tagged:          yes",
+    "UserProperties:  no",
+    "Suspects:        no",
+    "Form:            none",
+    "JavaScript:      no",
+    "Pages:           175",
+    "Encrypted:       no",
+    "Page size:       594.96 x 841.92 pts (A4)",
+    "Page rot:        0",
+    "File size:       5263973 bytes",
+    "Optimized:       no",
+    "PDF version:     1.4"
+  ],
+  "sources": [
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+      "sha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+      "filename": "2026-11-10-federation-dolt-bdpv4.md"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-architecture.md",
+      "sha256": "13AB93549CC16BCE16DE412252284F22A39DD8FDA633666BEC41B3F3E4D585D1",
+      "filename": "2026-11-10-federation-dolt-architecture.md"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-current-contracts.md",
+      "sha256": "FDFAEB31D79DC495EAF8A8F927CA9538CAE6719B91C0F9665D90C098FCB153E2",
+      "filename": "2026-11-10-federation-current-contracts.md"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-three-system-workflows.md",
+      "sha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+      "filename": "2026-11-10-federation-three-system-workflows.md"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-reconciliation.md",
+      "sha256": "E30D5D97D9EB37D4A245F5DBA641ED6B53F2CC5F9A46BAACC99B06BC815D361B",
+      "filename": "2026-11-10-federation-reconciliation.md"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-library-options.md",
+      "sha256": "B697F167906E5F00DDB8EF648253C588CE58FAE4E4F7839472BA775B84481BB7",
+      "filename": "2026-11-10-federation-library-options.md"
+    },
+    {
+      "path": "docs/plans/2026-11-11-federation-correctness-evaluation.md",
+      "sha256": "F874822E84A52A54CB951AE13226C6AD75B497E0835A5D1729C3A7537B46F2B7",
+      "filename": "2026-11-11-federation-correctness-evaluation.md"
+    },
+    {
+      "path": "docs/Project/federation-dolt/Functional-Requirements.md",
+      "sha256": "90A3AA3D92E240ABA07302C4FCFD427DB66C819FD595C2812DCFFD571353C822",
+      "filename": "Functional-Requirements.md"
+    },
+    {
+      "path": "docs/Project/federation-dolt/Technical-Requirements.md",
+      "sha256": "AB47015A3CD05B1A8D01B07B0B7EFEB3D69E38E75B9C7A9A08F633EA243E652E",
+      "filename": "Technical-Requirements.md"
+    },
+    {
+      "path": "docs/Project/federation-dolt/Testing-Requirements.md",
+      "sha256": "80CB186857D42DD944112C45F7AC180EEB24B1A82904FA284C134EEA5527730C",
+      "filename": "Testing-Requirements.md"
+    },
+    {
+      "path": "docs/Project/federation-dolt/TR-per-FR-Mapping.md",
+      "sha256": "0F37D7617AA63D06073B8EDD35DB6C9FFCDC7727EDAFD3C95D01A011055B7A8B",
+      "filename": "TR-per-FR-Mapping.md"
+    },
+    {
+      "path": "docs/Project/federation-dolt/Requirements-Matrix.md",
+      "sha256": "261C7C63985D4C94C2748E8AC993C591B47ABBA21B0F982C946083FE45FD3A69",
+      "filename": "Requirements-Matrix.md"
+    },
+    {
+      "path": "docs/architecture/Task-Workflow-Architecture.md",
+      "sha256": "69096B1958E64EB43458EC3EA9592F0BA12A4AB972B4895F87D01069071BB1A5",
+      "filename": "Task-Workflow-Architecture.md"
+    },
+    {
+      "path": "docs/receipts/federation/20261110-revision-audit.md",
+      "sha256": "B992E3B419BF914577AF589103048BB7C11D9C6E0F12E1B75D1CE0918061A934",
+      "filename": "20261110-revision-audit.md"
+    },
+    {
+      "path": "docs/receipts/federation/20261110-revision-audit-dispositions.md",
+      "sha256": "0C4C28A47B3B87226B9EADE10DCCB4B8AD708F10D2CC61D2F164DB15E22FAF5B",
+      "filename": "20261110-revision-audit-dispositions.md"
+    },
+    {
+      "path": "docs/plans/federation/diagrams/structurizr-Containers.svg",
+      "sha256": "BC7D643DF1E6E59FF894F0A1E1B477F4CB2EC10D068BEF163379973CC8A768AB",
+      "filename": "structurizr-Containers.svg"
+    },
+    {
+      "path": "docs/plans/federation/diagrams/structurizr-Deployment.svg",
+      "sha256": "D3869CF727946492EA342ECE6403E0B841859FB136279CDA0A1EA08D1DE696E1",
+      "filename": "structurizr-Deployment.svg"
+    },
+    {
+      "path": "docs/plans/federation/contracts.json",
+      "sha256": "B6869A2AAA0FB239B9160C7EB95BB74EB8C7ADE52E18DFD54992301EA486E032",
+      "filename": "contracts.json"
+    },
+    {
+      "path": "docs/plans/federation/workspace.dsl",
+      "sha256": "6ACEBA9801599640F22ED1C0760899622B12DBB48DEFD32FA87688119FC62141",
+      "filename": "workspace.dsl"
+    },
+    {
+      "path": "docs/plans/visuals/federation-three-systems.html",
+      "sha256": "7F6E43241B585EF06E67A5397117C7585E671BA749D69801CA6AE808BDEEB584",
+      "filename": "federation-three-systems.html"
+    }
+  ],
+  "scope": "Current federation planning packet, including section16; no implementation acceptance",
+  "pdfSha256": "410F8F48A267BBB357F47F1E10DB68C827DD28B8A56B5E858737B77764B007A6",
+  "sourceManifestSha256": "913CCE32D7D1F919ED4137085F5A0DB0C2A23578CD2C5E3E37976BFEA0F19791",
+  "timestampLocal": "2026-11-17T10:52:58"
+}

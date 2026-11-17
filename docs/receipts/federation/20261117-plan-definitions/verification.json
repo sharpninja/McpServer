@@ -1,0 +1,187 @@
+{
+  "planSha256": "793E435123B9B375ECC9A52086FEA52E7CC8FCDEF92874DEC3C4AFD3770D7CE4",
+  "independentHostileValidation": "not run for this amendment",
+  "checkedAtLocal": "2026-11-17T08:40:30.3935464-06:00",
+  "findings": [
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-174"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-175"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-176"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-177"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-178"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-179"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-180"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-181"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-182"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-183"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-184"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-185"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-186"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-187"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-188"
+    },
+    {
+      "field": "mapping missing",
+      "host": "legion2",
+      "id": "FR-MCP-189"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-174"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-175"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-176"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-177"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-178"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-179"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-180"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-181"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-182"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-183"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-184"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-185"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-186"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-187"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-188"
+    },
+    {
+      "field": "mapping missing",
+      "host": "omarchy",
+      "id": "FR-MCP-189"
+    }
+  ],
+  "findingCount": 32,
+  "phase0Resumed": false,
+  "hosts": [
+    {
+      "coreMappings": 0,
+      "criteria": 392,
+      "unchangedCriteriaPreserved": 169,
+      "newOrChangedCriteriaUnsatisfied": 223,
+      "definitions": 86,
+      "host": "PAYTON-LEGION2"
+    },
+    {
+      "coreMappings": 0,
+      "criteria": 392,
+      "unchangedCriteriaPreserved": 367,
+      "newOrChangedCriteriaUnsatisfied": 25,
+      "definitions": 86,
+      "host": "LAB-OMARCHY"
+    }
+  ]
+}

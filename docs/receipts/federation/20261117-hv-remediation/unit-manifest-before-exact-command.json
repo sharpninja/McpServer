@@ -1,0 +1,117 @@
+{
+  "timestampLocal": "2026-11-17T09:33:56",
+  "reviewClass": "plan-readiness",
+  "codeChanged": false,
+  "commands": [
+    "build.ps1 Test --test-run-id 20261117T092100-federation-plan-baseline",
+    "build.ps1 TestGroups --test-groups Build.Tests:<all44classes> --test-run-id 20261117T092100-federation-plan-baseline"
+  ],
+  "integrationScope": "No implemented federation integration is adjudicated; no integration pass claimed. Both-host phase-exit gates remain future obligations.",
+  "selection": "Seven canonical Unit-role projects plus all44 Build.Tests infrastructure classes. Review/Validation projects are separate acceptance/AI-review workflows, not the canonical unit lane.",
+  "entries": [
+    {
+      "total": 3350,
+      "sha256": "C9DE3F269317FC95EBDBC8CDFE70FEA6FE77B2F20BFD67075FA35CDE920FCA57",
+      "passed": 3350,
+      "runId": "1cd8478e-d810-474d-b399-b407fbd28e4a",
+      "skipped": 0,
+      "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.Support.Mcp.Tests.trx",
+      "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "host": "PAYTON-LEGION2",
+      "failed": 0,
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+    },
+    {
+      "total": 311,
+      "sha256": "1AEDAC95ADB1FDB7EA9C4514F3614F8415625FF1AC6172987662D6E1AC290778",
+      "passed": 311,
+      "runId": "e9c6b7f6-de97-4867-b82d-020c589b322c",
+      "skipped": 0,
+      "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.Client.Tests.trx",
+      "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+      "host": "PAYTON-LEGION2",
+      "failed": 0,
+      "project": "QBrainAi.Client.Tests",
+      "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+    },
+    {
+      "total": 33,
+      "sha256": "8C1D06C70072053B96D3BC8B1DF2FE2A1C5A0582567698DADD273AB288502D32",
+      "passed": 33,
+      "runId": "92783f76-b71a-42f2-8a1d-4213c2e20a78",
+      "skipped": 0,
+      "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.Cqrs.Tests.trx",
+      "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+      "host": "PAYTON-LEGION2",
+      "failed": 0,
+      "project": "QBrainAi.Cqrs.Tests",
+      "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+    },
+    {
+      "total": 20,
+      "sha256": "2AD0CD7DEEFD6F67A3F0F6430C824AA844FF4415B10E78455DE35926476D3283",
+      "passed": 20,
+      "runId": "d0c05fb7-4264-4976-8988-f3ef9a11b66e",
+      "skipped": 0,
+      "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.Launcher.Tests.trx",
+      "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+      "host": "PAYTON-LEGION2",
+      "failed": 0,
+      "project": "QBrainAi.Launcher.Tests",
+      "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+    },
+    {
+      "total": 64,
+      "sha256": "0C6B48DA26D14BB670C531326AEAA90CC14C459198E95027AA8C3A30692C611F",
+      "passed": 64,
+      "runId": "bc0b1a95-dc38-42af-b5c2-c81931aa0e41",
+      "skipped": 0,
+      "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.McpAgent.Tests.trx",
+      "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "host": "PAYTON-LEGION2",
+      "failed": 0,
+      "project": "QBrainAi.McpAgent.Tests",
+      "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+    },
+    {
+      "total": 1035,
+      "sha256": "EC52060D1F648CCDC2845624ED66B0C9C4239B43D867E8DF16F3236143617EC7",
+      "passed": 1035,
+      "runId": "98a52528-e44d-49fe-acf8-f9ef3dc086c4",
+      "skipped": 0,
+      "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.Repl.Core.Tests.trx",
+      "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "host": "PAYTON-LEGION2",
+      "failed": 0,
+      "project": "QBrainAi.Repl.Core.Tests",
+      "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+    },
+    {
+      "total": 90,
+      "sha256": "53D17E64227D6B25D8E4F470A4C48B4AC4BC0C2C79CFDE3EA819415B46A223A1",
+      "passed": 90,
+      "runId": "e12f44a5-93a5-488c-af76-4ee47819f573",
+      "skipped": 0,
+      "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.QBAgent.Tests.trx",
+      "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "host": "PAYTON-LEGION2",
+      "failed": 0,
+      "project": "QBrainAi.QBAgent.Tests",
+      "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+    },
+    {
+      "total": 540,
+      "sha256": "1B6C940471E99C56952FB40B3351D6358269EA0D79E2239AF2ECE6AD8B890F8C",
+      "passed": 540,
+      "runId": "69a83a34-814a-4f51-b58d-d38276175637",
+      "skipped": 0,
+      "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/Build.Tests.trx",
+      "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/groups/Build.Tests/Build.Tests.trx",
+      "host": "PAYTON-LEGION2",
+      "failed": 0,
+      "project": "Build.Tests",
+      "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+    }
+  ]
+}

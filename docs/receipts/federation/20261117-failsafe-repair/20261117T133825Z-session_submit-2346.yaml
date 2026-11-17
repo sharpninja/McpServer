@@ -1,0 +1,41 @@
+method: client.SessionLog.SubmitAsync
+label: session_submit
+timestamp: 20261117T133825Z
+params:
+  sessionLog:
+    turns:
+      - queryTitle: Begin federation Phase0 under workspace and global procedures
+        tokenCount: 0
+        planFile: None
+        model: codex
+        todoId: None
+        queryText: Begin Phase 0. Ensure all workspace and global procedures are followed, especially session logging.
+        status: in_progress
+        response: (turn opened)
+        timestamp: 2026-11-17T13:38:24Z
+        requestId: req-20261117T073823-begin-federation-phase0
+    turnCount: 1
+    lastUpdated: 2026-11-17T13:38:25Z
+    model: codex
+    agentExecutablePath: C:\Users\kingd\AppData\Local\Microsoft\WinGet\Links\codex.exe
+    started: 2026-11-16T17:42:46Z
+    status: in_progress
+    sourceType: Codex
+    sessionId: Codex-20261116T174245Z-plugin-session
+    agentSessionId: codex-side-stop-gate-20261116T114244
+    agentExecutableVersion: codex-cli 0.166.0
+payloadFingerprint: 0CCE8B31146DB24AD182ADB510AFC739323D2F3992B914A4D5DAD5C3DD9A71E3
+drainAttempts: 2
+lastDrainError: |-
+  type: error
+  payload:
+    requestId: req-20261117T144842Z-a32f
+    code: method_invocation_error
+    message: 'RequestId must match req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal> (example: req-20260304T113901Z-plan-namingconventions-001).'
+    retryable: false
+    details:
+      clientName: SessionLog
+      methodName: SubmitAsync
+      exceptionType: QBrainAi.Client.McpValidationException
+
+  ---

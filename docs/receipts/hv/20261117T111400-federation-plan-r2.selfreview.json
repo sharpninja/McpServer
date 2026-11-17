@@ -1,0 +1,2002 @@
+{
+  "testEvidence": {
+    "kind": "plan-readiness-with-real-baseline-TRX",
+    "implementationClaim": false,
+    "trxSupplied": true,
+    "manifest": "docs/receipts/hv/20261117-federation-plan-unit-evidence/manifest.json",
+    "files": [
+      {
+        "total": 3350,
+        "sha256": "C9DE3F269317FC95EBDBC8CDFE70FEA6FE77B2F20BFD67075FA35CDE920FCA57",
+        "passed": 3350,
+        "runId": "1cd8478e-d810-474d-b399-b407fbd28e4a",
+        "skipped": 0,
+        "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.Support.Mcp.Tests.trx",
+        "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "host": "PAYTON-LEGION2",
+        "failed": 0,
+        "project": "QBrainAi.Support.Mcp.Tests",
+        "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+      },
+      {
+        "total": 311,
+        "sha256": "1AEDAC95ADB1FDB7EA9C4514F3614F8415625FF1AC6172987662D6E1AC290778",
+        "passed": 311,
+        "runId": "e9c6b7f6-de97-4867-b82d-020c589b322c",
+        "skipped": 0,
+        "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.Client.Tests.trx",
+        "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "host": "PAYTON-LEGION2",
+        "failed": 0,
+        "project": "QBrainAi.Client.Tests",
+        "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+      },
+      {
+        "total": 33,
+        "sha256": "8C1D06C70072053B96D3BC8B1DF2FE2A1C5A0582567698DADD273AB288502D32",
+        "passed": 33,
+        "runId": "92783f76-b71a-42f2-8a1d-4213c2e20a78",
+        "skipped": 0,
+        "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.Cqrs.Tests.trx",
+        "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "host": "PAYTON-LEGION2",
+        "failed": 0,
+        "project": "QBrainAi.Cqrs.Tests",
+        "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+      },
+      {
+        "total": 20,
+        "sha256": "2AD0CD7DEEFD6F67A3F0F6430C824AA844FF4415B10E78455DE35926476D3283",
+        "passed": 20,
+        "runId": "d0c05fb7-4264-4976-8988-f3ef9a11b66e",
+        "skipped": 0,
+        "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.Launcher.Tests.trx",
+        "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "host": "PAYTON-LEGION2",
+        "failed": 0,
+        "project": "QBrainAi.Launcher.Tests",
+        "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+      },
+      {
+        "total": 64,
+        "sha256": "0C6B48DA26D14BB670C531326AEAA90CC14C459198E95027AA8C3A30692C611F",
+        "passed": 64,
+        "runId": "bc0b1a95-dc38-42af-b5c2-c81931aa0e41",
+        "skipped": 0,
+        "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.McpAgent.Tests.trx",
+        "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "host": "PAYTON-LEGION2",
+        "failed": 0,
+        "project": "QBrainAi.McpAgent.Tests",
+        "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+      },
+      {
+        "total": 1035,
+        "sha256": "EC52060D1F648CCDC2845624ED66B0C9C4239B43D867E8DF16F3236143617EC7",
+        "passed": 1035,
+        "runId": "98a52528-e44d-49fe-acf8-f9ef3dc086c4",
+        "skipped": 0,
+        "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.Repl.Core.Tests.trx",
+        "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "host": "PAYTON-LEGION2",
+        "failed": 0,
+        "project": "QBrainAi.Repl.Core.Tests",
+        "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+      },
+      {
+        "total": 90,
+        "sha256": "53D17E64227D6B25D8E4F470A4C48B4AC4BC0C2C79CFDE3EA819415B46A223A1",
+        "passed": 90,
+        "runId": "e12f44a5-93a5-488c-af76-4ee47819f573",
+        "skipped": 0,
+        "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/QBrainAi.QBAgent.Tests.trx",
+        "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "host": "PAYTON-LEGION2",
+        "failed": 0,
+        "project": "QBrainAi.QBAgent.Tests",
+        "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+      },
+      {
+        "total": 540,
+        "sha256": "1B6C940471E99C56952FB40B3351D6358269EA0D79E2239AF2ECE6AD8B890F8C",
+        "passed": 540,
+        "runId": "69a83a34-814a-4f51-b58d-d38276175637",
+        "skipped": 0,
+        "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/Build.Tests.trx",
+        "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261117T092100-federation-plan-baseline/groups/Build.Tests/Build.Tests.trx",
+        "host": "PAYTON-LEGION2",
+        "failed": 0,
+        "project": "Build.Tests",
+        "head": "911cb810fbf1e005e2cbbbc426daeea7300319a2"
+      }
+    ],
+    "note": "No implemented federation integration is adjudicated; no integration pass claimed. Both-host phase-exit gates remain future obligations."
+  },
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "checks": {
+    "phaseBoundaryAudit": {
+      "status": "checked",
+      "evidence": "All implementation Tasks stay Planning; Phase0 feasibility precedes Ph1. Ph3 seed/export excludes Ph6 join; Ph7 plugin bindings do not precede server contracts; DEPLOY HOLD retained."
+    },
+    "noNewMechanism": {
+      "status": "checked",
+      "evidence": "R1 fixes only restore mandated direct dependencies and current complete rendering; no new product requirements, ACs, algorithms or completion claims."
+    },
+    "searchBeforeAdding": {
+      "status": "checked",
+      "evidence": "Searched existing catalog and source projections;86 existing canonical IDs retained;no new requirement IDs and no extra product mechanism."
+    },
+    "whatIfPass": {
+      "status": "checked",
+      "evidence": "Per-contract pass: offline local persistence and restart001; lost commit/intent002; foreign/nonempty enrollment003; pooled branch/session isolation004; concurrent public heads005; old generation/worker/hub epochs006; stale/delete-update/cyclic merges007; dirty/cancel/lost reply recovery008; collision/reservation/revert009; unsupported plugin/context010; audit replay/secrets/background writers011; identity revocation/TLS/offline auth012; dirty/unattested schema upgrade013; batch/source-change/omitted-domain recovery014; inert external-effect metadata015; admitted-write/takeover/preview races016. Named GWT outcomes and owning phases retained; no runtime pass claimed."
+    },
+    "operatorScopeVerbatim": {
+      "status": "checked",
+      "evidence": "Latest request and prior plan-first stop copied verbatim into prompt. Unrelated requirements reconciliation stays stopped."
+    },
+    "mappingLint": {
+      "status": "checked",
+      "evidence": "Fresh mechanical lint:86 definitions/392 AC/16 triples;67 task IDs/11 groups,372 named coverage references resolve, dependency DAG acyclic, all11 gates depend directly on all other members. Existing verification-v2 both-host definition readback has zero findings."
+    },
+    "propagationAudit": {
+      "status": "checked",
+      "evidence": "Plan section4 mock-green sequence, section5 accepted patchable EF10 fork and sections14/15 reviewer routing aligned to latest live rules. Definitions remain byte-equivalent to final-v2 payload. contracts.json projection reconciled to canonical TR descriptions, Ph4/Ph7 and Ph2/Ph3/Ph4/Ph5/Ph6/Ph7 annotations. R1 F01:45 direct edges repaired in plan and11 LEGION gate TODOs, read back; parent TODO worktree/reviewer metadata corrected. Exact baseline command recorded. Current235-page PDF prints58states/DSL,21 attachments hash verified. Old incomplete PDF retained with explicit limitation."
+    },
+    "standingRulesInBrief": {
+      "status": "checked",
+      "evidence": "Prompt requires full add-profile plus live Global/Workspace memories, correct Codex plugin, read-only product inspection, PowerShell-only, audit/failsafe rules, full JSONL, progress, scores, per-task scope and infrastructure rule."
+    },
+    "holisticRead": {
+      "status": "checked",
+      "evidence": "Fresh round: complete main plan1752lines, architecture203, current contracts335, workflows190, reconciliation28, library112, correctness98, contractsJSON294, FR294/TR306/TEST263/mapping20/matrix26 read end-to-end; revision audit202/dispositions52 and full visual source142 read. Task-workflow3.5.11/3.5.12 inspected as specific policy anchors, not a new review of the whole unrelated architecture."
+    }
+  },
+  "timestampLocal": "2026-11-17T11:17:08",
+  "artifactPins": [
+    {
+      "sha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+      "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md"
+    },
+    {
+      "sha256": "13AB93549CC16BCE16DE412252284F22A39DD8FDA633666BEC41B3F3E4D585D1",
+      "path": "docs/plans/2026-11-10-federation-dolt-architecture.md"
+    },
+    {
+      "sha256": "FDFAEB31D79DC495EAF8A8F927CA9538CAE6719B91C0F9665D90C098FCB153E2",
+      "path": "docs/plans/2026-11-10-federation-current-contracts.md"
+    },
+    {
+      "sha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+      "path": "docs/plans/2026-11-10-federation-three-system-workflows.md"
+    },
+    {
+      "sha256": "E30D5D97D9EB37D4A245F5DBA641ED6B53F2CC5F9A46BAACC99B06BC815D361B",
+      "path": "docs/plans/2026-11-10-federation-reconciliation.md"
+    },
+    {
+      "sha256": "B697F167906E5F00DDB8EF648253C588CE58FAE4E4F7839472BA775B84481BB7",
+      "path": "docs/plans/2026-11-10-federation-library-options.md"
+    },
+    {
+      "sha256": "F874822E84A52A54CB951AE13226C6AD75B497E0835A5D1729C3A7537B46F2B7",
+      "path": "docs/plans/2026-11-11-federation-correctness-evaluation.md"
+    },
+    {
+      "sha256": "90A3AA3D92E240ABA07302C4FCFD427DB66C819FD595C2812DCFFD571353C822",
+      "path": "docs/Project/federation-dolt/Functional-Requirements.md"
+    },
+    {
+      "sha256": "AB47015A3CD05B1A8D01B07B0B7EFEB3D69E38E75B9C7A9A08F633EA243E652E",
+      "path": "docs/Project/federation-dolt/Technical-Requirements.md"
+    },
+    {
+      "sha256": "80CB186857D42DD944112C45F7AC180EEB24B1A82904FA284C134EEA5527730C",
+      "path": "docs/Project/federation-dolt/Testing-Requirements.md"
+    },
+    {
+      "sha256": "0F37D7617AA63D06073B8EDD35DB6C9FFCDC7727EDAFD3C95D01A011055B7A8B",
+      "path": "docs/Project/federation-dolt/TR-per-FR-Mapping.md"
+    },
+    {
+      "sha256": "261C7C63985D4C94C2748E8AC993C591B47ABBA21B0F982C946083FE45FD3A69",
+      "path": "docs/Project/federation-dolt/Requirements-Matrix.md"
+    },
+    {
+      "sha256": "69096B1958E64EB43458EC3EA9592F0BA12A4AB972B4895F87D01069071BB1A5",
+      "path": "docs/architecture/Task-Workflow-Architecture.md"
+    },
+    {
+      "sha256": "B992E3B419BF914577AF589103048BB7C11D9C6E0F12E1B75D1CE0918061A934",
+      "path": "docs/receipts/federation/20261110-revision-audit.md"
+    },
+    {
+      "sha256": "0C4C28A47B3B87226B9EADE10DCCB4B8AD708F10D2CC61D2F164DB15E22FAF5B",
+      "path": "docs/receipts/federation/20261110-revision-audit-dispositions.md"
+    },
+    {
+      "sha256": "BC7D643DF1E6E59FF894F0A1E1B477F4CB2EC10D068BEF163379973CC8A768AB",
+      "path": "docs/plans/federation/diagrams/structurizr-Containers.svg"
+    },
+    {
+      "sha256": "D3869CF727946492EA342ECE6403E0B841859FB136279CDA0A1EA08D1DE696E1",
+      "path": "docs/plans/federation/diagrams/structurizr-Deployment.svg"
+    },
+    {
+      "sha256": "B6869A2AAA0FB239B9160C7EB95BB74EB8C7ADE52E18DFD54992301EA486E032",
+      "path": "docs/plans/federation/contracts.json"
+    },
+    {
+      "sha256": "6ACEBA9801599640F22ED1C0760899622B12DBB48DEFD32FA87688119FC62141",
+      "path": "docs/plans/federation/workspace.dsl"
+    },
+    {
+      "sha256": "7F6E43241B585EF06E67A5397117C7585E671BA749D69801CA6AE808BDEEB584",
+      "path": "docs/plans/visuals/federation-three-systems.html"
+    },
+    {
+      "sha256": "3F5FBB7849F0C3F27ACBE81D171C51138395AE777C42D091F999F0929948EA98",
+      "path": "docs/plans/exports/Federation-2026-11-17-current-complete.pdf"
+    },
+    {
+      "sha256": "837FB096003D57329B77E01C6EF03242317F537B3BEB439DE39C6A82AC9B8CA9",
+      "path": "docs/plans/exports/Federation-2026-11-17-current-complete.manifest.json"
+    },
+    {
+      "sha256": "13E4379DB6F3AB009FD62BC200F84594CC5FE398EF6B75FEB450AB68DE53C079",
+      "path": "docs/receipts/hv/20261117-federation-plan-unit-evidence/manifest.json"
+    }
+  ],
+  "mechanicalLint": {
+    "groups": 11,
+    "matrix": [
+      {
+        "id": "TASK-FEDPH0-001",
+        "g": "GRP-FEDPH0-001",
+        "n": 1,
+        "s": "Planning",
+        "d": [],
+        "r": [
+          "FR-MCP-186",
+          "TR-MCP-FEDERATION-013",
+          "TEST-MCP-234"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH0-002",
+        "g": "GRP-FEDPH0-001",
+        "n": 2,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH0-001"
+        ],
+        "r": [
+          "FR-MCP-186",
+          "FR-MCP-177",
+          "FR-MCP-175",
+          "TR-MCP-FEDERATION-002",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-013",
+          "TEST-MCP-223",
+          "TEST-MCP-225",
+          "TEST-MCP-234"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH0-003",
+        "g": "GRP-FEDPH0-001",
+        "n": 3,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH0-001"
+        ],
+        "r": [
+          "FR-MCP-185",
+          "TR-MCP-FEDERATION-012",
+          "TEST-MCP-233"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH0-004",
+        "g": "GRP-FEDPH0-001",
+        "n": 4,
+        "s": "Planning",
+        "d": [],
+        "r": [
+          "FR-MCP-184",
+          "FR-MCP-182",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TEST-MCP-230",
+          "TEST-MCP-232"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH0-005",
+        "g": "GRP-FEDPH0-001",
+        "n": 5,
+        "s": "Planning",
+        "d": [],
+        "r": [
+          "FR-MCP-185",
+          "TR-MCP-FEDERATION-012",
+          "TEST-MCP-233"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH0-006",
+        "g": "GRP-FEDPH0-001",
+        "n": 6,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH0-002"
+        ],
+        "r": [
+          "FR-MCP-180",
+          "FR-MCP-186",
+          "FR-MCP-187",
+          "FR-MCP-189",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-014",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-228",
+          "TEST-MCP-234",
+          "TEST-MCP-235",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH0-007",
+        "g": "GRP-FEDPH0-001",
+        "n": 7,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH0-002",
+          "TASK-FEDPH0-003"
+        ],
+        "r": [
+          "FR-MCP-179",
+          "FR-MCP-184",
+          "FR-MCP-185",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TEST-MCP-227",
+          "TEST-MCP-232",
+          "TEST-MCP-233"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH0-008",
+        "g": "GRP-FEDPH0-001",
+        "n": 8,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH0-001",
+          "TASK-FEDPH0-002",
+          "TASK-FEDPH0-003",
+          "TASK-FEDPH0-004",
+          "TASK-FEDPH0-005",
+          "TASK-FEDPH0-006",
+          "TASK-FEDPH0-007"
+        ],
+        "r": [
+          "FR-MCP-186",
+          "TR-MCP-FEDERATION-013",
+          "TEST-MCP-234"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH0-009",
+        "g": "GRP-FEDPH0-001",
+        "n": 9,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH0-001",
+          "TASK-FEDPH0-002",
+          "TASK-FEDPH0-003",
+          "TASK-FEDPH0-004",
+          "TASK-FEDPH0-005",
+          "TASK-FEDPH0-006",
+          "TASK-FEDPH0-007",
+          "TASK-FEDPH0-008"
+        ],
+        "r": [
+          "FR-MCP-186",
+          "FR-MCP-177",
+          "FR-MCP-175",
+          "FR-MCP-185",
+          "FR-MCP-184",
+          "FR-MCP-182",
+          "FR-MCP-180",
+          "FR-MCP-187",
+          "FR-MCP-189",
+          "FR-MCP-179",
+          "TR-MCP-FEDERATION-002",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-014",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-223",
+          "TEST-MCP-225",
+          "TEST-MCP-227",
+          "TEST-MCP-228",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TEST-MCP-234",
+          "TEST-MCP-235",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "FAIL",
+        "a": 87.5,
+        "c": 89.06,
+        "miss": [
+          "TASK-FEDPH0-001",
+          "TASK-FEDPH0-002",
+          "TASK-FEDPH0-003",
+          "TASK-FEDPH0-004",
+          "TASK-FEDPH0-005",
+          "TASK-FEDPH0-006",
+          "TASK-FEDPH0-007"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH1-001",
+        "g": "GRP-FEDPH1-001",
+        "n": 1,
+        "s": "Planning",
+        "d": [
+          "GRP-FEDPH0-001"
+        ],
+        "r": [
+          "FR-MCP-186",
+          "TR-MCP-FEDERATION-013",
+          "TEST-MCP-234"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH1-002",
+        "g": "GRP-FEDPH1-001",
+        "n": 2,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH1-001"
+        ],
+        "r": [
+          "FR-MCP-186",
+          "TR-MCP-FEDERATION-013",
+          "TEST-MCP-234"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH1-003",
+        "g": "GRP-FEDPH1-001",
+        "n": 3,
+        "s": "Planning",
+        "d": [
+          "GRP-FEDPH0-001"
+        ],
+        "r": [
+          "FR-MCP-186",
+          "TR-MCP-FEDERATION-013",
+          "TEST-MCP-234"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH1-004",
+        "g": "GRP-FEDPH1-001",
+        "n": 4,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH1-002",
+          "TASK-FEDPH1-003"
+        ],
+        "r": [
+          "FR-MCP-186",
+          "TR-MCP-FEDERATION-013",
+          "TEST-MCP-234"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH1-005",
+        "g": "GRP-FEDPH1-001",
+        "n": 5,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH1-001",
+          "TASK-FEDPH1-002",
+          "TASK-FEDPH1-003",
+          "TASK-FEDPH1-004"
+        ],
+        "r": [
+          "FR-MCP-186",
+          "TR-MCP-FEDERATION-013",
+          "TEST-MCP-234"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "FAIL",
+        "a": 87.5,
+        "c": 90.62,
+        "miss": [
+          "TASK-FEDPH1-001",
+          "TASK-FEDPH1-002",
+          "TASK-FEDPH1-003"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH2-001",
+        "g": "GRP-FEDPH2-001",
+        "n": 1,
+        "s": "Planning",
+        "d": [
+          "GRP-FEDPH1-001"
+        ],
+        "r": [
+          "FR-MCP-174",
+          "FR-MCP-176",
+          "TR-MCP-FEDERATION-001",
+          "TR-MCP-FEDERATION-003",
+          "TEST-MCP-222",
+          "TEST-MCP-224"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH2-002",
+        "g": "GRP-FEDPH2-001",
+        "n": 2,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH2-001"
+        ],
+        "r": [
+          "FR-MCP-177",
+          "FR-MCP-184",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-011",
+          "TEST-MCP-225",
+          "TEST-MCP-232"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH2-003",
+        "g": "GRP-FEDPH2-001",
+        "n": 3,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH2-002"
+        ],
+        "r": [
+          "FR-MCP-182",
+          "TR-MCP-FEDERATION-009",
+          "TEST-MCP-230"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH2-004",
+        "g": "GRP-FEDPH2-001",
+        "n": 4,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH2-002"
+        ],
+        "r": [
+          "FR-MCP-189",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH2-005",
+        "g": "GRP-FEDPH2-001",
+        "n": 5,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH2-001"
+        ],
+        "r": [
+          "FR-MCP-185",
+          "TR-MCP-FEDERATION-012",
+          "TEST-MCP-233"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH2-006",
+        "g": "GRP-FEDPH2-001",
+        "n": 6,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH2-002"
+        ],
+        "r": [
+          "FR-MCP-184",
+          "FR-MCP-188",
+          "TR-MCP-AUDIT-004",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-015",
+          "TEST-MCP-232",
+          "TEST-MCP-236"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH2-007",
+        "g": "GRP-FEDPH2-001",
+        "n": 7,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH2-001",
+          "TASK-FEDPH2-002",
+          "TASK-FEDPH2-003",
+          "TASK-FEDPH2-004",
+          "TASK-FEDPH2-005",
+          "TASK-FEDPH2-006"
+        ],
+        "r": [
+          "FR-MCP-174",
+          "FR-MCP-176",
+          "FR-MCP-177",
+          "FR-MCP-184",
+          "FR-MCP-182",
+          "FR-MCP-189",
+          "FR-MCP-185",
+          "FR-MCP-188",
+          "TR-MCP-FEDERATION-001",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-015",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-222",
+          "TEST-MCP-224",
+          "TEST-MCP-225",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TEST-MCP-236",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH2-008",
+        "g": "GRP-FEDPH2-001",
+        "n": 8,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH2-001",
+          "TASK-FEDPH2-002",
+          "TASK-FEDPH2-003",
+          "TASK-FEDPH2-004",
+          "TASK-FEDPH2-005",
+          "TASK-FEDPH2-006",
+          "TASK-FEDPH2-007"
+        ],
+        "r": [
+          "FR-MCP-174",
+          "FR-MCP-176",
+          "FR-MCP-177",
+          "FR-MCP-184",
+          "FR-MCP-182",
+          "FR-MCP-189",
+          "FR-MCP-185",
+          "FR-MCP-188",
+          "TR-MCP-FEDERATION-001",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-015",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-222",
+          "TEST-MCP-224",
+          "TEST-MCP-225",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TEST-MCP-236",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "FAIL",
+        "a": 87.5,
+        "c": 89.29,
+        "miss": [
+          "TASK-FEDPH2-001",
+          "TASK-FEDPH2-002",
+          "TASK-FEDPH2-003",
+          "TASK-FEDPH2-004",
+          "TASK-FEDPH2-005",
+          "TASK-FEDPH2-006"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH3-001",
+        "g": "GRP-FEDPH3-001",
+        "n": 1,
+        "s": "Planning",
+        "d": [
+          "GRP-FEDPH2-001"
+        ],
+        "r": [
+          "FR-MCP-187",
+          "FR-MCP-182",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-230",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH3-002",
+        "g": "GRP-FEDPH3-001",
+        "n": 2,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH3-001"
+        ],
+        "r": [
+          "FR-MCP-187",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH3-003",
+        "g": "GRP-FEDPH3-001",
+        "n": 3,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH3-001"
+        ],
+        "r": [
+          "FR-MCP-184",
+          "TR-MCP-FEDERATION-011",
+          "TEST-MCP-232"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH3-004",
+        "g": "GRP-FEDPH3-001",
+        "n": 4,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH3-002"
+        ],
+        "r": [
+          "FR-MCP-187",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH3-005",
+        "g": "GRP-FEDPH3-001",
+        "n": 5,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH3-001",
+          "TASK-FEDPH3-002",
+          "TASK-FEDPH3-003",
+          "TASK-FEDPH3-004"
+        ],
+        "r": [
+          "FR-MCP-187",
+          "FR-MCP-182",
+          "FR-MCP-184",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH3-006",
+        "g": "GRP-FEDPH3-001",
+        "n": 6,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH3-001",
+          "TASK-FEDPH3-002",
+          "TASK-FEDPH3-003",
+          "TASK-FEDPH3-004",
+          "TASK-FEDPH3-005"
+        ],
+        "r": [
+          "FR-MCP-187",
+          "FR-MCP-182",
+          "FR-MCP-184",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "FAIL",
+        "a": 87.5,
+        "c": 90.0,
+        "miss": [
+          "TASK-FEDPH3-001",
+          "TASK-FEDPH3-002",
+          "TASK-FEDPH3-003",
+          "TASK-FEDPH3-004"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH4-001",
+        "g": "GRP-FEDPH4-001",
+        "n": 1,
+        "s": "Planning",
+        "d": [
+          "GRP-FEDPH3-001"
+        ],
+        "r": [
+          "FR-MCP-175",
+          "FR-MCP-189",
+          "FR-MCP-184",
+          "TR-MCP-FEDERATION-002",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-223",
+          "TEST-MCP-232",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH4-002",
+        "g": "GRP-FEDPH4-001",
+        "n": 2,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH4-001"
+        ],
+        "r": [
+          "FR-MCP-177",
+          "FR-MCP-183",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-010",
+          "TEST-MCP-225",
+          "TEST-MCP-231"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH4-003",
+        "g": "GRP-FEDPH4-001",
+        "n": 3,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH4-001"
+        ],
+        "r": [
+          "FR-MCP-175",
+          "TR-MCP-FEDERATION-002",
+          "TEST-MCP-223"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH4-004",
+        "g": "GRP-FEDPH4-001",
+        "n": 4,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH4-001",
+          "TASK-FEDPH4-002",
+          "TASK-FEDPH4-003"
+        ],
+        "r": [
+          "FR-MCP-175",
+          "FR-MCP-189",
+          "FR-MCP-184",
+          "FR-MCP-177",
+          "FR-MCP-183",
+          "TR-MCP-FEDERATION-002",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-010",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-223",
+          "TEST-MCP-225",
+          "TEST-MCP-231",
+          "TEST-MCP-232",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH4-005",
+        "g": "GRP-FEDPH4-001",
+        "n": 5,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH4-001",
+          "TASK-FEDPH4-002",
+          "TASK-FEDPH4-003",
+          "TASK-FEDPH4-004"
+        ],
+        "r": [
+          "FR-MCP-175",
+          "FR-MCP-189",
+          "FR-MCP-184",
+          "FR-MCP-177",
+          "FR-MCP-183",
+          "TR-MCP-FEDERATION-002",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-010",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-223",
+          "TEST-MCP-225",
+          "TEST-MCP-231",
+          "TEST-MCP-232",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "FAIL",
+        "a": 87.5,
+        "c": 90.62,
+        "miss": [
+          "TASK-FEDPH4-001",
+          "TASK-FEDPH4-002",
+          "TASK-FEDPH4-003"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH5-001",
+        "g": "GRP-FEDPH5-001",
+        "n": 1,
+        "s": "Planning",
+        "d": [
+          "GRP-FEDPH4-001"
+        ],
+        "r": [
+          "FR-MCP-176",
+          "FR-MCP-185",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-012",
+          "TEST-MCP-224",
+          "TEST-MCP-233"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH5-002",
+        "g": "GRP-FEDPH5-001",
+        "n": 2,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH5-001"
+        ],
+        "r": [
+          "FR-MCP-185",
+          "TR-MCP-FEDERATION-012",
+          "TEST-MCP-233"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH5-003",
+        "g": "GRP-FEDPH5-001",
+        "n": 3,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH5-002"
+        ],
+        "r": [
+          "FR-MCP-178",
+          "FR-MCP-181",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-008",
+          "TEST-MCP-226",
+          "TEST-MCP-229"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH5-004",
+        "g": "GRP-FEDPH5-001",
+        "n": 4,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH5-003"
+        ],
+        "r": [
+          "FR-MCP-179",
+          "FR-MCP-181",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-008",
+          "TEST-MCP-227",
+          "TEST-MCP-229"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH5-005",
+        "g": "GRP-FEDPH5-001",
+        "n": 5,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH5-002"
+        ],
+        "r": [
+          "FR-MCP-184",
+          "FR-MCP-182",
+          "TR-MCP-AUDIT-004",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TEST-MCP-230",
+          "TEST-MCP-232"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH5-006",
+        "g": "GRP-FEDPH5-001",
+        "n": 6,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH5-001",
+          "TASK-FEDPH5-002",
+          "TASK-FEDPH5-003",
+          "TASK-FEDPH5-004",
+          "TASK-FEDPH5-005"
+        ],
+        "r": [
+          "FR-MCP-176",
+          "FR-MCP-185",
+          "FR-MCP-178",
+          "FR-MCP-181",
+          "FR-MCP-179",
+          "FR-MCP-184",
+          "FR-MCP-182",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TEST-MCP-224",
+          "TEST-MCP-226",
+          "TEST-MCP-227",
+          "TEST-MCP-229",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-233"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH5-007",
+        "g": "GRP-FEDPH5-001",
+        "n": 7,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH5-001",
+          "TASK-FEDPH5-002",
+          "TASK-FEDPH5-003",
+          "TASK-FEDPH5-004",
+          "TASK-FEDPH5-005",
+          "TASK-FEDPH5-006"
+        ],
+        "r": [
+          "FR-MCP-176",
+          "FR-MCP-185",
+          "FR-MCP-178",
+          "FR-MCP-181",
+          "FR-MCP-179",
+          "FR-MCP-184",
+          "FR-MCP-182",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TEST-MCP-224",
+          "TEST-MCP-226",
+          "TEST-MCP-227",
+          "TEST-MCP-229",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-233"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "FAIL",
+        "a": 87.5,
+        "c": 89.58,
+        "miss": [
+          "TASK-FEDPH5-001",
+          "TASK-FEDPH5-002",
+          "TASK-FEDPH5-003",
+          "TASK-FEDPH5-004",
+          "TASK-FEDPH5-005"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6-001",
+        "g": "GRP-FEDPH6-001",
+        "n": 1,
+        "s": "Planning",
+        "d": [
+          "GRP-FEDPH5-001"
+        ],
+        "r": [
+          "FR-MCP-178",
+          "FR-MCP-180",
+          "FR-MCP-189",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-226",
+          "TEST-MCP-228",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH6-002",
+        "g": "GRP-FEDPH6-001",
+        "n": 2,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH6-001"
+        ],
+        "r": [
+          "FR-MCP-180",
+          "TR-MCP-FEDERATION-007",
+          "TEST-MCP-228"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH6-003",
+        "g": "GRP-FEDPH6-001",
+        "n": 3,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH6-001"
+        ],
+        "r": [
+          "FR-MCP-181",
+          "FR-MCP-186",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-013",
+          "TEST-MCP-229",
+          "TEST-MCP-234"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH6-004",
+        "g": "GRP-FEDPH6-001",
+        "n": 4,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH6-002",
+          "TASK-FEDPH6-003"
+        ],
+        "r": [
+          "FR-MCP-181",
+          "FR-MCP-179",
+          "FR-MCP-184",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-011",
+          "TEST-MCP-227",
+          "TEST-MCP-229",
+          "TEST-MCP-232"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH6-005",
+        "g": "GRP-FEDPH6-001",
+        "n": 5,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH6-001"
+        ],
+        "r": [
+          "FR-MCP-188",
+          "TR-MCP-FEDERATION-015",
+          "TEST-MCP-236"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH6-006",
+        "g": "GRP-FEDPH6-001",
+        "n": 6,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH6-001",
+          "TASK-FEDPH6-002",
+          "TASK-FEDPH6-003",
+          "TASK-FEDPH6-004",
+          "TASK-FEDPH6-005"
+        ],
+        "r": [
+          "FR-MCP-180",
+          "FR-MCP-181",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-008",
+          "TEST-MCP-228",
+          "TEST-MCP-229"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH6-007",
+        "g": "GRP-FEDPH6-001",
+        "n": 7,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH6-001",
+          "TASK-FEDPH6-002",
+          "TASK-FEDPH6-003",
+          "TASK-FEDPH6-004",
+          "TASK-FEDPH6-005",
+          "TASK-FEDPH6-006"
+        ],
+        "r": [
+          "FR-MCP-178",
+          "FR-MCP-180",
+          "FR-MCP-189",
+          "FR-MCP-181",
+          "FR-MCP-186",
+          "FR-MCP-179",
+          "FR-MCP-184",
+          "FR-MCP-188",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-015",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-226",
+          "TEST-MCP-227",
+          "TEST-MCP-228",
+          "TEST-MCP-229",
+          "TEST-MCP-232",
+          "TEST-MCP-234",
+          "TEST-MCP-236",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "FAIL",
+        "a": 87.5,
+        "c": 89.58,
+        "miss": [
+          "TASK-FEDPH6-001",
+          "TASK-FEDPH6-002",
+          "TASK-FEDPH6-003",
+          "TASK-FEDPH6-004",
+          "TASK-FEDPH6-005"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6J-001",
+        "g": "GRP-FEDPH6-002",
+        "n": 1,
+        "s": "Planning",
+        "d": [
+          "GRP-FEDPH6-001"
+        ],
+        "r": [
+          "FR-MCP-187",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH6J-002",
+        "g": "GRP-FEDPH6-002",
+        "n": 2,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH6J-001"
+        ],
+        "r": [
+          "FR-MCP-184",
+          "TR-MCP-FEDERATION-011",
+          "TEST-MCP-232"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH6J-003",
+        "g": "GRP-FEDPH6-002",
+        "n": 3,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH6J-001",
+          "TASK-FEDPH6J-002"
+        ],
+        "r": [
+          "FR-MCP-187",
+          "FR-MCP-184",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-232",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH6J-004",
+        "g": "GRP-FEDPH6-002",
+        "n": 4,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH6J-001",
+          "TASK-FEDPH6J-002",
+          "TASK-FEDPH6J-003"
+        ],
+        "r": [
+          "FR-MCP-187",
+          "FR-MCP-184",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-232",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "FAIL",
+        "a": 87.5,
+        "c": 91.67,
+        "miss": [
+          "TASK-FEDPH6J-001",
+          "TASK-FEDPH6J-002"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH7-001",
+        "g": "GRP-FEDPH7-001",
+        "n": 1,
+        "s": "Planning",
+        "d": [
+          "GRP-FEDPH6-002"
+        ],
+        "r": [
+          "FR-MCP-183",
+          "TR-MCP-FEDERATION-010",
+          "TEST-MCP-231"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH7-002",
+        "g": "GRP-FEDPH7-001",
+        "n": 2,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH7-001"
+        ],
+        "r": [
+          "FR-MCP-183",
+          "TR-MCP-FEDERATION-010",
+          "TEST-MCP-231"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH7-003",
+        "g": "GRP-FEDPH7-001",
+        "n": 3,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH7-002"
+        ],
+        "r": [
+          "FR-MCP-176",
+          "FR-MCP-182",
+          "FR-MCP-185",
+          "FR-MCP-181",
+          "FR-MCP-188",
+          "FR-MCP-189",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-015",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-224",
+          "TEST-MCP-229",
+          "TEST-MCP-230",
+          "TEST-MCP-233",
+          "TEST-MCP-236",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH7-004",
+        "g": "GRP-FEDPH7-001",
+        "n": 4,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH7-002"
+        ],
+        "r": [
+          "FR-MCP-180",
+          "TR-MCP-FEDERATION-007",
+          "TEST-MCP-228"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH7-005",
+        "g": "GRP-FEDPH7-001",
+        "n": 5,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH7-001",
+          "TASK-FEDPH7-002",
+          "TASK-FEDPH7-003",
+          "TASK-FEDPH7-004"
+        ],
+        "r": [
+          "FR-MCP-183",
+          "FR-MCP-176",
+          "FR-MCP-182",
+          "FR-MCP-185",
+          "FR-MCP-181",
+          "FR-MCP-188",
+          "FR-MCP-189",
+          "FR-MCP-180",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-010",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-015",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-224",
+          "TEST-MCP-228",
+          "TEST-MCP-229",
+          "TEST-MCP-230",
+          "TEST-MCP-231",
+          "TEST-MCP-233",
+          "TEST-MCP-236",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH7-006",
+        "g": "GRP-FEDPH7-001",
+        "n": 6,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH7-001",
+          "TASK-FEDPH7-002",
+          "TASK-FEDPH7-003",
+          "TASK-FEDPH7-004",
+          "TASK-FEDPH7-005"
+        ],
+        "r": [
+          "FR-MCP-183",
+          "FR-MCP-176",
+          "FR-MCP-182",
+          "FR-MCP-185",
+          "FR-MCP-181",
+          "FR-MCP-188",
+          "FR-MCP-189",
+          "FR-MCP-180",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-010",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-015",
+          "TR-MCP-FEDERATION-016",
+          "TEST-MCP-224",
+          "TEST-MCP-228",
+          "TEST-MCP-229",
+          "TEST-MCP-230",
+          "TEST-MCP-231",
+          "TEST-MCP-233",
+          "TEST-MCP-236",
+          "TEST-MCP-237"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "FAIL",
+        "a": 87.5,
+        "c": 90.0,
+        "miss": [
+          "TASK-FEDPH7-001",
+          "TASK-FEDPH7-002",
+          "TASK-FEDPH7-003",
+          "TASK-FEDPH7-004"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH8-001",
+        "g": "GRP-FEDPH8-001",
+        "n": 1,
+        "s": "Planning",
+        "d": [
+          "GRP-FEDPH7-001"
+        ],
+        "r": [
+          "FR-MCP-178",
+          "FR-MCP-186",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-013",
+          "TEST-MCP-226",
+          "TEST-MCP-234"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH8-002",
+        "g": "GRP-FEDPH8-001",
+        "n": 2,
+        "s": "Planning",
+        "d": [
+          "GRP-FEDPH7-001"
+        ],
+        "r": [
+          "FR-MCP-186",
+          "FR-MCP-179",
+          "FR-MCP-185",
+          "FR-MCP-184",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-013",
+          "TEST-MCP-227",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TEST-MCP-234"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH8-003",
+        "g": "GRP-FEDPH8-001",
+        "n": 3,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002"
+        ],
+        "r": [
+          "FR-MCP-181",
+          "FR-MCP-174",
+          "TR-MCP-FEDERATION-001",
+          "TR-MCP-FEDERATION-008",
+          "TEST-MCP-222",
+          "TEST-MCP-229"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH8-004",
+        "g": "GRP-FEDPH8-001",
+        "n": 4,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002"
+        ],
+        "r": [
+          "FR-MCP-187",
+          "FR-MCP-186",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-234",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH8-005",
+        "g": "GRP-FEDPH8-001",
+        "n": 5,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH8-004"
+        ],
+        "r": [
+          "FR-MCP-187",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH8-006",
+        "g": "GRP-FEDPH8-001",
+        "n": 6,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002",
+          "TASK-FEDPH8-003",
+          "TASK-FEDPH8-004",
+          "TASK-FEDPH8-005"
+        ],
+        "r": [
+          "FR-MCP-178",
+          "FR-MCP-186",
+          "FR-MCP-179",
+          "FR-MCP-185",
+          "FR-MCP-184",
+          "FR-MCP-181",
+          "FR-MCP-174",
+          "FR-MCP-187",
+          "TR-MCP-FEDERATION-001",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-222",
+          "TEST-MCP-226",
+          "TEST-MCP-227",
+          "TEST-MCP-229",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TEST-MCP-234",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDPH8-007",
+        "g": "GRP-FEDPH8-001",
+        "n": 7,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002",
+          "TASK-FEDPH8-003",
+          "TASK-FEDPH8-004",
+          "TASK-FEDPH8-005",
+          "TASK-FEDPH8-006"
+        ],
+        "r": [
+          "FR-MCP-178",
+          "FR-MCP-186",
+          "FR-MCP-179",
+          "FR-MCP-185",
+          "FR-MCP-184",
+          "FR-MCP-181",
+          "FR-MCP-174",
+          "FR-MCP-187",
+          "TR-MCP-FEDERATION-001",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-222",
+          "TEST-MCP-226",
+          "TEST-MCP-227",
+          "TEST-MCP-229",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TEST-MCP-234",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "FAIL",
+        "a": 87.5,
+        "c": 89.58,
+        "miss": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002",
+          "TASK-FEDPH8-003",
+          "TASK-FEDPH8-004",
+          "TASK-FEDPH8-005"
+        ]
+      },
+      {
+        "id": "TASK-FEDCUT-001",
+        "g": "GRP-FEDCUT-001",
+        "n": 1,
+        "s": "Planning",
+        "d": [
+          "GRP-FEDPH8-001"
+        ],
+        "r": [
+          "FR-MCP-186",
+          "FR-MCP-184",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-013",
+          "TEST-MCP-232",
+          "TEST-MCP-234"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDCUT-002",
+        "g": "GRP-FEDCUT-001",
+        "n": 2,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDCUT-001"
+        ],
+        "r": [
+          "FR-MCP-178",
+          "FR-MCP-187",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-226",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "PASS",
+        "a": 100,
+        "c": 100
+      },
+      {
+        "id": "TASK-FEDCUT-003",
+        "g": "GRP-FEDCUT-001",
+        "n": 3,
+        "s": "Planning",
+        "d": [
+          "TASK-FEDCUT-001",
+          "TASK-FEDCUT-002"
+        ],
+        "r": [
+          "FR-MCP-186",
+          "FR-MCP-184",
+          "FR-MCP-178",
+          "FR-MCP-187",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-014",
+          "TEST-MCP-226",
+          "TEST-MCP-232",
+          "TEST-MCP-234",
+          "TEST-MCP-235"
+        ],
+        "sel": "PRA+REG/OOS",
+        "v": "FAIL",
+        "a": 87.5,
+        "c": 93.75,
+        "miss": [
+          "TASK-FEDCUT-001"
+        ]
+      }
+    ],
+    "missingGateEdges": 0,
+    "acyclic": true,
+    "tasks": 67,
+    "coverageReferences": 372
+  },
+  "pdfEvidence": {
+    "limitation": "Sampled visual inspection, not every page. All caption text and full DSL mechanically verified.",
+    "visualSamples": [
+      1,
+      9,
+      16,
+      40,
+      175,
+      176,
+      213,
+      235
+    ],
+    "sha256": "3F5FBB7849F0C3F27ACBE81D171C51138395AE777C42D091F999F0929948EA98",
+    "pages": 235,
+    "path": "docs/plans/exports/Federation-2026-11-17-current-complete.pdf",
+    "attachments": 21,
+    "printedStates": 58
+  }
+}

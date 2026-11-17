@@ -1,0 +1,26 @@
+{
+  "independentHostileValidation": "not run for this amendment",
+  "planSha256": "0777A48FB9C0953159922EAE0D3AE44371E30DBE1FDCAED9C3EEDAF76F150189",
+  "findingCount": 0,
+  "phase0Resumed": false,
+  "findings": [],
+  "hosts": [
+    {
+      "host": "PAYTON-LEGION2",
+      "newOrChangedCriteriaUnsatisfied": 223,
+      "unchangedCriteriaPreserved": 169,
+      "criteria": 392,
+      "definitions": 86,
+      "coreMappings": 16
+    },
+    {
+      "host": "LAB-OMARCHY",
+      "newOrChangedCriteriaUnsatisfied": 25,
+      "unchangedCriteriaPreserved": 367,
+      "criteria": 392,
+      "definitions": 86,
+      "coreMappings": 16
+    }
+  ],
+  "checkedAtLocal": "2026-11-17T08:44:16.55647-06:00"
+}

@@ -1,0 +1,139 @@
+{
+  "findings": [
+    {
+      "disposition": "All67 current dependency lists matched plan; stale v/a/c/miss fields removed in labeled derived selfreview; exact submitted selfreview retained",
+      "receipt": "docs/receipts/federation/20261117-hv-remediation/r2-corrected.selfreview.json",
+      "id": "F01"
+    },
+    {
+      "disposition": "Four exact marker-key occurrences redacted from publication copies only. Private raw originals retained with all error/failure fields. Historical exposure remains recorded. No rotation or service restart performed.",
+      "id": "F02"
+    },
+    {
+      "disposition": "Historical timestamp defects retained. Subsequent parent updates use fresh measured local timestamps. Historical entries are not rewritten.",
+      "id": "F03"
+    },
+    {
+      "disposition": "Reviewer corrected dedicated CacheRoot and retained the wrong-cache duplicate failed with wrong_session_cache_target.",
+      "id": "F04"
+    },
+    {
+      "disposition": "Parent Legion plugin independently queried completed canonical turn and current pending0/quarantine14. Historical supported drain is corroborated by persisted parent action3; no fresh replay fabricated. Reviewer original UNKNOWN retained.",
+      "receipt": "docs/receipts/federation/20261117-hv-remediation/r2-legion-canonical-readback.json",
+      "id": "U01"
+    }
+  ],
+  "reviewerSessionId": "Codex-20261117T173304Z-federation-plan-r2-hv",
+  "accuracy": 99,
+  "fail": 4,
+  "reviewerRequestId": "req-20261117T173304Z-federation-plan-r2-hv",
+  "completeness": 99,
+  "pass": 23,
+  "phase0Authorization": "Operator authorized resume after plan clearance; no implementation completion inferred",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "substantiveBlockers": 0,
+  "implementationTasksCompleted": 0,
+  "overallVerdict": "AGREE",
+  "publicationFiles": [
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117T091300-federation-plan-r1.response.jsonl",
+      "sha256": "12A7D6424B4075207E2D194333A64C223490446B6B1D32D7D317490AAA15750F",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.response.jsonl",
+      "privateOriginalSha256": "DBCD9FE8074115B620F99A1523FA1DA50B6BDE657FFDE1BACD8B4DDDC716451A"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117T091300-federation-plan-r1.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.stderr.txt",
+      "privateOriginalSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117T091300-federation-plan-r1.verdict.md",
+      "sha256": "CE5AEF8CBC279235847805766C5EF2DC6C63426B79C660F73A990625C825038C",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.verdict.md",
+      "privateOriginalSha256": "CE5AEF8CBC279235847805766C5EF2DC6C63426B79C660F73A990625C825038C"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117T111400-federation-plan-r2.response.jsonl",
+      "sha256": "68FF628292DECC66B0181BA313E2087C1C651086EEDD017873A33B8C390429E9",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T111400-federation-plan-r2.response.jsonl",
+      "privateOriginalSha256": "440083D8B35B891FCAAB4411813506C197EBEB7A82D5C0C8FEA63DDDA6DD3B57"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117T111400-federation-plan-r2.stderr.txt",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T111400-federation-plan-r2.stderr.txt",
+      "privateOriginalSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117T111400-federation-plan-r2.verdict.md",
+      "sha256": "2AF3D090D73E69E0ECC131D1F7C394C4E706BF7C70D0C6E9C75E2503A6D0D50C",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T111400-federation-plan-r2.verdict.md",
+      "privateOriginalSha256": "2AF3D090D73E69E0ECC131D1F7C394C4E706BF7C70D0C6E9C75E2503A6D0D50C"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117-federation-plan-r2-evidence\\federation-r2-evidence-quality-audit.json",
+      "sha256": "72EF732A5E8E74FF247CE500E497435272985BD671B0D865A34A3906F49BA198",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-evidence-quality-audit.json",
+      "privateOriginalSha256": "72EF732A5E8E74FF247CE500E497435272985BD671B0D865A34A3906F49BA198"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117-federation-plan-r2-evidence\\federation-r2-independent-audit.json",
+      "sha256": "490538413A9F9F3C5150FE815995A111AADB76D511723B89FF9666F6A899252C",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-independent-audit.json",
+      "privateOriginalSha256": "490538413A9F9F3C5150FE815995A111AADB76D511723B89FF9666F6A899252C"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117-federation-plan-r2-evidence\\federation-r2-independent-verdict.json",
+      "sha256": "6EB3BD5F3E6E9E7827B90E62BC283FB98E31D65D5DA8D2B2BB1365170BD3AB4C",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-independent-verdict.json",
+      "privateOriginalSha256": "6EB3BD5F3E6E9E7827B90E62BC283FB98E31D65D5DA8D2B2BB1365170BD3AB4C"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117-federation-plan-r2-evidence\\federation-r2-independent-verdict.md",
+      "sha256": "3D31E0B30541129FAA85B85CE77AA8DA26A93E53C2DBBCBC8DE5A2CD5601EDD8",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-independent-verdict.md",
+      "privateOriginalSha256": "3D31E0B30541129FAA85B85CE77AA8DA26A93E53C2DBBCBC8DE5A2CD5601EDD8"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117-federation-plan-r2-evidence\\federation-r2-requirement-audit.json",
+      "sha256": "59C02672DDE94220E8D4EF192263E364BA483782984314AAA02DE0962343B1ED",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-requirement-audit.json",
+      "privateOriginalSha256": "59C02672DDE94220E8D4EF192263E364BA483782984314AAA02DE0962343B1ED"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117-federation-plan-r2-evidence\\federation-r2-source-block-audit.json",
+      "sha256": "4B7C6C7BE504B144B8B225179A28AB312E35870FAC47D1EB62521E3AD2F5B124",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-source-block-audit.json",
+      "privateOriginalSha256": "4B7C6C7BE504B144B8B225179A28AB312E35870FAC47D1EB62521E3AD2F5B124"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117-federation-plan-r2-evidence\\federation-r2-surface-audit.json",
+      "sha256": "7BF7DB72462C9FC9E19BC32061B59EA5D1423F308A5466D554582135BCC5AFA5",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-surface-audit.json",
+      "privateOriginalSha256": "7BF7DB72462C9FC9E19BC32061B59EA5D1423F308A5466D554582135BCC5AFA5"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117-federation-plan-r2-evidence\\federation-r2-task-matrix.json",
+      "sha256": "4A26B23F481B322AC94C13C5895A71591C4F9988E35D65E60CDD83DB44CB1A87",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-task-matrix.json",
+      "privateOriginalSha256": "4A26B23F481B322AC94C13C5895A71591C4F9988E35D65E60CDD83DB44CB1A87"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117-federation-plan-r2-evidence\\federation-r2-verdict-readback-pre.json",
+      "sha256": "52AC244EB830A34114CFE8F241D728ACD344E93E93D25D6F93754BEE0A692F7A",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-verdict-readback-pre.json",
+      "privateOriginalSha256": "52AC244EB830A34114CFE8F241D728ACD344E93E93D25D6F93754BEE0A692F7A"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\docs\\receipts\\hv\\20261117-federation-plan-r2-evidence\\federation-r2-verdict-readback.json",
+      "sha256": "FD8692B5C0DD6582814DA2AED96870EB716BA158D9A11BD77A655633D2DAF3DB",
+      "privateOriginal": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-verdict-readback.json",
+      "privateOriginalSha256": "FD8692B5C0DD6582814DA2AED96870EB716BA158D9A11BD77A655633D2DAF3DB"
+    }
+  ],
+  "unknown": 1,
+  "deployHold": true,
+  "unrelatedReconciliation": "stopped",
+  "timestampLocal": "2026-11-17T13:20:08"
+}

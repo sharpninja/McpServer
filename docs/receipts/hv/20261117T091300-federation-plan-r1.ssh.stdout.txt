@@ -1,0 +1,7 @@
+{
+  "packet": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1",
+  "startedLocal": "2026-11-17T09:38:19",
+  "reviewerModel": "gpt-5.6-sol",
+  "pid": 2282321,
+  "reviewerEffort": "max"
+}

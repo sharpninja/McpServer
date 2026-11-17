@@ -1,0 +1,14 @@
+{
+  "readbackSha256": "3D31E0B30541129FAA85B85CE77AA8DA26A93E53C2DBBCBC8DE5A2CD5601EDD8",
+  "source": "F:/GitHub/McpServer/.mcpServer/codex/R2-prefinal-1303.verdict.md",
+  "fullVerdictPersisted": true,
+  "sourceSha256": "3D31E0B30541129FAA85B85CE77AA8DA26A93E53C2DBBCBC8DE5A2CD5601EDD8",
+  "utf8Bytes": 102278,
+  "actions": 31,
+  "sessionId": "Codex-20261116T174245Z-plugin-session",
+  "designDecisions": 8,
+  "chunks": 9,
+  "requestId": "req-20261117T150430Z-federation-plan-hv-sync",
+  "timestampLocal": "2026-11-17T13:14:49",
+  "dialogItems": 22
+}

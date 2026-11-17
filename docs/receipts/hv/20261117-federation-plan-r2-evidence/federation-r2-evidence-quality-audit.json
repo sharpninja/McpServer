@@ -1,0 +1,119 @@
+{
+  "generatedAtLocal": "2026-11-17T12:53:56",
+  "credentialScan": {
+    "candidateFileCount": 68,
+    "filesWithExactCredential": [
+      {
+        "path": "docs/receipts/hv/20261117T091300-federation-plan-r1.response.jsonl",
+        "exactOccurrenceCount": 2
+      },
+      {
+        "path": "docs/receipts/hv/20261117T111400-federation-plan-r2.response.jsonl",
+        "exactOccurrenceCount": 2
+      }
+    ],
+    "affectedFileCount": 2,
+    "exactOccurrenceTotal": 4,
+    "credentialValueStored": false,
+    "rotationPerformedOrClaimed": false
+  },
+  "timestampAudit": [
+    {
+      "path": "docs/receipts/hv/20261117T091300-federation-plan-r1.response.jsonl",
+      "agentMessageCount": 21,
+      "prefixedTimestampCount": 18,
+      "unprefixedMessageOrdinals": [
+        1,
+        2,
+        4
+      ],
+      "duplicatePrefixedTimestamps": [
+        {
+          "timestamp": "2026-11-17T09:42:04",
+          "count": 2
+        },
+        {
+          "timestamp": "2026-11-17T09:43:50",
+          "count": 2
+        },
+        {
+          "timestamp": "2026-11-17T09:56:28",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/receipts/hv/20261117T111400-federation-plan-r2.response.jsonl",
+      "agentMessageCount": 26,
+      "prefixedTimestampCount": 18,
+      "unprefixedMessageOrdinals": [
+        1,
+        2,
+        3,
+        10,
+        15,
+        19,
+        21,
+        23
+      ],
+      "duplicatePrefixedTimestamps": [
+        {
+          "timestamp": "2026-11-17T11:30:32",
+          "count": 6
+        },
+        {
+          "timestamp": "2026-11-17T11:48:10",
+          "count": 2
+        },
+        {
+          "timestamp": "2026-11-17T12:52:48",
+          "count": 2
+        }
+      ]
+    }
+  ],
+  "selfReviewDrift": {
+    "reportedMissingGateEdges": 0,
+    "reportedAcyclic": true,
+    "staleTaskRowCount": 11,
+    "staleTaskIds": [
+      "TASK-FEDCUT-003",
+      "TASK-FEDPH0-009",
+      "TASK-FEDPH1-005",
+      "TASK-FEDPH2-008",
+      "TASK-FEDPH3-006",
+      "TASK-FEDPH4-005",
+      "TASK-FEDPH5-007",
+      "TASK-FEDPH6-007",
+      "TASK-FEDPH6J-004",
+      "TASK-FEDPH7-006",
+      "TASK-FEDPH8-007"
+    ],
+    "staleMissingEdgeEntryCount": 45,
+    "staleVerdicts": [
+      {
+        "verdict": "FAIL",
+        "count": 11
+      }
+    ],
+    "currentIndependentGateCount": 11,
+    "currentIndependentPassingGateCount": 11,
+    "currentGateIdsMatchStaleRows": true
+  },
+  "mappingCorrection": {
+    "originalFindingCount": 32,
+    "correctedFindingCount": 0,
+    "correctedHostCoreMappings": [
+      {
+        "host": "PAYTON-LEGION2",
+        "coreMappings": 16
+      },
+      {
+        "host": "LAB-OMARCHY",
+        "coreMappings": 16
+      }
+    ],
+    "legion2EdgeChanges": 0,
+    "omarchyEdgeChanges": 0
+  }
+}

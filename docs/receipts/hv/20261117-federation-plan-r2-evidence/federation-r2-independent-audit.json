@@ -1,0 +1,2130 @@
+{
+  "generatedAtLocal": "2026-11-17T12:12:03",
+  "root": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117",
+  "plan": {
+    "sha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+    "lineCount": 1752,
+    "section16Present": true,
+    "section16DefinitionHeadingCount": 86
+  },
+  "canonicalDefinitions": {
+    "payloadSha256": "2A12F96B5B9C853D8CCE0B4A0DF127B34F27657EAC8B4874C1A1BFAB1085957F",
+    "recordCount": 86,
+    "criterionCountDeclared": 392,
+    "criterionCountObserved": 392,
+    "exactDefinitionMatches": 86,
+    "failures": [],
+    "mappingCount": 16,
+    "undefinedImplementationReferences": []
+  },
+  "tasks": {
+    "count": 67,
+    "uniqueIds": 67,
+    "planningCount": 67,
+    "groupCount": 11,
+    "groupOrdinalsContiguous": 11,
+    "unresolvedDependencies": [],
+    "dependencyGraphAcyclic": true,
+    "topologicalTaskCount": 67,
+    "cycleTaskIds": [],
+    "catalog": [
+      {
+        "id": "TASK-FEDPH0-001",
+        "group": "GRP-FEDPH0-001",
+        "ordinal": 1,
+        "title": "B1: pin Dolt, EF10 MySQL-protocol provider, driver and container images; host inventory.",
+        "state": "Planning",
+        "dependencies": [],
+        "expandedTaskDependencies": [],
+        "requirements": [
+          "FR-MCP-186",
+          "TEST-MCP-234",
+          "TR-MCP-FEDERATION-013"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH0-002",
+        "group": "GRP-FEDPH0-001",
+        "ordinal": 2,
+        "title": "Dolt compatibility harness: model, CRUD/LINQ, migrations, branch isolation, commit boundary.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH0-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH0-001"
+        ],
+        "requirements": [
+          "FR-MCP-175",
+          "FR-MCP-177",
+          "FR-MCP-186",
+          "TEST-MCP-223",
+          "TEST-MCP-225",
+          "TEST-MCP-234",
+          "TR-MCP-FEDERATION-002",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-013"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH0-003",
+        "group": "GRP-FEDPH0-001",
+        "ordinal": 3,
+        "title": "Dolt remote authorization and guarded publication proof.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH0-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH0-001"
+        ],
+        "requirements": [
+          "FR-MCP-185",
+          "TEST-MCP-233",
+          "TR-MCP-FEDERATION-012"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH0-004",
+        "group": "GRP-FEDPH0-001",
+        "ordinal": 4,
+        "title": "B2-B4: writer/entity classification, context topology, node-tagged ID grammar.",
+        "state": "Planning",
+        "dependencies": [],
+        "expandedTaskDependencies": [],
+        "requirements": [
+          "FR-MCP-182",
+          "FR-MCP-184",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH0-005",
+        "group": "GRP-FEDPH0-001",
+        "ordinal": 5,
+        "title": "B5: identity evidence on restored Duende 7.4 (absorbs MCP-FEDIDENTITY-001 design inputs).",
+        "state": "Planning",
+        "dependencies": [],
+        "expandedTaskDependencies": [],
+        "requirements": [
+          "FR-MCP-185",
+          "TEST-MCP-233",
+          "TR-MCP-FEDERATION-012"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH0-006",
+        "group": "GRP-FEDPH0-001",
+        "ordinal": 6,
+        "title": "B6-B9: merge/conflict semantics, schema distribution, migration manifest, write gate.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH0-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH0-002"
+        ],
+        "requirements": [
+          "FR-MCP-180",
+          "FR-MCP-186",
+          "FR-MCP-187",
+          "FR-MCP-189",
+          "TEST-MCP-228",
+          "TEST-MCP-234",
+          "TEST-MCP-235",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-014",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH0-007",
+        "group": "GRP-FEDPH0-001",
+        "ordinal": 7,
+        "title": "B10-B12: operating limits, polling thresholds, refs/GC/restore epoch and secret safety.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH0-002",
+          "TASK-FEDPH0-003"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH0-002",
+          "TASK-FEDPH0-003"
+        ],
+        "requirements": [
+          "FR-MCP-179",
+          "FR-MCP-184",
+          "FR-MCP-185",
+          "TEST-MCP-227",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH0-008",
+        "group": "GRP-FEDPH0-001",
+        "ordinal": 8,
+        "title": "Ph0 exit: B1-B12 operator acceptance, coverage binding, Build.Tests inventory, three-peer fixture proof.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH0-001",
+          "TASK-FEDPH0-002",
+          "TASK-FEDPH0-003",
+          "TASK-FEDPH0-004",
+          "TASK-FEDPH0-005",
+          "TASK-FEDPH0-006",
+          "TASK-FEDPH0-007"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH0-001",
+          "TASK-FEDPH0-002",
+          "TASK-FEDPH0-003",
+          "TASK-FEDPH0-004",
+          "TASK-FEDPH0-005",
+          "TASK-FEDPH0-006",
+          "TASK-FEDPH0-007"
+        ],
+        "requirements": [
+          "FR-MCP-186",
+          "TEST-MCP-234",
+          "TR-MCP-FEDERATION-013"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH0-009",
+        "group": "GRP-FEDPH0-001",
+        "ordinal": 9,
+        "title": "Ph0 group HV gate: Ph0 feasibility and exact dependency selection.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH0-001",
+          "TASK-FEDPH0-002",
+          "TASK-FEDPH0-003",
+          "TASK-FEDPH0-004",
+          "TASK-FEDPH0-005",
+          "TASK-FEDPH0-006",
+          "TASK-FEDPH0-007",
+          "TASK-FEDPH0-008"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH0-001",
+          "TASK-FEDPH0-002",
+          "TASK-FEDPH0-003",
+          "TASK-FEDPH0-004",
+          "TASK-FEDPH0-005",
+          "TASK-FEDPH0-006",
+          "TASK-FEDPH0-007",
+          "TASK-FEDPH0-008"
+        ],
+        "requirements": [
+          "FR-MCP-175",
+          "FR-MCP-177",
+          "FR-MCP-179",
+          "FR-MCP-180",
+          "FR-MCP-182",
+          "FR-MCP-184",
+          "FR-MCP-185",
+          "FR-MCP-186",
+          "FR-MCP-187",
+          "FR-MCP-189",
+          "TEST-MCP-223",
+          "TEST-MCP-225",
+          "TEST-MCP-227",
+          "TEST-MCP-228",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TEST-MCP-234",
+          "TEST-MCP-235",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-002",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-014",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH1-001",
+        "group": "GRP-FEDPH1-001",
+        "ordinal": 1,
+        "title": "Canonical dolt provider kind, factory, options, health and setup tooling.",
+        "state": "Planning",
+        "dependencies": [
+          "GRP-FEDPH0-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH0-009"
+        ],
+        "requirements": [
+          "FR-MCP-186",
+          "TEST-MCP-234",
+          "TR-MCP-FEDERATION-013"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH1-002",
+        "group": "GRP-FEDPH1-001",
+        "ordinal": 2,
+        "title": "QBrainAi.Storage.DoltMigrations baseline and startup exclusion for versioned projects.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH1-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH1-001"
+        ],
+        "requirements": [
+          "FR-MCP-186",
+          "TEST-MCP-234",
+          "TR-MCP-FEDERATION-013"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH1-003",
+        "group": "GRP-FEDPH1-001",
+        "ordinal": 3,
+        "title": "Nuke TestFederationProviders target carrying the Ph0 contracts.",
+        "state": "Planning",
+        "dependencies": [
+          "GRP-FEDPH0-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH0-009"
+        ],
+        "requirements": [
+          "FR-MCP-186",
+          "TEST-MCP-234",
+          "TR-MCP-FEDERATION-013"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH1-004",
+        "group": "GRP-FEDPH1-001",
+        "ordinal": 4,
+        "title": "Ph1 exit gate on LAB and LEGION (provider and migration slice).",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH1-002",
+          "TASK-FEDPH1-003"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH1-002",
+          "TASK-FEDPH1-003"
+        ],
+        "requirements": [
+          "FR-MCP-186",
+          "TEST-MCP-234",
+          "TR-MCP-FEDERATION-013"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH1-005",
+        "group": "GRP-FEDPH1-001",
+        "ordinal": 5,
+        "title": "Ph1 group HV gate: Ph1 fourth provider and schema migrations.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH1-001",
+          "TASK-FEDPH1-002",
+          "TASK-FEDPH1-003",
+          "TASK-FEDPH1-004"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH1-001",
+          "TASK-FEDPH1-002",
+          "TASK-FEDPH1-003",
+          "TASK-FEDPH1-004"
+        ],
+        "requirements": [
+          "FR-MCP-186",
+          "TEST-MCP-234",
+          "TR-MCP-FEDERATION-013"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH2-001",
+        "group": "GRP-FEDPH2-001",
+        "ordinal": 1,
+        "title": "Immutable ProjectId enrollment mapping, per-project provider, local execution without LocalProxy.",
+        "state": "Planning",
+        "dependencies": [
+          "GRP-FEDPH1-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH1-005"
+        ],
+        "requirements": [
+          "FR-MCP-174",
+          "FR-MCP-176",
+          "TEST-MCP-222",
+          "TEST-MCP-224",
+          "TR-MCP-FEDERATION-001",
+          "TR-MCP-FEDERATION-003"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH2-002",
+        "group": "GRP-FEDPH2-001",
+        "ordinal": 2,
+        "title": "Full table classification and branch-scoped DbContext/query/index keys.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH2-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH2-001"
+        ],
+        "requirements": [
+          "FR-MCP-177",
+          "FR-MCP-184",
+          "TEST-MCP-225",
+          "TEST-MCP-232",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-011"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH2-003",
+        "group": "GRP-FEDPH2-001",
+        "ordinal": 3,
+        "title": "Two-character node-tagged local ID allocation and scoped permanent aliases.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH2-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH2-002"
+        ],
+        "requirements": [
+          "FR-MCP-182",
+          "TEST-MCP-230",
+          "TR-MCP-FEDERATION-009"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH2-004",
+        "group": "GRP-FEDPH2-001",
+        "ordinal": 4,
+        "title": "Fenced branch edit leases.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH2-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH2-002"
+        ],
+        "requirements": [
+          "FR-MCP-189",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH2-005",
+        "group": "GRP-FEDPH2-001",
+        "ordinal": 5,
+        "title": "Identity owner binding and host user management (folds MCP-FEDIDENTITY-001).",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH2-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH2-001"
+        ],
+        "requirements": [
+          "FR-MCP-185",
+          "TEST-MCP-233",
+          "TR-MCP-FEDERATION-012"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH2-006",
+        "group": "GRP-FEDPH2-001",
+        "ordinal": 6,
+        "title": "Hub-bound audit/outbox obligation and federation effect boundary.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH2-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH2-002"
+        ],
+        "requirements": [
+          "FR-MCP-184",
+          "FR-MCP-188",
+          "TEST-MCP-232",
+          "TEST-MCP-236",
+          "TR-MCP-AUDIT-004",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-015"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH2-007",
+        "group": "GRP-FEDPH2-001",
+        "ordinal": 7,
+        "title": "Ph2 exit gate on LAB and LEGION (routing and boundary slice).",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH2-001",
+          "TASK-FEDPH2-002",
+          "TASK-FEDPH2-003",
+          "TASK-FEDPH2-004",
+          "TASK-FEDPH2-005",
+          "TASK-FEDPH2-006"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH2-001",
+          "TASK-FEDPH2-002",
+          "TASK-FEDPH2-003",
+          "TASK-FEDPH2-004",
+          "TASK-FEDPH2-005",
+          "TASK-FEDPH2-006"
+        ],
+        "requirements": [
+          "FR-MCP-174",
+          "FR-MCP-176",
+          "FR-MCP-177",
+          "FR-MCP-182",
+          "FR-MCP-184",
+          "FR-MCP-185",
+          "FR-MCP-188",
+          "FR-MCP-189",
+          "TEST-MCP-222",
+          "TEST-MCP-224",
+          "TEST-MCP-225",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TEST-MCP-236",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-001",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-015",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH2-008",
+        "group": "GRP-FEDPH2-001",
+        "ordinal": 8,
+        "title": "Ph2 group HV gate: Ph2 project routing, data boundaries and editing ownership.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH2-001",
+          "TASK-FEDPH2-002",
+          "TASK-FEDPH2-003",
+          "TASK-FEDPH2-004",
+          "TASK-FEDPH2-005",
+          "TASK-FEDPH2-006",
+          "TASK-FEDPH2-007"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH2-001",
+          "TASK-FEDPH2-002",
+          "TASK-FEDPH2-003",
+          "TASK-FEDPH2-004",
+          "TASK-FEDPH2-005",
+          "TASK-FEDPH2-006",
+          "TASK-FEDPH2-007"
+        ],
+        "requirements": [
+          "FR-MCP-174",
+          "FR-MCP-176",
+          "FR-MCP-177",
+          "FR-MCP-182",
+          "FR-MCP-184",
+          "FR-MCP-185",
+          "FR-MCP-188",
+          "FR-MCP-189",
+          "TEST-MCP-222",
+          "TEST-MCP-224",
+          "TEST-MCP-225",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TEST-MCP-236",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-001",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-015",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH3-001",
+        "group": "GRP-FEDPH3-001",
+        "ordinal": 1,
+        "title": "Migration planner, immutable source manifest, duplicate-candidate review and permanent aliases.",
+        "state": "Planning",
+        "dependencies": [
+          "GRP-FEDPH2-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH2-008"
+        ],
+        "requirements": [
+          "FR-MCP-182",
+          "FR-MCP-187",
+          "TEST-MCP-230",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH3-002",
+        "group": "GRP-FEDPH3-001",
+        "ordinal": 2,
+        "title": "Seed run/resume/verify/status/abort from SQLite, PostgreSQL and SQL Server.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH3-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH3-001"
+        ],
+        "requirements": [
+          "FR-MCP-187",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH3-003",
+        "group": "GRP-FEDPH3-001",
+        "ordinal": 3,
+        "title": "Audit backfill preparation for every historical TODO/generic audit row.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH3-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH3-001"
+        ],
+        "requirements": [
+          "FR-MCP-184",
+          "TEST-MCP-232",
+          "TR-MCP-FEDERATION-011"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH3-004",
+        "group": "GRP-FEDPH3-001",
+        "ordinal": 4,
+        "title": "Frozen-head Dolt-to-SQLite project recovery export.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH3-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH3-002"
+        ],
+        "requirements": [
+          "FR-MCP-187",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH3-005",
+        "group": "GRP-FEDPH3-001",
+        "ordinal": 5,
+        "title": "Ph3 exit gate on LAB and LEGION (seed and export slice).",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH3-001",
+          "TASK-FEDPH3-002",
+          "TASK-FEDPH3-003",
+          "TASK-FEDPH3-004"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH3-001",
+          "TASK-FEDPH3-002",
+          "TASK-FEDPH3-003",
+          "TASK-FEDPH3-004"
+        ],
+        "requirements": [
+          "FR-MCP-182",
+          "FR-MCP-184",
+          "FR-MCP-187",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH3-006",
+        "group": "GRP-FEDPH3-001",
+        "ordinal": 6,
+        "title": "Ph3 group HV gate: Ph3 seed migration and project recovery export.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH3-001",
+          "TASK-FEDPH3-002",
+          "TASK-FEDPH3-003",
+          "TASK-FEDPH3-004",
+          "TASK-FEDPH3-005"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH3-001",
+          "TASK-FEDPH3-002",
+          "TASK-FEDPH3-003",
+          "TASK-FEDPH3-004",
+          "TASK-FEDPH3-005"
+        ],
+        "requirements": [
+          "FR-MCP-182",
+          "FR-MCP-184",
+          "FR-MCP-187",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH4-001",
+        "group": "GRP-FEDPH4-001",
+        "ordinal": 1,
+        "title": "Status/diff/history/commit preview and idempotent explicit commit.",
+        "state": "Planning",
+        "dependencies": [
+          "GRP-FEDPH3-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH3-006"
+        ],
+        "requirements": [
+          "FR-MCP-175",
+          "FR-MCP-184",
+          "FR-MCP-189",
+          "TEST-MCP-223",
+          "TEST-MCP-232",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-002",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH4-002",
+        "group": "GRP-FEDPH4-001",
+        "ordinal": 2,
+        "title": "Branch lifecycle across server context.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH4-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH4-001"
+        ],
+        "requirements": [
+          "FR-MCP-177",
+          "FR-MCP-183",
+          "TEST-MCP-225",
+          "TEST-MCP-231",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-010"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH4-003",
+        "group": "GRP-FEDPH4-001",
+        "ordinal": 3,
+        "title": "Local unpublished-head scanning and publication intent recovery.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH4-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH4-001"
+        ],
+        "requirements": [
+          "FR-MCP-175",
+          "TEST-MCP-223",
+          "TR-MCP-FEDERATION-002"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH4-004",
+        "group": "GRP-FEDPH4-001",
+        "ordinal": 4,
+        "title": "Ph4 exit gate on LAB and LEGION (commit and branch slice).",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH4-001",
+          "TASK-FEDPH4-002",
+          "TASK-FEDPH4-003"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH4-001",
+          "TASK-FEDPH4-002",
+          "TASK-FEDPH4-003"
+        ],
+        "requirements": [
+          "FR-MCP-175",
+          "FR-MCP-177",
+          "FR-MCP-183",
+          "FR-MCP-184",
+          "FR-MCP-189",
+          "TEST-MCP-223",
+          "TEST-MCP-225",
+          "TEST-MCP-231",
+          "TEST-MCP-232",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-002",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-010",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH4-005",
+        "group": "GRP-FEDPH4-001",
+        "ordinal": 5,
+        "title": "Ph4 group HV gate: Ph4 explicit history commits and local publication intent.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH4-001",
+          "TASK-FEDPH4-002",
+          "TASK-FEDPH4-003",
+          "TASK-FEDPH4-004"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH4-001",
+          "TASK-FEDPH4-002",
+          "TASK-FEDPH4-003",
+          "TASK-FEDPH4-004"
+        ],
+        "requirements": [
+          "FR-MCP-175",
+          "FR-MCP-177",
+          "FR-MCP-183",
+          "FR-MCP-184",
+          "FR-MCP-189",
+          "TEST-MCP-223",
+          "TEST-MCP-225",
+          "TEST-MCP-231",
+          "TEST-MCP-232",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-002",
+          "TR-MCP-FEDERATION-004",
+          "TR-MCP-FEDERATION-010",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH5-001",
+        "group": "GRP-FEDPH5-001",
+        "ordinal": 1,
+        "title": "Hub shared remote provisioning, node enrollment and project/branch subscription.",
+        "state": "Planning",
+        "dependencies": [
+          "GRP-FEDPH4-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH4-005"
+        ],
+        "requirements": [
+          "FR-MCP-176",
+          "FR-MCP-185",
+          "TEST-MCP-224",
+          "TEST-MCP-233",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-012"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH5-002",
+        "group": "GRP-FEDPH5-001",
+        "ordinal": 2,
+        "title": "IdentityServer clients/scopes, gateway introspection and credential containment.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH5-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH5-001"
+        ],
+        "requirements": [
+          "FR-MCP-185",
+          "TEST-MCP-233",
+          "TR-MCP-FEDERATION-012"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH5-003",
+        "group": "GRP-FEDPH5-001",
+        "ordinal": 3,
+        "title": "Candidate upload, validation and expected-head guarded publication.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH5-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH5-002"
+        ],
+        "requirements": [
+          "FR-MCP-178",
+          "FR-MCP-181",
+          "TEST-MCP-226",
+          "TEST-MCP-229",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-008"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH5-004",
+        "group": "GRP-FEDPH5-001",
+        "ordinal": 4,
+        "title": "SyncSubscription control table, polling/reporting, worker epochs and restore epoch.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH5-003"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH5-003"
+        ],
+        "requirements": [
+          "FR-MCP-179",
+          "FR-MCP-181",
+          "TEST-MCP-227",
+          "TEST-MCP-229",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-008"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH5-005",
+        "group": "GRP-FEDPH5-001",
+        "ordinal": 5,
+        "title": "Audit batch ingestion with idempotent receipts and human-ID reservation.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH5-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH5-002"
+        ],
+        "requirements": [
+          "FR-MCP-182",
+          "FR-MCP-184",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TR-MCP-AUDIT-004",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH5-006",
+        "group": "GRP-FEDPH5-001",
+        "ordinal": 6,
+        "title": "Ph5 exit gate on LAB and LEGION (hub and publication slice).",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH5-001",
+          "TASK-FEDPH5-002",
+          "TASK-FEDPH5-003",
+          "TASK-FEDPH5-004",
+          "TASK-FEDPH5-005"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH5-001",
+          "TASK-FEDPH5-002",
+          "TASK-FEDPH5-003",
+          "TASK-FEDPH5-004",
+          "TASK-FEDPH5-005"
+        ],
+        "requirements": [
+          "FR-MCP-176",
+          "FR-MCP-178",
+          "FR-MCP-179",
+          "FR-MCP-181",
+          "FR-MCP-182",
+          "FR-MCP-184",
+          "FR-MCP-185",
+          "TEST-MCP-224",
+          "TEST-MCP-226",
+          "TEST-MCP-227",
+          "TEST-MCP-229",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH5-007",
+        "group": "GRP-FEDPH5-001",
+        "ordinal": 7,
+        "title": "Ph5 group HV gate: Ph5 hub control table and publication.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH5-001",
+          "TASK-FEDPH5-002",
+          "TASK-FEDPH5-003",
+          "TASK-FEDPH5-004",
+          "TASK-FEDPH5-005",
+          "TASK-FEDPH5-006"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH5-001",
+          "TASK-FEDPH5-002",
+          "TASK-FEDPH5-003",
+          "TASK-FEDPH5-004",
+          "TASK-FEDPH5-005",
+          "TASK-FEDPH5-006"
+        ],
+        "requirements": [
+          "FR-MCP-176",
+          "FR-MCP-178",
+          "FR-MCP-179",
+          "FR-MCP-181",
+          "FR-MCP-182",
+          "FR-MCP-184",
+          "FR-MCP-185",
+          "TEST-MCP-224",
+          "TEST-MCP-226",
+          "TEST-MCP-227",
+          "TEST-MCP-229",
+          "TEST-MCP-230",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6-001",
+        "group": "GRP-FEDPH6-001",
+        "ordinal": 1,
+        "title": "Temporary integration branches, clean-merge validation and gated live-branch apply.",
+        "state": "Planning",
+        "dependencies": [
+          "GRP-FEDPH5-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH5-007"
+        ],
+        "requirements": [
+          "FR-MCP-178",
+          "FR-MCP-180",
+          "FR-MCP-189",
+          "TEST-MCP-226",
+          "TEST-MCP-228",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6-002",
+        "group": "GRP-FEDPH6-001",
+        "ordinal": 2,
+        "title": "Head-bound conflict review.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH6-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH6-001"
+        ],
+        "requirements": [
+          "FR-MCP-180",
+          "TEST-MCP-228",
+          "TR-MCP-FEDERATION-007"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6-003",
+        "group": "GRP-FEDPH6-001",
+        "ordinal": 3,
+        "title": "Dirty working-set deferral and schema catch-up.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH6-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH6-001"
+        ],
+        "requirements": [
+          "FR-MCP-181",
+          "FR-MCP-186",
+          "TEST-MCP-229",
+          "TEST-MCP-234",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-013"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6-004",
+        "group": "GRP-FEDPH6-001",
+        "ordinal": 4,
+        "title": "Recovery pins/receipts, maintenance preflight/attest/status, derived-state refresh.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH6-002",
+          "TASK-FEDPH6-003"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH6-002",
+          "TASK-FEDPH6-003"
+        ],
+        "requirements": [
+          "FR-MCP-179",
+          "FR-MCP-181",
+          "FR-MCP-184",
+          "TEST-MCP-227",
+          "TEST-MCP-229",
+          "TEST-MCP-232",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-011"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6-005",
+        "group": "GRP-FEDPH6-001",
+        "ordinal": 5,
+        "title": "Imported state does not repeat external effects.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH6-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH6-001"
+        ],
+        "requirements": [
+          "FR-MCP-188",
+          "TEST-MCP-236",
+          "TR-MCP-FEDERATION-015"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6-006",
+        "group": "GRP-FEDPH6-001",
+        "ordinal": 6,
+        "title": "Ph6 integration slice gate (targeted classes plus TestFederationProviders).",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH6-001",
+          "TASK-FEDPH6-002",
+          "TASK-FEDPH6-003",
+          "TASK-FEDPH6-004",
+          "TASK-FEDPH6-005"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH6-001",
+          "TASK-FEDPH6-002",
+          "TASK-FEDPH6-003",
+          "TASK-FEDPH6-004",
+          "TASK-FEDPH6-005"
+        ],
+        "requirements": [
+          "FR-MCP-180",
+          "FR-MCP-181",
+          "TEST-MCP-228",
+          "TEST-MCP-229",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-008"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6-007",
+        "group": "GRP-FEDPH6-001",
+        "ordinal": 7,
+        "title": "Ph6 group HV gate: Ph6 incoming integration, review and recovery.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH6-001",
+          "TASK-FEDPH6-002",
+          "TASK-FEDPH6-003",
+          "TASK-FEDPH6-004",
+          "TASK-FEDPH6-005",
+          "TASK-FEDPH6-006"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH6-001",
+          "TASK-FEDPH6-002",
+          "TASK-FEDPH6-003",
+          "TASK-FEDPH6-004",
+          "TASK-FEDPH6-005",
+          "TASK-FEDPH6-006"
+        ],
+        "requirements": [
+          "FR-MCP-178",
+          "FR-MCP-179",
+          "FR-MCP-180",
+          "FR-MCP-181",
+          "FR-MCP-184",
+          "FR-MCP-186",
+          "FR-MCP-188",
+          "FR-MCP-189",
+          "TEST-MCP-226",
+          "TEST-MCP-227",
+          "TEST-MCP-228",
+          "TEST-MCP-229",
+          "TEST-MCP-232",
+          "TEST-MCP-234",
+          "TEST-MCP-236",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-015",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6J-001",
+        "group": "GRP-FEDPH6-002",
+        "ordinal": 1,
+        "title": "Join mode: clone C0, stage decisions, import J1, review/merge to M1.",
+        "state": "Planning",
+        "dependencies": [
+          "GRP-FEDPH6-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH6-007"
+        ],
+        "requirements": [
+          "FR-MCP-187",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6J-002",
+        "group": "GRP-FEDPH6-002",
+        "ordinal": 2,
+        "title": "Audit backfill verification.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH6J-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH6J-001"
+        ],
+        "requirements": [
+          "FR-MCP-184",
+          "TEST-MCP-232",
+          "TR-MCP-FEDERATION-011"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6J-003",
+        "group": "GRP-FEDPH6-002",
+        "ordinal": 3,
+        "title": "Ph6 exit gate on LAB and LEGION (full phase including GRP-FEDPH6-001).",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH6J-001",
+          "TASK-FEDPH6J-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH6J-001",
+          "TASK-FEDPH6J-002"
+        ],
+        "requirements": [
+          "FR-MCP-184",
+          "FR-MCP-187",
+          "TEST-MCP-232",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH6J-004",
+        "group": "GRP-FEDPH6-002",
+        "ordinal": 4,
+        "title": "Ph6 group HV gate: Ph6 join migration and cutover readiness.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH6J-001",
+          "TASK-FEDPH6J-002",
+          "TASK-FEDPH6J-003"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH6J-001",
+          "TASK-FEDPH6J-002",
+          "TASK-FEDPH6J-003"
+        ],
+        "requirements": [
+          "FR-MCP-184",
+          "FR-MCP-187",
+          "TEST-MCP-232",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH7-001",
+        "group": "GRP-FEDPH7-001",
+        "ordinal": 1,
+        "title": "Plugin repo/version inventory and typed DTO/client methods.",
+        "state": "Planning",
+        "dependencies": [
+          "GRP-FEDPH6-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH6J-004"
+        ],
+        "requirements": [
+          "FR-MCP-183",
+          "TEST-MCP-231",
+          "TR-MCP-FEDERATION-010"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH7-002",
+        "group": "GRP-FEDPH7-001",
+        "ordinal": 2,
+        "title": "REST, MCP and REPL adapters for every federation workflow.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH7-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH7-001"
+        ],
+        "requirements": [
+          "FR-MCP-183",
+          "TEST-MCP-231",
+          "TR-MCP-FEDERATION-010"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH7-003",
+        "group": "GRP-FEDPH7-001",
+        "ordinal": 3,
+        "title": "First-party plugin wrappers and shared conformance fixtures.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH7-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH7-002"
+        ],
+        "requirements": [
+          "FR-MCP-176",
+          "FR-MCP-181",
+          "FR-MCP-182",
+          "FR-MCP-185",
+          "FR-MCP-188",
+          "FR-MCP-189",
+          "TEST-MCP-224",
+          "TEST-MCP-229",
+          "TEST-MCP-230",
+          "TEST-MCP-233",
+          "TEST-MCP-236",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-015",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH7-004",
+        "group": "GRP-FEDPH7-001",
+        "ordinal": 4,
+        "title": "Review and wait-age surfacing with 15 minute warning and 24 hour escalation.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH7-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH7-002"
+        ],
+        "requirements": [
+          "FR-MCP-180",
+          "TEST-MCP-228",
+          "TR-MCP-FEDERATION-007"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH7-005",
+        "group": "GRP-FEDPH7-001",
+        "ordinal": 5,
+        "title": "Ph7 exit gate on LAB and LEGION (client and plugin slice).",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH7-001",
+          "TASK-FEDPH7-002",
+          "TASK-FEDPH7-003",
+          "TASK-FEDPH7-004"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH7-001",
+          "TASK-FEDPH7-002",
+          "TASK-FEDPH7-003",
+          "TASK-FEDPH7-004"
+        ],
+        "requirements": [
+          "FR-MCP-176",
+          "FR-MCP-180",
+          "FR-MCP-181",
+          "FR-MCP-182",
+          "FR-MCP-183",
+          "FR-MCP-185",
+          "FR-MCP-188",
+          "FR-MCP-189",
+          "TEST-MCP-224",
+          "TEST-MCP-228",
+          "TEST-MCP-229",
+          "TEST-MCP-230",
+          "TEST-MCP-231",
+          "TEST-MCP-233",
+          "TEST-MCP-236",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-010",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-015",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH7-006",
+        "group": "GRP-FEDPH7-001",
+        "ordinal": 6,
+        "title": "Ph7 group HV gate: Ph7 server and plugin workflows.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH7-001",
+          "TASK-FEDPH7-002",
+          "TASK-FEDPH7-003",
+          "TASK-FEDPH7-004",
+          "TASK-FEDPH7-005"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH7-001",
+          "TASK-FEDPH7-002",
+          "TASK-FEDPH7-003",
+          "TASK-FEDPH7-004",
+          "TASK-FEDPH7-005"
+        ],
+        "requirements": [
+          "FR-MCP-176",
+          "FR-MCP-180",
+          "FR-MCP-181",
+          "FR-MCP-182",
+          "FR-MCP-183",
+          "FR-MCP-185",
+          "FR-MCP-188",
+          "FR-MCP-189",
+          "TEST-MCP-224",
+          "TEST-MCP-228",
+          "TEST-MCP-229",
+          "TEST-MCP-230",
+          "TEST-MCP-231",
+          "TEST-MCP-233",
+          "TEST-MCP-236",
+          "TEST-MCP-237",
+          "TR-MCP-FEDERATION-003",
+          "TR-MCP-FEDERATION-007",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-009",
+          "TR-MCP-FEDERATION-010",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-015",
+          "TR-MCP-FEDERATION-016"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH8-001",
+        "group": "GRP-FEDPH8-001",
+        "ordinal": 1,
+        "title": "Three-logical-peer fixture run of U01-U15 from the accepted integration SHA.",
+        "state": "Planning",
+        "dependencies": [
+          "GRP-FEDPH7-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH7-006"
+        ],
+        "requirements": [
+          "FR-MCP-178",
+          "FR-MCP-186",
+          "TEST-MCP-226",
+          "TEST-MCP-234",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-013"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH8-002",
+        "group": "GRP-FEDPH8-001",
+        "ordinal": 2,
+        "title": "Two-real-host acceptance matrix on LAB and LEGION.",
+        "state": "Planning",
+        "dependencies": [
+          "GRP-FEDPH7-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH7-006"
+        ],
+        "requirements": [
+          "FR-MCP-179",
+          "FR-MCP-184",
+          "FR-MCP-185",
+          "FR-MCP-186",
+          "TEST-MCP-227",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TEST-MCP-234",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-013"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH8-003",
+        "group": "GRP-FEDPH8-001",
+        "ordinal": 3,
+        "title": "Partition and restart fault matrix.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002"
+        ],
+        "requirements": [
+          "FR-MCP-174",
+          "FR-MCP-181",
+          "TEST-MCP-222",
+          "TEST-MCP-229",
+          "TR-MCP-FEDERATION-001",
+          "TR-MCP-FEDERATION-008"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH8-004",
+        "group": "GRP-FEDPH8-001",
+        "ordinal": 4,
+        "title": "Four-provider regression, three-source migration, reviewed join, recovery export and isolated restore receipts.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002"
+        ],
+        "requirements": [
+          "FR-MCP-186",
+          "FR-MCP-187",
+          "TEST-MCP-234",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH8-005",
+        "group": "GRP-FEDPH8-001",
+        "ordinal": 5,
+        "title": "Cutover preparation under DEPLOY HOLD (no live change).",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH8-004"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH8-004"
+        ],
+        "requirements": [
+          "FR-MCP-187",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH8-006",
+        "group": "GRP-FEDPH8-001",
+        "ordinal": 6,
+        "title": "Ph8 exit gate on LAB and LEGION (release candidate).",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002",
+          "TASK-FEDPH8-003",
+          "TASK-FEDPH8-004",
+          "TASK-FEDPH8-005"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002",
+          "TASK-FEDPH8-003",
+          "TASK-FEDPH8-004",
+          "TASK-FEDPH8-005"
+        ],
+        "requirements": [
+          "FR-MCP-174",
+          "FR-MCP-178",
+          "FR-MCP-179",
+          "FR-MCP-181",
+          "FR-MCP-184",
+          "FR-MCP-185",
+          "FR-MCP-186",
+          "FR-MCP-187",
+          "TEST-MCP-222",
+          "TEST-MCP-226",
+          "TEST-MCP-227",
+          "TEST-MCP-229",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TEST-MCP-234",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-001",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDPH8-007",
+        "group": "GRP-FEDPH8-001",
+        "ordinal": 7,
+        "title": "Ph8 group HV gate: Ph8 two-host acceptance and three-peer fixture.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002",
+          "TASK-FEDPH8-003",
+          "TASK-FEDPH8-004",
+          "TASK-FEDPH8-005",
+          "TASK-FEDPH8-006"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002",
+          "TASK-FEDPH8-003",
+          "TASK-FEDPH8-004",
+          "TASK-FEDPH8-005",
+          "TASK-FEDPH8-006"
+        ],
+        "requirements": [
+          "FR-MCP-174",
+          "FR-MCP-178",
+          "FR-MCP-179",
+          "FR-MCP-181",
+          "FR-MCP-184",
+          "FR-MCP-185",
+          "FR-MCP-186",
+          "FR-MCP-187",
+          "TEST-MCP-222",
+          "TEST-MCP-226",
+          "TEST-MCP-227",
+          "TEST-MCP-229",
+          "TEST-MCP-232",
+          "TEST-MCP-233",
+          "TEST-MCP-234",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-001",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-006",
+          "TR-MCP-FEDERATION-008",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-012",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDCUT-001",
+        "group": "GRP-FEDCUT-001",
+        "ordinal": 1,
+        "title": "Cut over the first host and observe a 48-hour soak.",
+        "state": "Planning",
+        "dependencies": [
+          "GRP-FEDPH8-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDPH8-007"
+        ],
+        "requirements": [
+          "FR-MCP-184",
+          "FR-MCP-186",
+          "TEST-MCP-232",
+          "TEST-MCP-234",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-013"
+        ]
+      },
+      {
+        "id": "TASK-FEDCUT-002",
+        "group": "GRP-FEDCUT-001",
+        "ordinal": 2,
+        "title": "Cut over the second host and final acceptance.",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDCUT-001"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDCUT-001"
+        ],
+        "requirements": [
+          "FR-MCP-178",
+          "FR-MCP-187",
+          "TEST-MCP-226",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-014"
+        ]
+      },
+      {
+        "id": "TASK-FEDCUT-003",
+        "group": "GRP-FEDCUT-001",
+        "ordinal": 3,
+        "title": "Ph8 group HV gate: Held live cutover (requires explicit DEPLOY HOLD release).",
+        "state": "Planning",
+        "dependencies": [
+          "TASK-FEDCUT-001",
+          "TASK-FEDCUT-002"
+        ],
+        "expandedTaskDependencies": [
+          "TASK-FEDCUT-001",
+          "TASK-FEDCUT-002"
+        ],
+        "requirements": [
+          "FR-MCP-178",
+          "FR-MCP-184",
+          "FR-MCP-186",
+          "FR-MCP-187",
+          "TEST-MCP-226",
+          "TEST-MCP-232",
+          "TEST-MCP-234",
+          "TEST-MCP-235",
+          "TR-MCP-FEDERATION-005",
+          "TR-MCP-FEDERATION-011",
+          "TR-MCP-FEDERATION-013",
+          "TR-MCP-FEDERATION-014"
+        ]
+      }
+    ],
+    "gateCount": 11,
+    "passingGates": 11,
+    "gateChecks": [
+      {
+        "group": "GRP-FEDCUT-001",
+        "gate": "TASK-FEDCUT-003",
+        "expectedDirectDependencies": [
+          "TASK-FEDCUT-001",
+          "TASK-FEDCUT-002"
+        ],
+        "actualDirectDependencies": [
+          "TASK-FEDCUT-001",
+          "TASK-FEDCUT-002"
+        ],
+        "missing": [],
+        "extra": [],
+        "pass": true
+      },
+      {
+        "group": "GRP-FEDPH0-001",
+        "gate": "TASK-FEDPH0-009",
+        "expectedDirectDependencies": [
+          "TASK-FEDPH0-001",
+          "TASK-FEDPH0-002",
+          "TASK-FEDPH0-003",
+          "TASK-FEDPH0-004",
+          "TASK-FEDPH0-005",
+          "TASK-FEDPH0-006",
+          "TASK-FEDPH0-007",
+          "TASK-FEDPH0-008"
+        ],
+        "actualDirectDependencies": [
+          "TASK-FEDPH0-001",
+          "TASK-FEDPH0-002",
+          "TASK-FEDPH0-003",
+          "TASK-FEDPH0-004",
+          "TASK-FEDPH0-005",
+          "TASK-FEDPH0-006",
+          "TASK-FEDPH0-007",
+          "TASK-FEDPH0-008"
+        ],
+        "missing": [],
+        "extra": [],
+        "pass": true
+      },
+      {
+        "group": "GRP-FEDPH1-001",
+        "gate": "TASK-FEDPH1-005",
+        "expectedDirectDependencies": [
+          "TASK-FEDPH1-001",
+          "TASK-FEDPH1-002",
+          "TASK-FEDPH1-003",
+          "TASK-FEDPH1-004"
+        ],
+        "actualDirectDependencies": [
+          "TASK-FEDPH1-001",
+          "TASK-FEDPH1-002",
+          "TASK-FEDPH1-003",
+          "TASK-FEDPH1-004"
+        ],
+        "missing": [],
+        "extra": [],
+        "pass": true
+      },
+      {
+        "group": "GRP-FEDPH2-001",
+        "gate": "TASK-FEDPH2-008",
+        "expectedDirectDependencies": [
+          "TASK-FEDPH2-001",
+          "TASK-FEDPH2-002",
+          "TASK-FEDPH2-003",
+          "TASK-FEDPH2-004",
+          "TASK-FEDPH2-005",
+          "TASK-FEDPH2-006",
+          "TASK-FEDPH2-007"
+        ],
+        "actualDirectDependencies": [
+          "TASK-FEDPH2-001",
+          "TASK-FEDPH2-002",
+          "TASK-FEDPH2-003",
+          "TASK-FEDPH2-004",
+          "TASK-FEDPH2-005",
+          "TASK-FEDPH2-006",
+          "TASK-FEDPH2-007"
+        ],
+        "missing": [],
+        "extra": [],
+        "pass": true
+      },
+      {
+        "group": "GRP-FEDPH3-001",
+        "gate": "TASK-FEDPH3-006",
+        "expectedDirectDependencies": [
+          "TASK-FEDPH3-001",
+          "TASK-FEDPH3-002",
+          "TASK-FEDPH3-003",
+          "TASK-FEDPH3-004",
+          "TASK-FEDPH3-005"
+        ],
+        "actualDirectDependencies": [
+          "TASK-FEDPH3-001",
+          "TASK-FEDPH3-002",
+          "TASK-FEDPH3-003",
+          "TASK-FEDPH3-004",
+          "TASK-FEDPH3-005"
+        ],
+        "missing": [],
+        "extra": [],
+        "pass": true
+      },
+      {
+        "group": "GRP-FEDPH4-001",
+        "gate": "TASK-FEDPH4-005",
+        "expectedDirectDependencies": [
+          "TASK-FEDPH4-001",
+          "TASK-FEDPH4-002",
+          "TASK-FEDPH4-003",
+          "TASK-FEDPH4-004"
+        ],
+        "actualDirectDependencies": [
+          "TASK-FEDPH4-001",
+          "TASK-FEDPH4-002",
+          "TASK-FEDPH4-003",
+          "TASK-FEDPH4-004"
+        ],
+        "missing": [],
+        "extra": [],
+        "pass": true
+      },
+      {
+        "group": "GRP-FEDPH5-001",
+        "gate": "TASK-FEDPH5-007",
+        "expectedDirectDependencies": [
+          "TASK-FEDPH5-001",
+          "TASK-FEDPH5-002",
+          "TASK-FEDPH5-003",
+          "TASK-FEDPH5-004",
+          "TASK-FEDPH5-005",
+          "TASK-FEDPH5-006"
+        ],
+        "actualDirectDependencies": [
+          "TASK-FEDPH5-001",
+          "TASK-FEDPH5-002",
+          "TASK-FEDPH5-003",
+          "TASK-FEDPH5-004",
+          "TASK-FEDPH5-005",
+          "TASK-FEDPH5-006"
+        ],
+        "missing": [],
+        "extra": [],
+        "pass": true
+      },
+      {
+        "group": "GRP-FEDPH6-001",
+        "gate": "TASK-FEDPH6-007",
+        "expectedDirectDependencies": [
+          "TASK-FEDPH6-001",
+          "TASK-FEDPH6-002",
+          "TASK-FEDPH6-003",
+          "TASK-FEDPH6-004",
+          "TASK-FEDPH6-005",
+          "TASK-FEDPH6-006"
+        ],
+        "actualDirectDependencies": [
+          "TASK-FEDPH6-001",
+          "TASK-FEDPH6-002",
+          "TASK-FEDPH6-003",
+          "TASK-FEDPH6-004",
+          "TASK-FEDPH6-005",
+          "TASK-FEDPH6-006"
+        ],
+        "missing": [],
+        "extra": [],
+        "pass": true
+      },
+      {
+        "group": "GRP-FEDPH6-002",
+        "gate": "TASK-FEDPH6J-004",
+        "expectedDirectDependencies": [
+          "TASK-FEDPH6J-001",
+          "TASK-FEDPH6J-002",
+          "TASK-FEDPH6J-003"
+        ],
+        "actualDirectDependencies": [
+          "TASK-FEDPH6J-001",
+          "TASK-FEDPH6J-002",
+          "TASK-FEDPH6J-003"
+        ],
+        "missing": [],
+        "extra": [],
+        "pass": true
+      },
+      {
+        "group": "GRP-FEDPH7-001",
+        "gate": "TASK-FEDPH7-006",
+        "expectedDirectDependencies": [
+          "TASK-FEDPH7-001",
+          "TASK-FEDPH7-002",
+          "TASK-FEDPH7-003",
+          "TASK-FEDPH7-004",
+          "TASK-FEDPH7-005"
+        ],
+        "actualDirectDependencies": [
+          "TASK-FEDPH7-001",
+          "TASK-FEDPH7-002",
+          "TASK-FEDPH7-003",
+          "TASK-FEDPH7-004",
+          "TASK-FEDPH7-005"
+        ],
+        "missing": [],
+        "extra": [],
+        "pass": true
+      },
+      {
+        "group": "GRP-FEDPH8-001",
+        "gate": "TASK-FEDPH8-007",
+        "expectedDirectDependencies": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002",
+          "TASK-FEDPH8-003",
+          "TASK-FEDPH8-004",
+          "TASK-FEDPH8-005",
+          "TASK-FEDPH8-006"
+        ],
+        "actualDirectDependencies": [
+          "TASK-FEDPH8-001",
+          "TASK-FEDPH8-002",
+          "TASK-FEDPH8-003",
+          "TASK-FEDPH8-004",
+          "TASK-FEDPH8-005",
+          "TASK-FEDPH8-006"
+        ],
+        "missing": [],
+        "extra": [],
+        "pass": true
+      }
+    ],
+    "newDirectEdgesFromR1Baseline": 45,
+    "receiptDeclaredNewEdges": 45,
+    "receiptEdgeSetMatches": true
+  },
+  "pdf": {
+    "sha256": "3F5FBB7849F0C3F27ACBE81D171C51138395AE777C42D091F999F0929948EA98",
+    "manifestSha256": "837FB096003D57329B77E01C6EF03242317F537B3BEB439DE39C6A82AC9B8CA9",
+    "extractedTextSha256": "95D32E2D0DE249BA257E11ECD8D93C5FBEF0B53E7E8B54A877CEC2A896E43644",
+    "workflowCount": 15,
+    "workflowNamesPrinted": 15,
+    "workflowNameFailures": [],
+    "stateCount": 58,
+    "stateCaptionsPrinted": 58,
+    "stateCaptionFailures": [],
+    "dslNonemptyLines": 79,
+    "dslLinesPrintedInOrder": 79,
+    "dslLineFailures": [],
+    "sourceAttachmentCount": 20,
+    "sourceAttachmentMatches": 20,
+    "attachmentFailures": [],
+    "embeddedManifestExists": true,
+    "embeddedManifestSha256": "E5B8B0B7F231F0DB6A2B4E3A0DA45B90D5466B3A248077354EE4BA0DD4224D07",
+    "declaredEmbeddedManifestSha256": "E5B8B0B7F231F0DB6A2B4E3A0DA45B90D5466B3A248077354EE4BA0DD4224D07"
+  },
+  "trx": {
+    "manifestSha256": "13E4379DB6F3AB009FD62BC200F84594CC5FE398EF6B75FEB450AB68DE53C079",
+    "trxCount": 8,
+    "hashMatches": 8,
+    "totals": {
+      "total": 5443,
+      "executed": 5443,
+      "passed": 5443,
+      "failed": 0,
+      "skipped": 0
+    },
+    "files": [
+      {
+        "file": "QBrainAi.Support.Mcp.Tests.trx",
+        "expectedSha256": "C9DE3F269317FC95EBDBC8CDFE70FEA6FE77B2F20BFD67075FA35CDE920FCA57",
+        "actualSha256": "C9DE3F269317FC95EBDBC8CDFE70FEA6FE77B2F20BFD67075FA35CDE920FCA57",
+        "hashMatch": true,
+        "total": 3350,
+        "executed": 3350,
+        "passed": 3350,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "QBrainAi.Client.Tests.trx",
+        "expectedSha256": "1AEDAC95ADB1FDB7EA9C4514F3614F8415625FF1AC6172987662D6E1AC290778",
+        "actualSha256": "1AEDAC95ADB1FDB7EA9C4514F3614F8415625FF1AC6172987662D6E1AC290778",
+        "hashMatch": true,
+        "total": 311,
+        "executed": 311,
+        "passed": 311,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "QBrainAi.Cqrs.Tests.trx",
+        "expectedSha256": "8C1D06C70072053B96D3BC8B1DF2FE2A1C5A0582567698DADD273AB288502D32",
+        "actualSha256": "8C1D06C70072053B96D3BC8B1DF2FE2A1C5A0582567698DADD273AB288502D32",
+        "hashMatch": true,
+        "total": 33,
+        "executed": 33,
+        "passed": 33,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "QBrainAi.Launcher.Tests.trx",
+        "expectedSha256": "2AD0CD7DEEFD6F67A3F0F6430C824AA844FF4415B10E78455DE35926476D3283",
+        "actualSha256": "2AD0CD7DEEFD6F67A3F0F6430C824AA844FF4415B10E78455DE35926476D3283",
+        "hashMatch": true,
+        "total": 20,
+        "executed": 20,
+        "passed": 20,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "QBrainAi.McpAgent.Tests.trx",
+        "expectedSha256": "0C6B48DA26D14BB670C531326AEAA90CC14C459198E95027AA8C3A30692C611F",
+        "actualSha256": "0C6B48DA26D14BB670C531326AEAA90CC14C459198E95027AA8C3A30692C611F",
+        "hashMatch": true,
+        "total": 64,
+        "executed": 64,
+        "passed": 64,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "QBrainAi.Repl.Core.Tests.trx",
+        "expectedSha256": "EC52060D1F648CCDC2845624ED66B0C9C4239B43D867E8DF16F3236143617EC7",
+        "actualSha256": "EC52060D1F648CCDC2845624ED66B0C9C4239B43D867E8DF16F3236143617EC7",
+        "hashMatch": true,
+        "total": 1035,
+        "executed": 1035,
+        "passed": 1035,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "QBrainAi.QBAgent.Tests.trx",
+        "expectedSha256": "53D17E64227D6B25D8E4F470A4C48B4AC4BC0C2C79CFDE3EA819415B46A223A1",
+        "actualSha256": "53D17E64227D6B25D8E4F470A4C48B4AC4BC0C2C79CFDE3EA819415B46A223A1",
+        "hashMatch": true,
+        "total": 90,
+        "executed": 90,
+        "passed": 90,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "Build.Tests.trx",
+        "expectedSha256": "1B6C940471E99C56952FB40B3351D6358269EA0D79E2239AF2ECE6AD8B890F8C",
+        "actualSha256": "1B6C940471E99C56952FB40B3351D6358269EA0D79E2239AF2ECE6AD8B890F8C",
+        "hashMatch": true,
+        "total": 540,
+        "executed": 540,
+        "passed": 540,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  }
+}

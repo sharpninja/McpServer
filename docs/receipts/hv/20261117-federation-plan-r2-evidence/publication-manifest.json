@@ -1,0 +1,166 @@
+{
+  "files": [
+    {
+      "publicationSha256": "12A7D6424B4075207E2D194333A64C223490446B6B1D32D7D317490AAA15750F",
+      "name": "20261117T091300-federation-plan-r1.response.jsonl",
+      "credentialOccurrences": 2,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "DBCD9FE8074115B620F99A1523FA1DA50B6BDE657FFDE1BACD8B4DDDC716451A",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/20261117T091300-federation-plan-r1.response.jsonl",
+      "source": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.response.jsonl"
+    },
+    {
+      "publicationSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "name": "20261117T091300-federation-plan-r1.stderr.txt",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/20261117T091300-federation-plan-r1.stderr.txt",
+      "source": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.stderr.txt"
+    },
+    {
+      "publicationSha256": "CE5AEF8CBC279235847805766C5EF2DC6C63426B79C660F73A990625C825038C",
+      "name": "20261117T091300-federation-plan-r1.verdict.md",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "CE5AEF8CBC279235847805766C5EF2DC6C63426B79C660F73A990625C825038C",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/20261117T091300-federation-plan-r1.verdict.md",
+      "source": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T091300-federation-plan-r1.verdict.md"
+    },
+    {
+      "publicationSha256": "68FF628292DECC66B0181BA313E2087C1C651086EEDD017873A33B8C390429E9",
+      "name": "20261117T111400-federation-plan-r2.response.jsonl",
+      "credentialOccurrences": 2,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "440083D8B35B891FCAAB4411813506C197EBEB7A82D5C0C8FEA63DDDA6DD3B57",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/20261117T111400-federation-plan-r2.response.jsonl",
+      "source": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T111400-federation-plan-r2.response.jsonl"
+    },
+    {
+      "publicationSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "name": "20261117T111400-federation-plan-r2.stderr.txt",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/20261117T111400-federation-plan-r2.stderr.txt",
+      "source": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T111400-federation-plan-r2.stderr.txt"
+    },
+    {
+      "publicationSha256": "2AF3D090D73E69E0ECC131D1F7C394C4E706BF7C70D0C6E9C75E2503A6D0D50C",
+      "name": "20261117T111400-federation-plan-r2.verdict.md",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "2AF3D090D73E69E0ECC131D1F7C394C4E706BF7C70D0C6E9C75E2503A6D0D50C",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/20261117T111400-federation-plan-r2.verdict.md",
+      "source": "/home/sharpninja/github/McpServer/.worktrees/federation-plan-hv-20261117/docs/receipts/hv/20261117T111400-federation-plan-r2.verdict.md"
+    },
+    {
+      "publicationSha256": "72EF732A5E8E74FF247CE500E497435272985BD671B0D865A34A3906F49BA198",
+      "name": "federation-r2-evidence-quality-audit.json",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "72EF732A5E8E74FF247CE500E497435272985BD671B0D865A34A3906F49BA198",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/federation-r2-evidence-quality-audit.json",
+      "source": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-evidence-quality-audit.json"
+    },
+    {
+      "publicationSha256": "490538413A9F9F3C5150FE815995A111AADB76D511723B89FF9666F6A899252C",
+      "name": "federation-r2-independent-audit.json",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "490538413A9F9F3C5150FE815995A111AADB76D511723B89FF9666F6A899252C",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/federation-r2-independent-audit.json",
+      "source": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-independent-audit.json"
+    },
+    {
+      "publicationSha256": "6EB3BD5F3E6E9E7827B90E62BC283FB98E31D65D5DA8D2B2BB1365170BD3AB4C",
+      "name": "federation-r2-independent-verdict.json",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "6EB3BD5F3E6E9E7827B90E62BC283FB98E31D65D5DA8D2B2BB1365170BD3AB4C",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/federation-r2-independent-verdict.json",
+      "source": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-independent-verdict.json"
+    },
+    {
+      "publicationSha256": "3D31E0B30541129FAA85B85CE77AA8DA26A93E53C2DBBCBC8DE5A2CD5601EDD8",
+      "name": "federation-r2-independent-verdict.md",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "3D31E0B30541129FAA85B85CE77AA8DA26A93E53C2DBBCBC8DE5A2CD5601EDD8",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/federation-r2-independent-verdict.md",
+      "source": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-independent-verdict.md"
+    },
+    {
+      "publicationSha256": "59C02672DDE94220E8D4EF192263E364BA483782984314AAA02DE0962343B1ED",
+      "name": "federation-r2-requirement-audit.json",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "59C02672DDE94220E8D4EF192263E364BA483782984314AAA02DE0962343B1ED",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/federation-r2-requirement-audit.json",
+      "source": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-requirement-audit.json"
+    },
+    {
+      "publicationSha256": "4B7C6C7BE504B144B8B225179A28AB312E35870FAC47D1EB62521E3AD2F5B124",
+      "name": "federation-r2-source-block-audit.json",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "4B7C6C7BE504B144B8B225179A28AB312E35870FAC47D1EB62521E3AD2F5B124",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/federation-r2-source-block-audit.json",
+      "source": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-source-block-audit.json"
+    },
+    {
+      "publicationSha256": "7BF7DB72462C9FC9E19BC32061B59EA5D1423F308A5466D554582135BCC5AFA5",
+      "name": "federation-r2-surface-audit.json",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "7BF7DB72462C9FC9E19BC32061B59EA5D1423F308A5466D554582135BCC5AFA5",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/federation-r2-surface-audit.json",
+      "source": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-surface-audit.json"
+    },
+    {
+      "publicationSha256": "4A26B23F481B322AC94C13C5895A71591C4F9988E35D65E60CDD83DB44CB1A87",
+      "name": "federation-r2-task-matrix.json",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "4A26B23F481B322AC94C13C5895A71591C4F9988E35D65E60CDD83DB44CB1A87",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/federation-r2-task-matrix.json",
+      "source": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-task-matrix.json"
+    },
+    {
+      "publicationSha256": "52AC244EB830A34114CFE8F241D728ACD344E93E93D25D6F93754BEE0A692F7A",
+      "name": "federation-r2-verdict-readback-pre.json",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "52AC244EB830A34114CFE8F241D728ACD344E93E93D25D6F93754BEE0A692F7A",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/federation-r2-verdict-readback-pre.json",
+      "source": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-verdict-readback-pre.json"
+    },
+    {
+      "publicationSha256": "FD8692B5C0DD6582814DA2AED96870EB716BA158D9A11BD77A655633D2DAF3DB",
+      "name": "federation-r2-verdict-readback.json",
+      "credentialOccurrences": 0,
+      "transformation": "Exact current marker API-key replacement only; trailing newline may normalize; all error/failure fields retained",
+      "originalSha256": "FD8692B5C0DD6582814DA2AED96870EB716BA158D9A11BD77A655633D2DAF3DB",
+      "originalRetained": true,
+      "publication": "/home/sharpninja/github/McpServer/.mcpServer/codex/hv-final-publication-20261117/federation-r2-verdict-readback.json",
+      "source": "/home/sharpninja/github/McpServer/.mcpServer/codex/federation-r2-verdict-readback.json"
+    }
+  ],
+  "timestampLocal": "2026-11-17T13:17:03",
+  "scope": "R1 and R2 final review evidence"
+}

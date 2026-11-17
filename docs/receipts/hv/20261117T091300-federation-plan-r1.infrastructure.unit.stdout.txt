@@ -1,0 +1,1 @@
+The process cannot access the file 'F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\.nuke\temp\build.log' because it is being used by another process.

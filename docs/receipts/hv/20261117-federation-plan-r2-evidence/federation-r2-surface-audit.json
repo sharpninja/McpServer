@@ -1,0 +1,416 @@
+{
+  "generatedAtLocal": "2026-11-17T12:40:44",
+  "planPath": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "surfaceCount": 17,
+  "passCount": 17,
+  "failCount": 0,
+  "numberedBOutputCount": 12,
+  "numberedBOutputLines": [
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70
+  ],
+  "surfaces": [
+    {
+      "id": "SCOPE-BOUNDARY",
+      "status": "PASS",
+      "claim": "Planning readiness is explicit; implementation, deployment acceptance and unrelated release scope are not claimed.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 3,
+          "pattern": "No implementation, package installation, schema migration, data migration or federation activation has occurred"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 11,
+          "pattern": "Source-code Git, arbitrary file synchronization, PRs, automatic hub election, live cross-provider CDC and concurrent independent schema migrations are outside this release"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 135,
+          "pattern": "DEPLOY HOLD remains active until the operator explicitly lifts it"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "MOCK-BARRIER",
+      "status": "PASS",
+      "claim": "BDPv4 mocks-first green, discriminating negative controls and zero-skip barrier precede production work.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 37,
+          "pattern": "Prove every required assertion passes against correct controlled mocks and rejects deliberately wrong behavior as expected negative controls inside a passing harness"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 37,
+          "pattern": "A deliberately red production suite is not the mock gate"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 27,
+          "pattern": "do not move unfinished implementation past a Byrd gate"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "PH0-READINESS-BOUNDARY",
+      "status": "PASS",
+      "claim": "B1-B12 are explicitly unproven blocking outputs, with host-separated evidence and no Phase0 exit inference.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 57,
+          "pattern": "Initial status for all B1-B12 is unproven"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 57,
+          "pattern": "Every B1-B12 receipt has separate LAB and LEGION evidence rows"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 57,
+          "pattern": "All must be accepted before Ph1 production integration begins"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "EF10-PROVIDER-DECISION",
+      "status": "PASS",
+      "claim": "The plan records the accepted patchable prerelease or community EF10 provider without silently downgrading or inventing a provider.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 72,
+          "pattern": "a prerelease or community-fork EF10 provider, patched by this project and contributed upstream as needed, is an accepted dependency"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 72,
+          "pattern": "do not downgrade the repository silently or ship a bespoke from-scratch provider"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "CRASH-RESTART-REPLAY",
+      "status": "PASS",
+      "claim": "Crash windows, restart, lost acknowledgment, idempotent replay and recovery are assigned named outcomes.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 94,
+          "pattern": "Inject death after target batch commit before acknowledgement"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 113,
+          "pattern": "hub/node restart at each state transition"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 1013,
+          "pattern": "No automatic retry creates a different commit"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "ORDERING-CONCURRENCY",
+      "status": "PASS",
+      "claim": "Concurrent writers, stale heads, simultaneous publication and fenced live mutations have explicit review or retry outcomes.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 113,
+          "pattern": "all-three concurrent nonconflicting commits"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 107,
+          "pattern": "simultaneous publishers overwrite history"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 111,
+          "pattern": "IncomingMergeCannotRaceAdmittedEdit"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "MALFORMED-BOUNDARY-INPUTS",
+      "status": "PASS",
+      "claim": "Malformed inputs, missing fields, authorization ordering and exact age and data boundaries are specified.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 1011,
+          "pattern": "Malformed/unsupported token is401"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 1011,
+          "pattern": "Missing required fields return400 invalid_request"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 1015,
+          "pattern": "fake clock for exact15-minute/24-hour age boundaries"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 94,
+          "pattern": "decimal/UTC/binary/Unicode edge cases"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "HOST-PLUGIN-COVERAGE",
+      "status": "PASS",
+      "claim": "Linux, native Windows, real hosts, the three-peer fixture and every installed first-party plugin are explicit evidence rows.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 51,
+          "pattern": "Prove on LAB Linux and LEGION native Windows"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 625,
+          "pattern": "each installed first-party plugin"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 126,
+          "pattern": "three-logical-peer fixture named FED-ATLAS-H, FED-ATLAS-A and FED-ATLAS-B"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "LIFECYCLE",
+      "status": "PASS",
+      "claim": "Branch, lease, migration, maintenance and review lifecycles include request, release, resume, status, cancel or abort, and recovery semantics.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 101,
+          "pattern": "FederationBranchLifecycleTests"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 1009,
+          "pattern": "migration/{plan|dry-run|run|resume|verify|export-project|export-todos|cutover|abort}"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 742,
+          "pattern": "owner release/takeover requires explicit authorization"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "PROJECT-SESSION-ISOLATION",
+      "status": "PASS",
+      "claim": "Project, branch, connection, host and network isolation are explicit and leakage is a failing condition.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 84,
+          "pattern": "cross-project row visible"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 534,
+          "pattern": "session selection never leaks between connections"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 130,
+          "pattern": "Network isolation must not disrupt unrelated projects"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "LEGACY-UPGRADE",
+      "status": "PASS",
+      "claim": "Explicit DirectProxy compatibility, old schema quarantine, feature catch-up and binary-swap safeguards are preserved.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 82,
+          "pattern": "Preserve DirectProxy behavior for explicit legacy configuration"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 113,
+          "pattern": "OldSchemaUnpublishedCommitMergesAfterUpgrade"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 113,
+          "pattern": "Test older-schema node quarantine separately from network failure"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "SECRET-AUDIT-HANDLING",
+      "status": "PASS",
+      "claim": "Credentials are excluded from transport and receipts, audit delivery is idempotent, and disclosure controls are test obligations.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 1003,
+          "pattern": "No endpoint accepts credentials in URL, argv or persisted receipts"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 1009,
+          "pattern": "payload mismatch is409 audit_id_conflict"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 128,
+          "pattern": "ReceiptsAndLogsContainNoCredentials"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "OPERATOR-DIAGNOSTICS",
+      "status": "PASS",
+      "claim": "Status, errors, ages, local versus remote heads, audit backlog and unsupported capability are operator visible.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 1001,
+          "pattern": "Status DTO includes projectId, branch, localHead, publishedHead"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 626,
+          "pattern": "unsupported_contract is shown"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 120,
+          "pattern": "review/wait ages immediately, with15minute warning and24hour escalation"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "TRACEABILITY",
+      "status": "PASS",
+      "claim": "Named FR, TR, TEST and acceptance criteria map to phases and remain pending until evidence exists.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 139,
+          "pattern": "The workflow inventory maps the 16 release contracts to phases, U01-U15 and 99 named acceptance cases"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 141,
+          "pattern": "ValidateTraceability checks the FR/TR/TEST links"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 141,
+          "pattern": "All amended criteria remain pending until the implementation passes the defined gates"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "DEFINITION-POPULATION",
+      "status": "PASS",
+      "claim": "The plan owns the 86 current definitions and requires prewrite, deltas, plugin responses and readback without phase resumption.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 460,
+          "pattern": "The 68 definitions in section 16.2 are the current release contracts"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 460,
+          "pattern": "Section 16.4 adds 18 explicitly retained dependencies, for 86 definitions in this plan"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 465,
+          "pattern": "Do not resume Phase 0 while definitions remain unresolved"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "EXTERNAL-EFFECT-BOUNDARY",
+      "status": "PASS",
+      "claim": "Imported state cannot replay business commands or external effects, and empty queues are never treated as success.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 111,
+          "pattern": "Incoming data must not re-execute business commands or external effects"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 1015,
+          "pattern": "a successful result must never be inferred solely from an empty queue"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 132,
+          "pattern": "neither unit mocks nor an empty queue substitute for these receipts"
+        }
+      ],
+      "missingPatterns": []
+    },
+    {
+      "id": "CUTOVER-HOLD",
+      "status": "PASS",
+      "claim": "Plan readiness and historic scores do not release deployment; staged cutover remains separately authorized.",
+      "anchors": [
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 135,
+          "pattern": "Plan approval, historical 98/98 or test success is not that release"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 132,
+          "pattern": "Live cutover remains a separate action under DEPLOY HOLD"
+        },
+        {
+          "file": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+          "line": 143,
+          "pattern": "neither plan approval nor a review score releases it"
+        }
+      ],
+      "missingPatterns": []
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "generatedAtLocal": "2026-11-17T12:01:44",
+  "liveSnapshotSha256": "EEB8D02F111B002DC39B5B085884917177CE1E231B908EF6DB58A3174AB19CA7",
+  "livePluginRequestId": "req-20261117T175445Z-fdcd",
+  "liveInventory": {
+    "functional": 420,
+    "technical": 568,
+    "testing": 641,
+    "mappings": 419
+  },
+  "targetRecords": 86,
+  "liveTargetMatches": 86,
+  "liveFailureCount": 0,
+  "liveFailures": [],
+  "coreMappings": {
+    "expected": 16,
+    "frTrEdgesMatched": 16,
+    "frTestEdgesMatched": 16,
+    "failureCount": 0,
+    "failures": []
+  },
+  "hostReceipts": [
+    {
+      "host": "omarchy",
+      "preimageRecords": 86,
+      "readbackRecords": 86,
+      "applyUpdates": 15,
+      "applyBatchTotal": 15,
+      "applied": true,
+      "unchangedCriteriaPreserved": 367,
+      "newOrChangedCriteriaUnsatisfied": 25,
+      "mappingCount": 66,
+      "mappingStable": true,
+      "failureCount": 0,
+      "failures": []
+    },
+    {
+      "host": "legion2",
+      "preimageRecords": 86,
+      "readbackRecords": 86,
+      "applyUpdates": 49,
+      "applyBatchTotal": 49,
+      "applied": true,
+      "unchangedCriteriaPreserved": 169,
+      "newOrChangedCriteriaUnsatisfied": 223,
+      "mappingCount": 64,
+      "mappingStable": true,
+      "failureCount": 0,
+      "failures": []
+    }
+  ]
+}

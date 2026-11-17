@@ -1,0 +1,48 @@
+{
+  "testEvidence": {
+    "implementationClaim": false,
+    "kind": "plan-readiness-only",
+    "note": "No product implementation/test edits or Phase0 acceptance claimed. Existing R5 is planning-only and supplied for regression context, not transfer of acceptance. Reviewer must identify applicable missing evidence rather than invent test success.",
+    "trxSupplied": false
+  },
+  "planSha256": "918E6F71CF587B85A9D27BDF40E094EDD10627D140B3BB709F8124D791527373",
+  "checks": {
+    "phaseBoundaryAudit": {
+      "status": "checked",
+      "evidence": "All implementation Tasks stay Planning; Phase0 feasibility precedes Ph1. Ph3 seed/export excludes Ph6 join; Ph7 plugin bindings do not precede server contracts; DEPLOY HOLD retained."
+    },
+    "noNewMechanism": {
+      "status": "checked",
+      "evidence": "Catalog amendment restores explicit definitions, provenance and existing mappings. Process fixes align existing rules only."
+    },
+    "searchBeforeAdding": {
+      "status": "checked",
+      "evidence": "Searched existing catalog and source projections;86 existing canonical IDs retained;no new requirement IDs and no extra product mechanism."
+    },
+    "whatIfPass": {
+      "status": "checked",
+      "evidence": "Checked crash/restart/replay, concurrency/head fences, malformed/foreign-project inputs, two OSs/plugins, lifecycle, legacy modes and operator-visible outcomes against named GWT criteria and Ph0 B1-B12. No runtime or implemented AC claimed."
+    },
+    "operatorScopeVerbatim": {
+      "status": "checked",
+      "evidence": "Latest request and prior plan-first stop copied verbatim into prompt. Unrelated requirements reconciliation stays stopped."
+    },
+    "mappingLint": {
+      "status": "checked",
+      "evidence": "Get-FederationPlanPayload asserts86 unique complete definitions,392 unique-within-record ACs,16 core mappings and zero undefined implementation references. verification-v2 readback zero findings both hosts; mapping-check-correction preserves prior checker error."
+    },
+    "propagationAudit": {
+      "status": "checked",
+      "evidence": "Plan section4 mock-green sequence, section5 accepted patchable EF10 fork and sections14/15 reviewer routing aligned to latest live rules. Definitions remain byte-equivalent to final-v2 payload."
+    },
+    "standingRulesInBrief": {
+      "status": "checked",
+      "evidence": "Prompt requires full add-profile plus live Global/Workspace memories, correct Codex plugin, read-only product inspection, PowerShell-only, audit/failsafe rules, full JSONL, progress, scores, per-task scope and infrastructure rule."
+    },
+    "holisticRead": {
+      "status": "checked",
+      "evidence": "Main plan sections1-16 read including all86 definitions. Architecture/current contracts/workflow packet retained at pinned base for independent whole-packet review; original versus new plan receipt supplied."
+    }
+  },
+  "timestampLocal": "2026-11-17T09:15:03"
+}

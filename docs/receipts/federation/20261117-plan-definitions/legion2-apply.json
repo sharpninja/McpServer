@@ -1,0 +1,353 @@
+{
+  "planSha256": "793E435123B9B375ECC9A52086FEA52E7CC8FCDEF92874DEC3C4AFD3770D7CE4",
+  "hostName": "PAYTON-LEGION2",
+  "updates": 49,
+  "deltas": [
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 3,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-174"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 4,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-175"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 4,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-176"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 3,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-177"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 3,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-178"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 4,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-179"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 7,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-180"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 5,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-181"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 8,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-182"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 4,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-183"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 10,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-184"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 9,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-185"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 12,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-186"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 11,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-187"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 5,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-188"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 7,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-189"
+    },
+    {
+      "titleChanged": false,
+      "descriptionChanged": false,
+      "newOrChangedCriteria": 1,
+      "unchangedCriteriaPreserved": 1,
+      "id": "FR-MCP-FED-ROUTE-001"
+    },
+    {
+      "titleChanged": false,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 0,
+      "unchangedCriteriaPreserved": 1,
+      "id": "TR-MCP-FED-ROUTE-001"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 3,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-001"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 4,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-002"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 4,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-003"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 3,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-004"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 3,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-005"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 4,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-006"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 7,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-007"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 5,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-008"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 8,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-009"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 4,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-010"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 10,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-011"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 9,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-012"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 12,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-013"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 11,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-014"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 5,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-015"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 7,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FEDERATION-016"
+    },
+    {
+      "titleChanged": false,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 3,
+      "unchangedCriteriaPreserved": 0,
+      "id": "FR-MCP-077"
+    },
+    {
+      "titleChanged": false,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 0,
+      "unchangedCriteriaPreserved": 5,
+      "id": "FR-MCP-173"
+    },
+    {
+      "titleChanged": false,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 1,
+      "unchangedCriteriaPreserved": 7,
+      "id": "FR-MCP-SESSIONLOGCTX-001"
+    },
+    {
+      "titleChanged": false,
+      "descriptionChanged": false,
+      "newOrChangedCriteria": 1,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TEST-MCP-AUDIT-001"
+    },
+    {
+      "titleChanged": false,
+      "descriptionChanged": false,
+      "newOrChangedCriteria": 3,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TEST-MCP-AUDIT-002"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": false,
+      "newOrChangedCriteria": 1,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TEST-MCP-FED-PATH-001"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 1,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TEST-MCP-PATHNORM-001"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 2,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TEST-MCP-SESSIONLOGSAN-002"
+    },
+    {
+      "titleChanged": false,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 2,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-AUDIT-002"
+    },
+    {
+      "titleChanged": false,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 2,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-AUDIT-003"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": false,
+      "newOrChangedCriteria": 1,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FED-PATH-001"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 5,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-FED-SESSIONLOG-001"
+    },
+    {
+      "titleChanged": false,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 0,
+      "unchangedCriteriaPreserved": 5,
+      "id": "TR-MCP-PATHNORM-001"
+    },
+    {
+      "titleChanged": false,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 0,
+      "unchangedCriteriaPreserved": 6,
+      "id": "TR-MCP-SESSIONLOGSAN-001"
+    },
+    {
+      "titleChanged": true,
+      "descriptionChanged": true,
+      "newOrChangedCriteria": 2,
+      "unchangedCriteriaPreserved": 0,
+      "id": "TR-MCP-SESSIONLOGSAN-002"
+    }
+  ],
+  "applied": true,
+  "batchTotal": 49,
+  "missingMappings": 16
+}

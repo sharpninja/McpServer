@@ -1,0 +1,18 @@
+{
+  "canonicalSessionId": "Codex-20261116T174245Z-plugin-session",
+  "artifacts": [
+    {
+      "name": "20261117T133825Z-session_submit-2346.yaml",
+      "sha256": "221FD82577536AF1B63D860AD39529A3015FB8747E4A2B627E4CE1B597785ED2",
+      "copyVerified": true
+    },
+    {
+      "name": "20261117T133838Z-session_submit-42fc.yaml",
+      "sha256": "8642CF8A9ECCE5C0E159DB511B6BEF13BB538E4D7C9244FEA51146878BFE0723",
+      "copyVerified": true
+    }
+  ],
+  "reason": "Nonretryable invalid RequestId captures; canonical valid turn already persisted, preserved originals before supported quarantine",
+  "timestampLocal": "2026-11-17T09:06:42",
+  "canonicalRequestId": "req-20261117T133836Z-begin-federation-phase0"
+}

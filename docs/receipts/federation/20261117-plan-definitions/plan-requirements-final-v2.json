@@ -1,0 +1,2802 @@
+{
+  "planPath": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "0777A48FB9C0953159922EAE0D3AE44371E30DBE1FDCAED9C3EEDAF76F150189",
+  "records": [
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A cannot reach the hub, when it edits and commits T1, then local read returns the change and publication remains pending.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given H and A commit concurrently, when synchronization completes, then both histories survive or a visible review blocks only that branch.",
+          "id": "review20261110-2",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Enrolled nodes execute and persist authorized business work locally while offline and exchange explicit version commits through LAB-OMARCHY. The hub coordinates project enrollment, guarded publication and reconciliation; it is not the executor of ordinary node requests. DirectProxy remains an explicitly selected legacy capability under FR-MCP-077. LocalProxy forwarding, outage command replay and read-switch are superseded for versioned federation.",
+      "kind": "fr",
+      "id": "FR-MCP-103",
+      "title": "Autonomous committed-history federation"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given legacy signed envelopes, when explicit legacy-mode tests run, then compatibility remains intact.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given degraded QuadBrain coordinator, when authorized general federation control or audit runs, then no keyserver call occurs and the operation is not blocked by coordinator state.",
+          "id": "review20261110-2",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Keep legacy HMAC envelope compatibility separate from transaction signing and protected diffgram encryption. Under the later FR-MCP-173 decision, general federation apply/control and audit do not invoke the QuadBrain coordinator or fail closed merely because it is degraded. Actual QuadBrain operations retain their coordinator rules.",
+      "kind": "fr",
+      "id": "FR-MCP-125",
+      "title": "Legacy federation compatibility without general keyserver gating"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A/main=C0 and the hub link is down, when A changes TODO T1.title from old to local, then the local API succeeds, a local reread returns local, and no hub request or history commit occurs.",
+          "id": "ac-NodeWorksWithHubUnavailable",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given H/main=C0 and the gateway is stopped, when H edits T1.title, then H persists it locally while remote/main remains C0.",
+          "id": "ac-HubUsesSameLocalExecution",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given the prior offline edit, when the application and Dolt restart, then T1.title remains local and main remains C0 until an explicit version commit.",
+          "id": "ac-OfflineLocalReadAfterWrite",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Every node, including the hub, performs authorized local business operations and persists results without hub connectivity.",
+      "kind": "fr",
+      "id": "FR-MCP-174",
+      "title": "autonomous local execution"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given main=C0 and remote=C0, when SaveChanges persists T1.title=draft, then main and remote stay C0 and no publication intent is emitted.",
+          "id": "ac-SaveDoesNotPublish",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given that draft and a valid preview, when commit request R1 succeeds, then main=A1, the reply says committed_locally, and one recoverable publication intent targets A1.",
+          "id": "ac-VersionCommitTriggersSync",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given B has a draft and desired head A1, when B polls, then outcome=waiting_local_work, B/main=C0 and the draft value is unchanged.",
+          "id": "ac-HubRequestDoesNotCommitDraft",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A1 committed while disconnected and a crash before intent persistence, when A restarts, then history scanning rediscovers A1 exactly once and publishes it after reconnect.",
+          "id": "ac-OfflineCommitDiscoveredAfterRestart",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Only an explicit version-history commit triggers publication; drafts and SQL saves remain local. Commit retries recover the same history identity.",
+      "kind": "fr",
+      "id": "FR-MCP-175",
+      "title": "explicit version commits and publication boundary"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given LAB path /home/sharpninja/github/McpServer and LEGION path F:/github/McpServer, when both enroll as ProjectId Atlas, then both reference Atlas and retain their distinct local paths.",
+          "id": "ac-DifferentHostPathsSameProject",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given target has TODO X, when clone is requested, then409 target_not_empty leaves X and all target files unchanged.",
+          "id": "ac-CloneRefusesNonemptyTarget",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given node A has only Atlas membership, when it enrolls or clones SecretProject, then403 unauthorized_project returns no rows, objects or project existence details.",
+          "id": "ac-UnauthorizedProjectDenied",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given Atlas is discoverable but A has a nonempty destination, when each plugin selects Atlas and attempts enrollment/clone, then it displays ProjectId, selected branch and409 target_not_empty with remediation; no database is overwritten and no different project is selected.",
+          "id": "ac-PluginEnrollmentDiagnostics",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Nodes enroll a logical project under immutable shared identity while retaining host-local paths and refusing destructive clones.\n\nServer: project discovery, scoped enrollment and structured refusal diagnostics. Plugin: project discovery/selection, enrollment progress and explicit actionable diagnostics.",
+      "kind": "fr",
+      "id": "FR-MCP-176",
+      "title": "logical project enrollment and initial clone"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given main T1.title=main and feature/search T1.title=feature, when alternating pooled reads run100 times, then each returns only its selected value.",
+          "id": "ac-PooledConnectionDoesNotLeakBranch",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given main=C0 and feature/search=F1, when F1 publishes, then remote feature=F1 and all main heads remain C0.",
+          "id": "ac-FeaturePublicationLeavesMainUnchanged",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a preview for main=C0 and feature=F1 but feature advances to F2, when merge submits the old preview, then409 head_changed creates no commit and changes no ref.",
+          "id": "ac-BranchMergeRequiresExpectedHeads",
+          "isSatisfied": false
+        }
+      ],
+      "description": "First-release project branches support isolated work, explicit sharing and reviewed merge; session selection never leaks between connections.",
+      "kind": "fr",
+      "id": "FR-MCP-177",
+      "title": "branches across server and plugin context"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given C0 contains T1.title=old,T1.description=old,T2.priority=low, when A1 changes title=A, B1 changes description=B and H1 changes T2.priority=high, then merges M1(A1,B1), M2(M1,H1) converge all heads to M2 with values A,B,high and all three commits in ancestry.",
+          "id": "ac-ThreeWriterCleanConvergence",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given H has an uncommitted title draft at C0, when A publishes A1, then remote=A1, H remains C0 with its draft, and B can accept A1.",
+          "id": "ac-HubDraftDoesNotBlockRemote",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A1 and B1 descend from C0, when both accept requests expect C0, then one succeeds and the other receives409 head_changed; after merge M1 publishes, both A1 and B1 remain ancestors.",
+          "id": "ac-ConcurrentPublishPreservesBothHistories",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Exchange committed history bidirectionally through guarded publication, preserving every accepted ancestor and the hub independent working copy.",
+      "kind": "fr",
+      "id": "FR-MCP-178",
+      "title": "bidirectional committed-history exchange"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6.",
+          "id": "ac-PollReadDoesNotAcknowledge",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given desired becomes8 while report7 is in flight, when report7 arrives, then reported=7, desired=8 and the subscription remains pending.",
+          "id": "ac-AckOldGenerationPreservesNewRequest",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given remote=A1 but control still names C0 after a crash, when reconciliation runs, then it records A1 and advances desired generation without producing another commit.",
+          "id": "ac-MissedNotificationReconciles",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a node remembers epoch E1 generation90 and the hub restores a backup at generation40, when the hub reopens, then epoch E2 differs from E1; E1 reports fail409 hub_epoch_changed and no head is force-reset. Node A1 is retained until verified ancestry recovery republishes missing history.",
+          "id": "ac-HubRestoreFromOlderBackup",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Use a durable hub subscription table with polling, generation and worker fencing, plus a fresh hub epoch after restore.",
+      "kind": "fr",
+      "id": "FR-MCP-179",
+      "title": "hub control table and polling"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten.",
+          "id": "ac-SameCellConflictNeedsReview",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A1 deletes T1 and B1 edits T1.title, when histories merge, then needs_review retains B1 and the deleted/edited alternatives for review.",
+          "id": "ac-DeleteUpdateNeedsReview",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given separate commits add T1 dependsOn T2 and T2 dependsOn T1, when Dolt merges without cell conflicts, then domain validation records dependency_cycle and leaves the prior valid live head unchanged.",
+          "id": "ac-CleanMergeCanFailDomainValidation",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a resolution preview binds local=B1 and incoming=A1, when incoming advances to A2, then resolve returns409 stale_review with no merge commit.",
+          "id": "ac-StaleReviewRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given unresolved needs_review at12:00, when the clock reaches12:15, then plugins/status and the operator inbox show warning with ReviewId and age900s; at24h severity is critical, with at most one repeat per hour.",
+          "id": "ac-ReviewAgeVisible",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given Atlas/main is blocked by review R1, when Atlas/feature publishes F2 and another project publishes X1, then both succeed while Atlas/main remains unchanged.",
+          "id": "ac-UnrelatedPublicationContinues",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A changes title and B changes description with no domain violation, when merge runs, then both values survive; competing priority or completion edits produce needs_review instead of choosing a timestamp winner.",
+          "id": "ac-SafeTodoMergeRules",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Conflicts and invalid merges preserve valid live data, require authorized review and remain visible with ageing while unrelated publication continues.",
+      "kind": "fr",
+      "id": "FR-MCP-180",
+      "title": "reviewed conflicts and valid merges"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given remote accepted A1 and reply was lost, when request R1 retries, then it returns A1 and the existing receipt; no A2 commit is created.",
+          "id": "ac-LostPushAckDoesNotDuplicateCommit",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given worker epoch changes4 to5, when epoch4 reports success, then409 stale_worker_epoch leaves current receipt and desired state unchanged.",
+          "id": "ac-OldWorkerEpochCannotReportSuccess",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given B/main=C0 with title=draft, when A1 is fetched, then outcome=waiting_local_work, main stays C0 and title remains draft; at15min status/inbox shows the age warning.",
+          "id": "ac-DirtyBranchDefersApply",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given B supports schema1 and incoming S1 requires schema2, when sync runs, then409 incompatible_schema leaves B's live data/head unchanged and records the required version.",
+          "id": "ac-IncompatibleSchemaDoesNotApply",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given operation R1 published A1 but its local reply was lost, when a plugin resumes, reads status and requests cancellation, then it shows publishedHead=A1 and a durable cancellation outcome for remaining work; it never claims A1 was rolled back or creates a second commit.",
+          "id": "ac-PluginRecoveryControls",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Recover synchronization, receipts and restored hub state without losing local work, inventing success or replaying business effects.\n\nServer: durable operation resume/status/safe cancellation. Plugin: expose resume, status and cancel with completed-versus-pending effects; never claim cancellation reverses published history.",
+      "kind": "fr",
+      "id": "FR-MCP-181",
+      "title": "recovery without lost or repeated work"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given tags LA and LG and both counters start1, when both create a TODO, then generated IDs differ and both records survive reconciliation.",
+          "id": "ac-TwoNodesCreateDistinctIds",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given LA allocated sequence42, when main reverts and another branch creates a record, then its sequence is greater than42.",
+          "id": "ac-BranchRevertDoesNotReuseSequence",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given LAB and LEGION have different entities named TODO-7, when migration resolves the collision, then scoped aliases resolve each original identity and every relational reference follows its reviewed canonical mapping; historical text remains byte-identical.",
+          "id": "ac-LegacyCollisionPreservesReferences",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given existing IMPL-UNITGREEN-001 and old TODO references, when imported and read by their original IDs, then they resolve through permanent aliases without rewriting commits, PR text, session logs, memories or documents.",
+          "id": "ac-LegacyIdsRemainValid",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given LAB TODO-7 and LEGION TODO-91 share normalized title Fix login, description and dependency set, when migration plan runs, then it emits a duplicate candidate with both IDs and evidence; until explicit review, neither is merged or deleted.",
+          "id": "ac-DifferentIdsSameTodoDetected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given human ID IMPL-UNITGREEN-001 is unreserved, when two nodes reserve it concurrently, then exactly one receives201 and the other409 human_id_reserved; retry by the winning requestId returns the same reservation.",
+          "id": "ac-SimultaneousHumanIdReservation",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given an offline-created provisional TODO requesting an unreserved human ID, when it reconnects and publishes, then409 human_id_unreserved retains the local record until reservation or reviewed alias resolution.",
+          "id": "ac-OfflineHumanIdPublicationDenied",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given LAB TODO-7 and LEGION TODO-91 are a duplicate candidate, when each plugin opens identity review, then both origin IDs, canonical/provisional IDs, similarity evidence and reservation outcome are visible; no alias or row changes before an authorized decision.",
+          "id": "ac-PluginIdentityDiagnostics",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Prevent generated-ID collisions, preserve permanent legacy aliases, detect duplicate work and atomically reserve human-assigned IDs.\n\nServer: provenance, scoped aliases, collision evidence and reservation outcomes. Plugin: expose provenance/collision diagnostics and the authorized resolution path without rewriting historical references.",
+      "kind": "fr",
+      "id": "FR-MCP-182",
+      "title": "collision-resistant and preserved identity"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given one fixture for commit R1, conflict R2 and migration R3, when each installed first-party plugin calls its wrapper, then normalized IDs, heads, error codes and audit agent identity match the typed client result.",
+          "id": "ac-EveryPluginUsesSameContract",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given server lacks federation contract1, when a plugin invokes commit, then unsupported_contract is shown and no raw SQL or shell fallback executes.",
+          "id": "ac-OldServerReportsUnsupportedCapability",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a cached leaseFence4 and session branch feature, when reconnect discovers fence5, then the plugin retains visible context but refuses writes with lease_lost until reacquired.",
+          "id": "ac-ReconnectRevalidatesContext",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a branch observation is older than24h, when status is displayed, then stale=true and observedUtc are visible; the branch, drafts and refs are not deleted.",
+          "id": "ac-StaleBranchReportedNotDeleted",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Expose consistent typed federation, review, identity, audit, migration and maintenance workflows through every first-party plugin.",
+      "kind": "fr",
+      "id": "FR-MCP-183",
+      "title": "first-party plugin federation contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given credentials and local machine paths exist in operational storage, when a project is cloned, then none appears in its versioned tables or history.",
+          "id": "ac-CloneOmitsSecrets",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A performs an offline TODO edit and creates audit E1, when connectivity returns without a Dolt commit, then hub audit contains exactly E1, A retains E1, and main/remote remain C0.",
+          "id": "ac-AuditReachesHub",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given E1 was stored but its receipt was lost, when the same batch retries, then exactly one E1 exists and the same hash receipt returns; changed payload under E1 returns409 audit_id_conflict.",
+          "id": "ac-AuditRetryIdempotent",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given source has100 TODO audit and20 generic audit rows, when seed/join audit backfill verifies, then all120 records have matching payload hashes and hub receipts; missing one blocks cutover.",
+          "id": "ac-AuditBackfillVerified",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given an explicitly promoted sanitized session with turns, actions, dialog, commits/files, PlanFile and TodoId, when cloned, then every promoted child and relationship matches the source snapshot; automatic capture still uses the audit channel.",
+          "id": "ac-FullProjectSessionGraphPreserved",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given accepted head changes C0 to A1, when the derived index rebuild completes, then queries read A1 values and no C0 cache is served under the A1 key.",
+          "id": "ac-AcceptedHeadRebuildsBranchIndex",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given main=C0 is clean, when heartbeat, audit and automatic session capture run, then Dolt working-set fingerprint remains unchanged.",
+          "id": "ac-BackgroundWritersDoNotDirtyVersionedBranch",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given agent1 owns the editing lease, when agent2 logs a session action, then its local audit persists without acquiring or changing agent1's lease.",
+          "id": "ac-SecondAgentLoggingNeedsNoLease",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a promoted snapshot contains a fixture secret detected by the configured detector, when commit preview runs, then422 secret_detected creates no commit and outputs no secret value.",
+          "id": "ac-CommitPreviewBlocksSecret",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given unique fixture canaries are injected through protected secret references, when commands, retries and failures execute on both hosts, then scans of argv, receipts, logs, chat/audit payloads, memory stores, generated files, Git staged blobs/new commits and Dolt working sets/new history find zero canary values. Scanner diagnostics and rejected commit previews also contain zero values; no secret is added to history to test the detector.",
+          "id": "ac-ReceiptsAndLogsContainNoCredentials",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Separate versioned project content from operational state while delivering permanent audit to the hub independently of commits and excluding secrets.",
+      "kind": "fr",
+      "id": "FR-MCP-184",
+      "title": "portable data versus host-local state"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0.",
+          "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects.",
+          "id": "ac-ForeignProjectCloneDenied",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged.",
+          "id": "ac-RevokedNodeCannotPublish",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403.",
+          "id": "ac-OfflineLocalAuthorizationStillApplies",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs.",
+          "id": "ac-LocalAppUserCannotPush",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation.",
+          "id": "ac-RevokedCredentialFailsFetchAndPublish",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds.",
+          "id": "ac-SqlPortUnreachableAcrossLink",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission.",
+          "id": "ac-UnknownCertificatePinRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs.",
+          "id": "ac-PluginLeastPrivilegeDenial",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Reuse integrated IdentityServer for single-user node ownership, per-node client credentials, project scopes and revocation; preserve authorized offline work.\n\nServer: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization.",
+      "kind": "fr",
+      "id": "FR-MCP-185",
+      "title": "scoped authorization and offline behavior"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given keys sqlite,postgresql,sqlserver,dolt, when runtime and design-time factories resolve them, then each selects its own strategy/migration history; unknown key returns unsupported_provider.",
+          "id": "ac-FourProvidersResolve",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given empty standalone Dolt then baseline schema1, when baseline and additive schema2 apply, then CRUD succeeds, data remains intact and repeated apply makes no further changes.",
+          "id": "ac-DoltBaselineAndUpgrade",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given recorded hashes of the three original migration chains, when Dolt support is added, then those hashes match and all three real-provider upgrade fixtures pass.",
+          "id": "ac-OriginalProviderMigrationsUnchanged",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given application supports schema1, when opening schema2 for domain writes, then incompatible_schema is returned before mutation.",
+          "id": "ac-UnsupportedSchemaRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a versioned project at schema1, when application starts, then no EF migration executes and its Dolt head/schema remain unchanged.",
+          "id": "ac-VersionedProjectNotMigratedAtStartup",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given B1 is unpublished on schema1 and hub S1 adds schema2 from C0, when preflight/upgrade and merge succeed, then B/main=M1 with both B1 and S1 ancestors and B1 row values preserved.",
+          "id": "ac-OldSchemaUnpublishedCommitMergesAfterUpgrade",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given main accepts S1 but feature still uses schema1, when feature is selected for writes, then it remains closed until its own merge with S1 validates.",
+          "id": "ac-FeatureBranchSchemaCatchUp",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given any local branch has a draft, when Nuke preflight runs, then409 maintenance_not_ready prevents binary replacement and preserves the draft.",
+          "id": "ac-DirtyDraftBlocksBinaryUpgrade",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current.",
+          "id": "ac-ContractBlockedUntilLocalBranchesAttested",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a ready public main but an unattested local feature, when deployment runs, then no binary/service/schema change occurs; explicit branch attestation is required.",
+          "id": "ac-DeploymentPreflightBlocksDirtyOrUnattestedBranch",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given one Windows worker owns Atlas, when a second process starts or the owner crashes, then concurrent ownership is denied and restart recovers only after the OS releases its lock; committed rows and unpublished heads survive.",
+          "id": "ac-WindowsWriterLockAndRestart",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given isolated disposable Atlas stores on LAB and LEGION and FED-ATLAS-H/A/B fixtures, when Ph8 partitions/reconnects each control, publication/history, audit and identity path and restarts each application/worker, Dolt, gateway, identity and control/audit component at commit/publication/report boundaries, then every matrix row records exact heads/ancestor sets/rows/drafts/refs/epoch and audit receipts matching the workflow outcome, with zero missing provider/migration/recovery rows. Missing any component/path row fails acceptance; unrelated live projects retain their provider mappings and data.",
+          "id": "ac-RealHostAcceptanceMatrix",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Support Dolt as the fourth provider with dedicated schema migration, controlled schema-history distribution, Windows/Linux lifecycle and original-provider regressions.",
+      "kind": "fr",
+      "id": "FR-MCP-186",
+      "title": "Dolt fourth-provider support and schema migration"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given the same fixture in SQLite,PostgreSQL,SQL Server, when seed migration runs, then counts, typed hashes, IDs, nulls, Unicode, decimals, UTC precision and FK relationships match in Dolt.",
+          "id": "ac-ThreeSourceProviderRoundTrip",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given target batch1 committed before a crash but its acknowledgement was lost, when resume runs, then batch1 is recognized by journal and no duplicate rows appear.",
+          "id": "ac-ResumeAfterBatchCommit",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given manifest source hash S0, when source is replaced by S1 before resume, then409 migration_source_changed writes no additional target rows.",
+          "id": "ac-ChangedSnapshotRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given one row hash differs, when cutover is requested, then409 migration_verification_failed leaves source routing active and writes closed on the target.",
+          "id": "ac-FailedVerifyCannotCutover",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given verified cutover completes, when target receives a new TODO, then source backup remains present, read-only and byte-identical; the new TODO exists only in Dolt until an explicit recovery export.",
+          "id": "ac-SourceRetainedAfterCutover",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given seed C0 is published and join imports J1, when join completes in Ph6, then C0 is an ancestor of J1 and reviewed main M1; no second root is created.",
+          "id": "ac-MigrationJoinPreservesCommonAncestor",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given seed T1.title=A and frozen join T1.title=B, when join planning runs, then an explicit keep/take/manual decision is required before J1 even if Dolt would fast-forward.",
+          "id": "ac-MigrationJoinDivergentRowRequiresReview",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given J1 is verified but main integration is unresolved, when cutover runs, then409 migration_verification_failed preserves source routing; only verified reviewed M1 permits cutover.",
+          "id": "ac-JoinCutoverRequiresReviewedMain",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A1 adds TODO T2 after cutover, when export-sqlite targets A1, then the new SQLite DB contains T2 and all TODO children/aliases with matching hashes, while the original source remains unchanged.",
+          "id": "ac-DoltTodoExportPreservesNewWrites",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given only Ph3 is implemented, when mode=join is requested, then501 unsupported_capability creates no target commit or routing change.",
+          "id": "ac-SeedPhaseRejectsJoin",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given Atlas has main=A1 with post-cutover TODO T1, requirement R1/mapping, use case U1/actor/flow/step, memory W1, portable setting K1 and promoted session S1/turn/action, plus unpublished feature=F1 and draft T2.title=draft, when export-project freezes both branches and verifies fresh SQLite snapshots plus operational backup, then all IDs/typed values/links/soft deletes match each captured working set, feature still resolves F1, T2 remains draft without a new Dolt commit, audit receipts reconcile, the retained Dolt archive contains A1/F1 ancestry and original SQLite bytes are unchanged. Omit W1 or feature in a negative control: migration_verification_failed prevents routing switch.",
+          "id": "ac-FullProjectRecoveryPreservesAllDomains",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Migrate all three original providers using verified seed then reviewed join, permanent identities, audit backfill and a source-retaining all-domain/all-branch project-to-SQLite recovery export.",
+      "kind": "fr",
+      "id": "FR-MCP-187",
+      "title": "original-provider-to-Dolt migration tool"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A1 records an already-sent GitHub update, when B integrates A1, then B state includes the result and outbound GitHub/email invocation count is0.",
+          "id": "ac-ImportDoesNotSendExternalAction",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given accepted commit A1 and effect E1, when sync retries10 times, then the effect ledger still has one E1 and no new external dispatch occurs.",
+          "id": "ac-RetryDoesNotRepeatEffect",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given audit backfill contains command names and receipt payloads, when the hub ingests them, then they are stored as evidence and no business command executes.",
+          "id": "ac-ImportedOperationalRowsRemainInert",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given QuadBrain coordinator is degraded but local authorization passes, when federation commit/control/audit operations execute, then none invokes the keyserver and valid local work succeeds.",
+          "id": "ac-FederationBypassesQuadBrainKeyserver",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given incoming A1 contains a TODO completed state and inert historical external-action metadata, when the plugin shows synchronization success, then it labels data received with zero external operations executed; requesting an external operation requires a separate explicit authorized command and its own receipt.",
+          "id": "ac-PluginEffectBoundary",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Imported project or audit state never replays external effects and general federation remains outside QuadBrain-only keyserver gating.\n\nServer: synchronization applies data without executing external operations. Plugin: distinguish history/data synchronization from separately authorized external effects in preview, status and receipts.",
+      "kind": "fr",
+      "id": "FR-MCP-188",
+      "title": "imported state does not repeat external effects"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given agent1 owns a draft, when agent2 commits the same branch, then409 branch_busy creates no commit and the draft remains agent1-owned.",
+          "id": "ac-CommitCannotCaptureOtherAgentDraft",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given fence4 expires and fence5 is issued, when a fence4 edit arrives, then409 lease_lost persists no row changes.",
+          "id": "ac-ExpiredLeaseFenced",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given preview fingerprint W1, when the working set becomes W2, then commit with W1 returns409 working_set_changed and requires a fresh preview.",
+          "id": "ac-PreviewChangeRequiresReview",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a write admitted under fence4, when expiry occurs mid-transaction, then that write finishes under the gate before fence5 takeover; a later fence4 write is rejected.",
+          "id": "ac-LeaseLostDuringWriteRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given request R1 created A1 and reply was lost, when R1 retries after restart, then A1 is returned by its commit trailer and history contains no duplicate commit.",
+          "id": "ac-CommitRetryReturnsSameHash",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given an edit holds the branch gate, when the integration worker requests a live head move, then it waits; after the edit finishes, fingerprint revalidation detects the draft and returns waiting_local_work without overwriting it.",
+          "id": "ac-IncomingMergeCannotRaceAdmittedEdit",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given agent1 owns A/main fence4 with a draft, when agent2 views context and requests editing, then it sees the owner and branch, receives409 branch_busy, and may select a separate feature branch; owner release/takeover requires explicit authorization and preserves the main draft without commit or discard.",
+          "id": "ac-PluginEditingOwnership",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Enforce branch edit ownership and fenced live-write serialization so no agent or sync worker captures or overwrites another agent draft.\n\nServer: editing owner, request/release and fenced takeover contracts. Plugin: display editing owner, request/release context and offer another branch without capturing another agent draft.",
+      "kind": "fr",
+      "id": "FR-MCP-189",
+      "title": "safe shared-host editing and commit ownership"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given offline audit E1, when reconnect occurs without a version commit, then the hub stores E1 once and the node retains it.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given runtime storage credentials, when update/delete of any existing audit row is attempted, then it is denied.",
+          "id": "review20261110-2",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given legacy and new compressed payload fixtures, when read/migrated on all supported providers, then their decoded values and historical text remain unchanged.",
+          "id": "review20261110-3",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Audit remains permanent locally and is delivered to the hub append-only unversioned store independently of project commits. Retain immutable runtime roles, readable legacy payloads and versioned compressed snapshots/diffs/metadata. Audit is excluded from branchable Dolt project history and wiki exports, not from hub delivery. Backfill TODO and generic audit history with verified hashes and receipts.",
+      "kind": "fr",
+      "id": "FR-MCP-AUDIT-001",
+      "title": "Permanent audit with append-only hub delivery"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given the domain manifest, when migration planning runs, then every source table/writer has a classified destination or explicit exclusion and no unknown domain passes.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given completed batches, when rerun, then no duplicate rows or external effects occur and already_applied counts are reported.",
+          "id": "review20261110-2",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a missing source row or audit receipt, when verify runs, then migration_verification_failed blocks cutover.",
+          "id": "review20261110-3",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Inventory every prior domain: TODO and children/links/doc metadata/audit; complete session graph; requirements/AC/mappings/scope layers; memory/versions; use cases/actors; source documents and derived chunks; triage; tools/buckets; agents; brain slots; handoff. Each maps to versioned data, hub-bound unversioned audit, host-local operational state or regenerable derived state with explicit counts/reason. Seed/join replace signed command backfill for versioned mode. Reads and writes always remain local; no read-switch.",
+      "kind": "fr",
+      "id": "FR-MCP-FED-BACKFILL-001",
+      "title": "Complete verified project and audit migration backfill"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A is enrolled in Atlas, when its control request omits ProjectId or requests another project, then400 invalid_request or403 unauthorized_project returns no default-workspace data.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given legacy proxy routing is explicitly selected, when valid normalized path or GlobalWorkspaceId is supplied, then both resolve the same scoped workspace.",
+          "id": "review20261110-2",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Current versioned control/remote endpoints resolve immutable ProjectId and authenticated NodeId membership; local paths are host-specific mappings, never authority or fallback to the hub primary workspace. Preserve the old proxy-header routing contract only for explicitly configured legacy DirectProxy paths.",
+      "kind": "fr",
+      "id": "FR-MCP-FED-ROUTE-001",
+      "title": "Federation project routing fails closed"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A changes host RunAs or DataDirectory, when heartbeat/clone runs, then those values never replace H configuration.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given CurrentRequirementLayerKey differs, when heartbeat runs, then hub-owned value remains and drift is reported.",
+          "id": "review20261110-2",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given an authorized portable prompt-template edit is committed, when synced, then peers receive its sanitized value.",
+          "id": "review20261110-3",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Version portable project configuration through explicit commits; retain host RunAs, executable paths, DataDirectory, tunnel settings and local filesystem mappings locally. CurrentRequirementLayerKey remains protected hub-admin-owned policy: heartbeat cannot overwrite it and drift is visible. Local offline work uses the last authorized policy. No blanket host-configuration replication.",
+      "kind": "fr",
+      "id": "FR-MCP-FED-WSSYNC-001",
+      "title": "Portable project configuration and local machine boundaries"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given workspace memory M1 edited offline, when saved, then the local read changes but remote C0 does not; after explicit commit and sync the peer receives the version.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A deletes and B edits M1, when merged, then needs_review preserves both histories.",
+          "id": "review20261110-2",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a global memory containing machine configuration, when cloning a project, then that memory is absent.",
+          "id": "review20261110-3",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Workspace-scoped portable memories and their versions are committed project data; local edits work offline and explicit version commits trigger exchange. Global/machine-specific memory remains operational. Conflicting updates/deletes require review. Preserve valid MEMORY-* identity, explicit scope and sanitizer boundaries. LocalProxy forwarding and signed command replay are superseded for this mode.",
+      "kind": "fr",
+      "id": "FR-MCP-MEMORY-008",
+      "title": "Versioned workspace memory federation"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given batchE1 was accepted and its reply lost, when retried, then one row and the same payload-hash receipt remain.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given E1 key with a changed payload, when submitted, then409 audit_id_conflict performs no overwrite.",
+          "id": "review20261110-2",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a wiki export or project clone, when generated, then it excludes credentials and operational audit rows while independent hub delivery remains enabled.",
+          "id": "review20261110-3",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Project history excludes secrets and automatic operational audit. This does NOT make audit local-only: every host retains permanent local audit and an append-only outbox delivers sanitized records to the hub unversioned ledger independently of project commits. AuditRecord key=(OriginNodeId,RecordId UUID); fields ProjectId,EntityKind,EntityId,OriginSequence int64,OccurredUtc,Actor,Action,PayloadVersion,PayloadHash,Payload. POST audit/batches validates token/project, inserts atomically by key and returns per-record durable receipts. Same key/hash is already_received; same key/different hash=409 audit_id_conflict. No UPDATE/DELETE permission. Local pruning is forbidden. Migration backfills TODO and generic audit history with counts/hashes and receipts. Credential values are excluded at capture, not silently replicated.",
+      "kind": "tr",
+      "id": "TR-MCP-AUDIT-004",
+      "title": "Append-only unversioned audit delivery and export policy"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given versioned mode, when a TODO request arrives, then LocalProxy middleware is not invoked.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given explicit DirectProxy mode, when a foreign workspace is addressed, then correct routing and loop protection remain intact.",
+          "id": "review20261110-2",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Use TR-MCP-FEDERATION-001..016 as the current versioned contract. Configure immutable ProjectId,NodeId,branch,IdentityServer client and hub gateway; never forward ordinary Dolt-project requests. Preserve legacy DirectProxy routing and loop protection in a distinct mode. Never run legacy mutation replay and versioned publication for the same project.",
+      "kind": "tr",
+      "id": "TR-MCP-FED-001",
+      "title": "Autonomous federation transport and compatibility contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given migration J1 contains all source rows and audit records, when verify executes, then source accounting at J1 and final invariants at M1 both pass, with durable audit receipts.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Use TR-MCP-FEDERATION-014 seed in Ph3 and join after review/publication in Ph6. Audit delivery follows TR-MCP-AUDIT-004. Manifest preserves typed values, logical IDs/aliases, versions, timestamps and full session graph. Per-table stable keyset batches and immutable source fingerprint support resume. Import never fans out original commands; only the reviewed version commit may publish.",
+      "kind": "tr",
+      "id": "TR-MCP-FED-BACKFILL-001",
+      "title": "Seed, join and audit backfill contracts"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given MemoryId M1 with versions V1,V2 in Atlas, when A1 is cloned, then both versions and their links match and no global memory is included.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Route the existing memory API locally. Version workspace-scoped memory rows and version graph through the Dolt project context; keep global/machine memory in operational storage. Validate memory identity and scope on local writes and merge. No separate replay adapter is required for Dolt mode; retain explicit legacy adapter compatibility only.",
+      "kind": "tr",
+      "id": "TR-MCP-FED-MEMORY-001",
+      "title": "Memory scope and history contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given a federation hop with unresolved workspace in legacy mode, when routed, then a4xx diagnostic is returned and no primary workspace fallback occurs.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Versioned APIs require ProjectId and derive NodeId from IdentityServer client membership. Missing project=400 invalid_request; foreign project=403 unauthorized_project. Request paths use the syntax-aware normalizer, not host Path.GetFullPath. Legacy header lookup remains mode-scoped and never supplies fallback identity to versioned routes.",
+      "kind": "tr",
+      "id": "TR-MCP-FED-ROUTE-001",
+      "title": "Scoped project resolution and legacy route isolation"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given older legacy registration lacks fields, when processed, then its existing mode defaults remain without mutating versioned project settings.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Project manifest classifies fields individually. Portable Name/prompt-template content may be versioned; IsPrimary,RunAs,AgentPath,DataDirectory,TunnelProvider and resolved TodoPath are host-local. Protected CurrentRequirementLayerKey changes require hub-admin permission and a versioned policy commit, never heartbeat overwrite. Legacy payload compatibility is tested only in legacy mode.",
+      "kind": "tr",
+      "id": "TR-MCP-FED-WSSYNC-001",
+      "title": "Configuration partition and protected policy contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A/main=C0 and the hub link is down, when A changes TODO T1.title from old to local, then the local API succeeds, a local reread returns local, and no hub request or history commit occurs.",
+          "id": "ac-NodeWorksWithHubUnavailable",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given H/main=C0 and the gateway is stopped, when H edits T1.title, then H persists it locally while remote/main remains C0.",
+          "id": "ac-HubUsesSameLocalExecution",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given the prior offline edit, when the application and Dolt restart, then T1.title remains local and main remains C0 until an explicit version commit.",
+          "id": "ac-OfflineLocalReadAfterWrite",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Local request routing binds immutable ProjectId, NodeId and Branch to one DbContext and branch write gate. Dolt-mode domain requests never invoke LocalProxy forwarding or wait for the hub. Existing local authentication remains mandatory; federation reference-token introspection is not a dependency of local work. Result fields distinguish local persistence, version commit and publication.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-001",
+      "title": "autonomous local execution contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given main=C0 and remote=C0, when SaveChanges persists T1.title=draft, then main and remote stay C0 and no publication intent is emitted.",
+          "id": "ac-SaveDoesNotPublish",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given that draft and a valid preview, when commit request R1 succeeds, then main=A1, the reply says committed_locally, and one recoverable publication intent targets A1.",
+          "id": "ac-VersionCommitTriggersSync",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given B has a draft and desired head A1, when B polls, then outcome=waiting_local_work, B/main=C0 and the draft value is unchanged.",
+          "id": "ac-HubRequestDoesNotCommitDraft",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A1 committed while disconnected and a crash before intent persistence, when A restarts, then history scanning rediscovers A1 exactly once and publishes it after reconnect.",
+          "id": "ac-OfflineCommitDiscoveredAfterRestart",
+          "isSatisfied": false
+        }
+      ],
+      "description": "POST /qbrainai/federation/projects/{projectId}/branches/{branch}/commits accepts requestId UUID, expectedHead, expectedWorkingSet, leaseFence, author and message. Success is 201 with commitHash and publicationState=committed_locally. Persist requestId in the Dolt commit trailer. Retry returns the original hash. Head/fingerprint/fence mismatch is HTTP409 with head_changed/working_set_changed/lease_lost. SaveChanges and control.poll never create version commits.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-002",
+      "title": "explicit version commits and publication boundary contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given LAB path /home/sharpninja/github/McpServer and LEGION path F:/github/McpServer, when both enroll as ProjectId Atlas, then both reference Atlas and retain their distinct local paths.",
+          "id": "ac-DifferentHostPathsSameProject",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given target has TODO X, when clone is requested, then409 target_not_empty leaves X and all target files unchanged.",
+          "id": "ac-CloneRefusesNonemptyTarget",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given node A has only Atlas membership, when it enrolls or clones SecretProject, then403 unauthorized_project returns no rows, objects or project existence details.",
+          "id": "ac-UnauthorizedProjectDenied",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given Atlas is discoverable but A has a nonempty destination, when each plugin selects Atlas and attempts enrollment/clone, then it displays ProjectId, selected branch and409 target_not_empty with remediation; no database is overwritten and no different project is selected.",
+          "id": "ac-PluginEnrollmentDiagnostics",
+          "isSatisfied": false
+        }
+      ],
+      "description": "ProjectEnrollment stores ProjectId UUID, NodeId, ownerSubjectId, normalized local path, schemaVersion and subscriptions. POST /qbrainai/federation/enroll accepts an authenticated pre-provisioned node client plus operator-authorized owner binding. Body ProjectId must be allowed by token scope fed.project.{ProjectId}.enroll and durable membership. Paths stay host-local; no default-workspace fallback. A nonempty clone destination returns409 target_not_empty.\n\nServer: project discovery, scoped enrollment and structured refusal diagnostics. Plugin: project discovery/selection, enrollment progress and explicit actionable diagnostics.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-003",
+      "title": "logical project enrollment and initial clone contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given main T1.title=main and feature/search T1.title=feature, when alternating pooled reads run100 times, then each returns only its selected value.",
+          "id": "ac-PooledConnectionDoesNotLeakBranch",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given main=C0 and feature/search=F1, when F1 publishes, then remote feature=F1 and all main heads remain C0.",
+          "id": "ac-FeaturePublicationLeavesMainUnchanged",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a preview for main=C0 and feature=F1 but feature advances to F2, when merge submits the old preview, then409 head_changed creates no commit and changes no ref.",
+          "id": "ac-BranchMergeRequiresExpectedHeads",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Branch APIs create/list/select/merge using ProjectId, branch and sessionId. Each pooled connection is opened for an explicit branch and verified before use. Merge accepts expectedSourceHead and expectedTargetHead; stale values yield409 head_changed. Reserved refs upload/, integration/ and review/ are inaccessible to ordinary editing credentials. Branch deletion fails409 branch_busy while leases, reviews or recovery pins reference it.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-004",
+      "title": "branches across server and plugin context contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given C0 contains T1.title=old,T1.description=old,T2.priority=low, when A1 changes title=A, B1 changes description=B and H1 changes T2.priority=high, then merges M1(A1,B1), M2(M1,H1) converge all heads to M2 with values A,B,high and all three commits in ancestry.",
+          "id": "ac-ThreeWriterCleanConvergence",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given H has an uncommitted title draft at C0, when A publishes A1, then remote=A1, H remains C0 with its draft, and B can accept A1.",
+          "id": "ac-HubDraftDoesNotBlockRemote",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A1 and B1 descend from C0, when both accept requests expect C0, then one succeeds and the other receives409 head_changed; after merge M1 publishes, both A1 and B1 remain ancestors.",
+          "id": "ac-ConcurrentPublishPreservesBothHistories",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Node upload authority is limited to its candidate namespace in an isolated upload repository. POST /qbrainai/federation/publication/accept accepts projectId, branch, requestId, candidateHead, expectedPublishedHead and hubEpoch. Gateway validates authorization, ancestry, schema and domain invariants before the sole fenced publisher advances the public ref without force. Token validation occurs at the gateway; native Dolt remotesapi is loopback-only and never trusts a node bearer token directly. Transport/procedure enforcement is a Ph0 proof gate.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-005",
+      "title": "bidirectional committed-history exchange contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6.",
+          "id": "ac-PollReadDoesNotAcknowledge",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given desired becomes8 while report7 is in flight, when report7 arrives, then reported=7, desired=8 and the subscription remains pending.",
+          "id": "ac-AckOldGenerationPreservesNewRequest",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given remote=A1 but control still names C0 after a crash, when reconciliation runs, then it records A1 and advances desired generation without producing another commit.",
+          "id": "ac-MissedNotificationReconciles",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a node remembers epoch E1 generation90 and the hub restores a backup at generation40, when the hub reopens, then epoch E2 differs from E1; E1 reports fail409 hub_epoch_changed and no head is force-reset. Node A1 is retained until verified ancestry recovery republishes missing history.",
+          "id": "ac-HubRestoreFromOlderBackup",
+          "isSatisfied": false
+        }
+      ],
+      "description": "SyncSubscription key=(NodeId,ProjectId,Branch) contains HubEpoch UUID, PublishedHead, PublishedGeneration int64, DesiredGeneration int64, ReportedGeneration int64, WorkerEpoch int64, AcceptedHead, Outcome and timestamps. POST control/poll is read-only. POST control/report includes all epochs and observed generation; stale worker=409 stale_worker_epoch, stale hub=409 hub_epoch_changed. Poll every30s with20% jitter; commit/reconnect/on-demand wake immediately. Backoff1s doubling to60s. Generation ordering is valid only within HubEpoch. Restore generates a new non-reused random epoch before listeners reopen.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-006",
+      "title": "hub control table and polling contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten.",
+          "id": "ac-SameCellConflictNeedsReview",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A1 deletes T1 and B1 edits T1.title, when histories merge, then needs_review retains B1 and the deleted/edited alternatives for review.",
+          "id": "ac-DeleteUpdateNeedsReview",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given separate commits add T1 dependsOn T2 and T2 dependsOn T1, when Dolt merges without cell conflicts, then domain validation records dependency_cycle and leaves the prior valid live head unchanged.",
+          "id": "ac-CleanMergeCanFailDomainValidation",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a resolution preview binds local=B1 and incoming=A1, when incoming advances to A2, then resolve returns409 stale_review with no merge commit.",
+          "id": "ac-StaleReviewRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given unresolved needs_review at12:00, when the clock reaches12:15, then plugins/status and the operator inbox show warning with ReviewId and age900s; at24h severity is critical, with at most one repeat per hour.",
+          "id": "ac-ReviewAgeVisible",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given Atlas/main is blocked by review R1, when Atlas/feature publishes F2 and another project publishes X1, then both succeed while Atlas/main remains unchanged.",
+          "id": "ac-UnrelatedPublicationContinues",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A changes title and B changes description with no domain violation, when merge runs, then both values survive; competing priority or completion edits produce needs_review instead of choosing a timestamp winner.",
+          "id": "ac-SafeTodoMergeRules",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Review record key=ReviewId UUID; fields ProjectId,Branch,baseHeads[],localHead,incomingHead,candidateRef,conflictingCells[],validationErrors[],createdUtc,lastNotifiedUtc,resolution,actor. GET conflicts and status expose it. Resolve binds exact heads and returns409 stale_review if changed. Safe TODO policy: identical concurrent values collapse; edits to different cells may merge only if invariants pass; duplicate immutable child IDs deduplicate only when bytes agree. Status, priority, title, description, dependency deletions and same-cell disagreements always require review; no timestamp last-writer-wins. Notify immediately in status and durable operator inbox; warn at15min, escalate at24h, repeat at most hourly; no email/Slack sent implicitly. Same-branch dependent commits wait; unrelated branches/projects continue.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-007",
+      "title": "reviewed conflicts and valid merges contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given remote accepted A1 and reply was lost, when request R1 retries, then it returns A1 and the existing receipt; no A2 commit is created.",
+          "id": "ac-LostPushAckDoesNotDuplicateCommit",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given worker epoch changes4 to5, when epoch4 reports success, then409 stale_worker_epoch leaves current receipt and desired state unchanged.",
+          "id": "ac-OldWorkerEpochCannotReportSuccess",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given B/main=C0 with title=draft, when A1 is fetched, then outcome=waiting_local_work, main stays C0 and title remains draft; at15min status/inbox shows the age warning.",
+          "id": "ac-DirtyBranchDefersApply",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given B supports schema1 and incoming S1 requires schema2, when sync runs, then409 incompatible_schema leaves B's live data/head unchanged and records the required version.",
+          "id": "ac-IncompatibleSchemaDoesNotApply",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given operation R1 published A1 but its local reply was lost, when a plugin resumes, reads status and requests cancellation, then it shows publishedHead=A1 and a durable cancellation outcome for remaining work; it never claims A1 was rolled back or creates a second commit.",
+          "id": "ac-PluginRecoveryControls",
+          "isSatisfied": false
+        }
+      ],
+      "description": "OperationReceipt binds requestId, node, project, branch, hubEpoch, candidate/result hashes and outcome. Durable refs pin candidates/reviews before receipt completion. Worker claims are fenced by WorkerEpoch; reconnect never trusts stored generation across HubEpoch. Fetch may advance remote-tracking refs, never dirty live refs. Restore first disables ingress, restores compatible data/control/audit checkpoints, creates new epoch, then re-advertises verified heads; node-held missing commits are uploaded and ancestry-validated before normal synchronization resumes.\n\nServer: durable operation resume/status/safe cancellation. Plugin: expose resume, status and cancel with completed-versus-pending effects; never claim cancellation reverses published history.\n\nHubRestoreFromOlderBackup is first owned by Ph5 (epoch/remote/control), extended by Ph6 (integration/review/audit resend), and repeated as isolated real-host acceptance in Ph8. Restore is tested, never assumed from successful backup creation.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-008",
+      "title": "recovery without lost or repeated work contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given tags LA and LG and both counters start1, when both create a TODO, then generated IDs differ and both records survive reconciliation.",
+          "id": "ac-TwoNodesCreateDistinctIds",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given LA allocated sequence42, when main reverts and another branch creates a record, then its sequence is greater than42.",
+          "id": "ac-BranchRevertDoesNotReuseSequence",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given LAB and LEGION have different entities named TODO-7, when migration resolves the collision, then scoped aliases resolve each original identity and every relational reference follows its reviewed canonical mapping; historical text remains byte-identical.",
+          "id": "ac-LegacyCollisionPreservesReferences",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given existing IMPL-UNITGREEN-001 and old TODO references, when imported and read by their original IDs, then they resolve through permanent aliases without rewriting commits, PR text, session logs, memories or documents.",
+          "id": "ac-LegacyIdsRemainValid",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given LAB TODO-7 and LEGION TODO-91 share normalized title Fix login, description and dependency set, when migration plan runs, then it emits a duplicate candidate with both IDs and evidence; until explicit review, neither is merged or deleted.",
+          "id": "ac-DifferentIdsSameTodoDetected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given human ID IMPL-UNITGREEN-001 is unreserved, when two nodes reserve it concurrently, then exactly one receives201 and the other409 human_id_reserved; retry by the winning requestId returns the same reservation.",
+          "id": "ac-SimultaneousHumanIdReservation",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given an offline-created provisional TODO requesting an unreserved human ID, when it reconnects and publishes, then409 human_id_unreserved retains the local record until reservation or reviewed alias resolution.",
+          "id": "ac-OfflineHumanIdPublicationDenied",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given LAB TODO-7 and LEGION TODO-91 are a duplicate candidate, when each plugin opens identity review, then both origin IDs, canonical/provisional IDs, similarity evidence and reservation outcome are visible; no alias or row changes before an authorized decision.",
+          "id": "ac-PluginIdentityDiagnostics",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Generated IDs use immutable two-character creator tags and durable branch-independent sequences with per-family grammar fixed in Ph0. Alias key=(ProjectId,OriginNodeId,EntityKind,LegacyId) maps permanently to CanonicalId; ambiguous unqualified lookup returns409 ambiguous_legacy_id. Historical text/commits are not rewritten. Migration duplicate candidates use normalized title/description/dependency features, returning similarity score plus evidence, never auto-merging. Human ID reservations are unique(ProjectId,EntityKind,HumanId) at the hub, bound to node/requestId. Offline nodes use generated provisional IDs; an unreserved human ID is not publishable.\n\nServer: provenance, scoped aliases, collision evidence and reservation outcomes. Plugin: expose provenance/collision diagnostics and the authorized resolution path without rewriting historical references.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-009",
+      "title": "collision-resistant and preserved identity contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given one fixture for commit R1, conflict R2 and migration R3, when each installed first-party plugin calls its wrapper, then normalized IDs, heads, error codes and audit agent identity match the typed client result.",
+          "id": "ac-EveryPluginUsesSameContract",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given server lacks federation contract1, when a plugin invokes commit, then unsupported_contract is shown and no raw SQL or shell fallback executes.",
+          "id": "ac-OldServerReportsUnsupportedCapability",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a cached leaseFence4 and session branch feature, when reconnect discovers fence5, then the plugin retains visible context but refuses writes with lease_lost until reacquired.",
+          "id": "ac-ReconnectRevalidatesContext",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a branch observation is older than24h, when status is displayed, then stale=true and observedUtc are visible; the branch, drafts and refs are not deleted.",
+          "id": "ac-StaleBranchReportedNotDeleted",
+          "isSatisfied": false
+        }
+      ],
+      "description": "All plugins call typed server/client/MCP/REPL contracts; no raw SQL/CLI fallback. Status DTO includes projectId, branch, localHead, publishedHead, observedUtc, dirty, ahead, behind, publicationState, incomingTarget, connectivity, reviewCount, oldestReviewAgeSeconds, waitingLocalWorkAgeSeconds, auditPendingCount, hubEpoch, workerEpoch. Capability contract version1 is negotiated; unknown version=409 unsupported_contract. Administrative maintenance.preflight/attest/status and migration commands share the same typed service as Nuke. Stable error envelope={code, message, requestId, projectId, branch, retryable, details}; status codes are locked in the technical contract appendix.\n\nTechnical contract appendix (TR-MCP-FEDERATION-010): all below routes are under /qbrainai/federation unless the commits route specifies the project/branch path. Every mutation requires requestId UUID and authenticated subject; node network requests additionally carry the project-scoped reference token. Responses carry contractVersion=1 and the stable error envelope. Path/body ProjectId mismatch is403 unauthorized_project. No endpoint accepts credentials in URL, argv or persisted receipts.\n\nRead/status routes: GET capabilities returns200 {contractVersion,capabilities}; GET projects/{projectId}/status returns200 the status DTO; GET projects/{projectId}/branches returns200 {items:[{name,head,dirty,publishedHead}]}; GET conflicts and GET conflicts/{reviewId} return200 review records filtered by membership. POST control/poll returns200 {hubEpoch,subscriptions}; reads never acknowledge work. POST control/report validates observed generation and worker epoch, returns200 the durable receipt or409 the named fence error. Poll/report use control scope; reads use read scope.\n\nMutation routes: POST enroll returns201 the enrollment (or200 the same idempotent enrollment); POST projects/{projectId}/branches creates201 {branch,head}; POST projects/{projectId}/branches/select returns200 {sessionId,branch,head} after local lease validation; POST projects/{projectId}/branches/{branch}/commits returns201 {commitHash,publicationState}, or200 the same commit on retry. POST publication/accept returns200 {requestId,hubEpoch,publishedHead,publishedGeneration,receiptId} only after the guarded ref update is durable. POST branches/merge and POST conflicts/{reviewId}/resolve bind expected heads and return201 the new commit; a conflict returns202 {outcome:needs_review,reviewId} while the live head stays unchanged. Share/merge/publication require publish scope plus branch permission. Enrollment requires enroll scope and the operator owner-binding approval.\n\nPOST audit/batches accepts {requestId,projectId,records:[AuditRecord]}, returns200 {receipts:[{originNodeId,recordId,payloadHash,outcome,receivedUtc}]}, and requires audit scope. Every record must match the token/project and batch ProjectId. Any invalid record rejects the whole batch before insert. Exact duplicate is already_received; payload mismatch is409 audit_id_conflict. POST ids/reservations accepts {requestId,projectId,entityKind,humanId,nodeId}, requires publish scope and returns201 the reservation or200 its exact retry; another owner gets409 human_id_reserved. POST maintenance/preflight and POST maintenance/attest, GET maintenance/status and POST migration/{plan|dry-run|run|resume|verify|export-project|export-todos|cutover|abort}, GET migration/status are operator-only local service operations. They are exposed through typed clients and Nuke, never public node-admin capabilities. A long migration returns202 {migrationId,status}; status/verify return200 a receipt, and a denied readiness check never performs cutover.\n\nStable failure mapping:401 invalid_token;403 unauthorized_project;409 head_changed, working_set_changed, lease_lost, branch_busy, stale_review, stale_worker_epoch, hub_epoch_changed, ambiguous_legacy_id, human_id_reserved, human_id_unreserved, target_not_empty, maintenance_not_ready, migration_source_changed, migration_verification_failed, incompatible_schema, unsupported_contract, publication_required, request_id_conflict, audit_id_conflict and waiting_local_work (the last also a 200 outcome in poll/report; see outcome fields);422 secret_detected, dependency_cycle and unsupported_provider;501 unsupported_capability;503 identity_unavailable or remote_unavailable. TLS rejection produces the local transport code tls_peer_untrusted with no HTTP response and no request sent. Missing required fields return400 invalid_request. Missing authorized resources return404 not_found; project authorization precedes existence disclosure. Malformed/unsupported token is401; valid token lacking project rights is403.\n\nOutcome fields are not HTTP errors: committed_locally, already_received, already_applied, waiting_local_work and needs_review remain visible through200 status/report responses (already_applied is the migration-journal idempotency outcome for a rerun completed batch, distinct from the audit-ledger already_received). A requested live mutation blocked by drafts returns409 waiting_local_work; an integration that durably creates review returns202 needs_review. dependency_cycle is a validationErrors entry on that review as well as422 for a directly invalid local mutation. retryable=true is restricted to transient503/transport failures; all stale-head/fence/review errors require reread and a fresh validated action. Idempotent retries with the same requestId but different payload return409 request_id_conflict. No automatic retry creates a different commit.\n\nTest fixtures capture actual content hashes as symbols C0,A1,B1,H1,M1,M2,S1 rather than hardcoding unstable engine hashes. Each symbol is immutable within the run manifest. Given/When/Then compares exact hash equality, specified parent sets, row values, status codes and error codes against that manifest; a successful result must never be inferred solely from an empty queue. Capture UTC timestamps and a fake clock for exact15-minute/24-hour age boundaries. All plan phase IDs use Ph0-Ph8; priority values remain separate.\n\nPlugin completeness is checked by PluginEnrollmentDiagnostics, PluginRecoveryControls, PluginIdentityDiagnostics, PluginLeastPrivilegeDenial, PluginEffectBoundary and PluginEditingOwnership in their mapped contracts. Ph7 owns their plugin bindings; earlier phases own server behavior. Standalone and explicit DirectProxy compatibility remain under FR-MCP-077/TR-MCP-FED-001; this does not reinstate versioned LocalProxy forwarding.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-010",
+      "title": "first-party plugin federation contract contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given credentials and local machine paths exist in operational storage, when a project is cloned, then none appears in its versioned tables or history.",
+          "id": "ac-CloneOmitsSecrets",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A performs an offline TODO edit and creates audit E1, when connectivity returns without a Dolt commit, then hub audit contains exactly E1, A retains E1, and main/remote remain C0.",
+          "id": "ac-AuditReachesHub",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given E1 was stored but its receipt was lost, when the same batch retries, then exactly one E1 exists and the same hash receipt returns; changed payload under E1 returns409 audit_id_conflict.",
+          "id": "ac-AuditRetryIdempotent",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given source has100 TODO audit and20 generic audit rows, when seed/join audit backfill verifies, then all120 records have matching payload hashes and hub receipts; missing one blocks cutover.",
+          "id": "ac-AuditBackfillVerified",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given an explicitly promoted sanitized session with turns, actions, dialog, commits/files, PlanFile and TodoId, when cloned, then every promoted child and relationship matches the source snapshot; automatic capture still uses the audit channel.",
+          "id": "ac-FullProjectSessionGraphPreserved",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given accepted head changes C0 to A1, when the derived index rebuild completes, then queries read A1 values and no C0 cache is served under the A1 key.",
+          "id": "ac-AcceptedHeadRebuildsBranchIndex",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given main=C0 is clean, when heartbeat, audit and automatic session capture run, then Dolt working-set fingerprint remains unchanged.",
+          "id": "ac-BackgroundWritersDoNotDirtyVersionedBranch",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given agent1 owns the editing lease, when agent2 logs a session action, then its local audit persists without acquiring or changing agent1's lease.",
+          "id": "ac-SecondAgentLoggingNeedsNoLease",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a promoted snapshot contains a fixture secret detected by the configured detector, when commit preview runs, then422 secret_detected creates no commit and outputs no secret value.",
+          "id": "ac-CommitPreviewBlocksSecret",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given unique fixture canaries are injected through protected secret references, when commands, retries and failures execute on both hosts, then scans of argv, receipts, logs, chat/audit payloads, memory stores, generated files, Git staged blobs/new commits and Dolt working sets/new history find zero canary values. Scanner diagnostics and rejected commit previews also contain zero values; no secret is added to history to test the detector.",
+          "id": "ac-ReceiptsAndLogsContainNoCredentials",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Project history excludes secrets and automatic operational audit. This does NOT make audit local-only: every host retains permanent local audit and an append-only outbox delivers sanitized records to the hub unversioned ledger independently of project commits. AuditRecord key=(OriginNodeId,RecordId UUID); fields ProjectId,EntityKind,EntityId,OriginSequence int64,OccurredUtc,Actor,Action,PayloadVersion,PayloadHash,Payload. POST audit/batches validates token/project, inserts atomically by key and returns per-record durable receipts. Same key/hash is already_received; same key/different hash=409 audit_id_conflict. No UPDATE/DELETE permission. Local pruning is forbidden. Migration backfills TODO and generic audit history with counts/hashes and receipts. Credential values are excluded at capture, not silently replicated.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-011",
+      "title": "portable data versus host-local state contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0.",
+          "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects.",
+          "id": "ac-ForeignProjectCloneDenied",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged.",
+          "id": "ac-RevokedNodeCannotPublish",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403.",
+          "id": "ac-OfflineLocalAuthorizationStillApplies",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs.",
+          "id": "ac-LocalAppUserCannotPush",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation.",
+          "id": "ac-RevokedCredentialFailsFetchAndPublish",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds.",
+          "id": "ac-SqlPortUnreachableAcrossLink",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission.",
+          "id": "ac-UnknownCertificatePinRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs.",
+          "id": "ac-PluginLeastPrivilegeDenial",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Reuse existing Duende IdentityServer. Provision client fed.node.{NodeId} per single-user node, bound to ownerSubjectId through authenticated operator enrollment. Client credentials issue short-lived reference access tokens; audience qbrain-federation and scopes fed.project.{ProjectId}.{read|publish|control|audit|enroll}; protected actions additionally require server membership/branch permission. Gateway introspects without positive caching for each new request and rechecks before publication commit; unavailable identity returns503 identity_unavailable. Revoke through IdentityServer: disable client and remove its persisted reference grants. Gateway rejects inactive tokens401 invalid_token; do not invent a revocation ledger. Native remotesapi uses gateway-held credentials over loopback; clients cannot access it directly. Ph0 proves token injection/relay including redirects/object URLs, project isolation and no public-ref bypass.\n\nServer: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization.\n\nPh0 B5 binds the exact restored Duende 7.4 patch and matching source-tag/API references, and proves issuance, introspection, grant removal and revocation against that binary. General/v8 documentation alone cannot close B5.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-012",
+      "title": "scoped authorization and offline behavior contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given keys sqlite,postgresql,sqlserver,dolt, when runtime and design-time factories resolve them, then each selects its own strategy/migration history; unknown key returns unsupported_provider.",
+          "id": "ac-FourProvidersResolve",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given empty standalone Dolt then baseline schema1, when baseline and additive schema2 apply, then CRUD succeeds, data remains intact and repeated apply makes no further changes.",
+          "id": "ac-DoltBaselineAndUpgrade",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given recorded hashes of the three original migration chains, when Dolt support is added, then those hashes match and all three real-provider upgrade fixtures pass.",
+          "id": "ac-OriginalProviderMigrationsUnchanged",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given application supports schema1, when opening schema2 for domain writes, then incompatible_schema is returned before mutation.",
+          "id": "ac-UnsupportedSchemaRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a versioned project at schema1, when application starts, then no EF migration executes and its Dolt head/schema remain unchanged.",
+          "id": "ac-VersionedProjectNotMigratedAtStartup",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given B1 is unpublished on schema1 and hub S1 adds schema2 from C0, when preflight/upgrade and merge succeed, then B/main=M1 with both B1 and S1 ancestors and B1 row values preserved.",
+          "id": "ac-OldSchemaUnpublishedCommitMergesAfterUpgrade",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given main accepts S1 but feature still uses schema1, when feature is selected for writes, then it remains closed until its own merge with S1 validates.",
+          "id": "ac-FeatureBranchSchemaCatchUp",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given any local branch has a draft, when Nuke preflight runs, then409 maintenance_not_ready prevents binary replacement and preserves the draft.",
+          "id": "ac-DirtyDraftBlocksBinaryUpgrade",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current.",
+          "id": "ac-ContractBlockedUntilLocalBranchesAttested",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a ready public main but an unattested local feature, when deployment runs, then no binary/service/schema change occurs; explicit branch attestation is required.",
+          "id": "ac-DeploymentPreflightBlocksDirtyOrUnattestedBranch",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given one Windows worker owns Atlas, when a second process starts or the owner crashes, then concurrent ownership is denied and restart recovers only after the OS releases its lock; committed rows and unpublished heads survive.",
+          "id": "ac-WindowsWriterLockAndRestart",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given isolated disposable Atlas stores on LAB and LEGION and FED-ATLAS-H/A/B fixtures, when Ph8 partitions/reconnects each control, publication/history, audit and identity path and restarts each application/worker, Dolt, gateway, identity and control/audit component at commit/publication/report boundaries, then every matrix row records exact heads/ancestor sets/rows/drafts/refs/epoch and audit receipts matching the workflow outcome, with zero missing provider/migration/recovery rows. Missing any component/path row fails acceptance; unrelated live projects retain their provider mappings and data.",
+          "id": "ac-RealHostAcceptanceMatrix",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Provider key dolt has a dedicated migration assembly; original provider migrations remain unchanged. Versioned project schema migrations are authored only by hub maintenance on maintenance/schema-N and distributed as history. MaintenanceReadiness binds epoch, binary/schema versions, all local branches including unpublished ones, heads, working-set hashes and attestations. Preflight must pass before Nuke swaps binaries; dirty/unattested branch=409 maintenance_not_ready. LAB uses pinned Linux image; LEGION uses checksum-pinned native Windows dolt.exe under a Windows host whose actual service identity, account, ACLs and child-process start/stop/crash cleanup must be evidenced in Ph0 B1/B9; no existing suitable service is assumed, local paths on F: and exclusive Windows file handle/named mutex ownership. All B1-B12 are evidenced on both OSs.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-013",
+      "title": "Dolt fourth-provider support and schema migration contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given the same fixture in SQLite,PostgreSQL,SQL Server, when seed migration runs, then counts, typed hashes, IDs, nulls, Unicode, decimals, UTC precision and FK relationships match in Dolt.",
+          "id": "ac-ThreeSourceProviderRoundTrip",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given target batch1 committed before a crash but its acknowledgement was lost, when resume runs, then batch1 is recognized by journal and no duplicate rows appear.",
+          "id": "ac-ResumeAfterBatchCommit",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given manifest source hash S0, when source is replaced by S1 before resume, then409 migration_source_changed writes no additional target rows.",
+          "id": "ac-ChangedSnapshotRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given one row hash differs, when cutover is requested, then409 migration_verification_failed leaves source routing active and writes closed on the target.",
+          "id": "ac-FailedVerifyCannotCutover",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given verified cutover completes, when target receives a new TODO, then source backup remains present, read-only and byte-identical; the new TODO exists only in Dolt until an explicit recovery export.",
+          "id": "ac-SourceRetainedAfterCutover",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given seed C0 is published and join imports J1, when join completes in Ph6, then C0 is an ancestor of J1 and reviewed main M1; no second root is created.",
+          "id": "ac-MigrationJoinPreservesCommonAncestor",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given seed T1.title=A and frozen join T1.title=B, when join planning runs, then an explicit keep/take/manual decision is required before J1 even if Dolt would fast-forward.",
+          "id": "ac-MigrationJoinDivergentRowRequiresReview",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given J1 is verified but main integration is unresolved, when cutover runs, then409 migration_verification_failed preserves source routing; only verified reviewed M1 permits cutover.",
+          "id": "ac-JoinCutoverRequiresReviewedMain",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A1 adds TODO T2 after cutover, when export-sqlite targets A1, then the new SQLite DB contains T2 and all TODO children/aliases with matching hashes, while the original source remains unchanged.",
+          "id": "ac-DoltTodoExportPreservesNewWrites",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given only Ph3 is implemented, when mode=join is requested, then501 unsupported_capability creates no target commit or routing change.",
+          "id": "ac-SeedPhaseRejectsJoin",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given Atlas has main=A1 with post-cutover TODO T1, requirement R1/mapping, use case U1/actor/flow/step, memory W1, portable setting K1 and promoted session S1/turn/action, plus unpublished feature=F1 and draft T2.title=draft, when export-project freezes both branches and verifies fresh SQLite snapshots plus operational backup, then all IDs/typed values/links/soft deletes match each captured working set, feature still resolves F1, T2 remains draft without a new Dolt commit, audit receipts reconcile, the retained Dolt archive contains A1/F1 ancestry and original SQLite bytes are unchanged. Omit W1 or feature in a negative control: migration_verification_failed prevents routing switch.",
+          "id": "ac-FullProjectRecoveryPreservesAllDomains",
+          "isSatisfied": false
+        }
+      ],
+      "description": "MigrationManifest binds MigrationId, mode, ProjectId, source provider/snapshot hash, schema versions, table counts, typed row hashes, alias decisions, audit backfill and immutable destination commit. Ph3 implements seed, dry-run/resume/verify and Dolt-to-new-SQLite project recovery; join is unavailable until Ph6 review/publication exist. Both lab sources are SQLite; PostgreSQL and SQL Server remain supported fixture sources. Retain originals read-only. Recovery quiesces the owner and captures every branch, including unpublished heads and dirty working sets, without creating history commits. Export one new compatible SQLite DB per branch containing ALL B2-classified versioned domains: TODO child/link/document graphs, requirements/mappings, use-case actors/flows/steps, workspace memories, portable configuration, promoted session graphs and permanent aliases. Preserve IDs, values, timestamps, versions, soft deletes and audit linkage. Manifest binds branch/head/working-set/schema/count/hash evidence; retain immutable Dolt objects/refs to preserve ancestry outside SQLite. export-todos remains a subset, never whole-project rollback acceptance. Missing domain/branch or failed validation blocks routing changes. Operator selects the verified active snapshot; others remain readable recovery artifacts. Capture host-local control/audit/outbox/IdentityServer backups at the same quiescence boundary and verify restore plus hub audit resend. Cutover requires verified receipts, explicit DEPLOY HOLD release and one-node soak before the second host.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-014",
+      "title": "original-provider-to-Dolt migration tool contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A1 records an already-sent GitHub update, when B integrates A1, then B state includes the result and outbound GitHub/email invocation count is0.",
+          "id": "ac-ImportDoesNotSendExternalAction",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given accepted commit A1 and effect E1, when sync retries10 times, then the effect ledger still has one E1 and no new external dispatch occurs.",
+          "id": "ac-RetryDoesNotRepeatEffect",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given audit backfill contains command names and receipt payloads, when the hub ingests them, then they are stored as evidence and no business command executes.",
+          "id": "ac-ImportedOperationalRowsRemainInert",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given QuadBrain coordinator is degraded but local authorization passes, when federation commit/control/audit operations execute, then none invokes the keyserver and valid local work succeeds.",
+          "id": "ac-FederationBypassesQuadBrainKeyserver",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given incoming A1 contains a TODO completed state and inert historical external-action metadata, when the plugin shows synchronization success, then it labels data received with zero external operations executed; requesting an external operation requires a separate explicit authorized command and its own receipt.",
+          "id": "ac-PluginEffectBoundary",
+          "isSatisfied": false
+        }
+      ],
+      "description": "History import and audit ingestion apply validated state, never dispatch original domain commands or external effects. EffectIdentity is stable across retries/import. Imported operational metadata is inert evidence, not an execution request. General federation apply/control is outside QuadBrain keyserver transaction gating per FR-MCP-173; actual QuadBrain operations retain their separate coordinator contract. Legacy HMAC envelopes remain isolated compatibility behavior.\n\nServer: synchronization applies data without executing external operations. Plugin: distinguish history/data synchronization from separately authorized external effects in preview, status and receipts.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-015",
+      "title": "imported state does not repeat external effects contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given agent1 owns a draft, when agent2 commits the same branch, then409 branch_busy creates no commit and the draft remains agent1-owned.",
+          "id": "ac-CommitCannotCaptureOtherAgentDraft",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given fence4 expires and fence5 is issued, when a fence4 edit arrives, then409 lease_lost persists no row changes.",
+          "id": "ac-ExpiredLeaseFenced",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given preview fingerprint W1, when the working set becomes W2, then commit with W1 returns409 working_set_changed and requires a fresh preview.",
+          "id": "ac-PreviewChangeRequiresReview",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a write admitted under fence4, when expiry occurs mid-transaction, then that write finishes under the gate before fence5 takeover; a later fence4 write is rejected.",
+          "id": "ac-LeaseLostDuringWriteRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given request R1 created A1 and reply was lost, when R1 retries after restart, then A1 is returned by its commit trailer and history contains no duplicate commit.",
+          "id": "ac-CommitRetryReturnsSameHash",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given an edit holds the branch gate, when the integration worker requests a live head move, then it waits; after the edit finishes, fingerprint revalidation detects the draft and returns waiting_local_work without overwriting it.",
+          "id": "ac-IncomingMergeCannotRaceAdmittedEdit",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given agent1 owns A/main fence4 with a draft, when agent2 views context and requests editing, then it sees the owner and branch, receives409 branch_busy, and may select a separate feature branch; owner release/takeover requires explicit authorization and preserves the main draft without commit or discard.",
+          "id": "ac-PluginEditingOwnership",
+          "isSatisfied": false
+        }
+      ],
+      "description": "BranchLease key=(ProjectId,Branch), OwnerSessionId, Fence int64, ExpiresUtc and WorkingSetFingerprint. Every live-branch mutation holds the same host-owner write gate across lease validation and transaction/commit. Expiry rejects new admission; an admitted write finishes before takeover. Isolated worker rights cover only non-live integration refs and it invokes owner API for live moves. Dirty takeover needs explicit review. Commit requestId persists in history for idempotency; preview binds exact head/fingerprint.\n\nServer: editing owner, request/release and fenced takeover contracts. Plugin: display editing owner, request/release context and offer another branch without capturing another agent draft.",
+      "kind": "tr",
+      "id": "TR-MCP-FEDERATION-016",
+      "title": "safe shared-host editing and commit ownership contract"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given federation apply/control operations and RequiredForMutations=true, when executed, then ITurnTransactionCoordinator invocation count is0; brain-slot.invoke remains gated.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "FR-MCP-173 supersedes the older requirement that all federation mutations invoke the coordinator. Keep HMAC legacy transport compatibility distinct from IdentityServer network authentication, versioned history and QuadBrain transaction signing. Do not change the live TurnTransactions flag to implement this separation.",
+      "kind": "tr",
+      "id": "TR-MCP-TXNCOMPAT-001",
+      "title": "Federation and QuadBrain trust separation"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given a local commit during outage, when reconnect runs, then history is exchanged without replaying the original command.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Test local read/write/restart during outage, version commit publication, project isolation and reviewed convergence using TEST-MCP-222..237. Retain explicit DirectProxy loop-protection and route tests. Replace LocalProxy hub-authority, queued-write and read-switch assertions for Dolt mode.",
+      "kind": "test",
+      "id": "TEST-MCP-136",
+      "title": "Autonomous federation and explicit legacy-mode tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A/main=C0 and the hub link is down, when A changes TODO T1.title from old to local, then the local API succeeds, a local reread returns local, and no hub request or history commit occurs.",
+          "id": "ac-NodeWorksWithHubUnavailable",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given H/main=C0 and the gateway is stopped, when H edits T1.title, then H persists it locally while remote/main remains C0.",
+          "id": "ac-HubUsesSameLocalExecution",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given the prior offline edit, when the application and Dolt restart, then T1.title remains local and main remains C0 until an explicit version commit.",
+          "id": "ac-OfflineLocalReadAfterWrite",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-174 and TR-MCP-FEDERATION-001 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-222",
+      "title": "autonomous local execution acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given main=C0 and remote=C0, when SaveChanges persists T1.title=draft, then main and remote stay C0 and no publication intent is emitted.",
+          "id": "ac-SaveDoesNotPublish",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given that draft and a valid preview, when commit request R1 succeeds, then main=A1, the reply says committed_locally, and one recoverable publication intent targets A1.",
+          "id": "ac-VersionCommitTriggersSync",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given B has a draft and desired head A1, when B polls, then outcome=waiting_local_work, B/main=C0 and the draft value is unchanged.",
+          "id": "ac-HubRequestDoesNotCommitDraft",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A1 committed while disconnected and a crash before intent persistence, when A restarts, then history scanning rediscovers A1 exactly once and publishes it after reconnect.",
+          "id": "ac-OfflineCommitDiscoveredAfterRestart",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-175 and TR-MCP-FEDERATION-002 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-223",
+      "title": "explicit version commits and publication boundary acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given LAB path /home/sharpninja/github/McpServer and LEGION path F:/github/McpServer, when both enroll as ProjectId Atlas, then both reference Atlas and retain their distinct local paths.",
+          "id": "ac-DifferentHostPathsSameProject",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given target has TODO X, when clone is requested, then409 target_not_empty leaves X and all target files unchanged.",
+          "id": "ac-CloneRefusesNonemptyTarget",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given node A has only Atlas membership, when it enrolls or clones SecretProject, then403 unauthorized_project returns no rows, objects or project existence details.",
+          "id": "ac-UnauthorizedProjectDenied",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given Atlas is discoverable but A has a nonempty destination, when each plugin selects Atlas and attempts enrollment/clone, then it displays ProjectId, selected branch and409 target_not_empty with remediation; no database is overwritten and no different project is selected.",
+          "id": "ac-PluginEnrollmentDiagnostics",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-176 and TR-MCP-FEDERATION-003 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-224",
+      "title": "logical project enrollment and initial clone acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given main T1.title=main and feature/search T1.title=feature, when alternating pooled reads run100 times, then each returns only its selected value.",
+          "id": "ac-PooledConnectionDoesNotLeakBranch",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given main=C0 and feature/search=F1, when F1 publishes, then remote feature=F1 and all main heads remain C0.",
+          "id": "ac-FeaturePublicationLeavesMainUnchanged",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a preview for main=C0 and feature=F1 but feature advances to F2, when merge submits the old preview, then409 head_changed creates no commit and changes no ref.",
+          "id": "ac-BranchMergeRequiresExpectedHeads",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-177 and TR-MCP-FEDERATION-004 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-225",
+      "title": "branches across server and plugin context acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given C0 contains T1.title=old,T1.description=old,T2.priority=low, when A1 changes title=A, B1 changes description=B and H1 changes T2.priority=high, then merges M1(A1,B1), M2(M1,H1) converge all heads to M2 with values A,B,high and all three commits in ancestry.",
+          "id": "ac-ThreeWriterCleanConvergence",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given H has an uncommitted title draft at C0, when A publishes A1, then remote=A1, H remains C0 with its draft, and B can accept A1.",
+          "id": "ac-HubDraftDoesNotBlockRemote",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A1 and B1 descend from C0, when both accept requests expect C0, then one succeeds and the other receives409 head_changed; after merge M1 publishes, both A1 and B1 remain ancestors.",
+          "id": "ac-ConcurrentPublishPreservesBothHistories",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-178 and TR-MCP-FEDERATION-005 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-226",
+      "title": "bidirectional committed-history exchange acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6.",
+          "id": "ac-PollReadDoesNotAcknowledge",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given desired becomes8 while report7 is in flight, when report7 arrives, then reported=7, desired=8 and the subscription remains pending.",
+          "id": "ac-AckOldGenerationPreservesNewRequest",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given remote=A1 but control still names C0 after a crash, when reconciliation runs, then it records A1 and advances desired generation without producing another commit.",
+          "id": "ac-MissedNotificationReconciles",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a node remembers epoch E1 generation90 and the hub restores a backup at generation40, when the hub reopens, then epoch E2 differs from E1; E1 reports fail409 hub_epoch_changed and no head is force-reset. Node A1 is retained until verified ancestry recovery republishes missing history.",
+          "id": "ac-HubRestoreFromOlderBackup",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-179 and TR-MCP-FEDERATION-006 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-227",
+      "title": "hub control table and polling acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten.",
+          "id": "ac-SameCellConflictNeedsReview",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A1 deletes T1 and B1 edits T1.title, when histories merge, then needs_review retains B1 and the deleted/edited alternatives for review.",
+          "id": "ac-DeleteUpdateNeedsReview",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given separate commits add T1 dependsOn T2 and T2 dependsOn T1, when Dolt merges without cell conflicts, then domain validation records dependency_cycle and leaves the prior valid live head unchanged.",
+          "id": "ac-CleanMergeCanFailDomainValidation",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a resolution preview binds local=B1 and incoming=A1, when incoming advances to A2, then resolve returns409 stale_review with no merge commit.",
+          "id": "ac-StaleReviewRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given unresolved needs_review at12:00, when the clock reaches12:15, then plugins/status and the operator inbox show warning with ReviewId and age900s; at24h severity is critical, with at most one repeat per hour.",
+          "id": "ac-ReviewAgeVisible",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given Atlas/main is blocked by review R1, when Atlas/feature publishes F2 and another project publishes X1, then both succeed while Atlas/main remains unchanged.",
+          "id": "ac-UnrelatedPublicationContinues",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A changes title and B changes description with no domain violation, when merge runs, then both values survive; competing priority or completion edits produce needs_review instead of choosing a timestamp winner.",
+          "id": "ac-SafeTodoMergeRules",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-180 and TR-MCP-FEDERATION-007 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-228",
+      "title": "reviewed conflicts and valid merges acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given remote accepted A1 and reply was lost, when request R1 retries, then it returns A1 and the existing receipt; no A2 commit is created.",
+          "id": "ac-LostPushAckDoesNotDuplicateCommit",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given worker epoch changes4 to5, when epoch4 reports success, then409 stale_worker_epoch leaves current receipt and desired state unchanged.",
+          "id": "ac-OldWorkerEpochCannotReportSuccess",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given B/main=C0 with title=draft, when A1 is fetched, then outcome=waiting_local_work, main stays C0 and title remains draft; at15min status/inbox shows the age warning.",
+          "id": "ac-DirtyBranchDefersApply",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given B supports schema1 and incoming S1 requires schema2, when sync runs, then409 incompatible_schema leaves B's live data/head unchanged and records the required version.",
+          "id": "ac-IncompatibleSchemaDoesNotApply",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given operation R1 published A1 but its local reply was lost, when a plugin resumes, reads status and requests cancellation, then it shows publishedHead=A1 and a durable cancellation outcome for remaining work; it never claims A1 was rolled back or creates a second commit.",
+          "id": "ac-PluginRecoveryControls",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-181 and TR-MCP-FEDERATION-008 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-229",
+      "title": "recovery without lost or repeated work acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given tags LA and LG and both counters start1, when both create a TODO, then generated IDs differ and both records survive reconciliation.",
+          "id": "ac-TwoNodesCreateDistinctIds",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given LA allocated sequence42, when main reverts and another branch creates a record, then its sequence is greater than42.",
+          "id": "ac-BranchRevertDoesNotReuseSequence",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given LAB and LEGION have different entities named TODO-7, when migration resolves the collision, then scoped aliases resolve each original identity and every relational reference follows its reviewed canonical mapping; historical text remains byte-identical.",
+          "id": "ac-LegacyCollisionPreservesReferences",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given existing IMPL-UNITGREEN-001 and old TODO references, when imported and read by their original IDs, then they resolve through permanent aliases without rewriting commits, PR text, session logs, memories or documents.",
+          "id": "ac-LegacyIdsRemainValid",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given LAB TODO-7 and LEGION TODO-91 share normalized title Fix login, description and dependency set, when migration plan runs, then it emits a duplicate candidate with both IDs and evidence; until explicit review, neither is merged or deleted.",
+          "id": "ac-DifferentIdsSameTodoDetected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given human ID IMPL-UNITGREEN-001 is unreserved, when two nodes reserve it concurrently, then exactly one receives201 and the other409 human_id_reserved; retry by the winning requestId returns the same reservation.",
+          "id": "ac-SimultaneousHumanIdReservation",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given an offline-created provisional TODO requesting an unreserved human ID, when it reconnects and publishes, then409 human_id_unreserved retains the local record until reservation or reviewed alias resolution.",
+          "id": "ac-OfflineHumanIdPublicationDenied",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given LAB TODO-7 and LEGION TODO-91 are a duplicate candidate, when each plugin opens identity review, then both origin IDs, canonical/provisional IDs, similarity evidence and reservation outcome are visible; no alias or row changes before an authorized decision.",
+          "id": "ac-PluginIdentityDiagnostics",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-182 and TR-MCP-FEDERATION-009 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-230",
+      "title": "collision-resistant and preserved identity acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given one fixture for commit R1, conflict R2 and migration R3, when each installed first-party plugin calls its wrapper, then normalized IDs, heads, error codes and audit agent identity match the typed client result.",
+          "id": "ac-EveryPluginUsesSameContract",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given server lacks federation contract1, when a plugin invokes commit, then unsupported_contract is shown and no raw SQL or shell fallback executes.",
+          "id": "ac-OldServerReportsUnsupportedCapability",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a cached leaseFence4 and session branch feature, when reconnect discovers fence5, then the plugin retains visible context but refuses writes with lease_lost until reacquired.",
+          "id": "ac-ReconnectRevalidatesContext",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a branch observation is older than24h, when status is displayed, then stale=true and observedUtc are visible; the branch, drafts and refs are not deleted.",
+          "id": "ac-StaleBranchReportedNotDeleted",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-183 and TR-MCP-FEDERATION-010 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-231",
+      "title": "first-party plugin federation contract acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given credentials and local machine paths exist in operational storage, when a project is cloned, then none appears in its versioned tables or history.",
+          "id": "ac-CloneOmitsSecrets",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A performs an offline TODO edit and creates audit E1, when connectivity returns without a Dolt commit, then hub audit contains exactly E1, A retains E1, and main/remote remain C0.",
+          "id": "ac-AuditReachesHub",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given E1 was stored but its receipt was lost, when the same batch retries, then exactly one E1 exists and the same hash receipt returns; changed payload under E1 returns409 audit_id_conflict.",
+          "id": "ac-AuditRetryIdempotent",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given source has100 TODO audit and20 generic audit rows, when seed/join audit backfill verifies, then all120 records have matching payload hashes and hub receipts; missing one blocks cutover.",
+          "id": "ac-AuditBackfillVerified",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given an explicitly promoted sanitized session with turns, actions, dialog, commits/files, PlanFile and TodoId, when cloned, then every promoted child and relationship matches the source snapshot; automatic capture still uses the audit channel.",
+          "id": "ac-FullProjectSessionGraphPreserved",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given accepted head changes C0 to A1, when the derived index rebuild completes, then queries read A1 values and no C0 cache is served under the A1 key.",
+          "id": "ac-AcceptedHeadRebuildsBranchIndex",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given main=C0 is clean, when heartbeat, audit and automatic session capture run, then Dolt working-set fingerprint remains unchanged.",
+          "id": "ac-BackgroundWritersDoNotDirtyVersionedBranch",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given agent1 owns the editing lease, when agent2 logs a session action, then its local audit persists without acquiring or changing agent1's lease.",
+          "id": "ac-SecondAgentLoggingNeedsNoLease",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a promoted snapshot contains a fixture secret detected by the configured detector, when commit preview runs, then422 secret_detected creates no commit and outputs no secret value.",
+          "id": "ac-CommitPreviewBlocksSecret",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given unique fixture canaries are injected through protected secret references, when commands, retries and failures execute on both hosts, then scans of argv, receipts, logs, chat/audit payloads, memory stores, generated files, Git staged blobs/new commits and Dolt working sets/new history find zero canary values. Scanner diagnostics and rejected commit previews also contain zero values; no secret is added to history to test the detector.",
+          "id": "ac-ReceiptsAndLogsContainNoCredentials",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-184 and TR-MCP-FEDERATION-011 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-232",
+      "title": "portable data versus host-local state acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0.",
+          "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects.",
+          "id": "ac-ForeignProjectCloneDenied",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged.",
+          "id": "ac-RevokedNodeCannotPublish",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403.",
+          "id": "ac-OfflineLocalAuthorizationStillApplies",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs.",
+          "id": "ac-LocalAppUserCannotPush",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation.",
+          "id": "ac-RevokedCredentialFailsFetchAndPublish",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds.",
+          "id": "ac-SqlPortUnreachableAcrossLink",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission.",
+          "id": "ac-UnknownCertificatePinRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs.",
+          "id": "ac-PluginLeastPrivilegeDenial",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-185 and TR-MCP-FEDERATION-012 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-233",
+      "title": "scoped authorization and offline behavior acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given keys sqlite,postgresql,sqlserver,dolt, when runtime and design-time factories resolve them, then each selects its own strategy/migration history; unknown key returns unsupported_provider.",
+          "id": "ac-FourProvidersResolve",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given empty standalone Dolt then baseline schema1, when baseline and additive schema2 apply, then CRUD succeeds, data remains intact and repeated apply makes no further changes.",
+          "id": "ac-DoltBaselineAndUpgrade",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given recorded hashes of the three original migration chains, when Dolt support is added, then those hashes match and all three real-provider upgrade fixtures pass.",
+          "id": "ac-OriginalProviderMigrationsUnchanged",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given application supports schema1, when opening schema2 for domain writes, then incompatible_schema is returned before mutation.",
+          "id": "ac-UnsupportedSchemaRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a versioned project at schema1, when application starts, then no EF migration executes and its Dolt head/schema remain unchanged.",
+          "id": "ac-VersionedProjectNotMigratedAtStartup",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given B1 is unpublished on schema1 and hub S1 adds schema2 from C0, when preflight/upgrade and merge succeed, then B/main=M1 with both B1 and S1 ancestors and B1 row values preserved.",
+          "id": "ac-OldSchemaUnpublishedCommitMergesAfterUpgrade",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given main accepts S1 but feature still uses schema1, when feature is selected for writes, then it remains closed until its own merge with S1 validates.",
+          "id": "ac-FeatureBranchSchemaCatchUp",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given any local branch has a draft, when Nuke preflight runs, then409 maintenance_not_ready prevents binary replacement and preserves the draft.",
+          "id": "ac-DirtyDraftBlocksBinaryUpgrade",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current.",
+          "id": "ac-ContractBlockedUntilLocalBranchesAttested",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a ready public main but an unattested local feature, when deployment runs, then no binary/service/schema change occurs; explicit branch attestation is required.",
+          "id": "ac-DeploymentPreflightBlocksDirtyOrUnattestedBranch",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given one Windows worker owns Atlas, when a second process starts or the owner crashes, then concurrent ownership is denied and restart recovers only after the OS releases its lock; committed rows and unpublished heads survive.",
+          "id": "ac-WindowsWriterLockAndRestart",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given isolated disposable Atlas stores on LAB and LEGION and FED-ATLAS-H/A/B fixtures, when Ph8 partitions/reconnects each control, publication/history, audit and identity path and restarts each application/worker, Dolt, gateway, identity and control/audit component at commit/publication/report boundaries, then every matrix row records exact heads/ancestor sets/rows/drafts/refs/epoch and audit receipts matching the workflow outcome, with zero missing provider/migration/recovery rows. Missing any component/path row fails acceptance; unrelated live projects retain their provider mappings and data.",
+          "id": "ac-RealHostAcceptanceMatrix",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-186 and TR-MCP-FEDERATION-013 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-234",
+      "title": "Dolt fourth-provider support and schema migration acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given the same fixture in SQLite,PostgreSQL,SQL Server, when seed migration runs, then counts, typed hashes, IDs, nulls, Unicode, decimals, UTC precision and FK relationships match in Dolt.",
+          "id": "ac-ThreeSourceProviderRoundTrip",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given target batch1 committed before a crash but its acknowledgement was lost, when resume runs, then batch1 is recognized by journal and no duplicate rows appear.",
+          "id": "ac-ResumeAfterBatchCommit",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given manifest source hash S0, when source is replaced by S1 before resume, then409 migration_source_changed writes no additional target rows.",
+          "id": "ac-ChangedSnapshotRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given one row hash differs, when cutover is requested, then409 migration_verification_failed leaves source routing active and writes closed on the target.",
+          "id": "ac-FailedVerifyCannotCutover",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given verified cutover completes, when target receives a new TODO, then source backup remains present, read-only and byte-identical; the new TODO exists only in Dolt until an explicit recovery export.",
+          "id": "ac-SourceRetainedAfterCutover",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given seed C0 is published and join imports J1, when join completes in Ph6, then C0 is an ancestor of J1 and reviewed main M1; no second root is created.",
+          "id": "ac-MigrationJoinPreservesCommonAncestor",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given seed T1.title=A and frozen join T1.title=B, when join planning runs, then an explicit keep/take/manual decision is required before J1 even if Dolt would fast-forward.",
+          "id": "ac-MigrationJoinDivergentRowRequiresReview",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given J1 is verified but main integration is unresolved, when cutover runs, then409 migration_verification_failed preserves source routing; only verified reviewed M1 permits cutover.",
+          "id": "ac-JoinCutoverRequiresReviewedMain",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given A1 adds TODO T2 after cutover, when export-sqlite targets A1, then the new SQLite DB contains T2 and all TODO children/aliases with matching hashes, while the original source remains unchanged.",
+          "id": "ac-DoltTodoExportPreservesNewWrites",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given only Ph3 is implemented, when mode=join is requested, then501 unsupported_capability creates no target commit or routing change.",
+          "id": "ac-SeedPhaseRejectsJoin",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given Atlas has main=A1 with post-cutover TODO T1, requirement R1/mapping, use case U1/actor/flow/step, memory W1, portable setting K1 and promoted session S1/turn/action, plus unpublished feature=F1 and draft T2.title=draft, when export-project freezes both branches and verifies fresh SQLite snapshots plus operational backup, then all IDs/typed values/links/soft deletes match each captured working set, feature still resolves F1, T2 remains draft without a new Dolt commit, audit receipts reconcile, the retained Dolt archive contains A1/F1 ancestry and original SQLite bytes are unchanged. Omit W1 or feature in a negative control: migration_verification_failed prevents routing switch.",
+          "id": "ac-FullProjectRecoveryPreservesAllDomains",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-187 and TR-MCP-FEDERATION-014 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-235",
+      "title": "original-provider-to-Dolt migration tool acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A1 records an already-sent GitHub update, when B integrates A1, then B state includes the result and outbound GitHub/email invocation count is0.",
+          "id": "ac-ImportDoesNotSendExternalAction",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given accepted commit A1 and effect E1, when sync retries10 times, then the effect ledger still has one E1 and no new external dispatch occurs.",
+          "id": "ac-RetryDoesNotRepeatEffect",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given audit backfill contains command names and receipt payloads, when the hub ingests them, then they are stored as evidence and no business command executes.",
+          "id": "ac-ImportedOperationalRowsRemainInert",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given QuadBrain coordinator is degraded but local authorization passes, when federation commit/control/audit operations execute, then none invokes the keyserver and valid local work succeeds.",
+          "id": "ac-FederationBypassesQuadBrainKeyserver",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given incoming A1 contains a TODO completed state and inert historical external-action metadata, when the plugin shows synchronization success, then it labels data received with zero external operations executed; requesting an external operation requires a separate explicit authorized command and its own receipt.",
+          "id": "ac-PluginEffectBoundary",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-188 and TR-MCP-FEDERATION-015 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-236",
+      "title": "imported state does not repeat external effects acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given agent1 owns a draft, when agent2 commits the same branch, then409 branch_busy creates no commit and the draft remains agent1-owned.",
+          "id": "ac-CommitCannotCaptureOtherAgentDraft",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given fence4 expires and fence5 is issued, when a fence4 edit arrives, then409 lease_lost persists no row changes.",
+          "id": "ac-ExpiredLeaseFenced",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given preview fingerprint W1, when the working set becomes W2, then commit with W1 returns409 working_set_changed and requires a fresh preview.",
+          "id": "ac-PreviewChangeRequiresReview",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given a write admitted under fence4, when expiry occurs mid-transaction, then that write finishes under the gate before fence5 takeover; a later fence4 write is rejected.",
+          "id": "ac-LeaseLostDuringWriteRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given request R1 created A1 and reply was lost, when R1 retries after restart, then A1 is returned by its commit trailer and history contains no duplicate commit.",
+          "id": "ac-CommitRetryReturnsSameHash",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given an edit holds the branch gate, when the integration worker requests a live head move, then it waits; after the edit finishes, fingerprint revalidation detects the draft and returns waiting_local_work without overwriting it.",
+          "id": "ac-IncomingMergeCannotRaceAdmittedEdit",
+          "isSatisfied": false
+        },
+        {
+          "text": "Given agent1 owns A/main fence4 with a draft, when agent2 views context and requests editing, then it sees the owner and branch, receives409 branch_busy, and may select a separate feature branch; owner release/takeover requires explicit authorization and preserves the main draft without commit or discard.",
+          "id": "ac-PluginEditingOwnership",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify FR-MCP-189 and TR-MCP-FEDERATION-016 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "kind": "test",
+      "id": "TEST-MCP-237",
+      "title": "safe shared-host editing and commit ownership acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given source has100 TODO audit and20 generic audit records, when backfill verifies, then all120 matching hashes and receipts exist at the hub; missing one blocks cutover.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "AuditReachesHub, AuditRetryIdempotent and AuditBackfillVerified exercise permanent node and hub ledgers. CloneOmitsSecrets verifies project history exclusions; wiki export remains free of operational audit. Preserve exact compression and runtime-role tests in TEST-MCP-AUDIT-001/002.",
+      "kind": "test",
+      "id": "TEST-MCP-AUDIT-003",
+      "title": "Audit delivery, secret exclusion and backfill verification"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given100 source TODO rows and120 audit records, when migration repeats after acknowledgement loss, then destination counts remain100/120, original timestamps/IDs resolve and external dispatch count is0.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Cover all explicitly classified domains, idempotent batch resume, no business-command fanout, typed hash parity, full session graph, identity aliases and audit receipts. Remove legacy local-read/hub-write and read-switch assertions in Dolt mode.",
+      "kind": "test",
+      "id": "TEST-MCP-FED-BACKFILL-001",
+      "title": "Complete seed/join/audit backfill tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given A Atlas and B SecretProject, when A supplies B path or hash, then403 unauthorized_project sends no B rows and performs no mutation.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Test missing/foreign project denial, different-host paths mapping to one logical project, token-to-project authorization and legacy fail-closed path/hash routing. Current ordinary TODO traffic is local, not forwarded.",
+      "kind": "test",
+      "id": "TEST-MCP-FED-ROUTE-001",
+      "title": "Project isolation and legacy routing tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given H layer release and A layer draft, when A heartbeats, then H remains release and drift=true; only a separately authorized policy commit changes it.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Test explicit committed portable configuration, host-value exclusion, hub-owned scope-layer drift and old legacy payload compatibility. Replace blanket equality of every host field and heartbeat-driven versioned mutation.",
+      "kind": "test",
+      "id": "TEST-MCP-FED-WSSYNC-001",
+      "title": "Portable configuration and drift tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given different same-base edits to M1.text, when sync merges, then needs_review returns base/local/incoming values and retains the valid local head.",
+          "id": "review20261110-1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Test scoped memory/version round trip, local offline CRUD, explicit-commit boundary, delete/update review and global-memory exclusion; retain legacy mode tests under explicit configuration.",
+      "kind": "test",
+      "id": "TEST-MCP-MEMORY-FED-001",
+      "title": "Versioned memory acceptance tests"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Given explicit legacy DirectProxy mode, global default routing and per-workspace overrides select the configured remote MCP instance; versioned project work remains under FR-MCP-103.",
+          "id": "ac-catalog-LegacyOptInRouting",
+          "isSatisfied": false
+        },
+        {
+          "text": "Forwarded legacy requests carry X-Mcp-Federation-Hop and enforce the configured maximum hop count.",
+          "id": "ac-catalog-LegacyLoopProtection",
+          "isSatisfied": false
+        },
+        {
+          "text": "Legacy /mcp-transport forwarding preserves SSE/streaming; /qbrainai/federation manages runtime routing, and running tunnel providers supply discoverable targets.",
+          "id": "ac-catalog-LegacyStreamingAndManagement",
+          "isSatisfied": false
+        }
+      ],
+      "description": "The server shall support an opt-in federation mode that proxies incoming requests to a configured remote MCP server instance. Routing shall support a global default target and per-workspace overrides. The feature shall include anti-loop protection (via `X-Mcp-Federation-Hop` header with a configurable maximum hop count), transparent SSE/streaming forwarding for `/mcp-transport`, a runtime management REST API at `/qbrainai/federation`, and auto-discovery of federation targets from running tunnel providers.\n\n\n**Technical Implementation:** `FederationOptions`, `FederationRegistry`, `FederationProxyService`, `FederationMiddleware`, `FederationController`\n\n**Configuration:** `Mcp:Federation:Enabled`, `Mcp:Federation:Targets`, `Mcp:Federation:DefaultTarget`, `Mcp:Federation:WorkspaceRoutes`, `Mcp:Federation:MaxHops`",
+      "kind": "fr",
+      "id": "FR-MCP-077",
+      "title": "Server Federation and Request Proxying"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "With TurnTransactions.Enabled=true and RequiredForMutations=true, general-agent mutations (todo.update, requirements.fr.update, sessionlog.submit for GrokCode and QBAgent, memory.add, repo.write, github.cli) do not invoke ITurnTransactionCoordinator.ExecuteAsync and still succeed.",
+          "id": "ac-fr173-001",
+          "isSatisfied": false
+        },
+        {
+          "text": "brain-slot.invoke and brain-slot.weight-update still invoke the coordinator and may call SignManifestAsync.",
+          "id": "ac-fr173-002",
+          "isSatisfied": false
+        },
+        {
+          "text": "Coordinator degraded state does not block general-agent first-party mutations.",
+          "id": "ac-fr173-003",
+          "isSatisfied": false
+        },
+        {
+          "text": "Live TurnTransactions.Enabled remains true for QuadBrain; the repo default may stay false.",
+          "id": "ac-fr173-004",
+          "isSatisfied": false
+        },
+        {
+          "text": "Focused TransactionGated* tests plus TurnTransactionCoordinatorTests, TurnTransactionKeyserverScopeTests, and BrainSlotInvocationTransactionTests complete with zero failures and zero skips.",
+          "id": "ac-fr173-005",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Keyserver manifest signing SHALL be used only for QuadBrain transactions: publisher party id prefix brain-slot:, or operation name prefix brain-slot. or quadbrain. All other first-party mutations (TODO, requirements, session-log for every source type including QBAgent, memory, repo, prompt templates, tool registry, GitHub, GraphRAG, voice, agent pool, issue-todo-sync, tool buckets, REPL TODO workflow, requirements ingest, context rebuild, and federation apply/control) SHALL persist without calling ITurnTransactionCoordinator or the keyserver even when Mcp:TurnTransactions:Enabled=true and RequiredForMutations=true. Do not disable the live TurnTransactions flag as the fix. QuadBrain brain-slot.invoke and brain-slot.weight-update remain coordinator-gated and may call keyserver.\n\nThe canonical structured criterion identities are ac-fr173-001 through ac-fr173-005 below.",
+      "kind": "fr",
+      "id": "FR-MCP-173",
+      "title": "Keyserver signs QuadBrain transactions only"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output.",
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-001",
+          "isSatisfied": false
+        },
+        {
+          "text": "When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive).",
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-002",
+          "isSatisfied": false
+        },
+        {
+          "text": "The first ordinary persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId and insert no turn row. A canceled or cancelled supersession may omit the pair, stores the exact sentinel None for each missing value, and a durable reopen preserves that bounded exception.",
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-003",
+          "isSatisfied": false
+        },
+        {
+          "text": "planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected.",
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-004",
+          "isSatisfied": false
+        },
+        {
+          "text": "Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields.",
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-005",
+          "isSatisfied": false
+        },
+        {
+          "text": "Existing rows SHALL be backfilled from turn contents and agent history under ~. Uncertain results stay None. Invented ids/paths are forbidden.",
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-006",
+          "isSatisfied": false
+        },
+        {
+          "text": "Import, transcript ingest, and federation apply SHALL persist a validated planFile and todoId (None if extraction finds nothing). Null is never stored.",
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-007",
+          "isSatisfied": false
+        },
+        {
+          "text": "The agent-history scan under ~ (.grok, .claude, .codex, .cursor) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder), and that covers each history root itself: a history root that is a link contributes no file, the same as a link inside it, while a home folder that is itself a link is still scanned; the scan never fails a submit or an import; when nothing usable is found the turn keeps None (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\"; operator 2026-10-21: \"Fix both, strengthen ACs\", hostile validation round 5 finding R5-F1; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8). Moved from AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\"); its real file-system binding is AC-TR-MCP-SESSIONLOG-006-010.",
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-008",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output. When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive). The first ordinary persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId; canceled/cancelled supersession preserves the bounded None-sentinel exception in AC-FR-MCP-SESSIONLOGCTX-001-003. planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected. Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields. Existing rows SHALL be backfilled from turn contents and agent history under ~. Import, transcript ingest, and federation apply SHALL persist a validated pair (None if extraction finds nothing). Children: AC-FR-MCP-SESSIONLOGCTX-001-001, AC-FR-MCP-SESSIONLOGCTX-001-002, AC-FR-MCP-SESSIONLOGCTX-001-003, AC-FR-MCP-SESSIONLOGCTX-001-004, AC-FR-MCP-SESSIONLOGCTX-001-005, AC-FR-MCP-SESSIONLOGCTX-001-006, AC-FR-MCP-SESSIONLOGCTX-001-007.",
+      "kind": "fr",
+      "id": "FR-MCP-SESSIONLOGCTX-001",
+      "title": "Session turns record current plan file and MCP TODO id"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Query and single-session GET responses redact secrets from session metadata, turns, actions, processing dialog, contexts, files, blockers, requirements, commits, raw context, and original entry payloads.",
+          "id": "ac-1",
+          "isSatisfied": false
+        },
+        {
+          "text": "Stored entities and submitted DTOs remain unchanged; sanitization is an outbound projection only.",
+          "id": "ac-2",
+          "isSatisfied": false
+        },
+        {
+          "text": "Default credential detectors are active without custom configuration and custom workspace rules may add bounded regex matches.",
+          "id": "ac-3",
+          "isSatisfied": false
+        },
+        {
+          "text": "Filtering, total count, ordering, offset, and limit are computed from raw data and remain unchanged after redaction.",
+          "id": "ac-4",
+          "isSatisfied": false
+        },
+        {
+          "text": "Federated and stdio read surfaces apply the same sanitization behavior.",
+          "id": "ac-5",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Session-log query and single-session read responses must redact built-in credential forms and workspace-configured regular-expression matches before data leaves the server while preserving the raw persisted session log.",
+      "kind": "fr",
+      "id": "FR-MCP-SESSIONLOGSAN-001",
+      "title": "Sanitized session-log read responses"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "AuditPayloadMigrationTests and AuditPayloadProviderMigrationTests apply actual migrations in scratch SQLite, PostgreSQL and SQL Server databases; each verifies legacy text reads, all four compressed-payload round trips, and the applied migration ID.",
+          "id": "ac-catalog-ProviderMigrationRoundTrips",
+          "isSatisfied": false
+        }
+      ],
+      "description": "AuditPayloadMigrationTests and AuditPayloadProviderMigrationTests apply the real SQLite, PostgreSQL, and SQL Server migrations in scratch databases, verify legacy text reads and all four compressed payload round trips, and confirm the new migration ID is applied.",
+      "kind": "test",
+      "id": "TEST-MCP-AUDIT-001",
+      "title": "Audit payload migration across three providers"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "DbFkBehaviorTests reject tracked audit updates.",
+          "id": "ac-catalog-AuditUpdateRejected",
+          "isSatisfied": false
+        },
+        {
+          "text": "SqlServerAuditPayloadMigrationTests verify the seven runtime-role DENY permissions.",
+          "id": "ac-catalog-SevenSqlServerDenials",
+          "isSatisfied": false
+        },
+        {
+          "text": "AuditPayloadMigrationTests prove AutoMigrate=false rejects pending schema and accepts migrated schema.",
+          "id": "ac-catalog-MigrationGuardBehavior",
+          "isSatisfied": false
+        }
+      ],
+      "description": "DbFkBehaviorTests reject tracked audit updates. SqlServerAuditPayloadMigrationTests assert seven SQL Server runtime-role DENY permissions. AuditPayloadMigrationTests verify AutoMigrate false rejects pending schema and accepts migrated schema.",
+      "kind": "test",
+      "id": "TEST-MCP-AUDIT-002",
+      "title": "Audit append-only runtime and migration guard"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "The root-relative Combine cases of TR-MCP-FED-PATH-001 AC1 run in the normalizer contract base against the scripted MockData fixture and the production normalizer on both simulated hosts, with negative controls that reject an appended segment, a dropped drive, and a dropped UNC share.",
+          "id": "AC1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Unit matrix {host: Windows, simulated Linux} x {input: C:\\x, C:/x, \\\\srv\\sh\\x, //srv/sh/x, /home/x, relative, mixed separators} for IWorkspacePathNormalizer: foreign-platform inputs are never prefixed with the process cwd and keep their platform. TriageService on simulated Linux: submit with C:\\Users\\kingd stores OriginalWorkspacePath C:/Users/kingd (no /opt/... prefix), getReport and queryGroups by the original path succeed. WorkspaceService.Init on simulated Linux with a Windows path does not create directories. Architecture test: no direct Path.GetFullPath on request-supplied workspace paths under src/ outside the allowlist. Mocks first: host-platform and file-system abstractions mocked.",
+      "kind": "test",
+      "id": "TEST-MCP-FED-PATH-001",
+      "title": "Cross-platform workspace path normalizer matrix"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "The native-boundary (ToNativePath) behavior for a non-Windows host is proven against a simulated host, on Windows as well, without a host-conditional skip; the Windows-host cases keep running on a Windows host.",
+          "id": "unitgreen-native-host",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Per BDP v4 (MockData fixture green before production code, then Real fixture). Storage-key equivalence: C:\\Users\\example, C:/Users/example, c:/users/EXAMPLE -> one key windows:C:/USERS/EXAMPLE; \\\\srv\\share\\x and //srv/share/x -> one key keeping leading //; \\\\?\\C:\\x -> C:/x. Remote-path detection treats //srv/share as remote. ToNativePath returns backslash paths on Windows. Rekey: value mapping f(x) touches only Windows-shaped values and is idempotent; planner builds the mapping and statement plan from a scripted snapshot; executors per provider (SQLite in-memory; SQL Server and PostgreSQL provider fixtures) rewrite all workspace columns and recompute hashed values with FK validation; report counts unchanged per table and per workspace; startup guard rejects an unconverted store; rehearsal on a restored copy of the Windows lab host's store recorded as receipts. GlobalWorkspaceId for (EXAMPLE-HOST, C:/Repos/Example) is stable across both input separators.",
+      "kind": "test",
+      "id": "TEST-MCP-PATHNORM-001",
+      "title": "Workspace path storage, rekey and native-boundary validation"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "TR-MCP-FED-SESSIONLOG-001 AC-001: full-graph equality; negative control: the pre-change 8-field turn payload fails the comparison.",
+          "id": "AC-001",
+          "isSatisfied": false
+        },
+        {
+          "text": "TR-MCP-FED-SESSIONLOG-001 AC-002: apply round trip to an empty store.",
+          "id": "AC-002",
+          "isSatisfied": false
+        },
+        {
+          "text": "TR-MCP-FED-SESSIONLOG-001 AC-003: sanitizer parity; negative control: an unsanitized payload fails.",
+          "id": "AC-003",
+          "isSatisfied": false
+        },
+        {
+          "text": "TR-MCP-FED-SESSIONLOG-001 AC-004: no federation data call while snapshotting (a federation data client double records zero calls).",
+          "id": "AC-004",
+          "isSatisfied": false
+        },
+        {
+          "text": "TR-MCP-FED-SESSIONLOG-001 AC-005: missing and soft-deleted sessions, and explicit version unchanged.",
+          "id": "AC-005",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Unit tests (SessionLogFederationStateAdapter with a SQLite store and the local session-log service) SHALL prove TR-MCP-FED-SESSIONLOG-001: full-graph equality with the local read, apply round trip, sanitizer parity, local-only snapshot, and unchanged missing-session and version behavior, each with a negative control that a partial or unsanitized payload fails.",
+      "kind": "test",
+      "id": "TEST-MCP-SESSIONLOG-FED-001",
+      "title": "Session-log federation snapshot carries the full session graph"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Unit tests cover every default detector, overlapping rules, deterministic replacements, recursive object payloads, invalid patterns, duplicate IDs, timeouts, and non-mutation.",
+          "id": "ac-1",
+          "isSatisfied": false
+        },
+        {
+          "text": "Service tests cover QueryAsync and GetAsync for every DTO field and preserve total count, ordering, offset, and limit.",
+          "id": "ac-2",
+          "isSatisfied": false
+        },
+        {
+          "text": "HTTP, stdio, and federated integration tests return redacted payloads while direct database verification retains raw values.",
+          "id": "ac-3",
+          "isSatisfied": false
+        },
+        {
+          "text": "Executed current-plus-prior test scope reports zero failures and zero skips.",
+          "id": "ac-4",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Tests must prove default and configured redaction across the complete session-log DTO graph and all supported read transports without changing persisted raw data or query semantics.",
+      "kind": "test",
+      "id": "TEST-MCP-SESSIONLOGSAN-001",
+      "title": "Session-log sanitization unit and transport validation"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "The single-string and whole-session tests inject RegexMatchTimeoutException for the pathological field, assert the timeout redaction token without logging the input, and prove other fields continue to be sanitized.",
+          "id": "ac-catalog-DeterministicTimeoutBinding",
+          "isSatisfied": false
+        },
+        {
+          "text": "Repeated isolated runs are stable without wall-clock timing, and the production default remains Regex.Replace.",
+          "id": "ac-catalog-StableDefaultInvoker",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Verify TR-MCP-SESSIONLOGSAN-002 using the injected RegexReplaceInvoker to raise RegexMatchTimeoutException deterministically for the pathological large field, without wall-clock timing. The single-string case must return the rule timeout token without logging input; the whole-session case must continue sanitizing other fields. Repeated isolated runs must be stable, and production must retain the default Regex.Replace invoker.",
+      "kind": "test",
+      "id": "TEST-MCP-SESSIONLOGSAN-002",
+      "title": "Deterministic sanitizer timeout contract validation"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "SQLite, PostgreSQL and SQL Server migrations add nullable versioned GZip UTF-8 storage for all four generic audit JSON payloads.",
+          "id": "ac-catalog-CompressedPayloadSchema",
+          "isSatisfied": false
+        },
+        {
+          "text": "Existing text columns remain readable, and migration does not rewrite historical text rows.",
+          "id": "ac-catalog-LegacyAuditReadPreserved",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Add nullable versioned GZip UTF-8 columns for the four generic audit JSON payloads on SQLite, SQL Server, and PostgreSQL. Preserve existing text columns and read legacy rows without a historical rewrite.\n**Covered by:** FR: FR-MCP-AUDIT-001; TEST: TEST-MCP-AUDIT-001, TEST-MCP-AUDIT-002, TEST-MCP-AUDIT-003",
+      "kind": "tr",
+      "id": "TR-MCP-AUDIT-002",
+      "title": "Versioned compressed generic audit payloads"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "The SQL Server migration creates a runtime role with ordinary application DML and denies UPDATE and DELETE on both audit ledgers and writes to EF migration history.",
+          "id": "ac-catalog-AuditRolePermissions",
+          "isSatisfied": false
+        },
+        {
+          "text": "With AutoMigrate=false, HTTP and stdio startup reject pending migrations before serving runtime work.",
+          "id": "ac-catalog-PendingMigrationStartupGuard",
+          "isSatisfied": false
+        }
+      ],
+      "description": "The SQL Server migration creates a runtime role with ordinary application DML but denies update and delete on both audit ledgers and writes to EF migration history. With AutoMigrate false, HTTP and stdio startup reject pending migrations before serving runtime work.\n**Covered by:** FR: FR-MCP-AUDIT-001; TEST: TEST-MCP-AUDIT-001, TEST-MCP-AUDIT-002, TEST-MCP-AUDIT-003",
+      "kind": "tr",
+      "id": "TR-MCP-AUDIT-003",
+      "title": "Restricted SQL Server audit runtime role"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "IWorkspacePathNormalizer.Combine treats a segment with one leading backslash as root-relative on Windows: it keeps the current root's volume, the drive (C:/) or the UNC server and share (//srv/share/), and replaces the rest of the path, on a Linux hub and a Windows host (PR 81 finding P12, PR 82 review).",
+          "id": "AC1",
+          "isSatisfied": false
+        }
+      ],
+      "description": "Introduce one request-path normalization entry point (IWorkspacePathNormalizer backed by WorkspaceIdentityPath) with an injectable host-platform abstraction so tests can simulate a Linux host on Windows. Every resolver that receives a request-supplied workspace path uses it: TriageService.ResolveSubmittingWorkspace/ResolveEffectiveWorkspaceAsync and query methods, WorkspaceService.NormalizePath (GetAsync/Create/Init), WorkspaceResolutionMiddleware.PopulateContext, HandoffWorkspacePaths, QBrainAiMcpTools.ApplyWorkspaceOverride, WorkspaceServiceAccessor, HandoffIngestionService, WorkspaceTokenService.Normalize, TodoServiceResolver, TodoServiceFactory, EfTodoService, RequirementsDatabaseDocumentService.CreateScope/TryGetRequestWorkspacePath, HostileReviewService, TodoExecutionService, FileGitHubWorkspaceTokenStore, AgentPoolService.BuildPooledDeviceId, AuditedAgentCliClient, RepoFileService, MarkerFileService, WikiDumpService, WorkspacePolicyDirectiveParser, AgentHelpPinnedPathResolver, HandoffSourceResolver, SessionLogWorkspaceAttributionValidator. Path.GetFullPath is applied only to host-native paths. An architecture test fails on any new direct Path.GetFullPath over request-supplied workspace paths outside an explicit allowlist.",
+      "kind": "tr",
+      "id": "TR-MCP-FED-PATH-001",
+      "title": "Single request-path normalization entry point"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "For a session whose turn carries a value in every turn field and at least one item in every child collection (commits with files), the snapshot payload deserializes as UnifiedSessionLogDto and equals the local session-log read of that session field by field, child collections in order.",
+          "id": "AC-001",
+          "isSatisfied": false
+        },
+        {
+          "text": "A snapshot payload is applyable: applying it through the adapter's ApplyAsync to a store without that session and then reading the session there yields a DTO equal to the source read, for values the sanitizer leaves unchanged.",
+          "id": "AC-002",
+          "isSatisfied": false
+        },
+        {
+          "text": "A value the outbound session-log sanitizer redacts in the session-log read is redacted the same way in the snapshot payload.",
+          "id": "AC-003",
+          "isSatisfied": false
+        },
+        {
+          "text": "Building a snapshot makes no federation data call: a session that exists only on a peer is not snapshotted, and a local session's snapshot carries only local turns.",
+          "id": "AC-004",
+          "isSatisfied": false
+        },
+        {
+          "text": "A missing or soft-deleted session yields PayloadJson \"null\" and Version null, and an existing session's Version equals its explicit version (ContentHash, else LastUpdated in Unix milliseconds, else TurnCount), as before this requirement.",
+          "id": "AC-005",
+          "isSatisfied": false
+        }
+      ],
+      "description": "SessionLogFederationStateAdapter.SnapshotAsync SHALL return, for an existing session of the local store, a payload in the UnifiedSessionLogDto shape that the adapter's ApplyAsync accepts, carrying every session field and every turn with all of its fields and child collections (actions, tags, context items, processing dialog, commits with their files, design decisions, requirements discovered, files modified, blockers), equal to what the local session-log read returns for that session after the outbound session-log sanitizer. Building a snapshot reads only the local store. The snapshot version stays the session's explicit version (ContentHash, else LastUpdated in Unix milliseconds, else TurnCount).",
+      "kind": "tr",
+      "id": "TR-MCP-FED-SESSIONLOG-001",
+      "title": "Session-log federation snapshot carries the full session graph"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "Reuse P1.4 Windows lexical normalization, preserve case, and reject distinct old keys converging before any database mutation.",
+          "id": "p15-policy-a",
+          "isSatisfied": false
+        },
+        {
+          "text": "Apply requires successful verified backup; all database changes and FK validation occur in one transaction; repeat apply is a no-op.",
+          "id": "p15-safety",
+          "isSatisfied": false
+        },
+        {
+          "text": "Dry-run inventory and planning run only on a database copy; report mappings, table and workspace counts, and retained manual triage hashes without secrets.",
+          "id": "p15-preview",
+          "isSatisfied": false
+        },
+        {
+          "text": "HTTP and STDIO startup refuse legacy Windows workspace ids and point to --workspace-path-rekey.",
+          "id": "p15-guard",
+          "isSatisfied": false
+        },
+        {
+          "text": "Recompute only derivable triage, handoff, and federation identities; repoint children; preserve manual triage hashes and rewrite token-store keys with file backup.",
+          "id": "p15-derived",
+          "isSatisfied": false
+        }
+      ],
+      "description": "WorkspaceIdentityPath.NormalizeLexicalPath emits '/' for Windows paths (UNC keeps leading '//'; \\\\?\\ device prefixes stripped to drive or // form); BuildStorageKey becomes windows:C:/WORKSPACES/EXAMPLE style. IsRemoteWindowsPath, IsNormalizedPathWithinRoot and NormalizeLocalAdministrativeShareAlias accept both separators. A ToNativePath helper produces backslash paths only for Win32 CreateFile/GetFinalPathNameByHandle, \\\\?\\ long-path prefixes and cmd.exe arguments. Persisted data is rewritten by an explicit maintenance command --workspace-path-rekey (decision D5, 2026-10-07) modelled on McpDatabaseEncryptionTransitionCommand: required backup unless --dry-run, report with old->new mapping and before/after counts; one transaction per database with foreign keys deferred or suspended and fully re-validated (decision D6: SQLite defer_foreign_keys, SQL Server NOCHECK then WITH CHECK CHECK, PostgreSQL DEFERRABLE + SET CONSTRAINTS ALL DEFERRED); set-based UPDATE per workspace column from a mapping table limited to Windows-shaped values; C# recomputation of hashed values (federation GlobalWorkspaceId/CanonicalWorkspaceId and hub hash-keyed Workspaces rows, TriageGroups GroupKey/GroupId with repointed children, HandoffIngestionRuns ReplayIdentity); FileGitHubWorkspaceTokenStore keys rewritten. No legacy dual-key lookup (decision D7): a startup guard refuses to start while any Windows-shaped workspace id still contains a backslash. Enrolled proxies are re-enrolled once after deploy (the Windows proxy in the original deployment). Plan: docs/plans/2026-10-07-federation-fixes.md section 4c.",
+      "kind": "tr",
+      "id": "TR-MCP-PATHNORM-001",
+      "title": "Forward-slash storage keys, rekey maintenance command and startup guard"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "ISessionLogSanitizer exposes DTO and string sanitization without mutating caller-owned objects.",
+          "id": "ac-1",
+          "isSatisfied": false
+        },
+        {
+          "text": "SessionLogSanitizationOptions limits rule count, pattern length, and per-match timeout; invalid or duplicate rule IDs fail options validation with the offending ID.",
+          "id": "ac-2",
+          "isSatisfied": false
+        },
+        {
+          "text": "Default rules cover bearer tokens, JWTs, private keys, common API-key and secret assignments, connection-string passwords, and known provider token prefixes.",
+          "id": "ac-3",
+          "isSatisfied": false
+        },
+        {
+          "text": "Replacement is deterministic as [REDACTED:<rule-id>] and does not expose captured secret fragments.",
+          "id": "ac-4",
+          "isSatisfied": false
+        },
+        {
+          "text": "SessionLogSanitizingService is the outermost ISessionLogService read decorator for HTTP/federation and is also registered in stdio.",
+          "id": "ac-5",
+          "isSatisfied": false
+        },
+        {
+          "text": "Regex timeout during a read fails closed for the affected value, emits rule diagnostics without the input value, and never returns the unsanitized value.",
+          "id": "ac-6",
+          "isSatisfied": false
+        }
+      ],
+      "description": "A single sanitizer decorator must clone session-log DTO graphs, apply validated default and configured regex rules with deterministic replacement tokens and finite timeouts, and wrap the final local or federated ISessionLogService read result.\n**Covered by:** FR: FR-MCP-SESSIONLOGSAN-001; TEST: TEST-MCP-SESSIONLOGSAN-001, TEST-MCP-SESSIONLOGSAN-002",
+      "kind": "tr",
+      "id": "TR-MCP-SESSIONLOGSAN-001",
+      "title": "Bounded outbound session-log sanitizer"
+    },
+    {
+      "acceptanceCriteria": [
+        {
+          "text": "With an injected RegexReplaceInvoker raising RegexMatchTimeoutException for the pathological field, SanitizeString returns [REDACTED:{ruleId}:timeout] for that field while other fields continue to be sanitized; repeated isolated runs do not depend on wall-clock jitter.",
+          "id": "AC1",
+          "isSatisfied": false
+        },
+        {
+          "text": "The production RegexReplaceInvoker defaults to Regex.Replace and preserves production sanitization behavior.",
+          "id": "AC2",
+          "isSatisfied": false
+        }
+      ],
+      "description": "The session-log sanitizer per-rule regex evaluation SHALL be exposed through an injectable seam (RegexReplaceInvoker, defaulting to Regex.Replace in production) so affected-field timeout redaction and continuation of other fields can be verified deterministically - forcing exactly one field/rule to raise RegexMatchTimeoutException - independent of catastrophic-backtracking wall-clock jitter. Acceptance Criteria: (AC1) with an injected invoker that raises RegexMatchTimeoutException for the pathological field, SanitizeString returns [REDACTED:{ruleId}:timeout] for that field while other fields continue to be sanitized by their rules, across repeated isolated runs (no flake); (AC2) production behavior is unchanged (default invoker is Regex.Replace). Origin: BUG-TRIAGE-081 (SessionLogSanitizerTimeoutTests flaked under scheduler jitter; the deployed 1ms->100ms budget was a mitigation, not deterministic). Validated by TEST-MCP-SESSIONLOGSAN-002.\n**Covered by:** FR: FR-MCP-SESSIONLOGSAN-001; TEST: TEST-MCP-SESSIONLOGSAN-001, TEST-MCP-SESSIONLOGSAN-002",
+      "kind": "tr",
+      "id": "TR-MCP-SESSIONLOGSAN-002",
+      "title": "Deterministic sanitizer timeout redaction and continuation"
+    }
+  ],
+  "mappings": [
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-001"
+      ],
+      "testIds": [
+        "TEST-MCP-222"
+      ],
+      "frId": "FR-MCP-174"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-002"
+      ],
+      "testIds": [
+        "TEST-MCP-223"
+      ],
+      "frId": "FR-MCP-175"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-003"
+      ],
+      "testIds": [
+        "TEST-MCP-224"
+      ],
+      "frId": "FR-MCP-176"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-004"
+      ],
+      "testIds": [
+        "TEST-MCP-225"
+      ],
+      "frId": "FR-MCP-177"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-005"
+      ],
+      "testIds": [
+        "TEST-MCP-226"
+      ],
+      "frId": "FR-MCP-178"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-006"
+      ],
+      "testIds": [
+        "TEST-MCP-227"
+      ],
+      "frId": "FR-MCP-179"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-007"
+      ],
+      "testIds": [
+        "TEST-MCP-228"
+      ],
+      "frId": "FR-MCP-180"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-008"
+      ],
+      "testIds": [
+        "TEST-MCP-229"
+      ],
+      "frId": "FR-MCP-181"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-009"
+      ],
+      "testIds": [
+        "TEST-MCP-230"
+      ],
+      "frId": "FR-MCP-182"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-010"
+      ],
+      "testIds": [
+        "TEST-MCP-231"
+      ],
+      "frId": "FR-MCP-183"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-011"
+      ],
+      "testIds": [
+        "TEST-MCP-232"
+      ],
+      "frId": "FR-MCP-184"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-012"
+      ],
+      "testIds": [
+        "TEST-MCP-233"
+      ],
+      "frId": "FR-MCP-185"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-013"
+      ],
+      "testIds": [
+        "TEST-MCP-234"
+      ],
+      "frId": "FR-MCP-186"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-014"
+      ],
+      "testIds": [
+        "TEST-MCP-235"
+      ],
+      "frId": "FR-MCP-187"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-015"
+      ],
+      "testIds": [
+        "TEST-MCP-236"
+      ],
+      "frId": "FR-MCP-188"
+    },
+    {
+      "trIds": [
+        "TR-MCP-FEDERATION-016"
+      ],
+      "testIds": [
+        "TEST-MCP-237"
+      ],
+      "frId": "FR-MCP-189"
+    }
+  ],
+  "undefinedImplementationReferences": [],
+  "criteriaCount": 392
+}
