@@ -1,0 +1,946 @@
+{
+  "timestampLocal": "2026-11-18T00:40:15",
+  "sourceHead": "ebdcfb970b95de4b7b38075b2d8cfe4e8f9104a3",
+  "task": "TASK-FEDPH0-004",
+  "sourceCatalogSha256": "88DA9E41116F88DEDA13A9675BA2B073AD63B41D0E65BD371B72FE9CCAD7CF05",
+  "enclosingIndexSha256": "318117EFC47830B5AEF2D86914173C121DED4ECAC01C281E9A04C4668D36BF0E",
+  "scriptSha256": "C7461035CCE6D5C1C28B531C24E8B3CB4215A51B6B07FE3DB340616D8D5125B9",
+  "sourceCount": 6,
+  "excerptCount": 16,
+  "flows": [
+    {
+      "observation": "Separate TransactionSecurity contexts persist parties/keys/manifests, scoped replay nonce+sequence reservations in a transaction, subscriber terminal states, audit and pending/retry/cancel/ack pubsub records. Completed-message purge is a separate explicitly filtered store operation. Copy helpers assign provenance timestamps.",
+      "family": "protected-transaction-state",
+      "boundary": "Retain protected existing transaction-security storage and data, outside project history/export; Excluded means excluded from project replication, not deleted. Preserve current replay/terminal/conflict constraints and separate contexts. No automatic invocation or command replay from incoming Dolt history, and no cross-store atomicity claim. Verify native contexts, exact protected-state preservation and no credential leakage."
+    },
+    {
+      "observation": "Agent definition/model replacement, workspace configuration/overrides, bans, runtime launch/event and LastLaunchedAt save host-local commands/paths/models and audit. Launch prepares isolation/branch and external process before event/state saves; failures may finalize/clean up.",
+      "family": "host-agent-runtime",
+      "boundary": "Host agent configuration, events, launch state and external process effects remain operational. Incoming history/import must not launch, ban/unban, seed or notify as a replay effect. Preserve original child rows, tombstones and local path confidentiality. Native negative controls observe intended operational changes without project or editing-lease mutation."
+    },
+    {
+      "observation": "Brain registry restores tombstones, enforces role uniqueness by disabling siblings, registers parties and records audit. Invocation saves attempt first, calls credential/provider/turn-transaction services, saves committed state, and optionally admits Curiosity output to raw context. Rejection also saves audit; raw admission writes documents/chunks/vectors.",
+      "family": "host-brain-slots",
+      "boundary": "Slot definitions, credential references, role/party mapping, invocation/audit and raw admission stay protected operational, not automatically promoted authored content. Preserve current execution, endpoint and transaction checks; complete registration/provider/admission effects must never be triggered by incoming history. Test each save/reject/reopen boundary without treating method-return committed as evidence of GraphRAG admission."
+    },
+    {
+      "observation": "Weight updates save each selected brain slot weight/version/timestamps plus audit; rollback restores prior weight/version and adds rollback audit.",
+      "family": "host-orchestration",
+      "boundary": "Host orchestration state and compensation remain operational. Preserve protected rows, prior values and audit without project mutation or federation lease acquisition. Source does not prove distributed transaction/recovery or runtime dispatch."
+    }
+  ],
+  "coveredCatalogCandidates": [
+    {
+      "methodKey": "src/QBrainAi.Services/Services/AgentService.cs:71:UpsertDefinitionAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/AgentService.cs",
+        "method": "UpsertDefinitionAsync",
+        "line": 108,
+        "owner": "AgentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-agent-runtime"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/AgentService.cs:118:DeleteDefinitionAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/AgentService.cs",
+        "method": "DeleteDefinitionAsync",
+        "line": 127,
+        "owner": "AgentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-agent-runtime"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/AgentService.cs:195:UpsertWorkspaceAgentAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/AgentService.cs",
+        "method": "UpsertWorkspaceAgentAsync",
+        "line": 238,
+        "owner": "AgentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-agent-runtime"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/AgentService.cs:248:DeleteWorkspaceAgentAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/AgentService.cs",
+        "method": "DeleteWorkspaceAgentAsync",
+        "line": 259,
+        "owner": "AgentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-agent-runtime"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/AgentService.cs:266:BanAgentAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/AgentService.cs",
+        "method": "BanAgentAsync",
+        "line": 284,
+        "owner": "AgentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-agent-runtime"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/AgentService.cs:266:BanAgentAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/AgentService.cs",
+        "method": "BanAgentAsync",
+        "line": 301,
+        "owner": "AgentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-agent-runtime"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/AgentService.cs:311:UnbanAgentAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/AgentService.cs",
+        "method": "UnbanAgentAsync",
+        "line": 327,
+        "owner": "AgentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-agent-runtime"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/AgentService.cs:311:UnbanAgentAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/AgentService.cs",
+        "method": "UnbanAgentAsync",
+        "line": 344,
+        "owner": "AgentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-agent-runtime"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/AgentService.cs:356:LaunchAgentAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/AgentService.cs",
+        "method": "LaunchAgentAsync",
+        "line": 409,
+        "owner": "AgentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-agent-runtime"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/AgentService.cs:477:LogEventAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/AgentService.cs",
+        "method": "LogEventAsync",
+        "line": 501,
+        "owner": "AgentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-agent-runtime"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/AgentService.cs:71:UpsertDefinitionAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/AgentService.cs",
+        "method": "UpsertDefinitionAsync",
+        "line": 89,
+        "owner": "AgentService"
+      },
+      "operation": "ModifiedAt",
+      "families": [
+        "host-agent-runtime"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotContextAdmissionService.cs:37:AdmitAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotContextAdmissionService.cs",
+        "method": "AdmitAsync",
+        "line": 95,
+        "owner": "BrainSlotContextAdmissionService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotInvocationService.cs:55:InvokeAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotInvocationService.cs",
+        "method": "InvokeAsync",
+        "line": 78,
+        "owner": "BrainSlotInvocationService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotInvocationService.cs:55:InvokeAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotInvocationService.cs",
+        "method": "InvokeAsync",
+        "line": 182,
+        "owner": "BrainSlotInvocationService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotInvocationService.cs:231:RejectAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotInvocationService.cs",
+        "method": "RejectAsync",
+        "line": 262,
+        "owner": "BrainSlotInvocationService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs:81:UpsertAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs",
+        "method": "UpsertAsync",
+        "line": 136,
+        "owner": "BrainSlotRegistryService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs:142:DeleteAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs",
+        "method": "DeleteAsync",
+        "line": 150,
+        "owner": "BrainSlotRegistryService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs:155:EnableAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs",
+        "method": "EnableAsync",
+        "line": 163,
+        "owner": "BrainSlotRegistryService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs:168:DisableAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs",
+        "method": "DisableAsync",
+        "line": 175,
+        "owner": "BrainSlotRegistryService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs:81:UpsertAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs",
+        "method": "UpsertAsync",
+        "line": 132,
+        "owner": "BrainSlotRegistryService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs:142:DeleteAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs",
+        "method": "DeleteAsync",
+        "line": 146,
+        "owner": "BrainSlotRegistryService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs:155:EnableAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs",
+        "method": "EnableAsync",
+        "line": 160,
+        "owner": "BrainSlotRegistryService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs:168:DisableAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs",
+        "method": "DisableAsync",
+        "line": 172,
+        "owner": "BrainSlotRegistryService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs:233:EnforceEnabledRoleUniquenessAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs",
+        "method": "EnforceEnabledRoleUniquenessAsync",
+        "line": 249,
+        "owner": "BrainSlotRegistryService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "host-brain-slots"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/QuadBrainOrchestrationService.cs:614:ApplyWeightUpdateAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/QuadBrainOrchestrationService.cs",
+        "method": "ApplyWeightUpdateAsync",
+        "line": 645,
+        "owner": "QuadBrainOrchestrationService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-orchestration"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/QuadBrainOrchestrationService.cs:649:RollbackWeightUpdateAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/QuadBrainOrchestrationService.cs",
+        "method": "RollbackWeightUpdateAsync",
+        "line": 677,
+        "owner": "QuadBrainOrchestrationService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-orchestration"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/QuadBrainOrchestrationService.cs:614:ApplyWeightUpdateAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/QuadBrainOrchestrationService.cs",
+        "method": "ApplyWeightUpdateAsync",
+        "line": 630,
+        "owner": "QuadBrainOrchestrationService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "host-orchestration"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/QuadBrainOrchestrationService.cs:649:RollbackWeightUpdateAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/QuadBrainOrchestrationService.cs",
+        "method": "RollbackWeightUpdateAsync",
+        "line": 663,
+        "owner": "QuadBrainOrchestrationService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "host-orchestration"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:635:SavePartyAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "SavePartyAsync",
+        "line": 668,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:701:SaveManifestAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "SaveManifestAsync",
+        "line": 714,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:761:TryReserveManifestReplayAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "TryReserveManifestReplayAsync",
+        "line": 815,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:838:TryAddTransactionAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "TryAddTransactionAsync",
+        "line": 846,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:855:AddOrCompleteTransactionAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "AddOrCompleteTransactionAsync",
+        "line": 866,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:855:AddOrCompleteTransactionAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "AddOrCompleteTransactionAsync",
+        "line": 874,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:878:AddOrKeepAbortAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "AddOrKeepAbortAsync",
+        "line": 889,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:878:AddOrKeepAbortAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "AddOrKeepAbortAsync",
+        "line": 897,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:913:SetLastSequenceAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "SetLastSequenceAsync",
+        "line": 927,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:930:TryAddNonceAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "TryAddNonceAsync",
+        "line": 944,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:953:RecordAuditAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "RecordAuditAsync",
+        "line": 969,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:972:SavePendingAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "SavePendingAsync",
+        "line": 985,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:972:SavePendingAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "SavePendingAsync",
+        "line": 1008,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:1012:MarkAttemptAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "MarkAttemptAsync",
+        "line": 1028,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:1031:MarkCanceledAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "MarkCanceledAsync",
+        "line": 1048,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:1051:MarkAcknowledgedAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "MarkAcknowledgedAsync",
+        "line": 1069,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:1125:PurgeCompletedAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "PurgeCompletedAsync",
+        "line": 1147,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:635:SavePartyAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "SavePartyAsync",
+        "line": 655,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "CreatedAtUtc",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:635:SavePartyAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "SavePartyAsync",
+        "line": 656,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:761:TryReserveManifestReplayAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "TryReserveManifestReplayAsync",
+        "line": 810,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:972:SavePendingAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "SavePendingAsync",
+        "line": 1007,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:1012:MarkAttemptAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "MarkAttemptAsync",
+        "line": 1027,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:1031:MarkCanceledAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "MarkCanceledAsync",
+        "line": 1047,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:1051:MarkAcknowledgedAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "MarkAcknowledgedAsync",
+        "line": 1068,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:1196:UpdateEntity",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "UpdateEntity",
+        "line": 1202,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "CreatedAtUtc",
+      "families": [
+        "protected-transaction-state"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:1258:UpdateEntity",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "UpdateEntity",
+        "line": 1279,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "CreatedAtUtc",
+      "families": [
+        "protected-transaction-state"
+      ]
+    }
+  ],
+  "excerpts": [
+    {
+      "sourceText": "    public async Task SavePartyAsync(\n        PartyRegistrationResponse party,\n        IReadOnlyCollection<PartyKeyDescriptor> keys,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        var existing = await db.KeyServerParties\n            .Include(entity => entity.Keys)\n            .SingleOrDefaultAsync(entity => entity.PartyId == party.PartyId, cancellationToken)\n            .ConfigureAwait(false);\n        if (existing is null)\n        {\n            existing = new KeyServerPartyEntity { PartyId = party.PartyId };\n            db.KeyServerParties.Add(existing);\n        }\n\n        existing.Role = party.Role;\n        existing.ActiveSigningKeyId = party.ActiveSigningKeyId;\n        existing.ActiveEncryptionKeyId = party.ActiveEncryptionKeyId;\n        existing.Status = party.Status;\n        existing.CreatedAtUtc = party.CreatedAtUtc;\n        existing.UpdatedAtUtc = party.UpdatedAtUtc;\n\n        foreach (var key in keys)\n        {\n            var existingKey = existing.Keys.SingleOrDefault(\n                current => string.Equals(current.KeyId, key.KeyId, StringComparison.OrdinalIgnoreCase));\n            if (existingKey is null)\n                db.KeyServerPartyKeys.Add(ToEntity(key));\n            else\n                UpdateEntity(existingKey, key);\n        }\n\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n    }",
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "firstLine": 635,
+      "lastLine": 669,
+      "family": "protected-transaction-state",
+      "excerptSha256": "AEBDD08880AAB055AAAEFC84F6AB78D8E0D1BDC1C487816DA1624A3E3ACF1DBB",
+      "fileSha256": "B1C43E2C8BDE72F50CAAFE53313947E5193BA776DE2C289BE1A27C25054B286C"
+    },
+    {
+      "sourceText": "    public async Task SaveManifestAsync(\n        TransactionManifestTraceRecord manifest,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        var existing = await db.KeyServerManifests\n            .SingleOrDefaultAsync(entity => entity.TransactionId == manifest.TransactionId, cancellationToken)\n            .ConfigureAwait(false);\n        if (existing is null)\n            db.KeyServerManifests.Add(ToEntity(manifest));\n        else\n            UpdateEntity(existing, manifest);\n\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n    }",
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "firstLine": 701,
+      "lastLine": 715,
+      "family": "protected-transaction-state",
+      "excerptSha256": "0B8E1DC04271B0E89DF02F0591616EE88B5D41DA7BE7A8C17FA0932311DB857F",
+      "fileSha256": "B1C43E2C8BDE72F50CAAFE53313947E5193BA776DE2C289BE1A27C25054B286C"
+    },
+    {
+      "sourceText": "    public async Task<TransactionFailureReason> TryReserveManifestReplayAsync(\n        string scope,\n        string pairKey,\n        long sequence,\n        string nonceKey,\n        string transactionId,\n        CancellationToken cancellationToken)\n    {\n        var scopedPairKey = BuildScopedReplayKey(scope, pairKey);\n        var scopedNonceKey = BuildScopedReplayKey(scope, nonceKey);\n        await using var db = CreateContext();\n        await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);\n        var nonceExists = await db.KeyServerNonces\n            .AsNoTracking()\n            .AnyAsync(existing => existing.NonceKey == scopedNonceKey, cancellationToken)\n            .ConfigureAwait(false);\n        if (nonceExists)\n        {\n            await transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);\n            return TransactionFailureReason.ReplayNonce;\n        }\n\n        var sequenceEntity = await db.KeyServerSequences\n            .SingleOrDefaultAsync(existing => existing.PairKey == scopedPairKey, cancellationToken)\n            .ConfigureAwait(false);\n        if (sequenceEntity is not null && sequence <= sequenceEntity.LastSequence)\n        {\n            await transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);\n            return TransactionFailureReason.StaleSequence;\n        }\n\n        db.KeyServerNonces.Add(new KeyServerNonceEntity\n        {\n            NonceKey = scopedNonceKey,\n            TransactionId = transactionId,\n            CreatedAtUtc = DateTimeOffset.UtcNow,\n        });\n        if (sequenceEntity is null)\n        {\n            db.KeyServerSequences.Add(new KeyServerSequenceEntity\n            {\n                PairKey = scopedPairKey,\n                LastSequence = sequence,\n                UpdatedAtUtc = DateTimeOffset.UtcNow,\n            });\n        }\n        else\n        {\n            sequenceEntity.LastSequence = sequence;\n            sequenceEntity.UpdatedAtUtc = DateTimeOffset.UtcNow;\n        }\n\n        try\n        {\n            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);\n            return TransactionFailureReason.None;\n        }\n        catch (DbUpdateException)\n        {\n            await transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);\n            return TransactionFailureReason.ReplayNonce;\n        }\n    }\n\n    public async Task<SubscriberTransactionState?> GetTransactionAsync(\n        string transactionId,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        var entity = await db.SubscriberTransactions\n            .AsNoTracking()\n            .SingleOrDefaultAsync(transaction => transaction.TransactionId == transactionId, cancellationToken)\n            .ConfigureAwait(false);\n        return entity is null ? null : ToState(entity);\n    }\n\n    public async Task<bool> TryAddTransactionAsync(\n        SubscriberTransactionState transaction,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        db.SubscriberTransactions.Add(ToEntity(transaction));\n        try\n        {\n            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            return true;\n        }\n        catch (DbUpdateException)\n        {\n            return false;\n        }\n    }\n\n    public async Task<SubscriberTransactionState> AddOrCompleteTransactionAsync(\n        SubscriberTransactionState transaction,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        var existing = await db.SubscriberTransactions\n            .SingleOrDefaultAsync(entity => entity.TransactionId == transaction.TransactionId, cancellationToken)\n            .ConfigureAwait(false);\n        if (existing is null)\n        {\n            db.SubscriberTransactions.Add(ToEntity(transaction));\n            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            return transaction;\n        }\n\n        if (!string.Equals(existing.Status, \"pending\", StringComparison.OrdinalIgnoreCase))\n            return ToState(existing);\n\n        UpdateEntity(existing, transaction);\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return transaction;\n    }\n\n    public async Task<SubscriberTransactionState> AddOrKeepAbortAsync(\n        SubscriberTransactionState transaction,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        var existing = await db.SubscriberTransactions\n            .SingleOrDefaultAsync(entity => entity.TransactionId == transaction.TransactionId, cancellationToken)\n            .ConfigureAwait(false);\n        if (existing is null)\n        {\n            db.SubscriberTransactions.Add(ToEntity(transaction));\n            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            return transaction;\n        }\n\n        if (string.Equals(existing.Status, \"committed\", StringComparison.OrdinalIgnoreCase))\n            return ToState(existing);\n\n        UpdateEntity(existing, transaction);\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return transaction;\n    }\n\n    public async Task<long?> GetLastSequenceAsync(\n        string pairKey,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        var entity = await db.SubscriberSequences\n            .AsNoTracking()\n            .SingleOrDefaultAsync(sequence => sequence.PairKey == pairKey, cancellationToken)\n            .ConfigureAwait(false);\n        return entity?.LastSequence;\n    }\n\n    public async Task SetLastSequenceAsync(\n        string pairKey,\n        long sequence,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        var entity = await db.SubscriberSequences\n            .SingleOrDefaultAsync(existing => existing.PairKey == pairKey, cancellationToken)\n            .ConfigureAwait(false);\n        if (entity is null)\n            db.SubscriberSequences.Add(new SubscriberSequenceEntity { PairKey = pairKey, LastSequence = sequence });\n        else\n            entity.LastSequence = Math.Max(entity.LastSequence, sequence);\n\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n    }\n\n    public async Task<bool> TryAddNonceAsync(\n        string nonceKey,\n        string transactionId,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        db.SubscriberNonces.Add(new SubscriberNonceEntity\n        {\n            NonceKey = nonceKey,\n            TransactionId = transactionId,\n            CreatedAtUtc = DateTimeOffset.UtcNow,\n        });\n        try\n        {\n            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            return true;\n        }\n        catch (DbUpdateException)\n        {\n            return false;\n        }\n    }\n\n    public async Task RecordAuditAsync(\n        string eventName,\n        string? transactionId,\n        TransactionFailureReason reason,\n        string? details,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        db.TransactionAuditEvents.Add(new TransactionAuditEntity\n        {\n            EventName = eventName,\n            TransactionId = transactionId,\n            Reason = reason,\n            Details = details,\n            CreatedAtUtc = DateTimeOffset.UtcNow,\n        });\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n    }\n\n    public async Task<TransactionPubSubMessageState> SavePendingAsync(\n        TransactionPubSubMessageState message,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        var existing = await db.TransactionPubSubMessages\n            .SingleOrDefaultAsync(entity => entity.OperationId == message.OperationId, cancellationToken)\n            .ConfigureAwait(false);\n        if (existing is null)\n        {\n            db.TransactionPubSubMessages.Add(ToEntity(message));\n            try\n            {\n                await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n                return message;\n            }\n            catch (DbUpdateException)\n            {\n                existing = await db.TransactionPubSubMessages\n                    .AsNoTracking()\n                    .SingleAsync(entity => entity.OperationId == message.OperationId, cancellationToken)\n                    .ConfigureAwait(false);\n                return ToState(existing);\n            }\n        }\n\n        if (string.Equals(existing.Status, \"acknowledged\", StringComparison.OrdinalIgnoreCase) ||\n            string.Equals(existing.Status, \"canceled\", StringComparison.OrdinalIgnoreCase) ||\n            !string.Equals(existing.RequestJson, message.RequestJson, StringComparison.Ordinal))\n            return ToState(existing);\n\n        existing.TransactionId = message.TransactionId;\n        existing.Kind = message.Kind;\n        existing.Status = message.Status;\n        existing.RequestJson = message.RequestJson;\n        existing.UpdatedAtUtc = DateTimeOffset.UtcNow;\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return ToState(existing);\n    }",
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "firstLine": 761,
+      "lastLine": 1010,
+      "family": "protected-transaction-state",
+      "excerptSha256": "A592AC1B15F5CCC100A7388AF64835C3B72BA2D26357E67F858F15F33342FFDA",
+      "fileSha256": "B1C43E2C8BDE72F50CAAFE53313947E5193BA776DE2C289BE1A27C25054B286C"
+    },
+    {
+      "sourceText": "    public async Task MarkAttemptAsync(\n        string operationId,\n        TransactionFailureReason reason,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        var entity = await db.TransactionPubSubMessages\n            .SingleOrDefaultAsync(message => message.OperationId == operationId, cancellationToken)\n            .ConfigureAwait(false);\n        if (entity is null)\n            return;\n\n        entity.Status = \"pending\";\n        entity.Reason = reason;\n        entity.AttemptCount++;\n        entity.UpdatedAtUtc = DateTimeOffset.UtcNow;\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n    }\n\n    public async Task MarkCanceledAsync(\n        string operationId,\n        string responseJson,\n        TransactionFailureReason reason,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        var entity = await db.TransactionPubSubMessages\n            .SingleOrDefaultAsync(message => message.OperationId == operationId, cancellationToken)\n            .ConfigureAwait(false);\n        if (entity is null)\n            return;\n\n        entity.Status = \"canceled\";\n        entity.ResponseJson = responseJson;\n        entity.Reason = reason;\n        entity.UpdatedAtUtc = DateTimeOffset.UtcNow;\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n    }\n\n    public async Task MarkAcknowledgedAsync(\n        string operationId,\n        string responseJson,\n        TransactionFailureReason reason,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        var entity = await db.TransactionPubSubMessages\n            .SingleOrDefaultAsync(message => message.OperationId == operationId, cancellationToken)\n            .ConfigureAwait(false);\n        if (entity is null)\n            return;\n\n        entity.Status = \"acknowledged\";\n        entity.ResponseJson = responseJson;\n        entity.Reason = reason;\n        entity.AttemptCount++;\n        entity.UpdatedAtUtc = DateTimeOffset.UtcNow;\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n    }",
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "firstLine": 1012,
+      "lastLine": 1070,
+      "family": "protected-transaction-state",
+      "excerptSha256": "B08E70D5691E5FB3C5070A99C925B4938CA351D87AB6C1607E74404D945423B1",
+      "fileSha256": "B1C43E2C8BDE72F50CAAFE53313947E5193BA776DE2C289BE1A27C25054B286C"
+    },
+    {
+      "sourceText": "    public async Task<int> PurgeCompletedAsync(\n        DateTimeOffset completedBeforeUtc,\n        int maxMessages,\n        CancellationToken cancellationToken)\n    {\n        await using var db = CreateContext();\n        var entities = await db.TransactionPubSubMessages\n            .ToArrayAsync(cancellationToken)\n            .ConfigureAwait(false);\n        var completed = entities\n            .Where(message =>\n                (string.Equals(message.Status, \"acknowledged\", StringComparison.OrdinalIgnoreCase) ||\n                 string.Equals(message.Status, \"canceled\", StringComparison.OrdinalIgnoreCase)) &&\n                message.UpdatedAtUtc <= completedBeforeUtc)\n            .OrderBy(message => message.UpdatedAtUtc)\n            .ThenBy(message => message.OperationId, StringComparer.OrdinalIgnoreCase)\n            .Take(Math.Max(1, maxMessages))\n            .ToArray();\n        if (completed.Length == 0)\n            return 0;\n\n        db.TransactionPubSubMessages.RemoveRange(completed);\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return completed.Length;\n    }",
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "firstLine": 1125,
+      "lastLine": 1149,
+      "family": "protected-transaction-state",
+      "excerptSha256": "1DBBA04FE6A79C5F4E40214FAE2E848E3FE57870E03916B70CDD6C7810F9B51F",
+      "fileSha256": "B1C43E2C8BDE72F50CAAFE53313947E5193BA776DE2C289BE1A27C25054B286C"
+    },
+    {
+      "sourceText": "    private static void UpdateEntity(KeyServerPartyKeyEntity entity, PartyKeyDescriptor key)\n    {\n        entity.Purpose = key.Purpose;\n        entity.Algorithm = key.Algorithm;\n        entity.PublicKeyPem = key.PublicKeyPem;\n        entity.Status = key.Status;\n        entity.CreatedAtUtc = key.CreatedAtUtc;\n        entity.ExpiresAtUtc = key.ExpiresAtUtc;\n    }",
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "firstLine": 1196,
+      "lastLine": 1204,
+      "family": "protected-transaction-state",
+      "excerptSha256": "28269E314F9884830BEF5DA24733BA63B80A2ED098F8D918402FA5ED93272F83",
+      "fileSha256": "B1C43E2C8BDE72F50CAAFE53313947E5193BA776DE2C289BE1A27C25054B286C"
+    },
+    {
+      "sourceText": "    private static void UpdateEntity(KeyServerManifestEntity entity, TransactionManifestTraceRecord manifest)\n    {\n        entity.TurnId = manifest.TurnId;\n        entity.PublisherPartyId = manifest.PublisherPartyId;\n        entity.PublisherSigningKeyId = manifest.PublisherSigningKeyId;\n        entity.SubscriberPartyId = manifest.SubscriberPartyId;\n        entity.SubscriberEncryptionKeyId = manifest.SubscriberEncryptionKeyId;\n        entity.Sequence = manifest.Sequence;\n        entity.Nonce = manifest.Nonce;\n        entity.IssuedAtUtc = manifest.IssuedAtUtc;\n        entity.ExpiresAtUtc = manifest.ExpiresAtUtc;\n        entity.DiffgramSha256 = manifest.DiffgramSha256;\n        entity.EncryptedBodySha256 = manifest.EncryptedBodySha256;\n        entity.SignatureAlgorithm = manifest.SignatureAlgorithm;\n        entity.EncryptionAlgorithm = manifest.EncryptionAlgorithm;\n        entity.CanonicalizationProfile = manifest.CanonicalizationProfile;\n        entity.SignatureKeyId = manifest.SignatureKeyId;\n        entity.SignatureValue = manifest.SignatureValue;\n        entity.SignedAtUtc = manifest.SignedAtUtc;\n        entity.ManifestHashSha256 = manifest.ManifestHashSha256;\n        entity.Status = manifest.Status;\n        entity.CreatedAtUtc = manifest.CreatedAtUtc;\n    }",
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "firstLine": 1258,
+      "lastLine": 1280,
+      "family": "protected-transaction-state",
+      "excerptSha256": "84510EA9ADC566C4D8E5730F0AFD49413D82AD0E769042A47027D792059D9390",
+      "fileSha256": "B1C43E2C8BDE72F50CAAFE53313947E5193BA776DE2C289BE1A27C25054B286C"
+    },
+    {
+      "sourceText": "    public async Task<AgentMutationResult> UpsertDefinitionAsync(AgentDefinitionRequest request, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        var existing = await _db.AgentDefinitions.FindAsync([request.Id], ct).ConfigureAwait(false);\n        var now = DateTime.UtcNow;\n\n        var created = existing is null;\n        if (existing is not null)\n        {\n            existing.DisplayName = request.DisplayName;\n            existing.DefaultLaunchCommand = request.DefaultLaunchCommand;\n            existing.DefaultInstructionFile = request.DefaultInstructionFile;\n            await _db.Entry(existing).Collection(x => x.Models).LoadAsync(ct).ConfigureAwait(false);\n            _db.AgentDefinitionModels.RemoveRange(existing.Models);\n            foreach (var row in ToModelRows(request.DefaultModels, existing.Id, existing.WorkspaceId))\n                existing.Models.Add(row);\n            existing.DefaultBranchStrategy = request.DefaultBranchStrategy;\n            existing.DefaultSeedPrompt = request.DefaultSeedPrompt;\n            existing.ModifiedAt = now;\n        }\n        else\n        {\n            _db.AgentDefinitions.Add(new AgentDefinitionEntity\n            {\n                Id = request.Id,\n                DisplayName = request.DisplayName,\n                DefaultLaunchCommand = request.DefaultLaunchCommand,\n                DefaultInstructionFile = request.DefaultInstructionFile,\n                Models = ToModelRows(request.DefaultModels, request.Id, string.Empty),\n                DefaultBranchStrategy = request.DefaultBranchStrategy,\n                DefaultSeedPrompt = request.DefaultSeedPrompt,\n                IsBuiltIn = false,\n                CreatedAt = now,\n                ModifiedAt = now\n            });\n        }\n\n        await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n        _logger.LogInformation(\"Upserted agent definition '{AgentId}'\", request.Id);\n        await PublishChangeSafeAsync(\n            created ? ChangeEventActions.Created : ChangeEventActions.Updated,\n            request.Id,\n            ct).ConfigureAwait(false);\n        return new AgentMutationResult { Success = true };\n    }\n\n    /// <inheritdoc />\n    public async Task<AgentMutationResult> DeleteDefinitionAsync(string agentType, CancellationToken ct = default)\n    {\n        var entity = await _db.AgentDefinitions.FindAsync([agentType], ct).ConfigureAwait(false);\n        if (entity is null)\n            return new AgentMutationResult { Success = false, Error = $\"Agent definition '{agentType}' not found.\" };\n        if (entity.IsBuiltIn)\n            return new AgentMutationResult { Success = false, Error = $\"Cannot delete built-in agent definition '{agentType}'.\" };\n\n        _db.AgentDefinitions.Remove(entity);\n        await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n        _logger.LogInformation(\"Deleted agent definition '{AgentId}'\", agentType);\n        await PublishChangeSafeAsync(ChangeEventActions.Deleted, agentType, ct).ConfigureAwait(false);\n        return new AgentMutationResult { Success = true };\n    }",
+      "path": "src/QBrainAi.Services/Services/AgentService.cs",
+      "firstLine": 71,
+      "lastLine": 131,
+      "family": "host-agent-runtime",
+      "excerptSha256": "E6CCE8944D9C0772089C10887A31E2FA5F7EF26793D8EB6DB79D73C911DB7B52",
+      "fileSha256": "D6CD1AD0AE551040373E4F5C40D56154D62855415EDFA41FFADB87AAA157E6B7"
+    },
+    {
+      "sourceText": "    public async Task<AgentMutationResult> UpsertWorkspaceAgentAsync(string workspacePath, AgentWorkspaceRequest request, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        var normalized = NormalizePath(workspacePath);\n\n        var defExists = await _db.AgentDefinitions.AnyAsync(x => x.Id == request.AgentId, ct).ConfigureAwait(false);\n        if (!defExists)\n            return new AgentMutationResult { Success = false, Error = $\"Agent definition '{request.AgentId}' not found. Create it first.\" };\n\n        var existing = await _db.AgentWorkspaces\n            .FirstOrDefaultAsync(x => x.WorkspacePath == normalized && x.AgentDefinitionId == request.AgentId, ct)\n            .ConfigureAwait(false);\n\n        var created = existing is null;\n        if (existing is not null)\n        {\n            existing.Enabled = request.Enabled;\n            existing.AgentIsolation = request.AgentIsolation;\n            existing.LaunchCommandOverride = request.LaunchCommandOverride;\n            existing.ListItems.Clear();\n            foreach (var row in ToOverrideRows(request.ModelsOverride, request.InstructionFilesOverride))\n                existing.ListItems.Add(row);\n            existing.BranchStrategyOverride = request.BranchStrategyOverride;\n            existing.SeedPromptOverride = request.SeedPromptOverride;\n            existing.MarkerAdditions = request.MarkerAdditions;\n        }\n        else\n        {\n            _db.AgentWorkspaces.Add(new AgentWorkspaceEntity\n            {\n                AgentDefinitionId = request.AgentId,\n                WorkspacePath = normalized,\n                Enabled = request.Enabled,\n                AgentIsolation = request.AgentIsolation,\n                LaunchCommandOverride = request.LaunchCommandOverride,\n                ListItems = ToOverrideRows(request.ModelsOverride, request.InstructionFilesOverride),\n                BranchStrategyOverride = request.BranchStrategyOverride,\n                SeedPromptOverride = request.SeedPromptOverride,\n                MarkerAdditions = request.MarkerAdditions,\n                AddedAt = DateTime.UtcNow\n            });\n        }\n\n        await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n        _logger.LogInformation(\"Upserted workspace agent '{AgentId}' in '{Workspace}'\", request.AgentId, normalized);\n        await PublishChangeSafeAsync(\n            created ? ChangeEventActions.Created : ChangeEventActions.Updated,\n            request.AgentId,\n            ct).ConfigureAwait(false);\n        return new AgentMutationResult { Success = true };\n    }\n\n    /// <inheritdoc />\n    public async Task<AgentMutationResult> DeleteWorkspaceAgentAsync(string workspacePath, string agentId, CancellationToken ct = default)\n    {\n        var normalized = NormalizePath(workspacePath);\n        var entity = await _db.AgentWorkspaces\n            .FirstOrDefaultAsync(x => x.WorkspacePath == normalized && x.AgentDefinitionId == agentId, ct)\n            .ConfigureAwait(false);\n\n        if (entity is null)\n            return new AgentMutationResult { Success = false, Error = $\"Agent '{agentId}' not found in workspace.\" };\n\n        _db.AgentWorkspaces.Remove(entity);\n        await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n        _logger.LogInformation(\"Deleted workspace agent '{AgentId}' from '{Workspace}'\", agentId, normalized);\n        await PublishChangeSafeAsync(ChangeEventActions.Deleted, agentId, ct).ConfigureAwait(false);\n        return new AgentMutationResult { Success = true };\n    }\n\n    /// <inheritdoc />\n    public async Task<AgentMutationResult> BanAgentAsync(string agentId, AgentBanRequest request, string? workspacePath = null, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n\n        if (request.Global || string.IsNullOrWhiteSpace(workspacePath))\n        {\n            var configs = await _db.AgentWorkspaces\n                .Where(x => x.AgentDefinitionId == agentId)\n                .ToListAsync(ct).ConfigureAwait(false);\n\n            foreach (var config in configs)\n            {\n                config.Banned = true;\n                config.Enabled = false;\n                config.BannedReason = request.Reason;\n                config.BannedUntilPr = request.BannedUntilPr;\n            }\n\n            await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n            _logger.LogInformation(\"Globally banned agent '{AgentId}' across {Count} workspaces\", agentId, configs.Count);\n        }\n        else\n        {\n            var normalized = NormalizePath(workspacePath);\n            var config = await _db.AgentWorkspaces\n                .FirstOrDefaultAsync(x => x.WorkspacePath == normalized && x.AgentDefinitionId == agentId, ct)\n                .ConfigureAwait(false);\n\n            if (config is null)\n                return new AgentMutationResult { Success = false, Error = $\"Agent '{agentId}' not found in workspace.\" };\n\n            config.Banned = true;\n            config.Enabled = false;\n            config.BannedReason = request.Reason;\n            config.BannedUntilPr = request.BannedUntilPr;\n            await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n            _logger.LogInformation(\"Banned agent '{AgentId}' in '{Workspace}'\", agentId, normalized);\n        }\n\n        await PublishChangeSafeAsync(ChangeEventActions.Updated, agentId, ct).ConfigureAwait(false);\n\n        return new AgentMutationResult { Success = true };\n    }\n\n    /// <inheritdoc />\n    public async Task<AgentMutationResult> UnbanAgentAsync(string agentId, string? workspacePath = null, CancellationToken ct = default)\n    {\n        if (string.IsNullOrWhiteSpace(workspacePath))\n        {\n            var configs = await _db.AgentWorkspaces\n                .Where(x => x.AgentDefinitionId == agentId && x.Banned)\n                .ToListAsync(ct).ConfigureAwait(false);\n\n            foreach (var config in configs)\n            {\n                config.Banned = false;\n                config.Enabled = true;\n                config.BannedReason = null;\n                config.BannedUntilPr = null;\n            }\n\n            await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n            _logger.LogInformation(\"Globally unbanned agent '{AgentId}' across {Count} workspaces\", agentId, configs.Count);\n        }\n        else\n        {\n            var normalized = NormalizePath(workspacePath);\n            var config = await _db.AgentWorkspaces\n                .FirstOrDefaultAsync(x => x.WorkspacePath == normalized && x.AgentDefinitionId == agentId, ct)\n                .ConfigureAwait(false);\n\n            if (config is null)\n                return new AgentMutationResult { Success = false, Error = $\"Agent '{agentId}' not found in workspace.\" };\n\n            config.Banned = false;\n            config.Enabled = true;\n            config.BannedReason = null;\n            config.BannedUntilPr = null;\n            await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n            _logger.LogInformation(\"Unbanned agent '{AgentId}' in '{Workspace}'\", agentId, normalized);\n        }\n\n        await PublishChangeSafeAsync(ChangeEventActions.Updated, agentId, ct).ConfigureAwait(false);\n\n        return new AgentMutationResult { Success = true };\n    }\n\n    // --- Runtime Process Lifecycle ---\n\n    /// <inheritdoc />\n    public async Task<AgentProcessInfo> LaunchAgentAsync(string workspacePath, string agentId, CancellationToken ct = default)\n    {\n        var normalizedWorkspace = NormalizePath(workspacePath);\n        var runtimeDependencies = EnsureRuntimeDependencies();\n        var workspaceConfig = await GetWorkspaceAgentEntityAsync(normalizedWorkspace, agentId, ct).ConfigureAwait(false);\n        var definition = workspaceConfig.AgentDefinition\n            ?? throw new InvalidOperationException($\"Agent definition '{agentId}' was not loaded for workspace runtime launch.\");\n\n        if (!workspaceConfig.Enabled)\n            throw new InvalidOperationException($\"Agent '{agentId}' is disabled in workspace '{normalizedWorkspace}'.\");\n        if (workspaceConfig.Banned)\n            throw new InvalidOperationException($\"Agent '{agentId}' is banned in workspace '{normalizedWorkspace}'.\");\n\n        var isolationStrategy = runtimeDependencies.Isolation.Resolve(workspaceConfig.AgentIsolation);\n        var workDirectory = await isolationStrategy.PrepareWorkDirectoryAsync(normalizedWorkspace, agentId, ct).ConfigureAwait(false);\n\n        var branchMode = string.IsNullOrWhiteSpace(workspaceConfig.BranchStrategyOverride)\n            ? definition.DefaultBranchStrategy\n            : workspaceConfig.BranchStrategyOverride;\n        var branchStrategy = runtimeDependencies.Branch.Resolve(branchMode);\n        var branchName = await branchStrategy.PrepareBranchAsync(workDirectory, agentId, ct).ConfigureAwait(false);\n\n        try\n        {\n            var resolvedCommand = AgentProcessCommandResolver.ResolveEffectiveCommand(\n                workspaceConfig,\n                definition,\n                workDirectory,\n                branchName);\n\n            var info = await runtimeDependencies.ProcessManager\n                .LaunchAsync(normalizedWorkspace, agentId, resolvedCommand, workDirectory, ct)\n                .ConfigureAwait(false);\n\n            await LogEventAsync(\n                normalizedWorkspace,\n                new AgentEventRequest\n                {\n                    AgentId = agentId,\n                    EventType = AgentEventType.Launch,\n                    Details = JsonSerializer.Serialize(\n                        new AgentLaunchEventDetails(\n                            resolvedCommand,\n                            branchName,\n                            workDirectory,\n                            isolationStrategy.StrategyName,\n                            branchStrategy.StrategyName),\n                        McpServicesJsonContext.Default.AgentLaunchEventDetails)\n                },\n                userId: null,\n                ct).ConfigureAwait(false);\n\n            workspaceConfig.LastLaunchedAt = DateTime.UtcNow;\n            await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n            return info;\n        }\n        catch\n        {\n            await branchStrategy.FinalizeBranchAsync(workDirectory, agentId, ct).ConfigureAwait(false);\n            await isolationStrategy.CleanupAsync(normalizedWorkspace, agentId, ct).ConfigureAwait(false);\n            throw;\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/AgentService.cs",
+      "firstLine": 195,
+      "lastLine": 418,
+      "family": "host-agent-runtime",
+      "excerptSha256": "9BDFF5047C941E96C583CE757F535EC7261A54037D68B308F9289683B1FB11B0",
+      "fileSha256": "D6CD1AD0AE551040373E4F5C40D56154D62855415EDFA41FFADB87AAA157E6B7"
+    },
+    {
+      "sourceText": "    public async Task<AgentMutationResult> LogEventAsync(string workspacePath, AgentEventRequest request, string? userId = null, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        var normalized = NormalizePath(workspacePath);\n\n        _db.AgentEventLogs.Add(new AgentEventLogEntity\n        {\n            AgentId = request.AgentId,\n            WorkspacePath = normalized,\n            EventType = request.EventType.ToString(),\n            UserId = userId,\n            DetailsJson = request.Details,\n            Timestamp = DateTime.UtcNow\n        });\n\n        if (request.EventType == AgentEventType.Launch)\n        {\n            var config = await _db.AgentWorkspaces\n                .FirstOrDefaultAsync(x => x.WorkspacePath == normalized && x.AgentDefinitionId == request.AgentId, ct)\n                .ConfigureAwait(false);\n            if (config is not null)\n                config.LastLaunchedAt = DateTime.UtcNow;\n        }\n\n        await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n        _logger.LogInformation(\"Logged {EventType} event for agent '{AgentId}' in '{Workspace}'\",\n            request.EventType, request.AgentId, normalized);\n        await PublishChangeSafeAsync(ChangeEventActions.Created, request.AgentId, ct).ConfigureAwait(false);\n        return new AgentMutationResult { Success = true };\n    }",
+      "path": "src/QBrainAi.Services/Services/AgentService.cs",
+      "firstLine": 477,
+      "lastLine": 506,
+      "family": "host-agent-runtime",
+      "excerptSha256": "D7C7E6CF9348D25A72EC4756D66675A8597220BA852F462724C5951306AE1162",
+      "fileSha256": "D6CD1AD0AE551040373E4F5C40D56154D62855415EDFA41FFADB87AAA157E6B7"
+    },
+    {
+      "sourceText": "    public async Task<BrainSlotDto> UpsertAsync(string slotId, UpsertBrainSlotRequest request, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        var normalizedSlotId = NormalizeSlotId(slotId)\n            ?? throw new BrainSlotValidationException(\"slotId is required.\");\n        var now = DateTimeOffset.UtcNow;\n        var role = BrainSlotValidation.NormalizeRole(request.Role);\n        var providerKind = BrainSlotValidation.NormalizeProviderKind(request.ProviderKind);\n        var timeout = NormalizeTimeout(request.TimeoutSeconds);\n        var partyId = NormalizePartyId(request.PartyId, role);\n\n        ValidateRequired(request.ModelId, nameof(request.ModelId));\n        ValidateCredentialReference(request.CredentialReference);\n        BrainSlotValidation.ValidateEndpoint(providerKind, request.Endpoint, _options);\n\n        var entity = await _db.BrainSlotDefinitions\n            .IgnoreQueryFilters(SoftDeleteFilter)\n            .FirstOrDefaultAsync(slot => slot.SlotId == normalizedSlotId, cancellationToken)\n            .ConfigureAwait(false);\n\n        var action = entity is null ? \"create\" : \"update\";\n        if (entity is null)\n        {\n            entity = new BrainSlotDefinitionEntity\n            {\n                SlotId = normalizedSlotId,\n                CreatedAtUtc = now,\n            };\n            _db.BrainSlotDefinitions.Add(entity);\n        }\n        else\n        {\n            RestoreSoftDeleted(entity);\n        }\n\n        if (request.Enabled)\n            await EnforceEnabledRoleUniquenessAsync(normalizedSlotId, role, request.ReplaceExisting, cancellationToken).ConfigureAwait(false);\n\n        entity.Role = role;\n        entity.DisplayName = NormalizeOptional(request.DisplayName);\n        entity.ProviderKind = providerKind;\n        entity.ModelId = request.ModelId.Trim();\n        entity.Endpoint = NormalizeOptional(request.Endpoint);\n        entity.CredentialReference = request.CredentialReference.Trim();\n        entity.PartyId = partyId;\n        entity.Enabled = request.Enabled;\n        entity.TimeoutSeconds = timeout;\n        entity.MaxOutputTokens = request.MaxOutputTokens <= 0 ? 1024 : request.MaxOutputTokens;\n        entity.SystemPrompt = NormalizeOptional(request.SystemPrompt);\n        if (entity.WeightVersion == 0 && entity.WeightUpdatedAtUtc is null)\n            entity.OrchestrationWeight = NormalizeWeight(request.OrchestrationWeight);\n        entity.UpdatedAtUtc = now;\n\n        await RegisterPartyAsync(entity, cancellationToken).ConfigureAwait(false);\n        AddAudit(action, entity, null);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        _logger.LogInformation(\"Brain slot {Action}: {SlotId} ({Role})\", action, entity.SlotId, entity.Role);\n        return ToDto(entity);\n    }\n\n    /// <inheritdoc />\n    public async Task<BrainSlotDto> DeleteAsync(string slotId, CancellationToken cancellationToken = default)\n    {\n        var entity = await GetRequiredEntityAsync(slotId, cancellationToken).ConfigureAwait(false);\n        entity.Enabled = false;\n        entity.UpdatedAtUtc = DateTimeOffset.UtcNow;\n        var dto = ToDto(entity);\n        AddAudit(\"delete\", entity, null);\n        _db.BrainSlotDefinitions.Remove(entity);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return dto;\n    }\n\n    /// <inheritdoc />\n    public async Task<BrainSlotDto> EnableAsync(string slotId, bool replaceExisting, CancellationToken cancellationToken = default)\n    {\n        var entity = await GetRequiredEntityAsync(slotId, cancellationToken).ConfigureAwait(false);\n        await EnforceEnabledRoleUniquenessAsync(entity.SlotId, entity.Role, replaceExisting, cancellationToken).ConfigureAwait(false);\n        entity.Enabled = true;\n        entity.UpdatedAtUtc = DateTimeOffset.UtcNow;\n        await RegisterPartyAsync(entity, cancellationToken).ConfigureAwait(false);\n        AddAudit(\"enable\", entity, new { replaceExisting });\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return ToDto(entity);\n    }\n\n    /// <inheritdoc />\n    public async Task<BrainSlotDto> DisableAsync(string slotId, CancellationToken cancellationToken = default)\n    {\n        var entity = await GetRequiredEntityAsync(slotId, cancellationToken).ConfigureAwait(false);\n        entity.Enabled = false;\n        entity.UpdatedAtUtc = DateTimeOffset.UtcNow;\n        await RegisterPartyAsync(entity, cancellationToken).ConfigureAwait(false);\n        AddAudit(\"disable\", entity, null);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return ToDto(entity);\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs",
+      "firstLine": 81,
+      "lastLine": 177,
+      "family": "host-brain-slots",
+      "excerptSha256": "6E976FF0A1DBF45EA408410B62C7198C8BE2D1B1D7EB67BA7FD455DD542D6860",
+      "fileSha256": "6EFB3CFA10F366F4DA13C6D16264B00799E8A4A9364492D260A459CCDEB571E8"
+    },
+    {
+      "sourceText": "    private async Task EnforceEnabledRoleUniquenessAsync(string slotId, string role, bool replaceExisting, CancellationToken cancellationToken)\n    {\n        var existing = await _db.BrainSlotDefinitions\n            .Where(slot => slot.Enabled && slot.Role == role && slot.SlotId != slotId)\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n\n        if (existing.Count == 0)\n            return;\n\n        if (!replaceExisting)\n            throw new BrainSlotConflictException($\"An enabled brain slot already exists for role '{role}'. Set replaceExisting=true to replace it.\");\n\n        foreach (var slot in existing)\n        {\n            slot.Enabled = false;\n            slot.UpdatedAtUtc = DateTimeOffset.UtcNow;\n            await RegisterPartyAsync(slot, cancellationToken).ConfigureAwait(false);\n            AddAudit(\"replace\", slot, new { replacementSlotId = slotId });\n        }\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs",
+      "firstLine": 233,
+      "lastLine": 253,
+      "family": "host-brain-slots",
+      "excerptSha256": "998BE3C63C04E61DC7D55DD836A118647C72DA07B0AF132DF247C57A410E33F5",
+      "fileSha256": "6EFB3CFA10F366F4DA13C6D16264B00799E8A4A9364492D260A459CCDEB571E8"
+    },
+    {
+      "sourceText": "    public async Task<string?> AdmitAsync(BrainSlotDefinitionEntity slot, string output, string transactionId, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(slot);\n        if (!string.Equals(slot.Role, BrainSlotRoles.CuriosityEngine, StringComparison.Ordinal))\n            throw new BrainSlotValidationException(\n                \"Only CuriosityEngine committed output may be admitted to GraphRAG/context in this slice.\",\n                BrainSlotReasonCodes.DeferredFeatureDisabled);\n\n        if (string.IsNullOrWhiteSpace(output))\n            return null;\n\n        var documentId = $\"brain-slot-{slot.SlotId}-{Guid.NewGuid():N}\";\n        var sourceKey = $\"{slot.Role}:{slot.SlotId}:{transactionId}\";\n        var chunks = _chunker.Chunk(documentId, output);\n        var contentHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))).ToLowerInvariant();\n\n        _db.Documents.Add(new ContextDocumentEntity\n        {\n            Id = documentId,\n            SourceType = \"brain-slot-curiosity\",\n            SourceKey = sourceKey,\n            IngestedAt = DateTime.UtcNow,\n            ContentHash = contentHash,\n        });\n\n        foreach (var chunk in chunks)\n        {\n            var embedding = _embeddingService.GenerateEmbedding(chunk.Content);\n            _db.Chunks.Add(new ContextChunkEntity\n            {\n                Id = chunk.Id,\n                DocumentId = documentId,\n                Content = chunk.Content,\n                TokenCount = chunk.TokenCount,\n                ChunkIndex = chunk.ChunkIndex,\n                Embedding = EmbeddingToBytes(embedding),\n            });\n            _vectorIndexService.AddVector(chunk.Id, embedding);\n        }\n\n        _db.DataAuditLogs.Add(new DataAuditLogEntity\n        {\n            WorkspaceId = _db.CurrentWorkspaceId,\n            EntityKind = \"BrainSlotContextAdmission\",\n            EntityKey = documentId,\n            Action = \"admit\",\n            SourceType = nameof(BrainSlotContextAdmissionService),\n            Actor = \"system\",\n            OccurredAtUtc = DateTimeOffset.UtcNow,\n            MetadataJson = System.Text.Json.JsonSerializer.Serialize(new\n            {\n                slot.SlotId,\n                slot.Role,\n                transactionId,\n                chunkCount = chunks.Count,\n            }),\n        });\n\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        _logger.LogInformation(\"Brain slot Curiosity output admitted to context: {DocumentId}\", documentId);\n        return documentId;\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotContextAdmissionService.cs",
+      "firstLine": 37,
+      "lastLine": 98,
+      "family": "host-brain-slots",
+      "excerptSha256": "7AC3E605C1EAE8F2931112008BF1058FB76C6310104CC76D0E2A8932ED079B4E",
+      "fileSha256": "00B230B40B5A39CE0CF0FCF22CF75BB57A00BFA5FB834CA57CA061CD0CBFD852"
+    },
+    {
+      "sourceText": "    public async Task<BrainSlotInvokeResponse> InvokeAsync(string slotId, BrainSlotInvokeRequest request, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        var started = DateTimeOffset.UtcNow;\n        var normalizedSlotId = string.IsNullOrWhiteSpace(slotId) ? string.Empty : slotId.Trim();\n        var invocation = new BrainSlotInvocationEntity\n        {\n            SlotId = normalizedSlotId,\n            Status = \"attempted\",\n            Reason = BrainSlotReasonCodes.None,\n            TurnId = request.TurnId,\n            StartedAtUtc = started,\n            AdmitToGraphRag = request.AdmitToGraphRag,\n            MetadataJson = JsonSerializer.Serialize(request.Metadata ?? new Dictionary<string, string>()),\n        };\n\n        var slot = await _registry.GetEntityAsync(normalizedSlotId, cancellationToken).ConfigureAwait(false);\n        if (slot is null)\n            return await RejectAsync(invocation, BrainSlotReasonCodes.SlotNotFound, started, \"slot not found\", cancellationToken).ConfigureAwait(false);\n\n        PopulateInvocationFromSlot(invocation, slot);\n        _db.BrainSlotInvocations.Add(invocation);\n        AddAudit(\"invoke_attempt\", slot, invocation, null);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        if (!_brainSlotOptions.CurrentValue.ExecutionEnabled)\n            return await RejectAsync(invocation, BrainSlotReasonCodes.ExecutionDisabled, started, \"execution disabled\", cancellationToken).ConfigureAwait(false);\n        if (!slot.Enabled)\n            return await RejectAsync(invocation, BrainSlotReasonCodes.SlotDisabled, started, \"slot disabled\", cancellationToken).ConfigureAwait(false);\n        if (string.IsNullOrWhiteSpace(request.Input))\n            return await RejectAsync(invocation, BrainSlotReasonCodes.ValidationFailed, started, \"input is required\", cancellationToken).ConfigureAwait(false);\n        if (request.AdmitToGraphRag && !string.Equals(slot.Role, BrainSlotRoles.CuriosityEngine, StringComparison.Ordinal))\n            return await RejectAsync(invocation, BrainSlotReasonCodes.DeferredFeatureDisabled, started, \"only CuriosityEngine may request GraphRAG admission\", cancellationToken).ConfigureAwait(false);\n        if (!TransactionsAreRequired())\n            return await RejectAsync(invocation, BrainSlotReasonCodes.TransactionsRequired, started, \"required turn transactions are disabled\", cancellationToken).ConfigureAwait(false);\n\n        try\n        {\n            BrainSlotValidation.ValidateEndpoint(slot.ProviderKind, slot.Endpoint, _brainSlotOptions);\n        }\n        catch (BrainSlotValidationException ex)\n        {\n            return await RejectAsync(invocation, ex.Reason, started, ex.Message, cancellationToken).ConfigureAwait(false);\n        }\n\n        if (!await PartyMappingIsActiveAsync(slot, cancellationToken).ConfigureAwait(false))\n            return await RejectAsync(invocation, BrainSlotReasonCodes.PartyMappingInvalid, started, \"trusted party signing key is missing or disabled\", cancellationToken).ConfigureAwait(false);\n\n        var credential = await _credentialResolver.ResolveAsync(slot.CredentialReference, cancellationToken).ConfigureAwait(false);\n        if (credential is null)\n            return await RejectAsync(invocation, BrainSlotReasonCodes.CredentialUnavailable, started, \"credential reference could not be resolved\", cancellationToken).ConfigureAwait(false);\n\n        var promptHash = HashHex(request.Input);\n        invocation.PromptSha256 = promptHash;\n        string output;\n        try\n        {\n            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);\n            timeoutCts.CancelAfter(TimeSpan.FromSeconds(slot.TimeoutSeconds <= 0 ? _brainSlotOptions.CurrentValue.DefaultTimeoutSeconds : slot.TimeoutSeconds));\n            var turnContext = request.TurnContext ?? BrainSlotTurnContext.FromInvokeRequest(request);\n            var strategy = _chatClientFactory.CreateStrategy(slot, credential);\n            output = await strategy.CompleteAsync(slot, request.Input, turnContext, request.Temperature, timeoutCts.Token).ConfigureAwait(false);\n        }\n        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)\n        {\n            return await RejectAsync(invocation, BrainSlotReasonCodes.ProviderFailed, started, \"provider timeout\", cancellationToken).ConfigureAwait(false);\n        }\n        catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)\n        {\n            _logger.LogWarning(ex, \"Brain slot provider failed for {SlotId}\", slot.SlotId);\n            return await RejectAsync(invocation, BrainSlotReasonCodes.ProviderFailed, started, \"provider failed\", cancellationToken).ConfigureAwait(false);\n        }\n\n        var outputHash = HashHex(output);\n        invocation.OutputSha256 = outputHash;\n        var operationBodyJson = JsonSerializer.Serialize(new\n        {\n            slotId = slot.SlotId,\n            slot.Role,\n            slot.ProviderKind,\n            slot.ModelId,\n            promptSha256 = promptHash,\n            outputSha256 = outputHash,\n            admissionTarget = request.AdmitToGraphRag ? \"GraphRAG\" : \"none\",\n            temperature = request.Temperature,\n            metadata = request.Metadata,\n            startedAtUtc = started,\n            modelCompletedAtUtc = DateTimeOffset.UtcNow,\n        });\n\n        var transaction = await _transactionCoordinator!.ExecuteAsync(\n            new TurnTransactionRequest\n            {\n                TransactionId = $\"brain-slot-{Guid.NewGuid():N}\",\n                TurnId = request.TurnId,\n                OperationName = \"brain-slot.invoke\",\n                OperationBodyJson = operationBodyJson,\n                PublisherPartyId = slot.PartyId,\n                Sequence = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),\n                Mutating = true,\n            },\n            _ => Task.FromResult(new TurnMutationResult\n            {\n                Success = true,\n                ResultJson = JsonSerializer.Serialize(new\n                {\n                    slot.SlotId,\n                    slot.Role,\n                    slot.ModelId,\n                    promptSha256 = promptHash,\n                    outputSha256 = outputHash,\n                }),\n            }),\n            cancellationToken).ConfigureAwait(false);\n\n        if (!string.Equals(transaction.Status, \"committed\", StringComparison.OrdinalIgnoreCase))\n        {\n            invocation.TransactionId = transaction.TransactionId;\n            return await RejectAsync(invocation, BrainSlotReasonCodes.CommitFailed, started, transaction.Message ?? transaction.Status, cancellationToken).ConfigureAwait(false);\n        }\n\n        invocation.Status = \"committed\";\n        invocation.Reason = BrainSlotReasonCodes.None;\n        invocation.TransactionId = transaction.TransactionId;\n        invocation.DiffgramId = transaction.DiffgramId;\n        invocation.CompletedAtUtc = DateTimeOffset.UtcNow;\n        AddAudit(\"invoke_committed\", slot, invocation, new { transaction.TransactionId, transaction.DiffgramId });\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        if (request.AdmitToGraphRag && string.Equals(slot.Role, BrainSlotRoles.CuriosityEngine, StringComparison.Ordinal))\n        {\n            try\n            {\n                await _contextAdmission.AdmitAsync(slot, output, transaction.TransactionId, cancellationToken).ConfigureAwait(false);\n            }\n            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)\n            {\n                _logger.LogWarning(ex, \"Committed brain-slot output admission failed for {SlotId}\", slot.SlotId);\n            }\n        }\n\n        return new BrainSlotInvokeResponse\n        {\n            Status = \"committed\",\n            Reason = BrainSlotReasonCodes.None,\n            SlotId = slot.SlotId,\n            Role = slot.Role,\n            TransactionId = transaction.TransactionId,\n            DiffgramId = transaction.DiffgramId,\n            ModelId = slot.ModelId,\n            Output = output,\n            StartedAtUtc = started,\n            CompletedAtUtc = invocation.CompletedAtUtc ?? DateTimeOffset.UtcNow,\n        };\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotInvocationService.cs",
+      "firstLine": 55,
+      "lastLine": 209,
+      "family": "host-brain-slots",
+      "excerptSha256": "D466CFBA5A7066713E78254A5735DB1AE1B9D73F1A8B57E9CDE1B73CC21410F0",
+      "fileSha256": "7941925F649AD2AB3401B659C90C71FC563DC69C54EC1A6A918DDC4042B97E35"
+    },
+    {
+      "sourceText": "    private async Task<BrainSlotInvokeResponse> RejectAsync(\n        BrainSlotInvocationEntity invocation,\n        string reason,\n        DateTimeOffset started,\n        string? details,\n        CancellationToken cancellationToken)\n    {\n        invocation.Status = \"rejected\";\n        invocation.Reason = reason;\n        invocation.CompletedAtUtc = DateTimeOffset.UtcNow;\n        if (_db.Entry(invocation).State == Microsoft.EntityFrameworkCore.EntityState.Detached)\n        {\n            if (!string.IsNullOrWhiteSpace(invocation.Role))\n                _db.BrainSlotInvocations.Add(invocation);\n        }\n        else\n        {\n            _db.BrainSlotInvocations.Update(invocation);\n        }\n\n        _db.DataAuditLogs.Add(new DataAuditLogEntity\n        {\n            WorkspaceId = _db.CurrentWorkspaceId,\n            EntityKind = \"BrainSlotInvocation\",\n            EntityKey = invocation.InvocationId,\n            Action = \"invoke_rejected\",\n            SourceType = nameof(BrainSlotInvocationService),\n            Actor = \"system\",\n            OccurredAtUtc = DateTimeOffset.UtcNow,\n            MetadataJson = JsonSerializer.Serialize(new { reason, details }),\n        });\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        return new BrainSlotInvokeResponse\n        {\n            Status = \"rejected\",\n            Reason = reason,\n            SlotId = invocation.SlotId,\n            Role = invocation.Role,\n            TransactionId = invocation.TransactionId,\n            DiffgramId = invocation.DiffgramId,\n            ModelId = string.IsNullOrWhiteSpace(invocation.ModelId) ? null : invocation.ModelId,\n            Output = null,\n            StartedAtUtc = started,\n            CompletedAtUtc = invocation.CompletedAtUtc ?? DateTimeOffset.UtcNow,\n        };\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Services/BrainSlotInvocationService.cs",
+      "firstLine": 231,
+      "lastLine": 277,
+      "family": "host-brain-slots",
+      "excerptSha256": "D4EE9A354EF761A30C537E2B363821C37067B811E6B45FD3839F303EBB0AA5D9",
+      "fileSha256": "7941925F649AD2AB3401B659C90C71FC563DC69C54EC1A6A918DDC4042B97E35"
+    },
+    {
+      "sourceText": "    private async Task<IReadOnlyList<QuadBrainWeightSnapshot>> ApplyWeightUpdateAsync(\n        IReadOnlyList<BrainSlotDefinitionEntity> slots,\n        IReadOnlyDictionary<string, double> normalizedWeights,\n        QuadBrainWeightUpdateRequest request,\n        CancellationToken cancellationToken)\n    {\n        var now = DateTimeOffset.UtcNow;\n        var snapshots = new List<QuadBrainWeightSnapshot>();\n        foreach (var slot in slots.OrderBy(item => item.Role, StringComparer.Ordinal))\n        {\n            var previousWeight = slot.OrchestrationWeight <= 0 ? 1.0 : slot.OrchestrationWeight;\n            var previousVersion = slot.WeightVersion;\n            var newWeight = normalizedWeights[slot.Role];\n            slot.OrchestrationWeight = newWeight;\n            slot.WeightVersion += 1;\n            slot.WeightUpdatedAtUtc = now;\n            slot.UpdatedAtUtc = now;\n\n            var snapshot = new QuadBrainWeightSnapshot\n            {\n                Role = slot.Role,\n                SlotId = slot.SlotId,\n                PreviousWeight = previousWeight,\n                NewWeight = newWeight,\n                PreviousVersion = previousVersion,\n                NewVersion = slot.WeightVersion,\n            };\n            snapshots.Add(snapshot);\n            AddWeightAudit(slot, request, snapshot);\n        }\n\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return snapshots;\n    }\n\n    private async Task RollbackWeightUpdateAsync(\n        IReadOnlyList<QuadBrainWeightSnapshot> snapshots,\n        CancellationToken cancellationToken)\n    {\n        foreach (var snapshot in snapshots)\n        {\n            var slot = await _db.BrainSlotDefinitions\n                .FirstOrDefaultAsync(item => item.SlotId == snapshot.SlotId && item.Role == snapshot.Role, cancellationToken)\n                .ConfigureAwait(false);\n            if (slot is null)\n                continue;\n\n            slot.OrchestrationWeight = snapshot.PreviousWeight;\n            slot.WeightVersion = snapshot.PreviousVersion;\n            slot.UpdatedAtUtc = DateTimeOffset.UtcNow;\n            _db.DataAuditLogs.Add(new DataAuditLogEntity\n            {\n                WorkspaceId = _db.CurrentWorkspaceId,\n                EntityKind = \"BrainSlotDefinition\",\n                EntityKey = slot.SlotId,\n                Action = \"weight_update_rollback\",\n                SourceType = nameof(QuadBrainOrchestrationService),\n                Actor = \"system\",\n                OccurredAtUtc = DateTimeOffset.UtcNow,\n                MetadataJson = JsonSerializer.Serialize(snapshot, JsonOptions),\n            });\n        }\n\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        _logger.LogInformation(\"Rolled back {Count} Quad-Brain weight updates.\", snapshots.Count);\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Services/QuadBrainOrchestrationService.cs",
+      "firstLine": 614,
+      "lastLine": 679,
+      "family": "host-orchestration",
+      "excerptSha256": "49B9D68A5A73E3B52BF4B507B75B5419586D5594B05AC778096BAF30951CDD6D",
+      "fileSha256": "F0295B9B05E13676D5BCFC169C08D5A77E7357157D845823B8E9F82F40838B5E"
+    }
+  ],
+  "runtimeProof": false,
+  "writerClosureComplete": false,
+  "operatorAccepted": false,
+  "productionCodeChanged": false,
+  "limitations": [
+    "Source-anchor coverage is not semantic binding or complete dynamic caller closure",
+    "Original proposed classifications are retained without operator acceptance",
+    "All native routing and relational behavior remain unproven",
+    "No product, database, migration or deployment operation executes"
+  ]
+}

@@ -1,0 +1,986 @@
+{
+  "timestampLocal": "2026-11-18T00:28:04",
+  "sourceHead": "ebdcfb970b95de4b7b38075b2d8cfe4e8f9104a3",
+  "task": "TASK-FEDPH0-004",
+  "sourceCatalogSha256": "88DA9E41116F88DEDA13A9675BA2B073AD63B41D0E65BD371B72FE9CCAD7CF05",
+  "enclosingIndexSha256": "318117EFC47830B5AEF2D86914173C121DED4ECAC01C281E9A04C4668D36BF0E",
+  "classificationSha256": "9E623372B679204FDFB061B343DC61F1185BBF060884270A9870214D933A373F",
+  "scriptSha256": "A57501E63E515ECE6DD585FD36C113F70B194534FC65E7CF531FE680598FC18D",
+  "commands": [
+    {
+      "methodSha256": "93A1D2116658F76140CA4E0D23CC6495BD8A6516622843609B72A92FCA87D60B",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Validates parent and flow type, computes sequence, adds flow and updates parent timestamp.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseFlowCommand.cs:28:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseFlowCommand.cs:28:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseFlowCommand.cs",
+            "method": "HandleAsync",
+            "line": 70,
+            "owner": "AddUseCaseFlowCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "useCase.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseFlowCommand.cs:28:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseFlowCommand.cs",
+            "method": "HandleAsync",
+            "line": 71,
+            "owner": "AddUseCaseFlowCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "B391C0C42AAFF33F1F9CF332BAAEB68A60D0A2BBD28C2B4E86B340A316299C0E",
+      "path": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseFlowCommand.cs"
+    },
+    {
+      "methodSha256": "59D50C0504F006ADC651712BEB1AB900A40B2C7A8C4E805BD39A86C4F0ACBE9C",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Validates parent flow and actor, computes step number, adds step, updates parent and reloads actor reference.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseStepCommand.cs:32:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseStepCommand.cs:32:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseStepCommand.cs",
+            "method": "HandleAsync",
+            "line": 93,
+            "owner": "AddUseCaseStepCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "useCase.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseStepCommand.cs:32:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseStepCommand.cs",
+            "method": "HandleAsync",
+            "line": 95,
+            "owner": "AddUseCaseStepCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "DF990EA91C1AB62DC736BEB08AE65809C3EB11A11F0455AE4D44438B88E38B4A",
+      "path": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseStepCommand.cs"
+    },
+    {
+      "methodSha256": "931B2F35E0308FEA7FD4238E73106BDC4EBDC8766C89750CBF82B5CCEE60F1EC",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Finds or creates workspace actor with an earlier save, revives/adds association, demotes other primary associations and updates parent.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/AttachUseCaseActorCommand.cs:30:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/AttachUseCaseActorCommand.cs:30:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/AttachUseCaseActorCommand.cs",
+            "method": "HandleAsync",
+            "line": 123,
+            "owner": "AttachUseCaseActorCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "useCase.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/AttachUseCaseActorCommand.cs:30:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/AttachUseCaseActorCommand.cs",
+            "method": "HandleAsync",
+            "line": 83,
+            "owner": "AttachUseCaseActorCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        },
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/AttachUseCaseActorCommand.cs:30:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/AttachUseCaseActorCommand.cs",
+            "method": "HandleAsync",
+            "line": 124,
+            "owner": "AttachUseCaseActorCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "B5124B6C04023B256B328662EBB6AE34C9BE68640DB55B7B6CE86E9F9AE3FBF2",
+      "path": "src/QBrainAi.Services/UseCases/Commands/AttachUseCaseActorCommand.cs"
+    },
+    {
+      "methodSha256": "26F190A41850405E8598AA0E11D0D72B1C3C398A9CE4F344B6D1B494138F5E94",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Validates FR then saves generated parent ID, optional link and generated flow, then steps and final save. Validation/failure can occur between saves.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseCommand.cs:27:HandleAsync",
+      "automaticAssignments": [],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseCommand.cs:27:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseCommand.cs",
+            "method": "HandleAsync",
+            "line": 65,
+            "owner": "CreateUseCaseCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        },
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseCommand.cs:27:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseCommand.cs",
+            "method": "HandleAsync",
+            "line": 95,
+            "owner": "CreateUseCaseCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        },
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseCommand.cs:27:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseCommand.cs",
+            "method": "HandleAsync",
+            "line": 120,
+            "owner": "CreateUseCaseCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "FF40EB4061F8AF58241CD9A3201244657A3C0CDAFB16303387E8B29A40532A04",
+      "path": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseCommand.cs"
+    },
+    {
+      "methodSha256": "5EFEA99ACFCB4ABA6CA1BDB05FD1AC4F858EB570FDEE8C70C901DB78081FA922",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Reads workspace FR, saves generated use case, then its realizes link in a second save.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseFromFrCommand.cs:27:HandleAsync",
+      "automaticAssignments": [],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseFromFrCommand.cs:27:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseFromFrCommand.cs",
+            "method": "HandleAsync",
+            "line": 65,
+            "owner": "CreateUseCaseFromFrCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        },
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseFromFrCommand.cs:27:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseFromFrCommand.cs",
+            "method": "HandleAsync",
+            "line": 78,
+            "owner": "CreateUseCaseFromFrCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "6E6FB9BF60E73A1C1AA11E858B32C413954A175325270901EBDE84F7C1089A89",
+      "path": "src/QBrainAi.Services/UseCases/Commands/CreateUseCaseFromFrCommand.cs"
+    },
+    {
+      "methodSha256": "1B9566F0320CD15D29A8966F7E8212F45F38DF21947B1038DB912331613CF59F",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Loads full use-case graph, removes steps/flows/joins/special requirements/extension points/FR links then parent through shadow soft-delete conventions. Shared Actor row is not explicitly removed.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/DeleteUseCaseCommand.cs:26:HandleAsync",
+      "automaticAssignments": [],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/DeleteUseCaseCommand.cs:26:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/DeleteUseCaseCommand.cs",
+            "method": "HandleAsync",
+            "line": 61,
+            "owner": "DeleteUseCaseCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "42E07171A83809AFA65C8BE790575FB5C714C76C0D3B4F6D4F0A478C4F314EEC",
+      "path": "src/QBrainAi.Services/UseCases/Commands/DeleteUseCaseCommand.cs"
+    },
+    {
+      "methodSha256": "1A03226C9F6B635E9F340099CA8904D5B32FB785BE508533D8E52E41B9370FB1",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Validates workspace FR and parent, rejects active duplicate or revives scoped deleted link, updates parent timestamp.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs:37:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs:37:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs",
+            "method": "HandleAsync",
+            "line": 82,
+            "owner": "LinkUseCaseToFrCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "useCase.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        },
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs:37:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs",
+            "method": "HandleAsync",
+            "line": 99,
+            "owner": "LinkUseCaseToFrCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "useCase.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs:37:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs",
+            "method": "HandleAsync",
+            "line": 83,
+            "owner": "LinkUseCaseToFrCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        },
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs:37:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs",
+            "method": "HandleAsync",
+            "line": 100,
+            "owner": "LinkUseCaseToFrCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "E46E3D8DF7A396FE67A73AA62BD8EC42D6752AD6AE96A4A19F84593D85373932",
+      "path": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs"
+    },
+    {
+      "methodSha256": "E5288AFA9208D66D2EB14BCAC4EA56D5DCD2B29AA261BC6FCC92FDE926680C54",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Validates graph nodes/edges and canonicalizes ordering, saves diagram JSON and parent timestamp.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/PutUseCaseDiagramGraphCommand.cs:36:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/PutUseCaseDiagramGraphCommand.cs:36:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/PutUseCaseDiagramGraphCommand.cs",
+            "method": "HandleAsync",
+            "line": 64,
+            "owner": "PutUseCaseDiagramGraphCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "entity.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/PutUseCaseDiagramGraphCommand.cs:36:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/PutUseCaseDiagramGraphCommand.cs",
+            "method": "HandleAsync",
+            "line": 65,
+            "owner": "PutUseCaseDiagramGraphCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "1F1A25420350A1C8C935E41C059C5C9D01070D4E1C3E50F6A5681C320DC5F851",
+      "path": "src/QBrainAi.Services/UseCases/Commands/PutUseCaseDiagramGraphCommand.cs"
+    },
+    {
+      "methodSha256": "BBE1A1F233005CAE33379F9997E8E6CFAD2FC624396D83B3E202115C25932660",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Validates allowed status, updates approval/timestamp and increments VersionNumber when entering Approved from a different status.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseApprovalStatusCommand.cs:33:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseApprovalStatusCommand.cs:33:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseApprovalStatusCommand.cs",
+            "method": "HandleAsync",
+            "line": 58,
+            "owner": "SetUseCaseApprovalStatusCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "entity.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseApprovalStatusCommand.cs:33:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseApprovalStatusCommand.cs",
+            "method": "HandleAsync",
+            "line": 65,
+            "owner": "SetUseCaseApprovalStatusCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "6B3668AB151B57577D7E83652CD17A91D4FDE2A65B7E070ADAFDB979657B0DAE",
+      "path": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseApprovalStatusCommand.cs"
+    },
+    {
+      "methodSha256": "939CDDECF22A713CDD50A5EEF4135534D7A7ADBEE79B031975EF27205B5EA9B2",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Stores trimmed ProductKey or null on the use case; no Product membership mutation or owner grant is performed here.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseProductKeyCommand.cs:27:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseProductKeyCommand.cs:27:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseProductKeyCommand.cs",
+            "method": "HandleAsync",
+            "line": 39,
+            "owner": "SetUseCaseProductKeyCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "entity.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseProductKeyCommand.cs:27:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseProductKeyCommand.cs",
+            "method": "HandleAsync",
+            "line": 40,
+            "owner": "SetUseCaseProductKeyCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "DE9D050636E9EC6DFBA383D7EBB4BEADE29FECCD4C423419BAC146D1C802A0C4",
+      "path": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseProductKeyCommand.cs"
+    },
+    {
+      "methodSha256": "881307CD7C8CE0175036EF9FBE159AE5428EAD100D2F45BE4C92138602263E8E",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Removes scoped link through tombstone convention and updates retained parent timestamp.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/UnlinkUseCaseFromFrCommand.cs:27:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/UnlinkUseCaseFromFrCommand.cs:27:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/UnlinkUseCaseFromFrCommand.cs",
+            "method": "HandleAsync",
+            "line": 53,
+            "owner": "UnlinkUseCaseFromFrCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "useCase.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/UnlinkUseCaseFromFrCommand.cs:27:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/UnlinkUseCaseFromFrCommand.cs",
+            "method": "HandleAsync",
+            "line": 55,
+            "owner": "UnlinkUseCaseFromFrCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "9A831FEC5D0F47C4CFFECC1FC4FF5B40A56634FE96F84753A5A5D025A6C78386",
+      "path": "src/QBrainAi.Services/UseCases/Commands/UnlinkUseCaseFromFrCommand.cs"
+    },
+    {
+      "methodSha256": "1C4D1433356948465F560474B0EFD4E9BB867445B6C127A27F6D3E72205403AF",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Validates selected use case/association, edits shared Actor name/description/type and association primary flag, demotes sibling primaries.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseActorCommand.cs:31:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseActorCommand.cs:31:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseActorCommand.cs",
+            "method": "HandleAsync",
+            "line": 87,
+            "owner": "UpdateUseCaseActorCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "useCase.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseActorCommand.cs:31:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseActorCommand.cs",
+            "method": "HandleAsync",
+            "line": 88,
+            "owner": "UpdateUseCaseActorCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "01E3EC82F4342707C68A2BD8A5D377BD1CD25075BBD94A52C0030E21A5FF4381",
+      "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseActorCommand.cs"
+    },
+    {
+      "methodSha256": "727203EB817E7D4477DA110A0496348EB48FD58266C42C18966D7641B0651A68",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Updates supplied header fields and timestamp without recreating children.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseCommand.cs:27:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseCommand.cs:27:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseCommand.cs",
+            "method": "HandleAsync",
+            "line": 61,
+            "owner": "UpdateUseCaseCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "entity.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseCommand.cs:27:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseCommand.cs",
+            "method": "HandleAsync",
+            "line": 62,
+            "owner": "UpdateUseCaseCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "272334E8061A4F77D1381C482DE36B8366B76ADDFFBF3C918A85141240061093",
+      "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseCommand.cs"
+    },
+    {
+      "methodSha256": "09716565B251553BE93975060A1F011362DF61524DCFCCE0309551FCEDFAB26B",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Validates parent/flow and sequence, edits selected flow and parent timestamp, retaining steps.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseFlowCommand.cs:31:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseFlowCommand.cs:31:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseFlowCommand.cs",
+            "method": "HandleAsync",
+            "line": 76,
+            "owner": "UpdateUseCaseFlowCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "useCase.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseFlowCommand.cs:31:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseFlowCommand.cs",
+            "method": "HandleAsync",
+            "line": 78,
+            "owner": "UpdateUseCaseFlowCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "D690FB2E8F2136152F44EEE59D0CAF9BF5C62311DE70A2512251DCFC3DE1C423",
+      "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseFlowCommand.cs"
+    },
+    {
+      "methodSha256": "CF450C73FA860BD6946E91DBDBD31602A0227E4C51A9BD36FE81305187B386F7",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Validates parent/flow/step and actor association; edits selected step, parent timestamp and reloads actor.",
+      "rationale": "Approved authored use-case/actor/flow/step/link graph; owning project/branch write gate covers complete operation and conventions.",
+      "proposedDestination": "ProjectVersioned",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseStepCommand.cs:33:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseStepCommand.cs:33:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseStepCommand.cs",
+            "method": "HandleAsync",
+            "line": 98,
+            "owner": "UpdateUseCaseStepCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "useCase.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseStepCommand.cs:33:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseStepCommand.cs",
+            "method": "HandleAsync",
+            "line": 100,
+            "owner": "UpdateUseCaseStepCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "3713FA2266A34C02F764EE89F8BFB351A6D5A8F17810EAC17BA2EA791E8E1DE1",
+      "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseStepCommand.cs"
+    },
+    {
+      "methodSha256": "75C882D6112C0F39018BAAEF507ABC8B829F599A2FCAAAC27F79326560407CB5",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Requires owner and registered enabled target workspace; creates/revives membership and updates product timestamp.",
+      "rationale": "Existing protected cross-workspace registry and membership authorization remain operational; preserve owner/member/visibility rules.",
+      "proposedDestination": "LocalOperational",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/AddProductMemberCommand.cs:20:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/AddProductMemberCommand.cs:20:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Support.Mcp/Products/Commands/AddProductMemberCommand.cs",
+            "method": "HandleAsync",
+            "line": 79,
+            "owner": "AddProductMemberCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "product.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/AddProductMemberCommand.cs:20:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Support.Mcp/Products/Commands/AddProductMemberCommand.cs",
+            "method": "HandleAsync",
+            "line": 80,
+            "owner": "AddProductMemberCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "59B2D2B565877D8D56147E66121ACC24A4E41736D605CF90777589FF0A6C1B93",
+      "path": "src/QBrainAi.Support.Mcp/Products/Commands/AddProductMemberCommand.cs"
+    },
+    {
+      "methodSha256": "1155ECE245942BA2FA843CB50C6555413A80417F753297ADEFBA5F8C0FD24B76",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Validates caller workspace and product key/name, rejects existing key, adds product plus owner membership.",
+      "rationale": "Existing protected cross-workspace registry and membership authorization remain operational; preserve owner/member/visibility rules.",
+      "proposedDestination": "LocalOperational",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/CreateProductCommand.cs:19:HandleAsync",
+      "automaticAssignments": [],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/CreateProductCommand.cs:19:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Support.Mcp/Products/Commands/CreateProductCommand.cs",
+            "method": "HandleAsync",
+            "line": 68,
+            "owner": "CreateProductCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "23F12325A7C2D2017A95488986436F928E7A1CB5C805173752E30B1772CA55A8",
+      "path": "src/QBrainAi.Support.Mcp/Products/Commands/CreateProductCommand.cs"
+    },
+    {
+      "methodSha256": "B3523DA5FD71669C612C08E94281E08DF7A1F02D6C420CF667782808F7319B4D",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Requires owner, soft-deletes product and memberships through shared conventions.",
+      "rationale": "Existing protected cross-workspace registry and membership authorization remain operational; preserve owner/member/visibility rules.",
+      "proposedDestination": "LocalOperational",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/DeleteProductCommand.cs:17:HandleAsync",
+      "automaticAssignments": [],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/DeleteProductCommand.cs:17:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Support.Mcp/Products/Commands/DeleteProductCommand.cs",
+            "method": "HandleAsync",
+            "line": 40,
+            "owner": "DeleteProductCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "44D0ECBDF910D2AAB9EF42C848D0FFF39A4AFC2308E3143C2BEC46941218D784",
+      "path": "src/QBrainAi.Support.Mcp/Products/Commands/DeleteProductCommand.cs"
+    },
+    {
+      "methodSha256": "73366D221E169D0C12BCF6F9DA8052DD01F6A63D9757ABAAF2B2CF7BE73E1EC2",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Requires visible product and owner or self-leave; owner cannot self-leave; soft-deletes target membership and updates product timestamp.",
+      "rationale": "Existing protected cross-workspace registry and membership authorization remain operational; preserve owner/member/visibility rules.",
+      "proposedDestination": "LocalOperational",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/RemoveProductMemberCommand.cs:19:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/RemoveProductMemberCommand.cs:19:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Support.Mcp/Products/Commands/RemoveProductMemberCommand.cs",
+            "method": "HandleAsync",
+            "line": 55,
+            "owner": "RemoveProductMemberCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "product.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/RemoveProductMemberCommand.cs:19:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Support.Mcp/Products/Commands/RemoveProductMemberCommand.cs",
+            "method": "HandleAsync",
+            "line": 56,
+            "owner": "RemoveProductMemberCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "EAFF5472AA342877D516CBD4EF699913C0D6B40947B0B23119978C8255FF1BCF",
+      "path": "src/QBrainAi.Support.Mcp/Products/Commands/RemoveProductMemberCommand.cs"
+    },
+    {
+      "methodSha256": "8D8B4112CA3F4257E31828C46D6B2CDEF3E916B26035668CD99BE14878E1D7FD",
+      "nativeRoutingVerified": false,
+      "sourceObservation": "Requires owner; edits product name/description/timestamp, retaining memberships.",
+      "rationale": "Existing protected cross-workspace registry and membership authorization remain operational; preserve owner/member/visibility rules.",
+      "proposedDestination": "LocalOperational",
+      "dynamicDispatchVerified": false,
+      "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/UpdateProductCommand.cs:18:HandleAsync",
+      "automaticAssignments": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/UpdateProductCommand.cs:18:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Support.Mcp/Products/Commands/UpdateProductCommand.cs",
+            "method": "HandleAsync",
+            "line": 45,
+            "owner": "UpdateProductCommandHandler"
+          },
+          "kind": "assignment",
+          "operation": "UpdatedAtUtc",
+          "expression": "product.UpdatedAtUtc = DateTimeOffset.UtcNow"
+        }
+      ],
+      "manualSourceReviewComplete": true,
+      "writerCalls": [
+        {
+          "semanticTargetVerified": false,
+          "methodKey": "src/QBrainAi.Support.Mcp/Products/Commands/UpdateProductCommand.cs:18:HandleAsync",
+          "source": {
+            "path": "src/QBrainAi.Support.Mcp/Products/Commands/UpdateProductCommand.cs",
+            "method": "HandleAsync",
+            "line": 46,
+            "owner": "UpdateProductCommandHandler"
+          },
+          "kind": "writer",
+          "operation": "SaveChangesAsync",
+          "expression": "db.SaveChangesAsync(context.CancellationToken)"
+        }
+      ],
+      "fileSha256": "27CA8779339561E325690068BDCCA2A915CAADB9C06520533F121622D1AF9DE6",
+      "path": "src/QBrainAi.Support.Mcp/Products/Commands/UpdateProductCommand.cs"
+    }
+  ],
+  "supportExcerpts": [
+    {
+      "lastLine": 98,
+      "fileSha256": "2E090D40A6CD698F678E83D9270CECF8FA259EDB4264D4F3BF8F57D3035EE7D8",
+      "sourceText": "    /// <summary>\n    /// Resolves a command/query workspace through the repository-wide identity policy and\n    /// propagates caller cancellation into bounded physical resolution.\n    /// </summary>\n    public static async Task<ResolvedUseCaseWorkspace> ResolveWorkspaceAsync(\n        McpDbContext db,\n        WorkspaceContext workspaceContext,\n        string? workspacePath,\n        CancellationToken cancellationToken)\n    {\n        var resolved = !string.IsNullOrWhiteSpace(workspacePath)\n            ? workspacePath.Trim()\n            : workspaceContext.WorkspacePath;\n\n        if (string.IsNullOrWhiteSpace(resolved))\n            throw new InvalidOperationException(\"Workspace path is required for use case operations.\");\n\n        var resolution = await WorkspaceIdentity.ResolveAsync(\n                resolved,\n                s_workspaceIdentityResolutionTimeout,\n                cancellationToken)\n            .ConfigureAwait(false);\n\n        var workspaceId = resolution.NormalizedPath;\n        if (!string.Equals(db.CurrentWorkspaceId, workspaceId, StringComparison.OrdinalIgnoreCase))\n            db.OverrideWorkspaceId(workspaceId);\n\n        return new ResolvedUseCaseWorkspace(\n            workspaceId,\n            resolution.NormalizedPath,\n            resolution.StorageKey);\n    }\n\n    /// <summary>Applies optional command/query workspace path override onto the scoped DbContext.</summary>\n    public static string ResolveWorkspaceId(McpDbContext db, WorkspaceContext workspaceContext, string? workspacePath)\n    {\n        var resolved = !string.IsNullOrWhiteSpace(workspacePath)\n            ? workspacePath.Trim()\n            : workspaceContext.WorkspacePath;\n\n        if (string.IsNullOrWhiteSpace(resolved))\n            throw new InvalidOperationException(\"Workspace path is required for use case operations.\");\n\n        if (!string.Equals(db.CurrentWorkspaceId, resolved, StringComparison.OrdinalIgnoreCase))\n            db.OverrideWorkspaceId(resolved);\n\n        return resolved;\n    }\n\n    /// <summary>Clears soft-delete shadow properties so a durable row becomes visible again.</summary>\n    public static void ClearSoftDelete(McpDbContext db, object entity)\n    {\n        var entry = db.Entry(entity);\n        if (entry.Metadata.FindProperty(\"IsDeleted\") is null)\n            return;\n\n        entry.State = EntityState.Modified;\n        entry.Property(\"IsDeleted\").CurrentValue = false;\n        entry.Property(\"DeletedAtUtc\").CurrentValue = null;\n        entry.Property(\"DeletedBy\").CurrentValue = null;\n        entry.Property(\"DeleteReason\").CurrentValue = null;\n    }\n\n    /// <summary>Loads a non-deleted use case aggregate with children, or null when not found.</summary>\n    public static async Task<UseCaseEntity?> LoadAggregateAsync(\n        McpDbContext db,\n        long useCaseId,\n        CancellationToken cancellationToken)\n    {\n        return await db.UseCases\n            .Include(u => u.UseCaseActors)\n            .ThenInclude(a => a.Actor)\n            .Include(u => u.Flows)\n            .ThenInclude(f => f.Steps)\n            .ThenInclude(s => s.Actor)\n            .Include(u => u.SpecialRequirements)\n            .Include(u => u.ExtensionPoints)\n            .Include(u => u.FrLinks)\n            .FirstOrDefaultAsync(u => u.UseCaseId == useCaseId, cancellationToken)\n            .ConfigureAwait(false);\n    }",
+      "path": "src/QBrainAi.Services/UseCases/UseCaseCqrsHelpers.cs",
+      "firstLine": 18
+    },
+    {
+      "lastLine": 281,
+      "fileSha256": "2E090D40A6CD698F678E83D9270CECF8FA259EDB4264D4F3BF8F57D3035EE7D8",
+      "sourceText": "    /// <summary>\n    /// Ensures a functional requirement (kind fr) exists for the workspace; returns null error message when valid.\n    /// </summary>\n    public static async Task<string?> ValidateFrExistsAsync(\n        McpDbContext db,\n        string workspaceId,\n        string frId,\n        CancellationToken cancellationToken)\n    {\n        if (string.IsNullOrWhiteSpace(frId))\n            return \"FrId is required.\";\n\n        var exists = await db.Requirements\n            .AsNoTracking()\n            .AnyAsync(\n                r => r.WorkspaceId == workspaceId\n                     && r.Kind == UseCaseConstants.FrKind\n                     && r.Id == frId.Trim(),\n                cancellationToken)\n            .ConfigureAwait(false);\n\n        return exists\n            ? null\n            : $\"Functional requirement '{frId.Trim()}' was not found (Kind must be fr).\";\n    }",
+      "path": "src/QBrainAi.Services/UseCases/UseCaseCqrsHelpers.cs",
+      "firstLine": 257
+    },
+    {
+      "lastLine": 132,
+      "fileSha256": "79535AB1D0FDB93BEA0BC86F1B030668CF18B10571EEEF4F30E03F9F43AF2BCF",
+      "sourceText": "    /// <summary>Resolves the caller workspace id from the command path.</summary>\n    public static string ResolveCaller(string? workspacePath)\n    {\n        var resolved = (workspacePath ?? string.Empty).Trim();\n        if (resolved.Length == 0)\n            throw new InvalidOperationException(\"Workspace path is required for product operations.\");\n\n        // FR-MCP-PATHNORM-001: compare with stored (canonical) workspace keys in the same form.\n        return WorkspaceIdentity.CanonicalizeWorkspaceId(resolved);\n    }\n\n    /// <summary>Requires a registered, enabled, non-deleted workspace.</summary>\n    public static async Task<string?> RequireRegisteredEnabledWorkspaceAsync(\n        McpDbContext db,\n        string workspaceId,\n        CancellationToken cancellationToken)\n    {\n        var workspace = await db.Workspaces\n            .IgnoreQueryFilters()\n            .FirstOrDefaultAsync(w => w.WorkspaceId == workspaceId, cancellationToken)\n            .ConfigureAwait(false);\n\n        if (workspace is null || workspace.IsDeleted || !workspace.IsEnabled)\n            return ProductResultCodes.BadRequestMsg(\"Workspace must be a registered enabled workspace.\");\n\n        return null;\n    }\n\n    /// <summary>Loads a non-deleted product by key, including memberships.</summary>\n    public static Task<ProductEntity?> LoadProductByKeyAsync(\n        McpDbContext db,\n        string key,\n        CancellationToken cancellationToken)\n    {\n        return db.Products\n            .Include(p => p.Memberships)\n            .FirstOrDefaultAsync(p => p.Key == key, cancellationToken);\n    }\n\n    /// <summary>True when a tracked entity has the soft-delete shadow flag set.</summary>\n    public static bool IsSoftDeleted(McpDbContext db, object entity)\n    {\n        var entry = db.Entry(entity);\n        if (entry.Metadata.FindProperty(\"IsDeleted\") is null)\n            return false;\n\n        return entry.Property(\"IsDeleted\").CurrentValue is true;\n    }\n\n    /// <summary>True when the caller is an active (non-deleted) member or owner.</summary>\n    public static bool IsActiveMember(McpDbContext db, ProductEntity product, string workspaceId)\n    {\n        return product.Memberships.Any(m =>\n            string.Equals(m.WorkspaceId, workspaceId, StringComparison.OrdinalIgnoreCase)\n            && !IsSoftDeleted(db, m));\n    }\n\n    /// <summary>True when the caller owns the product.</summary>\n    public static bool IsOwner(ProductEntity product, string workspaceId)\n        => string.Equals(product.OwnerWorkspaceId, workspaceId, StringComparison.OrdinalIgnoreCase);\n\n    /// <summary>\n    /// Visibility/auth for a read: missing or non-member is 404 (do not leak existence).\n    /// </summary>\n    public static string? RequireVisible(McpDbContext db, ProductEntity? product, string caller)\n    {\n        if (product is null || IsSoftDeleted(db, product) || !IsActiveMember(db, product, caller))\n            return ProductResultCodes.NotFoundMsg(\"Product was not found.\");\n\n        return null;\n    }\n\n    /// <summary>\n    /// Visibility/auth for an owner mutation. Outsiders get 404; members who are not owners get 403.\n    /// </summary>\n    public static string? RequireOwner(McpDbContext db, ProductEntity? product, string caller)\n    {\n        if (product is null || IsSoftDeleted(db, product))\n            return ProductResultCodes.NotFoundMsg(\"Product was not found.\");\n\n        if (IsOwner(product, caller))\n            return null;\n\n        if (IsActiveMember(db, product, caller))\n            return ProductResultCodes.ForbiddenMsg(\"Only the owner may change this product.\");\n\n        return ProductResultCodes.NotFoundMsg(\"Product was not found.\");\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Products/ProductCqrsHelpers.cs",
+      "firstLine": 45
+    },
+    {
+      "lastLine": 49,
+      "fileSha256": "EB0D8C0078D6A3AADC723BE4C5779AF68097E06E592AB557BEF37AD1210BAA43",
+      "sourceText": "    /// <summary>\n    /// Registers use case CQRS handlers, diagram service, and related infrastructure.\n    /// Call from both HTTP host (<c>Program.cs</c>) and STDIO host (<c>McpStdioHost.cs</c>).\n    /// </summary>\n    /// <param name=\"services\">Service collection.</param>\n    /// <returns>The same service collection for chaining.</returns>\n    public static IServiceCollection AddUseCaseCqrs(this IServiceCollection services)\n    {\n        ArgumentNullException.ThrowIfNull(services);\n\n        services.AddSingleton<IUseCaseDiagramService, MermaidUseCaseDiagramService>();\n        services.AddSingleton<IUseCaseUmlSerializationService, UseCaseUmlSerializationService>();\n\n        services.AddTransient<ICommandHandler<CreateUseCaseCommand, UseCaseDetailDto>, CreateUseCaseCommandHandler>();\n        services.AddTransient<ICommandHandler<UpdateUseCaseCommand, UseCaseDetailDto>, UpdateUseCaseCommandHandler>();\n        services.AddTransient<ICommandHandler<DeleteUseCaseCommand, bool>, DeleteUseCaseCommandHandler>();\n        services.AddTransient<ICommandHandler<AddUseCaseFlowCommand, UseCaseFlowDto>, AddUseCaseFlowCommandHandler>();\n        services.AddTransient<ICommandHandler<AddUseCaseStepCommand, UseCaseStepDto>, AddUseCaseStepCommandHandler>();\n        services.AddTransient<ICommandHandler<AttachUseCaseActorCommand, UseCaseActorDto>, AttachUseCaseActorCommandHandler>();\n        services.AddTransient<ICommandHandler<LinkUseCaseToFrCommand, UseCaseFrLinkDto>, LinkUseCaseToFrCommandHandler>();\n        services.AddTransient<ICommandHandler<UnlinkUseCaseFromFrCommand, bool>, UnlinkUseCaseFromFrCommandHandler>();\n        services.AddTransient<ICommandHandler<CreateUseCaseFromFrCommand, UseCaseDetailDto>, CreateUseCaseFromFrCommandHandler>();\n        services.AddTransient<ICommandHandler<SetUseCaseApprovalStatusCommand, UseCaseDetailDto>, SetUseCaseApprovalStatusCommandHandler>();\n        services.AddTransient<ICommandHandler<SetUseCaseProductKeyCommand, UseCaseDetailDto>, SetUseCaseProductKeyCommandHandler>();\n        services.AddTransient<ICommandHandler<PutUseCaseDiagramGraphCommand, UseCaseDiagramGraphDto>, PutUseCaseDiagramGraphCommandHandler>();\n\n        services.AddTransient<IQueryHandler<GetUseCaseQuery, UseCaseDetailDto>, GetUseCaseQueryHandler>();\n        services.AddTransient<IQueryHandler<ListUseCasesQuery, IReadOnlyList<UseCaseSummaryDto>>, ListUseCasesQueryHandler>();\n        services.AddTransient<IQueryHandler<ListUseCasesByProductQuery, IReadOnlyList<UseCaseSummaryDto>>, ListUseCasesByProductQueryHandler>();\n        services.AddTransient<IQueryHandler<GetUseCaseDiagramQuery, UseCaseDiagramDto>, GetUseCaseDiagramQueryHandler>();\n        services.AddTransient<IQueryHandler<GetUseCaseDiagramGraphQuery, UseCaseDiagramGraphDto>, GetUseCaseDiagramGraphQueryHandler>();\n        services.AddTransient<IQueryHandler<GetUseCasesForFrQuery, IReadOnlyList<LinkedUseCaseDto>>, GetUseCasesForFrQueryHandler>();\n        services.AddTransient<IQueryHandler<GetUseCaseFrCoverageQuery, UseCaseFrCoverageDto>, GetUseCaseFrCoverageQueryHandler>();\n\n        return services;",
+      "path": "src/QBrainAi.Services/UseCases/ServiceCollectionExtensions.cs",
+      "firstLine": 15
+    },
+    {
+      "lastLine": 55,
+      "fileSha256": "49A7804FC9FD242FD22415069B26CFE167D75A5B822985FFE6C956C3D28145F6",
+      "sourceText": "    /// <summary>FR-MCP-USECASE-001: Creates a use case.</summary>\n    [HttpPost]\n    [ProducesResponseType(typeof(UseCaseDetailDto), StatusCodes.Status201Created)]\n    [ProducesResponseType(StatusCodes.Status400BadRequest)]\n    [ProducesResponseType(StatusCodes.Status404NotFound)]\n    [ProducesResponseType(StatusCodes.Status409Conflict)]\n    [RequiresUnreferencedCode(\"CQRS dispatcher uses reflection over handler types.\")]\n    public async Task<ActionResult<UseCaseDetailDto>> CreateAsync(\n        [FromBody] CreateUseCaseRequest? request,\n        CancellationToken cancellationToken)\n    {\n        if (request is null)\n            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, \"Request body is required.\", 400));\n\n        var result = await _dispatcher.SendAsync(\n            new CreateUseCaseCommand(GetWorkspacePath(), request),\n            cancellationToken).ConfigureAwait(false);\n        if (result.IsFailure)\n            return MapFailure(result);\n\n        return Created(\n            new Uri($\"/qbrainai/usecases/{result.Value!.UseCaseId}\", UriKind.Relative),\n            result.Value);",
+      "path": "src/QBrainAi.Support.Mcp/Controllers/UseCasesController.cs",
+      "firstLine": 33
+    },
+    {
+      "lastLine": 139,
+      "fileSha256": "49A7804FC9FD242FD22415069B26CFE167D75A5B822985FFE6C956C3D28145F6",
+      "sourceText": "    /// <summary>FR-MCP-USECASE-008: Sets approval status for a use case.</summary>\n    [HttpPost(\"{id:long}/approval\")]\n    [ProducesResponseType(typeof(UseCaseDetailDto), StatusCodes.Status200OK)]\n    [RequiresUnreferencedCode(\"CQRS dispatcher uses reflection over handler types.\")]\n    public async Task<ActionResult<UseCaseDetailDto>> SetApprovalAsync(\n        long id,\n        [FromBody] SetApprovalRequest? request,\n        CancellationToken cancellationToken)\n    {\n        if (request is null || string.IsNullOrWhiteSpace(request.Status))\n            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, \"Status is required.\", 400));\n\n        var result = await _dispatcher.SendAsync(\n            new SetUseCaseApprovalStatusCommand(GetWorkspacePath(), id, request.Status),\n            cancellationToken).ConfigureAwait(false);\n        if (result.IsFailure)\n            return MapFailure(result);\n        return Ok(result.Value);\n    }\n\n    /// <summary>FR-MCP-USECASE-009: Sets product membership key.</summary>\n    [HttpPost(\"{id:long}/product\")]\n    [ProducesResponseType(typeof(UseCaseDetailDto), StatusCodes.Status200OK)]\n    [RequiresUnreferencedCode(\"CQRS dispatcher uses reflection over handler types.\")]\n    public async Task<ActionResult<UseCaseDetailDto>> SetProductAsync(\n        long id,\n        [FromBody] SetProductRequest? request,\n        CancellationToken cancellationToken)\n    {\n        var result = await _dispatcher.SendAsync(\n            new SetUseCaseProductKeyCommand(GetWorkspacePath(), id, request?.ProductKey),\n            cancellationToken).ConfigureAwait(false);\n        if (result.IsFailure)\n            return MapFailure(result);\n        return Ok(result.Value);\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Controllers/UseCasesController.cs",
+      "firstLine": 104
+    },
+    {
+      "lastLine": 51,
+      "fileSha256": "68100274B9DA26A0449442E7B25EE3E26F1ABE277612BEDE30914DCF680CF532",
+      "sourceText": "    /// <summary>FR-MCP-PRODUCT-001: Create a product owned by the caller.</summary>\n    [HttpPost]\n    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status201Created)]\n    [RequiresUnreferencedCode(\"CQRS dispatcher uses reflection over handler types.\")]\n    public async Task<ActionResult<ProductDto>> CreateAsync(\n        [FromBody] CreateProductRequest? request,\n        CancellationToken cancellationToken)\n    {\n        if (request is null)\n            return BadRequest(new { error = \"Request body is required.\" });\n\n        var result = await _dispatcher.SendAsync(\n            new CreateProductCommand(GetWorkspacePath(), request),\n            cancellationToken).ConfigureAwait(false);\n        if (result.IsFailure)\n            return MapFailure(result.Error);\n\n        return Created(\n            new Uri($\"/qbrainai/products/{result.Value!.Key}\", UriKind.Relative),\n            result.Value);\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Controllers/ProductsController.cs",
+      "firstLine": 31
+    }
+  ],
+  "entityPolicies": [
+    {
+      "policy": "AuthoredProject",
+      "destination": "ProjectVersioned",
+      "name": "ActorEntity",
+      "condition": "All rows"
+    },
+    {
+      "policy": "HostOperations",
+      "destination": "LocalOperational",
+      "name": "ProductEntity",
+      "condition": "All rows"
+    },
+    {
+      "policy": "HostOperations",
+      "destination": "LocalOperational",
+      "name": "ProductWorkspaceMembershipEntity",
+      "condition": "All rows"
+    },
+    {
+      "policy": "AuthoredProject",
+      "destination": "ProjectVersioned",
+      "name": "UseCaseActorEntity",
+      "condition": "All rows"
+    },
+    {
+      "policy": "AuthoredProject",
+      "destination": "ProjectVersioned",
+      "name": "UseCaseEntity",
+      "condition": "All rows"
+    },
+    {
+      "policy": "AuthoredProject",
+      "destination": "ProjectVersioned",
+      "name": "UseCaseExtensionPointEntity",
+      "condition": "All rows"
+    },
+    {
+      "policy": "AuthoredProject",
+      "destination": "ProjectVersioned",
+      "name": "UseCaseFlowEntity",
+      "condition": "All rows"
+    },
+    {
+      "policy": "AuthoredProject",
+      "destination": "ProjectVersioned",
+      "name": "UseCaseFrLinkEntity",
+      "condition": "All rows"
+    },
+    {
+      "policy": "AuthoredProject",
+      "destination": "ProjectVersioned",
+      "name": "UseCaseSpecialRequirementEntity",
+      "condition": "All rows"
+    },
+    {
+      "policy": "AuthoredProject",
+      "destination": "ProjectVersioned",
+      "name": "UseCaseStepEntity",
+      "condition": "All rows"
+    }
+  ],
+  "commandSources": 20,
+  "writerCalls": 25,
+  "automaticAssignments": 16,
+  "runtimeProof": false,
+  "writerClosureComplete": false,
+  "operatorAccepted": false,
+  "productionCodeChanged": false,
+  "limitations": [
+    "Manual source review of twenty named command handlers, not all application writers",
+    "Retains original proposed classification, not operator acceptance",
+    "DI/controller source is not runtime reachability or complete dispatch proof",
+    "Multi-save generated IDs, audit split, shared actors, tombstones and cross-store membership lookup require native binding",
+    "Current long ID routes/DTOs remain B4 parser/compatibility work; no new ID syntax adopted"
+  ]
+}

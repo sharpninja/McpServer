@@ -1,0 +1,551 @@
+{
+  "timestampLocal": "2026-11-18T00:42:41",
+  "sourceHead": "ebdcfb970b95de4b7b38075b2d8cfe4e8f9104a3",
+  "task": "TASK-FEDPH0-004",
+  "sourceCatalogSha256": "88DA9E41116F88DEDA13A9675BA2B073AD63B41D0E65BD371B72FE9CCAD7CF05",
+  "enclosingIndexSha256": "318117EFC47830B5AEF2D86914173C121DED4ECAC01C281E9A04C4668D36BF0E",
+  "scriptSha256": "C7461035CCE6D5C1C28B531C24E8B3CB4215A51B6B07FE3DB340616D8D5125B9",
+  "sourceCount": 5,
+  "excerptCount": 11,
+  "flows": [
+    {
+      "observation": "Existing enrollment/heartbeat/workspace registry save host topology in fresh scopes. Legacy operation insert records payload/headers/body/version, conflict default hub-wins and fanout; retries/acknowledgments update operational queue/status, workspace paths/global IDs are mutable legacy fields.",
+      "family": "legacy-topology",
+      "boundary": "Retain legacy non-enrolled operation and records operationally with explicit cutover disposition. Do not treat mutable legacy GlobalWorkspaceId/path or default hub-wins replay as new immutable ProjectId or mandatory-review Dolt integration. Protected topology/queues/headers never become project payloads; no replay loop runs for enrolled projects."
+    },
+    {
+      "observation": "Tools/buckets and agent adapters directly upsert/delete registry and agent/model/workspace rows in fresh contexts, copying payload/default timestamps.",
+      "family": "legacy-host-replay",
+      "boundary": "Existing host-local tools/agents remain operational and retained. Explicitly fence legacy replay for enrolled projects; merged history is not permission to install, launch, register or execute payloads. Source names and apply success do not prove correct protected destination or full child state."
+    },
+    {
+      "observation": "Tool CRUD normalizes scope/tags and tombstones parents/tags; bucket add/remove/install/sync fetch manifests, create tool via registry, stamp provenance with later save, update installed definitions/tags and publish changes.",
+      "family": "host-tools",
+      "boundary": "Commands/templates, host/global tool scope, bucket provenance/sync status and tags stay operational. Keep delete/revival and scope behavior with actual child rows; never execute a command template or fetch/install merely from incoming project history. Preserve multi-save failures without claiming cross-store atomicity."
+    },
+    {
+      "observation": "Database workspace update/delete normalizes local path, conditionally bootstraps, saves host registry or deletion metadata then writes filesystem projection and publishes change.",
+      "family": "host-workspace-registry",
+      "boundary": "Local registration, path, enablement/deletion and filesystem projection stay protected operational. Portable settings are only the approved separately sanitized projection. Local workspace deletion does not authorize deleting immutable project identity/history or portable content; preserve standalone semantics and original archives."
+    }
+  ],
+  "coveredCatalogCandidates": [
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:1491:ApplyAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "ApplyAsync",
+        "line": 1514,
+        "owner": "ToolsBucketsFederationStateAdapter"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-host-replay"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:1491:ApplyAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "ApplyAsync",
+        "line": 1536,
+        "owner": "ToolsBucketsFederationStateAdapter"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-host-replay"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:1714:ApplyAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "ApplyAsync",
+        "line": 1736,
+        "owner": "AgentsFederationStateAdapter"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-host-replay"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:1714:ApplyAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "ApplyAsync",
+        "line": 1758,
+        "owner": "AgentsFederationStateAdapter"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-host-replay"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:1848:UpsertAgentDefinitionAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "UpsertAgentDefinitionAsync",
+        "line": 1881,
+        "owner": "AgentsFederationStateAdapter"
+      },
+      "operation": "ModifiedAt",
+      "families": [
+        "legacy-host-replay"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:50:EnrollAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "EnrollAsync",
+        "line": 80,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:93:HeartbeatAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "HeartbeatAsync",
+        "line": 123,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:137:RegisterWorkspaceAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "RegisterWorkspaceAsync",
+        "line": 146,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:260:MarkReplayFailureAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "MarkReplayFailureAsync",
+        "line": 286,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:297:UpsertOperationAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "UpsertOperationAsync",
+        "line": 376,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:388:AcknowledgeOperationAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "AcknowledgeOperationAsync",
+        "line": 423,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:435:AcknowledgeSyncItemAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "AcknowledgeSyncItemAsync",
+        "line": 482,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:550:ResolveConflictAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "ResolveConflictAsync",
+        "line": 563,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:50:EnrollAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "EnrollAsync",
+        "line": 75,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:93:HeartbeatAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "HeartbeatAsync",
+        "line": 117,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:260:MarkReplayFailureAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "MarkReplayFailureAsync",
+        "line": 284,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:297:UpsertOperationAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "UpsertOperationAsync",
+        "line": 354,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:388:AcknowledgeOperationAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "AcknowledgeOperationAsync",
+        "line": 411,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:435:AcknowledgeSyncItemAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "AcknowledgeSyncItemAsync",
+        "line": 466,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationTopologyService.cs:643:UpsertWorkspaceAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+        "method": "UpsertWorkspaceAsync",
+        "line": 684,
+        "owner": "FederationTopologyService"
+      },
+      "operation": "Version",
+      "families": [
+        "legacy-topology"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/ToolBucketService.cs:57:AddBucketAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/ToolBucketService.cs",
+        "method": "AddBucketAsync",
+        "line": 84,
+        "owner": "ToolBucketService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-tools"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/ToolBucketService.cs:92:RemoveBucketAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/ToolBucketService.cs",
+        "method": "RemoveBucketAsync",
+        "line": 112,
+        "owner": "ToolBucketService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-tools"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/ToolBucketService.cs:135:InstallAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/ToolBucketService.cs",
+        "method": "InstallAsync",
+        "line": 167,
+        "owner": "ToolBucketService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-tools"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/ToolBucketService.cs:175:SyncAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/ToolBucketService.cs",
+        "method": "SyncAsync",
+        "line": 229,
+        "owner": "ToolBucketService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-tools"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/ToolRegistryService.cs:84:CreateAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/ToolRegistryService.cs",
+        "method": "CreateAsync",
+        "line": 115,
+        "owner": "ToolRegistryService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-tools"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/ToolRegistryService.cs:123:UpdateAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/ToolRegistryService.cs",
+        "method": "UpdateAsync",
+        "line": 159,
+        "owner": "ToolRegistryService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-tools"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/ToolRegistryService.cs:167:DeleteAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/ToolRegistryService.cs",
+        "method": "DeleteAsync",
+        "line": 180,
+        "owner": "ToolRegistryService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-tools"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/WorkspaceService.cs:405:UpdateDatabaseAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/WorkspaceService.cs",
+        "method": "UpdateDatabaseAsync",
+        "line": 417,
+        "owner": "WorkspaceService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-workspace-registry"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/WorkspaceService.cs:429:DeleteDatabaseAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/WorkspaceService.cs",
+        "method": "DeleteDatabaseAsync",
+        "line": 446,
+        "owner": "WorkspaceService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "host-workspace-registry"
+      ]
+    }
+  ],
+  "excerpts": [
+    {
+      "sourceText": "    public async Task<FederationEnrollmentResponse> EnrollAsync(FederationEnrollmentRequest request, CancellationToken cancellationToken)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        var now = DateTimeOffset.UtcNow;\n        var proxyId = NormalizeProxyId(request.ProxyId, request.DisplayName);\n\n        await using var scope = _scopeFactory.CreateAsyncScope();\n        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n        var proxy = await db.FederationProxies.FindAsync([proxyId], cancellationToken).ConfigureAwait(false);\n\n        if (proxy is null)\n        {\n            proxy = new FederationProxyEntity\n            {\n                ProxyId = proxyId,\n                CreatedAtUtc = now,\n            };\n            db.FederationProxies.Add(proxy);\n        }\n\n        proxy.DisplayName = request.DisplayName;\n        proxy.BaseUrl = TrimTrailingSlash(request.BaseUrl);\n        proxy.MetadataJson = request.MetadataJson;\n        proxy.Role = FederationRole.LocalProxy.ToString();\n        proxy.Status = \"enrolled\";\n        proxy.UpdatedAtUtc = now;\n\n        foreach (var workspace in request.Workspaces)\n            await UpsertWorkspaceAsync(db, proxyId, workspace, now, cancellationToken).ConfigureAwait(false);\n\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);\n\n        return new FederationEnrollmentResponse\n        {\n            ProxyId = proxyId,\n            Accepted = true,\n            ServerTimeUtc = now,\n            HeartbeatSeconds = _options.CurrentValue.Sync.HeartbeatSeconds,\n        };\n    }\n\n    /// <inheritdoc />\n    public async Task<FederationHeartbeatResponse> HeartbeatAsync(string proxyId, FederationHeartbeatRequest request, CancellationToken cancellationToken)\n    {\n        ArgumentException.ThrowIfNullOrWhiteSpace(proxyId);\n        ArgumentNullException.ThrowIfNull(request);\n        var now = DateTimeOffset.UtcNow;\n\n        await using var scope = _scopeFactory.CreateAsyncScope();\n        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n        var proxy = await db.FederationProxies.FindAsync([proxyId], cancellationToken).ConfigureAwait(false);\n\n        if (proxy is null)\n        {\n            proxy = new FederationProxyEntity\n            {\n                ProxyId = proxyId,\n                DisplayName = proxyId,\n                Role = FederationRole.LocalProxy.ToString(),\n                CreatedAtUtc = now,\n            };\n            db.FederationProxies.Add(proxy);\n        }\n\n        proxy.Status = string.IsNullOrWhiteSpace(request.Status) ? \"online\" : request.Status.Trim();\n        proxy.LastHeartbeatUtc = now;\n        proxy.UpdatedAtUtc = now;\n        proxy.MetadataJson = request.MetadataJson ?? proxy.MetadataJson;\n\n        foreach (var workspace in request.Workspaces)\n            await UpsertWorkspaceAsync(db, proxyId, workspace, now, cancellationToken).ConfigureAwait(false);\n\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);\n\n        var queueStatus = await GetQueueStatusAsync(proxyId, cancellationToken).ConfigureAwait(false);\n        return new FederationHeartbeatResponse\n        {\n            ProxyId = proxyId,\n            RecordedAtUtc = now,\n            QueueDepth = queueStatus.QueueDepth,\n            ConflictCount = queueStatus.ConflictCount,\n        };\n    }\n\n    /// <inheritdoc />\n    public async Task<FederationWorkspaceInfo> RegisterWorkspaceAsync(string proxyId, FederationWorkspaceRegistrationRequest request, CancellationToken cancellationToken)\n    {\n        ArgumentException.ThrowIfNullOrWhiteSpace(proxyId);\n        ArgumentNullException.ThrowIfNull(request);\n        var now = DateTimeOffset.UtcNow;\n\n        await using var scope = _scopeFactory.CreateAsyncScope();\n        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n        var entity = await UpsertWorkspaceAsync(db, proxyId, request, now, cancellationToken).ConfigureAwait(false);\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);\n\n        return ToWorkspaceInfo(entity);\n    }",
+      "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+      "firstLine": 50,
+      "lastLine": 150,
+      "family": "legacy-topology",
+      "excerptSha256": "510370F40AEF3F3AE354A15EF5AB85B8DB07610614FDCA4695959C9FE59BF087",
+      "fileSha256": "68D570868086FC1FEAE2D823F0CAEF8CE489E07ED85FF55C4ACA5A6351C35B96"
+    },
+    {
+      "sourceText": "    public async Task<FederationOperationResponse> MarkReplayFailureAsync(\n        string operationId,\n        string error,\n        int maxAttempts,\n        CancellationToken cancellationToken)\n    {\n        ArgumentException.ThrowIfNullOrWhiteSpace(operationId);\n        var now = DateTimeOffset.UtcNow;\n\n        await using var scope = _scopeFactory.CreateAsyncScope();\n        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n        var entity = await db.FederationOperations.FindAsync([operationId], cancellationToken).ConfigureAwait(false);\n        if (entity is null)\n        {\n            return new FederationOperationResponse\n            {\n                OperationId = operationId,\n                Status = \"not_found\",\n                Created = false,\n            };\n        }\n\n        entity.AttemptCount++;\n        entity.LastError = error;\n        entity.UpdatedAtUtc = now;\n        entity.Status = entity.AttemptCount >= maxAttempts ? \"replay_blocked\" : \"replay_failed\";\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);\n\n        return new FederationOperationResponse\n        {\n            OperationId = operationId,\n            Status = entity.Status,\n            Created = false,\n        };\n    }\n\n    private async Task<FederationOperationResponse> UpsertOperationAsync(\n        FederationOperationRequest request,\n        string createdStatus,\n        bool createOutbox,\n        bool detectConflict,\n        CancellationToken cancellationToken)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        ArgumentException.ThrowIfNullOrWhiteSpace(request.ProxyId);\n        var now = DateTimeOffset.UtcNow;\n        var operationId = string.IsNullOrWhiteSpace(request.OperationId)\n            ? $\"fedop-{Guid.NewGuid():N}\"\n            : request.OperationId.Trim();\n\n        await using var scope = _scopeFactory.CreateAsyncScope();\n        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n        await EnsureProxyAsync(db, request.ProxyId, now, cancellationToken).ConfigureAwait(false);\n\n        var entity = await db.FederationOperations.FindAsync([operationId], cancellationToken).ConfigureAwait(false);\n        var created = entity is null;\n        if (!created)\n        {\n            return new FederationOperationResponse\n            {\n                OperationId = operationId,\n                Status = entity!.Status,\n                Created = false,\n            };\n        }\n\n        if (entity is null)\n        {\n            entity = new FederationOperationEntity\n            {\n                OperationId = operationId,\n                ProxyId = request.ProxyId,\n                CreatedAtUtc = now,\n            };\n            db.FederationOperations.Add(entity);\n        }\n\n        entity.SourceOperationId = request.SourceOperationId;\n        entity.GlobalWorkspaceId = request.GlobalWorkspaceId;\n        entity.Domain = string.IsNullOrWhiteSpace(request.Domain) ? \"unknown\" : request.Domain.Trim();\n        entity.ResourceId = request.ResourceId;\n        entity.HttpMethod = request.HttpMethod;\n        entity.Path = request.Path;\n        entity.Method = request.Method;\n        entity.HeadersJson = request.HeadersJson;\n        entity.BodyBase64 = request.BodyBase64;\n        entity.BaseVersion = request.BaseVersion;\n        var hubVersion = detectConflict\n            ? await ResolveHubVersionAsync(request.Domain, request.ResourceId, cancellationToken).ConfigureAwait(false)\n            : null;\n        entity.HubVersion = hubVersion ?? entity.HubVersion;\n        var conflict = created && IsStaleVersion(request.BaseVersion, hubVersion);\n        entity.Status = created ? conflict ? \"conflict\" : createdStatus : entity.Status;\n        entity.UpdatedAtUtc = now;\n\n        if (created && conflict)\n        {\n            db.FederationConflicts.Add(new FederationConflictEntity\n            {\n                ConflictId = $\"fedconf-{Guid.NewGuid():N}\",\n                OperationId = operationId,\n                ProxyId = request.ProxyId,\n                Domain = entity.Domain,\n                ResourceId = entity.ResourceId,\n                ProxyVersion = request.BaseVersion,\n                HubVersion = hubVersion,\n                ResolutionStatus = \"open\",\n                DetailsJson = \"{\\\"resolution\\\":\\\"hub_wins_by_default\\\"}\",\n                CreatedAtUtc = now,\n            });\n        }\n\n        if (created && createOutbox && !conflict)\n            await AddFanoutRowsAsync(db, request.ProxyId, operationId, now, cancellationToken).ConfigureAwait(false);\n\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);\n\n        return new FederationOperationResponse\n        {\n            OperationId = operationId,\n            Status = entity.Status,\n            Created = created,\n        };\n    }\n\n    /// <inheritdoc />\n    public async Task<FederationOperationResponse> AcknowledgeOperationAsync(string operationId, FederationOperationAckRequest request, CancellationToken cancellationToken)\n    {\n        ArgumentException.ThrowIfNullOrWhiteSpace(operationId);\n        ArgumentNullException.ThrowIfNull(request);\n        var now = DateTimeOffset.UtcNow;\n\n        await using var scope = _scopeFactory.CreateAsyncScope();\n        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n        var entity = await db.FederationOperations.FindAsync([operationId], cancellationToken).ConfigureAwait(false);\n        if (entity is null)\n        {\n            return new FederationOperationResponse\n            {\n                OperationId = operationId,\n                Status = \"not_found\",\n                Created = false,\n            };\n        }\n\n        entity.Status = string.IsNullOrWhiteSpace(request.Status) ? \"acknowledged\" : request.Status.Trim();\n        entity.HubVersion = request.HubVersion ?? entity.HubVersion;\n        entity.LastError = request.Error;\n        entity.AcknowledgedAtUtc = now;\n        entity.UpdatedAtUtc = now;\n\n        if (IsTerminalApplyFailure(entity.Status))\n        {\n            var outboxRows = await db.FederationOutbox\n                .Where(o => o.OperationId == operationId && o.AcknowledgedAtUtc == null)\n                .ToListAsync(cancellationToken)\n                .ConfigureAwait(false);\n            foreach (var row in outboxRows)\n                row.AcknowledgedAtUtc = now;\n        }\n\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);\n\n        return new FederationOperationResponse\n        {\n            OperationId = operationId,\n            Status = entity.Status,\n            Created = false,\n        };\n    }\n\n    /// <inheritdoc />\n    public async Task<FederationOperationResponse> AcknowledgeSyncItemAsync(\n        string proxyId,\n        long sequence,\n        FederationSyncAckRequest request,\n        CancellationToken cancellationToken)\n    {\n        ArgumentException.ThrowIfNullOrWhiteSpace(proxyId);\n        ArgumentNullException.ThrowIfNull(request);\n        var now = DateTimeOffset.UtcNow;\n\n        await using var scope = _scopeFactory.CreateAsyncScope();\n        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n        var outbox = await db.FederationOutbox\n            .FirstOrDefaultAsync(o => o.ProxyId == proxyId && o.Sequence == sequence, cancellationToken)\n            .ConfigureAwait(false);\n        if (outbox is null)\n        {\n            return new FederationOperationResponse\n            {\n                OperationId = string.Empty,\n                Status = \"not_found\",\n                Created = false,\n            };\n        }\n\n        outbox.AcknowledgedAtUtc = now;\n        var entity = await db.FederationOperations.FindAsync([outbox.OperationId], cancellationToken).ConfigureAwait(false);\n        if (entity is not null)\n        {\n            entity.HubVersion = request.HubVersion ?? entity.HubVersion;\n            entity.LastError = request.Error;\n            entity.UpdatedAtUtc = now;\n\n            var anyPending = await db.FederationOutbox\n                .AnyAsync(o =>\n                    o.OperationId == outbox.OperationId &&\n                    o.Sequence != sequence &&\n                    o.AcknowledgedAtUtc == null,\n                    cancellationToken)\n                .ConfigureAwait(false);\n            if (!anyPending)\n            {\n                entity.Status = string.IsNullOrWhiteSpace(request.Status) ? \"acknowledged\" : request.Status.Trim();\n                entity.AcknowledgedAtUtc = now;\n            }\n        }\n\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);\n\n        return new FederationOperationResponse\n        {\n            OperationId = outbox.OperationId,\n            Status = entity?.Status ?? \"acknowledged\",\n            Created = false,\n        };\n    }",
+      "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+      "firstLine": 260,
+      "lastLine": 491,
+      "family": "legacy-topology",
+      "excerptSha256": "C74C680CACADE1717B32DEBA95D78A6BABD8FEA8EA556A72A8ECABA6E3F60E10",
+      "fileSha256": "68D570868086FC1FEAE2D823F0CAEF8CE489E07ED85FF55C4ACA5A6351C35B96"
+    },
+    {
+      "sourceText": "    public async Task<FederationConflictInfo?> ResolveConflictAsync(string conflictId, FederationConflictResolutionRequest request, CancellationToken cancellationToken)\n    {\n        ArgumentException.ThrowIfNullOrWhiteSpace(conflictId);\n        ArgumentNullException.ThrowIfNull(request);\n\n        await using var scope = _scopeFactory.CreateAsyncScope();\n        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n        var entity = await db.FederationConflicts.FindAsync([conflictId], cancellationToken).ConfigureAwait(false);\n        if (entity is null)\n            return null;\n\n        entity.ResolutionStatus = string.IsNullOrWhiteSpace(request.ResolutionStatus) ? \"hub_wins\" : request.ResolutionStatus.Trim();\n        entity.ResolvedAtUtc = DateTimeOffset.UtcNow;\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);\n\n        return new FederationConflictInfo\n        {\n            ConflictId = entity.ConflictId,\n            OperationId = entity.OperationId,\n            ProxyId = entity.ProxyId,\n            Domain = entity.Domain,\n            ResourceId = entity.ResourceId,\n            ProxyVersion = entity.ProxyVersion,\n            HubVersion = entity.HubVersion,\n            ResolutionStatus = entity.ResolutionStatus,\n            CreatedAtUtc = entity.CreatedAtUtc,\n        };\n    }",
+      "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+      "firstLine": 550,
+      "lastLine": 578,
+      "family": "legacy-topology",
+      "excerptSha256": "8DABAE3BC632AF90B08648B5B4115023EECDD43B78AF90BC0C24DBAC6495455A",
+      "fileSha256": "68D570868086FC1FEAE2D823F0CAEF8CE489E07ED85FF55C4ACA5A6351C35B96"
+    },
+    {
+      "sourceText": "    private static async Task<FederationWorkspaceEntity> UpsertWorkspaceAsync(\n        McpDbContext db,\n        string proxyId,\n        FederationWorkspaceRegistrationRequest request,\n        DateTimeOffset now,\n        CancellationToken cancellationToken)\n    {\n        ArgumentException.ThrowIfNullOrWhiteSpace(request.WorkspacePath);\n        var identity = await WorkspaceIdentity.ResolveAsync(\n                request.WorkspacePath,\n                TimeSpan.FromSeconds(5),\n                cancellationToken)\n            .ConfigureAwait(false);\n        var canonicalPath = identity.NormalizedPath;\n        var globalWorkspaceId = string.IsNullOrWhiteSpace(request.GlobalWorkspaceId)\n            ? CreateGlobalWorkspaceId(proxyId, identity.StorageKey)\n            : request.GlobalWorkspaceId.Trim();\n\n        var entity = db.FederationWorkspaces.Local.FirstOrDefault(w =>\n                string.Equals(w.ProxyId, proxyId, StringComparison.OrdinalIgnoreCase) &&\n                string.Equals(w.WorkspacePath, canonicalPath, StringComparison.OrdinalIgnoreCase))\n            ?? db.FederationWorkspaces.FirstOrDefault(w => w.ProxyId == proxyId && w.WorkspacePath == canonicalPath);\n\n        if (entity is null)\n        {\n            entity = new FederationWorkspaceEntity\n            {\n                ProxyId = proxyId,\n                WorkspacePath = canonicalPath,\n                GlobalWorkspaceId = globalWorkspaceId,\n                CanonicalWorkspaceId = globalWorkspaceId,\n                CreatedAtUtc = now,\n            };\n            db.FederationWorkspaces.Add(entity);\n        }\n\n        entity.GlobalWorkspaceId = globalWorkspaceId;\n        entity.CanonicalWorkspaceId = globalWorkspaceId;\n        entity.WorkspacePath = canonicalPath;\n        entity.WorkspaceName = request.WorkspaceName;\n        entity.IsEnabled = request.IsEnabled;\n        entity.Version = request.Version;\n        entity.MetadataJson = request.MetadataJson;\n        entity.LastSeenUtc = now;\n        EnsureFederatedWorkspaceRow(db, entity, now);\n        return entity;\n    }",
+      "path": "src/QBrainAi.Services/Services/FederationTopologyService.cs",
+      "firstLine": 643,
+      "lastLine": 689,
+      "family": "legacy-topology",
+      "excerptSha256": "3CCBD380BF1692311ED83C335021C0E58FD587CB19498228B110534CC1DAC9C3",
+      "fileSha256": "68D570868086FC1FEAE2D823F0CAEF8CE489E07ED85FF55C4ACA5A6351C35B96"
+    },
+    {
+      "sourceText": "    public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)\n    {\n        ArgumentNullException.ThrowIfNull(operation);\n        await using var scope = ScopeFactory.CreateAsyncScope();\n        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n\n        if (string.Equals(operation.HttpMethod, \"DELETE\", StringComparison.OrdinalIgnoreCase))\n        {\n            var resourceId = operation.ResourceId;\n            if (string.IsNullOrWhiteSpace(resourceId))\n                return Conflict(\"Tools/buckets delete operation does not identify a resource id.\");\n\n            var tools = await db.ToolDefinitions\n                .Include(t => t.Tags)\n                .Where(t => t.Name == resourceId || t.BucketName == resourceId)\n                .ToListAsync(cancellationToken)\n                .ConfigureAwait(false);\n            var buckets = await db.ToolBuckets\n                .Where(b => b.Name == resourceId)\n                .ToListAsync(cancellationToken)\n                .ConfigureAwait(false);\n            db.ToolDefinitions.RemoveRange(tools);\n            db.ToolBuckets.RemoveRange(buckets);\n            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            return new FederationApplyResult { Applied = true, Version = null };\n        }\n\n        ToolsBucketsPayload? payload;\n        try\n        {\n            payload = (ToolsBucketsPayload?)JsonSerializer.Deserialize(operation.PayloadJson, typeof(ToolsBucketsPayload), FederationAdapterJsonContext.Default);\n        }\n        catch (JsonException ex)\n        {\n            return Conflict($\"Tools/buckets federation payload is invalid JSON: {ex.Message}\");\n        }\n\n        if (payload is null || (payload.Buckets.Count == 0 && payload.Tools.Count == 0))\n            return Conflict(\"Tools/buckets federation payload does not contain bucket or tool rows.\");\n\n        foreach (var bucket in payload.Buckets)\n            await UpsertBucketAsync(db, bucket, cancellationToken).ConfigureAwait(false);\n        foreach (var tool in payload.Tools)\n            await UpsertToolAsync(db, tool, cancellationToken).ConfigureAwait(false);\n\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return new FederationApplyResult\n        {\n            Applied = true,\n            Version = await GetVersionAsync(operation.ResourceId ?? \"*\", cancellationToken).ConfigureAwait(false),\n        };\n    }",
+      "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+      "firstLine": 1491,
+      "lastLine": 1542,
+      "family": "legacy-host-replay",
+      "excerptSha256": "2E131BCC5116D309843A00E8D87C5EC397ACC8ED9354BC19D9C5523564CAD4D0",
+      "fileSha256": "25B2CF5EA3135C2382087C97CACDAD544F1BC6EC3914011BA8734F3E646D0674"
+    },
+    {
+      "sourceText": "    public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)\n    {\n        ArgumentNullException.ThrowIfNull(operation);\n        await using var scope = ScopeFactory.CreateAsyncScope();\n        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n\n        if (string.Equals(operation.HttpMethod, \"DELETE\", StringComparison.OrdinalIgnoreCase))\n        {\n            var resourceId = operation.ResourceId;\n            if (string.IsNullOrWhiteSpace(resourceId))\n                return Conflict(\"Agents delete operation does not identify an agent definition id.\");\n\n            var workspaceConfigs = await db.AgentWorkspaces\n                .Where(a => a.AgentDefinitionId == resourceId)\n                .ToListAsync(cancellationToken)\n                .ConfigureAwait(false);\n            var definitions = await db.AgentDefinitions\n                .Where(a => a.Id == resourceId)\n                .ToListAsync(cancellationToken)\n                .ConfigureAwait(false);\n            db.AgentWorkspaces.RemoveRange(workspaceConfigs);\n            db.AgentDefinitions.RemoveRange(definitions);\n            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            return new FederationApplyResult { Applied = true, Version = null };\n        }\n\n        AgentsPayload? payload;\n        try\n        {\n            payload = (AgentsPayload?)JsonSerializer.Deserialize(operation.PayloadJson, typeof(AgentsPayload), FederationAdapterJsonContext.Default);\n        }\n        catch (JsonException ex)\n        {\n            return Conflict($\"Agents federation payload is invalid JSON: {ex.Message}\");\n        }\n\n        if (payload is null || (payload.Definitions.Count == 0 && payload.WorkspaceConfigs.Count == 0))\n            return Conflict(\"Agents federation payload does not contain agent definition or workspace rows.\");\n\n        foreach (var definition in payload.Definitions)\n            await UpsertAgentDefinitionAsync(db, definition, cancellationToken).ConfigureAwait(false);\n        foreach (var workspace in payload.WorkspaceConfigs)\n            await UpsertAgentWorkspaceAsync(db, workspace, cancellationToken).ConfigureAwait(false);\n\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return new FederationApplyResult\n        {\n            Applied = true,\n            Version = await GetVersionAsync(operation.ResourceId ?? \"*\", cancellationToken).ConfigureAwait(false),\n        };\n    }",
+      "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+      "firstLine": 1714,
+      "lastLine": 1764,
+      "family": "legacy-host-replay",
+      "excerptSha256": "071BA453E8C977E3184DCA6F220273B2C5A342EEC6D998B9F4530F12EDED6AF8",
+      "fileSha256": "25B2CF5EA3135C2382087C97CACDAD544F1BC6EC3914011BA8734F3E646D0674"
+    },
+    {
+      "sourceText": "    private static async Task UpsertAgentDefinitionAsync(\n        McpDbContext db,\n        AgentDefinitionPayload definition,\n        CancellationToken cancellationToken)\n    {\n        var id = definition.Id.Trim();\n        var entity = await db.AgentDefinitions\n            .FirstOrDefaultAsync(a => a.Id == id, cancellationToken)\n            .ConfigureAwait(false);\n        if (entity is null)\n        {\n            entity = new AgentDefinitionEntity\n            {\n                Id = id,\n                CreatedAt = definition.CreatedAt ?? DateTime.UtcNow,\n            };\n            db.AgentDefinitions.Add(entity);\n        }\n\n        entity.DisplayName = definition.DisplayName ?? entity.DisplayName;\n        entity.DefaultLaunchCommand = definition.DefaultLaunchCommand ?? entity.DefaultLaunchCommand;\n        entity.DefaultInstructionFile = definition.DefaultInstructionFile ?? entity.DefaultInstructionFile;\n        if (definition.DefaultModelsJson is not null)\n        {\n            var models = ParseWireList(definition.DefaultModelsJson) ?? [];\n            entity.Models.Clear();\n            for (var i = 0; i < models.Count; i++)\n                entity.Models.Add(new AgentDefinitionModelEntity { WorkspaceId = entity.WorkspaceId, Ordinal = i, Model = models[i] });\n        }\n\n        entity.DefaultBranchStrategy = definition.DefaultBranchStrategy ?? entity.DefaultBranchStrategy;\n        entity.DefaultSeedPrompt = definition.DefaultSeedPrompt ?? entity.DefaultSeedPrompt;\n        entity.IsBuiltIn = definition.IsBuiltIn;\n        entity.ModifiedAt = definition.ModifiedAt ?? DateTime.UtcNow;\n    }",
+      "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+      "firstLine": 1848,
+      "lastLine": 1882,
+      "family": "legacy-host-replay",
+      "excerptSha256": "396D335ED044A12ADC22A2192CCF87F06DA8A6ABBF46A96F65028046F80091EB",
+      "fileSha256": "25B2CF5EA3135C2382087C97CACDAD544F1BC6EC3914011BA8734F3E646D0674"
+    },
+    {
+      "sourceText": "    public async Task<BucketMutationResult> AddBucketAsync(BucketAddRequest request, CancellationToken ct = default)\n    {\n        var name = (request.Name ?? \"\").Trim().ToLowerInvariant();\n        if (string.IsNullOrEmpty(name))\n            return new BucketMutationResult(false, \"Bucket name is required.\");\n\n        var exists = await _db.ToolBuckets\n            .IgnoreQueryFilters()\n            .AnyAsync(b => b.Name == name, ct)\n            .ConfigureAwait(false);\n        if (exists)\n            return new BucketMutationResult(false, $\"Bucket '{name}' already exists.\");\n\n        var entity = new ToolBucketEntity\n        {\n            Name = name,\n            Owner = (request.Owner ?? \"\").Trim(),\n            Repo = (request.Repo ?? \"\").Trim(),\n            Branch = string.IsNullOrWhiteSpace(request.Branch) ? \"main\" : request.Branch.Trim(),\n            ManifestPath = string.IsNullOrWhiteSpace(request.ManifestPath) ? \"/\" : request.ManifestPath.Trim(),\n            DateTimeCreated = DateTimeOffset.UtcNow,\n        };\n\n        if (string.IsNullOrEmpty(entity.Owner) || string.IsNullOrEmpty(entity.Repo))\n            return new BucketMutationResult(false, \"Owner and Repo are required.\");\n\n        _db.ToolBuckets.Add(entity);\n        await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n        await PublishChangeSafeAsync(ChangeEventActions.Created, name, ct).ConfigureAwait(false);\n\n        _logger.LogInformation(\"Bucket added: {Name} ({Owner}/{Repo})\", name, entity.Owner, entity.Repo);\n        return new BucketMutationResult(true, Bucket: ToDto(entity));\n    }\n\n    /// <inheritdoc />\n    public async Task<BucketMutationResult> RemoveBucketAsync(string bucketName, bool uninstallTools = false, CancellationToken ct = default)\n    {\n        var name = (bucketName ?? \"\").Trim().ToLowerInvariant();\n        var entity = await GetVisibleBucketsQuery().FirstOrDefaultAsync(b => b.Name == name, ct).ConfigureAwait(false);\n        if (entity is null)\n            return new BucketMutationResult(false, $\"Bucket '{name}' not found.\");\n\n        if (uninstallTools)\n        {\n            var tools = await _db.ToolDefinitions.Where(t => t.BucketName == name).ToListAsync(ct).ConfigureAwait(false);\n            _db.ToolDefinitions.RemoveRange(tools);\n            _logger.LogInformation(\"Uninstalled {Count} tools from bucket '{Name}'\", tools.Count, name);\n            foreach (var tool in tools)\n            {\n                await PublishToolRegistryChangeSafeAsync(ChangeEventActions.Deleted, tool.Id.ToString(), ct).ConfigureAwait(false);\n            }\n        }\n\n        var dto = ToDto(entity);\n        _db.ToolBuckets.Remove(entity);\n        await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n        await PublishChangeSafeAsync(ChangeEventActions.Deleted, name, ct).ConfigureAwait(false);\n\n        _logger.LogInformation(\"Bucket removed: {Name}\", name);\n        return new BucketMutationResult(true, Bucket: dto);\n    }",
+      "path": "src/QBrainAi.Services/Services/ToolBucketService.cs",
+      "firstLine": 57,
+      "lastLine": 117,
+      "family": "host-tools",
+      "excerptSha256": "539EA9F752305B748171158D3096239A7028A4DABACD0511E7687EF326FA2313",
+      "fileSha256": "BF6C4C025399DA1863E31014CD70034A81CA1B1C64000A1A3360451C57A8FC1E"
+    },
+    {
+      "sourceText": "    public async Task<ToolMutationResult> InstallAsync(string bucketName, string toolName, string? workspacePath = null, CancellationToken ct = default)\n    {\n        var name = (bucketName ?? \"\").Trim().ToLowerInvariant();\n        var bucket = await GetVisibleBucketsQuery().AsNoTracking().FirstOrDefaultAsync(b => b.Name == name, ct).ConfigureAwait(false);\n        if (bucket is null)\n            return new ToolMutationResult(false, $\"Bucket '{name}' not found.\");\n\n        var manifests = await FetchManifestsAsync(bucket, ct).ConfigureAwait(false);\n        if (manifests is null)\n            return new ToolMutationResult(false, $\"Failed to read manifests from {bucket.Owner}/{bucket.Repo}.\");\n\n        var manifest = manifests.FirstOrDefault(m => string.Equals(m.Name, toolName, StringComparison.OrdinalIgnoreCase));\n        if (manifest is null)\n            return new ToolMutationResult(false, $\"Tool '{toolName}' not found in bucket '{name}'.\");\n\n        // Create via the registry service (handles uniqueness, normalization).\n        var result = await _toolRegistry.CreateAsync(new ToolCreateRequest(\n            manifest.Name,\n            manifest.Description,\n            manifest.Tags,\n            manifest.ParameterSchema,\n            manifest.CommandTemplate,\n            workspacePath), ct).ConfigureAwait(false);\n\n        if (!result.Success)\n            return result;\n\n        // Stamp the bucket provenance.\n        var entity = await _db.ToolDefinitions.FirstOrDefaultAsync(t => t.Id == result.Tool!.Id, ct).ConfigureAwait(false);\n        if (entity is not null)\n        {\n            entity.BucketName = name;\n            await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n        }\n\n        _logger.LogInformation(\"Installed tool '{Tool}' from bucket '{Bucket}'\", manifest.Name, name);\n        return result;\n    }\n\n    /// <inheritdoc />\n    public async Task<BucketSyncResult> SyncAsync(string bucketName, CancellationToken ct = default)\n    {\n        var name = (bucketName ?? \"\").Trim().ToLowerInvariant();\n        var bucket = await GetVisibleBucketsQuery().FirstOrDefaultAsync(b => b.Name == name, ct).ConfigureAwait(false);\n        if (bucket is null)\n            return new BucketSyncResult(false, $\"Bucket '{name}' not found.\");\n\n        var manifests = await FetchManifestsAsync(bucket, ct).ConfigureAwait(false);\n        if (manifests is null)\n            return new BucketSyncResult(false, $\"Failed to read manifests from {bucket.Owner}/{bucket.Repo}.\");\n\n        var installed = await _db.ToolDefinitions\n            .Include(t => t.Tags)\n            .Where(t => t.BucketName == name)\n            .ToListAsync(ct).ConfigureAwait(false);\n\n        int updated = 0, unchanged = 0;\n        var manifestByName = manifests.ToDictionary(m => m.Name, StringComparer.OrdinalIgnoreCase);\n\n        foreach (var tool in installed)\n        {\n            if (!manifestByName.TryGetValue(tool.Name, out var manifest))\n            {\n                unchanged++;\n                continue;\n            }\n\n            var changed = false;\n            if (tool.Description != manifest.Description) { tool.Description = manifest.Description; changed = true; }\n            if (tool.ParameterSchema != manifest.ParameterSchema) { tool.ParameterSchema = manifest.ParameterSchema; changed = true; }\n            if (tool.CommandTemplate != manifest.CommandTemplate) { tool.CommandTemplate = manifest.CommandTemplate; changed = true; }\n\n            var currentTags = tool.Tags.Select(t => t.Tag).OrderBy(t => t).ToList();\n            var newTags = manifest.Tags.Select(t => t.Trim().ToLowerInvariant()).OrderBy(t => t).Distinct().ToList();\n            if (!currentTags.SequenceEqual(newTags))\n            {\n                tool.Tags.Clear();\n                foreach (var tag in newTags)\n                    tool.Tags.Add(new ToolDefinitionTagEntity { Tag = tag });\n                changed = true;\n            }\n\n            if (changed)\n            {\n                tool.DateTimeModified = DateTimeOffset.UtcNow;\n                updated++;\n            }\n            else\n            {\n                unchanged++;\n            }\n        }\n\n        bucket.DateTimeLastSynced = DateTimeOffset.UtcNow;\n        await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n        await PublishChangeSafeAsync(ChangeEventActions.Updated, name, ct).ConfigureAwait(false);\n\n        _logger.LogInformation(\"Bucket sync '{Name}': {Updated} updated, {Unchanged} unchanged\", name, updated, unchanged);\n        return new BucketSyncResult(true, Updated: updated, Unchanged: unchanged);\n    }",
+      "path": "src/QBrainAi.Services/Services/ToolBucketService.cs",
+      "firstLine": 135,
+      "lastLine": 234,
+      "family": "host-tools",
+      "excerptSha256": "0B87A817522CD54A0F5B54A41440519194EA3A0812B76B4247C203A9368DBDB9",
+      "fileSha256": "BF6C4C025399DA1863E31014CD70034A81CA1B1C64000A1A3360451C57A8FC1E"
+    },
+    {
+      "sourceText": "    public async Task<ToolMutationResult> CreateAsync(ToolCreateRequest request, CancellationToken ct = default)\n    {\n        var name = (request.Name ?? \"\").Trim();\n        if (string.IsNullOrEmpty(name))\n            return new ToolMutationResult(false, \"Tool name is required.\");\n\n        var scope = NormalizeScope(request.WorkspacePath);\n\n        // Unique name per scope.\n        var exists = await _db.ToolDefinitions.AnyAsync(\n            t => t.Name == name && t.WorkspacePath == scope.WorkspacePath, ct).ConfigureAwait(false);\n        if (exists)\n            return new ToolMutationResult(false, $\"Tool '{name}' already exists in this scope.\");\n\n        var now = DateTimeOffset.UtcNow;\n        var entity = new ToolDefinitionEntity\n        {\n            Name = name,\n            Description = (request.Description ?? \"\").Trim(),\n            ParameterSchema = request.ParameterSchema,\n            CommandTemplate = request.CommandTemplate,\n            WorkspacePath = scope.WorkspacePath,\n            WorkspaceId = scope.WorkspaceId,\n            DateTimeCreated = now,\n            DateTimeModified = now,\n        };\n\n        foreach (var tag in NormalizeTags(request.Tags))\n            entity.Tags.Add(new ToolDefinitionTagEntity { Tag = tag, WorkspaceId = scope.WorkspaceId });\n\n        _db.ToolDefinitions.Add(entity);\n        await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n        await PublishChangeSafeAsync(ChangeEventActions.Created, entity.Id.ToString(), ct).ConfigureAwait(false);\n\n        _logger.LogInformation(\"Tool created: {Name} (scope: {Scope})\", name, scope.WorkspacePath ?? \"global\");\n        return new ToolMutationResult(true, Tool: ToDto(entity));\n    }\n\n    /// <inheritdoc />\n    public async Task<ToolMutationResult> UpdateAsync(int id, ToolUpdateRequest request, CancellationToken ct = default)\n    {\n        var entity = await _db.ToolDefinitions.Include(t => t.Tags)\n            .FirstOrDefaultAsync(t => t.Id == id, ct).ConfigureAwait(false);\n        if (entity is null)\n            return new ToolMutationResult(false, $\"Tool {id} not found.\");\n\n        if (request.Name is not null)\n        {\n            var name = request.Name.Trim();\n            if (string.IsNullOrEmpty(name))\n                return new ToolMutationResult(false, \"Tool name cannot be empty.\");\n            entity.Name = name;\n        }\n\n        if (request.Description is not null)\n            entity.Description = request.Description.Trim();\n\n        if (request.ParameterSchema is not null)\n            entity.ParameterSchema = request.ParameterSchema;\n\n        if (request.CommandTemplate is not null)\n            entity.CommandTemplate = request.CommandTemplate;\n\n        if (request.WorkspacePath is not null)\n            ApplyScope(entity, NormalizeScope(request.WorkspacePath));\n\n        var now = DateTimeOffset.UtcNow;\n        IReadOnlyList<string>? tagsOverride = null;\n        if (request.Tags is not null)\n        {\n            tagsOverride = NormalizeTags(request.Tags);\n            await ReplaceTagsAsync(entity, tagsOverride, now, ct).ConfigureAwait(false);\n        }\n\n        entity.DateTimeModified = now;\n        await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n        await PublishChangeSafeAsync(ChangeEventActions.Updated, entity.Id.ToString(), ct).ConfigureAwait(false);\n\n        _logger.LogInformation(\"Tool updated: {Name} (id: {Id})\", entity.Name, entity.Id);\n        return new ToolMutationResult(true, Tool: ToDto(entity, tagsOverride));\n    }\n\n    /// <inheritdoc />\n    public async Task<ToolMutationResult> DeleteAsync(int id, CancellationToken ct = default)\n    {\n        var entity = await _db.ToolDefinitions.Include(t => t.Tags)\n            .FirstOrDefaultAsync(t => t.Id == id, ct).ConfigureAwait(false);\n        if (entity is null)\n            return new ToolMutationResult(false, $\"Tool {id} not found.\");\n\n        var dto = ToDto(entity);\n        var now = DateTimeOffset.UtcNow;\n        foreach (var tag in entity.Tags)\n            MarkSoftDeleted(tag, now, \"tool_deleted\");\n        entity.DateTimeModified = now;\n        MarkSoftDeleted(entity, now, \"tool_deleted\");\n        await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n        await PublishChangeSafeAsync(ChangeEventActions.Deleted, dto.Id.ToString(), ct).ConfigureAwait(false);\n\n        _logger.LogInformation(\"Tool deleted: {Name} (id: {Id})\", dto.Name, dto.Id);\n        return new ToolMutationResult(true, Tool: dto);\n    }",
+      "path": "src/QBrainAi.Services/Services/ToolRegistryService.cs",
+      "firstLine": 84,
+      "lastLine": 185,
+      "family": "host-tools",
+      "excerptSha256": "7E775BF15A02BC904831000C58321A5C86028407316C150310859A980A1ED66C",
+      "fileSha256": "B371993C2EF5F437F9D3C03322C17FDEBCADD365C62757617B7DEEB5DA6649EA"
+    },
+    {
+      "sourceText": "    private async Task<WorkspaceMutationResult> UpdateDatabaseAsync(string workspacePath, WorkspaceUpdateRequest request, CancellationToken ct)\n    {\n        var normalized = NormalizePath(workspacePath);\n        await s_writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await EnsureBootstrappedAsync(ct).ConfigureAwait(false);\n            var entity = await FindActiveWorkspaceAsync(normalized, ct).ConfigureAwait(false);\n            if (entity is null)\n                return new WorkspaceMutationResult(false, $\"Workspace not found: {normalized}\");\n\n            ApplyUpdate(entity, request, normalized);\n            await _db!.SaveChangesAsync(ct).ConfigureAwait(false);\n            await WriteProjectionFromDatabaseAsync(ct).ConfigureAwait(false);\n            _logger.LogInformation(\"Workspace updated: {Name} at {Path}\", entity.Name, entity.WorkspacePath);\n            await PublishChangeSafeAsync(ChangeEventActions.Updated, normalized, ct).ConfigureAwait(false);\n            return new WorkspaceMutationResult(true, Workspace: await ToDtoAsync(entity, ct).ConfigureAwait(false));\n        }\n        finally\n        {\n            s_writeLock.Release();\n        }\n    }\n\n    private async Task<WorkspaceMutationResult> DeleteDatabaseAsync(string workspacePath, CancellationToken ct)\n    {\n        var normalized = NormalizePath(workspacePath);\n        await s_writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await EnsureBootstrappedAsync(ct).ConfigureAwait(false);\n            var entity = await FindActiveWorkspaceAsync(normalized, ct).ConfigureAwait(false);\n            if (entity is null)\n                return new WorkspaceMutationResult(false, $\"Workspace not found: {normalized}\");\n\n            var dto = await ToDtoAsync(entity, ct).ConfigureAwait(false);\n            entity.IsDeleted = true;\n            entity.DeletedAtUtc = DateTimeOffset.UtcNow;\n            entity.DeletedBy = nameof(WorkspaceService);\n            entity.DeleteReason = \"workspace_delete\";\n            entity.DateTimeModified = entity.DeletedAtUtc.Value;\n            await _db!.SaveChangesAsync(ct).ConfigureAwait(false);\n            await WriteProjectionFromDatabaseAsync(ct).ConfigureAwait(false);\n            _logger.LogInformation(\"Workspace soft-deleted: {Name} at {Path}\", dto.Name, dto.WorkspacePath);\n            await PublishChangeSafeAsync(ChangeEventActions.Deleted, normalized, ct).ConfigureAwait(false);\n            return new WorkspaceMutationResult(true, Workspace: dto);\n        }\n        finally\n        {\n            s_writeLock.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/WorkspaceService.cs",
+      "firstLine": 405,
+      "lastLine": 456,
+      "family": "host-workspace-registry",
+      "excerptSha256": "78B1848DE9700F2C3F9C1D803B7793F4BA8B69F9FEAD3BD7237226F9DF0A0ACE",
+      "fileSha256": "8080643999E317218E6D3781121A46E44A77E2C22AF20126DFC0315EA49D17D0"
+    }
+  ],
+  "runtimeProof": false,
+  "writerClosureComplete": false,
+  "operatorAccepted": false,
+  "productionCodeChanged": false,
+  "limitations": [
+    "Source-anchor coverage is not semantic binding or complete dynamic caller closure",
+    "Original proposed classifications are retained without operator acceptance",
+    "All native routing and relational behavior remain unproven",
+    "No product, database, migration or deployment operation executes"
+  ]
+}

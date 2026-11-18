@@ -1,0 +1,749 @@
+{
+  "timestampLocal": "2026-11-18T00:38:47",
+  "sourceHead": "ebdcfb970b95de4b7b38075b2d8cfe4e8f9104a3",
+  "task": "TASK-FEDPH0-004",
+  "sourceCatalogSha256": "88DA9E41116F88DEDA13A9675BA2B073AD63B41D0E65BD371B72FE9CCAD7CF05",
+  "enclosingIndexSha256": "318117EFC47830B5AEF2D86914173C121DED4ECAC01C281E9A04C4668D36BF0E",
+  "scriptSha256": "C7461035CCE6D5C1C28B531C24E8B3CB4215A51B6B07FE3DB340616D8D5125B9",
+  "sourceCount": 6,
+  "excerptCount": 20,
+  "flows": [
+    {
+      "observation": "Layer definitions, authored requirement/criterion graph and mappings save through fresh DI scopes. Active-layer selection mutates host WorkspaceEntity. Batch add is idempotent for already-visible records; individual create can revive a tombstone and resets creation time. Update replaces dependent AC rows. Mapping replacement tombstones missing links and revives selected links. Compensation preserves scoped identities, criteria and shadow delete state.",
+      "family": "authored-requirement-graph",
+      "boundary": "Keep definitions/criteria/links in owning authored project operation, selector operational. Preserve standalone behavior, exact composite keys, provenance and existing retired-ID policy. Bootstrap, restoration, fresh scopes, batches and compensation must retain original project/branch. Native provider must prove actual dependent-row replacement, soft-delete/filter and transaction behavior; syntax save count is insufficient."
+    },
+    {
+      "observation": "Ingest saves raw ContextDocument/Chunk rows after mutating vector index, optionally reindexes. Delete removes vectors before saved document/children. Entity and relationship CRUD mutate raw graph tables and timestamps.",
+      "family": "operational-raw-graph",
+      "boundary": "Retain original LocalOperational classification even for explicit CRUD. Raw/derived storage must not dirty project working set or acquire federation edit lease. Failure between vector/index and saved rows requires its real-binding/rebuild observations; only separately explicit sanitized document promotion is versioned."
+    },
+    {
+      "observation": "Website streaming upserts each fetched document/chunk set, emits persisted progress, then saves the context. Helper replaces existing chunks, updates/replaces raw documents, and attempts embeddings/vector updates with caught per-chunk errors.",
+      "family": "operational-raw-ingestion",
+      "boundary": "Raw ingestion remains operational; progress messages and successful helper returns alone do not establish durable rows. Prove exact operational rows and vector/rebuild state at save/failure/reopen while authored content, head, branch and lease remain unchanged."
+    },
+    {
+      "observation": "Read-only write consolidation is rejected; dry run returns plan. Mutation selects only Workspace memories, appends version/merged-from lineage, rewires edges, removes victims and updates survivor timestamp before save. Scheduled path has separate in-process workspace lock/TTL.",
+      "family": "workspace-memory-consolidation",
+      "boundary": "Portable authored memory/version/explicit-edge changes require original project gate. Co-retrieved and nonportable links, lock/schedule state remain operational. Do not confuse consolidation lock with federation lease or permit unattended authored mutation as an operational log write. Preserve survivor/victim lineage and all original rows under migration; pending native ownership/recovery proofs."
+    },
+    {
+      "observation": "The automatic CreatedAtUtc assignment copies a saved replay record timestamp into a deserialized RequirementsRecoveryResult DTO; this method has no database mutation.",
+      "family": "recovery-result-dto",
+      "boundary": "Keep original syntax candidate visible but identify DTO-only assignment; parent replay record remains operational. It is not a new persistent writer."
+    }
+  ],
+  "coveredCatalogCandidates": [
+    {
+      "methodKey": "src/QBrainAi.GraphRag/Services/GraphRagService.cs:371:IngestTextAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+        "method": "IngestTextAsync",
+        "line": 412,
+        "owner": "GraphRagService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-raw-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.GraphRag/Services/GraphRagService.cs:511:DeleteDocumentAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+        "method": "DeleteDocumentAsync",
+        "line": 529,
+        "owner": "GraphRagService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-raw-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.GraphRag/Services/GraphRagService.cs:546:CreateEntityAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+        "method": "CreateEntityAsync",
+        "line": 562,
+        "owner": "GraphRagService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-raw-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.GraphRag/Services/GraphRagService.cs:576:UpdateEntityAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+        "method": "UpdateEntityAsync",
+        "line": 589,
+        "owner": "GraphRagService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-raw-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.GraphRag/Services/GraphRagService.cs:616:DeleteEntityAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+        "method": "DeleteEntityAsync",
+        "line": 623,
+        "owner": "GraphRagService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-raw-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.GraphRag/Services/GraphRagService.cs:631:CreateRelationshipAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+        "method": "CreateRelationshipAsync",
+        "line": 658,
+        "owner": "GraphRagService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-raw-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.GraphRag/Services/GraphRagService.cs:672:UpdateRelationshipAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+        "method": "UpdateRelationshipAsync",
+        "line": 687,
+        "owner": "GraphRagService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-raw-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.GraphRag/Services/GraphRagService.cs:716:DeleteRelationshipAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+        "method": "DeleteRelationshipAsync",
+        "line": 723,
+        "owner": "GraphRagService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-raw-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.GraphRag/Services/GraphRagService.cs:576:UpdateEntityAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+        "method": "UpdateEntityAsync",
+        "line": 587,
+        "owner": "GraphRagService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "operational-raw-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.GraphRag/Services/GraphRagService.cs:672:UpdateRelationshipAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+        "method": "UpdateRelationshipAsync",
+        "line": 685,
+        "owner": "GraphRagService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "operational-raw-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Ingestion/IngestionCoordinator.cs:81:IngestWebsiteStreamingAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Ingestion/IngestionCoordinator.cs",
+        "method": "IngestWebsiteStreamingAsync",
+        "line": 164,
+        "owner": "IngestionCoordinator"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-raw-ingestion"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs:36:ConsolidateAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+        "method": "ConsolidateAsync",
+        "line": 141,
+        "owner": "MemoryConsolidateOperations"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "workspace-memory-consolidation"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs:204:ConsolidateUnlockedAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+        "method": "ConsolidateUnlockedAsync",
+        "line": 247,
+        "owner": "MemoryConsolidateOperations"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "workspace-memory-consolidation"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs:36:ConsolidateAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+        "method": "ConsolidateAsync",
+        "line": 138,
+        "owner": "MemoryConsolidateOperations"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "workspace-memory-consolidation"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:300:CreateRequirementLayerAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "CreateRequirementLayerAsync",
+        "line": 332,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:342:UpdateRequirementLayerAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "UpdateRequirementLayerAsync",
+        "line": 370,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:391:SetWorkspaceCurrentRequirementLayerAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "SetWorkspaceCurrentRequirementLayerAsync",
+        "line": 404,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:513:RestoreRequirementsSnapshotAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "RestoreRequirementsSnapshotAsync",
+        "line": 529,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:571:PurgeInvalidPlaceholdersAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "PurgeInvalidPlaceholdersAsync",
+        "line": 606,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:650:DeleteFrAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "DeleteFrAsync",
+        "line": 663,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:802:AddBatchAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "AddBatchAsync",
+        "line": 853,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:867:UpdateBatchAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "UpdateBatchAsync",
+        "line": 905,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:974:UpsertMappingAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "UpsertMappingAsync",
+        "line": 1010,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:1057:DeleteMappingAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "DeleteMappingAsync",
+        "line": 1070,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:1150:AddRequirementAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "AddRequirementAsync",
+        "line": 1213,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:1222:UpdateRequirementAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "UpdateRequirementAsync",
+        "line": 1253,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:1347:DeleteRequirementAndTargetLinksAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "DeleteRequirementAndTargetLinksAsync",
+        "line": 1359,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:342:UpdateRequirementLayerAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "UpdateRequirementLayerAsync",
+        "line": 369,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:867:UpdateBatchAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "UpdateBatchAsync",
+        "line": 902,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:1019:UpsertTraceabilityLink",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "UpsertTraceabilityLink",
+        "line": 1048,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "CreatedAtUtc",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:1150:AddRequirementAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "AddRequirementAsync",
+        "line": 1208,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "CreatedAtUtc",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:1150:AddRequirementAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "AddRequirementAsync",
+        "line": 1209,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:1222:UpdateRequirementAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "UpdateRequirementAsync",
+        "line": 1252,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:1973:CopyRequirement",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "CopyRequirement",
+        "line": 1984,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "CreatedAtUtc",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:1973:CopyRequirement",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "CopyRequirement",
+        "line": 1985,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "UpdatedAtUtc",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:2001:CopyTraceabilityLink",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+        "method": "CopyTraceabilityLink",
+        "line": 2006,
+        "owner": "RequirementsDatabaseDocumentService"
+      },
+      "operation": "CreatedAtUtc",
+      "families": [
+        "authored-requirement-graph"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Requirements/RequirementsRecoveryService.cs:235:Deserialize",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Requirements/RequirementsRecoveryService.cs",
+        "method": "Deserialize",
+        "line": 243,
+        "owner": "RequirementsRecoveryService"
+      },
+      "operation": "CreatedAtUtc",
+      "families": [
+        "recovery-result-dto"
+      ]
+    }
+  ],
+  "excerpts": [
+    {
+      "sourceText": "    public async Task<RequirementScopeLayerEntry> CreateRequirementLayerAsync(RequirementScopeLayerEntry entry, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(entry);\n        await _writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);\n            var workspaceId = RequireWorkspaceId(ctx);\n            var normalized = NormalizeLayerEntry(entry, workspaceId);\n\n            if (await ctx.RequirementScopeLayers.AnyAsync(x => x.Key == normalized.Key, ct).ConfigureAwait(false))\n                throw new RequirementsConflictException($\"Requirement scope layer '{normalized.Key}' already exists.\");\n            if (await ctx.RequirementScopeLayers.AnyAsync(x => x.Order == normalized.Order, ct).ConfigureAwait(false))\n                throw new RequirementsConflictException($\"Requirement scope layer order '{normalized.Order}' already exists.\");\n\n            await ValidateLayerSunsetAsync(ctx, normalized.Key, normalized.Order, normalized.ScopeEndLayerKey, allowSelf: true, ct).ConfigureAwait(false);\n            var now = DateTimeOffset.UtcNow;\n            var row = new RequirementScopeLayerEntity\n            {\n                WorkspaceId = workspaceId,\n                Key = normalized.Key,\n                Order = normalized.Order,\n                Name = normalized.Name,\n                Description = normalized.Description,\n                ScopeEndLayerKey = NormalizeOptionalLayerKey(normalized.ScopeEndLayerKey),\n                CreatedAtUtc = now,\n                UpdatedAtUtc = now\n            };\n\n            ctx.RequirementScopeLayers.Add(row);\n            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);\n            return MapLayer(row);\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }\n\n    /// <inheritdoc />\n    public async Task<RequirementScopeLayerEntry> UpdateRequirementLayerAsync(RequirementScopeLayerUpdateRequest request, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        await _writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);\n            var key = NormalizeLayerKey(request.Key);\n            var row = await ctx.RequirementScopeLayers.FirstOrDefaultAsync(x => x.Key == key, ct).ConfigureAwait(false)\n                ?? throw new RequirementsNotFoundException($\"Requirement scope layer '{key}' was not found.\");\n\n            if (request.Order.HasValue && request.Order.Value != row.Order)\n                throw new InvalidOperationException(\"Requirement scope layer order is immutable.\");\n\n            if (!string.IsNullOrWhiteSpace(request.Name))\n                row.Name = request.Name.Trim();\n            if (request.Description is not null)\n                row.Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim();\n            if (request.ScopeEndLayerKey is not null)\n            {\n                var scopeEnd = NormalizeOptionalLayerKey(request.ScopeEndLayerKey);\n                await ValidateLayerSunsetAsync(ctx, row.Key, row.Order, scopeEnd, allowSelf: true, ct).ConfigureAwait(false);\n                row.ScopeEndLayerKey = scopeEnd;\n            }\n\n            row.UpdatedAtUtc = DateTimeOffset.UtcNow;\n            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);\n            return MapLayer(row);\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }\n\n    /// <inheritdoc />\n    public async Task<RequirementScopeLayerEntry> GetWorkspaceCurrentRequirementLayerAsync(CancellationToken ct = default)\n    {\n        await using var scope = CreateScope();\n        var ctx = scope.Context;\n        await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);\n        var workspace = await EnsureWorkspaceRowAsync(ctx, RequireWorkspaceId(ctx), ct).ConfigureAwait(false);\n        var layer = await FindLayerAsync(ctx, workspace.CurrentRequirementLayerKey, ct).ConfigureAwait(false);\n        return MapLayer(layer);\n    }\n\n    /// <inheritdoc />\n    public async Task<RequirementScopeLayerEntry> SetWorkspaceCurrentRequirementLayerAsync(string layerKey, CancellationToken ct = default)\n    {\n        await _writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);\n            var normalizedKey = NormalizeLayerKey(layerKey);\n            var layer = await FindLayerAsync(ctx, normalizedKey, ct).ConfigureAwait(false);\n            var workspace = await EnsureWorkspaceRowAsync(ctx, RequireWorkspaceId(ctx), ct).ConfigureAwait(false);\n            workspace.CurrentRequirementLayerKey = normalizedKey;\n            workspace.DateTimeModified = DateTimeOffset.UtcNow;\n            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);\n            return MapLayer(layer);\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "firstLine": 300,
+      "lastLine": 411,
+      "family": "authored-requirement-graph",
+      "excerptSha256": "5925EB6AC5ED8CACAD9499C91879B9B35A8DA0D0EA7F00C1508E60AE2E5294C5",
+      "fileSha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A"
+    },
+    {
+      "sourceText": "    public async Task RestoreRequirementsSnapshotAsync(\n        RequirementsCompensationSnapshot snapshot,\n        CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(snapshot);\n        if (snapshot.State is not RequirementsDatabaseCompensationState state)\n            throw new InvalidOperationException($\"Requirements compensation snapshot provider '{snapshot.Provider}' is not supported by {nameof(RequirementsDatabaseDocumentService)}.\");\n\n        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            await EnsureBootstrappedAsync(ctx, cancellationToken).ConfigureAwait(false);\n            await RestoreRequirementsCoreAsync(ctx, state, cancellationToken).ConfigureAwait(false);\n            await RestoreTraceabilityLinksCoreAsync(ctx, state, cancellationToken).ConfigureAwait(false);\n            await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "firstLine": 513,
+      "lastLine": 535,
+      "family": "authored-requirement-graph",
+      "excerptSha256": "D90A333EC3E6E41D292B8BA5051A4B2E8C045D06A801DE86427BDE2B128DD1ED",
+      "fileSha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A"
+    },
+    {
+      "sourceText": "    public async Task<int> PurgeInvalidPlaceholdersAsync(CancellationToken ct = default)\n    {\n        await _writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);\n\n            // Fetch translatable part first (Body startsWith is supported), then apply non-translatable regex + null check in memory to avoid EF translation failure.\n            var candidates = await scope.Context.Requirements\n                .Where(x => x.Kind == FrKind &&\n                            x.Body != null &&\n                            x.Body.StartsWith(\"Placeholder requirement backfilled\"))\n                .ToListAsync(ct)\n                .ConfigureAwait(false);\n\n        var toDelete = candidates\n                .Where(x => string.IsNullOrEmpty(x.Id) || !IsValidRequirementId(x.Id, \"FR\"))\n                .ToList();\n\n            if (toDelete.Count > 0)\n            {\n                var badFrIds = toDelete.Select(x => x.Id).ToList();\n                // Load links using the (workspace filtered) ctx and remove to avoid FK on req delete. Use per-id to ensure tracked entities.\n                foreach (var id in badFrIds.Where(i => !string.IsNullOrEmpty(i)))\n                {\n                    var linksForId = await scope.Context.RequirementTraceabilityLinks\n                        .IgnoreQueryFilters()\n                        .Where(l => l.FrId == id)\n                        .ToListAsync(ct)\n                        .ConfigureAwait(false);\n                    if (linksForId.Count > 0)\n                        scope.Context.RequirementTraceabilityLinks.RemoveRange(linksForId);\n                }\n                scope.Context.Requirements.RemoveRange(toDelete);\n                await scope.Context.SaveChangesAsync(ct).ConfigureAwait(false);\n            }\n\n            return toDelete.Count;\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "firstLine": 571,
+      "lastLine": 615,
+      "family": "authored-requirement-graph",
+      "excerptSha256": "BE71A6A46DBF55FA90613548B78CC263C2EC35B40988A91B537AD308173BC220",
+      "fileSha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A"
+    },
+    {
+      "sourceText": "    public async Task DeleteFrAsync(string id, CancellationToken ct = default)\n    {\n        ValidateId(id, nameof(id));\n        await _writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);\n            var row = await FindRequirementAsync(ctx, FrKind, id, asTracking: true, ct).ConfigureAwait(false)\n                ?? throw new RequirementsNotFoundException($\"FR '{id}' was not found.\");\n            ctx.Requirements.Remove(row);\n            ctx.RequirementTraceabilityLinks.RemoveRange(ctx.RequirementTraceabilityLinks.Where(x => x.FrId == id));\n            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);\n            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Deleted, id, ct).ConfigureAwait(false);\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "firstLine": 650,
+      "lastLine": 670,
+      "family": "authored-requirement-graph",
+      "excerptSha256": "452C37BC30361DE5E7F382244C5334C0C18EFFA10EE5452508A62A9620C8CA8A",
+      "fileSha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A"
+    },
+    {
+      "sourceText": "    public async Task<RequirementsBatchEntries> AddBatchAsync(RequirementsBatchEntries entries, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(entries);\n        ValidateBatchEntries(entries);\n        ValidateBatchUniqueIds(entries);\n\n        await _writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);\n            await using var transaction = await ctx.Database.BeginTransactionAsync(ct).ConfigureAwait(false);\n\n            var workspaceId = RequireWorkspaceId(ctx);\n            var now = Now();\n            var toInsert = new List<RequirementBatchValue>();\n            foreach (var value in EnumerateBatch(entries))\n            {\n                _ = await ValidateRequirementScopeAsync(ctx, value.ScopeStartLayerKey, value.ScopeEndLayerKey, ct).ConfigureAwait(false);\n                bool exists = await ctx.Requirements.AnyAsync(x => x.Kind == value.Kind && x.Id == value.Id, ct).ConfigureAwait(false);\n                if (!exists)\n                {\n                    toInsert.Add(value);\n                }\n                // Idempotent create: pre-existing records are left as-is (mitigates double-submit races from clients/plugins that send the batch twice).\n            }\n\n            foreach (var value in toInsert)\n            {\n                var requirementScope = await ValidateRequirementScopeAsync(ctx, value.ScopeStartLayerKey, value.ScopeEndLayerKey, ct).ConfigureAwait(false);\n                var entity = new RequirementEntity\n                {\n                    WorkspaceId = workspaceId,\n                    Kind = value.Kind,\n                    Id = value.Id,\n                    Title = value.Title,\n                    Body = value.Body,\n                    Priority = NormalizePriority(value.Priority),\n                    Status = NormalizeStatus(value.Status),\n                    Notes = value.Notes,\n                    ScopeStartLayerKey = requirementScope.Start,\n                    ScopeEndLayerKey = requirementScope.End,\n                    CreatedAtUtc = now,\n                    UpdatedAtUtc = now\n                };\n                ctx.Requirements.Add(entity);\n                ctx.RequirementAcceptanceCriteria.AddRange(\n                    ToCriterionEntities(value.AcceptanceCriteria, workspaceId, value.Kind, value.Id));\n            }\n\n            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);\n            await transaction.CommitAsync(ct).ConfigureAwait(false);\n\n            var result = NormalizeBatchResult(entries, workspaceId);\n            await PublishBatchRequirementsChangeSafeAsync(ChangeEventActions.Created, result, ct).ConfigureAwait(false);\n            return result;\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }\n\n    /// <inheritdoc />\n    public async Task<RequirementsBatchEntries> UpdateBatchAsync(RequirementsBatchEntries entries, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(entries);\n        ValidateBatchEntries(entries);\n        ValidateBatchUniqueIds(entries);\n\n        await _writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);\n            await using var transaction = await ctx.Database.BeginTransactionAsync(ct).ConfigureAwait(false);\n\n            var updates = new List<(RequirementEntity Row, RequirementBatchValue Value)>();\n            foreach (var value in EnumerateBatch(entries))\n            {\n                var row = await FindRequirementAsync(ctx, value.Kind, value.Id, asTracking: true, ct).ConfigureAwait(false)\n                    ?? throw new RequirementsNotFoundException($\"{value.Kind.ToUpperInvariant()} '{value.Id}' was not found.\");\n                _ = await ValidateRequirementScopeAsync(ctx, value.ScopeStartLayerKey, value.ScopeEndLayerKey, ct).ConfigureAwait(false);\n                updates.Add((row, value));\n            }\n\n            var now = Now();\n            foreach (var (row, value) in updates)\n            {\n                var requirementScope = await ValidateRequirementScopeAsync(ctx, value.ScopeStartLayerKey, value.ScopeEndLayerKey, ct).ConfigureAwait(false);\n                row.Title = value.Title;\n                row.Body = value.Body;\n                row.Priority = NormalizePriority(value.Priority);\n                row.Status = NormalizeStatus(value.Status);\n                row.Notes = value.Notes;\n                await SetCriteriaAsync(ctx, row, value.AcceptanceCriteria, ct).ConfigureAwait(false);\n                row.ScopeStartLayerKey = requirementScope.Start;\n                row.ScopeEndLayerKey = requirementScope.End;\n                row.UpdatedAtUtc = now;\n            }\n\n            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);\n            await transaction.CommitAsync(ct).ConfigureAwait(false);\n\n            var result = NormalizeBatchResult(entries, RequireWorkspaceId(ctx));\n            await PublishBatchRequirementsChangeSafeAsync(ChangeEventActions.Updated, result, ct).ConfigureAwait(false);\n            return result;\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "firstLine": 802,
+      "lastLine": 916,
+      "family": "authored-requirement-graph",
+      "excerptSha256": "2649183E06C27D108BA36099D5F3E73E80F27ECFFA376B52A312B79B7EFF9395",
+      "fileSha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A"
+    },
+    {
+      "sourceText": "    public async Task UpsertMappingAsync(FrTrMapping mapping, CancellationToken ct = default)\n    {\n        ValidateMapping(mapping);\n        var normalizedTrIds = NormalizeIds(mapping.TrIds);\n        var normalizedTestIds = NormalizeIds(mapping.TestIds);\n\n        await _writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);\n            await ValidateMappingTargetsAsync(ctx, mapping.FrId, normalizedTrIds, normalizedTestIds, ct).ConfigureAwait(false);\n\n            var workspaceId = RequireWorkspaceId(ctx);\n            var existingLinks = await ctx.RequirementTraceabilityLinks\n                .IgnoreQueryFilters(SoftDeleteQueryFilter)\n                .Where(x => x.WorkspaceId == workspaceId && x.FrId == mapping.FrId)\n                .ToListAsync(ct)\n                .ConfigureAwait(false);\n\n            var timestamp = DateTimeOffset.UtcNow;\n            var now = timestamp.ToString(\"O\");\n            var desiredKeys = normalizedTrIds\n                .Select(trId => BuildTraceabilityLinkKey(TrKind, trId))\n                .Concat(normalizedTestIds.Select(testId => BuildTraceabilityLinkKey(TestKind, testId)))\n                .ToHashSet(StringComparer.OrdinalIgnoreCase);\n\n            foreach (var existingLink in existingLinks.Where(link => !desiredKeys.Contains(BuildTraceabilityLinkKey(link.TargetKind, link.TargetId))))\n                MarkSoftDeleted(ctx, existingLink, timestamp, \"requirements_mapping_replaced\");\n\n            foreach (var trId in normalizedTrIds)\n                UpsertTraceabilityLink(ctx, existingLinks, workspaceId, mapping.FrId, TrKind, trId, now);\n            foreach (var testId in normalizedTestIds)\n                UpsertTraceabilityLink(ctx, existingLinks, workspaceId, mapping.FrId, TestKind, testId, now);\n\n            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);\n            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Updated, mapping.FrId, ct).ConfigureAwait(false);\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }\n\n    private static void UpsertTraceabilityLink(\n        McpDbContext ctx,\n        IReadOnlyList<RequirementTraceabilityLinkEntity> existingLinks,\n        string workspaceId,\n        string frId,\n        string targetKind,\n        string targetId,\n        string createdAtUtc)\n    {\n        var existing = existingLinks.FirstOrDefault(link =>\n            string.Equals(link.TargetKind, targetKind, StringComparison.OrdinalIgnoreCase)\n            && string.Equals(link.TargetId, targetId, StringComparison.OrdinalIgnoreCase));\n\n        if (existing is null)\n        {\n            ctx.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity\n            {\n                WorkspaceId = workspaceId,\n                FrId = frId,\n                TargetKind = targetKind,\n                TargetId = targetId,\n                CreatedAtUtc = createdAtUtc\n            });\n            return;\n        }\n\n        existing.SourceKind = FrKind;\n        if (IsSoftDeleted(ctx, existing))\n        {\n            existing.CreatedAtUtc = createdAtUtc;\n            ClearSoftDelete(ctx, existing);\n        }\n    }\n\n    private static string BuildTraceabilityLinkKey(string targetKind, string targetId)\n        => $\"{targetKind}\\0{targetId}\";\n\n    /// <inheritdoc />\n    public async Task DeleteMappingAsync(string frId, CancellationToken ct = default)\n    {\n        ValidateId(frId, nameof(frId));\n        await _writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);\n            var links = await ctx.RequirementTraceabilityLinks.Where(x => x.FrId == frId).ToListAsync(ct).ConfigureAwait(false);\n            if (links.Count == 0)\n                throw new RequirementsNotFoundException($\"Mapping row '{frId}' was not found.\");\n            ctx.RequirementTraceabilityLinks.RemoveRange(links);\n            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);\n            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Deleted, frId, ct).ConfigureAwait(false);\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "firstLine": 974,
+      "lastLine": 1077,
+      "family": "authored-requirement-graph",
+      "excerptSha256": "DB3EA1A516BBD06C07C977C474E23260C25F1513E4D8525387DFAAE2BCE45652",
+      "fileSha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A"
+    },
+    {
+      "sourceText": "    private async Task AddRequirementAsync(\n        string kind,\n        string id,\n        string title,\n        string body,\n        string priority,\n        string status,\n        string? notes,\n        IReadOnlyList<AcceptanceCriterion>? acceptanceCriteria,\n        string? scopeStartLayerKey,\n        string? scopeEndLayerKey,\n        CancellationToken ct)\n    {\n        await _writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);\n            var requirementScope = await ValidateRequirementScopeAsync(ctx, scopeStartLayerKey, scopeEndLayerKey, ct).ConfigureAwait(false);\n            var existing = await ctx.Requirements\n                .IgnoreQueryFilters(SoftDeleteQueryFilter)\n                .FirstOrDefaultAsync(x => x.Kind == kind && x.Id == id, ct)\n                .ConfigureAwait(false);\n            if (existing is not null && !IsSoftDeleted(ctx, existing))\n                throw new RequirementsConflictException($\"{kind.ToUpperInvariant()} '{id}' already exists.\");\n\n            var now = Now();\n            if (existing is null)\n            {\n                ctx.Requirements.Add(new RequirementEntity\n                {\n                    WorkspaceId = RequireWorkspaceId(ctx),\n                    Kind = kind,\n                    Id = id,\n                    Title = title,\n                    Body = body,\n                    Priority = NormalizePriority(priority),\n                    Status = NormalizeStatus(status),\n                    Notes = notes,\n                    ScopeStartLayerKey = requirementScope.Start,\n                    ScopeEndLayerKey = requirementScope.End,\n                    CreatedAtUtc = now,\n                    UpdatedAtUtc = now\n                });\n                ctx.RequirementAcceptanceCriteria.AddRange(\n                    ToCriterionEntities(acceptanceCriteria, RequireWorkspaceId(ctx), kind, id));\n            }\n            else\n            {\n                existing.Title = title;\n                existing.Body = body;\n                existing.Priority = NormalizePriority(priority);\n                existing.Status = NormalizeStatus(status);\n                existing.Notes = notes;\n                await SetCriteriaAsync(ctx, existing, acceptanceCriteria, ct).ConfigureAwait(false);\n                existing.ScopeStartLayerKey = requirementScope.Start;\n                existing.ScopeEndLayerKey = requirementScope.End;\n                existing.CreatedAtUtc = now;\n                existing.UpdatedAtUtc = now;\n                ClearSoftDelete(ctx, existing);\n            }\n\n            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);\n            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Created, id, ct).ConfigureAwait(false);\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }\n\n    private async Task UpdateRequirementAsync(\n        string kind,\n        string id,\n        string title,\n        string body,\n        string priority,\n        string status,\n        string? notes,\n        IReadOnlyList<AcceptanceCriterion>? acceptanceCriteria,\n        string? scopeStartLayerKey,\n        string? scopeEndLayerKey,\n        CancellationToken ct)\n    {\n        await _writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);\n            var requirementScope = await ValidateRequirementScopeAsync(ctx, scopeStartLayerKey, scopeEndLayerKey, ct).ConfigureAwait(false);\n            var row = await FindRequirementAsync(ctx, kind, id, asTracking: true, ct).ConfigureAwait(false)\n                ?? throw new RequirementsNotFoundException($\"{kind.ToUpperInvariant()} '{id}' was not found.\");\n            row.Title = title;\n            row.Body = body;\n            row.Priority = NormalizePriority(priority);\n            row.Status = NormalizeStatus(status);\n            row.Notes = notes;\n            await SetCriteriaAsync(ctx, row, acceptanceCriteria, ct).ConfigureAwait(false);\n            row.ScopeStartLayerKey = requirementScope.Start;\n            row.ScopeEndLayerKey = requirementScope.End;\n            row.UpdatedAtUtc = Now();\n            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);\n            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Updated, id, ct).ConfigureAwait(false);\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "firstLine": 1150,
+      "lastLine": 1260,
+      "family": "authored-requirement-graph",
+      "excerptSha256": "F6CA58B3228FD46CB166DA036162A5FCA9729B0590AEF835604AD00A71AB4D74",
+      "fileSha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A"
+    },
+    {
+      "sourceText": "    private async Task DeleteRequirementAndTargetLinksAsync(string kind, string id, CancellationToken ct)\n    {\n        await _writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);\n            var row = await FindRequirementAsync(ctx, kind, id, asTracking: true, ct).ConfigureAwait(false)\n                ?? throw new RequirementsNotFoundException($\"{kind.ToUpperInvariant()} '{id}' was not found.\");\n            ctx.Requirements.Remove(row);\n            ctx.RequirementTraceabilityLinks.RemoveRange(ctx.RequirementTraceabilityLinks.Where(x => x.TargetKind == kind && x.TargetId == id));\n            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);\n            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Deleted, id, ct).ConfigureAwait(false);\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "firstLine": 1347,
+      "lastLine": 1366,
+      "family": "authored-requirement-graph",
+      "excerptSha256": "80F278293A3AFC89A2EE789DE162A45649FF6943BB53FFCF07B0598BFC0AE4F9",
+      "fileSha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A"
+    },
+    {
+      "sourceText": "    private static void CopyRequirement(RequirementEntity source, RequirementEntity target)\n    {\n        target.Title = source.Title;\n        target.Body = source.Body;\n        target.Priority = source.Priority;\n        target.Status = source.Status;\n        target.Notes = source.Notes;\n        target.AcceptanceCriteria.Clear();\n        target.AcceptanceCriteria.AddRange(CloneCriteria(source.AcceptanceCriteria));\n        target.ScopeStartLayerKey = source.ScopeStartLayerKey;\n        target.ScopeEndLayerKey = source.ScopeEndLayerKey;\n        target.CreatedAtUtc = source.CreatedAtUtc;\n        target.UpdatedAtUtc = source.UpdatedAtUtc;\n    }\n\n    private static RequirementTraceabilityLinkEntity CloneTraceabilityLink(RequirementTraceabilityLinkEntity source)\n    {\n        return new RequirementTraceabilityLinkEntity\n        {\n            WorkspaceId = source.WorkspaceId,\n            SourceKind = source.SourceKind,\n            FrId = source.FrId,\n            TargetKind = source.TargetKind,\n            TargetId = source.TargetId,\n            CreatedAtUtc = source.CreatedAtUtc,\n        };\n    }\n\n    private static void CopyTraceabilityLink(\n        RequirementTraceabilityLinkEntity source,\n        RequirementTraceabilityLinkEntity target)\n    {\n        target.SourceKind = source.SourceKind;\n        target.CreatedAtUtc = source.CreatedAtUtc;\n    }",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "firstLine": 1973,
+      "lastLine": 2007,
+      "family": "authored-requirement-graph",
+      "excerptSha256": "948A9A0FF3F7674ED37B6D1224AD90B42536DE17E4A20550AF97F333916945AE",
+      "fileSha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A"
+    },
+    {
+      "sourceText": "    private static async Task SetCriteriaAsync(McpDbContext ctx, RequirementEntity row, IReadOnlyList<AcceptanceCriterion>? criteria, CancellationToken ct)\n    {\n        var existing = await ctx.RequirementAcceptanceCriteria\n            .Where(c => c.WorkspaceId == row.WorkspaceId && c.RequirementKind == row.Kind && c.RequirementId == row.Id)\n            .ToListAsync(ct)\n            .ConfigureAwait(false);\n        ctx.RequirementAcceptanceCriteria.RemoveRange(existing);\n        ctx.RequirementAcceptanceCriteria.AddRange(ToCriterionEntities(criteria, row.WorkspaceId, row.Kind, row.Id));\n    }\n\n    /// <summary>Loads and attaches acceptance-criterion child rows onto the (non-mapped) AcceptanceCriteria\n    /// holder of each requirement, so <c>MapFr/MapTr/MapTest</c> and clone paths can read them.</summary>\n    private static async Task AttachCriteriaAsync(McpDbContext ctx, IReadOnlyCollection<RequirementEntity> rows, CancellationToken ct)\n    {\n        if (rows.Count == 0)\n            return;\n        var ids = rows.Select(r => r.Id).Distinct(StringComparer.Ordinal).ToList();\n        var criteria = await ctx.RequirementAcceptanceCriteria\n            .AsNoTracking()\n            .Where(c => ids.Contains(c.RequirementId))\n            .ToListAsync(ct)\n            .ConfigureAwait(false);\n        var lookup = criteria.ToLookup(c => (c.WorkspaceId, c.RequirementKind, c.RequirementId));\n        foreach (var row in rows)\n        {\n            row.AcceptanceCriteria = lookup[(row.WorkspaceId, row.Kind, row.Id)]\n                .OrderBy(c => c.Ordinal)\n                .ToList();\n        }\n    }\n\n    /// <summary>Deep-clones acceptance-criterion child rows (preserving their composite parent-key\n    /// columns) for a cloned/copied requirement that keeps the same identity.</summary>\n    private static List<RequirementAcceptanceCriterionEntity> CloneCriteria(IEnumerable<RequirementAcceptanceCriterionEntity> source) =>\n        source.OrderBy(r => r.Ordinal)\n            .Select(r => new RequirementAcceptanceCriterionEntity\n            {\n                WorkspaceId = r.WorkspaceId,\n                RequirementKind = r.RequirementKind,\n                RequirementId = r.RequirementId,\n                Ordinal = r.Ordinal,\n                CriterionId = r.CriterionId,\n                Text = r.Text,\n                IsSatisfied = r.IsSatisfied,\n                Evidence = r.Evidence,",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "firstLine": 88,
+      "lastLine": 132,
+      "family": "authored-requirement-graph",
+      "excerptSha256": "B03D255AF18317BC9528CCA1354F2789C476A2B04F24C06BDB8552C9F4EE054C",
+      "fileSha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A"
+    },
+    {
+      "sourceText": "    private DbScope CreateScope()\n    {\n        var scope = _scopeFactory.CreateAsyncScope();\n        var requestCtx = _httpContextAccessor?.HttpContext?.RequestServices.GetService<WorkspaceContext>();\n        var workspacePath = requestCtx?.WorkspacePath;\n        if (string.IsNullOrWhiteSpace(workspacePath))\n            workspacePath = TryInferWorkspacePathFromOptions();\n        if (!string.IsNullOrWhiteSpace(workspacePath))\n        {\n            workspacePath = NormalizeRequestWorkspacePath(workspacePath, QBrainAi.Client.WorkspacePathNormalizer.Process)!;\n            var scopedWorkspace = scope.ServiceProvider.GetService<WorkspaceContext>();\n            if (scopedWorkspace is not null)\n            {\n                scopedWorkspace.WorkspacePath = workspacePath;\n                scopedWorkspace.WorkspaceName = requestCtx?.WorkspaceName ?? Path.GetFileName(workspacePath);\n            }\n        }\n\n        var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n        if (!string.IsNullOrWhiteSpace(workspacePath))\n            ctx.OverrideWorkspaceId(NormalizeRequestWorkspacePath(workspacePath, QBrainAi.Client.WorkspacePathNormalizer.Process)!);\n\n        return new DbScope(scope, ctx);\n    }",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "firstLine": 1512,
+      "lastLine": 1535,
+      "family": "authored-requirement-graph",
+      "excerptSha256": "17E9EA3DF224114AD92747445DC516B65F83D93AD0B9ADA4CC86EE395C217D79",
+      "fileSha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A"
+    },
+    {
+      "sourceText": "    private static async Task RestoreRequirementsCoreAsync(\n        McpDbContext ctx,\n        RequirementsDatabaseCompensationState state,\n        CancellationToken cancellationToken)\n    {\n        var currentRows = await ctx.Requirements\n            .IgnoreQueryFilters(SoftDeleteQueryFilter)\n            .Where(row => row.WorkspaceId == state.WorkspaceId)\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n        var snapshotRows = state.Requirements.ToDictionary(\n            row => RequirementKey(row.Entity.WorkspaceId, row.Entity.Kind, row.Entity.Id),\n            StringComparer.OrdinalIgnoreCase);\n\n        foreach (var current in currentRows)\n        {\n            if (!snapshotRows.ContainsKey(RequirementKey(current.WorkspaceId, current.Kind, current.Id)))\n                MarkSoftDeleted(ctx, current, DateTimeOffset.UtcNow, \"requirements_transaction_rollback\");\n        }\n\n        foreach (var snapshot in state.Requirements)\n        {\n            var source = snapshot.Entity;\n            var current = currentRows.FirstOrDefault(row =>\n                string.Equals(row.WorkspaceId, source.WorkspaceId, StringComparison.OrdinalIgnoreCase)\n                && string.Equals(row.Kind, source.Kind, StringComparison.OrdinalIgnoreCase)\n                && string.Equals(row.Id, source.Id, StringComparison.OrdinalIgnoreCase));\n            if (current is null)\n            {\n                current = CloneRequirement(source);\n                ctx.Requirements.Add(current);\n            }\n            else\n            {\n                CopyRequirement(source, current);\n            }\n\n            // Restore acceptance criteria dependent-side (the [NotMapped] holder does not persist).\n            var existingCriteria = await ctx.RequirementAcceptanceCriteria\n                .IgnoreQueryFilters(SoftDeleteQueryFilter)\n                .Where(c => c.WorkspaceId == source.WorkspaceId && c.RequirementKind == source.Kind && c.RequirementId == source.Id)\n                .ToListAsync(cancellationToken)\n                .ConfigureAwait(false);\n            ctx.RequirementAcceptanceCriteria.RemoveRange(existingCriteria);\n            ctx.RequirementAcceptanceCriteria.AddRange(CloneCriteria(source.AcceptanceCriteria));\n\n            ApplySoftDeleteState(ctx.Entry(current), snapshot.SoftDelete);\n        }\n    }\n\n    private static async Task RestoreTraceabilityLinksCoreAsync(\n        McpDbContext ctx,\n        RequirementsDatabaseCompensationState state,\n        CancellationToken cancellationToken)\n    {\n        var currentLinks = await ctx.RequirementTraceabilityLinks\n            .IgnoreQueryFilters(SoftDeleteQueryFilter)\n            .Where(row => row.WorkspaceId == state.WorkspaceId)\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n        var snapshotLinks = state.TraceabilityLinks.ToDictionary(\n            row => TraceabilityKey(row.Entity.WorkspaceId, row.Entity.FrId, row.Entity.TargetKind, row.Entity.TargetId),\n            StringComparer.OrdinalIgnoreCase);\n\n        foreach (var current in currentLinks)\n        {\n            if (!snapshotLinks.ContainsKey(TraceabilityKey(current.WorkspaceId, current.FrId, current.TargetKind, current.TargetId)))\n                MarkSoftDeleted(ctx, current, DateTimeOffset.UtcNow, \"requirements_transaction_rollback\");\n        }\n\n        foreach (var snapshot in state.TraceabilityLinks)\n        {\n            var source = snapshot.Entity;\n            var current = currentLinks.FirstOrDefault(row =>\n                string.Equals(row.WorkspaceId, source.WorkspaceId, StringComparison.OrdinalIgnoreCase)\n                && string.Equals(row.FrId, source.FrId, StringComparison.OrdinalIgnoreCase)\n                && string.Equals(row.TargetKind, source.TargetKind, StringComparison.OrdinalIgnoreCase)\n                && string.Equals(row.TargetId, source.TargetId, StringComparison.OrdinalIgnoreCase));\n            if (current is null)\n            {\n                current = CloneTraceabilityLink(source);\n                ctx.RequirementTraceabilityLinks.Add(current);\n            }\n            else\n            {\n                CopyTraceabilityLink(source, current);\n            }\n\n            ApplySoftDeleteState(ctx.Entry(current), snapshot.SoftDelete);\n        }\n    }",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "firstLine": 1855,
+      "lastLine": 1945,
+      "family": "authored-requirement-graph",
+      "excerptSha256": "23E44D81D99EA909D1C9D31BCC66A325F216D49535BDF41582CA69DC06875ED0",
+      "fileSha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A"
+    },
+    {
+      "sourceText": "    public async Task<GraphRagIngestTextResponse> IngestTextAsync(GraphRagIngestTextRequest request, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        if (string.IsNullOrWhiteSpace(request.Content))\n            throw new ArgumentException(\"Content must not be empty.\", nameof(request));\n\n        var documentId = $\"adhoc-{Guid.NewGuid():N}\";\n        var contentHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(request.Content)));\n        var sourceType = request.SourceType ?? \"adhoc-text\";\n        var sourceKey = request.SourceKey ?? request.Title ?? documentId;\n\n        var chunker = new Chunker();\n        var chunks = chunker.Chunk(documentId, request.Content);\n        var totalTokens = chunks.Sum(c => c.TokenCount);\n\n        var docEntity = new ContextDocumentEntity\n        {\n            Id = documentId,\n            SourceType = sourceType,\n            SourceKey = sourceKey,\n            IngestedAt = DateTime.UtcNow,\n            ContentHash = contentHash,\n        };\n        _dbContext.Documents.Add(docEntity);\n\n        foreach (var chunk in chunks)\n        {\n            var embedding = _embeddingService.GenerateEmbedding(chunk.Content);\n            var chunkEntity = new ContextChunkEntity\n            {\n                Id = chunk.Id,\n                DocumentId = documentId,\n                Content = chunk.Content,\n                TokenCount = chunk.TokenCount,\n                ChunkIndex = chunk.ChunkIndex,\n                Embedding = EmbeddingToBytes(embedding),\n            };\n            _dbContext.Chunks.Add(chunkEntity);\n            _vectorIndexService.AddVector(chunk.Id, embedding);\n        }\n\n        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);\n\n        var reindexTriggered = false;\n        if (request.TriggerReindex)\n        {\n            await IndexAsync(null, ct).ConfigureAwait(false);\n            reindexTriggered = true;\n        }\n\n        _logger.LogInformation(\"GraphRAG ad-hoc text ingested: DocumentId={DocumentId}, Chunks={ChunkCount}, Tokens={TokenCount}\",\n            documentId, chunks.Count, totalTokens);\n\n        return new GraphRagIngestTextResponse\n        {\n            DocumentId = documentId,\n            ChunkCount = chunks.Count,\n            TokenCount = totalTokens,\n            SourceType = sourceType,\n            SourceKey = sourceKey,\n            ReindexTriggered = reindexTriggered,\n        };\n    }",
+      "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+      "firstLine": 371,
+      "lastLine": 433,
+      "family": "operational-raw-graph",
+      "excerptSha256": "3086DB69B814C5F0B4A95F5E3C2F0A6A88BB633C304C8CB71EE32064D09F1432",
+      "fileSha256": "BB7F784FC5F7BAD9D05E4B0A1F18302E6D374CDCF53957CF9F16D091A5901DF6"
+    },
+    {
+      "sourceText": "    public async Task<GraphRagDocumentDeleteResponse> DeleteDocumentAsync(string documentId, CancellationToken ct = default)\n    {\n        var doc = await _dbContext.Documents.FirstOrDefaultAsync(d => d.Id == documentId, ct).ConfigureAwait(false);\n        if (doc is null)\n            return new GraphRagDocumentDeleteResponse { DocumentId = documentId, ChunksRemoved = 0, Success = false };\n\n        var chunks = await _dbContext.Chunks\n            .Where(c => c.DocumentId == documentId)\n            .ToListAsync(ct)\n            .ConfigureAwait(false);\n\n        foreach (var chunk in chunks)\n        {\n            _vectorIndexService.RemoveVector(chunk.Id);\n        }\n\n        _dbContext.Chunks.RemoveRange(chunks);\n        _dbContext.Documents.Remove(doc);\n        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);\n\n        _logger.LogInformation(\"GraphRAG document deleted: DocumentId={DocumentId}, ChunksRemoved={ChunkCount}\",\n            documentId, chunks.Count);\n\n        return new GraphRagDocumentDeleteResponse\n        {\n            DocumentId = documentId,\n            ChunksRemoved = chunks.Count,\n            Success = true,\n        };\n    }\n\n    // ── Entity CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──\n\n    /// <inheritdoc />\n    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the creation and update times come from one reading of the service's clock instead of DateTime.UtcNow, so a unit test can supply scripted times (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>\n    public async Task<GraphEntityResponse> CreateEntityAsync(GraphEntityRequest request, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        var now = _timeProvider.GetUtcNow().UtcDateTime;\n        var entity = new GraphEntityEntity\n        {\n            Id = $\"ge-{Guid.NewGuid():N}\",\n            Name = request.Name,\n            EntityType = request.EntityType,\n            Description = request.Description,\n            Metadata = request.Metadata,\n            CreatedAtUtc = now,\n            UpdatedAtUtc = now,\n        };\n\n        _dbContext.GraphEntities.Add(entity);\n        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);\n\n        return MapEntityToResponse(entity);\n    }\n\n    /// <inheritdoc />\n    public async Task<GraphEntityResponse?> GetEntityAsync(string entityId, CancellationToken ct = default)\n    {\n        var entity = await _dbContext.GraphEntities.FirstOrDefaultAsync(e => e.Id == entityId, ct).ConfigureAwait(false);\n        return entity is null ? null : MapEntityToResponse(entity);\n    }\n\n    /// <inheritdoc />\n    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the update time comes from the service's clock instead of DateTime.UtcNow, and the creation time is kept, so a unit test can supply scripted times (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>\n    public async Task<GraphEntityResponse?> UpdateEntityAsync(string entityId, GraphEntityRequest request, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        var entity = await _dbContext.GraphEntities.FirstOrDefaultAsync(e => e.Id == entityId, ct).ConfigureAwait(false);\n        if (entity is null)\n            return null;\n\n        entity.Name = request.Name;\n        entity.EntityType = request.EntityType;\n        entity.Description = request.Description;\n        entity.Metadata = request.Metadata;\n        entity.UpdatedAtUtc = _timeProvider.GetUtcNow().UtcDateTime;\n\n        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);\n        return MapEntityToResponse(entity);\n    }\n\n    /// <inheritdoc />\n    public async Task<GraphEntityListResponse> ListEntitiesAsync(int skip = 0, int take = 50, string? entityType = null, CancellationToken ct = default)\n    {\n        var query = _dbContext.GraphEntities.AsQueryable();\n        if (!string.IsNullOrWhiteSpace(entityType))\n            query = query.Where(e => e.EntityType == entityType);\n\n        var totalCount = await query.CountAsync(ct).ConfigureAwait(false);\n        var entities = await query\n            .OrderBy(e => e.CreatedAtUtc)\n            .Skip(skip)\n            .Take(take)\n            .ToListAsync(ct)\n            .ConfigureAwait(false);\n\n        return new GraphEntityListResponse\n        {\n            Entities = entities.Select(MapEntityToResponse).ToList(),\n            TotalCount = totalCount,\n        };\n    }\n\n    /// <inheritdoc />\n    public async Task<bool> DeleteEntityAsync(string entityId, CancellationToken ct = default)\n    {\n        var entity = await _dbContext.GraphEntities.FirstOrDefaultAsync(e => e.Id == entityId, ct).ConfigureAwait(false);\n        if (entity is null)\n            return false;\n\n        _dbContext.GraphEntities.Remove(entity);\n        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);\n        return true;\n    }\n\n    // ── Relationship CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──\n\n    /// <inheritdoc />\n    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the creation and update times come from one reading of the service's clock instead of DateTime.UtcNow, the same rule as entities (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>\n    public async Task<GraphRelationshipResponse> CreateRelationshipAsync(GraphRelationshipRequest request, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n\n        var sourceExists = await _dbContext.GraphEntities.AnyAsync(e => e.Id == request.SourceEntityId, ct).ConfigureAwait(false);\n        if (!sourceExists)\n            throw new InvalidOperationException($\"Source entity '{request.SourceEntityId}' does not exist.\");\n\n        var targetExists = await _dbContext.GraphEntities.AnyAsync(e => e.Id == request.TargetEntityId, ct).ConfigureAwait(false);\n        if (!targetExists)\n            throw new InvalidOperationException($\"Target entity '{request.TargetEntityId}' does not exist.\");\n\n        var now = _timeProvider.GetUtcNow().UtcDateTime;\n        var relationship = new GraphRelationshipEntity\n        {\n            Id = $\"gr-{Guid.NewGuid():N}\",\n            SourceEntityId = request.SourceEntityId,\n            TargetEntityId = request.TargetEntityId,\n            RelationshipType = request.RelationshipType,\n            Description = request.Description,\n            Weight = request.Weight,\n            Metadata = request.Metadata,\n            CreatedAtUtc = now,\n            UpdatedAtUtc = now,\n        };\n\n        _dbContext.GraphRelationships.Add(relationship);\n        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);\n\n        return MapRelationshipToResponse(relationship);\n    }\n\n    /// <inheritdoc />\n    public async Task<GraphRelationshipResponse?> GetRelationshipAsync(string relationshipId, CancellationToken ct = default)\n    {\n        var rel = await _dbContext.GraphRelationships.FirstOrDefaultAsync(r => r.Id == relationshipId, ct).ConfigureAwait(false);\n        return rel is null ? null : MapRelationshipToResponse(rel);\n    }\n\n    /// <inheritdoc />\n    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the update time comes from the service's clock instead of DateTime.UtcNow, the same rule as entities (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>\n    public async Task<GraphRelationshipResponse?> UpdateRelationshipAsync(string relationshipId, GraphRelationshipRequest request, CancellationToken ct = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        var rel = await _dbContext.GraphRelationships.FirstOrDefaultAsync(r => r.Id == relationshipId, ct).ConfigureAwait(false);\n        if (rel is null)\n            return null;\n\n        rel.SourceEntityId = request.SourceEntityId;\n        rel.TargetEntityId = request.TargetEntityId;\n        rel.RelationshipType = request.RelationshipType;\n        rel.Description = request.Description;\n        rel.Weight = request.Weight;\n        rel.Metadata = request.Metadata;\n        rel.UpdatedAtUtc = _timeProvider.GetUtcNow().UtcDateTime;\n\n        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);\n        return MapRelationshipToResponse(rel);\n    }\n\n    /// <inheritdoc />\n    public async Task<GraphRelationshipListResponse> ListRelationshipsAsync(int skip = 0, int take = 50, string? entityId = null, string? relationshipType = null, CancellationToken ct = default)\n    {\n        var query = _dbContext.GraphRelationships.AsQueryable();\n        if (!string.IsNullOrWhiteSpace(entityId))\n            query = query.Where(r => r.SourceEntityId == entityId || r.TargetEntityId == entityId);\n        if (!string.IsNullOrWhiteSpace(relationshipType))\n            query = query.Where(r => r.RelationshipType == relationshipType);\n\n        var totalCount = await query.CountAsync(ct).ConfigureAwait(false);\n        var relationships = await query\n            .OrderBy(r => r.CreatedAtUtc)\n            .Skip(skip)\n            .Take(take)\n            .ToListAsync(ct)\n            .ConfigureAwait(false);\n\n        return new GraphRelationshipListResponse\n        {\n            Relationships = relationships.Select(MapRelationshipToResponse).ToList(),\n            TotalCount = totalCount,\n        };\n    }\n\n    /// <inheritdoc />\n    public async Task<bool> DeleteRelationshipAsync(string relationshipId, CancellationToken ct = default)\n    {\n        var rel = await _dbContext.GraphRelationships.FirstOrDefaultAsync(r => r.Id == relationshipId, ct).ConfigureAwait(false);\n        if (rel is null)\n            return false;\n\n        _dbContext.GraphRelationships.Remove(rel);\n        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);\n        return true;\n    }",
+      "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+      "firstLine": 511,
+      "lastLine": 725,
+      "family": "operational-raw-graph",
+      "excerptSha256": "6F203DDDD462D0031F19C3AC6B32A971E0A48F82F6B7CF94622C030DDD43B099",
+      "fileSha256": "BB7F784FC5F7BAD9D05E4B0A1F18302E6D374CDCF53957CF9F16D091A5901DF6"
+    },
+    {
+      "sourceText": "    public async Task<WebsiteIngestResult> IngestWebsiteStreamingAsync(\n        WebsiteIngestRequest request,\n        Func<WebsiteIngestProgressEvent, Task>? onProgress,\n        CancellationToken cancellationToken = default)\n    {\n        var startedAt = DateTime.UtcNow;\n        var result = new WebsiteIngestResult\n        {\n            RunId = Guid.NewGuid().ToString(\"N\"),\n            StartedAtUtc = startedAt,\n            Status = \"completed\"\n        };\n\n        if (onProgress is not null)\n        {\n            await onProgress(new WebsiteIngestProgressEvent\n            {\n                RunId = result.RunId,\n                EventType = \"started\",\n                Status = result.Status,\n                PagesProcessed = 0,\n                DocumentsIngested = 0,\n                ChunksWritten = 0,\n                Message = \"Website ingestion started.\"\n            }).ConfigureAwait(false);\n        }\n\n        var pagesProcessed = 0;\n        var pages = await _websiteIngestor.IngestAsync(\n            request,\n            async page =>\n            {\n                pagesProcessed++;\n                if (onProgress is null)\n                {\n                    return;\n                }\n\n                await onProgress(new WebsiteIngestProgressEvent\n                {\n                    RunId = result.RunId,\n                    EventType = \"page\",\n                    Status = result.Status,\n                    PagesProcessed = pagesProcessed,\n                    DocumentsIngested = 0,\n                    ChunksWritten = 0,\n                    UrlResult = page.Outcome,\n                    Message = $\"Fetched {page.Outcome.Url} ({page.Outcome.Status}).\"\n                }).ConfigureAwait(false);\n            },\n            cancellationToken).ConfigureAwait(false);\n        var outcomes = new List<WebsiteIngestUrlResult>(capacity: pages.Count);\n        var docsIngested = 0;\n        var chunksWritten = 0;\n\n        foreach (var page in pages)\n        {\n            outcomes.Add(page.Outcome);\n            if (page.Document is null || page.Chunks.Count == 0)\n            {\n                continue;\n            }\n\n            await UpsertDocumentAndChunksAsync(page.Document, page.Chunks, cancellationToken).ConfigureAwait(false);\n            docsIngested++;\n            chunksWritten += page.Chunks.Count;\n\n            if (onProgress is not null)\n            {\n                await onProgress(new WebsiteIngestProgressEvent\n                {\n                    RunId = result.RunId,\n                    EventType = \"persisted\",\n                    Status = result.Status,\n                    PagesProcessed = pagesProcessed,\n                    DocumentsIngested = docsIngested,\n                    ChunksWritten = chunksWritten,\n                    UrlResult = page.Outcome,\n                    Message = $\"Persisted {page.Outcome.Url}.\"\n                }).ConfigureAwait(false);\n            }\n        }\n\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        if (outcomes.Any(o => string.Equals(o.Status, \"error\", StringComparison.OrdinalIgnoreCase)))\n        {\n            result.Status = \"partial-failure\";\n        }\n\n        result.DocumentsIngested = docsIngested;\n        result.ChunksWritten = chunksWritten;\n        result.UrlResults = outcomes;\n        result.CompletedAtUtc = DateTime.UtcNow;\n\n        if (onProgress is not null)\n        {\n            await onProgress(new WebsiteIngestProgressEvent\n            {\n                RunId = result.RunId,\n                EventType = \"completed\",\n                Status = result.Status,\n                PagesProcessed = pagesProcessed,\n                DocumentsIngested = result.DocumentsIngested,\n                ChunksWritten = result.ChunksWritten,\n                Result = result,\n                Message = \"Website ingestion completed.\"\n            }).ConfigureAwait(false);\n        }\n\n        return result;\n    }",
+      "path": "src/QBrainAi.Services/Ingestion/IngestionCoordinator.cs",
+      "firstLine": 81,
+      "lastLine": 192,
+      "family": "operational-raw-ingestion",
+      "excerptSha256": "F7E681D56498CB2F80375F193E2AED0C8037631953594CA4704BB56E93DE395B",
+      "fileSha256": "B3B4B553B1E54DFAF0151F13D9CCD6DD1EB6B772750593B03E65A7B1A03FE17F"
+    },
+    {
+      "sourceText": "    private async Task UpsertDocumentAndChunksAsync(\n        Models.ContextDocument doc,\n        IReadOnlyList<Models.ContextChunk> chunks,\n        CancellationToken cancellationToken)\n    {\n        var existingDocs = await _db.Documents\n            .Where(d => d.SourceType == doc.SourceType && d.SourceKey == doc.SourceKey)\n            .ToListAsync(cancellationToken).ConfigureAwait(false);\n\n        if (existingDocs.Count > 0)\n        {\n            var existingIds = existingDocs.Select(d => d.Id).ToList();\n            var toRemove = await _db.Chunks\n                .Where(c => existingIds.Contains(c.DocumentId))\n                .ToListAsync(cancellationToken)\n                .ConfigureAwait(false);\n            _db.Chunks.RemoveRange(toRemove);\n\n            if (existingDocs.Count == 1 && existingDocs[0].Id == doc.Id)\n            {\n                var existing = existingDocs[0];\n                existing.SourceType = doc.SourceType;\n                existing.SourceKey = doc.SourceKey;\n                existing.IngestedAt = doc.IngestedAt;\n                existing.ContentHash = doc.ContentHash;\n            }\n            else\n            {\n                _db.Documents.RemoveRange(existingDocs);\n                _db.Documents.Add(new ContextDocumentEntity\n                {\n                    Id = doc.Id,\n                    SourceType = doc.SourceType,\n                    SourceKey = doc.SourceKey,\n                    IngestedAt = doc.IngestedAt,\n                    ContentHash = doc.ContentHash\n                });\n            }\n        }\n        else\n        {\n            _db.Documents.Add(new ContextDocumentEntity\n            {\n                Id = doc.Id,\n                SourceType = doc.SourceType,\n                SourceKey = doc.SourceKey,\n                IngestedAt = doc.IngestedAt,\n                ContentHash = doc.ContentHash\n            });\n        }\n\n        var chunkEntities = new List<ContextChunkEntity>();\n        foreach (var c in chunks)\n        {\n            var entity = new ContextChunkEntity\n            {\n                Id = c.Id,\n                DocumentId = c.DocumentId,\n                Content = c.Content,\n                TokenCount = c.TokenCount,\n                ChunkIndex = c.ChunkIndex\n            };\n            _db.Chunks.Add(entity);\n            chunkEntities.Add(entity);\n        }\n\n        // TR-PLANNED-CORE-013: Generate embeddings and add to vector index if embedding service is available\n        if (_embeddingService.IsAvailable)\n        {\n            const int batchSize = 32;\n            for (var i = 0; i < chunkEntities.Count; i += batchSize)\n            {\n                var batch = chunkEntities.Skip(i).Take(batchSize).ToList();\n                foreach (var entity in batch)\n                {\n                    try\n                    {\n                        var embedding = _embeddingService.GenerateEmbedding(entity.Content);\n                        var bytes = new byte[embedding.Length * sizeof(float)];\n                        Buffer.BlockCopy(embedding, 0, bytes, 0, bytes.Length);\n                        entity.Embedding = bytes;\n                        _vectorIndexService.AddVector(entity.Id, embedding);\n                    }\n                    catch (Exception ex)\n                    {\n                        _logger.LogDebug(ex, \"Failed to generate embedding for chunk {ChunkId}\", entity.Id);\n                    }\n                }\n\n                if (i > 0 && i % 100 == 0)\n                    _logger.LogDebug(\"Embedding progress: {Count}/{Total} chunks processed\", i, chunkEntities.Count);\n            }\n        }\n    }",
+      "path": "src/QBrainAi.Services/Ingestion/IngestionCoordinator.cs",
+      "firstLine": 343,
+      "lastLine": 436,
+      "family": "operational-raw-ingestion",
+      "excerptSha256": "B2436122F1B48CF35B193D004AABC0B8F328E7638C0103CA2EE80849F3F735F5",
+      "fileSha256": "B3B4B553B1E54DFAF0151F13D9CCD6DD1EB6B772750593B03E65A7B1A03FE17F"
+    },
+    {
+      "sourceText": "    public async Task<MemoryConsolidateResult> ConsolidateAsync(\n        MemoryConsolidateRequest? request,\n        bool readOnlyCaller,\n        CancellationToken cancellationToken)\n    {\n        request ??= new MemoryConsolidateRequest();\n        var dryRun = request.DryRun ?? MemoryConsolidateLimits.DefaultDryRun;\n        var allowHardDelete = request.AllowHardDelete ?? MemoryConsolidateLimits.DefaultAllowHardDelete;\n        var threshold = request.SimilarityThreshold ?? MemoryConsolidateLimits.DefaultSimilarityThreshold;\n\n        if (readOnlyCaller && !dryRun)\n            return new MemoryConsolidateResult(403, FailureKind: MemoryMutationFailureKind.Validation, Error: \"Read-only caller cannot write-consolidate.\");\n\n        if (threshold < MemoryConsolidateLimits.MinSimilarityThreshold\n            || threshold > MemoryConsolidateLimits.MaxSimilarityThreshold)\n        {\n            return new MemoryConsolidateResult(400, FailureKind: MemoryMutationFailureKind.Validation, Error: \"SimilarityThreshold out of range.\");\n        }\n\n        var runId = string.IsNullOrWhiteSpace(request.RunId)\n            ? \"consol-\" + Guid.NewGuid().ToString(\"N\")\n            : request.RunId!;\n\n        if (!TryAcquireLock(_workspacePath, forceOverlap: false, _time.GetUtcNow(), out _))\n        {\n            return new MemoryConsolidateResult(\n                409,\n                RunId: runId,\n                DryRunApplied: dryRun,\n                FailureKind: MemoryMutationFailureKind.Conflict,\n                Error: \"Consolidate lock busy.\");\n        }\n\n        try\n        {\n            await Task.Delay(100, cancellationToken).ConfigureAwait(false);\n\n            if (request.CancelRequested)\n            {\n                return new MemoryConsolidateResult(\n                    499,\n                    RunId: runId,\n                    DryRunApplied: dryRun,\n                    FailureKind: MemoryMutationFailureKind.Conflict,\n                    Error: \"Consolidate cancelled.\");\n            }\n\n            var memories = await _db.Memories\n                .Where(m => m.WorkspaceId == _workspacePath || m.WorkspaceId == null)\n                .ToListAsync(cancellationToken)\n                .ConfigureAwait(false);\n\n            var workspaceRows = memories\n                .Where(m => string.Equals(m.Scope, MemoryEntity.WorkspaceScope, StringComparison.OrdinalIgnoreCase)\n                            && string.Equals(m.WorkspaceId, _workspacePath, StringComparison.OrdinalIgnoreCase))\n                .ToList();\n\n            var clusters = BuildClusters(workspaceRows, threshold);\n            var plan = clusters.Select(c => new MemoryConsolidatePlanItem\n            {\n                CandidateIds = c.Select(m => m.Id).ToList(),\n                SimilarityScore = ScoreCluster(c),\n                SurvivorId = dryRun ? null : PickSurvivor(c).Id,\n            }).ToList();\n\n            if (dryRun)\n            {\n                return new MemoryConsolidateResult(\n                    200,\n                    Plan: plan,\n                    RunId: runId,\n                    DryRunApplied: true,\n                    EventEmitted: false);\n            }\n\n            string? survivorId = null;\n            var mergedAway = new List<string>();\n\n            foreach (var cluster in clusters)\n            {\n                var survivor = PickSurvivor(cluster);\n                survivorId = survivor.Id;\n                var nextVersion = await _db.MemoryVersions\n                    .Where(v => v.MemoryId == survivor.Id)\n                    .Select(v => (int?)v.VersionNumber)\n                    .MaxAsync(cancellationToken)\n                    .ConfigureAwait(false) ?? survivor.Version;\n                nextVersion += 1;\n                foreach (var victim in cluster.Where(m => m.Id != survivor.Id))\n                {\n                    nextVersion = AppendLineage(survivor, victim, nextVersion);\n                    await RewireEdgesAsync(survivor.Id, victim.Id, cancellationToken).ConfigureAwait(false);\n                    _db.Memories.Remove(victim);\n                    mergedAway.Add(victim.Id);\n                }\n\n                if (string.IsNullOrWhiteSpace(survivor.Content) && string.IsNullOrWhiteSpace(survivor.Text))\n                {\n                    survivor.Content = cluster.Select(m => m.Content ?? m.Text).FirstOrDefault(s => !string.IsNullOrWhiteSpace(s));\n                    survivor.Text = survivor.Content ?? survivor.Text;\n                }\n\n                survivor.UpdatedAtUtc = DateTimeOffset.UtcNow;\n            }\n\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n            return new MemoryConsolidateResult(\n                200,\n                Plan: plan,\n                SurvivorId: survivorId,\n                MergedAwayIds: mergedAway,\n                RunId: runId,\n                DryRunApplied: false,\n                EventEmitted: true);\n        }\n        finally\n        {\n            ReleaseLock(_workspacePath);\n        }\n    }",
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+      "firstLine": 36,
+      "lastLine": 156,
+      "family": "workspace-memory-consolidation",
+      "excerptSha256": "7334261C0E833F4530F4DC7D57797D7F409E46FF42F0A177A54021CBD6F7123D",
+      "fileSha256": "D24532A5D9C932B9ACC253BED44977D29185C52758B2660C8F0C9EF9A47143D2"
+    },
+    {
+      "sourceText": "    private async Task<MemoryConsolidateResult> ConsolidateUnlockedAsync(\n        bool dryRun,\n        string runId,\n        CancellationToken cancellationToken)\n    {\n        var memories = await _db.Memories\n            .Where(m => m.WorkspaceId == _workspacePath)\n            .Where(m => m.Scope == MemoryEntity.WorkspaceScope)\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n\n        var clusters = BuildClusters(memories, MemoryConsolidateLimits.DefaultSimilarityThreshold);\n        var plan = clusters.Select(c => new MemoryConsolidatePlanItem\n        {\n            CandidateIds = c.Select(m => m.Id).ToList(),\n            SimilarityScore = ScoreCluster(c),\n            SurvivorId = dryRun ? null : PickSurvivor(c).Id,\n        }).ToList();\n\n        if (dryRun)\n            return new MemoryConsolidateResult(200, Plan: plan, RunId: runId, DryRunApplied: true, EventEmitted: false);\n\n        string? survivorId = null;\n        var mergedAway = new List<string>();\n        foreach (var cluster in clusters)\n        {\n            var survivor = PickSurvivor(cluster);\n            survivorId = survivor.Id;\n            var nextVersion = await _db.MemoryVersions\n                .Where(v => v.MemoryId == survivor.Id)\n                .Select(v => (int?)v.VersionNumber)\n                .MaxAsync(cancellationToken)\n                .ConfigureAwait(false) ?? survivor.Version;\n            nextVersion += 1;\n            foreach (var victim in cluster.Where(m => m.Id != survivor.Id))\n            {\n                nextVersion = AppendLineage(survivor, victim, nextVersion);\n                await RewireEdgesAsync(survivor.Id, victim.Id, cancellationToken).ConfigureAwait(false);\n                _db.Memories.Remove(victim);\n                mergedAway.Add(victim.Id);\n            }\n        }\n\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return new MemoryConsolidateResult(\n            200,\n            Plan: plan,\n            SurvivorId: survivorId,\n            MergedAwayIds: mergedAway,\n            RunId: runId,\n            DryRunApplied: false,\n            EventEmitted: true);\n    }",
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+      "firstLine": 204,
+      "lastLine": 256,
+      "family": "workspace-memory-consolidation",
+      "excerptSha256": "0C333C10980C3A3E59A400260907891771C20A7D5ED8E5035995E23608EB9F84",
+      "fileSha256": "D24532A5D9C932B9ACC253BED44977D29185C52758B2660C8F0C9EF9A47143D2"
+    },
+    {
+      "sourceText": "    private int AppendLineage(MemoryEntity survivor, MemoryEntity victim, int nextVersionNumber)\n    {\n        _db.MemoryVersions.Add(new MemoryVersionEntity\n        {\n            MemoryId = survivor.Id,\n            VersionNumber = nextVersionNumber,\n            Title = survivor.Title,\n            Content = survivor.Content ?? survivor.Text ?? string.Empty,\n            CreatedAtUtc = DateTimeOffset.UtcNow,\n        });\n\n        if (!_db.MemoryEdges.Local.Any(e =>\n                e.FromMemoryId == survivor.Id && e.ToMemoryId == victim.Id && e.EdgeType == \"merged-from\"))\n        {\n            _db.MemoryEdges.Add(new MemoryEdgeEntity\n            {\n                FromMemoryId = survivor.Id,\n                ToMemoryId = victim.Id,\n                EdgeType = \"merged-from\",\n                Weight = 1.0,\n            });\n        }\n\n        return nextVersionNumber + 1;\n    }\n\n    private async Task RewireEdgesAsync(string survivorId, string victimId, CancellationToken cancellationToken)\n    {\n        var edges = await _db.MemoryEdges\n            .Where(e => e.FromMemoryId == victimId || e.ToMemoryId == victimId)\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n\n        foreach (var edge in edges)\n        {\n            if (edge.FromMemoryId == victimId)\n                edge.FromMemoryId = survivorId;\n            if (edge.ToMemoryId == victimId)\n                edge.ToMemoryId = survivorId;\n            if (edge.FromMemoryId == edge.ToMemoryId)\n                _db.MemoryEdges.Remove(edge);\n        }\n    }\n\n    /// <summary>\n    /// TR-MCP-MEMORY-JOBS-002: takes the workspace's consolidation lock at <paramref name=\"now\"/>. A free lock is taken; a\n    /// held lock is taken over only by a forced overlap when it was acquired more than the 30 second TTL before\n    /// <paramref name=\"now\"/>; otherwise the caller is told the lock is held.\n    /// </summary>\n    /// <param name=\"workspace\">The canonical workspace key.</param>\n    /// <param name=\"forceOverlap\">Whether a held lock past its TTL may be taken over.</param>\n    /// <param name=\"now\">The time of the attempt, from the operations' clock.</param>\n    /// <param name=\"lockHeld\">True when the attempt failed because the lock is held.</param>\n    /// <returns>True when the lock was taken.</returns>\n    /// <remarks>2026-11-05, TR-MCP-MEMORY-JOBS-002; TR-MCP-USECASE-018 AC-006 (appended \"The same holds for every age, expiry or staleness decision a unit test checks\"): takes the time of the attempt from its caller instead of reading DateTimeOffset.UtcNow, and is internal so a unit test binds the TTL decision to scripted times (hostile validation round 12 finding R12-F2, sibling S37; mock gate ug-r13z4-mockgate-b-1). TR-MCP-MEMORY-JOBS-002 in this file is a historical id of the memory plan, not a record in the requirement store, so it makes no coverage claim (labeled 2026-11-05 before hostile validation round 13).</remarks>\n    internal static bool TryAcquireLock(string workspace, bool forceOverlap, DateTimeOffset now, out bool lockHeld)\n    {\n        lockHeld = false;\n        var state = Locks.GetOrAdd(workspace, _ => new WorkspaceLockState());\n        lock (state.Gate)\n        {\n            if (state.Held)\n            {\n                if (forceOverlap && now - state.AcquiredAtUtc > LockTtl)\n                {\n                    state.Held = true;\n                    state.AcquiredAtUtc = now;\n                    return true;\n                }\n\n                lockHeld = true;\n                return false;\n            }\n\n            state.Held = true;\n            state.AcquiredAtUtc = now;\n            return true;\n        }\n    }\n\n    /// <summary>TR-MCP-MEMORY-JOBS-002: releases the workspace's consolidation lock.</summary>\n    /// <param name=\"workspace\">The canonical workspace key.</param>\n    /// <remarks>2026-11-05, TR-MCP-MEMORY-JOBS-002; TR-MCP-USECASE-018 AC-006 (appended): internal so a unit test that holds the lock at a scripted time releases it (hostile validation round 12 finding R12-F2, sibling S37).</remarks>\n    internal static void ReleaseLock(string workspace)\n    {\n        if (!Locks.TryGetValue(workspace, out var state))\n            return;\n        lock (state.Gate)\n            state.Held = false;",
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.Locks.cs",
+      "firstLine": 11,
+      "lastLine": 99,
+      "family": "workspace-memory-consolidation",
+      "excerptSha256": "5DD594FA75C91B89E415DD02B5758C074479E0D5D73B39EECC899BFD5F1AC1F3",
+      "fileSha256": "178E4A05D71A3924A5380BD4975ECF98E9163E876F515ABB8438602DCD499D76"
+    },
+    {
+      "sourceText": "    private static RequirementsRecoveryResult Deserialize(RequirementsRecoveryRunEntity run)\n    {\n        var result = JsonSerializer.Deserialize<RequirementsRecoveryResult>(run.ResultJson, ResultJsonOptions)\n            ?? throw new InvalidOperationException(\"Stored requirements recovery result is empty.\");\n        result.IdempotencyKey = run.IdempotencyKey;\n        result.PayloadHash = run.PayloadHash;\n        result.Status = run.Status;\n        result.Applied = true;\n        result.CreatedAtUtc = run.CreatedAtUtc;\n        return result;\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Requirements/RequirementsRecoveryService.cs",
+      "firstLine": 235,
+      "lastLine": 245,
+      "family": "recovery-result-dto",
+      "excerptSha256": "D5BB81EF41957B3FED5660139B585C0F34699DAB18F52594EC87DD080A034170",
+      "fileSha256": "82FF84F600060EF331D80D0A331A5B09496F1BE7D954216244DE9BFFA73B28FE"
+    }
+  ],
+  "runtimeProof": false,
+  "writerClosureComplete": false,
+  "operatorAccepted": false,
+  "productionCodeChanged": false,
+  "limitations": [
+    "Source-anchor coverage is not semantic binding or complete dynamic caller closure",
+    "Original proposed classifications are retained without operator acceptance",
+    "All native routing and relational behavior remain unproven",
+    "No product, database, migration or deployment operation executes"
+  ]
+}

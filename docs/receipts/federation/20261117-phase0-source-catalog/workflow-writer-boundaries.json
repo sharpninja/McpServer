@@ -1,0 +1,708 @@
+{
+  "timestampLocal": "2026-11-18T00:41:32",
+  "sourceHead": "ebdcfb970b95de4b7b38075b2d8cfe4e8f9104a3",
+  "task": "TASK-FEDPH0-004",
+  "sourceCatalogSha256": "88DA9E41116F88DEDA13A9675BA2B073AD63B41D0E65BD371B72FE9CCAD7CF05",
+  "enclosingIndexSha256": "318117EFC47830B5AEF2D86914173C121DED4ECAC01C281E9A04C4668D36BF0E",
+  "scriptSha256": "C7461035CCE6D5C1C28B531C24E8B3CB4215A51B6B07FE3DB340616D8D5125B9",
+  "sourceCount": 7,
+  "excerptCount": 18,
+  "flows": [
+    {
+      "observation": "Dialog append uses explicit parent-session workspace predicate because child tables lack workspace filters. Upsert turn stamps all children from parent, retries first-insert uniqueness once. Retitle/item deletion, budgeted saves and all-workspace repair mutate raw session graphs.",
+      "family": "operational-session",
+      "boundary": "Raw logs remain operational and logging requires no federation edit lease. Preserve complete parent/child keys, workspace isolation, additive merge, titles and retained provenance. Existing repair/del/restore must not select immutable promoted snapshots. Explicit sanitized promotion is a separate full-graph versioned operation."
+    },
+    {
+      "observation": "Report/group submission and processing retarget effective workspace, persist idempotency/group/research/output state, invoke research runner, call TODO creation with retry, then save resulting CreatedTodoId and completed/failure status. Manual regroup moves report relationships with multiple saves.",
+      "family": "triage-to-authored-todo",
+      "boundary": "Triage control/research and output remain operational. Creating or compensating the authored TODO is a separate owning-project operation, not permission to bypass the edit gate because the origin is background research. Carry original target through deferral/retry/reopen and bind operational CreatedTodoId to the actual saved TODO without duplicates. Imported history cannot re-run research or create TODOs as an effect."
+    },
+    {
+      "observation": "Run persistence stores sanitized draft/diagnostics, replay identity and terminal state. Reservation handles unique-race winner and operational processing lease. After TODO application, cancellation/ambiguous-save handling invokes compensation.",
+      "family": "handoff-to-authored-todo",
+      "boundary": "Run state/diagnostics/processing lease remain operational; authored TODO application and compensation retain original owning gate/project/branch. Processing lease is not federation editing authority. Bind replay to actual TODO graph and preserve retry/compensation data without rerunning an incoming historical handoff."
+    },
+    {
+      "observation": "Hostile review submission validates workspace/limits, saves request/artifact links/diagnostics; reviewer output records executions/findings/verdict or failure state.",
+      "family": "operational-review",
+      "boundary": "Review queue/executions/findings stay operational and do not auto-author project changes or promote raw evidence. Preserve original receipts, child relationships and protected paths outside cloneable history. Source limits are current behavior, not adoption of this service as the authorized cross-machine HV runner."
+    },
+    {
+      "observation": "Restore loads original TODO including tombstones, replaces dependent list/task rows, restores metadata/deletion state, syncs requirement links, appends restoration audit and finalizes projection. Projection-failure metadata uses a separate fresh scope and save.",
+      "family": "todo-compensation",
+      "boundary": "Authored TODO children/links/portable metadata stay in original project operation. Audit and projection failure/time/error markers remain operational. Preserve existing write outcome despite later projection failure; do not stamp another branch, resurrect retired requirements or duplicate prior audit on retry. Native child/key/soft-delete behavior still required."
+    },
+    {
+      "observation": "Startup migrator/importer create fresh scopes and conditionally read legacy SQLite/YAML only for missing marker, existing file and empty target. They save TODO child graph, historic audit and document metadata then write filesystem marker.",
+      "family": "legacy-todo-bootstrap",
+      "boundary": "Retain standalone behavior but do not auto-import into enrolled projects on startup. Explicit approved migration accounts for portable TODO graph versus operational historical audit/projection/markers and retains source files. File marker or nonempty target alone is not full migration verification."
+    }
+  ],
+  "coveredCatalogCandidates": [
+    {
+      "methodKey": "src/QBrainAi.Services/Services/EfTodoService.cs:100:RestoreAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+        "method": "RestoreAsync",
+        "line": 158,
+        "owner": "EfTodoService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "todo-compensation"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/EfTodoService.cs:932:TryRecordProjectionFailureAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+        "method": "TryRecordProjectionFailureAsync",
+        "line": 940,
+        "owner": "EfTodoService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "todo-compensation"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/HandoffIngestionService.cs:582:PersistAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+        "method": "PersistAsync",
+        "line": 633,
+        "owner": "HandoffIngestionService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "handoff-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/HandoffIngestionService.cs:644:TryReserveRunAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+        "method": "TryReserveRunAsync",
+        "line": 690,
+        "owner": "HandoffIngestionService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "handoff-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/HandoffIngestionService.cs:853:SaveRunAfterTodoAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+        "method": "SaveRunAfterTodoAsync",
+        "line": 857,
+        "owner": "HandoffIngestionService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "handoff-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/HostileReviewService.cs:44:SubmitAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HostileReviewService.cs",
+        "method": "SubmitAsync",
+        "line": 140,
+        "owner": "HostileReviewService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-review"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/HostileReviewService.cs:196:AcceptReviewerOutputAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HostileReviewService.cs",
+        "method": "AcceptReviewerOutputAsync",
+        "line": 209,
+        "owner": "HostileReviewService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-review"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/HostileReviewService.cs:196:AcceptReviewerOutputAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HostileReviewService.cs",
+        "method": "AcceptReviewerOutputAsync",
+        "line": 221,
+        "owner": "HostileReviewService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-review"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/HostileReviewService.cs:196:AcceptReviewerOutputAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HostileReviewService.cs",
+        "method": "AcceptReviewerOutputAsync",
+        "line": 271,
+        "owner": "HostileReviewService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-review"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/LegacyTodoSqliteMigrator.cs:75:RunAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/LegacyTodoSqliteMigrator.cs",
+        "method": "RunAsync",
+        "line": 126,
+        "owner": "LegacyTodoSqliteMigrator"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-todo-bootstrap"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/SessionLogService.cs:439:AppendProcessingDialogAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+        "method": "AppendProcessingDialogAsync",
+        "line": 491,
+        "owner": "SessionLogService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-session"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/SessionLogService.cs:661:RepairWorkspaceStampsAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+        "method": "RepairWorkspaceStampsAsync",
+        "line": 706,
+        "owner": "SessionLogService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-session"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/SessionLogService.cs:753:UpsertTurnAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+        "method": "UpsertTurnAsync",
+        "line": 803,
+        "owner": "SessionLogService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-session"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/SessionLogService.cs:753:UpsertTurnAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+        "method": "UpsertTurnAsync",
+        "line": 832,
+        "owner": "SessionLogService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-session"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/SessionLogService.cs:929:SetSessionTitleAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+        "method": "SetSessionTitleAsync",
+        "line": 947,
+        "owner": "SessionLogService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-session"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/SessionLogService.cs:959:SetTurnTitleAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+        "method": "SetTurnTitleAsync",
+        "line": 985,
+        "owner": "SessionLogService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-session"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/SessionLogService.cs:1041:DeleteTurnItemAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+        "method": "DeleteTurnItemAsync",
+        "line": 1061,
+        "owner": "SessionLogService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-session"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/SessionLogService.cs:1880:SaveChangesBudgetedAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+        "method": "SaveChangesBudgetedAsync",
+        "line": 1881,
+        "owner": "SessionLogService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "operational-session"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TodoBootstrapImporter.cs:151:BootstrapWorkspaceAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TodoBootstrapImporter.cs",
+        "method": "BootstrapWorkspaceAsync",
+        "line": 202,
+        "owner": "TodoBootstrapImporter"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "legacy-todo-bootstrap"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:117:SubmitReportCoreAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "SubmitReportCoreAsync",
+        "line": 220,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:440:FlushGroupAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "FlushGroupAsync",
+        "line": 454,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:459:RetryGroupAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "RetryGroupAsync",
+        "line": 486,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:491:DeleteGroupAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "DeleteGroupAsync",
+        "line": 519,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:553:CreateGroupFromSelectionAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "CreateGroupFromSelectionAsync",
+        "line": 586,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:553:CreateGroupFromSelectionAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "CreateGroupFromSelectionAsync",
+        "line": 591,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:602:ConsolidateIntoGroupAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "ConsolidateIntoGroupAsync",
+        "line": 619,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:602:ConsolidateIntoGroupAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "ConsolidateIntoGroupAsync",
+        "line": 636,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:905:ProcessGroupAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "ProcessGroupAsync",
+        "line": 922,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:925:AppendAgentOutputAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "AppendAgentOutputAsync",
+        "line": 942,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:905:ProcessGroupAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "ProcessGroupAsync",
+        "line": 969,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:905:ProcessGroupAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "ProcessGroupAsync",
+        "line": 987,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:905:ProcessGroupAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "ProcessGroupAsync",
+        "line": 1012,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:905:ProcessGroupAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "ProcessGroupAsync",
+        "line": 1025,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:905:ProcessGroupAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "ProcessGroupAsync",
+        "line": 1031,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/TriageService.cs:1035:FailStaleProcessingRunsAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/TriageService.cs",
+        "method": "FailStaleProcessingRunsAsync",
+        "line": 1088,
+        "owner": "TriageService"
+      },
+      "operation": "SaveChangesAsync",
+      "families": [
+        "triage-to-authored-todo"
+      ]
+    }
+  ],
+  "excerpts": [
+    {
+      "sourceText": "    public async Task<int> AppendProcessingDialogAsync(\n        string sourceType,\n        string sessionId,\n        string requestId,\n        IReadOnlyList<ProcessingDialogItemDto> items,\n        CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(sourceType);\n        ArgumentNullException.ThrowIfNull(sessionId);\n        ArgumentNullException.ThrowIfNull(requestId);\n        ArgumentNullException.ThrowIfNull(items);\n        SyncDbWorkspaceFromContext();\n\n        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);\n        if (sessionIdError is not null)\n            throw new ArgumentException(sessionIdError, nameof(sessionId));\n        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(requestId);\n        if (requestIdError is not null)\n            throw new ArgumentException(requestIdError, nameof(requestId));\n\n        // BUG-SESSIONLOG-WS-001..004: child sets carry no workspace query filter,\n        // so isolation comes from the explicit parent-session predicate here.\n        var currentWorkspaceId = _db.CurrentWorkspaceId;\n        var entry = await _db.SessionLogTurns\n            .Include(e => e.ProcessingDialog)\n            .FirstOrDefaultAsync(e =>\n                e.SessionLog!.SourceType == sourceType\n                && e.SessionLog.SessionId == sessionId\n                && e.SessionLog.WorkspaceId == currentWorkspaceId\n                && e.RequestId == requestId, cancellationToken)\n            .ConfigureAwait(false)\n            ?? throw new InvalidOperationException(\n                $\"Entry not found: {sourceType}/{sessionId}/{requestId}\");\n\n        var nextOrdinal = entry.ProcessingDialog.Count > 0\n            ? entry.ProcessingDialog.Max(p => p.Ordinal) + 1\n            : 0;\n\n        var workspaceId = ResolveWorkspaceId();\n        foreach (var item in items)\n        {\n            entry.ProcessingDialog.Add(new SessionLogProcessingDialogEntity\n            {\n                Ordinal = nextOrdinal++,\n                Timestamp = ParseDateTimeOffset(item.Timestamp) ?? DateTimeOffset.UtcNow,\n                Role = item.Role ?? \"model\",\n                Content = item.Content ?? string.Empty,\n                Category = item.Category,\n                WorkspaceId = workspaceId\n            });\n        }\n\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        _logger.LogDebug(\"Appended {Count} dialog items to {SourceType}/{SessionId}/{RequestId}\",\n            items.Count, sourceType, sessionId, requestId);\n        await PublishChangeSafeAsync(\n            ChangeEventActions.Updated,\n            $\"{sourceType}/{sessionId}\",\n            $\"mcp://workspace/sessionlog/{sourceType}/{sessionId}\",\n            cancellationToken).ConfigureAwait(false);\n\n        return entry.ProcessingDialog.Count;\n    }",
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "firstLine": 439,
+      "lastLine": 501,
+      "family": "operational-session",
+      "excerptSha256": "0EA11ADBF96B5D4D9AFFF68FA1ED7D3CE6E232E283FCDDAA63C578A52CA781A5",
+      "fileSha256": "A6BBAEE7ADBF14FDE961BEB64D04A7A66EA52BDCB964CE708AF5939532E7B84D"
+    },
+    {
+      "sourceText": "    public async Task<int> RepairWorkspaceStampsAsync(bool dryRun = false, CancellationToken cancellationToken = default)\n    {\n        SyncDbWorkspaceFromContext();\n        var sessions = await _db.SessionLogs\n            .IgnoreQueryFilters()\n            .Include(s => s.Turns)\n                .ThenInclude(t => t.Actions)\n            .Include(s => s.Turns)\n                .ThenInclude(t => t.Tags)\n            .Include(s => s.Turns)\n                .ThenInclude(t => t.ContextItems)\n            .Include(s => s.Turns)\n                .ThenInclude(t => t.ProcessingDialog)\n            .Include(s => s.Turns)\n                .ThenInclude(t => t.Commits)\n                    .ThenInclude(c => c.Files)\n            .Include(s => s.Turns)\n                .ThenInclude(t => t.StringListItems)\n            .AsSplitQuery()\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n\n        var changed = 0;\n        foreach (var session in sessions)\n        {\n            var workspaceId = session.WorkspaceId;\n            foreach (var turn in session.Turns)\n            {\n                changed += Restamp(turn.WorkspaceId, workspaceId, value => turn.WorkspaceId = value);\n                foreach (var action in turn.Actions)\n                    changed += Restamp(action.WorkspaceId, workspaceId, value => action.WorkspaceId = value);\n                foreach (var tag in turn.Tags)\n                    changed += Restamp(tag.WorkspaceId, workspaceId, value => tag.WorkspaceId = value);\n                foreach (var context in turn.ContextItems)\n                    changed += Restamp(context.WorkspaceId, workspaceId, value => context.WorkspaceId = value);\n                foreach (var dialog in turn.ProcessingDialog)\n                    changed += Restamp(dialog.WorkspaceId, workspaceId, value => dialog.WorkspaceId = value);\n                foreach (var commit in turn.Commits)\n                    changed += Restamp(commit.WorkspaceId, workspaceId, value => commit.WorkspaceId = value);\n                foreach (var stringItem in turn.StringListItems)\n                    changed += Restamp(stringItem.WorkspaceId, workspaceId, value => stringItem.WorkspaceId = value);\n            }\n        }\n\n        if (changed > 0 && !dryRun)\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        else if (dryRun)\n            _db.ChangeTracker.Clear();\n\n        return changed;\n\n        static int Restamp(string current, string workspaceId, Action<string> setWorkspaceId)\n        {\n            if (string.Equals(current, workspaceId, StringComparison.Ordinal))\n                return 0;\n\n            setWorkspaceId(workspaceId);\n            return 1;\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "firstLine": 661,
+      "lastLine": 720,
+      "family": "operational-session",
+      "excerptSha256": "9BA4C5809AF1D35F02D853075FE22EF4E50015313720BD0B2593354AEB95EB28",
+      "fileSha256": "A6BBAEE7ADBF14FDE961BEB64D04A7A66EA52BDCB964CE708AF5939532E7B84D"
+    },
+    {
+      "sourceText": "    public async Task<long> UpsertTurnAsync(string sourceType, string sessionId, UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(sourceType);\n        ArgumentNullException.ThrowIfNull(sessionId);\n        ArgumentNullException.ThrowIfNull(turn);\n        SyncDbWorkspaceFromContext();\n\n        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);\n        if (sessionIdError is not null)\n            throw new ArgumentException(sessionIdError, nameof(sessionId));\n\n        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(turn.RequestId);\n        if (requestIdError is not null)\n            throw new ArgumentException(requestIdError, nameof(turn));\n\n        var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)\n            ?? throw new InvalidOperationException($\"Session not found: {sourceType}/{sessionId}\");\n\n        var existingTurn = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId);\n        SessionLogTurnEntity persistedTurn;\n\n        ValidateWorkspaceAttribution(turn, existingTurn);\n\n        if (existingTurn is null)\n        {\n            ApplyTurnContext(turn, isImport: false, sessionDto: null, session);\n            persistedTurn = MapSingleEntry(turn);\n            session.Turns.Add(persistedTurn);\n        }\n        else\n        {\n            SessionLogTurnContextValidator.ValidateIfSupplied(turn.PlanFile, turn.TodoId);\n            if (turn.PlanFile is not null)\n                turn.PlanFile = SessionLogTurnContextValidator.ValidatePlanFile(turn.PlanFile, required: true);\n            if (turn.TodoId is not null)\n                turn.TodoId = SessionLogTurnContextValidator.ValidateTodoId(turn.TodoId, required: true);\n            UpdateEntryFromDto(existingTurn, turn, mergeOmittedFields: true);\n            persistedTurn = existingTurn;\n        }\n\n        ValidateTerminalTurnCompliance(MapTurnEntityToDto(persistedTurn), session.SourceType);\n\n        // BUG-SESSIONLOG-WS-002: the turn and its children inherit the PARENT\n        // session's stamp; the ambient workspace never re-stamps the session here.\n        StampTurnChildren(persistedTurn, session.WorkspaceId);\n\n        RefreshSessionSummaryFromTurns(session);\n\n        try\n        {\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        }\n        catch (DbUpdateException ex) when (IsSessionLogTurnUniqueRace(ex))\n        {\n            // TEST-MCP-SESSIONLIFE-005: two first inserts of the same request id.\n            // Retry once as an update of the row that won the race.\n            _logger.LogWarning(\n                \"UNIQUE constraint race for turn {SourceType}/{SessionId}/{RequestId}, retrying as update\",\n                sourceType,\n                sessionId,\n                turn.RequestId);\n            _db.ChangeTracker.Clear();\n\n            session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)\n                ?? throw new InvalidOperationException($\"Session not found after turn unique race: {sourceType}/{sessionId}\");\n            var raced = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId)\n                ?? throw new InvalidOperationException(\n                    $\"Turn {turn.RequestId} disappeared after UNIQUE constraint failure.\",\n                    ex);\n\n            SessionLogTurnContextValidator.ValidateIfSupplied(turn.PlanFile, turn.TodoId);\n            if (turn.PlanFile is not null)\n                turn.PlanFile = SessionLogTurnContextValidator.ValidatePlanFile(turn.PlanFile, required: true);\n            if (turn.TodoId is not null)\n                turn.TodoId = SessionLogTurnContextValidator.ValidateTodoId(turn.TodoId, required: true);\n            UpdateEntryFromDto(raced, turn, mergeOmittedFields: true);\n            ValidateTerminalTurnCompliance(MapTurnEntityToDto(raced), session.SourceType);\n            StampTurnChildren(raced, session.WorkspaceId);\n            RefreshSessionSummaryFromTurns(session);\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            persistedTurn = raced;\n        }\n\n        await PublishChangeSafeAsync(\n            ChangeEventActions.Updated,\n            $\"{sourceType}/{sessionId}\",\n            $\"mcp://workspace/sessionlog/{sourceType}/{sessionId}\",\n            cancellationToken).ConfigureAwait(false);\n\n        return persistedTurn.Id;\n    }",
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "firstLine": 753,
+      "lastLine": 843,
+      "family": "operational-session",
+      "excerptSha256": "D4661BF814CC1254990E71AC71A72F7FB7EA316FB65C4C90287FB429115DB5DE",
+      "fileSha256": "A6BBAEE7ADBF14FDE961BEB64D04A7A66EA52BDCB964CE708AF5939532E7B84D"
+    },
+    {
+      "sourceText": "    public async Task<long> SetSessionTitleAsync(string sourceType, string sessionId, string title, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(sourceType);\n        ArgumentNullException.ThrowIfNull(sessionId);\n        ArgumentNullException.ThrowIfNull(title);\n        SyncDbWorkspaceFromContext();\n\n        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);\n        if (sessionIdError is not null)\n            throw new ArgumentException(sessionIdError, nameof(sessionId));\n\n        // TR-MCP-SESSIONLOG-005: dedicated session retitle. Unlike the additive\n        // SubmitAsync merge (which the plugin now calls with the title omitted),\n        // this explicitly overwrites the session Title so an agent rename sticks.\n        var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)\n            ?? throw new InvalidOperationException($\"Session not found: {sourceType}/{sessionId}\");\n\n        session.Title = title;\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        await PublishChangeSafeAsync(\n            ChangeEventActions.Updated,\n            $\"{sourceType}/{sessionId}\",\n            $\"mcp://workspace/sessionlog/{sourceType}/{sessionId}\",\n            cancellationToken).ConfigureAwait(false);\n\n        return session.Id;\n    }\n\n    /// <inheritdoc />\n    public async Task<long> SetTurnTitleAsync(string sourceType, string sessionId, string requestId, string title, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(sourceType);\n        ArgumentNullException.ThrowIfNull(sessionId);\n        ArgumentNullException.ThrowIfNull(requestId);\n        ArgumentNullException.ThrowIfNull(title);\n        SyncDbWorkspaceFromContext();\n\n        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);\n        if (sessionIdError is not null)\n            throw new ArgumentException(sessionIdError, nameof(sessionId));\n\n        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(requestId);\n        if (requestIdError is not null)\n            throw new ArgumentException(requestIdError, nameof(requestId));\n\n        // TR-MCP-SESSIONLOG-005: dedicated turn retitle. Explicitly overwrites the\n        // turn QueryTitle without the reset-omitted-scalars semantics of\n        // ReplaceTurnAsync, so an agent-refined title survives incidental submits.\n        var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)\n            ?? throw new InvalidOperationException($\"Session not found: {sourceType}/{sessionId}\");\n\n        var turn = session.Turns.FirstOrDefault(t => t.RequestId == requestId)\n            ?? throw new InvalidOperationException($\"Turn not found: {sourceType}/{sessionId}/{requestId}\");\n\n        turn.QueryTitle = title;\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        await PublishChangeSafeAsync(\n            ChangeEventActions.Updated,\n            $\"{sourceType}/{sessionId}\",\n            $\"mcp://workspace/sessionlog/{sourceType}/{sessionId}\",\n            cancellationToken).ConfigureAwait(false);\n\n        return turn.Id;\n    }",
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "firstLine": 929,
+      "lastLine": 994,
+      "family": "operational-session",
+      "excerptSha256": "691D4422DEF9F44B244DF07B5075070D1D0C5EBF7A3F6A747BA3BECD11D5C832",
+      "fileSha256": "A6BBAEE7ADBF14FDE961BEB64D04A7A66EA52BDCB964CE708AF5939532E7B84D"
+    },
+    {
+      "sourceText": "    public async Task<bool> DeleteTurnItemAsync(string sourceType, string sessionId, string requestId, string section, string itemKey, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(sourceType);\n        ArgumentNullException.ThrowIfNull(sessionId);\n        ArgumentNullException.ThrowIfNull(requestId);\n        ArgumentNullException.ThrowIfNull(itemKey);\n        SyncDbWorkspaceFromContext();\n\n        var parsed = ParseSection(section);\n        ValidateTurnIdentifiers(sourceType, sessionId, requestId);\n\n        var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false);\n        var turnEntity = session?.Turns.FirstOrDefault(t => t.RequestId == requestId);\n        if (session is null || turnEntity is null)\n            return false;\n\n        if (!RemoveSectionItem(turnEntity, parsed, itemKey))\n            return false;\n\n        StampTurnChildren(turnEntity, session.WorkspaceId);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await PublishChangeSafeAsync(\n            ChangeEventActions.Updated,\n            $\"{sourceType}/{sessionId}\",\n            $\"mcp://workspace/sessionlog/{sourceType}/{sessionId}\",\n            cancellationToken).ConfigureAwait(false);\n\n        return true;\n    }",
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "firstLine": 1041,
+      "lastLine": 1069,
+      "family": "operational-session",
+      "excerptSha256": "B5241D617F0BCDBE9F0632E644F23A7125DCA14FE3F5C808B248849130418F2E",
+      "fileSha256": "A6BBAEE7ADBF14FDE961BEB64D04A7A66EA52BDCB964CE708AF5939532E7B84D"
+    },
+    {
+      "sourceText": "    private Task SaveChangesBudgetedAsync(CancellationToken cancellationToken, TimeSpan? budget = null)\n        => StorageCommandBudget.ExecuteAsync(ct => _db.SaveChangesAsync(ct), cancellationToken, budget);",
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "firstLine": 1880,
+      "lastLine": 1881,
+      "family": "operational-session",
+      "excerptSha256": "3B41F45FB181AD5850A0C235D3719AABD0451205BA6D45F2E8424A4F1283E29A",
+      "fileSha256": "A6BBAEE7ADBF14FDE961BEB64D04A7A66EA52BDCB964CE708AF5939532E7B84D"
+    },
+    {
+      "sourceText": "    private async Task<TriageReportSubmitResult> SubmitReportCoreAsync(\n        TriageReportRequest request,\n        CancellationToken cancellationToken)\n    {\n        var validationError = ValidateReport(request);\n        if (validationError is not null)\n        {\n            return new TriageReportSubmitResult\n            {\n                Success = false,\n                Error = validationError,\n            };\n        }\n\n        var originalWorkspacePath = ResolveSubmittingWorkspace(request);\n        var mcpServerRelated = IsQBrainAiRelated(request);\n        var effectiveWorkspacePath = await ResolveEffectiveWorkspaceAsync(\n            originalWorkspacePath,\n            mcpServerRelated,\n            cancellationToken).ConfigureAwait(false);\n        _db.OverrideWorkspaceId(effectiveWorkspacePath);\n\n        if (!string.IsNullOrWhiteSpace(request.IdempotencyKey))\n        {\n            var existing = await _db.TriageReports\n                .FirstOrDefaultAsync(r => r.IdempotencyKey == request.IdempotencyKey, cancellationToken)\n                .ConfigureAwait(false);\n            if (existing is not null)\n            {\n                var existingGroup = await _db.TriageGroups\n                    .FirstAsync(g => g.GroupId == existing.GroupId, cancellationToken)\n                    .ConfigureAwait(false);\n                return Accepted(existing.ReportId, existing.GroupId, existingGroup.Status, existingGroup.QuietDeadlineUtc, effectiveWorkspacePath);\n            }\n        }\n\n        var now = _timeProvider.GetUtcNow();\n        var fingerprint = BuildFingerprint(request);\n        var groupKey = Hash($\"{effectiveWorkspacePath}|{fingerprint}\");\n        var groupId = $\"triage-group-{groupKey[..16]}\";\n        var quietDeadline = now.Add(_options.QuietPeriod);\n\n        var group = await _db.TriageGroups\n            .FirstOrDefaultAsync(g => g.GroupKey == groupKey, cancellationToken)\n            .ConfigureAwait(false);\n\n        if (group is null)\n        {\n            group = new TriageGroupEntity\n            {\n                WorkspaceId = effectiveWorkspacePath,\n                GroupId = groupId,\n                GroupKey = groupKey,\n                EffectiveWorkspacePath = effectiveWorkspacePath,\n                Title = request.Title.Trim(),\n                Summary = request.Summary.Trim(),\n                Status = StatusCollecting,\n                ReportCount = 0,\n                FirstReportAtUtc = now,\n                LastReportAtUtc = now,\n                QuietDeadlineUtc = quietDeadline,\n                IsQBrainAiRelated = mcpServerRelated,\n            };\n            _db.TriageGroups.Add(group);\n        }\n\n        group.LastReportAtUtc = now;\n        group.QuietDeadlineUtc = quietDeadline;\n        group.ReportCount += 1;\n        if (group.Status == StatusFailed)\n        {\n            group.Status = StatusCollecting;\n            group.LastError = null;\n        }\n\n        var reportId = $\"triage-report-{Guid.NewGuid():N}\";\n        var report = new TriageReportEntity\n        {\n            WorkspaceId = effectiveWorkspacePath,\n            ReportId = reportId,\n            GroupId = group.GroupId,\n            OriginalWorkspacePath = originalWorkspacePath,\n            EffectiveWorkspacePath = effectiveWorkspacePath,\n            Title = request.Title.Trim(),\n            Summary = request.Summary.Trim(),\n            ObservedBehavior = TrimOrNull(request.ObservedBehavior),\n            ExpectedBehavior = TrimOrNull(request.ExpectedBehavior),\n            Severity = TrimOrNull(request.Severity) ?? \"medium\",\n            Component = TrimOrNull(request.Component),\n            DedupeKey = TrimOrNull(request.DedupeKey),\n            ErrorSignature = TrimOrNull(request.ErrorSignature),\n            Fingerprint = fingerprint,\n            EvidenceJson = SerializeMap(request.Evidence),\n            ListItems = BuildTriageListItems(request, effectiveWorkspacePath),\n            ReporterAgent = TrimOrNull(request.ReporterAgent),\n            SessionId = TrimOrNull(request.SessionId),\n            TurnId = TrimOrNull(request.TurnId),\n            CurrentTodoId = TrimOrNull(request.CurrentTodoId),\n            IdempotencyKey = TrimOrNull(request.IdempotencyKey),\n            Status = ReportStatusGrouped,\n            CreatedUtc = now,\n        };\n        _db.TriageReports.Add(report);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        return Accepted(reportId, group.GroupId, group.Status, group.QuietDeadlineUtc, effectiveWorkspacePath);\n    }",
+      "path": "src/QBrainAi.Services/Services/TriageService.cs",
+      "firstLine": 117,
+      "lastLine": 223,
+      "family": "triage-to-authored-todo",
+      "excerptSha256": "4851C0C0FCD942C351394660EF2973AEEEAEADB0FBE3CD8D0D849DEDC84B795D",
+      "fileSha256": "9D3B0C428FD2C8B85FC6708C153B1F290F0D0E6A98F35EE7E0D28924B1D090AA"
+    },
+    {
+      "sourceText": "    public async Task<TriageGroupDetail> FlushGroupAsync(string groupId, CancellationToken cancellationToken = default)\n    {\n        var group = await GetGroupEntityAsync(groupId, cancellationToken).ConfigureAwait(false);\n        var now = _timeProvider.GetUtcNow();\n        if (group.Status == StatusProcessing)\n            await FailStaleProcessingRunsAsync(now, group.GroupId, cancellationToken).ConfigureAwait(false);\n\n        group.QuietDeadlineUtc = now;\n        if (group.Status == StatusFailed)\n        {\n            group.Status = StatusCollecting;\n            group.LastError = null;\n        }\n\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return await ToGroupDetailAsync(group, includeReports: true, cancellationToken).ConfigureAwait(false);\n    }\n\n    /// <inheritdoc />\n    public async Task<TriageGroupDetail> RetryGroupAsync(\n        string groupId,\n        bool force = false,\n        CancellationToken cancellationToken = default)\n    {\n        var group = await GetGroupEntityAsync(groupId, cancellationToken).ConfigureAwait(false);\n        var now = _timeProvider.GetUtcNow();\n        if (group.Status == StatusProcessing)\n        {\n            if (force)\n            {\n                await ForceFailProcessingRunsAsync(group, now, cancellationToken).ConfigureAwait(false);\n            }\n            else\n            {\n                await FailStaleProcessingRunsAsync(now, group.GroupId, cancellationToken).ConfigureAwait(false);\n            }\n\n            if (group.Status == StatusProcessing)\n                throw new InvalidOperationException($\"Triage group '{group.GroupId}' is still processing and cannot be retried yet.\");\n        }\n\n        await ClearStaleCreatedTodoReferenceForRetryAsync(group, now, cancellationToken).ConfigureAwait(false);\n\n        group.Status = StatusCollecting;\n        group.LastError = null;\n        group.QuietDeadlineUtc = now;\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return await ToGroupDetailAsync(group, includeReports: true, cancellationToken).ConfigureAwait(false);\n    }\n\n    /// <inheritdoc />\n    public async Task<TriageGroupDeleteResult> DeleteGroupAsync(\n        string groupId,\n        string? reason = null,\n        CancellationToken cancellationToken = default)\n    {\n        var group = await GetGroupEntityAsync(groupId, cancellationToken).ConfigureAwait(false);\n        var reports = await _db.TriageReports\n            .Include(r => r.ListItems)\n            .Where(r => r.GroupId == group.GroupId)\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n\n        var now = _timeProvider.GetUtcNow();\n        var trimmedReason = string.IsNullOrWhiteSpace(reason) ? null : reason.Trim();\n        if (trimmedReason is not null)\n        {\n            _db.Entry(group).Property(\"DeleteReason\").CurrentValue = trimmedReason;\n            foreach (var report in reports)\n                _db.Entry(report).Property(\"DeleteReason\").CurrentValue = trimmedReason;\n        }\n\n        // Remove is intercepted by McpDbContext into a soft-delete (IsDeleted + DeletedAtUtc).\n        // Decomposed report list-items carry a required ReportId, so remove them explicitly to\n        // avoid a set-null on those dependent rows.\n        foreach (var report in reports)\n            _db.RemoveRange(report.ListItems);\n        _db.TriageReports.RemoveRange(reports);\n        _db.TriageGroups.Remove(group);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        return new TriageGroupDeleteResult\n        {\n            GroupId = group.GroupId,\n            DeletedReportCount = reports.Count,\n            DeletedAtUtc = now,\n        };\n    }",
+      "path": "src/QBrainAi.Services/Services/TriageService.cs",
+      "firstLine": 440,
+      "lastLine": 527,
+      "family": "triage-to-authored-todo",
+      "excerptSha256": "8137A7C385768744914A99E99BDC61526DCEEAC5A39E3954C038665F3B980C10",
+      "fileSha256": "9D3B0C428FD2C8B85FC6708C153B1F290F0D0E6A98F35EE7E0D28924B1D090AA"
+    },
+    {
+      "sourceText": "    public async Task<TriageGroupEditResult> CreateGroupFromSelectionAsync(\n        TriageGroupSelectionRequest request,\n        CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n\n        var selection = await ResolveSelectionAsync(request, excludedGroupId: null, cancellationToken).ConfigureAwait(false);\n        await EnsureEditableGroupsAsync(selection.SourceGroups, cancellationToken).ConfigureAwait(false);\n        var workspacePath = EnsureSingleWorkspace(selection.Reports);\n        _db.OverrideWorkspaceId(workspacePath);\n\n        var now = _timeProvider.GetUtcNow();\n        var groupKey = Hash($\"{workspacePath}|manual|{Guid.NewGuid():N}\");\n        var group = new TriageGroupEntity\n        {\n            WorkspaceId = workspacePath,\n            GroupId = $\"triage-group-{groupKey[..16]}\",\n            GroupKey = groupKey,\n            EffectiveWorkspacePath = workspacePath,\n            Title = TrimOrNull(request.Title) ?? selection.Reports.OrderBy(report => report.CreatedUtc).First().Title,\n            Summary = TrimOrNull(request.Summary) ?? selection.Reports.OrderBy(report => report.CreatedUtc).First().Summary,\n            Status = StatusQueued,\n            ReportCount = 0,\n            FirstReportAtUtc = now,\n            LastReportAtUtc = now,\n            QuietDeadlineUtc = now,\n            IsQBrainAiRelated = selection.SourceGroups.Any(group => group.IsQBrainAiRelated),\n        };\n        _db.TriageGroups.Add(group);\n\n        var movedCount = MoveReportsToGroup(selection.Reports, group);\n        RefreshGroupAggregate(group, selection.Reports, group.Title, group.Summary, group.QuietDeadlineUtc);\n        QueueManualGroup(group, now);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        var removedGroupIds = await RemoveEmptySourceGroupsAsync(\n            selection.SourceGroups,\n            group.GroupId,\n            cancellationToken).ConfigureAwait(false);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        return new TriageGroupEditResult\n        {\n            Group = await ToGroupDetailAsync(group, includeReports: true, cancellationToken).ConfigureAwait(false),\n            RemovedGroupIds = removedGroupIds,\n            MovedReportCount = movedCount,\n        };\n    }\n\n    /// <inheritdoc />\n    public async Task<TriageGroupEditResult> ConsolidateIntoGroupAsync(\n        string targetGroupId,\n        TriageGroupSelectionRequest request,\n        CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        var targetGroup = await GetGroupEntityAsync(targetGroupId, cancellationToken).ConfigureAwait(false);\n        var selection = await ResolveSelectionAsync(request, targetGroup.GroupId, cancellationToken).ConfigureAwait(false);\n        await EnsureEditableGroupsAsync(selection.SourceGroups.Append(targetGroup).DistinctBy(group => group.GroupId).ToList(), cancellationToken)\n            .ConfigureAwait(false);\n\n        var workspacePath = EnsureSingleWorkspace(selection.Reports);\n        if (!string.Equals(workspacePath, targetGroup.EffectiveWorkspacePath, StringComparison.OrdinalIgnoreCase))\n            throw new InvalidOperationException(\"Selected triage reports must belong to the target group workspace.\");\n\n        var now = _timeProvider.GetUtcNow();\n        var movedCount = MoveReportsToGroup(selection.Reports, targetGroup);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        var targetReports = await _db.TriageReports\n            .Where(report => report.GroupId == targetGroup.GroupId)\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n        RefreshGroupAggregate(\n            targetGroup,\n            targetReports,\n            targetGroup.Title,\n            targetGroup.Summary,\n            now.Add(_options.QuietPeriod));\n        QueueManualGroup(targetGroup, now);\n        var removedGroupIds = await RemoveEmptySourceGroupsAsync(\n            selection.SourceGroups,\n            targetGroup.GroupId,\n            cancellationToken).ConfigureAwait(false);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        return new TriageGroupEditResult\n        {\n            Group = await ToGroupDetailAsync(targetGroup, includeReports: true, cancellationToken).ConfigureAwait(false),\n            RemovedGroupIds = removedGroupIds,\n            MovedReportCount = movedCount,\n        };\n    }",
+      "path": "src/QBrainAi.Services/Services/TriageService.cs",
+      "firstLine": 553,
+      "lastLine": 644,
+      "family": "triage-to-authored-todo",
+      "excerptSha256": "E9F4641E8F6B324EDED17A900C9FCD0A61718A193B9E1B9BEDEACB60AEAAC474",
+      "fileSha256": "9D3B0C428FD2C8B85FC6708C153B1F290F0D0E6A98F35EE7E0D28924B1D090AA"
+    },
+    {
+      "sourceText": "    private async Task ProcessGroupAsync(TriageGroupEntity group, CancellationToken cancellationToken)\n    {\n        if (!string.IsNullOrWhiteSpace(group.CreatedTodoId))\n            return;\n\n        group.Status = StatusProcessing;\n        group.LastError = null;\n        var run = new TriageResearchRunEntity\n        {\n            WorkspaceId = group.WorkspaceId,\n            RunId = $\"triage-run-{Guid.NewGuid():N}\",\n            GroupId = group.GroupId,\n            Status = StatusProcessing,\n            PromptTemplateId = _options.PromptTemplateId,\n            StartedUtc = _timeProvider.GetUtcNow(),\n        };\n        _db.TriageResearchRuns.Add(run);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        using var outputLock = new SemaphoreSlim(1, 1);\n        async Task AppendAgentOutputAsync(TriageResearchOutputUpdate update)\n        {\n            if (string.IsNullOrEmpty(update.Text))\n                return;\n\n            await outputLock.WaitAsync(CancellationToken.None).ConfigureAwait(false);\n            try\n            {\n                if (string.Equals(update.StreamName, \"stderr\", StringComparison.OrdinalIgnoreCase))\n                {\n                    run.AgentStderr = AppendRunOutput(run.AgentStderr, update.Text);\n                }\n                else\n                {\n                    run.AgentStdout = AppendRunOutput(run.AgentStdout, update.Text);\n                }\n\n                await _db.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);\n            }\n            finally\n            {\n                outputLock.Release();\n            }\n        }\n\n        try\n        {\n            var detail = await ToGroupDetailAsync(group, includeReports: true, cancellationToken).ConfigureAwait(false);\n            var groupJson = JsonSerializer.Serialize(detail, typeof(TriageGroupDetail), McpServicesJsonContext.Default);\n            var prompt = await RenderPromptAsync(detail, groupJson, cancellationToken).ConfigureAwait(false);\n            run.GroupJson = groupJson;\n            run.Prompt = prompt;\n\n            var rawResult = await _researchRunner.RunAsync(\n                new TriageResearchRequest(detail, groupJson, prompt, group.EffectiveWorkspacePath, AppendAgentOutputAsync),\n                cancellationToken).ConfigureAwait(false);\n            run.RawOutput = rawResult.OutputJson;\n            run.AgentStdout = MergeRunOutput(run.AgentStdout, rawResult.AgentStdout);\n            run.AgentStderr = MergeRunOutput(run.AgentStderr, rawResult.AgentStderr);\n            run.AgentExitCode = rawResult.AgentExitCode;\n\n            if (!rawResult.Success)\n            {\n                MarkResearchFailure(group, run, rawResult.Error ?? \"Triage research runner failed.\");\n                await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n                return;\n            }\n\n            var schema = ValidateResearchOutput(rawResult.OutputJson);\n            var researchOutput = schema.Output;\n            var schemaError = schema.Error;\n            if ((!schema.Valid || researchOutput is null) && !ContainsJsonObject(rawResult.OutputJson))\n            {\n                researchOutput = BuildFallbackResearchOutput(\n                    detail,\n                    schemaError ?? \"Triage research output failed schema validation.\",\n                    run.RunId);\n            }\n\n            if (researchOutput is null)\n            {\n                MarkResearchFailure(group, run, schemaError ?? \"Triage research output failed schema validation.\");\n                await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n                return;\n            }\n\n            TriageTodoCreationAttempt creationAttempt;\n            await TodoCreationLock.WaitAsync(cancellationToken).ConfigureAwait(false);\n            try\n            {\n                creationAttempt = await CreateTriageTodoWithRetryAsync(group, researchOutput, cancellationToken)\n                    .ConfigureAwait(false);\n            }\n            finally\n            {\n                TodoCreationLock.Release();\n            }\n\n            var todoId = creationAttempt.RequestedTodoId;\n            var createResult = creationAttempt.Result;\n            var todoCreatedWithWarning = creationAttempt.CreatedWithWarning;\n            if (createResult is null)\n                throw new InvalidOperationException(\"Triage TODO creation did not return a result.\");\n\n            if (!createResult.Success && !todoCreatedWithWarning)\n            {\n                MarkResearchFailure(group, run, createResult.Error ?? \"TODO creation failed.\");\n                await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n                return;\n            }\n\n            var createdTodoId = createResult.Item?.Id ?? todoId;\n            group.CreatedTodoId = createdTodoId;\n            group.Status = StatusCompleted;\n            group.LastError = todoCreatedWithWarning ? createResult.Error : null;\n            run.CreatedTodoId = createdTodoId;\n            run.Status = StatusCompleted;\n            run.Error = todoCreatedWithWarning ? createResult.Error : null;\n            run.ResponseJson = JsonSerializer.Serialize(researchOutput, typeof(ResearchOutput), McpServicesJsonContext.Default);\n            run.CompletedUtc = _timeProvider.GetUtcNow();\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        }\n        catch (Exception ex) when (ex is not OperationCanceledException)\n        {\n            _logger.LogWarning(ex, \"Triage research failed for group {GroupId}.\", group.GroupId);\n            MarkResearchFailure(group, run, ex.Message);\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        }\n    }\n\n    private async Task<int> FailStaleProcessingRunsAsync(\n        DateTimeOffset now,\n        string? groupId,\n        CancellationToken cancellationToken)\n    {\n        var maxRunTime = GetEffectiveMaxRunTime();\n        var staleStartedBeforeUtc = now - maxRunTime;\n        var query = _db.TriageResearchRuns\n            .IgnoreQueryFilters()\n            .Where(run => run.Status == StatusProcessing && run.StartedUtc <= staleStartedBeforeUtc);\n        if (!string.IsNullOrWhiteSpace(groupId))\n        {\n            var trimmedGroupId = groupId.Trim();\n            query = query.Where(run => run.GroupId == trimmedGroupId);\n        }\n\n        var staleRuns = await query\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n        if (staleRuns.Count == 0)\n            return 0;\n\n        var staleGroupIds = staleRuns\n            .Select(run => run.GroupId)\n            .Distinct(StringComparer.Ordinal)\n            .ToArray();\n        var staleGroups = await _db.TriageGroups\n            .IgnoreQueryFilters()\n            .Where(group => staleGroupIds.Contains(group.GroupId))\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n        var error = $\"Triage research run exceeded the configured maximum duration ({maxRunTime}) and was marked failed for retry.\";\n\n        foreach (var run in staleRuns)\n        {\n            run.Status = StatusFailed;\n            run.Error = error;\n            run.CompletedUtc = now;\n\n            var group = staleGroups.FirstOrDefault(candidate =>\n                string.Equals(candidate.GroupId, run.GroupId, StringComparison.Ordinal) &&\n                string.Equals(candidate.WorkspaceId, run.WorkspaceId, StringComparison.Ordinal));\n            if (group is null ||\n                !string.Equals(group.Status, StatusProcessing, StringComparison.OrdinalIgnoreCase) ||\n                !string.IsNullOrWhiteSpace(group.CreatedTodoId))\n            {\n                continue;\n            }\n\n            group.Status = StatusFailed;\n            group.LastError = error;\n        }\n\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return staleRuns.Count;\n    }",
+      "path": "src/QBrainAi.Services/Services/TriageService.cs",
+      "firstLine": 905,
+      "lastLine": 1090,
+      "family": "triage-to-authored-todo",
+      "excerptSha256": "65A5807BF1F50DCDB2D7D0DA8183C060DF7E1B2BE41CA242256CD13D8E4770EF",
+      "fileSha256": "9D3B0C428FD2C8B85FC6708C153B1F290F0D0E6A98F35EE7E0D28924B1D090AA"
+    },
+    {
+      "sourceText": "    private async Task<HandoffIngestionResult> PersistAsync(\n        HandoffIngestionRequest request,\n        string workspacePath,\n        HandoffResolvedSource resolved,\n        HandoffTodoDraft? draft,\n        List<HandoffDiagnostic> diagnostics,\n        bool created,\n        bool replayed,\n        bool requiresReview,\n        HandoffReviewState reviewState,\n        string? createdTodoId,\n        string? agent,\n        string? model,\n        bool success,\n        string? error,\n        CancellationToken cancellationToken,\n        string? errorCode = null)\n    {\n        var runId = $\"handoff-run-{Guid.NewGuid():N}\";\n        var sanitizedDraft = SanitizeDraft(draft);\n        var entity = new HandoffIngestionRunEntity\n        {\n            RunId = runId,\n            WorkspaceId = workspacePath,\n            SourceKind = resolved.SourceKind.ToString(),\n            SourceLocator = SanitizeText(resolved.Locator) ?? resolved.Locator,\n            ContentSha256 = resolved.ContentSha256 ?? string.Empty,\n            ExtractedAtUtc = _time.GetUtcNow(),\n            PromptVersion = HandoffPromptDefaults.PromptVersion,\n            TemplateVersion = HandoffPromptDefaults.TemplateId,\n            Agent = SanitizeText(agent),\n            Model = SanitizeText(model),\n            Confidence = sanitizedDraft?.Confidence,\n            Mode = request.Mode.ToString(),\n            ReviewState = reviewState.ToString(),\n            CreatedTodoId = createdTodoId,\n            DraftJson = sanitizedDraft is null ? null : JsonSerializer.Serialize(sanitizedDraft, DraftJsonOptions),\n            Force = request.Force,\n            ReplayIdentity = HandoffReplayKeys.Create(\n                workspacePath,\n                resolved.ContentSha256 ?? string.Empty,\n                HandoffPromptDefaults.PromptVersion,\n                request.Force || string.IsNullOrEmpty(resolved.ContentSha256),\n                runId),\n            ProcessingState = nameof(HandoffProcessingState.Terminal),\n            Succeeded = success,\n            Error = SanitizeText(error),\n            ErrorCode = errorCode,\n        };\n        ReplaceDiagnostics(entity, diagnostics);\n        _db.HandoffIngestionRuns.Add(entity);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        var result = MapEntity(entity, replayed);\n        result.Success = success;\n        result.Created = created;\n        result.RequiresReview = requiresReview;\n        result.Error = error;\n        result.ErrorCode = errorCode;\n        return result;\n    }\n\n    private async Task<(HandoffIngestionRunEntity? Entity, bool Replayed, bool InProgress)> TryReserveRunAsync(\n        HandoffIngestionRequest request,\n        string workspacePath,\n        HandoffResolvedSource resolved,\n        CancellationToken cancellationToken)\n    {\n        var runId = $\"handoff-run-{Guid.NewGuid():N}\";\n        var identity = HandoffReplayKeys.Create(\n            workspacePath,\n            resolved.ContentSha256 ?? string.Empty,\n            HandoffPromptDefaults.PromptVersion,\n            request.Force,\n            runId);\n        if (!request.Force)\n        {\n            var existing = await _db.HandoffIngestionRuns\n                .Include(run => run.Diagnostics)\n                .FirstOrDefaultAsync(run => run.ReplayIdentity == identity, cancellationToken)\n                .ConfigureAwait(false);\n            if (existing is not null)\n                return await ResolveExistingReservationAsync(existing, cancellationToken).ConfigureAwait(false);\n        }\n\n        var now = _time.GetUtcNow();\n        var entity = new HandoffIngestionRunEntity\n        {\n            RunId = runId,\n            WorkspaceId = workspacePath,\n            SourceKind = resolved.SourceKind.ToString(),\n            SourceLocator = SanitizeText(resolved.Locator) ?? resolved.Locator,\n            ContentSha256 = resolved.ContentSha256 ?? string.Empty,\n            ExtractedAtUtc = now,\n            PromptVersion = HandoffPromptDefaults.PromptVersion,\n            TemplateVersion = HandoffPromptDefaults.TemplateId,\n            Mode = request.Mode.ToString(),\n            ReviewState = nameof(HandoffReviewState.None),\n            Force = request.Force,\n            ReplayIdentity = identity,\n            Succeeded = false,\n            ProcessingState = nameof(HandoffProcessingState.Processing),\n            ProcessingOwner = _instanceId,\n            ProcessingLeaseExpiresAtUtc = now.Add(_lease.Duration),\n        };\n        _db.HandoffIngestionRuns.Add(entity);\n        try\n        {\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            return (entity, false, false);\n        }\n        catch (DbUpdateException ex) when (HandoffDbExceptions.IsUniqueViolation(ex))\n        {\n            _db.Entry(entity).State = EntityState.Detached;\n            var winner = await _db.HandoffIngestionRuns\n                .Include(run => run.Diagnostics)\n                .FirstAsync(run => run.ReplayIdentity == identity, cancellationToken)\n                .ConfigureAwait(false);\n            return await ResolveExistingReservationAsync(winner, cancellationToken).ConfigureAwait(false);\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+      "firstLine": 582,
+      "lastLine": 702,
+      "family": "handoff-to-authored-todo",
+      "excerptSha256": "2C811D9A4288BBC06FF2E122B0E6D9DD92151587D0FB75A8F9D411CADA17C532",
+      "fileSha256": "1D1FCFBF24918B8E13189D064ED594E7080C031CB15C839769FCF2480DAE7EE4"
+    },
+    {
+      "sourceText": "    private async Task<bool> SaveRunAfterTodoAsync(HandoffIngestionRunEntity entity, CancellationToken cancellationToken)\n    {\n        try\n        {\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            return true;\n        }\n        catch (OperationCanceledException) when (!string.IsNullOrWhiteSpace(entity.CreatedTodoId))\n        {\n            if (!await TryCompensateCreatedRunAsync(entity).ConfigureAwait(false))\n                throw;\n            throw;\n        }\n        catch (Exception ex) when (!string.IsNullOrWhiteSpace(entity.CreatedTodoId) && HandoffDbExceptions.IsCommitAmbiguous(ex))\n        {\n            if (!await TryCompensateCreatedRunAsync(entity).ConfigureAwait(false))\n                throw;\n            return true;\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+      "firstLine": 853,
+      "lastLine": 872,
+      "family": "handoff-to-authored-todo",
+      "excerptSha256": "8D83C1A889A5CD82A2B1DD4EC28CEAAF37420480DF2ADB345FCEFD0E379A4E4D",
+      "fileSha256": "1D1FCFBF24918B8E13189D064ED594E7080C031CB15C839769FCF2480DAE7EE4"
+    },
+    {
+      "sourceText": "    public async Task<HostileReviewResult> SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        cancellationToken.ThrowIfCancellationRequested();\n\n        if (!string.IsNullOrWhiteSpace(request.WorkspacePath)\n            && !IsSameWorkspace(request.WorkspacePath, _workspaceId, QBrainAi.Client.WorkspacePathNormalizer.Process)\n            && !string.Equals(request.WorkspacePath, _workspaceId, StringComparison.OrdinalIgnoreCase))\n        {\n            return new HostileReviewResult\n            {\n                Success = false,\n                HttpStatus = 403,\n                ErrorCode = \"foreign_workspace\",\n                Error = \"The request workspace does not match the authenticated workspace.\",\n            };\n        }\n\n        var payload = request.SerializedPayload ?? JsonSerializer.Serialize(request);\n        var payloadBytes = Encoding.UTF8.GetByteCount(payload);\n        if (payloadBytes > _options.MaximumSubmitBytes)\n        {\n            return new HostileReviewResult\n            {\n                Success = false,\n                HttpStatus = 400,\n                ErrorCode = \"payload_too_large\",\n                Error = \"Serialized request exceeds 1,048,576 bytes.\",\n            };\n        }\n\n        if (request.Links.Count > _options.MaximumLinks)\n        {\n            return new HostileReviewResult\n            {\n                Success = false,\n                HttpStatus = 400,\n                ErrorCode = \"too_many_links\",\n                Error = \"More than 64 artifact links is rejected.\",\n            };\n        }\n\n        var active = await _db.HostileReviewRequests\n            .CountAsync(item => item.Status == \"Queued\" || item.Status == \"Claimed\" || item.Status == \"Running\", cancellationToken)\n            .ConfigureAwait(false);\n        if (active >= _options.MaximumActiveQueue)\n        {\n            return new HostileReviewResult\n            {\n                Success = false,\n                HttpStatus = 429,\n                ErrorCode = \"queue_full\",\n                Error = \"Hostile review queue is at capacity.\",\n            };\n        }\n\n        var now = _time.GetUtcNow();\n        var requestId = $\"hr-{now:yyyyMMddHHmmss}-{Guid.NewGuid():N}\";\n        var entity = new HostileReviewRequestEntity\n        {\n            RequestId = requestId,\n            WorkspaceId = _workspaceId,\n            TargetType = string.IsNullOrWhiteSpace(request.TargetType) ? \"code\" : request.TargetType.Trim(),\n            Mode = string.IsNullOrWhiteSpace(request.Mode) ? \"adversarial\" : request.Mode.Trim(),\n            ScopeStatement = request.ScopeStatement ?? string.Empty,\n            RequestingAgent = string.IsNullOrWhiteSpace(request.RequestingAgent) ? \"unknown\" : request.RequestingAgent.Trim(),\n            Status = \"Queued\",\n            CreatedUtc = now,\n            UpdatedUtc = now,\n        };\n\n        foreach (var link in request.Links)\n        {\n            var resolution = ResolveLink(link);\n            entity.Links.Add(new HostileReviewArtifactLinkEntity\n            {\n                RequestId = requestId,\n                WorkspaceId = _workspaceId,\n                ArtifactType = string.IsNullOrWhiteSpace(link.ArtifactType) ? \"unknown\" : link.ArtifactType.Trim(),\n                ArtifactId = link.ArtifactId ?? string.Empty,\n                ContentSha256 = resolution.Hash,\n                Resolved = resolution.Resolved,\n            });\n            if (!string.IsNullOrWhiteSpace(resolution.DiagnosticCode))\n            {\n                entity.Diagnostics.Add(new HostileReviewDiagnosticEntity\n                {\n                    RequestId = requestId,\n                    WorkspaceId = _workspaceId,\n                    Code = resolution.DiagnosticCode,\n                    Message = resolution.DiagnosticMessage ?? resolution.DiagnosticCode,\n                });\n            }\n        }\n\n        _db.HostileReviewRequests.Add(entity);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return Map(entity);\n    }",
+      "path": "src/QBrainAi.Services/Services/HostileReviewService.cs",
+      "firstLine": 44,
+      "lastLine": 142,
+      "family": "operational-review",
+      "excerptSha256": "589D593584FE93422EB17370D009B5DC99C2485601A115433F0711B26ADA8632",
+      "fileSha256": "D1EE8AF2FE81AA6F886155C0095EF4D64CBEBB0958856F32A1CC9483E95AAA4E"
+    },
+    {
+      "sourceText": "    public async Task<HostileReviewResult> AcceptReviewerOutputAsync(string requestId, HostileReviewerOutput output, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(output);\n        var entity = await LoadAsync(requestId, cancellationToken).ConfigureAwait(false);\n        if (entity is null)\n            return NotFound(requestId);\n\n        if (!string.Equals(output.Model, HostileReviewPromptDefaults.RequiredModel, StringComparison.Ordinal)\n            || !string.Equals(output.Effort, HostileReviewPromptDefaults.RequiredEffort, StringComparison.Ordinal))\n        {\n            entity.Status = \"Failed\";\n            entity.LastErrorCode = \"ModelUnavailable\";\n            entity.UpdatedUtc = _time.GetUtcNow();\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            var failed = Map(entity);\n            failed.ErrorCode = \"ModelUnavailable\";\n            failed.Success = false;\n            return failed;\n        }\n\n        if (!AllowedVerdicts.Contains(output.Verdict))\n        {\n            entity.Status = \"Failed\";\n            entity.LastErrorCode = \"malformed_output\";\n            entity.UpdatedUtc = _time.GetUtcNow();\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            var failed = Map(entity);\n            failed.ErrorCode = \"malformed_output\";\n            failed.Success = false;\n            return failed;\n        }\n\n        var now = _time.GetUtcNow();\n        entity.Executions.Add(new HostileReviewExecutionEntity\n        {\n            ExecutionId = $\"hrex-{Guid.NewGuid():N}\",\n            RequestId = entity.RequestId,\n            WorkspaceId = entity.WorkspaceId,\n            ReviewerAgent = output.ReviewerAgent,\n            Model = output.Model,\n            Effort = output.Effort,\n            SourceSurface = output.SourceSurface,\n            PromptTemplateId = output.PromptTemplateId,\n            PromptVersion = output.PromptVersion,\n            StartedUtc = now,\n            EndedUtc = now,\n            InputTokens = output.InputTokens,\n            OutputTokens = output.OutputTokens,\n        });\n\n        foreach (var finding in output.Findings)\n        {\n            var category = AllowedCategories.Contains(finding.Category) ? finding.Category : \"uncertainty\";\n            entity.Findings.Add(new HostileReviewFindingEntity\n            {\n                RequestId = entity.RequestId,\n                WorkspaceId = entity.WorkspaceId,\n                Category = category,\n                Severity = string.IsNullOrWhiteSpace(finding.Severity) ? \"medium\" : finding.Severity,\n                ArtifactId = finding.ArtifactId,\n                Location = finding.Location,\n                RequirementId = finding.RequirementId,\n                EvidenceSummary = finding.EvidenceSummary,\n                Recommendation = finding.Recommendation,\n            });\n        }\n\n        entity.Verdict = output.Verdict.ToUpperInvariant();\n        entity.QualityDisclosure = output.RequestQuality.Disclosure;\n        entity.QualityScopeClarity = output.RequestQuality.ScopeClarity;\n        entity.QualityObjectiveClarity = output.RequestQuality.ObjectiveClarity;\n        entity.QualityConfidence = output.RequestQuality.Confidence;\n        entity.QualityEnoughContext = output.RequestQuality.EnoughContext;\n        entity.Status = \"Succeeded\";\n        entity.UpdatedUtc = now;\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return Map(entity);\n    }",
+      "path": "src/QBrainAi.Services/Services/HostileReviewService.cs",
+      "firstLine": 196,
+      "lastLine": 273,
+      "family": "operational-review",
+      "excerptSha256": "CABE76190B2E8DBEFF6DC1F2B46BD8D16D801A9468F9A8E9596EA17797681E13",
+      "fileSha256": "D1EE8AF2FE81AA6F886155C0095EF4D64CBEBB0958856F32A1CC9483E95AAA4E"
+    },
+    {
+      "sourceText": "    public async Task<TodoMutationResult> RestoreAsync(TodoCompensationSnapshot snapshot, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(snapshot);\n        if (snapshot.State is not EfTodoCompensationState state)\n        {\n            return new TodoMutationResult(\n                false,\n                $\"TODO compensation snapshot provider '{snapshot.Provider}' is not supported by {nameof(EfTodoService)}.\",\n                FailureKind: TodoMutationFailureKind.Conflict);\n        }\n\n        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n            var workspaceId = string.IsNullOrWhiteSpace(state.Item.WorkspaceId)\n                ? ctx.CurrentWorkspaceId\n                : state.Item.WorkspaceId;\n            var existing = await ctx.TodoItems\n                .IgnoreQueryFilters()\n                .FirstOrDefaultAsync(row => row.WorkspaceId == workspaceId && row.Id == state.Item.Id, cancellationToken)\n                .ConfigureAwait(false);\n            TodoItemEntity restored;\n            if (existing is null)\n            {\n                restored = CloneTodoItem(state.Item);\n                ctx.TodoItems.Add(restored);\n            }\n            else\n            {\n                CopyTodoItem(state.Item, existing);\n                restored = existing;\n            }\n\n            // Restore the 4NF child rows dependent-side: replace whatever rows exist (including\n            // soft-deleted ones) with the captured snapshot's children.\n            var staleListRows = await ctx.TodoItemListItems\n                .IgnoreQueryFilters()\n                .Where(r => r.WorkspaceId == workspaceId && r.TodoId == state.Item.Id)\n                .ToListAsync(cancellationToken)\n                .ConfigureAwait(false);\n            var staleTaskRows = await ctx.TodoItemTasks\n                .IgnoreQueryFilters()\n                .Where(r => r.WorkspaceId == workspaceId && r.TodoId == state.Item.Id)\n                .ToListAsync(cancellationToken)\n                .ConfigureAwait(false);\n            ctx.TodoItemListItems.RemoveRange(staleListRows);\n            ctx.TodoItemTasks.RemoveRange(staleTaskRows);\n            ctx.TodoItemListItems.AddRange(restored.ListItems);\n            ctx.TodoItemTasks.AddRange(restored.ImplementationTaskRows);\n\n            ApplySoftDeleteState(ctx.Entry(restored), state.SoftDelete);\n            await RestoreDocumentMetadataAsync(ctx, state.DocumentMetadata, cancellationToken).ConfigureAwait(false);\n\n            var restoredFlat = ToFlatItem(restored);\n            await SyncTodoRequirementLinksAsync(ctx, restored, restoredFlat, cancellationToken).ConfigureAwait(false);\n            await AppendAuditAsync(ctx, restored.Id, \"restored\", restoredFlat, null, \"transaction_rollback\", cancellationToken).ConfigureAwait(false);\n            await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n            return await FinalizeMutationAsync(ChangeEventActions.Updated, restored.Id, restoredFlat, cancellationToken).ConfigureAwait(false);\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+      "firstLine": 100,
+      "lastLine": 166,
+      "family": "todo-compensation",
+      "excerptSha256": "CB8D20DD0C47EC50AE363B6C62F113CB56C821BDB9BEEC6AA40297B32274E88C",
+      "fileSha256": "C0C4B87DCE260DDE58B65589C36D5C9CD5A8E73EB90066599C7B90C584DD6572"
+    },
+    {
+      "sourceText": "    private async Task TryRecordProjectionFailureAsync(Exception ex)\n    {\n        try\n        {\n            await using var scope = CreateScope();\n            var metadata = await GetOrCreateDocumentMetadataAsync(scope.Context, CancellationToken.None).ConfigureAwait(false);\n            metadata.LastProjectionFailureUtc = DateTime.UtcNow.ToString(\"O\");\n            metadata.LastProjectionFailureMessage = ex.Message;\n            await scope.Context.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);\n        }\n        catch (Exception recordEx) when (recordEx is InvalidOperationException or DbUpdateException)\n        {\n            _logger.LogWarning(recordEx, \"Failed to persist TODO projection failure metadata for {TodoFilePath}.\", ResolveTodoPath());\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+      "firstLine": 932,
+      "lastLine": 946,
+      "family": "todo-compensation",
+      "excerptSha256": "0AD23CF9F5386AACF857E0C4D3FA7358C9C0EE2AA64E0904DB26F01D977BF488",
+      "fileSha256": "C0C4B87DCE260DDE58B65589C36D5C9CD5A8E73EB90066599C7B90C584DD6572"
+    },
+    {
+      "sourceText": "    internal async Task<MigrationOutcome> RunAsync(CancellationToken cancellationToken)\n    {\n        var opts = _storageOptions.Value;\n        if (!opts.MigrateFromLegacySqlite)\n        {\n            _logger.LogInformation(\"LegacyTodoSqliteMigrator: disabled via Mcp:TodoStorage:MigrateFromLegacySqlite=false; no-op.\");\n            return MigrationOutcome.SkippedByFlag;\n        }\n\n        var legacyPath = ResolveLegacyPath(opts);\n        if (string.IsNullOrWhiteSpace(legacyPath) || !File.Exists(legacyPath))\n        {\n            _logger.LogInformation(\"LegacyTodoSqliteMigrator: no legacy SQLite file at '{Path}'; no-op.\", legacyPath);\n            return MigrationOutcome.SkippedMissingFile;\n        }\n\n        var markerPath = legacyPath + MarkerFileSuffix;\n        if (File.Exists(markerPath))\n        {\n            _logger.LogInformation(\"LegacyTodoSqliteMigrator: marker '{Marker}' present; no-op.\", markerPath);\n            return MigrationOutcome.SkippedMarkerPresent;\n        }\n\n        await using var scope = _scopeFactory.CreateAsyncScope();\n        var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n\n        if (await ctx.TodoItems.AnyAsync(cancellationToken).ConfigureAwait(false))\n        {\n            await WriteMarkerAsync(markerPath, \"target non-empty\", cancellationToken).ConfigureAwait(false);\n            _logger.LogInformation(\"LegacyTodoSqliteMigrator: target already has TODO rows; wrote marker and exited.\");\n            return MigrationOutcome.SkippedTargetPopulated;\n        }\n\n        var (items, history, metadata) = await ReadLegacyAsync(legacyPath, cancellationToken).ConfigureAwait(false);\n\n        foreach (var item in items)\n        {\n            ctx.TodoItems.Add(item);\n            ctx.TodoItemListItems.AddRange(item.ListItems);\n            ctx.TodoItemTasks.AddRange(item.ImplementationTaskRows);\n        }\n\n        foreach (var row in history)\n            ctx.TodoAuditHistory.Add(row);\n        if (metadata is not null)\n        {\n            ctx.TodoDocumentMetadata.Add(metadata);\n            ctx.TodoDocumentNotes.AddRange(metadata.Notes);\n            ctx.TodoCompletedGroups.AddRange(metadata.CompletedGroups);\n        }\n\n        await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await WriteMarkerAsync(markerPath, $\"imported items={items.Count} history={history.Count} meta={(metadata is null ? 0 : 1)}\", cancellationToken).ConfigureAwait(false);\n        _logger.LogInformation(\n            \"LegacyTodoSqliteMigrator: imported {Items} TODO items, {History} audit rows, {Meta} metadata row(s) from '{Path}'.\",\n            items.Count, history.Count, metadata is null ? 0 : 1, legacyPath);\n        return MigrationOutcome.Migrated;\n    }",
+      "path": "src/QBrainAi.Services/Services/LegacyTodoSqliteMigrator.cs",
+      "firstLine": 75,
+      "lastLine": 132,
+      "family": "legacy-todo-bootstrap",
+      "excerptSha256": "66E43C1EE94B4F65733620D2DD0E98F35E8D35E1A28D79D2AF21F203B11D1B9F",
+      "fileSha256": "8817D5820529D2BD02FA608763D66335059BFC286000338907D78C7181128951"
+    },
+    {
+      "sourceText": "    internal async Task<BootstrapOutcome> BootstrapWorkspaceAsync(WorkspaceConfigEntry entry, CancellationToken cancellationToken)\n    {\n        ArgumentNullException.ThrowIfNull(entry);\n\n        var workspacePath = Path.GetFullPath(entry.WorkspacePath);\n        var todoRel = string.IsNullOrWhiteSpace(entry.TodoPath) ? \"docs/todo.yaml\" : entry.TodoPath;\n        var todoAbsolute = Path.IsPathRooted(todoRel)\n            ? Path.GetFullPath(todoRel)\n            : Path.GetFullPath(Path.Combine(workspacePath, todoRel));\n        var dataDirectory = string.IsNullOrWhiteSpace(entry.DataDirectory) ? workspacePath : Path.GetFullPath(entry.DataDirectory);\n        var markerPath = Path.Combine(dataDirectory, MarkerFileName);\n\n        if (File.Exists(markerPath))\n            return new BootstrapOutcome(workspacePath, BootstrapResult.SkippedMarkerPresent, 0);\n\n        if (!File.Exists(todoAbsolute))\n        {\n            _logger.LogInformation(\"TodoBootstrapImporter: '{Workspace}' has no YAML at '{Path}'; no-op.\", workspacePath, todoAbsolute);\n            return new BootstrapOutcome(workspacePath, BootstrapResult.SkippedMissingYaml, 0);\n        }\n\n        await using var scope = _scopeFactory.CreateAsyncScope();\n        var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n        ctx.OverrideWorkspaceId(workspacePath);\n\n        if (await ctx.TodoItems.AnyAsync(cancellationToken).ConfigureAwait(false))\n        {\n            await WriteMarkerAsync(markerPath, \"target non-empty\", cancellationToken).ConfigureAwait(false);\n            return new BootstrapOutcome(workspacePath, BootstrapResult.SkippedWorkspacePopulated, 0);\n        }\n\n        var file = await TodoYamlFileSerializer.ReadIfExistsAsync(todoAbsolute, cancellationToken).ConfigureAwait(false);\n        if (file is null)\n            return new BootstrapOutcome(workspacePath, BootstrapResult.SkippedMissingYaml, 0);\n\n        var importedAtUtc = DateTime.UtcNow.ToString(\"O\");\n        var (items, history, metadata) = ProjectEntities(file, importedAtUtc);\n\n        foreach (var item in items)\n        {\n            ctx.TodoItems.Add(item);\n            ctx.TodoItemListItems.AddRange(item.ListItems);\n            ctx.TodoItemTasks.AddRange(item.ImplementationTaskRows);\n        }\n\n        foreach (var row in history)\n            ctx.TodoAuditHistory.Add(row);\n        ctx.TodoDocumentMetadata.Add(metadata);\n        ctx.TodoDocumentNotes.AddRange(metadata.Notes);\n        ctx.TodoCompletedGroups.AddRange(metadata.CompletedGroups);\n\n        await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await WriteMarkerAsync(markerPath, $\"imported items={items.Count}\", cancellationToken).ConfigureAwait(false);\n\n        _logger.LogInformation(\n            \"TodoBootstrapImporter: workspace '{Workspace}' bootstrapped {Items} items from '{Path}'.\",\n            workspacePath, items.Count, todoAbsolute);\n        return new BootstrapOutcome(workspacePath, BootstrapResult.Imported, items.Count);\n    }",
+      "path": "src/QBrainAi.Services/Services/TodoBootstrapImporter.cs",
+      "firstLine": 151,
+      "lastLine": 209,
+      "family": "legacy-todo-bootstrap",
+      "excerptSha256": "5D285E2C8EEDF0EB9BAE3FA3D4B908F040FDDE33991E0D7C78678A0F92F3C486",
+      "fileSha256": "10DED5440ED566A3C579FE3A96CCC2C64E12A3B747E7E42E4C423FC470B01720"
+    }
+  ],
+  "runtimeProof": false,
+  "writerClosureComplete": false,
+  "operatorAccepted": false,
+  "productionCodeChanged": false,
+  "limitations": [
+    "Source-anchor coverage is not semantic binding or complete dynamic caller closure",
+    "Original proposed classifications are retained without operator acceptance",
+    "All native routing and relational behavior remain unproven",
+    "No product, database, migration or deployment operation executes"
+  ]
+}
