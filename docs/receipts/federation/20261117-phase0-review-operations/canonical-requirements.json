@@ -1,0 +1,141 @@
+{
+  "TR-MCP-FEDERATION-007": {
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-SameCellConflictNeedsReview",
+        "text": "Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DeleteUpdateNeedsReview",
+        "text": "Given A1 deletes T1 and B1 edits T1.title, when histories merge, then needs_review retains B1 and the deleted/edited alternatives for review."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-CleanMergeCanFailDomainValidation",
+        "text": "Given separate commits add T1 dependsOn T2 and T2 dependsOn T1, when Dolt merges without cell conflicts, then domain validation records dependency_cycle and leaves the prior valid live head unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-StaleReviewRejected",
+        "text": "Given a resolution preview binds local=B1 and incoming=A1, when incoming advances to A2, then resolve returns409 stale_review with no merge commit."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ReviewAgeVisible",
+        "text": "Given unresolved needs_review at12:00, when the clock reaches12:15, then plugins/status and the operator inbox show warning with ReviewId and age900s; at24h severity is critical, with at most one repeat per hour."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-UnrelatedPublicationContinues",
+        "text": "Given Atlas/main is blocked by review R1, when Atlas/feature publishes F2 and another project publishes X1, then both succeed while Atlas/main remains unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-SafeTodoMergeRules",
+        "text": "Given A changes title and B changes description with no domain violation, when merge runs, then both values survive; competing priority or completion edits produce needs_review instead of choosing a timestamp winner."
+      }
+    ],
+    "priority": "medium",
+    "title": "reviewed conflicts and valid merges contract",
+    "workspaceId": "F:/GitHub/McpServer",
+    "body": "Review record key=ReviewId UUID; fields ProjectId,Branch,baseHeads[],localHead,incomingHead,candidateRef,conflictingCells[],validationErrors[],createdUtc,lastNotifiedUtc,resolution,actor. GET conflicts and status expose it. Resolve binds exact heads and returns409 stale_review if changed. Safe TODO policy: identical concurrent values collapse; edits to different cells may merge only if invariants pass; duplicate immutable child IDs deduplicate only when bytes agree. Status, priority, title, description, dependency deletions and same-cell disagreements always require review; no timestamp last-writer-wins. Notify immediately in status and durable operator inbox; warn at15min, escalate at24h, repeat at most hourly; no email/Slack sent implicitly. Same-branch dependent commits wait; unrelated branches/projects continue.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "pending",
+    "id": "TR-MCP-FEDERATION-007"
+  },
+  "TEST-MCP-228": {
+    "scopeStartLayerKey": "layer-1",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-SameCellConflictNeedsReview",
+        "text": "Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DeleteUpdateNeedsReview",
+        "text": "Given A1 deletes T1 and B1 edits T1.title, when histories merge, then needs_review retains B1 and the deleted/edited alternatives for review."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-CleanMergeCanFailDomainValidation",
+        "text": "Given separate commits add T1 dependsOn T2 and T2 dependsOn T1, when Dolt merges without cell conflicts, then domain validation records dependency_cycle and leaves the prior valid live head unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-StaleReviewRejected",
+        "text": "Given a resolution preview binds local=B1 and incoming=A1, when incoming advances to A2, then resolve returns409 stale_review with no merge commit."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ReviewAgeVisible",
+        "text": "Given unresolved needs_review at12:00, when the clock reaches12:15, then plugins/status and the operator inbox show warning with ReviewId and age900s; at24h severity is critical, with at most one repeat per hour."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-UnrelatedPublicationContinues",
+        "text": "Given Atlas/main is blocked by review R1, when Atlas/feature publishes F2 and another project publishes X1, then both succeed while Atlas/main remains unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-SafeTodoMergeRules",
+        "text": "Given A changes title and B changes description with no domain violation, when merge runs, then both values survive; competing priority or completion edits produce needs_review instead of choosing a timestamp winner."
+      }
+    ],
+    "title": "reviewed conflicts and valid merges acceptance tests",
+    "workspaceId": "F:/GitHub/McpServer",
+    "condition": "Verify FR-MCP-180 and TR-MCP-FEDERATION-007 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+    "id": "TEST-MCP-228",
+    "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+    "status": "pending",
+    "priority": "high"
+  },
+  "FR-MCP-180": {
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-SameCellConflictNeedsReview",
+        "text": "Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DeleteUpdateNeedsReview",
+        "text": "Given A1 deletes T1 and B1 edits T1.title, when histories merge, then needs_review retains B1 and the deleted/edited alternatives for review."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-CleanMergeCanFailDomainValidation",
+        "text": "Given separate commits add T1 dependsOn T2 and T2 dependsOn T1, when Dolt merges without cell conflicts, then domain validation records dependency_cycle and leaves the prior valid live head unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-StaleReviewRejected",
+        "text": "Given a resolution preview binds local=B1 and incoming=A1, when incoming advances to A2, then resolve returns409 stale_review with no merge commit."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ReviewAgeVisible",
+        "text": "Given unresolved needs_review at12:00, when the clock reaches12:15, then plugins/status and the operator inbox show warning with ReviewId and age900s; at24h severity is critical, with at most one repeat per hour."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-UnrelatedPublicationContinues",
+        "text": "Given Atlas/main is blocked by review R1, when Atlas/feature publishes F2 and another project publishes X1, then both succeed while Atlas/main remains unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-SafeTodoMergeRules",
+        "text": "Given A changes title and B changes description with no domain violation, when merge runs, then both values survive; competing priority or completion edits produce needs_review instead of choosing a timestamp winner."
+      }
+    ],
+    "priority": "medium",
+    "title": "reviewed conflicts and valid merges",
+    "workspaceId": "F:/GitHub/McpServer",
+    "body": "Conflicts and invalid merges preserve valid live data, require authorized review and remain visible with ageing while unrelated publication continues.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "pending",
+    "id": "FR-MCP-180"
+  }
+}

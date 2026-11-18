@@ -1,0 +1,74 @@
+{
+  "timestampLocal": "2026-11-17T21:10:58",
+  "tasks": [
+    "TASK-FEDPH0-006",
+    "TASK-FEDPH0-007"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T211024-fedph0-review-operations-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0ReviewOperationsMockGateTests --test-run-id 20261117T211024-fedph0-review-operations-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 188,
+  "passed": 188,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 4,
+  "expectedNegativeControls": 184,
+  "coverage": [
+    {
+      "test": "TEST-MCP-228",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-007",
+      "text": "Given unresolved needs_review at12:00, when the clock reaches12:15, then plugins/status and the operator inbox show warning with ReviewId and age900s; at24h severity is critical, with at most one repeat per hour.",
+      "satisfied": false,
+      "fr": "FR-MCP-180",
+      "ac": "ac-ReviewAgeVisible"
+    },
+    {
+      "test": "TEST-MCP-228",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-007",
+      "text": "Given Atlas/main is blocked by review R1, when Atlas/feature publishes F2 and another project publishes X1, then both succeed while Atlas/main remains unchanged.",
+      "satisfied": false,
+      "fr": "FR-MCP-180",
+      "ac": "ac-UnrelatedPublicationContinues"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "6621B00BCF9E42791D6ACC52528B54CE3EE3519D2DCFAC43BF736746DA5980E9",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0ReviewOperationsContract.cs",
+      "lfNormalizedSha256": "F4B0F58C42B6B80B5DDDC32ABCB03DAEAD51FF340602C905DAE6F160A5B317A7"
+    },
+    {
+      "sha256": "D8F2371FDBEADCDA27CD236F576176060F3CC88EEC5704988C9E3117E1937A5F",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0ReviewOperationsMockGateTests.cs",
+      "lfNormalizedSha256": "0F6E37E0FE0C5B525EFC19C8D5F4E2F886749CBA63429D8A0C7D516A54CE9C94"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "551C460671EF71142422E5AA395B17A11F34B644143864AEE156C358DAE1EBBC",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T211024-fedph0-review-operations-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "3ABFCBE16942681EDC5C3A3DD5F6815AA80467D90967E5A8FE238F51835166FB",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_21-10-28.log"
+    }
+  ],
+  "pending": [
+    "One selected generic plugin assertion boundary only; actual installed-plugin bindings unexecuted.",
+    "Real scheduler, durable inbox and per-branch gateway isolation unexecuted.",
+    "No task/group completion or B1-B12 acceptance; implementation barrier Closed and DEPLOY HOLD active."
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
