@@ -1,0 +1,101 @@
+{
+  "timestampLocal": "2026-11-17T21:00:10",
+  "tasks": [
+    "TASK-FEDPH0-006"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T205921-fedph0-merge-validation-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0MergeValidationMockGateTests --test-run-id 20261117T205921-fedph0-merge-validation-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 746,
+  "passed": 746,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 8,
+  "expectedNegativeControls": 738,
+  "coverage": [
+    {
+      "test": "TEST-MCP-228",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-007",
+      "text": "Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten.",
+      "satisfied": false,
+      "fr": "FR-MCP-180",
+      "ac": "ac-SameCellConflictNeedsReview"
+    },
+    {
+      "test": "TEST-MCP-228",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-007",
+      "text": "Given A1 deletes T1 and B1 edits T1.title, when histories merge, then needs_review retains B1 and the deleted/edited alternatives for review.",
+      "satisfied": false,
+      "fr": "FR-MCP-180",
+      "ac": "ac-DeleteUpdateNeedsReview"
+    },
+    {
+      "test": "TEST-MCP-228",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-007",
+      "text": "Given separate commits add T1 dependsOn T2 and T2 dependsOn T1, when Dolt merges without cell conflicts, then domain validation records dependency_cycle and leaves the prior valid live head unchanged.",
+      "satisfied": false,
+      "fr": "FR-MCP-180",
+      "ac": "ac-CleanMergeCanFailDomainValidation"
+    },
+    {
+      "test": "TEST-MCP-228",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-007",
+      "text": "Given a resolution preview binds local=B1 and incoming=A1, when incoming advances to A2, then resolve returns409 stale_review with no merge commit.",
+      "satisfied": false,
+      "fr": "FR-MCP-180",
+      "ac": "ac-StaleReviewRejected"
+    },
+    {
+      "test": "TEST-MCP-228",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-007",
+      "text": "Given A changes title and B changes description with no domain violation, when merge runs, then both values survive; competing priority or completion edits produce needs_review instead of choosing a timestamp winner.",
+      "satisfied": false,
+      "fr": "FR-MCP-180",
+      "ac": "ac-SafeTodoMergeRules"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "FD5A62D786FD77304E0ED79A32A7BB550A03D9EAC539997F8196917275AA6EB6",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0MergeValidationContract.cs",
+      "lfNormalizedSha256": "69894DD9EEE20E9079BDF625B6F563D1567852E24AB320FED80EBE3B310110CD"
+    },
+    {
+      "sha256": "70081D7A2C1DDC53A6F59BC308A8642EBBF05C46CC13F4BD515A845F7C717D6D",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0MergeValidationMockGateTests.cs",
+      "lfNormalizedSha256": "0F19F38C0FA59CDF30ABF701A5BEF9196A02737145065E678648EE0E2C0DB2EF"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "D2CE29B1AD349B76CB243F7EDCE9AE9FDD823A21ED2E01A05FB3C5DDA9B64F9D",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T205921-fedph0-merge-validation-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "330D9CD3ACE68750808CDC5508C76AF025BAB3BCB0BF5D7AA462DFD6A0A85358",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_20-59-24.log"
+    }
+  ],
+  "pending": [
+    "Real Dolt merge/transaction/constraint/unrelated-history behavior not executed.",
+    "Physical private ref transfer, restart and garbage-collection retention not proven.",
+    "Review ageing/unrelated publication and full B6/B7-B9 coverage still pending.",
+    "All nine tasks Planning, group barrier Closed, B1-B12 unaccepted and DEPLOY HOLD active."
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}

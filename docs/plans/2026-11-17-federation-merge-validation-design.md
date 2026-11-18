@@ -1,0 +1,43 @@
+# Phase 0 merge and validation design checkpoint
+
+Plan: PLAN-FEDDOLT-001. Task: TASK-FEDPH0-006, B6. This contract-step design extends the approved plan without changing its requirements. It does not accept B6, open the group implementation barrier, or authorize deployment.
+
+## Approved observable behavior
+
+Trace: FR-MCP-180, TR-MCP-FEDERATION-007, TEST-MCP-228. Their seven active Layer 1 criteria were reread through the Codex plugin on 2026-11-17 and match the plan. This increment exercises ac-SameCellConflictNeedsReview, ac-DeleteUpdateNeedsReview, ac-CleanMergeCanFailDomainValidation, ac-StaleReviewRejected and ac-SafeTodoMergeRules. Review ageing and unrelated publication require additional assertions later; they are not covered by this increment.
+
+The disposable fixture starts at common base C0, local Atlas/main B1, incoming Atlas/main A1 and unrelated public Atlas/feature F1. Source T1 has title original, description original description, priority low and completion todo. B1 and A1 are independently valid. Independent branch snapshots, not a merge result flag, establish the original live rows and protected public refs. Opaque commit labels in mocks stand for adapter-observed real commit hashes later.
+
+The same-cell scenario uses base low, local medium and incoming high priority. Delete/update uses incoming deletion of T1 and local title edited. Dependency-cycle uses local T1->T2 and incoming T2->T1, with no cell conflicts; validation must report dependency_cycle. Distinct-cell uses incoming title incoming title plus local description local description; both survive and validation passes. Competing priority uses low/medium/high. Competing completion uses todo/doing/done. A disputed case cannot silently select a timestamp winner.
+
+Review-required results retain B1's exact live rows and every protected public ref. The review identifies a UUID ReviewId, Atlas/main, exact base/local/incoming hashes, candidate ref, actual differing cells including deletion flags, and domain/constraint errors. A delete marker differs from an empty string or omitted evidence. Local and remote review/candidate refs must both exist and resolve to retained objects; a control-table row alone is insufficient. A close/reopen read must recover the same record and pin targets. The eventual engine adapter independently checks physical reachability and actual conflict/violation tables. The mock only proves the assertions can reject missing or corrupt observations.
+
+For a stale preview, preserve the original B1/A1 binding, advance incoming to A2, then resolve using the old binding. Require HTTP409 stale_review, zero resolution merge commits, unchanged B1 live rows and unchanged public refs. Both original review pins and the new incoming head must remain reachable. Refreshing review presentation must not erase the previous evidence or imply that the stale resolution applied.
+
+A clean distinct-cell candidate must retain T1's local description and incoming title, both dependencies when applicable, and unchanged other fields. Validation is rerun before fenced application; B6's disposable integration exercise does not publish public refs. SQL transaction completion, candidate Dolt commits, live-head advancement and publication are separate observations. Other B9 fencing and exactly replay-safe application work remains outside this narrow seam.
+
+## Pinned engine research
+
+Candidate engine: Dolt v2.7.4, tag commit 9e4102e303610fc4681de16a9f7bbbc870d884a3. These are inspected source facts, not executed engine results:
+
+- [DOLT_MERGE](https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/sqle/dprocedures/dolt_merge.go), lines 312-345: merge artifacts and optional Dolt history commit are separate paths. Read conflict/violation observations rather than interpreting a returned row as successful application.
+- [SQL transaction validation](https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/sqle/dsess/transactions.go), lines 645-848: conflicts and constraint violations have distinct commit gates; a concurrent working-set conflict still rolls back.
+- [System variables](https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/sqle/system_variables.go), lines 149-201: automatic Dolt commits, force-transaction commit and allowed conflict persistence default to zero. The conflict-persistence setting is session-scoped.
+- [Merge transaction tests](https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/sqle/enginetest/dolt_queries_merge.go), lines 1551-1624, declare conflict-query/abort behavior with the allow flag, and rollback when it is disabled. Those upstream tests were read, not run here.
+- [Commit ancestry](https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/doltdb/commit.go), lines 161-216, returns ErrNoCommonAncestor when the merge-base set is empty. The final SQL operation's error and unrelated-history behavior still require an experiment.
+
+## Disposable real-binding obligations, still pending
+
+The binding uses clean, isolated candidate branches and explicit source-head pins. Live/public application connections keep all three override values at zero. Any private experimental connection that enables conflict persistence is unpooled, candidate-only and closed after use; its settings cannot bleed into ordinary reads/writes. No global override is enabled. Do not use force_transaction_commit to make invalid live data pass.
+
+Before selecting a persistence sequence, measure with the pinned engine: explicit versus autocommit merge, --no-commit behavior, actual conflict cells, default rollback, allow-conflicts SQL commit versus Dolt history commit, constraint violations with allow-conflicts alone, restart visibility, ref transfer and garbage collection. Test unique, FK, not-null and check violations separately, including mechanically clean merges. Test unrelated histories without fabricating a common base. Pin SQL outputs, errors, settings before/after, all branch/working-set hashes, Dolt history and physical object reachability on both hosts.
+
+The architecture requires review and candidate refs locally and remotely until a durable authorized-resolution receipt permits release. Persisting only a dirty working set or only JSON in the control store cannot satisfy that rule. Whether the chosen Dolt private-ref representation can retain every conflict/constraint artifact safely is still unproven; the experiment must establish it before implementation is selected. If it cannot, present the specific feasibility failure through the approved plan's decision path. No weaker retention rule is substituted.
+
+## Assertion proof and remaining work
+
+`Phase0MergeValidationContract` will preserve the same inputs, assertions and interaction checks when later bound to the real disposable adapter. Independent mocks are not a merge engine. Valid controls include row-order variation; negative controls independently corrupt outcome, live/public state, conflict values, deletion evidence, validation errors, review identity/source pins, retained local/remote refs, restart state and stale-resolution effects. The existing Phase0SafetyBoundary suite remains intact.
+
+All nine tasks remain Planning. All B1-B12 outputs remain unaccepted. Full B6 engine/transaction/constraint/schema/unrelated-history/retention proof, complete task006 B7-B9 designs, the whole group's remaining mock coverage, real bindings, final-head gates on both hosts, and independent hostile validation remain pending. DEPLOY HOLD remains active.
+
+Windows mock checkpoint: Nuke `TestGroups` run `20261117T205921-fedph0-merge-validation-mock` passed746/746 (8 valid controls,738 expected rejection controls),0 failed,0 skipped. Exact TRX/log and canonical criteria are in `docs/receipts/federation/20261117-phase0-merge-validation/`. Independent current incoming and candidate heads prevent a no-op advance or jointly wrong pin targets from passing. Linux repetition is pending at this checkpoint; no real-engine claim follows.
