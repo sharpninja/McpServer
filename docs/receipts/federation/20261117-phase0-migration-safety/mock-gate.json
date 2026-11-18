@@ -1,0 +1,91 @@
+{
+  "timestampLocal": "2026-11-17T23:33:43",
+  "tasks": [
+    "TASK-FEDPH0-006"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T233231-fedph0-migration-safety-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0MigrationSafetyMockGateTests --test-run-id 20261117T233231-fedph0-migration-safety-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 3153,
+  "passed": 3153,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 24,
+  "expectedNegativeControls": 3129,
+  "coverage": [
+    {
+      "test": "TEST-MCP-235",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-014",
+      "text": "Given target batch1 committed before a crash but its acknowledgement was lost, when resume runs, then batch1 is recognized by journal and no duplicate rows appear.",
+      "satisfied": false,
+      "fr": "FR-MCP-187",
+      "ac": "ac-ResumeAfterBatchCommit"
+    },
+    {
+      "test": "TEST-MCP-235",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-014",
+      "text": "Given manifest source hash S0, when source is replaced by S1 before resume, then409 migration_source_changed writes no additional target rows.",
+      "satisfied": false,
+      "fr": "FR-MCP-187",
+      "ac": "ac-ChangedSnapshotRejected"
+    },
+    {
+      "test": "TEST-MCP-235",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-014",
+      "text": "Given one row hash differs, when cutover is requested, then409 migration_verification_failed leaves source routing active and writes closed on the target.",
+      "satisfied": false,
+      "fr": "FR-MCP-187",
+      "ac": "ac-FailedVerifyCannotCutover"
+    },
+    {
+      "test": "TEST-MCP-235",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-014",
+      "text": "Given verified cutover completes, when target receives a new TODO, then source backup remains present, read-only and byte-identical; the new TODO exists only in Dolt until an explicit recovery export.",
+      "satisfied": false,
+      "fr": "FR-MCP-187",
+      "ac": "ac-SourceRetainedAfterCutover"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "2790AC44F43A1DF93AC6AA6B83A85739CEE2558108A7639E6B1999F5BE38A34E",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0MigrationSafetyContract.cs",
+      "lfNormalizedSha256": "FDD218A43D5DD02D84768150EA8C905486225736B30073F3C126CEA0A3F42474"
+    },
+    {
+      "sha256": "CFD72A0B94C14060E0066987CD1B25C03BC4EEC215B9A93888BEA94E4DD24A4C",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0MigrationSafetyMockGateTests.cs",
+      "lfNormalizedSha256": "86042F4B2EBF51F0AEA0F8085EC8C420EB979D55A3F439A7F36B07A92BD66B51"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "03058047754ADD89BC81ACEFE986DCD5D3E4B31F4B90EC3BAA1E53CB1C779050",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T233231-fedph0-migration-safety-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "F7BBEAD6E507ECC90CA7607C7010E802A078CF503A700FC7D2D5FA1AC8BE0F28",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_23-32-47.log"
+    }
+  ],
+  "pending": [
+    "Native provider/database crash/resume and byte-retained source evidence on both hosts",
+    "Full B2 all-domain manifest/aliases/audit accounting and reviewed join/recovery export",
+    "Remaining B8/B1-B12/group design and mock coverage, full final-head gates and hostile validation"
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}

@@ -1,0 +1,22 @@
+# Phase 0 migration-safety assertion design
+
+Plan PLAN-FEDDOLT-001, Task TASK-FEDPH0-006, output B8. Existing FR-MCP-187/TR-MCP-FEDERATION-014/TEST-MCP-235: ac-ResumeAfterBatchCommit, ac-ChangedSnapshotRejected, ac-FailedVerifyCannotCutover, ac-SourceRetainedAfterCutover. This is an internal mock-first assertion seam. No product migration, provider adoption, public API, live routing change, task acceptance or DEPLOY HOLD release is authorized by it.
+
+## Fixture and observation boundary
+
+Run four fixtures for each source-provider label sqlite, postgresql and sqlserver. This label matrix is assertion evidence only; actual database execution requires separate native integration bindings. A small typed compatibility table has T1/T2 with exact decimal values, subsecond UTC, Unicode and null values. It is deliberately not the complete B2-classified project graph and does not claim the all-domain or FK round-trip criterion. The retained source snapshot has manifest identity S0. Its actual native byte hash, canonical typed row hash, schema versions, table counts, alias decisions, audit count and destination identity are observed independently of responses. Literal hashes/heads are run-manifest aliases at real binding, never fabricated adapter values. Empty alias/audit arrays belong only to this small fixture; full alias/audit graphs remain mandatory B8 work.
+
+The manifest binds a fixed MigrationId, seed mode, Atlas, original provider and S0, source/target schema 1, declared typed-table count 2 and expected source row hash. Destination remains absent until a verified completed fixture already has C0. Full-table reads and independent journal rows detect duplicates, lost data and stale source binding; exact target heads, original source presence/read-only/byte hash, active routing, write admission and other-project/control fingerprints are reread at each boundary. Native adapter operation evidence must come from retained completed process/HTTP/database receipts, not method-entry counters.
+
+## Four scripts
+
+- Resume: target batch1 and its journal are durable before acknowledgement loss. Kill/reopen, resume batch2, retry resume and reopen. T1 is never duplicated, each batch applies once and no routing/history publication occurs.
+- Changed snapshot: manifest still binds S0 but current source has been replaced by S1. Resume, reopen and retry return 409 migration_source_changed. The original retained S0 snapshot and all target rows/journal/routing remain unchanged.
+- Failed verification: one typed target row differs. Cutover, reopen and retry return 409 migration_verification_failed. Target writes remain closed and original source routing remains active; neither rows nor history are silently repaired.
+- Retention: a disposable verified C0 is eligible for fixture cutover. Switch fixture routing only, add post-cutover T3 to the Dolt working set and reopen. Original retained source remains present/read-only/byte-identical, excludes T3, and C0 remains unchanged because a SQL save is not a history commit. This neither performs nor authorizes live cutover.
+
+Negative controls must corrupt every observed manifest, journal, typed-row, routing/retention/protected-state, reply and executed-operation field at each checkpoint. Reverse unordered rows, journals and table inventories as valid controls. These prove the assertion code discriminates; actual engine crash durability, canonical hashing, all-domain source accounting, audit receipts, common-root join/review and full-project recovery are still pending.
+
+## Windows mock checkpoint
+
+Run 20261117T233231-fedph0-migration-safety-mock passed 3153/3153: 24 valid provider/script/order combinations and 3129 expected negative controls, zero failures/skips. Exact TRX/Nuke/canonical criteria and source hashes are retained under docs/receipts/federation/20261117-phase0-migration-safety. Linux pairing and actual migration/retention proof remain pending. All tasks remain open.
