@@ -1,0 +1,14 @@
+{
+  "timestampLocal": "2026-11-17T18:49:08",
+  "method": "workflow.requirements.effective",
+  "workspace": "F:/GitHub/McpServer",
+  "activeLayer": "layer-1",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "definitions": 86,
+  "liveMatchedDefinitions": 86,
+  "plannedCriteria": 392,
+  "liveCriteria": 392,
+  "missingDefinitions": [],
+  "criterionIdOrExactTextDifferences": [],
+  "semanticStatus": "Comparison only; no requirement/AC status changed; no implementation proof"
+}
