@@ -1,0 +1,258 @@
+{
+  "timestampLocal": "2026-11-17T20:07:53",
+  "sourceHead": "532be3df22e4b78593310c2a25eeffccc7b0a42e",
+  "task": "TASK-FEDPH0-005",
+  "requirementIds": [
+    "FR-MCP-185",
+    "TR-MCP-FEDERATION-012",
+    "TEST-MCP-233"
+  ],
+  "packages": [
+    {
+      "repository": "https://github.com/DuendeSoftware/products",
+      "sourceCommit": "020d97530d6e40795dcbf4c0efe05ecc793974f4",
+      "assets": [
+        {
+          "runtime": {
+            "lib/net10.0/Duende.IdentityServer.dll": {
+              "related": ".xml"
+            }
+          },
+          "compile": {
+            "lib/net10.0/Duende.IdentityServer.dll": {
+              "related": ".xml"
+            }
+          },
+          "target": "net10.0"
+        }
+      ],
+      "sourceBranch": "refs/heads/releases/is/7.4.x",
+      "id": "Duende.IdentityServer",
+      "version": "7.4.7",
+      "nuspecSha256": "5EA17EA93366E1445D4BEE449F3EF67EEE01561754492F996625486C51EE3830",
+      "packageSha256": "1CD4883857738F2A2677CA01891BB14206FA9641FF5D22F367DE3F196C30BCEB"
+    },
+    {
+      "repository": "https://github.com/DuendeSoftware/products",
+      "sourceCommit": "020d97530d6e40795dcbf4c0efe05ecc793974f4",
+      "assets": [
+        {
+          "runtime": {
+            "lib/net10.0/Duende.IdentityServer.Storage.dll": {
+              "related": ".xml"
+            }
+          },
+          "compile": {
+            "lib/net10.0/Duende.IdentityServer.Storage.dll": {
+              "related": ".xml"
+            }
+          },
+          "target": "net10.0"
+        }
+      ],
+      "sourceBranch": "refs/heads/releases/is/7.4.x",
+      "id": "Duende.IdentityServer.Storage",
+      "version": "7.4.7",
+      "nuspecSha256": "4CED779056DA0673A5C7EDC010EFCAB436578D88CCDA175F3E29B50CFBA748AB",
+      "packageSha256": "D0518E8143CB2C68C6B6A60758A36B7B12651582310C8B3A30719BF0394942D3"
+    },
+    {
+      "repository": "https://github.com/DuendeSoftware/products",
+      "sourceCommit": "ddebbc3e53370afad97c7e854c1d24034134db78",
+      "assets": [
+        {
+          "runtime": {
+            "lib/net10.0/Duende.IdentityServer.AspNetIdentity.dll": {
+              "related": ".xml"
+            }
+          },
+          "compile": {
+            "lib/net10.0/Duende.IdentityServer.AspNetIdentity.dll": {
+              "related": ".xml"
+            }
+          },
+          "target": "net10.0"
+        }
+      ],
+      "sourceBranch": "refs/heads/releases/is/7.4.x",
+      "id": "Duende.IdentityServer.AspNetIdentity",
+      "version": "7.4.6",
+      "nuspecSha256": "F52A5C66275A3322C1D592306F4282795BCC950F3334E56B358E39C759783A15",
+      "packageSha256": "1CC475E47A4F2C6FD22DFB569684A3329735AA3B2269CE45A3FF610EB84416CE"
+    },
+    {
+      "repository": "https://github.com/DuendeSoftware/products",
+      "sourceCommit": "ddebbc3e53370afad97c7e854c1d24034134db78",
+      "assets": [
+        {
+          "runtime": {
+            "lib/net10.0/Duende.IdentityServer.EntityFramework.dll": {
+              "related": ".xml"
+            }
+          },
+          "compile": {
+            "lib/net10.0/Duende.IdentityServer.EntityFramework.dll": {
+              "related": ".xml"
+            }
+          },
+          "target": "net10.0"
+        }
+      ],
+      "sourceBranch": "refs/heads/releases/is/7.4.x",
+      "id": "Duende.IdentityServer.EntityFramework",
+      "version": "7.4.6",
+      "nuspecSha256": "E0DEF8AE52286B3ABFB14C8C88EA72376A25008CE3CF85E03C3195A75B980285",
+      "packageSha256": "FBCF6ED3E9E30C960AA14D586B56A9A80DAC9D17823E1007B3DB81B499500162"
+    },
+    {
+      "repository": "https://github.com/DuendeSoftware/products",
+      "sourceCommit": "ddebbc3e53370afad97c7e854c1d24034134db78",
+      "assets": [
+        {
+          "runtime": {
+            "lib/net10.0/Duende.IdentityServer.EntityFramework.Storage.dll": {
+              "related": ".xml"
+            }
+          },
+          "compile": {
+            "lib/net10.0/Duende.IdentityServer.EntityFramework.Storage.dll": {
+              "related": ".xml"
+            }
+          },
+          "target": "net10.0"
+        }
+      ],
+      "sourceBranch": "refs/heads/releases/is/7.4.x",
+      "id": "Duende.IdentityServer.EntityFramework.Storage",
+      "version": "7.4.6",
+      "nuspecSha256": "3CCF768A724E0A09B050B98863D5000EB44C1172ACD1ACE6C7F7FA0330BFC123",
+      "packageSha256": "DACFD481C2F102EAB97CFBDC239471D55AB993D3122D43F65E1C7F58005CE940"
+    }
+  ],
+  "assetsFile": {
+    "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\src\\QBrainAi.Support.Mcp\\obj\\project.assets.json",
+    "sha256": "51189BD6352A2EFA2AFF05E4F76908E7D07063E3CBDD3F6D782F5C3955728C9A"
+  },
+  "upstreamReferences": [
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/020d97530d6e40795dcbf4c0efe05ecc793974f4/identity-server/src/IdentityServer/Configuration/DependencyInjection/IdentityServerServiceCollectionExtensions.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/IdentityServer/Configuration/DependencyInjection/IdentityServerServiceCollectionExtensions.cs",
+      "commit": "020d97530d6e40795dcbf4c0efe05ecc793974f4"
+    },
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/020d97530d6e40795dcbf4c0efe05ecc793974f4/identity-server/src/IdentityServer/Configuration/DependencyInjection/BuilderExtensions/Core.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/IdentityServer/Configuration/DependencyInjection/BuilderExtensions/Core.cs",
+      "commit": "020d97530d6e40795dcbf4c0efe05ecc793974f4"
+    },
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/020d97530d6e40795dcbf4c0efe05ecc793974f4/identity-server/src/IdentityServer/Configuration/DependencyInjection/BuilderExtensions/InMemory.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/IdentityServer/Configuration/DependencyInjection/BuilderExtensions/InMemory.cs",
+      "commit": "020d97530d6e40795dcbf4c0efe05ecc793974f4"
+    },
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/020d97530d6e40795dcbf4c0efe05ecc793974f4/identity-server/src/IdentityServer/Stores/Default/DefaultReferenceTokenStore.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/IdentityServer/Stores/Default/DefaultReferenceTokenStore.cs",
+      "commit": "020d97530d6e40795dcbf4c0efe05ecc793974f4"
+    },
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/020d97530d6e40795dcbf4c0efe05ecc793974f4/identity-server/src/IdentityServer/Stores/Default/DefaultGrantStore.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/IdentityServer/Stores/Default/DefaultGrantStore.cs",
+      "commit": "020d97530d6e40795dcbf4c0efe05ecc793974f4"
+    },
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/020d97530d6e40795dcbf4c0efe05ecc793974f4/identity-server/src/IdentityServer/Stores/InMemory/InMemoryPersistedGrantStore.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/IdentityServer/Stores/InMemory/InMemoryPersistedGrantStore.cs",
+      "commit": "020d97530d6e40795dcbf4c0efe05ecc793974f4"
+    },
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/020d97530d6e40795dcbf4c0efe05ecc793974f4/identity-server/src/IdentityServer/ResponseHandling/Default/TokenRevocationResponseGenerator.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/IdentityServer/ResponseHandling/Default/TokenRevocationResponseGenerator.cs",
+      "commit": "020d97530d6e40795dcbf4c0efe05ecc793974f4"
+    },
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/020d97530d6e40795dcbf4c0efe05ecc793974f4/identity-server/src/IdentityServer/Validation/Default/TokenValidator.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/IdentityServer/Validation/Default/TokenValidator.cs",
+      "commit": "020d97530d6e40795dcbf4c0efe05ecc793974f4"
+    },
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/020d97530d6e40795dcbf4c0efe05ecc793974f4/identity-server/src/IdentityServer/Validation/Default/IntrospectionRequestValidator.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/IdentityServer/Validation/Default/IntrospectionRequestValidator.cs",
+      "commit": "020d97530d6e40795dcbf4c0efe05ecc793974f4"
+    },
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/020d97530d6e40795dcbf4c0efe05ecc793974f4/identity-server/src/Storage/Stores/IPersistedGrantStore.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/Storage/Stores/IPersistedGrantStore.cs",
+      "commit": "020d97530d6e40795dcbf4c0efe05ecc793974f4"
+    },
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/020d97530d6e40795dcbf4c0efe05ecc793974f4/identity-server/src/Storage/Models/Client.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/Storage/Models/Client.cs",
+      "commit": "020d97530d6e40795dcbf4c0efe05ecc793974f4"
+    },
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/ddebbc3e53370afad97c7e854c1d24034134db78/identity-server/src/EntityFramework/IdentityServerEntityFrameworkBuilderExtensions.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/EntityFramework/IdentityServerEntityFrameworkBuilderExtensions.cs",
+      "commit": "ddebbc3e53370afad97c7e854c1d24034134db78"
+    },
+    {
+      "url": "https://github.com/DuendeSoftware/products/blob/ddebbc3e53370afad97c7e854c1d24034134db78/identity-server/src/EntityFramework.Storage/DbContexts/PersistedGrantDbContext.cs",
+      "provenance": "Read through GitHub connector at exact nuspec source commit",
+      "path": "identity-server/src/EntityFramework.Storage/DbContexts/PersistedGrantDbContext.cs",
+      "commit": "ddebbc3e53370afad97c7e854c1d24034134db78"
+    }
+  ],
+  "localSourceHashes": [
+    {
+      "path": "Directory.Packages.props",
+      "sha256": "5B7A4038A94511FE30D6F3641453078A160EE44066D72733B6B7D808DC18CC87"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Identity/IdentityServerExtensions.cs",
+      "sha256": "861763BD2ACEC58836CE42B71C04697660ECBAB068872CE85E1986BB855D3DD0"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Identity/IdentityServerConfig.cs",
+      "sha256": "80B32F3F56746E537C5BDB9378A4EAD7804DE74232579E35697489764B7E3160"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Identity/EmbeddedIdentityServerStrategy.cs",
+      "sha256": "24675EAD5E3FC3A631AABE2CDFA10908B518C6E1F95EA56802A401284596C4EF"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Identity/McpIdentityDbContext.cs",
+      "sha256": "918C592874B65256ED04040D80E1C049C5D6285EF425B2DEE9C2B3DB378D174F"
+    }
+  ],
+  "observed": "Local source uses SQL Server ASP.NET Identity, in-memory clients/resources and JWT validation; upstream core defaults to in-memory persisted grants/PAR. No runtime DI resolution inspected.",
+  "proposedOperationalSets": [
+    "PersistedGrants",
+    "DeviceFlowCodes",
+    "Keys",
+    "ServerSideSessions",
+    "PushedAuthorizationRequests"
+  ],
+  "status": "SourceApiDesignOnly",
+  "realTokenIssued": false,
+  "liveConfigurationChanged": false,
+  "compatibilityProven": false,
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "pending": [
+    "Complete configuration and operational relational models and store binding",
+    "Actual issuance/introspection/restart/revocation on both hosts",
+    "Provider, dependency and licensing feasibility",
+    "Guarded Dolt relay, full final-head gates and independent HV"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "timestampLocal": "2026-11-17T20:13:42",
+  "tasks": [
+    "TASK-FEDPH0-005"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T201236-fedph0-identity-platform-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0IdentityPlatformMockGateTests --test-run-id 20261117T201236-fedph0-identity-platform-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 197,
+  "passed": 197,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 2,
+  "expectedNegativeControls": 195,
+  "coverage": [
+    {
+      "test": "TEST-MCP-233",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-012",
+      "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged.",
+      "satisfied": false,
+      "fr": "FR-MCP-185",
+      "ac": "ac-RevokedNodeCannotPublish"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "AFA61E42A3978C9665AE1AB201068E81BD87926C436F8B8F3F1998C872732591",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityPlatformContract.cs",
+      "lfNormalizedSha256": "3A1902528295538F6EBC3DBAD378EACB70BBC93A3BB4D8AAB89D28AA76662E7A"
+    },
+    {
+      "sha256": "3BBEA89975FC6203C95FF3A1FB6A30039499D30C2C29E6D96A37275F8F823319",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityPlatformMockGateTests.cs",
+      "lfNormalizedSha256": "1954B1E9921B1E9037A04CD312C22E39EA9BFF0BEF1459315C5344A4166BC913"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "A1F34C74EEFE0822A63A9687AB14578D907390684F9B25266A802214EA84D1D9",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T201236-fedph0-identity-platform-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "0C8B9A17F7EBCAC6F8DE8DB0C3D77DE191F85F84538B32E8E21F7CF570AD331F",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_20-12-40.log"
+    }
+  ],
+  "pending": [
+    "Real exact-package issuance/introspection and restart/revocation adapters are not implemented.",
+    "Actual relational model, provider and licensing compatibility, protected stores, gateway/relay protocol and token-cache effects remain unproven.",
+    "All complete group mock gates and designs, B1-B12 acceptance, both-host full final-head gates and independent HV remain pending. Implementation barrier Closed; DEPLOY HOLD active."
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
