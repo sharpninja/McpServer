@@ -1,0 +1,867 @@
+{
+  "timestampLocal": "2026-11-18T00:06:55",
+  "sourceHead": "f3dcd7073b89205c97bf27284a6a43e9d5dbe307",
+  "tasks": [
+    "TASK-FEDPH0-004",
+    "TASK-FEDPH0-006"
+  ],
+  "outputs": [
+    "B2",
+    "B3",
+    "B7",
+    "B8"
+  ],
+  "sourceCatalogSha256": "88DA9E41116F88DEDA13A9675BA2B073AD63B41D0E65BD371B72FE9CCAD7CF05",
+  "classificationSha256": "9E623372B679204FDFB061B343DC61F1185BBF060884270A9870214D933A373F",
+  "scriptSha256": "6F4187CA78D7C8F0508E54CA217BDC3E40D4AEA45C779677CC64D74954011C5B",
+  "catalogWriterCandidates": 214,
+  "reviewedNonSaveChangesCandidates": 29,
+  "remainingSaveChangesCandidates": 185,
+  "sourceCount": 7,
+  "excerptCount": 23,
+  "familyCount": 7,
+  "sourceHashes": [
+    {
+      "path": "src/QBrainAi.Services/Services/Fts5SearchService.cs",
+      "sha256": "2467121A777D27C8090EA0FC4E48639AA3BC553D400E5439A7800A5D5FE6A823"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+      "sha256": "1D1FCFBF24918B8E13189D064ED594E7080C031CB15C839769FCF2480DAE7EE4"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "sha256": "A6BBAEE7ADBF14FDE961BEB64D04A7A66EA52BDCB964CE708AF5939532E7B84D"
+    },
+    {
+      "path": "src/QBrainAi.Storage/Database/McpDatabaseMigrationCoordinator.cs",
+      "sha256": "CC4FBFFEA8B119B1C08CD5B34DA0989F5721F13D89D3E8319821FE8121B19123"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+      "sha256": "B1196A039129597B0467E046212DA8BFA85DFA33F8F7DE0A844B52390DB53680"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs",
+      "sha256": "CA2972F73333EE58866D9F98F08AC5700F40AC501BBB3D85C9038F3FD950F53C"
+    },
+    {
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "sha256": "B1C43E2C8BDE72F50CAAFE53313947E5193BA776DE2C289BE1A27C25054B286C"
+    }
+  ],
+  "excerpts": [
+    {
+      "excerpt": "    public async Task RebuildAsync(CancellationToken ct = default)\n    {\n        if (!_isSqliteProvider)\n        {\n            _logger.LogInformation(\n                \"Skipping FTS5 rebuild for non-SQLite provider: {ProviderName}\",\n                _db.Database.ProviderName ?? \"<unknown>\");\n            return;\n        }\n\n        try\n        {\n            var conn = _db.Database.GetDbConnection();\n            await conn.OpenAsync(ct).ConfigureAwait(false);\n\n            // Repopulate FTS5 index from visible chunks only. FTS SQL bypasses EF query\n            // filters, so soft-delete predicates must be explicit here.\n            using var deleteCmd = conn.CreateCommand();\n            deleteCmd.CommandText = \"DELETE FROM chunks_fts\";\n            await deleteCmd.ExecuteNonQueryAsync(ct).ConfigureAwait(false);\n\n            using var insertCmd = conn.CreateCommand();\n            insertCmd.CommandText = \"\"\"\n                INSERT INTO chunks_fts(ChunkId, Content)\n                SELECT c.Id, c.Content\n                FROM Chunks c\n                JOIN Documents d ON c.DocumentId = d.Id\n                WHERE c.IsDeleted = 0 AND d.IsDeleted = 0\n                \"\"\";\n            await insertCmd.ExecuteNonQueryAsync(ct).ConfigureAwait(false);\n\n            using var rebuildCmd = conn.CreateCommand();\n            rebuildCmd.CommandText = \"INSERT INTO chunks_fts(chunks_fts) VALUES('rebuild')\";\n            await rebuildCmd.ExecuteNonQueryAsync(ct).ConfigureAwait(false);\n\n            _logger.LogInformation(\"FTS5 index rebuilt successfully\");\n        }\n        catch (Exception ex) when (ex is not OperationCanceledException)\n        {\n            _logger.LogError(ex, \"Failed to rebuild FTS5 index\");\n            throw;\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/Fts5SearchService.cs",
+      "sha256": "A68F4C888E5736EF453FBDD58910B488E31751A65A5A8C2720EDED861AA249AA",
+      "firstLine": 143,
+      "lastLine": 185,
+      "family": "derived-fts"
+    },
+    {
+      "excerpt": "        string runId,\n        HandoffApprovalRequest request,\n        CancellationToken cancellationToken)\n    {\n        var entity = await _db.HandoffIngestionRuns\n            .Include(run => run.Diagnostics)\n            .FirstOrDefaultAsync(run => run.RunId == runId, cancellationToken)\n            .ConfigureAwait(false);\n\n        if (entity is null)\n            return new HandoffIngestionResult { Success = false, Error = $\"Handoff run '{runId}' was not found.\", ErrorCode = \"run_not_found\" };\n\n        if (entity.ReviewState == nameof(HandoffReviewState.Created) && !string.IsNullOrWhiteSpace(entity.CreatedTodoId))\n            return MapEntity(entity, replayed: true);\n\n        if (entity.ReviewState == nameof(HandoffReviewState.Failed))\n            return new HandoffIngestionResult { Success = false, Error = \"Failed runs cannot be approved.\", ErrorCode = \"run_not_approvable\" };\n\n        var now = _time.GetUtcNow();\n        var claimed = await _db.HandoffIngestionRuns\n            .Where(run => run.RunId == runId\n                && (run.ReviewState == nameof(HandoffReviewState.PendingReview)\n                    || (run.ReviewState == nameof(HandoffReviewState.Approving)\n                        && (run.ApprovalLeaseExpiresAtUtc == null || run.ApprovalLeaseExpiresAtUtc < now))))\n            .ExecuteUpdateAsync(\n                setters => setters\n                    .SetProperty(run => run.ReviewState, nameof(HandoffReviewState.Approving))\n                    .SetProperty(run => run.ApprovalOwner, _instanceId)\n                    .SetProperty(run => run.ApprovalLeaseExpiresAtUtc, now.Add(_lease.Duration))\n                    .SetProperty(run => run.StateVersion, run => run.StateVersion + 1),\n                cancellationToken)\n            .ConfigureAwait(false);",
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+      "sha256": "F03D6F8DD76D9A66229EDAA9542FDD5F6E27645F4607002E21A411E248C8E934",
+      "firstLine": 313,
+      "lastLine": 344,
+      "family": "handoff-control-cas"
+    },
+    {
+      "excerpt": "    private async Task<(bool Created, string? TodoId)> TryCreateTodoAsync(\n        HandoffIngestionRunEntity entity,\n        HandoffTodoDraft draft,\n        List<HandoffDiagnostic> diagnostics,\n        CancellationToken cancellationToken)\n    {\n        var intentId = entity.TodoCreationIntentId;\n        if (string.IsNullOrWhiteSpace(intentId))\n        {\n            intentId = $\"handoff-todo:{entity.RunId}\";\n            using var persistCts = CreateCompensationCts();\n            var version = entity.StateVersion;\n            var persisted = await _db.HandoffIngestionRuns\n                .Where(run => run.RunId == entity.RunId\n                    && (run.ProcessingOwner == _instanceId || run.ApprovalOwner == _instanceId)\n                    && run.StateVersion == version)\n                .ExecuteUpdateAsync(\n                    setters => setters\n                        .SetProperty(run => run.TodoCreationIntentId, intentId)\n                        .SetProperty(run => run.StateVersion, version + 1),\n                    persistCts.Token)\n                .ConfigureAwait(false);\n            if (persisted == 0)\n                return (false, null);\n            entity.TodoCreationIntentId = intentId;\n            entity.StateVersion = version + 1;\n        }",
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+      "sha256": "5E7032E66EC5714132D756120C42B3DD85B21BAB3780808959467EDFE97C2E1F",
+      "firstLine": 469,
+      "lastLine": 495,
+      "family": "handoff-control-cas"
+    },
+    {
+      "excerpt": "        HandoffIngestionRunEntity existing,\n        CancellationToken cancellationToken)\n    {\n        var now = _time.GetUtcNow();\n        var isTerminal = existing.ProcessingState == nameof(HandoffProcessingState.Terminal)\n            || existing.ReviewState is nameof(HandoffReviewState.Created)\n                or nameof(HandoffReviewState.Failed)\n                or nameof(HandoffReviewState.Rejected)\n                or nameof(HandoffReviewState.PendingReview);\n        if (isTerminal && existing.ProcessingState != nameof(HandoffProcessingState.Processing))\n            return (existing, true, false);\n\n        var leaseLive = existing.ProcessingState == nameof(HandoffProcessingState.Processing)\n            && existing.ProcessingLeaseExpiresAtUtc is { } expires\n            && expires >= now\n            && !string.Equals(existing.ProcessingOwner, _instanceId, StringComparison.Ordinal);\n        if (leaseLive)\n            return (existing, false, true);\n\n        var taken = await _db.HandoffIngestionRuns\n            .Where(run => run.RunId == existing.RunId\n                && run.ProcessingState == nameof(HandoffProcessingState.Processing)\n                && run.StateVersion == existing.StateVersion\n                && (run.ProcessingLeaseExpiresAtUtc == null || run.ProcessingLeaseExpiresAtUtc < now))\n            .ExecuteUpdateAsync(\n                setters => setters\n                    .SetProperty(run => run.ProcessingOwner, _instanceId)\n                    .SetProperty(run => run.ProcessingLeaseExpiresAtUtc, now.Add(_lease.Duration))\n                    .SetProperty(run => run.StateVersion, run => run.StateVersion + 1),\n                cancellationToken)\n            .ConfigureAwait(false);",
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+      "sha256": "6CBC94878B49FDC22464C3F4CCFDAC2A83BD6842282EA51C4F144B7B8A990156",
+      "firstLine": 705,
+      "lastLine": 735,
+      "family": "handoff-control-cas"
+    },
+    {
+      "excerpt": "        var sanitizedDraft = SanitizeDraft(draft);\n        var claimedVersion = entity.StateVersion;\n        var effectivePrompt = string.IsNullOrWhiteSpace(promptVersion)\n            ? HandoffPromptDefaults.PromptVersion\n            : promptVersion.Trim();\n        var effectiveTemplate = string.IsNullOrWhiteSpace(templateVersion)\n            ? HandoffPromptDefaults.TemplateId\n            : templateVersion.Trim();\n        var fenced = await _db.HandoffIngestionRuns\n            .Where(run => run.RunId == entity.RunId\n                && run.ProcessingOwner == _instanceId\n                && run.StateVersion == claimedVersion)\n            .ExecuteUpdateAsync(\n                setters => setters\n                    .SetProperty(run => run.PromptVersion, effectivePrompt)\n                    .SetProperty(run => run.TemplateVersion, effectiveTemplate)\n                    .SetProperty(run => run.Agent, SanitizeText(agent))\n                    .SetProperty(run => run.Model, SanitizeText(model))\n                    .SetProperty(run => run.Confidence, sanitizedDraft?.Confidence)\n                    .SetProperty(run => run.Mode, request.Mode.ToString())\n                    .SetProperty(run => run.ReviewState, reviewState.ToString())\n                    .SetProperty(run => run.ProcessingState, nameof(HandoffProcessingState.Terminal))\n                    .SetProperty(run => run.ProcessingOwner, (string?)null)\n                    .SetProperty(run => run.ProcessingLeaseExpiresAtUtc, (DateTimeOffset?)null)\n                    .SetProperty(run => run.CreatedTodoId, createdTodoId)\n                    .SetProperty(run => run.DraftJson, sanitizedDraft is null ? null : JsonSerializer.Serialize(sanitizedDraft, DraftJsonOptions))\n                    .SetProperty(run => run.Succeeded, success)\n                    .SetProperty(run => run.Error, SanitizeText(error))\n                    .SetProperty(run => run.ErrorCode, errorCode)\n                    .SetProperty(run => run.StateVersion, claimedVersion + 1),\n                cancellationToken)\n            .ConfigureAwait(false);",
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+      "sha256": "6CAF77A16818CE9770EEB4D578D8B8F82FC61CFCB65F720EB2899A39E7F1FF91",
+      "firstLine": 774,
+      "lastLine": 805,
+      "family": "handoff-control-cas"
+    },
+    {
+      "excerpt": "    {\n        using var cts = new CancellationTokenSource(_lease.CompensationTimeout);\n        var token = cts.Token;\n        var todo = await _workspaceAccessor.GetTodoService()\n            .GetByIdAsync(entity.CreatedTodoId!, token)\n            .ConfigureAwait(false);\n        if (todo is null)\n            return false;\n\n        await using var fresh = CreateFreshContext();\n        fresh.OverrideWorkspaceId(entity.WorkspaceId);\n        var updated = await fresh.HandoffIngestionRuns\n            .Where(run => run.RunId == entity.RunId\n                && (run.ProcessingOwner == _instanceId || run.ApprovalOwner == _instanceId || run.CreatedTodoId == entity.CreatedTodoId))\n            .ExecuteUpdateAsync(\n                setters => setters\n                    .SetProperty(run => run.ReviewState, nameof(HandoffReviewState.Created))\n                    .SetProperty(run => run.ProcessingState, nameof(HandoffProcessingState.Terminal))\n                    .SetProperty(run => run.ProcessingOwner, (string?)null)\n                    .SetProperty(run => run.ProcessingLeaseExpiresAtUtc, (DateTimeOffset?)null)\n                    .SetProperty(run => run.CreatedTodoId, entity.CreatedTodoId)\n                    .SetProperty(run => run.TodoCreationIntentId, entity.TodoCreationIntentId)\n                    .SetProperty(run => run.Succeeded, true)\n                    .SetProperty(run => run.Error, (string?)null)\n                    .SetProperty(run => run.ErrorCode, (string?)null)\n                    .SetProperty(run => run.DraftJson, entity.DraftJson)\n                    .SetProperty(run => run.Agent, entity.Agent)\n                    .SetProperty(run => run.Model, entity.Model)\n                    .SetProperty(run => run.Confidence, entity.Confidence),\n                token)\n            .ConfigureAwait(false);\n        if (updated == 0)\n            return false;\n\n        entity.ReviewState = nameof(HandoffReviewState.Created);\n        entity.ProcessingState = nameof(HandoffProcessingState.Terminal);\n        entity.Succeeded = true;\n        return true;",
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+      "sha256": "347670A7969D4DA953738AA2BCA6CF5C2504765E39BA39008A15D8CEA547F474",
+      "firstLine": 875,
+      "lastLine": 912,
+      "family": "handoff-control-cas"
+    },
+    {
+      "excerpt": "    private async Task<HandoffIngestionResult> TerminalizeReservedRunAsync(\n        HandoffIngestionRunEntity entity,\n        string errorCode,\n        string error,\n        CancellationToken cancellationToken)\n    {\n        _ = cancellationToken;\n        using var cts = CreateCompensationCts();\n        var token = cts.Token;\n        if (!await OwnsProcessingAsync(entity, token).ConfigureAwait(false))\n            return InProgressResult(entity);\n\n        var version = entity.StateVersion;\n        var fenced = await _db.HandoffIngestionRuns\n            .Where(run => run.RunId == entity.RunId\n                && run.ProcessingOwner == _instanceId\n                && run.StateVersion == version)\n            .ExecuteUpdateAsync(\n                setters => setters\n                    .SetProperty(run => run.ReviewState, nameof(HandoffReviewState.Failed))\n                    .SetProperty(run => run.ProcessingState, nameof(HandoffProcessingState.Terminal))\n                    .SetProperty(run => run.ProcessingOwner, (string?)null)\n                    .SetProperty(run => run.ProcessingLeaseExpiresAtUtc, (DateTimeOffset?)null)\n                    .SetProperty(run => run.Succeeded, false)\n                    .SetProperty(run => run.Error, SanitizeText(error))\n                    .SetProperty(run => run.ErrorCode, errorCode)\n                    .SetProperty(run => run.StateVersion, version + 1),\n                token)\n            .ConfigureAwait(false);\n        if (fenced == 0)\n            return InProgressResult(entity);",
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+      "sha256": "6AE71632374BBC661E794C39CA9E375CED69A5B51FE198A54FDA27B07B160CDC",
+      "firstLine": 915,
+      "lastLine": 945,
+      "family": "handoff-control-cas"
+    },
+    {
+      "excerpt": "    private async Task RenewProcessingLeaseLoopAsync(HandoffIngestionRunEntity entity, CancellationToken cancellationToken)\n    {\n        try\n        {\n            while (!cancellationToken.IsCancellationRequested)\n            {\n                await WaitForHeartbeatIntervalAsync(cancellationToken).ConfigureAwait(false);\n                var now = _time.GetUtcNow();\n                await using var db = CreateFreshContext();\n                var renewed = await db.HandoffIngestionRuns\n                    .Where(run => run.RunId == entity.RunId\n                        && run.ProcessingOwner == _instanceId\n                        && run.ProcessingState == nameof(HandoffProcessingState.Processing)\n                        && run.StateVersion == entity.StateVersion)\n                    .ExecuteUpdateAsync(\n                        setters => setters\n                            .SetProperty(run => run.ProcessingLeaseExpiresAtUtc, now.Add(_lease.Duration)),\n                        cancellationToken)\n                    .ConfigureAwait(false);\n                if (renewed == 0)\n                    return;\n                entity.ProcessingLeaseExpiresAtUtc = now.Add(_lease.Duration);\n            }\n        }\n        catch (OperationCanceledException)\n        {\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+      "sha256": "117460564B1FF608105590156B21A7FD6EDFCEB114F5AFF3AE2DE9E8910B08E5",
+      "firstLine": 986,
+      "lastLine": 1013,
+      "family": "handoff-control-cas"
+    },
+    {
+      "excerpt": "    private async Task<bool> TryCompleteApprovalAsync(\n        HandoffIngestionRunEntity entity,\n        string reviewState,\n        bool succeeded,\n        string? createdTodoId,\n        string? reviewer,\n        string? notes,\n        string? error,\n        string? errorCode,\n        CancellationToken cancellationToken)\n    {\n        var version = entity.StateVersion;\n        var updated = await _db.HandoffIngestionRuns\n            .Where(run => run.RunId == entity.RunId\n                && run.ApprovalOwner == _instanceId\n                && run.StateVersion == version)\n            .ExecuteUpdateAsync(\n                setters => setters\n                    .SetProperty(run => run.ReviewState, reviewState)\n                    .SetProperty(run => run.ProcessingState, reviewState == nameof(HandoffReviewState.PendingReview)\n                        ? nameof(HandoffProcessingState.None)\n                        : nameof(HandoffProcessingState.Terminal))\n                    .SetProperty(run => run.ApprovalOwner, (string?)null)\n                    .SetProperty(run => run.ApprovalLeaseExpiresAtUtc, (DateTimeOffset?)null)\n                    .SetProperty(run => run.CreatedTodoId, createdTodoId)\n                    .SetProperty(run => run.Reviewer, reviewer)\n                    .SetProperty(run => run.ReviewNotes, notes)\n                    .SetProperty(run => run.Succeeded, succeeded)\n                    .SetProperty(run => run.Error, SanitizeText(error))\n                    .SetProperty(run => run.ErrorCode, errorCode)\n                    .SetProperty(run => run.StateVersion, version + 1),\n                cancellationToken)\n            .ConfigureAwait(false);\n        if (updated == 0)\n            return false;\n\n        entity.ReviewState = reviewState;\n        entity.Succeeded = succeeded;",
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+      "sha256": "68A50064F4E890F1F9E732146DBF8BB43C493B69D21032BDDFCF2113FBD9D947",
+      "firstLine": 1047,
+      "lastLine": 1084,
+      "family": "handoff-control-cas"
+    },
+    {
+      "excerpt": "        var sessionRowId = session.Id;\n        var turnId = turnEntity.Id;\n\n        // Child FKs are DeleteBehavior.Restrict (no cascade); soft-delete bottom-up with\n        // bulk ExecuteUpdate so durable session-log rows retain deletion metadata.\n        // Drop tracked entities first so they cannot conflict with bulk updates.\n        _db.ChangeTracker.Clear();\n        await SoftDeleteTurnRowsAsync(\n            turnId,\n            DateTimeOffset.UtcNow,\n            \"session_log_turn_delete\",\n            cancellationToken).ConfigureAwait(false);\n\n        var remaining = await _db.SessionLogTurns\n            .CountAsync(t => t.SessionLogId == sessionRowId, cancellationToken).ConfigureAwait(false);\n        await _db.SessionLogs\n            .Where(s => s.Id == sessionRowId)\n            .ExecuteUpdateAsync(setters => setters.SetProperty(s => s.TurnCount, remaining), cancellationToken)\n            .ConfigureAwait(false);\n\n        await PublishChangeSafeAsync(\n            ChangeEventActions.Updated,\n            $\"{sourceType}/{sessionId}\",\n            $\"mcp://workspace/sessionlog/{sourceType}/{sessionId}\",\n            cancellationToken).ConfigureAwait(false);\n\n        return true;",
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "sha256": "23983AE1B70BAB667925522F4EAE91CE29BF04411E2A48F4759C120D17C394E0",
+      "firstLine": 1092,
+      "lastLine": 1118,
+      "family": "session-operational-bulk"
+    },
+    {
+      "excerpt": "    /// <summary>\n    /// FR-SUPPORT-010G / TR-MCP-DB-003: bulk soft-delete every child row of a turn\n    /// and the turn row itself (bottom-up). Child sets carry no workspace query\n    /// filter, so the turn id alone scopes the update.\n    /// </summary>\n    private async Task SoftDeleteTurnRowsAsync(\n        long turnId,\n        DateTimeOffset deletedAtUtc,\n        string reason,\n        CancellationToken cancellationToken)\n    {\n        await SoftDeleteRowsAsync(_db.SessionLogActions.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);\n        await SoftDeleteRowsAsync(_db.SessionLogTurnTags.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);\n        await SoftDeleteRowsAsync(_db.SessionLogTurnContexts.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);\n        await SoftDeleteRowsAsync(_db.SessionLogProcessingDialogs.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);\n        await SoftDeleteRowsAsync(_db.SessionLogCommits.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);\n        await SoftDeleteRowsAsync(_db.SessionLogTurnStringLists.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);\n        await SoftDeleteRowsAsync(_db.SessionLogTurns.Where(x => x.Id == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);\n    }\n\n    private static Task<int> SoftDeleteRowsAsync<TEntity>(\n        IQueryable<TEntity> query,\n        DateTimeOffset deletedAtUtc,\n        string reason,\n        CancellationToken cancellationToken)\n        where TEntity : class\n    {\n        return query.ExecuteUpdateAsync(\n            setters => setters\n                .SetProperty(entity => EF.Property<bool>(entity, \"IsDeleted\"), true)\n                .SetProperty(entity => EF.Property<DateTimeOffset?>(entity, \"DeletedAtUtc\"), deletedAtUtc)\n                .SetProperty(entity => EF.Property<string?>(entity, \"DeletedBy\"), nameof(SessionLogService))\n                .SetProperty(entity => EF.Property<string?>(entity, \"DeleteReason\"), reason),\n            cancellationToken);\n    }",
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "sha256": "211FDC9E11FDB47E6EDA0FD9D13B50F3B19F5C97480752C764819675A5B1315E",
+      "firstLine": 1165,
+      "lastLine": 1199,
+      "family": "session-operational-bulk"
+    },
+    {
+      "excerpt": "    private async Task<bool> TryReviveTombstonedSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken)\n    {\n        // Only the SoftDelete named filter is bypassed; the Workspace filter stays active so\n        // revival can never cross workspaces.\n        var sessionRowId = await _db.SessionLogs\n            .IgnoreQueryFilters([\"SoftDelete\"])\n            .Where(s => s.SourceType == sourceType && s.SessionId == sessionId)\n            .Select(s => (long?)s.Id)\n            .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);\n        if (sessionRowId is null)\n            return false;\n\n        var turnIds = _db.SessionLogTurns\n            .IgnoreQueryFilters([\"SoftDelete\"])\n            .Where(t => t.SessionLogId == sessionRowId.Value)\n            .Select(t => t.Id);\n\n        await RestoreRowsAsync(_db.SessionLogActions.IgnoreQueryFilters([\"SoftDelete\"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);\n        await RestoreRowsAsync(_db.SessionLogTurnTags.IgnoreQueryFilters([\"SoftDelete\"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);\n        await RestoreRowsAsync(_db.SessionLogTurnContexts.IgnoreQueryFilters([\"SoftDelete\"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);\n        await RestoreRowsAsync(_db.SessionLogProcessingDialogs.IgnoreQueryFilters([\"SoftDelete\"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);\n        await RestoreRowsAsync(_db.SessionLogCommits.IgnoreQueryFilters([\"SoftDelete\"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);\n        await RestoreRowsAsync(_db.SessionLogTurnStringLists.IgnoreQueryFilters([\"SoftDelete\"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);\n        await RestoreRowsAsync(_db.SessionLogTurns.IgnoreQueryFilters([\"SoftDelete\"]).Where(t => t.SessionLogId == sessionRowId.Value), cancellationToken).ConfigureAwait(false);\n        await RestoreRowsAsync(_db.SessionLogs.IgnoreQueryFilters([\"SoftDelete\"]).Where(s => s.Id == sessionRowId.Value), cancellationToken).ConfigureAwait(false);\n\n        _db.ChangeTracker.Clear();\n        _logger.LogInformation(\"Revived soft-deleted session log {SourceType}/{SessionId} (Id={Id}) for resubmission\", sourceType, sessionId, sessionRowId.Value);\n        return true;\n    }\n\n    private static Task<int> RestoreRowsAsync<TEntity>(\n        IQueryable<TEntity> query,\n        CancellationToken cancellationToken)\n        where TEntity : class\n    {\n        return query.ExecuteUpdateAsync(\n            setters => setters\n                .SetProperty(entity => EF.Property<bool>(entity, \"IsDeleted\"), false)\n                .SetProperty(entity => EF.Property<DateTimeOffset?>(entity, \"DeletedAtUtc\"), (DateTimeOffset?)null)\n                .SetProperty(entity => EF.Property<string?>(entity, \"DeletedBy\"), (string?)null)\n                .SetProperty(entity => EF.Property<string?>(entity, \"DeleteReason\"), (string?)null),\n            cancellationToken);\n    }",
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "sha256": "6E7BAFF30A4628630A671E135DE74F2DDBDBC7E3D8F4C77D7D85CE8F9661E7B3",
+      "firstLine": 1201,
+      "lastLine": 1244,
+      "family": "session-operational-bulk"
+    },
+    {
+      "excerpt": "    public static async Task ApplyMigrationsAsync(\n        McpDbContext dbContext,\n        McpDatabaseProviderOptions providerOptions,\n        CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(dbContext);\n        ArgumentNullException.ThrowIfNull(providerOptions);\n\n        // TR-MCP-PATHNORM-001: legacy keys must be rejected before migrations issue canonical queries.\n        await ValidateWorkspaceKeysBeforeMigrationAsync(dbContext, cancellationToken).ConfigureAwait(false);\n        await AdoptLegacyHistoryAsync(dbContext, cancellationToken).ConfigureAwait(false);\n        await dbContext.Database.MigrateAsync(cancellationToken).ConfigureAwait(false);\n    }\n\n    /// <summary>Applies migrations or verifies an operator-migrated database before runtime use.</summary>\n    public static async Task EnsureReadyAsync(\n        McpDbContext dbContext,\n        McpDatabaseRuntimeOptions runtimeOptions,\n        CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(dbContext);\n        ArgumentNullException.ThrowIfNull(runtimeOptions);\n        if (runtimeOptions.AutoMigrate)\n        {\n            await ApplyMigrationsAsync(dbContext, runtimeOptions.ProviderOptions, cancellationToken).ConfigureAwait(false);\n            return;\n        }\n\n        await ValidateWorkspaceKeysBeforeMigrationAsync(dbContext, cancellationToken).ConfigureAwait(false);\n        var pending = (await dbContext.Database.GetPendingMigrationsAsync(cancellationToken).ConfigureAwait(false)).ToArray();\n        if (pending.Length > 0)\n            throw new InvalidOperationException(\n                \"Database migrations must be applied by the schema administrator before runtime startup. Pending: \"\n                + string.Join(\", \", pending));\n    }",
+      "path": "src/QBrainAi.Storage/Database/McpDatabaseMigrationCoordinator.cs",
+      "sha256": "87EF107C115C2ECB363557CE625AFB0455667ECF5CAA7CD0247F1E3CA7E4CADD",
+      "firstLine": 20,
+      "lastLine": 54,
+      "family": "provider-migration-adoption"
+    },
+    {
+      "excerpt": "    private static async Task AdoptLegacyHistoryAsync(McpDbContext dbContext, CancellationToken cancellationToken)\n    {\n        var definedMigrations = dbContext.GetService<IMigrationsAssembly>().Migrations.Keys.ToArray();\n        if (definedMigrations.Length == 0)\n        {\n            return;\n        }\n\n        var baselineMigrationId = definedMigrations[0];\n        var appliedMigrations = (await dbContext.Database.GetAppliedMigrationsAsync(cancellationToken).ConfigureAwait(false)).ToArray();\n        if (appliedMigrations.Length == 0\n            || appliedMigrations.Contains(baselineMigrationId, StringComparer.OrdinalIgnoreCase)\n            || !appliedMigrations.Any(applied => !definedMigrations.Contains(applied, StringComparer.OrdinalIgnoreCase)))\n        {\n            return;\n        }\n\n        var historyRepository = dbContext.GetService<IHistoryRepository>();\n        var insertScript = historyRepository.GetInsertScript(\n            new HistoryRow(baselineMigrationId, GetProductVersion()));\n\n        await dbContext.Database.ExecuteSqlRawAsync(insertScript, cancellationToken).ConfigureAwait(false);\n    }",
+      "path": "src/QBrainAi.Storage/Database/McpDatabaseMigrationCoordinator.cs",
+      "sha256": "E39E4129CE69E48540D039A9DE030F0C1026FEC1981C123125339CBE4480AE47",
+      "firstLine": 65,
+      "lastLine": 87,
+      "family": "provider-migration-adoption"
+    },
+    {
+      "excerpt": "        report.AddStep(\n            \"Rewrite application tables\",\n            targetEncrypted\n                ? \"Rewrite each public application table from heap to tde_heap and run SELECT count(*) after each rewrite.\"\n                : \"Rewrite each encrypted public application table from tde_heap back to heap and run SELECT count(*) after each rewrite.\",\n            targetEncrypted\n                ? \"ALTER TABLE \\\"public\\\".\\\"<table>\\\" SET ACCESS METHOD tde_heap;\\nSELECT count(*) FROM \\\"public\\\".\\\"<table>\\\";\"\n                : \"ALTER TABLE \\\"public\\\".\\\"<table>\\\" SET ACCESS METHOD heap;\\nSELECT count(*) FROM \\\"public\\\".\\\"<table>\\\";\");\n        report.AddStep(\"Verify final table state\", \"Use pg_tde_is_encrypted(...) to confirm every application table reached the requested state.\", \"SELECT schemaname, tablename, pg_tde_is_encrypted(format('%I.%I', schemaname, tablename)::regclass) FROM pg_tables WHERE schemaname = 'public' AND tablename <> '__EFMigrationsHistory';\");\n\n        if (!options.Execute)\n        {\n            report.Summary = targetEncrypted ? \"PostgreSQL enable transition plan generated.\" : \"PostgreSQL disable transition plan generated.\";\n            return;\n        }\n\n        if (targetEncrypted\n            && (string.IsNullOrWhiteSpace(runtimeOptions.EncryptionOptions.PostgreSqlKeyProvider)\n                || string.IsNullOrWhiteSpace(runtimeOptions.EncryptionOptions.PostgreSqlPrincipalKey)))\n        {\n            throw new InvalidOperationException(\n                \"PostgreSQL enable transitions require pg_tde key-provider and principal-key configuration before table rewrites can begin.\");\n        }\n\n        await RunProcessAsync(dumpToolPath, [\"-Fc\", \"-f\", Path.GetFullPath(options.BackupPath!), \"-d\", runtimeOptions.ProviderOptions.ConnectionString], null, cancellationToken).ConfigureAwait(false);\n\n        await using var dbContext = CreateDbContext(runtimeOptions.ProviderOptions);\n        await using var connection = dbContext.Database.GetDbConnection();\n        if (connection.State != ConnectionState.Open)\n        {\n            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);\n        }\n\n        var extensionInstalled = await ExecuteScalarAsync<bool>(\n            connection,\n            \"\"\"\n            SELECT EXISTS (\n                SELECT 1\n                FROM pg_extension\n                WHERE extname = 'pg_tde');\n            \"\"\",\n            cancellationToken).ConfigureAwait(false);\n        if (!extensionInstalled)\n        {\n            throw new InvalidOperationException(\"The connected PostgreSQL database does not expose pg_tde. Provision Percona Server for PostgreSQL with pg_tde before running a transition.\");\n        }\n\n        var tables = await ReadPostgreSqlTableStatesAsync(connection, cancellationToken).ConfigureAwait(false);\n        foreach (var table in tables.Where(t => targetEncrypted ? !t.IsEncrypted : t.IsEncrypted))\n        {\n            var rewriteSql = targetEncrypted\n                ? $\"ALTER TABLE {QuotePostgreSqlIdentifier(table.Schema)}.{QuotePostgreSqlIdentifier(table.Table)} SET ACCESS METHOD tde_heap;\"\n                : $\"ALTER TABLE {QuotePostgreSqlIdentifier(table.Schema)}.{QuotePostgreSqlIdentifier(table.Table)} SET ACCESS METHOD heap;\";\n            await ExecuteNonQueryAsync(connection, rewriteSql, cancellationToken).ConfigureAwait(false);\n            await ExecuteScalarAsync<long>(connection, $\"SELECT count(*) FROM {QuotePostgreSqlIdentifier(table.Schema)}.{QuotePostgreSqlIdentifier(table.Table)};\", cancellationToken).ConfigureAwait(false);\n        }\n\n        await ValidateAgainstTargetStateAsync(runtimeOptions, targetEncrypted, cancellationToken).ConfigureAwait(false);\n        SetAllStepStatuses(report, \"completed\");\n        report.Summary = targetEncrypted\n            ? \"PostgreSQL tables were rewritten to pg_tde successfully. Keep the pg_dump backup until the server restarts cleanly with encryption enabled.\"\n            : \"PostgreSQL tables were rewritten back to heap successfully. Keep the pg_dump backup until the server restarts cleanly with encryption disabled.\";",
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+      "sha256": "C87C19B93F1466755D173B442F9965A52AFDEF7CB8FD4B74144E92D775B99E9D",
+      "firstLine": 220,
+      "lastLine": 281,
+      "family": "provider-encryption-administration"
+    },
+    {
+      "excerpt": "            \"Change database TDE state\",\n            targetEncrypted\n                ? \"Create the database encryption key if needed, then enable TDE.\"\n                : \"Disable TDE and wait for decryption to complete.\",\n            targetEncrypted\n                ? \"CREATE DATABASE ENCRYPTION KEY WITH ALGORITHM = AES_256 ENCRYPTION BY SERVER CERTIFICATE [<certificate>];\\nALTER DATABASE [<current-database>] SET ENCRYPTION ON;\"\n                : \"ALTER DATABASE [<current-database>] SET ENCRYPTION OFF;\");\n        report.AddStep(\"Poll for the final encryption state\", targetEncrypted ? \"Poll sys.dm_database_encryption_keys until encryption_state reaches 3 (encrypted).\" : \"Poll sys.dm_database_encryption_keys until the database reports state 1 or no row remains.\", \"SELECT TOP (1) encryption_state FROM sys.dm_database_encryption_keys WHERE database_id = DB_ID();\");\n        report.Warnings.Add(\"SQL Server TDE transitions do not remove certificates or keys automatically. Retain all TDE certificates and private keys for backup and restore compatibility.\");\n\n        if (!options.Execute)\n        {\n            report.Summary = targetEncrypted ? \"SQL Server enable transition plan generated.\" : \"SQL Server disable transition plan generated.\";\n            return;\n        }\n\n        await using var dbContext = CreateDbContext(runtimeOptions.ProviderOptions);\n        await using var connection = dbContext.Database.GetDbConnection();\n        if (connection.State != ConnectionState.Open)\n        {\n            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);\n        }\n\n        var databaseName = await ExecuteScalarAsync<string>(connection, \"SELECT DB_NAME();\", cancellationToken).ConfigureAwait(false)\n            ?? throw new InvalidOperationException(\"Unable to resolve the current SQL Server database name.\");\n        await ExecuteNonQueryAsync(connection, $\"BACKUP DATABASE {QuoteSqlServerIdentifier(databaseName)} TO DISK = N'{EscapeSqlLiteral(options.BackupPath!)}' WITH COPY_ONLY, INIT, CHECKSUM;\", cancellationToken).ConfigureAwait(false);\n\n        if (targetEncrypted)\n        {\n            var certificateName = runtimeOptions.EncryptionOptions.SqlServerCertificateName;\n            if (string.IsNullOrWhiteSpace(certificateName))\n            {\n                throw new InvalidOperationException(\"SQL Server enable transitions require Mcp:Database:Encryption:SqlServer:CertificateName or MCP_SQLSERVER_TDE_CERTIFICATE.\");\n            }\n\n            var certificateExists = await ExecuteScalarAsync<int>(connection, $\"SELECT COUNT(*) FROM master.sys.certificates WHERE name = N'{EscapeSqlLiteral(certificateName)}';\", cancellationToken).ConfigureAwait(false);\n            if (certificateExists <= 0)\n            {\n                throw new InvalidOperationException($\"SQL Server certificate '{certificateName}' was not found in master.sys.certificates. Provision the certificate before enabling TDE.\");\n            }\n\n            var dekExists = await ExecuteScalarAsync<int>(connection, \"SELECT COUNT(*) FROM sys.dm_database_encryption_keys WHERE database_id = DB_ID();\", cancellationToken).ConfigureAwait(false) > 0;\n            if (!dekExists)\n            {\n                await ExecuteNonQueryAsync(connection, $\"CREATE DATABASE ENCRYPTION KEY WITH ALGORITHM = AES_256 ENCRYPTION BY SERVER CERTIFICATE {QuoteSqlServerIdentifier(certificateName)};\", cancellationToken).ConfigureAwait(false);\n            }\n\n            await ExecuteNonQueryAsync(connection, $\"ALTER DATABASE {QuoteSqlServerIdentifier(databaseName)} SET ENCRYPTION ON;\", cancellationToken).ConfigureAwait(false);\n            await WaitForSqlServerEncryptionStateAsync(connection, static state => state == 3, options.SqlServerTimeout, cancellationToken).ConfigureAwait(false);\n        }\n        else\n        {\n            await ExecuteNonQueryAsync(connection, $\"ALTER DATABASE {QuoteSqlServerIdentifier(databaseName)} SET ENCRYPTION OFF;\", cancellationToken).ConfigureAwait(false);\n            await WaitForSqlServerEncryptionStateAsync(connection, static state => state is null or 1, options.SqlServerTimeout, cancellationToken).ConfigureAwait(false);\n        }\n\n        await ValidateAgainstTargetStateAsync(runtimeOptions, targetEncrypted, cancellationToken).ConfigureAwait(false);\n        SetAllStepStatuses(report, \"completed\");\n        report.Summary = targetEncrypted\n            ? \"SQL Server TDE was enabled successfully. Keep the database backup and retain all certificates and keys until the encrypted configuration is stable.\"",
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+      "sha256": "64A9A585B8098CF05CC3552377D5B400A38B0E95F778B99BB92512CC717C75C1",
+      "firstLine": 306,
+      "lastLine": 365,
+      "family": "provider-encryption-administration"
+    },
+    {
+      "excerpt": "    private static async Task ExecuteNonQueryAsync(\n        DbConnection connection,\n        string sql,\n        CancellationToken cancellationToken)\n    {\n        await using var command = connection.CreateCommand();\n        command.CommandText = sql;\n        await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);",
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+      "sha256": "76E0ECFE9B0DDF4FB0DDA6DE0241F13726AA3501B8FFC24A79298B37318805CE",
+      "firstLine": 508,
+      "lastLine": 515,
+      "family": "provider-encryption-administration"
+    },
+    {
+      "excerpt": "    private static readonly HashSet<string> IdentityColumns = new(StringComparer.Ordinal)\n    {\n        \"WorkspaceId\", \"OwnerWorkspaceId\", \"WorkspacePath\", \"OriginalWorkspacePath\",\n        \"EffectiveWorkspacePath\", \"GlobalWorkspaceId\", \"CanonicalWorkspaceId\"\n    };\n\n    /// <summary>Policy A normalization, shared with the raw startup guard.</summary>\n    public static string Normalize(string value) => WorkspacePathRekeyGuard.Normalize(value);\n\n    /// <summary>Rejects legacy rows before canonical EF predicates can hide them.</summary>\n    public static Task ValidateStartupAsync(DbConnection connection, CancellationToken cancellationToken) =>\n        WorkspacePathRekeyGuard.ValidateStartupAsync(connection, cancellationToken);\n\n    /// <summary>Plans against an explicitly selected connection; apply requires a fresh, verified backup.</summary>\n    public static async Task<Report> RunAsync(DbConnection connection, bool dryRun, string? backupPath, CancellationToken cancellationToken)\n    {\n        cancellationToken.ThrowIfCancellationRequested();\n        var backupConnectionSettings = connection.ConnectionString;\n        if (connection.State != ConnectionState.Open)\n            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);\n        var tables = await InventoryAsync(connection, null, cancellationToken).ConfigureAwait(false);\n        var plan = await PlanAsync(connection, null, tables, cancellationToken).ConfigureAwait(false);\n        if (dryRun) return new(true, 0, plan.Mappings, plan.Tables, plan.Manual);\n        if (string.IsNullOrWhiteSpace(backupPath))\n            throw new InvalidOperationException(\"Apply requires --backup-path and a successful verified backup.\");\n        await BackupAsync(connection, backupPath, cancellationToken, backupConnectionSettings).ConfigureAwait(false);\n        await using var transaction = await connection.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken).ConfigureAwait(false);\n        try\n        {\n            // Replan under the transaction: no update uses a stale preflight.\n            plan = await PlanAsync(connection, transaction, tables, cancellationToken).ConfigureAwait(false);\n            var restore = await DeferConstraintsAsync(connection, transaction, tables, cancellationToken).ConfigureAwait(false);\n            long changed = 0;\n            foreach (var change in plan.Changes)\n            {\n                foreach (var batch in change.Values.Where(x => x.Key != x.Value).Chunk(200))\n                {\n                    await using var command = connection.CreateCommand();\n                    command.Transaction = transaction;\n                    command.CommandTimeout = 600;\n                    var arms = new List<string>();\n                    var keys = new List<string>();\n                    for (var i = 0; i < batch.Length; i++)\n                    {\n                        Add(command, \"@o\" + i, batch[i].Key);\n                        Add(command, \"@n\" + i, batch[i].Value);\n                        arms.Add($\"WHEN @o{i} THEN @n{i}\");\n                        keys.Add(\"@o\" + i);\n                    }\n                    command.CommandText = $\"UPDATE {change.Table.Sql} SET {Quote(change.Column)} = CASE {Exact(connection, change.Column)} \"\n                        + string.Join(\" \", arms) + $\" ELSE {Quote(change.Column)} END WHERE {Exact(connection, change.Column)} IN ({string.Join(\",\", keys)})\";\n                    changed += await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);\n                }\n            }\n            foreach (var sql in restore)\n                await ExecuteAsync(connection, transaction, sql, cancellationToken).ConfigureAwait(false);\n            if (connection is SqliteConnection)\n            {\n                var violations = await RowsAsync(connection, transaction, \"PRAGMA foreign_key_check\", cancellationToken).ConfigureAwait(false);\n                if (violations.Count != 0) throw new InvalidOperationException(\"Rekey foreign-key validation failed.\");\n            }\n            var after = await PlanAsync(connection, transaction, tables, cancellationToken).ConfigureAwait(false);\n            if (after.Changes.Any(x => x.Values.Any(v => v.Key != v.Value)))\n                throw new InvalidOperationException(\"Rekey validation found remaining noncanonical identities.\");\n            for (var i = 0; i < plan.Tables.Count; i++)\n            {\n                if (plan.Tables[i].Before != after.Tables[i].Before)\n                    throw new InvalidOperationException(\"Rekey changed a table row count.\");\n                var expected = plan.Tables[i].Workspaces.ToDictionary(\n                    x => plan.Mappings.FirstOrDefault(m => m.OldKey == x.Key)?.NewKey ?? x.Key, x => x.Value, StringComparer.Ordinal);\n                if (expected.Count != after.Tables[i].Workspaces.Count\n                    || expected.Any(x => !after.Tables[i].Workspaces.TryGetValue(x.Key, out var count) || count != x.Value))\n                    throw new InvalidOperationException(\"Rekey changed a per-workspace row count.\");\n            }\n            await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);\n            return new(false, changed, plan.Mappings, plan.Tables, plan.Manual);\n        }\n        catch\n        {\n            await transaction.RollbackAsync(CancellationToken.None).ConfigureAwait(false);",
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs",
+      "sha256": "E962A1396C3C204CE8705E0A301C33D828F776B4BAB33C18E4272D8DB2C75199",
+      "firstLine": 25,
+      "lastLine": 104,
+      "family": "workspace-path-administration"
+    },
+    {
+      "excerpt": "    private static async Task BackupAsync(DbConnection connection, string path, CancellationToken ct, string backupConnectionSettings)\n    {\n        if (connection is SqliteConnection sqlite)\n        {\n            path = Path.GetFullPath(path);\n            using (new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None)) { }\n            var settings = new SqliteConnectionStringBuilder(sqlite.ConnectionString)\n            {\n                DataSource = path, Mode = SqliteOpenMode.ReadWrite, Pooling = false\n            };\n            await using var backup = new SqliteConnection(settings.ConnectionString);\n            await backup.OpenAsync(ct).ConfigureAwait(false);\n            sqlite.BackupDatabase(backup);\n            var integrity = await RowsAsync(backup, null, \"PRAGMA integrity_check\", ct).ConfigureAwait(false);\n            if (integrity.Count != 1 || Text(integrity[0][0]) != \"ok\")\n                throw new InvalidOperationException(\"Backup verification failed; no data was changed.\");\n            return;\n        }\n        // Provider-native backup is deliberately required; a supplied old file is not proof of a backup.\n        if (connection.GetType().Name == \"SqlConnection\")\n        {\n            await using var check = connection.CreateCommand();\n            check.CommandText = \"EXEC master.dbo.xp_fileexist @path\";\n            Add(check, \"@path\", path);\n            if (Convert.ToInt32(await check.ExecuteScalarAsync(ct).ConfigureAwait(false)) != 0)\n                throw new InvalidOperationException(\"Backup target already exists.\");\n            await using var command = connection.CreateCommand();\n            command.CommandTimeout = 600;\n            Add(command, \"@path\", path);\n            command.CommandText = $\"BACKUP DATABASE {Quote(connection.Database)} TO DISK=@path WITH COPY_ONLY,CHECKSUM\";\n            await command.ExecuteNonQueryAsync(ct).ConfigureAwait(false);\n            command.CommandText = \"RESTORE VERIFYONLY FROM DISK=@path WITH CHECKSUM\";\n            await command.ExecuteNonQueryAsync(ct).ConfigureAwait(false);\n            return;\n        }\n        if (connection is Npgsql.NpgsqlConnection postgres)\n        {\n            path = Path.GetFullPath(path);\n            using (new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None)) { }\n            var settings = new Npgsql.NpgsqlConnectionStringBuilder(backupConnectionSettings);\n            var environment = new Dictionary<string, string>\n            {\n                [\"PGDATABASE\"] = postgres.Database,\n                [\"PGHOST\"] = settings.Host ?? \"localhost\",\n                [\"PGPORT\"] = settings.Port.ToString(System.Globalization.CultureInfo.InvariantCulture),\n                [\"PGUSER\"] = settings.Username ?? \"\",\n                [\"PGPASSWORD\"] = settings.Password ?? \"\",",
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs",
+      "sha256": "FD5C842DC35C54CA138B0D39FEED8F1040504DEF879C1988608C077B1834FB55",
+      "firstLine": 285,
+      "lastLine": 331,
+      "family": "workspace-path-administration"
+    },
+    {
+      "excerpt": "    private static async Task<List<object[]>> RowsAsync(DbConnection connection, DbTransaction? transaction, string sql, CancellationToken ct)\n    {\n        await using var command = connection.CreateCommand();\n        command.Transaction = transaction;\n        command.CommandText = sql;\n        command.CommandTimeout = 600;\n        var result = new List<object[]>();\n        await using var reader = await command.ExecuteReaderAsync(ct).ConfigureAwait(false);\n        while (await reader.ReadAsync(ct).ConfigureAwait(false))\n        {\n            var row = new object[reader.FieldCount];\n            reader.GetValues(row);\n            result.Add(row);\n        }\n        return result;\n    }\n\n    private static async Task ExecuteAsync(DbConnection connection, DbTransaction transaction, string sql, CancellationToken ct)\n    {\n        await using var command = connection.CreateCommand();\n        command.Transaction = transaction;\n        command.CommandText = sql;\n        command.CommandTimeout = 600;\n        await command.ExecuteNonQueryAsync(ct).ConfigureAwait(false);\n    }\n\n    private static void Add(DbCommand command, string name, string value)\n    {\n        var parameter = command.CreateParameter();\n        parameter.ParameterName = name; parameter.Value = value; command.Parameters.Add(parameter);\n    }",
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs",
+      "sha256": "5CA845345469E1BC56B38BA3B00BC010A58903277350BBFF12DEEB99B0441D13",
+      "firstLine": 387,
+      "lastLine": 417,
+      "family": "workspace-path-administration"
+    },
+    {
+      "excerpt": "internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore, ISubscriberStateStore, ITransactionPubSubBrokerStore\n{\n    private readonly DbContextOptions<TransactionSecurityDbContext> _options;\n\n    public SqliteTransactionSecurityStateStore(string databasePath)\n    {\n        ArgumentException.ThrowIfNullOrWhiteSpace(databasePath);\n        var fullPath = Path.GetFullPath(databasePath);\n        var directory = Path.GetDirectoryName(fullPath);\n        if (!string.IsNullOrWhiteSpace(directory))\n            Directory.CreateDirectory(directory);\n\n        _options = new DbContextOptionsBuilder<TransactionSecurityDbContext>()\n            .UseSqlite($\"Data Source={fullPath}\")\n            .Options;\n\n        using var db = CreateContext();\n        db.Database.EnsureCreated();\n        db.Database.ExecuteSqlRaw(\n            \"\"\"\n            CREATE TABLE IF NOT EXISTS \"TransactionPubSubMessages\" (\n                \"OperationId\" TEXT NOT NULL CONSTRAINT \"PK_TransactionPubSubMessages\" PRIMARY KEY,\n                \"TransactionId\" TEXT NOT NULL,\n                \"Kind\" TEXT NOT NULL,\n                \"TopicName\" TEXT NOT NULL DEFAULT 'mcp.turntransactions',\n                \"SubscriberId\" TEXT NOT NULL DEFAULT 'all-required',\n                \"Status\" TEXT NOT NULL,\n                \"RequestJson\" TEXT NOT NULL,\n                \"ResponseJson\" TEXT NULL,\n                \"AttemptCount\" INTEGER NOT NULL,\n                \"Reason\" INTEGER NOT NULL,\n                \"CreatedAtUtc\" TEXT NOT NULL,\n                \"UpdatedAtUtc\" TEXT NOT NULL\n            );\n            \"\"\");\n        EnsureTransactionPubSubTopicColumn(db);\n        EnsureTransactionPubSubSubscriberColumn(db);\n    }",
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "sha256": "6539A19982E7A013F38198B7D09C8B7EA4B2EDC0B99FC7B4BAF75BD7560D38DB",
+      "firstLine": 596,
+      "lastLine": 633,
+      "family": "transaction-security-operational"
+    },
+    {
+      "excerpt": "    public async Task<TransactionPubSubMessageState?> TryClaimPendingAsync(\n        string operationId,\n        DateTimeOffset staleInProgressBeforeUtc,\n        CancellationToken cancellationToken)\n    {\n        var now = DateTimeOffset.UtcNow;\n        await using var db = CreateContext();\n        var updated = await db.Database.ExecuteSqlInterpolatedAsync(\n                $\"\"\"\n                UPDATE \"TransactionPubSubMessages\"\n                SET \"Status\" = {\"in_progress\"},\n                    \"UpdatedAtUtc\" = {now}\n                WHERE \"OperationId\" = {operationId}\n                  AND (\n                      \"Status\" = {\"pending\"}\n                      OR (\"Status\" = {\"in_progress\"} AND \"UpdatedAtUtc\" <= {staleInProgressBeforeUtc})\n                  )\n                \"\"\",\n                cancellationToken)\n            .ConfigureAwait(false);\n        if (updated == 0)\n            return null;\n\n        var entity = await db.TransactionPubSubMessages\n            .AsNoTracking()\n            .SingleOrDefaultAsync(message => message.OperationId == operationId, cancellationToken)\n            .ConfigureAwait(false);\n        return entity is null ? null : ToState(entity);\n    }",
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "sha256": "21D1FACBC2C4AE82CFEA6C17F1C6B3E948056923B2F0FD0F949F80049BF0B7AF",
+      "firstLine": 1072,
+      "lastLine": 1100,
+      "family": "transaction-security-operational"
+    },
+    {
+      "excerpt": "    private static string BuildScopedReplayKey(string scope, string value)\n        => $\"{scope.Trim()}\\n{value}\";\n\n    private static void EnsureTransactionPubSubTopicColumn(TransactionSecurityDbContext db)\n    {\n        try\n        {\n            db.Database.ExecuteSqlRaw(\n                \"\"\"\n                ALTER TABLE \"TransactionPubSubMessages\"\n                ADD COLUMN \"TopicName\" TEXT NOT NULL DEFAULT 'mcp.turntransactions';\n                \"\"\");\n        }\n        catch (SqliteException ex) when (\n            ex.SqliteErrorCode == 1 &&\n            ex.Message.Contains(\"duplicate column\", StringComparison.OrdinalIgnoreCase))\n        {\n        }\n    }\n\n    private static void EnsureTransactionPubSubSubscriberColumn(TransactionSecurityDbContext db)\n    {\n        try\n        {\n            db.Database.ExecuteSqlRaw(\n                \"\"\"\n                ALTER TABLE \"TransactionPubSubMessages\"\n                ADD COLUMN \"SubscriberId\" TEXT NOT NULL DEFAULT 'all-required';\n                \"\"\");\n        }\n        catch (SqliteException ex) when (\n            ex.SqliteErrorCode == 1 &&\n            ex.Message.Contains(\"duplicate column\", StringComparison.OrdinalIgnoreCase))\n        {\n        }\n    }",
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "sha256": "DD62FB99AA13C3D26C0B87A6A674516A33F026FA33FA82785F47508FF92CC0EA",
+      "firstLine": 1351,
+      "lastLine": 1386,
+      "family": "transaction-security-operational"
+    }
+  ],
+  "families": [
+    {
+      "ranges": [
+        [
+          143,
+          185
+        ]
+      ],
+      "id": "derived-fts",
+      "path": "src/QBrainAi.Services/Services/Fts5SearchService.cs",
+      "observed": "SQLite-only derived FTS rebuild executes DELETE, filtered INSERT and rebuild commands directly. Non-SQLite returns without commands. Source SQL explicitly excludes soft-deleted chunks/documents.",
+      "proposed": "Keep derived/raw ingestion indexes operational and branch-scoped. Preserve original source records and explicit visibility filtering; no project-context SQL or history commit. Non-SQLite capability behavior must remain explicit."
+    },
+    {
+      "ranges": [
+        [
+          313,
+          344
+        ],
+        [
+          469,
+          495
+        ],
+        [
+          705,
+          735
+        ],
+        [
+          774,
+          805
+        ],
+        [
+          875,
+          912
+        ],
+        [
+          915,
+          945
+        ],
+        [
+          986,
+          1013
+        ],
+        [
+          1047,
+          1084
+        ]
+      ],
+      "id": "handoff-control-cas",
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+      "observed": "Eight bulk update calls claim, persist creation intent, take over, terminalize, compensate, renew and complete control runs under owner/state-version predicates. Fresh contexts are used. Actual TODO creation delegates to the selected TODO service separately.",
+      "proposed": "Keep all run/intention/processing lease state operational. Never conflate processing lease with federation editing lease. Preserve CAS and workspace scoping. Any explicit authored TODO application enters the owning project fence; background control changes cannot acquire that editing lease or replay content."
+    },
+    {
+      "ranges": [
+        [
+          1092,
+          1118
+        ],
+        [
+          1165,
+          1199
+        ],
+        [
+          1201,
+          1244
+        ]
+      ],
+      "id": "session-operational-bulk",
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "observed": "Bulk deletion sets child/turn shadow tombstones bottom-up and recomputes TurnCount. Revival bypasses only SoftDelete, keeps Workspace filtering, restores children and session metadata, then clears tracking.",
+      "proposed": "Keep raw operational audit/capture graphs in their existing boundary with explicit visibility/restore semantics. These helpers must never select immutable promoted project snapshots. Preserve original rows; no versioned history rewriting or implicit external effect replay."
+    },
+    {
+      "ranges": [
+        [
+          20,
+          54
+        ],
+        [
+          65,
+          87
+        ]
+      ],
+      "id": "provider-migration-adoption",
+      "path": "src/QBrainAi.Storage/Database/McpDatabaseMigrationCoordinator.cs",
+      "observed": "AutoMigrate dispatch may validate keys, adopt legacy migration history via generated raw insert then apply provider migrations. With AutoMigrate false, startup checks pending migrations instead. Legacy adoption conditionally short-circuits.",
+      "proposed": "Preserve standalone/control provider migration chains. A versioned-project startup must not inherit legacy adoption or MigrateAsync. Only designated schema-author maintenance changes project schema/history under B7; no automatic startup migration."
+    },
+    {
+      "ranges": [
+        [
+          220,
+          281
+        ],
+        [
+          306,
+          365
+        ],
+        [
+          508,
+          515
+        ]
+      ],
+      "id": "provider-encryption-administration",
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+      "observed": "Explicit Execute false returns a transition plan. Execute true uses selected PostgreSQL table rewrites or SQL Server backup/TDE commands through direct connection helpers, with verification. PostgreSQL native backup call includes a connection-string argument in source.",
+      "proposed": "Keep provider-specific administrative commands on explicitly selected supported standalone/control databases; never reinterpret them as Dolt SQL. Preserve backups/certificates. Federation harness must use protected credential references/environment and zero credential argv; do not reuse the connection-string argument pattern. No actual secret exposure is asserted from source alone."
+    },
+    {
+      "ranges": [
+        [
+          25,
+          104
+        ],
+        [
+          285,
+          331
+        ],
+        [
+          387,
+          417
+        ]
+      ],
+      "id": "workspace-path-administration",
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs",
+      "observed": "Explicit connection dry-run produces plan; apply requires fresh verified provider backup and serializable replan, parameterized identity updates, constraint restoration, row-count/workspace verification and commit. SQL Server backup and verification plus generic command helper are direct calls.",
+      "proposed": "Preserve standalone path normalization and retained backups. Enrolled immutable ProjectId and versioned authored history are not host-path rekey targets. Route host administrative path updates outside project history; no automatic project/context-wide rewrite."
+    },
+    {
+      "ranges": [
+        [
+          596,
+          633
+        ],
+        [
+          1072,
+          1100
+        ],
+        [
+          1351,
+          1386
+        ]
+      ],
+      "id": "transaction-security-operational",
+      "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "observed": "Own TransactionSecurityDbContext SQLite options. Constructor EnsureCreated plus conditional message table/column SQL and interpolated message claim update; claim rereads actual result. This is separate from McpDbContext.",
+      "proposed": "Retain security/message schema and durable claim state operational, never cloned or merged as project content. Preserve duplicate-column handling and exact claim predicates; no Dolt mapping or key/certificate replication."
+    }
+  ],
+  "candidateReviews": [
+    {
+      "evidenceFirstLine": 143,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/Fts5SearchService.cs",
+        "method": "RebuildAsync",
+        "line": 162,
+        "owner": "Fts5SearchService"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 185,
+      "key": "src/QBrainAi.Services/Services/Fts5SearchService.cs:162:ExecuteNonQueryAsync",
+      "family": "derived-fts",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 143,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/Fts5SearchService.cs",
+        "method": "RebuildAsync",
+        "line": 172,
+        "owner": "Fts5SearchService"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 185,
+      "key": "src/QBrainAi.Services/Services/Fts5SearchService.cs:172:ExecuteNonQueryAsync",
+      "family": "derived-fts",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 143,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/Fts5SearchService.cs",
+        "method": "RebuildAsync",
+        "line": 176,
+        "owner": "Fts5SearchService"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 185,
+      "key": "src/QBrainAi.Services/Services/Fts5SearchService.cs:176:ExecuteNonQueryAsync",
+      "family": "derived-fts",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 313,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+        "method": "ApproveCoreAsync",
+        "line": 332,
+        "owner": "HandoffIngestionService"
+      },
+      "operation": "ExecuteUpdateAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 344,
+      "key": "src/QBrainAi.Services/Services/HandoffIngestionService.cs:332:ExecuteUpdateAsync",
+      "family": "handoff-control-cas",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 469,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+        "method": "TryCreateTodoAsync",
+        "line": 481,
+        "owner": "HandoffIngestionService"
+      },
+      "operation": "ExecuteUpdateAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 495,
+      "key": "src/QBrainAi.Services/Services/HandoffIngestionService.cs:481:ExecuteUpdateAsync",
+      "family": "handoff-control-cas",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 705,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+        "method": "ResolveExistingReservationAsync",
+        "line": 724,
+        "owner": "HandoffIngestionService"
+      },
+      "operation": "ExecuteUpdateAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 735,
+      "key": "src/QBrainAi.Services/Services/HandoffIngestionService.cs:724:ExecuteUpdateAsync",
+      "family": "handoff-control-cas",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 774,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+        "method": "CompleteReservedRunAsync",
+        "line": 782,
+        "owner": "HandoffIngestionService"
+      },
+      "operation": "ExecuteUpdateAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 805,
+      "key": "src/QBrainAi.Services/Services/HandoffIngestionService.cs:782:ExecuteUpdateAsync",
+      "family": "handoff-control-cas",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 875,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+        "method": "TryCompensateCreatedRunAsync",
+        "line": 886,
+        "owner": "HandoffIngestionService"
+      },
+      "operation": "ExecuteUpdateAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 912,
+      "key": "src/QBrainAi.Services/Services/HandoffIngestionService.cs:886:ExecuteUpdateAsync",
+      "family": "handoff-control-cas",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 915,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+        "method": "TerminalizeReservedRunAsync",
+        "line": 928,
+        "owner": "HandoffIngestionService"
+      },
+      "operation": "ExecuteUpdateAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 945,
+      "key": "src/QBrainAi.Services/Services/HandoffIngestionService.cs:928:ExecuteUpdateAsync",
+      "family": "handoff-control-cas",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 986,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+        "method": "RenewProcessingLeaseLoopAsync",
+        "line": 995,
+        "owner": "HandoffIngestionService"
+      },
+      "operation": "ExecuteUpdateAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 1013,
+      "key": "src/QBrainAi.Services/Services/HandoffIngestionService.cs:995:ExecuteUpdateAsync",
+      "family": "handoff-control-cas",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 1047,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs",
+        "method": "TryCompleteApprovalAsync",
+        "line": 1059,
+        "owner": "HandoffIngestionService"
+      },
+      "operation": "ExecuteUpdateAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 1084,
+      "key": "src/QBrainAi.Services/Services/HandoffIngestionService.cs:1059:ExecuteUpdateAsync",
+      "family": "handoff-control-cas",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 1092,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+        "method": "DeleteTurnAsync",
+        "line": 1107,
+        "owner": "SessionLogService"
+      },
+      "operation": "ExecuteUpdateAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 1118,
+      "key": "src/QBrainAi.Services/Services/SessionLogService.cs:1107:ExecuteUpdateAsync",
+      "family": "session-operational-bulk",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 1165,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+        "method": "SoftDeleteRowsAsync",
+        "line": 1192,
+        "owner": "SessionLogService"
+      },
+      "operation": "ExecuteUpdateAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 1199,
+      "key": "src/QBrainAi.Services/Services/SessionLogService.cs:1192:ExecuteUpdateAsync",
+      "family": "session-operational-bulk",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 1201,
+      "source": {
+        "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+        "method": "RestoreRowsAsync",
+        "line": 1237,
+        "owner": "SessionLogService"
+      },
+      "operation": "ExecuteUpdateAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 1244,
+      "key": "src/QBrainAi.Services/Services/SessionLogService.cs:1237:ExecuteUpdateAsync",
+      "family": "session-operational-bulk",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 65,
+      "source": {
+        "path": "src/QBrainAi.Storage/Database/McpDatabaseMigrationCoordinator.cs",
+        "method": "AdoptLegacyHistoryAsync",
+        "line": 86,
+        "owner": "McpDatabaseMigrationCoordinator"
+      },
+      "operation": "ExecuteSqlRawAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 87,
+      "key": "src/QBrainAi.Storage/Database/McpDatabaseMigrationCoordinator.cs:86:ExecuteSqlRawAsync",
+      "family": "provider-migration-adoption",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 220,
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+        "method": "RunPostgreSqlAsync",
+        "line": 273,
+        "owner": "McpDatabaseEncryptionTransitionRunner"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 281,
+      "key": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs:273:ExecuteNonQueryAsync",
+      "family": "provider-encryption-administration",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 306,
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+        "method": "RunSqlServerAsync",
+        "line": 331,
+        "owner": "McpDatabaseEncryptionTransitionRunner"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 365,
+      "key": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs:331:ExecuteNonQueryAsync",
+      "family": "provider-encryption-administration",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 306,
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+        "method": "RunSqlServerAsync",
+        "line": 350,
+        "owner": "McpDatabaseEncryptionTransitionRunner"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 365,
+      "key": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs:350:ExecuteNonQueryAsync",
+      "family": "provider-encryption-administration",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 306,
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+        "method": "RunSqlServerAsync",
+        "line": 353,
+        "owner": "McpDatabaseEncryptionTransitionRunner"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 365,
+      "key": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs:353:ExecuteNonQueryAsync",
+      "family": "provider-encryption-administration",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 306,
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+        "method": "RunSqlServerAsync",
+        "line": 358,
+        "owner": "McpDatabaseEncryptionTransitionRunner"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 365,
+      "key": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs:358:ExecuteNonQueryAsync",
+      "family": "provider-encryption-administration",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 508,
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+        "method": "ExecuteNonQueryAsync",
+        "line": 515,
+        "owner": "McpDatabaseEncryptionTransitionRunner"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 515,
+      "key": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs:515:ExecuteNonQueryAsync",
+      "family": "provider-encryption-administration",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 25,
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs",
+        "method": "RunAsync",
+        "line": 76,
+        "owner": "WorkspacePathRekey"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 104,
+      "key": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs:76:ExecuteNonQueryAsync",
+      "family": "workspace-path-administration",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 285,
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs",
+        "method": "BackupAsync",
+        "line": 315,
+        "owner": "WorkspacePathRekey"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 331,
+      "key": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs:315:ExecuteNonQueryAsync",
+      "family": "workspace-path-administration",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 285,
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs",
+        "method": "BackupAsync",
+        "line": 317,
+        "owner": "WorkspacePathRekey"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 331,
+      "key": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs:317:ExecuteNonQueryAsync",
+      "family": "workspace-path-administration",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 387,
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs",
+        "method": "ExecuteAsync",
+        "line": 410,
+        "owner": "WorkspacePathRekey"
+      },
+      "operation": "ExecuteNonQueryAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 417,
+      "key": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs:410:ExecuteNonQueryAsync",
+      "family": "workspace-path-administration",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 596,
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "SqliteTransactionSecurityStateStore",
+        "line": 614,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "ExecuteSqlRaw",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 633,
+      "key": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:614:ExecuteSqlRaw",
+      "family": "transaction-security-operational",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 1072,
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "TryClaimPendingAsync",
+        "line": 1079,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "ExecuteSqlInterpolatedAsync",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 1100,
+      "key": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:1079:ExecuteSqlInterpolatedAsync",
+      "family": "transaction-security-operational",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 1351,
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "EnsureTransactionPubSubTopicColumn",
+        "line": 1358,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "ExecuteSqlRaw",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 1386,
+      "key": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:1358:ExecuteSqlRaw",
+      "family": "transaction-security-operational",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    },
+    {
+      "evidenceFirstLine": 1351,
+      "source": {
+        "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+        "method": "EnsureTransactionPubSubSubscriberColumn",
+        "line": 1375,
+        "owner": "SqliteTransactionSecurityStateStore"
+      },
+      "operation": "ExecuteSqlRaw",
+      "proposedDestination": "OutsideProjectVersionHistory",
+      "evidenceLastLine": 1386,
+      "key": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs:1375:ExecuteSqlRaw",
+      "family": "transaction-security-operational",
+      "nativeExecutionVerified": false,
+      "sourceTargetReviewed": true
+    }
+  ],
+  "runtimeProof": false,
+  "writerClosureComplete": false,
+  "operatorAccepted": false,
+  "productionCodeChanged": false,
+  "status": "ProposedSourceReview",
+  "limitations": [
+    "No SQL, application code, service, schema migration, backup or native administration command executed",
+    "29 syntax candidates include callers/helpers; not 29 distinct native operations",
+    "Candidate coverage does not establish every dynamic caller, external writer or semantic call graph",
+    "Remaining tracked SaveChanges and automatic assignments require full source closure",
+    "Original classification/catalog remain immutable; this review supplements them and does not assert current federation routing"
+  ]
+}
