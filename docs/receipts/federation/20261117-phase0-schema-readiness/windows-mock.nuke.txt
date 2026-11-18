@@ -1,0 +1,49 @@
+V |                      | ArgumentsFromParametersFile.OnBuildCreated (150)
+V |                      | HandleReSharperSurrogateArguments.OnBuildCreated (150)
+V |                      | InjectParameterValues.OnBuildCreated (100)
+V |                      | HandleShellCompletion.OnBuildCreated (75)
+V |                      | GenerateBuildServerConfigurations.OnBuildCreated (50)
+V |                      | InvokeBuildServerConfigurationGeneration.OnBuildCreated (45)
+V |                      | UpdateNotification.OnBuildCreated (10)
+V |                      | UnsetVisualStudioEnvironmentVariables.OnBuildCreated (0)
+V |                      | HandleVisualStudioDebugging.OnBuildCreated (0)
+V |                      | EventInvoker.OnBuildCreated (-3.4028235E+38)
+V |                      | HandlePlanRequests.OnBuildInitialized (10)
+V |                      | HandleHelpRequests.OnBuildInitialized (5)
+V |                      | Telemetry.OnBuildInitialized (0)
+V |                      | InjectNonParameterValues.OnBuildInitialized (-100)
+V |                      | EventInvoker.OnBuildInitialized (-3.4028235E+38)
+V | TestGroups           | EventInvoker.OnTargetRunning (-3.4028235E+38)
+I | TestGroups           | Test group filter for QBrainAi.Support.Mcp.Tests: Platform!=Linux&(FullyQualifiedName~.Phase0SchemaReadinessMockGateTests.)
+I | TestGroups           | > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --filter Platform!=Linux&(FullyQualifiedName~.Phase0SchemaReadinessMockGateTests.) --verbosity minimal --results-directory F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\TestResults\20261117T230125-fedph0-schema-readiness-mock\groups\QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx
+V | TestGroups           | @ F:\GitHub\McpServer\.worktrees\federation-phase0-20261117
+D | TestGroups           |   Determining projects to restore...
+D | TestGroups           |   All projects are up-to-date for restore.
+D | TestGroups           |   QBrainAi.SessionLog.Transcripts -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.SessionLog.Transcripts\bin\Debug\net10.0\QBrainAi.SessionLog.Transcripts.dll
+D | TestGroups           |   QBrainAi.ProcessTree.TestHelper -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.ProcessTree.TestHelper\bin\Debug\net10.0\QBrainAi.ProcessTree.TestHelper.dll
+D | TestGroups           |   QBrainAi.TransactionSecurity -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.TransactionSecurity\bin\Debug\net10.0\QBrainAi.TransactionSecurity.dll
+D | TestGroups           |   QBrainAi.Client -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Client\bin\Debug\net10.0\QBrainAi.Client.dll
+D | TestGroups           |   QBrainAi.Common.AgentCli -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Common.AgentCli\bin\Debug\net10.0\QBrainAi.Common.AgentCli.dll
+D | TestGroups           |   QBrainAi.Cqrs -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Cqrs\bin\Debug\net10.0\QBrainAi.Cqrs.dll
+D | TestGroups           |   QBrainAi.ServiceDefaults -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.ServiceDefaults\bin\Debug\net10.0\QBrainAi.ServiceDefaults.dll
+D | TestGroups           |   QBrainAi.Cqrs.Mvvm -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Cqrs.Mvvm\bin\Debug\net10.0\QBrainAi.Cqrs.Mvvm.dll
+D | TestGroups           |   QBrainAi.Repl.Core -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Repl.Core\bin\Debug\net10.0\QBrainAi.Repl.Core.dll
+D | TestGroups           |   QBrainAi.Storage -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage\bin\Debug\net10.0\QBrainAi.Storage.dll
+D | TestGroups           |   QBrainAi.McpAgent -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.McpAgent\bin\Debug\net10.0\QBrainAi.McpAgent.dll
+D | TestGroups           |   QBrainAi.Storage.SqlServerMigrations -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage.SqlServerMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqlServerMigrations.dll
+D | TestGroups           |   QBrainAi.Storage.SqliteMigrations -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage.SqliteMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqliteMigrations.dll
+D | TestGroups           |   QBrainAi.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage.PostgreSqlMigrations\bin\Debug\net10.0\QBrainAi.Storage.PostgreSqlMigrations.dll
+D | TestGroups           |   QBrainAi.Services -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Services\bin\Debug\net10.0\QBrainAi.Services.dll
+D | TestGroups           |   QBrainAi.GraphRag -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.GraphRag\bin\Debug\net10.0\QBrainAi.GraphRag.dll
+D | TestGroups           |   QBrainAi.Support.Mcp -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Support.Mcp\bin\Debug\net10.0\QBrainAi.Support.Mcp.dll
+D | TestGroups           |   QBrainAi.Support.Mcp.Tests -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll
+D | TestGroups           | Test run for F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+D | TestGroups           | A total of 1 test files matched the specified pattern.
+D | TestGroups           | Results File: F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\TestResults\20261117T230125-fedph0-schema-readiness-mock\groups\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx
+D | TestGroups           | 
+D | TestGroups           | Passed!  - Failed:     0, Passed:  1290, Skipped:     0, Total:  1290, Duration: 444 ms - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+V | TestGroups           | Telemetry.OnTargetSucceeded (0)
+V | TestGroups           | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
+V |                      | UpdateNotification.OnBuildFinished (10)
+V |                      | SerializeBuildServerState.OnBuildFinished (0)
+V |                      | EventInvoker.OnBuildFinished (-3.4028235E+38)

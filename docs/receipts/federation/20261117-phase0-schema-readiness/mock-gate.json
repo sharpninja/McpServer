@@ -1,0 +1,83 @@
+{
+  "timestampLocal": "2026-11-17T23:02:30",
+  "tasks": [
+    "TASK-FEDPH0-006"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T230125-fedph0-schema-readiness-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0SchemaReadinessMockGateTests --test-run-id 20261117T230125-fedph0-schema-readiness-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 1290,
+  "passed": 1290,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 12,
+  "expectedNegativeControls": 1278,
+  "coverage": [
+    {
+      "test": "TEST-MCP-234",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-013",
+      "text": "Given any local branch has a draft, when Nuke preflight runs, then409 maintenance_not_ready prevents binary replacement and preserves the draft.",
+      "satisfied": false,
+      "fr": "FR-MCP-186",
+      "ac": "ac-DirtyDraftBlocksBinaryUpgrade"
+    },
+    {
+      "test": "TEST-MCP-234",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-013",
+      "text": "Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current.",
+      "satisfied": false,
+      "fr": "FR-MCP-186",
+      "ac": "ac-ContractBlockedUntilLocalBranchesAttested"
+    },
+    {
+      "test": "TEST-MCP-234",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-013",
+      "text": "Given a ready public main but an unattested local feature, when deployment runs, then no binary/service/schema change occurs; explicit branch attestation is required.",
+      "satisfied": false,
+      "fr": "FR-MCP-186",
+      "ac": "ac-DeploymentPreflightBlocksDirtyOrUnattestedBranch"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "3F538A771B5561977B4C1EF98C9A2B83B816DF0AB5277B46D567D0F66E738268",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0SchemaReadinessContract.cs",
+      "lfNormalizedSha256": "C35195E660CFE855C5B80F72DBA7CDF37CA2608A5C79BB3971B7FD0BF2BC2674"
+    },
+    {
+      "sha256": "2A8F4013DDEA336C59BC9C832EBFB0B42ADC354233ABCD8D895087C64783231E",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0SchemaReadinessMockGateTests.cs",
+      "lfNormalizedSha256": "1D0CAFEB7C142DF8366461F63FF1777298BA6A471DEE308CD27BAD9A7CFF5046"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "30E2DF50E650881B3706781669D8AA08D8AD10EE50F02A5270D7927E1186643B",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T230125-fedph0-schema-readiness-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "4605B6BF30098C5B350AAA47610F5A4450554AD6EC53C18D6DDEB5641ACF78FD",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_23-01-51.log"
+    }
+  ],
+  "pending": [
+    "Partial readiness-refusal/protocol assertions only, not whole B7 or task006 completeness",
+    "Actual authenticated preflight, binary/service preservation, epoch/inventory race fencing and native process reopen on both hosts",
+    "Single-author schema commits, startup exclusion, old-schema unpublished merge and feature catch-up",
+    "Whole-group mocks before disposable implementations; all B1-B12, final-head gates and independent HV"
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
