@@ -1,0 +1,17 @@
+{
+  "workflow": "U01",
+  "useCaseId": 10237,
+  "title": "Federation U01: enroll and start the same project",
+  "frLinks": [
+    "FR-MCP-176",
+    "FR-MCP-182",
+    "FR-MCP-185",
+    "FR-MCP-187"
+  ],
+  "paragraphs": 1,
+  "sourceSha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+  "sourceAnchor": "#u01",
+  "readbackVerified": true,
+  "approvedByAgent": false,
+  "requirementsCompleted": false
+}

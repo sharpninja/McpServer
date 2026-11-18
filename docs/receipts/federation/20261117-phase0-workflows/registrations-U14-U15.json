@@ -1,0 +1,34 @@
+[
+  {
+    "workflow": "U14",
+    "useCaseId": 10250,
+    "title": "Federation U14: duplicate work, permanent aliases and human IDs",
+    "frLinks": [
+      "FR-MCP-182",
+      "FR-MCP-187"
+    ],
+    "paragraphs": 1,
+    "sourceSha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+    "sourceAnchor": "#u14",
+    "readbackVerified": true,
+    "approvedByAgent": false,
+    "requirementsCompleted": false
+  },
+  {
+    "workflow": "U15",
+    "useCaseId": 10251,
+    "title": "Federation U15: restore a hub older than a node",
+    "frLinks": [
+      "FR-MCP-179",
+      "FR-MCP-181",
+      "FR-MCP-184",
+      "FR-MCP-188"
+    ],
+    "paragraphs": 1,
+    "sourceSha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+    "sourceAnchor": "#u15",
+    "readbackVerified": true,
+    "approvedByAgent": false,
+    "requirementsCompleted": false
+  }
+]

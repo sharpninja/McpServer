@@ -1,0 +1,54 @@
+[
+  {
+    "workflow": "U02",
+    "useCaseId": 10238,
+    "title": "Federation U02: node A edits, then commits",
+    "frLinks": [
+      "FR-MCP-174",
+      "FR-MCP-175",
+      "FR-MCP-178",
+      "FR-MCP-179",
+      "FR-MCP-183",
+      "FR-MCP-189"
+    ],
+    "paragraphs": 1,
+    "sourceSha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+    "sourceAnchor": "#u02",
+    "readbackVerified": true,
+    "approvedByAgent": false,
+    "requirementsCompleted": false
+  },
+  {
+    "workflow": "U03",
+    "useCaseId": 10239,
+    "title": "Federation U03: work directly on the hub",
+    "frLinks": [
+      "FR-MCP-174",
+      "FR-MCP-175",
+      "FR-MCP-178",
+      "FR-MCP-184"
+    ],
+    "paragraphs": 1,
+    "sourceSha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+    "sourceAnchor": "#u03",
+    "readbackVerified": true,
+    "approvedByAgent": false,
+    "requirementsCompleted": false
+  },
+  {
+    "workflow": "U04",
+    "useCaseId": 10240,
+    "title": "Federation U04: simultaneous clean edits on all three systems",
+    "frLinks": [
+      "FR-MCP-178",
+      "FR-MCP-181",
+      "FR-MCP-188"
+    ],
+    "paragraphs": 1,
+    "sourceSha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+    "sourceAnchor": "#u04",
+    "readbackVerified": true,
+    "approvedByAgent": false,
+    "requirementsCompleted": false
+  }
+]

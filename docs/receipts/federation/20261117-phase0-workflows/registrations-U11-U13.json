@@ -1,0 +1,51 @@
+[
+  {
+    "workflow": "U11",
+    "useCaseId": 10247,
+    "title": "Federation U11: node running an older schema/application",
+    "frLinks": [
+      "FR-MCP-181",
+      "FR-MCP-183",
+      "FR-MCP-186"
+    ],
+    "paragraphs": 2,
+    "sourceSha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+    "sourceAnchor": "#u11",
+    "readbackVerified": true,
+    "approvedByAgent": false,
+    "requirementsCompleted": false
+  },
+  {
+    "workflow": "U12",
+    "useCaseId": 10248,
+    "title": "Federation U12: two agents on one host",
+    "frLinks": [
+      "FR-MCP-177",
+      "FR-MCP-183",
+      "FR-MCP-189"
+    ],
+    "paragraphs": 1,
+    "sourceSha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+    "sourceAnchor": "#u12",
+    "readbackVerified": true,
+    "approvedByAgent": false,
+    "requirementsCompleted": false
+  },
+  {
+    "workflow": "U13",
+    "useCaseId": 10249,
+    "title": "Federation U13: audit reaches the hub without a project commit",
+    "frLinks": [
+      "FR-MCP-184",
+      "FR-MCP-185",
+      "FR-MCP-188",
+      "FR-MCP-AUDIT-001"
+    ],
+    "paragraphs": 1,
+    "sourceSha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+    "sourceAnchor": "#u13",
+    "readbackVerified": true,
+    "approvedByAgent": false,
+    "requirementsCompleted": false
+  }
+]

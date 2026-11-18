@@ -1,0 +1,52 @@
+[
+  {
+    "workflow": "U08",
+    "useCaseId": 10244,
+    "title": "Federation U08: divergent feature work and deliberate merge",
+    "frLinks": [
+      "FR-MCP-177",
+      "FR-MCP-180",
+      "FR-MCP-183",
+      "FR-MCP-189"
+    ],
+    "paragraphs": 1,
+    "sourceSha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+    "sourceAnchor": "#u08",
+    "readbackVerified": true,
+    "approvedByAgent": false,
+    "requirementsCompleted": false
+  },
+  {
+    "workflow": "U09",
+    "useCaseId": 10245,
+    "title": "Federation U09: lost response or crash during synchronization",
+    "frLinks": [
+      "FR-MCP-179",
+      "FR-MCP-181",
+      "FR-MCP-188"
+    ],
+    "paragraphs": 1,
+    "sourceSha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+    "sourceAnchor": "#u09",
+    "readbackVerified": true,
+    "approvedByAgent": false,
+    "requirementsCompleted": false
+  },
+  {
+    "workflow": "U10",
+    "useCaseId": 10246,
+    "title": "Federation U10: migrate an existing project",
+    "frLinks": [
+      "FR-MCP-182",
+      "FR-MCP-184",
+      "FR-MCP-186",
+      "FR-MCP-187"
+    ],
+    "paragraphs": 2,
+    "sourceSha256": "2FFB237E3507E22436C84DD2AB60E7ACD333CEC069FABE9E5505D2C2070A303E",
+    "sourceAnchor": "#u10",
+    "readbackVerified": true,
+    "approvedByAgent": false,
+    "requirementsCompleted": false
+  }
+]
