@@ -1,0 +1,66 @@
+{
+  "timestampLocal": "2026-11-17T21:49:21",
+  "tasks": [
+    "TASK-FEDPH0-004"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T214239-fedph0-identity-diagnostics-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0IdentityDiagnosticsMockGateTests --test-run-id 20261117T214239-fedph0-identity-diagnostics-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 83,
+  "passed": 83,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 4,
+  "expectedNegativeControls": 79,
+  "coverage": [
+    {
+      "test": "TEST-MCP-230",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-009",
+      "text": "Given LAB TODO-7 and LEGION TODO-91 are a duplicate candidate, when each plugin opens identity review, then both origin IDs, canonical/provisional IDs, similarity evidence and reservation outcome are visible; no alias or row changes before an authorized decision.",
+      "satisfied": false,
+      "fr": "FR-MCP-182",
+      "ac": "ac-PluginIdentityDiagnostics"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "AB2AC2F005D21E6D2ED456F1CD45D72E37EFE7300F84D3769DAAFD8DB2964ABF",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityDiagnosticsContract.cs",
+      "lfNormalizedSha256": "92D9D58A55F9ECECF22C566BF89E1D5A7AF0DF8BEEFF3FF85CD6028E031707E5"
+    },
+    {
+      "sha256": "01AECB5761D7F288EF59AF6A7470FDA06F51F86685764D93A70DF35696C4AE40",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityDiagnosticsMockGateTests.cs",
+      "lfNormalizedSha256": "E4254D68B05B132B91883D2F8F693EDAD885018810D98760B0921AD2A875FB41"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "F621BF70B189AC3476C774CF70837BE981DC74CCAAA0823F069290A8F4E81722",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T214239-fedph0-identity-diagnostics-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "70A8D5FE95C2E811E38C08EE917515BC790A7DC245748B53A6E21EC45DB915B3",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_21-42-42.log"
+    }
+  ],
+  "pending": [
+    "Generic selected diagnostic surface only; no actual installed plugin was invoked.",
+    "Ph7 must bind these same assertions to each inventoried first-party plugin on both hosts.",
+    "No stable public diagnostic DTO, ID grammar, alias decision or reservation API was adopted.",
+    "Full B4 consumer/capability/allocator closure and B1-B12 remain pending.",
+    "No production binding, task completion, full phase gate or HV claimed."
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
