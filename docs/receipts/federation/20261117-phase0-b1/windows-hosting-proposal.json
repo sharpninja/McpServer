@@ -1,0 +1,44 @@
+{
+  "timestampLocal": "2026-11-17T18:33:55",
+  "taskId": "TASK-FEDPH0-001",
+  "blockingOutput": "B1",
+  "status": "Proposed; operator approval pending",
+  "basis": "316 registered Windows services inspected;312 executable paths parsed;4 protected/unreadable entries retained, not interpreted as absence. No Dolt/wrapper candidate among readable executables or matching processes.",
+  "alternative": {
+    "tool": "WinSW",
+    "release": "https://github.com/winsw/winsw/releases/tag/v2.12.0",
+    "maintenanceCaveat": "Pinned stable2.x, not v3 prerelease; restricted-account clean-exit behavior is an explicit test target, including upstream issue1136",
+    "version": "2.12.0",
+    "asset": "WinSW-x64.exe",
+    "configurationReference": "https://raw.githubusercontent.com/winsw/winsw/v2.12.0/doc/xmlConfigFile.md",
+    "license": "MIT",
+    "issue": "https://github.com/winsw/winsw/issues/1136",
+    "licenseReference": "https://raw.githubusercontent.com/winsw/winsw/v2.12.0/LICENSE.txt",
+    "assetByteHash": "Must be captured and verified before execution; not yet downloaded"
+  },
+  "scope": {
+    "implementation": "Nuke-owned provision, inspect, stop and unregister for uniquely run-scoped service names. No direct deployment or binary copy into the active McpServer service.",
+    "failurePolicy": "Restart after10seconds,20seconds,then60seconds for later failures; never reboot",
+    "purpose": "Disposable native Windows Ph0 Dolt service-host proof and FED-ATLAS-H/A/B fixtures only",
+    "serviceSid": "Per-service SID enabled; runtime data ACL grants its service SID, SYSTEM and Administrators",
+    "credentials": "Backend-only credential path with restricted ACL; no secrets in command arguments, output, source or receipts",
+    "data": "Separate TestResults/<run-id>/FED-ATLAS-H,A,B roots; SQL loopback-only dynamic ports; no live workspace database",
+    "account": "NT AUTHORITY/LocalService, passwordless",
+    "host": "PAYTON-LEGION2",
+    "serviceNames": "QBrainDoltPh0<alphanumeric-run-id>H, A and B",
+    "stopTimeout": "60 seconds graceful Ctrl+C, followed by verified process-tree termination if necessary",
+    "cleanup": "Stop and unregister only the run-owned services through Nuke, retain databases and logs; verify no owned child remains and unrelated service state unchanged",
+    "binary": "Pinned WinSW and Dolt binaries under TestResults/<run-id>/tools; actual SHA256 verified before use",
+    "startMode": "Manual for Phase0; no persistent auto-start"
+  },
+  "acceptance": [
+    "Parser/PSSA clean for orchestration and WhatIf before state changes",
+    "Mock-green group implementation barrier before implementing harness adapters",
+    "Read back actual SCM name/account/executable/start/recovery/SID plus data ACL",
+    "Start/stop/restart and unexpected child exit demonstrate bounded recovery with no orphan child",
+    "SQL connection and Dolt read/write smoke on native Windows, separate from Linux proof",
+    "Graceful service stop under restricted account does not reproduce issue1136; otherwise stop this alternative and report concrete failure",
+    "No existing McpServer restart, live DB change, production enrollment or DEPLOY HOLD release"
+  ],
+  "hold": "Proposal is not dependency adoption, runtime proof, operator B1 acceptance or permission to begin Ph1"
+}

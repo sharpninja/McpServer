@@ -1,0 +1,5064 @@
+{
+  "timestampLocal": "2026-11-17T18:32:33",
+  "hostName": "PAYTON-LEGION2",
+  "serviceCount": 316,
+  "unparsedServiceCount": 4,
+  "services": [
+    {
+      "name": "ADPSvc",
+      "displayName": "Aggregated Data Platform Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "ALG",
+      "displayName": "Application Layer Gateway Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\alg.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "ALG.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "AppIDSvc",
+      "displayName": "Application Identity",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Appinfo",
+      "displayName": "Application Information",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 7004,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "AppMgmt",
+      "displayName": "Application Management",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "AppReadiness",
+      "displayName": "App Readiness",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "AppVClient",
+      "displayName": "Microsoft App-V Client",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\AppVClient.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.9818 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "AppVClient.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "AppXSvc",
+      "displayName": "AppX Deployment Service (AppXSVC)",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 2140,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "ApxSvc",
+      "displayName": "Windows Virtual Audio Device Proxy Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "AssignedAccessManagerSvc",
+      "displayName": "AssignedAccessManager Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "AudioEndpointBuilder",
+      "displayName": "Windows Audio Endpoint Builder",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4656,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Audiosrv",
+      "displayName": "Windows Audio",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4820,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "autotimesvc",
+      "displayName": "Cellular Time",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "AxInstSV",
+      "displayName": "ActiveX Installer (AxInstSV)",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "AzureAttestService",
+      "displayName": "AzureAttestService",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5920,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "BDESVC",
+      "displayName": "BitLocker Drive Encryption Service",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "BFE",
+      "displayName": "Base Filtering Engine",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4364,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "BITS",
+      "displayName": "Background Intelligent Transfer Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 25412,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "BrokerInfrastructure",
+      "displayName": "Background Tasks Infrastructure Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 1932,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "BTAGService",
+      "displayName": "Bluetooth Audio Gateway Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 2396,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "BthAvctpSvc",
+      "displayName": "AVCTP service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 2408,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "bthserv",
+      "displayName": "Bluetooth Support Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 2428,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "camsvc",
+      "displayName": "Capability Access Manager Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5904,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "CDPSvc",
+      "displayName": "Connected Devices Platform Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 10776,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "CertPropSvc",
+      "displayName": "Certificate Propagation",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 4012,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "ClickToRunSvc",
+      "displayName": "Microsoft Office Click-to-Run Service",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\Common Files\\Microsoft Shared\\ClickToRun\\OfficeClickToRun.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6000,
+      "version": {
+        "version": "16.0.20527.20196",
+        "productName": "Microsoft 365 and Office",
+        "company": "Microsoft Corporation",
+        "originalFilename": "OfficeClickToRun.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "ClipSVC",
+      "displayName": "Client License Service (ClipSVC)",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "cloudidsvc",
+      "displayName": "Microsoft Cloud Identity Service",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "CodexSandboxService.OpenAI.Codex",
+      "displayName": "ChatGPT",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\WindowsApps\\OpenAI.Codex_26.1111.2228.0_x64__2p2nqsd0c76g0\\app\\resources\\codex-windows-sandbox-service.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6872,
+      "version": {
+        "version": null,
+        "productName": null,
+        "company": null,
+        "originalFilename": null
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "com.docker.service",
+      "displayName": "Docker Desktop Service",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\Docker\\Docker\\com.docker.service",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "4.94.0.241994",
+        "productName": "Docker Desktop Service",
+        "company": "Docker Inc.",
+        "originalFilename": "com.docker.service"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "COMSysApp",
+      "displayName": "COM+ System Application",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\dllhost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.9818 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "dllhost.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "CoreMessagingRegistrar",
+      "displayName": "CoreMessaging",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 2388,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "CoworkVMService",
+      "displayName": "Claude",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\WindowsApps\\Claude_4.23118.1.0_x64__pzs8sxrjxfjjc\\app\\resources\\cowork-svc.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6920,
+      "version": {
+        "version": null,
+        "productName": null,
+        "company": null,
+        "originalFilename": null
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "CryptSvc",
+      "displayName": "Cryptographic Services",
+      "account": "NT Authority\\NetworkService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4740,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "CscService",
+      "displayName": "Offline Files",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DcomLaunch",
+      "displayName": "DCOM Server Process Launcher",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 1932,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "dcsvc",
+      "displayName": "Declared Configuration(DC) service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "defragsvc",
+      "displayName": "Optimize drives",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DeviceAssociationService",
+      "displayName": "Device Association Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 3388,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DeviceInstall",
+      "displayName": "Device Install Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 10312,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DevQueryBroker",
+      "displayName": "DevQuery Background Discovery Broker",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Dhcp",
+      "displayName": "DHCP Client",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 3304,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "diagsvc",
+      "displayName": "Diagnostic Execution Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DiagTrack",
+      "displayName": "Connected User Experiences and Telemetry",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5964,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DialogBlockingService",
+      "displayName": "DialogBlockingService",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DiscordSystemHelper",
+      "displayName": "Discord System Helper",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\Common Files\\Discord\\Discord\\DiscordSystemHelper.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "0.1.0",
+        "productName": "Discord System Helper",
+        "company": "Discord Inc.",
+        "originalFilename": "DiscordSystemHelper.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DispBrokerDesktopSvc",
+      "displayName": "Display Policy Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5696,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DisplayEnhancementService",
+      "displayName": "Display Enhancement Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 11140,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DmEnrollmentSvc",
+      "displayName": "Device Management Enrollment Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "dmwappushservice",
+      "displayName": "Device Management Wireless Application Protocol (WAP) Push message Routing Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Dnscache",
+      "displayName": "DNS Client",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 3728,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DoSvc",
+      "displayName": "Delivery Optimization",
+      "account": "NT Authority\\NetworkService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5140,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "dot3svc",
+      "displayName": "Wired AutoConfig",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DPS",
+      "displayName": "Diagnostic Policy Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5948,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DsmSvc",
+      "displayName": "Device Setup Manager",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DsSvc",
+      "displayName": "Data Sharing Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DusmSvc",
+      "displayName": "Data Usage",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 1704,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "EapHost",
+      "displayName": "Extensible Authentication Protocol",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "edgeupdate",
+      "displayName": "Microsoft Edge Update Service (edgeupdate)",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files (x86)\\Microsoft\\EdgeUpdate\\MicrosoftEdgeUpdate.exe",
+      "startMode": "Auto",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "1.3.271.7",
+        "productName": "Microsoft Edge Update",
+        "company": "Microsoft Corporation",
+        "originalFilename": "MicrosoftEdgeUpdate.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "edgeupdatem",
+      "displayName": "Microsoft Edge Update Service (edgeupdatem)",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files (x86)\\Microsoft\\EdgeUpdate\\MicrosoftEdgeUpdate.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "1.3.271.7",
+        "productName": "Microsoft Edge Update",
+        "company": "Microsoft Corporation",
+        "originalFilename": "MicrosoftEdgeUpdate.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "EFS",
+      "displayName": "Encrypting File System (EFS)",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\lsass.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.9818 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "lsass.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "ELANFPService",
+      "displayName": "ELAN Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\ELANFPService.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5892,
+      "version": {
+        "version": "1.5.4.24",
+        "productName": "ELAN FingerPrinter",
+        "company": "ELAN Microelectronics Corp.",
+        "originalFilename": "EFDService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "ElanIapService",
+      "displayName": "Elan Fw Update Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\ElanIapService.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5932,
+      "version": {
+        "version": "12.4.0.18",
+        "productName": "ELAN Fingerprint",
+        "company": "ELAN Microelectronics Corp.",
+        "originalFilename": "EFDIAPService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "embeddedmode",
+      "displayName": "Embedded Mode",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "EntAppSvc",
+      "displayName": "Enterprise App Management Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "EventLog",
+      "displayName": "Windows Event Log",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4396,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "EventSystem",
+      "displayName": "COM+ Event System",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4424,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "fdPHost",
+      "displayName": "Function Discovery Provider Host",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "FDResPub",
+      "displayName": "Function Discovery Resource Publication",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 12244,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "fhsvc",
+      "displayName": "File History Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "FileSyncHelper",
+      "displayName": "FileSyncHelper",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\Microsoft OneDrive\\26.204.1019.0007\\FileSyncHelper.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "26.204.1019.0007",
+        "productName": "Microsoft OneDrive",
+        "company": "Microsoft Corporation",
+        "originalFilename": "FileSyncHelper.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "FontCache",
+      "displayName": "Windows Font Cache Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4672,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "FontCache3.0.0.0",
+      "displayName": "Windows Presentation Foundation Font Cache 3.0.0.0",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\Microsoft.Net\\Framework64\\v3.0\\WPF\\PresentationFontCache.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "3.0.6920.9151 built by: WinRelRS6",
+        "productName": "Microsoft® .NET Framework",
+        "company": "Microsoft Corporation",
+        "originalFilename": "PresentationFontCache.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "FrameServer",
+      "displayName": "Windows Camera Frame Server",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 17420,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "FrameServerMonitor",
+      "displayName": "Windows Camera Frame Server Monitor",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 2812,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "GalaxyClientService",
+      "displayName": "GalaxyClientService",
+      "account": "LocalSystem",
+      "executable": "\\\\?\\C:\\Program Files (x86)\\GOG Galaxy\\GalaxyClientService.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "2.1.10.56",
+        "productName": "GOG Galaxy",
+        "company": "GOG.com",
+        "originalFilename": "GalaxyClientService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "GalaxyCommunication",
+      "displayName": "GalaxyCommunication",
+      "account": "LocalSystem",
+      "executable": "C:\\ProgramData\\GOG.com\\Galaxy\\redists\\GalaxyCommunication.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "2.1.0.13",
+        "productName": "GOG Galaxy",
+        "company": "GOG.com",
+        "originalFilename": "CommunicationService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "GameInputRedistService",
+      "displayName": "GameInput Redist Service",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\Microsoft GameInput\\x64\\GameInputRedistService.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5940,
+      "version": {
+        "version": "4.0.306.0",
+        "productName": "Microsoft® Windows® GameInput",
+        "company": "Windows (R) Win 7 DDK provider",
+        "originalFilename": "GameInputRedistService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "GameInputSvc",
+      "displayName": "GameInput Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\GameInputSvc.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "0.2309.26100.9818",
+        "productName": "Microsoft GameInput",
+        "company": "Microsoft Corporation",
+        "originalFilename": "GameInputSvc.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "GamingServices",
+      "displayName": "Gaming Services",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\WindowsApps\\Microsoft.GamingServices_39.118.30001.0_x64__8wekyb3d8bbwe\\GamingServices.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6888,
+      "version": {
+        "version": "10.0.26100.9656 (WinBuild.160101.0800)",
+        "productName": "Microsoft Gaming Install Services",
+        "company": "Microsoft Corporation",
+        "originalFilename": "GamingServices.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "GamingServicesNet",
+      "displayName": "Gaming Services",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\Program Files\\WindowsApps\\Microsoft.GamingServices_39.118.30001.0_x64__8wekyb3d8bbwe\\GamingServicesNet.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6880,
+      "version": {
+        "version": "10.0.26100.9656 (WinBuild.160101.0800)",
+        "productName": "Microsoft Gaming Install Services",
+        "company": "Microsoft Corporation",
+        "originalFilename": "GamingServices.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "gpsvc",
+      "displayName": "Group Policy Client",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 36796,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "GraphicsPerfSvc",
+      "displayName": "GraphicsPerfSvc",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "HgClientService",
+      "displayName": "Host Guardian Client Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "hidserv",
+      "displayName": "Human Interface Device Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 2820,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "hns",
+      "displayName": "Host Network Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 3660,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "hpatchmon",
+      "displayName": "Hotpatch Monitoring Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "HvHost",
+      "displayName": "HV Host Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 2340,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "icssvc",
+      "displayName": "Windows Mobile Hotspot Service",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "IKEEXT",
+      "displayName": "IKE and AuthIP IPsec Keying Modules",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6032,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "InstallService",
+      "displayName": "Microsoft Store Install Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 11852,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "InventorySvc",
+      "displayName": "Inventory and Compatibility Appraisal service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 29356,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "iphlpsvc",
+      "displayName": "IP Helper",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5124,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "IpOverUsbSvc",
+      "displayName": "Windows Phone IP over USB Transport (IpOverUsbSvc)",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files (x86)\\Common Files\\Microsoft Shared\\Phone Tools\\CoreCon\\11.0\\bin\\IpOverUsbSvc.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.8249 (WinBuild.160101.0800)",
+        "productName": "Microsoft (R) Windows (R) Kits",
+        "company": "Microsoft Corporation",
+        "originalFilename": "IpOverUsbSvc.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "IpxlatCfgSvc",
+      "displayName": "IP Translation Configuration Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "IsolationSession",
+      "displayName": "IsolationSession",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "IsoSessionCore",
+      "displayName": "IsoSessionCore",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "KeyIso",
+      "displayName": "CNG Key Isolation",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\lsass.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 1788,
+      "version": {
+        "version": "10.0.26100.9818 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "lsass.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "KtmRm",
+      "displayName": "KtmRm for Distributed Transaction Coordinator",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "LanmanServer",
+      "displayName": "Server",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6444,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "LanmanWorkstation",
+      "displayName": "Workstation",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4120,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "LenovoFnAndFunctionKeys",
+      "displayName": "Lenovo Fn and function keys service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\lenovofnandfunctionkeys.inf_amd64_5e21bf389d23855a\\LenovoUtilityService.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6008,
+      "version": {
+        "version": "2.1.2602.8",
+        "productName": "Lenovo Fn and function keys service",
+        "company": "Lenovo",
+        "originalFilename": "LenovoUtilityService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "lfsvc",
+      "displayName": "Geolocation Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 4596,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "LicenseManager",
+      "displayName": "Windows License Manager Service",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 13008,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "lltdsvc",
+      "displayName": "Link-Layer Topology Discovery Mapper",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "lmhosts",
+      "displayName": "TCP/IP NetBIOS Helper",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 2380,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "LocalKdc",
+      "displayName": "Kerberos Local Key Distribution Center",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\lsass.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.9818 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "lsass.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "LSM",
+      "displayName": "LSM",
+      "account": null,
+      "executable": "",
+      "startMode": "Unknown",
+      "state": "Running",
+      "processId": 1284,
+      "version": null,
+      "binaryParsed": false
+    },
+    {
+      "name": "LxpSvc",
+      "displayName": "Language Experience Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "MapsBroker",
+      "displayName": "Downloaded Maps Manager",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "McmSvc",
+      "displayName": "McmSvc",
+      "account": null,
+      "executable": "",
+      "startMode": "Unknown",
+      "state": "Stopped",
+      "processId": 0,
+      "version": null,
+      "binaryParsed": false
+    },
+    {
+      "name": "McpManagementService",
+      "displayName": "McpManagementService",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "McpServer",
+      "displayName": "MCP Server",
+      "account": "LocalSystem",
+      "executable": "C:/ProgramData/McpServer\\QBrainAi.Support.Mcp.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5992,
+      "version": {
+        "version": "1.4.40.0",
+        "productName": "QBrainAi.Support.Mcp",
+        "company": "QBrainAi.Support.Mcp",
+        "originalFilename": "QBrainAi.Support.Mcp.dll"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "MDCoreSvc",
+      "displayName": "Microsoft Defender Core Service",
+      "account": "LocalSystem",
+      "executable": "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.26100.4-0\\MpDefenderCoreService.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6048,
+      "version": {
+        "version": "4.18.26100.4 (79b015c6fabb20b1ccd067f376e490f0bac19809)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "MpDefenderCoreService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "MicrosoftCopilotElevationService",
+      "displayName": "Microsoft Copilot Elevation Service (MicrosoftCopilotElevationService)",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\157.0.4341.60\\elevation_service.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "157.0.4341.60",
+        "productName": "Microsoft Edge",
+        "company": "Microsoft Corporation",
+        "originalFilename": "elevation_service.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "MicrosoftEdgeElevationService",
+      "displayName": "Microsoft Edge Elevation Service (MicrosoftEdgeElevationService)",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\157.0.4341.60\\elevation_service.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "157.0.4341.60",
+        "productName": "Microsoft Edge",
+        "company": "Microsoft Corporation",
+        "originalFilename": "elevation_service.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "midisrv",
+      "displayName": "Windows MIDI Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\midisrv.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.9818 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "midisrv.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "MouseKeyProxy",
+      "displayName": "MouseKeyProxy",
+      "account": "LocalSystem",
+      "executable": "C:\\ProgramData\\MouseKeyProxy\\MouseKeyProxy.Service.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6148,
+      "version": {
+        "version": "0.5.6.0",
+        "productName": "MouseKeyProxy",
+        "company": "SharpNinja",
+        "originalFilename": "MouseKeyProxy.Service.dll"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "mpssvc",
+      "displayName": "Windows Defender Firewall",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4364,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "MSDTC",
+      "displayName": "Distributed Transaction Coordinator",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\System32\\msdtc.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "2001.12.10941.16384 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "MSDTC.EXE.MUI"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "MSiSCSI",
+      "displayName": "Microsoft iSCSI Initiator Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "msiserver",
+      "displayName": "Windows Installer",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\msiexec.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "5.0.26100.9711 (WinBuild.160101.0800)",
+        "productName": "Windows Installer - Unicode",
+        "company": "Microsoft Corporation",
+        "originalFilename": "msiexec.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "MsKeyboardFilter",
+      "displayName": "Microsoft Keyboard Filter",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "MSSQLSERVER",
+      "displayName": "SQL Server (MSSQLSERVER)",
+      "account": "NT Service\\MSSQLSERVER",
+      "executable": "C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\Binn\\sqlservr.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 8868,
+      "version": {
+        "version": "2025.0170.1155.03 ((sql2025_rtm_gdr9).261021-1906)",
+        "productName": "Microsoft SQL Server",
+        "company": "Microsoft Corporation",
+        "originalFilename": "SQLSERVR.EXE"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "NahimicService",
+      "displayName": "Nahimic service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\NahimicService.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6040,
+      "version": {
+        "version": "2.6.1.0",
+        "productName": "NahimicService",
+        "company": "Nahimic",
+        "originalFilename": "Nahimic Service"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "NaturalAuthentication",
+      "displayName": "Natural Authentication",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "NcaSvc",
+      "displayName": "Network Connectivity Assistant",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "NcbService",
+      "displayName": "Network Connection Broker",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 2652,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "NcdAutoSetup",
+      "displayName": "Network Connected Devices Auto-Setup",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 12108,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Netlogon",
+      "displayName": "Netlogon",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\lsass.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.9818 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "lsass.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Netman",
+      "displayName": "Network Connections",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "netprofm",
+      "displayName": "Network List Service",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 3048,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "NetSetupSvc",
+      "displayName": "NetSetupSvc",
+      "account": null,
+      "executable": "",
+      "startMode": "Unknown",
+      "state": "Stopped",
+      "processId": 0,
+      "version": null,
+      "binaryParsed": false
+    },
+    {
+      "name": "NetTcpPortSharing",
+      "displayName": "Net.Tcp Port Sharing Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\Microsoft.NET\\Framework64\\v4.0.30319\\SMSvcHost.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "4.8.10001.0 built by: 5f296df0c000005",
+        "productName": "Microsoft® .NET Framework",
+        "company": "Microsoft Corporation",
+        "originalFilename": "SMSvcHost.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "NgcCtnrSvc",
+      "displayName": "Microsoft Passport Container",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 7264,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "NgcSvc",
+      "displayName": "Microsoft Passport",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 2880,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "NlaSvc",
+      "displayName": "Network Location Awareness",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "nsi",
+      "displayName": "Network Store Interface Service",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 2888,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "nvagent",
+      "displayName": "Network Virtualization Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 4220,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "NVDisplay.ContainerLocalSystem",
+      "displayName": "NVIDIA Display Container LS",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\nvlti.inf_amd64_5f3182d180b7ff06\\Display.NvContainer\\NVDisplay.Container.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4232,
+      "version": {
+        "version": "",
+        "productName": "",
+        "company": "",
+        "originalFilename": ""
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "OneDrive Updater Service",
+      "displayName": "OneDrive Updater Service",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\Microsoft OneDrive\\26.204.1019.0007\\OneDriveUpdaterService.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "26.204.1019.0007",
+        "productName": "Microsoft OneDrive",
+        "company": "Microsoft Corporation",
+        "originalFilename": "OneDriveUpdaterService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PcaSvc",
+      "displayName": "Program Compatibility Assistant Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 23804,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PeerDistSvc",
+      "displayName": "BranchCache",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PerfHost",
+      "displayName": "Performance Counter DLL Host",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\SysWow64\\perfhost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "perfhost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PhoneSvc",
+      "displayName": "Phone Service",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "pla",
+      "displayName": "Performance Logs & Alerts",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PlugPlay",
+      "displayName": "Plug and Play",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 1932,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PlutonQcService",
+      "displayName": "PlutonQcService",
+      "account": null,
+      "executable": "",
+      "startMode": "Unknown",
+      "state": "Stopped",
+      "processId": 0,
+      "version": null,
+      "binaryParsed": false
+    },
+    {
+      "name": "PolicyAgent",
+      "displayName": "IPsec Policy Agent",
+      "account": "NT Authority\\NetworkService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 9740,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "postgresql-x64-17",
+      "displayName": "postgresql-x64-17 - PostgreSQL Server 17",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\Program Files\\PostgreSQL\\17\\bin\\pg_ctl.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "17.10",
+        "productName": "PostgreSQL",
+        "company": "PostgreSQL Global Development Group",
+        "originalFilename": "pg_ctl.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Power",
+      "displayName": "Power",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 1932,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PowerToys.MWB.Service",
+      "displayName": "PowerToys Mouse Without Borders Service",
+      "account": "LocalSystem",
+      "executable": "C:\\Users\\kingd\\AppData\\Local\\PowerToys\\PowerToys.MouseWithoutBordersService.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "0.100.2.0",
+        "productName": "PowerToys",
+        "company": "Microsoft Corporation",
+        "originalFilename": "PowerToys.MouseWithoutBordersService.dll"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PrintDeviceConfigurationService",
+      "displayName": "Print Device Configuration Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PrintNotify",
+      "displayName": "Printer Extensions and Notifications",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PrintScanBrokerService",
+      "displayName": "PrintScanBrokerService",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "ProfSvc",
+      "displayName": "User Profile Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 2904,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PushToInstall",
+      "displayName": "Windows PushToInstall Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "QWAVE",
+      "displayName": "Quality Windows Audio Video Experience",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 11528,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "RasAuto",
+      "displayName": "Remote Access Auto Connection Manager",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "RasMan",
+      "displayName": "Remote Access Connection Manager",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 26612,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "refsdedupsvc",
+      "displayName": "ReFS Dedup Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\ReFsDedupSvc.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "ReFsDedupSvc.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "RemoteAccess",
+      "displayName": "Routing and Remote Access",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "RemoteRegistry",
+      "displayName": "Remote Registry",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "RetailDemo",
+      "displayName": "Retail Demo Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "RmSvc",
+      "displayName": "Radio Management Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 11880,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "RpcEptMapper",
+      "displayName": "RPC Endpoint Mapper",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 924,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "RpcLocator",
+      "displayName": "Remote Procedure Call (RPC) Locator",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\system32\\locator.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "locator.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "RpcSs",
+      "displayName": "Remote Procedure Call (RPC)",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 924,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "RtkAudioUniversalService",
+      "displayName": "Realtek Audio Universal Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\realtekservice.inf_amd64_a1020546271138b9\\RtkAudUService64.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6424,
+      "version": {
+        "version": "1.0.410.1",
+        "productName": "Realtek HD Audio Universal Service",
+        "company": "Realtek Semiconductor",
+        "originalFilename": "RtkAudUService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "RtkBtManServ",
+      "displayName": "Realtek Bluetooth Device Manager Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\RtkBtManServ.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6512,
+      "version": {
+        "version": "1.2.59.1",
+        "productName": "Bluetooth Software",
+        "company": "Realtek Semiconductor Corp.",
+        "originalFilename": ""
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SamSs",
+      "displayName": "Security Accounts Manager",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\lsass.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 1788,
+      "version": {
+        "version": "10.0.26100.9818 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "lsass.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SCardSvr",
+      "displayName": "Smart Card",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "ScDeviceEnum",
+      "displayName": "Smart Card Device Enumeration Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Schedule",
+      "displayName": "Task Scheduler",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 2732,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SCPolicySvc",
+      "displayName": "Smart Card Removal Policy",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SDRSVC",
+      "displayName": "Windows Backup",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "seclogon",
+      "displayName": "Secondary Logon",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 18868,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SecurityHealthService",
+      "displayName": "Windows Security Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\SecurityHealthService.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 19600,
+      "version": {
+        "version": "10.0.26100.9818 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "SecurityHealthService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SEMgrSvc",
+      "displayName": "Payments and NFC/SE Manager",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SENS",
+      "displayName": "System Event Notification Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4556,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Sense",
+      "displayName": "Windows Defender Advanced Threat Protection Service",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\Windows Defender Advanced Threat Protection\\MsSense.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.8837.26060.2029 (9d3bebd1131b516a96de62dd80b6b02cfad86865)",
+        "productName": "Windows Cyber Defense",
+        "company": "Microsoft Corporation",
+        "originalFilename": "MsSense.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SensorDataService",
+      "displayName": "Sensor Data Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\SensorDataService.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "SensorDataService.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SensorService",
+      "displayName": "Sensor Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SensrSvc",
+      "displayName": "Sensor Monitoring Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SessionEnv",
+      "displayName": "Remote Desktop Configuration",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 4256,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SharedAccess",
+      "displayName": "Internet Connection Sharing (ICS)",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 4908,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "ShellHWDetection",
+      "displayName": "Shell Hardware Detection",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5472,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "shpamsvc",
+      "displayName": "Shared PC Account Manager",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "smphost",
+      "displayName": "Microsoft Storage Spaces SMP",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SmsRouter",
+      "displayName": "Microsoft Windows SMS Router Service.",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SNMPTrap",
+      "displayName": "SNMP Trap",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\snmptrap.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "snmptrap.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Spooler",
+      "displayName": "Print Spooler",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\spoolsv.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5656,
+      "version": {
+        "version": "10.0.26100.8875 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "spoolsv.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "sppsvc",
+      "displayName": "Software Protection",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\system32\\sppsvc.exe",
+      "startMode": "Auto",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.8115 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "sppsvc.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SQLBrowser",
+      "displayName": "SQL Server Browser",
+      "account": "NT AUTHORITY\\LOCALSERVICE",
+      "executable": "C:\\Program Files (x86)\\Microsoft SQL Server\\90\\Shared\\sqlbrowser.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "2025.0170.1000.07 ((sql2025_rtm).251021-1808)",
+        "productName": "Microsoft SQL Server",
+        "company": "Microsoft Corporation",
+        "originalFilename": "SQLBROWSER.EXE"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SQLSERVERAGENT",
+      "displayName": "SQL Server Agent (MSSQLSERVER)",
+      "account": "NT Service\\SQLSERVERAGENT",
+      "executable": "C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\Binn\\SQLAGENT.EXE",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 18340,
+      "version": {
+        "version": "2025.0170.1155.03 ((sql2025_rtm_gdr9).261021-1906)",
+        "productName": "Microsoft SQL Server",
+        "company": "Microsoft Corporation",
+        "originalFilename": "SQLAGENT.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SQLTELEMETRY",
+      "displayName": "SQL Server CEIP service (MSSQLSERVER)",
+      "account": "NT Service\\SQLTELEMETRY",
+      "executable": "C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\Binn\\sqlceip.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "17.0.1000.7",
+        "productName": "Microsoft SQL Server",
+        "company": "Microsoft Corporation",
+        "originalFilename": "sqlceip.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SQLWriter",
+      "displayName": "SQL Server VSS Writer",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\Microsoft SQL Server\\90\\Shared\\sqlwriter.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "2025.0170.4025.03 ((sql2025_rtm_qfe-cu3).260225-2224)",
+        "productName": "Microsoft SQL Server",
+        "company": "Microsoft Corporation",
+        "originalFilename": "SQLWRITER.EXE"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SSDPSRV",
+      "displayName": "SSDP Discovery",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 6544,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "ssh-agent",
+      "displayName": "OpenSSH Authentication Agent",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\OpenSSH\\ssh-agent.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "9.5.6.4",
+        "productName": "OpenSSH for Windows",
+        "company": "",
+        "originalFilename": ""
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "sshd",
+      "displayName": "OpenSSH SSH Server",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\OpenSSH\\sshd.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6528,
+      "version": {
+        "version": "9.5.6.4",
+        "productName": "OpenSSH for Windows",
+        "company": "",
+        "originalFilename": ""
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SstpSvc",
+      "displayName": "Secure Socket Tunneling Protocol Service",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 21768,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Start11",
+      "displayName": "Stardock Start11",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files (x86)\\Stardock\\Start11\\Start11Srv.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4884,
+      "version": {
+        "version": "2.5.6.0",
+        "productName": "Stardock Start11",
+        "company": "Stardock Software, Inc",
+        "originalFilename": "Start11Srv"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "StateRepository",
+      "displayName": "State Repository Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 780,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Steam Client Service",
+      "displayName": "Steam Client Service",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files (x86)\\Common Files\\Steam\\steamservice.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.96.30.42",
+        "productName": "Steam Client Service",
+        "company": "Valve Corporation",
+        "originalFilename": "SteamService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "StiSvc",
+      "displayName": "Windows Image Acquisition (WIA)",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 2952,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "StorSvc",
+      "displayName": "Storage Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 11636,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "svsvc",
+      "displayName": "Spot Verifier",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "swprv",
+      "displayName": "Microsoft Software Shadow Copy Provider",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SysMain",
+      "displayName": "SysMain",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4500,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "SystemEventsBroker",
+      "displayName": "System Events Broker",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 1932,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Tailscale",
+      "displayName": "Tailscale",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\Tailscale\\tailscaled.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6564,
+      "version": {
+        "version": "1.104.7-tfb3b9b296-g0651cc45e",
+        "productName": "Tailscale",
+        "company": "Tailscale Inc.",
+        "originalFilename": "tailscaled.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "TapiSrv",
+      "displayName": "Telephony",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "TermService",
+      "displayName": "Remote Desktop Services",
+      "account": "NT Authority\\NetworkService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 2352,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "TextInputManagementService",
+      "displayName": "Text Input Management Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5056,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Themes",
+      "displayName": "Themes",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4508,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "TieringEngineService",
+      "displayName": "Storage Tiers Management",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\system32\\TieringEngineService.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "TieringEngineService.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "TimeBrokerSvc",
+      "displayName": "Time Broker",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 2660,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "TokenBroker",
+      "displayName": "Web Account Manager",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 9936,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "TrkWks",
+      "displayName": "Distributed Link Tracking Client",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6536,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "TroubleshootingSvc",
+      "displayName": "Recommended Troubleshooting Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "TruckMateFReFSMaintenance20260907",
+      "displayName": "TruckMate F ReFS Safe Mode Maintenance",
+      "account": "LocalSystem",
+      "executable": "C:\\ProgramData\\TruckMateMaintenance\\F-ReFS-20260907\\TruckMateFReFSMaintenanceService.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "0.0.0.0",
+        "productName": "",
+        "company": "",
+        "originalFilename": "TruckMateFReFSMaintenanceService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "TrustedInstaller",
+      "displayName": "Windows Modules Installer",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\servicing\\TrustedInstaller.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.7019 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "TrustedInstaller.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "tzautoupdate",
+      "displayName": "Auto Time Zone Updater",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "UevAgentService",
+      "displayName": "User Experience Virtualization Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\AgentService.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "AgentService.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "UmRdpService",
+      "displayName": "Remote Desktop Services UserMode Port Redirector",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 3748,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "upnphost",
+      "displayName": "UPnP Device Host",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "usbipd",
+      "displayName": "USBIP Device Host",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\usbipd-win\\usbipd.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6836,
+      "version": {
+        "version": "5.3.0.1158",
+        "productName": "usbipd-win",
+        "company": "Frans van Dorsselaer",
+        "originalFilename": "usbipd.dll"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "UserManager",
+      "displayName": "User Manager",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 3120,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "UsoSvc",
+      "displayName": "Update Orchestrator Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 29216,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "VaultSvc",
+      "displayName": "Credential Manager",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\lsass.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 1788,
+      "version": {
+        "version": "10.0.26100.9818 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "lsass.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "vds",
+      "displayName": "Virtual Disk",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\vds.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "vds.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "vmcompute",
+      "displayName": "Hyper-V Host Compute Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\vmcompute.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 5664,
+      "version": {
+        "version": "10.0.26100.8457 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "vmcompute.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "vmicguestinterface",
+      "displayName": "Hyper-V Guest Service Interface",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "vmicheartbeat",
+      "displayName": "Hyper-V Heartbeat Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "vmickvpexchange",
+      "displayName": "Hyper-V Data Exchange Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "vmicrdv",
+      "displayName": "Hyper-V Remote Desktop Virtualization Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "vmicshutdown",
+      "displayName": "Hyper-V Guest Shutdown Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "vmictimesync",
+      "displayName": "Hyper-V Time Synchronization Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "vmicvmsession",
+      "displayName": "Hyper-V PowerShell Direct Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "vmicvss",
+      "displayName": "Hyper-V Volume Shadow Copy Requestor",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "vmms",
+      "displayName": "Hyper-V Virtual Machine Management",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\vmms.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 3624,
+      "version": {
+        "version": "10.0.26100.8115 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "vmms.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "VSInstallerElevationService",
+      "displayName": "Visual Studio Installer Elevation Service",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\VSInstallerElevationService.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "4.12.34.54489",
+        "productName": "Visual Studio",
+        "company": "Microsoft",
+        "originalFilename": "VSInstallerElevationService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "VSS",
+      "displayName": "Volume Shadow Copy",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\vssvc.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.8115 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "VSSVC.EXE.MUI"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "VSStandardCollectorService150",
+      "displayName": "Visual Studio Standard Collector Service 150",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Common\\DiagnosticsHub.Collection.Service\\StandardCollector.Service.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "18.5.37003.3 built by: DiagHub_main_ad574201cf27f437f399af5d12a905acd5df1d59",
+        "productName": "Microsoft® Visual Studio®",
+        "company": "Microsoft Corporation",
+        "originalFilename": "StandardCollector.Service.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "W32Time",
+      "displayName": "Windows Time",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WaaSMedicSvc",
+      "displayName": "WaaSMedicSvc",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WalletService",
+      "displayName": "WalletService",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WarpJITSvc",
+      "displayName": "Warp JIT Service",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "wbengine",
+      "displayName": "Block Level Backup Engine Service",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\system32\\wbengine.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.8972 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "wbengine.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WbioSrvc",
+      "displayName": "Windows Biometric Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Wcmsvc",
+      "displayName": "Windows Connection Manager",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 4728,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "wcncsvc",
+      "displayName": "Windows Connect Now - Config Registrar",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 32096,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WdiServiceHost",
+      "displayName": "Diagnostic Service Host",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 7588,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WdiSystemHost",
+      "displayName": "Diagnostic System Host",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 23328,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WdNisSvc",
+      "displayName": "Microsoft Defender Antivirus Network Inspection Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.26100.4-0\\NisSrv.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 19512,
+      "version": {
+        "version": "4.18.26100.4 (79b015c6fabb20b1ccd067f376e490f0bac19809)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "NisSrv.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WebClient",
+      "displayName": "WebClient",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "webthreatdefsvc",
+      "displayName": "Web Threat Defense Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 22440,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Wecsvc",
+      "displayName": "Windows Event Collector",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WEPHOSTSVC",
+      "displayName": "Windows Encryption Provider Host Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "wercplsupport",
+      "displayName": "Problem Reports Control Panel Support",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WerSvc",
+      "displayName": "Windows Error Reporting Service",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WFDSConMgrSvc",
+      "displayName": "Wi-Fi Direct Services Connection Manager Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "whesvc",
+      "displayName": "Windows Health and Optimized Experiences",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 7656,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WiaRpc",
+      "displayName": "Still Image Acquisition Events",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WinDefend",
+      "displayName": "Microsoft Defender Antivirus Service",
+      "account": "LocalSystem",
+      "executable": "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.26100.4-0\\MsMpEng.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6608,
+      "version": {
+        "version": "4.18.26100.4 (79b015c6fabb20b1ccd067f376e490f0bac19809)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "MsMpEng.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WinFsp.Launcher",
+      "displayName": "WinFsp.Launcher",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files (x86)\\WinFsp\\SxS\\sxs.20260728T234225Z\\bin\\launcher-x64.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6728,
+      "version": {
+        "version": "2.1.25156.ddca7bd",
+        "productName": "WinFsp",
+        "company": "Navimatics LLC",
+        "originalFilename": "launcher.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WinHttpAutoProxySvc",
+      "displayName": "WinHTTP Web Proxy Auto-Discovery Service",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 3264,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "Winmgmt",
+      "displayName": "Windows Management Instrumentation",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 3980,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WinRM",
+      "displayName": "Windows Remote Management (WS-Management)",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 10076,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "wisvc",
+      "displayName": "Windows Insider Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WlanSvc",
+      "displayName": "WLAN AutoConfig",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5380,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "wlidsvc",
+      "displayName": "Microsoft Account Sign-in Assistant",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "wlpasvc",
+      "displayName": "Local Profile Assistant Service",
+      "account": "NT Authority\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WManSvc",
+      "displayName": "Windows Management Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "wmiApSrv",
+      "displayName": "WMI Performance Adapter",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\system32\\wbem\\WmiApSrv.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.8521 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "WmiApSrv.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WMPNetworkSvc",
+      "displayName": "Windows Media Player Network Sharing Service",
+      "account": "NT AUTHORITY\\NetworkService",
+      "executable": "C:\\Program Files\\Windows Media Player\\wmpnetwk.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "12.0.26100.8457 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "WMPNetwk.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "workfolderssvc",
+      "displayName": "workfolderssvc",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WpcMonSvc",
+      "displayName": "Parental Controls",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WPDBusEnum",
+      "displayName": "Portable Device Enumerator Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WpnService",
+      "displayName": "Windows Push Notifications System Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6772,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WSAIFabricSvc",
+      "displayName": "Windows AI Components Host",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6780,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "wscsvc",
+      "displayName": "Security Center",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 3840,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WSearch",
+      "displayName": "Windows Search",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\SearchIndexer.exe",
+      "startMode": "Disabled",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "7.0.26100.9549 (WinBuild.160101.0800)",
+        "productName": "Windows® Search",
+        "company": "Microsoft Corporation",
+        "originalFilename": "SearchIndexer.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WSLService",
+      "displayName": "WSL Service",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\WSL\\wslservice.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6968,
+      "version": {
+        "version": "3.0.5.0",
+        "productName": "Windows Subsystem for Linux",
+        "company": "Microsoft Corporation",
+        "originalFilename": "wslservice.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "wuauserv",
+      "displayName": "Windows Update",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "wuqisvc",
+      "displayName": "Microsoft Usage and Quality Insights",
+      "account": "NT AUTHORITY\\LocalService",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WwanSvc",
+      "displayName": "WWAN AutoConfig",
+      "account": "localSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "XblAuthManager",
+      "displayName": "Xbox Live Auth Manager",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "XblGameSave",
+      "displayName": "Xbox Live Game Save",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "XboxGipSvc",
+      "displayName": "Xbox Accessory Management Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "XboxNetApiSvc",
+      "displayName": "Xbox Live Networking Service",
+      "account": "LocalSystem",
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "XboxService",
+      "displayName": "XBOX Input Service",
+      "account": "LocalSystem",
+      "executable": "C:\\Program Files\\XboxService\\x64\\XboxService.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 6824,
+      "version": {
+        "version": "4.0.305.0",
+        "productName": "Microsoft® Windows® GameInput",
+        "company": "Windows (R) Win 7 DDK provider",
+        "originalFilename": "GameInputRedistService.exe"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "AarSvc_87aa7",
+      "displayName": "AarSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "BcastDVRUserService_87aa7",
+      "displayName": "BcastDVRUserService_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "BluetoothUserService_87aa7",
+      "displayName": "BluetoothUserService_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 9588,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "CaptureService_87aa7",
+      "displayName": "CaptureService_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "cbdhsvc_87aa7",
+      "displayName": "cbdhsvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 12432,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "CDPUserSvc_87aa7",
+      "displayName": "CDPUserSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 9608,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "CloudBackupRestoreSvc_87aa7",
+      "displayName": "CloudBackupRestoreSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "ConsentUxUserSvc_87aa7",
+      "displayName": "ConsentUxUserSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "CredentialEnrollmentManagerUserSvc_87aa7",
+      "displayName": "CredentialEnrollmentManagerUserSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\CredentialEnrollmentManager.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.8115 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "CredentialEnrollmentManager.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DeviceAssociationBrokerSvc_87aa7",
+      "displayName": "DeviceAssociationBrokerSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DevicePickerUserSvc_87aa7",
+      "displayName": "DevicePickerUserSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "DevicesFlowUserSvc_87aa7",
+      "displayName": "DevicesFlowUserSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 17580,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "MessagingService_87aa7",
+      "displayName": "MessagingService_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "NPSMSvc_87aa7",
+      "displayName": "NPSMSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 15564,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "OneSyncSvc_87aa7",
+      "displayName": "OneSyncSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "P9RdrService_87aa7",
+      "displayName": "P9RdrService_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PenService_87aa7",
+      "displayName": "PenService_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PimIndexMaintenanceSvc_87aa7",
+      "displayName": "PimIndexMaintenanceSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 7256,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "PrintWorkflowUserSvc_87aa7",
+      "displayName": "PrintWorkflowUserSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Stopped",
+      "processId": 0,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "UdkUserSvc_87aa7",
+      "displayName": "UdkUserSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 14052,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "UnistoreSvc_87aa7",
+      "displayName": "UnistoreSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\System32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 7256,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "UserDataSvc_87aa7",
+      "displayName": "UserDataSvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Manual",
+      "state": "Running",
+      "processId": 7256,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "webthreatdefusersvc_87aa7",
+      "displayName": "webthreatdefusersvc_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 9712,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    },
+    {
+      "name": "WpnUserService_87aa7",
+      "displayName": "WpnUserService_87aa7",
+      "account": null,
+      "executable": "C:\\WINDOWS\\system32\\svchost.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 9816,
+      "version": {
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "productName": "Microsoft® Windows® Operating System",
+        "company": "Microsoft Corporation",
+        "originalFilename": "svchost.exe.mui"
+      },
+      "binaryParsed": true
+    }
+  ],
+  "candidateServices": [
+    {
+      "name": "McpServer",
+      "displayName": "MCP Server",
+      "account": "LocalSystem",
+      "executable": "C:/ProgramData/McpServer\\QBrainAi.Support.Mcp.exe",
+      "startMode": "Auto",
+      "state": "Running",
+      "processId": 5992,
+      "version": {
+        "version": "1.4.40.0",
+        "productName": "QBrainAi.Support.Mcp",
+        "company": "QBrainAi.Support.Mcp",
+        "originalFilename": "QBrainAi.Support.Mcp.dll"
+      },
+      "binaryParsed": true
+    }
+  ],
+  "candidateProcesses": [],
+  "scope": "All registered service executable paths and file-version metadata only; no arguments or configuration. This cannot prove absence of unregistered executables. No service is installed, started, stopped or changed."
+}
