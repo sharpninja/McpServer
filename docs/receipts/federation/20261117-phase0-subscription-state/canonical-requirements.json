@@ -1,0 +1,96 @@
+{
+  "TEST-MCP-227": {
+    "scopeStartLayerKey": "layer-1",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-PollReadDoesNotAcknowledge",
+        "text": "Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-AckOldGenerationPreservesNewRequest",
+        "text": "Given desired becomes8 while report7 is in flight, when report7 arrives, then reported=7, desired=8 and the subscription remains pending."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-MissedNotificationReconciles",
+        "text": "Given remote=A1 but control still names C0 after a crash, when reconciliation runs, then it records A1 and advances desired generation without producing another commit."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-HubRestoreFromOlderBackup",
+        "text": "Given a node remembers epoch E1 generation90 and the hub restores a backup at generation40, when the hub reopens, then epoch E2 differs from E1; E1 reports fail409 hub_epoch_changed and no head is force-reset. Node A1 is retained until verified ancestry recovery republishes missing history."
+      }
+    ],
+    "title": "hub control table and polling acceptance tests",
+    "workspaceId": "F:/GitHub/McpServer",
+    "condition": "Verify FR-MCP-179 and TR-MCP-FEDERATION-006 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+    "id": "TEST-MCP-227",
+    "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+    "status": "pending",
+    "priority": "high"
+  },
+  "TR-MCP-FEDERATION-006": {
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-PollReadDoesNotAcknowledge",
+        "text": "Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-AckOldGenerationPreservesNewRequest",
+        "text": "Given desired becomes8 while report7 is in flight, when report7 arrives, then reported=7, desired=8 and the subscription remains pending."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-MissedNotificationReconciles",
+        "text": "Given remote=A1 but control still names C0 after a crash, when reconciliation runs, then it records A1 and advances desired generation without producing another commit."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-HubRestoreFromOlderBackup",
+        "text": "Given a node remembers epoch E1 generation90 and the hub restores a backup at generation40, when the hub reopens, then epoch E2 differs from E1; E1 reports fail409 hub_epoch_changed and no head is force-reset. Node A1 is retained until verified ancestry recovery republishes missing history."
+      }
+    ],
+    "priority": "medium",
+    "title": "hub control table and polling contract",
+    "workspaceId": "F:/GitHub/McpServer",
+    "body": "SyncSubscription key=(NodeId,ProjectId,Branch) contains HubEpoch UUID, PublishedHead, PublishedGeneration int64, DesiredGeneration int64, ReportedGeneration int64, WorkerEpoch int64, AcceptedHead, Outcome and timestamps. POST control/poll is read-only. POST control/report includes all epochs and observed generation; stale worker=409 stale_worker_epoch, stale hub=409 hub_epoch_changed. Poll every30s with20% jitter; commit/reconnect/on-demand wake immediately. Backoff1s doubling to60s. Generation ordering is valid only within HubEpoch. Restore generates a new non-reused random epoch before listeners reopen.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "pending",
+    "id": "TR-MCP-FEDERATION-006"
+  },
+  "FR-MCP-179": {
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-PollReadDoesNotAcknowledge",
+        "text": "Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-AckOldGenerationPreservesNewRequest",
+        "text": "Given desired becomes8 while report7 is in flight, when report7 arrives, then reported=7, desired=8 and the subscription remains pending."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-MissedNotificationReconciles",
+        "text": "Given remote=A1 but control still names C0 after a crash, when reconciliation runs, then it records A1 and advances desired generation without producing another commit."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-HubRestoreFromOlderBackup",
+        "text": "Given a node remembers epoch E1 generation90 and the hub restores a backup at generation40, when the hub reopens, then epoch E2 differs from E1; E1 reports fail409 hub_epoch_changed and no head is force-reset. Node A1 is retained until verified ancestry recovery republishes missing history."
+      }
+    ],
+    "priority": "medium",
+    "title": "hub control table and polling",
+    "workspaceId": "F:/GitHub/McpServer",
+    "body": "Use a durable hub subscription table with polling, generation and worker fencing, plus a fresh hub epoch after restore.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "pending",
+    "id": "FR-MCP-179"
+  }
+}

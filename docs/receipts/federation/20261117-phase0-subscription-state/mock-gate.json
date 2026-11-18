@@ -1,0 +1,83 @@
+{
+  "timestampLocal": "2026-11-17T22:02:18",
+  "tasks": [
+    "TASK-FEDPH0-007"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T220135-fedph0-subscription-state-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0SubscriptionStateMockGateTests --test-run-id 20261117T220135-fedph0-subscription-state-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 321,
+  "passed": 321,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 8,
+  "expectedNegativeControls": 313,
+  "coverage": [
+    {
+      "test": "TEST-MCP-227",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-006",
+      "text": "Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6.",
+      "satisfied": false,
+      "fr": "FR-MCP-179",
+      "ac": "ac-PollReadDoesNotAcknowledge"
+    },
+    {
+      "test": "TEST-MCP-227",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-006",
+      "text": "Given desired becomes8 while report7 is in flight, when report7 arrives, then reported=7, desired=8 and the subscription remains pending.",
+      "satisfied": false,
+      "fr": "FR-MCP-179",
+      "ac": "ac-AckOldGenerationPreservesNewRequest"
+    },
+    {
+      "test": "TEST-MCP-227",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-006",
+      "text": "Given remote=A1 but control still names C0 after a crash, when reconciliation runs, then it records A1 and advances desired generation without producing another commit.",
+      "satisfied": false,
+      "fr": "FR-MCP-179",
+      "ac": "ac-MissedNotificationReconciles"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "1BF4B9515DD0F4F331A5A5C65ECCACA95647122CBB974A81C7ED85D5862C663B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0SubscriptionStateContract.cs",
+      "lfNormalizedSha256": "3F660160B4D2E80D3394A099133D6F3806B8C2F756120088D8039829F2D64D71"
+    },
+    {
+      "sha256": "89330C5CDBBCE050977BA1E624181278077A5ED58E6735CBC83E3ED23D42B55F",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0SubscriptionStateMockGateTests.cs",
+      "lfNormalizedSha256": "9A0115412A277211B6F340DCCD4C308D7EB0C5AAF1B02F2D90EE33193927475B"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "6D2AA064953739F7AAC636E1B7DFB9979A74849EA16634B5DF77E2F1124AC66D",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T220135-fedph0-subscription-state-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "2340B2A7DAFFFEB085396912BF38CF40E95BC711E320D7911C0CD155866781CB",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_22-01-45.log"
+    }
+  ],
+  "pending": [
+    "Mock assertion discrimination only; no actual control database, publisher, scheduler or transport invoked.",
+    "Polling timing/jitter/backoff, worker fencing, all epoch interactions and real adapters remain pending.",
+    "B11 and broader B1-B12 acceptance, full phase gates and HV remain pending.",
+    "All tasks open; implementation barrier Closed; DEPLOY HOLD active."
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
