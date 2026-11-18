@@ -1,0 +1,1185 @@
+{
+  "timestampLocal": "2026-11-17T19:34:45",
+  "head": "c5772c1c2a024343cb049903cd3add42b8163ffd",
+  "taskId": "TASK-FEDPH0-004",
+  "status": "Source observations and proposed treatment; not accepted",
+  "sourcePins": [
+    {
+      "sha256": "0EABA353A4CD8F5BF9574BC0FCA1B05563A2E5AB92180E2AB9D90F1EC9743858",
+      "path": "src/QBrainAi.Services/Services/ITriageTodoCreator.cs"
+    },
+    {
+      "sha256": "3912CADD554995458422CB3AF395F6A691C71AD34053DD6021D3452F45C4CD19",
+      "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedTriageTodoCreator.cs"
+    },
+    {
+      "sha256": "1D9A36EFB02580FEBCCCA2C4DFA51869C8FF906EE013EE87E821BC3F61001478",
+      "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedTodoMutationService.cs"
+    },
+    {
+      "sha256": "9D3B0C428FD2C8B85FC6708C153B1F290F0D0E6A98F35EE7E0D28924B1D090AA",
+      "path": "src/QBrainAi.Services/Services/TriageService.cs"
+    },
+    {
+      "sha256": "1D1FCFBF24918B8E13189D064ED594E7080C031CB15C839769FCF2480DAE7EE4",
+      "path": "src/QBrainAi.Services/Services/HandoffIngestionService.cs"
+    },
+    {
+      "sha256": "D24532A5D9C932B9ACC253BED44977D29185C52758B2660C8F0C9EF9A47143D2",
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs"
+    },
+    {
+      "sha256": "43BD025B8E796677E285982E8701A274D8CA7ED2C468E07F381092215F3C3BE1",
+      "path": "src/QBrainAi.Services/Memory/Commands/RunConsolidateJobCommandHandler.cs"
+    },
+    {
+      "sha256": "B76183B78699E40326CE3D13E8F6C681551FD0AC409C386F6C723F4A49ABE52D",
+      "path": "src/QBrainAi.Services/Memory/Models/MemoryS4Models.cs"
+    },
+    {
+      "sha256": "10DED5440ED566A3C579FE3A96CCC2C64E12A3B747E7E42E4C423FC470B01720",
+      "path": "src/QBrainAi.Services/Services/TodoBootstrapImporter.cs"
+    },
+    {
+      "sha256": "8817D5820529D2BD02FA608763D66335059BFC286000338907D78C7181128951",
+      "path": "src/QBrainAi.Services/Services/LegacyTodoSqliteMigrator.cs"
+    },
+    {
+      "sha256": "B29FBD5AF2652A3D6F57D672C63C87ED390192950417F79DEC95EAA4A29A317E",
+      "path": "src/QBrainAi.Support.Mcp/Program.cs"
+    },
+    {
+      "sha256": "EF817FAA86A08C5194F8C69B32BCCFAA3869920DA8689641A50C7747D10C6D89",
+      "path": "src/QBrainAi.Support.Mcp/McpStdio/McpStdioHost.cs"
+    },
+    {
+      "sha256": "E6D013959E84088E0490210B809B6A7E9BFE6279279F27DDD7ECAA3E1FEFCE40",
+      "path": "src/QBrainAi.Services/Models/UseCaseModels.cs"
+    },
+    {
+      "sha256": "18BFDDAB21C5B2CAB9E855C989F96549E99555A93274D77AEE6B7945F9DCDAAC",
+      "path": "src/QBrainAi.Client/Models/UseCaseModels.cs"
+    },
+    {
+      "sha256": "42BF5BF571EB132DE8986C274C2256C9057CACDBA67FAB2295DC293EEABBBDCA",
+      "path": "src/QBrainAi.Services/Services/TodoValidator.cs"
+    },
+    {
+      "sha256": "622609585E5D107E5E20B72AF8172EC2C477053C5F73B13C03F424DA8D02FEC0",
+      "path": "src/QBrainAi.Services/Services/SessionLogTurnContextValidator.cs"
+    },
+    {
+      "sha256": "ACC16571500FD045141D627CDBF7689E3029B63CFFE86C24CD9FA6AE7978C6E3",
+      "path": "src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs"
+    },
+    {
+      "sha256": "C2ED1C2B0245DC671F26E1588C10A3BA41839438E5380E3D489B01C561847648",
+      "path": "src/QBrainAi.Services/Services/HandoffTodoDraftValidator.cs"
+    },
+    {
+      "sha256": "7E366AAAA73B6F4FBA9456EF2FB3EA762AAF4F24031B6DD306AE3B083EA75476",
+      "path": "src/QBrainAi.Repl.Core/TodoWorkflow.cs"
+    },
+    {
+      "sha256": "9BEAD3B7CC54C9F475FB44F689B26907C8ABEF34C7075C091E4DE51374B242D0",
+      "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs"
+    },
+    {
+      "sha256": "3482BD0F10497F9E80485F09CD8377895866527B35DF5E448C3C443BF3EC9D8C",
+      "path": "src/QBrainAi.Repl.Core/ReplYamlMessageValidator.cs"
+    },
+    {
+      "sha256": "467F63CA29593B60DEB632D0ACCA6DD8C6483BB6C500D41201A666C07CB00450",
+      "path": "src/QBrainAi.Services/Services/MemoryService.cs"
+    },
+    {
+      "sha256": "EDA46C03A5D6C4E4F70DA8438EF4C38A054EE5879A76A9F1AFCC8A0ECFCE2B77",
+      "path": "src/QBrainAi.Services/Services/TodoExecutionService.cs"
+    },
+    {
+      "sha256": "861763BD2ACEC58836CE42B71C04697660ECBAB068872CE85E1986BB855D3DD0",
+      "path": "src/QBrainAi.Support.Mcp/Identity/IdentityServerExtensions.cs"
+    },
+    {
+      "sha256": "24675EAD5E3FC3A631AABE2CDFA10908B518C6E1F95EA56802A401284596C4EF",
+      "path": "src/QBrainAi.Support.Mcp/Identity/EmbeddedIdentityServerStrategy.cs"
+    }
+  ],
+  "modelInputSha256": "F42DAF75423DB96E2E5A871FBB3062D962ADC2AEC94E3FBB14D9B90F32AAAF18",
+  "classificationInputSha256": "9E623372B679204FDFB061B343DC61F1185BBF060884270A9870214D933A373F",
+  "keyComponents": [
+    {
+      "entityPrimaryKey": [
+        "ActorId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "ActorEntity",
+      "key": "ActorId"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "AgentDefinitionEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "AgentDefinitionModelEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "AgentEventLogEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int32",
+      "valueGenerated": "OnAdd",
+      "entity": "AgentWorkspaceEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "AgentWorkspaceListItemEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "SlotId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "BrainSlotDefinitionEntity",
+      "key": "WorkspaceId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "SlotId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "BrainSlotDefinitionEntity",
+      "key": "SlotId"
+    },
+    {
+      "entityPrimaryKey": [
+        "InvocationId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "BrainSlotInvocationEntity",
+      "key": "InvocationId"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "ContextChunkEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "ContextDocumentEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "AuditId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "PermanentAudit",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "DataAuditLogEntity",
+      "key": "AuditId"
+    },
+    {
+      "entityPrimaryKey": [
+        "ConflictId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "FederationConflictEntity",
+      "key": "ConflictId"
+    },
+    {
+      "entityPrimaryKey": [
+        "OperationId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "FederationOperationEntity",
+      "key": "OperationId"
+    },
+    {
+      "entityPrimaryKey": [
+        "Sequence"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "FederationOutboxEntity",
+      "key": "Sequence"
+    },
+    {
+      "entityPrimaryKey": [
+        "ProxyId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "FederationProxyEntity",
+      "key": "ProxyId"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "FederationWorkspaceEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "GraphEntityEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "GraphRelationshipEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "DiagnosticId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "HandoffDiagnosticEntity",
+      "key": "DiagnosticId"
+    },
+    {
+      "entityPrimaryKey": [
+        "RunId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "HandoffIngestionRunEntity",
+      "key": "RunId"
+    },
+    {
+      "entityPrimaryKey": [
+        "LinkId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "HostileReviewArtifactLinkEntity",
+      "key": "LinkId"
+    },
+    {
+      "entityPrimaryKey": [
+        "DiagnosticId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "HostileReviewDiagnosticEntity",
+      "key": "DiagnosticId"
+    },
+    {
+      "entityPrimaryKey": [
+        "ExecutionId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "HostileReviewExecutionEntity",
+      "key": "ExecutionId"
+    },
+    {
+      "entityPrimaryKey": [
+        "FindingId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "HostileReviewFindingEntity",
+      "key": "FindingId"
+    },
+    {
+      "entityPrimaryKey": [
+        "RequestId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "HostileReviewRequestEntity",
+      "key": "RequestId"
+    },
+    {
+      "entityPrimaryKey": [
+        "EdgeRowId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "MemoryEdges",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "MemoryEdgeEntity",
+      "key": "EdgeRowId"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "WorkspaceMemory",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "MemoryEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "MemoryId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "DerivedIndex",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "MemoryIndexEntity",
+      "key": "MemoryId"
+    },
+    {
+      "entityPrimaryKey": [
+        "VersionRowId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "WorkspaceMemory",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "MemoryVersionEntity",
+      "key": "VersionRowId"
+    },
+    {
+      "entityPrimaryKey": [
+        "ProductId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "ProductEntity",
+      "key": "ProductId"
+    },
+    {
+      "entityPrimaryKey": [
+        "ProductId",
+        "WorkspaceId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int64",
+      "valueGenerated": "Never",
+      "entity": "ProductWorkspaceMembershipEntity",
+      "key": "ProductId"
+    },
+    {
+      "entityPrimaryKey": [
+        "ProductId",
+        "WorkspaceId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "ProductWorkspaceMembershipEntity",
+      "key": "WorkspaceId"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "RequirementAcceptanceCriterionEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "Kind",
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "RequirementEntity",
+      "key": "WorkspaceId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "Kind",
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "RequirementEntity",
+      "key": "Kind"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "Kind",
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "RequirementEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "Key"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "RequirementScopeLayerEntity",
+      "key": "WorkspaceId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "Key"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "RequirementScopeLayerEntity",
+      "key": "Key"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "FrId",
+        "TargetKind",
+        "TargetId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "RequirementTraceabilityLinkEntity",
+      "key": "WorkspaceId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "FrId",
+        "TargetKind",
+        "TargetId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "RequirementTraceabilityLinkEntity",
+      "key": "FrId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "FrId",
+        "TargetKind",
+        "TargetId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "RequirementTraceabilityLinkEntity",
+      "key": "TargetKind"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "FrId",
+        "TargetKind",
+        "TargetId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "RequirementTraceabilityLinkEntity",
+      "key": "TargetId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "IdempotencyKey"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "RequirementsRecoveryRunEntity",
+      "key": "WorkspaceId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "IdempotencyKey"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "RequirementsRecoveryRunEntity",
+      "key": "IdempotencyKey"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "SessionPromotion",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "SessionLogActionEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "SessionPromotion",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "SessionLogCommitEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "SessionPromotion",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "SessionLogCommitFileEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "SessionPromotion",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "SessionLogEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "SessionPromotion",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "SessionLogProcessingDialogEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "SessionPromotion",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "SessionLogTagEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "SessionPromotion",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "SessionLogTurnContextEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "SessionPromotion",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "SessionLogTurnEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "SessionPromotion",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "SessionLogTurnStringListEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "SessionPromotion",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "SessionLogTurnTagEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "AuditId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "PermanentAudit",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "TodoAuditHistoryEntity",
+      "key": "AuditId"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "TodoCompletedGroupEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "TodoCompletedItemEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "SingletonId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "TodoDocumentMetadataEntity",
+      "key": "WorkspaceId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "SingletonId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int32",
+      "valueGenerated": "Never",
+      "entity": "TodoDocumentMetadataEntity",
+      "key": "SingletonId"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "TodoDocumentNoteEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "TodoItemEntity",
+      "key": "WorkspaceId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "TodoItemEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "TodoItemListItemEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "TodoItemTaskEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "TodoId",
+        "RequirementKind",
+        "RequirementId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "TodoRequirementLinkEntity",
+      "key": "WorkspaceId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "TodoId",
+        "RequirementKind",
+        "RequirementId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "TodoRequirementLinkEntity",
+      "key": "TodoId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "TodoId",
+        "RequirementKind",
+        "RequirementId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "TodoRequirementLinkEntity",
+      "key": "RequirementKind"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "TodoId",
+        "RequirementKind",
+        "RequirementId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "TodoRequirementLinkEntity",
+      "key": "RequirementId"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int32",
+      "valueGenerated": "OnAdd",
+      "entity": "ToolBucketEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int32",
+      "valueGenerated": "OnAdd",
+      "entity": "ToolDefinitionEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int32",
+      "valueGenerated": "OnAdd",
+      "entity": "ToolDefinitionTagEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "GroupId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "TriageGroupEntity",
+      "key": "GroupId"
+    },
+    {
+      "entityPrimaryKey": [
+        "ReportId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "TriageReportEntity",
+      "key": "ReportId"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "TriageReportListItemEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "RunId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "HostOperations",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "TriageResearchRunEntity",
+      "key": "RunId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "UseCaseId",
+        "ActorId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "UseCaseActorEntity",
+      "key": "WorkspaceId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "UseCaseId",
+        "ActorId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "Never",
+      "entity": "UseCaseActorEntity",
+      "key": "UseCaseId"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId",
+        "UseCaseId",
+        "ActorId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "Never",
+      "entity": "UseCaseActorEntity",
+      "key": "ActorId"
+    },
+    {
+      "entityPrimaryKey": [
+        "UseCaseId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "UseCaseEntity",
+      "key": "UseCaseId"
+    },
+    {
+      "entityPrimaryKey": [
+        "ExtensionPointId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "UseCaseExtensionPointEntity",
+      "key": "ExtensionPointId"
+    },
+    {
+      "entityPrimaryKey": [
+        "FlowId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "UseCaseFlowEntity",
+      "key": "FlowId"
+    },
+    {
+      "entityPrimaryKey": [
+        "LinkId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "UseCaseFrLinkEntity",
+      "key": "LinkId"
+    },
+    {
+      "entityPrimaryKey": [
+        "SpecialReqId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "UseCaseSpecialRequirementEntity",
+      "key": "SpecialReqId"
+    },
+    {
+      "entityPrimaryKey": [
+        "StepId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "UseCaseStepEntity",
+      "key": "StepId"
+    },
+    {
+      "entityPrimaryKey": [
+        "Id"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "AuthoredProject",
+      "clrType": "System.Int64",
+      "valueGenerated": "OnAdd",
+      "entity": "WorkspaceBannedItemEntity",
+      "key": "Id"
+    },
+    {
+      "entityPrimaryKey": [
+        "WorkspaceId"
+      ],
+      "baselineValueChanged": false,
+      "proposedPolicy": "WorkspaceSplit",
+      "clrType": "System.String",
+      "valueGenerated": "Never",
+      "entity": "WorkspaceEntity",
+      "key": "WorkspaceId"
+    }
+  ],
+  "generatedNumericKeyCounts": {
+    "total": 42,
+    "int32": 4,
+    "int64": 38
+  },
+  "indirectWriterFlows": [
+    {
+      "runtimeVerified": false,
+      "treatment": "Preserve existing transaction-coordinator semantics. In versioned mode a background research job retains proposal/intent in control storage without acquiring an editing lease or changing project rows. An explicitly authorized application of that proposal enters the owning server project/branch/fence gate. A mutation helper is not evidence of automatic-writer authorization.",
+      "observed": "HTTP Program:400 and stdio host:204 select TransactionGatedTriageTodoCreator. TriageService:1158-1173 -> ITriageTodoCreator.CreateAsync -> TransactionGatedTriageTodoCreator:20-21 -> TransactionGatedTodoMutationService:104-129,248-298 -> selected TODO service. Default non-host creator forwards directly at ITriageTodoCreator:32-33.",
+      "id": "triage-todo"
+    },
+    {
+      "runtimeVerified": false,
+      "treatment": "Keep ingestion diagnostics, recovery intent, lease/version and source artifacts operational. An explicit create or approval command may enter the project gate with its captured owner/fence; background completion cannot infer that authority or acquire a lease. Retain pending result for explicit apply when authority no longer holds. Reconcile replay by intent and existing result without rerunning unrelated external effects.",
+      "observed": "HandoffIngestionService:172-202 can create through mode-policy outcome; approval:421 calls the same TryCreateTodoAsync. The method:485 persists TodoCreationIntentId with a version predicate, then:497-511 resolves TODO service and creates content using that idempotency intent.",
+      "id": "handoff-todo"
+    },
+    {
+      "runtimeVerified": false,
+      "treatment": "Dry-run can read a captured project branch without writing it. Non-dry-run workspace-memory apply requires explicit owner/fence and transactional complete graph mutation; unattended invocation retains a proposal only. Global/machine-memory operational behavior remains separate. Never silently substitute the control copy for a versioned Workspace memory.",
+      "observed": "MemoryConsolidateOperations:36-150 explicit consolidate and:160-255 job method reach lineage/edge rewrites and memory removal followed by SaveChanges. Job defaults to dry-run at:165 via MemoryS4Models DefaultDryRun=true. Command handler:20-22 constructs full McpDbContext then invokes the job. A job-capable method is not proof an unattended scheduler is registered or active.",
+      "id": "memory-consolidate"
+    },
+    {
+      "runtimeVerified": false,
+      "treatment": "For enrolled versioned projects, startup YAML bootstrap cannot write the project database. Use reviewed seed/join/import workflow under the plan manifest and gate. Existing standalone behavior stays intact; derived projection goes outward from accepted project content.",
+      "observed": "TodoBootstrapImporter IHostedService StartAsync:58 -> RunAsync:78 -> BootstrapWorkspaceAsync:151; direct content SaveChanges:202. Program:733 registers hosted service. Empty target/marker checks alone do not distinguish a newly cloned/enrolled project from a standalone workspace.",
+      "id": "yaml-startup-import"
+    },
+    {
+      "runtimeVerified": false,
+      "treatment": "Keep standalone legacy migration behavior. For versioned mode do not auto-import at process startup; reviewed seed/join manifest separates versioned content from permanent operational audit and verifies both. Marker/empty checks are not migration authorization.",
+      "observed": "LegacyTodoSqliteMigrator StartAsync:55 -> RunAsync:75 -> selected McpDbContext:99; adds TODO child graph and audit/metadata:110-124 then SaveChanges:126. Program:727 registers hosted service.",
+      "id": "legacy-startup-import"
+    }
+  ],
+  "identityFacts": [
+    {
+      "requiredTreatment": "B4 must select exact representation, versioned DTO/route behavior, explicit legacy aliases and all relational remapping before implementation.",
+      "observation": "Service DTO UseCaseSummaryDto.UseCaseId:210 and UseCaseDetailDto.UseCaseId:240 are Int64; client equivalents:258,292 are Int64. Actor/flow/step/link and service special-requirement/extension-point DTO IDs also use long. A string tag cannot be inserted into these fields without a new compatible contract surface.",
+      "id": "public-numeric-usecases"
+    },
+    {
+      "requiredTreatment": "Use central per-family parsing and explicit generated provenance; preserve legacy bytes and validate tagged syntax separately. Audit plugin, traceability, link extraction, sorting and display consumers.",
+      "observation": "TODO validators/extractors and requirement REPL validators commonly require exactly three trailing decimal digits; MemoryService:406 accepts at least three. Existing legacy compatibility cannot be achieved by globally replacing one regex.",
+      "id": "parser-width"
+    },
+    {
+      "requiredTreatment": "Enrolled-project generated identities need durable branch-independent, nonreused allocation. These existing producers alone do not establish that property. Preserve standalone behavior.",
+      "observation": "MemoryService.GenerateNextIdAsync:324-347 scans matching rows including soft deletes then max+1; TodoExecutionService.GenerateNextTodoIdAsync:1364-1385 increments execution state and checks current/soft-deleted TODOs; TriageService.GenerateNextTodoIdAsync:1250-1285 scans triage/TODO maxima.",
+      "id": "branch-local-allocators"
+    },
+    {
+      "requiredTreatment": "Inventory exact restored Duende7.4 services/stores and prove reference-token lifecycle in disposable B5 binding. Do not infer durable operational grants from McpIdentityDbContext model metadata.",
+      "observation": "IdentityServerExtensions:25-26 registers SQL Server ASP.NET Identity;:51-54 registers in-memory IdentityServer resources/scopes/clients. EmbeddedIdentityServerStrategy:42-53 configures JWT bearer. B5 reference-token/introspection/revocation and persisted grants are not established by this setup.",
+      "id": "identity-store-boundary"
+    }
+  ],
+  "limitations": [
+    "Five named call flows are verified source observations, not a complete dynamic call graph or writer closure",
+    "No public ID grammar adopted, no DTO or entity changed, no runtime relational/Dolt binding",
+    "IdentityServer source boundary observation is not a package/API or security feasibility verdict",
+    "No baseline or production behavior declared defective solely because federation will require different routing"
+  ],
+  "operatorAccepted": false,
+  "runtimeEvidence": false,
+  "phase0Complete": false
+}

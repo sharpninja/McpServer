@@ -5,6 +5,8 @@ namespace QBrainAi.Support.Mcp.Tests.Federation.Phase0;
 /// 2026-11-17: TASK-FEDPH0-004; FR-MCP-182 ac-TwoNodesCreateDistinctIds, ac-LegacyIdsRemainValid;
 /// FR-MCP-184 ac-BackgroundWritersDoNotDirtyVersionedBranch; TR-MCP-FEDERATION-009/011; TEST-MCP-230/232.
 /// No real database, migration, allocator grammar or production adapter is implemented or accepted here.
+/// 2026-11-17: FR-MCP-184 ac-BackgroundWritersDoNotDirtyVersionedBranch; B2 source inventory extends
+/// negative controls to indirect triage/handoff/consolidation and startup-import proposals, including unwanted lease acquisition.
 /// </remarks>
 public sealed class Phase0IdentityIsolationMockGateTests
 {
@@ -14,10 +16,11 @@ public sealed class Phase0IdentityIsolationMockGateTests
     {
         var probe = new WriterProbe();
         Phase0IdentityIsolationContract.AssertBackgroundIsolation(probe);
-        Assert.Equal(3, probe.Writes);
-        Assert.Equal(4, probe.FingerprintReads);
-        Assert.Equal(4, probe.HeadReads);
-        Assert.Equal(4, probe.RowReads);
+        Assert.Equal(8, probe.Writes);
+        Assert.Equal(9, probe.FingerprintReads);
+        Assert.Equal(9, probe.HeadReads);
+        Assert.Equal(9, probe.RowReads);
+        Assert.Equal(9, probe.LeaseReads);
     }
 
     /// <summary>Both sequence-one node records survive reconciliation with all content and provenance.</summary>
@@ -54,9 +57,9 @@ public sealed class Phase0IdentityIsolationMockGateTests
     {
         get
         {
-            for (var checkpoint = 0; checkpoint < 4; checkpoint++)
+            for (var checkpoint = 0; checkpoint < 9; checkpoint++)
             {
-                foreach (var fault in new[] { "Head", "Fingerprint", "FingerprintNull", "FingerprintEmpty", "RowsMissing", "RowsExtra" })
+                foreach (var fault in new[] { "Head", "Fingerprint", "FingerprintNull", "FingerprintEmpty", "RowsMissing", "RowsExtra", "Lease" })
                     yield return [checkpoint, fault];
                 if (checkpoint == 0) continue;
                 yield return [checkpoint, "RowDropped"];
@@ -132,7 +135,12 @@ public sealed class Phase0IdentityIsolationMockGateTests
         internal int FingerprintReads { get; private set; }
         internal int HeadReads { get; private set; }
         internal int RowReads { get; private set; }
-        private static readonly string[] Kinds = ["heartbeat", "audit", "automatic-session"];
+        // Independent fixture schedule is intentionally separate from the assertion's writer list.
+        private static readonly string[] Kinds = ["heartbeat", "audit", "automatic-session", "triage-proposal", "handoff-result", "consolidation-proposal", "yaml-bootstrap-plan", "legacy-import-plan"];
+        /// <summary>Counts independent editing-lease observations.</summary>
+        internal int LeaseReads { get; private set; }
+        /// <inheritdoc />
+        public string? ReadEditingLease() => LeaseReads++ == checkpoint && fault == "Lease" ? "unexpected-automatic-owner" : null;
         /// <inheritdoc />
         public void Prepare() => Writes = 0;
         /// <inheritdoc />

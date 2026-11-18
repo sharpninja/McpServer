@@ -2,7 +2,7 @@ namespace QBrainAi.Support.Mcp.Tests.Federation.Phase0;
 
 /// <summary>An independently read operational record, excluded from the versioned project context.</summary>
 /// <param name="Id">Fixture operation identity.</param>
-/// <param name="Kind">Heartbeat, audit or automatic-session kind.</param>
+/// <param name="Kind">Operational writer or retained proposal/import-plan kind.</param>
 /// <param name="Payload">Persisted fixture data.</param>
 /// <remarks>2026-11-17: FR-MCP-184 ac-BackgroundWritersDoNotDirtyVersionedBranch; TEST-MCP-232.</remarks>
 internal sealed record Phase0OperationalRow(string Id, string Kind, string Payload);
@@ -27,6 +27,10 @@ internal interface IPhase0OperationalWriterProbe
     /// <summary>Reads persisted operational rows independently of the writer's return value.</summary>
     /// <returns>All fixture operational rows.</returns>
     IReadOnlyList<Phase0OperationalRow>? ReadOperationalRows();
+    /// <summary>Reads the editing lease independently; automatic work must not acquire one.</summary>
+    /// <returns>Null when this initially unowned fixture remains unowned.</returns>
+    /// <remarks>2026-11-17: FR-MCP-184 ac-BackgroundWritersDoNotDirtyVersionedBranch; B2 indirect-writer closure.</remarks>
+    string? ReadEditingLease();
 }
 
 /// <summary>A created or resolved TODO with stable provenance and content.</summary>
@@ -103,14 +107,17 @@ internal static class Phase0IdentityIsolationContract
         var fingerprint = probe.ReadWorkingSetFingerprint();
         Assert.False(string.IsNullOrWhiteSpace(fingerprint));
         Assert.Empty(Assert.IsAssignableFrom<IReadOnlyList<Phase0OperationalRow>>(probe.ReadOperationalRows()));
+        Assert.Null(probe.ReadEditingLease());
         var expected = new List<Phase0OperationalRow>();
-        foreach (var kind in new[] { "heartbeat", "audit", "automatic-session" })
+        // Source-traced indirect writers retain proposals/plans, never apply project content automatically.
+        foreach (var kind in new[] { "heartbeat", "audit", "automatic-session", "triage-proposal", "handoff-result", "consolidation-proposal", "yaml-bootstrap-plan", "legacy-import-plan" })
         {
             var row = new Phase0OperationalRow("op-" + (expected.Count + 1), kind, "payload:" + kind);
             probe.RunWriter(row.Id, row.Kind, row.Payload);
             expected.Add(row);
             Assert.Equal("C0", probe.ReadHead());
             Assert.Equal(fingerprint, probe.ReadWorkingSetFingerprint());
+            Assert.Null(probe.ReadEditingLease());
             var actual = Assert.IsAssignableFrom<IReadOnlyList<Phase0OperationalRow>>(probe.ReadOperationalRows());
             Assert.Equal(expected.OrderBy(item => item.Id), actual.OrderBy(item => item.Id));
         }

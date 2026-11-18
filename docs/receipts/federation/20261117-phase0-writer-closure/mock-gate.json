@@ -1,0 +1,84 @@
+{
+  "timestampLocal": "2026-11-17T19:42:56",
+  "tasks": [
+    "TASK-FEDPH0-004"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T194129-fedph0-writer-closure-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0IdentityIsolationMockGateTests --test-run-id 20261117T194129-fedph0-writer-closure-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 270,
+  "passed": 270,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 4,
+  "expectedNegativeControls": 266,
+  "coverage": [
+    {
+      "test": "TEST-MCP-230",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-009",
+      "text": "Given tags LA and LG and both counters start1, when both create a TODO, then generated IDs differ and both records survive reconciliation.",
+      "satisfied": false,
+      "fr": "FR-MCP-182",
+      "ac": "ac-TwoNodesCreateDistinctIds"
+    },
+    {
+      "test": "TEST-MCP-230",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-009",
+      "text": "Given existing IMPL-UNITGREEN-001 and old TODO references, when imported and read by their original IDs, then they resolve through permanent aliases without rewriting commits, PR text, session logs, memories or documents.",
+      "satisfied": false,
+      "fr": "FR-MCP-182",
+      "ac": "ac-LegacyIdsRemainValid"
+    },
+    {
+      "test": "TEST-MCP-232",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-011",
+      "text": "Given main=C0 is clean, when heartbeat, audit and automatic session capture run, then Dolt working-set fingerprint remains unchanged.",
+      "satisfied": false,
+      "fr": "FR-MCP-184",
+      "ac": "ac-BackgroundWritersDoNotDirtyVersionedBranch"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "EE1B37B7D0C4602EEADBB771C8DDFB5B5B961C69FAFCE3A680E4C3FE8B8E1F01",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityIsolationContract.cs",
+      "lfNormalizedSha256": "0F6F47012921F5AC46CD1DDF990B337BEF0650C1BBE942A4E37F57E87A921118"
+    },
+    {
+      "sha256": "9F1E581070B16DD70838ED05D8A59C0E0CB3E7816E317E0471784FFD4572DC76",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityIsolationMockGateTests.cs",
+      "lfNormalizedSha256": "F5A3A95683C21EC367AEA4B93B8ADEFBD364BA4A01DD219AF48C17D095F46DF8"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "17E349383CA35D73540DCD8653F7DD8BB518DF9BE424DF20B2F3F08514F1487F",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T194129-fedph0-writer-closure-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "8494E390D47182E171209FB4336EE8F32DE851BA0B1F3A0F07C57F1DA965A104",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_19-41-32.log"
+    }
+  ],
+  "pending": [
+    "Proposed B4 API/capability and allocator error dispositions",
+    "Complete writer-call closure and relational-provider inventory",
+    "Full B2/B3/B4 discriminating mocks and disposable real binding on both hosts",
+    "Final-head full gates and actual independent group HV",
+    "Operator B1-B12 acceptance"
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
