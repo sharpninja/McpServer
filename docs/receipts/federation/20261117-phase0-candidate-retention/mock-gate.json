@@ -1,0 +1,75 @@
+{
+  "timestampLocal": "2026-11-17T22:36:15",
+  "tasks": [
+    "TASK-FEDPH0-006",
+    "TASK-FEDPH0-007"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T223531-fedph0-candidate-retention-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0CandidateRetentionMockGateTests --test-run-id 20261117T223531-fedph0-candidate-retention-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 1312,
+  "passed": 1312,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 8,
+  "expectedNegativeControls": 1304,
+  "coverage": [
+    {
+      "test": "TEST-MCP-228",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-007",
+      "text": "Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten.",
+      "satisfied": false,
+      "fr": "FR-MCP-180",
+      "ac": "ac-SameCellConflictNeedsReview"
+    },
+    {
+      "test": "TEST-MCP-228",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-007",
+      "text": "Given A1 deletes T1 and B1 edits T1.title, when histories merge, then needs_review retains B1 and the deleted/edited alternatives for review.",
+      "satisfied": false,
+      "fr": "FR-MCP-180",
+      "ac": "ac-DeleteUpdateNeedsReview"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "FEC702DF67E97F6CD497A15F53C0622E747F1A212C0A3749AAD99606FABEA484",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0CandidateRetentionContract.cs",
+      "lfNormalizedSha256": "C0A172C5BA35D570B5F3E0BEA80EF859B0FCA17E7B59A8594906D1AD9C72303F"
+    },
+    {
+      "sha256": "411C954420ECEF407A4149F8B6F14A07D4DDE8566608D464D7C5519CFE339768",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0CandidateRetentionMockGateTests.cs",
+      "lfNormalizedSha256": "2E8691092131B64D5233F4BEE50E4BE7CAAC04A8385CD734CBB2BCE8B5EE4F1E"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "139E30A370C8C4885A586D967592FD5518473386D0BF5339B0E7BC398D69B689",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T223531-fedph0-candidate-retention-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "54F7E830DA091E42E83C4983F550C2195B38DB876018C5B0EB22E103ED13C19C",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_22-35-45.log"
+    }
+  ],
+  "pending": [
+    "Mock assertion proof only; candidate transfer, native GC, restart and private schema/constraint persistence are not proven.",
+    "Schema and unique-constraint fixtures supplement B6/B12 and do not exhaust the required constraint matrix.",
+    "No selected persistence sequence, production adapter, task acceptance or implementation-barrier change.",
+    "Windows initial1263 run is retained under TestResults as superseded; this1312 run adds independent native-operation observations."
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}

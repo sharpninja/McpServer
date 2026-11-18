@@ -1,0 +1,211 @@
+{
+  "timestampLocal": "2026-11-17T22:26:01",
+  "candidateVersion": "2.7.4",
+  "commit": "9e4102e303610fc4681de16a9f7bbbc870d884a3",
+  "tasks": [
+    "TASK-FEDPH0-006",
+    "TASK-FEDPH0-007"
+  ],
+  "requirements": [
+    "FR-MCP-180",
+    "TR-MCP-FEDERATION-007",
+    "TEST-MCP-228"
+  ],
+  "evidenceKind": "PinnedSourceInspection",
+  "sources": [
+    {
+      "url": "https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/doltdb/doltdb.go",
+      "excerpts": [
+        {
+          "endLine": 1007,
+          "startLine": 979,
+          "text": "// FastForwardWithWorkspaceCheck performs a fast-forward of |branch| to |commit| only if the remote\n// working set is in sync with its HEAD, then updates the working set to match the new HEAD.\n// This is used when pushing to a remote. If the remote does not maintain a working set, no working\n// set update is performed.\n// When |allowDirtyWorking| is true, the working set may have unstaged changes, such as ignored tables.\nfunc (ddb *DoltDB) FastForwardWithWorkspaceCheck(ctx context.Context, branch ref.DoltRef, commit *Commit, allowDirtyWorking bool) error {\n\tds, err := ddb.db.GetDataset(ctx, branch.String())\n\tif err != nil {\n\t\treturn err\n\t}\n\n\taddr, err := commit.HashOf()\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tws := \"\"\n\tpushConcurrencyControl := chunks.GetPushConcurrencyControl(datas.ChunkStoreFromDatabase(ddb.db))\n\tif pushConcurrencyControl == chunks.PushConcurrencyControl_AssertWorkingSet {\n\t\twsRef, err := ref.WorkingSetRefForHead(branch)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tws = wsRef.String()\n\t}\n\n\t_, err = ddb.db.FastForward(ctx, ds, addr, ws, allowDirtyWorking)\n\n\treturn err"
+        },
+        {
+          "endLine": 2144,
+          "startLine": 2089,
+          "text": "// GC performs garbage collection on this ddb.\n//\n// If |safepointF| is non-nil, it will be called at some point after the GC begins\n// and before the GC ends. It will be called without\n// Database/ValueStore/NomsBlockStore locks held. If should establish\n// safepoints in every application-level in-progress read and write workflow\n// against this DoltDB. Examples of doing this include, for example, blocking\n// until no possibly-stale ChunkStore state is retained in memory, or failing\n// certain in-progress operations which cannot be finalized in a timely manner,\n// etc.\nfunc (ddb *DoltDB) GC(ctx context.Context, gcConfig chunks.GCConfig, safepointController types.GCSafepointController) error {\n\tcollector, ok := ddb.db.Database.(datas.GarbageCollector)\n\tif !ok {\n\t\treturn fmt.Errorf(\"this database does not support garbage collection\")\n\t}\n\n\terr := ddb.pruneUnreferencedDatasets(ctx)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tdatasets, err := ddb.db.Datasets(ctx)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tnewGen := make(hash.HashSet)\n\toldGen := make(hash.HashSet)\n\terr = datasets.IterAll(ctx, func(keyStr string, h hash.Hash) error {\n\t\tvar isOldGen bool\n\t\tswitch {\n\t\tcase ref.IsRef(keyStr):\n\t\t\tparsed, err := ref.Parse(keyStr)\n\t\t\tif err != nil && !errors.Is(err, ref.ErrUnknownRefType) {\n\t\t\t\treturn err\n\t\t\t}\n\n\t\t\trefType := parsed.GetType()\n\t\t\tisOldGen = refType == ref.BranchRefType || refType == ref.RemoteRefType || refType == ref.InternalRefType\n\t\t}\n\n\t\tif isOldGen {\n\t\t\toldGen.Insert(h)\n\t\t} else {\n\t\t\tnewGen.Insert(h)\n\t\t}\n\n\t\treturn nil\n\t})\n\n\tif err != nil {\n\t\treturn err\n\t}\n\n\treturn collector.GC(ctx, gcConfig, oldGen, newGen, safepointController)\n}"
+        },
+        {
+          "endLine": 2182,
+          "startLine": 2150,
+          "text": "func (ddb *DoltDB) pruneUnreferencedDatasets(ctx context.Context) error {\n\tdd, err := ddb.db.Datasets(ctx)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tvar deletes []string\n\t_ = dd.IterAll(ctx, func(dsID string, _ hash.Hash) (err error) {\n\t\tif !ref.IsRef(dsID) && !ref.IsWorkingSet(dsID) {\n\t\t\tdeletes = append(deletes, dsID)\n\t\t}\n\t\treturn nil\n\t})\n\n\t// e.g. flushes\n\tfor _, dsID := range deletes {\n\t\tds, err := ddb.db.GetDataset(ctx, dsID)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\n\t\tds, err = ddb.db.Delete(ctx, ds, \"\")\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\n\t\tif ds.HasHead() {\n\t\t\treturn fmt.Errorf(\"unsuccessful delete for dataset %s\", ds.ID())\n\t\t}\n\t}\n\n\treturn nil\n}"
+        }
+      ],
+      "decodedLfUtf8Sha256": "1B8D4526347D66C4051EB54905FDF499B07F4DAAF4FD8308637D0C27BD6E0714",
+      "path": "go/libraries/doltcore/doltdb/doltdb.go",
+      "lineCount": 2735
+    },
+    {
+      "url": "https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/doltdb/workingset.go",
+      "excerpts": [
+        {
+          "endLine": 164,
+          "startLine": 133,
+          "text": "type MergeState struct {\n\t// the source commit\n\tcommit *Commit\n\t// the spec string that was used to specify |commit|\n\tcommitSpecStr    string\n\tpreMergeWorking  RootValue\n\tunmergableTables []TableName\n\tmergedTables     []TableName\n\t// isCherryPick is set to true when the in-progress merge is a cherry-pick. This is needed so that\n\t// commit knows to NOT create a commit with multiple parents when creating a commit for a cherry-pick.\n\tisCherryPick bool\n\t// isRevert is set to true when the in-progress merge is a revert operation. Like cherry-pick, a\n\t// revert should only create a single-parent commit, not a merge commit with two parents.\n\tisRevert bool\n\t// preMergeHeadCommit is the HEAD commit at the time the merge/cherry-pick/revert started.\n\t// This is used by --abort to restore the branch HEAD pointer to its pre-operation state\n\t// and ensure that any commits made as part of the merge/cherry-pick/revert are not reachable.\n\tpreMergeHeadCommit *Commit\n\t// pendingCommitsToProcess holds the remaining commit hashes to be processed after a conflict\n\t// is resolved in a multi-commit revert or cherry-pick series. When --continue is called,\n\t// these commits are applied, in order.\n\tpendingCommitsToProcess []string\n}\n\n// todo(andy): this might make more sense in pkg merge\ntype SchemaConflict struct {\n\tToSch, FromSch    schema.Schema\n\tToFks, FromFks    []ForeignKey\n\tToParentSchemas   map[TableName]schema.Schema\n\tFromParentSchemas map[TableName]schema.Schema\n\ttoTbl, fromTbl    *Table\n}"
+        },
+        {
+          "endLine": 264,
+          "startLine": 246,
+          "text": "func (m MergeState) HasSchemaConflicts() bool {\n\treturn len(m.unmergableTables) > 0\n}\n\nfunc (m MergeState) TablesWithSchemaConflicts() []TableName {\n\treturn m.unmergableTables\n}\n\nfunc (m MergeState) MergedTables() []TableName {\n\treturn m.mergedTables\n}\n\nfunc (m MergeState) IterSchemaConflicts(ctx context.Context, ddb *DoltDB, cb SchemaConflictFn) (err error) {\n\tvar to, from RootValue\n\n\tto = m.preMergeWorking\n\tif from, err = m.commit.GetRootValue(ctx); err != nil {\n\t\treturn err\n\t}"
+        },
+        {
+          "endLine": 759,
+          "startLine": 726,
+          "text": "\tvar mergeState *datas.MergeState\n\tif ws.mergeState != nil {\n\t\tr, preMergeWorking, err := db.doWriteRootValue(ctx, ws.mergeState.preMergeWorking, skipIfPresent)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tws.mergeState.preMergeWorking = r\n\n\t\th, err := ws.mergeState.commit.HashOf()\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tdCommit, err := datas.LoadCommitAddr(ctx, db.vrw, h)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\n\t\tvar headDCommit *datas.Commit\n\t\tif ws.mergeState.preMergeHeadCommit != nil {\n\t\t\theadH, err := ws.mergeState.preMergeHeadCommit.HashOf()\n\t\t\tif err != nil {\n\t\t\t\treturn nil, err\n\t\t\t}\n\t\t\theadDCommit, err = datas.LoadCommitAddr(ctx, db.vrw, headH)\n\t\t\tif err != nil {\n\t\t\t\treturn nil, err\n\t\t\t}\n\t\t}\n\n\t\t// TODO: Serialize the full TableName\n\t\tmergeState, err = datas.NewMergeState(preMergeWorking, dCommit, ws.mergeState.commitSpecStr, FlattenTableNames(ws.mergeState.unmergableTables), ws.mergeState.isCherryPick, ws.mergeState.isRevert, headDCommit, ws.mergeState.pendingCommitsToProcess)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}"
+        }
+      ],
+      "decodedLfUtf8Sha256": "112959513649A2C96483050AADCD474ED2FE1F00107665CB6378A43B54B85B91",
+      "path": "go/libraries/doltcore/doltdb/workingset.go",
+      "lineCount": 792
+    },
+    {
+      "url": "https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/env/actions/commit.go",
+      "excerpts": [
+        {
+          "endLine": 177,
+          "startLine": 140,
+          "text": "\t\treturn nil, NothingStaged{notStaged}\n\t}\n\n\tif !props.Force {\n\t\tinConflict, err := doltdb.TablesWithDataConflicts(ctx, roots.Working)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tif len(inConflict) > 0 {\n\t\t\treturn nil, NewTblInConflictError(inConflict)\n\t\t}\n\t\tviolatesConstraints, err := doltdb.TablesWithConstraintViolations(ctx, roots.Working)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tif len(violatesConstraints) > 0 {\n\t\t\treturn nil, NewTblHasConstraintViolations(violatesConstraints)\n\t\t}\n\n\t\tif ws.MergeActive() {\n\t\t\tschConflicts := ws.MergeState().TablesWithSchemaConflicts()\n\t\t\tif len(schConflicts) > 0 {\n\t\t\t\treturn nil, NewTblSchemaConflictError(schConflicts)\n\t\t\t}\n\t\t}\n\n\t\tfkChecks, err := ctx.GetSessionVariable(ctx, \"foreign_key_checks\")\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\n\t\tif intValue, ok := fkChecks.(int8); ok && intValue == 1 {\n\t\t\troots.Staged, err = doltdb.ValidateForeignKeysOnSchemas(ctx, tableResolver, roots.Staged)\n\t\t\tif err != nil {\n\t\t\t\treturn nil, err\n\t\t\t}\n\t\t}\n\t}"
+        }
+      ],
+      "decodedLfUtf8Sha256": "9E6F1750DB28550D7845576C82C0A96C5474135A5BD6D4F1F5E52EF6D016A458",
+      "path": "go/libraries/doltcore/env/actions/commit.go",
+      "lineCount": 262
+    },
+    {
+      "url": "https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/env/actions/remotes.go",
+      "excerpts": [
+        {
+          "endLine": 168,
+          "startLine": 85,
+          "text": "func Push(ctx context.Context, tempTableDir string, mode ref.UpdateMode, destRef ref.BranchRef, remoteRef ref.RemoteRef, srcDB, destDB *doltdb.DoltDB, commit *doltdb.Commit, statsCh chan pull.Stats) (*PushRefResult, error) {\n\th, err := commit.HashOf()\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tvar oldHash hash.Hash\n\tisNewBranch := false\n\tcanFF := true\n\tprevCommit, err := destDB.ResolveCommitRef(ctx, destRef)\n\tif errors.Is(err, doltdb.ErrBranchNotFound) {\n\t\tisNewBranch = true\n\t} else if err != nil {\n\t\treturn nil, err\n\t} else {\n\t\tif oldHash, err = prevCommit.HashOf(); err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tif oldHash == h {\n\t\t\treturn nil, doltdb.ErrUpToDate\n\t\t}\n\t\t// A forced push does not need an ancestry check. Besides being\n\t\t// unnecessary for the update itself, checking ancestry here can be\n\t\t// very expensive for remotes backed by the remotes API because every\n\t\t// parent lookup may be a network request. Keep the check for normal\n\t\t// pushes, where it is required to reject non-fast-forward updates.\n\t\tif mode == ref.FastForwardOnly {\n\t\t\tif canFF, err = prevCommit.CanFastForwardTo(ctx, commit); err != nil {\n\t\t\t\treturn nil, err\n\t\t\t}\n\t\t\tif !canFF {\n\t\t\t\treturn nil, ErrCantFF\n\t\t\t}\n\t\t}\n\t}\n\n\terr = destDB.PullChunks(ctx, tempTableDir, srcDB, []hash.Hash{h}, statsCh, nil)\n\tif errors.Is(err, nbs.ErrGhostChunkRequested) {\n\t\terr = ErrShallowPushImpossible\n\t}\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tswitch mode {\n\tcase ref.ForceUpdate:\n\t\terr = destDB.SetHeadAndWorkingSetToCommit(ctx, destRef, commit)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\terr = srcDB.SetHeadToCommit(ctx, remoteRef, commit)\n\tcase ref.FastForwardOnly:\n\t\t// Working sets with only ignored tables are allowed through\n\t\t// fast-forward updates without failing the workspace check.\n\t\tonlyIgnored := false\n\t\troots, err := destDB.ResolveBranchRoots(ctx, destRef)\n\t\tif err == nil {\n\t\t\tonlyIgnored, _ = diff.WorkingSetContainsOnlyIgnoredTables(ctx, roots)\n\t\t}\n\t\terr = destDB.FastForwardWithWorkspaceCheck(ctx, destRef, commit, onlyIgnored)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\t// We set the remote ref to the commit here, regardless of its\n\t\t// previous value. It does not need to be a FastForward update\n\t\t// of the local ref for this operation to succeed.\n\t\terr = srcDB.SetHeadToCommit(ctx, remoteRef, commit)\n\t}\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tresultType := PushResultTypeUpdated\n\tif isNewBranch {\n\t\tresultType = PushResultTypeNewBranch\n\t} else if mode == ref.ForceUpdate || !canFF {\n\t\tresultType = PushResultTypeForced\n\t}\n\n\treturn &PushRefResult{\n\t\tType:    resultType,\n\t\tOldHash: oldHash,\n\t\tNewHash: h,\n\t}, nil"
+        },
+        {
+          "endLine": 247,
+          "startLine": 230,
+          "text": "func push[C doltdb.Context](ctx C, rsr env.RepoStateReader[C], tmpDir string, src, dest *doltdb.DoltDB, remote *env.Remote, opts *env.PushTarget, statsCh chan pull.Stats) (*PushRefResult, error) {\n\tswitch opts.SrcRef.GetType() {\n\tcase ref.BranchRefType:\n\t\tif opts.SrcRef == ref.EmptyBranchRef {\n\t\t\tif err := deleteRemoteBranch(ctx, opts.DestRef, opts.RemoteRef, src, dest, *remote, opts.Mode.Force); err != nil {\n\t\t\t\treturn nil, err\n\t\t\t}\n\t\t\treturn &PushRefResult{Type: PushResultTypeDeleted}, nil\n\t\t}\n\t\treturn PushToRemoteBranch(ctx, rsr, tmpDir, opts.Mode, opts.SrcRef, opts.DestRef, opts.RemoteRef, src, dest, *remote, statsCh)\n\tcase ref.TagRefType:\n\t\tif err := pushTagToRemote(ctx, tmpDir, opts.SrcRef, opts.DestRef, src, dest, statsCh); err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\treturn &PushRefResult{Type: PushResultTypeNewTag}, nil\n\tdefault:\n\t\treturn nil, fmt.Errorf(\"%w: %s of type %s\", ErrCannotPushRef, opts.SrcRef.String(), opts.SrcRef.GetType())\n\t}"
+        },
+        {
+          "endLine": 345,
+          "startLine": 304,
+          "text": "// PushToRemoteBranch resolves |srcRef| to a commit and pushes it to\n// |destRef| on |remoteDB|, updating the local remote tracking\n// reference |remoteRef|.\n//\n// Returns a *PushRefResult on success recording whether the remote\n// branch was created or updated, or an error if the ref cannot be\n// resolved or the push is rejected.\nfunc PushToRemoteBranch[C doltdb.Context](ctx C, rsr env.RepoStateReader[C], tempTableDir string, mode ref.UpdateMode, srcRef, destRef, remoteRef ref.DoltRef, localDB, remoteDB *doltdb.DoltDB, remote env.Remote, statsCh chan pull.Stats) (*PushRefResult, error) {\n\tevt := events.GetEventFromContext(ctx)\n\n\tu, err := earl.Parse(remote.Url)\n\n\t// TODO: why is evt nil sometimes?\n\tif err == nil && evt != nil {\n\t\tif u.Scheme != \"\" {\n\t\t\tevt.SetAttribute(eventsapi.AttributeID_REMOTE_URL_SCHEME, u.Scheme)\n\t\t}\n\t}\n\n\tcs, _ := doltdb.NewCommitSpec(srcRef.GetPath())\n\theadRef, err := rsr.CWBHeadRef(ctx)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\toptCmt, err := localDB.Resolve(ctx, cs, headRef)\n\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"%w; refspec not found: '%s'; %s\", ref.ErrInvalidRefSpec, srcRef.GetPath(), err.Error())\n\t}\n\tcm, ok := optCmt.ToCommit()\n\tif !ok {\n\t\treturn nil, doltdb.ErrGhostCommitEncountered\n\t}\n\n\tres, err := Push(ctx, tempTableDir, mode, destRef.(ref.BranchRef), remoteRef.(ref.RemoteRef), localDB, remoteDB, cm, statsCh)\n\tswitch err {\n\tcase nil:\n\t\treturn res, nil\n\tcase doltdb.ErrUpToDate, doltdb.ErrIsAhead, ErrCantFF, datas.ErrMergeNeeded, datas.ErrDirtyWorkspace, ErrShallowPushImpossible:\n\t\treturn nil, err\n\tdefault:\n\t\treturn nil, fmt.Errorf(\"%w; %w\", ErrUnknownPushErr, err)\n\t}"
+        }
+      ],
+      "decodedLfUtf8Sha256": "51E04EE16485BD8D548919C3455E38B10197FFD3E563203ECC545EA82333C262",
+      "path": "go/libraries/doltcore/env/actions/remotes.go",
+      "lineCount": 1028
+    },
+    {
+      "url": "https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/ref/ref.go",
+      "excerpts": [
+        {
+          "endLine": 74,
+          "startLine": 39,
+          "text": "const (\n\t// BranchRefType is a reference to a local branch in the format refs/heads/...\n\tBranchRefType RefType = \"heads\"\n\n\t// RemoteRefType is a reference to a local remote tracking branch\n\tRemoteRefType RefType = \"remotes\"\n\n\t// InternalRefType is a reference to a dolt internal commit\n\tInternalRefType RefType = \"internal\"\n\n\t// TagRefType is a reference to commit tag\n\tTagRefType RefType = \"tags\"\n\n\t// WorkspaceRefType is a reference to a workspace\n\tWorkspaceRefType RefType = \"workspaces\"\n\n\t// StashRefType is a reference to a stash list\n\tStashRefType RefType = \"stashes\"\n\n\t// StatsRefType is a reference to a statistics table\n\tStatsRefType RefType = \"statistics\"\n\n\t// TupleRefType is a reference to a statistics table\n\tTupleRefType RefType = \"tuples\"\n)\n\n// HeadRefTypes are the ref types that point to a HEAD and contain a Commit struct. These are the types that are\n// returned by GetHeadRefs. Other ref types don't point to Commits necessarily, so aren't in this list and must be\n// asked for explicitly.\nvar HeadRefTypes = map[RefType]struct{}{\n\tBranchRefType:    {},\n\tRemoteRefType:    {},\n\tInternalRefType:  {},\n\tTagRefType:       {},\n\tWorkspaceRefType: {},\n}"
+        },
+        {
+          "endLine": 190,
+          "startLine": 160,
+          "text": "}\n\n// Parse will parse ref strings and return a DoltRef or an error for refs that can't be parsed.\n// refs without a RefType prefix (\"refs/heads/\", \"refs/tags/\", etc) are assumed to be branches)\nfunc Parse(str string) (DoltRef, error) {\n\tif !IsRef(str) {\n\t\tif strings.HasPrefix(str, remotesPrefix) {\n\t\t\treturn NewRemoteRefFromPathStr(str)\n\t\t} else {\n\t\t\treturn NewBranchRef(str), nil\n\t\t}\n\t}\n\n\tfor rType := range HeadRefTypes {\n\t\tprefix := PrefixForType(rType)\n\t\tif strings.HasPrefix(str, prefix) {\n\t\t\tstr = str[len(prefix):]\n\t\t\tswitch rType {\n\t\t\tcase BranchRefType:\n\t\t\t\treturn NewBranchRef(str), nil\n\t\t\tcase RemoteRefType:\n\t\t\t\treturn NewRemoteRefFromPathStr(str)\n\t\t\tcase InternalRefType:\n\t\t\t\treturn NewInternalRef(str), nil\n\t\t\tcase TagRefType:\n\t\t\t\treturn NewTagRef(str), nil\n\t\t\tcase WorkspaceRefType:\n\t\t\t\treturn NewWorkspaceRef(str), nil\n\t\t\tdefault:\n\t\t\t\tpanic(\"unknown type \" + rType)\n\t\t\t}"
+        },
+        {
+          "endLine": 215,
+          "startLine": 207,
+          "text": "\tif prefix := PrefixForType(StatsRefType); strings.HasPrefix(str, prefix) {\n\t\treturn NewStatsRef(), nil\n\t}\n\n\tif prefix := PrefixForType(TupleRefType); strings.HasPrefix(str, prefix) {\n\t\treturn NewTupleRef(str[len(prefix):]), nil\n\t}\n\n\treturn nil, ErrUnknownRefType"
+        }
+      ],
+      "decodedLfUtf8Sha256": "229FB2C826A40F3C033E452CC8091C8146F38933B067ABC7060CBD7C4BE349B2",
+      "path": "go/libraries/doltcore/ref/ref.go",
+      "lineCount": 217
+    },
+    {
+      "url": "https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/sqle/dprocedures/dolt_commit.go",
+      "excerpts": [
+        {
+          "endLine": 333,
+          "startLine": 307,
+          "text": "\t\tcommitStagedProps.Author.Date = datas.CommitDateAt(t)\n\t\tcommitStagedProps.Committer.Date = commitStagedProps.Committer.Date.Or(t)\n\t}\n\n\tif apr.Contains(cli.ForceFlag) {\n\t\tcommitStagedProps.Force = true\n\t\terr = ctx.SetSessionVariable(ctx, \"dolt_force_transaction_commit\", 1)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t}\n\n\tshouldSign, err := dsess.GetBooleanSystemVar(ctx, \"gpgsign\")\n\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"failed to get gpgsign: %w\", err)\n\t}\n\n\tpendingCommit, err := dSess.NewPendingCommit(ctx, dbName, roots, commitStagedProps)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tif pendingCommit == nil {\n\t\treturn nil, nil\n\t}\n\n\tif apr.Contains(cli.SignFlag) || shouldSign {"
+        }
+      ],
+      "decodedLfUtf8Sha256": "AF2FD7C16F27C58C93966075E1A760D68A4F03AEE35E93B0BC7D8AB5B3D868F7",
+      "path": "go/libraries/doltcore/sqle/dprocedures/dolt_commit.go",
+      "lineCount": 382
+    },
+    {
+      "url": "https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/sqle/dprocedures/dolt_gc.go",
+      "excerpts": [
+        {
+          "endLine": 80,
+          "startLine": 40,
+          "text": "\tcmdSuccess = 0\n)\n\nfunc init() {\n\tif os.Getenv(dconfig.EnvDisableGcProcedure) != \"\" {\n\t\tDoltGCFeatureFlag = false\n\t}\n\tif choice := os.Getenv(dconfig.EnvGCSafepointControllerChoice); choice != \"\" {\n\t\tif choice == \"kill_connections\" {\n\t\t\tUseSessionAwareSafepointController = false\n\t\t} else if choice != \"session_aware\" {\n\t\t\tpanic(\"Invalid value for \" + dconfig.EnvGCSafepointControllerChoice + \": \" + choice + \". Must be session_aware or kill_connections\")\n\t\t}\n\t}\n}\n\nvar DoltGCFeatureFlag = true\nvar UseSessionAwareSafepointController = true\n\n// doltGC is the stored procedure to run online garbage collection on a database.\nfunc doltGC(ctx *sql.Context, args ...string) (sql.RowIter, error) {\n\tif !DoltGCFeatureFlag {\n\t\treturn nil, errors.New(\"DOLT_GC() stored procedure disabled\")\n\t}\n\tres, err := doDoltGC(ctx, args)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\treturn rowToIter(int64(res)), nil\n}\n\nvar ErrServerPerformedGC = errors.New(\"this connection was established when this server performed an online garbage collection. this connection can no longer be used. please reconnect.\")\n\n// The original behavior safepoint controller, which kills all connections right as the GC process is being finalized.\n// The only connection which is left up is the connection on which dolt_gc is called, but that connection is\n// invalidated in such a way that all future queries on it return an error.\ntype killConnectionsSafepointController struct {\n\tcallCtx     *sql.Context\n\tdoltDB      *doltdb.DoltDB\n\tstatsDoneCh chan struct{}\n\torigEpoch   int"
+        }
+      ],
+      "decodedLfUtf8Sha256": "BD35E1B935DC35346A9970B45A10276C3E1CBB063EFBC959C1CB02CCF1902AF6",
+      "path": "go/libraries/doltcore/sqle/dprocedures/dolt_gc.go",
+      "lineCount": 348
+    },
+    {
+      "url": "https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/sqle/dprocedures/dolt_push.go",
+      "excerpts": [
+        {
+          "endLine": 88,
+          "startLine": 45,
+          "text": "\t\tNullable: true,\n\t},\n}\n\n// doltPush is the stored procedure version for the CLI command `dolt push`.\nfunc doltPush(ctx *sql.Context, args ...string) (sql.RowIter, error) {\n\tres, message, err := doDoltPush(ctx, args)\n\treturn rowToIter(int64(res), message), err\n}\n\nfunc doDoltPush(ctx *sql.Context, args []string) (int, string, error) {\n\tdbName := ctx.GetCurrentDatabase()\n\n\tif len(dbName) == 0 {\n\t\treturn cmdFailure, \"\", fmt.Errorf(\"empty database name\")\n\t}\n\tif err := branch_control.CheckAccess(ctx, branch_control.Permissions_Write); err != nil {\n\t\treturn cmdFailure, \"\", err\n\t}\n\n\tsess := dsess.DSessFromSess(ctx.Session)\n\tdbData, ok := sess.GetDbData(ctx, dbName)\n\tif !ok {\n\t\treturn cmdFailure, \"\", fmt.Errorf(\"could not load database %s\", dbName)\n\t}\n\n\tapr, err := cli.CreatePushArgParser().Parse(args)\n\tif err != nil {\n\t\treturn cmdFailure, \"\", err\n\t}\n\n\tautoSetUpRemote := loadConfig(ctx).GetStringOrDefault(config.PushAutoSetupRemote, \"false\")\n\tpushAutoSetUpRemote, err := strconv.ParseBool(autoSetUpRemote)\n\tif err != nil {\n\t\treturn cmdFailure, \"\", err\n\t}\n\n\ttargets, remote, err := env.NewPushOpts(ctx, apr, dbData.Rsr, dbData.Ddb, apr.Contains(cli.ForceFlag), apr.Contains(cli.SetUpstreamFlag), pushAutoSetUpRemote, apr.Contains(cli.AllFlag))\n\tif err != nil {\n\t\treturn cmdFailure, \"\", err\n\t}\n\n\tif user, hasUser := apr.GetValue(cli.UserFlag); hasUser {\n\t\trmt := (*remote).WithParams(map[string]string{"
+        },
+        {
+          "endLine": 142,
+          "startLine": 110,
+          "text": "\tvar returnMsg string\n\tpo := &env.PushOptions[*sql.Context]{\n\t\tTargets: targets,\n\t\tRemote:  remote,\n\t\tRsr:     dbData.Rsr,\n\t\tRsw:     dbData.Rsw,\n\t\tSrcDb:   dbData.Ddb,\n\t\tDestDb:  remoteDB,\n\t\tTmpDir:  tmpDir,\n\t}\n\tpull.WithDiscardingStatsCh(func(statsCh chan pull.Stats) {\n\t\treturnMsg, err = actions.DoPush(ctx, po, statsCh)\n\t})\n\tif err != nil {\n\t\tswitch err {\n\t\tcase doltdb.ErrUpToDate:\n\t\t\treturn cmdSuccess, \"Everything up-to-date\", nil\n\t\tcase datas.ErrMergeNeeded:\n\t\t\treturn cmdFailure, returnMsg, fmt.Errorf(\"%w; the tip of your current branch is behind its remote counterpart\", err)\n\t\tdefault:\n\t\t\tif returnMsg != \"\" {\n\t\t\t\t// For multiple branches push, we need to print successful push message\n\t\t\t\t// before the error message. We currently cannot return success message\n\t\t\t\t// if there was a failed push with error. So, we need to include the success\n\t\t\t\t// message in the error message before returning.\n\t\t\t\terr = fmt.Errorf(\"%s\\n%s\", returnMsg, err.Error())\n\t\t\t}\n\t\t\treturn cmdFailure, \"\", err\n\t\t}\n\t}\n\t// TODO : set upstream should be persisted outside of session\n\treturn cmdSuccess, returnMsg, nil\n}"
+        }
+      ],
+      "decodedLfUtf8Sha256": "8A4B62CDBB883C83CAAF70154D1DF018CDF8D8308156D54BC66A9C229CF81B37",
+      "path": "go/libraries/doltcore/sqle/dprocedures/dolt_push.go",
+      "lineCount": 143
+    },
+    {
+      "url": "https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/sqle/dsess/session.go",
+      "excerpts": [
+        {
+          "endLine": 1088,
+          "startLine": 1052,
+          "text": "// NewPendingCommit returns a new |doltdb.PendingCommit| for the database named, using the roots given, adding any\n// merge parent from an in progress merge as appropriate. The session working set is not updated with these new roots,\n// but they are set in the returned |doltdb.PendingCommit|. If there are no changes staged, this method returns nil.\nfunc (d *DoltSession) NewPendingCommit(\n\tctx *sql.Context,\n\tdbName string,\n\troots doltdb.Roots,\n\tprops actions.CommitStagedProps,\n) (*doltdb.PendingCommit, error) {\n\tbranchState, ok, err := d.lookupDbState(ctx, dbName)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tif !ok {\n\t\treturn nil, fmt.Errorf(\"session state for database %s not found\", dbName)\n\t}\n\n\treturn d.newPendingCommit(ctx, dbName, branchState, roots, props)\n}\n\n// newPendingCommit returns a new |doltdb.PendingCommit| for the database and head named by |branchState|\n// See NewPendingCommit\nfunc (d *DoltSession) newPendingCommit(ctx *sql.Context, dbName string, branchState *branchState, roots doltdb.Roots, props actions.CommitStagedProps) (*doltdb.PendingCommit, error) {\n\theadCommit := branchState.headCommit\n\n\tws, err := branchState.WorkingSet(ctx)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tif ws == nil {\n\t\treturn nil, doltdb.ErrOperationNotSupportedInDetachedHead\n\t}\n\n\tvar mergeParentCommits []*doltdb.Commit\n\tif ws.MergeCommitParents() {\n\t\tmergeParentCommits = []*doltdb.Commit{ws.MergeState().Commit()}\n\t} else if props.Amend {"
+        },
+        {
+          "endLine": 1136,
+          "startLine": 1124,
+          "text": "\ttableResolver, err := GetTableResolver(ctx, dbName)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tpendingCommit, err := actions.GetCommitStaged(ctx, tableResolver, roots, ws, mergeParentCommits, amendedCommit, branchState.dbData.Ddb, props)\n\tif err != nil {\n\t\t// Special case for nothing staged, which is not an error\n\t\tif _, ok := err.(actions.NothingStaged); !ok {\n\t\t\treturn nil, err\n\t\t}\n\t}\n\n\treturn pendingCommit, nil"
+        }
+      ],
+      "decodedLfUtf8Sha256": "8BC2E80918EC533981971BAA3AD51F32D7832FAE6469B5872474F73575F6DC8E",
+      "path": "go/libraries/doltcore/sqle/dsess/session.go",
+      "lineCount": 2717
+    },
+    {
+      "url": "https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/libraries/doltcore/sqle/dsess/transactions.go",
+      "excerpts": [
+        {
+          "endLine": 276,
+          "startLine": 265,
+          "text": "\t\t\tpending.Roots.Staged = result.Root\n\n\t\t\t// We also need to update the working set to reflect the new staged root value\n\t\t\tworkingSet = workingSet.WithStagedRoot(pending.Roots.Staged)\n\n\t\t\tlogrus.Tracef(\"staged and HEAD merge took %s\", time.Since(start))\n\t\t}\n\t}\n\n\tworkingSet = workingSet.ClearMerge()\n\n\treturn workingSet, &pending, expectedHead, nil"
+        },
+        {
+          "endLine": 737,
+          "startLine": 666,
+          "text": "func (tx *DoltTransaction) validateWorkingSetForCommit(ctx *sql.Context, workingSet *doltdb.WorkingSet, isFf ffMerge) error {\n\tforceTransactionCommit, err := ctx.GetSessionVariable(ctx, ForceTransactionCommit)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tallowCommitConflicts, err := ctx.GetSessionVariable(ctx, AllowCommitConflicts)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\thasSchemaConflicts := false\n\tif workingSet.MergeState() != nil {\n\t\thasSchemaConflicts = workingSet.MergeState().HasSchemaConflicts()\n\t}\n\n\tworkingRoot := workingSet.WorkingRoot()\n\thasDataConflicts, err := doltdb.HasConflicts(ctx, workingRoot)\n\tif err != nil {\n\t\treturn err\n\t}\n\thasConstraintViolations, err := doltdb.HasConstraintViolations(ctx, workingRoot)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tif hasDataConflicts || hasSchemaConflicts {\n\t\t// TODO: Sometimes this returns the wrong error. Define an internal\n\t\t// merge to be a merge that occurs inside a transaction. Define a\n\t\t// transaction merge to be the merge that resolves changes between two\n\t\t// transactions. If an internal merge creates a documented conflict and\n\t\t// the transaction merge is not a fast-forward, a retry transaction\n\t\t// error will be returned. Instead, an ErrUnresolvedConflictsCommit should\n\t\t// be returned.\n\n\t\t// Conflicts are never acceptable when they resulted from a merge with the existing working set -- it's equivalent\n\t\t// to hitting a write lock (which we didn't take). Always roll back and return an error in this case.\n\t\tif !isFf {\n\t\t\treturn tx.rollbackAndErr(ctx, retryTransactionError(\"\"))\n\t\t}\n\n\t\t// If there were conflicts before merge with the persisted working set, whether we allow it to be committed is a\n\t\t// session setting\n\t\tif !(allowCommitConflicts.(int8) == 1 || forceTransactionCommit.(int8) == 1) {\n\t\t\trollbackErr := tx.rollback(ctx)\n\t\t\tif rollbackErr != nil {\n\t\t\t\treturn rollbackErr\n\t\t\t}\n\n\t\t\t// Return a different error message depending on if @autocommit is enabled or not, to help\n\t\t\t// users understand what steps to take\n\t\t\tautocommit, err := isSessionAutocommit(ctx)\n\t\t\tif err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t\tif autocommit {\n\t\t\t\treturn ErrUnresolvedConflictsAutoCommit\n\t\t\t} else {\n\t\t\t\treturn ErrUnresolvedConflictsCommit\n\t\t\t}\n\t\t}\n\t}\n\n\tif hasConstraintViolations {\n\t\t// Constraint violations are acceptable in the working set if force\n\t\t// transaction commit is enabled, regardless if an internal merge ( a\n\t\t// merge that occurs inside a transaction) or a transaction merge\n\t\t// created them.\n\n\t\t// TODO: We need to add more granularity in terms of what types of constraint violations can be committed. For example,\n\t\t// in the case of foreign_key_checks=0 you should be able to commit foreign key violations.\n\t\tif forceTransactionCommit.(int8) != 1 {"
+        }
+      ],
+      "decodedLfUtf8Sha256": "95682DEE9603889708815B27989DE7D8A472AED8B32B85B2C4A6AC7125E88C18",
+      "path": "go/libraries/doltcore/sqle/dsess/transactions.go",
+      "lineCount": 940
+    }
+  ],
+  "runtimeExecuted": false,
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "accepted": false,
+  "limitations": [
+    "Source inspection does not establish preservation, transport or garbage-collection behavior at runtime.",
+    "No private conflict persistence sequence has been selected.",
+    "No live branch, global override, service, package or database was changed."
+  ]
+}
