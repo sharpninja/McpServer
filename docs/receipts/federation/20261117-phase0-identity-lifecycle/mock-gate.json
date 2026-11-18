@@ -1,0 +1,82 @@
+{
+  "timestampLocal": "2026-11-17T19:57:11",
+  "tasks": [
+    "TASK-FEDPH0-004"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T195618-fedph0-identity-lifecycle-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0IdentityLifecycleMockGateTests --test-run-id 20261117T195618-fedph0-identity-lifecycle-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 137,
+  "passed": 137,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 5,
+  "expectedNegativeControls": 132,
+  "coverage": [
+    {
+      "test": "TEST-MCP-230",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-009",
+      "text": "Given LA allocated sequence42, when main reverts and another branch creates a record, then its sequence is greater than42.",
+      "satisfied": false,
+      "fr": "FR-MCP-182",
+      "ac": "ac-BranchRevertDoesNotReuseSequence"
+    },
+    {
+      "test": "TEST-MCP-230",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-009",
+      "text": "Given human ID IMPL-UNITGREEN-001 is unreserved, when two nodes reserve it concurrently, then exactly one receives201 and the other409 human_id_reserved; retry by the winning requestId returns the same reservation.",
+      "satisfied": false,
+      "fr": "FR-MCP-182",
+      "ac": "ac-SimultaneousHumanIdReservation"
+    },
+    {
+      "test": "TEST-MCP-230",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-009",
+      "text": "Given an offline-created provisional TODO requesting an unreserved human ID, when it reconnects and publishes, then409 human_id_unreserved retains the local record until reservation or reviewed alias resolution.",
+      "satisfied": false,
+      "fr": "FR-MCP-182",
+      "ac": "ac-OfflineHumanIdPublicationDenied"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "BA0E924CC658D1F9FB8B87C2DA028F0E6B7DF1423C17E3AB1A756B278CB2A10A",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityLifecycleContract.cs",
+      "lfNormalizedSha256": "D514F1520DA9B73534487CECDA40C4397C4B2537BCB7FE95149B3095AD1B161D"
+    },
+    {
+      "sha256": "B2708C64711E7F7CCF89C1BE296F29C8ED1B6BDD351CAC4AB3753A8B5B623FFE",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityLifecycleMockGateTests.cs",
+      "lfNormalizedSha256": "FD1BD268C104E1B7E2B8F1B488E60FF9199701260C236F5D174E6D2D34D4ECA2"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "CC988DEDB7150A0367FC13645940B42ACF8B2ADEC96B6293ECC0FD9C07572AD6",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T195618-fedph0-identity-lifecycle-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "D9C0BEEAEB2685F75B75D3D9F675BD8ADAF39D160082DA31686BD920B9DBD1FF",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_19-56-21.log"
+    }
+  ],
+  "pending": [
+    "Remaining B4 identity families and consumers, legacy collision/reference mappings, duplicate review and plugin diagnostics.",
+    "No real allocator, hub reservation, branch revert or publication adapter bound; no provider feasibility acceptance.",
+    "All nine group designs and complete mock gates, full final-head both-host gates, B1-B12 acceptance and independent HV remain outstanding. Implementation barrier Closed; DEPLOY HOLD active."
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
