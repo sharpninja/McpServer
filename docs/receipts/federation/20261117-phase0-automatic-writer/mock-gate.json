@@ -1,0 +1,74 @@
+{
+  "timestampLocal": "2026-11-17T23:57:12",
+  "tasks": [
+    "TASK-FEDPH0-004"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T235612-fedph0-automatic-writer-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0AutomaticWriterMockGateTests --test-run-id 20261117T235612-fedph0-automatic-writer-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 5724,
+  "passed": 5724,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 4,
+  "expectedNegativeControls": 5720,
+  "coverage": [
+    {
+      "test": "TEST-MCP-232",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-011",
+      "text": "Given main=C0 is clean, when heartbeat, audit and automatic session capture run, then Dolt working-set fingerprint remains unchanged.",
+      "satisfied": false,
+      "fr": "FR-MCP-184",
+      "ac": "ac-BackgroundWritersDoNotDirtyVersionedBranch"
+    },
+    {
+      "test": "TEST-MCP-232",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-011",
+      "text": "Given agent1 owns the editing lease, when agent2 logs a session action, then its local audit persists without acquiring or changing agent1's lease.",
+      "satisfied": false,
+      "fr": "FR-MCP-184",
+      "ac": "ac-SecondAgentLoggingNeedsNoLease"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "2284C951A4D82688A05CC5D0637A8672D9C9CF1E5C6F741AF10D5049E2B30345",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0AutomaticWriterContract.cs",
+      "lfNormalizedSha256": "FEF12A6C96EB420B1469BF6098607B61FD2AE5424F51C90E75BA9FEAFAB2B822"
+    },
+    {
+      "sha256": "F5E9A295C0D569686C82BD50AECB9370C6ECA84B44BDB663330EFA55217B9A27",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0AutomaticWriterMockGateTests.cs",
+      "lfNormalizedSha256": "1FA2B4F980BCFBE34659B9EDED30E9E0119FAEA7AF4CCB2BB61D2BD8ED83BE5C"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "72354E5B5DFF6D9A5128EF26170F0B9E6AE7EF94B421B1F278E4B55734F16C83",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T235612-fedph0-automatic-writer-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "A0108C15DBC77BC4803FB510E29FB6B98DA204C6D421C74B0D22656C4C4D3A90",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_23-56-16.log"
+    }
+  ],
+  "pending": [
+    "Native automatic and indirect writer routing bindings",
+    "Full dispatch and raw-SQL/EF writer closure",
+    "Complete relational per-provider mappings and full project manifests",
+    "B1-B12 operator acceptance, final-head cumulative gates and HV"
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
