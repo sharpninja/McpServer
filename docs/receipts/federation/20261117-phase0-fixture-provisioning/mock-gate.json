@@ -1,0 +1,66 @@
+{
+  "timestampLocal": "2026-11-17T18:07:20",
+  "tasks": [
+    "TASK-FEDPH0-008"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T180650-fedph0-fixture-provisioning-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0FixtureProvisioningMockGateTests --test-run-id 20261117T180650-fedph0-fixture-provisioning-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 75,
+  "passed": 75,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 4,
+  "expectedNegativeControls": 71,
+  "coverage": [
+    {
+      "ac": "ac-RealHostAcceptanceMatrix",
+      "test": "TEST-MCP-234",
+      "satisfied": false,
+      "fr": "FR-MCP-186",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-013",
+      "text": "Given isolated disposable Atlas stores on LAB and LEGION and FED-ATLAS-H/A/B fixtures, when Ph8 partitions/reconnects each control, publication/history, audit and identity path and restarts each application/worker, Dolt, gateway, identity and control/audit component at commit/publication/report boundaries, then every matrix row records exact heads/ancestor sets/rows/drafts/refs/epoch and audit receipts matching the workflow outcome, with zero missing provider/migration/recovery rows. Missing any component/path row fails acceptance; unrelated live projects retain their provider mappings and data."
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0FixtureProvisioningContract.cs",
+      "sha256": "7E663500A087D38A9DC8C0F11A4D83D3E4FDED5448573B9E0235D24CAEB19298",
+      "lfNormalizedSha256": "B87B8DE1CBD725639A9B3C6EDC724C056F3CE3C7F35968D6B9224BC73481FF95"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0FixtureProvisioningMockGateTests.cs",
+      "sha256": "CA3226DCB60BF51A16F552AEEB49EF3346307DDD93C51D229A8EE5B0333E1795",
+      "lfNormalizedSha256": "6A57FB332A9C689E1B785BA04BC2DD18E0D71E571E139C758BAB84A7F6BE204F"
+    }
+  ],
+  "copies": [
+    {
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T180650-fedph0-fixture-provisioning-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "8AB6D0505B45CD1FFF43312D0AC0CFC77193D2C7C6097CC87ED7D8191AA17549",
+      "name": "windows-mock.trx"
+    },
+    {
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_18-06-37.log",
+      "sha256": "958745E45F60AF7C5F7147A6CEE610C2F8B3F40C7C6876F5C7BC72F4C1BFD2A0",
+      "name": "windows-mock.nuke.txt"
+    }
+  ],
+  "pending": [
+    "Partial Ph0 provisioning prerequisite mock only; actual Nuke fixture provisioning has not run on either host.",
+    "All B1-B12 operator acceptances, owner/status/evidence/dependent phase records remain pending.",
+    "Exhaustive current-scope AC/U01-U15 phase binding and complete Build.Tests class/case inventory remain pending.",
+    "Full Ph8 control/publication/history/audit/identity fault matrix stays owned by Ph8; no runtime acceptance claimed.",
+    "Group barrier Closed; full current-plus-prior phase-exit gates on both hosts and independent HV remain pending."
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
