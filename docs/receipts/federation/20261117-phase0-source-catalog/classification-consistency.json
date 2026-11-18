@@ -1,0 +1,15 @@
+{
+  "timestampLocal": "2026-11-17T19:21:23",
+  "head": "ac07503d3a4b62e0ceb77717c24a7927226ec139",
+  "classificationSha256": "9E623372B679204FDFB061B343DC61F1185BBF060884270A9870214D933A373F",
+  "entityCount": 88,
+  "propertyCount": 1079,
+  "relationshipCount": 126,
+  "writerCalls": 214,
+  "automaticAssignments": 64,
+  "consistency": "PASS",
+  "semanticWriterVerification": "Pending",
+  "relationalDoltVerification": "Pending",
+  "operatorAcceptance": "Pending",
+  "hostileReview": "Not run"
+}

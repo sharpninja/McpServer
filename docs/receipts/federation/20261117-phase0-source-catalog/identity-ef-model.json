@@ -1,0 +1,571 @@
+{
+  "timestampLocal": "2026-11-17T19:13:44",
+  "head": "ac07503d3a4b62e0ceb77717c24a7927226ec139",
+  "provider": "Microsoft.EntityFrameworkCore.InMemory",
+  "connectionState": "NotCreated",
+  "databaseOpened": false,
+  "sqlExecuted": false,
+  "runtimeDoltEvidence": false,
+  "storageAssemblySha256": "F756F4ABA4E66283B7D09307B4B4942CB9FCF5CBBAF7ED81877E7447B6900135",
+  "storageAssembly": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll",
+  "efVersion": "10.0.0.0",
+  "entities": [
+    {
+      "name": "IdentityRole",
+      "clrFullName": "Microsoft.AspNetCore.Identity.IdentityRole",
+      "table": "AspNetRoles",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "ConcurrencyStamp",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": true,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Name",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "256",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "NormalizedName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "256",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "NormalizedName"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IdentityRoleClaim`1",
+      "clrFullName": "Microsoft.AspNetCore.Identity.IdentityRoleClaim`1[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "table": "AspNetRoleClaims",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ClaimType",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "ClaimValue",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "RoleId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "IdentityRole",
+          "dependentProperties": [
+            "RoleId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "IdentityUserClaim`1",
+      "clrFullName": "Microsoft.AspNetCore.Identity.IdentityUserClaim`1[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "table": "AspNetUserClaims",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ClaimType",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "ClaimValue",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "UserId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "McpUser",
+          "dependentProperties": [
+            "UserId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "IdentityUserLogin`1",
+      "clrFullName": "Microsoft.AspNetCore.Identity.IdentityUserLogin`1[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "table": "AspNetUserLogins",
+      "primaryKey": [
+        "LoginProvider",
+        "ProviderKey"
+      ],
+      "properties": [
+        {
+          "name": "LoginProvider",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "ProviderKey",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "ProviderDisplayName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "UserId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "McpUser",
+          "dependentProperties": [
+            "UserId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "IdentityUserRole`1",
+      "clrFullName": "Microsoft.AspNetCore.Identity.IdentityUserRole`1[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "table": "AspNetUserRoles",
+      "primaryKey": [
+        "UserId",
+        "RoleId"
+      ],
+      "properties": [
+        {
+          "name": "UserId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "RoleId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "IdentityRole",
+          "dependentProperties": [
+            "RoleId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        },
+        {
+          "principal": "McpUser",
+          "dependentProperties": [
+            "UserId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "IdentityUserToken`1",
+      "clrFullName": "Microsoft.AspNetCore.Identity.IdentityUserToken`1[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "table": "AspNetUserTokens",
+      "primaryKey": [
+        "UserId",
+        "LoginProvider",
+        "Name"
+      ],
+      "properties": [
+        {
+          "name": "UserId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "LoginProvider",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Name",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "McpUser",
+          "dependentProperties": [
+            "UserId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "McpUser",
+      "clrFullName": "QBrainAi.Support.Mcp.Identity.McpUser",
+      "table": "AspNetUsers",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "AccessFailedCount",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "ConcurrencyStamp",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": true,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "DisplayName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Email",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "256",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "EmailConfirmed",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "LockoutEnabled",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "LockoutEnd",
+          "clrType": "System.Nullable`1[[System.DateTimeOffset, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "NormalizedEmail",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "256",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "NormalizedUserName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "256",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "PasswordHash",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "PhoneNumber",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "PhoneNumberConfirmed",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "SecurityStamp",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "TwoFactorEnabled",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "UserName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "256",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "unique": false,
+          "properties": [
+            "NormalizedEmail"
+          ]
+        },
+        {
+          "unique": true,
+          "properties": [
+            "NormalizedUserName"
+          ]
+        }
+      ]
+    }
+  ]
+}
