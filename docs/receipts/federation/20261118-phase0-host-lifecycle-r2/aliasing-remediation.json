@@ -1,0 +1,105 @@
+{
+  "timestampLocal": "2026-11-18T01:39:54",
+  "taskId": "TASK-FEDPH0-001",
+  "trace": "B1;FR-MCP-186;TR-MCP-FEDERATION-013;TEST-MCP-234",
+  "reason": "Mutable baseline dictionaries allowed later observer cache changes to rewrite expected values",
+  "before": {
+    "skipped": 0,
+    "failed": 16,
+    "runId": "20261118T013744-fedph0-host-lifecycle-aliasing-probe",
+    "failures": [
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 6, fault: \"SharedUnrelatedChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 6, fault: \"SharedStoreChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 7, fault: \"SharedUnrelatedChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 8, fault: \"SharedUnrelatedChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 7, fault: \"SharedStoreChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 2, fault: \"SharedStoreChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 2, fault: \"SharedUnrelatedChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 1, fault: \"SharedUnrelatedChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 3, fault: \"SharedUnrelatedChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 4, fault: \"SharedUnrelatedChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 8, fault: \"SharedStoreChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 5, fault: \"SharedStoreChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 4, fault: \"SharedStoreChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 5, fault: \"SharedUnrelatedChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 1, fault: \"SharedStoreChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      },
+      {
+        "testName": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0HostLifecycleMockGateTests.WrongLifecycleEvidenceIsRejected(checkpoint: 3, fault: \"SharedStoreChanged\")",
+        "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(Xunit.Sdk.XunitException)"
+      }
+    ],
+    "passed": 288,
+    "assertionSourceCommit": "6b10195e4baef063caef590a2937677d7116234b",
+    "exitCode": -1,
+    "total": 304
+  },
+  "after": {
+    "skipped": 0,
+    "passed": 304,
+    "runId": "20261118T013840-fedph0-host-lifecycle-mock-r2",
+    "failed": 0,
+    "total": 304,
+    "exitCode": 0,
+    "remediation": "Copy both baseline dictionaries before any lifecycle operation; same independently scripted shared mutations rejected"
+  },
+  "copies": [
+    {
+      "destination": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/docs/receipts/federation/20261118-phase0-host-lifecycle-r2/aliasing-before-fix.trx",
+      "sha256": "ABA6EB6C414DD176632565364D646E9D217A3D9E73F12A9C58E5D253669D0D4E",
+      "source": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261118T013744-fedph0-host-lifecycle-aliasing-probe/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "destination": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/docs/receipts/federation/20261118-phase0-host-lifecycle-r2/aliasing-before-fix.nuke.txt",
+      "sha256": "553BD211093971A3B2A0CAEDF5B46C2EC78DD08A46BBFAE8CC6B11FE0B5093EF",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-18_01-37-48.log"
+    }
+  ],
+  "supersedes": "20261118-phase0-host-lifecycle current source proof only; original288case receipts retained",
+  "nativeRuntimeProof": false,
+  "operatorAccepted": false
+}

@@ -63,6 +63,7 @@ internal interface IPhase0HostLifecycleProbe
 /// 2026-11-18: TASK-FEDPH0-001 B1; FR-MCP-186; TR-MCP-FEDERATION-013 native lifecycle; TEST-MCP-234.
 /// Supporting design evidence only, not full ac-FourProvidersResolve, ac-WindowsWriterLockAndRestart or ac-RealHostAcceptanceMatrix.
 /// Native ACLs, locks, SQL readiness and failure timing must be measured by later integration adapters.
+/// 2026-11-18: B1 lifecycle baseline dictionaries are copied before operations so mutable observer caches cannot alter expectations.
 /// </remarks>
 internal static class Phase0HostLifecycleContract
 {
@@ -94,6 +95,11 @@ internal static class Phase0HostLifecycleContract
         {
             Assert.False(string.IsNullOrWhiteSpace(pair.Key)); Assert.False(string.IsNullOrWhiteSpace(pair.Value));
         }
+        baseline = baseline with
+        {
+            Artifacts = baseline.Artifacts.ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.Ordinal),
+            Unrelated = baseline.Unrelated.ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.Ordinal)
+        };
         probe.Start(); var running = CheckPreservation(probe, baseline); AssertRunning(running, policy);
         probe.StopGracefully(); var stopped = CheckPreservation(probe, baseline); AssertGraceful(stopped, policy);
         probe.Start(); running = CheckPreservation(probe, baseline); AssertRunning(running, policy);

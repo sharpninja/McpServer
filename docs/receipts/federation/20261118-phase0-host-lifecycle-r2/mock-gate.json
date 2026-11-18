@@ -1,0 +1,83 @@
+{
+  "timestampLocal": "2026-11-18T01:39:54",
+  "tasks": [
+    "TASK-FEDPH0-001"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "sourceBaseHead": "6b10195e4baef063caef590a2937677d7116234b",
+  "runId": "20261118T013840-fedph0-host-lifecycle-mock-r2",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0HostLifecycleMockGateTests --test-run-id 20261118T013840-fedph0-host-lifecycle-mock-r2",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 304,
+  "passed": 304,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 3,
+  "expectedNegativeControls": 301,
+  "sourceHashes": [
+    {
+      "sha256": "5C4FFE3504107B66626B77745C504CC79523FB68CB08EF6927AEACD393CD1460",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0HostLifecycleContract.cs",
+      "lfNormalizedSha256": "4F882D00A467B4961E7BBB8B472B8F3A338444815243D4E2B0C8419C5B8341E4"
+    },
+    {
+      "sha256": "47388FCFA38A0F3C6E7A37E37D5BFB0ADF059DA3E439D45A498F61780CBC762F",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0HostLifecycleMockGateTests.cs",
+      "lfNormalizedSha256": "F8670FD14AAE6602CE4D103FCCFD229F8D7EA4C2396A1BFEE56F80E602660F08"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "5F201A7102ECDF06BFB2B186CD8A799538471F85B87998393576A3353F7648C3",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261118T013840-fedph0-host-lifecycle-mock-r2\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "1FCC2F5434CFB12D702EAE5785BF0387EBCA046FD1BB049B6A8F30A445620681",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-18_01-38-42.log"
+    },
+    {
+      "sha256": "82EB9F43EE400A03D175042D8F472BC54CFD0F352D833BA6E2687CB1789939E4",
+      "name": "initial-compiler-failure.txt",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/20261118T013036-host-lifecycle-initial-build.log"
+    }
+  ],
+  "trace": {
+    "test": "TEST-MCP-234",
+    "basis": "Explicit TR description native host identity/account/ACL/child lifecycle obligation",
+    "tr": "TR-MCP-FEDERATION-013",
+    "coverage": "Partial B1 lifecycle supporting evidence; no full criterion satisfaction claimed",
+    "planOutput": "B1",
+    "fr": "FR-MCP-186"
+  },
+  "observations": [
+    "Candidate configuration and recovery actions",
+    "Nine chronological state readbacks",
+    "Connected acyclic owned process inventory with account",
+    "Original data/unpublished head/artifact retention",
+    "Unrelated resource fingerprints",
+    "Graceful-stop budget without force",
+    "Three crash recovery ordinals and failed-child creation identity",
+    "Owned unregister without data/log deletion"
+  ],
+  "limitations": [
+    "Scripted unit responses only, not Windows or Linux host execution",
+    "Pending WinSW proposal is not adopted",
+    "No native ACL, exclusive lock, database query/durability or readiness evidence",
+    "No whole FourProvidersResolve, WindowsWriterLockAndRestart or RealHostAcceptanceMatrix satisfaction",
+    "Initial C#14 field-keyword compiler failure retained; renamed local and immediate verification succeeded before passing Nuke gate",
+    "No phase exit or task acceptance"
+  ],
+  "nativeRuntimeProof": false,
+  "operatorAccepted": false,
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false,
+  "scriptSha256": "3E774B1D615FDC4F9CDED8805073B2C2E5ED9DB725732FBED318ECD9ED1BD865"
+}

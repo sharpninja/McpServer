@@ -4,6 +4,7 @@ namespace QBrainAi.Support.Mcp.Tests.Federation.Phase0;
 /// <remarks>
 /// 2026-11-18: TASK-FEDPH0-001 B1; FR-MCP-186; TR-MCP-FEDERATION-013 native host lifecycle; TEST-MCP-234.
 /// These candidate-policy unit mocks neither install/adopt WinSW nor prove OS, SQL, ACL or locking behavior.
+/// 2026-11-18: B1 lifecycle negative controls also mutate shared baseline dictionary instances to detect expectation aliasing.
 /// </remarks>
 public sealed class Phase0HostLifecycleMockGateTests
 {
@@ -34,6 +35,8 @@ public sealed class Phase0HostLifecycleMockGateTests
                 foreach (var fault in new[] { "Missing", "Registered", "State", "ProcessesMissing", "DataNull", "DataChanged", "HeadNull", "HeadChanged",
                     "ArtifactsMissing", "StoreMissing", "LogMissing", "StoreChanged", "LogChanged", "UnrelatedMissing", "UnrelatedDropped", "UnrelatedExtra", "UnrelatedChanged" })
                     yield return [checkpoint, fault];
+                if (checkpoint > 0)
+                    foreach (var sharedFault in new[] { "SharedStoreChanged", "SharedUnrelatedChanged" }) yield return [checkpoint, sharedFault];
                 if (checkpoint is 0 or 2 or 7 or 8) yield return [checkpoint, "Orphan"];
                 if (checkpoint is 2 or 7)
                     foreach (var fault in new[] { "Forced", "StopMissing", "StopNegative", "StopLate" }) yield return [checkpoint, fault];
@@ -68,6 +71,8 @@ public sealed class Phase0HostLifecycleMockGateTests
     private sealed class ScriptedProbe(int checkpoint = -2, string fault = "", int variation = 0) : IPhase0HostLifecycleProbe
     {
         private int _reads;
+        private readonly Dictionary<string, string> _sharedArtifacts = new() { ["seeded-store"] = "STORE-SEED-HASH", ["original-log"] = "LOG-ORIGINAL-HASH" };
+        private readonly Dictionary<string, string> _sharedUnrelated = new() { ["live-service"] = "RUNNING-PID-CREATION-A", ["other-project"] = "PROVIDER-AND-DATA-B" };
         /// <summary>Retains independent observed interaction order.</summary>
         internal List<string> Calls { get; } = [];
         /// <inheritdoc />
@@ -130,6 +135,15 @@ public sealed class Phase0HostLifecycleMockGateTests
                 index is 2 or 7 ? 125 : null, false,
                 index switch { 4 => 10_025, 5 => 20_100, 6 => 60_050, _ => null },
                 index is >= 4 and <= 6 ? Child(index - 1) : null);
+            if (fault.StartsWith("Shared", StringComparison.Ordinal))
+            {
+                if (index == checkpoint)
+                {
+                    if (fault == "SharedStoreChanged") _sharedArtifacts["seeded-store"] = "mutated-shared-store";
+                    else _sharedUnrelated["other-project"] = "mutated-shared-unrelated";
+                }
+                return state with { Artifacts = _sharedArtifacts, Unrelated = _sharedUnrelated };
+            }
             if (index != checkpoint) return state;
             if (fault.StartsWith("Process:", StringComparison.Ordinal))
             {
