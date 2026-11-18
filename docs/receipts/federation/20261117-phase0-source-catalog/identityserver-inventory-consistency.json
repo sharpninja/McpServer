@@ -1,0 +1,21 @@
+{
+  "timestampLocal": "2026-11-17T22:52:50",
+  "classificationSha256": "8973DC43340E813C50B92137EE756C841732A6A70F56DB342FB431423764A178",
+  "checks": [
+    "Baseline and model byte hashes",
+    "Exact entity/property/relationship multisets",
+    "Property types, nullability, shadow flags and protected dispositions",
+    "Exact primary keys and index metadata",
+    "Metadata-only and pending-acceptance flags",
+    "Supplement and combined denominators"
+  ],
+  "entityCount": 27,
+  "propertyCount": 204,
+  "relationshipCount": 17,
+  "indexCount": 35,
+  "artifactConsistency": "PASS",
+  "productTestsRun": false,
+  "relationalProviderProof": false,
+  "operatorAccepted": false,
+  "hostileReview": "Not run"
+}

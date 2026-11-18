@@ -1,0 +1,2399 @@
+{
+  "timestampLocal": "2026-11-17T22:49:25",
+  "head": "45a7318ecde104742887e589a8d68655a83148a6",
+  "taskIds": [
+    "TASK-FEDPH0-004",
+    "TASK-FEDPH0-005"
+  ],
+  "modelKind": "Configuration",
+  "contextType": "Duende.IdentityServer.EntityFramework.DbContexts.ConfigurationDbContext",
+  "provider": "Microsoft.EntityFrameworkCore.InMemory",
+  "connectionState": "NotCreated",
+  "databaseOpened": false,
+  "sqlExecuted": false,
+  "runtimeDoltEvidence": false,
+  "operatorAccepted": false,
+  "phase0Complete": false,
+  "storageAssemblySha256": "F8308B09EC4941C00CBAEAD7FE85867BA6E8197C5DC47B2E0739DA33C3615A4E",
+  "storageAssembly": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/Duende.IdentityServer.EntityFramework.Storage.dll",
+  "storageAssemblyVersion": "7.0.0.0",
+  "storageInformationalVersion": "7.4.6+build.0.ddebbc3e53370afad97c7e854c1d24034134db78",
+  "efVersion": "10.0.0.0",
+  "storeOptionsType": "Duende.IdentityServer.EntityFramework.Options.ConfigurationStoreOptions",
+  "counts": {
+    "properties": 162,
+    "entities": 22,
+    "shadowProperties": 0,
+    "indexes": 20,
+    "foreignKeys": 17
+  },
+  "entities": [
+    {
+      "name": "ApiResource",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiResource",
+      "table": "ApiResources",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "AllowedAccessTokenSigningAlgorithms",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "1000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "DisplayName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Enabled",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "LastAccessed",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Name",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "NonEditable",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "RequireResourceIndicator",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "ShowInDiscoveryDocument",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Updated",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "Name"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ApiResourceClaim",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiResourceClaim",
+      "table": "ApiResourceClaims",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ApiResourceId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "ApiResource",
+          "dependentProperties": [
+            "ApiResourceId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ApiResourceId",
+            "Type"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ApiResourceProperty",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiResourceProperty",
+      "table": "ApiResourceProperties",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ApiResourceId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Key",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "250",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "2000",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "ApiResource",
+          "dependentProperties": [
+            "ApiResourceId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ApiResourceId",
+            "Key"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ApiResourceScope",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiResourceScope",
+      "table": "ApiResourceScopes",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ApiResourceId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Scope",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "ApiResource",
+          "dependentProperties": [
+            "ApiResourceId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ApiResourceId",
+            "Scope"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ApiResourceSecret",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiResourceSecret",
+      "table": "ApiResourceSecrets",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ApiResourceId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "1000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Expiration",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "250",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "4000",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "ApiResource",
+          "dependentProperties": [
+            "ApiResourceId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "ApiScope",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiScope",
+      "table": "ApiScopes",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "1000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "DisplayName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Emphasize",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Enabled",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "LastAccessed",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Name",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "NonEditable",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Required",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "ShowInDiscoveryDocument",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Updated",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "Name"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ApiScopeClaim",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiScopeClaim",
+      "table": "ApiScopeClaims",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ScopeId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "ApiScope",
+          "dependentProperties": [
+            "ScopeId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ScopeId",
+            "Type"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ApiScopeProperty",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiScopeProperty",
+      "table": "ApiScopeProperties",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "Key",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "250",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "ScopeId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "2000",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "ApiScope",
+          "dependentProperties": [
+            "ScopeId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ScopeId",
+            "Key"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Client",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.Client",
+      "table": "Clients",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "AbsoluteRefreshTokenLifetime",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "AccessTokenLifetime",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "AccessTokenType",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "AllowAccessTokensViaBrowser",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "AllowOfflineAccess",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "AllowPlainTextPkce",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "AllowRememberConsent",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "AllowedIdentityTokenSigningAlgorithms",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "AlwaysIncludeUserClaimsInIdToken",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "AlwaysSendClientClaims",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "AuthorizationCodeLifetime",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "BackChannelLogoutSessionRequired",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "BackChannelLogoutUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "2000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "CibaLifetime",
+          "clrType": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "ClientClaimsPrefix",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "ClientName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "ClientUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "2000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "ConsentLifetime",
+          "clrType": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "CoordinateLifetimeWithUserSession",
+          "clrType": "System.Nullable`1[[System.Boolean, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "DPoPClockSkew",
+          "clrType": "System.TimeSpan",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "DPoPValidationMode",
+          "clrType": "Duende.IdentityServer.Models.DPoPTokenExpirationValidationMode",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "1000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "DeviceCodeLifetime",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "EnableLocalLogin",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Enabled",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "FrontChannelLogoutSessionRequired",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "FrontChannelLogoutUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "2000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "IdentityTokenLifetime",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "IncludeJwtId",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "InitiateLoginUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "2000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "LastAccessed",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "LogoUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "2000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "NonEditable",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "PairWiseSubjectSalt",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "PollingInterval",
+          "clrType": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "ProtocolType",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "PushedAuthorizationLifetime",
+          "clrType": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "RefreshTokenExpiration",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "RefreshTokenUsage",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "RequireClientSecret",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "RequireConsent",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "RequireDPoP",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "RequirePkce",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "RequirePushedAuthorization",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "RequireRequestObject",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "SlidingRefreshTokenLifetime",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "UpdateAccessTokenClaimsOnRefresh",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Updated",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "UserCodeType",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "UserSsoLifetime",
+          "clrType": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ClientClaim",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientClaim",
+      "table": "ClientClaims",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "250",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "250",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "Client",
+          "dependentProperties": [
+            "ClientId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "Type",
+            "Value"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ClientCorsOrigin",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientCorsOrigin",
+      "table": "ClientCorsOrigins",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Origin",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "150",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "Client",
+          "dependentProperties": [
+            "ClientId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "Origin"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ClientGrantType",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientGrantType",
+      "table": "ClientGrantTypes",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "GrantType",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "250",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "Client",
+          "dependentProperties": [
+            "ClientId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "GrantType"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ClientIdPRestriction",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientIdPRestriction",
+      "table": "ClientIdPRestrictions",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Provider",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "Client",
+          "dependentProperties": [
+            "ClientId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "Provider"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ClientPostLogoutRedirectUri",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientPostLogoutRedirectUri",
+      "table": "ClientPostLogoutRedirectUris",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "PostLogoutRedirectUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "400",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "Client",
+          "dependentProperties": [
+            "ClientId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "PostLogoutRedirectUri"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ClientProperty",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientProperty",
+      "table": "ClientProperties",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Key",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "250",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "2000",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "Client",
+          "dependentProperties": [
+            "ClientId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "Key"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ClientRedirectUri",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientRedirectUri",
+      "table": "ClientRedirectUris",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "RedirectUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "400",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "Client",
+          "dependentProperties": [
+            "ClientId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "RedirectUri"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ClientScope",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientScope",
+      "table": "ClientScopes",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Scope",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "Client",
+          "dependentProperties": [
+            "ClientId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "Scope"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ClientSecret",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientSecret",
+      "table": "ClientSecrets",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "2000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Expiration",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "250",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "4000",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "Client",
+          "dependentProperties": [
+            "ClientId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "IdentityProvider",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.IdentityProvider",
+      "table": "IdentityProviders",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "DisplayName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Enabled",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "LastAccessed",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "NonEditable",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Properties",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Scheme",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "20",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Updated",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "Scheme"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IdentityResource",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.IdentityResource",
+      "table": "IdentityResources",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "1000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "DisplayName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Emphasize",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Enabled",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Name",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "NonEditable",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Required",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "ShowInDiscoveryDocument",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Updated",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "Name"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IdentityResourceClaim",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.IdentityResourceClaim",
+      "table": "IdentityResourceClaims",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "IdentityResourceId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "IdentityResource",
+          "dependentProperties": [
+            "IdentityResourceId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "IdentityResourceId",
+            "Type"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IdentityResourceProperty",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.IdentityResourceProperty",
+      "table": "IdentityResourceProperties",
+      "primaryKey": [
+        "Id"
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "annotations": []
+        },
+        {
+          "name": "IdentityResourceId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": []
+        },
+        {
+          "name": "Key",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "250",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "annotations": [
+            {
+              "value": "2000",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "principal": "IdentityResource",
+          "dependentProperties": [
+            "IdentityResourceId"
+          ],
+          "principalProperties": [
+            "Id"
+          ],
+          "required": true,
+          "unique": false,
+          "deleteBehavior": "Cascade"
+        }
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "IdentityResourceId",
+            "Key"
+          ]
+        }
+      ]
+    }
+  ],
+  "sourceCommit": "ddebbc3e53370afad97c7e854c1d24034134db78",
+  "sourceUrl": "https://github.com/DuendeSoftware/products/blob/ddebbc3e53370afad97c7e854c1d24034134db78/identity-server/src/EntityFramework.Storage/DbContexts/ConfigurationDbContext.cs",
+  "limitations": [
+    "Metadata-only InMemory model of the proposed standard Duende context, not the currently registered in-memory stores or any live database",
+    "No relational SQL types, physical tables, index/constraint enforcement, provider parity, migrations, token issuance or revocation proven",
+    "No database created/opened or SaveChanges invoked; all data are type/field metadata, never stored credential or grant values",
+    "The existing three-context 88-entity inventory remains a separate historical denominator; these contexts supplement it without overwriting it"
+  ]
+}

@@ -1,0 +1,3339 @@
+{
+  "timestampLocal": "2026-11-17T22:51:34",
+  "head": "45a7318ecde104742887e589a8d68655a83148a6",
+  "taskIds": [
+    "TASK-FEDPH0-004",
+    "TASK-FEDPH0-005"
+  ],
+  "requirementIds": [
+    "FR-MCP-184",
+    "TR-MCP-FEDERATION-011",
+    "TEST-MCP-232",
+    "FR-MCP-185",
+    "TR-MCP-FEDERATION-012",
+    "TEST-MCP-233"
+  ],
+  "status": "Proposed metadata classification supplement, not acceptance",
+  "operatorAccepted": false,
+  "phase0Complete": false,
+  "runtimeDoltEvidence": false,
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "baselineClassification": {
+    "counts": {
+      "mappedProperties": 1079,
+      "entities": 88,
+      "writerCallCandidates": 214,
+      "relationships": 126,
+      "automaticAssignmentCandidates": 64
+    },
+    "sha256": "9E623372B679204FDFB061B343DC61F1185BBF060884270A9870214D933A373F",
+    "path": "proposed-storage-classification.json",
+    "meaning": "Historical three-context baseline, unchanged"
+  },
+  "modelInputs": [
+    {
+      "sqlExecuted": false,
+      "contextType": "Duende.IdentityServer.EntityFramework.DbContexts.ConfigurationDbContext",
+      "sourceCommit": "ddebbc3e53370afad97c7e854c1d24034134db78",
+      "sourceHead": "45a7318ecde104742887e589a8d68655a83148a6",
+      "sha256": "17386E990DAEB15CD4A24BE7612FC3C105957C28638D0978BA0431F1AD57F33B",
+      "counts": {
+        "properties": 162,
+        "entities": 22,
+        "shadowProperties": 0,
+        "indexes": 20,
+        "foreignKeys": 17
+      },
+      "databaseOpened": false,
+      "name": "identityserver-configuration-model.json",
+      "sourceUrl": "https://github.com/DuendeSoftware/products/blob/ddebbc3e53370afad97c7e854c1d24034134db78/identity-server/src/EntityFramework.Storage/DbContexts/ConfigurationDbContext.cs"
+    },
+    {
+      "sqlExecuted": false,
+      "contextType": "Duende.IdentityServer.EntityFramework.DbContexts.PersistedGrantDbContext",
+      "sourceCommit": "ddebbc3e53370afad97c7e854c1d24034134db78",
+      "sourceHead": "45a7318ecde104742887e589a8d68655a83148a6",
+      "sha256": "B160C07C5A0712F57CA0392592DF27E71C61828067A861A86D543197C7F09962",
+      "counts": {
+        "entities": 5,
+        "foreignKeys": 0,
+        "indexes": 15,
+        "shadowProperties": 0,
+        "properties": 42
+      },
+      "databaseOpened": false,
+      "name": "identityserver-operational-model.json",
+      "sourceUrl": "https://github.com/DuendeSoftware/products/blob/ddebbc3e53370afad97c7e854c1d24034134db78/identity-server/src/EntityFramework.Storage/DbContexts/PersistedGrantDbContext.cs"
+    }
+  ],
+  "supplementCounts": {
+    "indexes": 35,
+    "relationships": 17,
+    "properties": 204,
+    "entities": 27,
+    "shadowProperties": 0
+  },
+  "combinedInventoryCounts": {
+    "contexts": 5,
+    "mappedPropertyOccurrences": 1283,
+    "entityOccurrences": 115,
+    "modelForeignKeys": 143,
+    "meaning": "Three baseline contexts plus two proposed standard Duende contexts; not current live persistence or final relational model denominator"
+  },
+  "entities": [
+    {
+      "name": "ApiResource",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiResource",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "Name"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "AllowedAccessTokenSigningAlgorithms",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "DisplayName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Enabled",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "LastAccessed",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Name",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "NonEditable",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "RequireResourceIndicator",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ShowInDiscoveryDocument",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Updated",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ApiResourceClaim",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiResourceClaim",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ApiResourceId",
+            "Type"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ApiResourceId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ApiResourceProperty",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiResourceProperty",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ApiResourceId",
+            "Key"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ApiResourceId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Key",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "OpaqueProtectedConfiguration",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ApiResourceScope",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiResourceScope",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ApiResourceId",
+            "Scope"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ApiResourceId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Scope",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ApiResourceSecret",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiResourceSecret",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ApiResourceId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Expiration",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "SecretMaterialOrHash",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ApiScope",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiScope",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "Name"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "DisplayName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Emphasize",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Enabled",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "LastAccessed",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Name",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "NonEditable",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Required",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ShowInDiscoveryDocument",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Updated",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ApiScopeClaim",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiScopeClaim",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ScopeId",
+            "Type"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ScopeId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ApiScopeProperty",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ApiScopeProperty",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ScopeId",
+            "Key"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Key",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ScopeId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "OpaqueProtectedConfiguration",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "Client",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.Client",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "AbsoluteRefreshTokenLifetime",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "AccessTokenLifetime",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "AccessTokenType",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "AllowAccessTokensViaBrowser",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "AllowOfflineAccess",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "AllowPlainTextPkce",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "AllowRememberConsent",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "AllowedIdentityTokenSigningAlgorithms",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "AlwaysIncludeUserClaimsInIdToken",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "AlwaysSendClientClaims",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "AuthorizationCodeLifetime",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "BackChannelLogoutSessionRequired",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "BackChannelLogoutUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "CibaLifetime",
+          "clrType": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientClaimsPrefix",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ConsentLifetime",
+          "clrType": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "CoordinateLifetimeWithUserSession",
+          "clrType": "System.Nullable`1[[System.Boolean, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "DPoPClockSkew",
+          "clrType": "System.TimeSpan",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "DPoPValidationMode",
+          "clrType": "Duende.IdentityServer.Models.DPoPTokenExpirationValidationMode",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "DeviceCodeLifetime",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "EnableLocalLogin",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Enabled",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "FrontChannelLogoutSessionRequired",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "FrontChannelLogoutUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "IdentityTokenLifetime",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "IncludeJwtId",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "InitiateLoginUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "LastAccessed",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "LogoUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "NonEditable",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "PairWiseSubjectSalt",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "PollingInterval",
+          "clrType": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ProtocolType",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "PushedAuthorizationLifetime",
+          "clrType": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "RefreshTokenExpiration",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "RefreshTokenUsage",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "RequireClientSecret",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "RequireConsent",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "RequireDPoP",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "RequirePkce",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "RequirePushedAuthorization",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "RequireRequestObject",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "SlidingRefreshTokenLifetime",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "UpdateAccessTokenClaimsOnRefresh",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Updated",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "UserCodeType",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "UserSsoLifetime",
+          "clrType": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ClientClaim",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientClaim",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "Type",
+            "Value"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "OpaqueProtectedConfiguration",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ClientCorsOrigin",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientCorsOrigin",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "Origin"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Origin",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ClientGrantType",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientGrantType",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "GrantType"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "GrantType",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ClientIdPRestriction",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientIdPRestriction",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "Provider"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Provider",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ClientPostLogoutRedirectUri",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientPostLogoutRedirectUri",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "PostLogoutRedirectUri"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "PostLogoutRedirectUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ClientProperty",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientProperty",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "Key"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Key",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "OpaqueProtectedConfiguration",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ClientRedirectUri",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientRedirectUri",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "RedirectUri"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "RedirectUri",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ClientScope",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientScope",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "ClientId",
+            "Scope"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Scope",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ClientSecret",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ClientSecret",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Expiration",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "SecretMaterialOrHash",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "IdentityProvider",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.IdentityProvider",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "Scheme"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "DisplayName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Enabled",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "LastAccessed",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "NonEditable",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Properties",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "OpaqueProtectedConfiguration",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Scheme",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Updated",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "IdentityResource",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.IdentityResource",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "Name"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "DisplayName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Emphasize",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Enabled",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Name",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "NonEditable",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Required",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ShowInDiscoveryDocument",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Updated",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "IdentityResourceClaim",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.IdentityResourceClaim",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "IdentityResourceId",
+            "Type"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "IdentityResourceId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "IdentityResourceProperty",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.IdentityResourceProperty",
+      "inputModel": "identityserver-configuration-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "IdentityResourceId",
+            "Key"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "IdentityResourceId",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Key",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Value",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityConfiguration",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "OpaqueProtectedConfiguration",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "DeviceFlowCodes",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.DeviceFlowCodes",
+      "inputModel": "identityserver-operational-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityOperational",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "UserCode"
+      ],
+      "indexes": [
+        {
+          "unique": true,
+          "properties": [
+            "DeviceCode"
+          ]
+        },
+        {
+          "unique": false,
+          "properties": [
+            "Expiration"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "UserCode",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "CredentialGrantOrSessionMaterial",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "CreationTime",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Data",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "CredentialGrantOrSessionMaterial",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "DeviceCode",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "CredentialGrantOrSessionMaterial",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Expiration",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "SessionId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "SubjectId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "Key",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.Key",
+      "inputModel": "identityserver-operational-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityOperational",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": false,
+          "properties": [
+            "Use"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Algorithm",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Data",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "CredentialGrantOrSessionMaterial",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "DataProtected",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "IsX509Certificate",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Use",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Version",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "PersistedGrant",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.PersistedGrant",
+      "inputModel": "identityserver-operational-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityOperational",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": false,
+          "properties": [
+            "ConsumedTime"
+          ]
+        },
+        {
+          "unique": false,
+          "properties": [
+            "Expiration"
+          ]
+        },
+        {
+          "unique": true,
+          "properties": [
+            "Key"
+          ]
+        },
+        {
+          "unique": false,
+          "properties": [
+            "SubjectId",
+            "ClientId",
+            "Type"
+          ]
+        },
+        {
+          "unique": false,
+          "properties": [
+            "SubjectId",
+            "SessionId",
+            "Type"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int64",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ConsumedTime",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "CreationTime",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Data",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "CredentialGrantOrSessionMaterial",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Expiration",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Key",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "CredentialGrantOrSessionMaterial",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "SessionId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "SubjectId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "PushedAuthorizationRequest",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.PushedAuthorizationRequest",
+      "inputModel": "identityserver-operational-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityOperational",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": false,
+          "properties": [
+            "ExpiresAtUtc"
+          ]
+        },
+        {
+          "unique": true,
+          "properties": [
+            "ReferenceValueHash"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int64",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ExpiresAtUtc",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Parameters",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "CredentialGrantOrSessionMaterial",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "ReferenceValueHash",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "CredentialGrantOrSessionMaterial",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    },
+    {
+      "name": "ServerSideSession",
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ServerSideSession",
+      "inputModel": "identityserver-operational-model.json",
+      "designStatus": "Proposed",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityOperational",
+      "reason": "Duende issuer configuration/security state is operational, never authored versioned project content",
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [
+        {
+          "unique": false,
+          "properties": [
+            "DisplayName"
+          ]
+        },
+        {
+          "unique": false,
+          "properties": [
+            "Expires"
+          ]
+        },
+        {
+          "unique": true,
+          "properties": [
+            "Key"
+          ]
+        },
+        {
+          "unique": false,
+          "properties": [
+            "SessionId"
+          ]
+        },
+        {
+          "unique": false,
+          "properties": [
+            "SubjectId"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int64",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Data",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "CredentialGrantOrSessionMaterial",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "DisplayName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Expires",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Key",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "CredentialGrantOrSessionMaterial",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Renewed",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "Scheme",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "SessionId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        },
+        {
+          "name": "SubjectId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "destination": "Excluded",
+          "retainedStore": "ProtectedIdentityOperational",
+          "condition": "All rows and all project scopes",
+          "sensitivity": "ProtectedIdentityMetadata",
+          "transformation": "Preserve in protected identity-store lifecycle and authorized backup; omit entirely from project clone/export/history, including promoted snapshots; no deletion or value inspection"
+        }
+      ],
+      "currentRegistrationProven": false,
+      "relationalVerified": false
+    }
+  ],
+  "relationships": [
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ApiResourceClaim",
+      "principal": "ApiResource",
+      "dependentProperties": [
+        "ApiResourceId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ApiResourceProperty",
+      "principal": "ApiResource",
+      "dependentProperties": [
+        "ApiResourceId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ApiResourceScope",
+      "principal": "ApiResource",
+      "dependentProperties": [
+        "ApiResourceId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ApiResourceSecret",
+      "principal": "ApiResource",
+      "dependentProperties": [
+        "ApiResourceId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ApiScopeClaim",
+      "principal": "ApiScope",
+      "dependentProperties": [
+        "ScopeId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ApiScopeProperty",
+      "principal": "ApiScope",
+      "dependentProperties": [
+        "ScopeId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ClientClaim",
+      "principal": "Client",
+      "dependentProperties": [
+        "ClientId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ClientCorsOrigin",
+      "principal": "Client",
+      "dependentProperties": [
+        "ClientId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ClientGrantType",
+      "principal": "Client",
+      "dependentProperties": [
+        "ClientId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ClientIdPRestriction",
+      "principal": "Client",
+      "dependentProperties": [
+        "ClientId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ClientPostLogoutRedirectUri",
+      "principal": "Client",
+      "dependentProperties": [
+        "ClientId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ClientProperty",
+      "principal": "Client",
+      "dependentProperties": [
+        "ClientId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ClientRedirectUri",
+      "principal": "Client",
+      "dependentProperties": [
+        "ClientId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ClientScope",
+      "principal": "Client",
+      "dependentProperties": [
+        "ClientId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "ClientSecret",
+      "principal": "Client",
+      "dependentProperties": [
+        "ClientId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "IdentityResourceClaim",
+      "principal": "IdentityResource",
+      "dependentProperties": [
+        "IdentityResourceId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    },
+    {
+      "inputModel": "identityserver-configuration-model.json",
+      "dependent": "IdentityResourceProperty",
+      "principal": "IdentityResource",
+      "dependentProperties": [
+        "IdentityResourceId"
+      ],
+      "principalProperties": [
+        "Id"
+      ],
+      "existingDeleteBehavior": "Cascade",
+      "destination": "Excluded",
+      "retainedStore": "ProtectedIdentityConfiguration",
+      "routing": "Preserve standard same-context identity-store relationship and backup graph; never copy to project context; relational enforcement remains unproven",
+      "designStatus": "Proposed"
+    }
+  ],
+  "softReferences": [
+    "PersistedGrant.ClientId and DeviceFlowCodes.ClientId identify issuer Client.ClientId by standard store protocol; no cross-context/database FK is inferred",
+    "Subject/session identifiers link identity protocols; human account and node owner/project authorization must be explicitly validated, not inferred from a matching string",
+    "NodeId to Duende ClientId and ProjectId to authorized scope remain protected control bindings; cloneable project rows never grant issuer authority"
+  ],
+  "writerBoundary": [
+    "Issuance, client administration, revocation, key rotation, session/grant cleanup and last-access updates remain protected operational writes and never take or dirty a project editing lease",
+    "Inventorying store types does not close transitive/background writer call flows or prove actual store registration; capture DI types and native lifecycle observations at disposable binding"
+  ],
+  "retention": [
+    "Keep existing human Identity context, standard Duende context-specific migration histories and standalone historical migrations separate",
+    "Durable revocation disables the client and removes its grants through standard store APIs; retain independent readback, restart and unrelated-node evidence",
+    "Backups must include configuration, grants, human identity and required data-protection/signing material under protected operational procedures; project clone is not identity-store recovery",
+    "No credentials, grant payloads or signing material are read by this metadata capture"
+  ],
+  "limitations": [
+    "Metadata-only InMemory model, not relational table naming/types/index/constraint enforcement or provider feasibility",
+    "Proposed standard stores supplement current in-memory registration source evidence; actual DI, migrations, restart durability, revocation and mixed-version/licensing feasibility remain pending",
+    "All baseline property/writer classifications remain proposed; full raw SQL, indirect and automatic writer closure remains pending",
+    "No product code, dependencies, live auth configuration, database or service changed; no B output accepted"
+  ]
+}
