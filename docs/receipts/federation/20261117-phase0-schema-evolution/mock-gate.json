@@ -1,0 +1,92 @@
+{
+  "timestampLocal": "2026-11-17T23:20:57",
+  "tasks": [
+    "TASK-FEDPH0-006"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T232006-fedph0-schema-evolution-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0SchemaEvolutionMockGateTests --test-run-id 20261117T232006-fedph0-schema-evolution-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 1490,
+  "passed": 1490,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 8,
+  "expectedNegativeControls": 1482,
+  "coverage": [
+    {
+      "test": "TEST-MCP-234",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-013",
+      "text": "Given a versioned project at schema1, when application starts, then no EF migration executes and its Dolt head/schema remain unchanged.",
+      "satisfied": false,
+      "fr": "FR-MCP-186",
+      "ac": "ac-VersionedProjectNotMigratedAtStartup"
+    },
+    {
+      "test": "TEST-MCP-234",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-013",
+      "text": "Given application supports schema1, when opening schema2 for domain writes, then incompatible_schema is returned before mutation.",
+      "satisfied": false,
+      "fr": "FR-MCP-186",
+      "ac": "ac-UnsupportedSchemaRejected"
+    },
+    {
+      "test": "TEST-MCP-234",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-013",
+      "text": "Given B1 is unpublished on schema1 and hub S1 adds schema2 from C0, when preflight/upgrade and merge succeed, then B/main=M1 with both B1 and S1 ancestors and B1 row values preserved.",
+      "satisfied": false,
+      "fr": "FR-MCP-186",
+      "ac": "ac-OldSchemaUnpublishedCommitMergesAfterUpgrade"
+    },
+    {
+      "test": "TEST-MCP-234",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-013",
+      "text": "Given main accepts S1 but feature still uses schema1, when feature is selected for writes, then it remains closed until its own merge with S1 validates.",
+      "satisfied": false,
+      "fr": "FR-MCP-186",
+      "ac": "ac-FeatureBranchSchemaCatchUp"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "8248CF4DC365827BD9BF0886C8D2D629154E6786AB4EE3458C15EA73560912C9",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0SchemaEvolutionContract.cs",
+      "lfNormalizedSha256": "E9A519AB4135CBADF1EB4FFDB4ACE515F729AFA502B83AA32DF56329FF760941"
+    },
+    {
+      "sha256": "51878B043237BCA7153DC99F4B583CD388415BCBF24EB2AAC8C025FB2773D9F3",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0SchemaEvolutionMockGateTests.cs",
+      "lfNormalizedSha256": "69F2801A1835E5FAE63871EDE377079253F0B4A106DC5BFD1F92C97392D3BCC5"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "0D0E81E1A57AB94A7C075277830673EBF49E6BD97DE44383BAE8ACF638F80621",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T232006-fedph0-schema-evolution-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "624016B2BCD7E96A8CF03873DF629AE37C1483B4DB7BC15CF3061339CA3A9034",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_23-20-17.log"
+    }
+  ],
+  "pending": [
+    "Native Dolt startup and schema-history merges on both hosts",
+    "Real EF-project startup exclusion, binary preflight and all-branch admission",
+    "Native ancestry/typed rows/history/conflict persistence and independently retained execution receipts",
+    "Remaining B7/B1-B12/group design, full cumulative gates and hostile validation"
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
