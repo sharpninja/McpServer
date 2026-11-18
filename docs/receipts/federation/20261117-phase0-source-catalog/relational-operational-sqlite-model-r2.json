@@ -1,0 +1,866 @@
+{
+  "timestampLocal": "2026-11-18T01:08:02",
+  "head": "e24322fb52b5286b226a8292f6d52442b05d03e2",
+  "taskIds": [
+    "TASK-FEDPH0-004",
+    "TASK-FEDPH0-005"
+  ],
+  "modelKind": "Operational",
+  "contextType": "Duende.IdentityServer.EntityFramework.DbContexts.PersistedGrantDbContext",
+  "provider": "Microsoft.EntityFrameworkCore.Sqlite",
+  "providerAssemblySha256": "6586082031570843C829CE6260B04965A94751007BE5A61B5B47C0460AA7400A",
+  "storageAssemblySha256": "F8308B09EC4941C00CBAEAD7FE85867BA6E8197C5DC47B2E0739DA33C3615A4E",
+  "sourceCatalogSha256": "88DA9E41116F88DEDA13A9675BA2B073AD63B41D0E65BD371B72FE9CCAD7CF05",
+  "scriptSha256": "85B679AC334A47F198BD355DF2F6C64F2E00137D75B38D0EE68E52084633FCF9",
+  "assemblyPins": [
+    {
+      "name": "Duende.IdentityServer.EntityFramework.Storage",
+      "sha256": "F8308B09EC4941C00CBAEAD7FE85867BA6E8197C5DC47B2E0739DA33C3615A4E",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/Duende.IdentityServer.EntityFramework.Storage.dll",
+      "version": "7.0.0.0"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Sqlite",
+      "sha256": "6586082031570843C829CE6260B04965A94751007BE5A61B5B47C0460AA7400A",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "version": "10.0.0.0"
+    },
+    {
+      "name": "SQLitePCLRaw.provider.e_sqlite3",
+      "sha256": "232990C8372AFF30574EEF9CC280B486EE6F39F8A66F83EA495DD0DBAE98740C",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+      "version": "2.1.11.2622"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore",
+      "sha256": "785AAEBFF28ACDAFC80F4FD2A7521392BB67AFD8069B89B3AA8D7C5627F49C60",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.dll",
+      "version": "10.0.0.0"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Relational",
+      "sha256": "68803FA0A71D4A9D58325DDDE1D1709451094A20B01CBDB3B73D69F42D115197",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
+      "version": "10.0.0.0"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Abstractions",
+      "sha256": "CE76BCE9DCC06FC6E22D6C4ABEBB4EA816A0079B10485C5C080D6EA9F0FD818E",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "version": "10.0.0.0"
+    },
+    {
+      "name": "Microsoft.Data.Sqlite",
+      "sha256": "1DFBF0E7BC0ACE8F9D411ABDBC64362D5225BDF53AD68444B792AF35AC611E29",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/Microsoft.Data.Sqlite.dll",
+      "version": "10.0.0.0"
+    },
+    {
+      "name": "SQLitePCLRaw.core",
+      "sha256": "3D2ED8E186F124F988EBDB45D0354185B424357BE2433BBA0033AB9EC31BD25B",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/SQLitePCLRaw.core.dll",
+      "version": "2.1.11.2622"
+    },
+    {
+      "name": "SQLitePCLRaw.batteries_v2",
+      "sha256": "94AC800C6B93AE50A025F247547781DEBE18391110667C5E242F51D8AC188FFB",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/SQLitePCLRaw.batteries_v2.dll",
+      "version": "2.1.11.2622"
+    }
+  ],
+  "nativePins": [
+    {
+      "sha256": "B7385D722C83FB52142A00477A726723745916D22A555711EE89834C1111FB2E",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/runtimes/win-x64/native/e_sqlite3.dll"
+    }
+  ],
+  "databaseOpened": false,
+  "sqlExecuted": false,
+  "explicitConnectionRequestedByInspector": false,
+  "constructorConnectionState": "NotRequestedByInspector",
+  "connectionObjectRequestedByContextConstructor": false,
+  "saveChangesInvoked": false,
+  "runtimeDoltEvidence": false,
+  "constraintEnforcementVerified": false,
+  "operatorAccepted": false,
+  "counts": {
+    "shadowProperties": 0,
+    "properties": 42,
+    "foreignKeys": 0,
+    "entities": 5,
+    "indexes": 15
+  },
+  "entities": [
+    {
+      "foreignKeys": [],
+      "table": "DeviceCodes",
+      "primaryKey": [
+        "UserCode"
+      ],
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.DeviceFlowCodes",
+      "name": "DeviceFlowCodes",
+      "properties": [
+        {
+          "name": "UserCode",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "UserCode",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "ClientId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "CreationTime",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "CreationTime",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Data",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Data",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "50000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Description",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "DeviceCode",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "DeviceCode",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Expiration",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Expiration",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "SessionId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "SessionId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "SubjectId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "SubjectId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "schema": null,
+      "indexes": [
+        {
+          "name": "IX_DeviceCodes_DeviceCode",
+          "properties": [
+            "DeviceCode"
+          ],
+          "filter": null,
+          "unique": true
+        },
+        {
+          "name": "IX_DeviceCodes_Expiration",
+          "properties": [
+            "Expiration"
+          ],
+          "filter": null,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "foreignKeys": [],
+      "table": "Keys",
+      "primaryKey": [
+        "Id"
+      ],
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.Key",
+      "name": "Key",
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Id",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Algorithm",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Algorithm",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Created",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Data",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Data",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "DataProtected",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "DataProtected",
+          "columnType": "INTEGER",
+          "annotations": []
+        },
+        {
+          "name": "IsX509Certificate",
+          "clrType": "System.Boolean",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "IsX509Certificate",
+          "columnType": "INTEGER",
+          "annotations": []
+        },
+        {
+          "name": "Use",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Use",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Version",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Version",
+          "columnType": "INTEGER",
+          "annotations": []
+        }
+      ],
+      "schema": null,
+      "indexes": [
+        {
+          "name": "IX_Keys_Use",
+          "properties": [
+            "Use"
+          ],
+          "filter": null,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "foreignKeys": [],
+      "table": "PersistedGrants",
+      "primaryKey": [
+        "Id"
+      ],
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.PersistedGrant",
+      "name": "PersistedGrant",
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int64",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "column": "Id",
+          "columnType": "INTEGER",
+          "annotations": []
+        },
+        {
+          "name": "ClientId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "ClientId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "ConsumedTime",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "ConsumedTime",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "CreationTime",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "CreationTime",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Data",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Data",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "50000",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Description",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Description",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Expiration",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Expiration",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Key",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Key",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "SessionId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "SessionId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "SubjectId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "SubjectId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Type",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Type",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "50",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "schema": null,
+      "indexes": [
+        {
+          "name": "IX_PersistedGrants_ConsumedTime",
+          "properties": [
+            "ConsumedTime"
+          ],
+          "filter": null,
+          "unique": false
+        },
+        {
+          "name": "IX_PersistedGrants_Expiration",
+          "properties": [
+            "Expiration"
+          ],
+          "filter": null,
+          "unique": false
+        },
+        {
+          "name": "IX_PersistedGrants_Key",
+          "properties": [
+            "Key"
+          ],
+          "filter": null,
+          "unique": true
+        },
+        {
+          "name": "IX_PersistedGrants_SubjectId_ClientId_Type",
+          "properties": [
+            "SubjectId",
+            "ClientId",
+            "Type"
+          ],
+          "filter": null,
+          "unique": false
+        },
+        {
+          "name": "IX_PersistedGrants_SubjectId_SessionId_Type",
+          "properties": [
+            "SubjectId",
+            "SessionId",
+            "Type"
+          ],
+          "filter": null,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "foreignKeys": [],
+      "table": "PushedAuthorizationRequests",
+      "primaryKey": [
+        "Id"
+      ],
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.PushedAuthorizationRequest",
+      "name": "PushedAuthorizationRequest",
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int64",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "column": "Id",
+          "columnType": "INTEGER",
+          "annotations": []
+        },
+        {
+          "name": "ExpiresAtUtc",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "ExpiresAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Parameters",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Parameters",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "ReferenceValueHash",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "ReferenceValueHash",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "64",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "schema": null,
+      "indexes": [
+        {
+          "name": "IX_PushedAuthorizationRequests_ExpiresAtUtc",
+          "properties": [
+            "ExpiresAtUtc"
+          ],
+          "filter": null,
+          "unique": false
+        },
+        {
+          "name": "IX_PushedAuthorizationRequests_ReferenceValueHash",
+          "properties": [
+            "ReferenceValueHash"
+          ],
+          "filter": null,
+          "unique": true
+        }
+      ]
+    },
+    {
+      "foreignKeys": [],
+      "table": "ServerSideSessions",
+      "primaryKey": [
+        "Id"
+      ],
+      "clrFullName": "Duende.IdentityServer.EntityFramework.Entities.ServerSideSession",
+      "name": "ServerSideSession",
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int64",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "column": "Id",
+          "columnType": "INTEGER",
+          "annotations": []
+        },
+        {
+          "name": "Created",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Created",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Data",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Data",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "DisplayName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "DisplayName",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Expires",
+          "clrType": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Expires",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Key",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Key",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Renewed",
+          "clrType": "System.DateTime",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Renewed",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Scheme",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Scheme",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "SessionId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "SessionId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "SubjectId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "SubjectId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "schema": null,
+      "indexes": [
+        {
+          "name": "IX_ServerSideSessions_DisplayName",
+          "properties": [
+            "DisplayName"
+          ],
+          "filter": null,
+          "unique": false
+        },
+        {
+          "name": "IX_ServerSideSessions_Expires",
+          "properties": [
+            "Expires"
+          ],
+          "filter": null,
+          "unique": false
+        },
+        {
+          "name": "IX_ServerSideSessions_Key",
+          "properties": [
+            "Key"
+          ],
+          "filter": null,
+          "unique": true
+        },
+        {
+          "name": "IX_ServerSideSessions_SessionId",
+          "properties": [
+            "SessionId"
+          ],
+          "filter": null,
+          "unique": false
+        },
+        {
+          "name": "IX_ServerSideSessions_SubjectId",
+          "properties": [
+            "SubjectId"
+          ],
+          "filter": null,
+          "unique": false
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Existing compiled baseline metadata only; not current live data or actual provider DDL/query/constraint enforcement",
+    "Mcp SQLite constructor requests a connection object and registers DDL functions; inspector rereads that same object to verify Closed before/after metadata. No other explicit connection request, connection opening, queries, SQL, migrations, saves, schema creation or packages",
+    "Relational metadata describes mappings, not accepted Dolt types or durable Duende registration",
+    "Windows inspection only; independent native evidence on both hosts and full classification/migration closure remain required"
+  ],
+  "supersedes": "relational-operational-sqlite-model-r1.json",
+  "supersessionReason": "r1 preserved correct types/counts but null column names from PowerShell null-schema coercion in Table(name,schema); r2 uses provider-bound StoreObjectIdentifier.Create and refuses blank column names/types",
+  "nativeExit": 0,
+  "saveScriptSha256": "A66FC111F3F4DA607CD5883EBB681BC4EC63C028816E01C2B3D5C7E2CD8ECD8A"
+}

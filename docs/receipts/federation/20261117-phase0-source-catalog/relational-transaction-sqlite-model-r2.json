@@ -1,0 +1,1255 @@
+{
+  "timestampLocal": "2026-11-18T01:08:00",
+  "head": "e24322fb52b5286b226a8292f6d52442b05d03e2",
+  "taskIds": [
+    "TASK-FEDPH0-004",
+    "TASK-FEDPH0-005"
+  ],
+  "modelKind": "Transaction",
+  "contextType": "QBrainAi.TransactionSecurity.Services.TransactionSecurityDbContext",
+  "provider": "Microsoft.EntityFrameworkCore.Sqlite",
+  "providerAssemblySha256": "6586082031570843C829CE6260B04965A94751007BE5A61B5B47C0460AA7400A",
+  "storageAssemblySha256": "26D3F20643B338ABECA421C0CD44AEB50B6B78233C29C91F8C35BFC30617A9E7",
+  "sourceCatalogSha256": "88DA9E41116F88DEDA13A9675BA2B073AD63B41D0E65BD371B72FE9CCAD7CF05",
+  "scriptSha256": "85B679AC334A47F198BD355DF2F6C64F2E00137D75B38D0EE68E52084633FCF9",
+  "assemblyPins": [
+    {
+      "sha256": "26D3F20643B338ABECA421C0CD44AEB50B6B78233C29C91F8C35BFC30617A9E7",
+      "version": "1.0.0.0",
+      "name": "QBrainAi.TransactionSecurity",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll"
+    },
+    {
+      "sha256": "6586082031570843C829CE6260B04965A94751007BE5A61B5B47C0460AA7400A",
+      "version": "10.0.0.0",
+      "name": "Microsoft.EntityFrameworkCore.Sqlite",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Sqlite.dll"
+    },
+    {
+      "sha256": "232990C8372AFF30574EEF9CC280B486EE6F39F8A66F83EA495DD0DBAE98740C",
+      "version": "2.1.11.2622",
+      "name": "SQLitePCLRaw.provider.e_sqlite3",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll"
+    },
+    {
+      "sha256": "785AAEBFF28ACDAFC80F4FD2A7521392BB67AFD8069B89B3AA8D7C5627F49C60",
+      "version": "10.0.0.0",
+      "name": "Microsoft.EntityFrameworkCore",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.dll"
+    },
+    {
+      "sha256": "68803FA0A71D4A9D58325DDDE1D1709451094A20B01CBDB3B73D69F42D115197",
+      "version": "10.0.0.0",
+      "name": "Microsoft.EntityFrameworkCore.Relational",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Relational.dll"
+    },
+    {
+      "sha256": "CE76BCE9DCC06FC6E22D6C4ABEBB4EA816A0079B10485C5C080D6EA9F0FD818E",
+      "version": "10.0.0.0",
+      "name": "Microsoft.EntityFrameworkCore.Abstractions",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll"
+    },
+    {
+      "sha256": "1DFBF0E7BC0ACE8F9D411ABDBC64362D5225BDF53AD68444B792AF35AC611E29",
+      "version": "10.0.0.0",
+      "name": "Microsoft.Data.Sqlite",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/Microsoft.Data.Sqlite.dll"
+    },
+    {
+      "sha256": "3D2ED8E186F124F988EBDB45D0354185B424357BE2433BBA0033AB9EC31BD25B",
+      "version": "2.1.11.2622",
+      "name": "SQLitePCLRaw.core",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/SQLitePCLRaw.core.dll"
+    },
+    {
+      "sha256": "94AC800C6B93AE50A025F247547781DEBE18391110667C5E242F51D8AC188FFB",
+      "version": "2.1.11.2622",
+      "name": "SQLitePCLRaw.batteries_v2",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/SQLitePCLRaw.batteries_v2.dll"
+    }
+  ],
+  "nativePins": [
+    {
+      "sha256": "B7385D722C83FB52142A00477A726723745916D22A555711EE89834C1111FB2E",
+      "path": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/runtimes/win-x64/native/e_sqlite3.dll"
+    }
+  ],
+  "databaseOpened": false,
+  "sqlExecuted": false,
+  "explicitConnectionRequestedByInspector": false,
+  "constructorConnectionState": "NotRequestedByInspector",
+  "connectionObjectRequestedByContextConstructor": false,
+  "saveChangesInvoked": false,
+  "runtimeDoltEvidence": false,
+  "constraintEnforcementVerified": false,
+  "operatorAccepted": false,
+  "counts": {
+    "shadowProperties": 0,
+    "entities": 10,
+    "indexes": 0,
+    "properties": 73,
+    "foreignKeys": 1
+  },
+  "entities": [
+    {
+      "primaryKey": [
+        "TransactionId"
+      ],
+      "indexes": [],
+      "foreignKeys": [],
+      "properties": [
+        {
+          "name": "TransactionId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "TransactionId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "CanonicalizationProfile",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "CanonicalizationProfile",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "120",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "CreatedAtUtc",
+          "clrType": "System.DateTimeOffset",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "CreatedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "DiffgramSha256",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "DiffgramSha256",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "64",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "EncryptedBodySha256",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "EncryptedBodySha256",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "64",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "EncryptionAlgorithm",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "EncryptionAlgorithm",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "120",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "ExpiresAtUtc",
+          "clrType": "System.DateTimeOffset",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "ExpiresAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "IssuedAtUtc",
+          "clrType": "System.DateTimeOffset",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "IssuedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "ManifestHashSha256",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "ManifestHashSha256",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "64",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Nonce",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Nonce",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "PublisherPartyId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "PublisherPartyId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "PublisherSigningKeyId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "PublisherSigningKeyId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Sequence",
+          "clrType": "System.Int64",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Sequence",
+          "columnType": "INTEGER",
+          "annotations": []
+        },
+        {
+          "name": "SignatureAlgorithm",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "SignatureAlgorithm",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "SignatureKeyId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "SignatureKeyId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "SignatureValue",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "SignatureValue",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "SignedAtUtc",
+          "clrType": "System.DateTimeOffset",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "SignedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Status",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Status",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "50",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "SubscriberEncryptionKeyId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "SubscriberEncryptionKeyId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "SubscriberPartyId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "SubscriberPartyId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "TurnId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "TurnId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "name": "KeyServerManifestEntity",
+      "schema": null,
+      "table": "TransactionKeyServerManifests",
+      "clrFullName": "QBrainAi.TransactionSecurity.Services.KeyServerManifestEntity"
+    },
+    {
+      "primaryKey": [
+        "NonceKey"
+      ],
+      "indexes": [],
+      "foreignKeys": [],
+      "properties": [
+        {
+          "name": "NonceKey",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "NonceKey",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "CreatedAtUtc",
+          "clrType": "System.DateTimeOffset",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "CreatedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "TransactionId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "TransactionId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "name": "KeyServerNonceEntity",
+      "schema": null,
+      "table": "TransactionKeyServerNonces",
+      "clrFullName": "QBrainAi.TransactionSecurity.Services.KeyServerNonceEntity"
+    },
+    {
+      "primaryKey": [
+        "PartyId"
+      ],
+      "indexes": [],
+      "foreignKeys": [],
+      "properties": [
+        {
+          "name": "PartyId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "PartyId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "ActiveEncryptionKeyId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "ActiveEncryptionKeyId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "ActiveSigningKeyId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "ActiveSigningKeyId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "CreatedAtUtc",
+          "clrType": "System.DateTimeOffset",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "CreatedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Role",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Role",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Status",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Status",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "50",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "UpdatedAtUtc",
+          "clrType": "System.Nullable`1[[System.DateTimeOffset, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "UpdatedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        }
+      ],
+      "name": "KeyServerPartyEntity",
+      "schema": null,
+      "table": "TransactionKeyServerParties",
+      "clrFullName": "QBrainAi.TransactionSecurity.Services.KeyServerPartyEntity"
+    },
+    {
+      "primaryKey": [
+        "PartyId",
+        "KeyId"
+      ],
+      "indexes": [],
+      "foreignKeys": [
+        {
+          "dependentProperties": [
+            "PartyId"
+          ],
+          "deleteBehavior": "Cascade",
+          "unique": false,
+          "required": true,
+          "principal": "KeyServerPartyEntity",
+          "principalProperties": [
+            "PartyId"
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "PartyId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "PartyId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "KeyId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "KeyId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Algorithm",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Algorithm",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "100",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "CreatedAtUtc",
+          "clrType": "System.DateTimeOffset",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "CreatedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "ExpiresAtUtc",
+          "clrType": "System.Nullable`1[[System.DateTimeOffset, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "ExpiresAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "PublicKeyPem",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "PublicKeyPem",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Purpose",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Purpose",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "50",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Status",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Status",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "50",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "name": "KeyServerPartyKeyEntity",
+      "schema": null,
+      "table": "TransactionKeyServerPartyKeys",
+      "clrFullName": "QBrainAi.TransactionSecurity.Services.KeyServerPartyKeyEntity"
+    },
+    {
+      "primaryKey": [
+        "PairKey"
+      ],
+      "indexes": [],
+      "foreignKeys": [],
+      "properties": [
+        {
+          "name": "PairKey",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "PairKey",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "LastSequence",
+          "clrType": "System.Int64",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "LastSequence",
+          "columnType": "INTEGER",
+          "annotations": []
+        },
+        {
+          "name": "UpdatedAtUtc",
+          "clrType": "System.DateTimeOffset",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "UpdatedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        }
+      ],
+      "name": "KeyServerSequenceEntity",
+      "schema": null,
+      "table": "TransactionKeyServerSequences",
+      "clrFullName": "QBrainAi.TransactionSecurity.Services.KeyServerSequenceEntity"
+    },
+    {
+      "primaryKey": [
+        "NonceKey"
+      ],
+      "indexes": [],
+      "foreignKeys": [],
+      "properties": [
+        {
+          "name": "NonceKey",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "NonceKey",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "CreatedAtUtc",
+          "clrType": "System.DateTimeOffset",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "CreatedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "TransactionId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "TransactionId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "name": "SubscriberNonceEntity",
+      "schema": null,
+      "table": "TransactionSubscriberNonces",
+      "clrFullName": "QBrainAi.TransactionSecurity.Services.SubscriberNonceEntity"
+    },
+    {
+      "primaryKey": [
+        "PairKey"
+      ],
+      "indexes": [],
+      "foreignKeys": [],
+      "properties": [
+        {
+          "name": "PairKey",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "PairKey",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "LastSequence",
+          "clrType": "System.Int64",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "LastSequence",
+          "columnType": "INTEGER",
+          "annotations": []
+        }
+      ],
+      "name": "SubscriberSequenceEntity",
+      "schema": null,
+      "table": "TransactionSubscriberSequences",
+      "clrFullName": "QBrainAi.TransactionSecurity.Services.SubscriberSequenceEntity"
+    },
+    {
+      "primaryKey": [
+        "TransactionId"
+      ],
+      "indexes": [],
+      "foreignKeys": [],
+      "properties": [
+        {
+          "name": "TransactionId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "TransactionId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "AbortedAtUtc",
+          "clrType": "System.Nullable`1[[System.DateTimeOffset, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "AbortedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "CommittedAtUtc",
+          "clrType": "System.Nullable`1[[System.DateTimeOffset, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "CommittedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "DiffgramId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "DiffgramId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "240",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "EncryptedBodySha256",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "EncryptedBodySha256",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "64",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "ManifestHashSha256",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "ManifestHashSha256",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "64",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Reason",
+          "clrType": "QBrainAi.TransactionSecurity.Models.TransactionFailureReason",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Reason",
+          "columnType": "INTEGER",
+          "annotations": []
+        },
+        {
+          "name": "Status",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Status",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "50",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "name": "SubscriberTransactionEntity",
+      "schema": null,
+      "table": "TransactionSubscriberTransactions",
+      "clrFullName": "QBrainAi.TransactionSecurity.Services.SubscriberTransactionEntity"
+    },
+    {
+      "primaryKey": [
+        "Id"
+      ],
+      "indexes": [],
+      "foreignKeys": [],
+      "properties": [
+        {
+          "name": "Id",
+          "clrType": "System.Int64",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "column": "Id",
+          "columnType": "INTEGER",
+          "annotations": []
+        },
+        {
+          "name": "CreatedAtUtc",
+          "clrType": "System.DateTimeOffset",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "CreatedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Details",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Details",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "EventName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "EventName",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "120",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Reason",
+          "clrType": "QBrainAi.TransactionSecurity.Models.TransactionFailureReason",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Reason",
+          "columnType": "INTEGER",
+          "annotations": []
+        },
+        {
+          "name": "TransactionId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "TransactionId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        }
+      ],
+      "name": "TransactionAuditEntity",
+      "schema": null,
+      "table": "TransactionAuditEvents",
+      "clrFullName": "QBrainAi.TransactionSecurity.Services.TransactionAuditEntity"
+    },
+    {
+      "primaryKey": [
+        "OperationId"
+      ],
+      "indexes": [],
+      "foreignKeys": [],
+      "properties": [
+        {
+          "name": "OperationId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "OperationId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "240",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "AttemptCount",
+          "clrType": "System.Int32",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "AttemptCount",
+          "columnType": "INTEGER",
+          "annotations": []
+        },
+        {
+          "name": "CreatedAtUtc",
+          "clrType": "System.DateTimeOffset",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "CreatedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Kind",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Kind",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "40",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "Reason",
+          "clrType": "QBrainAi.TransactionSecurity.Models.TransactionFailureReason",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Reason",
+          "columnType": "INTEGER",
+          "annotations": []
+        },
+        {
+          "name": "RequestJson",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "RequestJson",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "ResponseJson",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": true,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "ResponseJson",
+          "columnType": "TEXT",
+          "annotations": []
+        },
+        {
+          "name": "Status",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "Status",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "40",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "SubscriberId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "column": "SubscriberId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            },
+            {
+              "value": "all-required",
+              "name": "Relational:DefaultValue"
+            }
+          ]
+        },
+        {
+          "name": "TopicName",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "OnAdd",
+          "column": "TopicName",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            },
+            {
+              "value": "mcp.turntransactions",
+              "name": "Relational:DefaultValue"
+            }
+          ]
+        },
+        {
+          "name": "TransactionId",
+          "clrType": "System.String",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "TransactionId",
+          "columnType": "TEXT",
+          "annotations": [
+            {
+              "value": "200",
+              "name": "MaxLength"
+            }
+          ]
+        },
+        {
+          "name": "UpdatedAtUtc",
+          "clrType": "System.DateTimeOffset",
+          "shadow": false,
+          "nullable": false,
+          "concurrencyToken": false,
+          "valueGenerated": "Never",
+          "column": "UpdatedAtUtc",
+          "columnType": "TEXT",
+          "annotations": []
+        }
+      ],
+      "name": "TransactionPubSubMessageEntity",
+      "schema": null,
+      "table": "TransactionPubSubMessages",
+      "clrFullName": "QBrainAi.TransactionSecurity.Services.TransactionPubSubMessageEntity"
+    }
+  ],
+  "limitations": [
+    "Existing compiled baseline metadata only; not current live data or actual provider DDL/query/constraint enforcement",
+    "Mcp SQLite constructor requests a connection object and registers DDL functions; inspector rereads that same object to verify Closed before/after metadata. No other explicit connection request, connection opening, queries, SQL, migrations, saves, schema creation or packages",
+    "Relational metadata describes mappings, not accepted Dolt types or durable Duende registration",
+    "Windows inspection only; independent native evidence on both hosts and full classification/migration closure remain required"
+  ],
+  "supersedes": "relational-transaction-sqlite-model-r1.json",
+  "supersessionReason": "r1 preserved correct types/counts but null column names from PowerShell null-schema coercion in Table(name,schema); r2 uses provider-bound StoreObjectIdentifier.Create and refuses blank column names/types",
+  "nativeExit": 0,
+  "saveScriptSha256": "A66FC111F3F4DA607CD5883EBB681BC4EC63C028816E01C2B3D5C7E2CD8ECD8A"
+}

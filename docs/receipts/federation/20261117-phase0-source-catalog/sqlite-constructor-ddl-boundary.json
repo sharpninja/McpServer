@@ -1,0 +1,48 @@
+{
+  "timestampLocal": "2026-11-18T01:13:08",
+  "sourceHead": "e24322fb52b5286b226a8292f6d52442b05d03e2",
+  "task": "TASK-FEDPH0-004",
+  "sourceCatalogSha256": "88DA9E41116F88DEDA13A9675BA2B073AD63B41D0E65BD371B72FE9CCAD7CF05",
+  "enclosingIndexSha256": "318117EFC47830B5AEF2D86914173C121DED4ECAC01C281E9A04C4668D36BF0E",
+  "scriptSha256": "C7461035CCE6D5C1C28B531C24E8B3CB4215A51B6B07FE3DB340616D8D5125B9",
+  "sourceCount": 2,
+  "excerptCount": 2,
+  "flows": [
+    {
+      "observation": "McpDbContext constructor always requests Database.ProviderName, and only SQLite requests a connection object and registers mcp_add_sessionlog_text_column_if_missing. Register creates a scalar callback; sqlite3_exec at SqliteSessionLogHeaderDdl.cs:28 executes ALTER TABLE only when that callback is invoked by the existing SQLite migration. Registration itself does not invoke callback SQL or open the connection. Native SQL call is outside the original fixed214 writer syntax search.",
+      "family": "sqlite-constructor-ddl-callback",
+      "boundary": "Retain this standalone/control SQLite migration helper and its original migrations. It is not a Dolt project schema path. An enrolled project startup must not execute automatic migration; explicit hub schema maintenance owns project schema changes. Callback validation, actual invocation and crash/duplicate behavior remain native test obligations. Preserve source/data; do not add this distinct operation to the original fixed candidate denominator or claim full closure."
+    }
+  ],
+  "coveredCatalogCandidates": [],
+  "excerpts": [
+    {
+      "sourceText": "    /// <summary>TR-PLANNED-CORE-013: Constructor for DI with workspace context.</summary>\n    [RequiresUnreferencedCode(\"EF Core DbContext construction is not trim-safe upstream; trimmed hosts must preserve the storage model or avoid EF-backed storage.\")]\n    public McpDbContext(DbContextOptions<McpDbContext> options, WorkspaceContext? workspaceContext = null)\n        : base(options)\n    {\n        _workspaceId = WorkspaceIdentity.CanonicalizeWorkspaceId(workspaceContext?.WorkspacePath);\n        RegisterSqliteSessionLogHeaderDdl();\n    }\n\n    /// <summary>TR-MCP-TRIAGESCHEMA-001: registers Sqlite header-column ADD helper used by 20260818205751.</summary>\n    private void RegisterSqliteSessionLogHeaderDdl()\n    {\n        var provider = Database.ProviderName ?? string.Empty;\n        if (!provider.Contains(\"Sqlite\", StringComparison.OrdinalIgnoreCase))\n            return;\n        if (Database.GetDbConnection() is not SqliteConnection sqlite)\n            return;\n        SqliteSessionLogHeaderDdl.Register(sqlite);\n    }",
+      "path": "src/QBrainAi.Storage/McpDbContext.cs",
+      "firstLine": 23,
+      "lastLine": 41,
+      "family": "sqlite-constructor-ddl-callback",
+      "excerptSha256": "31CC8BD58619EB93DA9FB33777799778665F387FD1D84E2125A783A3A743D6CF",
+      "fileSha256": "32259348F87A6504C37536C419AC0AD73E283B9DC0EB15BCFF20D3F061EFB9EF"
+    },
+    {
+      "sourceText": "/// <summary>\n/// TR-MCP-TRIAGESCHEMA-001: registers a Sqlite scalar that issues ALTER TABLE ADD COLUMN\n/// for SessionLogs agent-header fields. The migration SQL skips the call when\n/// <c>pragma_table_info</c> already lists the column.\n/// </summary>\npublic static class SqliteSessionLogHeaderDdl\n{\n    /// <summary>Scalar function name invoked from Sqlite 20260818205751 Up().</summary>\n    public const string FunctionName = \"mcp_add_sessionlog_text_column_if_missing\";\n\n    /// <summary>Registers <see cref=\"FunctionName\"/> on <paramref name=\"connection\"/>.</summary>\n    /// <param name=\"connection\">The Sqlite connection used by EF migrate.</param>\n    public static void Register(SqliteConnection connection)\n    {\n        ArgumentNullException.ThrowIfNull(connection);\n        connection.CreateFunction(FunctionName, (string column) =>\n        {\n            ArgumentException.ThrowIfNullOrWhiteSpace(column);\n            if (column.AsSpan().IndexOfAny(\"\\\"';[]\") >= 0)\n                throw new ArgumentException(\"Column name must be a simple identifier.\", nameof(column));\n\n            var sql = $\"\"\"ALTER TABLE \"SessionLogs\" ADD COLUMN \"{column}\" TEXT NULL;\"\"\";\n            var rc = raw.sqlite3_exec(connection.Handle, sql);\n            if (rc != raw.SQLITE_OK)\n            {\n                var message = raw.sqlite3_errmsg(connection.Handle).utf8_to_string();\n                throw new InvalidOperationException($\"Failed to add SessionLogs.{column}: {message}\");\n            }\n\n            return 1;\n        });\n    }\n}",
+      "path": "src/QBrainAi.Storage/Database/SqliteSessionLogHeaderDdl.cs",
+      "firstLine": 6,
+      "lastLine": 38,
+      "family": "sqlite-constructor-ddl-callback",
+      "excerptSha256": "F6778F514D2B8DD9486452DC923F7679AD711BE7F9DE992D9F854E7A52E78D40",
+      "fileSha256": "AE1EEE956FEA0EDAB33EF0E535C25C4EF19DDF03258306B3080CEBDAE1D0FABA"
+    }
+  ],
+  "runtimeProof": false,
+  "writerClosureComplete": false,
+  "operatorAccepted": false,
+  "productionCodeChanged": false,
+  "limitations": [
+    "Source-anchor coverage is not semantic binding or complete dynamic caller closure",
+    "Original proposed classifications are retained without operator acceptance",
+    "All native routing and relational behavior remain unproven",
+    "No product, database, migration or deployment operation executes"
+  ]
+}
