@@ -1,0 +1,670 @@
+{
+  "timestampLocal": "2026-11-18T00:22:16",
+  "sourceHead": "673982eb0c17921d36f5d6d92eb28afc86ef4691",
+  "task": "TASK-FEDPH0-004",
+  "sourceCatalogSha256": "88DA9E41116F88DEDA13A9675BA2B073AD63B41D0E65BD371B72FE9CCAD7CF05",
+  "enclosingIndexSha256": "318117EFC47830B5AEF2D86914173C121DED4ECAC01C281E9A04C4668D36BF0E",
+  "scriptSha256": "9A34E999EA6BDD82B18CC9A0C31F8DCB452842E28BFDAC2A011A811274B817F8",
+  "sourceCount": 12,
+  "excerptCount": 21,
+  "flows": [
+    {
+      "observation": "Current serializable transaction saves RequirementEntity updates and RequirementsRecoveryRunEntity replay hash/result together, with same-key replay/conflict and unique-race handling.",
+      "family": "recovery-replay",
+      "boundary": "Authored requirements and operational recovery receipts separate. Preserve exact payload/receipt binding and all-or-nothing item graph; prove crash/replay recovery without claiming cross-store atomicity."
+    },
+    {
+      "observation": "Fresh DI scopes obtain McpDbContext and override host workspace identity. TODO create/update/delete save children/links plus audit. Link synchronization may revive or create requirement placeholders. File projection and success/failure markers are later operations.",
+      "family": "todo-graph-audit-projection",
+      "boundary": "Resolve immutable project/branch at each fresh scope and compensation. Keep authored graph and valid links under owner gate; audit/projection markers operational. Do not treat projection failure as rollback, repeat audit/version increments or unconditional resurrection of retired requirements."
+    },
+    {
+      "observation": "Add/update save content first, append MemoryVersion in another save, then attempt operational session logging. Revert saves content and a version together. Scope can be changed by update; EmbeddingStatus is mixed with authored content.",
+      "family": "memory-content-version-session",
+      "boundary": "Preserve complete content/version graph, route scope/status/session fields explicitly, and prove restart at each save boundary. Scope movement and version parent ownership cannot be inferred from an ID or a whole-table rule."
+    },
+    {
+      "observation": "Workspace creation saves host registry then invokes explicit dump import inside a current database transaction. Wiki import directly adds TODO/link projections and may copy a YAML archive.",
+      "family": "explicit-workspace-dump-import",
+      "boundary": "Enrolled projects use approved explicit import/migration and owner gate. Preserve standalone behavior and original archive data. Host registry transaction cannot imply a distributed project/control transaction or complete all-domain migration."
+    },
+    {
+      "observation": "Memory, session and tool compensation directly query a DbContext with soft-delete visibility, restore fields/graphs and save. Session compensation uses its current DB transaction.",
+      "family": "transaction-compensation",
+      "boundary": "Compensation must use the original operation context and owning gate, never whichever branch is active later. Raw session/tool data stay operational; Workspace-memory restoration preserves authored graph and scoped identity. Current exact-helper naming does not prove full new projection coverage."
+    },
+    {
+      "observation": "Existing state adapters directly save memory, requirement and session rows, and may invoke selected services. These paths implement legacy command/state replay.",
+      "family": "legacy-replay",
+      "boundary": "Keep legacy standalone/non-enrolled behavior. Do not execute legacy replay for an enrolled versioned project or replay incoming merged data through business commands/external effects. Old queue/conflict/operation records require explicit retained disposition at cutover."
+    },
+    {
+      "observation": "An automatic UpdatedAtUtc candidate belongs to the encrypted GitHub token JSON file, not an EF row.",
+      "family": "protected-file-writer",
+      "boundary": "Protected host-local token file and Data Protection remain outside project history/export. Syntax assignment matches alone cannot identify database writes or safe content."
+    }
+  ],
+  "coveredCatalogCandidates": [
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Requirements/RequirementsRecoveryService.cs:69:ApplyAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Requirements/RequirementsRecoveryService.cs",
+        "method": "ApplyAsync",
+        "line": 111,
+        "owner": "RequirementsRecoveryService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "recovery-replay"
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Requirements/RequirementsRecoveryService.cs:171:ApplyItems",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Requirements/RequirementsRecoveryService.cs",
+        "method": "ApplyItems",
+        "line": 183,
+        "owner": "RequirementsRecoveryService"
+      },
+      "operation": "UpdatedAtUtc",
+      "family": "recovery-replay"
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Requirements/RequirementsRecoveryService.cs:171:ApplyItems",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Requirements/RequirementsRecoveryService.cs",
+        "method": "ApplyItems",
+        "line": 187,
+        "owner": "RequirementsRecoveryService"
+      },
+      "operation": "CreatedAtUtc",
+      "family": "recovery-replay"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/EfTodoService.cs:278:CreateAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+        "method": "CreateAsync",
+        "line": 317,
+        "owner": "EfTodoService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "todo-graph-audit-projection"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/EfTodoService.cs:278:CreateAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+        "method": "CreateAsync",
+        "line": 382,
+        "owner": "EfTodoService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "todo-graph-audit-projection"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/EfTodoService.cs:579:UpdateCoreAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+        "method": "UpdateCoreAsync",
+        "line": 659,
+        "owner": "EfTodoService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "todo-graph-audit-projection"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/EfTodoService.cs:664:DeleteCoreAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+        "method": "DeleteCoreAsync",
+        "line": 688,
+        "owner": "EfTodoService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "todo-graph-audit-projection"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/EfTodoService.cs:717:ProjectDatabaseToYamlAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+        "method": "ProjectDatabaseToYamlAsync",
+        "line": 730,
+        "owner": "EfTodoService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "todo-graph-audit-projection"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/MemoryService.cs:52:AddAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/MemoryService.cs",
+        "method": "AddAsync",
+        "line": 126,
+        "owner": "MemoryService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "memory-content-version-session"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/MemoryService.cs:189:UpdateAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/MemoryService.cs",
+        "method": "UpdateAsync",
+        "line": 290,
+        "owner": "MemoryService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "memory-content-version-session"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/MemoryService.cs:300:RemoveAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/MemoryService.cs",
+        "method": "RemoveAsync",
+        "line": 318,
+        "owner": "MemoryService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "memory-content-version-session"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/MemoryService.cs:189:UpdateAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/MemoryService.cs",
+        "method": "UpdateAsync",
+        "line": 284,
+        "owner": "MemoryService"
+      },
+      "operation": "UpdatedAtUtc",
+      "family": "memory-content-version-session"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Memory/MemoryCompetitiveOperations.cs:99:RevertAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Memory/MemoryCompetitiveOperations.cs",
+        "method": "RevertAsync",
+        "line": 140,
+        "owner": "MemoryCompetitiveOperations"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "memory-content-version-session"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Memory/MemoryCompetitiveOperations.cs:161:AppendVersionAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Memory/MemoryCompetitiveOperations.cs",
+        "method": "AppendVersionAsync",
+        "line": 172,
+        "owner": "MemoryCompetitiveOperations"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "memory-content-version-session"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Memory/MemoryCompetitiveOperations.cs:99:RevertAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Memory/MemoryCompetitiveOperations.cs",
+        "method": "RevertAsync",
+        "line": 127,
+        "owner": "MemoryCompetitiveOperations"
+      },
+      "operation": "UpdatedAtUtc",
+      "family": "memory-content-version-session"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Memory/MemorySessionLogHook.cs:13:TryAppendAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Memory/MemorySessionLogHook.cs",
+        "method": "TryAppendAsync",
+        "line": 45,
+        "owner": "MemorySessionLogHook"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "memory-content-version-session"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/WorkspaceService.cs:320:CreateDatabaseAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/WorkspaceService.cs",
+        "method": "CreateDatabaseAsync",
+        "line": 359,
+        "owner": "WorkspaceService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "explicit-workspace-dump-import"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/WikiDumpService.cs:90:ImportAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/WikiDumpService.cs",
+        "method": "ImportAsync",
+        "line": 162,
+        "owner": "WikiDumpService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "explicit-workspace-dump-import"
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/TransactionGatedMemoryService.cs:403:RestoreMemoryExactAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedMemoryService.cs",
+        "method": "RestoreMemoryExactAsync",
+        "line": 445,
+        "owner": "TransactionGatedMemoryService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "transaction-compensation"
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/TransactionGatedMemoryService.cs:403:RestoreMemoryExactAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedMemoryService.cs",
+        "method": "RestoreMemoryExactAsync",
+        "line": 434,
+        "owner": "TransactionGatedMemoryService"
+      },
+      "operation": "Version",
+      "family": "transaction-compensation"
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/TransactionGatedMemoryService.cs:403:RestoreMemoryExactAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedMemoryService.cs",
+        "method": "RestoreMemoryExactAsync",
+        "line": 435,
+        "owner": "TransactionGatedMemoryService"
+      },
+      "operation": "CreatedAtUtc",
+      "family": "transaction-compensation"
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/TransactionGatedMemoryService.cs:403:RestoreMemoryExactAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedMemoryService.cs",
+        "method": "RestoreMemoryExactAsync",
+        "line": 436,
+        "owner": "TransactionGatedMemoryService"
+      },
+      "operation": "UpdatedAtUtc",
+      "family": "transaction-compensation"
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/TransactionGatedSessionLogService.cs:376:RestoreSessionAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedSessionLogService.cs",
+        "method": "RestoreSessionAsync",
+        "line": 405,
+        "owner": "TransactionGatedSessionLogService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "transaction-compensation"
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/TransactionGatedSessionLogService.cs:415:RestoreCreatedSessionAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedSessionLogService.cs",
+        "method": "RestoreCreatedSessionAsync",
+        "line": 430,
+        "owner": "TransactionGatedSessionLogService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "transaction-compensation"
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/TransactionGatedSessionLogService.cs:415:RestoreCreatedSessionAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedSessionLogService.cs",
+        "method": "RestoreCreatedSessionAsync",
+        "line": 438,
+        "owner": "TransactionGatedSessionLogService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "transaction-compensation"
+    },
+    {
+      "methodKey": "src/QBrainAi.Support.Mcp/Services/TransactionGatedToolRegistryService.cs:192:RestoreToolAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedToolRegistryService.cs",
+        "method": "RestoreToolAsync",
+        "line": 234,
+        "owner": "TransactionGatedToolRegistryService"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "transaction-compensation"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:705:ApplyCreateAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "ApplyCreateAsync",
+        "line": 757,
+        "owner": "MemoryFederationStateAdapter"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "legacy-replay"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:765:ApplyUpdateAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "ApplyUpdateAsync",
+        "line": 819,
+        "owner": "MemoryFederationStateAdapter"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "legacy-replay"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:827:ApplyDeleteAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "ApplyDeleteAsync",
+        "line": 849,
+        "owner": "MemoryFederationStateAdapter"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "legacy-replay"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:978:ApplyAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "ApplyAsync",
+        "line": 1001,
+        "owner": "SessionLogFederationStateAdapter"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "legacy-replay"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:1276:ApplyAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "ApplyAsync",
+        "line": 1302,
+        "owner": "RequirementsFederationStateAdapter"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "legacy-replay"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:1276:ApplyAsync",
+      "kind": "writer",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "ApplyAsync",
+        "line": 1325,
+        "owner": "RequirementsFederationStateAdapter"
+      },
+      "operation": "SaveChangesAsync",
+      "family": "legacy-replay"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:765:ApplyUpdateAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "ApplyUpdateAsync",
+        "line": 815,
+        "owner": "MemoryFederationStateAdapter"
+      },
+      "operation": "UpdatedAtUtc",
+      "family": "legacy-replay"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:1382:UpsertRequirementAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+        "method": "UpsertRequirementAsync",
+        "line": 1406,
+        "owner": "RequirementsFederationStateAdapter"
+      },
+      "operation": "UpdatedAtUtc",
+      "family": "legacy-replay"
+    },
+    {
+      "methodKey": "src/QBrainAi.Services/Services/FileGitHubWorkspaceTokenStore.cs:75:UpsertAsync",
+      "kind": "assignment",
+      "source": {
+        "path": "src/QBrainAi.Services/Services/FileGitHubWorkspaceTokenStore.cs",
+        "method": "UpsertAsync",
+        "line": 103,
+        "owner": "FileGitHubWorkspaceTokenStore"
+      },
+      "operation": "UpdatedAtUtc",
+      "family": "protected-file-writer"
+    }
+  ],
+  "excerpts": [
+    {
+      "sourceText": "    public async Task<RequirementsRecoveryResult> ApplyAsync(RequirementsRecoveryRequest request, CancellationToken cancellationToken = default)\n    {\n        var payload = Validate(request);\n        var prior = await FindRunAsync(payload.WorkspaceId, payload.Key, cancellationToken).ConfigureAwait(false);\n        if (prior is not null)\n            return ResolveExisting(prior, payload.Hash);\n\n        // Recovery is upsert. Unique races on the requirement PK (concurrent applies with\n        // different idempotency keys) reload and retry instead of fabricating an\n        // idempotency-key payload conflict. Unique races on the recovery-run key still\n        // resolve to Replay / Conflict via FindRunAsync.\n        for (var attempt = 1; attempt <= UniqueRaceMaxAttempts; attempt++)\n        {\n            await using var transaction = await _db.Database\n                .BeginTransactionAsync(System.Data.IsolationLevel.Serializable, cancellationToken)\n                .ConfigureAwait(false);\n            try\n            {\n                var raced = await FindRunAsync(payload.WorkspaceId, payload.Key, cancellationToken).ConfigureAwait(false);\n                if (raced is not null)\n                {\n                    await transaction.RollbackAsync(CancellationToken.None).ConfigureAwait(false);\n                    _db.ChangeTracker.Clear();\n                    return ResolveExisting(raced, payload.Hash);\n                }\n\n                var existing = await LoadExistingAsync(payload.Items, cancellationToken).ConfigureAwait(false);\n                RejectAcceptanceCriteriaRemoval(payload.Items, existing);\n                var createdAt = DateTimeOffset.UtcNow.ToString(\"o\");\n                var result = BuildResult(payload, existing, applied: true, replay: false, createdAtUtc: createdAt);\n                ApplyItems(payload, existing, createdAt);\n                _db.RequirementsRecoveryRuns.Add(new RequirementsRecoveryRunEntity\n                {\n                    WorkspaceId = payload.WorkspaceId,\n                    IdempotencyKey = payload.Key,\n                    PayloadHash = payload.Hash,\n                    Status = \"applied\",\n                    ResultJson = JsonSerializer.Serialize(result, ResultJsonOptions),\n                    CreatedAtUtc = createdAt,\n                });\n\n                await StorageCommandBudget.ExecuteAsync(\n                    ct => _db.SaveChangesAsync(ct),\n                    cancellationToken,\n                    _commandBudget).ConfigureAwait(false);\n                await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);\n                return result;\n            }\n            catch (DbUpdateException ex) when (IsUniqueViolation(ex))\n            {\n                if (_db.Database.CurrentTransaction is not null)\n                    await transaction.RollbackAsync(CancellationToken.None).ConfigureAwait(false);\n                _db.ChangeTracker.Clear();\n                var raced = await FindRunAsync(payload.WorkspaceId, payload.Key, cancellationToken).ConfigureAwait(false);\n                if (raced is not null)\n                    return ResolveExisting(raced, payload.Hash);\n\n                if (attempt < UniqueRaceMaxAttempts)\n                    continue;\n\n                // Preserve the actual unique failure rather than fabricating a same-key payload conflict.\n                throw;\n            }\n            catch\n            {\n                if (_db.Database.CurrentTransaction is not null)\n                    await transaction.RollbackAsync(CancellationToken.None).ConfigureAwait(false);\n                throw;\n            }\n        }\n\n        throw new InvalidOperationException(\"Requirements recovery apply exhausted unique-race retries.\");\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Requirements/RequirementsRecoveryService.cs",
+      "firstLine": 69,
+      "lastLine": 141,
+      "family": "recovery-replay",
+      "excerptSha256": "35533C80B257849358183FB4D46ABAFB36202045A355DE08F9990B1B6261E1A2",
+      "fileSha256": "82FF84F600060EF331D80D0A331A5B09496F1BE7D954216244DE9BFFA73B28FE"
+    },
+    {
+      "sourceText": "    private RequirementsRecoveryResult ResolveExisting(RequirementsRecoveryRunEntity run, string hash)\n    {\n        if (!string.Equals(run.PayloadHash, hash, StringComparison.Ordinal))\n        {\n            throw new RequirementsRecoveryConflictException(\n                $\"Requirements recovery idempotency key '{run.IdempotencyKey}' conflicts with a stored payload.\");\n        }\n\n        var stored = Deserialize(run);\n        stored.Replay = true;\n        return stored;\n    }\n\n    private void ApplyItems(NormalizedPayload payload, Dictionary<string, RequirementEntity> existing, string timestamp)\n    {\n        foreach (var item in payload.Items)\n        {\n            var mapKey = MapKey(item.Kind, item.Id);\n            if (existing.TryGetValue(mapKey, out var row))\n            {\n                var wasDeleted = IsSoftDeleted(row);\n                row.Title = item.Title;\n                row.Body = item.Body;\n                row.Priority = item.Priority;\n                row.Status = item.Status;\n                row.UpdatedAtUtc = timestamp;\n                // Ordinary create path revives soft-deleted rows by clearing deletion metadata.\n                // Always clear: tracked stale shadow values must not leave IsDeleted=1 in the store.\n                if (wasDeleted)\n                    row.CreatedAtUtc = timestamp;\n                ClearSoftDelete(row);\n\n                continue;\n            }\n\n            _db.Requirements.Add(new RequirementEntity\n            {\n                WorkspaceId = payload.WorkspaceId,\n                Kind = item.Kind,\n                Id = item.Id,\n                Title = item.Title,\n                Body = item.Body,\n                Priority = item.Priority,\n                Status = item.Status,\n                // FR-MCP-REQRECOVERY-001 / RequirementEntity default: recovery creates rows at the\n                // product-requirements root layer. Item request has no ScopeStartLayerKey field.\n                ScopeStartLayerKey = \"layer-1\",\n                CreatedAtUtc = timestamp,\n                UpdatedAtUtc = timestamp,\n            });\n        }\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Requirements/RequirementsRecoveryService.cs",
+      "firstLine": 158,
+      "lastLine": 209,
+      "family": "recovery-replay",
+      "excerptSha256": "B4143C14608CFC6A989ACFA19C6AA09C44473701DFA253E9D674002381A3999E",
+      "fileSha256": "82FF84F600060EF331D80D0A331A5B09496F1BE7D954216244DE9BFFA73B28FE"
+    },
+    {
+      "sourceText": "    public async Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n\n        var idError = TodoValidator.ValidateTodoId(request.Id);\n        if (idError is not null)\n            return new TodoMutationResult(false, idError, FailureKind: TodoMutationFailureKind.Validation);\n\n        var normalizedSection = NormalizeSection(request.Section);\n        var normalizedPriority = NormalizePriority(normalizedSection, request.Priority);\n        var priorityError = TodoValidator.ValidatePriority(normalizedPriority);\n        if (priorityError is not null)\n            return new TodoMutationResult(false, priorityError, FailureKind: TodoMutationFailureKind.Validation);\n\n        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);\n        try\n        {\n            await using var scope = CreateScope();\n            var ctx = scope.Context;\n\n            var existingItem = await ctx.TodoItems\n                .IgnoreQueryFilters()\n                .FirstOrDefaultAsync(\n                    i => i.Id == request.Id && i.WorkspaceId == ctx.CurrentWorkspaceId,\n                    cancellationToken)\n                .ConfigureAwait(false);\n            if (existingItem is not null)\n            {\n                await AttachTodoChildrenAsync(ctx, [existingItem], cancellationToken).ConfigureAwait(false);\n                var existingFlat = ToFlatItem(existingItem);\n                if (ReadSoftDeleteState(ctx.Entry(existingItem)).IsDeleted)\n                {\n                    SetSoftDeleteState(ctx.Entry(existingItem), isDeleted: false, reason: null);\n                    existingItem.Title = request.Title;\n                    existingItem.Section = normalizedSection;\n                    existingItem.Priority = normalizedPriority;\n                    existingItem.Done = false;\n                    existingItem.Note = request.Note;\n                    existingItem.Remaining = request.Remaining;\n                    await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n                    await AttachTodoChildrenAsync(ctx, [existingItem], cancellationToken).ConfigureAwait(false);\n                    return new TodoMutationResult(true, Item: ToFlatItem(existingItem));\n                }\n\n                if (!string.IsNullOrWhiteSpace(request.IdempotencyKey)\n                    && string.Equals(existingItem.IdempotencyKey, request.IdempotencyKey, StringComparison.Ordinal)\n                    && TodoPayloadFingerprint.AreEquivalent(request, existingFlat))\n                {\n                    return new TodoMutationResult(true, Item: existingFlat);\n                }\n\n                return new TodoMutationResult(false, $\"Item with id '{request.Id}' already exists.\", FailureKind: TodoMutationFailureKind.Conflict);\n            }\n\n            var allEntities = await ctx.TodoItems.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);\n            await AttachTodoChildrenAsync(ctx, allEntities, cancellationToken).ConfigureAwait(false);\n            var all = allEntities.Select(ToFlatItem).ToList();\n            var depIdError = TodoValidator.ValidateDependencyIds(request.DependsOn, all, \"dependsOn\");\n            if (depIdError is not null)\n                return new TodoMutationResult(false, depIdError, FailureKind: TodoMutationFailureKind.Validation);\n            var depError = TodoValidator.ValidateDependencies(request.Id, request.DependsOn?.ToList() ?? [], all);\n            if (depError is not null)\n                return new TodoMutationResult(false, depError, FailureKind: TodoMutationFailureKind.Validation);\n\n            var itemKind = DetermineItemKind(normalizedSection);\n            var sectionOrder = await ResolveSectionOrderAsync(ctx, normalizedSection, cancellationToken).ConfigureAwait(false);\n            var itemOrder = await GetNextItemOrderAsync(ctx, normalizedSection, normalizedPriority, itemKind, cancellationToken).ConfigureAwait(false);\n\n            var workspaceId = ctx.CurrentWorkspaceId;\n            var entity = new TodoItemEntity\n            {\n                WorkspaceId = workspaceId,\n                Id = request.Id,\n                Title = request.Title,\n                Section = normalizedSection,\n                Priority = normalizedPriority,\n                Done = false,\n                Estimate = request.Estimate,\n                Note = request.Note,\n                Remaining = request.Remaining,\n                ItemKind = itemKind,\n                SectionOrder = sectionOrder,\n                ItemOrder = itemOrder,\n                PhaseLabel = itemKind == CodeReviewPhaseItemKind ? request.Phase ?? request.Title : null,\n                IdempotencyKey = request.IdempotencyKey,\n            };\n\n            ctx.TodoItems.Add(entity);\n            var listItems = BuildListItems(\n                workspaceId,\n                entity.Id,\n                request.Description,\n                request.TechnicalDetails,\n                request.DependsOn,\n                request.FunctionalRequirements,\n                request.TechnicalRequirements);\n            var taskRows = BuildTaskRows(workspaceId, entity.Id, request.ImplementationTasks);\n            ctx.TodoItemListItems.AddRange(listItems);\n            ctx.TodoItemTasks.AddRange(taskRows);\n            entity.ListItems = listItems;\n            entity.ImplementationTaskRows = taskRows;\n            var flat = ToFlatItem(entity);\n            await SyncTodoRequirementLinksAsync(ctx, entity, flat, cancellationToken).ConfigureAwait(false);\n            await AppendAuditAsync(ctx, entity.Id, ChangeEventActions.Created, flat, null, ApiSource, cancellationToken).ConfigureAwait(false);\n            await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n            return await FinalizeMutationAsync(ChangeEventActions.Created, entity.Id, flat, cancellationToken).ConfigureAwait(false);\n        }\n        finally\n        {\n            _writeLock.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+      "firstLine": 278,
+      "lastLine": 390,
+      "family": "todo-graph-audit-projection",
+      "excerptSha256": "667FF35F139F2391022885D851B4B96B6DF7C6CAB1528B2BB8513B3BB7CFFCEC",
+      "fileSha256": "C0C4B87DCE260DDE58B65589C36D5C9CD5A8E73EB90066599C7B90C584DD6572"
+    },
+    {
+      "sourceText": "    private async Task<TodoMutationResult> UpdateCoreAsync(\n        McpDbContext ctx,\n        string id,\n        TodoUpdateRequest request,\n        CancellationToken cancellationToken)\n    {\n        var existing = await ctx.TodoItems.FirstOrDefaultAsync(i => i.Id == id, cancellationToken).ConfigureAwait(false);\n        if (existing is null)\n            return new TodoMutationResult(false, $\"Item with id '{id}' not found.\", FailureKind: TodoMutationFailureKind.NotFound);\n\n        await AttachTodoChildrenAsync(ctx, [existing], cancellationToken).ConfigureAwait(false);\n        var previousFlat = ToFlatItem(existing);\n        var updatedSection = NormalizeSection(request.Section ?? existing.Section);\n        var updatedPriority = NormalizePriority(updatedSection, request.Priority ?? existing.Priority);\n        var priorityError = TodoValidator.ValidatePriority(updatedPriority);\n        if (priorityError is not null)\n            return new TodoMutationResult(false, priorityError, FailureKind: TodoMutationFailureKind.Validation);\n\n        var updatedKind = DetermineItemKind(updatedSection);\n        var prevSection = existing.Section;\n        var prevPriority = existing.Priority;\n        var prevKind = existing.ItemKind;\n\n        existing.Title = request.Title ?? existing.Title;\n        existing.Section = updatedSection;\n        existing.Priority = updatedPriority;\n        existing.Done = request.Done ?? existing.Done;\n        existing.Estimate = request.Estimate ?? existing.Estimate;\n        existing.Note = request.Note ?? existing.Note;\n        existing.CompletedDate = request.CompletedDate ?? existing.CompletedDate;\n        existing.DoneSummary = request.DoneSummary ?? existing.DoneSummary;\n        existing.Remaining = request.Remaining ?? existing.Remaining;\n        existing.Reference = request.Reference ?? existing.Reference;\n\n        // 4NF children: null request lists keep the previous values; supplied lists replace them.\n        var updatedListItems = BuildListItems(\n            existing.WorkspaceId,\n            existing.Id,\n            request.Description ?? previousFlat.Description,\n            request.TechnicalDetails ?? previousFlat.TechnicalDetails,\n            request.DependsOn ?? previousFlat.DependsOn,\n            request.FunctionalRequirements ?? previousFlat.FunctionalRequirements,\n            request.TechnicalRequirements ?? previousFlat.TechnicalRequirements);\n        var updatedTaskRows = BuildTaskRows(\n            existing.WorkspaceId,\n            existing.Id,\n            request.ImplementationTasks ?? previousFlat.ImplementationTasks);\n        await ReplaceTodoChildrenAsync(ctx, existing, updatedListItems, updatedTaskRows, cancellationToken).ConfigureAwait(false);\n        existing.ItemKind = updatedKind;\n        existing.PhaseLabel = updatedKind == CodeReviewPhaseItemKind\n            ? request.Phase ?? existing.PhaseLabel ?? existing.Title\n            : null;\n        if (updatedKind == CodeReviewPhaseItemKind && request.Reference is not null)\n        {\n            var metadata = await GetOrCreateDocumentMetadataAsync(ctx, cancellationToken).ConfigureAwait(false);\n            metadata.CodeReviewReference = request.Reference;\n        }\n\n        var updatedDependsOn = ListValues(existing, DependsOnListType);\n        var allEntities = await ctx.TodoItems.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);\n        await AttachTodoChildrenAsync(ctx, allEntities, cancellationToken).ConfigureAwait(false);\n        var all = allEntities.Select(ToFlatItem).ToList();\n        var depIdError = TodoValidator.ValidateDependencyIds(updatedDependsOn, all, \"dependsOn\");\n        if (depIdError is not null)\n            return new TodoMutationResult(false, depIdError, FailureKind: TodoMutationFailureKind.Validation);\n        var depError = TodoValidator.ValidateDependencies(id, updatedDependsOn?.ToList() ?? [], all);\n        if (depError is not null)\n            return new TodoMutationResult(false, depError, FailureKind: TodoMutationFailureKind.Validation);\n\n        existing.SectionOrder = await ResolveSectionOrderAsync(ctx, existing.Section, cancellationToken).ConfigureAwait(false);\n        if (!string.Equals(prevSection, existing.Section, StringComparison.OrdinalIgnoreCase)\n            || !string.Equals(prevPriority, existing.Priority, StringComparison.OrdinalIgnoreCase)\n            || !string.Equals(prevKind, existing.ItemKind, StringComparison.OrdinalIgnoreCase))\n        {\n            existing.ItemOrder = await GetNextItemOrderAsync(ctx, existing.Section, existing.Priority, existing.ItemKind, cancellationToken).ConfigureAwait(false);\n        }\n\n        var updatedFlat = ToFlatItem(existing);\n        await SyncTodoRequirementLinksAsync(ctx, existing, updatedFlat, cancellationToken).ConfigureAwait(false);\n        await AppendAuditAsync(ctx, existing.Id, ChangeEventActions.Updated, updatedFlat, previousFlat, ApiSource, cancellationToken).ConfigureAwait(false);\n        await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        return await FinalizeMutationAsync(ChangeEventActions.Updated, existing.Id, updatedFlat, cancellationToken).ConfigureAwait(false);\n    }\n\n    private async Task<TodoMutationResult> DeleteCoreAsync(\n        McpDbContext ctx,\n        string id,\n        CancellationToken cancellationToken)\n    {\n        var existing = await ctx.TodoItems.FirstOrDefaultAsync(i => i.Id == id, cancellationToken).ConfigureAwait(false);\n        if (existing is null)\n            return new TodoMutationResult(false, $\"Item with id '{id}' not found.\", FailureKind: TodoMutationFailureKind.NotFound);\n\n        await AttachTodoChildrenAsync(ctx, [existing], cancellationToken).ConfigureAwait(false);\n        var snapshot = ToFlatItem(existing);\n        await SoftDeleteTodoRequirementLinksAsync(ctx, existing, cancellationToken).ConfigureAwait(false);\n        var childLists = await ctx.TodoItemListItems\n            .Where(r => r.WorkspaceId == existing.WorkspaceId && r.TodoId == existing.Id)\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n        var childTasks = await ctx.TodoItemTasks\n            .Where(r => r.WorkspaceId == existing.WorkspaceId && r.TodoId == existing.Id)\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n        ctx.TodoItemListItems.RemoveRange(childLists);\n        ctx.TodoItemTasks.RemoveRange(childTasks);\n        ctx.TodoItems.Remove(existing);\n        await AppendAuditAsync(ctx, id, ChangeEventActions.Deleted, snapshot, snapshot, ApiSource, cancellationToken).ConfigureAwait(false);\n        await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        return await FinalizeMutationAsync(ChangeEventActions.Deleted, id, null, cancellationToken).ConfigureAwait(false);\n    }\n\n    private async Task<TodoMutationResult> FinalizeMutationAsync(\n        string action,\n        string id,\n        TodoFlatItem? item,\n        CancellationToken cancellationToken)\n    {\n        await PublishChangeSafeAsync(action, id, cancellationToken).ConfigureAwait(false);\n\n        try\n        {\n            await ProjectDatabaseToYamlAsync(cancellationToken).ConfigureAwait(false);\n        }\n        catch (Exception ex) when (IsProjectionException(ex))\n        {\n            var todoPath = ResolveTodoPath();\n            await TryRecordProjectionFailureAsync(ex).ConfigureAwait(false);\n            _logger.LogError(ex, \"TODO mutation for {Id} committed in database but projection to {TodoFilePath} failed.\", id, todoPath);\n            var message = $\"TODO '{id}' was committed to authoritative database storage, but projection to '{todoPath}' failed: {ex.Message}\";\n            return new TodoMutationResult(false, message, item, TodoMutationFailureKind.ProjectionFailed);\n        }\n\n        return new TodoMutationResult(true, Item: item);\n    }\n\n    private async Task ProjectDatabaseToYamlAsync(CancellationToken cancellationToken)\n    {\n        var todoPath = ResolveTodoPath();\n        var file = await BuildProjectedTodoFileAsync(cancellationToken).ConfigureAwait(false);\n        await TodoYamlFileSerializer.WriteAtomicallyAsync(todoPath, file, cancellationToken).ConfigureAwait(false);\n\n        try\n        {\n            await using var scope = CreateScope();\n            var metadata = await GetOrCreateDocumentMetadataAsync(scope.Context, CancellationToken.None).ConfigureAwait(false);\n            metadata.LastProjectedToYamlUtc = DateTime.UtcNow.ToString(\"O\");\n            metadata.LastProjectionFailureUtc = null;\n            metadata.LastProjectionFailureMessage = null;\n            await scope.Context.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);\n        }\n        catch (Exception ex) when (ex is InvalidOperationException or DbUpdateException)\n        {\n            _logger.LogWarning(ex, \"TODO.yaml projection succeeded for {TodoFilePath}, but projection metadata could not be updated.\", todoPath);\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+      "firstLine": 579,
+      "lastLine": 736,
+      "family": "todo-graph-audit-projection",
+      "excerptSha256": "4CBC8E54FBE52CA94497080E9033988ECBD5352596EBB6F9CB39F61F991BF73B",
+      "fileSha256": "C0C4B87DCE260DDE58B65589C36D5C9CD5A8E73EB90066599C7B90C584DD6572"
+    },
+    {
+      "sourceText": "    private async Task AppendAuditAsync(\n        McpDbContext ctx,\n        string todoId,\n        string action,\n        TodoFlatItem? snapshot,\n        TodoFlatItem? previousSnapshot,\n        string source,\n        CancellationToken cancellationToken)\n    {\n        var maxVersion = await ctx.TodoAuditHistory\n            .Where(h => h.TodoId == todoId)\n            .Select(h => (int?)h.Version)\n            .MaxAsync(cancellationToken)\n            .ConfigureAwait(false) ?? 0;\n\n        ctx.TodoAuditHistory.Add(new TodoAuditHistoryEntity\n        {\n            TodoId = todoId,\n            Version = maxVersion + 1,\n            Action = action,\n            RecordedAtUtc = DateTime.UtcNow.ToString(\"O\"),\n            SnapshotJson = SerializeFlatItem(snapshot),\n            PreviousSnapshotJson = SerializeFlatItem(previousSnapshot),\n            Source = source,\n        });\n    }\n\n    private async Task SyncTodoRequirementLinksAsync(\n        McpDbContext ctx,\n        TodoItemEntity entity,\n        TodoFlatItem flat,\n        CancellationToken cancellationToken)\n    {\n        var workspaceId = string.IsNullOrWhiteSpace(entity.WorkspaceId)\n            ? ctx.CurrentWorkspaceId\n            : entity.WorkspaceId;\n        var now = DateTimeOffset.UtcNow;\n        var desired = NormalizeRequirementLinks(flat)\n            .Select(link => (WorkspaceId: workspaceId, TodoId: entity.Id, link.Kind, link.Id))\n            .ToArray();\n\n        foreach (var link in desired)\n        {\n            await EnsureRequirementAsync(ctx, link.WorkspaceId, link.Kind, link.Id, now, cancellationToken).ConfigureAwait(false);\n        }\n\n        var existingLinks = await ctx.TodoRequirementLinks\n            .IgnoreQueryFilters()\n            .Where(row => row.WorkspaceId == workspaceId && row.TodoId == entity.Id)\n            .ToListAsync(cancellationToken)\n            .ConfigureAwait(false);\n        var desiredKeys = desired\n            .Select(link => BuildTodoRequirementKey(link.Kind, link.Id))\n            .ToHashSet(StringComparer.OrdinalIgnoreCase);\n\n        foreach (var existing in existingLinks)\n        {\n            var key = BuildTodoRequirementKey(existing.RequirementKind, existing.RequirementId);\n            SetSoftDeleteState(ctx.Entry(existing), !desiredKeys.Contains(key), !desiredKeys.Contains(key) ? \"todo_requirement_sync\" : null);\n        }\n\n        foreach (var link in desired)\n        {\n            var existing = existingLinks.SingleOrDefault(row =>\n                string.Equals(row.RequirementKind, link.Kind, StringComparison.OrdinalIgnoreCase)\n                && string.Equals(row.RequirementId, link.Id, StringComparison.OrdinalIgnoreCase));\n            if (existing is not null)\n            {\n                SetSoftDeleteState(ctx.Entry(existing), false, null);\n                continue;\n            }\n\n            ctx.TodoRequirementLinks.Add(new TodoRequirementLinkEntity\n            {\n                WorkspaceId = link.WorkspaceId,\n                TodoId = link.TodoId,\n                RequirementKind = link.Kind,\n                RequirementId = link.Id,\n                CreatedAtUtc = now,\n            });\n        }\n    }\n\n    private static async Task EnsureRequirementAsync(\n        McpDbContext ctx,\n        string workspaceId,\n        string kind,\n        string id,\n        DateTimeOffset now,\n        CancellationToken cancellationToken)\n    {\n        var existing = await ctx.Requirements\n            .IgnoreQueryFilters()\n            .SingleOrDefaultAsync(row => row.WorkspaceId == workspaceId && row.Kind == kind && row.Id == id, cancellationToken)\n            .ConfigureAwait(false);\n        if (existing is not null)\n        {\n            SetSoftDeleteState(ctx.Entry(existing), false, null);\n            return;\n        }\n\n        if (!IsValidRequirementId(id, kind))\n            return;\n\n        // Use a stable ancient timestamp for backfills to avoid \"createdAt at list/read time\" symptom.\n        // Title==id and placeholder body are intentional markers for dangling TODO links; consumers\n        // should prefer list + filter or explicit creates over relying on these.\n        var backfillTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);\n        ctx.Requirements.Add(new RequirementEntity\n        {\n            WorkspaceId = workspaceId,\n            Kind = kind,\n            Id = id,\n            Title = id,\n            Body = $\"Placeholder requirement backfilled for TODO link {id}.\",\n            Priority = \"medium\",\n            Status = \"pending\",\n            CreatedAtUtc = backfillTime.ToString(\"O\"),\n            UpdatedAtUtc = backfillTime.ToString(\"O\"),\n        });\n    }",
+      "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+      "firstLine": 1003,
+      "lastLine": 1123,
+      "family": "todo-graph-audit-projection",
+      "excerptSha256": "B6B0314DB0EFBD182D3A8544F76F806B488B5BD9F7AB94447264FFD071A6F353",
+      "fileSha256": "C0C4B87DCE260DDE58B65589C36D5C9CD5A8E73EB90066599C7B90C584DD6572"
+    },
+    {
+      "sourceText": "    private DbScope CreateScope()\n    {\n        var scope = _scopeFactory.CreateAsyncScope();\n        // TR-MCP-TODO-008: EfTodoService is a singleton but McpDbContext applies a\n        // per-workspace global query filter fed by the scoped WorkspaceContext.\n        // The new scope we just created is detached from the HTTP request scope,\n        // so we must copy the request-scope's workspace identity onto the new\n        // scope's DbContext before any query runs. When called outside an HTTP\n        // request (STDIO/hosted services/tests) we leave the fresh scope's\n        // WorkspaceContext as-is.\n        var requestCtx = _httpContextAccessor?.HttpContext?.RequestServices.GetService<WorkspaceContext>();\n        var workspacePath = requestCtx is not null && !string.IsNullOrEmpty(requestCtx.WorkspacePath)\n            ? requestCtx.WorkspacePath\n            : _fixedWorkspacePath;\n        if (!string.IsNullOrEmpty(workspacePath))\n        {\n            var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n            ctx.OverrideWorkspaceId(workspacePath);\n            return new DbScope(scope, ctx);\n        }\n        return new DbScope(scope);\n    }\n\n    private readonly struct DbScope : IAsyncDisposable\n    {\n        private readonly AsyncServiceScope _scope;\n\n        public DbScope(AsyncServiceScope scope)\n        {\n            _scope = scope;\n            Context = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n        }\n\n        public DbScope(AsyncServiceScope scope, McpDbContext context)\n        {\n            _scope = scope;\n            Context = context;\n        }\n\n        public McpDbContext Context { get; }\n\n        public ValueTask DisposeAsync() => _scope.DisposeAsync();",
+      "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+      "firstLine": 1425,
+      "lastLine": 1466,
+      "family": "todo-graph-audit-projection",
+      "excerptSha256": "0A1CACD9B3CACC6B7E070B1C1648520BC25BCDAA9B058DB0F491263510E3DBE2",
+      "fileSha256": "C0C4B87DCE260DDE58B65589C36D5C9CD5A8E73EB90066599C7B90C584DD6572"
+    },
+    {
+      "sourceText": "    public async Task<MemoryMutationResult> AddAsync(MemoryAddRequest request, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n\n        var category = NormalizeCategory(request.Category);\n        if (category is null)\n            return Validation(\"Memory category is required.\");\n\n        if (string.IsNullOrWhiteSpace(request.Text) && string.IsNullOrWhiteSpace(request.Content))\n            return Validation(\"Memory text is required.\");\n\n        if (!Enum.IsDefined(request.Scope))\n            return Validation(\"Memory scope must be Global or Workspace.\");\n\n        var content = string.IsNullOrWhiteSpace(request.Content) ? request.Text : request.Content;\n        if (MemoryPolicy.RejectsSecrets(content) || MemoryPolicy.RejectsSecrets(request.Text))\n            return Validation(\"Memory content matches a rejected secret pattern.\");\n\n        if (request.Title is { Length: > MemoryLimits.MaxTitleLength })\n            return Validation(\"Title exceeds the configured maximum length.\");\n        if (content.Length > MemoryLimits.MaxContentLength)\n            return Validation(\"Content exceeds the configured maximum length.\");\n        if (request.Tags is not null && request.Tags.Any(tag => tag is { Length: > MemoryLimits.MaxTagLength }))\n            return Validation(\"Tag exceeds the configured maximum length.\");\n        if (request.Confidence is < 0 or > 1)\n            return Validation(\"Confidence must be in [0,1].\");\n        if (!string.IsNullOrWhiteSpace(request.Type)\n            && !MemoryLimits.AllowedTypes.Contains(request.Type.Trim()))\n        {\n            return Validation(\"Type is not an allowed memory type.\");\n        }\n\n        var workspaceId = ResolveWorkspaceId(request.Scope);\n        if (request.Scope == MemoryScope.Workspace && workspaceId is null)\n            return Validation(\"Workspace memory requires an active workspace.\");\n\n        var id = string.IsNullOrWhiteSpace(request.Id)\n            ? await GenerateNextIdAsync(category, cancellationToken).ConfigureAwait(false)\n            : NormalizeId(request.Id);\n        if (!IsValidMemoryId(id))\n            return Validation(\"Memory id must match MEMORY-{CATEGORY}-{NNN}.\");\n\n        var duplicate = await _db.Memories\n            .IgnoreQueryFilters()\n            .AnyAsync(memory => memory.Id == id, cancellationToken)\n            .ConfigureAwait(false);\n        if (duplicate)\n            return new MemoryMutationResult(false, $\"Memory '{id}' already exists.\", FailureKind: MemoryMutationFailureKind.Conflict);\n\n        var now = _timeProvider.GetUtcNow();\n        var entity = new MemoryEntity\n        {\n            Id = id,\n            Category = category,\n            Scope = ToEntityScope(request.Scope),\n            WorkspaceId = workspaceId,\n            Text = string.IsNullOrWhiteSpace(request.Text) ? content : request.Text,\n            Version = 1,\n            CreatedAtUtc = now,\n            UpdatedAtUtc = now,\n            UpdatedBy = NormalizeOptional(request.UpdatedBy),\n            Title = NormalizeOptional(request.Title),\n            Summary = NormalizeOptional(request.Summary),\n            Content = content,\n            Type = NormalizeOptional(request.Type),\n            Tags = MemoryLayerMapper.SerializeTags(request.Tags),\n            Confidence = request.Confidence ?? MemoryLimits.DefaultConfidence,\n            SourceKind = NormalizeOptional(request.SourceKind),\n            SourceRef = NormalizeOptional(request.SourceRef),\n            CreatedBy = NormalizeOptional(request.CreatedBy),\n            EmbeddingStatus = \"pending\",\n        };\n\n        _db.Memories.Add(entity);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await new MemoryCompetitiveOperations(_db).AppendVersionAsync(entity, cancellationToken).ConfigureAwait(false);\n        await MemorySessionLogHook.TryAppendAsync(_db, entity.Id, \"memory_add\", cancellationToken).ConfigureAwait(false);\n        _logger.LogInformation(\"Memory created: {MemoryId} ({Scope})\", entity.Id, entity.Scope);\n        return new MemoryMutationResult(true, Memory: MemoryLayerMapper.ToItem(entity));\n    }",
+      "path": "src/QBrainAi.Services/Services/MemoryService.cs",
+      "firstLine": 52,
+      "lastLine": 131,
+      "family": "memory-content-version-session",
+      "excerptSha256": "6545FAA5EBF7007FE3139170C423F37C1CE430F7E7611FCCF30F179D620B7189",
+      "fileSha256": "467F63CA29593B60DEB632D0ACCA6DD8C6483BB6C500D41201A666C07CB00450"
+    },
+    {
+      "sourceText": "    public async Task<MemoryMutationResult> UpdateAsync(string id, MemoryUpdateRequest request, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n\n        var normalizedId = NormalizeId(id);\n        if (!IsValidMemoryId(normalizedId))\n            return Validation(\"Memory id must match MEMORY-{CATEGORY}-{NNN}.\");\n\n        var entity = await _db.Memories\n            .FirstOrDefaultAsync(memory => memory.Id == normalizedId, cancellationToken)\n            .ConfigureAwait(false);\n        if (entity is null)\n            return new MemoryMutationResult(false, $\"Memory '{normalizedId}' not found.\", FailureKind: MemoryMutationFailureKind.NotFound);\n\n        if (request.Category is not null)\n        {\n            var category = NormalizeCategory(request.Category);\n            if (category is null)\n                return Validation(\"Memory category cannot be empty.\");\n            entity.Category = category;\n        }\n\n        if (request.Scope is not null)\n        {\n            if (!Enum.IsDefined(request.Scope.Value))\n                return Validation(\"Memory scope must be Global or Workspace.\");\n\n            var workspaceId = ResolveWorkspaceId(request.Scope.Value);\n            if (request.Scope.Value == MemoryScope.Workspace && workspaceId is null)\n                return Validation(\"Workspace memory requires an active workspace.\");\n\n            entity.Scope = ToEntityScope(request.Scope.Value);\n            entity.WorkspaceId = workspaceId;\n        }\n\n        var contentChanged = false;\n        if (request.Text is not null)\n        {\n            if (string.IsNullOrWhiteSpace(request.Text))\n                return Validation(\"Memory text cannot be empty.\");\n            if (MemoryPolicy.RejectsSecrets(request.Text))\n                return Validation(\"Memory content matches a rejected secret pattern.\");\n            entity.Text = request.Text;\n            entity.Content = request.Text;\n            contentChanged = true;\n        }\n\n        if (request.Content is not null)\n        {\n            if (string.IsNullOrWhiteSpace(request.Content))\n                return Validation(\"Memory content cannot be empty.\");\n            if (MemoryPolicy.RejectsSecrets(request.Content))\n                return Validation(\"Memory content matches a rejected secret pattern.\");\n            entity.Content = request.Content;\n            entity.Text = request.Content;\n            contentChanged = true;\n        }\n\n        if (request.Title is not null)\n        {\n            if (request.Title.Length > MemoryLimits.MaxTitleLength)\n                return Validation(\"Title exceeds the configured maximum length.\");\n            entity.Title = NormalizeOptional(request.Title);\n        }\n\n        if (request.Summary is not null)\n            entity.Summary = NormalizeOptional(request.Summary);\n\n        if (request.Type is not null)\n        {\n            if (!MemoryLimits.AllowedTypes.Contains(request.Type.Trim()))\n                return Validation(\"Type is not an allowed memory type.\");\n            entity.Type = NormalizeOptional(request.Type);\n        }\n\n        if (request.Tags is not null)\n        {\n            if (request.Tags.Any(tag => tag is { Length: > MemoryLimits.MaxTagLength }))\n                return Validation(\"Tag exceeds the configured maximum length.\");\n            entity.Tags = MemoryLayerMapper.SerializeTags(request.Tags);\n        }\n\n        if (request.Confidence is not null)\n        {\n            if (request.Confidence is < 0 or > 1)\n                return Validation(\"Confidence must be in [0,1].\");\n            entity.Confidence = request.Confidence;\n        }\n\n        if (request.SourceKind is not null)\n            entity.SourceKind = NormalizeOptional(request.SourceKind);\n        if (request.SourceRef is not null)\n            entity.SourceRef = NormalizeOptional(request.SourceRef);\n\n        entity.Version++;\n        entity.UpdatedAtUtc = _timeProvider.GetUtcNow();\n        if (request.UpdatedBy is not null)\n            entity.UpdatedBy = NormalizeOptional(request.UpdatedBy);\n        if (contentChanged)\n            entity.EmbeddingStatus = \"pending\";\n\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        if (contentChanged)\n            await new MemoryCompetitiveOperations(_db).AppendVersionAsync(entity, cancellationToken).ConfigureAwait(false);\n        await MemorySessionLogHook.TryAppendAsync(_db, entity.Id, \"memory_update\", cancellationToken).ConfigureAwait(false);\n        _logger.LogInformation(\"Memory updated: {MemoryId}\", entity.Id);\n        return new MemoryMutationResult(true, Memory: MemoryLayerMapper.ToItem(entity));\n    }\n\n    /// <inheritdoc />\n    /// <remarks>2026-11-03, FR-MCP-MEMORY-002 (criterion \"Remove soft-deletes a memory by ID\"); TR-MCP-USECASE-018 AC-006 (appended): the removal time comes from the service's clock instead of DateTimeOffset.UtcNow, the same clock as the creation and update times (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>\n    public async Task<MemoryMutationResult> RemoveAsync(string id, CancellationToken cancellationToken = default)\n    {\n        var normalizedId = NormalizeId(id);\n        if (!IsValidMemoryId(normalizedId))\n            return Validation(\"Memory id must match MEMORY-{CATEGORY}-{NNN}.\");\n\n        var entity = await _db.Memories\n            .FirstOrDefaultAsync(memory => memory.Id == normalizedId, cancellationToken)\n            .ConfigureAwait(false);\n        if (entity is null)\n            return new MemoryMutationResult(false, $\"Memory '{normalizedId}' not found.\", FailureKind: MemoryMutationFailureKind.NotFound);\n\n        var item = MemoryLayerMapper.ToItem(entity);\n        var entry = _db.Entry(entity);\n        entry.Property<bool>(\"IsDeleted\").CurrentValue = true;\n        entry.Property<DateTimeOffset?>(\"DeletedAtUtc\").CurrentValue = _timeProvider.GetUtcNow();\n        entry.Property<string?>(\"DeletedBy\").CurrentValue = \"MemoryService\";\n        entry.Property<string?>(\"DeleteReason\").CurrentValue = \"memory_remove\";\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await MemorySessionLogHook.TryAppendAsync(_db, entity.Id, \"memory_remove\", cancellationToken).ConfigureAwait(false);\n        _logger.LogInformation(\"Memory removed: {MemoryId}\", entity.Id);\n        return new MemoryMutationResult(true, Memory: item);\n    }",
+      "path": "src/QBrainAi.Services/Services/MemoryService.cs",
+      "firstLine": 189,
+      "lastLine": 322,
+      "family": "memory-content-version-session",
+      "excerptSha256": "62D944D0BA2C206D27120C55AA5BCBB8ECBFA8E7148FAF195F34D27D663A628C",
+      "fileSha256": "467F63CA29593B60DEB632D0ACCA6DD8C6483BB6C500D41201A666C07CB00450"
+    },
+    {
+      "sourceText": "    public async Task<MemoryRevertResult> RevertAsync(\n        string memoryId,\n        int versionNumber,\n        bool readOnlyCaller,\n        CancellationToken cancellationToken)\n    {\n        if (readOnlyCaller)\n            return new MemoryRevertResult(403, FailureKind: MemoryMutationFailureKind.Validation, Error: \"Read-only caller cannot revert.\");\n\n        var entity = await _db.Memories\n            .FirstOrDefaultAsync(memory => memory.Id == memoryId, cancellationToken)\n            .ConfigureAwait(false);\n        if (entity is null)\n            return new MemoryRevertResult(404, FailureKind: MemoryMutationFailureKind.NotFound, Error: $\"Memory '{memoryId}' not found.\");\n\n        var snapshot = await _db.MemoryVersions\n            .AsNoTracking()\n            .FirstOrDefaultAsync(\n                version => version.MemoryId == memoryId && version.VersionNumber == versionNumber,\n                cancellationToken)\n            .ConfigureAwait(false);\n        if (snapshot is null)\n            return new MemoryRevertResult(404, FailureKind: MemoryMutationFailureKind.NotFound, Error: $\"Version {versionNumber} was not found.\");\n\n        entity.Title = snapshot.Title;\n        entity.Content = snapshot.Content;\n        entity.Text = snapshot.Content;\n        entity.Version++;\n        entity.UpdatedAtUtc = DateTimeOffset.UtcNow;\n        entity.EmbeddingStatus = \"pending\";\n\n        var nextNumber = await NextVersionNumberAsync(memoryId, cancellationToken).ConfigureAwait(false);\n        _db.MemoryVersions.Add(new MemoryVersionEntity\n        {\n            MemoryId = entity.Id,\n            VersionNumber = nextNumber,\n            Title = entity.Title,\n            Content = MemoryLayerMapper.EffectiveContent(entity),\n            CreatedAtUtc = entity.UpdatedAtUtc,\n        });\n\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        await MemorySessionLogHook.TryAppendAsync(_db, entity.Id, \"memory_revert\", cancellationToken).ConfigureAwait(false);\n        return new MemoryRevertResult(200, MemoryLayerMapper.ToItem(entity));\n    }",
+      "path": "src/QBrainAi.Services/Memory/MemoryCompetitiveOperations.cs",
+      "firstLine": 99,
+      "lastLine": 143,
+      "family": "memory-content-version-session",
+      "excerptSha256": "5654706AD80C2C360405D041F44C323368E938D6D0BFFBCE8029656F6AB3B31B",
+      "fileSha256": "C9074430D4856EAEE2A3444F37916C062F51828056B0ADBA40EDFCA0FD5E6839"
+    },
+    {
+      "sourceText": "    public async Task AppendVersionAsync(MemoryEntity entity, CancellationToken cancellationToken)\n    {\n        var nextNumber = await NextVersionNumberAsync(entity.Id, cancellationToken).ConfigureAwait(false);\n        _db.MemoryVersions.Add(new MemoryVersionEntity\n        {\n            MemoryId = entity.Id,\n            VersionNumber = nextNumber,\n            Title = entity.Title,\n            Content = MemoryLayerMapper.EffectiveContent(entity),\n            CreatedAtUtc = entity.UpdatedAtUtc,\n        });\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n    }\n\n    private async Task<int> NextVersionNumberAsync(string memoryId, CancellationToken cancellationToken)\n    {\n        var max = await _db.MemoryVersions\n            .IgnoreQueryFilters()\n            .Where(version => version.MemoryId == memoryId)\n            .Select(version => (int?)version.VersionNumber)\n            .MaxAsync(cancellationToken)\n            .ConfigureAwait(false);",
+      "path": "src/QBrainAi.Services/Memory/MemoryCompetitiveOperations.cs",
+      "firstLine": 161,
+      "lastLine": 182,
+      "family": "memory-content-version-session",
+      "excerptSha256": "BC0619743E539322348EC260FBEFBB5206F4841FEB40B78BD26029A9D0E3C6FE",
+      "fileSha256": "C9074430D4856EAEE2A3444F37916C062F51828056B0ADBA40EDFCA0FD5E6839"
+    },
+    {
+      "sourceText": "    public static async Task TryAppendAsync(\n        McpDbContext db,\n        string memoryId,\n        string actionType,\n        CancellationToken cancellationToken)\n    {\n        var workspaceId = db.CurrentWorkspaceId;\n        var turn = await (\n                from entry in db.SessionLogTurns.IgnoreQueryFilters()\n                join session in db.SessionLogs.IgnoreQueryFilters() on entry.SessionLogId equals session.Id\n                where session.WorkspaceId == workspaceId || entry.WorkspaceId == workspaceId\n                orderby entry.Id descending\n                select entry)\n            .FirstOrDefaultAsync(cancellationToken)\n            .ConfigureAwait(false);\n        if (turn is null)\n            return;\n\n        var order = await db.SessionLogActions\n            .IgnoreQueryFilters()\n            .CountAsync(action => action.SessionLogTurnId == turn.Id, cancellationToken)\n            .ConfigureAwait(false);\n\n        db.SessionLogActions.Add(new SessionLogActionEntity\n        {\n            WorkspaceId = string.IsNullOrEmpty(turn.WorkspaceId) ? workspaceId : turn.WorkspaceId,\n            SessionLogTurnId = turn.Id,\n            Order = order + 1,\n            Type = \"memory\",\n            Status = \"completed\",\n            Description = $\"{actionType} {memoryId}\",\n        });\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n    }",
+      "path": "src/QBrainAi.Services/Memory/MemorySessionLogHook.cs",
+      "firstLine": 13,
+      "lastLine": 46,
+      "family": "memory-content-version-session",
+      "excerptSha256": "CFE62D885F0EEA80B24C68FFA95CEA7E8E2BE64210F169069D060C792C40E3D8",
+      "fileSha256": "04C88453ECDB8BFB2E2FF8B8A940B3ADACE898806AD5E61A6CAD257D51EFD93D"
+    },
+    {
+      "sourceText": "    private async Task<WorkspaceMutationResult> CreateDatabaseAsync(WorkspaceCreateRequest request, CancellationToken ct)\n    {\n        var normalized = NormalizePath(request.WorkspacePath);\n        if (string.IsNullOrWhiteSpace(normalized))\n            return new WorkspaceMutationResult(false, \"WorkspacePath is required.\");\n\n        await s_writeLock.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            await EnsureBootstrappedAsync(ct).ConfigureAwait(false);\n            var existing = await _db!.Workspaces\n                .IgnoreQueryFilters()\n                .Include(w => w.BannedItems)\n                .SingleOrDefaultAsync(w => w.WorkspaceId == normalized || w.WorkspacePath == normalized, ct)\n                .ConfigureAwait(false);\n\n            if (existing is { IsDeleted: false })\n                return new WorkspaceMutationResult(false, $\"Workspace already registered: {normalized}\");\n\n            var entry = CreateConfigEntry(request, normalized);\n            WorkspaceEntity entity;\n            if (existing is null)\n            {\n                entity = ToEntity(entry);\n                _db.Workspaces.Add(entity);\n            }\n            else\n            {\n                ApplyConfigEntry(existing, entry);\n                existing.IsDeleted = false;\n                existing.DeletedAtUtc = null;\n                existing.DeletedBy = null;\n                existing.DeleteReason = null;\n                entity = existing;\n            }\n\n            await using var transaction = await _db.Database.BeginTransactionAsync(ct).ConfigureAwait(false);\n            try\n            {\n                await _db.SaveChangesAsync(ct).ConfigureAwait(false);\n                var importFailure = await TryImportDumpAsync(request.DumpPath, normalized, ct).ConfigureAwait(false);\n                if (importFailure is not null)\n                {\n                    await transaction.RollbackAsync(ct).ConfigureAwait(false);\n                    _db.ChangeTracker.Clear();\n                    return importFailure;\n                }\n\n                await transaction.CommitAsync(ct).ConfigureAwait(false);\n            }\n            catch\n            {\n                await transaction.RollbackAsync(ct).ConfigureAwait(false);\n                _db.ChangeTracker.Clear();\n                throw;\n            }\n\n            await WriteProjectionFromDatabaseAsync(ct).ConfigureAwait(false);\n            _logger.LogInformation(\"Workspace created: {Name} at {Path}\", entity.Name, entity.WorkspacePath);\n            await PublishChangeSafeAsync(ChangeEventActions.Created, normalized, ct).ConfigureAwait(false);\n            return new WorkspaceMutationResult(true, Workspace: await ToDtoAsync(entity, ct).ConfigureAwait(false));\n        }\n        finally\n        {\n            s_writeLock.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/WorkspaceService.cs",
+      "firstLine": 320,
+      "lastLine": 386,
+      "family": "explicit-workspace-dump-import",
+      "excerptSha256": "F1078E5B563140D484EF1F53E4D21E2FE6B21FE69706BD6A88CA6B2AAE145D5B",
+      "fileSha256": "8080643999E317218E6D3781121A46E44A77E2C22AF20126DFC0315EA49D17D0"
+    },
+    {
+      "sourceText": "    public async Task<WikiDumpImportResult> ImportAsync(WikiDumpImportRequest request, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(request);\n        cancellationToken.ThrowIfCancellationRequested();\n        if (IsUnsafePath(request.DumpPath) || IsUnsafePath(request.DestinationWorkspacePath))\n            return Fail(\"unsafe_path\", \"Dump or destination path is unsafe.\");\n\n        var dumpFile = ResolveDumpFile(request.DumpPath);\n        if (dumpFile is null)\n            return Fail(\"malformed_dump\", \"Dump path does not contain mcp-wiki-dump.json.\");\n\n        string json;\n        try\n        {\n            json = await File.ReadAllTextAsync(dumpFile, cancellationToken).ConfigureAwait(false);\n            JsonSerializer.Deserialize<WikiDumpDocument>(json, JsonOptions);\n        }\n        catch (JsonException)\n        {\n            return Fail(\"malformed_dump\", \"Dump JSON is malformed.\");\n        }\n\n        var dump = JsonSerializer.Deserialize<WikiDumpDocument>(json, JsonOptions);\n        if (dump is null)\n            return Fail(\"malformed_dump\", \"Dump JSON is malformed.\");\n        if (!string.Equals(dump.SchemaVersion, WikiDumpDefaults.SchemaVersion, StringComparison.Ordinal))\n            return Fail(\"version_mismatch\", \"Dump schemaVersion is not mcp-wiki-dump/v1.\");\n        if (dump.Tables.Count == 0)\n            return Fail(\"missing_tables\", \"Dump tables[] is missing.\");\n\n        var expected = ComputeSha256(dump);\n        if (!string.IsNullOrWhiteSpace(dump.Sha256) && !string.Equals(dump.Sha256, expected, StringComparison.OrdinalIgnoreCase))\n            return Fail(\"hash_mismatch\", \"Dump sha256 does not match canonical bytes.\");\n\n        var destination = Path.GetFullPath(request.DestinationWorkspacePath);\n        var diagnostics = new List<string>();\n        var created = new List<string>();\n        foreach (var todo in dump.Todos)\n        {\n            var exists = await _db.TodoItems.AnyAsync(item => item.Id == todo.Id, cancellationToken).ConfigureAwait(false);\n            if (exists)\n                continue;\n            _db.TodoItems.Add(new TodoItemEntity\n            {\n                Id = todo.Id,\n                Title = todo.Title,\n                Section = todo.Section,\n                Priority = todo.Priority,\n                Done = todo.Done,\n                WorkspaceId = destination,\n            });\n            created.Add(todo.Id);\n        }\n\n        foreach (var link in dump.TodoRequirementLinks)\n        {\n            var exists = await _db.TodoRequirementLinks.AnyAsync(\n                item => item.TodoId == link.TodoId && item.RequirementId == link.RequirementId,\n                cancellationToken).ConfigureAwait(false);\n            if (exists)\n                continue;\n            _db.TodoRequirementLinks.Add(new TodoRequirementLinkEntity\n            {\n                WorkspaceId = destination,\n                TodoId = link.TodoId,\n                RequirementKind = link.RequirementKind,\n                RequirementId = link.RequirementId,\n                CreatedAtUtc = _time.GetUtcNow(),\n            });\n        }\n\n        if (created.Count > 0 || dump.TodoRequirementLinks.Count > 0)\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n\n        string? archive = null;\n        var todoYaml = request.TodoYamlPath;\n        if (string.IsNullOrWhiteSpace(todoYaml))\n        {\n            var sibling = Path.Combine(Path.GetDirectoryName(dumpFile) ?? destination, \"todo.yaml\");\n            if (File.Exists(sibling))\n                todoYaml = sibling;\n            var destYaml = Path.Combine(destination, \"docs\", \"todo.yaml\");\n            if (File.Exists(destYaml))\n                todoYaml = destYaml;\n        }\n\n        if (!string.IsNullOrWhiteSpace(todoYaml) && File.Exists(todoYaml))\n        {\n            diagnostics.Add(\"dump_wins_over_todo_yaml: \" + dumpFile + \" | \" + todoYaml);\n            var archiveDir = Path.Combine(destination, \".mcpServer\", \"archive\", \"todo-yaml\");\n            Directory.CreateDirectory(archiveDir);\n            archive = Path.Combine(archiveDir, \"todo.yaml\");\n            File.Copy(todoYaml, archive, overwrite: true);\n        }\n\n        return new WikiDumpImportResult\n        {\n            Success = true,\n            CreatedTodoIds = created,\n            Diagnostics = diagnostics,\n            TodoYamlArchivePath = archive,\n        };\n    }",
+      "path": "src/QBrainAi.Services/Services/WikiDumpService.cs",
+      "firstLine": 90,
+      "lastLine": 192,
+      "family": "explicit-workspace-dump-import",
+      "excerptSha256": "8A061B61BC11833C20999DC6572766A511BC26E768CE29CD8C57B722967540C8",
+      "fileSha256": "4E82F8DD086940CCD8A9DFCC6EF59FA91A2751BD9CB9830260A419ABDF7C8539"
+    },
+    {
+      "sourceText": "    private async Task RestoreMemoryAsync(MemoryItem previous, CancellationToken cancellationToken)\n    {\n        if (_db is not null)\n        {\n            await RestoreMemoryExactAsync(previous, cancellationToken).ConfigureAwait(false);\n            return;\n        }\n\n        var rollback = await _memoryService.UpdateAsync(\n                previous.Id,\n                new MemoryUpdateRequest\n                {\n                    Category = previous.Category,\n                    Scope = previous.Scope,\n                    Text = previous.Text,\n                    UpdatedBy = previous.UpdatedBy,\n                },\n                cancellationToken)\n            .ConfigureAwait(false);\n\n        if (rollback.Success)\n            return;\n\n        if (rollback.FailureKind == MemoryMutationFailureKind.NotFound)\n        {\n            await RestoreRemovedMemoryAsync(previous, cancellationToken).ConfigureAwait(false);\n            return;\n        }\n\n        throw new InvalidOperationException(rollback.Error ?? $\"Rollback update for memory '{previous.Id}' failed.\");\n    }\n\n    private async Task RestoreRemovedMemoryAsync(MemoryItem previous, CancellationToken cancellationToken)\n    {\n        if (_db is not null)\n        {\n            await RestoreMemoryExactAsync(previous, cancellationToken).ConfigureAwait(false);\n            return;\n        }\n\n        var rollback = await _memoryService.AddAsync(\n                new MemoryAddRequest\n                {\n                    Id = previous.Id,\n                    Category = previous.Category,\n                    Scope = previous.Scope,\n                    Text = previous.Text,\n                    UpdatedBy = previous.UpdatedBy,\n                },\n                cancellationToken)\n            .ConfigureAwait(false);\n\n        if (!rollback.Success)\n            throw new InvalidOperationException(rollback.Error ?? $\"Rollback restore for memory '{previous.Id}' failed.\");\n    }\n\n    private async Task RestoreMemoryExactAsync(MemoryItem previous, CancellationToken cancellationToken)\n    {\n        if (_db is null)\n            throw new InvalidOperationException(\"A database context is required for exact memory rollback restoration.\");\n\n        var entity = await _db.Memories\n            .IgnoreQueryFilters()\n            .FirstOrDefaultAsync(memory => memory.Id == previous.Id, cancellationToken)\n            .ConfigureAwait(false);\n        if (entity is null)\n        {\n            entity = new MemoryEntity\n            {\n                Id = previous.Id,\n                Category = previous.Category,\n                Scope = ToEntityScope(previous.Scope),\n                WorkspaceId = previous.WorkspacePath,\n                Text = previous.Text,\n                Version = previous.Version,\n                CreatedAtUtc = previous.CreatedAtUtc,\n                UpdatedAtUtc = previous.UpdatedAtUtc,\n                UpdatedBy = previous.UpdatedBy,\n            };\n            _db.Memories.Add(entity);\n        }\n        else\n        {\n            entity.Category = previous.Category;\n            entity.Scope = ToEntityScope(previous.Scope);\n            entity.WorkspaceId = previous.WorkspacePath;\n            entity.Text = previous.Text;\n            entity.Version = previous.Version;\n            entity.CreatedAtUtc = previous.CreatedAtUtc;\n            entity.UpdatedAtUtc = previous.UpdatedAtUtc;\n            entity.UpdatedBy = previous.UpdatedBy;\n        }\n\n        var entry = _db.Entry(entity);\n        SetShadowValue(entry, \"IsDeleted\", false);\n        SetShadowValue(entry, \"DeletedAtUtc\", null);\n        SetShadowValue(entry, \"DeletedBy\", null);\n        SetShadowValue(entry, \"DeleteReason\", null);\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedMemoryService.cs",
+      "firstLine": 347,
+      "lastLine": 446,
+      "family": "transaction-compensation",
+      "excerptSha256": "A294640B3146724BC26A50C0FA18FDDDC6E51E37034A0A993601D79171F02373",
+      "fileSha256": "F7C719EAE8422B955B46988099B18517BBC36D9401227E5E4C30C5D0D01D4DA3"
+    },
+    {
+      "sourceText": "    private async Task RestoreSessionAsync(\n        SessionGraphSnapshot snapshot,\n        CancellationToken cancellationToken)\n    {\n        await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);\n        try\n        {\n            _db.ChangeTracker.Clear();\n            var current = await SessionQuery(includeSoftDeleted: true)\n                .FirstOrDefaultAsync(\n                    entity => entity.SourceType == snapshot.SourceType\n                              && entity.SessionId == snapshot.SessionId\n                              && entity.WorkspaceId == snapshot.WorkspaceId,\n                    cancellationToken)\n                .ConfigureAwait(false);\n            if (current is null)\n            {\n                if (snapshot.Session is not null)\n                    _db.SessionLogs.Add(CloneSession(snapshot.Session));\n            }\n            else if (snapshot.Session is null)\n            {\n                SoftDeleteSessionGraph(current, \"transaction_rollback_removed_session\");\n            }\n            else\n            {\n                RestoreSessionGraph(current, snapshot.Session);\n            }\n\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);\n        }\n        catch\n        {\n            await transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);\n            throw;\n        }\n    }\n\n    private async Task RestoreCreatedSessionAsync(\n        SessionGraphSnapshot snapshot,\n        CancellationToken cancellationToken)\n    {\n        _db.ChangeTracker.Clear();\n        var current = await SessionQuery(includeSoftDeleted: true)\n            .FirstOrDefaultAsync(\n                entity => entity.SourceType == snapshot.SourceType\n                          && entity.SessionId == snapshot.SessionId\n                          && entity.WorkspaceId == snapshot.WorkspaceId,\n                cancellationToken)\n            .ConfigureAwait(false);\n        if (current is not null)\n        {\n            ClearSessionGraphSoftDelete(current);\n            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            return;\n        }\n\n        if (snapshot.Session is null)\n            return;\n\n        _db.SessionLogs.Add(CloneSession(snapshot.Session));\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedSessionLogService.cs",
+      "firstLine": 376,
+      "lastLine": 439,
+      "family": "transaction-compensation",
+      "excerptSha256": "37A8DDFCD8245674DF03C7F053FDE6424456F8D536695287DDD8B9E3A1AF3F86",
+      "fileSha256": "32466B1816F9479BD446C36C909AE16992B61056C78B0F130006E4FE429A0684"
+    },
+    {
+      "sourceText": "    private async Task RestoreToolAsync(ToolDefinitionSnapshot snapshot, CancellationToken cancellationToken)\n    {\n        _db.ChangeTracker.Clear();\n        var entity = await _db.ToolDefinitions\n            .IgnoreQueryFilters()\n            .Include(tool => tool.Tags)\n            .FirstOrDefaultAsync(tool => tool.Id == snapshot.Id, cancellationToken)\n            .ConfigureAwait(false);\n\n        if (entity is null)\n        {\n            entity = new ToolDefinitionEntity\n            {\n                Id = snapshot.Id,\n                WorkspaceId = snapshot.WorkspaceId,\n                Name = snapshot.Name,\n                Description = snapshot.Description,\n                ParameterSchema = snapshot.ParameterSchema,\n                CommandTemplate = snapshot.CommandTemplate,\n                WorkspacePath = snapshot.WorkspacePath,\n                BucketName = snapshot.BucketName,\n                DateTimeCreated = snapshot.DateTimeCreated,\n                DateTimeModified = snapshot.DateTimeModified,\n            };\n            _db.ToolDefinitions.Add(entity);\n        }\n        else\n        {\n            entity.WorkspaceId = snapshot.WorkspaceId;\n            entity.Name = snapshot.Name;\n            entity.Description = snapshot.Description;\n            entity.ParameterSchema = snapshot.ParameterSchema;\n            entity.CommandTemplate = snapshot.CommandTemplate;\n            entity.WorkspacePath = snapshot.WorkspacePath;\n            entity.BucketName = snapshot.BucketName;\n            entity.DateTimeCreated = snapshot.DateTimeCreated;\n            entity.DateTimeModified = snapshot.DateTimeModified;\n        }\n\n        ApplySoftDelete(_db.Entry(entity), snapshot.SoftDelete);\n        RestoreTagSnapshots(entity, snapshot.Tags);\n\n        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        _db.ChangeTracker.Clear();\n    }",
+      "path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedToolRegistryService.cs",
+      "firstLine": 192,
+      "lastLine": 236,
+      "family": "transaction-compensation",
+      "excerptSha256": "1432BBB077E93427BE94A18AFD56F33B1B09745263497CC55748D3E84A1716A8",
+      "fileSha256": "4053CC4C1B5993D064F4F7E2CC84038B937FA2B518ABC68D8FFA6B340541797A"
+    },
+    {
+      "sourceText": "    private static async Task<FederationApplyResult> ApplyCreateAsync(\n        McpDbContext db,\n        FederationStateOperation operation,\n        CancellationToken cancellationToken)\n    {\n        var payload = DeserializePayload(operation.PayloadJson);\n        var id = NormalizeId(payload.Id);\n        if (!IsValidMemoryId(id))\n            return Conflict(\"Memory create payload must include an explicit id matching MEMORY-{CATEGORY}-{NNN}.\");\n\n        var category = NormalizeCategory(payload.Category);\n        if (category is null)\n            return Conflict(\"Memory create payload must include a non-empty category.\");\n\n        if (string.IsNullOrWhiteSpace(payload.Text))\n            return Conflict(\"Memory create payload must include non-empty text.\");\n\n        var scope = payload.Scope ?? MemoryScope.Workspace;\n        var workspaceId = ResolveWorkspaceId(scope, operation);\n        if (scope == MemoryScope.Workspace && workspaceId is null)\n            return Conflict(\"Workspace memory create requires a global workspace id.\");\n\n        var existing = await db.Memories\n            .IgnoreQueryFilters()\n            .FirstOrDefaultAsync(memory => memory.Id == id, cancellationToken)\n            .ConfigureAwait(false);\n        if (existing is not null)\n        {\n            var version = existing.Version.ToString(CultureInfo.InvariantCulture);\n            if (IsDeleted(db, existing))\n                return Conflict($\"Memory '{id}' already exists as a deleted row.\", version);\n\n            return IsEquivalentCreate(existing, category, scope, workspaceId, payload.Text)\n                ? new FederationApplyResult { Applied = false, AlreadyApplied = true, Version = version }\n                : Conflict($\"Memory '{id}' already exists with different state.\", version);\n        }\n\n        var now = DateTimeOffset.UtcNow;\n        var createdAt = payload.CreatedAtUtc ?? now;\n        var updatedAt = payload.UpdatedAtUtc ?? createdAt;\n        db.Memories.Add(new MemoryEntity\n        {\n            Id = id,\n            Category = category,\n            Scope = ToEntityScope(scope),\n            WorkspaceId = workspaceId,\n            Text = payload.Text,\n            Version = payload.Version is > 0 ? payload.Version.Value : 1,\n            CreatedAtUtc = createdAt,\n            UpdatedAtUtc = updatedAt,\n            UpdatedBy = NormalizeOptional(payload.UpdatedBy),\n        });\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return new FederationApplyResult\n        {\n            Applied = true,\n            Version = await ReadCurrentVersionAsync(db, id, cancellationToken).ConfigureAwait(false),\n        };\n    }\n\n    private static async Task<FederationApplyResult> ApplyUpdateAsync(\n        McpDbContext db,\n        FederationStateOperation operation,\n        CancellationToken cancellationToken)\n    {\n        var id = ResolveMemoryId(operation);\n        if (!IsValidMemoryId(id))\n            return Conflict(\"Memory update operation does not identify a valid memory id.\");\n\n        var entity = await db.Memories\n            .IgnoreQueryFilters()\n            .FirstOrDefaultAsync(memory => memory.Id == id, cancellationToken)\n            .ConfigureAwait(false);\n        if (entity is null || IsDeleted(db, entity))\n            return Conflict($\"Memory '{id}' is missing or deleted.\");\n\n        if (!OwnsWorkspace(entity, operation.GlobalWorkspaceId))\n            return Conflict(\n                $\"Workspace memory '{id}' cannot be applied to global workspace '{operation.GlobalWorkspaceId ?? \"<none>\"}'.\",\n                entity.Version.ToString(CultureInfo.InvariantCulture));\n\n        var payload = DeserializePayload(operation.PayloadJson);\n        if (payload.Category is not null)\n        {\n            var category = NormalizeCategory(payload.Category);\n            if (category is null)\n                return Conflict(\"Memory update category cannot be empty.\");\n\n            entity.Category = category;\n        }\n\n        if (payload.Scope is { } scope)\n        {\n            var workspaceId = ResolveWorkspaceId(scope, operation);\n            if (scope == MemoryScope.Workspace && workspaceId is null)\n                return Conflict(\"Workspace memory update requires a global workspace id.\");\n\n            entity.Scope = ToEntityScope(scope);\n            entity.WorkspaceId = workspaceId;\n        }\n\n        if (payload.Text is not null)\n        {\n            if (string.IsNullOrWhiteSpace(payload.Text))\n                return Conflict(\"Memory update text cannot be empty.\");\n\n            entity.Text = payload.Text;\n        }\n\n        entity.Version++;\n        entity.UpdatedAtUtc = payload.UpdatedAtUtc ?? DateTimeOffset.UtcNow;\n        if (payload.UpdatedBy is not null)\n            entity.UpdatedBy = NormalizeOptional(payload.UpdatedBy);\n\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return new FederationApplyResult\n        {\n            Applied = true,\n            Version = entity.Version.ToString(CultureInfo.InvariantCulture),\n        };\n    }\n\n    private static async Task<FederationApplyResult> ApplyDeleteAsync(\n        McpDbContext db,\n        FederationStateOperation operation,\n        CancellationToken cancellationToken)\n    {\n        var id = ResolveMemoryId(operation);\n        if (!IsValidMemoryId(id))\n            return Conflict(\"Memory delete operation does not identify a valid memory id.\");\n\n        var entity = await db.Memories\n            .IgnoreQueryFilters()\n            .FirstOrDefaultAsync(memory => memory.Id == id, cancellationToken)\n            .ConfigureAwait(false);\n        if (entity is null || IsDeleted(db, entity))\n            return new FederationApplyResult { Applied = true, Version = null };\n\n        if (!OwnsWorkspace(entity, operation.GlobalWorkspaceId))\n            return Conflict(\n                $\"Workspace memory '{id}' cannot be deleted from global workspace '{operation.GlobalWorkspaceId ?? \"<none>\"}'.\",\n                entity.Version.ToString(CultureInfo.InvariantCulture));\n\n        db.Memories.Remove(entity);\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        return new FederationApplyResult { Applied = true, Version = null };\n    }",
+      "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+      "firstLine": 705,
+      "lastLine": 851,
+      "family": "legacy-replay",
+      "excerptSha256": "AF45521C2D01656F250D3AE56BF8AEE29ECF17A708D2BA2D21BE15EE7742D922",
+      "fileSha256": "25B2CF5EA3135C2382087C97CACDAD544F1BC6EC3914011BA8734F3E646D0674"
+    },
+    {
+      "sourceText": "    public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)\n    {\n        ArgumentNullException.ThrowIfNull(operation);\n        var key = SessionLogKey.Parse(operation.ResourceId ?? string.Empty);\n\n        await using var scope = ScopeFactory.CreateAsyncScope();\n        if (string.Equals(operation.HttpMethod, \"DELETE\", StringComparison.OrdinalIgnoreCase))\n        {\n            if (string.IsNullOrWhiteSpace(key.SessionId))\n                return Conflict(\"Session log delete operation does not identify a session id.\");\n\n            var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n            var query = SessionLogGraphQuery(db).Where(s => s.SessionId == key.SessionId);\n            if (!string.IsNullOrWhiteSpace(key.SourceType))\n                query = query.Where(s => s.SourceType == key.SourceType);\n            var session = await query.FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);\n            if (session is null)\n                return new FederationApplyResult { Applied = true, Version = null };\n\n            if (IsSoftDeleted(db, session))\n                return new FederationApplyResult { Applied = true, Version = null };\n\n            SoftDeleteSessionGraph(db, session, \"federation_delete_replay\");\n            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            return new FederationApplyResult { Applied = true, Version = null };\n        }\n\n        UnifiedSessionLogDto? payload;\n        try\n        {\n            payload = (UnifiedSessionLogDto?)JsonSerializer.Deserialize(operation.PayloadJson, typeof(UnifiedSessionLogDto), FederationAdapterJsonContext.Default);\n        }\n        catch (JsonException ex)\n        {\n            return Conflict($\"Session log federation payload is invalid JSON: {ex.Message}\");\n        }\n\n        if (payload is null)\n            return Conflict(\"Session log federation payload is empty.\");\n        payload.SourceType ??= key.SourceType;\n        payload.SessionId ??= key.SessionId;\n        if (string.IsNullOrWhiteSpace(payload.SourceType) || string.IsNullOrWhiteSpace(payload.SessionId))\n            return Conflict(\"Session log federation payload must include sourceType and sessionId.\");\n\n        var sessionLogService = scope.ServiceProvider.GetRequiredService<ISessionLogService>();\n        await sessionLogService.SubmitAsync(payload, contentHash: operation.OperationId, cancellationToken: cancellationToken)\n            .ConfigureAwait(false);\n\n        var version = await GetVersionAsync($\"{payload.SourceType}/{payload.SessionId}\", cancellationToken).ConfigureAwait(false);\n        return new FederationApplyResult { Applied = true, Version = version };\n    }",
+      "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+      "firstLine": 978,
+      "lastLine": 1028,
+      "family": "legacy-replay",
+      "excerptSha256": "8E9C5F32A60E0AF71151DDD464C9968C7489920E835D3F4276A6A0CAFE381D86",
+      "fileSha256": "25B2CF5EA3135C2382087C97CACDAD544F1BC6EC3914011BA8734F3E646D0674"
+    },
+    {
+      "sourceText": "    public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)\n    {\n        ArgumentNullException.ThrowIfNull(operation);\n        var requirementKey = RequirementKey.Parse(operation.ResourceId ?? string.Empty);\n        await using var scope = ScopeFactory.CreateAsyncScope();\n        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();\n\n        if (string.Equals(operation.HttpMethod, \"DELETE\", StringComparison.OrdinalIgnoreCase))\n        {\n            if (string.IsNullOrWhiteSpace(requirementKey.Id))\n                return Conflict(\"Requirements delete operation does not identify a requirement id.\");\n\n            var query = db.Requirements.Where(r => r.Id == requirementKey.Id);\n            if (!string.IsNullOrWhiteSpace(requirementKey.Kind))\n                query = query.Where(r => r.Kind == requirementKey.Kind);\n            var rows = await query.ToListAsync(cancellationToken).ConfigureAwait(false);\n            if (rows.Count == 0)\n                return new FederationApplyResult { Applied = true, Version = null };\n\n            var ids = rows.Select(r => r.Id).ToHashSet(StringComparer.OrdinalIgnoreCase);\n            var links = await db.RequirementTraceabilityLinks\n                .Where(l => ids.Contains(l.FrId) || ids.Contains(l.TargetId))\n                .ToListAsync(cancellationToken)\n                .ConfigureAwait(false);\n            db.RequirementTraceabilityLinks.RemoveRange(links);\n            db.Requirements.RemoveRange(rows);\n            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n            return new FederationApplyResult { Applied = true, Version = null };\n        }\n\n        RequirementsPayload? payload;\n        try\n        {\n            payload = (RequirementsPayload?)JsonSerializer.Deserialize(operation.PayloadJson, typeof(RequirementsPayload), FederationAdapterJsonContext.Default);\n        }\n        catch (JsonException ex)\n        {\n            return Conflict($\"Requirements federation payload is invalid JSON: {ex.Message}\");\n        }\n\n        if (payload is null || payload.Requirements.Count == 0)\n            return Conflict(\"Requirements federation payload does not contain requirement rows.\");\n\n        foreach (var item in payload.Requirements)\n            await UpsertRequirementAsync(db, item, cancellationToken).ConfigureAwait(false);\n\n        foreach (var link in payload.Links)\n            await UpsertRequirementLinkAsync(db, link, cancellationToken).ConfigureAwait(false);\n\n        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);\n        var version = await GetVersionAsync(operation.ResourceId ?? payload.Requirements[0].Id, cancellationToken).ConfigureAwait(false);\n        return new FederationApplyResult { Applied = true, Version = version };\n    }",
+      "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+      "firstLine": 1276,
+      "lastLine": 1328,
+      "family": "legacy-replay",
+      "excerptSha256": "B6B9E3841C5BCFF509A59D1C30BE3E4B2CA1DC3001938E1B06D68DBB2A94533E",
+      "fileSha256": "25B2CF5EA3135C2382087C97CACDAD544F1BC6EC3914011BA8734F3E646D0674"
+    },
+    {
+      "sourceText": "    private static async Task UpsertRequirementAsync(\n        McpDbContext db,\n        RequirementPayload item,\n        CancellationToken cancellationToken)\n    {\n        var kind = string.IsNullOrWhiteSpace(item.Kind) ? \"fr\" : item.Kind.Trim().ToLowerInvariant();\n        var id = item.Id.Trim();\n        var entity = await db.Requirements\n            .FirstOrDefaultAsync(r => r.Kind == kind && r.Id == id, cancellationToken)\n            .ConfigureAwait(false);\n        var now = DateTimeOffset.UtcNow.ToString(\"O\", CultureInfo.InvariantCulture);\n        if (entity is null)\n        {\n            entity = new RequirementEntity\n            {\n                Kind = kind,\n                Id = id,\n                CreatedAtUtc = string.IsNullOrWhiteSpace(item.CreatedAtUtc) ? now : item.CreatedAtUtc,\n            };\n            db.Requirements.Add(entity);\n        }\n\n        entity.Title = item.Title ?? string.Empty;\n        entity.Body = item.Body ?? string.Empty;\n        entity.UpdatedAtUtc = string.IsNullOrWhiteSpace(item.UpdatedAtUtc) ? now : item.UpdatedAtUtc;\n    }",
+      "path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+      "firstLine": 1382,
+      "lastLine": 1407,
+      "family": "legacy-replay",
+      "excerptSha256": "276E4663CAC3E35A0BCA6DB5D5BCFF6E1FF0A404F8562DCB6696FCE942419F2A",
+      "fileSha256": "25B2CF5EA3135C2382087C97CACDAD544F1BC6EC3914011BA8734F3E646D0674"
+    },
+    {
+      "sourceText": "    public async Task UpsertAsync(string workspacePath, string accessToken, DateTimeOffset? expiresAtUtc = null, CancellationToken ct = default)\n    {\n        if (string.IsNullOrWhiteSpace(accessToken))\n            throw new ArgumentException(\"Access token is required.\", nameof(accessToken));\n\n        var normalized = NormalizeWorkspacePath(workspacePath);\n        var now = DateTimeOffset.UtcNow;\n        var encrypted = _protector.Protect(accessToken.Trim());\n\n        await _gate.WaitAsync(ct).ConfigureAwait(false);\n        try\n        {\n            using var storeLock = await AcquireStoreLockAsync(ct).ConfigureAwait(false);\n            var doc = await ReadUnlockedAsync(ct).ConfigureAwait(false);\n            var existing = doc.Entries.FirstOrDefault(e => string.Equals(e.WorkspacePath, normalized, StringComparison.OrdinalIgnoreCase));\n            if (existing is null)\n            {\n                doc.Entries.Add(new GitHubTokenStoreEntry\n                {\n                    WorkspacePath = normalized,\n                    AccessTokenProtected = encrypted,\n                    UpdatedAtUtc = now,\n                    ExpiresAtUtc = expiresAtUtc,\n                });\n            }\n            else\n            {\n                existing.AccessTokenProtected = encrypted;\n                existing.UpdatedAtUtc = now;\n                existing.ExpiresAtUtc = expiresAtUtc;\n            }\n\n            await WriteUnlockedAsync(doc, ct).ConfigureAwait(false);\n        }\n        finally\n        {\n            _gate.Release();\n        }\n    }",
+      "path": "src/QBrainAi.Services/Services/FileGitHubWorkspaceTokenStore.cs",
+      "firstLine": 75,
+      "lastLine": 113,
+      "family": "protected-file-writer",
+      "excerptSha256": "FB0B639DEF93772F728E64A7F7CE7A423693CE5CD4D77B78255444C75884A4B0",
+      "fileSha256": "0034D2372A307FE9597B741A952A4B2D1184EB21364A74E4CF3BEFB8A8096233"
+    }
+  ],
+  "runtimeProof": false,
+  "writerClosureComplete": false,
+  "operatorAccepted": false,
+  "productionCodeChanged": false,
+  "limitations": [
+    "Selected source boundaries, not full dynamic caller/semantic closure",
+    "Current single-context transactions do not prove future project/control atomicity",
+    "No product execution, database read/write, migration or administrative command",
+    "No requirements or approved plan amendment; task design remains proposed"
+  ]
+}
