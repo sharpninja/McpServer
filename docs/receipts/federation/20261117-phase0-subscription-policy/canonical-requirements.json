@@ -1,0 +1,299 @@
+{
+  "TEST-MCP-231": {
+    "scopeStartLayerKey": "layer-1",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-EveryPluginUsesSameContract",
+        "text": "Given one fixture for commit R1, conflict R2 and migration R3, when each installed first-party plugin calls its wrapper, then normalized IDs, heads, error codes and audit agent identity match the typed client result."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OldServerReportsUnsupportedCapability",
+        "text": "Given server lacks federation contract1, when a plugin invokes commit, then unsupported_contract is shown and no raw SQL or shell fallback executes."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ReconnectRevalidatesContext",
+        "text": "Given a cached leaseFence4 and session branch feature, when reconnect discovers fence5, then the plugin retains visible context but refuses writes with lease_lost until reacquired."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-StaleBranchReportedNotDeleted",
+        "text": "Given a branch observation is older than24h, when status is displayed, then stale=true and observedUtc are visible; the branch, drafts and refs are not deleted."
+      }
+    ],
+    "title": "first-party plugin federation contract acceptance tests",
+    "workspaceId": "F:/GitHub/McpServer",
+    "condition": "Verify FR-MCP-183 and TR-MCP-FEDERATION-010 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+    "id": "TEST-MCP-231",
+    "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+    "status": "pending",
+    "priority": "high"
+  },
+  "FR-MCP-181": {
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-LostPushAckDoesNotDuplicateCommit",
+        "text": "Given remote accepted A1 and reply was lost, when request R1 retries, then it returns A1 and the existing receipt; no A2 commit is created."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OldWorkerEpochCannotReportSuccess",
+        "text": "Given worker epoch changes4 to5, when epoch4 reports success, then409 stale_worker_epoch leaves current receipt and desired state unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DirtyBranchDefersApply",
+        "text": "Given B/main=C0 with title=draft, when A1 is fetched, then outcome=waiting_local_work, main stays C0 and title remains draft; at15min status/inbox shows the age warning."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-IncompatibleSchemaDoesNotApply",
+        "text": "Given B supports schema1 and incoming S1 requires schema2, when sync runs, then409 incompatible_schema leaves B's live data/head unchanged and records the required version."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-PluginRecoveryControls",
+        "text": "Given operation R1 published A1 but its local reply was lost, when a plugin resumes, reads status and requests cancellation, then it shows publishedHead=A1 and a durable cancellation outcome for remaining work; it never claims A1 was rolled back or creates a second commit."
+      }
+    ],
+    "priority": "medium",
+    "title": "recovery without lost or repeated work",
+    "workspaceId": "F:/GitHub/McpServer",
+    "body": "Recover synchronization, receipts and restored hub state without losing local work, inventing success or replaying business effects.\n\nServer: durable operation resume/status/safe cancellation. Plugin: expose resume, status and cancel with completed-versus-pending effects; never claim cancellation reverses published history.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "pending",
+    "id": "FR-MCP-181"
+  },
+  "TEST-MCP-229": {
+    "scopeStartLayerKey": "layer-1",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-LostPushAckDoesNotDuplicateCommit",
+        "text": "Given remote accepted A1 and reply was lost, when request R1 retries, then it returns A1 and the existing receipt; no A2 commit is created."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OldWorkerEpochCannotReportSuccess",
+        "text": "Given worker epoch changes4 to5, when epoch4 reports success, then409 stale_worker_epoch leaves current receipt and desired state unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DirtyBranchDefersApply",
+        "text": "Given B/main=C0 with title=draft, when A1 is fetched, then outcome=waiting_local_work, main stays C0 and title remains draft; at15min status/inbox shows the age warning."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-IncompatibleSchemaDoesNotApply",
+        "text": "Given B supports schema1 and incoming S1 requires schema2, when sync runs, then409 incompatible_schema leaves B's live data/head unchanged and records the required version."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-PluginRecoveryControls",
+        "text": "Given operation R1 published A1 but its local reply was lost, when a plugin resumes, reads status and requests cancellation, then it shows publishedHead=A1 and a durable cancellation outcome for remaining work; it never claims A1 was rolled back or creates a second commit."
+      }
+    ],
+    "title": "recovery without lost or repeated work acceptance tests",
+    "workspaceId": "F:/GitHub/McpServer",
+    "condition": "Verify FR-MCP-181 and TR-MCP-FEDERATION-008 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+    "id": "TEST-MCP-229",
+    "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+    "status": "pending",
+    "priority": "high"
+  },
+  "TR-MCP-FEDERATION-010": {
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-EveryPluginUsesSameContract",
+        "text": "Given one fixture for commit R1, conflict R2 and migration R3, when each installed first-party plugin calls its wrapper, then normalized IDs, heads, error codes and audit agent identity match the typed client result."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OldServerReportsUnsupportedCapability",
+        "text": "Given server lacks federation contract1, when a plugin invokes commit, then unsupported_contract is shown and no raw SQL or shell fallback executes."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ReconnectRevalidatesContext",
+        "text": "Given a cached leaseFence4 and session branch feature, when reconnect discovers fence5, then the plugin retains visible context but refuses writes with lease_lost until reacquired."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-StaleBranchReportedNotDeleted",
+        "text": "Given a branch observation is older than24h, when status is displayed, then stale=true and observedUtc are visible; the branch, drafts and refs are not deleted."
+      }
+    ],
+    "priority": "medium",
+    "title": "first-party plugin federation contract contract",
+    "workspaceId": "F:/GitHub/McpServer",
+    "body": "All plugins call typed server/client/MCP/REPL contracts; no raw SQL/CLI fallback. Status DTO includes projectId, branch, localHead, publishedHead, observedUtc, dirty, ahead, behind, publicationState, incomingTarget, connectivity, reviewCount, oldestReviewAgeSeconds, waitingLocalWorkAgeSeconds, auditPendingCount, hubEpoch, workerEpoch. Capability contract version1 is negotiated; unknown version=409 unsupported_contract. Administrative maintenance.preflight/attest/status and migration commands share the same typed service as Nuke. Stable error envelope={code, message, requestId, projectId, branch, retryable, details}; status codes are locked in the technical contract appendix.\n\nTechnical contract appendix (TR-MCP-FEDERATION-010): all below routes are under /qbrainai/federation unless the commits route specifies the project/branch path. Every mutation requires requestId UUID and authenticated subject; node network requests additionally carry the project-scoped reference token. Responses carry contractVersion=1 and the stable error envelope. Path/body ProjectId mismatch is403 unauthorized_project. No endpoint accepts credentials in URL, argv or persisted receipts.\n\nRead/status routes: GET capabilities returns200 {contractVersion,capabilities}; GET projects/{projectId}/status returns200 the status DTO; GET projects/{projectId}/branches returns200 {items:[{name,head,dirty,publishedHead}]}; GET conflicts and GET conflicts/{reviewId} return200 review records filtered by membership. POST control/poll returns200 {hubEpoch,subscriptions}; reads never acknowledge work. POST control/report validates observed generation and worker epoch, returns200 the durable receipt or409 the named fence error. Poll/report use control scope; reads use read scope.\n\nMutation routes: POST enroll returns201 the enrollment (or200 the same idempotent enrollment); POST projects/{projectId}/branches creates201 {branch,head}; POST projects/{projectId}/branches/select returns200 {sessionId,branch,head} after local lease validation; POST projects/{projectId}/branches/{branch}/commits returns201 {commitHash,publicationState}, or200 the same commit on retry. POST publication/accept returns200 {requestId,hubEpoch,publishedHead,publishedGeneration,receiptId} only after the guarded ref update is durable. POST branches/merge and POST conflicts/{reviewId}/resolve bind expected heads and return201 the new commit; a conflict returns202 {outcome:needs_review,reviewId} while the live head stays unchanged. Share/merge/publication require publish scope plus branch permission. Enrollment requires enroll scope and the operator owner-binding approval.\n\nPOST audit/batches accepts {requestId,projectId,records:[AuditRecord]}, returns200 {receipts:[{originNodeId,recordId,payloadHash,outcome,receivedUtc}]}, and requires audit scope. Every record must match the token/project and batch ProjectId. Any invalid record rejects the whole batch before insert. Exact duplicate is already_received; payload mismatch is409 audit_id_conflict. POST ids/reservations accepts {requestId,projectId,entityKind,humanId,nodeId}, requires publish scope and returns201 the reservation or200 its exact retry; another owner gets409 human_id_reserved. POST maintenance/preflight and POST maintenance/attest, GET maintenance/status and POST migration/{plan|dry-run|run|resume|verify|export-project|export-todos|cutover|abort}, GET migration/status are operator-only local service operations. They are exposed through typed clients and Nuke, never public node-admin capabilities. A long migration returns202 {migrationId,status}; status/verify return200 a receipt, and a denied readiness check never performs cutover.\n\nStable failure mapping:401 invalid_token;403 unauthorized_project;409 head_changed, working_set_changed, lease_lost, branch_busy, stale_review, stale_worker_epoch, hub_epoch_changed, ambiguous_legacy_id, human_id_reserved, human_id_unreserved, target_not_empty, maintenance_not_ready, migration_source_changed, migration_verification_failed, incompatible_schema, unsupported_contract, publication_required, request_id_conflict, audit_id_conflict and waiting_local_work (the last also a 200 outcome in poll/report; see outcome fields);422 secret_detected, dependency_cycle and unsupported_provider;501 unsupported_capability;503 identity_unavailable or remote_unavailable. TLS rejection produces the local transport code tls_peer_untrusted with no HTTP response and no request sent. Missing required fields return400 invalid_request. Missing authorized resources return404 not_found; project authorization precedes existence disclosure. Malformed/unsupported token is401; valid token lacking project rights is403.\n\nOutcome fields are not HTTP errors: committed_locally, already_received, already_applied, waiting_local_work and needs_review remain visible through200 status/report responses (already_applied is the migration-journal idempotency outcome for a rerun completed batch, distinct from the audit-ledger already_received). A requested live mutation blocked by drafts returns409 waiting_local_work; an integration that durably creates review returns202 needs_review. dependency_cycle is a validationErrors entry on that review as well as422 for a directly invalid local mutation. retryable=true is restricted to transient503/transport failures; all stale-head/fence/review errors require reread and a fresh validated action. Idempotent retries with the same requestId but different payload return409 request_id_conflict. No automatic retry creates a different commit.\n\nTest fixtures capture actual content hashes as symbols C0,A1,B1,H1,M1,M2,S1 rather than hardcoding unstable engine hashes. Each symbol is immutable within the run manifest. Given/When/Then compares exact hash equality, specified parent sets, row values, status codes and error codes against that manifest; a successful result must never be inferred solely from an empty queue. Capture UTC timestamps and a fake clock for exact15-minute/24-hour age boundaries. All plan phase IDs use Ph0-Ph8; priority values remain separate.\n\nPlugin completeness is checked by PluginEnrollmentDiagnostics, PluginRecoveryControls, PluginIdentityDiagnostics, PluginLeastPrivilegeDenial, PluginEffectBoundary and PluginEditingOwnership in their mapped contracts. Ph7 owns their plugin bindings; earlier phases own server behavior. Standalone and explicit DirectProxy compatibility remain under FR-MCP-077/TR-MCP-FED-001; this does not reinstate versioned LocalProxy forwarding.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "pending",
+    "id": "TR-MCP-FEDERATION-010"
+  },
+  "TEST-MCP-227": {
+    "scopeStartLayerKey": "layer-1",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-PollReadDoesNotAcknowledge",
+        "text": "Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-AckOldGenerationPreservesNewRequest",
+        "text": "Given desired becomes8 while report7 is in flight, when report7 arrives, then reported=7, desired=8 and the subscription remains pending."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-MissedNotificationReconciles",
+        "text": "Given remote=A1 but control still names C0 after a crash, when reconciliation runs, then it records A1 and advances desired generation without producing another commit."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-HubRestoreFromOlderBackup",
+        "text": "Given a node remembers epoch E1 generation90 and the hub restores a backup at generation40, when the hub reopens, then epoch E2 differs from E1; E1 reports fail409 hub_epoch_changed and no head is force-reset. Node A1 is retained until verified ancestry recovery republishes missing history."
+      }
+    ],
+    "title": "hub control table and polling acceptance tests",
+    "workspaceId": "F:/GitHub/McpServer",
+    "condition": "Verify FR-MCP-179 and TR-MCP-FEDERATION-006 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+    "id": "TEST-MCP-227",
+    "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+    "status": "pending",
+    "priority": "high"
+  },
+  "FR-MCP-183": {
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-EveryPluginUsesSameContract",
+        "text": "Given one fixture for commit R1, conflict R2 and migration R3, when each installed first-party plugin calls its wrapper, then normalized IDs, heads, error codes and audit agent identity match the typed client result."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OldServerReportsUnsupportedCapability",
+        "text": "Given server lacks federation contract1, when a plugin invokes commit, then unsupported_contract is shown and no raw SQL or shell fallback executes."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ReconnectRevalidatesContext",
+        "text": "Given a cached leaseFence4 and session branch feature, when reconnect discovers fence5, then the plugin retains visible context but refuses writes with lease_lost until reacquired."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-StaleBranchReportedNotDeleted",
+        "text": "Given a branch observation is older than24h, when status is displayed, then stale=true and observedUtc are visible; the branch, drafts and refs are not deleted."
+      }
+    ],
+    "priority": "medium",
+    "title": "first-party plugin federation contract",
+    "workspaceId": "F:/GitHub/McpServer",
+    "body": "Expose consistent typed federation, review, identity, audit, migration and maintenance workflows through every first-party plugin.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "pending",
+    "id": "FR-MCP-183"
+  },
+  "TR-MCP-FEDERATION-008": {
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-LostPushAckDoesNotDuplicateCommit",
+        "text": "Given remote accepted A1 and reply was lost, when request R1 retries, then it returns A1 and the existing receipt; no A2 commit is created."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OldWorkerEpochCannotReportSuccess",
+        "text": "Given worker epoch changes4 to5, when epoch4 reports success, then409 stale_worker_epoch leaves current receipt and desired state unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DirtyBranchDefersApply",
+        "text": "Given B/main=C0 with title=draft, when A1 is fetched, then outcome=waiting_local_work, main stays C0 and title remains draft; at15min status/inbox shows the age warning."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-IncompatibleSchemaDoesNotApply",
+        "text": "Given B supports schema1 and incoming S1 requires schema2, when sync runs, then409 incompatible_schema leaves B's live data/head unchanged and records the required version."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-PluginRecoveryControls",
+        "text": "Given operation R1 published A1 but its local reply was lost, when a plugin resumes, reads status and requests cancellation, then it shows publishedHead=A1 and a durable cancellation outcome for remaining work; it never claims A1 was rolled back or creates a second commit."
+      }
+    ],
+    "priority": "medium",
+    "title": "recovery without lost or repeated work contract",
+    "workspaceId": "F:/GitHub/McpServer",
+    "body": "OperationReceipt binds requestId, node, project, branch, hubEpoch, candidate/result hashes and outcome. Durable refs pin candidates/reviews before receipt completion. Worker claims are fenced by WorkerEpoch; reconnect never trusts stored generation across HubEpoch. Fetch may advance remote-tracking refs, never dirty live refs. Restore first disables ingress, restores compatible data/control/audit checkpoints, creates new epoch, then re-advertises verified heads; node-held missing commits are uploaded and ancestry-validated before normal synchronization resumes.\n\nServer: durable operation resume/status/safe cancellation. Plugin: expose resume, status and cancel with completed-versus-pending effects; never claim cancellation reverses published history.\n\nHubRestoreFromOlderBackup is first owned by Ph5 (epoch/remote/control), extended by Ph6 (integration/review/audit resend), and repeated as isolated real-host acceptance in Ph8. Restore is tested, never assumed from successful backup creation.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "pending",
+    "id": "TR-MCP-FEDERATION-008"
+  },
+  "FR-MCP-179": {
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-PollReadDoesNotAcknowledge",
+        "text": "Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-AckOldGenerationPreservesNewRequest",
+        "text": "Given desired becomes8 while report7 is in flight, when report7 arrives, then reported=7, desired=8 and the subscription remains pending."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-MissedNotificationReconciles",
+        "text": "Given remote=A1 but control still names C0 after a crash, when reconciliation runs, then it records A1 and advances desired generation without producing another commit."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-HubRestoreFromOlderBackup",
+        "text": "Given a node remembers epoch E1 generation90 and the hub restores a backup at generation40, when the hub reopens, then epoch E2 differs from E1; E1 reports fail409 hub_epoch_changed and no head is force-reset. Node A1 is retained until verified ancestry recovery republishes missing history."
+      }
+    ],
+    "priority": "medium",
+    "title": "hub control table and polling",
+    "workspaceId": "F:/GitHub/McpServer",
+    "body": "Use a durable hub subscription table with polling, generation and worker fencing, plus a fresh hub epoch after restore.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "pending",
+    "id": "FR-MCP-179"
+  },
+  "TR-MCP-FEDERATION-006": {
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-PollReadDoesNotAcknowledge",
+        "text": "Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-AckOldGenerationPreservesNewRequest",
+        "text": "Given desired becomes8 while report7 is in flight, when report7 arrives, then reported=7, desired=8 and the subscription remains pending."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-MissedNotificationReconciles",
+        "text": "Given remote=A1 but control still names C0 after a crash, when reconciliation runs, then it records A1 and advances desired generation without producing another commit."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-HubRestoreFromOlderBackup",
+        "text": "Given a node remembers epoch E1 generation90 and the hub restores a backup at generation40, when the hub reopens, then epoch E2 differs from E1; E1 reports fail409 hub_epoch_changed and no head is force-reset. Node A1 is retained until verified ancestry recovery republishes missing history."
+      }
+    ],
+    "priority": "medium",
+    "title": "hub control table and polling contract",
+    "workspaceId": "F:/GitHub/McpServer",
+    "body": "SyncSubscription key=(NodeId,ProjectId,Branch) contains HubEpoch UUID, PublishedHead, PublishedGeneration int64, DesiredGeneration int64, ReportedGeneration int64, WorkerEpoch int64, AcceptedHead, Outcome and timestamps. POST control/poll is read-only. POST control/report includes all epochs and observed generation; stale worker=409 stale_worker_epoch, stale hub=409 hub_epoch_changed. Poll every30s with20% jitter; commit/reconnect/on-demand wake immediately. Backoff1s doubling to60s. Generation ordering is valid only within HubEpoch. Restore generates a new non-reused random epoch before listeners reopen.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "pending",
+    "id": "TR-MCP-FEDERATION-006"
+  }
+}

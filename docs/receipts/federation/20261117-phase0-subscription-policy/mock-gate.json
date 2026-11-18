@@ -1,0 +1,83 @@
+{
+  "timestampLocal": "2026-11-17T22:12:59",
+  "tasks": [
+    "TASK-FEDPH0-007"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T221205-fedph0-subscription-policy-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0SubscriptionPolicyMockGateTests --test-run-id 20261117T221205-fedph0-subscription-policy-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 130,
+  "passed": 130,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 4,
+  "expectedNegativeControls": 126,
+  "coverage": [
+    {
+      "test": "TEST-MCP-227",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-006",
+      "text": "Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6.",
+      "satisfied": false,
+      "fr": "FR-MCP-179",
+      "ac": "ac-PollReadDoesNotAcknowledge"
+    },
+    {
+      "test": "TEST-MCP-229",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-008",
+      "text": "Given worker epoch changes4 to5, when epoch4 reports success, then409 stale_worker_epoch leaves current receipt and desired state unchanged.",
+      "satisfied": false,
+      "fr": "FR-MCP-181",
+      "ac": "ac-OldWorkerEpochCannotReportSuccess"
+    },
+    {
+      "test": "TEST-MCP-231",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-010",
+      "text": "Given a branch observation is older than24h, when status is displayed, then stale=true and observedUtc are visible; the branch, drafts and refs are not deleted.",
+      "satisfied": false,
+      "fr": "FR-MCP-183",
+      "ac": "ac-StaleBranchReportedNotDeleted"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "0A24928099376935ABAE28FA0BE8CF7AEF5D1AFF9A4D51817331C8394BE8F26C",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0SubscriptionPolicyContract.cs",
+      "lfNormalizedSha256": "A8933DB5571EFAC46CE02554B2BE70530CFD5D77C053E8862E0A464026F5F344"
+    },
+    {
+      "sha256": "1A88B666F4EB1662DD1BA29D31ADA2578DB4FD1B1D41F5F7DD3ACB78701A519E",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0SubscriptionPolicyMockGateTests.cs",
+      "lfNormalizedSha256": "4557AC8E2E0E73217757F440B18556C9C6934F30A62A05BF88ECEE2285CA5387"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "E26AD3836403A1AFBF1FD157EDFD94725C51478A33CF9E79474A11AF644D19B7",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T221205-fedph0-subscription-policy-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "67F87B6C6B088C0739F9D6F7932368E4D5C99BA68CF25F7BAB920DFF1C339BE2",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_22-12-20.log"
+    }
+  ],
+  "pending": [
+    "FR179 timing tests supplement the TR006 scheduling body; the poll acknowledgement criterion is separately asserted in the 321-case subscription-state seam.",
+    "Policy delay selections only; actual timer dispatch, random quality, restart/transport behavior and durable adapters remain unproven.",
+    "Worker/stale observations are mocks; stale status uses a generic selected surface, not an installed plugin.",
+    "All B1-B12 acceptance, final phase gates and HV pending. No task completion or barrier advancement."
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}
