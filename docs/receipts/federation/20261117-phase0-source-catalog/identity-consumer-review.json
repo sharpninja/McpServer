@@ -1,0 +1,2051 @@
+{
+  "timestampLocal": "2026-11-17T21:33:52",
+  "sourceHead": "f04cafdfdebb5eceaaab022eac16457a090cf7fb",
+  "task": "TASK-FEDPH0-004",
+  "requirements": [
+    "FR-MCP-182",
+    "TR-MCP-FEDERATION-009",
+    "TEST-MCP-230"
+  ],
+  "kind": "Manually reviewed source dispositions",
+  "reviewedFiles": 32,
+  "files": [
+    {
+      "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+      "sha256": "9BEAD3B7CC54C9F475FB44F689B26907C8ABEF34C7075C091E4DE51374B242D0",
+      "classification": "Validation and metadata",
+      "reviewedExcerpts": [
+        {
+          "start": 32,
+          "end": 36,
+          "lines": [
+            "    private static readonly Regex FrIdPattern = new(@\"^FR-[A-Z0-9]+(?:-[A-Z0-9]+)*-\\d{3}$\", RegexOptions.Compiled);",
+            "    private static readonly Regex TrIdPattern = new(@\"^TR-[A-Z0-9]+(?:-[A-Z0-9]+)+-\\d{3}$\", RegexOptions.Compiled);",
+            "    private static readonly Regex TestIdPattern = new(@\"^TEST-[A-Z0-9]+(?:-[A-Z0-9]+)*-\\d{3}$\", RegexOptions.Compiled);",
+            "    private static readonly Regex MappingRequirementIdPattern = new(@\"^(FR|TR|TEST)-[A-Z0-9]+(-[A-Z0-9]+)*$\", RegexOptions.Compiled | RegexOptions.IgnoreCase);",
+            "    private static readonly Regex LayerKeyPattern = new(@\"^[A-Za-z0-9][A-Za-z0-9._-]*$\", RegexOptions.Compiled);"
+          ]
+        },
+        {
+          "start": 811,
+          "end": 853,
+          "lines": [
+            "    private static void ValidateFrId(string id)",
+            "    {",
+            "        if (string.IsNullOrWhiteSpace(id))",
+            "        {",
+            "            throw new ArgumentException(\"FR ID cannot be null or empty\", nameof(id));",
+            "        }",
+            "",
+            "        if (!FrIdPattern.IsMatch(id))",
+            "        {",
+            "            throw new ArgumentException($\"Invalid FR ID format: {id}\");",
+            "        }",
+            "    }",
+            "",
+            "    private static void ValidateTrId(string id)",
+            "    {",
+            "        ValidateTrIdPresent(id);",
+            "",
+            "        if (!TrIdPattern.IsMatch(id))",
+            "        {",
+            "            throw new ArgumentException($\"Invalid TR ID format: {id}. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###\");",
+            "        }",
+            "    }",
+            "",
+            "    private static void ValidateTrIdPresent(string id)",
+            "    {",
+            "        if (string.IsNullOrWhiteSpace(id))",
+            "        {",
+            "            throw new ArgumentException(\"TR ID cannot be null or empty\", nameof(id));",
+            "        }",
+            "    }",
+            "",
+            "    private static void ValidateTestId(string id)",
+            "    {",
+            "        if (string.IsNullOrWhiteSpace(id))",
+            "        {",
+            "            throw new ArgumentException(\"TEST ID cannot be null or empty\", nameof(id));",
+            "        }",
+            "",
+            "        if (!TestIdPattern.IsMatch(id))",
+            "        {",
+            "            throw new ArgumentException($\"Invalid TEST ID format: {id}. Expected format: TEST-<AREA>[-<QUALIFIER>]-###\");",
+            "        }",
+            "    }"
+          ]
+        },
+        {
+          "start": 892,
+          "end": 914,
+          "lines": [
+            "    private static string ExtractArea(string id)",
+            "    {",
+            "        var parts = id.Split('-');",
+            "        return parts.Length > 1 ? parts[1] : string.Empty;",
+            "    }",
+            "",
+            "    private static string ExtractTrArea(string id)",
+            "    {",
+            "        var parts = id.Split('-');",
+            "        return parts.Length > 1 ? parts[1] : string.Empty;",
+            "    }",
+            "",
+            "    private static string ExtractTrSubarea(string id)",
+            "    {",
+            "        var parts = id.Split('-');",
+            "        return parts.Length > 2 ? parts[2] : string.Empty;",
+            "    }",
+            "",
+            "    private static string ExtractTestArea(string id)",
+            "    {",
+            "        var parts = id.Split('-');",
+            "        return parts.Length > 1 ? parts[1] : string.Empty;",
+            "    }"
+          ]
+        },
+        {
+          "start": 960,
+          "end": 981,
+          "lines": [
+            "    public string Id => _entry.Id;",
+            "    public string Title => _entry.Title;",
+            "    public string Description => _entry.Body;",
+            "    public string Status => _entry.Status;",
+            "    public string Priority => _entry.Priority;",
+            "    public string Area => ExtractArea(_entry.Id);",
+            "    public string? Notes => _entry.Notes;",
+            "    /// <inheritdoc />",
+            "    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria => _entry.AcceptanceCriteria;",
+            "    /// <inheritdoc />",
+            "    public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;",
+            "    /// <inheritdoc />",
+            "    public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;",
+            "    /// <inheritdoc />",
+            "    public string? CreatedAt => RequirementTimestampText.Format(_entry.CreatedAtUtc);",
+            "    /// <inheritdoc />",
+            "    public string? UpdatedAt => RequirementTimestampText.Format(_entry.UpdatedAtUtc);",
+            "",
+            "    private static string ExtractArea(string id)",
+            "    {",
+            "        var parts = id.Split('-');",
+            "        return parts.Length > 1 ? parts[1] : string.Empty;"
+          ]
+        },
+        {
+          "start": 1026,
+          "end": 1055,
+          "lines": [
+            "    public string Id => _entry.Id;",
+            "    public string Title => _entry.Title;",
+            "    public string Description => _entry.Body;",
+            "    public string Status => _entry.Status;",
+            "    public string Priority => _entry.Priority;",
+            "    public string Area => ExtractArea(_entry.Id);",
+            "    public string Subarea => ExtractSubarea(_entry.Id);",
+            "    public string? Notes => _entry.Notes;",
+            "    /// <inheritdoc />",
+            "    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria => _entry.AcceptanceCriteria;",
+            "    /// <inheritdoc />",
+            "    public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;",
+            "    /// <inheritdoc />",
+            "    public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;",
+            "    /// <inheritdoc />",
+            "    public string? CreatedAt => RequirementTimestampText.Format(_entry.CreatedAtUtc);",
+            "    /// <inheritdoc />",
+            "    public string? UpdatedAt => RequirementTimestampText.Format(_entry.UpdatedAtUtc);",
+            "",
+            "    private static string ExtractArea(string id)",
+            "    {",
+            "        var parts = id.Split('-');",
+            "        return parts.Length > 1 ? parts[1] : string.Empty;",
+            "    }",
+            "",
+            "    private static string ExtractSubarea(string id)",
+            "    {",
+            "        var parts = id.Split('-');",
+            "        return parts.Length > 2 ? parts[2] : string.Empty;",
+            "    }"
+          ]
+        },
+        {
+          "start": 1098,
+          "end": 1122,
+          "lines": [
+            "",
+            "    public string Id => _entry.Id;",
+            "    public string Title => string.IsNullOrWhiteSpace(_entry.Title) ? $\"Test {_entry.Id}\" : _entry.Title;",
+            "    public string Description => _entry.Condition;",
+            "    public string Status => _entry.Status;",
+            "    public string Priority => _entry.Priority;",
+            "    public string Area => ExtractArea(_entry.Id);",
+            "    public string TestType => \"unit\";",
+            "    public string? Notes => _entry.Notes;",
+            "    /// <inheritdoc />",
+            "    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria => _entry.AcceptanceCriteria;",
+            "    /// <inheritdoc />",
+            "    public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;",
+            "    /// <inheritdoc />",
+            "    public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;",
+            "    /// <inheritdoc />",
+            "    public string? CreatedAt => RequirementTimestampText.Format(_entry.CreatedAtUtc);",
+            "    /// <inheritdoc />",
+            "    public string? UpdatedAt => RequirementTimestampText.Format(_entry.UpdatedAtUtc);",
+            "",
+            "    private static string ExtractArea(string id)",
+            "    {",
+            "        var parts = id.Split('-');",
+            "        return parts.Length > 1 ? parts[1] : string.Empty;",
+            "    }"
+          ]
+        }
+      ],
+      "observation": "FR/TR/TEST validation requires exactly3 terminal digits. TR has at least2 intermediate segments. Metadata assumes parts[1]area/parts[2]subarea, so TR-MCP-LA-001 is syntactically accepted but LA would be exposed as subarea.",
+      "futureDisposition": "Versioned-boundary change needed; keep existing standalone behavior and exact legacy aliases. No production edit authorized by this receipt.",
+      "requiredVerification": [
+        "999 and1000",
+        "Do not infer tag as subarea",
+        "Retain old approved human IDs"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/ReplYamlMessageValidator.cs",
+      "sha256": "3482BD0F10497F9E80485F09CD8377895866527B35DF5E448C3C443BF3EC9D8C",
+      "classification": "Recovery validation",
+      "reviewedExcerpts": [
+        {
+          "start": 714,
+          "end": 717,
+          "lines": [
+            "    private static readonly Regex RecoveryFrIdPattern = new(@\"^FR-[A-Z0-9]+(?:-[A-Z0-9]+)*-\\d{3}$\", RegexOptions.Compiled);",
+            "    private static readonly Regex RecoveryTrIdPattern = new(@\"^TR-[A-Z0-9]+(?:-[A-Z0-9]+)+-\\d{3}$\", RegexOptions.Compiled);",
+            "    private static readonly Regex RecoveryTestIdPattern = new(@\"^TEST-[A-Z0-9]+(?:-[A-Z0-9]+)*-\\d{3}$\", RegexOptions.Compiled);",
+            "    private static readonly Regex RecoveryKeyPattern = new(@\"^[A-Za-z0-9._:-]{1,128}$\", RegexOptions.Compiled);"
+          ]
+        },
+        {
+          "start": 743,
+          "end": 773,
+          "lines": [
+            "        for (var index = 0; index < items.Count; index++)",
+            "        {",
+            "            var item = ToDictionary(items[index]);",
+            "            if (item is null)",
+            "            {",
+            "                errors.Add($\"items[{index}] must be an object.\");",
+            "                continue;",
+            "            }",
+            "",
+            "            var kind = RequireText(item, \"kind\", errors, $\"items[{index}].kind\")?.Trim().ToLowerInvariant();",
+            "            var id = RequireText(item, \"id\", errors, $\"items[{index}].id\");",
+            "            // TEST titles are optional (canonical TEST rows may be titleless); FR/TR still require title.",
+            "            if (kind is \"test\")",
+            "                OptionalText(item, \"title\", errors, $\"items[{index}].title\");",
+            "            else",
+            "                RequireText(item, \"title\", errors, $\"items[{index}].title\");",
+            "            RequireText(item, \"body\", errors, $\"items[{index}].body\");",
+            "            if (kind is not (\"fr\" or \"tr\" or \"test\") && kind is not null)",
+            "                errors.Add($\"items[{index}].kind must be one of: fr, tr, test.\");",
+            "            else if (kind is not null && id is not null && !IsRecoveryId(kind, id))",
+            "                errors.Add($\"items[{index}].id '{id}' is not valid for kind '{kind}'.\");",
+            "        }",
+            "    }",
+            "",
+            "    private static bool IsRecoveryId(string kind, string id) => kind switch",
+            "    {",
+            "        \"fr\" => RecoveryFrIdPattern.IsMatch(id),",
+            "        \"tr\" => RecoveryTrIdPattern.IsMatch(id),",
+            "        \"test\" => RecoveryTestIdPattern.IsMatch(id),",
+            "        _ => false,",
+            "    };"
+          ]
+        }
+      ],
+      "observation": "Recovery item kind selects one of3 exact-three-digit regexes before dispatch.",
+      "futureDisposition": "Versioned-boundary change needed; keep existing standalone behavior and exact legacy aliases. No production edit authorized by this receipt.",
+      "requiredVerification": [
+        "FR/TR/TEST each boundary",
+        "Malformed canonical sequences",
+        "No partial recovery mutation"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Requirements/RequirementsRecoveryService.cs",
+      "sha256": "82FF84F600060EF331D80D0A331A5B09496F1BE7D954216244DE9BFFA73B28FE",
+      "classification": "Recovery validation and length",
+      "reviewedExcerpts": [
+        {
+          "start": 19,
+          "end": 30,
+          "lines": [
+            "    private static readonly Regex FrIdPattern = new(@\"^FR-[A-Z0-9]+(?:-[A-Z0-9]+)*-\\d{3}$\", RegexOptions.Compiled);",
+            "    private static readonly Regex TrIdPattern = new(@\"^TR-[A-Z0-9]+(?:-[A-Z0-9]+)+\\-\\d{3}$\", RegexOptions.Compiled);",
+            "    private static readonly Regex TestIdPattern = new(@\"^TEST-[A-Z0-9]+(?:-[A-Z0-9]+)*-\\d{3}$\", RegexOptions.Compiled);",
+            "    private static readonly Regex KeyPattern = new(@\"^[A-Za-z0-9._:-]{1,128}$\", RegexOptions.Compiled);",
+            "    /// <summary>Matches <see cref=\"RequirementEntity.Title\"/> <c>[StringLength(1024)]</c>.</summary>",
+            "    private const int TitleMaxLength = 1024;",
+            "    /// <summary>Matches <see cref=\"RequirementEntity.Id\"/> <c>[StringLength(128)]</c>.</summary>",
+            "    private const int IdMaxLength = 128;",
+            "    /// <summary>Matches <see cref=\"RequirementEntity.Priority\"/> <c>[StringLength(32)]</c>.</summary>",
+            "    private const int PriorityMaxLength = 32;",
+            "    /// <summary>Matches <see cref=\"RequirementEntity.Status\"/> <c>[StringLength(64)]</c>.</summary>",
+            "    private const int StatusMaxLength = 64;"
+          ]
+        },
+        {
+          "start": 310,
+          "end": 343,
+          "lines": [
+            "",
+            "            var kind = item.Kind?.Trim().ToLowerInvariant() ?? string.Empty;",
+            "            if (kind is not (\"fr\" or \"tr\" or \"test\"))",
+            "                throw new ArgumentException(\"item.kind must be one of: fr, tr, test.\");",
+            "",
+            "            var id = item.Id?.Trim() ?? string.Empty;",
+            "            if (!IsValidId(kind, id))",
+            "                throw new ArgumentException($\"Requirement id '{id}' is not valid for kind '{kind}'.\");",
+            "            if (id.Length > IdMaxLength)",
+            "                throw new ArgumentException($\"Requirement id '{id}' exceeds {IdMaxLength} characters.\");",
+            "",
+            "            var title = item.Title?.Trim() ?? string.Empty;",
+            "            var body = item.Body?.Trim() ?? string.Empty;",
+            "            // Canonical TEST rows may have empty Title (ValidateTest only requires condition/body).",
+            "            if (body.Length == 0)",
+            "                throw new ArgumentException($\"Requirement '{id}' requires body.\");",
+            "            if (body.StartsWith(\"Placeholder requirement backfilled for TODO link\", StringComparison.Ordinal))",
+            "                throw new ArgumentException($\"Requirement '{id}' body is a placeholder.\");",
+            "            if (kind is not \"test\" && title.Length == 0)",
+            "                throw new ArgumentException($\"Requirement '{id}' requires title.\");",
+            "            if (title.Length > TitleMaxLength)",
+            "                throw new ArgumentException($\"Requirement '{id}' title exceeds {TitleMaxLength} characters.\");",
+            "",
+            "            var priority = string.IsNullOrWhiteSpace(item.Priority) ? \"medium\" : item.Priority.Trim().ToLowerInvariant();",
+            "            var status = string.IsNullOrWhiteSpace(item.Status) ? \"pending\" : item.Status.Trim().ToLowerInvariant();",
+            "            if (priority.Length > PriorityMaxLength)",
+            "                throw new ArgumentException($\"Requirement '{id}' priority exceeds {PriorityMaxLength} characters.\");",
+            "            if (status.Length > StatusMaxLength)",
+            "                throw new ArgumentException($\"Requirement '{id}' status exceeds {StatusMaxLength} characters.\");",
+            "            var mapKey = MapKey(kind, id);",
+            "            if (!seen.Add(mapKey))",
+            "                throw new ArgumentException($\"Duplicate requirement '{kind}:{id}' in the recovery payload.\");",
+            "",
+            "            normalized.Add(new NormalizedItem(kind, id, title, body, priority, status));"
+          ]
+        },
+        {
+          "start": 366,
+          "end": 380,
+          "lines": [
+            "    private static bool IsValidId(string kind, string id) => kind switch",
+            "    {",
+            "        \"fr\" => FrIdPattern.IsMatch(id),",
+            "        \"tr\" => TrIdPattern.IsMatch(id),",
+            "        \"test\" => TestIdPattern.IsMatch(id),",
+            "        _ => false,",
+            "    };",
+            "",
+            "    private static string Hash(IReadOnlyList<NormalizedItem> items)",
+            "    {",
+            "        // Canonical JSON (ordered fields, no indent) so newline-bearing title/body cannot collide.",
+            "        var payload = items",
+            "            .OrderBy(item => item.Kind, StringComparer.Ordinal)",
+            "            .ThenBy(item => item.Id, StringComparer.Ordinal)",
+            "            .Select(item => new HashField(item.Kind, item.Id, item.Title, item.Body, item.Priority, item.Status))"
+          ]
+        }
+      ],
+      "observation": "Service trims IDs, validates exact-three-digit grammar, enforces128characters, and hashes ordered IDs for idempotency.",
+      "futureDisposition": "Versioned-boundary change needed; keep existing standalone behavior and exact legacy aliases. No production edit authorized by this receipt.",
+      "requiredVerification": [
+        "Do not normalize new canonical bytes silently",
+        "128/129length",
+        "Source receipt replay order stays deterministic"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoWorkflow.cs",
+      "sha256": "7E366AAAA73B6F4FBA9456EF2FB3EA762AAF4F24031B6DD306AE3B083EA75476",
+      "classification": "TODO validation",
+      "reviewedExcerpts": [
+        {
+          "start": 557,
+          "end": 568,
+          "lines": [
+            "    private static void ValidateTodoId(string id)",
+            "    {",
+            "        // Canonical format: uppercase kebab-case ending in -### or ISSUE-{number}.",
+            "        var validPattern1 = System.Text.RegularExpressions.Regex.IsMatch(id, @\"^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\\d{3}$\");",
+            "        var validPattern2 = System.Text.RegularExpressions.Regex.IsMatch(id, @\"^ISSUE-\\d+$\");",
+            "        var validPattern3 = id == \"ISSUE-NEW\";",
+            "",
+            "        if (!validPattern1 && !validPattern2 && !validPattern3)",
+            "        {",
+            "            throw new ArgumentException($\"Invalid TODO ID format: {id}\", nameof(id));",
+            "        }",
+            "    }"
+          ]
+        }
+      ],
+      "observation": "Kebab IDs allow several segments but exactly3 terminal digits; ISSUE-number and ISSUE-NEW are separate paths.",
+      "futureDisposition": "Versioned-boundary change needed; keep existing standalone behavior and exact legacy aliases. No production edit authorized by this receipt.",
+      "requiredVerification": [
+        "EXEC-TODO-LA-999/1000",
+        "ISSUE-NEW create-only",
+        "Legacy ISSUE unchanged"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/TodoValidator.cs",
+      "sha256": "42BF5BF571EB132DE8986C274C2256C9057CACDBA67FAB2295DC293EEABBBDCA",
+      "classification": "TODO and dependency validation",
+      "reviewedExcerpts": [
+        {
+          "start": 11,
+          "end": 20,
+          "lines": [
+            "    private const string KebabTodoIdPattern = \"^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\\\\d{3}$\";",
+            "    private const string IssueTodoIdPattern = \"^ISSUE-\\\\d+$\";",
+            "",
+            "    private static readonly Regex s_kebabTodoIdRegex = new(",
+            "        KebabTodoIdPattern,",
+            "        RegexOptions.Compiled | RegexOptions.CultureInvariant);",
+            "",
+            "    private static readonly Regex s_issueTodoIdRegex = new(",
+            "        IssueTodoIdPattern,",
+            "        RegexOptions.Compiled | RegexOptions.CultureInvariant);"
+          ]
+        },
+        {
+          "start": 33,
+          "end": 88,
+          "lines": [
+            "    /// <summary>",
+            "    /// Returns an error message when the TODO identifier is null, empty, or does not match",
+            "    /// the canonical format <c>&lt;PREFIX&gt;-&lt;AREA&gt;[-&lt;DETAIL&gt;...]-###</c> or <c>ISSUE-{number}</c>.",
+            "    /// </summary>",
+            "    public static string? ValidateTodoId(string? id)",
+            "    {",
+            "        if (string.IsNullOrWhiteSpace(id))",
+            "            return \"Todo id is required.\";",
+            "",
+            "        if (!IsCanonicalTodoId(id))",
+            "            return $\"Todo id must match uppercase kebab-case ending in -### (regex: {KebabTodoIdPattern}) or ISSUE-{{number}} (regex: {IssueTodoIdPattern}).\";",
+            "",
+            "        return null;",
+            "    }",
+            "",
+            "    /// <summary>",
+            "    /// Validates an enumerable of TODO identifiers. Returns the first error found or <see langword=\"null\"/>.",
+            "    /// </summary>",
+            "    public static string? ValidateTodoIds(IEnumerable<string>? ids, string fieldName)",
+            "    {",
+            "        if (ids is null)",
+            "            return null;",
+            "",
+            "        foreach (var id in ids)",
+            "        {",
+            "            var error = ValidateTodoId(id);",
+            "            if (error is not null)",
+            "                return $\"{fieldName} contains invalid TODO id '{id}'. {error}\";",
+            "        }",
+            "",
+            "        return null;",
+            "    }",
+            "",
+            "    /// <summary>",
+            "    /// Validates dependency identifiers with backward compatibility:",
+            "    /// canonical IDs are always valid; legacy IDs are allowed only when they",
+            "    /// already exist in the current TODO set.",
+            "    /// </summary>",
+            "    public static string? ValidateDependencyIds(IEnumerable<string>? ids, IReadOnlyList<TodoFlatItem> allItems, string fieldName)",
+            "    {",
+            "        if (ids is null)",
+            "            return null;",
+            "",
+            "        var knownIds = new HashSet<string>(allItems.Select(i => i.Id), StringComparer.OrdinalIgnoreCase);",
+            "        foreach (var id in ids)",
+            "        {",
+            "            if (ValidateTodoId(id) is null)",
+            "                continue;",
+            "",
+            "            if (knownIds.Contains(id))",
+            "                continue;",
+            "",
+            "            return $\"{fieldName} contains invalid TODO id '{id}'. Todo id must match uppercase kebab-case ending in -### (regex: {KebabTodoIdPattern}) or ISSUE-{{number}} (regex: {IssueTodoIdPattern}).\";",
+            "        }",
+            "",
+            "        return null;"
+          ]
+        },
+        {
+          "start": 95,
+          "end": 123,
+          "lines": [
+            "    public static string? ValidateDependencies(string itemId, List<string> dependsOn, List<TodoFlatItem> allItems)",
+            "    {",
+            "        if (dependsOn.Any(d => string.Equals(d, itemId, StringComparison.OrdinalIgnoreCase)))",
+            "            return $\"Item '{itemId}' cannot depend on itself.\";",
+            "",
+            "        var knownIds = new HashSet<string>(allItems.Select(i => i.Id), StringComparer.OrdinalIgnoreCase);",
+            "        foreach (var depId in dependsOn)",
+            "        {",
+            "            if (!knownIds.Contains(depId) && !string.Equals(depId, itemId, StringComparison.OrdinalIgnoreCase))",
+            "                return $\"Dependency '{depId}' does not exist.\";",
+            "        }",
+            "",
+            "        var graph = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);",
+            "        foreach (var item in allItems)",
+            "        {",
+            "            var deps = string.Equals(item.Id, itemId, StringComparison.OrdinalIgnoreCase)",
+            "                ? dependsOn",
+            "                : item.DependsOn?.ToList() ?? [];",
+            "            graph[item.Id] = deps;",
+            "        }",
+            "",
+            "        if (!graph.ContainsKey(itemId))",
+            "            graph[itemId] = dependsOn;",
+            "",
+            "        var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);",
+            "        var inStack = new HashSet<string>(StringComparer.OrdinalIgnoreCase);",
+            "        if (HasCycle(itemId, graph, visited, inStack))",
+            "            return $\"Circular dependency detected involving '{itemId}'.\";",
+            ""
+          ]
+        },
+        {
+          "start": 154,
+          "end": 155,
+          "lines": [
+            "    private static bool IsCanonicalTodoId(string id)",
+            "        => s_kebabTodoIdRegex.IsMatch(id) || s_issueTodoIdRegex.IsMatch(id);"
+          ]
+        }
+      ],
+      "observation": "Persisted TODO validation differs from single-area session/handoff grammar; legacy dependency IDs are allowed if present in current items; dependency comparisons are case-insensitive.",
+      "futureDisposition": "Versioned-boundary change needed; keep existing standalone behavior and exact legacy aliases. No production edit authorized by this receipt.",
+      "requiredVerification": [
+        "Known legacy dependency preserved",
+        "Unknown malformed dependency rejected",
+        "Tagged graph self/cycle detection",
+        "Do not silently change standalone case semantics"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/SessionLogTurnContextValidator.cs",
+      "sha256": "622609585E5D107E5E20B72AF8172EC2C477053C5F73B13C03F424DA8D02FEC0",
+      "classification": "Operational context reference",
+      "reviewedExcerpts": [
+        {
+          "start": 14,
+          "end": 27,
+          "lines": [
+            "    /// <summary>Canonical MCP TODO id.</summary>",
+            "    public static readonly Regex CanonicalTodoId = new(",
+            "        @\"^[A-Z]+-[A-Z0-9]+-\\d{3}$\",",
+            "        RegexOptions.Compiled | RegexOptions.CultureInvariant);",
+            "",
+            "    /// <summary>GitHub-backed ISSUE-N TODO id.</summary>",
+            "    public static readonly Regex IssueTodoId = new(",
+            "        @\"^ISSUE-\\d+$\",",
+            "        RegexOptions.Compiled | RegexOptions.CultureInvariant);",
+            "",
+            "    /// <summary>FR/TR/TEST ids that must not be accepted as TODO ids.</summary>",
+            "    public static readonly Regex RequirementId = new(",
+            "        @\"^(FR|TR|TEST)-\",",
+            "        RegexOptions.Compiled | RegexOptions.CultureInvariant);"
+          ]
+        },
+        {
+          "start": 106,
+          "end": 135,
+          "lines": [
+            "    /// <summary>Validates <paramref name=\"todoId\"/>.</summary>",
+            "    public static string? ValidateTodoId(string? todoId, bool required)",
+            "    {",
+            "        if (todoId is null)",
+            "        {",
+            "            if (required)",
+            "                throw new ArgumentException(\"Invalid session turn planFile/todoId: todoId is omitted.\", nameof(todoId));",
+            "            return null;",
+            "        }",
+            "",
+            "        if (string.IsNullOrWhiteSpace(todoId))",
+            "            throw new ArgumentException(\"Invalid session turn planFile/todoId: todoId is empty.\", nameof(todoId));",
+            "",
+            "        if (todoId == NoneSentinel)",
+            "            return NoneSentinel;",
+            "",
+            "        if (todoId.Equals(NoneSentinel, StringComparison.OrdinalIgnoreCase))",
+            "            throw new ArgumentException(\"Invalid session turn planFile/todoId: sentinel must be the exact value 'None'.\", nameof(todoId));",
+            "",
+            "        if (todoId.Length > 128)",
+            "            throw new ArgumentException(\"Invalid session turn planFile/todoId: todoId exceeds 128 characters.\", nameof(todoId));",
+            "",
+            "        if (RequirementId.IsMatch(todoId))",
+            "            throw new ArgumentException(\"Invalid session turn planFile/todoId: todoId must not be an FR/TR/TEST id.\", nameof(todoId));",
+            "",
+            "        if (CanonicalTodoId.IsMatch(todoId) || IssueTodoId.IsMatch(todoId))",
+            "            return todoId;",
+            "",
+            "        throw new ArgumentException(\"Invalid session turn planFile/todoId: todoId is not a canonical TODO id or ISSUE-N.\", nameof(todoId));",
+            "    }"
+          ]
+        }
+      ],
+      "observation": "Session TODO context requires single middle segment, exactly3 digits, excludes FR/TR/TEST, preserves exact None sentinel and has128character limit.",
+      "futureDisposition": "Versioned-boundary change needed; keep existing standalone behavior and exact legacy aliases. No production edit authorized by this receipt.",
+      "requiredVerification": [
+        "Tagged TODO context reference",
+        "Exact None",
+        "Requirement ID still not TODO",
+        "128/129length"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+      "sha256": "ACC16571500FD045141D627CDBF7689E3029B63CFFE86C24CD9FA6AE7978C6E3",
+      "classification": "Operational context extraction",
+      "reviewedExcerpts": [
+        {
+          "start": 12,
+          "end": 18,
+          "lines": [
+            "    private static readonly Regex PathToken = new(",
+            "        @\"(?:~[/\\\\]|[A-Za-z]:[/\\\\]|[/\\\\]|(?<![\\w./\\\\-]))(?:[\\w.-]+[/\\\\])+[\\w.-]+\\.[A-Za-z0-9]+\",",
+            "        RegexOptions.Compiled | RegexOptions.CultureInvariant);",
+            "",
+            "    private static readonly Regex TodoToken = new(",
+            "        @\"\\b(?:[A-Z]+-[A-Z0-9]+-\\d{3}|ISSUE-\\d+)\\b\",",
+            "        RegexOptions.Compiled | RegexOptions.CultureInvariant);"
+          ]
+        },
+        {
+          "start": 202,
+          "end": 223,
+          "lines": [
+            "    private static string ExtractTodoId(SessionLogTurnEntity turn, IReadOnlyList<string> sources)",
+            "    {",
+            "        var tagHits = turn.Tags",
+            "            .Select(t => t.Tag)",
+            "            .Where(tag => tag is not null && IsTodoId(tag))",
+            "            .Distinct(StringComparer.Ordinal)",
+            "            .ToList();",
+            "        if (tagHits.Count == 1)",
+            "            return tagHits[0]!;",
+            "        if (tagHits.Count > 1)",
+            "            return SessionLogTurnContextValidator.NoneSentinel;",
+            "",
+            "        var counts = new Dictionary<string, int>(StringComparer.Ordinal);",
+            "        foreach (var source in sources)",
+            "        {",
+            "            foreach (Match match in TodoToken.Matches(source))",
+            "            {",
+            "                var value = match.Value;",
+            "                if (!IsTodoId(value) || IsEmbeddedInRequirementId(source, match.Index))",
+            "                    continue;",
+            "                counts[value] = counts.GetValueOrDefault(value) + 1;",
+            "            }"
+          ]
+        }
+      ],
+      "observation": "Token search and validation use single-area3digit TODO patterns. Extraction scans tags/text then validates and excludes embedded requirement IDs.",
+      "futureDisposition": "Versioned-boundary change needed; keep existing standalone behavior and exact legacy aliases. No production edit authorized by this receipt.",
+      "requiredVerification": [
+        "No partial token from longer qualified ID",
+        "Ambiguous tokens retain existing sentinel behavior",
+        "No requirement substring treated as TODO"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/HandoffTodoDraftValidator.cs",
+      "sha256": "C2ED1C2B0245DC671F26E1588C10A3BA41839438E5380E3D489B01C561847648",
+      "classification": "Handoff validation",
+      "reviewedExcerpts": [
+        {
+          "start": 28,
+          "end": 32,
+          "lines": [
+            "    private static readonly Regex TodoIdRegex = new(\"^[A-Z]+-[A-Z0-9]+-\\\\d{3}$\", RegexOptions.Compiled);",
+            "    private static readonly Regex IssueIdRegex = new(\"^ISSUE-\\\\d+$\", RegexOptions.Compiled);",
+            "    private static readonly Regex RequirementIdRegex = new(",
+            "        \"^(FR|TR|TEST)-[A-Z0-9]+(-[A-Z0-9]+)*$\",",
+            "        RegexOptions.Compiled | RegexOptions.CultureInvariant);"
+          ]
+        },
+        {
+          "start": 62,
+          "end": 78,
+          "lines": [
+            "        var diagnostics = new List<HandoffDiagnostic>();",
+            "        var normalized = new HandoffTodoDraft",
+            "        {",
+            "            Id = NormalizeRequired(draft.Id, \"id\", \"draft_invalid_id\", \"TODO id is required and must match the canonical TODO or ISSUE format.\", diagnostics, value =>",
+            "                TodoIdRegex.IsMatch(value) || IssueIdRegex.IsMatch(value)),",
+            "            Title = NormalizeRequired(draft.Title, \"title\", \"draft_invalid_title\", \"Title is required.\", diagnostics),",
+            "            Section = NormalizeRequired(draft.Section, \"section\", \"draft_invalid_section\", \"Section is required.\", diagnostics),",
+            "            Priority = NormalizePriority(draft.Priority, diagnostics),",
+            "            Estimate = NormalizeOptional(draft.Estimate, \"estimate\", \"draft_invalid_estimate\", diagnostics),",
+            "            Description = NormalizeLines(draft.Description, \"description\", \"draft_invalid_description\", diagnostics),",
+            "            TechnicalDetails = NormalizeLines(draft.TechnicalDetails, \"technicalDetails\", \"draft_invalid_technicalDetails\", diagnostics),",
+            "            ImplementationTasks = NormalizeTasks(draft.ImplementationTasks, diagnostics),",
+            "            DependsOn = NormalizeIds(draft.DependsOn, \"dependsOn\", \"draft_invalid_dependsOn\", diagnostics, value =>",
+            "                TodoIdRegex.IsMatch(value) || IssueIdRegex.IsMatch(value)),",
+            "            FunctionalRequirements = NormalizeIds(draft.FunctionalRequirements, \"functionalRequirements\", \"draft_invalid_functionalRequirements\", diagnostics, value => IsRequirementId(value, \"FR\")),",
+            "            TechnicalRequirements = NormalizeIds(draft.TechnicalRequirements, \"technicalRequirements\", \"draft_invalid_technicalRequirements\", diagnostics, value => IsRequirementId(value, \"TR\")),",
+            "            Confidence = NormalizeConfidence(draft.Confidence, diagnostics),"
+          ]
+        },
+        {
+          "start": 94,
+          "end": 116,
+          "lines": [
+            "    private static string? NormalizeRequired(",
+            "        string? value,",
+            "        string field,",
+            "        string code,",
+            "        string message,",
+            "        List<HandoffDiagnostic> diagnostics,",
+            "        Func<string, bool>? extra = null)",
+            "    {",
+            "        if (string.IsNullOrWhiteSpace(value))",
+            "        {",
+            "            diagnostics.Add(Error(code, field, message));",
+            "            return null;",
+            "        }",
+            "",
+            "        var trimmed = value.Trim();",
+            "        if (extra is not null && !extra(trimmed))",
+            "        {",
+            "            diagnostics.Add(Error(code, field, message));",
+            "            return trimmed;",
+            "        }",
+            "",
+            "        return trimmed;",
+            "    }"
+          ]
+        }
+      ],
+      "observation": "Handoff TODO/dependencies require single-area3digits and normalize whitespace; requirement links use broad shape grammar.",
+      "futureDisposition": "Versioned-boundary change needed; keep existing standalone behavior and exact legacy aliases. No production edit authorized by this receipt.",
+      "requiredVerification": [
+        "Whole tagged ID retained",
+        "No tag parsed as area",
+        "Create/dependency same behavior",
+        "Explicit legacy preservation"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/HandoffPromptDefaults.cs",
+      "sha256": "EED42DC6AA686D9CB421EF86D8016D89232D523A78B836893F2B3610F771371E",
+      "classification": "Prompt propagation",
+      "reviewedExcerpts": [
+        {
+          "start": 18,
+          "end": 29,
+          "lines": [
+            "    /// <summary>Versioned extraction prompt. Requires a single JSON object and forbids compatibility wrapping.</summary>",
+            "    public const string Prompt =",
+            "        \"\"\"",
+            "        Extract one MCP TODO draft from the handoff document in {handoffText}.",
+            "        Return only a single JSON object. Do not wrap it in markdown. Do not emit prose.",
+            "",
+            "        Required properties:",
+            "        - id: canonical TODO id matching ^[A-Z]+-[A-Z0-9]+-\\d{3}$ or ^ISSUE-\\d+$",
+            "        - title: short title",
+            "        - section: existing or proposed section name",
+            "        - priority: critical, high, medium, or low",
+            "        - confidence: number from 0.0 to 1.0"
+          ]
+        }
+      ],
+      "observation": "Default extraction prompt instructs single-area3digit TODO grammar.",
+      "futureDisposition": "Keep canonical prompt and selected versioned capability aligned with validator; do not independently patch generated projections.",
+      "requiredVerification": [
+        "Versioned versus standalone prompt contract"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs",
+      "sha256": "522FBB8DA6165044C6462314998193B21A1E461F805053F2A505498F5A71953D",
+      "classification": "Broad validation and metadata",
+      "reviewedExcerpts": [
+        {
+          "start": 186,
+          "end": 188,
+          "lines": [
+            "    private static readonly System.Text.RegularExpressions.Regex RequirementIdShapeRegex = new(",
+            "        @\"^(FR|TR|TEST)-[A-Z0-9]+(-[A-Z0-9]+)*$\",",
+            "        System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.IgnoreCase);"
+          ]
+        },
+        {
+          "start": 843,
+          "end": 870,
+          "lines": [
+            "    private static void ValidateId(string id, string paramName, string? expectedPrefix = null)",
+            "    {",
+            "        if (string.IsNullOrWhiteSpace(id))",
+            "            throw new ArgumentException(\"ID is required.\", paramName);",
+            "        if (expectedPrefix is not null && !IsValidRequirementId(id, expectedPrefix))",
+            "            throw new ArgumentException($\"Requirement ID '{id}' must match the {expectedPrefix} identifier shape.\", paramName);",
+            "    }",
+            "",
+            "    private static bool IsValidRequirementId(string id, string expectedPrefix) =>",
+            "        RequirementIdShapeRegex.IsMatch(id)",
+            "        && id.StartsWith(expectedPrefix + \"-\", StringComparison.OrdinalIgnoreCase)",
+            "        && !id.Contains('*', StringComparison.Ordinal);",
+            "",
+            "    private static string? GetRequirementArea(string id, string expectedPrefix) =>",
+            "        SplitRequirementId(id, expectedPrefix) is { Length: >= 2 } parts ? parts[1] : null;",
+            "",
+            "    private static string? GetRequirementSubarea(string id, string expectedPrefix) =>",
+            "        SplitRequirementId(id, expectedPrefix) is { Length: >= 3 } parts ? parts[2] : null;",
+            "",
+            "    private static string[]? SplitRequirementId(string id, string expectedPrefix)",
+            "    {",
+            "        if (!IsValidRequirementId(id, expectedPrefix))",
+            "            return null;",
+            "        return id.Split('-', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);",
+            "    }",
+            "",
+            "    private static bool IdEquals(string left, string right) =>",
+            "        string.Equals(left?.Trim(), right?.Trim(), StringComparison.OrdinalIgnoreCase);"
+          ]
+        }
+      ],
+      "observation": "Document service accepts broad FR/TR/TEST shapes case-insensitively and extracts area/subarea positionally; it cannot establish registered family/tag or canonical sequence validity.",
+      "futureDisposition": "Versioned-boundary change needed; keep existing standalone behavior and exact legacy aliases. No production edit authorized by this receipt.",
+      "requiredVerification": [
+        "Syntactic acceptance is not provenance",
+        "TR tag versus subarea",
+        "Legacy lookup semantics preserved"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs",
+      "sha256": "2A871BDA68067193221609160CA39E841F9DFD1F087E34489E76B45DF1CC1F1B",
+      "classification": "Presentation grouping",
+      "reviewedExcerpts": [
+        {
+          "start": 240,
+          "end": 253,
+          "lines": [
+            "            sb.AppendLine();",
+            "",
+            "            foreach (var entry in group.OrderBy(static item => item.Id, StringComparer.Ordinal))",
+            "            {",
+            "                sb.Append(\"### \").AppendLine(entry.Id);",
+            "                sb.AppendLine();",
+            "                if (!string.IsNullOrWhiteSpace(entry.Condition))",
+            "                {",
+            "                    sb.AppendLine(entry.Condition.Trim());",
+            "                    sb.AppendLine();",
+            "                }",
+            "",
+            "                RequirementsDocumentRenderer.AppendAcceptanceCriteria(sb, entry.AcceptanceCriteria);",
+            "                sb.AppendLine();"
+          ]
+        },
+        {
+          "start": 262,
+          "end": 283,
+          "lines": [
+            "    private static string GetTestingGroupKey(string id)",
+            "    {",
+            "        if (string.IsNullOrWhiteSpace(id))",
+            "            return \"TEST\";",
+            "",
+            "        var segments = id.Split('-', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);",
+            "        if (segments.Length == 0)",
+            "            return id.Trim();",
+            "",
+            "        var groupSegments = new List<string>(segments.Length);",
+            "        foreach (var segment in segments)",
+            "        {",
+            "            if (groupSegments.Count > 0 && char.IsDigit(segment[0]))",
+            "                break;",
+            "",
+            "            groupSegments.Add(segment);",
+            "        }",
+            "",
+            "        return groupSegments.Count == 0",
+            "            ? id.Trim()",
+            "            : string.Join('-', groupSegments);",
+            "    }"
+          ]
+        }
+      ],
+      "observation": "TEST grouping stops at first digit-leading segment and display ordering is ordinal; an alphabetic node tag becomes a group segment, a digit-leading tag terminates grouping.",
+      "futureDisposition": "Versioned grouping must use parsed family metadata; retain deterministic serialization separately from human numeric sequence ordering.",
+      "requiredVerification": [
+        "LA and1A tags same family grouping",
+        "999 precedes1000 in sequence display",
+        "Deterministic export bytes"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/RequirementsService.cs",
+      "sha256": "BE35BEBF5B294748BF9BCCC312AC07AEF3CBB16373E803186DB68324ABFD4149",
+      "classification": "Text extraction",
+      "reviewedExcerpts": [
+        {
+          "start": 258,
+          "end": 305,
+          "lines": [
+            "    /// <summary>",
+            "    /// Extract FR-XXX-### and TR-XXX-### IDs from the Copilot response.",
+            "    /// First tries to parse a JSON block; falls back to regex extraction.",
+            "    /// </summary>",
+            "    internal (List<string> FrIds, List<string> TrIds) ExtractRequirementIds(string body)",
+            "    {",
+            "        // Try to find a JSON block in the response",
+            "        var jsonMatch = System.Text.RegularExpressions.Regex.Match(",
+            "            body,",
+            "            @\"\\{[^{}]*\"\"functionalRequirements\"\"[^{}]*\\}\",",
+            "            System.Text.RegularExpressions.RegexOptions.Singleline);",
+            "",
+            "        if (jsonMatch.Success)",
+            "        {",
+            "            try",
+            "            {",
+            "                using var doc = JsonDocument.Parse(jsonMatch.Value);",
+            "                var frIds = ExtractJsonArray(doc, \"functionalRequirements\");",
+            "                var trIds = ExtractJsonArray(doc, \"technicalRequirements\");",
+            "                if (frIds.Count > 0 || trIds.Count > 0)",
+            "                    return (frIds, trIds);",
+            "            }",
+            "            catch (JsonException ex)",
+            "            {",
+            "                logger.LogWarning(\"{ExceptionDetail}\", ex.ToString());",
+            "                // Fall through to regex",
+            "            }",
+            "        }",
+            "",
+            "        // Fallback: regex extraction of all FR-XXX-### and TR-XXX-### patterns",
+            "        var frMatches = System.Text.RegularExpressions.Regex.Matches(body, @\"FR-[A-Z]+-\\d{3}\");",
+            "        var trMatches = System.Text.RegularExpressions.Regex.Matches(body, @\"TR-[A-Z]+-\\d{3}\");",
+            "",
+            "        var frs = frMatches.Select(m => m.Value).Distinct(StringComparer.OrdinalIgnoreCase).ToList();",
+            "        var trs = trMatches.Select(m => m.Value).Distinct(StringComparer.OrdinalIgnoreCase).ToList();",
+            "",
+            "        return (frs, trs);",
+            "    }",
+            "",
+            "    private static List<string> ExtractJsonArray(JsonDocument doc, string propertyName)",
+            "    {",
+            "        if (doc.RootElement.TryGetProperty(propertyName, out var arr) && arr.ValueKind == JsonValueKind.Array)",
+            "            return arr.EnumerateArray()",
+            "                .Where(e => e.ValueKind == JsonValueKind.String)",
+            "                .Select(e => e.GetString()!)",
+            "                .Where(s => !string.IsNullOrWhiteSpace(s))",
+            "                .Distinct(StringComparer.OrdinalIgnoreCase)",
+            "                .ToList();"
+          ]
+        }
+      ],
+      "observation": "JSON extraction preserves strings, but fallback unanchored single-area3digit regex misses qualified IDs and can return a prefix of a4digit legacy ID.",
+      "futureDisposition": "Versioned-boundary change needed; keep existing standalone behavior and exact legacy aliases. No production edit authorized by this receipt.",
+      "requiredVerification": [
+        "Whole-token extraction",
+        "Qualified and tagged IDs",
+        "No FR-MCP-100 prefix extracted from FR-MCP-1000"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/EfTodoService.cs",
+      "sha256": "C0C4B87DCE260DDE58B65589C36D5C9CD5A8E73EB90066599C7B90C584DD6572",
+      "classification": "Requirement link parsing",
+      "reviewedExcerpts": [
+        {
+          "start": 1161,
+          "end": 1186,
+          "lines": [
+            "    private static string ExtractRequirementId(string value)",
+            "    {",
+            "        var trimmed = value.Trim();",
+            "        var delimiter = trimmed.IndexOfAny([' ', '\\t', '\\r', '\\n', ':']);",
+            "        if (delimiter > 0)",
+            "            trimmed = trimmed[..delimiter];",
+            "",
+            "        return trimmed.Length <= RequirementIdMaxLength",
+            "            ? trimmed",
+            "            : trimmed[..RequirementIdMaxLength];",
+            "    }",
+            "",
+            "    private static bool IsValidRequirementId(string id, string kind)",
+            "    {",
+            "        if (string.IsNullOrWhiteSpace(id)) return false;",
+            "        var k = kind.ToLowerInvariant();",
+            "        if (k == \"fr\")",
+            "            return System.Text.RegularExpressions.Regex.IsMatch(id, @\"^FR-[A-Z0-9]+(-[A-Z0-9]+)*-\\d+$\", System.Text.RegularExpressions.RegexOptions.IgnoreCase);",
+            "        if (k == \"tr\")",
+            "            return System.Text.RegularExpressions.Regex.IsMatch(id, @\"^TR-[A-Z0-9]+(-[A-Z0-9]+)*-\\d+$\", System.Text.RegularExpressions.RegexOptions.IgnoreCase);",
+            "        if (k == \"test\")",
+            "            return System.Text.RegularExpressions.Regex.IsMatch(id, @\"^TEST-[A-Z0-9]+(-[A-Z0-9]+)*-\\d+$\", System.Text.RegularExpressions.RegexOptions.IgnoreCase);",
+            "        return true;",
+            "    }",
+            "",
+            "    private static string BuildTodoRequirementKey(string kind, string id) => kind.ToLowerInvariant() + \":\" + id;"
+          ]
+        }
+      ],
+      "observation": "Requirement links are cut at whitespace/colon, truncated to RequirementIdMaxLength, and checked by permissive digit-width regexes; this is not registered canonical validation.",
+      "futureDisposition": "Versioned-boundary change needed; keep existing standalone behavior and exact legacy aliases. No production edit authorized by this receipt.",
+      "requiredVerification": [
+        "Oversize rejection rather than alias-changing truncation",
+        "Full-width positive Int64",
+        "Typed legacy links",
+        "Kind/provenance checked"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/TriageService.cs",
+      "sha256": "9D3B0C428FD2C8B85FC6708C153B1F290F0D0E6A98F35EE7E0D28924B1D090AA",
+      "classification": "Legacy allocator",
+      "reviewedExcerpts": [
+        {
+          "start": 1250,
+          "end": 1293,
+          "lines": [
+            "    private async Task<string> GenerateNextTodoIdAsync(CancellationToken cancellationToken, int minimumBugNumber = 0)",
+            "    {",
+            "        var max = Math.Max(0, minimumBugNumber);",
+            "        var existingGroups = await _db.TriageGroups",
+            "            .IgnoreQueryFilters()",
+            "            .Where(g => g.CreatedTodoId != null && g.CreatedTodoId.StartsWith(TodoPrefix))",
+            "            .Select(g => g.CreatedTodoId!)",
+            "            .ToListAsync(cancellationToken)",
+            "            .ConfigureAwait(false);",
+            "",
+            "        foreach (var id in existingGroups)",
+            "            max = Math.Max(max, ParseBugNumber(id));",
+            "",
+            "        var existingTodos = await _db.TodoItems",
+            "            .IgnoreQueryFilters()",
+            "            .AsNoTracking()",
+            "            .Where(todo => todo.Id.StartsWith(TodoPrefix))",
+            "            .Select(todo => todo.Id)",
+            "            .ToListAsync(cancellationToken)",
+            "            .ConfigureAwait(false);",
+            "",
+            "        foreach (var id in existingTodos)",
+            "            max = Math.Max(max, ParseBugNumber(id));",
+            "",
+            "        try",
+            "        {",
+            "            var todos = await _todoService.QueryAsync(new TodoQueryRequest { Keyword = TodoPrefix }, cancellationToken).ConfigureAwait(false);",
+            "            foreach (var item in todos.Items)",
+            "                max = Math.Max(max, ParseBugNumber(item.Id));",
+            "        }",
+            "        catch (NotSupportedException)",
+            "        {",
+            "            // The EF group scan still preserves idempotence for triage-created rows.",
+            "        }",
+            "",
+            "        return $\"{TodoPrefix}{(max + 1).ToString(\"000\", CultureInfo.InvariantCulture)}\";",
+            "    }",
+            "",
+            "    private static int ParseBugNumber(string value)",
+            "    {",
+            "        var match = Regex.Match(value, \"^BUG-TRIAGE-(\\\\d+)$\", RegexOptions.CultureInvariant, TimeSpan.FromMilliseconds(100));",
+            "        return match.Success && int.TryParse(match.Groups[1].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsed)",
+            "            ? parsed",
+            "            : 0;"
+          ]
+        }
+      ],
+      "observation": "BUG-TRIAGE scans local existing records with Int32 parsing then emits max+1 minimum width3; tagged suffixes do not match that legacy parse.",
+      "futureDisposition": "Retain standalone generator; versioned producer uses branch-independent control allocator with no scan-max fallback.",
+      "requiredVerification": [
+        "Concurrent creators",
+        "Overflow refusal",
+        "Restore and consumed gaps",
+        "No tagged ID ignored then reused"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/MemoryService.cs",
+      "sha256": "467F63CA29593B60DEB632D0ACCA6DD8C6483BB6C500D41201A666C07CB00450",
+      "classification": "Legacy allocator",
+      "reviewedExcerpts": [
+        {
+          "start": 324,
+          "end": 347,
+          "lines": [
+            "    private async Task<string> GenerateNextIdAsync(string category, CancellationToken cancellationToken)",
+            "    {",
+            "        var prefix = $\"MEMORY-{category}-\";",
+            "        var ids = await _db.Memories",
+            "            .IgnoreQueryFilters(AllQueryFilters)",
+            "            .Where(memory => memory.Id.StartsWith(prefix))",
+            "            .Select(memory => memory.Id)",
+            "            .ToListAsync(cancellationToken)",
+            "            .ConfigureAwait(false);",
+            "",
+            "        var regex = MemoryIdSuffixRegex(prefix);",
+            "        var next = ids",
+            "            .Select(id => regex.Match(id))",
+            "            .Where(match => match.Success)",
+            "            .Select(match => int.Parse(match.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture))",
+            "            .DefaultIfEmpty(0)",
+            "            .Max() + 1;",
+            "",
+            "        return $\"{prefix}{next:000}\";",
+            "    }",
+            "",
+            "    private static Regex MemoryIdSuffixRegex(string prefix)",
+            "    {",
+            "        return new Regex(\"^\" + Regex.Escape(prefix) + \"([0-9]+)$\", RegexOptions.CultureInvariant, TimeSpan.FromMilliseconds(100));"
+          ]
+        }
+      ],
+      "observation": "MEMORY category generator scans all matching rows including deleted and parses suffix as Int32 before max+1; no creator tag is represented.",
+      "futureDisposition": "Retain standalone generator; versioned Workspace memory creation uses its family control allocator. Global operational memory is not automatically portable project content.",
+      "requiredVerification": [
+        "Deleted identity never reused",
+        "Tag/family scoped counters",
+        "Int64 boundary",
+        "Scope split"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "build/TraceabilityValidator.cs",
+      "sha256": "E432238B5CA9992069E1018954745071CCBC42C4A35BD560D4E90196AF7E323A",
+      "classification": "Range shorthand",
+      "reviewedExcerpts": [
+        {
+          "start": 9,
+          "end": 25,
+          "lines": [
+            "    [GeneratedRegex(@\"^##\\s+(FR-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*)\\b\")]",
+            "    private static partial Regex FrHeadingRegex();",
+            "",
+            "    [GeneratedRegex(@\"^##\\s+(TR-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*)\\b\")]",
+            "    private static partial Regex TrHeadingRegex();",
+            "",
+            "    [GeneratedRegex(@\"\\b(TEST-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*)\\b\")]",
+            "    private static partial Regex TestIdRegex();",
+            "",
+            "    [GeneratedRegex(@\"^\\|\\s*(FR-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*)\\b\")]",
+            "    private static partial Regex MappingFrRegex();",
+            "",
+            "    [GeneratedRegex(@\"^\\|\\s*((?:FR|TR|TEST)-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*)\\s*\\|\")]",
+            "    private static partial Regex MatrixIdRegex();",
+            "",
+            "    [GeneratedRegex(@\"^([A-Z]+(?:-[A-Z0-9]+)+-)(\\d{3})[–-](\\d{3})$\")]",
+            "    private static partial Regex RangeTokenRegex();"
+          ]
+        },
+        {
+          "start": 83,
+          "end": 99,
+          "lines": [
+            "    /// <summary>Expands a range token like FR-MCP-001-003 into individual IDs.</summary>",
+            "    public static IEnumerable<string> ExpandRangeToken(string token)",
+            "    {",
+            "        var match = RangeTokenRegex().Match(token);",
+            "        if (!match.Success)",
+            "            return [token];",
+            "",
+            "        var prefix = match.Groups[1].Value;",
+            "        var start = int.Parse(match.Groups[2].Value);",
+            "        var end = int.Parse(match.Groups[3].Value);",
+            "",
+            "        if (end < start)",
+            "            return [token];",
+            "",
+            "        return Enumerable.Range(start, end - start + 1)",
+            "            .Select(i => $\"{prefix}{i:D3}\");",
+            "    }"
+          ]
+        }
+      ],
+      "observation": "Heading patterns are broad; range shorthand is exactly3digit endpoints using Int32 and D3 output.",
+      "futureDisposition": "Preserve legacy range syntax. Versioned IDs require explicit same-family/same-tag numeric endpoint handling or explicit IDs; never span tags implicitly.",
+      "requiredVerification": [
+        "999/1000 boundary",
+        "No accidental cross-tag range",
+        "Do not expand canonical singleton"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDocumentRenderer.cs",
+      "sha256": "1B1DC389C8EE09F0D7EE22315662E1F18D9FE5856CC03514518934108B243947",
+      "classification": "Range shorthand",
+      "reviewedExcerpts": [
+        {
+          "start": 304,
+          "end": 329,
+          "lines": [
+            "    private static IEnumerable<string> ExpandMatrixRequirementToken(string token)",
+            "    {",
+            "        var trimmed = token.Trim();",
+            "        var lastDash = Math.Max(trimmed.LastIndexOf('-'), trimmed.LastIndexOf('\\u2013'));",
+            "        if (lastDash <= 0 || lastDash >= trimmed.Length - 1)",
+            "            return IsRequirementId(trimmed) ? [trimmed] : [];",
+            "",
+            "        var prefix = trimmed[..(lastDash + 1)];",
+            "        var startText = prefix.Length >= 4 ? prefix[^4..^1] : string.Empty;",
+            "        var endText = trimmed[(lastDash + 1)..];",
+            "        if (!int.TryParse(startText, out var start)",
+            "            || !int.TryParse(endText, out var end)",
+            "            || end < start)",
+            "        {",
+            "            return IsRequirementId(trimmed) ? [trimmed] : [];",
+            "        }",
+            "",
+            "        var idPrefix = prefix[..^4];",
+            "        return Enumerable.Range(start, end - start + 1)",
+            "            .Select(i => $\"{idPrefix}{i:D3}\");",
+            "    }",
+            "",
+            "    private static bool IsRequirementId(string value) =>",
+            "        value.StartsWith(\"FR-\", StringComparison.Ordinal)",
+            "        || value.StartsWith(\"TR-\", StringComparison.Ordinal)",
+            "        || value.StartsWith(\"TEST-\", StringComparison.Ordinal);"
+          ]
+        }
+      ],
+      "observation": "Matrix expansion takes last3 characters before final delimiter, parses Int32 endpoints and formats D3; it is not a general full-width canonical parser.",
+      "futureDisposition": "Use parsed explicit endpoints for any later approved versioned range support; preserve existing serialized historical rows.",
+      "requiredVerification": [
+        "Long endpoint cannot be truncated",
+        "Numeric tag not mistaken for range",
+        "Canonical singleton exact"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/IssueTodoSyncService.cs",
+      "sha256": "EC023AE695540B38777EDA76F671E9D9A84098DEB36349DFF5853403F7A68D05",
+      "classification": "External identity retained",
+      "reviewedExcerpts": [
+        {
+          "start": 503,
+          "end": 521,
+          "lines": [
+            "    private static bool TryParseIssueNumber(string todoId, out int issueNumber, out string? error)",
+            "    {",
+            "        issueNumber = 0;",
+            "        error = null;",
+            "",
+            "        if (!todoId.StartsWith(IssueIdPrefix, StringComparison.OrdinalIgnoreCase))",
+            "        {",
+            "            error = $\"TODO id {todoId} is not an ISSUE-* id\";",
+            "            return false;",
+            "        }",
+            "",
+            "        if (!int.TryParse(todoId.AsSpan(IssueIdPrefix.Length), out issueNumber))",
+            "        {",
+            "            error = $\"Cannot parse issue number from {todoId}\";",
+            "            return false;",
+            "        }",
+            "",
+            "        return true;",
+            "    }"
+          ]
+        }
+      ],
+      "observation": "ISSUE suffix is parsed as GitHub Int32 issue number.",
+      "futureDisposition": "Preserve external ISSUE identity; do not insert creator tags into GitHub issue numbers.",
+      "requiredVerification": [
+        "ISSUE-17 stays external number17",
+        "Tagged project ID never reaches issue parser"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/SessionLogWorkflow.cs",
+      "sha256": "4F305FB610E084C61E6CAF8EDC8A0ECDB915346D1D9C249C7F54AB6D15DF36B1",
+      "classification": "Operational identity retained",
+      "reviewedExcerpts": [
+        {
+          "start": 387,
+          "end": 413,
+          "lines": [
+            "    private static void ValidateSessionId(string sessionId, string agent)",
+            "    {",
+            "        // Format: <Agent>-<yyyyMMddTHHmmssZ>-<suffix>",
+            "        // Regex: ^[A-Z][A-Za-z0-9]*-\\d{8}T\\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "        if (!System.Text.RegularExpressions.Regex.IsMatch(sessionId,",
+            "            @\"^[A-Z][A-Za-z0-9]*-\\d{8}T\\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$\"))",
+            "        {",
+            "            throw new ArgumentException($\"Invalid session ID format: {sessionId}\", nameof(sessionId));",
+            "        }",
+            "",
+            "        // Ensure prefix matches agent name",
+            "        var prefix = sessionId.Split('-')[0];",
+            "        if (prefix != agent)",
+            "        {",
+            "            throw new ArgumentException(\"Session ID prefix must match agent name\", nameof(sessionId));",
+            "        }",
+            "    }",
+            "",
+            "    private static void ValidateRequestId(string requestId)",
+            "    {",
+            "        // Format: req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>",
+            "        // Regex: ^req-\\d{8}T\\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "        if (!System.Text.RegularExpressions.Regex.IsMatch(requestId,",
+            "            @\"^req-\\d{8}T\\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$\"))",
+            "        {",
+            "            throw new ArgumentException($\"Invalid request ID format: {requestId}\", nameof(requestId));",
+            "        }"
+          ]
+        }
+      ],
+      "observation": "Session prefix split enforces actual agent identity; session and request IDs use timestamp formats.",
+      "futureDisposition": "Keep operational audit formats intact; new SESSION-SNAPSHOT identity is a separate promoted record, not renaming of sessions/requests.",
+      "requiredVerification": [
+        "Session/request history byte preservation",
+        "Promoted child references retain originals"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "plugins/core/lib-node/src/tools/requirements.ts",
+      "sha256": "44E1399258609E6C30B9509D0AD8A114DC43BB7126DABE61315785136D3C356D",
+      "classification": "False identity match",
+      "reviewedExcerpts": [
+        {
+          "start": 996,
+          "end": 1000,
+          "lines": [
+            "        generatedAt:",
+            "          typeof result.generatedAt === 'string'",
+            "            ? result.generatedAt",
+            "            : new Date().toISOString().replace(/\\.\\d{3}Z$/, 'Z'),",
+            "      },"
+          ]
+        },
+        {
+          "start": 1059,
+          "end": 1063,
+          "lines": [
+            "        ...(/zip/i.test(contentType) ? { fileName: 'requirements-wiki-documents.zip' } : {}),",
+            "        format,",
+            "        docType,",
+            "        generatedAt: new Date().toISOString().replace(/\\.\\d{3}Z$/, 'Z'),",
+            "      },"
+          ]
+        }
+      ],
+      "observation": "The two three-digit regexes remove timestamp milliseconds, not identity digits.",
+      "futureDisposition": "No identity change. Existing Node runtime may only be retired under lab policy.",
+      "requiredVerification": [
+        "Do not change timestamps as ID remediation"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "sha256": "81E6E0F190E9C13FCA828A55503E514982AD0D499B1934866500F7BBCA4059ED",
+      "classification": "False project identity match",
+      "reviewedExcerpts": [
+        {
+          "start": 3575,
+          "end": 3579,
+          "lines": [
+            "            if ($DrainAttempts -ge 0) { $record['drainAttempts'] = $DrainAttempts }",
+            "",
+            "            $path = Join-Path $FailsafeDir (\"{0}-session_submit-{1}.yaml\" -f $Stamp, $RequestId.Substring($RequestId.Length - 4))",
+            "            Write-McpYamlObject -Path $path -Document $record",
+            "            return $path"
+          ]
+        }
+      ],
+      "observation": "Substring takes4 requestId characters to form a failsafe filename; it does not parse a project entity.",
+      "futureDisposition": "No project ID grammar change justified by this hit.",
+      "requiredVerification": [
+        "Separate operational filename policy"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Cqrs/CorrelationId.cs",
+      "sha256": "43CF9D68E54DD90665463C2B900340DDB221DA15CC8EA9C4E2F7FBB12F668DD9",
+      "classification": "Operational identity retained",
+      "reviewedExcerpts": [
+        {
+          "start": 5,
+          "end": 14,
+          "lines": [
+            "/// <summary>",
+            "/// TR-MCP-CQRS-002: Decimal correlation ID with format <c>{baseId}.{counter}</c>.",
+            "/// The <see cref=\"BaseId\"/> is a random 8-digit long that remains stable for the entire call tree.",
+            "/// The counter is a thread-safe incrementing integer that advances with each pipeline step or handler call,",
+            "/// giving every step in the distributed call tree a unique identifier.",
+            "/// </summary>",
+            "public sealed class CorrelationId",
+            "{",
+            "    private readonly long _baseId;",
+            "    private int _counter;"
+          ]
+        },
+        {
+          "start": 52,
+          "end": 83,
+          "lines": [
+            "    /// <summary>",
+            "    /// Parses a correlation ID string in <c>{baseId}.{counter}</c> format.",
+            "    /// </summary>",
+            "    /// <param name=\"value\">The string to parse (e.g. <c>\"48291735.3\"</c>).</param>",
+            "    /// <returns>A reconstituted <see cref=\"CorrelationId\"/>.</returns>",
+            "    /// <exception cref=\"FormatException\">Thrown if the string is not in the expected format.</exception>",
+            "    public static CorrelationId Parse(string value)",
+            "    {",
+            "        ArgumentException.ThrowIfNullOrWhiteSpace(value);",
+            "        var dotIndex = value.IndexOf('.', StringComparison.Ordinal);",
+            "        if (dotIndex < 1 || dotIndex >= value.Length - 1)",
+            "            throw new FormatException($\"Invalid correlation ID format: '{value}'. Expected '{{baseId}}.{{counter}}'.\");",
+            "",
+            "        var baseId = long.Parse(value.AsSpan(0, dotIndex), CultureInfo.InvariantCulture);",
+            "        var counter = int.Parse(value.AsSpan(dotIndex + 1), CultureInfo.InvariantCulture);",
+            "        return new CorrelationId(baseId, counter);",
+            "    }",
+            "",
+            "    /// <summary>",
+            "    /// Attempts to parse a correlation ID string. Returns <c>null</c> if parsing fails.",
+            "    /// </summary>",
+            "    /// <param name=\"value\">The string to parse.</param>",
+            "    /// <returns>A <see cref=\"CorrelationId\"/> or <c>null</c>.</returns>",
+            "    public static CorrelationId? TryParse(string? value)",
+            "    {",
+            "        if (string.IsNullOrWhiteSpace(value)) return null;",
+            "        try { return Parse(value); }",
+            "        catch { return null; }",
+            "    }",
+            "",
+            "    /// <summary>HTTP header name for correlation ID propagation.</summary>",
+            "    public const string HeaderName = \"X-Correlation-Id\";"
+          ]
+        }
+      ],
+      "observation": "Decimal base.counter is a CQRS call-tree correlation format using numeric components.",
+      "futureDisposition": "Not a portable authored entity ID. Do not replace this format with project canonical grammar.",
+      "requiredVerification": [
+        "Correlation behavior remains separate"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Memory/MemoryPromoteOperations.cs",
+      "sha256": "30E896121D43A0B463C38F9A4B15178B30FC8185E7926327D9EDA2DE0D67EB9F",
+      "classification": "Operational source reference retained",
+      "reviewedExcerpts": [
+        {
+          "start": 58,
+          "end": 77,
+          "lines": [
+            "        if (kind.Equals(MemoryPromoteSourceKinds.SessionLog, StringComparison.OrdinalIgnoreCase))",
+            "        {",
+            "            normalizedKind = MemoryPromoteSourceKinds.SessionLog;",
+            "            var match = SessionRefRegex.Match(sourceRef);",
+            "            if (!match.Success)",
+            "                return new MemoryPromoteResult(400, FailureKind: MemoryMutationFailureKind.Validation, Error: \"Invalid sessionlog SourceRef.\");",
+            "",
+            "            var turnId = long.Parse(match.Groups[\"turn\"].Value);",
+            "            var actionId = long.Parse(match.Groups[\"action\"].Value);",
+            "",
+            "            var action = await _db.SessionLogActions",
+            "                .AsNoTracking()",
+            "                .FirstOrDefaultAsync(a => a.Id == actionId && a.SessionLogTurnId == turnId, cancellationToken)",
+            "                .ConfigureAwait(false);",
+            "",
+            "            if (action is null)",
+            "                return new MemoryPromoteResult(404, FailureKind: MemoryMutationFailureKind.NotFound, Error: \"Session turn/action not found.\");",
+            "",
+            "            if (!string.Equals(action.WorkspaceId, _workspacePath, StringComparison.OrdinalIgnoreCase))",
+            "                return new MemoryPromoteResult(403, FailureKind: MemoryMutationFailureKind.Validation, Error: \"Cross-workspace promote forbidden.\");"
+          ]
+        }
+      ],
+      "observation": "Promotion source uses original numeric session turn/action IDs and checks workspace after lookup.",
+      "futureDisposition": "Preserve original source reference in immutable promotion provenance; snapshot canonical identity is separate.",
+      "requiredVerification": [
+        "Typed source reference retains numeric meaning",
+        "Cross-workspace authorization"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Client/UseCaseClient.cs",
+      "sha256": "1CA7DB92632645D62F0AC23E6DB54B7D2B107E8A4333B3E0E8732CF414A751F7",
+      "classification": "Numeric public boundary",
+      "reviewedExcerpts": [
+        {
+          "start": 30,
+          "end": 69,
+          "lines": [
+            "    /// <summary>Gets a use case aggregate by id.</summary>",
+            "    public async Task<UseCaseDetail> GetAsync(long useCaseId, CancellationToken cancellationToken = default)",
+            "    {",
+            "        return await GetAsync<UseCaseDetail>($\"qbrainai/usecases/{useCaseId}\", cancellationToken).ConfigureAwait(true);",
+            "    }",
+            "",
+            "    /// <summary>Creates a use case.</summary>",
+            "    public async Task<UseCaseDetail> CreateAsync(CreateUseCaseRequest request, CancellationToken cancellationToken = default)",
+            "    {",
+            "        return await PostAsync<UseCaseDetail>(\"qbrainai/usecases\", request, cancellationToken).ConfigureAwait(true);",
+            "    }",
+            "",
+            "    /// <summary>Updates use case header fields.</summary>",
+            "    public async Task<UseCaseDetail> UpdateAsync(long useCaseId, UpdateUseCaseRequest request, CancellationToken cancellationToken = default)",
+            "    {",
+            "        return await PutAsync<UseCaseDetail>($\"qbrainai/usecases/{useCaseId}\", request, cancellationToken).ConfigureAwait(true);",
+            "    }",
+            "",
+            "    /// <summary>Soft-deletes a use case.</summary>",
+            "    public async Task DeleteAsync(long useCaseId, CancellationToken cancellationToken = default)",
+            "    {",
+            "        await SendForStatusAsync(HttpMethod.Delete, $\"qbrainai/usecases/{useCaseId}\", null, cancellationToken).ConfigureAwait(true);",
+            "    }",
+            "",
+            "    /// <summary>Adds a flow to a use case.</summary>",
+            "    public async Task<UseCaseFlow> AddFlowAsync(long useCaseId, AddUseCaseFlowRequest request, CancellationToken cancellationToken = default)",
+            "    {",
+            "        return await PostAsync<UseCaseFlow>($\"qbrainai/usecases/{useCaseId}/flows\", request, cancellationToken).ConfigureAwait(true);",
+            "    }",
+            "",
+            "    /// <summary>Adds a step to a flow.</summary>",
+            "    public async Task<UseCaseStep> AddStepAsync(long useCaseId, long flowId, AddUseCaseStepRequest request, CancellationToken cancellationToken = default)",
+            "    {",
+            "        return await PostAsync<UseCaseStep>($\"qbrainai/usecases/{useCaseId}/flows/{flowId}/steps\", request, cancellationToken).ConfigureAwait(true);",
+            "    }",
+            "",
+            "    /// <summary>Attaches an actor to a use case.</summary>",
+            "    public async Task<UseCaseActor> AttachActorAsync(long useCaseId, AttachUseCaseActorRequest request, CancellationToken cancellationToken = default)",
+            "    {",
+            "        return await PostAsync<UseCaseActor>($\"qbrainai/usecases/{useCaseId}/actors\", request, cancellationToken).ConfigureAwait(true);"
+          ]
+        },
+        {
+          "start": 112,
+          "end": 125,
+          "lines": [
+            "    /// <summary>Links a use case to a functional requirement.</summary>",
+            "    public async Task<UseCaseFrLink> LinkFrAsync(long useCaseId, LinkUseCaseToFrRequest request, CancellationToken cancellationToken = default)",
+            "    {",
+            "        return await PostAsync<UseCaseFrLink>($\"qbrainai/usecases/{useCaseId}/links\", request, cancellationToken).ConfigureAwait(true);",
+            "    }",
+            "",
+            "    /// <summary>Unlinks a use case from a functional requirement.</summary>",
+            "    public async Task UnlinkFrAsync(long useCaseId, string frId, CancellationToken cancellationToken = default)",
+            "    {",
+            "        await SendForStatusAsync(",
+            "            HttpMethod.Delete,",
+            "            $\"qbrainai/usecases/{useCaseId}/links/{Uri.EscapeDataString(frId)}\",",
+            "            null,",
+            "            cancellationToken).ConfigureAwait(true);"
+          ]
+        },
+        {
+          "start": 142,
+          "end": 148,
+          "lines": [
+            "    /// <summary>FR-MCP-USECASE-012: Loads the UML diagram graph for the canvas editor.</summary>",
+            "    public async Task<UseCaseDiagramGraph> GetDiagramGraphAsync(long useCaseId, CancellationToken cancellationToken = default)",
+            "    {",
+            "        return await GetAsync<UseCaseDiagramGraph>($\"qbrainai/usecases/{useCaseId}/diagram-graph\", cancellationToken)",
+            "            .ConfigureAwait(true);",
+            "    }",
+            ""
+          ]
+        }
+      ],
+      "observation": "Use-case client parameters and route interpolation use Int64 for usecase/flow/actor parents.",
+      "futureDisposition": "Retain existing standalone public contracts. Versioned string DTO/routes/capability disposition is still open; never map tagged strings to machine-local surrogate numbers.",
+      "requiredVerification": [
+        "Capability rejection before mutation",
+        "No precision loss",
+        "Origin-qualified legacy lookup"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Services/Models/UseCaseModels.cs",
+      "sha256": "E6D013959E84088E0490210B809B6A7E9BFE6279279F27DDD7ECAA3E1FEFCE40",
+      "classification": "Numeric DTO boundary",
+      "reviewedExcerpts": [
+        {
+          "start": 94,
+          "end": 100,
+          "lines": [
+            "    /// </summary>",
+            "    public int? StepNumber { get; set; }",
+            "",
+            "    /// <summary>Optional actor id for the step.</summary>",
+            "    public long? ActorId { get; set; }",
+            "",
+            "    /// <summary>Actor action text (required).</summary>"
+          ]
+        },
+        {
+          "start": 208,
+          "end": 211,
+          "lines": [
+            "{",
+            "    /// <summary>Use case surrogate id.</summary>",
+            "    public long UseCaseId { get; init; }",
+            ""
+          ]
+        },
+        {
+          "start": 298,
+          "end": 307,
+          "lines": [
+            "{",
+            "    /// <summary>Actor id.</summary>",
+            "    public long ActorId { get; init; }",
+            "",
+            "    /// <summary>Parent use case id.</summary>",
+            "    public long UseCaseId { get; init; }",
+            "",
+            "    /// <summary>Actor name.</summary>",
+            "    public string Name { get; init; } = string.Empty;",
+            ""
+          ]
+        },
+        {
+          "start": 322,
+          "end": 357,
+          "lines": [
+            "{",
+            "    /// <summary>Flow id.</summary>",
+            "    public long FlowId { get; init; }",
+            "",
+            "    /// <summary>Parent use case id.</summary>",
+            "    public long UseCaseId { get; init; }",
+            "",
+            "    /// <summary>Flow type.</summary>",
+            "    public string FlowType { get; init; } = \"Basic\";",
+            "",
+            "    /// <summary>Optional name.</summary>",
+            "    public string? Name { get; init; }",
+            "",
+            "    /// <summary>Sequence among flows.</summary>",
+            "    public int SequenceNumber { get; init; }",
+            "",
+            "    /// <summary>Steps ordered by step number.</summary>",
+            "    public IReadOnlyList<UseCaseStepDto> Steps { get; init; } = [];",
+            "}",
+            "",
+            "/// <summary>",
+            "/// FR-MCP-USECASE-002 / TR-MCP-USECASE-002: Step DTO.",
+            "/// </summary>",
+            "public sealed class UseCaseStepDto",
+            "{",
+            "    /// <summary>Step id.</summary>",
+            "    public long StepId { get; init; }",
+            "",
+            "    /// <summary>Parent flow id.</summary>",
+            "    public long FlowId { get; init; }",
+            "",
+            "    /// <summary>Step number.</summary>",
+            "    public int StepNumber { get; init; }",
+            "",
+            "    /// <summary>Optional actor id.</summary>",
+            "    public long? ActorId { get; init; }"
+          ]
+        },
+        {
+          "start": 373,
+          "end": 417,
+          "lines": [
+            "/// FR-MCP-USECASE-001 / TR-MCP-USECASE-002: Special requirement DTO.",
+            "/// </summary>",
+            "public sealed class UseCaseSpecialRequirementDto",
+            "{",
+            "    /// <summary>Special requirement id.</summary>",
+            "    public long SpecialReqId { get; init; }",
+            "",
+            "    /// <summary>Optional category.</summary>",
+            "    public string? Category { get; init; }",
+            "",
+            "    /// <summary>Requirement text.</summary>",
+            "    public string RequirementText { get; init; } = string.Empty;",
+            "",
+            "    /// <summary>Optional priority.</summary>",
+            "    public int? Priority { get; init; }",
+            "}",
+            "",
+            "/// <summary>",
+            "/// FR-MCP-USECASE-001 / TR-MCP-USECASE-002: Extension point DTO.",
+            "/// </summary>",
+            "public sealed class UseCaseExtensionPointDto",
+            "{",
+            "    /// <summary>Extension point id.</summary>",
+            "    public long ExtensionPointId { get; init; }",
+            "",
+            "    /// <summary>Name.</summary>",
+            "    public string Name { get; init; } = string.Empty;",
+            "",
+            "    /// <summary>Optional description.</summary>",
+            "    public string? Description { get; init; }",
+            "}",
+            "",
+            "/// <summary>",
+            "/// FR-MCP-USECASE-003 / TR-MCP-USECASE-002: Use case to FR link DTO (FrId is string).",
+            "/// </summary>",
+            "public sealed class UseCaseFrLinkDto",
+            "{",
+            "    /// <summary>Link id.</summary>",
+            "    public long LinkId { get; init; }",
+            "",
+            "    /// <summary>Use case id.</summary>",
+            "    public long UseCaseId { get; init; }",
+            "",
+            "    /// <summary>Functional requirement id (string).</summary>",
+            "    public string FrId { get; init; } = string.Empty;"
+          ]
+        }
+      ],
+      "observation": "Usecase/actor/flow/step/special/extension/link DTO identifiers are Int64, including optional ActorId.",
+      "futureDisposition": "Additive versioned contract required before implementation; preserve null and composite parent identity. Client model/caller closure remains open.",
+      "requiredVerification": [
+        "All graph members use canonical strings",
+        "Null actor preserved",
+        "No numeric coercion"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Controllers/UseCasesController.cs",
+      "sha256": "49A7804FC9FD242FD22415069B26CFE167D75A5B822985FFE6C956C3D28145F6",
+      "classification": "Numeric route boundary",
+      "reviewedExcerpts": [
+        {
+          "start": 162,
+          "end": 174,
+          "lines": [
+            "    /// <summary>FR-MCP-USECASE-001: Gets a use case by id.</summary>",
+            "    [HttpGet(\"{id:long}\")]",
+            "    [ProducesResponseType(typeof(UseCaseDetailDto), StatusCodes.Status200OK)]",
+            "    [ProducesResponseType(StatusCodes.Status404NotFound)]",
+            "    [RequiresUnreferencedCode(\"CQRS dispatcher uses reflection over handler types.\")]",
+            "    public async Task<ActionResult<UseCaseDetailDto>> GetAsync(long id, CancellationToken cancellationToken)",
+            "    {",
+            "        var result = await _dispatcher.QueryAsync(",
+            "            new GetUseCaseQuery(GetWorkspacePath(), id),",
+            "            cancellationToken).ConfigureAwait(false);",
+            "        if (result.IsFailure)",
+            "            return MapFailure(result);",
+            "        return Ok(result.Value);"
+          ]
+        },
+        {
+          "start": 238,
+          "end": 252,
+          "lines": [
+            "",
+            "    /// <summary>FR-MCP-USECASE-002: Adds a step to a flow.</summary>",
+            "    [HttpPost(\"{id:long}/flows/{flowId:long}/steps\")]",
+            "    [ProducesResponseType(typeof(UseCaseStepDto), StatusCodes.Status201Created)]",
+            "    [ProducesResponseType(StatusCodes.Status400BadRequest)]",
+            "    [ProducesResponseType(StatusCodes.Status404NotFound)]",
+            "    [RequiresUnreferencedCode(\"CQRS dispatcher uses reflection over handler types.\")]",
+            "    public async Task<ActionResult<UseCaseStepDto>> AddStepAsync(",
+            "        long id,",
+            "        long flowId,",
+            "        [FromBody] CreateUseCaseStepRequest? request,",
+            "        CancellationToken cancellationToken)",
+            "    {",
+            "        if (request is null)",
+            "            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, \"Request body is required.\", 400));"
+          ]
+        },
+        {
+          "start": 290,
+          "end": 302,
+          "lines": [
+            "    /// <summary>FR-MCP-USECASE-018: Updates an actor already associated with a use case.</summary>",
+            "    [HttpPut(\"{id:long}/actors/{actorId:long}\")]",
+            "    [ProducesResponseType(typeof(UseCaseActorDto), StatusCodes.Status200OK)]",
+            "    [ProducesResponseType(StatusCodes.Status400BadRequest)]",
+            "    [ProducesResponseType(StatusCodes.Status404NotFound)]",
+            "    [RequiresUnreferencedCode(\"CQRS dispatcher uses reflection over handler types.\")]",
+            "    public async Task<ActionResult<UseCaseActorDto>> UpdateActorAsync(",
+            "        long id,",
+            "        long actorId,",
+            "        [FromBody] UpdateUseCaseActorRequest? request,",
+            "        CancellationToken cancellationToken)",
+            "    {",
+            "        if (request is null)"
+          ]
+        },
+        {
+          "start": 338,
+          "end": 350,
+          "lines": [
+            "    /// <summary>FR-MCP-USECASE-018: Updates a step already owned by a use-case flow.</summary>",
+            "    [HttpPut(\"{id:long}/flows/{flowId:long}/steps/{stepId:long}\")]",
+            "    [ProducesResponseType(typeof(UseCaseStepDto), StatusCodes.Status200OK)]",
+            "    [ProducesResponseType(StatusCodes.Status400BadRequest)]",
+            "    [ProducesResponseType(StatusCodes.Status404NotFound)]",
+            "    [RequiresUnreferencedCode(\"CQRS dispatcher uses reflection over handler types.\")]",
+            "    public async Task<ActionResult<UseCaseStepDto>> UpdateStepAsync(",
+            "        long id,",
+            "        long flowId,",
+            "        long stepId,",
+            "        [FromBody] UpdateUseCaseStepRequest? request,",
+            "        CancellationToken cancellationToken)",
+            "    {"
+          ]
+        }
+      ],
+      "observation": "ASP.NET routes constrain usecase and child identifiers as long and dispatch numeric CQRS commands.",
+      "futureDisposition": "Cannot expose tagged records by merely broadening validators. Shared route/DTO/capability design must specify additive versioned behavior before B4 acceptance.",
+      "requiredVerification": [
+        "Route binding",
+        "Project authorization before existence",
+        "No silent legacy-route break"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Storage/Entities/RequirementEntity.cs",
+      "sha256": "1570C0820F298743CD9FE11F5A930FA1A364DAB638255DF6063A241F8E5EA72C",
+      "classification": "Length annotation",
+      "reviewedExcerpts": [
+        {
+          "start": 12,
+          "end": 25,
+          "lines": [
+            "    /// <summary>Resolved workspace discriminator, normally the absolute workspace path.</summary>",
+            "    [Required]",
+            "    [StringLength(1024)]",
+            "    public string WorkspaceId { get; set; } = string.Empty;",
+            "",
+            "    /// <summary>Requirement kind: <c>fr</c>, <c>tr</c>, or <c>test</c>.</summary>",
+            "    [Required]",
+            "    [StringLength(16)]",
+            "    public string Kind { get; set; } = string.Empty;",
+            "",
+            "    /// <summary>Canonical requirement identifier.</summary>",
+            "    [Required]",
+            "    [StringLength(128)]",
+            "    public string Id { get; set; } = string.Empty;"
+          ]
+        }
+      ],
+      "observation": "Requirement Id128 and WorkspaceId1024 are source annotations, not measured Dolt index feasibility.",
+      "futureDisposition": "Keep standalone model and historical migrations. Measure versioned key/index bytes, collation and composite limits in B1/B2.",
+      "requiredVerification": [
+        "128/129ID boundary",
+        "Multibyte/index and collation integration"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Storage/Entities/TodoItemEntity.cs",
+      "sha256": "D0210606530D79380713FC368DB6A73AC5B0027D0A880249FD26811122ED20CB",
+      "classification": "Length annotation",
+      "reviewedExcerpts": [
+        {
+          "start": 22,
+          "end": 38,
+          "lines": [
+            "    /// <summary>",
+            "    /// Workspace discriminator (TR-MCP-MT-003 pattern); the absolute workspace",
+            "    /// path resolved from <c>WorkspaceContext</c>. Part of the composite",
+            "    /// primary key with <see cref=\"Id\"/>.",
+            "    /// </summary>",
+            "    [Required]",
+            "    [StringLength(1024)]",
+            "    public string WorkspaceId { get; set; } = string.Empty;",
+            "",
+            "    /// <summary>Canonical TODO identifier (e.g. <c>MVP-APP-001</c>, <c>ISSUE-17</c>).</summary>",
+            "    [StringLength(128)]",
+            "    public required string Id { get; set; }",
+            "",
+            "    /// <summary>Short human-readable title.</summary>",
+            "    [Required]",
+            "    [StringLength(1024)]",
+            "    public required string Title { get; set; }"
+          ]
+        }
+      ],
+      "observation": "TODO Id128 is part of workspace-scoped composite key, with WorkspaceId1024.",
+      "futureDisposition": "Do not infer relational index feasibility from CLR annotations or InMemory model.",
+      "requiredVerification": [
+        "Composite key bytes",
+        "Full Int64 suffix",
+        "Legacy widths"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Storage/Entities/TodoRequirementLinkEntity.cs",
+      "sha256": "7E52D4E54172A0AF9857CD30E34694AFE4851EE326167354AB80643BE9317706",
+      "classification": "Reference length annotation",
+      "reviewedExcerpts": [
+        {
+          "start": 12,
+          "end": 30,
+          "lines": [
+            "    /// <summary>Workspace discriminator for both TODO and requirement.</summary>",
+            "    [Required]",
+            "    [StringLength(1024)]",
+            "    public string WorkspaceId { get; set; } = string.Empty;",
+            "",
+            "    /// <summary>Canonical TODO identifier.</summary>",
+            "    [Required]",
+            "    [StringLength(128)]",
+            "    public string TodoId { get; set; } = string.Empty;",
+            "",
+            "    /// <summary>Requirement kind: fr, tr, or test.</summary>",
+            "    [Required]",
+            "    [StringLength(16)]",
+            "    public string RequirementKind { get; set; } = string.Empty;",
+            "",
+            "    /// <summary>Requirement identifier.</summary>",
+            "    [Required]",
+            "    [StringLength(128)]",
+            "    public string RequirementId { get; set; } = string.Empty;"
+          ]
+        }
+      ],
+      "observation": "Both TodoId and RequirementId have128character limits; link carries workspace and kind.",
+      "futureDisposition": "Versioned schema and aliases must preserve typed scoped references; no truncation to fit.",
+      "requiredVerification": [
+        "Both parent keys",
+        "Kind and scope",
+        "Length refusal preserves data"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "templates/prompt-templates.yaml",
+      "sha256": "1EF9B7ACDED70F2DED5ABFA2936422CEDAAEB16ECE32B00C280B2DF74E2F619B",
+      "classification": "Canonical prompt source",
+      "reviewedExcerpts": [
+        {
+          "start": 535,
+          "end": 542,
+          "lines": [
+            "      ## Naming Conventions",
+            "",
+            "      - Persisted TODO IDs must be uppercase canonical ids in either <SDLC-PHASE>-<AREA>-### form (regex: ^[A-Z]+-[A-Z0-9]+-\\d{3}$) or ISSUE-{number} form (regex: ^ISSUE-\\d+$).",
+            "      - Valid TODO IDs: PLAN-NAMINGCONVENTIONS-001, MCP-API-042, ISSUE-17.",
+            "      - Invalid TODO IDs: plan-api-001, MCP-API-42, ISSUE-ABC, MCPAPI001.",
+            "      - Create requests may use ISSUE-NEW only when the intent is to create a new GitHub-backed TODO. The server will create the GitHub issue immediately and persist the TODO using the canonical ISSUE-{number} id.",
+            "      - Session IDs must use <Agent>-<yyyyMMddTHHmmssZ>-<suffix> and start with the exact agent/source type prefix.",
+            "      - `<Agent>` / `sourceType` must be the agent's real identity in Pascal-Case. Valid example: `Codex`. Invalid examples: `codex`, `copilotcli` (when the agent is Codex), `Assistant`."
+          ]
+        },
+        {
+          "start": 664,
+          "end": 673,
+          "lines": [
+            "    content: |-",
+            "      Extract one MCP TODO draft from the handoff document in {{handoffText}}.",
+            "      Return only a single JSON object. Do not wrap it in markdown. Do not emit prose.",
+            "",
+            "      Required properties:",
+            "      - id: canonical TODO id matching ^[A-Z]+-[A-Z0-9]+-\\d{3}$ or ^ISSUE-\\d+$",
+            "      - title: short title",
+            "      - section: existing or proposed section name",
+            "      - priority: critical, high, medium, or low",
+            "      - confidence: number from 0.0 to 1.0"
+          ]
+        }
+      ],
+      "observation": "Runtime marker and handoff templates instruct single-area3digit TODO format.",
+      "futureDisposition": "Any authorized change is object-first YAML mutation and coordinated projection; current receipt does not amend templates or marker.",
+      "requiredVerification": [
+        "Marker and prompt propagation",
+        "Legacy examples retained"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "docs/context/todo-schema.md",
+      "sha256": "54AE513E6E5F30D769E29BAFA553664CB13A1D5C1E7A81CB1A946508C9558CDE",
+      "classification": "Canonical documentation",
+      "reviewedExcerpts": [
+        {
+          "start": 22,
+          "end": 29,
+          "lines": [
+            "## Naming Conventions (Normative)",
+            "",
+            "- Persisted TODO IDs must match either uppercase kebab-case ending in a three-digit sequence suffix",
+            "  or canonical GitHub issue IDs `ISSUE-{number}`.",
+            "- Required persisted-ID regex set: `^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\\d{3}$` or `^ISSUE-\\d+$`",
+            "- Valid persisted-ID examples: `PLAN-NAMINGCONVENTIONS-001`, `PHASE0-REMOTE-001`, `MCP-TODO-CREATE-001`, `ISSUE-17`",
+            "- Invalid persisted-ID examples: `plan-api-001`, `MCP-API-42`, `MCP-001`, `ISSUE-ABC`, `MCPAPI001`",
+            "- Create requests may also use the special id `ISSUE-NEW`. The server immediately creates a GitHub"
+          ]
+        }
+      ],
+      "observation": "Normative TODO documentation specifies multi-segment3digit persisted identifiers and ISSUE-NEW create behavior.",
+      "futureDisposition": "Versioned documentation must distinguish legacy and new capability; refresh ingested projection through owning workflow.",
+      "requiredVerification": [
+        "Canonical versus ingested text"
+      ],
+      "runtimeProof": false
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/graphrag-global/input/canonical/docs/context/todo-schema.md",
+      "sha256": "AAF6FE4418C1BD340964F3EBB9D34AF5853CDEE25711D4567734587A2680AA13",
+      "classification": "Ingested projection",
+      "reviewedExcerpts": [
+        {
+          "start": 17,
+          "end": 29,
+          "lines": [
+            "## Naming Conventions (Normative)",
+            "",
+            "- Persisted TODO IDs must match either uppercase kebab-case ending in a three-digit sequence suffix",
+            "  or canonical GitHub issue IDs `ISSUE-{number}`.",
+            "- Required persisted-ID regex set: `^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\\d{3}$` or `^ISSUE-\\d+$`",
+            "- Valid persisted-ID examples: `PLAN-NAMINGCONVENTIONS-001`, `PHASE0-REMOTE-001`, `MCP-TODO-CREATE-001`, `ISSUE-17`",
+            "- Invalid persisted-ID examples: `plan-api-001`, `MCP-API-42`, `MCP-001`, `ISSUE-ABC`, `MCPAPI001`",
+            "- Create requests may also use the special id `ISSUE-NEW`. The server immediately creates a GitHub",
+            "  issue, rewrites the saved TODO id to the canonical `ISSUE-{number}` value, and returns that canonical id.",
+            "- After the first sync, `ISSUE-{number}` descriptions are immutable. Server-side TODO update surfaces sync",
+            "  subsequent ISSUE changes to GitHub, keep the local description/body unchanged, and append a GitHub issue",
+            "  comment describing the applied change set.",
+            "- When creating/updating `dependsOn`, each dependency ID must follow the same persisted TODO ID convention."
+          ]
+        }
+      ],
+      "observation": "Ingested TODO schema repeats three-digit grammar with different line offsets.",
+      "futureDisposition": "Do not patch ingestion copy independently; track canonical source docs/context/todo-schema.md.",
+      "requiredVerification": [
+        "Projection refreshed only by authorized workflow"
+      ],
+      "runtimeProof": false
+    }
+  ],
+  "completeConsumerInventory": false,
+  "productionChanges": false,
+  "tasksCompleted": false,
+  "implementationBarrier": "Closed",
+  "limitations": [
+    "Targeted source review, not runtime execution or a complete semantic call graph.",
+    "Lexical source inventory has215candidate files/918hits; this receipt does not mark all of them reviewed.",
+    "Unreviewed numeric DTO/caller, ordering, length/index/provider, installed-plugin/UI and transitive consumers remain pending.",
+    "Versioned route/DTO/capability and unsafe/exhausted allocator failure mapping remain open contract dispositions.",
+    "No grammar/operator adoption, API upgrade, migration or deployment is established."
+  ],
+  "generator": {
+    "path": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\Save-FederationIdentityConsumerReview.ps1",
+    "sha256": "DE2C062C7F00FFC23157E65972775A94EB90C01A8E63813D0A807541DDBAA8C2"
+  }
+}
