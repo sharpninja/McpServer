@@ -1,0 +1,1 @@
+Historical R1 mock evidence. The current source and receipt are in ../20261117-phase0-identity-reconciliation-r2/. R2 changes the list-row content projection to the actual ListType discriminator so its Value can independently follow the reviewed dependency mapping. Original R1 artifacts remain retained; do not use their hashes as the current source proof.

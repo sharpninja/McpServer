@@ -1,0 +1,74 @@
+{
+  "timestampLocal": "2026-11-17T20:35:45",
+  "tasks": [
+    "TASK-FEDPH0-004"
+  ],
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "host": "PAYTON-LEGION2",
+  "runId": "20261117T203531-fedph0-identity-reconciliation-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0IdentityReconciliationMockGateTests --test-run-id 20261117T203531-fedph0-identity-reconciliation-mock",
+  "plan": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+  "planSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+  "total": 466,
+  "passed": 466,
+  "failed": 0,
+  "skipped": 0,
+  "positiveCases": 4,
+  "expectedNegativeControls": 462,
+  "coverage": [
+    {
+      "test": "TEST-MCP-230",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-009",
+      "text": "Given LAB and LEGION have different entities named TODO-7, when migration resolves the collision, then scoped aliases resolve each original identity and every relational reference follows its reviewed canonical mapping; historical text remains byte-identical.",
+      "satisfied": false,
+      "fr": "FR-MCP-182",
+      "ac": "ac-LegacyCollisionPreservesReferences"
+    },
+    {
+      "test": "TEST-MCP-230",
+      "binding": "Scripted mock only",
+      "tr": "TR-MCP-FEDERATION-009",
+      "text": "Given LAB TODO-7 and LEGION TODO-91 share normalized title Fix login, description and dependency set, when migration plan runs, then it emits a duplicate candidate with both IDs and evidence; until explicit review, neither is merged or deleted.",
+      "satisfied": false,
+      "fr": "FR-MCP-182",
+      "ac": "ac-DifferentIdsSameTodoDetected"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "sha256": "F94FB9248775EFD6F69E2998B0A67EA7560A9572EE34E513FD3A15E7856C67F1",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityReconciliationContract.cs",
+      "lfNormalizedSha256": "F857CE72D6672F5D68B7E906483DA9EC6F1B323CA152314C745EEF7347287BBB"
+    },
+    {
+      "sha256": "33989FE03C3AA3F986CDE7903C89345A8CB237BBDB3212F32B122EF13C708836",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityReconciliationMockGateTests.cs",
+      "lfNormalizedSha256": "58FEC6255092475F1491D5D64E67F198162855EAF3EA6BAFC41EAA1B9B6C967A"
+    }
+  ],
+  "copies": [
+    {
+      "sha256": "80440A9F06E2F7D28EF83D51E72122A5A59C56BB35630FB1BAC6361B7523D213",
+      "name": "windows-mock.trx",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261117T203531-fedph0-identity-reconciliation-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "sha256": "EDC44391CC795483454AB79591D305FB3A385A844B0E7FB330C07E56AEB0CE0C",
+      "name": "windows-mock.nuke.txt",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-17_20-35-33.log"
+    }
+  ],
+  "pending": [
+    "Small source-verified TODO task/list graph only; all B2-classified relationship families and typed composite keys still need complete fixture binding.",
+    "No production importer, duplicate detector, plugin behavior, or real database is exercised.",
+    "Full B4 grammar/consumer closure and actual allocator/parser/import evidence remain unproven.",
+    "Initial874-case run rejected for assistant-authored fictitious graph relationships; original artifacts retained under TestResults/20261117T202949-fedph0-identity-reconciliation-mock and its original Nuke log."
+  ],
+  "productionImplementationChanged": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false
+}

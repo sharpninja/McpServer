@@ -1,0 +1,156 @@
+{
+  "TEST-MCP-230": {
+    "scopeStartLayerKey": "layer-1",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-TwoNodesCreateDistinctIds",
+        "text": "Given tags LA and LG and both counters start1, when both create a TODO, then generated IDs differ and both records survive reconciliation."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-BranchRevertDoesNotReuseSequence",
+        "text": "Given LA allocated sequence42, when main reverts and another branch creates a record, then its sequence is greater than42."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-LegacyCollisionPreservesReferences",
+        "text": "Given LAB and LEGION have different entities named TODO-7, when migration resolves the collision, then scoped aliases resolve each original identity and every relational reference follows its reviewed canonical mapping; historical text remains byte-identical."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-LegacyIdsRemainValid",
+        "text": "Given existing IMPL-UNITGREEN-001 and old TODO references, when imported and read by their original IDs, then they resolve through permanent aliases without rewriting commits, PR text, session logs, memories or documents."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DifferentIdsSameTodoDetected",
+        "text": "Given LAB TODO-7 and LEGION TODO-91 share normalized title Fix login, description and dependency set, when migration plan runs, then it emits a duplicate candidate with both IDs and evidence; until explicit review, neither is merged or deleted."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-SimultaneousHumanIdReservation",
+        "text": "Given human ID IMPL-UNITGREEN-001 is unreserved, when two nodes reserve it concurrently, then exactly one receives201 and the other409 human_id_reserved; retry by the winning requestId returns the same reservation."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OfflineHumanIdPublicationDenied",
+        "text": "Given an offline-created provisional TODO requesting an unreserved human ID, when it reconnects and publishes, then409 human_id_unreserved retains the local record until reservation or reviewed alias resolution."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-PluginIdentityDiagnostics",
+        "text": "Given LAB TODO-7 and LEGION TODO-91 are a duplicate candidate, when each plugin opens identity review, then both origin IDs, canonical/provisional IDs, similarity evidence and reservation outcome are visible; no alias or row changes before an authorized decision."
+      }
+    ],
+    "title": "collision-resistant and preserved identity acceptance tests",
+    "workspaceId": "F:/GitHub/McpServer",
+    "condition": "Verify FR-MCP-182 and TR-MCP-FEDERATION-009 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+    "id": "TEST-MCP-230",
+    "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+    "status": "pending",
+    "priority": "high"
+  },
+  "TR-MCP-FEDERATION-009": {
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-TwoNodesCreateDistinctIds",
+        "text": "Given tags LA and LG and both counters start1, when both create a TODO, then generated IDs differ and both records survive reconciliation."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-BranchRevertDoesNotReuseSequence",
+        "text": "Given LA allocated sequence42, when main reverts and another branch creates a record, then its sequence is greater than42."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-LegacyCollisionPreservesReferences",
+        "text": "Given LAB and LEGION have different entities named TODO-7, when migration resolves the collision, then scoped aliases resolve each original identity and every relational reference follows its reviewed canonical mapping; historical text remains byte-identical."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-LegacyIdsRemainValid",
+        "text": "Given existing IMPL-UNITGREEN-001 and old TODO references, when imported and read by their original IDs, then they resolve through permanent aliases without rewriting commits, PR text, session logs, memories or documents."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DifferentIdsSameTodoDetected",
+        "text": "Given LAB TODO-7 and LEGION TODO-91 share normalized title Fix login, description and dependency set, when migration plan runs, then it emits a duplicate candidate with both IDs and evidence; until explicit review, neither is merged or deleted."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-SimultaneousHumanIdReservation",
+        "text": "Given human ID IMPL-UNITGREEN-001 is unreserved, when two nodes reserve it concurrently, then exactly one receives201 and the other409 human_id_reserved; retry by the winning requestId returns the same reservation."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OfflineHumanIdPublicationDenied",
+        "text": "Given an offline-created provisional TODO requesting an unreserved human ID, when it reconnects and publishes, then409 human_id_unreserved retains the local record until reservation or reviewed alias resolution."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-PluginIdentityDiagnostics",
+        "text": "Given LAB TODO-7 and LEGION TODO-91 are a duplicate candidate, when each plugin opens identity review, then both origin IDs, canonical/provisional IDs, similarity evidence and reservation outcome are visible; no alias or row changes before an authorized decision."
+      }
+    ],
+    "priority": "medium",
+    "title": "collision-resistant and preserved identity contract",
+    "workspaceId": "F:/GitHub/McpServer",
+    "body": "Generated IDs use immutable two-character creator tags and durable branch-independent sequences with per-family grammar fixed in Ph0. Alias key=(ProjectId,OriginNodeId,EntityKind,LegacyId) maps permanently to CanonicalId; ambiguous unqualified lookup returns409 ambiguous_legacy_id. Historical text/commits are not rewritten. Migration duplicate candidates use normalized title/description/dependency features, returning similarity score plus evidence, never auto-merging. Human ID reservations are unique(ProjectId,EntityKind,HumanId) at the hub, bound to node/requestId. Offline nodes use generated provisional IDs; an unreserved human ID is not publishable.\n\nServer: provenance, scoped aliases, collision evidence and reservation outcomes. Plugin: expose provenance/collision diagnostics and the authorized resolution path without rewriting historical references.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "pending",
+    "id": "TR-MCP-FEDERATION-009"
+  },
+  "FR-MCP-182": {
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-TwoNodesCreateDistinctIds",
+        "text": "Given tags LA and LG and both counters start1, when both create a TODO, then generated IDs differ and both records survive reconciliation."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-BranchRevertDoesNotReuseSequence",
+        "text": "Given LA allocated sequence42, when main reverts and another branch creates a record, then its sequence is greater than42."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-LegacyCollisionPreservesReferences",
+        "text": "Given LAB and LEGION have different entities named TODO-7, when migration resolves the collision, then scoped aliases resolve each original identity and every relational reference follows its reviewed canonical mapping; historical text remains byte-identical."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-LegacyIdsRemainValid",
+        "text": "Given existing IMPL-UNITGREEN-001 and old TODO references, when imported and read by their original IDs, then they resolve through permanent aliases without rewriting commits, PR text, session logs, memories or documents."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DifferentIdsSameTodoDetected",
+        "text": "Given LAB TODO-7 and LEGION TODO-91 share normalized title Fix login, description and dependency set, when migration plan runs, then it emits a duplicate candidate with both IDs and evidence; until explicit review, neither is merged or deleted."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-SimultaneousHumanIdReservation",
+        "text": "Given human ID IMPL-UNITGREEN-001 is unreserved, when two nodes reserve it concurrently, then exactly one receives201 and the other409 human_id_reserved; retry by the winning requestId returns the same reservation."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OfflineHumanIdPublicationDenied",
+        "text": "Given an offline-created provisional TODO requesting an unreserved human ID, when it reconnects and publishes, then409 human_id_unreserved retains the local record until reservation or reviewed alias resolution."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-PluginIdentityDiagnostics",
+        "text": "Given LAB TODO-7 and LEGION TODO-91 are a duplicate candidate, when each plugin opens identity review, then both origin IDs, canonical/provisional IDs, similarity evidence and reservation outcome are visible; no alias or row changes before an authorized decision."
+      }
+    ],
+    "priority": "medium",
+    "title": "collision-resistant and preserved identity",
+    "workspaceId": "F:/GitHub/McpServer",
+    "body": "Prevent generated-ID collisions, preserve permanent legacy aliases, detect duplicate work and atomically reserve human-assigned IDs.\n\nServer: provenance, scoped aliases, collision evidence and reservation outcomes. Plugin: expose provenance/collision diagnostics and the authorized resolution path without rewriting historical references.",
+    "scopeStartLayerKey": "layer-1",
+    "status": "pending",
+    "id": "FR-MCP-182"
+  }
+}
