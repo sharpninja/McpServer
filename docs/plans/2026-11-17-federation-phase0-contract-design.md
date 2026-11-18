@@ -217,3 +217,7 @@ The automatic-writer companion and command-writer-boundaries.json now cover sour
 ### Full writer source-anchor accounting, not native closure
 
 The automatic-writer design's distinct coverage checkpoint and writer-review-progress-r2.json account for all 214 writer-call and 64 automatic-assignment candidates through eight pinned receipts, with no missing source anchor and all 59 enclosure-source hashes unchanged. The four new domain, security/runtime, workflow and host-registry receipts extend per-command and prior boundary evidence. Runtime routing, semantic/dynamic caller closure, native relational mappings, all-domain migration/export/audit graphs and B2/B3 acceptance remain unproven. All tasks remain open and the implementation barrier remains Closed. This source-only checkpoint changes no product code or approved requirement.
+
+### Bounded static writer-target binding
+
+writer-semantic-bindings-r1.json resolves 278/278 original candidate targets with zero unresolved symbols using existing metadata only (771 source inputs, 494 reference pins). All 174 non-MSBuild inspection-compilation errors remain recorded, including omitted generated JSON/regex members and two other diagnostics; this is neither a build result nor native writer closure. The automatic-writer companion records the 185 tracked-save and 29 bulk/direct/helper split, separate transaction-security context, and response-DTO/file assignment counterexamples. All acceptance, runtime and full-caller-closure flags remain false; no task/barrier/approved requirement changes.
