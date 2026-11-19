@@ -1,0 +1,39 @@
+# Task004 B2-B4 design and mock checkpoint
+
+PLAN-FEDDOLT-001; TASK-FEDPH0-004; GRP-FEDPH0-001. Candidate work only. The task remains Planning, done false, with the all-nine implementation barrier Closed and DEPLOY HOLD unchanged. This companion changes no requirement or public behavior and makes no native, B-output, task completion or HV claim.
+
+## Current definition and existing evidence
+
+The assigned canonical pairs are FR-MCP-184 ac-BackgroundWritersDoNotDirtyVersionedBranch and FR-MCP-182 ac-TwoNodesCreateDistinctIds/ac-LegacyIdsRemainValid, constrained by TR-MCP-FEDERATION-009/011 and TEST-MCP-230/232. B2-B4 requires the complete writer/property/reference classification, context topology and generated/human identity compatibility design in addition to those three pairs. The source catalog and automatic-writer/identity companions retain the broader denominator.
+
+The existing source catalog records214 writer calls and64 automatic assignments (278 fixed anchors), corrected seven relational model manifests with968 properties,88 classified entity entries and126 relationship entries. Source-symbol resolution and the174 metadata-inspector compilation diagnostics are not a product build or dynamic writer proof. The supplemental sqlite3_exec constructor callback remains explicitly in scope. Session capture and derived operational state remain unversioned; only an explicit immutable session snapshot is promoted.
+
+B3 keeps the historical full McpDbContext and original standalone migration histories, a Dolt-only project projection keyed by immutable ProjectId, a separate unversioned control context with additive provider chains, the existing authentication boundaries and existing QuadBrain operational/security database. Stable application-validated soft references replace cross-store foreign keys and joins. None of these contexts, migrations or validators is implemented by this checkpoint.
+
+## Finite consumer roster and review attribution
+
+identity-consumer-roster.json accounts for the retained215 candidate files and918 lexical matches against the current source checkout. Every source exists, every full-file hash matches and every retained line matches. It preserves all32 original manual-review records. Exactly31 of them belong to the215 candidates; docs/context/todo-schema.md is a supplemental reviewed document. Thus184 candidate files remain without an individual semantic review. The roster does not turn those files into reviewed consumers.
+
+remaining-consumer-partition.json routes those184 files for independent review:106 identity-model/consumer candidates,64 operational/external-ID candidates,12 build-tooling candidates and2 documentation/retired-Node candidates. A bucket is not a semantic disposition. Each exact path carries its hash, source anchors, lexical categories and the B4 obligations it may affect. True identity dependencies, false positives and unchanged operational/external IDs require individual source judgments. No new Node implementation is proposed.
+
+The inspection helper is tools/powershell/Inspect-FederationConsumerRoster.ps1. Before its actual output write, parser and Warning/Error analyzer checks returned0 diagnostics and WhatIf completed. The first combined checks lost their PowerShell.MCP console pipes; individual minimal checks recovered. The ignored original inspection script remains retained, with the tracked helper verified byte-identical by SHA256.
+
+## Added allocator safety seam
+
+Phase0AllocatorSafetyContract and IPhase0AllocatorSafetyProbe are test-owned interfaces, immutable DTOs and exact commands for later disposable bindings. The allocator key is explicitly ProjectId/creator tag/entity kind. Prepare seeds Atlas/Todo plus an unrelated Other/LA/Todo counter and byte-exact legacy content/history. ExecuteAsync receives the exact request/action/tag/recovery evidence, ReadState independently reads complete durable counters, receipts, content and history, and Reopen closes/reopens both stores without resetting either.
+
+The four scenarios prove: overlapping same-tag allocations issue distinct identities above42; lost-reply retry returns its durable receipt; a failed subsequent project write consumes its allocation and the next request advances; unsafe restored old-tag creation refuses until authoritative high-water100 is established; Int64.MaxValue refuses without wrap and a fresh never-reused LG tag allocates1 without changing the exhausted LA counter or historical references. Valid allocation gaps and either concurrent sequence order are permitted. Counters and allocation-request receipts become visible together, while project content failure is separately observed. No cross-store atomic transaction is claimed.
+
+Normalized Issued, ReplyLost, Refused, ContentRejected and Applied observations are local test-owned outcomes, not new public protocol codes. The live TR009 body and main plan sections at lines979-984/1001-1013 require durable identity and lock the public error envelope but assign no allocator-specific exhausted/unsafe code. Phase0 tests the required safe refusal/no issuance/no reuse without adding a new operator gate for an endpoint not shipped here. Later public mapping remains with the existing typed-contract design owner.
+
+The native adapter, after the group barrier opens, uses run-owned Nuke-provisioned project and unversioned-control stores on each approved control provider. It records native allocation transactions, orchestrates two independent requests, loses only the reply after durability, injects a separate project-write failure, restores unsafe allocator state, supplies authoritative recovery evidence and exercises Int64 exhaustion/fresh enrollment. It must implement the same commands and retain the same assertion source. It obtains snapshots through separate reopened readers, not a cached success flag, expected fixture echo or method-entry count. No live database or service is used.
+
+## Receipt and remaining current-definition work
+
+Windows Nuke run20261119T104244-task004-allocator-final passed375/375 with0 failures and0 skips:4 valid scenario cases and371 deliberately wrong observations. Each valid scenario also exercises two allowed gap variants. Negative controls mutate each reply and durable checkpoint, including every allocation request/project/tag/kind/sequence/canonical-ID field; the harness requires the intended injection to execute and an xUnit assertion to reject it. Mandatory code-verify passed after each source edit. The earlier249-case result is historical and is not substituted for this final source version.
+
+Exact TRX, Nuke log, code-verify logs, current effective definitions and source pins are under docs/receipts/federation/20261119-task004-readiness. This is Windows mock execution, not actual LAB-OMARCHY execution. Parent owns integrated paired-host checks.
+
+The current checkpoint does not yet establish full Task004 readiness. Individual consumer dispositions remain for184 files. The additive numeric/canonical DTO compatibility strategy needs its dedicated discriminating seam, and the existing small identity-reference fixture must be complemented by a complete B2 reference-manifest projection/assertion contract. These are in-scope design/mock work in progress. Native allocator/import/parser/provider/runtime compatibility remains later implementation and B-output acceptance work, not a prerequisite invented for design readiness.
+
+Final checkpoint run20261119T104821-task004-allocator-checkpoint repeated375/375,0fail/skip after making Project and Kind explicit command DTO fields and removing an EOF blank line. The original375-case final run remains retained; windows-allocator-checkpoint.trx and windows-allocator-checkpoint.log.zip and allocator-checkpoint-code-verify.txt bind the checkpoint source. No assertion was weakened.

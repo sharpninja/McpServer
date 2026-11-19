@@ -1,0 +1,108 @@
+{
+  "capturedLocal": "2026-11-19T10:49:18",
+  "workspace": "F:/GitHub/McpServer",
+  "branch": "codex/fedph0-task004-20261119",
+  "baseHead": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "modelReceipt": "C:/Users/kingd/.codex/sessions/2026/11/19/rollout-2026-11-19T09-38-08-01a1f475-4599-7a80-8369-1e7c30e7e879.jsonl turn_context",
+  "sessionId": "Codex-20261119T153852Z-plugin-session",
+  "requestId": "req-20261119T161426Z-prompt-0ebb",
+  "parentSessionId": "Codex-20261116T174245Z-plugin-session",
+  "parentRequestId": "req-20261119T155309Z-prompt-142e",
+  "files": [
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+      "sha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72"
+    },
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-architecture.md",
+      "sha256": "13AB93549CC16BCE16DE412252284F22A39DD8FDA633666BEC41B3F3E4D585D1"
+    },
+    {
+      "path": "docs/plans/2026-11-17-federation-phase0-contract-design.md",
+      "sha256": "A10BFC2A11448E1AE4344CC932025175916E56B3719E9A84C67E7E7706D57653"
+    },
+    {
+      "path": "docs/plans/2026-11-17-federation-identity-design.md",
+      "sha256": "08B892A581D1FC08CC902CB8E14CAC80B71DD0A828253225C890E3556D0ACBD9"
+    },
+    {
+      "path": "docs/plans/2026-11-17-federation-automatic-writer-design.md",
+      "sha256": "23B31874EE3FC44453B32520C0A84AF21F1C3A1165B13EE116F7874113740EE8"
+    },
+    {
+      "path": "docs/plans/2026-11-19-federation-task004-readiness.md",
+      "sha256": "EF69E98DDB5603BFB390C5ADC9C200EBADACCE81F4747AA7B88E56CA26EE413F"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/proposed-storage-classification.json",
+      "sha256": "E60B28468F3C884EC7EB70BAA48C2F1457365EB64CB4279DDB146278301AA324"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/identity-consumer-candidates.json",
+      "sha256": "F567D0DB01C3281F34A4DD9430DBF8D9773B0B095ACD28DE2DEE25FB69246DB6"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/identity-consumer-review.json",
+      "sha256": "5827F3C6DD653CED0CFD8FB8EA406A598F7277E9C547A26645B469A9E8138A67"
+    },
+    {
+      "path": "tools/powershell/Inspect-FederationConsumerRoster.ps1",
+      "sha256": "298DC32CB59A3223FF5B7361DEB0695FFC831913556858ED38D9EE4EB0A096A2"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AllocatorSafetyMockGateTests.cs",
+      "sha256": "EF89CFFA3A375801CC9638DAA343EFCCD6FCB680F739C42DE70E27BDA37AA18F"
+    }
+  ],
+  "receipts": [
+    {
+      "path": "allocator-checkpoint-code-verify.txt",
+      "sha256": "F8C9D6E6095FAA9C26458339235593B4FFF8940CD3F8B816590C73EA412F163F"
+    },
+    {
+      "path": "allocator-final-code-verify.txt",
+      "sha256": "5D6104AE42E74E67E30D1CD9E86573B27221A59AA0A177C57D3620AF85FA0C41"
+    },
+    {
+      "path": "allocator-initial-code-verify.txt",
+      "sha256": "73098D70FC10CF6DA540C4D1747E53A4A20543605F411B21A26F2835E59180B7"
+    },
+    {
+      "path": "identity-consumer-roster.json",
+      "sha256": "7F9E41E5FC93861D5E544767784060EABABA951C3517E26F509A9FE382F5F8DE"
+    },
+    {
+      "path": "README.md",
+      "sha256": "9A0296FAF32C636C2BEA1419868E6D98177DF538248E043E4F2A07BE7AB5CCA2"
+    },
+    {
+      "path": "remaining-consumer-partition.json",
+      "sha256": "0231FABE8027B8D8289F12D6BEFB70E2210B3B48546AEB6923A4ADB10982F39F"
+    },
+    {
+      "path": "task004-definition-and-requirements.json",
+      "sha256": "D9678F0D1BB5980E96BDB30E4BBC1912DE888FE9F245CCD8E4D21803AD292658"
+    },
+    {
+      "path": "windows-allocator-checkpoint.log.zip",
+      "sha256": "99F8683E1626492624A91A789360BDBF1AD8BFE5775877E906ED25772D6AF950"
+    },
+    {
+      "path": "windows-allocator-checkpoint.trx",
+      "sha256": "04D5BC7016031CA052AE78F07CFA6DAAB06A32290A3116D3080FA8E19A54E6E0"
+    },
+    {
+      "path": "windows-allocator-final.log.zip",
+      "sha256": "AA126BE630B4687636FDAA3ACA39CF7A5C1C1F248EAAB5532557746396AAFD77"
+    },
+    {
+      "path": "windows-allocator-final.trx",
+      "sha256": "C4D2F065718720DDC6278150F5F2BA3E48F5B92123A633107546FDC7A67786A8"
+    }
+  ],
+  "nativeProof": false,
+  "taskReady": false
+}
