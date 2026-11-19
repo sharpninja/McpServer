@@ -5,7 +5,7 @@ using Xunit.Sdk;
 namespace QBrainAi.Support.Mcp.Tests.Federation.Phase0;
 
 /// <summary>Test-owned additive boundary inputs; numeric standalone IDs remain numeric.</summary>
-/// <param name="Operation">ReadStandalone, ReadVersioned, ResolveLegacy or Negotiate.</param>
+/// <param name="Operation">Exact local adapter command from the frozen identity, projection, guidance and composition roster.</param>
 /// <param name="ContractVersion">Requested contract version.</param><param name="Project">Immutable scope.</param>
 /// <param name="Origin">Original creator.</param><param name="Kind">Entity family.</param>
 /// <param name="LegacyType">Exact original type discriminator.</param><param name="LegacyValue">Exact original representation.</param>
@@ -46,7 +46,11 @@ internal interface IPhase0IdentityDtoProbe
 
 /// <summary>Freezes additive identity shape, typed legacy distinctions and capability refusal assertions.</summary>
 /// <remarks>2026-11-19: TASK-FEDPH0-004 B4; FR-MCP-182 ac-LegacyIdsRemainValid; TR-MCP-FEDERATION-009; TEST-MCP-230.
-/// Concrete public endpoint naming remains with the existing typed transport owner. No new HTTP error is introduced.</remarks>
+/// Concrete public endpoint naming remains with the existing typed transport owner. No new HTTP error is introduced.
+/// 2026-11-19: GitHubController451-477 consumes a project TODO legacy alias ISSUE-{number}; the separate external issue number
+/// retains its numeric meaning. This exact mixed-boundary fixture supplements the grammar rejection of ISSUE-87 as a new generated ID.
+/// 2026-11-19: Source-disposition closure adds exact traceability graph/Int64, layer-key versus creator metadata, mixed operational
+/// soft references, versioned guidance and composition/replay observations. These are local adapter observations, not new public DTOs.</remarks>
 internal static class Phase0IdentityDtoBoundaryContract
 {
     internal const string Canonical = "UC-LA-9223372036854775807";
@@ -85,7 +89,7 @@ internal static class Phase0IdentityDtoBoundaryContract
         AssertState(probe.ReadState());
     }
 
-    /// <summary>Defines exact standalone, additive canonical, three typed legacy and two unsupported requests.</summary>
+    /// <summary>Defines fifteen exact identity, traceability, layer, mixed-reference, guidance, composition and refusal requests.</summary>
     /// <returns>Inputs bound unchanged by the later adapter.</returns>
     internal static Phase0DtoCommand[] Commands() =>
     [
@@ -94,6 +98,14 @@ internal static class Phase0IdentityDtoBoundaryContract
         new("ResolveLegacy", LegacyType: "string", LegacyValue: "007"),
         new("ResolveLegacy", LegacyType: "string", LegacyValue: "7"),
         new("ResolveLegacy", LegacyType: "int64", LegacyValue: "7"),
+        new("ResolveLegacy", Kind: "Todo", LegacyType: "string", LegacyValue: "ISSUE-87"),
+        new("ReadExternalIssue", Kind: "GitHubIssue", NumericId: 87),
+        new("ReadStandaloneTraceability", NumericId: long.MaxValue),
+        new("ReadVersionedTraceability", CanonicalId: Canonical),
+        new("ReadLayerProjection", Kind: "RequirementLayer", LegacyType: "string", LegacyValue: "local-project"),
+        new("ReadMixedOperationalReferences", Kind: "Handoff", LegacyValue: "handoff-7"),
+        new("ReadVersionedGuidance", Kind: "PluginGuidance"),
+        new("ReadComposition", Kind: "ProjectContext"),
         new("Negotiate", ContractVersion: 2),
         new("UnsupportedCommand")
     ];
@@ -107,14 +119,49 @@ internal static class Phase0IdentityDtoBoundaryContract
         new(200, null, Reference("UC-LA-101", "string", "007")),
         new(200, null, Reference("UC-LA-102", "string", "7")),
         new(200, null, Reference("UC-LA-103", "int64", "7")),
+        new(200, null, Reference("TODO-LA-104", "string", "ISSUE-87", "Todo")),
+        new(200, null, new JsonObject { ["issueNumber"] = 87L, ["repository"] = "sharpninja/McpServer" }),
+        new(200, null, new JsonObject { ["useCaseId"] = long.MaxValue, ["frId"] = "FR-MCP-007" }),
+        new(200, null, new JsonObject
+        {
+            ["projectId"] = "Atlas", ["useCaseId"] = Canonical, ["frId"] = "FR-MCP-LG-1000",
+            ["flowId"] = "UC-FLOW-LA-001", ["stepId"] = "UC-STEP-LA-001",
+            ["sequenceNumber"] = 1000, ["stepNumber"] = 7, ["versionNumber"] = 2, ["linkOrder"] = 1,
+            ["diagramNodeId"] = "node-7"
+        }),
+        new(200, null, new JsonObject
+        {
+            ["projectId"] = "Atlas", ["originNodeId"] = "LA", ["layerKey"] = "local-project", ["order"] = 7,
+            ["requirementId"] = "FR-MCP-LG-1000", ["area"] = "MCP", ["subarea"] = null, ["creatorTag"] = "LG"
+        }),
+        new(200, null, new JsonObject
+        {
+            ["runId"] = "handoff-7", ["requestId"] = "req-20261119T171310Z-prompt-5c2d",
+            ["gitSha"] = "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d", ["auditVersion"] = 2,
+            ["todoRef"] = Reference("TODO-LA-104", "string", "ISSUE-87", "Todo"), ["sourceText"] = Historical
+        }),
+        new(200, null, new JsonObject
+        {
+            ["todo999"] = "EXEC-TODO-LA-999", ["todo1000"] = "EXEC-TODO-LA-1000",
+            ["memory999"] = "MEMORY-FACT-LA-999", ["memory1000"] = "MEMORY-FACT-LA-1000",
+            ["sort"] = "parsed-family/tag/numeric-sequence", ["legacyGuidanceRetained"] = true,
+            ["newNodeImplementation"] = false
+        }),
+        new(200, null, new JsonObject
+        {
+            ["projectId"] = "Atlas", ["versionedProjectProvider"] = "Dolt", ["standaloneProvider"] = "SQLite",
+            ["canonicalBoundaryBound"] = true, ["legacyReplayAllowedForVersionedProject"] = false,
+            ["localReads"] = true, ["workspaceAuthorizationRetained"] = true,
+            ["operationalStoresRetained"] = true, ["crossStoreJoinCount"] = 0
+        }),
         new(409, "unsupported_contract", null),
         new(501, "unsupported_capability", null)
     ];
 
     /// <summary>Preserves original type/value separately from display and canonical identity.</summary>
-    private static JsonObject Reference(string canonical, string? type, string? value) => new()
+    private static JsonObject Reference(string canonical, string? type, string? value, string kind = "UseCase") => new()
     {
-        ["contractVersion"] = 1, ["projectId"] = "Atlas", ["originNodeId"] = "LA", ["entityKind"] = "UseCase",
+        ["contractVersion"] = 1, ["projectId"] = "Atlas", ["originNodeId"] = "LA", ["entityKind"] = kind,
         ["canonicalId"] = canonical, ["legacyType"] = type, ["legacyValue"] = value,
         ["displayLabel"] = "User label UC-7", ["provenance"] = "reviewed-import-LA"
     };
@@ -209,7 +256,7 @@ public sealed class Phase0IdentityDtoBoundaryMockGateTests
         /// <inheritdoc/>
         public Phase0DtoState? ReadState()
         {
-            if (readIndex == 8) Assert.True(reopened);
+            if (readIndex == Phase0IdentityDtoBoundaryContract.Commands().Length + 1) Assert.True(reopened);
             var index = readIndex++;
             var state = new Phase0DtoState(long.MaxValue, Phase0IdentityDtoBoundaryContract.Canonical,
                 Phase0IdentityDtoBoundaryContract.Historical, 0, 0, 0);
@@ -224,6 +271,6 @@ public sealed class Phase0IdentityDtoBoundaryMockGateTests
             };
         }
         /// <inheritdoc/>
-        public void Reopen() { Assert.Equal(7, commandIndex); reopened = true; }
+        public void Reopen() { Assert.Equal(Phase0IdentityDtoBoundaryContract.Commands().Length, commandIndex); reopened = true; }
     }
 }

@@ -1,0 +1,1408 @@
+{
+  "schemaVersion": 1,
+  "taskId": "TASK-FEDPH0-004",
+  "artifactType": "ReadOnlySourceSemanticDisposition",
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "sessionId": "Codex-20261119T162438Z-plugin-session",
+  "requestId": "req-20261119T165814Z-task004-consumer-review",
+  "parentSessionId": "Codex-20261116T174245Z-plugin-session",
+  "parentRequestId": "req-20261119T155309Z-prompt-142e",
+  "latestOperatorSteeringRequestId": "req-20261119T171121Z-prompt-bc32",
+  "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+  "sourceWorktree": "F:/GitHub/McpServer/.worktrees/fedph0-task007-20261119",
+  "partitionPath": "docs/receipts/federation/20261119-task004-readiness/remaining-consumer-partition.json",
+  "partitionSha256": "0231FABE8027B8D8289F12D6BEFB70E2210B3B48546AEB6923A4ADB10982F39F",
+  "partition": "IdentityModelOrConsumer ordinal 001-053, root owns 054-106",
+  "reviewedFileCount": 53,
+  "sourceHashMismatchCount": 0,
+  "fullSourceReadCount": 53,
+  "nativeProof": false,
+  "productFilesModified": [],
+  "testsRun": [],
+  "taskStateChanged": false,
+  "isHostileValidation": false,
+  "limitations": [
+    "Read-only current-source semantic classification; does not establish canonical production implementation, mocks sufficiency, Task004 Ready, phase exit, or native runtime acceptance.",
+    "Operational versus authored judgments use the approved identity/automatic-writer plans; no new entity families or behavior requirements are invented."
+  ],
+  "findings": [
+    "Legacy numeric use-case DTOs and LinkedUseCaseRef require additive versioned canonical projections, preserving standalone JSON numeric contracts and nullable graph references.",
+    "Legacy requirement/TODO interface and command docs contain fixed-three-digit regex. Actual requirement service shape validator is broader and case-insensitive; a central registered canonical parser is required on the enrolled path, not a guessed regex widening.",
+    "Actual requirement service derives area/subarea from ID segments and validates lowercase kebab layer keys. Versioned canonical identity mapping must preserve those semantic fields without interpreting creator tags as areas or silently breaking legacy layer APIs.",
+    "Memory graph endpoints, consolidation lineage and deterministic ID tie-breaks are genuine identity consumers; operational index/Hebbian/job state stays distinct from authored memory content.",
+    "Audit/runtime/GraphRAG/legacy federation-control IDs, content ordinals and snapshots were individually classified and retained, not blanket-exempted from a keyword bucket."
+  ],
+  "processFriction": {
+    "note": "No process rule became an unnecessary blocker during this read-only partition review.",
+    "blockingRuleObserved": false
+  },
+  "sourceHashes": [
+    {
+      "candidateId": "src/QBrainAi.Client/Models/RequirementsModels.cs",
+      "expected": "160C48AFD79BD8ABAC5A71547600CA4E3259E0E70ECAAC3CF00C933A1778D5DE",
+      "actual": "160C48AFD79BD8ABAC5A71547600CA4E3259E0E70ECAAC3CF00C933A1778D5DE",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/Models/TodoModels.cs",
+      "expected": "9B1ABEC9CE527E6CBF86A8B630FBBCD7AC3DBA4ADF7F2E2BA9433E234A3E7BB6",
+      "actual": "9B1ABEC9CE527E6CBF86A8B630FBBCD7AC3DBA4ADF7F2E2BA9433E234A3E7BB6",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/Models/UseCaseModels.cs",
+      "expected": "18BFDDAB21C5B2CAB9E855C989F96549E99555A93274D77AEE6B7945F9DCDAAC",
+      "actual": "18BFDDAB21C5B2CAB9E855C989F96549E99555A93274D77AEE6B7945F9DCDAAC",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.QBAgent/QBAgentOpenTodoList.cs",
+      "expected": "F9C1C352D21E9230DCBFE5D85CC4AD540C0D87CA985A6947B9ED5C288476760C",
+      "actual": "F9C1C352D21E9230DCBFE5D85CC4AD540C0D87CA985A6947B9ED5C288476760C",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs",
+      "expected": "32F6C377C7F67F5C7BFB0A2D19CA2AC5BE36F354AD7EC6864470FC139165D54C",
+      "actual": "32F6C377C7F67F5C7BFB0A2D19CA2AC5BE36F354AD7EC6864470FC139165D54C",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Repl.Core/ITodoWorkflow.cs",
+      "expected": "38F1500255EE7FEECA0D90D85270A314E871F11DEA0996EB2D3A5B040142F56B",
+      "actual": "38F1500255EE7FEECA0D90D85270A314E871F11DEA0996EB2D3A5B040142F56B",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Repl.Core/RequirementsCommandShapes.cs",
+      "expected": "21DF4ED44F2B8F29B5EAAC68A4F6B8E6C8D4EA14AF0033C9284C2F1011691CDA",
+      "actual": "21DF4ED44F2B8F29B5EAAC68A4F6B8E6C8D4EA14AF0033C9284C2F1011691CDA",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+      "expected": "D24532A5D9C932B9ACC253BED44977D29185C52758B2660C8F0C9EF9A47143D2",
+      "actual": "D24532A5D9C932B9ACC253BED44977D29185C52758B2660C8F0C9EF9A47143D2",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Memory/MemoryExploreOperations.cs",
+      "expected": "0BD552BFE8264FFDC936920FDCA95FD2A0DCA17F1DE263ED23E58A36BEAC5A45",
+      "actual": "0BD552BFE8264FFDC936920FDCA95FD2A0DCA17F1DE263ED23E58A36BEAC5A45",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Memory/MemorySearchOperations.cs",
+      "expected": "4765E004945E405BC9223105F15910364DB2F976163159F418CD28727B735719",
+      "actual": "4765E004945E405BC9223105F15910364DB2F976163159F418CD28727B735719",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs",
+      "expected": "F1C512DC3D3A69300F9EE3324E7304E78C2A5D2BC487C74DE090B71C5B4DD127",
+      "actual": "F1C512DC3D3A69300F9EE3324E7304E78C2A5D2BC487C74DE090B71C5B4DD127",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "expected": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A",
+      "actual": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/ITodoService.cs",
+      "expected": "13B2E98B07529E078F868A069922765F2A1D7A18F35F7C744BEFCFB19EEBD90E",
+      "actual": "13B2E98B07529E078F868A069922765F2A1D7A18F35F7C744BEFCFB19EEBD90E",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseFlowCommand.cs",
+      "expected": "B391C0C42AAFF33F1F9CF332BAAEB68A60D0A2BBD28C2B4E86B340A316299C0E",
+      "actual": "B391C0C42AAFF33F1F9CF332BAAEB68A60D0A2BBD28C2B4E86B340A316299C0E",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseStepCommand.cs",
+      "expected": "DF990EA91C1AB62DC736BEB08AE65809C3EB11A11F0455AE4D44438B88E38B4A",
+      "actual": "DF990EA91C1AB62DC736BEB08AE65809C3EB11A11F0455AE4D44438B88E38B4A",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/AttachUseCaseActorCommand.cs",
+      "expected": "B5124B6C04023B256B328662EBB6AE34C9BE68640DB55B7B6CE86E9F9AE3FBF2",
+      "actual": "B5124B6C04023B256B328662EBB6AE34C9BE68640DB55B7B6CE86E9F9AE3FBF2",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/DeleteUseCaseCommand.cs",
+      "expected": "42E07171A83809AFA65C8BE790575FB5C714C76C0D3B4F6D4F0A478C4F314EEC",
+      "actual": "42E07171A83809AFA65C8BE790575FB5C714C76C0D3B4F6D4F0A478C4F314EEC",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs",
+      "expected": "E46E3D8DF7A396FE67A73AA62BD8EC42D6752AD6AE96A4A19F84593D85373932",
+      "actual": "E46E3D8DF7A396FE67A73AA62BD8EC42D6752AD6AE96A4A19F84593D85373932",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/PutUseCaseDiagramGraphCommand.cs",
+      "expected": "1F1A25420350A1C8C935E41C059C5C9D01070D4E1C3E50F6A5681C320DC5F851",
+      "actual": "1F1A25420350A1C8C935E41C059C5C9D01070D4E1C3E50F6A5681C320DC5F851",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseApprovalStatusCommand.cs",
+      "expected": "6B3668AB151B57577D7E83652CD17A91D4FDE2A65B7E070ADAFDB979657B0DAE",
+      "actual": "6B3668AB151B57577D7E83652CD17A91D4FDE2A65B7E070ADAFDB979657B0DAE",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseProductKeyCommand.cs",
+      "expected": "DE9D050636E9EC6DFBA383D7EBB4BEADE29FECCD4C423419BAC146D1C802A0C4",
+      "actual": "DE9D050636E9EC6DFBA383D7EBB4BEADE29FECCD4C423419BAC146D1C802A0C4",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/UnlinkUseCaseFromFrCommand.cs",
+      "expected": "9A831FEC5D0F47C4CFFECC1FC4FF5B40A56634FE96F84753A5A5D025A6C78386",
+      "actual": "9A831FEC5D0F47C4CFFECC1FC4FF5B40A56634FE96F84753A5A5D025A6C78386",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseActorCommand.cs",
+      "expected": "01E3EC82F4342707C68A2BD8A5D377BD1CD25075BBD94A52C0030E21A5FF4381",
+      "actual": "01E3EC82F4342707C68A2BD8A5D377BD1CD25075BBD94A52C0030E21A5FF4381",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseCommand.cs",
+      "expected": "272334E8061A4F77D1381C482DE36B8366B76ADDFFBF3C918A85141240061093",
+      "actual": "272334E8061A4F77D1381C482DE36B8366B76ADDFFBF3C918A85141240061093",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseFlowCommand.cs",
+      "expected": "D690FB2E8F2136152F44EEE59D0CAF9BF5C62311DE70A2512251DCFC3DE1C423",
+      "actual": "D690FB2E8F2136152F44EEE59D0CAF9BF5C62311DE70A2512251DCFC3DE1C423",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseStepCommand.cs",
+      "expected": "3713FA2266A34C02F764EE89F8BFB351A6D5A8F17810EAC17BA2EA791E8E1DE1",
+      "actual": "3713FA2266A34C02F764EE89F8BFB351A6D5A8F17810EAC17BA2EA791E8E1DE1",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Queries/GetUseCaseDiagramGraphQuery.cs",
+      "expected": "19A81A77ACE70CE7BF490D45F20B7BF41B090D628F575E5E3DB0F8195B2778F3",
+      "actual": "19A81A77ACE70CE7BF490D45F20B7BF41B090D628F575E5E3DB0F8195B2778F3",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Queries/GetUseCaseDiagramQuery.cs",
+      "expected": "3315F85AD4FF3D6C566091C367CD7579E20B53C581ABF16B8A977506E4F49224",
+      "actual": "3315F85AD4FF3D6C566091C367CD7579E20B53C581ABF16B8A977506E4F49224",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Queries/GetUseCaseQuery.cs",
+      "expected": "B17896CCCCBAFD4B92483D1F9B93C4659C2C53BE6C420C60ABD0269B020CA54A",
+      "actual": "B17896CCCCBAFD4B92483D1F9B93C4659C2C53BE6C420C60ABD0269B020CA54A",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Services/MermaidUseCaseDiagramService.cs",
+      "expected": "C528E133BE5F79DDFC4B0DD5B942B27965216D3A185ABDC4526343B26426BD98",
+      "actual": "C528E133BE5F79DDFC4B0DD5B942B27965216D3A185ABDC4526343B26426BD98",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Services/UseCaseUmlSerializationService.cs",
+      "expected": "9AA8895AC26E6A420C48B1677C8E5F5C8FFC525EB0364C218E99B1407D789C38",
+      "actual": "9AA8895AC26E6A420C48B1677C8E5F5C8FFC525EB0364C218E99B1407D789C38",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/UseCaseCqrsHelpers.cs",
+      "expected": "2E090D40A6CD698F678E83D9270CECF8FA259EDB4264D4F3BF8F57D3035EE7D8",
+      "actual": "2E090D40A6CD698F678E83D9270CECF8FA259EDB4264D4F3BF8F57D3035EE7D8",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/UseCaseFrCoverageCore.cs",
+      "expected": "4A45415187E019206F178296FA152C913B17F7BAA28FC7C536B21A92B3C1103A",
+      "actual": "4A45415187E019206F178296FA152C913B17F7BAA28FC7C536B21A92B3C1103A",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/UseCaseFrCoverageEvaluator.cs",
+      "expected": "A7B5FB3B3E63AFF0E4BCB55FC5AC72A8AFF6DECEECA66E126834B73810969151",
+      "actual": "A7B5FB3B3E63AFF0E4BCB55FC5AC72A8AFF6DECEECA66E126834B73810969151",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/ActorEntity.cs",
+      "expected": "D2930C2B9D8783BC1D4A18C8BE6ECD89C1D05B88B04975902B0B339635EE8510",
+      "actual": "D2930C2B9D8783BC1D4A18C8BE6ECD89C1D05B88B04975902B0B339635EE8510",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/AgentDefinitionEntity.cs",
+      "expected": "212F2B9E1558A0009C61A98D329EB690ED5CF3766D67ED5DA3747E9B10DF2048",
+      "actual": "212F2B9E1558A0009C61A98D329EB690ED5CF3766D67ED5DA3747E9B10DF2048",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/AgentDefinitionModelEntity.cs",
+      "expected": "9149BE7EFFC92FCD876EED7A2041D75C9DF094B59A33BFAC32260AB4B46E5017",
+      "actual": "9149BE7EFFC92FCD876EED7A2041D75C9DF094B59A33BFAC32260AB4B46E5017",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/AgentEventLogEntity.cs",
+      "expected": "524C306504497BF25F7AD62ABC47CA5B916027D6A96C7B5DD39B066ED65AF6D7",
+      "actual": "524C306504497BF25F7AD62ABC47CA5B916027D6A96C7B5DD39B066ED65AF6D7",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/AgentWorkspaceEntity.cs",
+      "expected": "1E1D613568F08CC7061D970FF9B84415FB7EE7470A9C161555C4187D6634E3FF",
+      "actual": "1E1D613568F08CC7061D970FF9B84415FB7EE7470A9C161555C4187D6634E3FF",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/AgentWorkspaceListItemEntity.cs",
+      "expected": "3648C8BB9A225FDF638517CC327AA611FAAD23697F633D5CC54271155A8A6677",
+      "actual": "3648C8BB9A225FDF638517CC327AA611FAAD23697F633D5CC54271155A8A6677",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/BrainSlotDefinitionEntity.cs",
+      "expected": "768C967332B092A7280641F7D909542B7CA6355FBCD1B8A63DEF6F78DF93B8AA",
+      "actual": "768C967332B092A7280641F7D909542B7CA6355FBCD1B8A63DEF6F78DF93B8AA",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/BrainSlotInvocationEntity.cs",
+      "expected": "0DDBE3ACBF42159135969770CB17173CBAE1F93F36DC9E9D740FC1C54AA79ADD",
+      "actual": "0DDBE3ACBF42159135969770CB17173CBAE1F93F36DC9E9D740FC1C54AA79ADD",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/ContextChunkEntity.cs",
+      "expected": "9F64502666F2F06BA0C487BFFC1DBABEF232D4A39090E174B2117CE29ADE4A41",
+      "actual": "9F64502666F2F06BA0C487BFFC1DBABEF232D4A39090E174B2117CE29ADE4A41",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/ContextDocumentEntity.cs",
+      "expected": "736DB14DA0A3A5E160D14AB7B529A48960AD5708475256CC7C106AF1AC85754E",
+      "actual": "736DB14DA0A3A5E160D14AB7B529A48960AD5708475256CC7C106AF1AC85754E",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/DataAuditLogEntity.cs",
+      "expected": "EAF2D745903C29F9D3219E234AF11470EC288D265A6FC1BE2E890F2A2F6638E5",
+      "actual": "EAF2D745903C29F9D3219E234AF11470EC288D265A6FC1BE2E890F2A2F6638E5",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/FederationConflictEntity.cs",
+      "expected": "498DF30AAB2873A45FACDCB6AD2A7DA25B7971A3360166527B54167853A2403D",
+      "actual": "498DF30AAB2873A45FACDCB6AD2A7DA25B7971A3360166527B54167853A2403D",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/FederationOperationEntity.cs",
+      "expected": "82A8531FC1A4DD9CD539B17A021386DD285AE9465CB0CBFEBF2D3740D7AF7768",
+      "actual": "82A8531FC1A4DD9CD539B17A021386DD285AE9465CB0CBFEBF2D3740D7AF7768",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/FederationOutboxEntity.cs",
+      "expected": "405B1ACA7537BDDFF2ADCFF8029FED09910082E8115ED6A8CF0EBD7C8CF9F9DF",
+      "actual": "405B1ACA7537BDDFF2ADCFF8029FED09910082E8115ED6A8CF0EBD7C8CF9F9DF",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/FederationProxyEntity.cs",
+      "expected": "F39382466F7FDCA10B9F56C6F556AA45FF4933AE00317BBAFCC5B30C7E6CC9A7",
+      "actual": "F39382466F7FDCA10B9F56C6F556AA45FF4933AE00317BBAFCC5B30C7E6CC9A7",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/FederationWorkspaceEntity.cs",
+      "expected": "780360E32C82C2DA8F837DEEFE15C81DC61D88506368443A5DA94345FE248F09",
+      "actual": "780360E32C82C2DA8F837DEEFE15C81DC61D88506368443A5DA94345FE248F09",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/GraphEntityEntity.cs",
+      "expected": "4A255A56EA9F386C5BD84742381C0AC315E3365D621AE38D40926898F0903E62",
+      "actual": "4A255A56EA9F386C5BD84742381C0AC315E3365D621AE38D40926898F0903E62",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/GraphRelationshipEntity.cs",
+      "expected": "2132A4619F37C5EBFA3F77531A42ADF37CE7D26F7BC8594AEC1A45D8BF71572F",
+      "actual": "2132A4619F37C5EBFA3F77531A42ADF37CE7D26F7BC8594AEC1A45D8BF71572F",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/HandoffDiagnosticEntity.cs",
+      "expected": "10F808A616ED41864EDE7AA79316F9E1C2085F0B63DE6EE4CD4D9002CB79ADB9",
+      "actual": "10F808A616ED41864EDE7AA79316F9E1C2085F0B63DE6EE4CD4D9002CB79ADB9",
+      "match": true
+    }
+  ],
+  "entries": [
+    {
+      "candidateId": "src/QBrainAi.Client/Models/RequirementsModels.cs",
+      "path": "src/QBrainAi.Client/Models/RequirementsModels.cs",
+      "sha256": "160C48AFD79BD8ABAC5A71547600CA4E3259E0E70ECAAC3CF00C933A1778D5DE",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-330",
+        "331-700",
+        "701-1100",
+        "1101-1310"
+      ],
+      "observation": "Client requirement DTOs retain string FR/TR/TEST/AC and layer/mapping endpoint identities, numeric reverse LinkedUseCaseRef, optional batch IDs and Kind discriminators, and TODO reference for AC-copy. Batch Error.Index and ingest counts are positions/counts, and export paths/manifests are operational artifacts.",
+      "b4Effect": "Use typed project/origin resolution for requirements, criteria, layers, mappings, mixed-kind batch items and copy-from-TODO references. Preserve legacy IDs/null patches and standalone numeric reverse-use-case DTO; expose canonical use-case reference additively. Do not tag layer Order, batch Index, parse counts, timestamps or file paths, or infer migration completion from DTO declarations.",
+      "anchors": [
+        "16-58 FR ID/AC/layer/reverse links",
+        "70-86 numeric reverse use case/content order",
+        "98-202 TR/TEST string IDs and scopes",
+        "208-262 layer keys and content order",
+        "314-328 mapping endpoint lists",
+        "338-560 individual create/update reference fields",
+        "574-992 batch ID/Kind/AC/scope contracts",
+        "1030-1084 response/errors/mapping/copy TODO IDs",
+        "1101-1205 export paths and ingest document artifacts",
+        "1211-1309 counts/source metadata"
+      ],
+      "classification": "VersionedRequirementIdentityConsumer",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/Models/TodoModels.cs",
+      "path": "src/QBrainAi.Client/Models/TodoModels.cs",
+      "sha256": "9B1ABEC9CE527E6CBF86A8B630FBBCD7AC3DBA4ADF7F2E2BA9433E234A3E7BB6",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-300",
+        "301-650",
+        "651-1050",
+        "1051-1423"
+      ],
+      "observation": "Client TODO DTOs carry string authored TODO/criterion/constraint/dependency/requirement references, execution parent-child/phase/plan links, plus operational audit cursors, checkpoint/session/artifact/commit references. AuditId is long and per-TODO Version int; device serial/package/coordinates belong to ADB runtime. No allocator or parser is implemented here.",
+      "b4Effect": "Preserve existing DTO shape and typed original references; capability/versioned DTOs must resolve authored IDs and every parent/child/dependency/phase/requirement reference through registered project/type/origin mappings. Operational audit/checkpoint/turn/artifact/commit/device IDs are retained according to their own contracts and must not all be tagged merely because named Id. Preserve historical snapshots and null semantics.",
+      "anchors": [
+        "9-11,73-87 flat ID/links/retry",
+        "105-163 create ID/links/retry",
+        "225-243 update links/workspace path",
+        "384-410 audit cursor/target/version/snapshots",
+        "577-618 AC/constraint/dependency IDs",
+        "664-698 artifact/turn/checkpoint/commit pointers",
+        "704-742 phase/requirement/TODO/plan graph",
+        "760-798 checkpoint graph",
+        "808-878 execution parent/child/dependency/reference graph",
+        "984-1006 delta pointers",
+        "1080-1118 plan inputs/results",
+        "1224-1310 validation/checkpoint/session links",
+        "1313-1423 ADB runtime DTOs"
+      ],
+      "classification": "AuthoredIdentityGraphAndOperationalReferenceDTO",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/Models/UseCaseModels.cs",
+      "path": "src/QBrainAi.Client/Models/UseCaseModels.cs",
+      "sha256": "18BFDDAB21C5B2CAB9E855C989F96549E99555A93274D77AEE6B7945F9DCDAAC",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-320",
+        "321-648"
+      ],
+      "observation": "Existing standalone client DTOs expose long use-case, actor, flow, step and FR-link identities, nullable actor references and string FR references. Flow SequenceNumber, StepNumber, approval VersionNumber, counts and graph SchemaVersion are content/protocol numbers. Canvas graph node/edge IDs are local artifact strings with endpoint references.",
+      "b4Effect": "Keep legacy numeric JSON DTOs unchanged. Add canonical string identities through the capability/versioned boundary and resolve legacy references with entity/project/origin; preserve nullable actor links and exact historical FR IDs. Do not tag content counters or treat diagram node IDs as allocator IDs.",
+      "anchors": [
+        "36-38 optional FR reference",
+        "106-108,128-130 nullable actor IDs",
+        "256-258,290-296 numeric use-case and workspace",
+        "360-366 actor/parent IDs",
+        "390-434 flow/step/nullable actor graph",
+        "454-472 link/use-case/FR and content order",
+        "557-559 schema version",
+        "609-647 graph IDs and endpoint links"
+      ],
+      "classification": "VersionedIdentityConsumer",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.QBAgent/QBAgentOpenTodoList.cs",
+      "path": "src/QBrainAi.QBAgent/QBAgentOpenTodoList.cs",
+      "sha256": "F9C1C352D21E9230DCBFE5D85CC4AD540C0D87CA985A6947B9ED5C288476760C",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-42"
+      ],
+      "observation": "Formats unchanged Todo IDs and total count, with priority then OrdinalIgnoreCase ID presentation sorting.",
+      "b4Effect": "Versioned presentation must preserve canonical strings/visible origin and use central parsed family/tag/numeric sequence sorting. Standalone count/pluralization is operational, not identity allocation.",
+      "anchors": [
+        "12-25: result and operational total count",
+        "29-36: case-insensitive lexical identity ordering and direct ID display"
+      ],
+      "classification": "VersionedIdentityConsumer",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs",
+      "path": "src/QBrainAi.Repl.Core/IRequirementsWorkflow.cs",
+      "sha256": "32F6C377C7F67F5C7BFB0A2D19CA2AC5BE36F354AD7EC6864470FC139165D54C",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-280",
+        "281-620",
+        "621-1000",
+        "1001-1420",
+        "1421-1441"
+      ],
+      "observation": "REPL requirement interface documents fixed three-digit legacy FR/TR/TEST regex, including narrower create-request regex. Actual interface operations carry typed string IDs for CRUD, batches, mappings, scopes, selected state and ingest conflicts. It exposes purge-invalid-placeholder and recovery idempotency operations; no regex implementation lives here.",
+      "b4Effect": "Versioned federated route must use central registered canonical grammar and fail-safe discrimination before any purge, not classify sequence 1000 as invalid from legacy docs. Preserve existing exact human IDs and legacy standalone routes, typed mapping/selected/ingest references, nullable layer links and operational recovery idempotency keys. Interface declarations alone do not prove enforcement or irreversible deletion behavior.",
+      "anchors": [
+        "16-36 legacy grammar",
+        "120-124 purge invalid placeholders",
+        "134-287 typed CRUD targets",
+        "295-351 atomic batches",
+        "367-408 mapping endpoints",
+        "447-500 workspace/document ingest",
+        "508-524 recovery versus operational key",
+        "538-553 typed selected state",
+        "663,870,1082 narrower legacy create docs",
+        "624-630,831-837,1043-1049 AC/scope links",
+        "1211-1275 nullable mappings",
+        "1421-1423 conflict reference"
+      ],
+      "classification": "VersionedRequirementIdentityConsumer",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Repl.Core/ITodoWorkflow.cs",
+      "path": "src/QBrainAi.Repl.Core/ITodoWorkflow.cs",
+      "sha256": "38F1500255EE7FEECA0D90D85270A314E871F11DEA0996EB2D3A5B040142F56B",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-320",
+        "321-700"
+      ],
+      "observation": "REPL interface documents legacy exact three-digit TODO regex and ISSUE-number/ISSUE-NEW behavior. Query/get/select/CRUD/stream/projection operations use string target IDs; selected state stores a string ID, and TODO DTOs carry dependency/FR/TR references. Stream Sequence is an event-local int.",
+      "b4Effect": "The federated capability/versioned contract must route accepted canonical TODO IDs including sequence 1000 through central parser rather than reusing the documented legacy three-digit regex. Keep historical IDs and GitHub issue sentinel semantics on standalone path. Selection/projection and analysis references must bind canonical project/type/origin; stream ordinals remain operational.",
+      "anchors": [
+        "13-29 legacy regex and ISSUE sentinel",
+        "63-94 query/get/select targets",
+        "121-167 CRUD and analysis targets",
+        "185-242 streams and projection target IDs",
+        "256-261 selection target",
+        "389-401 references",
+        "423-429 legacy create regex",
+        "561-573 update references",
+        "595-626 analysis IDs",
+        "660-674 stream ordinal versus target"
+      ],
+      "classification": "VersionedIdentityConsumer",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Repl.Core/RequirementsCommandShapes.cs",
+      "path": "src/QBrainAi.Repl.Core/RequirementsCommandShapes.cs",
+      "sha256": "21DF4ED44F2B8F29B5EAAC68A4F6B8E6C8D4EA14AF0033C9284C2F1011691CDA",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-300",
+        "301-680",
+        "681-1100",
+        "1101-1510",
+        "1511-1930",
+        "1931-2238"
+      ],
+      "observation": "REPL command-shape declarations contain string typed requirement get/create/update/delete, mapping and selected-state identifiers plus historical YAML examples. Fixed-three-digit format language is repeated in docs/error descriptions, not executable parser code. RequestId matches protocol request/response correlation, distinct from requirement identity.",
+      "b4Effect": "Keep operation names and error codes stable; add capability/versioned canonical ID contracts and central validation for authored target/ref fields without retagging request correlation, paths, counts or example historical IDs. Mapping tuple null/list semantics and selected-type identity must survive migration. Documentation regex cannot substitute for current parser proof or justify deleting canonical 1000+ IDs.",
+      "anchors": [
+        "51-69 protocol correlation IDs",
+        "129-351 stable method names",
+        "443-449,501-506 FR ID docs",
+        "609-653 nullable updates and scopes",
+        "706-739 delete target/result",
+        "829-894,1092-1098 TR ID docs",
+        "1209-1274,1473-1506 TEST ID docs",
+        "1525-1540,1600-1625,1684-1738 mapping tuple fields",
+        "1787-1806 export path",
+        "2087-2107 selected typed IDs",
+        "2145-2168 request correlation/error payload",
+        "2186-2192 legacy regex error documentation"
+      ],
+      "classification": "VersionedIdentityCommandContract",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+      "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+      "sha256": "D24532A5D9C932B9ACC253BED44977D29185C52758B2660C8F0C9EF9A47143D2",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-294"
+      ],
+      "observation": "Consolidation emits operational consol-/job-GUID runs, workspace-path locks and plan candidate/survivor memory IDs. It loads workspace memories, increments per-memory VersionNumber, rewires victim IDs to survivor through a partial-class helper, deletes victims, and chooses survivor by CreatedAt then ordinal ID. Content duplicate clustering is not identity alias resolution.",
+      "b4Effect": "Authored workspace-memory graph rewrites, lineage and deletes must bind owning gate plus canonical project/type/origin references. Preserve exact IDs/aliases across planned merge. Run GUIDs, TTL lock identity and version numbers remain operational. Versioned deterministic ID tie-breaking must use central comparer without treating ID sequence as cross-node time; standalone behavior retained.",
+      "anchors": [
+        "29-31 path lock scope",
+        "55-57,166-167 operational run GUIDs",
+        "83-99 candidates/survivor IDs",
+        "114-129 versions/rewire/delete",
+        "209-243 job write loop",
+        "258-285 content cluster keys",
+        "291-292 timestamp then ordinal ID selection"
+      ],
+      "classification": "AuthoredMemoryIdentityConsumerWithOperationalJobIds",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Memory/MemoryExploreOperations.cs",
+      "path": "src/QBrainAi.Services/Memory/MemoryExploreOperations.cs",
+      "sha256": "0BD552BFE8264FFDC936920FDCA95FD2A0DCA17F1DE263ED23E58A36BEAC5A45",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-386"
+      ],
+      "observation": "Explore consumes seed and neighbor memory IDs, uses ordinal ID sets/dictionaries and weight-then-ordinal result ranking. Explicit-edge writes validate visible From/To IDs, self-loop and duplicate tuple. Hebbian writes operational co-retrieved weights with the same endpoint references; traversal never modifies memory content.",
+      "b4Effect": "Canonical authored-memory resolution must retain project/scope/origin and graph endpoints, including self-loop detection after alias resolution. Central versioned ID comparer applies only identity tie-breaking; weights/depth/caps remain numeric. Explicit authored edges and operational Hebbian learning need distinct storage/gate disposition; do not promote all runtime reweighting into authored replication.",
+      "anchors": [
+        "53-96 seed lookup and neighbor ID tie rank",
+        "122-168 From/To self-loop/visible/duplicate checks",
+        "178-195 explicit edge projection",
+        "203-238 Hebbian filtering/pair mutation",
+        "269-288 scoped visible IDs and outgoing index",
+        "301-321 graph reference traversal",
+        "336-362 co-retrieved endpoint/weight updates"
+      ],
+      "classification": "MemoryGraphIdentityConsumer",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Memory/MemorySearchOperations.cs",
+      "path": "src/QBrainAi.Services/Memory/MemorySearchOperations.cs",
+      "sha256": "4765E004945E405BC9223105F15910364DB2F976163159F418CD28727B735719",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-260",
+        "261-535"
+      ],
+      "observation": "Recall joins memory and rebuildable index rows by exact string memory ID, returns it and ranks equal scores ordinally. Index/reconcile/batch use the same target ID and scoped WorkspaceId, hashes of searchable content, embedding status and timestamps. Tokenize canonicalizes natural-language tokens, not entity IDs.",
+      "b4Effect": "Keep authored-memory identities and scoped index foreign references coherent after canonical resolution. Operational indexes/embedding status/reconciliation remain rebuildable private side effects, not portable authored IDs. Versioned tie sorting uses central identity comparer; lexical token Canonical map, hash/vector dimensions and ranking values are not identity parsing.",
+      "anchors": [
+        "73-91 index dictionary and FK",
+        "115-133 hit ID/ordinal tiebreak",
+        "159-224 index lookup/write and scoped FK",
+        "230-268 reconciliation/batch target IDs",
+        "279-331 status/filter/exact index check",
+        "337-341 content SHA",
+        "391-437 natural-language canonicalization"
+      ],
+      "classification": "AuthoredMemoryReferenceWithOperationalIndex",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs",
+      "path": "src/QBrainAi.Services/Requirements/Models/RequirementsModels.cs",
+      "sha256": "F1C512DC3D3A69300F9EE3324E7304E78C2A5D2BC487C74DE090B71C5B4DD127",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-259"
+      ],
+      "observation": "FR/TR/TEST entry identities and mapping endpoints are strings. Reverse LinkedUseCaseRef is long; requirement layer Key/end references are strings while Order is immutable content order. Historical row timestamps and aggregated mapping creation timestamps are returned, not generated identities.",
+      "b4Effect": "Preserve human requirement IDs and typed project-scoped links; additive capability/versioned projection is required for LinkedUseCaseRef numeric-to-canonical transition. Register authored layer keys/references without tagging layer order, priorities, enum values or dates; product keys remain protected registry references.",
+      "anchors": [
+        "25-38 FR identity/scope/timestamps",
+        "47-51 numeric linked use case and link order",
+        "72-84 TR identity/scope",
+        "105-117 TEST identity/scope",
+        "145-177 layer keys/order and immutability",
+        "195-236 mapping endpoint strings and earliest stored creation"
+      ],
+      "classification": "VersionedIdentityConsumer",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "path": "src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs",
+      "sha256": "E6C513454FEFB50B711E81D1D8BBA6A58B6F777E32DB284B4182C68093626A6A",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-280",
+        "281-560",
+        "561-860",
+        "861-1150",
+        "1151-1450",
+        "1451-1740",
+        "1741-2030",
+        "2031-2119"
+      ],
+      "observation": "This real database service validates requirement IDs with a permissive case-insensitive token-shape regex, not fixed three-digit suffixes or canonical positive Int64 grammar. It uses typed workspace/kind/ID composite AC and mapping keys, string layer keys validated by lowercase kebab regex, ordinal database ID ordering, numeric linked-use-case joins, and legacy ID-segment SQL LIKE area/subarea filters. CRUD, batch, bootstrap, purge, soft-delete revival, snapshots/rollback and change-event EntityId/ResourceUri all consume these references.",
+      "b4Effect": "Enrolled/versioned adapter must centralize canonical parser/comparer and scoped typed legacy alias resolution across these exact read/write/restore/import/notification paths. Keep legacy human IDs and standalone validation/filter behavior; do not interpret a creator tag as area/subarea. Explicit authored layer keys need versioned mapping instead of passing uppercase canonical IDs into the legacy lowercase layer regex. Preserve criterion Ordinal and layer Order as content numbers; retain timestamps, nulls, append-only history, and snapshot graph. Workspace path normalization cannot replace immutable ProjectId mapping. Broad existing shape acceptance and source reads do not prove native canonical enforcement.",
+      "anchors": [
+        "29-35 permissive regex",
+        "41-113 typed AC parent keys and content ordinals",
+        "154-184 numeric use-case join/projection",
+        "241-253 typed mapping endpoints/layer content order",
+        "285-405 layer/current-layer mutations",
+        "429-456 effective typed keys",
+        "468-529 snapshot/restore",
+        "571-606 placeholder purge",
+        "618-798 CRUD ID paths",
+        "802-909 batch typed targets/criteria",
+        "925-1071 mapping ordering/revival",
+        "1150-1254 create/revive/update",
+        "1319-1333 per-kind duplicate validation",
+        "1368-1399 mapping existence and exact typed lookup",
+        "1403-1465 bootstrap/import graph",
+        "1468-1532 workspace path scoping",
+        "1617-1645 ID normalization and area/subarea SQL filters",
+        "1709-1723 actual requirement shape/equality",
+        "1741-1799 layer grammar/scope links",
+        "1855-1951 composite rollback keys",
+        "1953-2056 clone/copy/soft-delete reference retention",
+        "2059-2078 emitted entity reference/URI"
+      ],
+      "classification": "VersionedAuthoredIdentityGraphService",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/ITodoService.cs",
+      "path": "src/QBrainAi.Services/Services/ITodoService.cs",
+      "sha256": "13B2E98B07529E078F868A069922765F2A1D7A18F35F7C744BEFCFB19EEBD90E",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-368"
+      ],
+      "observation": "Service CRUD and compensation take string TODO IDs. Flat/create/update DTOs carry string DependsOn, FR and TR references, plus separate exact-create IdempotencyKey. Audit rows have long AuditId and int per-TODO Version with old/new snapshots; move request is a target path, not identity.",
+      "b4Effect": "Resolve authored TODO IDs/dependencies/requirement links through project/type/origin and central canonical parser while retaining exact retry identity and historical snapshots. Never apply tag grammar to audit cursors/version, compensation provider IDs or target paths; do not rewrite append-only history.",
+      "anchors": [
+        "14-27 TODO CRUD/audit targets",
+        "39-54 compensation exact target",
+        "161-171 references/idempotency",
+        "180-223 create ID/references/idempotency",
+        "271-278 update link arrays",
+        "335-360 audit row cursor/version/snapshots",
+        "363-367 workspace move path"
+      ],
+      "classification": "AuthoredIdentityConsumerWithOperationalHistory",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseFlowCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseFlowCommand.cs",
+      "sha256": "B391C0C42AAFF33F1F9CF332BAAEB68A60D0A2BBD28C2B4E86B340A316299C0E",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-80"
+      ],
+      "observation": "Consumes longUseCaseId, queries parent, inserts a generated flow with numeric parent reference and returns FlowDto.",
+      "b4Effect": "Keep standalone numeric API; additive versioned command/projection resolves canonical parent and generated UC-FLOW identity. SequenceNumber is content order, not a generated identity.",
+      "anchors": [
+        "16-17: numeric public command",
+        "40-44: parent lookup",
+        "46-58: independent content sequence",
+        "61-73: stored numeric parent and generated row/DTO"
+      ],
+      "classification": "VersionedIdentityConsumer",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseStepCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/AddUseCaseStepCommand.cs",
+      "sha256": "DF990EA91C1AB62DC736BEB08AE65809C3EB11A11F0455AE4D44438B88E38B4A",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-109"
+      ],
+      "observation": "Consumes longUseCaseId/FlowId and optional longActorId, validates graph ownership then inserts step and returns mapped DTO.",
+      "b4Effect": "Additive versioned canonical graph reference boundary must map parent flow/usecase and nullable actor without Int64 conversion. StepNumber remains content ordinal.",
+      "anchors": [
+        "17-21: numeric command identities",
+        "44-59: flow/usecase and actor lookups",
+        "62-85: content step order and stored refs",
+        "95-102: persisted result/actor navigation/DTO"
+      ],
+      "classification": "VersionedIdentityConsumer",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/AttachUseCaseActorCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/AttachUseCaseActorCommand.cs",
+      "sha256": "B5124B6C04023B256B328662EBB6AE34C9BE68640DB55B7B6CE86E9F9AE3FBF2",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-141"
+      ],
+      "observation": "Consumes numeric usecase/optional actor, can create actor by name, revives or creates workspace/usecase/actor composite association and returns numeric IDs.",
+      "b4Effect": "Preserve standalone numeric endpoints and name behavior. Versioned ACTOR allocation and composite canonical parent mapping require central resolver/capability; do not assume same-name identity equivalence during federation import.",
+      "anchors": [
+        "16-19: numeric parent command",
+        "49-83: existing numeric lookup or generated actor",
+        "87-110: composite association/revival",
+        "126-133: numeric response refs"
+      ],
+      "classification": "VersionedIdentityConsumer",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/DeleteUseCaseCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/DeleteUseCaseCommand.cs",
+      "sha256": "42E07171A83809AFA65C8BE790575FB5C714C76C0D3B4F6D4F0A478C4F314EEC",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-69"
+      ],
+      "observation": "Consumes longUseCaseId and soft-deletes complete aggregate graph including steps/flows/actor joins/special/extension/FR links.",
+      "b4Effect": "Canonical versioned target must resolve before delete; preserve every mapped child/link and deletion semantics. No new identity allocated.",
+      "anchors": [
+        "14 numeric command;34-61 aggregate lookup and full graph removal"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/LinkUseCaseToFrCommand.cs",
+      "sha256": "E46E3D8DF7A396FE67A73AA62BD8EC42D6752AD6AE96A4A19F84593D85373932",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-109"
+      ],
+      "observation": "Consumes longUseCaseId plus stringFrId; checks FR kind, detects active duplicate/revives deleted composite or generates LinkId. LinkOrder is content ordering.",
+      "b4Effect": "Versioned UC/FR canonical references and UC-FR-LINK allocator must preserve exact user FR IDs, scoped alias lookup and duplicate/revival behavior. LinkOrder stays numeric.",
+      "anchors": [
+        "20-26 command;44-57 FR lookup;61-84 composite/revival;87-102 insertion/result"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/PutUseCaseDiagramGraphCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/PutUseCaseDiagramGraphCommand.cs",
+      "sha256": "1F1A25420350A1C8C935E41C059C5C9D01070D4E1C3E50F6A5681C320DC5F851",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-118"
+      ],
+      "observation": "Numeric parent lookup stores graph JSON after local string node uniqueness and source/target referential validation; nodes/edges sorted ordinal for normalization.",
+      "b4Effect": "Additive canonical parent command boundary required. Graph node/edge strings are artifact-local keys, not generated entity families; preserve topology/bytes and deterministic normalization, not chronology sorting.",
+      "anchors": [
+        "16-19 command;52-65 lookup/save;75-103 graph validation;109-116 normalization"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseApprovalStatusCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseApprovalStatusCommand.cs",
+      "sha256": "6B3668AB151B57577D7E83652CD17A91D4FDE2A65B7E070ADAFDB979657B0DAE",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-75"
+      ],
+      "observation": "Numeric parent loads/reloads aggregate; approving increments numeric VersionNumber.",
+      "b4Effect": "Canonical versioned parent/DTO projection needed; approval revision counter is content state, never canonical identity.",
+      "anchors": [
+        "16-19 command;51-68 lookup/revision/save"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseProductKeyCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/SetUseCaseProductKeyCommand.cs",
+      "sha256": "DE9D050636E9EC6DFBA383D7EBB4BEADE29FECCD4C423419BAC146D1C802A0C4",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-51"
+      ],
+      "observation": "Numeric usecase target and optional trimmed product membership key mutate/reload detail.",
+      "b4Effect": "Versioned route resolves UC and stable product/project soft reference with access; no tag rewrite of existing ProductKey or local workspace path.",
+      "anchors": [
+        "15-18 command;32-44 load/product field/save/reload"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/UnlinkUseCaseFromFrCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/UnlinkUseCaseFromFrCommand.cs",
+      "sha256": "9A831FEC5D0F47C4CFFECC1FC4FF5B40A56634FE96F84753A5A5D025A6C78386",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-63"
+      ],
+      "observation": "Numeric usecase and exact trimmed string FR query their link then soft-delete.",
+      "b4Effect": "Canonical UC/FR resolver and project/kind scope needed before mutation; preserve human FR bytes and other links.",
+      "anchors": [
+        "15-16 command;33-55 identity normalization/query/removal"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseActorCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseActorCommand.cs",
+      "sha256": "01E3EC82F4342707C68A2BD8A5D377BD1CD25075BBD94A52C0030E21A5FF4381",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-105"
+      ],
+      "observation": "Numeric usecase/actor command validates association, mutates actor fields and isPrimary, clears other primary links, returns numeric refs.",
+      "b4Effect": "Versioned canonical composite association must map parent/actor before lookup; preserve graph and single-primary behavior. Name/type fields are content, not identities.",
+      "anchors": [
+        "16-20 command;54-84 parent/association/primary query;90-98 response"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseCommand.cs",
+      "sha256": "272334E8061A4F77D1381C482DE36B8366B76ADDFFBF3C918A85141240061093",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-73"
+      ],
+      "observation": "Numeric target edits header and priority then reloads aggregate.",
+      "b4Effect": "Additive canonical versioned parent lookup/DTO needed; numeric Priority remains content.",
+      "anchors": [
+        "15-16 command;36-40 target;42-66 content/save/detail"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseFlowCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseFlowCommand.cs",
+      "sha256": "D690FB2E8F2136152F44EEE59D0CAF9BF5C62311DE70A2512251DCFC3DE1C423",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-86"
+      ],
+      "observation": "Numeric usecase/flow validated together; updates type/name/positive SequenceNumber.",
+      "b4Effect": "Canonical parent-child ownership preserved through resolver/projection; SequenceNumber remains numeric content order.",
+      "anchors": [
+        "16-20 command;51-75 order validation/ownership/update"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseStepCommand.cs",
+      "path": "src/QBrainAi.Services/UseCases/Commands/UpdateUseCaseStepCommand.cs",
+      "sha256": "3713FA2266A34C02F764EE89F8BFB351A6D5A8F17810EAC17BA2EA791E8E1DE1",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-117"
+      ],
+      "observation": "Numeric usecase/flow/step plus nullable ActorId validated through parent graph; positive StepNumber and action are content.",
+      "b4Effect": "Versioned canonical parent/child/optional actor references must preserve nulls and ownership; no scalar-to-canonical cast.",
+      "anchors": [
+        "17-22 command;51-89 graph ownership;93-110 stored refs/result"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Queries/GetUseCaseDiagramGraphQuery.cs",
+      "path": "src/QBrainAi.Services/UseCases/Queries/GetUseCaseDiagramGraphQuery.cs",
+      "sha256": "19A81A77ACE70CE7BF490D45F20B7BF41B090D628F575E5E3DB0F8195B2778F3",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-80"
+      ],
+      "observation": "Numeric target returns saved graph JSON or empty schema1 graph; updates only returned schema/kind defaults.",
+      "b4Effect": "Additive canonical target query/DTO boundary. SchemaVersion is protocol schema number and remains numeric; artifact-local graph IDs stay strings.",
+      "anchors": [
+        "15-16 query;42-73 entity/read graph/defaults"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Queries/GetUseCaseDiagramQuery.cs",
+      "path": "src/QBrainAi.Services/UseCases/Queries/GetUseCaseDiagramQuery.cs",
+      "sha256": "3315F85AD4FF3D6C566091C367CD7579E20B53C581ABF16B8A977506E4F49224",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-161"
+      ],
+      "observation": "Numeric usecase aggregate generates uc_/actor_/flow_/association_/extend_ artifact-local strings from original IDs, numeric actor order and flow content order.",
+      "b4Effect": "Versioned canonical DTO and collision-safe artifact-local identifier mapping must preserve every endpoint/reference without treating presentation aliases as public canonical IDs. SequenceNumber remains domain order.",
+      "anchors": [
+        "15-16 query;70-74 response;88-156 derived graph IDs and ordering"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Queries/GetUseCaseQuery.cs",
+      "path": "src/QBrainAi.Services/UseCases/Queries/GetUseCaseQuery.cs",
+      "sha256": "B17896CCCCBAFD4B92483D1F9B93C4659C2C53BE6C420C60ABD0269B020CA54A",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-48"
+      ],
+      "observation": "Numeric target loads full aggregate through workspace resolver and maps detail.",
+      "b4Effect": "Versioned canonical lookup needs explicit project/origin context before graph access; standalone numeric query retained.",
+      "anchors": [
+        "13 query;30-41 scope/load/map"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Services/MermaidUseCaseDiagramService.cs",
+      "path": "src/QBrainAi.Services/UseCases/Services/MermaidUseCaseDiagramService.cs",
+      "sha256": "C528E133BE5F79DDFC4B0DD5B942B27965216D3A185ABDC4526343B26426BD98",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-159"
+      ],
+      "observation": "Sequence diagram uses actor names for sanitized aliases; optional numeric ActorId fallback matches actor; flows/steps sort by content order then numeric ID.",
+      "b4Effect": "Versioned identity-aware DTO/ref matching needed; content ordinals retained. GenerateMermaid name is not an ID generator; sanitizing display aliases must not rewrite canonical record IDs/history.",
+      "anchors": [
+        "28 GenerateMermaid;38-43 name aliases;63/77/106/110 order;124-137 actor lookup"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/Services/UseCaseUmlSerializationService.cs",
+      "path": "src/QBrainAi.Services/UseCases/Services/UseCaseUmlSerializationService.cs",
+      "sha256": "9AA8895AC26E6A420C48B1677C8E5F5C8FFC525EB0364C218E99B1407D789C38",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-174"
+      ],
+      "observation": "Pure artifact graph serializer sorts ordinal node/edge IDs and sanitizes them for Mermaid/PlantUML, including edge endpoints.",
+      "b4Effect": "Artifact-local deterministic serialization, not canonical allocation/chronology. Preserve topology and IDs in source graph; display sanitization cannot become identity mapping or history rewrite.",
+      "anchors": [
+        "19-24 and83-88 sort;61-71/131-141 endpoints;158-166 sanitizer"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/UseCaseCqrsHelpers.cs",
+      "path": "src/QBrainAi.Services/UseCases/UseCaseCqrsHelpers.cs",
+      "sha256": "2E090D40A6CD698F678E83D9270CECF8FA259EDB4264D4F3BF8F57D3035EE7D8",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-306"
+      ],
+      "observation": "Workspace path resolution overrides scoped DbContext; numeric aggregate query and all numeric child DTO mappings, ordinal content sorting and string FR existence check.",
+      "b4Effect": "Central versioned project/origin resolver and additive canonical aggregate/DTO mappings required end-to-end. Preserve optional actor refs, soft-delete metadata, content order, human FR IDs and typed standalone originals.",
+      "anchors": [
+        "22-64 workspace scope;82-97 long target;101-255 numeric DTO graph;260-280 FR query"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/UseCaseFrCoverageCore.cs",
+      "path": "src/QBrainAi.Services/UseCases/UseCaseFrCoverageCore.cs",
+      "sha256": "4A45415187E019206F178296FA152C913B17F7BAA28FC7C536B21A92B3C1103A",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-63"
+      ],
+      "observation": "Coverage joins long UC IDs and case-insensitive string FR IDs; missing FRs sorted for report, counts remain integers.",
+      "b4Effect": "Versioned canonical/origin-scoped equality must prevent cross-origin alias conflation and retain exact IDs in findings. Counts are operational; report ordering is distinct from canonical chronology.",
+      "anchors": [
+        "18-38 tuple identities/equality/sort;53-60 ID display"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/UseCases/UseCaseFrCoverageEvaluator.cs",
+      "path": "src/QBrainAi.Services/UseCases/UseCaseFrCoverageEvaluator.cs",
+      "sha256": "A7B5FB3B3E63AFF0E4BCB55FC5AC72A8AFF6DECEECA66E126834B73810969151",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-56"
+      ],
+      "observation": "Queries numeric UC and string FR/link IDs into shared coverage core; result item carries longUseCaseId.",
+      "b4Effect": "Additive canonical versioned query/result projection and same mapped relationships required; numeric total/linked counts retained.",
+      "anchors": [
+        "22-42 graph queries;47 long result identity;50-56 count fields"
+      ],
+      "classification": "IdentityOrArtifactBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/ActorEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/ActorEntity.cs",
+      "sha256": "D2930C2B9D8783BC1D4A18C8BE6ECD89C1D05B88B04975902B0B339635EE8510",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-34"
+      ],
+      "observation": "LongActorId surrogate, workspace scope, named actor and usecase association navigation.",
+      "b4Effect": "Authored ACTOR/project projection maps typed legacy long plus origin and composite parents; standalone entity remains unchanged.",
+      "anchors": [
+        "10-17 key/scope;32-33 association"
+      ],
+      "classification": "VersionedIdentityEntity",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/AgentDefinitionEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/AgentDefinitionEntity.cs",
+      "sha256": "212F2B9E1558A0009C61A98D329EB690ED5CF3766D67ED5DA3747E9B10DF2048",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-52"
+      ],
+      "observation": "Stable agent type stringId, WorkspaceId, defaults and ordered model rows/config navigation.",
+      "b4Effect": "Runtime definitions stay operational; do not allocate tagged project IDs or replay process seed/launch. Preserve stable agent type keys and child refs.",
+      "anchors": [
+        "11-17 key/scope;31-32 models;50-51 configs"
+      ],
+      "classification": "OperationalIdentityPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/AgentDefinitionModelEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/AgentDefinitionModelEntity.cs",
+      "sha256": "9149BE7EFFC92FCD876EED7A2041D75C9DF094B59A33BFAC32260AB4B46E5017",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-29"
+      ],
+      "observation": "Long rowId, stringAgentDefinitionId and intOrdinal store default provider model list.",
+      "b4Effect": "Operational child surrogate/parent relationship retained; Ordinal is list order and Model is external provider identifier, not authored identity.",
+      "anchors": [
+        "11-25 key/parent/ordinal/model"
+      ],
+      "classification": "OperationalIdentityPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/AgentEventLogEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/AgentEventLogEntity.cs",
+      "sha256": "524C306504497BF25F7AD62ABC47CA5B916027D6A96C7B5DD39B066ED65AF6D7",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-41"
+      ],
+      "observation": "Long generated eventId, stringAgentId/workspacePath and optional JWTUserId record lifecycle audit.",
+      "b4Effect": "Operational audit retained; no tagging of event row or external auth subject and no promotion-driven launch effect.",
+      "anchors": [
+        "12-34 event/key/agent/subject"
+      ],
+      "classification": "OperationalIdentityPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/AgentWorkspaceEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/AgentWorkspaceEntity.cs",
+      "sha256": "1E1D613568F08CC7061D970FF9B84415FB7EE7470A9C161555C4187D6634E3FF",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-76"
+      ],
+      "observation": "IntId agent config with definition stringFK, physical WorkspacePath, nullable external PRnumber and runtime restart/launch fields.",
+      "b4Effect": "Operational configuration remains local/protected; external PRnumber/runtime counters not project IDs. Preserve list child and type reference.",
+      "anchors": [
+        "12-26 keys/path;38-39 PR;49-75 child/runtime/navigation"
+      ],
+      "classification": "OperationalIdentityPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/AgentWorkspaceListItemEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/AgentWorkspaceListItemEntity.cs",
+      "sha256": "3648C8BB9A225FDF638517CC327AA611FAAD23697F633D5CC54271155A8A6677",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-37"
+      ],
+      "observation": "Long rowId, intAgentWorkspaceId FK, stringListType and intOrdinal plus model/path value.",
+      "b4Effect": "Operational ordered override child stays with parent; preserve surrogate and ordinal, never canonical-tag external model/path.",
+      "anchors": [
+        "14-33 row/parent/list/ordinal"
+      ],
+      "classification": "OperationalIdentityPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/BrainSlotDefinitionEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/BrainSlotDefinitionEntity.cs",
+      "sha256": "768C967332B092A7280641F7D909542B7CA6355FBCD1B8A63DEF6F78DF93B8AA",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-77"
+      ],
+      "observation": "Workspace/SlotId tuple, providerModelId, credentialReference and partyId plus numeric token/time/weight controls.",
+      "b4Effect": "Existing QuadBrain operational/security store retained; no model/party/slot tagging or credential replication. Numeric controls are operational.",
+      "anchors": [
+        "10-16 slot key;32-49 external/security refs;54-70 numeric controls"
+      ],
+      "classification": "OperationalIdentityPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/BrainSlotInvocationEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/BrainSlotInvocationEntity.cs",
+      "sha256": "0DDBE3ACBF42159135969770CB17173CBAE1F93F36DC9E9D740FC1C54AA79ADD",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-80"
+      ],
+      "observation": "GUIDInvocationId links slot, optional turn/transaction/diffgram strings and prompt/output hashes in provider audit.",
+      "b4Effect": "Operational invocation/correlation identities retained; no rewriting external transaction/turn/hash IDs or replaying provider effects.",
+      "anchors": [
+        "10-22 invocation/slot;49-67 cross-system refs/hashes"
+      ],
+      "classification": "OperationalIdentityPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/ContextChunkEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/ContextChunkEntity.cs",
+      "sha256": "9F64502666F2F06BA0C487BFFC1DBABEF232D4A39090E174B2117CE29ADE4A41",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-41"
+      ],
+      "observation": "String chunkId and DocumentId FK; TokenCount/ChunkIndex plus embedding are derived retrieval state.",
+      "b4Effect": "Local operational ingestion projection retained outside authored history; document relationship preserved, counters not identities.",
+      "anchors": [
+        "11-22 key/parent;28-40 derived fields/navigation"
+      ],
+      "classification": "OperationalIdentityPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/ContextDocumentEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/ContextDocumentEntity.cs",
+      "sha256": "736DB14DA0A3A5E160D14AB7B529A48960AD5708475256CC7C106AF1AC85754E",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-39"
+      ],
+      "observation": "String documentId and sourceType/SourceKey URL/path, ingestion timestamp/content hash and chunks.",
+      "b4Effect": "LocalOperational raw ingestion record retained; explicit sanitized promotion is separate. No canonical-tag source key/hash or implicit replication.",
+      "anchors": [
+        "11-35 key/source/hash;37-38 children"
+      ],
+      "classification": "OperationalIdentityPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/DataAuditLogEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/DataAuditLogEntity.cs",
+      "sha256": "EAF2D745903C29F9D3219E234AF11470EC288D265A6FC1BE2E890F2A2F6638E5",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-149"
+      ],
+      "observation": "GUIDAuditId and polymorphic EntityKind/EntityKey plus request/correlation/federation refs; compressed legacy-compatible sanitized snapshot payloads.",
+      "b4Effect": "Append-only operational audit retained byte-exact; newly written versioned entity references must identify actual canonical project target, but do not rewrite old audit IDs, source typed keys or historical snapshots. EncodingVersion remains numeric.",
+      "anchors": [
+        "16-34 audit/target key;51-67 correlation/encoding;69-146 legacy payload handling"
+      ],
+      "classification": "OperationalAuditSoftReference",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/FederationConflictEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/FederationConflictEntity.cs",
+      "sha256": "498DF30AAB2873A45FACDCB6AD2A7DA25B7971A3360166527B54167853A2403D",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-56"
+      ],
+      "observation": "StringConflictId/OperationId/ProxyId and nullable domainResourceId/version/status persist legacy replay conflict.",
+      "b4Effect": "Legacy control records retained with cutover disposition; fence replay for enrolled Dolt projects. Resource strings are domain refs, no implicit tagged conversion or hub-wins adoption.",
+      "anchors": [
+        "11-41 identities/resource/version;43-55 resolution"
+      ],
+      "classification": "LegacyFederationControlPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/FederationOperationEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/FederationOperationEntity.cs",
+      "sha256": "82A8531FC1A4DD9CD539B17A021386DD285AE9465CB0CBFEBF2D3740D7AF7768",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-83"
+      ],
+      "observation": "String operation/proxy/sourceOperation/globalWorkspace/resource IDs plus replay payload, versions, attemptCount/status.",
+      "b4Effect": "Operational replay/idempotency IDs retained; canonical ProjectId does not equal mutable legacy GlobalWorkspaceId. Fence enrolled-project business replay; AttemptCount stays integer.",
+      "anchors": [
+        "11-36 identities/resource;50-82 payload/state"
+      ],
+      "classification": "LegacyFederationControlPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/FederationOutboxEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/FederationOutboxEntity.cs",
+      "sha256": "405B1ACA7537BDDFF2ADCFF8029FED09910082E8115ED6A8CF0EBD7C8CF9F9DF",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-29"
+      ],
+      "observation": "Long monotonic deliverySequence and proxy/operation references with acknowledgements.",
+      "b4Effect": "Operational fanout cursor remains numeric and preserves legacy delivery refs; not authored ID allocation sequence. Retain pending records during explicit cutover.",
+      "anchors": [
+        "10-28 cursor/refs/acks"
+      ],
+      "classification": "LegacyFederationControlPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/FederationProxyEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/FederationProxyEntity.cs",
+      "sha256": "F39382466F7FDCA10B9F56C6F556AA45FF4933AE00317BBAFCC5B30C7E6CC9A7",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-44"
+      ],
+      "observation": "String stableProxyId and mutable endpoint/heartbeat/status.",
+      "b4Effect": "Operational enrollment identity retained; no automatic creator-tag derivation or external listener adoption.",
+      "anchors": [
+        "10-29 key/endpoint;31-43 lifecycle"
+      ],
+      "classification": "LegacyFederationControlPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/FederationWorkspaceEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/FederationWorkspaceEntity.cs",
+      "sha256": "780360E32C82C2DA8F837DEEFE15C81DC61D88506368443A5DA94345FE248F09",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-56"
+      ],
+      "observation": "Long rowId and stringGlobalWorkspaceId/ProxyId/CanonicalWorkspaceId with local path/version and registry navigation.",
+      "b4Effect": "Operational legacy path-to-proxy registry retained; new immutable ProjectId needs explicit mapping, not path rewrite or guessed equality.",
+      "anchors": [
+        "10-36 key/mapping/path;44-55 version/navigation"
+      ],
+      "classification": "LegacyFederationControlPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/GraphEntityEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/GraphEntityEntity.cs",
+      "sha256": "4A255A56EA9F386C5BD84742381C0AC315E3365D621AE38D40926898F0903E62",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-48"
+      ],
+      "observation": "String ge-GUID-described Id, WorkspaceId and explicit raw graph entity with source/target edge collections.",
+      "b4Effect": "Existing raw GraphRAG graph remains operational per source classification; preserve node/edge references and IDs, do not invent registry family or implicit authored promotion.",
+      "anchors": [
+        "11-17 key/scope;43-47 edges"
+      ],
+      "classification": "OperationalIdentityPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/GraphRelationshipEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/GraphRelationshipEntity.cs",
+      "sha256": "2132A4619F37C5EBFA3F77531A42ADF37CE7D26F7BC8594AEC1A45D8BF71572F",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-59"
+      ],
+      "observation": "String gr-GUID-described relationshipId with source/target stringFKs and numericWeight.",
+      "b4Effect": "Raw graph operational edges retained with canonical own raw IDs; no blanket node tagging or Weight conversion. Preserve both optional navigation references and tombstone behavior in owning context.",
+      "anchors": [
+        "12-28 key/endpoints;39-58 weight/navigation"
+      ],
+      "classification": "OperationalIdentityPreserved",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/HandoffDiagnosticEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/HandoffDiagnosticEntity.cs",
+      "sha256": "10F808A616ED41864EDE7AA79316F9E1C2085F0B63DE6EE4CD4D9002CB79ADB9",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-47"
+      ],
+      "observation": "LongDiagnosticId links stringRunId, code/severity/field/message and intOrdinal.",
+      "b4Effect": "Operational diagnostic graph retained; run/codes not generated project identities, Ordinal remains display order. No raw-source/credential inclusion.",
+      "anchors": [
+        "9-26 key/parent/code;37-46 message/order/navigation"
+      ],
+      "classification": "OperationalIdentityPreserved",
+      "nativeProof": false
+    }
+  ]
+}

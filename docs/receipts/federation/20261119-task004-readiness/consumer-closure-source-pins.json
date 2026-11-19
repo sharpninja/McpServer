@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 1,
+  "taskId": "TASK-FEDPH0-004",
+  "timestampLocal": "2026-11-19T11:41:22",
+  "sourceHeadBeforeCommit": "dfea410831e88dc7e963ed5e1d4501f7de13648c",
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "sessionId": "Codex-20261119T153852Z-plugin-session",
+  "requestId": "req-20261119T171650Z-prompt-b74a",
+  "parentSessionId": "Codex-20261116T174245Z-plugin-session",
+  "parentRequestId": "req-20261119T171310Z-prompt-5c2d",
+  "classes": [
+    {
+      "className": "Phase0IdentityIsolationMockGateTests",
+      "expectedCases": 270
+    },
+    {
+      "className": "Phase0IdentityLifecycleMockGateTests",
+      "expectedCases": 137
+    },
+    {
+      "className": "Phase0IdentityReconciliationMockGateTests",
+      "expectedCases": 466
+    },
+    {
+      "className": "Phase0IdentityDiagnosticsMockGateTests",
+      "expectedCases": 83
+    },
+    {
+      "className": "Phase0IdentityGrammarMockGateTests",
+      "expectedCases": 9973
+    },
+    {
+      "className": "Phase0AutomaticWriterMockGateTests",
+      "expectedCases": 5724
+    },
+    {
+      "className": "Phase0AllocatorSafetyMockGateTests",
+      "expectedCases": 375
+    },
+    {
+      "className": "Phase0IdentityDtoBoundaryMockGateTests",
+      "expectedCases": 272
+    },
+    {
+      "className": "Phase0ReferenceManifestMockGateTests",
+      "expectedCases": 13308
+    }
+  ],
+  "expectedCases": 30608,
+  "selector": "QBrainAi.Support.Mcp.Tests:Phase0IdentityIsolationMockGateTests,Phase0IdentityLifecycleMockGateTests,Phase0IdentityReconciliationMockGateTests,Phase0IdentityDiagnosticsMockGateTests,Phase0IdentityGrammarMockGateTests,Phase0AutomaticWriterMockGateTests,Phase0AllocatorSafetyMockGateTests,Phase0IdentityDtoBoundaryMockGateTests,Phase0ReferenceManifestMockGateTests",
+  "integratedCaseNameHash": null,
+  "integratedCaseNameHashOwner": "Parent computes ordinal case-name hash from actual integrated Windows TRX and compares actual Linux roster.",
+  "finalDtoRun": "20261119T113400-task004-dto-consumers",
+  "finalDtoPassed": 272,
+  "finalDtoFailed": 0,
+  "finalDtoSkipped": 0,
+  "hashes": [
+    {
+      "path": "docs/plans/2026-11-17-federation-identity-design.md",
+      "sha256": "8973E7A3F947183B3180AE64220F1BC262D7065D6CE4C29D3E934FBBBA840D71",
+      "bytes": 19539
+    },
+    {
+      "path": "docs/plans/2026-11-19-federation-task004-readiness.md",
+      "sha256": "99205F824F1430E99256FE36CED841605E8C87AF66B22950A01BFB316482D959",
+      "bytes": 21523
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/allocator-checkpoint-code-verify.txt",
+      "sha256": "F8C9D6E6095FAA9C26458339235593B4FFF8940CD3F8B816590C73EA412F163F",
+      "bytes": 3051
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/allocator-final-code-verify.txt",
+      "sha256": "5D6104AE42E74E67E30D1CD9E86573B27221A59AA0A177C57D3620AF85FA0C41",
+      "bytes": 3051
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/allocator-initial-code-verify.txt",
+      "sha256": "73098D70FC10CF6DA540C4D1747E53A4A20543605F411B21A26F2835E59180B7",
+      "bytes": 3051
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/consumer-reviews-root.json",
+      "sha256": "056F7CA838A6957024D28F9E4C3604E94D74C0861B3C78E081F9E82D554D63F2",
+      "bytes": 92292
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/consumer-semantic-review.json",
+      "sha256": "B983F881B8E4777B13B3989D8B1B40DDAB3726B3E3C71AD043A7F8AA520DCE02",
+      "bytes": 1412238
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/dto-consumers-code-verify.txt",
+      "sha256": "61B5524E03CEA3D4CFD3FD0AAFDEB4767E52A5AC29B5FF0948CDA36753F20336",
+      "bytes": 3051
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/dto-issue-code-verify.txt",
+      "sha256": "5AA4FC6B3DF834D0E6FD049CCDC063034153CE9C1CDEA695F25149C9FEE57EFB",
+      "bytes": 3051
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/dto-reference-code-verify.txt",
+      "sha256": "CB5B28DE8EC8873254790E9D893FDE5E0437E8119811A7DDB850B69E92906D59",
+      "bytes": 3051
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/dto-reference-source-pins.json",
+      "sha256": "1AD95EAAC46E857DE396E25F27ED8670BC8290C79EF9EAB8E69E5C97A99ADFD0",
+      "bytes": 5254
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/identity-consumer-roster.json",
+      "sha256": "7F9E41E5FC93861D5E544767784060EABABA951C3517E26F509A9FE382F5F8DE",
+      "bytes": 627865
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/operational-external-review.json",
+      "sha256": "7DF7BD8A79D917276B98BC2D6C497B6BCA777673C61DDCA2B82B9DE859C6B182",
+      "bytes": 168599
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/README.md",
+      "sha256": "F3E87A48714504CA21A177DC4053CA259B3D7CC51C8F528BEC3AE349071102CB",
+      "bytes": 6776
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/remaining-consumer-partition.json",
+      "sha256": "0231FABE8027B8D8289F12D6BEFB70E2210B3B48546AEB6923A4ADB10982F39F",
+      "bytes": 261486
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/repl-dispatcher-semantic-disposition.json",
+      "sha256": "1A5493979892CE36A338C3BA304B19A7941A801EEFA6A98940B3271A1F14BD96",
+      "bytes": 5420
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/requirements-controller-semantic-disposition.json",
+      "sha256": "8A4BB7270BDBAE7ED1DC0A5EFBD1AF102D7356E8CAE9BE005637FDB0399D2DA9",
+      "bytes": 5488
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/sample-host-semantic-disposition.json",
+      "sha256": "A9F3A426C06A77ADB5F9B16EB6CACBC93EBF3A3D0022B8A2996FF6A4152DB105",
+      "bytes": 3140
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/source-pins.json",
+      "sha256": "FDC7E173DA992FA26DB462772CDC215BF4A58C59E4D7FE8690244F3BCA2CF046",
+      "bytes": 4387
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/task004-build-doc-semantic-disposition.json",
+      "sha256": "1633C1A92085E1CC53BF5C88A443C99F390A332E560DEB03704050962B014BA9",
+      "bytes": 26082
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/task004-consumers-a-semantic-disposition.json",
+      "sha256": "BAA5282F81929D6FA37E1BE5D9B73B12EC6615D4F0B06F6948BD9C12101775FA",
+      "bytes": 78125
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/task004-definition-and-requirements.json",
+      "sha256": "D9678F0D1BB5980E96BDB30E4BBC1912DE888FE9F245CCD8E4D21803AD292658",
+      "bytes": 39113
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/task004-program-semantic-disposition.json",
+      "sha256": "23E5C81D6FA4E046D1FB67318BEFEF027DA13C7BDD9F9EC0F04B25E85B7573DA",
+      "bytes": 5693
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/windows-allocator-checkpoint.log.zip",
+      "sha256": "99F8683E1626492624A91A789360BDBF1AD8BFE5775877E906ED25772D6AF950",
+      "bytes": 1357
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/windows-allocator-checkpoint.trx",
+      "sha256": "04D5BC7016031CA052AE78F07CFA6DAAB06A32290A3116D3080FA8E19A54E6E0",
+      "bytes": 632934
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/windows-allocator-final.log.zip",
+      "sha256": "AA126BE630B4687636FDAA3ACA39CF7A5C1C1F248EAAB5532557746396AAFD77",
+      "bytes": 1349
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/windows-allocator-final.trx",
+      "sha256": "C4D2F065718720DDC6278150F5F2BA3E48F5B92123A633107546FDC7A67786A8",
+      "bytes": 632934
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/windows-dto-consumers.log.zip",
+      "sha256": "A99CA5C28A1E3A41C53F743935430DC5C39C749CA65E79B81CB82FD4388F3B9A",
+      "bytes": 1356
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/windows-dto-consumers.trx",
+      "sha256": "CED1C5A7714B41CCBF3C1414ED044FAC5DDC72B8F02A1FF6807B0F37B9F72A8C",
+      "bytes": 445565
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/windows-dto-final.log.zip",
+      "sha256": "00F99AD69CC2EA0CAD47F913A06D9412FFDB3A4BBAAD1B092D509197355789F2",
+      "bytes": 1353
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/windows-dto-final.trx",
+      "sha256": "B71D05F6B48886D33A125AB8282085AA592DDCCFDB4F9198818E8BB99AAC53F9",
+      "bytes": 215140
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/windows-dto-issue.log.zip",
+      "sha256": "9CED398F4B31ECE10AF5AAE740C6D5507AFAAD69748E644C4C37F2CB3C2E5281",
+      "bytes": 1353
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/windows-dto-issue.trx",
+      "sha256": "9150AF055C5F35055E5A7D47F701BDDBC1E820EA0AA024EBE1FF06A3CCA553E1",
+      "bytes": 268995
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/windows-dto-reference.log.zip",
+      "sha256": "34D9DAC2C7E7C4E71C655EDCAD6EBFC66DE3E4378FB9B1D035A300CE7B05AFC1",
+      "bytes": 1374
+    },
+    {
+      "path": "docs/receipts/federation/20261119-task004-readiness/windows-dto-reference.trx",
+      "sha256": "372E65F3EF6B1411B58BFD10C8D67E5896724D4E10EAD41025EED26BA3AF2C38",
+      "bytes": 22256576
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AllocatorSafetyMockGateTests.cs",
+      "sha256": "EF89CFFA3A375801CC9638DAA343EFCCD6FCB680F739C42DE70E27BDA37AA18F",
+      "bytes": 23210
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AutomaticWriterContract.cs",
+      "sha256": "FEF12A6C96EB420B1469BF6098607B61FD2AE5424F51C90E75BA9FEAFAB2B822",
+      "bytes": 8587
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AutomaticWriterMockGateTests.cs",
+      "sha256": "1FA2B4F980BCFBE34659B9EDED30E9E0119FAEA7AF4CCB2BB61D2BD8ED83BE5C",
+      "bytes": 10442
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityDiagnosticsContract.cs",
+      "sha256": "92D9D58A55F9ECECF22C566BF89E1D5A7AF0DF8BEEFF3FF85CD6028E031707E5",
+      "bytes": 7368
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityDiagnosticsMockGateTests.cs",
+      "sha256": "E4254D68B05B132B91883D2F8F693EDAD885018810D98760B0921AD2A875FB41",
+      "bytes": 9244
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityDtoBoundaryMockGateTests.cs",
+      "sha256": "89F9FCCD99507282CEFE3707EB2E98B157C5192A23EAEC914203EE5D57890D33",
+      "bytes": 17042
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityGrammarMockGateTests.cs",
+      "sha256": "7EDAC6D2331F4A4A37B96AC524B21EBEB131D6CE8B3384CE1A354832CB940AC5",
+      "bytes": 18995
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityIsolationContract.cs",
+      "sha256": "0F6F47012921F5AC46CD1DDF990B337BEF0650C1BBE942A4E37F57E87A921118",
+      "bytes": 10848
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityIsolationMockGateTests.cs",
+      "sha256": "F5A3A95683C21EC367AEA4B93B8ADEFBD364BA4A01DD219AF48C17D095F46DF8",
+      "bytes": 15337
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityLifecycleContract.cs",
+      "sha256": "D514F1520DA9B73534487CECDA40C4397C4B2537BCB7FE95149B3095AD1B161D",
+      "bytes": 11093
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityLifecycleMockGateTests.cs",
+      "sha256": "FD1BD268C104E1B7E2B8F1B488E60FF9199701260C236F5D174E6D2D34D4ECA2",
+      "bytes": 16126
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityReconciliationContract.cs",
+      "sha256": "5A3EB9F6EBB978D49990848C9A57376850024D768D3149E525823ECE5C8FD11A",
+      "bytes": 13703
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityReconciliationMockGateTests.cs",
+      "sha256": "9E7CCFB579B2671EE168EEAB2F390910E0A9F60DA4ECE52642E1271BB747B37B",
+      "bytes": 16519
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ReferenceManifestMockGateTests.cs",
+      "sha256": "BE7FF3F4A0DD3972A6B4F0B73A6EBEC5AF81F2D02444C112C004714AD93E4517",
+      "bytes": 23165
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+      "sha256": "0B2C00BE0579BA5CFF0666948619F0ECA4D6CE68C46956998B8B48CD9DAB1C54",
+      "bytes": 4645
+    },
+    {
+      "path": "tools/powershell/Export-FederationTask004ClosurePins.ps1",
+      "sha256": "FC695BEB9574EA22F4D6CB0A10ABE26924ABCC15E0658964DAD773C3A43E8451",
+      "bytes": 5654
+    },
+    {
+      "path": "tools/powershell/Join-FederationConsumerSemanticReviews.ps1",
+      "sha256": "DA5C675B48CB7B0B0F0BEE293A3BD8169DC2911FBF591002A0A7D9586B805338",
+      "bytes": 16178
+    }
+  ],
+  "zipEntryPins": [
+    {
+      "zip": "windows-dto-issue.log.zip",
+      "original": ".nuke/temp/build.2026-11-19_11-23-26.log",
+      "rawSha256": "96B8FB80A2D74C829D949F2797E30582116898CD4A162BB63CD2BD65BE78CA2A",
+      "originalRetained": true
+    },
+    {
+      "zip": "windows-dto-consumers.log.zip",
+      "original": ".nuke/temp/build.2026-11-19_11-35-31.log",
+      "rawSha256": "C612A7E882C5154B06B0BB62A88098196B3431EA5DF79ADAD0BC99BEE00F427A",
+      "originalRetained": true
+    }
+  ],
+  "nativeProof": false,
+  "taskStateChanged": false,
+  "isHV": false,
+  "limitations": [
+    "Sources and retained per-class evidence are pinned, not claimed as one new cumulative execution.",
+    "Shared Task002/005 provider/migration/relational-model evidence remains separate.",
+    "Parent owns integrated paired-host gate, live definition review, Ready and all-nine pause. No native implementation starts here."
+  ]
+}

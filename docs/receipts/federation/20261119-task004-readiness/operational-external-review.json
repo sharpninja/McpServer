@@ -1,0 +1,4155 @@
+{
+  "taskId": "TASK-FEDPH0-004",
+  "bucket": "OperationalOrExternalIdCandidates",
+  "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+  "parentSessionId": "Codex-20261116T174245Z-plugin-session",
+  "parentRequestId": "req-20261119T155309Z-prompt-142e",
+  "sessionId": "Codex-20261119T154121Z-plugin-session",
+  "requestId": "req-20261119T165305Z-turn-2684",
+  "reviewedLocal": "2026-11-19T11:29:33",
+  "originalBucketFiles": 64,
+  "reassignedCandidateIds": [
+    "src/QBrainAi.McpAgent.SampleHost/SampleHostPreviewFactory.cs",
+    "src/QBrainAi.Support.Mcp/Program.cs",
+    "src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs"
+  ],
+  "assignedFiles": 61,
+  "reviewedFiles": 61,
+  "remainingCandidateIds": [],
+  "limitation": "Read-only semantic design evidence. No implementation, native tests, caller-graph closure, task state or acceptance is established. Reassigned3 require separate root/owner supplements.",
+  "rows": [
+    {
+      "candidateId": "src/QBrainAi.Client/BoundedFileSystemPolicy.cs",
+      "sourcePath": "src/QBrainAi.Client/BoundedFileSystemPolicy.cs",
+      "sourceSha256": "BBDB2638451FD51F3B6F4C47BE9655CA764984D505E9FA7251D292264D125A15",
+      "sourceLineCount": 195,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 152,
+          "text": "                !int.TryParse(prefixFields[0], out var mountId))",
+          "category": "NumericParse"
+        },
+        {
+          "line": 194,
+          "text": "        int MountId);",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Linux mountinfo mount ID is parsed as an integer for bounded physical-file traversal; no authored project identity is parsed.",
+      "disposition": "Retain kernel mount identity and mount-boundary comparison.",
+      "b4Obligations": [
+        "Do not apply canonical entity grammar to kernel mount identifiers."
+      ],
+      "supportAnchors": [
+        {
+          "line": 152,
+          "text": "                !int.TryParse(prefixFields[0], out var mountId))"
+        },
+        {
+          "line": 194,
+          "text": "        int MountId);"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/GitHubClient.cs",
+      "sourcePath": "src/QBrainAi.Client/GitHubClient.cs",
+      "sourceSha256": "D89F7936E850A77C67E1C0FD96C208FA97E458DB667D43D5E0849C9E01F85AA2",
+      "sourceLineCount": 189,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 154,
+          "text": "    public async Task<GitHubWorkflowRunDetail> GetWorkflowRunAsync(long runId, CancellationToken cancellationToken = default)",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 160,
+          "text": "    public async Task<GitHubOperationResult> RerunWorkflowRunAsync(long runId, CancellationToken cancellationToken = default)",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 166,
+          "text": "    public async Task<GitHubOperationResult> CancelWorkflowRunAsync(long runId, CancellationToken cancellationToken = default)",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Workflow-run long runId is passed to GitHub Actions routes; issue and PR numbers are external GitHub keys.",
+      "disposition": "Retain external workflow-run IDs and existing route typing.",
+      "b4Obligations": [
+        "A returned project TODO reference remains a separate canonical or legacy string; never infer it from a GitHub number."
+      ],
+      "supportAnchors": [
+        {
+          "line": 154,
+          "text": "    public async Task<GitHubWorkflowRunDetail> GetWorkflowRunAsync(long runId, CancellationToken cancellationToken = default)"
+        },
+        {
+          "line": 160,
+          "text": "    public async Task<GitHubOperationResult> RerunWorkflowRunAsync(long runId, CancellationToken cancellationToken = default)"
+        },
+        {
+          "line": 166,
+          "text": "    public async Task<GitHubOperationResult> CancelWorkflowRunAsync(long runId, CancellationToken cancellationToken = default)"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/Models/DesktopModels.cs",
+      "sourcePath": "src/QBrainAi.Client/Models/DesktopModels.cs",
+      "sourceSha256": "A385C3ECBBD05292217344AA03A4EB0168A7D1BECCB057E9D2073B7343E369B4",
+      "sourceLineCount": 70,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 57,
+          "text": "    public int? ProcessId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "DesktopLaunchResult.ProcessId is an operating-system process identifier.",
+      "disposition": "Retain numeric OS process identity.",
+      "b4Obligations": [
+        "Generated project identity grammar does not apply to launcher PIDs."
+      ],
+      "supportAnchors": [
+        {
+          "line": 57,
+          "text": "    public int? ProcessId { get; set; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/Models/HealthModels.cs",
+      "sourcePath": "src/QBrainAi.Client/Models/HealthModels.cs",
+      "sourceSha256": "4128EB92F1FC4FEA301884E152D7C6C3A627D2DE5E2AFEFCE6F9B8EBDD2DD780",
+      "sourceLineCount": 115,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 74,
+          "text": "    public int ProcessId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "ServerStartupResult.ProcessId reports OS process identity; port and marker timestamps are operational health values.",
+      "disposition": "Retain health response operational numeric fields.",
+      "b4Obligations": [
+        "Never reinterpret health PIDs or ports as versioned entity sequence numbers."
+      ],
+      "supportAnchors": [
+        {
+          "line": 74,
+          "text": "    public int ProcessId { get; set; }"
+        },
+        {
+          "line": 82,
+          "text": "    public int? Port { get; set; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Common.AgentCli/DefaultProcessSpawner.cs",
+      "sourcePath": "src/QBrainAi.Common.AgentCli/DefaultProcessSpawner.cs",
+      "sourceSha256": "A87B5C1CE6091AA1ABE16CEA17B3B1EEA15F1B234E097D57FB9BE7912D7C725B",
+      "sourceLineCount": 53,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 35,
+          "text": "        public int Id => process.Id;",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "ManagedProcess.Id directly delegates to Process.Id.",
+      "disposition": "Retain OS PID interface.",
+      "b4Obligations": [
+        "Do not introduce creator tags into OS process APIs."
+      ],
+      "supportAnchors": [
+        {
+          "line": 35,
+          "text": "        public int Id => process.Id;"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Common.AgentCli/ISpawnedProcess.cs",
+      "sourcePath": "src/QBrainAi.Common.AgentCli/ISpawnedProcess.cs",
+      "sourceSha256": "EE549F811EB05A33367870FCE0E54175783E1063878494A2771EBC990D527970",
+      "sourceLineCount": 36,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 23,
+          "text": "    int Id { get; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "ISpawnedProcess.Id is documented as the operating-system process identifier.",
+      "disposition": "Retain integer process contract.",
+      "b4Obligations": [
+        "Project canonical identity and process identity remain distinct types."
+      ],
+      "supportAnchors": [
+        {
+          "line": 23,
+          "text": "    int Id { get; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Launcher/Models/ProcessLaunchResult.cs",
+      "sourcePath": "src/QBrainAi.Launcher/Models/ProcessLaunchResult.cs",
+      "sourceSha256": "E88F7A609FD2ED84AE668C5C276EDAE9D215D4BF9A53170A78C310B51FB93F0C",
+      "sourceLineCount": 39,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 20,
+          "text": "    public int? ProcessId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "ProcessId, ExitCode and Win32Error describe launcher execution.",
+      "disposition": "Retain numeric process, exit and Win32 error values.",
+      "b4Obligations": [
+        "No project ID allocator or alias lookup is applicable to launch result fields."
+      ],
+      "supportAnchors": [
+        {
+          "line": 20,
+          "text": "    public int? ProcessId { get; set; }"
+        },
+        {
+          "line": 26,
+          "text": "    public int? ExitCode { get; set; }"
+        },
+        {
+          "line": 38,
+          "text": "    public int? ErrorCode { get; set; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Launcher/Native/NativeMethods.cs",
+      "sourcePath": "src/QBrainAi.Launcher/Native/NativeMethods.cs",
+      "sourceSha256": "E794D92F24319C3F9C9FD950B84EEA0FC3C3DF9947866CA5149F565A981E5784",
+      "sourceLineCount": 89,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 80,
+          "text": "    internal static partial int WTSGetActiveConsoleSessionId();",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 88,
+          "text": "    internal static extern bool WTSQueryUserToken(int sessionId, out IntPtr phToken);",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Win32 token and WTS session API parameters carry native session IDs.",
+      "disposition": "Retain native ABI and OS session semantics.",
+      "b4Obligations": [
+        "Do not substitute canonical project strings in P/Invoke integer parameters."
+      ],
+      "supportAnchors": [
+        {
+          "line": 88,
+          "text": "    internal static extern bool WTSQueryUserToken(int sessionId, out IntPtr phToken);"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Launcher/Native/NativeStructs.cs",
+      "sourcePath": "src/QBrainAi.Launcher/Native/NativeStructs.cs",
+      "sourceSha256": "97CCECCC5927BE3495436C03CB476323BC6E8EFDC5FB1B0C6B1889F5D0012EDD",
+      "sourceLineCount": 107,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 85,
+          "text": "        public int dwProcessId;",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 88,
+          "text": "        public int dwThreadId;",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "PROCESS_INFORMATION dwProcessId and dwThreadId are native process/thread IDs.",
+      "disposition": "Retain exact native structure layout and numeric fields.",
+      "b4Obligations": [
+        "Canonical project identity must never alter Windows ABI layout."
+      ],
+      "supportAnchors": [
+        {
+          "line": 85,
+          "text": "        public int dwProcessId;"
+        },
+        {
+          "line": 88,
+          "text": "        public int dwThreadId;"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Repl.Core/ReplCommandTimeout.cs",
+      "sourcePath": "src/QBrainAi.Repl.Core/ReplCommandTimeout.cs",
+      "sourceSha256": "A2F6A8140FFD899C917851B79D04EDE5D2CF80B573657A13A2FA1382B5088F88",
+      "sourceLineCount": 41,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 28,
+          "text": "        long.TryParse(configured, NumberStyles.Integer, CultureInfo.InvariantCulture, out var seconds) && seconds is >= 1 and <= LargestSeconds",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "long.TryParse reads a bounded timeout in seconds, not an entity identifier.",
+      "disposition": "Retain timeout numeric validation and limits.",
+      "b4Obligations": [
+        "Do not route numeric timeout parsing through the project ID parser."
+      ],
+      "supportAnchors": [
+        {
+          "line": 28,
+          "text": "        long.TryParse(configured, NumberStyles.Integer, CultureInfo.InvariantCulture, out var seconds) && seconds is >= 1 and <= LargestSeconds"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Repl.Core/WorkspaceValidationWorkflow.cs",
+      "sourcePath": "src/QBrainAi.Repl.Core/WorkspaceValidationWorkflow.cs",
+      "sourceSha256": "4B8FC03480A926AEF592223A6BF478366DDE437553519666D1061420F51E4AAF",
+      "sourceLineCount": 66,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 35,
+          "text": "            && int.TryParse(Convert.ToString(offsetRaw, CultureInfo.InvariantCulture), NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedOffset))",
+          "category": "NumericParse"
+        },
+        {
+          "line": 42,
+          "text": "            && int.TryParse(Convert.ToString(limitRaw, CultureInfo.InvariantCulture), NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedLimit))",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "Numeric parsing reads pagination offset, limit and recent-hours filter.",
+      "disposition": "Retain numeric query controls.",
+      "b4Obligations": [
+        "Canonical sequence grammar does not replace pagination or time-range parsing."
+      ],
+      "supportAnchors": [
+        {
+          "line": 24,
+          "text": "            && double.TryParse(Convert.ToString(raw, CultureInfo.InvariantCulture), NumberStyles.Float, CultureInfo.InvariantCulture, out var hours))"
+        },
+        {
+          "line": 35,
+          "text": "            && int.TryParse(Convert.ToString(offsetRaw, CultureInfo.InvariantCulture), NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedOffset))"
+        },
+        {
+          "line": 42,
+          "text": "            && int.TryParse(Convert.ToString(limitRaw, CultureInfo.InvariantCulture), NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedLimit))"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Models/AgentProcessModels.cs",
+      "sourcePath": "src/QBrainAi.Services/Models/AgentProcessModels.cs",
+      "sourceSha256": "9B61D9C7A4A4857EAD49D4D8C8056A66F633330623D7759F0BE0A75E80C513B8",
+      "sourceLineCount": 84,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 41,
+          "text": "    public int? ProcessId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "ProcessId is nullable OS process identity; AgentId is agent-type identity, WorkspacePath is local host context.",
+      "disposition": "Retain operational process metadata; do not conflate agent type with creator provenance.",
+      "b4Obligations": [
+        "Operational agent/process fields stay outside authored project identity allocation."
+      ],
+      "supportAnchors": [
+        {
+          "line": 41,
+          "text": "    public int? ProcessId { get; set; }"
+        },
+        {
+          "line": 47,
+          "text": "    public string AgentId { get; set; } = string.Empty;"
+        },
+        {
+          "line": 53,
+          "text": "    public string WorkspacePath { get; set; } = string.Empty;"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Native/NativeMethods.cs",
+      "sourcePath": "src/QBrainAi.Services/Native/NativeMethods.cs",
+      "sourceSha256": "29A3E4FA1C820CE05A8FE4E838C1053744398F5DB1BE0F75F37784329170ECA5",
+      "sourceLineCount": 158,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 98,
+          "text": "    internal static extern int WTSGetActiveConsoleSessionId();",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 106,
+          "text": "    internal static extern bool WTSQueryUserToken(int sessionId, out IntPtr phToken);",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "WTS, token and process operations use OS session/PID values and native handles.",
+      "disposition": "Retain native APIs and session identity.",
+      "b4Obligations": [
+        "Do not reinterpret OS numeric values as project entity identities."
+      ],
+      "supportAnchors": [
+        {
+          "line": 1,
+          "text": "using System.Runtime.InteropServices;"
+        },
+        {
+          "line": 158,
+          "text": "}"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Native/NativeStructs.cs",
+      "sourcePath": "src/QBrainAi.Services/Native/NativeStructs.cs",
+      "sourceSha256": "00AC706250E4EAD65849F3C9D6BCE14103AF5C923DF0B287AB248E876777F393",
+      "sourceLineCount": 106,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 84,
+          "text": "        public int dwProcessId;",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 87,
+          "text": "        public int dwThreadId;",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Native PROCESS_INFORMATION carries dwProcessId and dwThreadId.",
+      "disposition": "Retain Windows ABI fields.",
+      "b4Obligations": [
+        "No creator tag or canonical entity string enters native structure layout."
+      ],
+      "supportAnchors": [
+        {
+          "line": 84,
+          "text": "        public int dwProcessId;"
+        },
+        {
+          "line": 87,
+          "text": "        public int dwThreadId;"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/CopilotCliAgentExecutionStrategy.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/CopilotCliAgentExecutionStrategy.cs",
+      "sourceSha256": "557E4694B544547A9D45AA9A4A93BA0B996204D8D3AAE42955EB3F8F876F00C4",
+      "sourceLineCount": 45,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 24,
+          "text": "        public int? ProcessId => session.ProcessId;",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Execution session ProcessId delegates to the managed interactive session OS PID.",
+      "disposition": "Retain operational execution identity.",
+      "b4Obligations": [
+        "Agent execution process IDs are not allocated project IDs."
+      ],
+      "supportAnchors": [
+        {
+          "line": 24,
+          "text": "        public int? ProcessId => session.ProcessId;"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/IAgentExecutionStrategy.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/IAgentExecutionStrategy.cs",
+      "sourceSha256": "1025CDE0E9541093BA3F964B72784FE564A72320E14ADA227E53B03A4E2184AD",
+      "sourceLineCount": 131,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 59,
+          "text": "    int? ProcessId { get; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "IAgentExecutionSession.ProcessId names the active child OS process.",
+      "disposition": "Retain integer process contract and strategy aliases.",
+      "b4Obligations": [
+        "Do not apply project entity grammar to process identity or strategy type aliases."
+      ],
+      "supportAnchors": [
+        {
+          "line": 59,
+          "text": "    int? ProcessId { get; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Middleware/FederationMiddleware.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/Middleware/FederationMiddleware.cs",
+      "sourceSha256": "6E704114AF241C84FAA18EA6CBD08F642E6F191EAA7B425E639D7E044F657F1B",
+      "sourceLineCount": 143,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 138,
+          "text": "        if (!int.TryParse(headerValue, out hopCount))",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "int.TryParse reads the federation forwarding hop count and guards loops; legacy LocalProxy transport role is operational routing.",
+      "disposition": "Retain numeric loop-control validation; lexical hit is not canonical entity parsing.",
+      "b4Obligations": [
+        "Do not conflate legacy proxy routing with authored Dolt project identity."
+      ],
+      "supportAnchors": [
+        {
+          "line": 138,
+          "text": "        if (!int.TryParse(headerValue, out hopCount))"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Models/DesktopLaunchModels.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/Models/DesktopLaunchModels.cs",
+      "sourceSha256": "6ECC0E43D917B73571491B0104DE6A89BF8FE4F98CABAB8E5AE1F7537A13CACB",
+      "sourceLineCount": 70,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 57,
+          "text": "    public int? ProcessId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Desktop launch response ProcessId describes an OS child process.",
+      "disposition": "Retain operational numeric PID.",
+      "b4Obligations": [
+        "No generated project identity conversion applies."
+      ],
+      "supportAnchors": [
+        {
+          "line": 57,
+          "text": "    public int? ProcessId { get; set; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/IToolBucketService.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/IToolBucketService.cs",
+      "sourceSha256": "76EDFB6CD001BFB7EE2C40185CC41B91048AE6D5AA440F53CDA211B4E11E3514",
+      "sourceLineCount": 78,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 44,
+          "text": "    int Id,",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "BucketDto.Id is a local host tool-bucket registry database key; repository coordinates are external GitHub identity.",
+      "disposition": "Retain local numeric registry identity per proposed B2 ToolBucketEntity HostOperations/LocalOperational classification.",
+      "b4Obligations": [
+        "Do not turn tool installation registry rows into authored project entities.",
+        "Preserve standalone tool-bucket APIs."
+      ],
+      "supportAnchors": [
+        {
+          "line": 44,
+          "text": "    int Id,"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/IToolRegistryService.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/IToolRegistryService.cs",
+      "sourceSha256": "4334B87C96FFB5598EE9E60789F153F657F8C5422054290089D5A0934537B5A4",
+      "sourceLineCount": 75,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 61,
+          "text": "    int Id,",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Get/update/delete integer IDs and ToolDto.Id identify local host tool registry rows.",
+      "disposition": "Retain numeric operational registry contract per B2 ToolDefinitionEntity HostOperations classification.",
+      "b4Obligations": [
+        "Project canonical DTO migration applies only to versioned families, not the operational tool registry."
+      ],
+      "supportAnchors": [
+        {
+          "line": 14,
+          "text": "    Task<ToolDto?> GetAsync(int id, CancellationToken ct = default);"
+        },
+        {
+          "line": 23,
+          "text": "    Task<ToolMutationResult> UpdateAsync(int id, ToolUpdateRequest request, CancellationToken ct = default);"
+        },
+        {
+          "line": 26,
+          "text": "    Task<ToolMutationResult> DeleteAsync(int id, CancellationToken ct = default);"
+        },
+        {
+          "line": 61,
+          "text": "    int Id,"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Products/Commands/AddProductMemberCommand.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/Products/Commands/AddProductMemberCommand.cs",
+      "sourceSha256": "59B2D2B565877D8D56147E66121ACC24A4E41736D605CF90777589FF0A6C1B93",
+      "sourceLineCount": 91,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 32,
+          "text": "            if (memberId.Length == 0)",
+          "category": "IdLength"
+        }
+      ],
+      "observedIdUse": "memberId.Length checks an empty canonicalized workspace-path key; ProductId is a host product-registry FK.",
+      "disposition": "Retain host registry membership and workspace-path validation per B2 ProductEntity/ProductWorkspaceMembershipEntity classification.",
+      "b4Obligations": [
+        "Do not confuse empty workspace-key checks with generated ID width validation.",
+        "Retain standalone registry references and soft-delete behavior."
+      ],
+      "supportAnchors": [
+        {
+          "line": 31,
+          "text": "            var memberId = WorkspaceIdentity.CanonicalizeWorkspaceId((command.MemberWorkspaceId ?? string.Empty).Trim());"
+        },
+        {
+          "line": 32,
+          "text": "            if (memberId.Length == 0)"
+        },
+        {
+          "line": 55,
+          "text": "                        m => m.ProductId == product.ProductId && m.WorkspaceId == memberId,"
+        },
+        {
+          "line": 70,
+          "text": "                        ProductId = product.ProductId,"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Products/ProductCqrsHelpers.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/Products/ProductCqrsHelpers.cs",
+      "sourceSha256": "79535AB1D0FDB93BEA0BC86F1B030668CF18B10571EEEF4F30E03F9F43AF2BCF",
+      "sourceLineCount": 172,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 141,
+          "text": "            .OrderBy(id => id, StringComparer.OrdinalIgnoreCase)",
+          "category": "IdOrdering"
+        }
+      ],
+      "observedIdUse": "PROD- keys identify host product registry entries; ordinal sorting orders workspace membership keys.",
+      "disposition": "Retain product host registry key semantics and deterministic workspace-key sorting.",
+      "b4Obligations": [
+        "Do not substitute generated numeric sequence ordering for workspace path ordering."
+      ],
+      "supportAnchors": [
+        {
+          "line": 16,
+          "text": "        @\"^PROD-[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$\","
+        },
+        {
+          "line": 141,
+          "text": "            .OrderBy(id => id, StringComparer.OrdinalIgnoreCase)"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/IGitHubCliService.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/IGitHubCliService.cs",
+      "sourceSha256": "464B035BB5B356196D7C65E8D87B844B2551807BF7F1A65E12CA64062C7A2B69",
+      "sourceLineCount": 249,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 87,
+          "text": "    Task<GitHubWorkflowRunDetailResult> GetWorkflowRunAsync(long runId, CancellationToken ct = default);",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 93,
+          "text": "    Task<GitHubMutationResult> RerunWorkflowRunAsync(long runId, CancellationToken ct = default);",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 99,
+          "text": "    Task<GitHubMutationResult> CancelWorkflowRunAsync(long runId, CancellationToken ct = default);",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 177,
+          "text": "    long RunId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 209,
+          "text": "    long RunId,",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "long runId and workflow result RunId values are GitHub Actions run identifiers; issue/PR/step numbers are external or ordered protocol fields.",
+      "disposition": "Retain external GitHub identifiers and workflow step ordering.",
+      "b4Obligations": [
+        "Project aliases never resolve GitHub workflow IDs."
+      ],
+      "supportAnchors": [
+        {
+          "line": 87,
+          "text": "    Task<GitHubWorkflowRunDetailResult> GetWorkflowRunAsync(long runId, CancellationToken ct = default);"
+        },
+        {
+          "line": 93,
+          "text": "    Task<GitHubMutationResult> RerunWorkflowRunAsync(long runId, CancellationToken ct = default);"
+        },
+        {
+          "line": 99,
+          "text": "    Task<GitHubMutationResult> CancelWorkflowRunAsync(long runId, CancellationToken ct = default);"
+        },
+        {
+          "line": 177,
+          "text": "    long RunId,"
+        },
+        {
+          "line": 209,
+          "text": "    long RunId,"
+        },
+        {
+          "line": 249,
+          "text": "    int? Number);"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Services/TransactionGatedGitHubCliService.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/Services/TransactionGatedGitHubCliService.cs",
+      "sourceSha256": "0E9B7F068E3C9C1D036B059A008E16297E3FF5C92291225B225950AF885D2C01",
+      "sourceLineCount": 160,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 115,
+          "text": "    public Task<GitHubWorkflowRunDetailResult> GetWorkflowRunAsync(long runId, CancellationToken ct = default)",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 119,
+          "text": "    public Task<GitHubMutationResult> RerunWorkflowRunAsync(long runId, CancellationToken ct = default)",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 128,
+          "text": "    public Task<GitHubMutationResult> CancelWorkflowRunAsync(long runId, CancellationToken ct = default)",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Transaction-gated wrapper forwards external GitHub run IDs unchanged and refuses uncompensated remote side effects under turn transactions.",
+      "disposition": "Retain external run identity and existing transaction barrier.",
+      "b4Obligations": [
+        "No canonical project allocator is introduced into GitHub protocol identifiers."
+      ],
+      "supportAnchors": [
+        {
+          "line": 115,
+          "text": "    public Task<GitHubWorkflowRunDetailResult> GetWorkflowRunAsync(long runId, CancellationToken ct = default)"
+        },
+        {
+          "line": 119,
+          "text": "    public Task<GitHubMutationResult> RerunWorkflowRunAsync(long runId, CancellationToken ct = default)"
+        },
+        {
+          "line": 128,
+          "text": "    public Task<GitHubMutationResult> CancelWorkflowRunAsync(long runId, CancellationToken ct = default)"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/Models/AgentModels.cs",
+      "sourcePath": "src/QBrainAi.Client/Models/AgentModels.cs",
+      "sourceSha256": "7C6C82B1D3908DFAC92D32A2278D920B2841883434FA86F53B0F297BF0A3A590",
+      "sourceLineCount": 552,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 160,
+          "text": "    public int Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 388,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 513,
+          "text": "    public int? ProcessId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "AgentWorkspaceConfig.Id and AgentEvent.Id are operational row keys; ProcessId is OS identity, AgentId is logical agent type, WorkspacePath is host context.",
+      "disposition": "Retain numeric operational agent configuration/event IDs under B2 AgentDefinition/AgentEventLog/AgentWorkspace HostOperations classifications.",
+      "b4Obligations": [
+        "Do not conflate agent-type identity or OS PID with creator provenance.",
+        "Explicit promotion preserves sanitized source provenance under snapshot-scoped keys instead of rewriting raw audit identity."
+      ],
+      "supportAnchors": [
+        {
+          "line": 28,
+          "text": "    public string Id { get; set; } = string.Empty;"
+        },
+        {
+          "line": 160,
+          "text": "    public int Id { get; set; }"
+        },
+        {
+          "line": 166,
+          "text": "    public string AgentId { get; set; } = string.Empty;"
+        },
+        {
+          "line": 388,
+          "text": "    public long Id { get; set; }"
+        },
+        {
+          "line": 394,
+          "text": "    public string AgentId { get; set; } = string.Empty;"
+        },
+        {
+          "line": 513,
+          "text": "    public int? ProcessId { get; set; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/Models/ToolRegistryModels.cs",
+      "sourcePath": "src/QBrainAi.Client/Models/ToolRegistryModels.cs",
+      "sourceSha256": "9BD4589E99DD8761473B5B18005F0B20E46B4E64B2B4C594012B60C29881CB75",
+      "sourceLineCount": 285,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 12,
+          "text": "    public int Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 136,
+          "text": "    public int Id { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "ToolDto.Id and BucketDto.Id are local installation/tool registry database keys.",
+      "disposition": "Retain operational registry numeric DTOs per B2 ToolDefinitionEntity and ToolBucketEntity classifications.",
+      "b4Obligations": [
+        "Do not impose versioned canonical DTO identity on local tool installation registry."
+      ],
+      "supportAnchors": [
+        {
+          "line": 12,
+          "text": "    public int Id { get; set; }"
+        },
+        {
+          "line": 136,
+          "text": "    public int Id { get; set; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/Models/SessionLogModels.cs",
+      "sourcePath": "src/QBrainAi.Client/Models/SessionLogModels.cs",
+      "sourceSha256": "B41D11E41AE0144C66338B29CC0DEBD4783CF724E183BBF4873AD155FA1C21E9",
+      "sourceLineCount": 529,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 400,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 432,
+          "text": "    public long TurnId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 492,
+          "text": "    public long TurnId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Submission Id/TurnId fields are operational DB receipts; SessionId and RequestId are existing string audit identity; TodoId is a separate project reference.",
+      "disposition": "Retain operational audit receipt IDs and source session/request grammar; preserve actual TODO reference string.",
+      "b4Obligations": [
+        "Automatic audit remains operational.",
+        "Explicit immutable snapshot uses scoped child keys and original source IDs; canonical or legacy TodoId is carried without numeric inference."
+      ],
+      "supportAnchors": [
+        {
+          "line": 16,
+          "text": "    public string? SessionId { get; set; }"
+        },
+        {
+          "line": 112,
+          "text": "    public string? RequestId { get; set; }"
+        },
+        {
+          "line": 140,
+          "text": "    public string? PlanFile { get; set; }"
+        },
+        {
+          "line": 144,
+          "text": "    public string? TodoId { get; set; }"
+        },
+        {
+          "line": 400,
+          "text": "    public long Id { get; set; }"
+        },
+        {
+          "line": 432,
+          "text": "    public long TurnId { get; set; }"
+        },
+        {
+          "line": 492,
+          "text": "    public long TurnId { get; set; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Repl.Core/ISessionLogWorkflow.cs",
+      "sourcePath": "src/QBrainAi.Repl.Core/ISessionLogWorkflow.cs",
+      "sourceSha256": "FFBFB2862197C7D7E9D72C424B6693D9CC4196FA7937BB13C40A4D2B66A7A3D9",
+      "sourceLineCount": 451,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 263,
+          "text": "    public long SubmitId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Agent/session/request validation regexes describe operational audit identity; SubmitId is operational recovery receipt; TodoId context is a project soft reference.",
+      "disposition": "Retain existing session/request grammar and operational numeric receipt; apply versioned reference rules only to TodoId or promoted snapshot reference boundaries.",
+      "b4Obligations": [
+        "Do not insert creator tags into session-log timestamp/request identifiers.",
+        "Promoted snapshot retains typed source identity and scoped child keys."
+      ],
+      "supportAnchors": [
+        {
+          "line": 24,
+          "text": "/// <description>Format: <c>&lt;Agent&gt;-&lt;yyyyMMddTHHmmssZ&gt;-&lt;suffix&gt;</c>. Regex: <c>^[A-Z][A-Za-z0-9]*-\\d{8}T\\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$</c></description>"
+        },
+        {
+          "line": 28,
+          "text": "/// <description>Format: <c>req-&lt;yyyyMMddTHHmmssZ&gt;-&lt;slugOrOrdinal&gt;</c>. Regex: <c>^req-\\d{8}T\\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$</c></description>"
+        },
+        {
+          "line": 111,
+          "text": "    Task BeginTurnAsync(string requestId, string queryTitle, string queryText, CancellationToken cancellationToken = default, string? planFile = null, string? todoId = null);"
+        },
+        {
+          "line": 263,
+          "text": "    public long SubmitId { get; set; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Models/AgentConfig.cs",
+      "sourcePath": "src/QBrainAi.Services/Models/AgentConfig.cs",
+      "sourceSha256": "4AC0AEA50730BD0EBC55467578FB60B7E069F85C2C61C5D16B8D24359B87268C",
+      "sourceLineCount": 269,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 49,
+          "text": "    public int Id { get; init; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 125,
+          "text": "    public long Id { get; init; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "AgentWorkspaceConfigDto.Id and AgentEventDto.Id are operational agent configuration/event row keys; agent type/path and external PR number remain distinct.",
+      "disposition": "Retain local operational identity according to B2 AgentWorkspace/AgentEventLog classifications.",
+      "b4Obligations": [
+        "Preserve external PR identity and logical agent type without applying generated project grammar."
+      ],
+      "supportAnchors": [
+        {
+          "line": 49,
+          "text": "    public int Id { get; init; }"
+        },
+        {
+          "line": 67,
+          "text": "    public int? BannedUntilPr { get; init; }"
+        },
+        {
+          "line": 125,
+          "text": "    public long Id { get; init; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/Models/GitHubModels.cs",
+      "sourcePath": "src/QBrainAi.Client/Models/GitHubModels.cs",
+      "sourceSha256": "77DB8EA050ED0BB3E30C9D9714705A67481BCD8F324FBEAF077AD73BAE6A38A9",
+      "sourceLineCount": 536,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 379,
+          "text": "    public long RunId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 423,
+          "text": "    public long RunId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Workflow RunId values are external GitHub keys; step Number is ordered protocol data. SingleIssueSyncResult.TodoId is a separate project identity string.",
+      "disposition": "Retain GitHub numeric run IDs and ordering; preserve canonical or legacy TODO string through the typed project-reference boundary.",
+      "b4Obligations": [
+        "Never cast the TODO ID from a GitHub issue/run number.",
+        "Canonical TODO DTO behavior belongs to versioned project boundary, while GitHub identifiers retain external semantics."
+      ],
+      "supportAnchors": [
+        {
+          "line": 283,
+          "text": "    public string? TodoId { get; set; }"
+        },
+        {
+          "line": 379,
+          "text": "    public long RunId { get; set; }"
+        },
+        {
+          "line": 423,
+          "text": "    public long RunId { get; set; }"
+        },
+        {
+          "line": 523,
+          "text": "    public int? Number { get; set; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/Models/FederationModels.cs",
+      "sourcePath": "src/QBrainAi.Client/Models/FederationModels.cs",
+      "sourceSha256": "31BF9BE30A6E7CC97A30B90C999FB0304C0813B0FA779B00AA4D212618546BAB",
+      "sourceLineCount": 737,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 524,
+          "text": "    public int? ProcessId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "ProcessId is local OS metadata. ResourceId strings in conflict/sync/operation DTOs can carry domain references, while ProxyId/EnvelopeId/OperationId and HubSequence are legacy operational transport identity/order.",
+      "disposition": "Mixed file: retain OS and transport IDs; carry versioned ResourceId strings exactly through approved project identity boundary.",
+      "b4Obligations": [
+        "Do not globally convert legacy proxy GUIDs or hub sequence fields.",
+        "Do not infer canonical project identity from operational transport IDs.",
+        "Actual project ResourceId fields require typed canonical/legacy handling at the versioned boundary; no new legacy transport mechanism is introduced."
+      ],
+      "supportAnchors": [
+        {
+          "line": 316,
+          "text": "    public string? ResourceId { get; set; }"
+        },
+        {
+          "line": 360,
+          "text": "    public long Sequence { get; set; }"
+        },
+        {
+          "line": 384,
+          "text": "    public string? ResourceId { get; set; }"
+        },
+        {
+          "line": 524,
+          "text": "    public int? ProcessId { get; set; }"
+        },
+        {
+          "line": 556,
+          "text": "    public string? ResourceId { get; set; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Common.AgentCli/AgentCliInteractiveSession.cs",
+      "sourcePath": "src/QBrainAi.Common.AgentCli/AgentCliInteractiveSession.cs",
+      "sourceSha256": "8DC585244C137105DABA78EC40887C0A446F4509EEB72FC56ED0752187574ACC",
+      "sourceLineCount": 686,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 44,
+          "text": "    public int ProcessId => _process.Id;",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 486,
+          "text": "        const int MaxLength = 500;",
+          "category": "IdLength"
+        },
+        {
+          "line": 487,
+          "text": "        return normalized.Length <= MaxLength ? normalized : normalized[..MaxLength] + \"...\";",
+          "category": "IdLength"
+        }
+      ],
+      "observedIdUse": "ProcessId directly exposes Process.Id. MaxLength 500 and output-tail limits truncate user-facing diagnostics rather than identity keys.",
+      "disposition": "Retain OS PID and diagnostic truncation behavior.",
+      "b4Obligations": [
+        "Do not treat diagnostic tail length as a canonical-ID width assumption.",
+        "CLI stdout/stderr is opaque operational text, not an entity ID parser."
+      ],
+      "supportAnchors": [
+        {
+          "line": 16,
+          "text": "    private const int OutputTailLineMaxChars = 300;"
+        },
+        {
+          "line": 44,
+          "text": "    public int ProcessId => _process.Id;"
+        },
+        {
+          "line": 486,
+          "text": "        const int MaxLength = 500;"
+        },
+        {
+          "line": 487,
+          "text": "        return normalized.Length <= MaxLength ? normalized : normalized[..MaxLength] + \"...\";"
+        },
+        {
+          "line": 643,
+          "text": "        if (sanitized.Length > OutputTailLineMaxChars)"
+        },
+        {
+          "line": 650,
+          "text": "                target.Dequeue();"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/DesktopProcessSpawner.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/DesktopProcessSpawner.cs",
+      "sourceSha256": "57632A35587EE64B0F404A90280CDE95A4263620918C08E03EA47114DB4B082B",
+      "sourceLineCount": 223,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 144,
+          "text": "        public int Id => handle.ProcessId;",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "DesktopSpawnedProcess.Id delegates to handle.ProcessId and Process.GetProcessById for OS lifecycle handling; arg.Length checks empty command arguments.",
+      "disposition": "Retain numeric PID, process lifecycle and empty argument serialization.",
+      "b4Obligations": [
+        "Do not apply canonical project identity grammar to process IDs or argument emptiness checks."
+      ],
+      "supportAnchors": [
+        {
+          "line": 75,
+          "text": "            if (arg.Contains(' ') || arg.Contains('\"') || arg.Length == 0)"
+        },
+        {
+          "line": 144,
+          "text": "        public int Id => handle.ProcessId;"
+        },
+        {
+          "line": 179,
+          "text": "                using var proc = Process.GetProcessById(handle.ProcessId);"
+        },
+        {
+          "line": 200,
+          "text": "                using var process = Process.GetProcessById(handle.ProcessId);"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/FederationLocalProxyEnrollmentService.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/FederationLocalProxyEnrollmentService.cs",
+      "sourceSha256": "274F27655655F6E0B7134D71250069E5EC8B1A494C2975FF53D6A8E413A9BCE4",
+      "sourceLineCount": 217,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 211,
+          "text": "    int ProcessId,",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Environment.ProcessId is serialized into local-proxy operational heartbeat metadata. ProxyId is existing enrollment/heartbeat routing identity and workspace paths identify host inventory.",
+      "disposition": "Retain process and legacy enrollment identity; operational inventory is not a project authored entity.",
+      "b4Obligations": [
+        "Do not rewrite legacy ProxyId as a generated project entity.",
+        "Host paths/tokens remain operational and outside versioned project promotion."
+      ],
+      "supportAnchors": [
+        {
+          "line": 105,
+          "text": "           !string.IsNullOrWhiteSpace(_registry.ProxyId);"
+        },
+        {
+          "line": 111,
+          "text": "            ProxyId = _registry.ProxyId,"
+        },
+        {
+          "line": 144,
+          "text": "            $\"{_registry.HubBaseUrl}/qbrainai/federation/proxies/{Uri.EscapeDataString(_registry.ProxyId!)}/heartbeat\","
+        },
+        {
+          "line": 184,
+          "text": "                Environment.ProcessId,"
+        },
+        {
+          "line": 211,
+          "text": "    int ProcessId,"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Options/McpInstanceResolver.cs",
+      "sourcePath": "src/QBrainAi.Services/Options/McpInstanceResolver.cs",
+      "sourceSha256": "402350E84BA2C411B148212801ECD0CEE67EAF1796A10C64F92AFEC6FC2FA66F",
+      "sourceLineCount": 316,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 133,
+          "text": "        return int.TryParse(raw, out var value) ? value : fallback;",
+          "category": "NumericParse"
+        },
+        {
+          "line": 205,
+          "text": "            if (!int.TryParse(rawPort, out var port))",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "int.TryParse reads effective integer settings and instance ports; instance names and configuration section keys are host configuration identity.",
+      "disposition": "Retain configuration integer parsing and port collision validation.",
+      "b4Obligations": [
+        "Canonical project identity parsing must not replace host numeric settings or instance port keys."
+      ],
+      "supportAnchors": [
+        {
+          "line": 130,
+          "text": "    public static int GetEffectiveMcpInt(IConfiguration configuration, string? instanceName, string key, int fallback)"
+        },
+        {
+          "line": 133,
+          "text": "        return int.TryParse(raw, out var value) ? value : fallback;"
+        },
+        {
+          "line": 193,
+          "text": "        var usedPorts = new Dictionary<int, string>();"
+        },
+        {
+          "line": 205,
+          "text": "            if (!int.TryParse(rawPort, out var port))"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Indexing/EmbeddingService.cs",
+      "sourcePath": "src/QBrainAi.Storage/Indexing/EmbeddingService.cs",
+      "sourceSha256": "69659BAED8A62C6F0EC8529F1E84AA8405BA718A03406C483BD50DB4E25DB0C4",
+      "sourceLineCount": 327,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 247,
+          "text": "    private readonly int _clsId;",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 248,
+          "text": "    private readonly int _sepId;",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 249,
+          "text": "    private readonly int _unkId;",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 250,
+          "text": "    private readonly int _padId;",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "inputIds/tokenTypeIds are BERT vocabulary token indices; vocabulary IDs and tensor dimensions are numeric ML protocol data.",
+      "disposition": "Retain tokenizer indices and numeric ONNX tensor representation.",
+      "b4Obligations": [
+        "Do not apply authored project identity grammar to vocabulary token IDs or tensor dimensions."
+      ],
+      "supportAnchors": [
+        {
+          "line": 175,
+          "text": "        var (inputIds, attentionMask, tokenTypeIds) = _tokenizer!.Tokenize(text ?? string.Empty);"
+        },
+        {
+          "line": 178,
+          "text": "        var inputIdsTensor = new DenseTensor<long>(inputIds.Select(x => (long)x).ToArray(), [1, seqLen]);"
+        },
+        {
+          "line": 245,
+          "text": "    private readonly Dictionary<string, int> _vocab;"
+        },
+        {
+          "line": 258,
+          "text": "            _vocab[lines[i]] = i;"
+        },
+        {
+          "line": 309,
+          "text": "                if (_vocab.TryGetValue(substr, out var id))"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Indexing/VectorIndexService.cs",
+      "sourcePath": "src/QBrainAi.Storage/Indexing/VectorIndexService.cs",
+      "sourceSha256": "BE3DF5FD9A6F82AA43031582986EF57CF71C791D61A79DB93E38AD6A1CA33BAF",
+      "sourceLineCount": 326,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 326,
+          "text": "internal sealed record ChunkIdMapping(string ChunkId, int InternalId);",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "InternalId is an HNSW vector index slot; a separate exact string ChunkId maps to that local derived slot. Persistence saves the slot mapping and rebuildable vectors.",
+      "disposition": "Retain local derived numeric vector slots and exact external chunk-key strings.",
+      "b4Obligations": [
+        "Do not allocate project entity identity from HNSW slot numbers.",
+        "Derived index remains rebuildable local state; canonical referenced strings must survive mapping without suffix inference."
+      ],
+      "supportAnchors": [
+        {
+          "line": 20,
+          "text": "    private readonly Dictionary<string, int> _chunkIdToInternalId = new(StringComparer.Ordinal);"
+        },
+        {
+          "line": 21,
+          "text": "    private readonly Dictionary<int, string> _internalIdToChunkId = [];"
+        },
+        {
+          "line": 64,
+          "text": "                    _chunkIdToInternalId[chunkId] = id;"
+        },
+        {
+          "line": 65,
+          "text": "                    _internalIdToChunkId[id] = chunkId;"
+        },
+        {
+          "line": 154,
+          "text": "                .Select(kv => new ChunkIdMapping(kv.Key, kv.Value))"
+        },
+        {
+          "line": 202,
+          "text": "                    _chunkIdToInternalId[m.ChunkId] = m.InternalId;"
+        },
+        {
+          "line": 203,
+          "text": "                    _internalIdToChunkId[m.InternalId] = m.ChunkId;"
+        },
+        {
+          "line": 326,
+          "text": "internal sealed record ChunkIdMapping(string ChunkId, int InternalId);"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/WorkspaceValidationService.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/WorkspaceValidationService.cs",
+      "sourceSha256": "7CBAB62FAEDD33BE1FAB42BFA0BF0C791B4DCC08E15247FF055456B09E9418F2",
+      "sourceLineCount": 329,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 112,
+          "text": "                _db.Requirements.AsNoTracking().OrderBy(item => item.Kind).ThenBy(item => item.Id),",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 116,
+          "text": "                _db.RequirementAcceptanceCriteria.AsNoTracking().OrderBy(item => item.Id),",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 192,
+          "text": "                _db.TodoItems.AsNoTracking().OrderBy(item => item.Id),",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 196,
+          "text": "                _db.TodoItemTasks.AsNoTracking().OrderBy(item => item.Id),",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 200,
+          "text": "                _db.TodoItemListItems.AsNoTracking().OrderBy(item => item.Id),",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 210,
+          "text": "                _db.Requirements.AsNoTracking().OrderBy(item => item.Id),",
+          "category": "IdOrdering"
+        }
+      ],
+      "observedIdUse": "Turn.Id fallback is an operational session audit ID. The same file compares requirement/TODO/link IDs as exact strings and uses database ID order for deterministic batch traversal.",
+      "disposition": "Mixed file: retain operational turn fallback and stable traversal; versioned requirements/TODO relationships must use canonical normalized project references at the context boundary.",
+      "b4Obligations": [
+        "No sequence-suffix parse or global numeric conversion is warranted.",
+        "Retain exact relationship validation, while canonical/legacy alias handling occurs before validator reads versioned context.",
+        "Lexical traversal order is not a user-facing numeric sequence presentation contract."
+      ],
+      "supportAnchors": [
+        {
+          "line": 112,
+          "text": "                _db.Requirements.AsNoTracking().OrderBy(item => item.Kind).ThenBy(item => item.Id),"
+        },
+        {
+          "line": 126,
+          "text": "        var requirementIds = requirements.Select(item => (item.Kind, item.Id)).ToHashSet();"
+        },
+        {
+          "line": 127,
+          "text": "        var criteriaByRequirement = criteria.GroupBy(item => (item.RequirementKind, item.RequirementId)).ToDictionary(group => group.Key, group => group.Count());"
+        },
+        {
+          "line": 176,
+          "text": "                var key = link.FrId + \"|\" + link.TargetKind + \"|\" + link.TargetId;"
+        },
+        {
+          "line": 183,
+          "text": "                if (!requirementIds.Contains((\"fr\", link.FrId)) || !requirementIds.Contains((link.TargetKind, link.TargetId)))"
+        },
+        {
+          "line": 215,
+          "text": "        var todoIds = todos.Select(item => item.Id).ToHashSet(StringComparer.Ordinal);"
+        },
+        {
+          "line": 216,
+          "text": "        var requirementIds = requirements.ToHashSet(StringComparer.Ordinal);"
+        },
+        {
+          "line": 237,
+          "text": "                if (!todoIds.Contains(item.Value))"
+        },
+        {
+          "line": 246,
+          "text": "                if (!requirementIds.Contains(link.RequirementId))"
+        },
+        {
+          "line": 270,
+          "text": "            findings.Add(Finding(\"session_stale_in_progress\", \"Error\", \"session-turn\", turn.RequestId ?? turn.Id.ToString(),"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Options/CanonicalSectionProjectionProvider.cs",
+      "sourcePath": "src/QBrainAi.Services/Options/CanonicalSectionProjectionProvider.cs",
+      "sourceSha256": "081490D4BB894426B810B1E1C7D433A13C4A7224DDB05BEF2C9B3D334357B278",
+      "sourceLineCount": 396,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 356,
+          "text": "                if (!int.TryParse(parts[index], NumberStyles.None, CultureInfo.InvariantCulture, out _))",
+          "category": "NumericParse"
+        },
+        {
+          "line": 370,
+          "text": "            if (!int.TryParse(parts[index], NumberStyles.None, CultureInfo.InvariantCulture, out _))",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "int.TryParse detects numeric configuration array segments; ordinal section/key overlay is host configuration precedence.",
+      "disposition": "Retain array-index recognition and configuration ordering.",
+      "b4Obligations": [
+        "Configuration key canonical/legacy section prefixes are unrelated to project canonical entity identity."
+      ],
+      "supportAnchors": [
+        {
+          "line": 353,
+          "text": "            var parts = suffix.Split(':');"
+        },
+        {
+          "line": 356,
+          "text": "                if (!int.TryParse(parts[index], NumberStyles.None, CultureInfo.InvariantCulture, out _))"
+        },
+        {
+          "line": 367,
+          "text": "        var parts = suffix.Split(':');"
+        },
+        {
+          "line": 370,
+          "text": "            if (!int.TryParse(parts[index], NumberStyles.None, CultureInfo.InvariantCulture, out _))"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Controllers/MemoryController.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/Controllers/MemoryController.cs",
+      "sourceSha256": "6504DCD6DADCF9507F7248A18DFB655C902F70974521BDB6C9503708D3E4C887",
+      "sourceLineCount": 365,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 286,
+          "text": "        if (int.TryParse(trimmed, out _)",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "int.TryParse rejects numeric scope enum input. Actual memory IDs, explore SeedId and revert target ID are string project references passed to services/CQRS.",
+      "disposition": "Mixed file: retain scope validation; canonical/legacy memory strings require central typed resolution at the versioned service boundary and URL-escaped created IDs.",
+      "b4Obligations": [
+        "Do not apply entity grammar to numeric scope enum validation.",
+        "Preserve path escaping, complete memory IDs and alias ambiguity handling for versioned operations."
+      ],
+      "supportAnchors": [
+        {
+          "line": 60,
+          "text": "    public async Task<ActionResult<MemoryItem>> GetAsync(string id, CancellationToken cancellationToken)"
+        },
+        {
+          "line": 83,
+          "text": "        var createdId = result.Memory?.Id ?? request.Id ?? string.Empty;"
+        },
+        {
+          "line": 84,
+          "text": "        return Created(new Uri($\"/qbrainai/memory/{Uri.EscapeDataString(createdId)}\", UriKind.Relative), result);"
+        },
+        {
+          "line": 90,
+          "text": "        string id,"
+        },
+        {
+          "line": 167,
+          "text": "                request.SeedId,"
+        },
+        {
+          "line": 225,
+          "text": "            new ListMemoryVersionsQuery(GetWorkspacePath(), id),"
+        },
+        {
+          "line": 243,
+          "text": "            var gated = await _memoryMutations.RevertAsync(id, version, cancellationToken).ConfigureAwait(false);"
+        },
+        {
+          "line": 257,
+          "text": "            ? await _memoryService.RemoveAsync(id, cancellationToken).ConfigureAwait(false)"
+        },
+        {
+          "line": 286,
+          "text": "        if (int.TryParse(trimmed, out _)"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.McpAgent/PowerShellSessions/HostedPowerShellSessionHost.cs",
+      "sourcePath": "src/QBrainAi.McpAgent/PowerShellSessions/HostedPowerShellSessionHost.cs",
+      "sourceSha256": "525FA987B0BE4A0E6AB1F249DAA6C2B67FE44C3D31957C928598962800C1384B",
+      "sourceLineCount": 376,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 121,
+          "text": "                if (int.TryParse(input, NumberStyles.Integer, CultureInfo.InvariantCulture, out var selectedChoice)",
+          "category": "NumericParse"
+        },
+        {
+          "line": 163,
+          "text": "        public override void WriteProgress(long sourceId, ProgressRecord record)",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "int.TryParse reads the index selected from a PowerShell prompt menu; PSHost InstanceId is runtime GUID identity and progress sourceId is a host progress stream key.",
+      "disposition": "Retain PowerShell host protocol identity and numeric menu index parsing.",
+      "b4Obligations": [
+        "Do not rewrite PSHost GUIDs, prompt choice indices or progress source IDs as authored project IDs."
+      ],
+      "supportAnchors": [
+        {
+          "line": 12,
+          "text": "    private readonly Guid _instanceId = Guid.NewGuid();"
+        },
+        {
+          "line": 25,
+          "text": "    public override Guid InstanceId => _instanceId;"
+        },
+        {
+          "line": 121,
+          "text": "                if (int.TryParse(input, NumberStyles.Integer, CultureInfo.InvariantCulture, out var selectedChoice)"
+        },
+        {
+          "line": 163,
+          "text": "        public override void WriteProgress(long sourceId, ProgressRecord record)"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Services/AppSettingsFileService.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/Services/AppSettingsFileService.cs",
+      "sourceSha256": "648CE60B176B22E6E746C709F9F97681E844889BFFE2F0CF21E4C931B76FF756",
+      "sourceLineCount": 445,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 437,
+          "text": "        return int.TryParse(segment, out index) && index >= 0;",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "int.TryParse recognizes nonnegative YAML list indices in flattened host configuration paths. GUIDs name atomic temporary files.",
+      "disposition": "Retain configuration list addressing and temporary-file names.",
+      "b4Obligations": [
+        "Do not confuse configuration indices or temporary filenames with generated project identity.",
+        "Configuration and secret-bearing host values remain operational, not project promotion data."
+      ],
+      "supportAnchors": [
+        {
+          "line": 292,
+          "text": "            $\".{Path.GetFileName(resolvedPath)}.{Guid.NewGuid():N}.tmp\");"
+        },
+        {
+          "line": 363,
+          "text": "    private static void ApplyToList(IList<object> current, string[] segments, int index, string? value)"
+        },
+        {
+          "line": 365,
+          "text": "        if (!TryGetListIndex(segments[index], out var listIndex))"
+        },
+        {
+          "line": 435,
+          "text": "    private static bool TryGetListIndex(string segment, out int index)"
+        },
+        {
+          "line": 437,
+          "text": "        return int.TryParse(segment, out index) && index >= 0;"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs",
+      "sourceSha256": "B93407AC8DC94B31EF9CD6CF4D8CF0FBD801ACEE0A3B54D1766D009F374345D7",
+      "sourceLineCount": 412,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 173,
+          "text": "                if (!int.TryParse(timeoutValue, out var seconds) || seconds <= 0)",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "int.TryParse validates positive SQL Server timeout seconds; instance names and backup/report paths select host database maintenance.",
+      "disposition": "Retain operational timeout and host maintenance configuration.",
+      "b4Obligations": [
+        "Do not route encryption maintenance timeout/instance names through project entity allocation.",
+        "No credential values are promoted to project history."
+      ],
+      "supportAnchors": [
+        {
+          "line": 173,
+          "text": "                if (!int.TryParse(timeoutValue, out var seconds) || seconds <= 0)"
+        },
+        {
+          "line": 198,
+          "text": "        options = new McpDatabaseEncryptionTransitionOptions"
+        },
+        {
+          "line": 204,
+          "text": "            BackupPath = backupPath,"
+        },
+        {
+          "line": 205,
+          "text": "            ReportPath = reportPath,"
+        },
+        {
+          "line": 210,
+          "text": "            SqlServerTimeout = sqlServerTimeout,"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Client/LinuxPhysicalPathResolver.cs",
+      "sourcePath": "src/QBrainAi.Client/LinuxPhysicalPathResolver.cs",
+      "sourceSha256": "23D84B50EDFB447DD0C87406ABA62C392EAE6397EC00A33FBB95DBB5CCED8BBF",
+      "sourceLineCount": 723,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 540,
+          "text": "    private static int ReadPinnedMountId(SafeFileHandle handle)",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 549,
+          "text": "            if (int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var mountId))",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "Pinned Linux mount IDs come from /proc/self/fdinfo; descriptors, statx inode/device values and syscall numbers are kernel identity and ABI.",
+      "disposition": "Retain mount/inode/descriptor numeric identity and same-device safety checks.",
+      "b4Obligations": [
+        "No creator tag, alias lookup or numeric project presentation applies to native file identity."
+      ],
+      "supportAnchors": [
+        {
+          "line": 377,
+          "text": "            var pinnedMountId = ReadPinnedMountId(handle);"
+        },
+        {
+          "line": 381,
+          "text": "            if (pinnedMountId != mount.MountId ||"
+        },
+        {
+          "line": 528,
+          "text": "            afterIdentity.Inode == beforeIdentity.Inode &&"
+        },
+        {
+          "line": 540,
+          "text": "    private static int ReadPinnedMountId(SafeFileHandle handle)"
+        },
+        {
+          "line": 549,
+          "text": "            if (int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var mountId))"
+        },
+        {
+          "line": 687,
+          "text": "    private static extern long OpenAt2("
+        },
+        {
+          "line": 707,
+          "text": "        internal ulong Inode;"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/FederationTopologyModels.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/FederationTopologyModels.cs",
+      "sourceSha256": "6B46AA59A28C843F32107FCB5DD6F28651DE4865F9DF1A17B12D7FD5E5145D54",
+      "sourceLineCount": 517,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 490,
+          "text": "    public int? ProcessId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "ProcessId is local OS metadata; Sequence is legacy hub ordering. Proxy/envelope/operation IDs are transport identity, while ResourceId is a separate domain-specific string.",
+      "disposition": "Mixed file: retain transport identity and ordering; carry exact typed domain ResourceId strings when used by versioned project boundaries.",
+      "b4Obligations": [
+        "Do not globally rekey legacy federation transport IDs or kernel PIDs.",
+        "Project ResourceId canonical/legacy resolution remains distinct from operation replay identity."
+      ],
+      "supportAnchors": [
+        {
+          "line": 161,
+          "text": "    public string? ResourceId { get; set; }"
+        },
+        {
+          "line": 243,
+          "text": "    public string? ResourceId { get; set; }"
+        },
+        {
+          "line": 278,
+          "text": "            ResourceId = ResourceId,"
+        },
+        {
+          "line": 320,
+          "text": "    public string? ResourceId { get; set; }"
+        },
+        {
+          "line": 346,
+          "text": "    public long Sequence { get; set; }"
+        },
+        {
+          "line": 355,
+          "text": "    public string? ResourceId { get; set; }"
+        },
+        {
+          "line": 416,
+          "text": "    public string EnvelopeId { get; set; } = $\"fedenvelope-{Guid.NewGuid():N}\";"
+        },
+        {
+          "line": 434,
+          "text": "    public string Nonce { get; set; } = Guid.NewGuid().ToString(\"N\");"
+        },
+        {
+          "line": 490,
+          "text": "    public int? ProcessId { get; set; }"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+      "sourceSha256": "E2DB14C625CE2CD27A9BF5DC397C075E0C78298FB8C346DC827F3DECAA0465AB",
+      "sourceLineCount": 473,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 90,
+          "text": "        public int? ProcessId => _process?.Id;",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "ProcessId directly returns spawned OS process Id. SessionId is a Codex CLI resume handle; GUID names temporary output files, and length checks guard command quoting.",
+      "disposition": "Retain operational CLI process/resume identity and temporary filenames.",
+      "b4Obligations": [
+        "No project canonical grammar or creator sequence allocation enters external CLI handles."
+      ],
+      "supportAnchors": [
+        {
+          "line": 59,
+          "text": "        if (!string.IsNullOrWhiteSpace(sessionId))"
+        },
+        {
+          "line": 62,
+          "text": "            arguments.Add(sessionId.Trim());"
+        },
+        {
+          "line": 90,
+          "text": "        public int? ProcessId => _process?.Id;"
+        },
+        {
+          "line": 141,
+          "text": "            var outputPath = Path.Combine(tempDirectory, $\"codex-output-{Guid.NewGuid():N}.txt\");"
+        },
+        {
+          "line": 313,
+          "text": "            if (value.Length == 0)"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs",
+      "sourceSha256": "55C58D9D99341EC82AA4D940A52FFF13ADFB47CFA261C551797E60963F362BBD",
+      "sourceLineCount": 533,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 156,
+          "text": "        public int? ProcessId => _process?.Id;",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "ProcessId exposes spawned OS Id. Persistent session UUID is passed to external Grok --session-id/--resume; GUIDs name prompt temp files.",
+      "disposition": "Retain external CLI session handles, OS PID and temporary-file identity.",
+      "b4Obligations": [
+        "Do not replace Grok protocol session UUIDs with authored project IDs."
+      ],
+      "supportAnchors": [
+        {
+          "line": 90,
+          "text": "    /// Builds Grok CLI args for a QuadBrain Cli slot: xhigh effort, a stable session UUID, and"
+        },
+        {
+          "line": 124,
+          "text": "            arguments.Add(sessionId);"
+        },
+        {
+          "line": 129,
+          "text": "            arguments.Add(sessionId);"
+        },
+        {
+          "line": 156,
+          "text": "        public int? ProcessId => _process?.Id;"
+        },
+        {
+          "line": 207,
+          "text": "            var promptFilePath = Path.Combine(tempDirectory, $\"grok-prompt-{Guid.NewGuid():N}.txt\");"
+        },
+        {
+          "line": 381,
+          "text": "            if (value.Length == 0)"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "sourceSha256": "849B1CCE89705291E908340DC3527471FA8D050D90B72985BFB3C6F8C4643E63",
+      "sourceLineCount": 556,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 52,
+          "text": "        public int? ProcessId => _process?.Id;",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "ProcessId exposes spawned OS process Id; GUIDs name operational prompt/output files and length checks quote empty CLI arguments.",
+      "disposition": "Retain operational agent execution identity and temporary-file names.",
+      "b4Obligations": [
+        "Do not apply project canonical ID grammar to OS PIDs or CLI quoting checks."
+      ],
+      "supportAnchors": [
+        {
+          "line": 52,
+          "text": "        public int? ProcessId => _process?.Id;"
+        },
+        {
+          "line": 103,
+          "text": "            var outputPath = Path.Combine(tempDirectory, $\"oneshot-output-{Guid.NewGuid():N}.txt\");"
+        },
+        {
+          "line": 249,
+          "text": "                    promptFilePath = Path.Combine(tempDirectory, $\"oneshot-prompt-{Guid.NewGuid():N}.txt\");"
+        },
+        {
+          "line": 390,
+          "text": "            if (value.Length == 0)"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/HostedMcpAgentExecutionStrategy.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/HostedMcpAgentExecutionStrategy.cs",
+      "sourceSha256": "E5AD5FF88A1C8E1A96E7D0C5816B524A46C23F6AA1952813E2FAE5191E814945",
+      "sourceLineCount": 732,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 178,
+          "text": "        public int? ProcessId => _baseChatClient.ProcessId;",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 321,
+          "text": "        public int? ProcessId => _session?.ProcessId;",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "ProcessId delegates to the hosted CLI OS process. Hosted AgentId derives from the logical agent name. Function-call GUIDs are transient chat protocol correlation, and JSON conversion preserves string values separately from numeric JSON values.",
+      "disposition": "Retain OS, logical-agent and tool-call correlation identity; preserve canonical project IDs as strings within arguments/results.",
+      "b4Obligations": [
+        "Do not tag logical agent names or transient function-call GUIDs.",
+        "Do not coerce project identity strings via generic numeric JSON conversion.",
+        "Hosted automatic audit remains operational under B2/B3."
+      ],
+      "supportAnchors": [
+        {
+          "line": 104,
+          "text": "            AgentId = BuildHostedAgentId(agentName),"
+        },
+        {
+          "line": 124,
+          "text": "    private static string BuildHostedAgentId(string agentName)"
+        },
+        {
+          "line": 138,
+          "text": "            : $\"mcpserver-{normalized}-hosted-agent\";"
+        },
+        {
+          "line": 178,
+          "text": "        public int? ProcessId => _baseChatClient.ProcessId;"
+        },
+        {
+          "line": 321,
+          "text": "        public int? ProcessId => _session?.ProcessId;"
+        },
+        {
+          "line": 471,
+          "text": "                                Guid.NewGuid().ToString(\"N\"),"
+        },
+        {
+          "line": 705,
+          "text": "                JsonValueKind.Number when value.TryGetInt64(out var intValue) => intValue,"
+        },
+        {
+          "line": 707,
+          "text": "                JsonValueKind.String => value.GetString() ?? string.Empty,"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Native/DesktopProcessLauncher.cs",
+      "sourcePath": "src/QBrainAi.Services/Native/DesktopProcessLauncher.cs",
+      "sourceSha256": "8052717B2835DE4F222E62A25D79C8E17E697C7C9B3C72A861AE82851BD13D0C",
+      "sourceLineCount": 673,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 22,
+          "text": "        int processId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 38,
+          "text": "    internal int ProcessId { get; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Native processId/ProcessId and console session IDs are obtained from CreateProcess/WTS; handles and environment keys are Windows operational state.",
+      "disposition": "Retain OS numeric identity, native ABI and process lifecycle.",
+      "b4Obligations": [
+        "Project entity allocation cannot change Windows PIDs, token session IDs or native handles."
+      ],
+      "supportAnchors": [
+        {
+          "line": 22,
+          "text": "        int processId,"
+        },
+        {
+          "line": 38,
+          "text": "    internal int ProcessId { get; }"
+        },
+        {
+          "line": 138,
+          "text": "            var consoleSessionId = NativeMethods.WTSGetActiveConsoleSessionId();"
+        },
+        {
+          "line": 231,
+          "text": "            _logger.LogInformation(\"Desktop process launched: PID={ProcessId}\", pi.dwProcessId);"
+        },
+        {
+          "line": 234,
+          "text": "                pi.dwProcessId,"
+        },
+        {
+          "line": 355,
+          "text": "            return pi.dwProcessId;"
+        },
+        {
+          "line": 371,
+          "text": "        var sessionId = NativeMethods.WTSGetActiveConsoleSessionId();"
+        },
+        {
+          "line": 400,
+          "text": "                    ref sessionId,"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs",
+      "sourceSha256": "B1196A039129597B0467E046212DA8BFA85DFA33F8F7DE0A844B52390DB53680",
+      "sourceLineCount": 604,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 433,
+          "text": "        if (!int.TryParse(digits, out var reservedBytes) || reservedBytes <= 0)",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "int.TryParse validates SQLite reserved-byte count; DB_ID and table/certificate identifiers are database-engine metadata; GUIDs identify a working file.",
+      "disposition": "Retain database-maintenance numeric state and provider identifiers.",
+      "b4Obligations": [
+        "Canonical project identity does not replace engine encryption state, reserved-byte count or temporary-file identity.",
+        "Existing standalone McpDbContext maintenance remains distinct from later project/control migration contexts."
+      ],
+      "supportAnchors": [
+        {
+          "line": 134,
+          "text": "        var workingPath = $\"{sourcePath}.{Guid.NewGuid():N}.working\";"
+        },
+        {
+          "line": 433,
+          "text": "        if (!int.TryParse(digits, out var reservedBytes) || reservedBytes <= 0)"
+        },
+        {
+          "line": 548,
+          "text": "                WHERE database_id = DB_ID();"
+        },
+        {
+          "line": 562,
+          "text": "    private static McpDbContext CreateDbContext(McpDatabaseProviderOptions providerOptions)"
+        },
+        {
+          "line": 565,
+          "text": "        services.AddDbContext<McpDbContext>(dbOptions =>"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Services/TransactionGatedToolRegistryService.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/Services/TransactionGatedToolRegistryService.cs",
+      "sourceSha256": "4053CC4C1B5993D064F4F7E2CC84038B937FA2B518ABC68D8FFA6B340541797A",
+      "sourceLineCount": 448,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 185,
+          "text": "            .OrderBy(tag => tag.Id)",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 389,
+          "text": "        int Id,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 397,
+          "text": "    private sealed record ToolDeleteTransactionPayload(int Id);",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 400,
+          "text": "        int Id,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 433,
+          "text": "        int Id,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 435,
+          "text": "        int ToolDefinitionId,",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Tool/tag IDs are int host-operational registry keys; snapshot restore preserves tool and ToolDefinitionId foreign-key graph. Transaction TurnId and sequence are coordinator operation identifiers.",
+      "disposition": "Retain host-operational numeric registry and compensation keys; do not apply project canonical grammar to tool IDs or transaction sequence.",
+      "b4Obligations": [
+        "B2 host-operations classification applies to ToolDefinitionEntity/ToolDefinitionTagEntity; snapshot equality is local compensation, not project alias resolution."
+      ],
+      "supportAnchors": [
+        {
+          "line": 50,
+          "text": "    public Task<ToolDto?> GetAsync(int id, CancellationToken ct = default)"
+        },
+        {
+          "line": 85,
+          "text": "    public Task<ToolMutationResult> UpdateAsync(int id, ToolUpdateRequest request, CancellationToken ct = default)"
+        },
+        {
+          "line": 113,
+          "text": "    public Task<ToolMutationResult> DeleteAsync(int id, CancellationToken ct = default)"
+        },
+        {
+          "line": 172,
+          "text": "    private async Task<ToolDefinitionSnapshot?> CaptureToolAsync(int id, CancellationToken cancellationToken)"
+        },
+        {
+          "line": 178,
+          "text": "            .FirstOrDefaultAsync(tool => tool.Id == id, cancellationToken)"
+        },
+        {
+          "line": 205,
+          "text": "                Id = snapshot.Id,"
+        },
+        {
+          "line": 242,
+          "text": "        var snapshotIds = snapshots.Select(tag => tag.Id).ToHashSet();"
+        },
+        {
+          "line": 251,
+          "text": "                    Id = snapshot.Id,"
+        },
+        {
+          "line": 252,
+          "text": "                    ToolDefinitionId = snapshot.ToolDefinitionId,"
+        },
+        {
+          "line": 279,
+          "text": "            TurnId = $\"{operationName}-{sequence}\","
+        },
+        {
+          "line": 287,
+          "text": "    private long NextSequence()"
+        },
+        {
+          "line": 389,
+          "text": "        int Id,"
+        },
+        {
+          "line": 397,
+          "text": "    private sealed record ToolDeleteTransactionPayload(int Id);"
+        },
+        {
+          "line": 400,
+          "text": "        int Id,"
+        },
+        {
+          "line": 433,
+          "text": "        int Id,"
+        },
+        {
+          "line": 435,
+          "text": "        int ToolDefinitionId,"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/McpStdio/QBrainAiMcpTools.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/McpStdio/QBrainAiMcpTools.cs",
+      "sourceSha256": "47BF847A0E7E25A3ADB9A9090010D3EFD73F0F5B2A60FDBF02849650F4CD3F21",
+      "sourceLineCount": 574,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 248,
+          "text": "        if (int.TryParse(trimmed, out _)",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "int.TryParse rejects numeric scope enum values, not entity identifiers. Memory tool IDs remain exact strings dispatched under explicit workspace scope and optional Global/Workspace memory scope.",
+      "disposition": "Retain scope parser and workspace override; bind project memory-ID normalization at the shared memory service boundary while preserving standalone numeric DTO compatibility and global-memory ownership rules.",
+      "b4Obligations": [
+        "TR009 family-aware memory alias/canonical resolution must preserve scope/workspace and ambiguity refusal. Never recast scope enum parsing or ingestion RunId as canonical entity parsing."
+      ],
+      "supportAnchors": [
+        {
+          "line": 156,
+          "text": "    private IDisposable ApplyWorkspaceOverride(string workspacePath)"
+        },
+        {
+          "line": 166,
+          "text": "        var canonical = HandoffWorkspacePaths.Canonicalize(workspacePath);"
+        },
+        {
+          "line": 177,
+          "text": "        var dbScope = _db.PushWorkspaceId(canonical);"
+        },
+        {
+          "line": 237,
+          "text": "    private static bool TryParseMemoryScope(string? value, out MemoryScope? scope, out string? error)"
+        },
+        {
+          "line": 248,
+          "text": "        if (int.TryParse(trimmed, out _)"
+        },
+        {
+          "line": 378,
+          "text": "            result.RunId,"
+        },
+        {
+          "line": 445,
+          "text": "    public async Task<string> MemoryGet("
+        },
+        {
+          "line": 447,
+          "text": "        [Description(\"Memory id\")] string id,"
+        },
+        {
+          "line": 453,
+          "text": "            var item = await _memoryService.GetAsync(id, cancellationToken).ConfigureAwait(false);"
+        },
+        {
+          "line": 473,
+          "text": "        [Description(\"Optional explicit memory id\")] string? id = null,"
+        },
+        {
+          "line": 496,
+          "text": "                    Id = id,"
+        },
+        {
+          "line": 519,
+          "text": "        [Description(\"Memory id\")] string id,"
+        },
+        {
+          "line": 542,
+          "text": "                ? await _memoryService.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false)"
+        },
+        {
+          "line": 557,
+          "text": "        [Description(\"Memory id\")] string id,"
+        },
+        {
+          "line": 564,
+          "text": "                ? await _memoryService.RemoveAsync(id, cancellationToken).ConfigureAwait(false)"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Controllers/AuthConfigController.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/Controllers/AuthConfigController.cs",
+      "sourceSha256": "2B715C1EB6CCC17C51A83863DEF6FD378998494AF08CC73BD6A4199EF5B160E9",
+      "sourceLineCount": 763,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 336,
+          "text": "            int.TryParse(stringSeconds, out seconds))",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "int.TryParse reads OAuth expires_in duration; ClientId is public OIDC client identity, not project entity key. Proxy paths/cookie lengths are URL and header protocol handling.",
+      "disposition": "Retain duration parsing and external OIDC/client identifiers; no B4 project identity rekey applies to this source.",
+      "b4Obligations": [
+        "Do not infer a federation token-lifetime rule from the pre-existing one-hour OIDC proxy policy. Auth configuration and credential handling belong to B5/B11 owner seams, separate from canonical project IDs."
+      ],
+      "supportAnchors": [
+        {
+          "line": 21,
+          "text": "    private const int MinimumOidcTokenLifetimeSeconds = 1 * 60 * 60;"
+        },
+        {
+          "line": 54,
+          "text": "            ClientId = oidcProvider.ClientId,"
+        },
+        {
+          "line": 102,
+          "text": "        var endpoint = oidcProvider.GetTokenEndpoint(requestBaseUrl);"
+        },
+        {
+          "line": 269,
+          "text": "        var hasAccess = TryReadTokenLifetimeSeconds(obj, \"expires_in\", out var accessExpiresInSeconds);"
+        },
+        {
+          "line": 277,
+          "text": "        var isAccessTooShort = hasAccess && accessExpiresInSeconds < MinimumOidcTokenLifetimeSeconds;"
+        },
+        {
+          "line": 303,
+          "text": "            error = \"oidc_token_lifetime_too_short\","
+        },
+        {
+          "line": 313,
+          "text": "    private static bool TryReadTokenLifetimeSeconds(JsonObject obj, string propertyName, out int seconds)"
+        },
+        {
+          "line": 327,
+          "text": "        if (value.TryGetValue<long>(out var longSeconds) &&"
+        },
+        {
+          "line": 336,
+          "text": "            int.TryParse(stringSeconds, out seconds))"
+        },
+        {
+          "line": 681,
+          "text": "                var cookiePath = part.Substring(\"Path=\".Length).Trim();"
+        },
+        {
+          "line": 702,
+          "text": "                var sameSiteValue = part.Substring(\"SameSite=\".Length).Trim();"
+        },
+        {
+          "line": 753,
+          "text": "    public string ClientId { get; set; } = \"\";"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Controllers/GitHubController.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/Controllers/GitHubController.cs",
+      "sourceSha256": "7417A2C4AFADED76F1D5EE7E368F6A097F4A3B2E718D4C216B213C58A13D2306",
+      "sourceLineCount": 628,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 356,
+          "text": "    public async Task<ActionResult<GitHubWorkflowRunDetail>> GetWorkflowRunAsync([FromRoute] long runId, CancellationToken cancellationToken = default)",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 373,
+          "text": "    public async Task<ActionResult<object>> RerunWorkflowRunAsync([FromRoute] long runId, CancellationToken cancellationToken = default)",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 386,
+          "text": "    public async Task<ActionResult<object>> CancelWorkflowRunAsync([FromRoute] long runId, CancellationToken cancellationToken = default)",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Issue/PR int route numbers and workflow long runIds address GitHub resources. Single-issue outbound sync constructs ISSUE-{number}, which is a real legacy project TODO reference, not merely external metadata.",
+      "disposition": "Retain external numeric routes and GitHub notification entity IDs; normalize the derived ISSUE legacy TODO reference through the exact scoped B4 resolver before project mutation, preserving historical external number.",
+      "b4Obligations": [
+        "At line461-462 the constructed ISSUE key must resolve through project/origin/family context, including ambiguous_legacy_id refusal, rather than deriving a new canonical ID from issue number. Preserve explicit GitHub issue/run numeric contracts and credential store locality."
+      ],
+      "supportAnchors": [
+        {
+          "line": 78,
+          "text": "    [HttpGet(\"issues/{number:int}\")]"
+        },
+        {
+          "line": 82,
+          "text": "    public async Task<ActionResult<object>> GetIssueAsync([FromRoute] int number, CancellationToken cancellationToken = default)"
+        },
+        {
+          "line": 164,
+          "text": "    [HttpPost(\"issues/{id}/comments\")]"
+        },
+        {
+          "line": 167,
+          "text": "    public async Task<ActionResult<object>> CommentOnIssueAsync([FromRoute] string id, [FromBody] GitHubCommentRequest? body, CancellationToken cancellationToken = default)"
+        },
+        {
+          "line": 234,
+          "text": "            await _tokenStore.UpsertAsync(workspacePath, request.AccessToken, request.ExpiresAtUtc, cancellationToken).ConfigureAwait(false);"
+        },
+        {
+          "line": 278,
+          "text": "            ClientId = oauth.ClientId,"
+        },
+        {
+          "line": 352,
+          "text": "    [HttpGet(\"actions/runs/{runId:long}\")]"
+        },
+        {
+          "line": 356,
+          "text": "    public async Task<ActionResult<GitHubWorkflowRunDetail>> GetWorkflowRunAsync([FromRoute] long runId, CancellationToken cancellationToken = default)"
+        },
+        {
+          "line": 373,
+          "text": "    public async Task<ActionResult<object>> RerunWorkflowRunAsync([FromRoute] long runId, CancellationToken cancellationToken = default)"
+        },
+        {
+          "line": 386,
+          "text": "    public async Task<ActionResult<object>> CancelWorkflowRunAsync([FromRoute] long runId, CancellationToken cancellationToken = default)"
+        },
+        {
+          "line": 451,
+          "text": "    [HttpPost(\"issues/{number:int}/sync\")]"
+        },
+        {
+          "line": 454,
+          "text": "    public async Task<ActionResult<object>> SyncSingleIssueAsync([FromRoute] int number, [FromQuery] string? direction = \"from-github\", CancellationToken cancellationToken = default)"
+        },
+        {
+          "line": 461,
+          "text": "            var todoId = $\"ISSUE-{number}\";"
+        },
+        {
+          "line": 462,
+          "text": "            var result = await _syncService.SyncTodoToIssueAsync(todoId, cancellationToken).ConfigureAwait(false);"
+        },
+        {
+          "line": 473,
+          "text": "            var result = await _syncService.SyncIssueToTodoAsync(issueResult.Issue, cancellationToken).ConfigureAwait(false);"
+        },
+        {
+          "line": 477,
+          "text": "            return Ok(new { success = true, todoId = result.Item?.Id });"
+        },
+        {
+          "line": 493,
+          "text": "                    EntityId = entityId,"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.SessionLog.Transcripts/TranscriptAdapters.cs",
+      "sourcePath": "src/QBrainAi.SessionLog.Transcripts/TranscriptAdapters.cs",
+      "sourceSha256": "19B0F5747870C8B42F3311767291388482FC7223A443266E13D901B39698AF70",
+      "sourceLineCount": 846,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 788,
+          "text": "        if (long.TryParse(text, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var parsedNumber))",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "Native agent session/message/call IDs and generated event-order fallback identifiers preserve source transcript identity. long.TryParse reads Unix epoch timestamps; SQL reader ordinals and ordering are source schema/projection details.",
+      "disposition": "Preserve source-native session/event IDs, ordered chronology and tool-call linkage; do not globally replace transcript IDs or timestamp parsing with project canonical IDs.",
+      "b4Obligations": [
+        "Automatic transcript ingestion remains B2 local-operational audit. Explicit sanitized source snapshots require separate canonical envelope and snapshot-scoped typed source references, without rewriting historical text or native event IDs."
+      ],
+      "supportAnchors": [
+        {
+          "line": 78,
+          "text": "                        sessionId = TranscriptUtilities.GetString(meta, \"id\") ?? sessionId;"
+        },
+        {
+          "line": 133,
+          "text": "                        EventId(payload, order),"
+        },
+        {
+          "line": 225,
+          "text": "    private static string EventId(JsonElement payload, int order)"
+        },
+        {
+          "line": 226,
+          "text": "        => TranscriptUtilities.GetString(payload, \"id\")"
+        },
+        {
+          "line": 227,
+          "text": "           ?? TranscriptUtilities.GetString(payload, \"call_id\")"
+        },
+        {
+          "line": 228,
+          "text": "           ?? \"codex-event-\" + order.ToString(System.Globalization.CultureInfo.InvariantCulture);"
+        },
+        {
+          "line": 289,
+          "text": "            sessionId = TranscriptUtilities.GetString(record, \"sessionId\") ?? sessionId;"
+        },
+        {
+          "line": 310,
+          "text": "                TranscriptUtilities.GetString(record, \"uuid\") ?? \"claude-event-\" + order.ToString(System.Globalization.CultureInfo.InvariantCulture),"
+        },
+        {
+          "line": 373,
+          "text": "        var sessionId = TranscriptUtilities.GetString(sessionRoot, \"session_id\") ?? TranscriptUtilities.GetString(messagesRoot, \"sessionId\") ?? TranscriptUtilities.DeriveSessionId(SourceKind, bundle.Files);"
+        },
+        {
+          "line": 385,
+          "text": "                events.Add(CreateEvent(TranscriptUtilities.GetString(message, \"id\") ?? \"cline-event-\" + order.ToString(System.Globalization.CultureInfo.InvariantCulture), order++, role, \"message\", text, TranscriptUtilities.ReadTimestamp(message)));"
+        },
+        {
+          "line": 475,
+          "text": "            var stepKey = TranscriptUtilities.GetString(part, \"messageID\") ?? TranscriptUtilities.GetString(part, \"messageId\") ?? TranscriptUtilities.GetString(part, \"id\");"
+        },
+        {
+          "line": 488,
+          "text": "            events.Add(CreateEvent(TranscriptUtilities.GetString(part, \"id\") ?? \"opencode-event-\" + order.ToString(System.Globalization.CultureInfo.InvariantCulture), order++, \"assistant\", type, TranscriptUtilities.GetString(part, \"text\"), TranscriptUtilities.ReadTimestamp(record)));"
+        },
+        {
+          "line": 545,
+          "text": "        var sessionId = TranscriptUtilities.DeriveSessionId(TranscriptSourceKind.OpenCode, sourceFiles);"
+        },
+        {
+          "line": 587,
+          "text": "            + \" WHERE \" + OpenCodeSqliteUtilities.QuoteIdentifier(\"session_id\") + \" = $sessionId\""
+        },
+        {
+          "line": 589,
+          "text": "        command.Parameters.AddWithValue(\"$sessionId\", sessionId);"
+        },
+        {
+          "line": 606,
+          "text": "        var messageIds = rows.Select(row => row.Id).ToHashSet(StringComparer.Ordinal);"
+        },
+        {
+          "line": 619,
+          "text": "                row.Id,"
+        },
+        {
+          "line": 655,
+          "text": "            + \" WHERE \" + OpenCodeSqliteUtilities.QuoteIdentifier(\"session_id\") + \" = $sessionId\""
+        },
+        {
+          "line": 678,
+          "text": "                metadata[\"messageId\"] = messageId;"
+        },
+        {
+          "line": 690,
+          "text": "    private static IReadOnlyList<TranscriptEvent> ReorderEvents(IReadOnlyList<TranscriptEvent> events)"
+        },
+        {
+          "line": 695,
+          "text": "            .Select((item, index) => new TranscriptEvent(item.Id, index + 1, item.Role, item.NativeType, item.Content, item.TimestampUtc, item.Metadata))"
+        },
+        {
+          "line": 788,
+          "text": "        if (long.TryParse(text, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var parsedNumber))"
+        },
+        {
+          "line": 799,
+          "text": "    private sealed record OpenCodeSqliteMessageRow(string Id, string Role, string? ModelId, string? ProviderId, string? ContentJson, DateTimeOffset? TimestampUtc);"
+        },
+        {
+          "line": 808,
+          "text": "        var sessionId = info is { } infoValue ? TranscriptUtilities.GetString(infoValue, \"id\") ?? TranscriptUtilities.DeriveSessionId(TranscriptSourceKind.OpenCode, bundle.Files) : TranscriptUtilities.DeriveSessionId(TranscriptSourceKind.OpenCode, bundle.Files);"
+        },
+        {
+          "line": 835,
+          "text": "                    TranscriptUtilities.GetString(messageInfo, \"id\") ?? \"opencode-event-\" + order.ToString(System.Globalization.CultureInfo.InvariantCulture),"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+      "sourceSha256": "1A2ADBD2408B74E381735BB7385CF3C2C49EAD0C0FDEB5F21B9D7BA8206951F6",
+      "sourceLineCount": 1056,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 366,
+          "text": "    public async Task<GitHubWorkflowRunDetailResult> GetWorkflowRunAsync(long runId, CancellationToken ct = default)",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 387,
+          "text": "    public async Task<GitHubMutationResult> RerunWorkflowRunAsync(long runId, CancellationToken ct = default)",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 397,
+          "text": "    public async Task<GitHubMutationResult> CancelWorkflowRunAsync(long runId, CancellationToken ct = default)",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 459,
+          "text": "        if (i >= 0 && i < last.Length - 1 && int.TryParse(last[(i + 1)..], out var num))",
+          "category": "NumericParse"
+        },
+        {
+          "line": 1041,
+          "text": "        if (property.ValueKind == JsonValueKind.String && long.TryParse(property.GetString(), out var parsed))",
+          "category": "NumericParse"
+        },
+        {
+          "line": 1052,
+          "text": "        if (property.ValueKind == JsonValueKind.String && int.TryParse(property.GetString(), out var parsed))",
+          "category": "NumericParse"
+        }
+      ],
+      "observedIdUse": "GitHub issue/PR numbers are external Int32; run/databaseId values are external Int64; attempts and step numbers are external ordering. CLI token and repository/workspace choices are host-side configuration.",
+      "disposition": "Retain numeric GitHub contracts, invariant formatting and URL number extraction; no project canonical-ID grammar applies to external target identifiers or JSON databaseId parsing.",
+      "b4Obligations": [
+        "Project TODO cross-links are resolved by owning sync/controller services, not by rewriting gh issue/run identifiers. Preserve host-native/foreign workspace refusal and host-local credentials under B2/B12."
+      ],
+      "supportAnchors": [
+        {
+          "line": 85,
+          "text": "    internal static GhInvocationPlan PlanInvocation("
+        },
+        {
+          "line": 96,
+          "text": "        if (!normalizer.IsHostNative(workspacePath))"
+        },
+        {
+          "line": 194,
+          "text": "    public async Task<GitHubCommentResult> CommentOnIssueAsync(string issueId, string body, CancellationToken cancellationToken = default)"
+        },
+        {
+          "line": 198,
+          "text": "        var normalizedIssueId = NormalizeTargetIdentifier(issueId, nameof(issueId));"
+        },
+        {
+          "line": 216,
+          "text": "    public async Task<GitHubIssueDetailResult> GetIssueAsync(int issueNumber, CancellationToken ct = default)"
+        },
+        {
+          "line": 236,
+          "text": "    public async Task<GitHubMutationResult> UpdateIssueAsync(int issueNumber, GitHubIssueUpdateRequest request, CancellationToken ct = default)"
+        },
+        {
+          "line": 301,
+          "text": "    public async Task<GitHubMutationResult> CloseIssueAsync(int issueNumber, string? reason = null, CancellationToken ct = default)"
+        },
+        {
+          "line": 341,
+          "text": "    public async Task<GitHubWorkflowRunListResult> ListWorkflowRunsAsync(GitHubWorkflowRunQuery query, CancellationToken ct = default)"
+        },
+        {
+          "line": 366,
+          "text": "    public async Task<GitHubWorkflowRunDetailResult> GetWorkflowRunAsync(long runId, CancellationToken ct = default)"
+        },
+        {
+          "line": 387,
+          "text": "    public async Task<GitHubMutationResult> RerunWorkflowRunAsync(long runId, CancellationToken ct = default)"
+        },
+        {
+          "line": 397,
+          "text": "    public async Task<GitHubMutationResult> CancelWorkflowRunAsync(long runId, CancellationToken ct = default)"
+        },
+        {
+          "line": 415,
+          "text": "                var number = el.TryGetProperty(\"number\", out var n) ? n.GetInt32() : 0;"
+        },
+        {
+          "line": 439,
+          "text": "                var number = el.TryGetProperty(\"number\", out var n) ? n.GetInt32() : 0;"
+        },
+        {
+          "line": 454,
+          "text": "    private static int? ParseIssueNumberFromUrl(string? url)"
+        },
+        {
+          "line": 459,
+          "text": "        if (i >= 0 && i < last.Length - 1 && int.TryParse(last[(i + 1)..], out var num))"
+        },
+        {
+          "line": 506,
+          "text": "    private static string NormalizeTargetIdentifier(string value, string paramName)"
+        },
+        {
+          "line": 596,
+          "text": "    private async Task<ProcessRunResult> RunGhAsync(IReadOnlyList<string> arguments, CancellationToken ct)"
+        },
+        {
+          "line": 821,
+          "text": "    private async Task<string?> TryResolveWorkspaceTokenAsync(CancellationToken ct)"
+        },
+        {
+          "line": 854,
+          "text": "            var number = el.TryGetProperty(\"number\", out var n) ? n.GetInt32() : 0;"
+        },
+        {
+          "line": 949,
+          "text": "                    RunId: ReadLong(el, \"databaseId\"),"
+        },
+        {
+          "line": 991,
+          "text": "                                Number: ReadNullableInt(stepElement, \"number\")));"
+        },
+        {
+          "line": 1007,
+          "text": "                RunId: ReadLong(root, \"databaseId\"),"
+        },
+        {
+          "line": 1035,
+          "text": "    private static long ReadLong(JsonElement parent, string propertyName)"
+        },
+        {
+          "line": 1041,
+          "text": "        if (property.ValueKind == JsonValueKind.String && long.TryParse(property.GetString(), out var parsed))"
+        },
+        {
+          "line": 1046,
+          "text": "    private static int? ReadNullableInt(JsonElement parent, string propertyName)"
+        },
+        {
+          "line": 1052,
+          "text": "        if (property.ValueKind == JsonValueKind.String && int.TryParse(property.GetString(), out var parsed))"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Services/TransactionGatedSessionLogService.cs",
+      "sourcePath": "src/QBrainAi.Support.Mcp/Services/TransactionGatedSessionLogService.cs",
+      "sourceSha256": "32466B1816F9479BD446C36C909AE16992B61056C78B0F130006E4FE429A0684",
+      "sourceLineCount": 898,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 445,
+          "text": "            .Include(session => session.Turns.OrderBy(turn => turn.Id))",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 476,
+          "text": "        foreach (var sourceTurn in source.Turns.OrderBy(turn => turn.Id))",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 694,
+          "text": "        AddRange(clone.Turns, source.Turns.OrderBy(turn => turn.Id).Select(CloneTurn));",
+          "category": "IdOrdering"
+        }
+      ],
+      "observedIdUse": "Session/request string IDs address local audit graph; long submit/turn database identities and child int keys/ordinals drive persistence, rollback matching and ordering. Turn transaction sequence is operation coordination, not project sequence.",
+      "disposition": "Retain operational session grammar, child storage keys and transaction counters. Copy/restore local operational audit graph without canonicalizing raw session/request IDs or ordering by canonical grammar.",
+      "b4Obligations": [
+        "B2 automatic logs stay local-operational; explicit sanitized snapshots use canonical envelope and scoped child source references. Existing RequestId matching and parent/workspace equality remain required when restoring graph."
+      ],
+      "supportAnchors": [
+        {
+          "line": 73,
+          "text": "    public Task<long> SubmitAsync("
+        },
+        {
+          "line": 108,
+          "text": "    public Task<long> UpsertTurnAsync("
+        },
+        {
+          "line": 336,
+          "text": "            TurnId = $\"{operationName}-{sequence}\","
+        },
+        {
+          "line": 344,
+          "text": "    private long NextSequence()"
+        },
+        {
+          "line": 355,
+          "text": "    private async Task<SessionGraphSnapshot> CaptureSessionAsync("
+        },
+        {
+          "line": 369,
+          "text": "                          && entity.SessionId == sessionId"
+        },
+        {
+          "line": 370,
+          "text": "                          && entity.WorkspaceId == workspaceId,"
+        },
+        {
+          "line": 445,
+          "text": "            .Include(session => session.Turns.OrderBy(turn => turn.Id))"
+        },
+        {
+          "line": 476,
+          "text": "        foreach (var sourceTurn in source.Turns.OrderBy(turn => turn.Id))"
+        },
+        {
+          "line": 493,
+          "text": "    private static SessionLogTurnEntity? FindMatchingTurn("
+        },
+        {
+          "line": 498,
+          "text": "        if (source.Id != 0)"
+        },
+        {
+          "line": 500,
+          "text": "            var byId = target.Turns.FirstOrDefault(turn => turn.Id == source.Id && !restoredTurns.Contains(turn));"
+        },
+        {
+          "line": 509,
+          "text": "            turn => string.Equals(turn.RequestId, source.RequestId, StringComparison.Ordinal)"
+        },
+        {
+          "line": 618,
+          "text": "        target.SessionId = source.SessionId;"
+        },
+        {
+          "line": 619,
+          "text": "        target.AgentDefinitionId = source.AgentDefinitionId;"
+        },
+        {
+          "line": 648,
+          "text": "        target.RequestId = source.RequestId;"
+        },
+        {
+          "line": 703,
+          "text": "            RequestId = source.RequestId,"
+        },
+        {
+          "line": 735,
+          "text": "    private static SessionLogActionEntity CloneAction(SessionLogActionEntity source)"
+        },
+        {
+          "line": 739,
+          "text": "            Order = source.Order,"
+        },
+        {
+          "line": 757,
+          "text": "            Ordinal = source.Ordinal,"
+        },
+        {
+          "line": 765,
+          "text": "            Ordinal = source.Ordinal,"
+        },
+        {
+          "line": 777,
+          "text": "            Sha = source.Sha,"
+        },
+        {
+          "line": 797,
+          "text": "            Ordinal = source.Ordinal,"
+        },
+        {
+          "line": 855,
+          "text": "        string SessionId,"
+        },
+        {
+          "line": 870,
+          "text": "        string RequestId,"
+        },
+        {
+          "line": 891,
+          "text": "        string ItemKey);"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+      "sourceSha256": "25B2CF5EA3135C2382087C97CACDAD544F1BC6EC3914011BA8734F3E646D0674",
+      "sourceLineCount": 2107,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 1064,
+          "text": "            .ThenBy(t => t.Id)",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 1125,
+          "text": "        public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 1199,
+          "text": "            .Include(session => session.Turns.OrderBy(turn => turn.Id))",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 1341,
+          "text": "            .ThenBy(r => r.Id)",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 1774,
+          "text": "            .OrderBy(a => a.Id)",
+          "category": "IdOrdering"
+        }
+      ],
+      "observedIdUse": "Mixed legacy HTTP federation adapters: real TODO/memory/requirement IDs and traceability links; local operational session graph long keys; host agent/tool metadata; composite resource route keys and old memory regex. Numeric versions, ordinals, PR numbers and session Id database joins are not new project IDs.",
+      "disposition": "Do not dismiss whole source as operational. TODO ResourceId/path tails, memory NormalizeId/regex and requirement Id/FrId/TargetId are explicit project identity binding surfaces; retain standalone legacy adapter wire compatibility and operational/native identifiers separately.",
+      "b4Obligations": [
+        "TR009 shared resolver must normalize project TODO/memory/FR/TR/TEST and link references with project/origin/family/layer context before project reads or mutation; old Trim/ToUpperInvariant/regex/composite kind parsing is not canonical proof.",
+        "B2 storage/ref manifest and Task003/005 transport cutover must prevent legacy HTTP apply paths from bypassing opted-in Dolt project context or copying host-only agent/tool settings. Existing automatic session log adapters remain local operational; explicit sanitized snapshot uses separate envelope/source-child key policy.",
+        "Source line1341/1361/1363 order is deterministic legacy snapshot ordering, not proof of required numeric entity presentation. Preserve external BannedUntilPr and integer Version/Ordinal semantics."
+      ],
+      "supportAnchors": [
+        {
+          "line": 56,
+          "text": "    public virtual string GetIdempotencyKey(FederationStateOperation operation)"
+        },
+        {
+          "line": 104,
+          "text": "            ResourceId = resourceId,"
+        },
+        {
+          "line": 196,
+          "text": "        var resourceId = ResolveResourceId(operation);"
+        },
+        {
+          "line": 360,
+          "text": "            .Where(t => t.Id == resourceId)"
+        },
+        {
+          "line": 371,
+          "text": "            .Where(r => r.WorkspaceId == row.WorkspaceId && r.TodoId == row.Id)"
+        },
+        {
+          "line": 392,
+          "text": "            Id = row.Id,"
+        },
+        {
+          "line": 412,
+          "text": "            DependsOnJson = SerializeListType(\"DependsOn\"),"
+        },
+        {
+          "line": 413,
+          "text": "            FunctionalRequirementsJson = SerializeListType(\"FunctionalRequirement\"),"
+        },
+        {
+          "line": 414,
+          "text": "            TechnicalRequirementsJson = SerializeListType(\"TechnicalRequirement\"),"
+        },
+        {
+          "line": 458,
+          "text": "        var todoId = ResolveTodoId(operation);"
+        },
+        {
+          "line": 466,
+          "text": "        var result = await todoService.UpdateAsync(todoId, request, cancellationToken).ConfigureAwait(false);"
+        },
+        {
+          "line": 475,
+          "text": "        var todoId = ResolveTodoId(operation);"
+        },
+        {
+          "line": 479,
+          "text": "        var result = await todoService.DeleteAsync(todoId, cancellationToken).ConfigureAwait(false);"
+        },
+        {
+          "line": 568,
+          "text": "    private static string? ResolveTodoId(FederationStateOperation operation)"
+        },
+        {
+          "line": 592,
+          "text": "    private static readonly Regex s_memoryIdRegex = new("
+        },
+        {
+          "line": 593,
+          "text": "        \"^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$\","
+        },
+        {
+          "line": 641,
+          "text": "        var id = NormalizeId(resourceId);"
+        },
+        {
+          "line": 650,
+          "text": "                memory.Id,"
+        },
+        {
+          "line": 711,
+          "text": "        var id = NormalizeId(payload.Id);"
+        },
+        {
+          "line": 723,
+          "text": "        var workspaceId = ResolveWorkspaceId(scope, operation);"
+        },
+        {
+          "line": 770,
+          "text": "        var id = ResolveMemoryId(operation);"
+        },
+        {
+          "line": 781,
+          "text": "        if (!OwnsWorkspace(entity, operation.GlobalWorkspaceId))"
+        },
+        {
+          "line": 832,
+          "text": "        var id = ResolveMemoryId(operation);"
+        },
+        {
+          "line": 843,
+          "text": "        if (!OwnsWorkspace(entity, operation.GlobalWorkspaceId))"
+        },
+        {
+          "line": 883,
+          "text": "    private static string? ResolveWorkspaceId(MemoryScope scope, FederationStateOperation operation)"
+        },
+        {
+          "line": 886,
+          "text": "    private static string ResolveMemoryId(FederationStateOperation operation)"
+        },
+        {
+          "line": 909,
+          "text": "    private static string NormalizeId(string? id)"
+        },
+        {
+          "line": 912,
+          "text": "    private static bool IsValidMemoryId(string? id)"
+        },
+        {
+          "line": 981,
+          "text": "        var key = SessionLogKey.Parse(operation.ResourceId ?? string.Empty);"
+        },
+        {
+          "line": 1023,
+          "text": "        await sessionLogService.SubmitAsync(payload, contentHash: operation.OperationId, cancellationToken: cancellationToken)"
+        },
+        {
+          "line": 1041,
+          "text": "                Id = s.Id,"
+        },
+        {
+          "line": 1062,
+          "text": "            .Where(t => t.SessionLogId == session.Id)"
+        },
+        {
+          "line": 1064,
+          "text": "            .ThenBy(t => t.Id)"
+        },
+        {
+          "line": 1125,
+          "text": "        public long Id { get; set; }"
+        },
+        {
+          "line": 1279,
+          "text": "        var requirementKey = RequirementKey.Parse(operation.ResourceId ?? string.Empty);"
+        },
+        {
+          "line": 1288,
+          "text": "            var query = db.Requirements.Where(r => r.Id == requirementKey.Id);"
+        },
+        {
+          "line": 1297,
+          "text": "                .Where(l => ids.Contains(l.FrId) || ids.Contains(l.TargetId))"
+        },
+        {
+          "line": 1333,
+          "text": "        var requirementKey = RequirementKey.Parse(resourceId);"
+        },
+        {
+          "line": 1341,
+          "text": "            .ThenBy(r => r.Id)"
+        },
+        {
+          "line": 1361,
+          "text": "            .OrderBy(l => l.FrId)"
+        },
+        {
+          "line": 1363,
+          "text": "            .ThenBy(l => l.TargetId)"
+        },
+        {
+          "line": 1366,
+          "text": "                FrId = l.FrId,"
+        },
+        {
+          "line": 1368,
+          "text": "                TargetId = l.TargetId,"
+        },
+        {
+          "line": 1388,
+          "text": "        var id = item.Id.Trim();"
+        },
+        {
+          "line": 1390,
+          "text": "            .FirstOrDefaultAsync(r => r.Kind == kind && r.Id == id, cancellationToken)"
+        },
+        {
+          "line": 1414,
+          "text": "        var frId = link.FrId.Trim();"
+        },
+        {
+          "line": 1416,
+          "text": "        var targetId = link.TargetId.Trim();"
+        },
+        {
+          "line": 1429,
+          "text": "            FrId = frId,"
+        },
+        {
+          "line": 1431,
+          "text": "            TargetId = targetId,"
+        },
+        {
+          "line": 1505,
+          "text": "                .Where(t => t.Name == resourceId || t.BucketName == resourceId)"
+        },
+        {
+          "line": 1625,
+          "text": "            .FirstOrDefaultAsync(t => t.Name == name && t.WorkspacePath == workspacePath, cancellationToken)"
+        },
+        {
+          "line": 1731,
+          "text": "                .Where(a => a.Id == resourceId)"
+        },
+        {
+          "line": 1774,
+          "text": "            .OrderBy(a => a.Id)"
+        },
+        {
+          "line": 1824,
+          "text": "                BannedUntilPr = a.BannedUntilPr,"
+        },
+        {
+          "line": 1906,
+          "text": "            .FirstOrDefaultAsync(a => a.AgentDefinitionId == agentDefinitionId && a.WorkspacePath == workspacePath, cancellationToken)"
+        },
+        {
+          "line": 1988,
+          "text": "        public int? BannedUntilPr { get; set; }"
+        },
+        {
+          "line": 2032,
+          "text": "    public override bool IsLocalOnly => true;"
+        },
+        {
+          "line": 2066,
+          "text": "    public static SessionLogKey Parse(string resourceId)"
+        },
+        {
+          "line": 2085,
+          "text": "    public static RequirementKey Parse(string resourceId)"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "sourcePath": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "sourceSha256": "A6BBAEE7ADBF14FDE961BEB64D04A7A66EA52BDCB964CE708AF5939532E7B84D",
+      "sourceLineCount": 2254,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 539,
+          "text": "                .Include(s => s.Turns.OrderBy(e => e.Id))",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 730,
+          "text": "            .Include(s => s.Turns.OrderBy(e => e.Id))",
+          "category": "IdOrdering"
+        },
+        {
+          "line": 1171,
+          "text": "        long turnId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 1284,
+          "text": "            TurnSection.Actions => int.TryParse(itemKey, out var order) && RemoveMatching(turn.Actions, a => a.Order == order),",
+          "category": "NumericParse"
+        },
+        {
+          "line": 1285,
+          "text": "            TurnSection.Dialog => int.TryParse(itemKey, out var ordinal) && RemoveMatching(turn.ProcessingDialog, d => d.Ordinal == ordinal),",
+          "category": "NumericParse"
+        },
+        {
+          "line": 2039,
+          "text": "        var turns = entity.Turns.OrderBy(e => e.Id).ToList();",
+          "category": "IdOrdering"
+        }
+      ],
+      "observedIdUse": "Automatic audit session/request grammars, local long database identities, child Order/Ordinal selectors and source/workspace attribution coexist with real TODO/plan soft references. int.TryParse(itemKey) selects action Order or dialog Ordinal; JSON int/long conversion preserves payload types. Session/turn database ordering is not canonical project-ID presentation.",
+      "disposition": "Retain automatic audit persistence and native child keys as operational identifiers. Project TODO/plan context in query and turn projection is a real scoped canonical-reference consumer; historical narrative and source session/request IDs remain unchanged. An explicit sanitized project snapshot requires its separate canonical envelope and typed source-child mapping.",
+      "b4Obligations": [
+        "Bind TODO/plan soft-reference reads and live projections through project/origin/family/layer-aware normalization, without rewriting historical text or coercing native audit keys.",
+        "Keep automatic audit rows outside versioned project commits; apply B2 snapshot classification and TR011 origin/source-child identity only when explicitly publishing a sanitized snapshot.",
+        "Preserve action Order/dialog Ordinal selectors and int/long JSON values as typed local metadata, not central entity-ID parsers."
+      ],
+      "supportAnchors": [
+        {
+          "line": 107,
+          "text": "    private void StampWorkspaceId(SessionLogEntity session)"
+        },
+        {
+          "line": 148,
+          "text": "            foreach (var stringItem in turn.StringListItems) stringItem.WorkspaceId = workspaceId;"
+        },
+        {
+          "line": 172,
+          "text": "            var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(dto.SessionId, dto.SourceType);"
+        },
+        {
+          "line": 179,
+          "text": "                    var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(turn.RequestId);"
+        },
+        {
+          "line": 220,
+          "text": "                SessionLogTurnContextValidator.ValidateIfSupplied(turn.PlanFile, turn.TodoId);"
+        },
+        {
+          "line": 224,
+          "text": "                    turn.TodoId = SessionLogTurnContextValidator.ValidateTodoId(turn.TodoId, required: true);"
+        },
+        {
+          "line": 300,
+          "text": "        return existing.Id;"
+        },
+        {
+          "line": 312,
+          "text": "            .Select(s => (long?)s.Id).FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);"
+        },
+        {
+          "line": 317,
+          "text": "            .Where(t => t.SessionLogId == id.Value).Select(t => t.Id)"
+        },
+        {
+          "line": 322,
+          "text": "            .Where(c => turnIds.Contains(c.SessionLogTurnId)).Select(c => c.Id)"
+        },
+        {
+          "line": 452,
+          "text": "        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);"
+        },
+        {
+          "line": 455,
+          "text": "        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(requestId);"
+        },
+        {
+          "line": 461,
+          "text": "        var currentWorkspaceId = _db.CurrentWorkspaceId;"
+        },
+        {
+          "line": 468,
+          "text": "                && e.RequestId == requestId, cancellationToken)"
+        },
+        {
+          "line": 473,
+          "text": "        var nextOrdinal = entry.ProcessingDialog.Count > 0"
+        },
+        {
+          "line": 482,
+          "text": "                Ordinal = nextOrdinal++,"
+        },
+        {
+          "line": 577,
+          "text": "        if (!string.IsNullOrWhiteSpace(request.TodoId))"
+        },
+        {
+          "line": 580,
+          "text": "            filtered = filtered.Where(s => s.Turns.Any(e => string.Equals(e.TodoId, todoFilter, StringComparison.Ordinal)));"
+        },
+        {
+          "line": 760,
+          "text": "        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);"
+        },
+        {
+          "line": 764,
+          "text": "        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(turn.RequestId);"
+        },
+        {
+          "line": 771,
+          "text": "        var existingTurn = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId);"
+        },
+        {
+          "line": 784,
+          "text": "            SessionLogTurnContextValidator.ValidateIfSupplied(turn.PlanFile, turn.TodoId);"
+        },
+        {
+          "line": 788,
+          "text": "                turn.TodoId = SessionLogTurnContextValidator.ValidateTodoId(turn.TodoId, required: true);"
+        },
+        {
+          "line": 823,
+          "text": "            SessionLogTurnContextValidator.ValidateIfSupplied(turn.PlanFile, turn.TodoId);"
+        },
+        {
+          "line": 827,
+          "text": "                turn.TodoId = SessionLogTurnContextValidator.ValidateTodoId(turn.TodoId, required: true);"
+        },
+        {
+          "line": 842,
+          "text": "        return persistedTurn.Id;"
+        },
+        {
+          "line": 1092,
+          "text": "        var sessionRowId = session.Id;"
+        },
+        {
+          "line": 1093,
+          "text": "        var turnId = turnEntity.Id;"
+        },
+        {
+          "line": 1171,
+          "text": "        long turnId,"
+        },
+        {
+          "line": 1284,
+          "text": "            TurnSection.Actions => int.TryParse(itemKey, out var order) && RemoveMatching(turn.Actions, a => a.Order == order),"
+        },
+        {
+          "line": 1285,
+          "text": "            TurnSection.Dialog => int.TryParse(itemKey, out var ordinal) && RemoveMatching(turn.ProcessingDialog, d => d.Ordinal == ordinal),"
+        },
+        {
+          "line": 1438,
+          "text": "    private async Task ResolveAgentDefinitionLinkAsync(UnifiedSessionLogDto dto, SessionLogEntity entity, CancellationToken cancellationToken)"
+        },
+        {
+          "line": 1459,
+          "text": "            dto.AgentDefinitionId = linkedAgentId;"
+        },
+        {
+          "line": 1463,
+          "text": "    private void ApplyTurnContext("
+        },
+        {
+          "line": 1497,
+          "text": "        turn.TodoId = normalized.TodoId;"
+        },
+        {
+          "line": 1546,
+          "text": "            TodoId = e.TodoId ?? SessionLogTurnContextValidator.NoneSentinel,"
+        },
+        {
+          "line": 1828,
+          "text": "            TodoId = e.TodoId ?? SessionLogTurnContextValidator.NoneSentinel,"
+        },
+        {
+          "line": 1936,
+          "text": "            Ordinal = i,"
+        },
+        {
+          "line": 1945,
+          "text": "            Ordinal = i,"
+        },
+        {
+          "line": 1957,
+          "text": "            Ordinal = i,"
+        },
+        {
+          "line": 2031,
+          "text": "                Ordinal = ordinal++,"
+        },
+        {
+          "line": 2039,
+          "text": "        var turns = entity.Turns.OrderBy(e => e.Id).ToList();"
+        },
+        {
+          "line": 2106,
+          "text": "        TodoId = e.TodoId,"
+        },
+        {
+          "line": 2186,
+          "text": "            int number => JsonValue.Create(number),"
+        },
+        {
+          "line": 2187,
+          "text": "            long number => JsonValue.Create(number),"
+        }
+      ],
+      "designGap": null
+    },
+    {
+      "candidateId": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "sourcePath": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs",
+      "sourceSha256": "B1C43E2C8BDE72F50CAAFE53313947E5193BA776DE2C289BE1A27C25054B286C",
+      "sourceLineCount": 1706,
+      "fullSourceRead": true,
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "originalCatalogSourceCommit": "1bdd61c52aba5e77c7336a5aa637e6d670391456",
+      "exactCatalogAnchors": [
+        {
+          "line": 1429,
+          "text": "            entity.Property(party => party.PartyId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1430,
+          "text": "            entity.Property(party => party.Role).HasMaxLength(100);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1431,
+          "text": "            entity.Property(party => party.ActiveSigningKeyId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1432,
+          "text": "            entity.Property(party => party.ActiveEncryptionKeyId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1433,
+          "text": "            entity.Property(party => party.Status).HasMaxLength(50);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1444,
+          "text": "            entity.Property(key => key.PartyId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1445,
+          "text": "            entity.Property(key => key.KeyId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1446,
+          "text": "            entity.Property(key => key.Purpose).HasMaxLength(50);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1447,
+          "text": "            entity.Property(key => key.Algorithm).HasMaxLength(100);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1448,
+          "text": "            entity.Property(key => key.Status).HasMaxLength(50);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1461,
+          "text": "            entity.Property(nonce => nonce.TransactionId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1468,
+          "text": "            entity.Property(manifest => manifest.TransactionId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1469,
+          "text": "            entity.Property(manifest => manifest.TurnId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1470,
+          "text": "            entity.Property(manifest => manifest.PublisherPartyId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1471,
+          "text": "            entity.Property(manifest => manifest.PublisherSigningKeyId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1472,
+          "text": "            entity.Property(manifest => manifest.SubscriberPartyId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1473,
+          "text": "            entity.Property(manifest => manifest.SubscriberEncryptionKeyId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1474,
+          "text": "            entity.Property(manifest => manifest.DiffgramSha256).HasMaxLength(64);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1475,
+          "text": "            entity.Property(manifest => manifest.EncryptedBodySha256).HasMaxLength(64);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1476,
+          "text": "            entity.Property(manifest => manifest.SignatureAlgorithm).HasMaxLength(100);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1477,
+          "text": "            entity.Property(manifest => manifest.EncryptionAlgorithm).HasMaxLength(120);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1478,
+          "text": "            entity.Property(manifest => manifest.CanonicalizationProfile).HasMaxLength(120);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1479,
+          "text": "            entity.Property(manifest => manifest.SignatureKeyId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1480,
+          "text": "            entity.Property(manifest => manifest.ManifestHashSha256).HasMaxLength(64);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1481,
+          "text": "            entity.Property(manifest => manifest.Status).HasMaxLength(50);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1488,
+          "text": "            entity.Property(transaction => transaction.TransactionId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1489,
+          "text": "            entity.Property(transaction => transaction.Status).HasMaxLength(50);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1490,
+          "text": "            entity.Property(transaction => transaction.ManifestHashSha256).HasMaxLength(64);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1491,
+          "text": "            entity.Property(transaction => transaction.EncryptedBodySha256).HasMaxLength(64);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1492,
+          "text": "            entity.Property(transaction => transaction.DiffgramId).HasMaxLength(240);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1505,
+          "text": "            entity.Property(nonce => nonce.TransactionId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1512,
+          "text": "            entity.Property(audit => audit.EventName).HasMaxLength(120);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1513,
+          "text": "            entity.Property(audit => audit.TransactionId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1520,
+          "text": "            entity.Property(message => message.OperationId).HasMaxLength(240);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1521,
+          "text": "            entity.Property(message => message.TransactionId).HasMaxLength(200);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1522,
+          "text": "            entity.Property(message => message.Kind).HasMaxLength(40);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1523,
+          "text": "            entity.Property(message => message.TopicName).HasMaxLength(200).HasDefaultValue(\"mcp.turntransactions\");",
+          "category": "IdLength"
+        },
+        {
+          "line": 1524,
+          "text": "            entity.Property(message => message.SubscriberId).HasMaxLength(200).HasDefaultValue(\"all-required\");",
+          "category": "IdLength"
+        },
+        {
+          "line": 1525,
+          "text": "            entity.Property(message => message.Status).HasMaxLength(40);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1668,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "observedIdUse": "Security party/key/transaction/operation/turn identifiers, scoped anti-replay pair/nonces and long sequence state. SQL string key limits 200/240 bound those existing operational protocol fields. TransactionAuditEntity.Id is a local long database key; AttemptCount is a retry counter. No project TODO/memory/requirement entity ID is minted or parsed here.",
+      "disposition": "Retain scoped security protocol identifiers, replay ordering and local audit identities in their existing host/operational domain. Do not apply canonical project-entity grammar, numeric presentation or project-ID allocator to replay sequence or transaction/audit keys.",
+      "b4Obligations": [
+        "If an explicit sanitized project snapshot references these security/audit rows, preserve typed source identities under the approved canonical envelope; do not federate security keys, credential material or host-only state as project data.",
+        "Keep replay scope/pair/nonce composition and monotonically checked security sequence independent of branch-independent project entity sequence.",
+        "Preserve chronological/sequence/operation ordering for replay and retry processing; it is not project entity presentation."
+      ],
+      "supportAnchors": [
+        {
+          "line": 164,
+          "text": "            .OrderBy(manifest => manifest.CreatedAtUtc)"
+        },
+        {
+          "line": 165,
+          "text": "            .ThenBy(manifest => manifest.Sequence)"
+        },
+        {
+          "line": 166,
+          "text": "            .ThenBy(manifest => manifest.TransactionId, StringComparer.OrdinalIgnoreCase)"
+        },
+        {
+          "line": 173,
+          "text": "    public Task<TransactionFailureReason> TryReserveManifestReplayAsync("
+        },
+        {
+          "line": 193,
+          "text": "            return Task.FromResult(TransactionFailureReason.None);"
+        },
+        {
+          "line": 241,
+          "text": "            TransactionId = manifest.TransactionId,"
+        },
+        {
+          "line": 242,
+          "text": "            TurnId = manifest.TurnId,"
+        },
+        {
+          "line": 247,
+          "text": "            Sequence = manifest.Sequence,"
+        },
+        {
+          "line": 307,
+          "text": "    private static string BuildScopedReplayKey(string scope, string value)"
+        },
+        {
+          "line": 308,
+          "text": "        => $\"{scope.Trim()}\\n{value}\";"
+        },
+        {
+          "line": 314,
+          "text": "    private readonly ConcurrentDictionary<string, SubscriberTransactionState> _transactions = new(StringComparer.OrdinalIgnoreCase);"
+        },
+        {
+          "line": 315,
+          "text": "    private readonly ConcurrentDictionary<string, long> _lastSequences = new(StringComparer.OrdinalIgnoreCase);"
+        },
+        {
+          "line": 316,
+          "text": "    private readonly ConcurrentDictionary<string, string> _nonces = new(StringComparer.OrdinalIgnoreCase);"
+        },
+        {
+          "line": 332,
+          "text": "        return Task.FromResult(_transactions.TryAdd(transaction.TransactionId, transaction));"
+        },
+        {
+          "line": 363,
+          "text": "    public Task<long?> GetLastSequenceAsync(string pairKey, CancellationToken cancellationToken)"
+        },
+        {
+          "line": 372,
+          "text": "        _lastSequences.AddOrUpdate(pairKey, sequence, (_, current) => Math.Max(current, sequence));"
+        },
+        {
+          "line": 414,
+          "text": "            if (_messages.TryGetValue(message.OperationId, out var existing))"
+        },
+        {
+          "line": 423,
+          "text": "                    TransactionId = message.TransactionId,"
+        },
+        {
+          "line": 453,
+          "text": "                    AttemptCount = message.AttemptCount + 1,"
+        },
+        {
+          "line": 543,
+          "text": "                .OrderBy(message => message.CreatedAtUtc)"
+        },
+        {
+          "line": 544,
+          "text": "                .ThenBy(message => message.OperationId, StringComparer.OrdinalIgnoreCase)"
+        },
+        {
+          "line": 617,
+          "text": "                \"OperationId\" TEXT NOT NULL CONSTRAINT \"PK_TransactionPubSubMessages\" PRIMARY KEY,"
+        },
+        {
+          "line": 618,
+          "text": "                \"TransactionId\" TEXT NOT NULL,"
+        },
+        {
+          "line": 643,
+          "text": "            .SingleOrDefaultAsync(entity => entity.PartyId == party.PartyId, cancellationToken)"
+        },
+        {
+          "line": 661,
+          "text": "                current => string.Equals(current.KeyId, key.KeyId, StringComparison.OrdinalIgnoreCase));"
+        },
+        {
+          "line": 695,
+          "text": "                key => key.PartyId == partyId && key.KeyId == keyId,"
+        },
+        {
+          "line": 707,
+          "text": "            .SingleOrDefaultAsync(entity => entity.TransactionId == manifest.TransactionId, cancellationToken)"
+        },
+        {
+          "line": 724,
+          "text": "            .SingleOrDefaultAsync(manifest => manifest.TransactionId == transactionId, cancellationToken)"
+        },
+        {
+          "line": 737,
+          "text": "            query = query.Where(manifest => manifest.PublisherPartyId == request.PublisherPartyId);"
+        },
+        {
+          "line": 739,
+          "text": "            query = query.Where(manifest => manifest.SubscriberPartyId == request.SubscriberPartyId);"
+        },
+        {
+          "line": 753,
+          "text": "            .OrderBy(manifest => manifest.CreatedAtUtc)"
+        },
+        {
+          "line": 754,
+          "text": "            .ThenBy(manifest => manifest.Sequence)"
+        },
+        {
+          "line": 755,
+          "text": "            .ThenBy(manifest => manifest.TransactionId, StringComparer.OrdinalIgnoreCase)"
+        },
+        {
+          "line": 764,
+          "text": "        long sequence,"
+        },
+        {
+          "line": 769,
+          "text": "        var scopedPairKey = BuildScopedReplayKey(scope, pairKey);"
+        },
+        {
+          "line": 770,
+          "text": "        var scopedNonceKey = BuildScopedReplayKey(scope, nonceKey);"
+        },
+        {
+          "line": 775,
+          "text": "            .AnyAsync(existing => existing.NonceKey == scopedNonceKey, cancellationToken)"
+        },
+        {
+          "line": 784,
+          "text": "            .SingleOrDefaultAsync(existing => existing.PairKey == scopedPairKey, cancellationToken)"
+        },
+        {
+          "line": 786,
+          "text": "        if (sequenceEntity is not null && sequence <= sequenceEntity.LastSequence)"
+        },
+        {
+          "line": 795,
+          "text": "            TransactionId = transactionId,"
+        },
+        {
+          "line": 803,
+          "text": "                LastSequence = sequence,"
+        },
+        {
+          "line": 833,
+          "text": "            .SingleOrDefaultAsync(transaction => transaction.TransactionId == transactionId, cancellationToken)"
+        },
+        {
+          "line": 861,
+          "text": "            .SingleOrDefaultAsync(entity => entity.TransactionId == transaction.TransactionId, cancellationToken)"
+        },
+        {
+          "line": 885,
+          "text": "            .ConfigureAwait(false);"
+        },
+        {
+          "line": 908,
+          "text": "            .SingleOrDefaultAsync(sequence => sequence.PairKey == pairKey, cancellationToken)"
+        },
+        {
+          "line": 923,
+          "text": "            db.SubscriberSequences.Add(new SubscriberSequenceEntity { PairKey = pairKey, LastSequence = sequence });"
+        },
+        {
+          "line": 925,
+          "text": "            entity.LastSequence = Math.Max(entity.LastSequence, sequence);"
+        },
+        {
+          "line": 938,
+          "text": "            NonceKey = nonceKey,"
+        },
+        {
+          "line": 939,
+          "text": "            TransactionId = transactionId,"
+        },
+        {
+          "line": 964,
+          "text": "            TransactionId = transactionId,"
+        },
+        {
+          "line": 978,
+          "text": "            .SingleOrDefaultAsync(entity => entity.OperationId == message.OperationId, cancellationToken)"
+        },
+        {
+          "line": 1003,
+          "text": "        existing.TransactionId = message.TransactionId;"
+        },
+        {
+          "line": 1026,
+          "text": "        entity.AttemptCount++;"
+        },
+        {
+          "line": 1084,
+          "text": "                WHERE \"OperationId\" = {operationId}"
+        },
+        {
+          "line": 1120,
+          "text": "            .ThenBy(message => message.OperationId, StringComparer.OrdinalIgnoreCase)"
+        },
+        {
+          "line": 1140,
+          "text": "            .ThenBy(message => message.OperationId, StringComparer.OrdinalIgnoreCase)"
+        },
+        {
+          "line": 1209,
+          "text": "            TransactionId = entity.TransactionId,"
+        },
+        {
+          "line": 1210,
+          "text": "            TurnId = entity.TurnId,"
+        },
+        {
+          "line": 1215,
+          "text": "            Sequence = entity.Sequence,"
+        },
+        {
+          "line": 1289,
+          "text": "            entity.DiffgramId,"
+        },
+        {
+          "line": 1301,
+          "text": "            DiffgramId = transaction.DiffgramId,"
+        },
+        {
+          "line": 1314,
+          "text": "        entity.DiffgramId = transaction.DiffgramId;"
+        },
+        {
+          "line": 1321,
+          "text": "            entity.OperationId,"
+        },
+        {
+          "line": 1337,
+          "text": "            OperationId = message.OperationId,"
+        },
+        {
+          "line": 1351,
+          "text": "    private static string BuildScopedReplayKey(string scope, string value)"
+        },
+        {
+          "line": 1352,
+          "text": "        => $\"{scope.Trim()}\\n{value}\";"
+        },
+        {
+          "line": 1428,
+          "text": "            entity.HasKey(party => party.PartyId);"
+        },
+        {
+          "line": 1429,
+          "text": "            entity.Property(party => party.PartyId).HasMaxLength(200);"
+        },
+        {
+          "line": 1443,
+          "text": "            entity.HasKey(key => new { key.PartyId, key.KeyId });"
+        },
+        {
+          "line": 1444,
+          "text": "            entity.Property(key => key.PartyId).HasMaxLength(200);"
+        },
+        {
+          "line": 1445,
+          "text": "            entity.Property(key => key.KeyId).HasMaxLength(200);"
+        },
+        {
+          "line": 1454,
+          "text": "            entity.HasKey(sequence => sequence.PairKey);"
+        },
+        {
+          "line": 1460,
+          "text": "            entity.HasKey(nonce => nonce.NonceKey);"
+        },
+        {
+          "line": 1467,
+          "text": "            entity.HasKey(manifest => manifest.TransactionId);"
+        },
+        {
+          "line": 1468,
+          "text": "            entity.Property(manifest => manifest.TransactionId).HasMaxLength(200);"
+        },
+        {
+          "line": 1469,
+          "text": "            entity.Property(manifest => manifest.TurnId).HasMaxLength(200);"
+        },
+        {
+          "line": 1487,
+          "text": "            entity.HasKey(transaction => transaction.TransactionId);"
+        },
+        {
+          "line": 1488,
+          "text": "            entity.Property(transaction => transaction.TransactionId).HasMaxLength(200);"
+        },
+        {
+          "line": 1492,
+          "text": "            entity.Property(transaction => transaction.DiffgramId).HasMaxLength(240);"
+        },
+        {
+          "line": 1498,
+          "text": "            entity.HasKey(sequence => sequence.PairKey);"
+        },
+        {
+          "line": 1504,
+          "text": "            entity.HasKey(nonce => nonce.NonceKey);"
+        },
+        {
+          "line": 1511,
+          "text": "            entity.HasKey(audit => audit.Id);"
+        },
+        {
+          "line": 1519,
+          "text": "            entity.HasKey(message => message.OperationId);"
+        },
+        {
+          "line": 1520,
+          "text": "            entity.Property(message => message.OperationId).HasMaxLength(240);"
+        },
+        {
+          "line": 1521,
+          "text": "            entity.Property(message => message.TransactionId).HasMaxLength(200);"
+        },
+        {
+          "line": 1572,
+          "text": "    public long LastSequence { get; set; }"
+        },
+        {
+          "line": 1600,
+          "text": "    public long Sequence { get; set; }"
+        },
+        {
+          "line": 1643,
+          "text": "    public string? DiffgramId { get; set; }"
+        },
+        {
+          "line": 1654,
+          "text": "    public long LastSequence { get; set; }"
+        },
+        {
+          "line": 1668,
+          "text": "    public long Id { get; set; }"
+        },
+        {
+          "line": 1683,
+          "text": "    public string OperationId { get; set; } = string.Empty;"
+        },
+        {
+          "line": 1685,
+          "text": "    public string TransactionId { get; set; } = string.Empty;"
+        },
+        {
+          "line": 1699,
+          "text": "    public int AttemptCount { get; set; }"
+        }
+      ],
+      "designGap": null
+    }
+  ]
+}

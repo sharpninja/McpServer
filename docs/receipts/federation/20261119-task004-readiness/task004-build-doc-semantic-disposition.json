@@ -1,0 +1,438 @@
+{
+  "schemaVersion": 1,
+  "taskId": "TASK-FEDPH0-004",
+  "artifactType": "ReadOnlySourceSemanticDisposition",
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "sessionId": "Codex-20261119T162438Z-plugin-session",
+  "requestId": "req-20261119T171922Z-task004-build-doc-review",
+  "parentSessionId": "Codex-20261116T174245Z-plugin-session",
+  "parentRequestId": "req-20261119T171310Z-prompt-5c2d",
+  "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+  "observedWorktreeHead": "dfea410831e88dc7e963ed5e1d4501f7de13648c",
+  "sourceWorktree": "F:/GitHub/McpServer/.worktrees/fedph0-task007-20261119",
+  "partitionPath": "docs/receipts/federation/20261119-task004-readiness/remaining-consumer-partition.json",
+  "partitionSha256": "0231FABE8027B8D8289F12D6BEFB70E2210B3B48546AEB6923A4ADB10982F39F",
+  "partitionDescription": "All12 BuildToolingCandidates and2 DocumentationOrRetiredRuntimeCandidates delegated by root with no prior full-source overlap",
+  "reviewedFileCount": 14,
+  "fullSourceReadCount": 14,
+  "sourceHashMismatchCount": 0,
+  "nativeProof": false,
+  "productFilesModified": [],
+  "testsRun": [],
+  "taskStateChanged": false,
+  "isHV": false,
+  "limitations": [
+    "Source classification only, not implementation correctness, whole Task004 design/mock sufficiency, Ready, phase exit, or native proof.",
+    "Each individual source byte hash matches checkpoint64f098b2 even though owner branch HEAD advanced.",
+    "Retired/runtime activation is not inferred from source presence or the routing bucket. No Node execution or new Node design."
+  ],
+  "findings": [
+    "UseCaseFrTraceabilityLoader26-60 is a genuine numeric authored UC/string FR graph consumer. Preserve standalone numeric SQLite behavior and provide an explicit canonical-aware typed project/origin traceability input; catch-empty optional SQLite output cannot prove enrolled graph completeness.",
+    "Legacy Node TODO tool51 advertises exact3digits only in description and forwards strings. Explicit legacy/runtime disposition is required; no executable regex width defect is demonstrated in this file and no new Node implementation is authorized.",
+    "GraphRAG copied prompt template537 contains exact3digit TODO instruction;453/458 contain memoryNNN/order guidance. Versioned enrolled guidance must align with canonical parser/comparer; copied content is not current authority.",
+    "The11 other build files individually use semantic versions, compiler diagnostic IDs, OS processes/unit/modes, ports, run/source/report/project/cache identities and counters. Retain their actual operational/external semantics rather than convert numeric expressions by lexical match."
+  ],
+  "processFriction": {
+    "blockingRuleObserved": false,
+    "operatorJudgment": "Task004 barrier finding these gaps is Unit-of-Work doing its job; this is operator judgment relayed in parent5c2d, not tooling friction.",
+    "toolingObservation": "A broad partition inspection emitted oversized truncated console output; corrected to bounded14-only source reads. This was agent output selection error, not a process blocker. All14 full source reads were individually bounded and complete.",
+    "approvalDenials": 0
+  },
+  "sourceHashes": [
+    {
+      "candidateId": "build/Build.PluginSessionLogIntegration.cs",
+      "path": "build/Build.PluginSessionLogIntegration.cs",
+      "expectedSha256": "8AAA7E83AB8D6072EE2471222D1EB882B44CC7E890F31CA2F42319C89F7EC982",
+      "actualSha256": "8AAA7E83AB8D6072EE2471222D1EB882B44CC7E890F31CA2F42319C89F7EC982",
+      "match": true
+    },
+    {
+      "candidateId": "build/Build.SyncAgentPlugins.cs",
+      "path": "build/Build.SyncAgentPlugins.cs",
+      "expectedSha256": "EFBA15439437C6640BAC3C94E71680D7D60889C11DB92C3CAD336AE8F5738CC0",
+      "actualSha256": "EFBA15439437C6640BAC3C94E71680D7D60889C11DB92C3CAD336AE8F5738CC0",
+      "match": true
+    },
+    {
+      "candidateId": "build/Build.TestDependencies.cs",
+      "path": "build/Build.TestDependencies.cs",
+      "expectedSha256": "266F1B4E19180D451F0B1D24247DEBDB05B1BB6F523BFD60F082FE91CC3739FC",
+      "actualSha256": "266F1B4E19180D451F0B1D24247DEBDB05B1BB6F523BFD60F082FE91CC3739FC",
+      "match": true
+    },
+    {
+      "candidateId": "build/ConfigValidator.cs",
+      "path": "build/ConfigValidator.cs",
+      "expectedSha256": "1C006F42B3C70CBFF91594B1993DB439197104FE0488763F88C3C29945029B1C",
+      "actualSha256": "1C006F42B3C70CBFF91594B1993DB439197104FE0488763F88C3C29945029B1C",
+      "match": true
+    },
+    {
+      "candidateId": "build/GitVersionBumper.cs",
+      "path": "build/GitVersionBumper.cs",
+      "expectedSha256": "83409DC3A086E318A1217B2BBCFDA5A1400B909D733A64C33F8C0C37D66C2B0B",
+      "actualSha256": "83409DC3A086E318A1217B2BBCFDA5A1400B909D733A64C33F8C0C37D66C2B0B",
+      "match": true
+    },
+    {
+      "candidateId": "build/IntegrationLaneExecution.cs",
+      "path": "build/IntegrationLaneExecution.cs",
+      "expectedSha256": "8534BA5EB9BD7CE0DB3AAA8ACDB06C5F210365B2A0C0EEEB350E9E3961667A9A",
+      "actualSha256": "8534BA5EB9BD7CE0DB3AAA8ACDB06C5F210365B2A0C0EEEB350E9E3961667A9A",
+      "match": true
+    },
+    {
+      "candidateId": "build/LinuxProviderTestProvisioner.cs",
+      "path": "build/LinuxProviderTestProvisioner.cs",
+      "expectedSha256": "0D65649D9179CAFA215020FFE9286AC23CD6575A16C41D5B5BF441D3A73EB18E",
+      "actualSha256": "0D65649D9179CAFA215020FFE9286AC23CD6575A16C41D5B5BF441D3A73EB18E",
+      "match": true
+    },
+    {
+      "candidateId": "build/LinuxServiceHelper.cs",
+      "path": "build/LinuxServiceHelper.cs",
+      "expectedSha256": "A72C5BEB997E46FF8EFDE8A6B99CE99E7D3811DA428CE4FDA3BE9EB591805EA8",
+      "actualSha256": "A72C5BEB997E46FF8EFDE8A6B99CE99E7D3811DA428CE4FDA3BE9EB591805EA8",
+      "match": true
+    },
+    {
+      "candidateId": "build/SessionLifeUnitGateValidator.cs",
+      "path": "build/SessionLifeUnitGateValidator.cs",
+      "expectedSha256": "316B81B07F2EEB6B99FD39BD82B478284C66F914BFD557AAE3985209B1C99A3A",
+      "actualSha256": "316B81B07F2EEB6B99FD39BD82B478284C66F914BFD557AAE3985209B1C99A3A",
+      "match": true
+    },
+    {
+      "candidateId": "build/UseCaseFrTraceabilityLoader.cs",
+      "path": "build/UseCaseFrTraceabilityLoader.cs",
+      "expectedSha256": "3FE72EB57F5115DCA7BBC3E6C91E9B91045BC16FB2EFB3FA9EF95EF7A4325D39",
+      "actualSha256": "3FE72EB57F5115DCA7BBC3E6C91E9B91045BC16FB2EFB3FA9EF95EF7A4325D39",
+      "match": true
+    },
+    {
+      "candidateId": "build/WarningSuppressionApprovalValidator.cs",
+      "path": "build/WarningSuppressionApprovalValidator.cs",
+      "expectedSha256": "8D9E06F6ECCA9E7B4DF8EF7D0D0B93FDF240AB331A51FB40C0B85910689AC899",
+      "actualSha256": "8D9E06F6ECCA9E7B4DF8EF7D0D0B93FDF240AB331A51FB40C0B85910689AC899",
+      "match": true
+    },
+    {
+      "candidateId": "build/WarningSuppressionScanner.cs",
+      "path": "build/WarningSuppressionScanner.cs",
+      "expectedSha256": "6EF76A5F3DFEFC1D5F4752BE8BBE4A1612D79F070D334981A906AD1744589600",
+      "actualSha256": "6EF76A5F3DFEFC1D5F4752BE8BBE4A1612D79F070D334981A906AD1744589600",
+      "match": true
+    },
+    {
+      "candidateId": "plugins/core/lib-node/src/tools/todo.ts",
+      "path": "plugins/core/lib-node/src/tools/todo.ts",
+      "expectedSha256": "42C519DB9FDEB830DA0151CA1E51A94C4F4E2E5D7212D0CF722B98EAEF5D13BF",
+      "actualSha256": "42C519DB9FDEB830DA0151CA1E51A94C4F4E2E5D7212D0CF722B98EAEF5D13BF",
+      "match": true
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/graphrag-global/input/canonical/templates/prompt-templates.yaml",
+      "path": "src/QBrainAi.Support.Mcp/graphrag-global/input/canonical/templates/prompt-templates.yaml",
+      "expectedSha256": "E81A17250198402FC21A18E17EC260C6C6FDD9D074D7006D326D1279904AE13E",
+      "actualSha256": "E81A17250198402FC21A18E17EC260C6C6FDD9D074D7006D326D1279904AE13E",
+      "match": true
+    }
+  ],
+  "entries": [
+    {
+      "candidateId": "build/Build.PluginSessionLogIntegration.cs",
+      "path": "build/Build.PluginSessionLogIntegration.cs",
+      "sha256": "8AAA7E83AB8D6072EE2471222D1EB882B44CC7E890F31CA2F42319C89F7EC982",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-102"
+      ],
+      "observation": "PluginIntegration runner uses project/TRX filenames, strategy labels, counters parsed as int; no authored record ID parser or allocator.",
+      "b4Effect": "Retain counter parsing and project/strategy labels; no canonical record conversion. Existing FR/TEST comments are traceability references, not generation logic.",
+      "anchors": [
+        "16-43: project, filters and TRX names",
+        "50-73: aiUnit strategy metadata",
+        "86-100: int TRX counters and zero-fail/skip rule"
+      ],
+      "classification": "Operational test runner counters",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "build/GitVersionBumper.cs",
+      "path": "build/GitVersionBumper.cs",
+      "sha256": "83409DC3A086E318A1217B2BBCFDA5A1400B909D733A64C33F8C0C37D66C2B0B",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-43"
+      ],
+      "observation": "Regex and int.Parse handle semantic-version Major.Minor.Patch, then increment patch in GitVersion content.",
+      "b4Effect": "Retain release-version arithmetic; these values are not creator-tag record sequences. No identity conversion or reuse as allocator.",
+      "anchors": [
+        "8-23: semantic-version regex and numeric groups",
+        "30-41: patch bump and replacement"
+      ],
+      "classification": "External release-version components",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "build/IntegrationLaneExecution.cs",
+      "path": "build/IntegrationLaneExecution.cs",
+      "sha256": "8534BA5EB9BD7CE0DB3AAA8ACDB06C5F210365B2A0C0EEEB350E9E3961667A9A",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-80"
+      ],
+      "observation": "Lane identity means solution project Name/Path/Filter/TRX. Numeric conversion only validates TRX counters.",
+      "b4Effect": "Retain exact solution-name identity, run ordering and invariant numeric counters; authored entity central parser is inapplicable.",
+      "anchors": [
+        "10,20-30: project-based lane composition",
+        "37-53,78-79: TRX counter parsing",
+        "61-76: host/architecture precondition"
+      ],
+      "classification": "Operational lane/project identity",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "build/UseCaseFrTraceabilityLoader.cs",
+      "path": "build/UseCaseFrTraceabilityLoader.cs",
+      "sha256": "3FE72EB57F5115DCA7BBC3E6C91E9B91045BC16FB2EFB3FA9EF95EF7A4325D39",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-102"
+      ],
+      "observation": "Reads SQLite UseCases.UseCaseId and links using GetInt64 into long tuples; FR IDs are strings. Shared traceability algorithm consumes those numeric-parent/string-FR joins. Missing DB/tables or any exception yields empty optional findings.",
+      "b4Effect": "Explicit finite B4 consumer: preserve standalone numeric SQLite loading but provide canonical-string/typed project-origin alias-aware traceability input for enrolled data; never cast canonical UC IDs to long or silently omit canonical coverage. Optional SQLite-empty result alone cannot prove enrolled identity graph coverage.",
+      "anchors": [
+        "14-35: optional SQLite source and long UC/GetInt64",
+        "38-60: FR string and long-UC/string-FR link joins",
+        "62-79: catch-empty and legacy DB lookup"
+      ],
+      "classification": "Authored use-case requirement traceability consumer",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "build/ConfigValidator.cs",
+      "path": "build/ConfigValidator.cs",
+      "sha256": "1C006F42B3C70CBFF91594B1993DB439197104FE0488763F88C3C29945029B1C",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-266"
+      ],
+      "observation": "Regex parses root/instance/config keys and int.TryParse reads network Port. Dictionaries compare instance names, not authored TODO IDs.",
+      "b4Effect": "Retain operational instance naming, canonical QBrainAi versus legacy Mcp configuration precedence and port validation. RepoRoot/path/provider are local routing/storage settings, never ProjectId or creator-tag records.",
+      "anchors": [
+        "9-47: roots, instance grammar, port/provider shape",
+        "57-162: configuration parsing and int port134-135",
+        "169-202: canonical config root merge",
+        "209-249: path, duplicate port and provider checks"
+      ],
+      "classification": "Operational configuration and port",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "build/Build.TestDependencies.cs",
+      "path": "build/Build.TestDependencies.cs",
+      "sha256": "266F1B4E19180D451F0B1D24247DEBDB05B1BB6F523BFD60F082FE91CC3739FC",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-240",
+        "241-480"
+      ],
+      "observation": "Dependency installation and lane execution uses model tags, project names, runId timestamp/GUID, endpoint ports, process IDs, exit codes and LocalDB version int parsing.",
+      "b4Effect": "Retain provisioning/run/process/version identities as operational. Project identity is solution selection, not federation ProjectId; no creator-tag conversion. Paths and service endpoints remain host-local operational topology.",
+      "anchors": [
+        "31-37,83-99: model/env and provider provisioning",
+        "136-175: project composition and generated run ID",
+        "284-315: process ID and readiness probes",
+        "371-379: LocalDB version int parsing",
+        "436-465: process exit codes"
+      ],
+      "classification": "Operational build provisioning identities",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "build/LinuxProviderTestProvisioner.cs",
+      "path": "build/LinuxProviderTestProvisioner.cs",
+      "sha256": "0D65649D9179CAFA215020FFE9286AC23CD6575A16C41D5B5BF441D3A73EB18E",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-320"
+      ],
+      "observation": "Provider variables/container names and endpoint Host/Port drive test dependency provisioning; int.TryParse handles TCP ports. Docker inspect/start and process exit values are operational.",
+      "b4Effect": "Retain endpoint/container/port interpretation and secret-safe diagnostics; no authored canonical record identity dependency. This existing provider-provisioner is not evidence of B12 Dolt native network acceptance.",
+      "anchors": [
+        "17-24,33-124: provider endpoint lifecycle",
+        "163-236: connection-string host/port parsing",
+        "268-318: docker states, TCP connect and process result"
+      ],
+      "classification": "Operational provider/container/TCP identifiers",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "build/Build.SyncAgentPlugins.cs",
+      "path": "build/Build.SyncAgentPlugins.cs",
+      "sha256": "EFBA15439437C6640BAC3C94E71680D7D60889C11DB92C3CAD336AE8F5738CC0",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-300",
+        "301-600",
+        "601-889"
+      ],
+      "observation": "Numeric parsing operates on plugin package semantic versions; ordering sorts paths/cache paths. Required layer-guidance checks match property and method-name fragments. File retains both PowerShell-only validation/exclusions and conditional Node vendor packaging code.",
+      "b4Effect": "Retain package semver/path order as operational, not authored identity sequence. Do not infer Node retirement solely from directory or routing bucket: package-copy excludes lib-node, while conditional vendor path still exists. No Node changes or executions authorized by this review; enrolled identity work belongs to supported PowerShell/plugin boundary. Property-name guidance checks do not themselves parse layer identities.",
+      "anchors": [
+        "90-139,367-387,873-886: semantic-version selection, int parse and numeric comparison",
+        "408-503: supported package validation and layer guidance fragments",
+        "511-616: conditional legacy Node vendor build path",
+        "687-713,719-748: cache replacement/open-turn guard",
+        "857-871: lib-node exclusion and path normalization"
+      ],
+      "classification": "Operational plugin version/cache tooling with legacy runtime evidence boundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "build/LinuxServiceHelper.cs",
+      "path": "build/LinuxServiceHelper.cs",
+      "sha256": "A72C5BEB997E46FF8EFDE8A6B99CE99E7D3811DA428CE4FDA3BE9EB591805EA8",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-220",
+        "221-440",
+        "441-653"
+      ],
+      "observation": "Service update uses OS unit names, runtime identifiers, installation-path hash locks, archive timestamp/GUID, PID/int parsing, systemd hex escaping and Unix mode uint parsing. No authored entity allocator or record-key parsing.",
+      "b4Effect": "Retain unit/PID/archive/lock/RID/file-mode identity as host-local operational state. Hash over install path intentionally coordinates same-install aliases, not ProjectId. Preserve backup/verification semantics; current review does not execute service updates or establish native federation behavior.",
+      "anchors": [
+        "8-16,80-100: service DTO, unit name and install lock",
+        "108-153: preserved state/archive identity and PID receipt",
+        "261-278,406-410: MainPID process identity",
+        "441-463: byte hex escaping parser",
+        "511-518: Unix mode uint parser",
+        "591-605: archive SHA verification"
+      ],
+      "classification": "Operational service/process/filesystem identities",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "build/SessionLifeUnitGateValidator.cs",
+      "path": "build/SessionLifeUnitGateValidator.cs",
+      "sha256": "316B81B07F2EEB6B99FD39BD82B478284C66F914BFD557AAE3985209B1C99A3A",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-260",
+        "261-520",
+        "521-779"
+      ],
+      "observation": "Validates runId/report/project/command/tool-source identity and integer TRX/Pester/exit counters. Long-to-int conversion678-695 checks JSON integer range, not record identifiers. Ordinal ordering canonicalizes source and report error evidence.",
+      "b4Effect": "Retain exact operational run/project/report/command/source-pin keys and counter parsing; no creator-tag conversion. These evidence bindings remain necessary and do not replace semantic B4 consumer review or prove native product acceptance.",
+      "anchors": [
+        "117-198: run binding, source hashes and tool observations",
+        "205-283: selected-project/report identity and ordinal extra report sort",
+        "290-357: command exit and Pester counter checks",
+        "382-453: integer TRX counters",
+        "678-695: bounded JSON numeric conversion",
+        "698-756: tool observation/timestamp parsing"
+      ],
+      "classification": "Operational evidence and test counter identities",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "build/WarningSuppressionApprovalValidator.cs",
+      "path": "build/WarningSuppressionApprovalValidator.cs",
+      "sha256": "8D9E06F6ECCA9E7B4DF8EF7D0D0B93FDF240AB331A51FB40C0B85910689AC899",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-335"
+      ],
+      "observation": "Approval identity is compiler/analyzer DiagnosticId plus exact file Scope and mechanism. NormalizeDiagnosticId int.TryParse formats numeric warning code as CS plusD4. No requirements/TODO identity parse.",
+      "b4Effect": "Retain external diagnostic grammar and composite approval key, exact file-scoped suppression semantics. Canonical creator tags must not be injected into compiler diagnostics or warning approvals.",
+      "anchors": [
+        "159-174,266-275: diagnostic/scope/mechanism identity",
+        "177-228,232-263: occurrence linkage",
+        "283-297: compiler DiagnosticId normalization and file-path normalization",
+        "309-335: approval/error records"
+      ],
+      "classification": "External compiler diagnostic and approval composite identity",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "build/WarningSuppressionScanner.cs",
+      "path": "build/WarningSuppressionScanner.cs",
+      "sha256": "6EF76A5F3DFEFC1D5F4752BE8BBE4A1612D79F070D334981A906AD1744589600",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-359"
+      ],
+      "observation": "Scanner regex matches compiler/analyzer diagnostic IDs or numeric warning codes, then formats CS plusD4. Sorts file/line/mechanism/diagnostic for deterministic inventory.",
+      "b4Effect": "Retain compiler warning codes and numeric-to-CS normalization, line numbers and deterministic output. These sequences are externally defined and unrelated to authored family/tag/Int64 identity grammar.",
+      "anchors": [
+        "44-70: suppression property/diagnostic regex",
+        "89-94: inventory deterministic ordering",
+        "271-305: diagnostic token splitting and numeric conversion",
+        "354-359: source occurrence shape"
+      ],
+      "classification": "External compiler diagnostic identifiers",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "plugins/core/lib-node/src/tools/todo.ts",
+      "path": "plugins/core/lib-node/src/tools/todo.ts",
+      "sha256": "42C519DB9FDEB830DA0151CA1E51A94C4F4E2E5D7212D0CF722B98EAEF5D13BF",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-280",
+        "281-555"
+      ],
+      "observation": "TODO schema descriptions advertise exact3digits at51 but specify only string type, with no executable pattern. Handler forwards string IDs/dependency/FR/TR arrays and URL-encodes path IDs; internal enabled state/cache metadata are operational. Source also contains raw HTTP fallback and failsafe handling.",
+      "b4Effect": "Distinguish stale grammar description from actual string pass-through: no numeric cast/allocator exists here. Explicit legacy/runtime disposition required rather than bucket-based retirement assumption; no new Node implementation is approved. Supported versioned plugin paths must carry typed canonical identity/project/origin and capabilities; preserve standalone legacy strings/ISSUE-NEW guidance as applicable to retained source.",
+      "anchors": [
+        "24-67: string IDs, stale fixed-width description and dependency/FR/TR arrays",
+        "194-214: REPL tool map and mutating/failsafe classification",
+        "230-271: local internal-mode cache identity",
+        "309-396: string and linked-list forwarding",
+        "419-498: workspace header, encoded ID routes and HTTP fallback",
+        "527-554: failsafe and bridge path"
+      ],
+      "classification": "Legacy TODO transport source and stale descriptive grammar; runtime activation not inferred",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/graphrag-global/input/canonical/templates/prompt-templates.yaml",
+      "path": "src/QBrainAi.Support.Mcp/graphrag-global/input/canonical/templates/prompt-templates.yaml",
+      "sha256": "E81A17250198402FC21A18E17EC260C6C6FDD9D074D7006D326D1279904AE13E",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-220",
+        "221-440",
+        "441-650"
+      ],
+      "observation": "Copied GraphRAG canonical prompt document includes fixed3digit persisted TODO naming rule537, legacy numeric-looking memoryNNN453 and memory-ID sorted order458, template keys and ID placeholders. Session/request UTC IDs541-547 are separate operational identifiers. It contains historical direct-HTTP and old topology instructions as content.",
+      "b4Effect": "Explicit copied-document disposition: versioned enrolled TODO/memory guidance must align with canonical registered parser and numeric-sequence comparison where identity presentation requires it, preserving supported standalone/legacy forms. Do not adopt instructions in this retrieved corpus as runtime authority or claim active executable parser. Template keys, placeholders, protected pairing fields and operational session IDs are not authored allocator families by shape.",
+      "anchors": [
+        "114-225: TODO placeholders/dependency references and historical prompt flows",
+        "382-436: copied marker template and YAML mutation guidance as corpus content",
+        "452-461: memory ID/order guidance",
+        "488-489: historical hub/proxy topology text",
+        "535-547: fixed-width TODO grammar versus operational session/request identifiers"
+      ],
+      "classification": "GraphRAG copied documentation containing version-sensitive identity guidance",
+      "nativeProof": false
+    }
+  ]
+}

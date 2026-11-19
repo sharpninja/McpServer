@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "taskId": "EXEC-TODO-FEDPH0-004",
+  "artifactType": "IndividualSemanticConsumerReview",
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "sessionId": "Codex-20261116T174245Z-plugin-session",
+  "requestId": "req-20261119T171914Z-prompt-0659",
+  "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+  "sourceWorktree": "F:/GitHub/McpServer/.worktrees/fedph0-task007-20261119",
+  "partitionSha256": "0231FABE8027B8D8289F12D6BEFB70E2210B3B48546AEB6923A4ADB10982F39F",
+  "reviewedFileCount": 1,
+  "fullSourceReadCount": 1,
+  "sourceHashMismatchCount": 0,
+  "nativeProof": false,
+  "productFilesModified": [],
+  "testsRun": [],
+  "taskStateChanged": false,
+  "isHV": false,
+  "limitations": [
+    "Full-source semantic review only. Source operational behavior was not executed.",
+    "This row was reassigned from agent006 original64candidate partition before root full-source read. Program.cs and ReplCommandDispatcher.cs are reviewed separately by agents005and007."
+  ],
+  "findings": [
+    "No authored identity grammar dependency in this file."
+  ],
+  "processFriction": [],
+  "entries": [
+    {
+      "candidateId": "src/QBrainAi.McpAgent.SampleHost/SampleHostPreviewFactory.cs",
+      "path": "src/QBrainAi.McpAgent.SampleHost/SampleHostPreviewFactory.cs",
+      "sha256": "C39A7232CC6EA7794BCD5966EB1CECDFA0DC4F3089AA374B7DE15C626BBD297B",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-240",
+        "241-500",
+        "501-800",
+        "801-1166"
+      ],
+      "anchors": [
+        {
+          "line": 1016,
+          "text": "        if (!int.TryParse(configured, out var seconds) || seconds <= 0)",
+          "category": "NumericParse"
+        },
+        {
+          "line": 1035,
+          "text": "        if (!int.TryParse(configured, out var value) || value < 0)",
+          "category": "NumericParse"
+        }
+      ],
+      "observation": "The full1166-line sample host initializes operational MCP/PowerShell/chat sessions and logs Begin/Complete/Fail with RequestId. Split at235 selects a slash command; token conversion581-586 handles token usage; verbosity782-806 selects1/2/3; integer parsing1016and1035 validates timeout seconds and retry counts. Workspace/model/agent/API settings and marker path scanning are operational configuration. There is no authored record ID parsing, allocation, fixed-width record regex or numeric record DTO in this file.",
+      "b4Effect": "Preserve operational session/request identity and sample-host configuration, verbosity and token accounting. These lexical hits do not require canonical tag grammar changes. Authored TODO/requirement tools registered by hostedAgent remain separately reviewed adapters, not proven by this host file. Explicit session snapshot publication preserves original context and source provenance; no unsupported source/content/history mutation is authorized.",
+      "classification": "OperationalHostSessionAndConfiguration",
+      "nativeProof": false
+    }
+  ]
+}

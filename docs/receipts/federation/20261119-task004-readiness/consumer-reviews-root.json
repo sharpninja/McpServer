@@ -1,0 +1,2455 @@
+{
+  "schemaVersion": 1,
+  "taskId": "EXEC-TODO-FEDPH0-004",
+  "artifactType": "IndividualSemanticConsumerReview",
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "sessionId": "Codex-20261116T174245Z-plugin-session",
+  "requestId": "req-20261119T171914Z-prompt-0659",
+  "originalCoordinationRequestId": "req-20261119T155309Z-prompt-142e",
+  "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+  "sourceWorktree": "F:/GitHub/McpServer/.worktrees/fedph0-task007-20261119",
+  "partitionPath": "F:\\GitHub\\McpServer\\.worktrees\\fedph0-task007-20261119\\docs\\receipts\\federation\\20261119-task004-readiness\\remaining-consumer-partition.json",
+  "partitionSha256": "0231FABE8027B8D8289F12D6BEFB70E2210B3B48546AEB6923A4ADB10982F39F",
+  "reviewedFileCount": 52,
+  "fullSourceReadCount": 52,
+  "sourceHashMismatchCount": 0,
+  "nativeProof": false,
+  "productFilesModified": [],
+  "testsRun": [],
+  "taskStateChanged": false,
+  "isHV": false,
+  "limitations": [
+    "Read-only semantic source review, not implementation or hostile validation.",
+    "Provider key/index/collation and DTO/plugin native behavior require later actual binding; lexical matches alone do not establish a defect.",
+    "RequirementsController is excluded here and reviewed by owner007. Other14root build/doc candidates were reassigned to agent005 before full read."
+  ],
+  "findings": [
+    "Preserve mixed operational IDs and authored soft references in handoff/HV/triage/session models.",
+    "Preserve typed ordered composite references, optional-null relationships, standalone numeric contracts, Global/Workspace distinctions, append-only history and project-versus-local-workspace identity.",
+    "Effective model includes shadow columns, workspace conversions and explicit requiredness that cannot be inferred from CLR annotations alone."
+  ],
+  "processFriction": [
+    {
+      "source": "Operator",
+      "requestId": "req-20261119T171310Z-prompt-5c2d",
+      "observation": "Early Task004 design/mock gap discovery is the Unit-of-Work process doing its job before gaps become difficult to fill.",
+      "unnecessaryBlocker": false
+    }
+  ],
+  "entries": [
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/HandoffIngestionRunEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/HandoffIngestionRunEntity.cs",
+      "sha256": "B2113D05F17C32361758C2169F339ABE6575ECB1B702BAA70F609004C22EA2B8",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-130"
+      ],
+      "observation": "RunId, replay identity, leases, state version and extraction metadata are operational. CreatedTodoId and TodoCreationIntentId are soft TODO references; normalized DraftJson can contain authored references.",
+      "b4Effect": "Preserve operational values and historical draft bytes; resolve newly versioned TODO references through project/origin/kind and typed aliases without casting. Include replay and approval recovery paths in later bindings.",
+      "anchors": [
+        {
+          "line": 10,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 15,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 20,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 25,
+          "text": "    [StringLength(2048)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 30,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 38,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 42,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 46,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 50,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 58,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 63,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 67,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 80,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 85,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 89,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 96,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 103,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 110,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 114,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 121,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 125,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "MixedOperationalAndAuthored",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/HostileReviewArtifactLinkEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/HostileReviewArtifactLinkEntity.cs",
+      "sha256": "F0FD602F24B8CB3DB26CF637332ADF16CA4F6BEA0245BF2CD01D9CD3472F9049",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-43"
+      ],
+      "observation": "LinkId is a long operational row key and RequestId points to a review request. ArtifactType selects a heterogeneous locator: TODO, requirement, session, triage, plan, file, commit or document.",
+      "b4Effect": "Do not allocate every locator as a project record. Preserve file paths and Git SHAs; only typed authored target kinds use canonical project mappings. Validate declared 1024 locator length without truncating.",
+      "anchors": [
+        {
+          "line": 11,
+          "text": "    public long LinkId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 15,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 20,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 25,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 30,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 34,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "MixedOperationalAndAuthored",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/HostileReviewDiagnosticEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/HostileReviewDiagnosticEntity.cs",
+      "sha256": "ACC3F99FBCC1C1E6AD2398D44AA3A4DB71D3F1A536EAC3D6580357432AE5692C",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-36"
+      ],
+      "observation": "DiagnosticId is an operational long row key; RequestId is its review parent. Code and Message are diagnostic payload, not authored entity identity.",
+      "b4Effect": "Retain row/request linkage and current limits. Explicit snapshot publication must preserve source values rather than treating every numeric diagnostic key as a canonical allocator input.",
+      "anchors": [
+        {
+          "line": 11,
+          "text": "    public long DiagnosticId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 15,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 20,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 25,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 30,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalKey",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/HostileReviewExecutionEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/HostileReviewExecutionEntity.cs",
+      "sha256": "995A0CC1249B5091FA772E5FA1EE6AC98A1F0BB62A5B1D692401F951BA022480",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-66"
+      ],
+      "observation": "ExecutionId and RequestId identify reviewer execution and its request. InputTokens and OutputTokens are nullable usage counts, not identities.",
+      "b4Effect": "Retain execution/request identities, nullable counts and provenance; no tag allocation or numeric conversion is justified by these lexical hits.",
+      "anchors": [
+        {
+          "line": 11,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 16,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 21,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 26,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 31,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 36,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 40,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 44,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 48,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalKey",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/HostileReviewFindingEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/HostileReviewFindingEntity.cs",
+      "sha256": "CDF1734CC5A5256877FDED64067CD7EC7E3BFD522D1AF840ECFE859FA05BDBD1",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-56"
+      ],
+      "observation": "FindingId and RequestId are operational. ArtifactId is a heterogeneous soft target and RequirementId can point to a requirement or AC.",
+      "b4Effect": "Preserve operational finding/request keys and evidence text. Versioned lookup of authored artifact/requirement/AC targets must carry exact target kind and project scope, including legacy aliases and maximum lengths.",
+      "anchors": [
+        {
+          "line": 11,
+          "text": "    public long FindingId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 15,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 20,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 25,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 30,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 34,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 38,
+          "text": "    [StringLength(512)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 42,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 46,
+          "text": "    [StringLength(2000)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 50,
+          "text": "    [StringLength(2000)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "MixedOperationalAndAuthored",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/HostileReviewRequestEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/HostileReviewRequestEntity.cs",
+      "sha256": "D02C0E363760FEDA6D84A11281E7EC91FEBE387E1B64ABD274924B4E52AD4A68",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-86"
+      ],
+      "observation": "RequestId is an operational review identity with child links, executions, findings and diagnostics. HttpStatus and quality values are observations, not IDs.",
+      "b4Effect": "Keep request and children attributable; do not reinterpret status codes or request identifiers as authored sequences. Publication retains original identities and sanitized text.",
+      "anchors": [
+        {
+          "line": 10,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 15,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 20,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 25,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 30,
+          "text": "    [StringLength(4000)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 35,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 40,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 47,
+          "text": "    [StringLength(16)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 66,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalKey",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/MemoryEdgeEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/MemoryEdgeEntity.cs",
+      "sha256": "B632CF334AC35BDF8D0E532303CB28F92BAF62795561711A801DC7058B0DE438",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-32"
+      ],
+      "observation": "EdgeRowId is a long surrogate; FromMemoryId and ToMemoryId are explicit directed memory references with edge type and weight.",
+      "b4Effect": "Workspace-authored edges use the approved canonical edge/parent mapping; Global edges retain original scope. Preserve directed endpoint order, exact typed aliases and edge uniqueness; do not convert the weight.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    public long EdgeRowId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 17,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 27,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "ScopeDependentAuthoredIdentity",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/MemoryEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/MemoryEntity.cs",
+      "sha256": "07785760394A21D364A032D2B9ABC9B6A6EC27C7A79A07F90065B7CECE20C947",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-96"
+      ],
+      "observation": "Id is a string key shared across scopes. Global rows have null WorkspaceId, Workspace rows carry a path; Category affects generated IDs and Version is a content counter.",
+      "b4Effect": "Split Global/control and Workspace-authored handling per classification. Preserve original text and versions; versioned Workspace IDs and category-aware family parsing must not change Global IDs or infer chronology across origins.",
+      "anchors": [
+        {
+          "line": 24,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 29,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 34,
+          "text": "    [StringLength(16)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 41,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 58,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 62,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 72,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 82,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 86,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 90,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 94,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "ScopeDependentAuthoredIdentity",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/MemoryIndexEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/MemoryIndexEntity.cs",
+      "sha256": "A965ACE53A2C814804096ABC0FB099579BAA47863FA45EB32E1BD5CF706CD0BA",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-32"
+      ],
+      "observation": "MemoryId is the parent lookup key; WorkspaceId is nullable for Global rows. ContentHash, embedding JSON and IndexedAtUtc are derived index state.",
+      "b4Effect": "Treat as derived/control per B2, not a new canonical authored allocation. A project index must resolve its canonical parent while preserving Global behavior and avoiding cross-store FK/join assumptions.",
+      "anchors": [
+        {
+          "line": 14,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 18,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 23,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "DerivedIndex",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/MemoryVersionEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/MemoryVersionEntity.cs",
+      "sha256": "E1C7DD9E49A26E2E849FCACE81F5711E1982F2065E65603E3892A8EE22EB65D3",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-33"
+      ],
+      "observation": "VersionRowId is a long row key, MemoryId a parent, and VersionNumber a contiguous content ordinal. Snapshot title/content are append-only history.",
+      "b4Effect": "Apply approved workspace version-row and parent mapping while preserving original row aliases, version ordinals and snapshot bytes. Global history remains outside automatic project rekeying.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    public long VersionRowId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 17,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 24,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "ScopeDependentAuthoredIdentity",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/ProductEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/ProductEntity.cs",
+      "sha256": "887F9D5FA95F4C3C7C35C53778B58C50D38842F791531F4F0DD2EF30B7A87FCF",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-42"
+      ],
+      "observation": "ProductId is a host-global surrogate and Key is the explicit product key. OwnerWorkspaceId is a workspace reference; source explicitly forbids a workspace query filter.",
+      "b4Effect": "Preserve host-global product semantics and existing product key grammar. Do not allocate ProductId from a project tag merely because it is numeric; native separation must preserve owner/membership references.",
+      "anchors": [
+        {
+          "line": 14,
+          "text": "    public long ProductId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 18,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 23,
+          "text": "    [StringLength(512)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 31,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "HostGlobalOperational",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/ProductWorkspaceMembershipEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/ProductWorkspaceMembershipEntity.cs",
+      "sha256": "8DE7CADD89E5842752CB0E30513748C41EB98E4052D5A602CEA9DCA3C0919B47",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-35"
+      ],
+      "observation": "ProductId plus WorkspaceId identifies membership; Role and AddedBy record the host-global association. There is no independent authored child ID.",
+      "b4Effect": "Retain composite membership identity and host-global owner/member semantics. Any federation projection requires explicit mappings, not invented per-membership canonical IDs or cross-store FK enforcement.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    public long ProductId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 17,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 30,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "HostGlobalOperational",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/RequirementAcceptanceCriterionEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/RequirementAcceptanceCriterionEntity.cs",
+      "sha256": "81D05B957BF537AF620C7B54A16C126E7F077666CBC8D2BFA47EA2F9B1165C1A",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-47"
+      ],
+      "observation": "Id is a long surrogate; CriterionId is the public criterion string. Parent identity is ordered WorkspaceId, RequirementKind, RequirementId; Ordinal is display position.",
+      "b4Effect": "Use approved REQ-AC canonical identity with typed legacy surrogate/public aliases and canonical parent vector. Preserve satisfaction/evidence and named legacy criterion IDs; reorder never implies rekey or completion.",
+      "anchors": [
+        {
+          "line": 15,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 18,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(16)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 26,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 33,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "PortableAuthoredIdentity",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/RequirementScopeLayerEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/RequirementScopeLayerEntity.cs",
+      "sha256": "B986F871485B40A79AF197EC76F2524A8FFF415EF81C384832C5967B97EC1D02",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-41"
+      ],
+      "observation": "Layer Key is workspace-scoped, Order is the immutable comparison ordinal, and ScopeEndLayerKey is another layer reference.",
+      "b4Effect": "Preserve layer ordering separately from identity and use the approved project-scoped layer projection. Existing legacy lowercase key validation cannot be widened by blindly passing uppercase canonical IDs; no new family is invented by this review.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 18,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 26,
+          "text": "    [StringLength(512)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 33,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "PortableAuthoredIdentity",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/RequirementsRecoveryRunEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/RequirementsRecoveryRunEntity.cs",
+      "sha256": "1902952236A2F89788D6CDB4E8BF3649AA28020A3BA5F24A59F7C10D8197EDD0",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-39"
+      ],
+      "observation": "WorkspaceId plus caller IdempotencyKey identifies an operational recovery receipt; PayloadHash guards replay and ResultJson can contain requirement results.",
+      "b4Effect": "Retain idempotency keys and hashes exactly. Typed result references need versioned projection without rewriting existing recovery receipts or mistaking the caller key for a generated requirement ID.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 18,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 23,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 28,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 37,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalKeyWithAuthoredPayload",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/RequirementTraceabilityLinkEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/RequirementTraceabilityLinkEntity.cs",
+      "sha256": "5099DFB3C84E800E8B09FDE9E353F4E024193B126E615E835D7C321775FC639A",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-46"
+      ],
+      "observation": "WorkspaceId, FrId, TargetKind and TargetId form the association; SourceKind is fr, TargetKind tr/test. Both ends navigate to requirement rows.",
+      "b4Effect": "Map both canonical parents with explicit kinds and ordered composite columns; no independent invented link ID. Preserve standalone references and historical source IDs and refuse absent versioned capability before mutation.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 18,
+          "text": "    [StringLength(16)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 23,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 28,
+          "text": "    [StringLength(16)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 33,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 38,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "CompositeAuthoredAssociation",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/SessionLogActionEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/SessionLogActionEntity.cs",
+      "sha256": "3D45109179E2E6B0C85EE8C58438E9EDC642A89E32F7E8234DB007764BA76905",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-42"
+      ],
+      "observation": "Id and SessionLogTurnId are operational numeric keys. Order is local action ordering; FilePath is a locator and Description is audit text.",
+      "b4Effect": "Keep source row and turn keys plus action order unchanged. Explicit published snapshots carry preserved operational graph/provenance; do not rewrite historical descriptions or file paths into canonical ID grammar.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 19,
+          "text": "    public long SessionLogTurnId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 28,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 32,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 36,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalSnapshotChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/SessionLogCommitEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/SessionLogCommitEntity.cs",
+      "sha256": "619DC91465F86AB6534F87DD6165121D2D9E1A4EE80F6EAE694287943DEA3CAE",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-48"
+      ],
+      "observation": "Id and SessionLogTurnId identify operational rows. Sha is an external Git hash, Branch and Author are external metadata; Ordinal is local ordering.",
+      "b4Effect": "Retain exact Git SHA/branch and audit values. Published snapshot mappings preserve parent/children without interpreting Git hashes or numeric ordinals as project authored IDs.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 19,
+          "text": "    public long SessionLogTurnId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 25,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 29,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 36,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalSnapshotChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/SessionLogCommitFileEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/SessionLogCommitFileEntity.cs",
+      "sha256": "46E675283E3AFF8C6AE6E8D22A1CA3AEEF27B6513CA73CC6B3CC81BBBF971CD9",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-30"
+      ],
+      "observation": "Id and SessionLogCommitId are operational parent/child keys; Ordinal is commit-local position and Path is the changed-file locator.",
+      "b4Effect": "Preserve original typed keys, ordering and path in explicit session snapshot publication. No independent canonical allocation follows from a numeric row hit.",
+      "anchors": [
+        {
+          "line": 14,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 20,
+          "text": "    public long SessionLogCommitId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "classification": "OperationalSnapshotChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/SessionLogEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/SessionLogEntity.cs",
+      "sha256": "3C4062EA57CAA3CA664E22CE214AEAF31268A9DCA89C5240D5FB102098FB0333",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-126"
+      ],
+      "observation": "Operational identity includes long Id and unique WorkspaceId, SourceType, SessionId; AgentSessionId and transcript/executable paths retain provider provenance. Counts are statistics.",
+      "b4Effect": "Keep live sessions operational. Explicit SESSION-SNAPSHOT publication preserves original keys, agent identities, source fingerprints and child graph; do not conflate local workspace path with shared ProjectId or infer global order from Id.",
+      "anchors": [
+        {
+          "line": 14,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 21,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 26,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 30,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 38,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 42,
+          "text": "    [StringLength(2048)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 46,
+          "text": "    [StringLength(2048)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 50,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 54,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 58,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 68,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 79,
+          "text": "    [StringLength(512)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 98,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 102,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 106,
+          "text": "    [StringLength(512)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 110,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 114,
+          "text": "    [StringLength(2048)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 118,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalSnapshotAggregate",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/SessionLogProcessingDialogEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/SessionLogProcessingDialogEntity.cs",
+      "sha256": "49DCEEDB400A65B64F23DA0CA3CCD516E15B3FDD6F2A165D997B54D6EB197A32",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-44"
+      ],
+      "observation": "Id and SessionLogTurnId are operational keys; Ordinal orders dialog and Content preserves recorded processing text.",
+      "b4Effect": "Preserve complete dialog order/content and exact parent identity during explicit publication. Do not parse or rewrite arbitrary prose as canonical references.",
+      "anchors": [
+        {
+          "line": 14,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 20,
+          "text": "    public long SessionLogTurnId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 30,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 38,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalSnapshotChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/SessionLogTagEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/SessionLogTagEntity.cs",
+      "sha256": "011AF9235B18BD7FC8B3D147D3884BE6B1FBFE47087762065AEEEAC37B2EA9B7",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-27"
+      ],
+      "observation": "Id and SessionLogId are operational row/parent keys; Tag is a free string capped at256.",
+      "b4Effect": "Retain tags and source parent mappings. Historical tags can name requirements but are not normalized FKs; never claim a broad text rewrite is a safe identity migration.",
+      "anchors": [
+        {
+          "line": 12,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 18,
+          "text": "    public long SessionLogId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalSnapshotChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/SessionLogTurnContextEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/SessionLogTurnContextEntity.cs",
+      "sha256": "5CE464DBDE4C4236CEBBD58D4E78538BC135BBFE00F109DDB7EE05215C3CC157",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-32"
+      ],
+      "observation": "Id and SessionLogTurnId are operational keys. ContextItem accepts path, URL or reference and is capped at2048.",
+      "b4Effect": "Preserve locator text and ordering; where versioned projection resolves authored targets it needs explicit type/provenance rather than parsing all context strings as IDs.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 19,
+          "text": "    public long SessionLogTurnId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 26,
+          "text": "    [StringLength(2048)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalSnapshotChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/SessionLogTurnEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/SessionLogTurnEntity.cs",
+      "sha256": "ED688A926135222A8F41B3E83D3ABD3778D3293FCEE1A3CB47ABF06C5430D27F",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-108"
+      ],
+      "observation": "Id, SessionLogId and RequestId are operational turn identity. TodoId is a soft authored reference with None sentinel; RawContextJson and OriginalEntryJson are historical bytes.",
+      "b4Effect": "Keep original turn/request keys and historical JSON; published snapshots retain typed source provenance. Resolve versioned TodoId explicitly without mutating historical audit text or replacing None with an ID.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 19,
+          "text": "    public long SessionLogId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 29,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 33,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 40,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 50,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 76,
+          "text": "    [StringLength(2048)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 84,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalSnapshotChildWithAuthoredReference",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/SessionLogTurnStringListEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/SessionLogTurnStringListEntity.cs",
+      "sha256": "233885D2D59285E5F20C3E14C056BC117E6DAD8A6C332E5FD470FD112807B706",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-36"
+      ],
+      "observation": "Id and SessionLogTurnId are operational keys. ListType chooses DesignDecision, Requirement, FileModified or Blocker; Value remains the original string.",
+      "b4Effect": "Retain ordered list values and exact parent mapping. A Requirement list item is not evidence of a normalized FK and does not authorize historical text rekeying.",
+      "anchors": [
+        {
+          "line": 14,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 20,
+          "text": "    public long SessionLogTurnId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 24,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalSnapshotChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/SessionLogTurnTagEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/SessionLogTurnTagEntity.cs",
+      "sha256": "98B353B1ADDD0BD2F6590B6576E0872757A937041BD0353634CADDAAA977EB5C",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-29"
+      ],
+      "observation": "Id and SessionLogTurnId are operational keys; Tag is a free string and the parent owns session scope.",
+      "b4Effect": "Preserve tags and exact operational parent graph for explicit snapshots. Numeric row IDs are not canonical authored allocations and ordering is not cross-node chronology.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 19,
+          "text": "    public long SessionLogTurnId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 23,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalSnapshotChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/TodoAuditHistoryEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/TodoAuditHistoryEntity.cs",
+      "sha256": "7AAC72CF1CB01CBA88E25A9C606FE7C1E5F313C49F3E3CF4807F10EC51D80121",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-57"
+      ],
+      "observation": "AuditId is an auto-increment operational audit key; TodoId links an authored TODO; Version is per-TODO history. SnapshotJson and PreviousSnapshotJson are immutable historical content.",
+      "b4Effect": "Preserve original audit keys, versions and snapshot bytes under the approved history classification. Map canonical TODO references/provenance for federated history without claiming global AuditId order or rewriting source history.",
+      "anchors": [
+        {
+          "line": 17,
+          "text": "    public long AuditId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 27,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 32,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 40,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 45,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 55,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "AppendOnlyHistoryWithAuthoredReference",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/TodoCompletedGroupEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/TodoCompletedGroupEntity.cs",
+      "sha256": "4E5F58643D457546F51BFC55182301C4A131178011531B64FFD491BED624B931",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-36"
+      ],
+      "observation": "Id is a long child key; WorkspaceId and SingletonId reference document metadata. Ordinal and Date describe archive grouping.",
+      "b4Effect": "Use approved completed-group identity and typed legacy alias; map metadata parent using ProjectId plus singleton discriminator, not a generated singleton ID. Preserve archive order/date.",
+      "anchors": [
+        {
+          "line": 15,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 18,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 22,
+          "text": "    public int SingletonId { get; set; } = 1;",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 28,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "PortableAuthoredChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/TodoCompletedItemEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/TodoCompletedItemEntity.cs",
+      "sha256": "7E7D7EFEE5CBAE11F0E8032B3F9755F45829FF888557F98453F915DF765D5235",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-39"
+      ],
+      "observation": "Id is an archive item key and GroupId its long parent. ItemId is a soft completed TODO reference; Ordinal is local position.",
+      "b4Effect": "Map approved completed-item/group canonical identities and typed original keys. Preserve optional ItemId/null and resolve authored TODO targets explicitly; no ordinal-to-ID conversion.",
+      "anchors": [
+        {
+          "line": 14,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 17,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 21,
+          "text": "    public long GroupId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 27,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 31,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "PortableAuthoredChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/TodoDocumentMetadataEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/TodoDocumentMetadataEntity.cs",
+      "sha256": "901085BB21DA424CEE99E27413233E0ADE101F2BCB19B3561A44EEBA204FEFDC",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-64"
+      ],
+      "observation": "WorkspaceId plus fixed SingletonId1 identifies metadata. Notes and CompletedGroups are NotMapped collections loaded from dependent rows; projection health timestamps/messages are operational.",
+      "b4Effect": "Use approved ProjectId plus singleton discriminator, never an allocator sequence for1. Preserve authored children while separating projection health/control fields; source NotMapped does not mean those child records may be omitted.",
+      "anchors": [
+        {
+          "line": 26,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 30,
+          "text": "    public int SingletonId { get; set; } = 1;",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 47,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 51,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 55,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 59,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "ProjectSingletonWithOperationalFields",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/TodoDocumentNoteEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/TodoDocumentNoteEntity.cs",
+      "sha256": "62FDD99B4606A346B1880688F829EFC1AACBE01BDE5500B4133E4280E0862B36",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-31"
+      ],
+      "observation": "Id is a long note row key; WorkspaceId and SingletonId point to the metadata singleton. Ordinal orders the exact note Value.",
+      "b4Effect": "Map approved note identity and parent singleton projection with typed old row alias. Preserve Value and ordinal; no text parsing or hidden note deletion.",
+      "anchors": [
+        {
+          "line": 14,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 17,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 21,
+          "text": "    public int SingletonId { get; set; } = 1;",
+          "category": "NumericIdDto"
+        }
+      ],
+      "classification": "PortableAuthoredChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/TodoItemListItemEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/TodoItemListItemEntity.cs",
+      "sha256": "698304EC858E1D9ED03BA233A77EA6F5E242BD2D90D15EB4B6D1CB86780BDAF4",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-42"
+      ],
+      "observation": "Id is a list-row key and WorkspaceId/TodoId its composite parent. ListType distinguishes free description/details from DependsOn and raw FR/TR strings; normalized joins live separately.",
+      "b4Effect": "Map approved list-row/parent identities. Canonical references in dependency/requirement list types need explicit typed mapping, while raw user strings remain preserved; do not treat every Value as a foreign key.",
+      "anchors": [
+        {
+          "line": 19,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 26,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 31,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "PortableAuthoredChildWithTypedPayload",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/TodoItemTaskEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/TodoItemTaskEntity.cs",
+      "sha256": "62AB6B9D4B5E68F10925C75CADB4194EEA7C626ECF846133B33A3E92DDFCE30D",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-35"
+      ],
+      "observation": "Id is a long implementation-subtask key; WorkspaceId/TodoId is parent identity. Ordinal orders Task text and Done is independent state.",
+      "b4Effect": "Map approved task-row and TODO canonical identities with typed aliases. Preserve ordinal/text/done exactly and never synthesize success from identity migration.",
+      "anchors": [
+        {
+          "line": 14,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 17,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 21,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "PortableAuthoredChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/ToolBucketEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/ToolBucketEntity.cs",
+      "sha256": "A93608E84492AABCAA2BA2BE8361870674ADDE1BF6E23FC128936353CCF7270D",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-49"
+      ],
+      "observation": "Id is an int surrogate. Owner, Repo, Branch and ManifestPath locate a GitHub tool bucket; Name is its configured natural key.",
+      "b4Effect": "Honor B2 registry classification and standalone numeric DTOs. Do not invent authored canonical families for external repository coordinates; any future project projection needs explicit versioned mapping and original provenance.",
+      "anchors": [
+        {
+          "line": 14,
+          "text": "    public int Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 21,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 26,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 31,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 36,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 41,
+          "text": "    [StringLength(512)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "ScopeDependentOperationalRegistry",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/ToolDefinitionEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/ToolDefinitionEntity.cs",
+      "sha256": "8C95C8F3633508A872AF66C46DF2BA75C36D734A46D0F8C0648BC70715B5AE6C",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-60"
+      ],
+      "observation": "Id is an int surrogate. Name, command template, parameter schema, WorkspacePath and BucketName define a tool registration that may be Global or workspace-scoped.",
+      "b4Effect": "Preserve scope and exact tool/bucket/command semantics under B2. A numeric ID or StringLength hit does not make command text an authored identity; avoid unsupported automatic canonical rewrites.",
+      "anchors": [
+        {
+          "line": 15,
+          "text": "    public int Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 27,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 31,
+          "text": "    [StringLength(8192)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 35,
+          "text": "    [StringLength(2048)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 42,
+          "text": "    [StringLength(2048)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 49,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "ScopeDependentOperationalRegistry",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/ToolDefinitionTagEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/ToolDefinitionTagEntity.cs",
+      "sha256": "5EE576D5B358EE9CB08F26383404C5D33C2FE99C3441B6FA1DC200204FBA463F",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-29"
+      ],
+      "observation": "Id and ToolDefinitionId are int registry row/parent keys; Tag is a lowercase discovery keyword.",
+      "b4Effect": "Retain standalone numeric contract and exact parent/tag uniqueness. A versioned registry projection, if included by classification, must map parent references explicitly rather than cast canonical IDs to int.",
+      "anchors": [
+        {
+          "line": 14,
+          "text": "    public int Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 20,
+          "text": "    public int ToolDefinitionId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 27,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "ScopeDependentOperationalRegistry",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/TriageGroupEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/TriageGroupEntity.cs",
+      "sha256": "97BBD96495FE2CBA2B4B1E286366D0220C0CC6D2EC1BE3726A2E5E3ED798F2F0",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-65"
+      ],
+      "observation": "GroupId and GroupKey identify operational report aggregation; ReportCount is a count. CreatedTodoId is a soft BUG-TRIAGE TODO reference.",
+      "b4Effect": "Keep operational group fingerprint and count behavior. Only newly versioned authored backlog targets use the approved BUG-TRIAGE family and typed lookup; do not convert group keys or quiet deadlines.",
+      "anchors": [
+        {
+          "line": 12,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 17,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 27,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 32,
+          "text": "    [StringLength(512)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 41,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 60,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalKeyWithAuthoredReference",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/TriageReportEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/TriageReportEntity.cs",
+      "sha256": "361D03FE15DDE9885827E4103ED5A621156A4A616E432EF4C913C7FA4C2CC2DB",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-104"
+      ],
+      "observation": "ReportId/GroupId and idempotency/dedupe keys identify triage work. SessionId/TurnId retain operational provenance; CurrentTodoId is an authored soft reference.",
+      "b4Effect": "Preserve operational report/group/idempotency identity and evidence JSON. Versioned TODO lookup must carry project/kind/origin and typed legacy value; arbitrary error signatures/tags are not normalized FKs.",
+      "anchors": [
+        {
+          "line": 12,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 17,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 27,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 32,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 37,
+          "text": "    [StringLength(512)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 51,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 55,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 59,
+          "text": "    [StringLength(512)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 67,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 78,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 82,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 86,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 90,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 94,
+          "text": "    [StringLength(512)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 99,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalKeyWithAuthoredReference",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/TriageReportListItemEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/TriageReportListItemEntity.cs",
+      "sha256": "26E75DF99ACC7EB70D7399D512B523DC259E82BB74C79A99F404B9AA5710CA25",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-38"
+      ],
+      "observation": "Id is a long child key, ReportId its operational parent. ListType and Ordinal retain affected paths, symbols, hints and tags.",
+      "b4Effect": "Keep ordered original list payloads and parent mapping. Do not allocate project authored IDs merely because a triage child has a numeric surrogate.",
+      "anchors": [
+        {
+          "line": 16,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 27,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalSnapshotChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/TriageResearchRunEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/TriageResearchRunEntity.cs",
+      "sha256": "1FF6ACDB5C43AB7B3A9D3DCE491278B86DF6D47EE64CE00B535C595BAE5DA48E",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-67"
+      ],
+      "observation": "RunId and GroupId identify research attempts. Prompt, GroupJson, raw outputs/streams and ResponseJson preserve audit provenance; CreatedTodoId is authored target.",
+      "b4Effect": "Retain original operational audit bytes and mappings. New authored TODO lookup uses canonical family/typed alias; never rewrite raw model output or source logs to simulate identity adoption.",
+      "anchors": [
+        {
+          "line": 12,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 17,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 27,
+          "text": "    [StringLength(64)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 31,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 65,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalKeyWithAuthoredReference",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/UseCaseActorEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/UseCaseActorEntity.cs",
+      "sha256": "81A1EADDDED84B57AACB2B00B5C7BA5721B3B0632667173169E60CFE0C3AB4D2",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-29"
+      ],
+      "observation": "WorkspaceId, UseCaseId and ActorId form the join with IsPrimary. Both parents are numeric in the standalone model.",
+      "b4Effect": "Use approved ordered canonical UC/ACTOR parent references, no invented association allocator. Preserve IsPrimary and typed Int64 originals; versioned contracts must not cast canonical strings back to long.",
+      "anchors": [
+        {
+          "line": 12,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 16,
+          "text": "    public long UseCaseId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 19,
+          "text": "    public long ActorId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "classification": "CompositeAuthoredAssociation",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/UseCaseEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/UseCaseEntity.cs",
+      "sha256": "0AD1BEA671AC90CF08483F7D58BDE0654FBF1E6A182FE52B8D577E6326E5237C",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-79"
+      ],
+      "observation": "UseCaseId is a long key. VersionNumber/Priority are content values; ProductKey is host-global membership and DiagramGraphJson is the saved artifact graph.",
+      "b4Effect": "Add canonical UC identity and typed legacy key while preserving standalone numeric wire and original diagrams/history. Product membership and graph-local node IDs need their own classifications, not implicit rekeying.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    public long UseCaseId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 17,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(200)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 35,
+          "text": "    [StringLength(50)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 52,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 56,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "PortableAuthoredIdentity",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/UseCaseExtensionPointEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/UseCaseExtensionPointEntity.cs",
+      "sha256": "35EBB5C4040001FE721A081F255844028BF0A69B1172B308AE92DB33F8E8E3B0",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-32"
+      ],
+      "observation": "ExtensionPointId and UseCaseId are standalone Int64 row/parent keys; Name and Description are authored content.",
+      "b4Effect": "Use approved extension-point/UC canonical IDs and typed aliases. Preserve content and parent isolation with versioned DTOs; do not widen the existing numeric contract silently.",
+      "anchors": [
+        {
+          "line": 12,
+          "text": "    public long ExtensionPointId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 16,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 20,
+          "text": "    public long UseCaseId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 24,
+          "text": "    [StringLength(100)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "PortableAuthoredChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/UseCaseFlowEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/UseCaseFlowEntity.cs",
+      "sha256": "34F313712C76B9D5EBA31EBCFC06599628F53D58E16236A6D51629CD76ED0956",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-39"
+      ],
+      "observation": "FlowId and UseCaseId are standalone long keys. SequenceNumber orders flows; FlowType is Basic/Alternative/Exception.",
+      "b4Effect": "Use approved flow and parent canonical identity, retain numeric sequence as content order. Reject mistyped/cross-project parents without treating sequence as global chronology.",
+      "anchors": [
+        {
+          "line": 12,
+          "text": "    public long FlowId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 16,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 20,
+          "text": "    public long UseCaseId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 24,
+          "text": "    [StringLength(20)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 28,
+          "text": "    [StringLength(100)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "PortableAuthoredChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/UseCaseFrLinkEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/UseCaseFrLinkEntity.cs",
+      "sha256": "396D832677D8511CE8AA4C7CE334F8E5DC77370FCEE7C17B1E7DDC3B1EA29659",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-52"
+      ],
+      "observation": "LinkId/UseCaseId are long keys; FrId plus FrKind refers to a requirement, and LinkOrder is optional ordering.",
+      "b4Effect": "Use approved UC-FR-LINK identity and UC parent plus canonical FR/kind/project vector. Preserve legacy numeric/string aliases, LinkType/Notes and original ordering; no requirement kind inferred from node tag.",
+      "anchors": [
+        {
+          "line": 13,
+          "text": "    public long LinkId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 17,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 21,
+          "text": "    public long UseCaseId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 25,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 30,
+          "text": "    [StringLength(16)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 35,
+          "text": "    [StringLength(20)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "PortableAuthoredChildWithCompositeReference",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/UseCaseSpecialRequirementEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/UseCaseSpecialRequirementEntity.cs",
+      "sha256": "47DE9314755F0C3634CBBCDAE57E7C0474ECE07E207386A90B51C3CA0BC87BF2",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-35"
+      ],
+      "observation": "SpecialReqId and UseCaseId are standalone long identities; Priority is nullable content and RequirementText is free authored prose.",
+      "b4Effect": "Use approved special-requirement/UC identities and typed aliases. Preserve nullable priority and exact prose; no free-text requirement extraction or inferred linkage.",
+      "anchors": [
+        {
+          "line": 12,
+          "text": "    public long SpecialReqId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 16,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 20,
+          "text": "    public long UseCaseId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 23,
+          "text": "    [StringLength(50)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "PortableAuthoredChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/UseCaseStepEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/UseCaseStepEntity.cs",
+      "sha256": "E997087864C133B604F48F2714C9F4487F01836C6475A10AC8CFC067B02FB09D",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-43"
+      ],
+      "observation": "StepId and FlowId are long keys; ActorId is nullable. StepNumber orders steps and Action/SystemResponse/DataEntities are authored text.",
+      "b4Effect": "Use approved step/flow/actor canonical mappings preserving null optional actor and typed legacy aliases. Keep step order separate from identity and verify actual optional FK metadata in native binding.",
+      "anchors": [
+        {
+          "line": 12,
+          "text": "    public long StepId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 16,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 20,
+          "text": "    public long FlowId { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 26,
+          "text": "    public long? ActorId { get; set; }",
+          "category": "NumericIdDto"
+        }
+      ],
+      "classification": "PortableAuthoredChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/WorkspaceBannedItemEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/WorkspaceBannedItemEntity.cs",
+      "sha256": "B6ADEDAD43FC8625FBDFE53CA669E9E069860E94842CE27AE7A37DE1799C91FD",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-38"
+      ],
+      "observation": "Id is a long policy-list child; WorkspaceId is both tenancy discriminator and parent FK. Category/Ordinal choose policy list and Value holds SPDX/country/org/person data.",
+      "b4Effect": "Use approved PROJECT-BANNED child identity and ProjectId parent projection while preserving local workspace path and exact policy values/order. Do not reinterpret SPDX tokens as generated IDs.",
+      "anchors": [
+        {
+          "line": 16,
+          "text": "    public long Id { get; set; }",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 22,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 27,
+          "text": "    [StringLength(32)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "PortablePolicyChild",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/Entities/WorkspaceEntity.cs",
+      "path": "src/QBrainAi.Storage/Entities/WorkspaceEntity.cs",
+      "sha256": "AE8B198160FE79040767964DC2E45C04717591C8E99D2CDDBF5C7E6F30E56FF7",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-96"
+      ],
+      "observation": "WorkspaceId/WorkspacePath are host-local normalized registration identities, including the empty Global row. CurrentRequirementLayerKey is a policy-layer reference; paths, RunAs and health/config fields are local.",
+      "b4Effect": "Keep physical workspace identity distinct from stable ProjectId. Partition authored policy from host registration/control; preserve Global row, local paths and soft-delete provenance, and resolve current-layer references through the approved projection.",
+      "anchors": [
+        {
+          "line": 17,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 21,
+          "text": "    [StringLength(2048)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 26,
+          "text": "    [StringLength(512)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 31,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 35,
+          "text": "    [StringLength(2048)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 39,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 43,
+          "text": "    [StringLength(512)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 69,
+          "text": "    [StringLength(2048)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 74,
+          "text": "    [StringLength(128)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 90,
+          "text": "    [StringLength(256)]",
+          "category": "IdLength"
+        },
+        {
+          "line": 94,
+          "text": "    [StringLength(1024)]",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "MixedWorkspaceRegistryAndProjectPolicy",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/McpDbContext.cs",
+      "path": "src/QBrainAi.Storage/McpDbContext.cs",
+      "sha256": "32259348F87A6504C37536C419AC0AD73E283B9DC0EB15BCFF20D3F061EFB9EF",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-1722"
+      ],
+      "observation": "All mapped entities, composite PK/FKs, max lengths, query filters, shadow soft-delete columns, generated values, audit snapshots and workspace stamping are configured here. WorkspaceKeyConversion runs at the end; MemoryIndex Workspace FK is explicitly required despite nullable CLR text. BuildEntityKey formats primary key components and audit sanitizer redacts Key-named fields.",
+      "b4Effect": "B2/B4 binding must inspect effective provider model including shadow properties and actual FK nullability/key order. Preserve standalone providers/migrations, append-only histories and operational key provenance; implement project-content mappings without cross-store FK/join/distributed SQL. Existing lexical sanitization/path normalization is not a versioned canonical parser; do not reuse its formatted audit key as a lossless typed alias. Native collation/index/length/generated-key behavior remains unproved.",
+      "anchors": [
+        {
+          "line": 734,
+          "text": "            e.Property(x => x.Title).HasMaxLength(256);",
+          "category": "IdLength"
+        },
+        {
+          "line": 735,
+          "text": "            e.Property(x => x.Type).HasMaxLength(64);",
+          "category": "IdLength"
+        },
+        {
+          "line": 736,
+          "text": "            e.Property(x => x.SourceKind).HasMaxLength(64);",
+          "category": "IdLength"
+        },
+        {
+          "line": 737,
+          "text": "            e.Property(x => x.SourceRef).HasMaxLength(1024);",
+          "category": "IdLength"
+        },
+        {
+          "line": 738,
+          "text": "            e.Property(x => x.CreatedBy).HasMaxLength(256);",
+          "category": "IdLength"
+        },
+        {
+          "line": 739,
+          "text": "            e.Property(x => x.EmbeddingStatus).HasMaxLength(32);",
+          "category": "IdLength"
+        },
+        {
+          "line": 768,
+          "text": "            e.Property(x => x.ContentHash).HasMaxLength(64);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1310,
+          "text": "            builder.Property<string?>(\"DeletedBy\").HasMaxLength(256);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1311,
+          "text": "            builder.Property<string?>(\"DeleteReason\").HasMaxLength(1024);",
+          "category": "IdLength"
+        },
+        {
+          "line": 1682,
+          "text": "            _ when _workspaceId.Length > 0 => _workspaceId,",
+          "category": "IdLength"
+        },
+        {
+          "line": 1694,
+          "text": "            return _workspaceId.Length > 0 ? _workspaceId : null;",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "CentralModelAndPersistenceBoundary",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Storage/WorkspaceIdentity.cs",
+      "path": "src/QBrainAi.Storage/WorkspaceIdentity.cs",
+      "sha256": "E72D01528202C98AABD9D73A23E4CAEA76B170682595F19FF57474ADA4905906",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-392"
+      ],
+      "observation": "Functions normalize local filesystem identities, distinguish opaque workspace IDs, hash request/proxy identities with domain separators, and length-prefix request key components. HashLength64 is SHA256 encoding length, not authored identity capacity.",
+      "b4Effect": "Preserve path/opaque/request/proxy semantics and existing hash versions. Stable ProjectId is distinct from machine path and receipt hash. Do not substitute case-insensitive proxy normalization or lexical workspace normalization for versioned canonical record parsing.",
+      "anchors": [
+        {
+          "line": 271,
+          "text": "        if (workspaceId.Length > 0 && string.IsNullOrWhiteSpace(workspaceId))",
+          "category": "IdLength"
+        }
+      ],
+      "classification": "OperationalWorkspaceAndReceiptIdentity",
+      "nativeProof": false
+    },
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/McpStdio/FwhMcpTools.UseCases.cs",
+      "path": "src/QBrainAi.Support.Mcp/McpStdio/FwhMcpTools.UseCases.cs",
+      "sha256": "C82656D281156FC931790355678CCCBE3296C6347E4A62DC4EDB4EBB45636B75",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-541"
+      ],
+      "observation": "MCP tools declare long useCaseId/actorId/flowId/stepId and nullable actorId, dispatch typed CQRS requests, serialize numeric current DTOs, and pass FR string references. Int priorities/sequence/order are content. Errors map NotFound/Validation/Conflict prefixes without ID parsing.",
+      "b4Effect": "Retain existing standalone numeric tool schemas. Expose additive versioned canonical-string adapters with explicit project/origin/kind/typed alias provenance and capability refusal before writes; do not alter long parameters or cast canonical strings. Apply to get/update/delete/actor/flow/step/link/diagram/approval/product and returned aggregates; later installed-plugin binding remains outside this mock gate.",
+      "anchors": [
+        {
+          "line": 50,
+          "text": "        [Description(\"Use case id\")] long useCaseId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 123,
+          "text": "        [Description(\"Use case id\")] long useCaseId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 166,
+          "text": "        [Description(\"Use case id\")] long useCaseId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 167,
+          "text": "        [Description(\"Actor id\")] long actorId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 207,
+          "text": "        [Description(\"Use case id\")] long useCaseId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 208,
+          "text": "        [Description(\"Flow id\")] long flowId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 246,
+          "text": "        [Description(\"Use case id\")] long useCaseId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 247,
+          "text": "        [Description(\"Flow id\")] long flowId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 248,
+          "text": "        [Description(\"Step id\")] long stepId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 251,
+          "text": "        [Description(\"Replacement actor id; omit to clear\")] long? actorId = null,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 291,
+          "text": "        [Description(\"Use case id\")] long useCaseId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 317,
+          "text": "        [Description(\"Use case id\")] long useCaseId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 379,
+          "text": "        [Description(\"Use case id\")] long useCaseId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 431,
+          "text": "        [Description(\"Use case id\")] long useCaseId,",
+          "category": "NumericIdDto"
+        },
+        {
+          "line": 458,
+          "text": "        [Description(\"Use case id\")] long useCaseId,",
+          "category": "NumericIdDto"
+        }
+      ],
+      "classification": "ActiveNumericPublicAdapter",
+      "nativeProof": false
+    }
+  ]
+}
