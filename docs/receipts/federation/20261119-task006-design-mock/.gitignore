@@ -1,0 +1,5 @@
+# Complete raw receipts remain local; byte-verified compressed copies are tracked.
+/windows.trx
+/omarchy.trx
+/windows-nuke.log
+/omarchy-nuke.log
