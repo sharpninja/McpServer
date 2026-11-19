@@ -1,0 +1,245 @@
+{
+  "timestampLocal": "2026-11-19T10:20:57.5387003-06:00",
+  "sourceCommit": "f56c3111e1250851f5f462b9f08e8bbbd2bb4b3d",
+  "taskId": "TASK-FEDPH0-003",
+  "definitionSha256": "495C84B4ACD554E9516BE4EC7630A048190FE8471DC4EF414318E92BCB8F85A3",
+  "definitionFields": {
+    "id": "TASK-FEDPH0-003",
+    "title": "Dolt remote authorization and guarded publication proof",
+    "description": [
+      "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH0-001 (groupOrdinal 3).",
+      "Task status: Planning. Eligibility: canStart=false, reasons=ImplementationBarrierClosed, DependencyIncomplete, incompleteDependencyCount=1. Design and mock-green work may proceed now; Planning to Ready requires that evidence (architecture 3.5.11).",
+      "Depends on (typed Task/Group targets): TASK-FEDPH0-001.",
+      "FR/AC coverage: FR-MCP-185: RawRemoteCannotBypassPublicationPolicy.",
+      "TR constraints: TR-MCP-FEDERATION-012. TEST: TEST-MCP-233. Classes: DoltRemoteAuthorizationTests.",
+      "Work: Prove clean and dirty remote pushes, lost responses, authenticated project isolation, inability to bypass guarded publication through raw remote requests, canonical-ref advancement and remote recovery under process death.",
+      "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15.",
+      "Selected native proof route (operator2026-11-19): narrow patch to pinned existing Dolt client; preserve transfer/history/merge, retain Proxy-Authorization channel, add exact-origin and shared TLS policy, structured pwsh helper argv and safe errors. Selected-route design/mock closure is required before Ready; implementation waits for the all-nine barrier."
+    ],
+    "dependsOn": [
+      "TASK-FEDPH0-001"
+    ],
+    "functionalRequirements": [
+      "FR-MCP-185"
+    ],
+    "technicalRequirements": [
+      "TR-MCP-FEDERATION-012"
+    ]
+  },
+  "windows": {
+    "host": "PAYTON-LEGION2",
+    "runId": "20261119T101445-fedph0-task003-definition",
+    "exitCode": 0,
+    "total": 9770,
+    "passed": 9770,
+    "failed": 0,
+    "skipped": 0,
+    "caseNamesSha256": "61489C4A7CBF22E66DD55138EC0770CF8640A98E6D3A6DC1E625EF8104AB30F4",
+    "sources": [
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AuthorizationContract.cs",
+        "sha256": "476A2AD782F4A785DA579EF4EB1CCEA139D0CF104C989D17E6C3E4B3C4AF8363",
+        "lfSha256": "671997D5E3F42F9E6B3DD79B83355F63550D02C52F45F09708C2A5799747E707"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AuthorizationMockGateTests.cs",
+        "sha256": "C37DE34923971245A721FE3FE35CD8C8614D2AC8011D720D9652E31CC7B43014",
+        "lfSha256": "F8582B267E052A34132A1DA77DD15AB35097A48D6D9BB7E93558144A38A014B6"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemotePublicationContract.cs",
+        "sha256": "E90EAF5324861FB9EAF9D52E44943241757800D07DCF142EEF02615B05826DBB",
+        "lfSha256": "E45EC33CD05555F5328EC34E9D5BFBB4B12900A52001547A1AFDE8A604191CDB"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemotePublicationMockGateTests.cs",
+        "sha256": "CD10030EECE7925582BDBF98028CF5EF9A8EB464A25F5FE6F9D68BBB7D633E12",
+        "lfSha256": "BC43CF6013D0E5321BDAC366D8F7CB77416DB70D2192FA199A05F6FE6B2DD042"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemoteTransportContract.cs",
+        "sha256": "15846052259AE586916A648BEB23119C20A36AF926D75C90F1C99316BA7A1402",
+        "lfSha256": "4A63AB6E8855E15E5E494EAE592CAA21854BBE35E1A0E042AAEAD10149DD6BF2"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemoteTransportMockGateTests.cs",
+        "sha256": "4AC2DD7840128A606E51A398DA5F0A7CF462F8F0B2F5DA734B1211FEA5CA8B22",
+        "lfSha256": "B0368F41B8B59D34611FD08C47AC80B62692B9C6AE6AF7CD8AB23A56DA571B84"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0NativeClientMockGateTests.cs",
+        "sha256": "3029A11ED5AD045CD0F268E842982128718198B8AE048D95F68F90E6F7BF340D",
+        "lfSha256": "4082DB8E902627D77FAFD165E78A4258982C0CD21271E045BABF72A85EB617AA"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0NativePolicyLifecycleMockGateTests.cs",
+        "sha256": "A5928CBF76F4CB2D537CF688FBF8D3497F350D1E86D8EA185DCAD04C7334C8CD",
+        "lfSha256": "15B5AC52EA2E66FCD1EA7D79C7D77940FF8A0F94BA13084E6BEB2E7BB7CE77DD"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RepositorySelectorMockGateTests.cs",
+        "sha256": "53A91182EC0FF2980AEE80DBAB20B4BC5D01E8318A5FDAE804949C03FAA0DDEB",
+        "lfSha256": "C90BC6752758ECFC24F625AC346A92F0290E71CB6F4FDEF2C76689C07AA53BFF"
+      }
+    ],
+    "classCounts": [
+      {
+        "class": "Phase0AuthorizationMockGateTests",
+        "count": 275
+      },
+      {
+        "class": "Phase0NativeClientMockGateTests",
+        "count": 1386
+      },
+      {
+        "class": "Phase0NativePolicyLifecycleMockGateTests",
+        "count": 1410
+      },
+      {
+        "class": "Phase0RemotePublicationMockGateTests",
+        "count": 321
+      },
+      {
+        "class": "Phase0RemoteTransportMockGateTests",
+        "count": 3368
+      },
+      {
+        "class": "Phase0RepositorySelectorMockGateTests",
+        "count": 3010
+      }
+    ],
+    "trxSha256": "64EB287B392078148DCFDCE93ABCB260C886C6B0ED480A275089295EA833A4DE",
+    "nukeLogSha256": "B528AF60BC81931279C81CC977B39DBA0A7E17CEDB9A0A7B412F027410AFB6D8"
+  },
+  "linux": {
+    "timestampLocal": "2026-11-19T10:18:21.3711246-06:00",
+    "host": "LAB-OMARCHY",
+    "worktree": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117",
+    "commit": "f56c3111e1250851f5f462b9f08e8bbbd2bb4b3d",
+    "runId": "20261119T101730-fedph0-task003-definition-linux",
+    "exitCode": 0,
+    "total": 9770,
+    "passed": 9770,
+    "failed": 0,
+    "skipped": 0,
+    "actualRows": 9770,
+    "selectorCorrectControls": 215,
+    "selectorNegativeControls": 2795,
+    "classCounts": [
+      {
+        "class": "Phase0AuthorizationMockGateTests",
+        "count": 275
+      },
+      {
+        "class": "Phase0NativeClientMockGateTests",
+        "count": 1386
+      },
+      {
+        "class": "Phase0NativePolicyLifecycleMockGateTests",
+        "count": 1410
+      },
+      {
+        "class": "Phase0RemotePublicationMockGateTests",
+        "count": 321
+      },
+      {
+        "class": "Phase0RemoteTransportMockGateTests",
+        "count": 3368
+      },
+      {
+        "class": "Phase0RepositorySelectorMockGateTests",
+        "count": 3010
+      }
+    ],
+    "sources": [
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AuthorizationContract.cs",
+        "sha256": "671997D5E3F42F9E6B3DD79B83355F63550D02C52F45F09708C2A5799747E707",
+        "lfSha256": "671997D5E3F42F9E6B3DD79B83355F63550D02C52F45F09708C2A5799747E707"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AuthorizationMockGateTests.cs",
+        "sha256": "F8582B267E052A34132A1DA77DD15AB35097A48D6D9BB7E93558144A38A014B6",
+        "lfSha256": "F8582B267E052A34132A1DA77DD15AB35097A48D6D9BB7E93558144A38A014B6"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemotePublicationContract.cs",
+        "sha256": "E45EC33CD05555F5328EC34E9D5BFBB4B12900A52001547A1AFDE8A604191CDB",
+        "lfSha256": "E45EC33CD05555F5328EC34E9D5BFBB4B12900A52001547A1AFDE8A604191CDB"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemotePublicationMockGateTests.cs",
+        "sha256": "BC43CF6013D0E5321BDAC366D8F7CB77416DB70D2192FA199A05F6FE6B2DD042",
+        "lfSha256": "BC43CF6013D0E5321BDAC366D8F7CB77416DB70D2192FA199A05F6FE6B2DD042"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemoteTransportContract.cs",
+        "sha256": "4A63AB6E8855E15E5E494EAE592CAA21854BBE35E1A0E042AAEAD10149DD6BF2",
+        "lfSha256": "4A63AB6E8855E15E5E494EAE592CAA21854BBE35E1A0E042AAEAD10149DD6BF2"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemoteTransportMockGateTests.cs",
+        "sha256": "B0368F41B8B59D34611FD08C47AC80B62692B9C6AE6AF7CD8AB23A56DA571B84",
+        "lfSha256": "B0368F41B8B59D34611FD08C47AC80B62692B9C6AE6AF7CD8AB23A56DA571B84"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0NativeClientMockGateTests.cs",
+        "sha256": "4082DB8E902627D77FAFD165E78A4258982C0CD21271E045BABF72A85EB617AA",
+        "lfSha256": "4082DB8E902627D77FAFD165E78A4258982C0CD21271E045BABF72A85EB617AA"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0NativePolicyLifecycleMockGateTests.cs",
+        "sha256": "15B5AC52EA2E66FCD1EA7D79C7D77940FF8A0F94BA13084E6BEB2E7BB7CE77DD",
+        "lfSha256": "15B5AC52EA2E66FCD1EA7D79C7D77940FF8A0F94BA13084E6BEB2E7BB7CE77DD"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RepositorySelectorMockGateTests.cs",
+        "sha256": "C90BC6752758ECFC24F625AC346A92F0290E71CB6F4FDEF2C76689C07AA53BFF",
+        "lfSha256": "C90BC6752758ECFC24F625AC346A92F0290E71CB6F4FDEF2C76689C07AA53BFF"
+      }
+    ],
+    "caseNamesSha256": "61489C4A7CBF22E66DD55138EC0770CF8640A98E6D3A6DC1E625EF8104AB30F4",
+    "trx": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/TestResults/20261119T101730-fedph0-task003-definition-linux/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+    "trxSha256": "D6E427DDB0688C63E5419EE64E069DDBC34ACE92CB262B84A821E95876C5751E",
+    "nukeLog": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/.nuke/temp/build.2026-11-19_10-17-36.log",
+    "nukeLogSha256": "24A2FEF8C7AE10E1EB9B6A7E261AA9E5FE61CA88D7FEFBC956529EDDF44CEDC4",
+    "runnerSha256": "E910475251681691D77EF6BCDC76F46CF1EEE400B2DA598D1B72CA62FF4C53DC",
+    "gitStatus": [],
+    "binding": "Complete six-class Task003 scripted observations only",
+    "nativeProof": false,
+    "taskReady": false,
+    "implementationBarrier": "Closed"
+  },
+  "logArchiveSha256": "11E34D8EF61F5BBC1F3A71D8ED6D2700C0346BAE64CEAF9E3B9B6CFE8A640AEA",
+  "receiptScriptSha256": "5C07F24CD219D3E02DD4A8C403EAA52BB22734981524095868D5D76E7714C011",
+  "authorSessionId": "Codex-20261116T174245Z-plugin-session",
+  "authorRequestId": "req-20261119T155309Z-prompt-142e",
+  "nativeProof": false,
+  "taskSuccess": false,
+  "implementationBarrier": "Closed",
+  "scope": "Current Task003 six-class scripted design/mock readiness evidence only",
+  "behaviorDefinitionFields": {
+    "id": "TASK-FEDPH0-003",
+    "title": "Dolt remote authorization and guarded publication proof",
+    "description": [
+      "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH0-001 (groupOrdinal 3).",
+      "Depends on (typed Task/Group targets): TASK-FEDPH0-001.",
+      "FR/AC coverage: FR-MCP-185: RawRemoteCannotBypassPublicationPolicy.",
+      "TR constraints: TR-MCP-FEDERATION-012. TEST: TEST-MCP-233. Classes: DoltRemoteAuthorizationTests.",
+      "Work: Prove clean and dirty remote pushes, lost responses, authenticated project isolation, inability to bypass guarded publication through raw remote requests, canonical-ref advancement and remote recovery under process death.",
+      "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15.",
+      "Selected native proof route (operator2026-11-19): narrow patch to pinned existing Dolt client; preserve transfer/history/merge, retain Proxy-Authorization channel, add exact-origin and shared TLS policy, structured pwsh helper argv and safe errors. Selected-route design/mock closure is required before Ready; implementation waits for the all-nine barrier."
+    ],
+    "dependsOn": [
+      "TASK-FEDPH0-001"
+    ],
+    "functionalRequirements": [
+      "FR-MCP-185"
+    ],
+    "technicalRequirements": [
+      "TR-MCP-FEDERATION-012"
+    ]
+  },
+  "behaviorDefinitionSha256": "77592BA879F7A8BB7D94433B9F26CA2C15D45775BE276582D63E8748237307B3",
+  "definitionHashPolicy": "definitionSha256 pins the exact reviewed pre-transition snapshot. behaviorDefinitionSha256 excludes only the simulated Task status/eligibility description; notes and status metadata are not behavioral definition changes. There is no deployed WorkTask Version on these TODO records."
+}

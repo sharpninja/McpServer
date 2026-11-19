@@ -1,6 +1,6 @@
 # Selected native-client contract for disposable Phase 0
 
-Author: Codex. Date: 2026-11-19. Task: TASK-FEDPH0-003, supporting Tasks005/007. This specifies the operator-selected narrow Dolt patch before implementation. Task003 remains Planning and the all-nine implementation barrier remains Closed.
+Author: Codex. Date: 2026-11-19. Task: TASK-FEDPH0-003, supporting Tasks005/007. This specifies the operator-selected narrow Dolt patch before implementation. The current definition review and readiness disposition are in2026-11-19-federation-task003-readiness.md. The all-nine implementation barrier remains Closed.
 
 Trace: FR-MCP-185 ac-RawRemoteCannotBypassPublicationPolicy, ac-ForeignProjectCloneDenied, ac-RevokedCredentialFailsFetchAndPublish and ac-UnknownCertificatePinRejected; TR-MCP-FEDERATION-012; TEST-MCP-233. Supporting credential containment: FR-MCP-184 ac-ReceiptsAndLogsContainNoCredentials; TR-MCP-FEDERATION-011; TEST-MCP-232. These are refinements of the selected proof route, not new requirements or claims of satisfaction.
 
@@ -93,3 +93,8 @@ Phase0RepositorySelectorMockGateTests supplies explicit RepoId/repo_path/repo_to
 The selected private upload route also permits its owner with publish rights to read that exact upload repository for native metadata/root/existence negotiation. This is required by pinned remotestorage/chunk_store.go150-205: NewDoltChunkStore first requests GetRepoMetadata and then loadRoot, before any upload. The UploadRead fixtures cover each of the9nonmutating RPCs against that same owner/request binding. This does not grant a public project reader access to another node's upload repository. BackendCalls in this observation means forwarded messages, not a claim about an upstream database lookup. Existing public read, raw-public-write denial, per-request identity and no-public-state-change assertions remain.
 
 R2 current-source checkpoint: Windows Nuke20261119T095800-fedph0-repository-selector-r2 passed3010/3010,0failed/skipped,215correctfixtures and2795negativecontrols. This adds wrong-owner, wrong-publication and read-only private-upload refusal for all9nonmutating RPCs. The earlier2632case receipt remains historical evidence for its exact retained source. Current source and complete R2 evidence are under docs/receipts/federation/20261119-phase0-repository-selector-r2. Paired Linux run and current-definition review remain pending; no native proof or task readiness is established by this paragraph.
+
+
+## Full current-definition mock review (2026-11-19)
+
+The paired R2 repository-selector gate passed3010/3010 on both hosts with matching source and zero failures/skips. The subsequent complete current Task003 six-class member gate passed9770/9770 on each host atf56c3111; all9source hashes and the complete case-name multiset match. The current definition review, contract map and later native-binding obligations are in2026-11-19-federation-task003-readiness.md. Exact TRX/current records/source copies/log archives are in docs/receipts/federation/20261119-task003-readiness. Earlier Planning/pending paragraphs describe their historical checkpoints; this review supersedes their listed design/mock gaps only. No native feasibility, B-output acceptance, Success or phase exit follows from these mocks.
