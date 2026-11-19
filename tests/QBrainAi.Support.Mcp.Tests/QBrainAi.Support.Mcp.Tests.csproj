@@ -44,6 +44,9 @@
          Pinned original-provider metadata fixtures support baseline/upgrade and migration-regression assertions. -->
     <!-- 2026-11-18: TASK-FEDPH0-002; FR-MCP-186 ac-OriginalProviderMigrationsUnchanged; TR-MCP-FEDERATION-013; TEST-MCP-234. Immutable source pins, not runtime upgrade proof. -->
     <!-- 2026-11-18: TASK-FEDPH0-002; FR-MCP-186 ac-DoltBaselineAndUpgrade; TR-MCP-FEDERATION-013; TEST-MCP-234. Desired full-model fixture, not observed Dolt output. -->
+    <!-- 2026-11-19: TASK-FEDPH0-004 B2/B3/B4; FR-MCP-182 ac-LegacyIdsRemainValid and FR-MCP-184 ac-BackgroundWritersDoNotDirtyVersionedBranch; TR-MCP-FEDERATION-009/011; TEST-MCP-230/232. Full proposed reference inventory is an immutable design fixture, not observed native output. -->
+    <EmbeddedResource Include="../../docs/receipts/federation/20261117-phase0-source-catalog/proposed-storage-classification.json"
+                      LogicalName="Federation.Phase0.proposed-storage-classification.json" />
     <EmbeddedResource Include="../../docs/receipts/federation/20261117-phase0-source-catalog/desired-dolt-standalone-schema.json"
                       LogicalName="Federation.Phase0.desired-dolt-standalone-schema.json" />
     <EmbeddedResource Include="../../docs/receipts/federation/20261117-phase0-source-catalog/original-provider-migration-baseline.json"

@@ -1,0 +1,136 @@
+{
+  "capturedLocal": "2026-11-19T11:13:19",
+  "workspace": "F:/GitHub/McpServer",
+  "branch": "codex/fedph0-task004-20261119",
+  "baseHead": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "sessionId": "Codex-20261119T153852Z-plugin-session",
+  "requestId": "req-20261119T161426Z-prompt-0ebb",
+  "parentSessionId": "Codex-20261116T174245Z-plugin-session",
+  "parentRequestId": "req-20261119T155309Z-prompt-142e",
+  "files": [
+    {
+      "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+      "sha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72"
+    },
+    {
+      "path": "docs/plans/2026-11-17-federation-phase0-contract-design.md",
+      "sha256": "A10BFC2A11448E1AE4344CC932025175916E56B3719E9A84C67E7E7706D57653"
+    },
+    {
+      "path": "docs/plans/2026-11-17-federation-identity-design.md",
+      "sha256": "08B892A581D1FC08CC902CB8E14CAC80B71DD0A828253225C890E3556D0ACBD9"
+    },
+    {
+      "path": "docs/plans/2026-11-17-federation-automatic-writer-design.md",
+      "sha256": "23B31874EE3FC44453B32520C0A84AF21F1C3A1165B13EE116F7874113740EE8"
+    },
+    {
+      "path": "docs/plans/2026-11-19-federation-task004-readiness.md",
+      "sha256": "AC3BFF21D433C2FD4C6EB982DE1AA1545DA3F5B1FE53E1B327E97BD33D28D89D"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+      "sha256": "0B2C00BE0579BA5CFF0666948619F0ECA4D6CE68C46956998B8B48CD9DAB1C54"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityDtoBoundaryMockGateTests.cs",
+      "sha256": "2CEC30FC20D7AE4A919F92D2D69741E52320974520E257E96872D1B62888D125"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ReferenceManifestMockGateTests.cs",
+      "sha256": "BE7FF3F4A0DD3972A6B4F0B73A6EBEC5AF81F2D02444C112C004714AD93E4517"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/proposed-storage-classification.json",
+      "sha256": "E60B28468F3C884EC7EB70BAA48C2F1457365EB64CB4279DDB146278301AA324"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/relational-mcp-sqlite-model-r2.json",
+      "sha256": "1AB40F02B1A18271443870253C61BC1116AE6F5334F6D46E1B265E38B205B51B"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/relational-identity-sqlite-model-r2.json",
+      "sha256": "79FC2D6B3F5A9B3F606D1C1FE4FDC98BF1D25A6D59EB9BE5A450FA1208FE24EA"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/relational-transaction-sqlite-model-r2.json",
+      "sha256": "15E6E6D659A6452540EAE72ABC27A1D061DA5DBD0BEAF7F23EC42CE340C5B6A2"
+    }
+  ],
+  "receipts": [
+    {
+      "path": "windows-dto-reference.trx",
+      "sha256": "372E65F3EF6B1411B58BFD10C8D67E5896724D4E10EAD41025EED26BA3AF2C38"
+    },
+    {
+      "path": "windows-dto-final.trx",
+      "sha256": "B71D05F6B48886D33A125AB8282085AA592DDCCFDB4F9198818E8BB99AAC53F9"
+    },
+    {
+      "path": "windows-dto-reference.log.zip",
+      "sha256": "34D9DAC2C7E7C4E71C655EDCAD6EBFC66DE3E4378FB9B1D035A300CE7B05AFC1"
+    },
+    {
+      "path": "windows-dto-final.log.zip",
+      "sha256": "00F99AD69CC2EA0CAD47F913A06D9412FFDB3A4BBAAD1B092D509197355789F2"
+    },
+    {
+      "path": "dto-reference-code-verify.txt",
+      "sha256": "CB5B28DE8EC8873254790E9D893FDE5E0437E8119811A7DDB850B69E92906D59"
+    },
+    {
+      "path": "README.md",
+      "sha256": "0FB91D6FD0F7EDC2F8B11708D6FF47AD82FB983793F08C445A40BAAD80AE3D76"
+    }
+  ],
+  "runs": [
+    {
+      "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0IdentityDtoBoundaryMockGateTests,Phase0ReferenceManifestMockGateTests --test-run-id 20261119T110541-task004-dto-reference-mock",
+      "failed": 0,
+      "skipped": 0,
+      "passed": 13438,
+      "classes": {
+        "Phase0IdentityDtoBoundaryMockGateTests": 130,
+        "Phase0ReferenceManifestMockGateTests": 13308
+      },
+      "runId": "20261119T110541-task004-dto-reference-mock"
+    },
+    {
+      "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0IdentityDtoBoundaryMockGateTests --test-run-id 20261119T110857-task004-dto-final",
+      "failed": 0,
+      "skipped": 0,
+      "passed": 131,
+      "classes": {
+        "Phase0IdentityDtoBoundaryMockGateTests": 131
+      },
+      "runId": "20261119T110857-task004-dto-final"
+    }
+  ],
+  "fixture": {
+    "classifiedProperties": 1079,
+    "origins": [
+      "LA",
+      "LG"
+    ],
+    "optionalRelationships": 3,
+    "referenceCases": 258,
+    "classifiedEntities": 88,
+    "relationships": 126,
+    "unreviewedConsumerCandidates": 184
+  },
+  "rawLogEntryHashes": [
+    {
+      "sha256": "513252D37EEB4237DDF08D65F6B17FB399209F1CF85F55C7540D78C96824EA72",
+      "path": ".nuke/temp/build.2026-11-19_11-05-45.log"
+    },
+    {
+      "sha256": "57F2D4E7B516D14865A1767A9E1474CA08321C2F4531F57CF35B027FA5BFD0F5",
+      "path": ".nuke/temp/build.2026-11-19_11-09-01.log"
+    }
+  ],
+  "nativeProof": false,
+  "taskReady": false
+}
