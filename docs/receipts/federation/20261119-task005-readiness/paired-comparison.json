@@ -1,0 +1,120 @@
+{
+  "timestampLocal": "2026-11-19T10:18:26",
+  "testedSourceCommit": "74bbc8120757467372821a40af998594b2b5c55f",
+  "windowsCases": 2733,
+  "linuxCases": 2733,
+  "windowsFailed": 0,
+  "linuxFailed": 0,
+  "windowsSkipped": 0,
+  "linuxSkipped": 0,
+  "caseNameComparison": "Ordinal sorted multiset; duplicates preserved",
+  "orderedCaseNameSha256": "D143C41BE232AF80684965BD7B9CB146A0DE807C6B2FFF8BAB49DCCD593E71CC",
+  "sourceComparison": "UTF8 text with CRLF normalized to LF; raw hashes retained separately",
+  "sourceHashes": [
+    {
+      "path": "docs/plans/2026-11-17-federation-identity-platform-design.md",
+      "windowsCanonicalSha256": "E5226EA1EF211EB4FA79BA29B8E553DF65349A5D8C6C261A27A28596DEA1C666",
+      "linuxCanonicalSha256": "E5226EA1EF211EB4FA79BA29B8E553DF65349A5D8C6C261A27A28596DEA1C666",
+      "match": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityAdmissionContract.cs",
+      "windowsCanonicalSha256": "05156F58AC125A212B8A1CFD9E007E8397D9969E975BBB941468C428094457A5",
+      "linuxCanonicalSha256": "05156F58AC125A212B8A1CFD9E007E8397D9969E975BBB941468C428094457A5",
+      "match": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityAdmissionMockGateTests.cs",
+      "windowsCanonicalSha256": "8072ED04B70B95BD1619E4317F0C8811962F459F9BB01FE396EFE54A3BF7CAAF",
+      "linuxCanonicalSha256": "8072ED04B70B95BD1619E4317F0C8811962F459F9BB01FE396EFE54A3BF7CAAF",
+      "match": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityManagementContract.cs",
+      "windowsCanonicalSha256": "60933990CD666CA7B83E8025E90DA9CAA70BED8BE0E7ADB8067B0BDA89C9E46E",
+      "linuxCanonicalSha256": "60933990CD666CA7B83E8025E90DA9CAA70BED8BE0E7ADB8067B0BDA89C9E46E",
+      "match": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityManagementMockGateTests.cs",
+      "windowsCanonicalSha256": "C6339255950DB7F9AC4372C682DB51B032E69CC1289AA10577AC2300D0117ADD",
+      "linuxCanonicalSha256": "C6339255950DB7F9AC4372C682DB51B032E69CC1289AA10577AC2300D0117ADD",
+      "match": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityPlatformContract.cs",
+      "windowsCanonicalSha256": "C8508CA8EF7E5D3D48F12F83058D3D7FC2808CC33AAF6D79921F60DC28168CCC",
+      "linuxCanonicalSha256": "C8508CA8EF7E5D3D48F12F83058D3D7FC2808CC33AAF6D79921F60DC28168CCC",
+      "match": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityPlatformMockGateTests.cs",
+      "windowsCanonicalSha256": "639A7050375676B263CCAA89AA905ABADC8C79E306DB9247A10091E3CCC00009",
+      "linuxCanonicalSha256": "639A7050375676B263CCAA89AA905ABADC8C79E306DB9247A10091E3CCC00009",
+      "match": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0WorkerPermissionContract.cs",
+      "windowsCanonicalSha256": "6D3CCF10FD5160F4DE3C9EEA9B521A156ABA78C5734E037FC52C3743C7D6A828",
+      "linuxCanonicalSha256": "6D3CCF10FD5160F4DE3C9EEA9B521A156ABA78C5734E037FC52C3743C7D6A828",
+      "match": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0WorkerPermissionMockGateTests.cs",
+      "windowsCanonicalSha256": "E23D242CC6B3F4A53619D060F3E84C3679E7ECEB418C0C81F6073389103D0848",
+      "linuxCanonicalSha256": "E23D242CC6B3F4A53619D060F3E84C3679E7ECEB418C0C81F6073389103D0848",
+      "match": true
+    }
+  ],
+  "linuxTrxSha256": "C7A006C2EC2CA28A8BC32E98D046DCE4CA25F81ED0DEAC5A782F37B57190F358",
+  "linuxLogSha256": "B8AB018C4924C80AAAEEBE009A570547BC38F12B6556CB1F56448949AAADFC43",
+  "laneScriptSha256": "D578D01C7D8E452DBF83D2636E1C03208ACA90E560E62F25228D08CCFF6E7006",
+  "readerScriptSha256": "E253576E134381868A00534F5DA3C355F87F68C64E8ADBADF2A702356D43022E",
+  "scriptParserErrors": 0,
+  "scriptAnalyzerWarnings": 0,
+  "laneWhatIf": "Executed on LAB before fetch/worktree/test mutation",
+  "retainedOriginals": true,
+  "parentIntegrationRequired": {
+    "Task006ContractSha256": "258A316FA091C8923884C16C28F477EEA76C4CF458C24967F1951D335AD57CEC",
+    "Task003": "Transport and selector current root sources/receipts must be pinned by parent",
+    "Task006Source": "b7cfbf30302d492c12e8366fccde9b78b1074a6c",
+    "Task007": "Complete current credential-capture/TLS evidence must be pinned by parent",
+    "Task006Contract": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0Task006SupplementContract.cs"
+  },
+  "recommendation": "Task005 design/mock candidate for independent parent current-definition review; no Ready transition performed",
+  "mockOnly": true,
+  "nativeProof": false,
+  "B5Accepted": false,
+  "taskDone": false,
+  "implementationBarrier": "Closed",
+  "sessionId": "Codex-20261119T154036Z-plugin-session",
+  "requestId": "req-20261119T154151Z-prompt-cad2",
+  "retainedLinuxLogArchive": {
+    "path": "linux.nuke.log.zip",
+    "sha256": "4B3B3D6D32D96E0A002AD5E4EBA5643A712415902E11CA51C17BC6811CF9841D",
+    "reason": "Raw Nuke padded output has trailing whitespace; lossless archive preserves exact evidence without source diff whitespace.",
+    "decompressedSha256": "B8AB018C4924C80AAAEEBE009A570547BC38F12B6556CB1F56448949AAADFC43",
+    "originalPlaintextRetainedLocally": true
+  },
+  "retainedWindowsLogArchive": {
+    "path": "windows.nuke.logs.zip",
+    "sha256": "A24DD9D7F8791DF678A046EE29500847AFC3839F44151189357D02EE02BCB4A9",
+    "contents": [
+      {
+        "entry": "windows-platform-management.trx.nuke.log",
+        "decompressedSha256": "660AEA9BDA02476F70676F03748403116789AB1316E54F0069BC85F80A9A13B8",
+        "originalPlaintextRetained": true
+      },
+      {
+        "entry": "windows-worker.trx.nuke.log",
+        "decompressedSha256": "3E61BC11869075F018F5E6759C4C0704A3D3584A65B941E4628D2B4B7049CCA7",
+        "originalPlaintextRetained": true
+      },
+      {
+        "entry": "windows-admission.trx.nuke.log",
+        "decompressedSha256": "B507BDC4506CF139CAF3E4A30872204D3F3E8FE843AA8930C6B9824190F9C8A2",
+        "originalPlaintextRetained": true
+      }
+    ]
+  }
+}

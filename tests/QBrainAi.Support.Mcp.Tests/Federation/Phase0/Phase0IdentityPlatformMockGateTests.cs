@@ -4,6 +4,7 @@ namespace QBrainAi.Support.Mcp.Tests.Federation.Phase0;
 /// <remarks>
 /// 2026-11-17: TASK-FEDPH0-005; B5; FR-MCP-185 ac-RevokedNodeCannotPublish;
 /// TR-MCP-FEDERATION-012; TEST-MCP-233. No real issuer, credentials, database or production adapter exists here.
+/// 2026-11-19: Current canonical scope plus abbreviated-scope negative controls at every active introspection.
 /// </remarks>
 public sealed class Phase0IdentityPlatformMockGateTests
 {
@@ -50,7 +51,7 @@ public sealed class Phase0IdentityPlatformMockGateTests
                 foreach (var facet in new[] { "Missing", "Status", "Active" })
                     yield return ["Introspect:" + checkpoint + ":" + facet];
                 if (checkpoint is 4 or 6) continue;
-                foreach (var facet in new[] { "ClientId", "Audience", "Project", "Owner", "ScopesMissing", "ScopeWrong", "ScopeExtra" })
+                foreach (var facet in new[] { "ClientId", "Audience", "Project", "Owner", "ScopesMissing", "ScopeWrong", "ScopeExtra", "ScopeAbbreviated" })
                     yield return ["Introspect:" + checkpoint + ":" + facet];
             }
             foreach (var facet in new[] { "Missing", "Status", "Code" })
@@ -151,7 +152,7 @@ public sealed class Phase0IdentityPlatformMockGateTests
             var checkpoint = Introspections++;
             Assert.Equal(checkpoint % 2 == 0 ? "A" : "B", node);
             var reply = new Phase0NodeIntrospection(200, node != "A" || !revoked, "fed.node." + node,
-                "qbrain-federation", "Atlas", "owner-" + node, ["Atlas.publish"]);
+                "qbrain-federation", "Atlas", "owner-" + node, ["fed.project.Atlas.publish"]);
             var prefix = "Introspect:" + checkpoint + ":";
             if (!fault.StartsWith(prefix, StringComparison.Ordinal)) return reply;
             return fault[prefix.Length..] switch
@@ -160,8 +161,9 @@ public sealed class Phase0IdentityPlatformMockGateTests
                 "Active" => reply with { Active = !reply.Active }, "ClientId" => reply with { ClientId = "foreign" },
                 "Audience" => reply with { Audience = "foreign" }, "Project" => reply with { Project = "SecretProject" },
                 "Owner" => reply with { Owner = "foreign" }, "ScopesMissing" => reply with { Scopes = null },
-                "ScopeWrong" => reply with { Scopes = ["Atlas.read"] },
-                "ScopeExtra" => reply with { Scopes = ["Atlas.publish", "SecretProject.publish"] },
+                "ScopeWrong" => reply with { Scopes = ["fed.project.Atlas.read"] },
+                "ScopeExtra" => reply with { Scopes = ["fed.project.Atlas.publish", "fed.project.SecretProject.publish"] },
+                "ScopeAbbreviated" => reply with { Scopes = ["Atlas.publish"] },
                 _ => throw new InvalidOperationException(fault)
             };
         }

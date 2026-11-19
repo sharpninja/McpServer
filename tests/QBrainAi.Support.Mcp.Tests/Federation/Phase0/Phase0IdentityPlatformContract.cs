@@ -98,7 +98,8 @@ internal static class Phase0IdentityPlatformContract
         Assert.Equal("Reference", issue.AccessTokenType);
     }
 
-    /// <summary>Checks active node identity, audience, owner binding, project and granted scope.</summary>
+    /// <summary>Checks active node identity, audience, owner binding, project and the canonical granted scope.</summary>
+    /// <remarks>2026-11-19: FR-MCP-185 ac-RevokedNodeCannotPublish; TR-MCP-FEDERATION-012; TEST-MCP-233. Reject abbreviated protocol scopes.</remarks>
     private static void AssertActive(Phase0NodeIntrospection? observation, string node)
     {
         Assert.NotNull(observation);
@@ -108,7 +109,7 @@ internal static class Phase0IdentityPlatformContract
         Assert.Equal("qbrain-federation", observation.Audience);
         Assert.Equal("Atlas", observation.Project);
         Assert.Equal("owner-" + node, observation.Owner);
-        Assert.Equal(new[] { "Atlas.publish" }, Assert.IsAssignableFrom<IReadOnlyList<string>>(observation.Scopes));
+        Assert.Equal(new[] { "fed.project.Atlas.publish" }, Assert.IsAssignableFrom<IReadOnlyList<string>>(observation.Scopes));
     }
 
     /// <summary>Checks the same previously valid token is now inactive; no positive result can be reused.</summary>
