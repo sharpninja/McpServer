@@ -1,0 +1,119 @@
+windows:
+  total: 13836
+  trxOriginal: F:\GitHub\McpServer\.worktrees\fedph0-task006-20261119\TestResults\task006-mock-20261119T100718\groups\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx
+  worktree: F:/GitHub/McpServer/.worktrees/fedph0-task006-20261119
+  trxSha256: 2838A3327F2359BED0B245A8E513BD571894247C363247B5A19E09A7551712CC
+  host: PAYTON-LEGION2
+  runId: task006-mock-20261119T100718
+  nukeLogArchiveEntry: windows-nuke.log
+  expectedNegativeControls: 13771
+  correctScripts: 64
+  trxArchiveEntry: windows.trx
+  failed: 0
+  inventoryChecks: 1
+  exitCode: 0
+  nukeLogOriginal: F:\GitHub\McpServer\.worktrees\fedph0-task006-20261119\.nuke\temp\build.2026-11-19_10-07-26.log
+  nukeLogSha256: 2C9D8F4EDE1ACBB327F16F89BFCBB8D9B212BFC7460096EA54967816BC90C22E
+  skipped: 0
+  passed: 13836
+  command: ./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0Task006SupplementMockGateTests --test-run-id task006-mock-20261119T100718
+recommendation: Candidate design/mock readiness evidence for parent integration and current-definition reconciliation. No child state transition.
+nativeProof: false
+sourceCommit: b7cfbf30302d492c12e8366fccde9b78b1074a6c
+definitionSnapshotSha256: FFEBD6E471F3E5657F84918A3655ABF8A3618E4FFE42301DDDD5D549CB1633B8
+branch: codex/fedph0-task006-20261119
+definitionSnapshot: current-definition.yaml
+barrierChanged: false
+stage: DesignAndMock
+task: TASK-FEDPH0-006
+archives:
+  - sha256: 8A4D02FD5D450B41B48778C3E7C202F1A208F2846B9D88EA9CB16DC32A451FEB
+    entries:
+      - name: windows.trx
+        length: 24174752
+        sha256: 2838A3327F2359BED0B245A8E513BD571894247C363247B5A19E09A7551712CC
+      - name: omarchy.trx
+        length: 24437540
+        sha256: FDD536A6D9878DF04AFF0E14D501C05EA2092E0B4833C1156FB4B00D630661DE
+    readbackVerified: true
+    path: paired-trx-and-runner.zip
+  - sha256: 83A82685EDA5CCDC7EE4FC13EF556E05574E40D90BD238F96C1A3B873891291A
+    entries:
+      - sha256: 2C9D8F4EDE1ACBB327F16F89BFCBB8D9B212BFC7460096EA54967816BC90C22E
+        name: windows-nuke.log
+      - sha256: 551659B83ADCFAF912A4D562D7F14E619AAF91FFBD124AF68086ADECFA5FB4BF
+        name: omarchy-nuke.log
+    readbackVerified: true
+    path: paired-nuke-logs.zip
+sourceNormalization: Raw Windows UTF8 CRLF and Linux UTF8 LF hashes are retained; normalized LF hashes match Linux bytes and the same pinned Git source.
+readinessChanged: false
+author:
+  sessionId: Codex-20261119T154121Z-plugin-session
+  turnRequestId: req-20261119T154123Z-prompt-8f5e
+  agent: Codex
+  parentSessionId: Codex-20261116T174245Z-plugin-session
+  model: gpt-6.1-sol
+  parentTurnRequestId: req-20261119T152235Z-prompt-100c
+  nativeThread: 01a1f475-0c2f-7063-880b-f209c06eff1c
+  effort: xhigh
+scriptValidation:
+  parserErrors: 0
+  runnerSha256: 3B6E218FBF71F87F8BF84032F3E291F8F7F61777499BD671B1AD3E59B80A7E55
+  helperOriginalPath: F:/GitHub/McpServer/.mcpServer/codex/bg-task006-20261119/Invoke-Task006PairedMock.ps1
+  helperRemoteCopy: /home/sharpninja/github/McpServer/.mcpServer/codex/Task006PairedRunner-01a1f475-0c2f.ps1
+  retainedUntrackedArchiveSha256: 18C8B4D7F1F2F29694B6C87C00564362F28F2DE213E1F154F05800D53781DAFB
+  helperTracked: false
+  analyzerWarningsAndErrors: 0
+  remoteWhatIfExit: 0
+  retainedUntrackedArchive: F:/GitHub/McpServer/.mcpServer/codex/bg-task006-20261119/paired-trx-and-runner.original.zip
+omarchy:
+  total: 13836
+  worktree: /home/sharpninja/github/McpServer/.worktrees/fedph0-task006-20261119
+  sourceCommit: b7cfbf30302d492c12e8366fccde9b78b1074a6c
+  binding: independent scripted mocks only
+  trxSha256: FDD536A6D9878DF04AFF0E14D501C05EA2092E0B4833C1156FB4B00D630661DE
+  negative: 13771
+  trx: /home/sharpninja/github/McpServer/.worktrees/fedph0-task006-20261119/TestResults/task006-omarchy-20261119T101232/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx
+  host: LAB-OMARCHY
+  runId: task006-omarchy-20261119T101232
+  runnerSha256: 3B6E218FBF71F87F8BF84032F3E291F8F7F61777499BD671B1AD3E59B80A7E55
+  failed: 0
+  barrierChanged: false
+  correct: 64
+  exitCode: 0
+  codeHashes:
+    - sha256: 1BC8B06C09438510BD2A0304F2D38139552C12849123F512868303F05EF375FA
+      name: Phase0Task006SupplementContract.cs
+    - sha256: 9CF19991880B738A0AB5BCAE7FDFA615EDCB9DA59C0B6016F2431972FCDE63CA
+      name: Phase0Task006SupplementMockGateTests.cs
+  skipped: 0
+  passed: 13836
+  timestampLocal: 2026-11-19T10:15:52.0000000
+productChanges: false
+baseCommit: 0bc4009437dc84b1d99f36a1336f3163c7b24fab
+scope:
+  - B6 transaction, constraints and unrelated-history experiments supplement existing merge/review/retention contracts
+  - B7 positive schema author, all-branch fencing, attestation inventory race and compatible worker supplement existing readiness/evolution contracts
+  - B8 seed/join/recovery manifest, full B2 domain/branch projections, explicit identity aliases, audit hash receipts supplement existing provider/typed migration safety
+  - B9 owning gate for five worker operations, isolated stale fence/preview/takeover, OS owner restart and three requestId crash windows
+sources:
+  - gitBlob: bde75c9b4ffaf36ce4912d3b6af69f0bae119bab
+    windowsRawSha256: 258A316FA091C8923884C16C28F477EEA76C4CF458C24967F1951D335AD57CEC
+    path: tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0Task006SupplementContract.cs
+    normalizedLfSha256: 1BC8B06C09438510BD2A0304F2D38139552C12849123F512868303F05EF375FA
+  - gitBlob: 8649f655ece7d1cb10a057e073132b8f8e4d271f
+    windowsRawSha256: 293956B4E33B81CD91B92B87FE5734299C641E24A48D1B532B061F85C0946539
+    path: tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0Task006SupplementMockGateTests.cs
+    normalizedLfSha256: 9CF19991880B738A0AB5BCAE7FDFA615EDCB9DA59C0B6016F2431972FCDE63CA
+  - gitBlob: 839953ab6dbe185d58375c4eb3cd51b43e27c89b
+    windowsRawSha256: 9D0311A9AD9FAC8DB1942F6EAEA5E0EC7FF1C258AD5AC741EFEF4AD91AEDA935
+    path: docs/plans/2026-11-19-federation-task006-design-mock-binding.md
+    normalizedLfSha256: 954146E984AEC0C08DB6269D100B8BC72D8F4EB55F628D36D03C386A9605C7C5
+hvRun: false
+remaining:
+  - Native adapter implementation only after all-nine barrier opens
+  - Real B6-B9 disposable Dolt/owner/migration experiments and feasibility dispositions
+  - All applicable B acceptance and host integration
+  - Final both-host full applicable gate set and HV before task Success/done
+timestampLocal: 2026-11-19T10:19:09
+taskDone: false
