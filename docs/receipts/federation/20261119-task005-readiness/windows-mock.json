@@ -1,0 +1,112 @@
+{
+  "host": "PAYTON-LEGION2",
+  "timestampLocal": "2026-11-19T10:09:48",
+  "baseCommit": "0bc4009437dc84b1d99f36a1336f3163c7b24fab",
+  "branch": "codex/fedph0-task005-20261119",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "agent": "Codex",
+  "sessionId": "Codex-20261119T154036Z-plugin-session",
+  "requestId": "req-20261119T154151Z-prompt-cad2",
+  "runs": [
+    {
+      "notExecuted": 0,
+      "runId": "fedph0-task005-20261119-management-platform-r1",
+      "passed": 1305,
+      "classes": [
+        {
+          "class": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0IdentityManagementMockGateTests",
+          "count": 1102
+        },
+        {
+          "class": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0IdentityPlatformMockGateTests",
+          "count": 203
+        }
+      ],
+      "sha256": "DB16CD2A9C5289D55ACE452A06415E836B6F2E309CB16CBACDCB17958D1FDA0B",
+      "trx": "windows-platform-management.trx",
+      "failed": 0
+    },
+    {
+      "notExecuted": 0,
+      "runId": "fedph0-task005-20261119-worker-r1",
+      "passed": 348,
+      "classes": [
+        {
+          "class": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0WorkerPermissionMockGateTests",
+          "count": 348
+        }
+      ],
+      "sha256": "D8DCC36DE794019F7AD06EE8CF483F39A3CFD57BD7A0B857D727B9F7DF073A71",
+      "trx": "windows-worker.trx",
+      "failed": 0
+    },
+    {
+      "notExecuted": 0,
+      "runId": "fedph0-task005-20261119-admission-r2",
+      "passed": 1080,
+      "classes": [
+        {
+          "class": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0IdentityAdmissionMockGateTests",
+          "count": 1080
+        }
+      ],
+      "sha256": "9B8FA456B11A5121B24EBD5E48F0A98BD70D92136CAF2484E644625E047080AC",
+      "trx": "windows-admission.trx",
+      "failed": 0
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "docs/plans/2026-11-17-federation-identity-platform-design.md",
+      "sha256": "E5226EA1EF211EB4FA79BA29B8E553DF65349A5D8C6C261A27A28596DEA1C666"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0WorkerPermissionMockGateTests.cs",
+      "sha256": "2A66086BA33EA28681CCEBED793F2D47EE2E52182A38AF6461E7D78CD5D1DB33"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0WorkerPermissionContract.cs",
+      "sha256": "C76DE7291360D3742566CCD2606668E8D2355139C2577AD6FAF8B7DC286C8D13"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityPlatformMockGateTests.cs",
+      "sha256": "639A7050375676B263CCAA89AA905ABADC8C79E306DB9247A10091E3CCC00009"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityPlatformContract.cs",
+      "sha256": "C8508CA8EF7E5D3D48F12F83058D3D7FC2808CC33AAF6D79921F60DC28168CCC"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityManagementMockGateTests.cs",
+      "sha256": "F42A65CAF9562DD3282AB753C6A3E94578916B609AFA270EBD7C22958E6B8C4F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityManagementContract.cs",
+      "sha256": "EA758A305425C3E67731985DA84754A4294AC1C36C52AACC0EF349762ED0E1CD"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityAdmissionMockGateTests.cs",
+      "sha256": "9C34060C7FF50CAC232AB8EEE1E6709B1F88F44B49BA97EAD25B09EF3B601962"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityAdmissionContract.cs",
+      "sha256": "26D4AEB9F7C7046CF25D22E999DD0ADF84570A9752BD5C7ED565B090D0BA40EC"
+    }
+  ],
+  "assignedAcceptanceCriteria": [
+    "FR-MCP-185/ac-RevokedNodeCannotPublish",
+    "FR-MCP-185/ac-LocalAppUserCannotPush"
+  ],
+  "testRequirement": "TEST-MCP-233",
+  "technicalRequirement": "TR-MCP-FEDERATION-012",
+  "statusClaim": "DesignAndMockReadinessCandidate",
+  "mockOnly": true,
+  "nativeProof": false,
+  "barrier": "Closed",
+  "done": false,
+  "scriptParserErrors": 0,
+  "scriptAnalyzerWarnings": 0,
+  "linuxPair": "Pending source commit and isolated run",
+  "retainedOriginals": true
+}
