@@ -1,0 +1,216 @@
+{
+  "FR-MCP-186": {
+    "title": "Dolt fourth-provider support and schema migration",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-FourProvidersResolve",
+        "text": "Given keys sqlite,postgresql,sqlserver,dolt, when runtime and design-time factories resolve them, then each selects its own strategy/migration history; unknown key returns unsupported_provider."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DoltBaselineAndUpgrade",
+        "text": "Given empty standalone Dolt then baseline schema1, when baseline and additive schema2 apply, then CRUD succeeds, data remains intact and repeated apply makes no further changes."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OriginalProviderMigrationsUnchanged",
+        "text": "Given recorded hashes of the three original migration chains, when Dolt support is added, then those hashes match and all three real-provider upgrade fixtures pass."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-UnsupportedSchemaRejected",
+        "text": "Given application supports schema1, when opening schema2 for domain writes, then incompatible_schema is returned before mutation."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-VersionedProjectNotMigratedAtStartup",
+        "text": "Given a versioned project at schema1, when application starts, then no EF migration executes and its Dolt head/schema remain unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OldSchemaUnpublishedCommitMergesAfterUpgrade",
+        "text": "Given B1 is unpublished on schema1 and hub S1 adds schema2 from C0, when preflight/upgrade and merge succeed, then B/main=M1 with both B1 and S1 ancestors and B1 row values preserved."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-FeatureBranchSchemaCatchUp",
+        "text": "Given main accepts S1 but feature still uses schema1, when feature is selected for writes, then it remains closed until its own merge with S1 validates."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DirtyDraftBlocksBinaryUpgrade",
+        "text": "Given any local branch has a draft, when Nuke preflight runs, then409 maintenance_not_ready prevents binary replacement and preserves the draft."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ContractBlockedUntilLocalBranchesAttested",
+        "text": "Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DeploymentPreflightBlocksDirtyOrUnattestedBranch",
+        "text": "Given a ready public main but an unattested local feature, when deployment runs, then no binary/service/schema change occurs; explicit branch attestation is required."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-WindowsWriterLockAndRestart",
+        "text": "Given one Windows worker owns Atlas, when a second process starts or the owner crashes, then concurrent ownership is denied and restart recovers only after the OS releases its lock; committed rows and unpublished heads survive."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-RealHostAcceptanceMatrix",
+        "text": "Given isolated disposable Atlas stores on LAB and LEGION and FED-ATLAS-H/A/B fixtures, when Ph8 partitions/reconnects each control, publication/history, audit and identity path and restarts each application/worker, Dolt, gateway, identity and control/audit component at commit/publication/report boundaries, then every matrix row records exact heads/ancestor sets/rows/drafts/refs/epoch and audit receipts matching the workflow outcome, with zero missing provider/migration/recovery rows. Missing any component/path row fails acceptance; unrelated live projects retain their provider mappings and data."
+      }
+    ],
+    "priority": "medium",
+    "scopeStartLayerKey": "layer-1",
+    "workspaceId": "F:/GitHub/McpServer",
+    "id": "FR-MCP-186",
+    "status": "pending",
+    "body": "Support Dolt as the fourth provider with dedicated schema migration, controlled schema-history distribution, Windows/Linux lifecycle and original-provider regressions."
+  },
+  "TR-MCP-FEDERATION-013": {
+    "title": "Dolt fourth-provider support and schema migration contract",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-FourProvidersResolve",
+        "text": "Given keys sqlite,postgresql,sqlserver,dolt, when runtime and design-time factories resolve them, then each selects its own strategy/migration history; unknown key returns unsupported_provider."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DoltBaselineAndUpgrade",
+        "text": "Given empty standalone Dolt then baseline schema1, when baseline and additive schema2 apply, then CRUD succeeds, data remains intact and repeated apply makes no further changes."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OriginalProviderMigrationsUnchanged",
+        "text": "Given recorded hashes of the three original migration chains, when Dolt support is added, then those hashes match and all three real-provider upgrade fixtures pass."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-UnsupportedSchemaRejected",
+        "text": "Given application supports schema1, when opening schema2 for domain writes, then incompatible_schema is returned before mutation."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-VersionedProjectNotMigratedAtStartup",
+        "text": "Given a versioned project at schema1, when application starts, then no EF migration executes and its Dolt head/schema remain unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OldSchemaUnpublishedCommitMergesAfterUpgrade",
+        "text": "Given B1 is unpublished on schema1 and hub S1 adds schema2 from C0, when preflight/upgrade and merge succeed, then B/main=M1 with both B1 and S1 ancestors and B1 row values preserved."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-FeatureBranchSchemaCatchUp",
+        "text": "Given main accepts S1 but feature still uses schema1, when feature is selected for writes, then it remains closed until its own merge with S1 validates."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DirtyDraftBlocksBinaryUpgrade",
+        "text": "Given any local branch has a draft, when Nuke preflight runs, then409 maintenance_not_ready prevents binary replacement and preserves the draft."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ContractBlockedUntilLocalBranchesAttested",
+        "text": "Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DeploymentPreflightBlocksDirtyOrUnattestedBranch",
+        "text": "Given a ready public main but an unattested local feature, when deployment runs, then no binary/service/schema change occurs; explicit branch attestation is required."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-WindowsWriterLockAndRestart",
+        "text": "Given one Windows worker owns Atlas, when a second process starts or the owner crashes, then concurrent ownership is denied and restart recovers only after the OS releases its lock; committed rows and unpublished heads survive."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-RealHostAcceptanceMatrix",
+        "text": "Given isolated disposable Atlas stores on LAB and LEGION and FED-ATLAS-H/A/B fixtures, when Ph8 partitions/reconnects each control, publication/history, audit and identity path and restarts each application/worker, Dolt, gateway, identity and control/audit component at commit/publication/report boundaries, then every matrix row records exact heads/ancestor sets/rows/drafts/refs/epoch and audit receipts matching the workflow outcome, with zero missing provider/migration/recovery rows. Missing any component/path row fails acceptance; unrelated live projects retain their provider mappings and data."
+      }
+    ],
+    "priority": "medium",
+    "scopeStartLayerKey": "layer-1",
+    "workspaceId": "F:/GitHub/McpServer",
+    "id": "TR-MCP-FEDERATION-013",
+    "status": "pending",
+    "body": "Provider key dolt has a dedicated migration assembly; original provider migrations remain unchanged. Versioned project schema migrations are authored only by hub maintenance on maintenance/schema-N and distributed as history. MaintenanceReadiness binds epoch, binary/schema versions, all local branches including unpublished ones, heads, working-set hashes and attestations. Preflight must pass before Nuke swaps binaries; dirty/unattested branch=409 maintenance_not_ready. LAB uses pinned Linux image; LEGION uses checksum-pinned native Windows dolt.exe under a Windows host whose actual service identity, account, ACLs and child-process start/stop/crash cleanup must be evidenced in Ph0 B1/B9; no existing suitable service is assumed, local paths on F: and exclusive Windows file handle/named mutex ownership. All B1-B12 are evidenced on both OSs."
+  },
+  "TEST-MCP-234": {
+    "title": "Dolt fourth-provider support and schema migration acceptance tests",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-FourProvidersResolve",
+        "text": "Given keys sqlite,postgresql,sqlserver,dolt, when runtime and design-time factories resolve them, then each selects its own strategy/migration history; unknown key returns unsupported_provider."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DoltBaselineAndUpgrade",
+        "text": "Given empty standalone Dolt then baseline schema1, when baseline and additive schema2 apply, then CRUD succeeds, data remains intact and repeated apply makes no further changes."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OriginalProviderMigrationsUnchanged",
+        "text": "Given recorded hashes of the three original migration chains, when Dolt support is added, then those hashes match and all three real-provider upgrade fixtures pass."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-UnsupportedSchemaRejected",
+        "text": "Given application supports schema1, when opening schema2 for domain writes, then incompatible_schema is returned before mutation."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-VersionedProjectNotMigratedAtStartup",
+        "text": "Given a versioned project at schema1, when application starts, then no EF migration executes and its Dolt head/schema remain unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OldSchemaUnpublishedCommitMergesAfterUpgrade",
+        "text": "Given B1 is unpublished on schema1 and hub S1 adds schema2 from C0, when preflight/upgrade and merge succeed, then B/main=M1 with both B1 and S1 ancestors and B1 row values preserved."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-FeatureBranchSchemaCatchUp",
+        "text": "Given main accepts S1 but feature still uses schema1, when feature is selected for writes, then it remains closed until its own merge with S1 validates."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DirtyDraftBlocksBinaryUpgrade",
+        "text": "Given any local branch has a draft, when Nuke preflight runs, then409 maintenance_not_ready prevents binary replacement and preserves the draft."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ContractBlockedUntilLocalBranchesAttested",
+        "text": "Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DeploymentPreflightBlocksDirtyOrUnattestedBranch",
+        "text": "Given a ready public main but an unattested local feature, when deployment runs, then no binary/service/schema change occurs; explicit branch attestation is required."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-WindowsWriterLockAndRestart",
+        "text": "Given one Windows worker owns Atlas, when a second process starts or the owner crashes, then concurrent ownership is denied and restart recovers only after the OS releases its lock; committed rows and unpublished heads survive."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-RealHostAcceptanceMatrix",
+        "text": "Given isolated disposable Atlas stores on LAB and LEGION and FED-ATLAS-H/A/B fixtures, when Ph8 partitions/reconnects each control, publication/history, audit and identity path and restarts each application/worker, Dolt, gateway, identity and control/audit component at commit/publication/report boundaries, then every matrix row records exact heads/ancestor sets/rows/drafts/refs/epoch and audit receipts matching the workflow outcome, with zero missing provider/migration/recovery rows. Missing any component/path row fails acceptance; unrelated live projects retain their provider mappings and data."
+      }
+    ],
+    "priority": "high",
+    "workspaceId": "F:/GitHub/McpServer",
+    "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+    "scopeStartLayerKey": "layer-1",
+    "condition": "Verify FR-MCP-186 and TR-MCP-FEDERATION-013 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+    "id": "TEST-MCP-234",
+    "status": "pending"
+  }
+}

@@ -40,6 +40,16 @@
           CopyToOutputDirectory="PreserveNewest" />
     <None Update="Fixtures\Transcripts\**\*"
           CopyToOutputDirectory="PreserveNewest" />
+    <!-- 2026-11-18: TASK-FEDPH0-002/004/005 B1/B2/B3/B5; FR-MCP-186/TR-MCP-FEDERATION-013/TEST-MCP-234.
+         Pinned original-provider metadata fixtures support baseline/upgrade and migration-regression assertions. -->
+    <!-- 2026-11-18: TASK-FEDPH0-002; FR-MCP-186 ac-OriginalProviderMigrationsUnchanged; TR-MCP-FEDERATION-013; TEST-MCP-234. Immutable source pins, not runtime upgrade proof. -->
+    <!-- 2026-11-18: TASK-FEDPH0-002; FR-MCP-186 ac-DoltBaselineAndUpgrade; TR-MCP-FEDERATION-013; TEST-MCP-234. Desired full-model fixture, not observed Dolt output. -->
+    <EmbeddedResource Include="../../docs/receipts/federation/20261117-phase0-source-catalog/desired-dolt-standalone-schema.json"
+                      LogicalName="Federation.Phase0.desired-dolt-standalone-schema.json" />
+    <EmbeddedResource Include="../../docs/receipts/federation/20261117-phase0-source-catalog/original-provider-migration-baseline.json"
+                      LogicalName="Federation.Phase0.original-provider-migration-baseline.json" />
+    <EmbeddedResource Include="../../docs/receipts/federation/20261117-phase0-source-catalog/relational-*-model-r2.json"
+                      LogicalName="Federation.Phase0.%(Filename)%(Extension)" />
     <EmbeddedResource Include="Fixtures\TransactionGatedStdioRouting\route.md"
                       LogicalName="TransactionGatedStdioRouting.route.md" />
     <EmbeddedResource Include="..\..\templates\prompt-templates.yaml"

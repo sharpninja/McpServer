@@ -1,0 +1,127 @@
+{
+  "timestampLocal": "2026-11-18T20:20:34",
+  "author": {
+    "agent": "Codex",
+    "sessionId": "Codex-20261116T174245Z-plugin-session",
+    "requestId": "req-20261119T020023Z-prompt-4460"
+  },
+  "task": "TASK-FEDPH0-003",
+  "group": "GRP-FEDPH0-001",
+  "host": "PAYTON-LEGION2",
+  "sourceBaseHead": "a1c3cb49b88edc8e9f976a16acda5b7c6ec4beae",
+  "sourcePins": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemoteTransportContract.cs",
+      "sha256": "43254923AEC3A7850BD1BD017BAA383602F716CE6193724E2A2153014113B1EB",
+      "lfSha256": "A82D997DFE1F1F1283721B766B1E1B7C6F605910103490F4C34D50D60A4297A0"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemoteTransportMockGateTests.cs",
+      "sha256": "7B0D68F88FCD9EC4FBBC044AE00A327267636C0B399EE5942217707000EFC8E8",
+      "lfSha256": "D04D82EB33F8843FDA7AB48A0F043E9C83A4E7BB7261BECBE15FB5482A908FB0"
+    },
+    {
+      "path": "docs/plans/2026-11-17-federation-phase0-contract-design.md",
+      "sha256": "1A3312AF9E73F59AFEFDAF29A0BDDB0FDAD641700D064FD3A22DE3F1AA43FF60",
+      "lfSha256": "299FCEFDF90597A65C5AE4053CAC7FF9A02B22FCEC626EFA712F7DE24E63DD64"
+    },
+    {
+      "path": "docs/receipts/federation/20261118-phase0-remote-transport-source/source-research.json",
+      "sha256": "AB839A354CED93C7B0FDB9D580A4C356972207436752B2E157E083B9FA13E4D4",
+      "lfSha256": "0FEB07FF4983F0D58A654599959A3EE60BFB3462C4E8776553EE5AA80C3DAB7C"
+    }
+  ],
+  "runId": "20261118T201615-fedph0-remote-transport-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0RemoteTransportMockGateTests --test-run-id 20261118T201615-fedph0-remote-transport-mock",
+  "trxCounters": {
+    "total": 2730,
+    "executed": 2730,
+    "passed": 2730,
+    "failed": 0,
+    "error": 0,
+    "timeout": 0,
+    "aborted": 0,
+    "inconclusive": 0,
+    "notRunnable": 0,
+    "notExecuted": 0,
+    "disconnected": 0,
+    "warning": 0,
+    "inProgress": 0,
+    "pending": 0
+  },
+  "methods": [
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemoteTransportMockGateTests.CorrectTransportTranscriptPasses",
+      "count": 38
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemoteTransportMockGateTests.CorruptTransportTranscriptIsRejected",
+      "count": 2653
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemoteTransportMockGateTests.SharedBaselineMutationIsRejected",
+      "count": 1
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemoteTransportMockGateTests.ValidIndependentNativeVariationPasses",
+      "count": 38
+    }
+  ],
+  "counts": {
+    "individualWrongObservations": 2653,
+    "correctFixtures": 38,
+    "allNegativeRejections": 2654,
+    "skipped": 0,
+    "total": 2730,
+    "failed": 0,
+    "validVariations": 38,
+    "aliasRejections": 1
+  },
+  "copies": [
+    {
+      "name": "windows-mock.trx",
+      "sha256": "0D40948494915057FD14AC4639801695F7FB434345A3EFF29961E708A60FDB07",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261118T201615-fedph0-remote-transport-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "windows-mock.nuke.txt",
+      "sha256": "ABF5AB9FBA81C3A962E254503958CC94F7FE6080853AA0ECACDAE35B67868762",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/20261118T201615-fedph0-remote-transport-mock.nuke.txt"
+    },
+    {
+      "name": "verified-compile.txt",
+      "sha256": "E894B4A8B50EE10720D8D2E48F5FC8FC1C916BF1BC476A2319A030B19D5FF0F9",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/last-build.log"
+    },
+    {
+      "name": "superseded-initial-compile.txt",
+      "sha256": "75AC8195F4087FC85E9F7E0F74C3D5184EDB6A332A667A52BBF73C3D04BC7B19",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/20261118T201533-transport-mock-initial-build.log"
+    },
+    {
+      "name": "Save-TransportMockEvidence.ps1",
+      "sha256": "6752D83A8BB4E7775909D7923F2003B52BA7DFDCA1F3F48BBCDA1B7653597337",
+      "source": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\Save-FederationTransportMockEvidence.ps1"
+    }
+  ],
+  "currentLayerKey": "layer-1",
+  "coverageLedger": "coverage.json",
+  "nativeProof": false,
+  "ready": false,
+  "taskSuccess": false,
+  "operatorAcceptedB5": false,
+  "implementationBarrier": "Closed",
+  "limitations": [
+    "No production token injection or gateway implementation exists in this seam",
+    "Stock helper rejects Authorization; concrete supported native binding remains a design question",
+    "Mock credential labels are not evidence of real secret containment",
+    "Cross-origin fixture names require actual adversarial location/redirect injection and captures in native binding",
+    "Wire hashes compare independently captured bytes; domain response meaning remains covered by other assertion seams",
+    "Real native execution on both hosts, B acceptance, final gates and independent HV remain mandatory"
+  ],
+  "compileHistory": {
+    "repair": "Renamed local fault variable; immediate compile succeeded",
+    "initialFailure": "12 CS9273/CS9258 errors: field keyword in C#14 property accessor",
+    "initialLog": "superseded-initial-compile.txt"
+  }
+}

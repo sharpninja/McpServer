@@ -1,0 +1,25 @@
+{
+  "id": "TASK-FEDPH0-002",
+  "title": "Dolt compatibility harness: model, CRUD/LINQ, migrations, branch isolation, commit boundary",
+  "description": [
+    "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH0-001 (groupOrdinal 2).",
+    "Depends on (typed Task/Group targets): TASK-FEDPH0-001.",
+    "FR/AC coverage: FR-MCP-186: DoltBaselineAndUpgrade; FR-MCP-177: PooledConnectionDoesNotLeakBranch; FR-MCP-175: SaveDoesNotPublish.",
+    "TR constraints: TR-MCP-FEDERATION-002, TR-MCP-FEDERATION-004, TR-MCP-FEDERATION-013. TEST: TEST-MCP-223, TEST-MCP-225, TEST-MCP-234. Classes: DoltProviderCompatibilityTests, DoltBranchIsolationTests, DoltCommitBoundaryTests.",
+    "Work: On LAB Linux and LEGION native Windows against real databases: full current model creation, representative CRUD/LINQ/raw SQL, concurrency tokens, rollback, decimal/date/text/index/FK mappings, migrations, branch connection isolation, SQL commit versus Dolt commit. Feasibility failures include unsupported mappings, SaveChanges creating history, or pool branch leakage. Pass on pinned versions using the operator-accepted EF10 provider or patched community fork; no bespoke from-scratch provider or custom merge engine. Design/mocks precede production binding, with zero unexplained failures or skips.",
+    "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15."
+  ],
+  "dependsOn": [
+    "TASK-FEDPH0-001"
+  ],
+  "functionalRequirements": [
+    "FR-MCP-186",
+    "FR-MCP-177",
+    "FR-MCP-175"
+  ],
+  "technicalRequirements": [
+    "TR-MCP-FEDERATION-002",
+    "TR-MCP-FEDERATION-004",
+    "TR-MCP-FEDERATION-013"
+  ]
+}

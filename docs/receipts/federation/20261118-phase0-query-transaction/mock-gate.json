@@ -1,0 +1,101 @@
+{
+  "timestampLocal": "2026-11-18T18:39:50",
+  "host": "PAYTON-LEGION2",
+  "sourceBaseHead": "a1c3cb49b88edc8e9f976a16acda5b7c6ec4beae",
+  "runId": "20261118T183640-fedph0-query-transaction-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0QueryTransactionMockGateTests --test-run-id 20261118T183640-fedph0-query-transaction-mock",
+  "total": 589,
+  "passed": 589,
+  "failed": 0,
+  "skipped": 0,
+  "positive": 5,
+  "expectedNegativeControls": 584,
+  "methods": {
+    "WrongQueryIsRejected": 68,
+    "CorrectTransactionsPass": 4,
+    "CorrectQueriesPass": 1,
+    "WrongTransactionIsRejected": 515,
+    "AliasedBaselineRewriteIsRejected": 1
+  },
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+      "lfSha256": "2A4D22954D10B4D2A815658C58489965F66B771373D3FA878294DE4CBC4D0098",
+      "sha256": "2A4D22954D10B4D2A815658C58489965F66B771373D3FA878294DE4CBC4D0098"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0StorageBoundaryContract.cs",
+      "lfSha256": "C8CC85C4121F519BA8535E5B93DB750AE912B14F499F5A7857B5D121B17BA271",
+      "sha256": "7F0C0556BBF48640FDA1C8D995C491DA94BA797EF6552266C5C17F7BAEDF593E"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0QueryTransactionContract.cs",
+      "lfSha256": "6B43F6C07A9358955C6D2AA4A80EDD6C125408E4E669D598C6975F04372EBF22",
+      "sha256": "A889C1B5D3BEFBBB612E1BF90F1CA413813A7866661483ACA74FE17C2313B1B9"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0QueryTransactionMockGateTests.cs",
+      "lfSha256": "9122604E90B5ED746C2674CDC6C4448A2C842ED0E7DDAEEA8DD6872CE0DD9360",
+      "sha256": "A1E6C3D53BCCE3A2DE5AFA30C8BCC3D5AF3882C3676B84674484C8FDD6179E0C"
+    }
+  ],
+  "copies": [
+    {
+      "name": "windows-mock.nuke.txt",
+      "sha256": "401D5E253448BF6113DCD0B5750D62F7B0E1A0BDD6D57E5C6CF6406A4792FDBB",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-18_18-36-58.log"
+    },
+    {
+      "name": "initial-compiler-failure.txt",
+      "sha256": "190AD39A1DF8BB81CD8A31109F3CD4B6DD47A300B3BF814121A04ABD6C27B8D8",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/20261118T183550-query-transaction-initial-build.log"
+    },
+    {
+      "name": "corrected-compile.txt",
+      "sha256": "580E7D0C5546815A9E3B93DA92F23B21DC1DF66E8AC6FB23B4A8A639CC9587CC",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/last-build.log"
+    }
+  ],
+  "rawTrx": {
+    "bytes": 963891,
+    "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261118T183640-fedph0-query-transaction-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx",
+    "retained": true,
+    "sha256": "8523ACF24618F52B80AD31F47D0E7ACADE55D533C02FF5F3756B9FF0C2C30885"
+  },
+  "tasks": [
+    "TASK-FEDPH0-002"
+  ],
+  "trace": {
+    "test": [
+      "TEST-MCP-223",
+      "TEST-MCP-234"
+    ],
+    "tr": [
+      "TR-MCP-FEDERATION-002",
+      "TR-MCP-FEDERATION-013"
+    ],
+    "fr": [
+      "FR-MCP-175",
+      "FR-MCP-186"
+    ],
+    "criteria": [
+      "ac-SaveDoesNotPublish",
+      "ac-DoltBaselineAndUpgrade"
+    ],
+    "coverage": "Partial representative query/transaction assertions, not whole-criterion satisfaction"
+  },
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "nativeRuntimeProof": false,
+  "operatorAccepted": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false,
+  "scriptSha256": "C8F99BE1BDFA660A21618B664C0574A6F68079A9EED1E29BC45F9D118A24491A",
+  "compressedTrx": {
+    "bytes": 113363,
+    "path": "windows-mock.trx.gz",
+    "decompressedSha256": "8523ACF24618F52B80AD31F47D0E7ACADE55D533C02FF5F3756B9FF0C2C30885",
+    "sha256": "92F4D0A7207188A6A4F51FBC6F13C8DC795A8EB390128E517427502177535EA2"
+  }
+}

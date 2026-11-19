@@ -1,0 +1,19 @@
+{
+  "id": "TASK-FEDPH0-001",
+  "title": "B1: pin Dolt, EF10 MySQL-protocol provider, driver and container images; host inventory",
+  "description": [
+    "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH0-001 (groupOrdinal 1).",
+    "Depends on (typed Task/Group targets): none.",
+    "FR/AC coverage: FR-MCP-186: FourProvidersResolve.",
+    "TR constraints: TR-MCP-FEDERATION-013. TEST: TEST-MCP-234.",
+    "Work: Record exact provider/driver/image versions, digests and licenses, all-four-provider fixture versions, LAB /var/lib/dolt mount and native LEGION hosting inventory (Windows service name, account, executable, start/recovery policy, data ACLs, child-process lifecycle). Read dependency compliance rules first. Prerelease or community-fork EF10 provider is accepted per MEMORY-PREFERENCE-002; report options instead of downgrading. Separate LAB and LEGION evidence rows; initial status unproven.",
+    "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15."
+  ],
+  "dependsOn": [],
+  "functionalRequirements": [
+    "FR-MCP-186"
+  ],
+  "technicalRequirements": [
+    "TR-MCP-FEDERATION-013"
+  ]
+}

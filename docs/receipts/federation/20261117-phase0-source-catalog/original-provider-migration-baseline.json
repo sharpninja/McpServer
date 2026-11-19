@@ -1,0 +1,1567 @@
+{
+  "timestampLocal": "2026-11-18T18:57:01",
+  "sourceHead": "a1c3cb49b88edc8e9f976a16acda5b7c6ec4beae",
+  "host": "PAYTON-LEGION2",
+  "policy": "Git blob identity plus UTF8 LF-normalized SHA256 are cross-host integrity pins. Raw Windows file SHA256 is retained as host provenance. No original chain change is accepted.",
+  "chains": [
+    {
+      "provider": "sqlite",
+      "assembly": "QBrainAi.Storage.SqliteMigrations",
+      "files": [
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260328202522_SqliteProviderInitialCreate.Designer.cs",
+          "gitBlobId": "3d00fd007b64c1d23e5ff84ce8ba436b0f20c446",
+          "lfSha256": "FBC2C28FDDDE4467162B355BEE39434E54E18E9CE64E6F0AB1C2A36CDD02174D",
+          "windowsRawSha256": "FBC2C28FDDDE4467162B355BEE39434E54E18E9CE64E6F0AB1C2A36CDD02174D"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260328202522_SqliteProviderInitialCreate.cs",
+          "gitBlobId": "dfd125972e1c34f10edb1cd1d86a40cf1508406f",
+          "lfSha256": "9DB29A5F91962C29B061781ED38141DC3FF8011AF6E29612212E031408A5C5FE",
+          "windowsRawSha256": "9DB29A5F91962C29B061781ED38141DC3FF8011AF6E29612212E031408A5C5FE"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260407120000_AddGraphEntitiesAndRelationships.Designer.cs",
+          "gitBlobId": "d8f814b4fe9243d88ab79d0ce2246281aca6ecfb",
+          "lfSha256": "A08681D835E2B3D79A10D8F4383AF92251B871F2E61742B75D65A73D5D4B0940",
+          "windowsRawSha256": "A08681D835E2B3D79A10D8F4383AF92251B871F2E61742B75D65A73D5D4B0940"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260407120000_AddGraphEntitiesAndRelationships.cs",
+          "gitBlobId": "99b54c85c6d13b7d71aeb1cc3cb2a66fc0ed1a0a",
+          "lfSha256": "44AD9FFA33AB7E25BD24BBAAEE2822FEE8244BA51444E34A7B47EE8197FCD150",
+          "windowsRawSha256": "44AD9FFA33AB7E25BD24BBAAEE2822FEE8244BA51444E34A7B47EE8197FCD150"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260420214635_AddTodoStorage.Designer.cs",
+          "gitBlobId": "34a7a8fe2692128fee526f9a9cdc55a0635f05a3",
+          "lfSha256": "D263B1D4DC65634AB076EFE4F8CA92960671C9DF7B59E7007499BEC743C96850",
+          "windowsRawSha256": "D263B1D4DC65634AB076EFE4F8CA92960671C9DF7B59E7007499BEC743C96850"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260420214635_AddTodoStorage.cs",
+          "gitBlobId": "7b55d14956cf3cfa3f2068eb9aec1de745314752",
+          "lfSha256": "EAB16067DF9DE5ECD445B8AD49C521785FDADF34F3A7D4A24E11561FC44C8ED3",
+          "windowsRawSha256": "EAB16067DF9DE5ECD445B8AD49C521785FDADF34F3A7D4A24E11561FC44C8ED3"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260421173624_AddTodoWorkspaceScoping.Designer.cs",
+          "gitBlobId": "560a18bedd5657a6633a9c811f929abb233a0f4f",
+          "lfSha256": "310FCD92997ECFB66CB4CB91429260926C4BC9DFC711C629EDB187CFFFCF85D0",
+          "windowsRawSha256": "310FCD92997ECFB66CB4CB91429260926C4BC9DFC711C629EDB187CFFFCF85D0"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260421173624_AddTodoWorkspaceScoping.cs",
+          "gitBlobId": "88a3dd11dcc7dc1c7eaf1309c86203db8318f9f0",
+          "lfSha256": "DB7E7E4729070B6AB66F5D8B3D20AEF01C6C0B405A1E544D7A84D78A4032D951",
+          "windowsRawSha256": "DB7E7E4729070B6AB66F5D8B3D20AEF01C6C0B405A1E544D7A84D78A4032D951"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260506175749_AddRequirementsWorkspaceStorage.Designer.cs",
+          "gitBlobId": "22886da1b2b9d902460774c9214c3aba94a474ab",
+          "lfSha256": "555187CB1DE1B85362449EC4F19DF513E4B2999D6DD0597F6A0CAE32045D4A8E",
+          "windowsRawSha256": "555187CB1DE1B85362449EC4F19DF513E4B2999D6DD0597F6A0CAE32045D4A8E"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260506175749_AddRequirementsWorkspaceStorage.cs",
+          "gitBlobId": "5a1014256fd5538148f1b28ec5144a9e864f7865",
+          "lfSha256": "B94DAEF9131D8B69F3CF82DC5E68939EC490B8448F9E7EF41E975163F2A2DF9F",
+          "windowsRawSha256": "B94DAEF9131D8B69F3CF82DC5E68939EC490B8448F9E7EF41E975163F2A2DF9F"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260521181303_AddFederationHubSpokeStorage.Designer.cs",
+          "gitBlobId": "f6c17e2dedb614dd38e41ca35fdf2dc2b89b9c2e",
+          "lfSha256": "BBA652B77B9FA87DAD827CA06FB4AA15601463512AB5DF1AC2B25DDB16E26192",
+          "windowsRawSha256": "BBA652B77B9FA87DAD827CA06FB4AA15601463512AB5DF1AC2B25DDB16E26192"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260521181303_AddFederationHubSpokeStorage.cs",
+          "gitBlobId": "24336e72ab3354face2397e1f628b7ae85c00ad5",
+          "lfSha256": "D1E2F46463984872B5EBFA97F5828D222E009B52A8451858D0929A244C32B099",
+          "windowsRawSha256": "D1E2F46463984872B5EBFA97F5828D222E009B52A8451858D0929A244C32B099"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260522155952_AddRequirementMetadata.Designer.cs",
+          "gitBlobId": "d7a1f12313a16091809415ff7226c81ca286a7cb",
+          "lfSha256": "205B5CAB7C701D139E29DA29BCD1E8E93B0975DD031133A14F0987C92BDAB78F",
+          "windowsRawSha256": "205B5CAB7C701D139E29DA29BCD1E8E93B0975DD031133A14F0987C92BDAB78F"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260522155952_AddRequirementMetadata.cs",
+          "gitBlobId": "e56ab084dafa89e16c61fe3cbb1d9bb24a7bc1e2",
+          "lfSha256": "95CDA40521F2DB10C336BB29A8EBA2226FA07F43B18618C2A81A059B03DC94A6",
+          "windowsRawSha256": "95CDA40521F2DB10C336BB29A8EBA2226FA07F43B18618C2A81A059B03DC94A6"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260522183224_AddDbFkIntegrityRepair.Designer.cs",
+          "gitBlobId": "c4bb7f03ba77fe8b7f597327da9f431dc12b5c35",
+          "lfSha256": "5E81CFC96C4CC1038F8DE95F86059F4B1D8AF30D00FFC36816AC722045718CAC",
+          "windowsRawSha256": "5E81CFC96C4CC1038F8DE95F86059F4B1D8AF30D00FFC36816AC722045718CAC"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260522183224_AddDbFkIntegrityRepair.cs",
+          "gitBlobId": "64c1f96e500605b28bd20de70de0057532be3a85",
+          "lfSha256": "C81999E99785C00B83886E4D4BAF65F0F6E44ABEC1D3EF61A1824905D94C6F2B",
+          "windowsRawSha256": "C81999E99785C00B83886E4D4BAF65F0F6E44ABEC1D3EF61A1824905D94C6F2B"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260525104159_ScopeSessionLogUniqueIndexByWorkspace.Designer.cs",
+          "gitBlobId": "71a60bcf73e6ffc793e0ef6588c164af09ae055f",
+          "lfSha256": "F652DD7292CCCAB7526A7AD8C21EDE0B17DF758EC42D74258AEA208F5252C873",
+          "windowsRawSha256": "F652DD7292CCCAB7526A7AD8C21EDE0B17DF758EC42D74258AEA208F5252C873"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260525104159_ScopeSessionLogUniqueIndexByWorkspace.cs",
+          "gitBlobId": "c7c16faa1a138d8aedcdca2b441aed468faa6157",
+          "lfSha256": "90963E22AFE9C387CB8A16B6DCB6B89F5226A22C1E3ED06AE900623DC6E04F93",
+          "windowsRawSha256": "90963E22AFE9C387CB8A16B6DCB6B89F5226A22C1E3ED06AE900623DC6E04F93"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260602205655_AddRequirementAcceptanceCriteriaJson.Designer.cs",
+          "gitBlobId": "71f09429f8f5cb5fe735b7a26bb612550e2e6ec5",
+          "lfSha256": "70D3E71E3E16C2BE8681A0D32162E503CB8520C2A2FD0F9250D8A3F262CDA2B6",
+          "windowsRawSha256": "70D3E71E3E16C2BE8681A0D32162E503CB8520C2A2FD0F9250D8A3F262CDA2B6"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260602205655_AddRequirementAcceptanceCriteriaJson.cs",
+          "gitBlobId": "6ee917b7d657674db7bd0ce4669020018a245a16",
+          "lfSha256": "B5DC227205D01C746F17DD21ABB8465068EB6462720A24396ED34B55AF11CA4B",
+          "windowsRawSha256": "B5DC227205D01C746F17DD21ABB8465068EB6462720A24396ED34B55AF11CA4B"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260608083211_AddMemoryStorage.Designer.cs",
+          "gitBlobId": "888122f1ae59317333eb9c7af9f68e6f1873922c",
+          "lfSha256": "96FC56D1A7CBDF0BC1D9351228E188009557E689415EF5DE7BF85891895331E9",
+          "windowsRawSha256": "96FC56D1A7CBDF0BC1D9351228E188009557E689415EF5DE7BF85891895331E9"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260608083211_AddMemoryStorage.cs",
+          "gitBlobId": "00fc0c1152ab8fd3c75cd98e5416d286db465b4b",
+          "lfSha256": "E4EDFC720AC223A0D135EC3289390A8628296E4B8B5C6DCC152E276E1671CCC3",
+          "windowsRawSha256": "E4EDFC720AC223A0D135EC3289390A8628296E4B8B5C6DCC152E276E1671CCC3"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260615175649_AddBrainSlotStorage.Designer.cs",
+          "gitBlobId": "a25c166e2bc9c810de419caabd5043563ca34908",
+          "lfSha256": "90841E23074C3A8CA249323274D7C75020B1AC6EF259C10DE14BD6ACF041E118",
+          "windowsRawSha256": "90841E23074C3A8CA249323274D7C75020B1AC6EF259C10DE14BD6ACF041E118"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260615175649_AddBrainSlotStorage.cs",
+          "gitBlobId": "aea55b1ed5e400589be26b1f0a4a839718fbc97f",
+          "lfSha256": "8383AED06A66E47F09962D17C2012F2960CCA152850D3694E2A7458123752DCF",
+          "windowsRawSha256": "8383AED06A66E47F09962D17C2012F2960CCA152850D3694E2A7458123752DCF"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260615200340_AddBrainSlotWeights.Designer.cs",
+          "gitBlobId": "1c9d0e327aa963e8b73bb34452d017f745b2aca9",
+          "lfSha256": "559F1FB99AAD12178991B57E98A4DA2FDE85CE1060CAEE691BB535B80C458468",
+          "windowsRawSha256": "559F1FB99AAD12178991B57E98A4DA2FDE85CE1060CAEE691BB535B80C458468"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260615200340_AddBrainSlotWeights.cs",
+          "gitBlobId": "53e9ea1847e55154b69e3968533bcbde8519a228",
+          "lfSha256": "B486875111E96F458A2B4515B0863CA6DECDEEF60B1B970E0353B92275972705",
+          "windowsRawSha256": "B486875111E96F458A2B4515B0863CA6DECDEEF60B1B970E0353B92275972705"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260625061830_AddTriageStorage.Designer.cs",
+          "gitBlobId": "a175ac67c94baf0aeb540d462304930bad4a326f",
+          "lfSha256": "900C7F4EEA08BD2CD466A4C1444FA0AB6E21EB3B8EA4A0F9AB82244FEAAC3EF7",
+          "windowsRawSha256": "9368425007B510810F032FFAF2BE2346FCA716C9FB81F39156A6933FA2E3DB50"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260625061830_AddTriageStorage.cs",
+          "gitBlobId": "500e7294099f8b620ffc8dca61e83643a9920787",
+          "lfSha256": "EDACD39E9A57B5F40DB99EB39A8B52C4328096B1E90DE5D2DB7B766BD4EB5BA2",
+          "windowsRawSha256": "6D8E7538F5A53DAC565A54D89413DEDA8F754F83E02853D34FA1553D74006AD3"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260628010323_AddRequirementScopeLayers.Designer.cs",
+          "gitBlobId": "ec720e27b8159817d6c809141188d01f3ca19014",
+          "lfSha256": "BEB16FD917F21FAB0E122CF0A4D5AAE3BE0072FF23015FF966EC512DE93FBAB7",
+          "windowsRawSha256": "D888B9470188FE83A9D028D7A0168D4FBFF50CA0F8A88A9071A3AC34925D1D06"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260628010323_AddRequirementScopeLayers.cs",
+          "gitBlobId": "26936f5f76bb4c1b93210545021d95929773dc7f",
+          "lfSha256": "73ECA2E2AA89F65B06B99B6EE2A7D346E3F5882EFBA949D2C2D9D553B5CFC0A7",
+          "windowsRawSha256": "61B8A5E85EAB950E7D9CD9AB09332F8448BEBB942CC73369795FCA17E3D04DE7"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260628102336_AddTriageRunAgentStreams.Designer.cs",
+          "gitBlobId": "b948f0021ddcc9e71fad166429918369b0d7fa40",
+          "lfSha256": "CC025AC137E36EDC3C56C3E6E1FB0EF3F69151D59E1390E80F5579DCEECDC7CB",
+          "windowsRawSha256": "5108382604A188C82BDC913E40738D85A5AE878D0484B42BE5F51AEADC6ACDB9"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260628102336_AddTriageRunAgentStreams.cs",
+          "gitBlobId": "3bc2568edb25365db82137df0754b38fff91bfab",
+          "lfSha256": "4060131B7F3CA7FD86E3F1EC49FA4803478412F49FAB115CD923B242A214578E",
+          "windowsRawSha256": "B732F1024B88D6CF61AACF9E41A58A2B165DA065CB83615AC752453CE7D04212"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260628122208_RemoveTodoRecords.Designer.cs",
+          "gitBlobId": "dcfc6a3a4c7e602c856802963ac205e3cd555fff",
+          "lfSha256": "2CE8B5236C46A8D0A5AD2ECC3CDF7AAAC876A3A12903B69035A5C3723D7FCC9A",
+          "windowsRawSha256": "B5197BE79684A3AA2A2C68DE08DF02C39AC906390FA7CFB4BC47DF6AA96377B3"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260628122208_RemoveTodoRecords.cs",
+          "gitBlobId": "307c1cbed9a0784326ac292c0de1cfbdb71159aa",
+          "lfSha256": "9E9774350F5B2CE9BA3581926084FEFCF9908C2D1125726EFF928EA1EE847EF4",
+          "windowsRawSha256": "FB5CF358AA4FA9695BE3F1565E6BF782E3739D2E22E0887A1A1436F3A3FB8DBA"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260628194717_RepairTriageCreatedTodoWorkspace.Designer.cs",
+          "gitBlobId": "5d758fbc07fdc4a98a2b8673855a134909d76cb9",
+          "lfSha256": "9DEF052958F1EBF74EFFBAC5928C7611541742E463E27763843DBC6E8E8F06C9",
+          "windowsRawSha256": "C9FDBF142EC8D95B635150CE6825DED659EE89C4541D83A0B6CFBA10412C5A9F"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260628194717_RepairTriageCreatedTodoWorkspace.cs",
+          "gitBlobId": "7cafb198c318b70ddf35e3f81ca185e09102cc2d",
+          "lfSha256": "E277E8B2C7079F50824681FB93C0248F3784CAF66EB3257C03EC4A8E4979A81C",
+          "windowsRawSha256": "3CE405746D116F1C979E64185FBE0AC0A0475DACD5934548F221533F75A93D9E"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701183234_AddMissingQueryIndexes.Designer.cs",
+          "gitBlobId": "41e3f3b1b4d7947630b539d79c05d806af011169",
+          "lfSha256": "96C30969749722ADF00F987296BCDD7E2F38E94740F96A61AB99614697DA3005",
+          "windowsRawSha256": "B1EC18B1F8152066478A77887286BFA79DAC0D275671805F19D91FD517D2EA9C"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701183234_AddMissingQueryIndexes.cs",
+          "gitBlobId": "f61680cfd25b57dc8c90a21c1514007374ff3d0c",
+          "lfSha256": "DEEA3295C44A9C18340A417FAA8033C2938A8722AE898CB5F380A1DCB8BA1EE9",
+          "windowsRawSha256": "BF535F980AF577D5BE4E889F06CB3AC861122B85CC5C5D03C64689FBC0898438"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701192324_StoreDateTimeOffsetAsUtcDateTime.Designer.cs",
+          "gitBlobId": "1c9d1991dbb1b5e3cbff02a9ef1d6836a9eb6d31",
+          "lfSha256": "A56E686E2B13C96F824B5CE2137F5345F776A1FD9DCDCBB8B4F57124390A82B9",
+          "windowsRawSha256": "DBF28A459A7CE2CD75560237F145FB3EC89E7CFAC97F6088FE88F3F96D4A8FB0"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701192324_StoreDateTimeOffsetAsUtcDateTime.cs",
+          "gitBlobId": "6ed531135bcf39122c3d831e86c2d6d2814021b8",
+          "lfSha256": "ED6CE2973656248DCBD0073D41CC6AC8465BD1A57283F69A2BE4E7542690EB3C",
+          "windowsRawSha256": "ED6CE2973656248DCBD0073D41CC6AC8465BD1A57283F69A2BE4E7542690EB3C"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701202445_AddTriageAndAgentEventForeignKeys.Designer.cs",
+          "gitBlobId": "88af18c9a97cc4aa56b7d46006169c4f789759f6",
+          "lfSha256": "3401F110CD14814D9AECC41AB9A8EF676C26A49B5051F8C5490F9EA04A0FC591",
+          "windowsRawSha256": "7850F0971D8A820812BE73E38427519D83229EF987D25E3262DDDFF318A1DA3C"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701202445_AddTriageAndAgentEventForeignKeys.cs",
+          "gitBlobId": "5fdf374fc9a8f61bcea190eb1bdab465dbbcaab2",
+          "lfSha256": "2AD82B6C96464C56EDA11F5F39942485B35AE23F4EC2CC4D843DB8139F29D97A",
+          "windowsRawSha256": "BAC17E8EFD73B3A9A599A3DC2E4409DB6BC600068B81840C1B1ABF42766C863C"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701205057_Decompose4nfSessionLogCommitFiles.Designer.cs",
+          "gitBlobId": "dc611b94dbe23d17f9be6ae3a39d15233c5d4ac0",
+          "lfSha256": "9642C1F7362E0A82B65484BCFB212FC4EF3194BDBA23CC7CAF256CE6349A024C",
+          "windowsRawSha256": "A7AE69FD04A5746C2464AFFD0BCE458A91394694B0CEDFE2AAD074E260B3EBAB"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701205057_Decompose4nfSessionLogCommitFiles.cs",
+          "gitBlobId": "098436ccfbf33129422332bfdcc1cd07251a5a54",
+          "lfSha256": "A10AF05204396DD77B142DF39A21F2F64A6E561E210D07028900650F3BDB7EAC",
+          "windowsRawSha256": "24683162E1F8B64DEA52F5047135B08EE2117851DF4602AA2A9771F02CCED700"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701210318_Decompose4nfTriageReportLists.Designer.cs",
+          "gitBlobId": "28ae05d525b8ece38b8beed8af92b43701d6f325",
+          "lfSha256": "B58E9B7F6EC39219355A01FA5495A6F634719E66945BFE3985113B061614B5D4",
+          "windowsRawSha256": "35670A3A9441DAA39DC7056CCAC449EFFB745E92F608DD7612DFA67CED3008CF"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701210318_Decompose4nfTriageReportLists.cs",
+          "gitBlobId": "db57fc9eef88bbaa1e3d9023267ad853b0f9f1fa",
+          "lfSha256": "8669C86D5785150FB8CAB6DD5433AF7F82D2D97E837B207613DD23B912E4EEDD",
+          "windowsRawSha256": "4559466676AF9BEAAC9ECB943C08BDD42FD4FEB4461723510EF695648C41DC67"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701211145_Decompose4nfWorkspaceBannedItems.Designer.cs",
+          "gitBlobId": "47582435c7490ab8a83989b42a862e9d7c7920d8",
+          "lfSha256": "7DE6E9CC52DEA26446B534AAD1A002D97DCBCAFBF263D90162F490F5012138F2",
+          "windowsRawSha256": "31F195ED1DED1793601B0D7CD8C2987EA56DB568AA2A2398254EE1C6A1A84FBB"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701211145_Decompose4nfWorkspaceBannedItems.cs",
+          "gitBlobId": "f42fa5f4dda7475b768e3398e3c1147ef65a8052",
+          "lfSha256": "D1AE52BBFC6AB7F4AE2A43AF8DB17947995837F8BADF3E1DDBA1CD63DF1B31C9",
+          "windowsRawSha256": "D1AE52BBFC6AB7F4AE2A43AF8DB17947995837F8BADF3E1DDBA1CD63DF1B31C9"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701220556_Decompose4nfRequirementAcceptanceCriteria.Designer.cs",
+          "gitBlobId": "1d6d06eee6e071d3752d5d357bc094ea1ad7ebcd",
+          "lfSha256": "B8388E3147FA18E9C3BD19F16E6649DC06FE46304854C30B6EF31206176887DD",
+          "windowsRawSha256": "290897ADBDE2B3AF81FB2C3FC502C65FAB17123ABC151CD90059829B09950896"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260701220556_Decompose4nfRequirementAcceptanceCriteria.cs",
+          "gitBlobId": "40a1d3f5eb77c9a586a54b03b9b5cc55ebbf10bd",
+          "lfSha256": "FC0C4D23205299C5B9067F348612CF05DF24A6BF9F66FB188FE15EA146E4E387",
+          "windowsRawSha256": "A4C2F3F611FAD33CF7E92D5E1DF8A3502509DDDE78D3BB50022D37C1F6045C70"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260702014116_Decompose4nfTodoItemLists.Designer.cs",
+          "gitBlobId": "5dea2a91ad7ef6a96fca88a390936a8a70f32472",
+          "lfSha256": "F690CBB28387841AE132973DC14DDC2A22E34461E7DC396068C830DE57F0392B",
+          "windowsRawSha256": "772415FA5E66DA930524FCBA7F0389B0D7FFEA3E2AA1F69A9373442E3A981421"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260702014116_Decompose4nfTodoItemLists.cs",
+          "gitBlobId": "11845ff453f62c8bda6b7f1b6c7405d75f61919c",
+          "lfSha256": "8BBA5D216AD088279595A0F2ACEBBBDE3ADA044DE8587EA5F2BCDE912AF67349",
+          "windowsRawSha256": "CA78417F6FD3167895FD2967CFC6DF1D416652D6FA10DF69773A58A17FC836F0"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260702192348_Decompose4nfTodoDocumentMetadata.Designer.cs",
+          "gitBlobId": "78f1a532cc13d61d4fc715228cf3430142d77d37",
+          "lfSha256": "353B8A976A29350F99F0EC6DFC6B5775509C813AAF200EDDA9D7E6261826CB81",
+          "windowsRawSha256": "1B2122BF372D1083F4BB69EF259154062DCD92AA72EC7E9962F58E98E3836ACF"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260702192348_Decompose4nfTodoDocumentMetadata.cs",
+          "gitBlobId": "7150ec50604b80f6a052437ade9f546ddf86e9b6",
+          "lfSha256": "C14A1353D8777C939B29DB7C523AF5DDAA750006E0786876977DE5E42122532D",
+          "windowsRawSha256": "80DB3587692E0C249C63BC477F9D55A63AD3BE56A5A9E4A9F7B6BADF2FA043AA"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260702193911_Decompose4nfAgentModelLists.Designer.cs",
+          "gitBlobId": "c9fef6e88f08a9b23d403b70c156bb7c5f2ee402",
+          "lfSha256": "17CDC0C1A80D856992BF0E7670CE1F446BF4286E11FC951F0696051E03372872",
+          "windowsRawSha256": "D444C18B9925BC6ACCC9646297FE05D2EB4728D5365141E74188D07A9070D598"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260702193911_Decompose4nfAgentModelLists.cs",
+          "gitBlobId": "132e3f4304d1a1a735a927a6e3859815ce8bf344",
+          "lfSha256": "780B31D62004784519366C44EA7F0BE850D1D069FC8C38ED0F16E0FD0DAE9277",
+          "windowsRawSha256": "F8D3F722F92AB7B8B1028FB673CDF49C0F7E57433CE86B5F7279563985A214D1"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260720170000_RenameQuadBrainRolesToCreativityLogic.Designer.cs",
+          "gitBlobId": "a7b85cb6541023da64c7767d3875faadc2514215",
+          "lfSha256": "37BA7BEB41ABF821889342AF6283281BCD667B78B52CC6219B6C593156433387",
+          "windowsRawSha256": "73B42554512F4D0B5F8279BFFB494BD6BA2D08110209F2426D4B809CD14F40BA"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260720170000_RenameQuadBrainRolesToCreativityLogic.cs",
+          "gitBlobId": "dc1d096fccb1f8e22468e9dcf0fbfbca5e29c393",
+          "lfSha256": "99E56E66AA034AEDED3E31037567A37EE1E9E594EC187351987C49DC71145C5C",
+          "windowsRawSha256": "FE205ED8DE09B0434449D2C26467C978440CCAD08E41F8436FCC03EACA63D5E9"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260807143850_AddUseCaseSupport.Designer.cs",
+          "gitBlobId": "863336fd58949130d7d6913f9059c0e01b50e822",
+          "lfSha256": "7035AB7BD84A8C760D5956240DF5E9439EF9BC2767E7B3BBD0CBB47AA1FAE59A",
+          "windowsRawSha256": "FFCDB1153F7B4D77E4BE03BD458205B50C2ED6E7DB4E03D1B896749337781941"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260807143850_AddUseCaseSupport.cs",
+          "gitBlobId": "8ed2c131ca24a69c91404ffdc94aa6b0009231c3",
+          "lfSha256": "09B6D2A56C1F422B92571E2E5C123A80773D4E9AA0BCE09357C8CC1F946B49EC",
+          "windowsRawSha256": "57763878F44BBC424AC272E51A8E5DCE654344574D39A7659A068D71538A31C6"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260808102524_AddUseCaseDiagramGraph.Designer.cs",
+          "gitBlobId": "c3bea91a240c6007e3443e21caa5cda1e8905e43",
+          "lfSha256": "249DBABCA39ADB686AA3E63B7339662A4B2CC9B541158E4788754A258A927D9D",
+          "windowsRawSha256": "D2D1B3C8E950BB5CE16DF90ECD05E1BAE43EFC66612372D3644E4757B71279BA"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260808102524_AddUseCaseDiagramGraph.cs",
+          "gitBlobId": "4f84a112d5004600ab324c60382b5ca6e2381bf6",
+          "lfSha256": "6B8E2E6A1583505734F23864D6B74DD966A6259F49B62BBE7904335A4584E62D",
+          "windowsRawSha256": "58F0FEA14EA673641A95A53E898CCF3F7F4DC1C50AF8FF43696A24905A758CE8"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260812173052_AddSessionLogTurnPlanFileAndTodoId.Designer.cs",
+          "gitBlobId": "cc847b4b9cdf3732405ce4a3ead65e13901d1f3c",
+          "lfSha256": "E6368A7E1224E008F571009043978767C907A4D0C04CCEC07E89A087580E7B5B",
+          "windowsRawSha256": "F30E97178FE3E8843600F9D3C389BDB4953035BC07390F428DE7D430A22A45C2"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260812173052_AddSessionLogTurnPlanFileAndTodoId.cs",
+          "gitBlobId": "3838d9e706904860d48db350467200888d702544",
+          "lfSha256": "85158F029B293480D86FED10D918CD26381423FE3C3680EA4FB06C7DC1224827",
+          "windowsRawSha256": "F2D8F4AA20AE92A5FACBDD9FE6629021E6284B2321BF60C9988494722C95F622"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260816183137_AddHandoffIngestionStorage.Designer.cs",
+          "gitBlobId": "5a875ad37cd84e39960bf5c43a45c8e733ef4018",
+          "lfSha256": "EECB24D92EB54AE7A540B449F19B55AB534F497B8B4D92D3EB96B7E498DD2E9E",
+          "windowsRawSha256": "5EFFD80AF235E7D73ABA66A82EC8884DC95CD7178C575D196417381D5994B903"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260816183137_AddHandoffIngestionStorage.cs",
+          "gitBlobId": "fdda71513f293c6524e71c9aa6207118eedcd180",
+          "lfSha256": "A4C37A1B318CE3707192B863F0E3829BE9B47B9D6D22EB6E42314559C44975EF",
+          "windowsRawSha256": "D559E94F2870CEF444545800EF6D9A0D207997A9C361FF62785BEF078F9DF5F3"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260818142008_AddProductsStorage.Designer.cs",
+          "gitBlobId": "950ac41f82d06d7bceda752249a399c3a82a1779",
+          "lfSha256": "833190318496A76F6C4D0B19A39E8C3820571D226470B1DAB4C65AB49B069145",
+          "windowsRawSha256": "A5454184347800A36388B5AD24933DCD48AFF946269FD6276A30CF352B9BA30D"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260818142008_AddProductsStorage.cs",
+          "gitBlobId": "e16c9ca7b5ba7576f5d946f14db82a71991a296c",
+          "lfSha256": "F35A54C55ECB272174AE59183B3BCA7444006C197E1763389540454E6F16EA41",
+          "windowsRawSha256": "04E8DE6D88A2D30C29A4C08F938217B2D0CECD81723CD7DB22B710704AFE8E27"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260818205751_AddSessionLogTagsAndAgentSessionHeaders.Designer.cs",
+          "gitBlobId": "15b00ba365b8fe48f50e59a5677b1935a9a1ef63",
+          "lfSha256": "D54F10236E30EE691361CF1C1D9FB5154FF156BCDFEF59BDA018A6DF6305C2EB",
+          "windowsRawSha256": "3C0C81849AB134B58932481D1251D182DD51F70C5AE06222ABF24A2F87EB5825"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260818205751_AddSessionLogTagsAndAgentSessionHeaders.cs",
+          "gitBlobId": "0df6e6778f598006046f08c5106ca598ef472bdc",
+          "lfSha256": "EC3235DD338936126708A211EA91165A902F069D97940237D6268918D9E57B95",
+          "windowsRawSha256": "F942DE6F6F49A741A98C48887B239668FAB76C022CB962D75E74394B4AE7C13C"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+          "gitBlobId": "453edf9f8a82398472c839addbbf817bba24cbd1",
+          "lfSha256": "EADFD124EA4B7F68740BACC9D12B3ADA203C063F610A648DF3FC4A3022B2B951",
+          "windowsRawSha256": "EADFD124EA4B7F68740BACC9D12B3ADA203C063F610A648DF3FC4A3022B2B951"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+          "gitBlobId": "6e79678d5b1e74cca660449a2137b980f74f0b17",
+          "lfSha256": "7F8B00BC7757B97AE13CECAB326A81BB245FEA932D413787052E932A9B1FADE8",
+          "windowsRawSha256": "7F8B00BC7757B97AE13CECAB326A81BB245FEA932D413787052E932A9B1FADE8"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+          "gitBlobId": "5d0ddc48c34e4ffff962d9dca20310e505581ea2",
+          "lfSha256": "CC78D6D246F50861DBD7CA25DF77D413E0764660872B8B09B63F7C580FD5E1BF",
+          "windowsRawSha256": "CC78D6D246F50861DBD7CA25DF77D413E0764660872B8B09B63F7C580FD5E1BF"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260929020000_AddRequirementsRecoveryRuns.cs",
+          "gitBlobId": "18c04e692055eaa9473a1e9a3cef4a1eaa8b3f3a",
+          "lfSha256": "0D91845561B5C0363DDC545CDFAA553784F120D82F733AD32CF5C5BB2F5D2557",
+          "windowsRawSha256": "0D91845561B5C0363DDC545CDFAA553784F120D82F733AD32CF5C5BB2F5D2557"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20260929140000_VersionedAuditPayloads.cs",
+          "gitBlobId": "b0e6ec3976291e1a7c3d2a4fa066da6625c730ec",
+          "lfSha256": "D6E928B2C160485F88847581895D7D4149ACDF5D3BEAC622C751A7429C90F516",
+          "windowsRawSha256": "5C61BC8F8D1B6FD94CDB2815A06ACEC8E5189A2E2659A95B829ECBFCCD1B5AF7"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20261005170000_RenameTriageIsMcpServerRelatedColumn.Designer.cs",
+          "gitBlobId": "c0053af20142df27241d1c748336da4fa1ef8c45",
+          "lfSha256": "F0DDD3888EB365472E676795BD6230AFAD4F93E00FACFACB6A43329D013F7E23",
+          "windowsRawSha256": "378C0A696B96210BBC12148B9C8171BB615E622975D8BBF6A768E862AAD6B010"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/20261005170000_RenameTriageIsMcpServerRelatedColumn.cs",
+          "gitBlobId": "f6ff548e699af2a5e88f60f4edbc022b429039e9",
+          "lfSha256": "F0609DF0319FFC22124699FC9C911C680DBE23D55B7B8AB4DB8B37C7D6B48864",
+          "windowsRawSha256": "F0609DF0319FFC22124699FC9C911C680DBE23D55B7B8AB4DB8B37C7D6B48864"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/Migrations/McpDbContextModelSnapshot.cs",
+          "gitBlobId": "8eee0be1fcd5702d9be444f029bb8296636bec35",
+          "lfSha256": "37BAA26E803E7CFED32E904ECD6C5F2BE753994F2DA7D60D1453C27694C80221",
+          "windowsRawSha256": "F8B3CF79A6A93C583E266B9036F5AA47ACAF5912702EF76D9A8BEEB8E2505B71"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqliteMigrations/QBrainAi.Storage.SqliteMigrations.csproj",
+          "gitBlobId": "8b7c56bf56720f1309d4014fcdb649a7450f7ab6",
+          "lfSha256": "2B9470BE8A1FEA5444C113D15DAD3A90FEB25FE02F9047A60B016CF3D3BFDBB8",
+          "windowsRawSha256": "2B9470BE8A1FEA5444C113D15DAD3A90FEB25FE02F9047A60B016CF3D3BFDBB8"
+        }
+      ],
+      "migrationIds": [
+        "20260328202522_SqliteProviderInitialCreate",
+        "20260407120000_AddGraphEntitiesAndRelationships",
+        "20260420214635_AddTodoStorage",
+        "20260421173624_AddTodoWorkspaceScoping",
+        "20260506175749_AddRequirementsWorkspaceStorage",
+        "20260521181303_AddFederationHubSpokeStorage",
+        "20260522155952_AddRequirementMetadata",
+        "20260522183224_AddDbFkIntegrityRepair",
+        "20260525104159_ScopeSessionLogUniqueIndexByWorkspace",
+        "20260602205655_AddRequirementAcceptanceCriteriaJson",
+        "20260608083211_AddMemoryStorage",
+        "20260615175649_AddBrainSlotStorage",
+        "20260615200340_AddBrainSlotWeights",
+        "20260625061830_AddTriageStorage",
+        "20260628010323_AddRequirementScopeLayers",
+        "20260628102336_AddTriageRunAgentStreams",
+        "20260628122208_RemoveTodoRecords",
+        "20260628194717_RepairTriageCreatedTodoWorkspace",
+        "20260701183234_AddMissingQueryIndexes",
+        "20260701192324_StoreDateTimeOffsetAsUtcDateTime",
+        "20260701202445_AddTriageAndAgentEventForeignKeys",
+        "20260701205057_Decompose4nfSessionLogCommitFiles",
+        "20260701210318_Decompose4nfTriageReportLists",
+        "20260701211145_Decompose4nfWorkspaceBannedItems",
+        "20260701220556_Decompose4nfRequirementAcceptanceCriteria",
+        "20260702014116_Decompose4nfTodoItemLists",
+        "20260702192348_Decompose4nfTodoDocumentMetadata",
+        "20260702193911_Decompose4nfAgentModelLists",
+        "20260720170000_RenameQuadBrainRolesToCreativityLogic",
+        "20260807143850_AddUseCaseSupport",
+        "20260808102524_AddUseCaseDiagramGraph",
+        "20260812173052_AddSessionLogTurnPlanFileAndTodoId",
+        "20260816183137_AddHandoffIngestionStorage",
+        "20260818142008_AddProductsStorage",
+        "20260818205751_AddSessionLogTagsAndAgentSessionHeaders",
+        "20260918223000_AddMemoryVersionAndEdgeStorage",
+        "20260919060000_AddMemoryIndexStorage",
+        "20260919193000_AddMemoryVersionSoftDeleteColumns",
+        "20260929020000_AddRequirementsRecoveryRuns",
+        "20260929140000_VersionedAuditPayloads",
+        "20261005170000_RenameTriageIsMcpServerRelatedColumn"
+      ]
+    },
+    {
+      "provider": "postgresql",
+      "assembly": "QBrainAi.Storage.PostgreSqlMigrations",
+      "files": [
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260328202540_PostgreSqlProviderInitialCreate.Designer.cs",
+          "gitBlobId": "c6feaa04c48f1b26c2cf29608fcf35c2d44d3c8a",
+          "lfSha256": "7E71F892624089F411DACA92ACFAC6F12BFABA3E69EEFB15611E6B531006593C",
+          "windowsRawSha256": "7E71F892624089F411DACA92ACFAC6F12BFABA3E69EEFB15611E6B531006593C"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260328202540_PostgreSqlProviderInitialCreate.cs",
+          "gitBlobId": "01819865f3b8df0fabd488e6a63b5dc7a5da942e",
+          "lfSha256": "4B5B5AC99262B5444F6C11A50B3DFA25988F68CE3D52D263D64972CDD6486B4D",
+          "windowsRawSha256": "4B5B5AC99262B5444F6C11A50B3DFA25988F68CE3D52D263D64972CDD6486B4D"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260420193911_AddGraphEntitiesAndRelationships.Designer.cs",
+          "gitBlobId": "32beb8ab64e49d2b4847b086bf6657301c7373dd",
+          "lfSha256": "6E3F1A50B2E5ACD399C5A9E397940B6AF269AEAB7E14CD4F4C42DACEF16A5655",
+          "windowsRawSha256": "6E3F1A50B2E5ACD399C5A9E397940B6AF269AEAB7E14CD4F4C42DACEF16A5655"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260420193911_AddGraphEntitiesAndRelationships.cs",
+          "gitBlobId": "8a63ad6b1decfc3d06f2f94bdf47beedba9f751b",
+          "lfSha256": "F718FCDF8BF746E1AB512A8D32047AD3F62EBFCA7FC7609A1E83811AF4D7971D",
+          "windowsRawSha256": "F718FCDF8BF746E1AB512A8D32047AD3F62EBFCA7FC7609A1E83811AF4D7971D"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260420214655_AddTodoStorage.Designer.cs",
+          "gitBlobId": "fbf920b047f7e54b47a7ea5e442c601a7bee520f",
+          "lfSha256": "9E244E3B03C34EC460202D97CF019EAEA2ED0D0051C66684A21766E85D338EC6",
+          "windowsRawSha256": "9E244E3B03C34EC460202D97CF019EAEA2ED0D0051C66684A21766E85D338EC6"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260420214655_AddTodoStorage.cs",
+          "gitBlobId": "6eee4cb053ce1dc60118bcf0248951e4108231f7",
+          "lfSha256": "993A77363CBB60BEBF4570E9291E8A5B349679C11739D8DBFB02EF3D9E7F7982",
+          "windowsRawSha256": "993A77363CBB60BEBF4570E9291E8A5B349679C11739D8DBFB02EF3D9E7F7982"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260421173651_AddTodoWorkspaceScoping.Designer.cs",
+          "gitBlobId": "17df4658fbb06e0d3497f9d34f5758fe22fa6a60",
+          "lfSha256": "36829C266B7D86BB8979D18C31DA67109472335A088841D13D7F5FD744ADF0E0",
+          "windowsRawSha256": "36829C266B7D86BB8979D18C31DA67109472335A088841D13D7F5FD744ADF0E0"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260421173651_AddTodoWorkspaceScoping.cs",
+          "gitBlobId": "3d5ea3dbb5b7394bc1a23a33c9ad811051943c39",
+          "lfSha256": "6C9C06CEDFDF00C38A38D3FF16F538D93B1A638440DF09A1EB8C1F9CE1B200FF",
+          "windowsRawSha256": "6C9C06CEDFDF00C38A38D3FF16F538D93B1A638440DF09A1EB8C1F9CE1B200FF"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260506175810_AddRequirementsWorkspaceStorage.Designer.cs",
+          "gitBlobId": "4ae255ae2a2a01b07422247ba1bead530c98e60a",
+          "lfSha256": "8B11EBA4A811901C2E58475FA52FA4B571179E97025D3B4B748C22FA2A3FAB38",
+          "windowsRawSha256": "8B11EBA4A811901C2E58475FA52FA4B571179E97025D3B4B748C22FA2A3FAB38"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260506175810_AddRequirementsWorkspaceStorage.cs",
+          "gitBlobId": "b0cf0c2c8e4f2ff0d3ddba086a535adeadbcbf44",
+          "lfSha256": "7E0059F1AACC0E8F2FFCFDE27F8B977D57FEB8198FA990623B45E4141649779B",
+          "windowsRawSha256": "7E0059F1AACC0E8F2FFCFDE27F8B977D57FEB8198FA990623B45E4141649779B"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260521181325_AddFederationHubSpokeStorage.Designer.cs",
+          "gitBlobId": "c633e742bcdf6f0b9808f194fb5642e8f61013fa",
+          "lfSha256": "C60695C2FCD239825310BB45085F97AEB60AFC093CCDC3A6D8B3EE74A44BAC1B",
+          "windowsRawSha256": "C60695C2FCD239825310BB45085F97AEB60AFC093CCDC3A6D8B3EE74A44BAC1B"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260521181325_AddFederationHubSpokeStorage.cs",
+          "gitBlobId": "4c01c9e23840716f88629d31aee7bfc647e6c137",
+          "lfSha256": "1007BE8AD4C5DA606472EEE570843F3600F5423F9BC37A2044BF424B6DC40DCB",
+          "windowsRawSha256": "1007BE8AD4C5DA606472EEE570843F3600F5423F9BC37A2044BF424B6DC40DCB"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260522160010_AddRequirementMetadata.Designer.cs",
+          "gitBlobId": "c91ba2b9228867e867a9e490d842af8c8df8175b",
+          "lfSha256": "F9167AB71FED39495CE8C1A06A42CF19AC5A359A344E6A850B5D0A54F4635E19",
+          "windowsRawSha256": "F9167AB71FED39495CE8C1A06A42CF19AC5A359A344E6A850B5D0A54F4635E19"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260522160010_AddRequirementMetadata.cs",
+          "gitBlobId": "d067d919a73504b247626cf29f8bb1e1548a75bf",
+          "lfSha256": "F8A19A869F496CCD2AE14E812B1806135D46A8C3C4C0558C3D3847FF551E661B",
+          "windowsRawSha256": "F8A19A869F496CCD2AE14E812B1806135D46A8C3C4C0558C3D3847FF551E661B"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260522183250_AddDbFkIntegrityRepair.Designer.cs",
+          "gitBlobId": "60db712bce2d0208945e726c051e30402474a257",
+          "lfSha256": "C57CA1420873A45F6DE5E96D41223C06B1A8BC59675FA8ACE268A8F457661A64",
+          "windowsRawSha256": "C57CA1420873A45F6DE5E96D41223C06B1A8BC59675FA8ACE268A8F457661A64"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260522183250_AddDbFkIntegrityRepair.cs",
+          "gitBlobId": "f4f0aa305f39887851706adddb2c3ccc37b57cbe",
+          "lfSha256": "99C8BAEAA7C906F4A0F1E7EAA242C7BDE8BEEF9E10DFA2357DCB0475D22AD82B",
+          "windowsRawSha256": "99C8BAEAA7C906F4A0F1E7EAA242C7BDE8BEEF9E10DFA2357DCB0475D22AD82B"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260525104227_ScopeSessionLogUniqueIndexByWorkspace.Designer.cs",
+          "gitBlobId": "dbc8e6c973ae6f389ec1e78a8a73e35dad44fdb7",
+          "lfSha256": "D110415AC23AD43228913318316103630782062FF46A2FA25347E78DE861ACF5",
+          "windowsRawSha256": "D110415AC23AD43228913318316103630782062FF46A2FA25347E78DE861ACF5"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260525104227_ScopeSessionLogUniqueIndexByWorkspace.cs",
+          "gitBlobId": "929d5c58d0ed80d4ad0c9461d1fcfa5f525fb8cc",
+          "lfSha256": "3BB25808C727B60C1CD01D6E5EF1AB39F958E2C6B820CCDCEDA7A0BA6F00005A",
+          "windowsRawSha256": "3BB25808C727B60C1CD01D6E5EF1AB39F958E2C6B820CCDCEDA7A0BA6F00005A"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260602205713_AddRequirementAcceptanceCriteriaJson.Designer.cs",
+          "gitBlobId": "5b123f269ac7fa4c519772b6a26ca025ed23b314",
+          "lfSha256": "B88000A0703FBC228BF814E976FAADC32F7630FECF288F66D7E98D0F6E7A6ED6",
+          "windowsRawSha256": "B88000A0703FBC228BF814E976FAADC32F7630FECF288F66D7E98D0F6E7A6ED6"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260602205713_AddRequirementAcceptanceCriteriaJson.cs",
+          "gitBlobId": "678a3c1b76f0be47dd3af91f44170e688583c82f",
+          "lfSha256": "D4DE7C906D3662D54E0BEDACADAC4D1F5A429669865F7196D9866097B0BE4B6A",
+          "windowsRawSha256": "D4DE7C906D3662D54E0BEDACADAC4D1F5A429669865F7196D9866097B0BE4B6A"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260608083250_AddMemoryStorage.Designer.cs",
+          "gitBlobId": "29d1fcf6c36c25372682612b62a86fc81e45302c",
+          "lfSha256": "9B3DD65578F69F065819E93E8825BF2B2DA5770545D0814D71C3F1C7B1BDE2E6",
+          "windowsRawSha256": "9B3DD65578F69F065819E93E8825BF2B2DA5770545D0814D71C3F1C7B1BDE2E6"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260608083250_AddMemoryStorage.cs",
+          "gitBlobId": "633b54c7a1936824b8bc1ec16df694ff945d32f1",
+          "lfSha256": "AA8D55E612700AE7B6A4539A9C70E4FE0EA3F6108825FB177691621765DE00BA",
+          "windowsRawSha256": "AA8D55E612700AE7B6A4539A9C70E4FE0EA3F6108825FB177691621765DE00BA"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260615175650_AddBrainSlotStorage.Designer.cs",
+          "gitBlobId": "463951af47bae8ab979de9e5336209e21dda83d3",
+          "lfSha256": "2C18F9DAEE5A5DA87D580452DC6F77545BF6307F5B33FCA719E365801E700907",
+          "windowsRawSha256": "2C18F9DAEE5A5DA87D580452DC6F77545BF6307F5B33FCA719E365801E700907"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260615175650_AddBrainSlotStorage.cs",
+          "gitBlobId": "fec31f11f6b9ce40e874ef3a25794bd3e609a396",
+          "lfSha256": "6FF007490351B26F94C8AD44E517DD67AD78E01911C77141EF2E1B78C5253747",
+          "windowsRawSha256": "6FF007490351B26F94C8AD44E517DD67AD78E01911C77141EF2E1B78C5253747"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260615200421_AddBrainSlotWeights.Designer.cs",
+          "gitBlobId": "e8f40305c4d945700a70319e1ab9d24b91a9c36e",
+          "lfSha256": "B25376A23A8B39C07096C5DB0E272931FDA8C0F54FF1F1C180A970FE288FA822",
+          "windowsRawSha256": "B25376A23A8B39C07096C5DB0E272931FDA8C0F54FF1F1C180A970FE288FA822"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260615200421_AddBrainSlotWeights.cs",
+          "gitBlobId": "9d34151f52c5f1cca3ab795cd492fc02b67ddc4d",
+          "lfSha256": "A7A581F7B1D1E1C6E7F7ED482A8079028E2FE45025F0FDDBDE3413B7016FF7D3",
+          "windowsRawSha256": "A7A581F7B1D1E1C6E7F7ED482A8079028E2FE45025F0FDDBDE3413B7016FF7D3"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260625061918_AddTriageStorage.Designer.cs",
+          "gitBlobId": "f60ff5332b6f6ed1a69fc4d14b545492336095d8",
+          "lfSha256": "4F50CF6F6C6C53F4EA8CD98B44F9B4D024CB7BA7DEE497619F9F642364679FDA",
+          "windowsRawSha256": "22CB5C1D5A08459C47D2E2838D856E5F88CA7F48F3A658AD06627754FE53ABB3"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260625061918_AddTriageStorage.cs",
+          "gitBlobId": "eb59b04c4200e8e8cf008581e19eaac5aef2152e",
+          "lfSha256": "D87357BBED898A24709856CA4D02B24803E1001114EB01D6B1447F83AA3DA995",
+          "windowsRawSha256": "BA19FCC8BD18DAB4632C85E5579256A12C6AA6CFB880317D21F214BA0BE919D4"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260628010406_AddRequirementScopeLayers.Designer.cs",
+          "gitBlobId": "06d2fbfcefd146a9ca85b15b3798ccad0832cfa2",
+          "lfSha256": "3310AF6E64B20EABE7BEFE81904A50F113A73318190E5C565ED8A43A2389476F",
+          "windowsRawSha256": "BDCBA228CF06D4A4522607053A5D175C272266883E4D5A28C4B9389F28512127"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260628010406_AddRequirementScopeLayers.cs",
+          "gitBlobId": "344c3b79c2cfbba48a4b81d6d79b10b3dd17e6d5",
+          "lfSha256": "0FD66707D2DE3083FBDB54861A0765F711751E1F4173E227D88B18181422B12A",
+          "windowsRawSha256": "0843A357A3AE577C824C43C4C2FF35D2758EEECC18E9C3D8F180DEA8C21521D0"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260628102514_AddTriageRunAgentStreams.Designer.cs",
+          "gitBlobId": "d2d596f5b3fd910a407cf4b73d285332d0ecf0a1",
+          "lfSha256": "E1F61A6876E4386346387E9D6B32DC617A66567B59F95B3B8AAC7F162DE976AF",
+          "windowsRawSha256": "D2612C8DDBE3B5176DF7DF2C39914EEA2904D4BE919CA6C3AC9360DDFFDB550F"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260628102514_AddTriageRunAgentStreams.cs",
+          "gitBlobId": "e4ac0e6bf4cfd0ea603230f08b51f932f14152d5",
+          "lfSha256": "FA0B33EFA5A49A97F66C75233A199E985D96D8AB08B94A874838B67A2541F2E5",
+          "windowsRawSha256": "0844888B909A95DCAC7C50853918D81DA9C6E813487552F69B4B531D48140C48"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260628122250_RemoveTodoRecords.Designer.cs",
+          "gitBlobId": "210b819b4d7c19e9c09eab02789b5ab1d1b16cc5",
+          "lfSha256": "29428771A2B8F4542C5F1A3F58B8448FFD9FA149D4B2954B22BD729D95545CA5",
+          "windowsRawSha256": "12D1429084728B66F057C5E836FD7C0A611149B8D494361349F3BA8C590CAFEA"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260628122250_RemoveTodoRecords.cs",
+          "gitBlobId": "e07bf66d5375c1982bcac92c15c786985f2a3590",
+          "lfSha256": "56CF680CAA4F2488B92E8F3A0AC0D4378A2A870BC783394D0A1B16CE4C982A30",
+          "windowsRawSha256": "11252892688934E77937EEEA34C3A99953087523C9BB158105AB694A554F7FC8"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260628194746_RepairTriageCreatedTodoWorkspace.Designer.cs",
+          "gitBlobId": "9391739c36a7970d89a74a202ef2d8b84a8b6797",
+          "lfSha256": "748011C062CA7EFFE78FB1AB99498FB088F666978063B8F6798C1B0F89266C8F",
+          "windowsRawSha256": "E0AED044663775EE0FE05C726C74B090E25275E282C9ABBDC0B74581EB1306DF"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260628194746_RepairTriageCreatedTodoWorkspace.cs",
+          "gitBlobId": "b5f58938dbf5830fd85c390619fbfee0da200488",
+          "lfSha256": "5D9089B955AAB0941D672E19FF48BD6CED3BD3C9431BB60500B60798CAF9C43A",
+          "windowsRawSha256": "185C6AFEAA9DF40B4AB091D2B68584AA32F13B6D1903BA3BE114F3044D440DB6"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701183309_AddMissingQueryIndexes.Designer.cs",
+          "gitBlobId": "599e468611740f863587d8118ba46677925be432",
+          "lfSha256": "8ED92E4CE6FA585DF3D022E5327F80BCEBCAEE77463BFA154AF5217F387159C2",
+          "windowsRawSha256": "B13E153EC3B9ADD9843E4F33A70D178F17982B28C83E2E7F4BE1F4608E4E5534"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701183309_AddMissingQueryIndexes.cs",
+          "gitBlobId": "9d42da07577489e83c960c1bd81d0aca0565d1e1",
+          "lfSha256": "B30E19564AC1502896209E505DA56A267055F65D451C82554A3F8946D22A1879",
+          "windowsRawSha256": "67F5A938F9C745C432972FE95E9005B1987068BFFE992080A7ABF878951CDD72"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701192521_StoreDateTimeOffsetAsUtcDateTime.Designer.cs",
+          "gitBlobId": "d90824661c4867e0d5a8575a5560341f79ed4586",
+          "lfSha256": "59BB7EA71E7B31822F6084AF9AEDBD2BF45C2304A34E71E7817401CE3E4290D3",
+          "windowsRawSha256": "4A3832D382A04979FC4475A8BB40115F383D562884C5039E0CB5A9E64A42D758"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701192521_StoreDateTimeOffsetAsUtcDateTime.cs",
+          "gitBlobId": "11f243698bce2d1faa8684986f4f40bc58f39db9",
+          "lfSha256": "7A82D2623FFA920E4C919149B951E26108334BFA2C487D9D78B2190A717593BE",
+          "windowsRawSha256": "A692312EA73683753AE45665EF0B36727C50783EAF4A958E13B024F8C7C62A4D"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701202457_AddTriageAndAgentEventForeignKeys.Designer.cs",
+          "gitBlobId": "e7e6bb96c0060b7c43139c10f7752ca74c8d7df4",
+          "lfSha256": "393728DB78D9903263D3DF92DA3CCE8DC062C82B07AFDBAACA990BA772E28393",
+          "windowsRawSha256": "68CFF1F57D9874640CC21ED41DF485A994585A6B58A0D696E07EE444118B8ECC"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701202457_AddTriageAndAgentEventForeignKeys.cs",
+          "gitBlobId": "3f8bba8def8bdddf8fc602e0300f0bc98adfcd98",
+          "lfSha256": "30EFEFE7B632392EB419289D866DD3B2F9BCF0BEC4B85AE9E49CFA3C28284B6A",
+          "windowsRawSha256": "9DD0B762282EECF350FA36CB5D235F65D301B296C53020031132AEB7F116D4E1"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701205107_Decompose4nfSessionLogCommitFiles.Designer.cs",
+          "gitBlobId": "5c07ef0894413a39f6b090b003ce0b61185ab9f1",
+          "lfSha256": "9F874980E3611247F611EA42DF611AD1FDE4B9731D519E942A6B1A8879BDE0B0",
+          "windowsRawSha256": "ED10BDB7228370687DA30DC18D684A356E5FC419C73CDA47C6FE3260648195CF"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701205107_Decompose4nfSessionLogCommitFiles.cs",
+          "gitBlobId": "c03ba50787ba49be65b459206faed63bcd18f7df",
+          "lfSha256": "14A1387EDFA7EFA6D02EC9D015F500EF1E8E61930BD5DF685B93E27AE581CB33",
+          "windowsRawSha256": "492F21085224044CD6AC9E6ABB12E2139237212489F362184517E69D467C50CF"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701210331_Decompose4nfTriageReportLists.Designer.cs",
+          "gitBlobId": "6cb5981d397295d6bf3a0409c993cbea6f0c239e",
+          "lfSha256": "C6940235CD8E40F35BD847E2B82BE146881E1ABCBA1CB2A69ABA9D94B6889A3C",
+          "windowsRawSha256": "748774D595688E9C85A255406D0C40012554B3E0DAC901E93443FE13FB1F96A1"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701210331_Decompose4nfTriageReportLists.cs",
+          "gitBlobId": "e190ebee7d853b1ded30223497e66ab5839c715e",
+          "lfSha256": "115BD02DB1B7E0A555FE859F369B2FCFBB7DC295D434DDF1DDE83AA0A62F30B5",
+          "windowsRawSha256": "4151F1E59CEBC386CC62915807EC28DBADC2C6C6A9DED8073D1B840FE91D6384"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701211157_Decompose4nfWorkspaceBannedItems.Designer.cs",
+          "gitBlobId": "56a4a6a6af5b4c70ad2658be7af345e628640a2c",
+          "lfSha256": "9062AB9A573F2DC6B0E43FBC60814161B77CB1AE7DDA0EC0062162EB55124B53",
+          "windowsRawSha256": "C59456953E540814EF2FA178E2221F8D43476F486684832293EDAE6054758961"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701211157_Decompose4nfWorkspaceBannedItems.cs",
+          "gitBlobId": "2958462af25a0792bfc183d6e80e8d548f2235fc",
+          "lfSha256": "F50157F273238E17F8F2493B0439C9C1354222257D605EDC6047A0DBACFD3616",
+          "windowsRawSha256": "F50157F273238E17F8F2493B0439C9C1354222257D605EDC6047A0DBACFD3616"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701220620_Decompose4nfRequirementAcceptanceCriteria.Designer.cs",
+          "gitBlobId": "012b8385098b7bae1c9af563db8195bea0f371bc",
+          "lfSha256": "8A9300B796343C3D9FE02B52178B6C68294531E6005450CFF53027BE6B6D413C",
+          "windowsRawSha256": "0BB044863BB2C27C06B159B354C2403FBC0F759F74A42E0885E900CD87F55223"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260701220620_Decompose4nfRequirementAcceptanceCriteria.cs",
+          "gitBlobId": "e81296e3f63ff27cebbd9f70057aad61fd5dfbe5",
+          "lfSha256": "2075E1DE47BC51BBB1406484A81437291525FA1D3FD85BFAEE77D76F993307F8",
+          "windowsRawSha256": "967C12A3E873A05CB60E1A287140131FF7C65A40122A8AEB2065A89777F6B82D"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260702014126_Decompose4nfTodoItemLists.Designer.cs",
+          "gitBlobId": "657ec3ead2850db808333b9453c121d77fa0c040",
+          "lfSha256": "1BFA0E35672F442EBFABE8BF1AE027AEC37119F5931578294AB9F48B714D6C9E",
+          "windowsRawSha256": "F7F9399494F84A638FE148175EAE23A375187CFD08601A996EB4660E6F102CB9"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260702014126_Decompose4nfTodoItemLists.cs",
+          "gitBlobId": "2addce1201e084ad4268abc207a96b57df4355ac",
+          "lfSha256": "78A170485FE9DD946C3568B23569B4CA5C5B1A6BA27C34FA2A44A71EA6EEE5BD",
+          "windowsRawSha256": "EEB2A8DB16EECCB3A654ED8AA2A6C59B331B37A44443D17B578F7115C8FCBB44"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260702192359_Decompose4nfTodoDocumentMetadata.Designer.cs",
+          "gitBlobId": "13b227658710f4d006ec1dd89f749c16392a2e5d",
+          "lfSha256": "36E443D1E7B59C4062D6C14802212EFC1BE5205BA6F7BEB8B79680C390D9E2A5",
+          "windowsRawSha256": "83C10CDCA96B4B0025FA698D22AB3FEC1CFAB972970549561A0529987670E780"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260702192359_Decompose4nfTodoDocumentMetadata.cs",
+          "gitBlobId": "db3349cdbd24616762514f69b3b8adf717e2d247",
+          "lfSha256": "18C6F6116364626DE7574793D58C23B46DD16AC1369F43148801B238F034D529",
+          "windowsRawSha256": "A68B6A4F7DC232A5C88098464B67287D34BE2EB66381109BFC4CFAF6B96DCD44"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260702193922_Decompose4nfAgentModelLists.Designer.cs",
+          "gitBlobId": "1752e3cdf0b2406c876e120dd464f1f5214b0936",
+          "lfSha256": "8F991A3116BD518A96D737CEAADCDD05C8A3A81063903C479BEEF3C9A9B2431F",
+          "windowsRawSha256": "EED5B36A35004EEE984F6FB6A1E8E810FAA7994EA6084B4E94FCBBEFF293E295"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260702193922_Decompose4nfAgentModelLists.cs",
+          "gitBlobId": "9ea8d6f8c552ff9b39eae42f629fda9bf9f99465",
+          "lfSha256": "BA20C1E486AD7D6E7D4BA28F6CE77D316B505BC97E8FC35464B890453288EE93",
+          "windowsRawSha256": "A60906372DA140DA18BB004D09B38850B12B042A9EB3D54B94074DC6F61161BB"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260720170000_RenameQuadBrainRolesToCreativityLogic.Designer.cs",
+          "gitBlobId": "6a99e196c81415557bbbfce36edd6b6195ff9dd9",
+          "lfSha256": "8C3936777AC74040203305EEBF904BFB16DDC28F21FB7DDF7782EBADA75243D4",
+          "windowsRawSha256": "122075DD34C177AF89A8359CA5D1F8D108460B7212AD29759CFD9EA7FB322F87"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260720170000_RenameQuadBrainRolesToCreativityLogic.cs",
+          "gitBlobId": "c8e504799b8dc8e8dec7a67ff81a0ccee0739353",
+          "lfSha256": "9513FD013495FA1E486B535B320A88E4442B5A7CC08BF2514B771BF07624C595",
+          "windowsRawSha256": "C6ECEB93E4141A8C00CDF015887B748814464327FDD85DE4A0DE14D0C1686D76"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260807143920_AddUseCaseSupport.Designer.cs",
+          "gitBlobId": "376f162b9934678a173ad0c9a993efbab401b560",
+          "lfSha256": "32C35596C01F9F2A9457E5068CCF876942FC6853F93C975F651AC5463D749159",
+          "windowsRawSha256": "09021DAF6F5BEE6A5E8D90A7E18BB77556D9F9BA86FE1FACC071F747F210DEA1"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260807143920_AddUseCaseSupport.cs",
+          "gitBlobId": "99d6ca90dfe4dfc658db320f72d16e6980611d8b",
+          "lfSha256": "041145FFEA559E3B5D4602FD4A0A7FD35B8A400669EB13E6A0A2962F7A13EBB5",
+          "windowsRawSha256": "4A95FC63DE761DB903857751E79B43883AC897DCB5B342CFDE73946B978DDB8A"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260808102600_AddUseCaseDiagramGraph.cs",
+          "gitBlobId": "89f76691de5f7bfa9e0a1277bb0100183ad0901a",
+          "lfSha256": "1D0A72CF071D581D8F413B1445A892583FA2A2D958E83409A073E6862EBBAA0D",
+          "windowsRawSha256": "61D782944B0288A00381C93BDF4EFA3515BB26E9850AB49191FED38B6EFFD98F"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260812173136_AddSessionLogTurnPlanFileAndTodoId.Designer.cs",
+          "gitBlobId": "f6ff6027d7d3440ccfb331743eb5df6a5bce0f81",
+          "lfSha256": "95C472506A679E3B2012DE81FC270184ADB14C1713C75ACF0A3BB2D706570CA0",
+          "windowsRawSha256": "67E84D5E355F54DC162A76349B4B4D10CC312983006CACFBF2FBF70FA212E1D1"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260812173136_AddSessionLogTurnPlanFileAndTodoId.cs",
+          "gitBlobId": "6a9f4fb5d909856525df8fabf50034a1095b27cc",
+          "lfSha256": "10613389D9352AEBC3995BD08F8624E4C92E8652E837834C86296BF93F4271FA",
+          "windowsRawSha256": "3EA7E4846256D5A6EF231BEBA56F11CDAB57D902E499D63D0CCFAFD87A6D7260"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260816183202_AddHandoffIngestionStorage.Designer.cs",
+          "gitBlobId": "5e90f0b62ba9e215cf3706d29c3a16e288a30774",
+          "lfSha256": "3E1F7A0C326377DD921BB4A65B8D367AD791700D179542B7CF1CDC1A16A8E5D3",
+          "windowsRawSha256": "7EA8171F1A1802EB6BB432EA620A6F6DDC6D6773FCAC0FC2F0D85B3B2529EE56"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260816183202_AddHandoffIngestionStorage.cs",
+          "gitBlobId": "c31d03fd96c9695202738a0a753e6080ca4cb049",
+          "lfSha256": "1EB6EFF30674C6CB10F7136D87C01E1CF9CF44666F795F3656DBB9BC1A086F5A",
+          "windowsRawSha256": "C7E7D8EBF72FDD3D9DC1488AA81D7CF831309C99F5585D08DB499C8DF000A689"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260818142039_AddProductsStorage.Designer.cs",
+          "gitBlobId": "195934e46c746356ae90d390795756a6af613a4b",
+          "lfSha256": "B473A5002E36FEF47B8320D3159A80FBA5EE0E6DCEE4BCA8C31804A51842391C",
+          "windowsRawSha256": "2C7530788026EFE0D9EEA0E2102721672C95C9BCF2A0442C686888602C58EDF6"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260818142039_AddProductsStorage.cs",
+          "gitBlobId": "063b94a5cbb3193523efdae0d1aee6b3b93aeb52",
+          "lfSha256": "AE2CA317BCC912E325745A67226F75121D58EF22CB360E787B93F60B5A263478",
+          "windowsRawSha256": "FB5DE4EFF2974330654D873598CBD36CC9FBF053DD131CCD525794B72398DF3B"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260818205822_AddSessionLogTagsAndAgentSessionHeaders.Designer.cs",
+          "gitBlobId": "542c81c634bcfa14191296853642bd83dfb81730",
+          "lfSha256": "3923A51959506BC141B7C39F1CFDC885B2A2FA45A608E19FCBBD32650606DC6B",
+          "windowsRawSha256": "A351B975948E7258C89700F47F55F56CAA5AD88F529C3EF1647B2AB07EAD2AE5"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260818205822_AddSessionLogTagsAndAgentSessionHeaders.cs",
+          "gitBlobId": "fc723ff0f4d1092215a6c12223d8b98c9a94e7cc",
+          "lfSha256": "41CE69F13D0E6980F9FA129FA0E8DEC8E28FD783AA83BACB3ADA7F8C87FA60A3",
+          "windowsRawSha256": "B33927622C181E7EC15CE84FBD2FD13D0FB3719C4B21503D9853EDD8A44D4EFB"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+          "gitBlobId": "0463209577d3d6bdbc9787f28ef0307cea1ea895",
+          "lfSha256": "70F5A4A45A17579945DA3CA78500BD74DC392928720C8B74354D712EB6D73F37",
+          "windowsRawSha256": "70F5A4A45A17579945DA3CA78500BD74DC392928720C8B74354D712EB6D73F37"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+          "gitBlobId": "2616ae2cb774c532de191f745cf5f3b070936f32",
+          "lfSha256": "BA7C5C77C4332FF606640A2192ECC0AA3957FE773CD920D3F2DA711CCC0F9A35",
+          "windowsRawSha256": "BA7C5C77C4332FF606640A2192ECC0AA3957FE773CD920D3F2DA711CCC0F9A35"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+          "gitBlobId": "20469fc5031a077ea269f2678568f622b79f3899",
+          "lfSha256": "DD703F15BAAE1A0A2B91F4185AA133FD90D765E8D4DC7FF4D429A76EB0B49AD8",
+          "windowsRawSha256": "DD703F15BAAE1A0A2B91F4185AA133FD90D765E8D4DC7FF4D429A76EB0B49AD8"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260929020000_AddRequirementsRecoveryRuns.cs",
+          "gitBlobId": "2a949684b7039cf55f055e124e716841dcab41e7",
+          "lfSha256": "EE1CA58D8AA03832572AB9490F1E29E7C8B6AB02EB94D3FB1E785871EE4DB8E2",
+          "windowsRawSha256": "EE1CA58D8AA03832572AB9490F1E29E7C8B6AB02EB94D3FB1E785871EE4DB8E2"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20260929140000_VersionedAuditPayloads.cs",
+          "gitBlobId": "a49e3a0e146c6a89a7232961f3046069998b6fae",
+          "lfSha256": "3079567FB2E200A1C58B32226C16F61C3B665710162D45A83BDDECF084708D03",
+          "windowsRawSha256": "0D343E27A5ADA10E847307CD16A110B29C0AE36E5D6613133DACCCDB3D3BD49A"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20261005170000_RenameTriageIsMcpServerRelatedColumn.Designer.cs",
+          "gitBlobId": "2c740fb2aa1b58cb64275621c47eabade314a45e",
+          "lfSha256": "663F5709983A48C1436EF025C553A9071FC4348F1AA188832E49C013C5F46684",
+          "windowsRawSha256": "2F96AF29D01E0A5A3F44A58BDA6B59AA7D0E69663B39F0D5E7CE4165A1119850"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/20261005170000_RenameTriageIsMcpServerRelatedColumn.cs",
+          "gitBlobId": "1b451b69ecc405d093c2ea58c4ce4dac62de9190",
+          "lfSha256": "69AC90A6F399117A902D9A6E57DC26458E99841C15C75DDC9FE0743AA51C29EC",
+          "windowsRawSha256": "69AC90A6F399117A902D9A6E57DC26458E99841C15C75DDC9FE0743AA51C29EC"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/McpDbContextModelSnapshot.cs",
+          "gitBlobId": "2c33a35a32b12dc923555e37d843a3e8ec94bde8",
+          "lfSha256": "66CA2F007661A2D402E30423FBA69E12CC5911EB4B0778EBEDAE13DCEED5F042",
+          "windowsRawSha256": "489F56A5784F8CEBCB5B73548C3A457D885C149F23E336B1CCE15377E8CC6F96"
+        },
+        {
+          "path": "src/QBrainAi.Storage.PostgreSqlMigrations/QBrainAi.Storage.PostgreSqlMigrations.csproj",
+          "gitBlobId": "74a18992fa6d97c46ae933d275387b510799e113",
+          "lfSha256": "429AB6C2CFDAF67867F26F816D62ECA2C36B7FF0B01A82C589A127D498089C3E",
+          "windowsRawSha256": "429AB6C2CFDAF67867F26F816D62ECA2C36B7FF0B01A82C589A127D498089C3E"
+        }
+      ],
+      "migrationIds": [
+        "20260328202540_PostgreSqlProviderInitialCreate",
+        "20260420193911_AddGraphEntitiesAndRelationships",
+        "20260420214655_AddTodoStorage",
+        "20260421173651_AddTodoWorkspaceScoping",
+        "20260506175810_AddRequirementsWorkspaceStorage",
+        "20260521181325_AddFederationHubSpokeStorage",
+        "20260522160010_AddRequirementMetadata",
+        "20260522183250_AddDbFkIntegrityRepair",
+        "20260525104227_ScopeSessionLogUniqueIndexByWorkspace",
+        "20260602205713_AddRequirementAcceptanceCriteriaJson",
+        "20260608083250_AddMemoryStorage",
+        "20260615175650_AddBrainSlotStorage",
+        "20260615200421_AddBrainSlotWeights",
+        "20260625061918_AddTriageStorage",
+        "20260628010406_AddRequirementScopeLayers",
+        "20260628102514_AddTriageRunAgentStreams",
+        "20260628122250_RemoveTodoRecords",
+        "20260628194746_RepairTriageCreatedTodoWorkspace",
+        "20260701183309_AddMissingQueryIndexes",
+        "20260701192521_StoreDateTimeOffsetAsUtcDateTime",
+        "20260701202457_AddTriageAndAgentEventForeignKeys",
+        "20260701205107_Decompose4nfSessionLogCommitFiles",
+        "20260701210331_Decompose4nfTriageReportLists",
+        "20260701211157_Decompose4nfWorkspaceBannedItems",
+        "20260701220620_Decompose4nfRequirementAcceptanceCriteria",
+        "20260702014126_Decompose4nfTodoItemLists",
+        "20260702192359_Decompose4nfTodoDocumentMetadata",
+        "20260702193922_Decompose4nfAgentModelLists",
+        "20260720170000_RenameQuadBrainRolesToCreativityLogic",
+        "20260807143920_AddUseCaseSupport",
+        "20260808102600_AddUseCaseDiagramGraph",
+        "20260812173136_AddSessionLogTurnPlanFileAndTodoId",
+        "20260816183202_AddHandoffIngestionStorage",
+        "20260818142039_AddProductsStorage",
+        "20260818205822_AddSessionLogTagsAndAgentSessionHeaders",
+        "20260918223000_AddMemoryVersionAndEdgeStorage",
+        "20260919060000_AddMemoryIndexStorage",
+        "20260919193000_AddMemoryVersionSoftDeleteColumns",
+        "20260929020000_AddRequirementsRecoveryRuns",
+        "20260929140000_VersionedAuditPayloads",
+        "20261005170000_RenameTriageIsMcpServerRelatedColumn"
+      ]
+    },
+    {
+      "provider": "sqlserver",
+      "assembly": "QBrainAi.Storage.SqlServerMigrations",
+      "files": [
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260328202557_SqlServerProviderInitialCreate.Designer.cs",
+          "gitBlobId": "40f05ad92c660168e80e751583e7f0645094f406",
+          "lfSha256": "81F8FBEC5E4445BECA39840102AEC2A0A6B7CF1AD6FC4B1781CC1876FF8830C8",
+          "windowsRawSha256": "81F8FBEC5E4445BECA39840102AEC2A0A6B7CF1AD6FC4B1781CC1876FF8830C8"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260328202557_SqlServerProviderInitialCreate.cs",
+          "gitBlobId": "7c97ef4e6deed40b5ef7ed10d9b4e50b45683e05",
+          "lfSha256": "9F3B3571709F95C1EE6F926C4DD5FB519859A26F884BBF0DAED1DCA90C39AC7A",
+          "windowsRawSha256": "9F3B3571709F95C1EE6F926C4DD5FB519859A26F884BBF0DAED1DCA90C39AC7A"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260420182917_AddGraphEntitiesAndRelationships.Designer.cs",
+          "gitBlobId": "00367d8ec4957b00edeb0bb78f92b839bc6d4f52",
+          "lfSha256": "E3FB362E792799EB2536227819090514537BF7016D13D7827D23831EDD36705E",
+          "windowsRawSha256": "E3FB362E792799EB2536227819090514537BF7016D13D7827D23831EDD36705E"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260420182917_AddGraphEntitiesAndRelationships.cs",
+          "gitBlobId": "5ad08c1c16399c9fca5561de10cfed39f31b7535",
+          "lfSha256": "7B18CF0A87DD482A859346E7C958B1DA7AA654D853CDC7C000B668B779953757",
+          "windowsRawSha256": "7B18CF0A87DD482A859346E7C958B1DA7AA654D853CDC7C000B668B779953757"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260420214644_AddTodoStorage.Designer.cs",
+          "gitBlobId": "715212cb54b77efc16cfc59b8e1f88e4dcf95206",
+          "lfSha256": "784D2175CAADCC51EF2AA283CDB5E9B42C2FFB2F84F7B7CAF8B43C4B87CBE407",
+          "windowsRawSha256": "784D2175CAADCC51EF2AA283CDB5E9B42C2FFB2F84F7B7CAF8B43C4B87CBE407"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260420214644_AddTodoStorage.cs",
+          "gitBlobId": "62831e8a0dc9fcc726b8f0baddfc60237d22cbea",
+          "lfSha256": "69128DC28A9F302EFF880D84B7C4FBF6BA1D6D8F348E5809F8A3F22B602D309D",
+          "windowsRawSha256": "69128DC28A9F302EFF880D84B7C4FBF6BA1D6D8F348E5809F8A3F22B602D309D"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260421173643_AddTodoWorkspaceScoping.Designer.cs",
+          "gitBlobId": "edb07c491dfd13f019a6f5effaa797a170713f54",
+          "lfSha256": "D3E38BCC58EDABE9E8FC38787028A5D33A9AAE9521C49122087EBAA7B56034B5",
+          "windowsRawSha256": "D3E38BCC58EDABE9E8FC38787028A5D33A9AAE9521C49122087EBAA7B56034B5"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260421173643_AddTodoWorkspaceScoping.cs",
+          "gitBlobId": "3eeb1126c5929947cee7cb63e88601676c2d3092",
+          "lfSha256": "90E99057AE79CC0C3D3231921DE94C709DF398869D0FD7D657F4B2CC8852BE3E",
+          "windowsRawSha256": "90E99057AE79CC0C3D3231921DE94C709DF398869D0FD7D657F4B2CC8852BE3E"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260506175810_AddRequirementsWorkspaceStorage.Designer.cs",
+          "gitBlobId": "b900878f772b82ec535a9643f83e576d20552158",
+          "lfSha256": "2848ED371DCDF925C61386370225CAE4E5DABBD8F8CB67ED57DB4D30C6642FB8",
+          "windowsRawSha256": "2848ED371DCDF925C61386370225CAE4E5DABBD8F8CB67ED57DB4D30C6642FB8"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260506175810_AddRequirementsWorkspaceStorage.cs",
+          "gitBlobId": "8fdda975c589196cd147cfc7ab7e0f297431cff9",
+          "lfSha256": "F5C1C2F817184DE5A4250C85E9A6EEB60D9D841E1654956B590E7EA98FBE5EDA",
+          "windowsRawSha256": "F5C1C2F817184DE5A4250C85E9A6EEB60D9D841E1654956B590E7EA98FBE5EDA"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260521181351_AddFederationHubSpokeStorage.Designer.cs",
+          "gitBlobId": "8a9d933bcfc42f7903abf7a39a56437e31d7d04b",
+          "lfSha256": "14BA8F238E2FBB3FEF9CD8573AD0A46D813ED923891E1A55F0A639327B23519A",
+          "windowsRawSha256": "14BA8F238E2FBB3FEF9CD8573AD0A46D813ED923891E1A55F0A639327B23519A"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260521181351_AddFederationHubSpokeStorage.cs",
+          "gitBlobId": "39ba05e9c4b8083091b0000c91efec448d542ab0",
+          "lfSha256": "E2E1263706889DBBD651F396C559F87EDE7FFC99FC03602CC69D76ACC806BB2F",
+          "windowsRawSha256": "E2E1263706889DBBD651F396C559F87EDE7FFC99FC03602CC69D76ACC806BB2F"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260522160010_AddRequirementMetadata.Designer.cs",
+          "gitBlobId": "e735ff75558100902c33096815597bf2729f8151",
+          "lfSha256": "BA8685D9C011A9D4729513E163D87BE22173984FBBC6A1EC96BC7DC73EBB5D1D",
+          "windowsRawSha256": "BA8685D9C011A9D4729513E163D87BE22173984FBBC6A1EC96BC7DC73EBB5D1D"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260522160010_AddRequirementMetadata.cs",
+          "gitBlobId": "ad81aba8dd1321db3466afd3c4e76db7ec44cd84",
+          "lfSha256": "D6B655973CA6187DF1B82D18285733A3E653A691997EC8516633D5D68CE3DF94",
+          "windowsRawSha256": "D6B655973CA6187DF1B82D18285733A3E653A691997EC8516633D5D68CE3DF94"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260522183236_AddDbFkIntegrityRepair.Designer.cs",
+          "gitBlobId": "06cb6a11d6ee0ae9880b9f98fc7a6efa617b66c6",
+          "lfSha256": "79272032CC2430C61960C143DFA0586801FAC7C1696DC2A1AAD42E4766000733",
+          "windowsRawSha256": "79272032CC2430C61960C143DFA0586801FAC7C1696DC2A1AAD42E4766000733"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260522183236_AddDbFkIntegrityRepair.cs",
+          "gitBlobId": "26afd570885e81e5fa6f1ba3753dc3780fa2ec82",
+          "lfSha256": "C17E390D4B8CD228C6C4D92B2DD9AD0644B0A1A2664F9F2AAB95AB7C0374B0D0",
+          "windowsRawSha256": "C17E390D4B8CD228C6C4D92B2DD9AD0644B0A1A2664F9F2AAB95AB7C0374B0D0"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260525104212_ScopeSessionLogUniqueIndexByWorkspace.Designer.cs",
+          "gitBlobId": "d4e2d44642a47a6e3f7f5c08e3b1411113fa82b0",
+          "lfSha256": "8E0594FC0321F06F7BCE9A2D6B476C8967FD86953440BF620DA6635F7E29E4AA",
+          "windowsRawSha256": "8E0594FC0321F06F7BCE9A2D6B476C8967FD86953440BF620DA6635F7E29E4AA"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260525104212_ScopeSessionLogUniqueIndexByWorkspace.cs",
+          "gitBlobId": "fe576bc5e893c92a23fbad9396f21c6094aced13",
+          "lfSha256": "FD37AE308A0EE845EB4CB0456B88C875D36180CC58D0B09A7E0C8A33148F4CDA",
+          "windowsRawSha256": "FD37AE308A0EE845EB4CB0456B88C875D36180CC58D0B09A7E0C8A33148F4CDA"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260602205731_AddRequirementAcceptanceCriteriaJson.Designer.cs",
+          "gitBlobId": "2bfa3898cd3994ef5e5abe0ae6bb65f938d0dfd4",
+          "lfSha256": "D06AEAFAF70936F23DB5184AC07C7D229883E27E765ED7F6CDC1321513842EC6",
+          "windowsRawSha256": "D06AEAFAF70936F23DB5184AC07C7D229883E27E765ED7F6CDC1321513842EC6"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260602205731_AddRequirementAcceptanceCriteriaJson.cs",
+          "gitBlobId": "2574f8670c111640dbd8423e85317aaa4d830506",
+          "lfSha256": "7B705BEBD3AB94E81F789A0ABE451C75FE95E0C6A270914EAD3FF2996561491E",
+          "windowsRawSha256": "7B705BEBD3AB94E81F789A0ABE451C75FE95E0C6A270914EAD3FF2996561491E"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260608083230_AddMemoryStorage.Designer.cs",
+          "gitBlobId": "3af7217fdb487ed06ea183f83d9e56b9e5c56802",
+          "lfSha256": "19B19CC4043E7AE2437CFE06920D7A78049DF51870C5C8855CA727F2F4B15334",
+          "windowsRawSha256": "19B19CC4043E7AE2437CFE06920D7A78049DF51870C5C8855CA727F2F4B15334"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260608083230_AddMemoryStorage.cs",
+          "gitBlobId": "b89896da7d8e995c6f2089f634628bf10075f64d",
+          "lfSha256": "5036527D8F541F4FA482DE54B693032DBD44F218EA31AF3A5204BE5D4DCA4B5B",
+          "windowsRawSha256": "5036527D8F541F4FA482DE54B693032DBD44F218EA31AF3A5204BE5D4DCA4B5B"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260615175650_AddBrainSlotStorage.Designer.cs",
+          "gitBlobId": "22f4c51c6dc9be0999a8cda23fb795d96669ebfa",
+          "lfSha256": "16A71B3298F3F0BA239BAAB56999DD8D25C0F49D173CE6D7DB26B66C06043FC7",
+          "windowsRawSha256": "16A71B3298F3F0BA239BAAB56999DD8D25C0F49D173CE6D7DB26B66C06043FC7"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260615175650_AddBrainSlotStorage.cs",
+          "gitBlobId": "be469b5cc9fc72863e1ef2510401480630586c20",
+          "lfSha256": "C17EA4B8406A162E718F22FDF1597BAEAD008AC1338308007F039FA2EE85DAF5",
+          "windowsRawSha256": "C17EA4B8406A162E718F22FDF1597BAEAD008AC1338308007F039FA2EE85DAF5"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260615200451_AddBrainSlotWeights.Designer.cs",
+          "gitBlobId": "8f0ad96e0929870348661aad9d51c9a9bbf9246f",
+          "lfSha256": "21F45670948682C50329404E90964EC05106C651CAD3CC47A4A8057915D791CA",
+          "windowsRawSha256": "21F45670948682C50329404E90964EC05106C651CAD3CC47A4A8057915D791CA"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260615200451_AddBrainSlotWeights.cs",
+          "gitBlobId": "357dd118e2cf0780b98f4b05f7ef55703e88614e",
+          "lfSha256": "99BC7B34692A5E2638CE236982D0F4122DC35341121E89A9F946893322924BC5",
+          "windowsRawSha256": "99BC7B34692A5E2638CE236982D0F4122DC35341121E89A9F946893322924BC5"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260625061853_AddTriageStorage.Designer.cs",
+          "gitBlobId": "d6e98fa0c275958ed8a7b22443a140db66dfe848",
+          "lfSha256": "41816DD8AD8C221B183E6E66A246CEDC32AFBDC5F2FF5A8A2D7C8873E4470058",
+          "windowsRawSha256": "9E53089F20A42982015EF1E4A44A8CDC4B4220EE0838881E7AF7FB619AE8F92A"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260625061853_AddTriageStorage.cs",
+          "gitBlobId": "0fe70ea576ce11cb698fb920111c775e05ae5351",
+          "lfSha256": "ADA334A0360039F1D960C901887F759344874D068CB714A93C26648D50A41068",
+          "windowsRawSha256": "E4A1124B88AB7381B898CEDF621A84E98A8ED9A7E2604470F67E3346288E5E91"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260628010344_AddRequirementScopeLayers.Designer.cs",
+          "gitBlobId": "85b55d04248a007ba6c59b083613fde1ac1b8f38",
+          "lfSha256": "193E7D7CB08978F68E5C858606D9AD6E0B497CD0081F36E162FE57984EB42669",
+          "windowsRawSha256": "5A412850EB9670F3DC773EF38C1DBAD7750375026E970C63BFC4A49A5BAAE723"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260628010344_AddRequirementScopeLayers.cs",
+          "gitBlobId": "ed142c1ed524eb63c66819b3086e361c9e8b8126",
+          "lfSha256": "01A380751B175626BCFD5ACEE5D0B053F7489EFC6DBA914F41DD711ED468E9A4",
+          "windowsRawSha256": "14B9D7F513CB888BA3A660AA73F4A6DFCB3E98CF0C962D088E84654132DAC21D"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260628102507_AddTriageRunAgentStreams.Designer.cs",
+          "gitBlobId": "b9737b3ebb8f7a71cd2901a60770ccef86244ce8",
+          "lfSha256": "31FE543057373A492EB6969F19F0676E8ADCE26D6BDB74283B63746183E96F54",
+          "windowsRawSha256": "8C6652F6B94C302AE7CBE7F3FDDE957B712B3DDCDE8A15CF075B53FD4F012B85"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260628102507_AddTriageRunAgentStreams.cs",
+          "gitBlobId": "159fed0680b8e737a5fef31b61f74defcbf90991",
+          "lfSha256": "123361977DA87C7351E982801B8E071571D66FFE07914E966986B0F3620B91A3",
+          "windowsRawSha256": "176BF711C7E82D9CC92B4151CB3A4DD8D473379D137042DA08438D3913844144"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260628122233_RemoveTodoRecords.Designer.cs",
+          "gitBlobId": "4961c1eda5924000ef4145af2257a9562a0206cc",
+          "lfSha256": "7E4F326E4BE1E7C9439A550CC7C677F6F853B92ABB3B92BE4A70D94985CF7880",
+          "windowsRawSha256": "90F03AEDD80D1F77D0ACC770AFF311766E0E4C815BE069820BED5B3631914DDA"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260628122233_RemoveTodoRecords.cs",
+          "gitBlobId": "155df3e61d8f9cfe17599c23a397460c93766a42",
+          "lfSha256": "AE5069F3963E12CC965672378827F2E795A73B75E9A766911952E7DBC648332D",
+          "windowsRawSha256": "FCDD119C27754A357910662C1DC70D64837A90151B6163257A4C8C66D925EF07"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260628194732_RepairTriageCreatedTodoWorkspace.Designer.cs",
+          "gitBlobId": "7701cadeca93297fdc0d1a05af43073791dbe6cd",
+          "lfSha256": "2B8E9F088A29F96FE043251DA6835C11DFE8A1161407FE33935F44C9293CF465",
+          "windowsRawSha256": "2F4EA2B1FD65574F3BA20A7924E8EC46C3944816A877B8E246F196EF881613A7"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260628194732_RepairTriageCreatedTodoWorkspace.cs",
+          "gitBlobId": "a0500a8acdd55dc283c87d45589fbadd8e45dcd6",
+          "lfSha256": "DDF7D39C205DEB7BD5025D29961CC35673079B2C749FE2B1E8397E9B013FA6EE",
+          "windowsRawSha256": "8C0CCF79091A790BC96B772476613766A641645E1E580F8394C107D32C3D3D39"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701183324_AddMissingQueryIndexes.Designer.cs",
+          "gitBlobId": "f799f731cd3f0ede8a9a7e85ea78f7e3a98df219",
+          "lfSha256": "32170447A71078929A45E9AC150B167B15633713A352C7004C934B237A8EA2B5",
+          "windowsRawSha256": "601F94022379D04C8760F5632E24C2FD6D3F301C44C71C8D32A6F75385893407"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701183324_AddMissingQueryIndexes.cs",
+          "gitBlobId": "c3b01bef34a32244ec00bb1a5d5ee7a2d7dcc078",
+          "lfSha256": "20246E7B6E6A8BB3D8B244866EF2202FAF009A6CBEAAC8C19D4FDB4179CEF37D",
+          "windowsRawSha256": "02778B3DCDC48D5D18A15B9378319B1CF174F2977156EF72A91F117BAB195544"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701192535_StoreDateTimeOffsetAsUtcDateTime.Designer.cs",
+          "gitBlobId": "36dbb01106140231298d0954b871e5ba5763f495",
+          "lfSha256": "677D8065E3FD95D89A47820CA305FE08A729AF98372B796BEC12D21DF88A8B2A",
+          "windowsRawSha256": "E373BC633DE06C9720089E9260DF7717D45F98F9C301191EFE7145CD33306211"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701192535_StoreDateTimeOffsetAsUtcDateTime.cs",
+          "gitBlobId": "8b313ba5df17f9a9037fb79de7873976ff97571a",
+          "lfSha256": "8BC08172A2997E987BC82C26F41443CF1261F498D2E8B5F19F00817F076DF918",
+          "windowsRawSha256": "8A600854335560D0442FAB32F056B01F227FBF6A4B72C9988460E9DD416191DA"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701202508_AddTriageAndAgentEventForeignKeys.Designer.cs",
+          "gitBlobId": "45a6419d4f3d1ab1221ec9f9fe25c81886bf273b",
+          "lfSha256": "561A285247D1CBFAD4EF1A244A6258136F6302C9762554A15A7D4173810E8F4E",
+          "windowsRawSha256": "C702CF94F83FC8CE105359A2276CF7D1B51EE37AE39959CD7F9533603ACA8C4B"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701202508_AddTriageAndAgentEventForeignKeys.cs",
+          "gitBlobId": "5a8a99fc3ad5e28ec6e8a86c4fc87feb94d7630a",
+          "lfSha256": "361000819EE2FE615827E13C4135E79244D4A62D1409E53C4D90FDC9FAF374E1",
+          "windowsRawSha256": "A079DD6BF7D091FEA5AA4A53B491353ACCF11E1267786F07D91BA63689CD4B3D"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701205117_Decompose4nfSessionLogCommitFiles.Designer.cs",
+          "gitBlobId": "cd077eedced6b40b10aec98b6eca226b41e242ae",
+          "lfSha256": "16B0F7ACE9E80D462C9474655794978F7884F6A9B978BAB4C22838DBEED34A1F",
+          "windowsRawSha256": "05BB945EC20B5F9E9DB56EEC644E4D375A3DA06A8DFCABE9EF2D2E24E045AEC3"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701205117_Decompose4nfSessionLogCommitFiles.cs",
+          "gitBlobId": "29d73b298e715067069f10dd7aeda3c8cfa9bb3d",
+          "lfSha256": "22CC539CF5821CD53EA4443E6A04F449CBAA1159BA66E432CC145D42597AC983",
+          "windowsRawSha256": "22CC539CF5821CD53EA4443E6A04F449CBAA1159BA66E432CC145D42597AC983"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701210343_Decompose4nfTriageReportLists.Designer.cs",
+          "gitBlobId": "3ea0c4346059c54ca50813101e88bf42219671cb",
+          "lfSha256": "1764FCD5B476697D65AA75CBAC8DB270DF2A4DED5B3A3E24D3644E3A455FACAD",
+          "windowsRawSha256": "F094EEF0C079D173F6780C8E586E02D41CBD995912DBEAB996B9751F761CE729"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701210343_Decompose4nfTriageReportLists.cs",
+          "gitBlobId": "a0656631bf980cb62f4599468069a164cb2d16a0",
+          "lfSha256": "1BB0EB46EFEC363CA2126DB4B70CD4D61C1F7198F8D05845D0972B30C03E0ED5",
+          "windowsRawSha256": "1BB0EB46EFEC363CA2126DB4B70CD4D61C1F7198F8D05845D0972B30C03E0ED5"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701211220_Decompose4nfWorkspaceBannedItems.Designer.cs",
+          "gitBlobId": "cc104ee949cc64fe41f079f6a5d2edb2f701599c",
+          "lfSha256": "4032CC03FD7F1DFCF089AD20946BEE2831F1A62E21E73E9EB7AFC1E76ABD3BB2",
+          "windowsRawSha256": "4A8FB2F589547BE4F8C5EB30E0837477CB1A620FC8EA3B357DB35BB7129E1A5C"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701211220_Decompose4nfWorkspaceBannedItems.cs",
+          "gitBlobId": "d4cc74367f644f22d97814984d5aaecaeebcdc7c",
+          "lfSha256": "AB3464F23D02F76EA533F3E8233CB37A55A8C823009BB41D1D2CF679003A6B2A",
+          "windowsRawSha256": "AB3464F23D02F76EA533F3E8233CB37A55A8C823009BB41D1D2CF679003A6B2A"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701220645_Decompose4nfRequirementAcceptanceCriteria.Designer.cs",
+          "gitBlobId": "e606730f8ca278edcae27efdeaf3c5b8c9862a1c",
+          "lfSha256": "74D79C3198E7016306330476872CEECB09D46FA47C667B50B3C57CA9CA32F1F3",
+          "windowsRawSha256": "2810FAA29E4CC86DD1378E74B0E92D788643FB3EC13E14257DCE66B37BDEEFB3"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260701220645_Decompose4nfRequirementAcceptanceCriteria.cs",
+          "gitBlobId": "0d6f5deb1779036cfdd82459564d4aa8703b0620",
+          "lfSha256": "1B4FC90DDC0ACF593038F6EE0FAB83BFFD3D8754E234D43E3C2398B3BBEA5CBE",
+          "windowsRawSha256": "1B4FC90DDC0ACF593038F6EE0FAB83BFFD3D8754E234D43E3C2398B3BBEA5CBE"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260702014138_Decompose4nfTodoItemLists.Designer.cs",
+          "gitBlobId": "7f36f25d465c7e6ba0884c224246ce374fcf748c",
+          "lfSha256": "481F2E37A835514F29E7130701DE614D85DA0C641D94954C14D10F85EE4E6117",
+          "windowsRawSha256": "DE90EFB0B611B94EA7E648017BAF773EBFB41D615D7A61EE31334A42E9C78984"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260702014138_Decompose4nfTodoItemLists.cs",
+          "gitBlobId": "105e7ccbb6c37cd3dd488cff21eb2fc8db8840fc",
+          "lfSha256": "C38CAECAA664881F05718D4AB03595D171886A24DE6ABDFE6B88E1BA1F4D3AAD",
+          "windowsRawSha256": "A88AA9A5F409969B4AD0059E67CA6DC2117ABFE0ACB2D1259D54471CC3DB5630"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260702192410_Decompose4nfTodoDocumentMetadata.Designer.cs",
+          "gitBlobId": "5a83f6ac8a1a735655c5f9a181c23ecb32f2dee6",
+          "lfSha256": "25FDD7CFF953014496425674C6B5F61B55E9734D4302CCAC4D39BA8E1592474B",
+          "windowsRawSha256": "0A5077350A09C38130BDCB51EF9FDFDC67BB762A7FF3F93EE7E06FD4B1213E74"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260702192410_Decompose4nfTodoDocumentMetadata.cs",
+          "gitBlobId": "fcc7105bd094f872f8a4569de8c3e78987b7b32a",
+          "lfSha256": "07974F3E8E31B5E53344124DCB87236EBB89E1F54F5FE9993E2B4991BD000079",
+          "windowsRawSha256": "663AA0FF3366B5B27C75D2906C7C08733F9BBBBBC69C899A31F1E560534CE5CF"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260702193940_Decompose4nfAgentModelLists.Designer.cs",
+          "gitBlobId": "cdb40eb4335a821b3c87745a64d9985f2eac6748",
+          "lfSha256": "EDAEC8A7B9AD82440B4DB818658502FCA59258EAEA363A9858C3C7325788F10A",
+          "windowsRawSha256": "5E16BA9587C93EABCA8E6625DBED9F4C0EFED2BBFB0F1B678A10106A848893A5"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260702193940_Decompose4nfAgentModelLists.cs",
+          "gitBlobId": "5235b77ebba6fcb2a9669addf271d567dcea8dfd",
+          "lfSha256": "1A36345ED7F251F853C3C8EFC18C2DB97B1F54565898D54BFC465BC7DBE744C3",
+          "windowsRawSha256": "55E0CE882ED8F5F9BA2B963BECACD5B0117D2DB921DD12B39268720D74A73FA6"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260720170000_RenameQuadBrainRolesToCreativityLogic.Designer.cs",
+          "gitBlobId": "d664c86fa9e8f138d5bf9953cf528d0af82a8b93",
+          "lfSha256": "3280F21EF488E0F822DDA448C94FCF54DADB55FA2344761730E676A1BB418AB8",
+          "windowsRawSha256": "931A1D544FCEA73A0914E3BB5FE6CF87E91E98BE5CDE68675FFC86893CC0441E"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260720170000_RenameQuadBrainRolesToCreativityLogic.cs",
+          "gitBlobId": "c62580fe4563ccc7d73c6ea74ef648d4f9891cd5",
+          "lfSha256": "DA5EC07F953FA12EE2BE732AF04D8C50FFE03DFB184D42DC5C57A435155AC757",
+          "windowsRawSha256": "1D7DF9F0EDAF4ED4D63979C74D5A703BBC015E45C8ACB59EFE6E911E5C8C3F10"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260807143919_AddUseCaseSupport.Designer.cs",
+          "gitBlobId": "4986bc0811f9e2ff8af83ca2859148fb84bd5d8c",
+          "lfSha256": "C702E5A70C2CA1E2BFFBFEC9BE0D233C78E99E66B6C527ACE281B896EFFCAC79",
+          "windowsRawSha256": "7989ED25B0D44A252C91AEB4190A6207CE59A84293969023FC2ED335E41C6C2D"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260807143919_AddUseCaseSupport.cs",
+          "gitBlobId": "e017749d28c35b8bea842935e6a726388456886f",
+          "lfSha256": "21E9FD24A440460243157933D047388B096D19456B314A001CE59A7DBB56093E",
+          "windowsRawSha256": "7F88F8044AD139C6FAAFDA3C25A10418DB21DD5032619EC8292D36B60F2B14C9"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260808102600_AddUseCaseDiagramGraph.cs",
+          "gitBlobId": "eb5e6e12a4ae578b13459d103778466def3cb81b",
+          "lfSha256": "E40081E6E12BA451D84A60193C7ADE6FD88947DAA631DD0B7C5494577A9C1C7A",
+          "windowsRawSha256": "177830FB0C3DAAE25B96D9D5EDF8CAA635825A7F7E43EB5330AF5A5C9DD2EA6F"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260812173131_AddSessionLogTurnPlanFileAndTodoId.Designer.cs",
+          "gitBlobId": "7c058885d6a077f82b9700be365900c21bb2f2a6",
+          "lfSha256": "502A00D480DA3DF3200D00D669935EE17FCE2FFB040F5B71D3723ECF16EED35A",
+          "windowsRawSha256": "0DF6C69EDF5639403FFEEA0D81282CAD23D7615C4D9C4DC22E1A76277C817E85"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260812173131_AddSessionLogTurnPlanFileAndTodoId.cs",
+          "gitBlobId": "c300c23d2f439d9494547da0531430227dc78a34",
+          "lfSha256": "C0759031434694FB267133393383DD2157B8D0D58FE77436B1AA50949B623498",
+          "windowsRawSha256": "E0D02D6518AC2411D6F8BE09B2AB7FFEF3F93341213CAD378D83584C4333FD60"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260816183150_AddHandoffIngestionStorage.Designer.cs",
+          "gitBlobId": "d1ccfb40d69ac92d36d2aeecd4775315953d7320",
+          "lfSha256": "3E8C5D94F2D2878F41033466663500704980119632F36B09B1A3299E1CAB2FD1",
+          "windowsRawSha256": "05503CB2F90333118955D4DA6B3A3ABA858C342E7AAF9595C4B928E687863DEF"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260816183150_AddHandoffIngestionStorage.cs",
+          "gitBlobId": "e1067604700731c75b6be02d7319283eacf6895b",
+          "lfSha256": "9A7A7761D52AF53F035A4E008292935D7D68E0B44F4F3E74477447D025BCF1DA",
+          "windowsRawSha256": "EC99D85A11AB2E900D3C46D2CB7DDD9C68BEFDAE59E73C3C64CE991CB95D7A72"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260818142028_AddProductsStorage.Designer.cs",
+          "gitBlobId": "ac7a7ca1d259c7ba7d4370eb6c06b4394a5e461b",
+          "lfSha256": "39A2A899CCA76BD81D5466EC9E5E58256A1D530AB56E0C8417646906E6C4EC2B",
+          "windowsRawSha256": "01ECBB9A648B3A8B161C7253962E3E065A93ED1DBBA8960A61647EC9B72B6A9A"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260818142028_AddProductsStorage.cs",
+          "gitBlobId": "7ca9e9af4e09de148b05c61c1fa381f9afe1b198",
+          "lfSha256": "9C62BB132E428D5F6DD653473BD07CE6C9A93727C537487D697FDEFAC05AD533",
+          "windowsRawSha256": "75D1117B6602757A28AA0B324772A6CE5724447C802B85A1F3B945ECAD3D2F0A"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260818205807_AddSessionLogTagsAndAgentSessionHeaders.Designer.cs",
+          "gitBlobId": "a1d35e507be04a9a28aa2fe95012c3b85e226872",
+          "lfSha256": "90A747ECC5E31C10E0F16496EAB845D79ADA986616B3904AE72BA08505901CCD",
+          "windowsRawSha256": "88B16068C93523241DA14B51F09FF3A7B905FC23230D71342D42EF1425D53A26"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260818205807_AddSessionLogTagsAndAgentSessionHeaders.cs",
+          "gitBlobId": "bc2eddccb52d0fb1f499e702a3e643166fddb5c2",
+          "lfSha256": "82D1D0A97BA01208C7EE9F673BE916A356B1F01FD8CDE546CCC27A2CC4A8C59C",
+          "windowsRawSha256": "43B86B43A6D2964BFB946AE10AB5CA73D9972AA6A4DB693080A7FF72E35300B2"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+          "gitBlobId": "8cabc022cdcab8c5a43ff56d7dd88280eeba3dbe",
+          "lfSha256": "CC539A5A12EC125EDB01B97F114BE480A5FF83510BC5F9B4458CE2D5548C45DB",
+          "windowsRawSha256": "CC539A5A12EC125EDB01B97F114BE480A5FF83510BC5F9B4458CE2D5548C45DB"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+          "gitBlobId": "6581d14ef384670b1208d092ba8611794ac7db16",
+          "lfSha256": "2B7FB5471B600FFE229D8F6A671894F7C0B16B45DC62E1F3EE2D4821733B2DC8",
+          "windowsRawSha256": "2B7FB5471B600FFE229D8F6A671894F7C0B16B45DC62E1F3EE2D4821733B2DC8"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+          "gitBlobId": "95abdfadab3c950bfee7fe9e2ae3b8e3c303668d",
+          "lfSha256": "9FD5A3CB987EF2306DC4530AE70A663E1AF1896CCC55BE789F8F995CEBCA0371",
+          "windowsRawSha256": "9FD5A3CB987EF2306DC4530AE70A663E1AF1896CCC55BE789F8F995CEBCA0371"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260929020000_AddRequirementsRecoveryRuns.cs",
+          "gitBlobId": "b71957ca308ff781dd39a6797c94fc64dcf44e48",
+          "lfSha256": "6651E51E2647ABA4F8F58858C0DF6662427BDDC850E02B5186A8482327E1081F",
+          "windowsRawSha256": "6651E51E2647ABA4F8F58858C0DF6662427BDDC850E02B5186A8482327E1081F"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20260929140000_VersionedAuditPayloads.cs",
+          "gitBlobId": "0cdcec495fd0a8c772ea82ad17b949fdcc43454b",
+          "lfSha256": "23DCDAA5C840E5E18CC3656C9CF0240B80ACEB1D919EE5FD101B85931DD8B6A8",
+          "windowsRawSha256": "58311FF25A04294D1F608B2E9EF8702F18CCCF364CC5E70EC9D0B73132651E6D"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20261005170000_RenameTriageIsMcpServerRelatedColumn.Designer.cs",
+          "gitBlobId": "623b9730657c2974822575189897356ee178596e",
+          "lfSha256": "550461DF1C9679566535E22CF1D333D5C0741D31B0FFC493B3B9553A9B0D5ACE",
+          "windowsRawSha256": "8310FFF7F597EA919E3F9AC1F1D00A9862715B1AB3C7611248A73CC9ED01FAF5"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/20261005170000_RenameTriageIsMcpServerRelatedColumn.cs",
+          "gitBlobId": "4ab8a4cce3e0c2a463f0d8aa61252818694e5f1e",
+          "lfSha256": "EF38BE0B0307C68D80F21127D5011B6BDD4E7C1E4B335546E68075B1BAE9FC99",
+          "windowsRawSha256": "EF38BE0B0307C68D80F21127D5011B6BDD4E7C1E4B335546E68075B1BAE9FC99"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/Migrations/McpDbContextModelSnapshot.cs",
+          "gitBlobId": "a23f756fa8b632781dcf989e4c571223f261fa53",
+          "lfSha256": "B56D8FA1E7F3F794ACD600D9E8E4D140B55F2F006202641EC9451B1EAB87A626",
+          "windowsRawSha256": "ED76E73568AB8EB83082A8CFD4D6C8E3D77333DA8E3C88B58AA6AE796822BD4F"
+        },
+        {
+          "path": "src/QBrainAi.Storage.SqlServerMigrations/QBrainAi.Storage.SqlServerMigrations.csproj",
+          "gitBlobId": "fb50c77f5ea39774b0349c8b6dc9e6eb3ca019fb",
+          "lfSha256": "B9BEF8E24C51D44E365482855B13780DBD086CD83C55708FABEFA9FD1706FC17",
+          "windowsRawSha256": "B9BEF8E24C51D44E365482855B13780DBD086CD83C55708FABEFA9FD1706FC17"
+        }
+      ],
+      "migrationIds": [
+        "20260328202557_SqlServerProviderInitialCreate",
+        "20260420182917_AddGraphEntitiesAndRelationships",
+        "20260420214644_AddTodoStorage",
+        "20260421173643_AddTodoWorkspaceScoping",
+        "20260506175810_AddRequirementsWorkspaceStorage",
+        "20260521181351_AddFederationHubSpokeStorage",
+        "20260522160010_AddRequirementMetadata",
+        "20260522183236_AddDbFkIntegrityRepair",
+        "20260525104212_ScopeSessionLogUniqueIndexByWorkspace",
+        "20260602205731_AddRequirementAcceptanceCriteriaJson",
+        "20260608083230_AddMemoryStorage",
+        "20260615175650_AddBrainSlotStorage",
+        "20260615200451_AddBrainSlotWeights",
+        "20260625061853_AddTriageStorage",
+        "20260628010344_AddRequirementScopeLayers",
+        "20260628102507_AddTriageRunAgentStreams",
+        "20260628122233_RemoveTodoRecords",
+        "20260628194732_RepairTriageCreatedTodoWorkspace",
+        "20260701183324_AddMissingQueryIndexes",
+        "20260701192535_StoreDateTimeOffsetAsUtcDateTime",
+        "20260701202508_AddTriageAndAgentEventForeignKeys",
+        "20260701205117_Decompose4nfSessionLogCommitFiles",
+        "20260701210343_Decompose4nfTriageReportLists",
+        "20260701211220_Decompose4nfWorkspaceBannedItems",
+        "20260701220645_Decompose4nfRequirementAcceptanceCriteria",
+        "20260702014138_Decompose4nfTodoItemLists",
+        "20260702192410_Decompose4nfTodoDocumentMetadata",
+        "20260702193940_Decompose4nfAgentModelLists",
+        "20260720170000_RenameQuadBrainRolesToCreativityLogic",
+        "20260807143919_AddUseCaseSupport",
+        "20260808102600_AddUseCaseDiagramGraph",
+        "20260812173131_AddSessionLogTurnPlanFileAndTodoId",
+        "20260816183150_AddHandoffIngestionStorage",
+        "20260818142028_AddProductsStorage",
+        "20260818205807_AddSessionLogTagsAndAgentSessionHeaders",
+        "20260918223000_AddMemoryVersionAndEdgeStorage",
+        "20260919060000_AddMemoryIndexStorage",
+        "20260919193000_AddMemoryVersionSoftDeleteColumns",
+        "20260929020000_AddRequirementsRecoveryRuns",
+        "20260929140000_VersionedAuditPayloads",
+        "20261005170000_RenameTriageIsMcpServerRelatedColumn"
+      ]
+    }
+  ],
+  "nativeUpgradeProof": false,
+  "scriptSha256": "8D23DDC66D79D4B6E14045BF86D323F63E39A96F42C32C427CFCE65980F5AC79"
+}

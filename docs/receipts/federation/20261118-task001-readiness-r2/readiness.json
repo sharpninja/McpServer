@@ -1,0 +1,139 @@
+{
+  "timestampLocal": "2026-11-18T17:58:52",
+  "task": "TASK-FEDPH0-001",
+  "group": "GRP-FEDPH0-001",
+  "stage": "DesignAndMockReadiness",
+  "author": {
+    "agent": "Codex",
+    "sessionId": "Codex-20261116T174245Z-plugin-session",
+    "requestId": "req-20261118T232259Z-taskgroup1-readiness"
+  },
+  "definitionFingerprint": "0E6DFEF40880DD351942BBC4FBD9DD549EADB9745BEFF982E729B9F4DB950977",
+  "fingerprintRule": "Ordered id/title/descriptions/dependencies/FR/TR; excludes note and derived Task status/eligibility description only",
+  "sourceBaseHead": "a1c3cb49b88edc8e9f976a16acda5b7c6ec4beae",
+  "host": "PAYTON-LEGION2",
+  "plan": {
+    "sha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+    "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md"
+  },
+  "design": {
+    "sha256": "0D5BAC65A51A14DDE2F3AEAC1DC85CBEF378F86BD46460426B0369C4B936B586",
+    "path": "docs/plans/2026-11-17-federation-phase0-contract-design.md"
+  },
+  "runId": "20261118T173225-fedph0-b1-design-r2",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0B1EvidenceMockGateTests,Phase0ProviderResolutionMockGateTests,Phase0HostLifecycleMockGateTests --test-run-id 20261118T173225-fedph0-b1-design-r2",
+  "counts": {
+    "total": 409,
+    "negativeReportingCases": 397,
+    "skipped": 0,
+    "b1NestedNegativeObservations": 213,
+    "positiveCases": 12,
+    "failed": 0,
+    "passed": 409
+  },
+  "suites": [
+    {
+      "suite": "Phase0B1EvidenceMockGateTests",
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "Phase0ProviderResolutionMockGateTests",
+      "total": 75,
+      "passed": 75,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "Phase0HostLifecycleMockGateTests",
+      "total": 304,
+      "passed": 304,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0B1EvidenceContract.cs",
+      "sha256": "67D1F6F5734BC2690B578143372B4CC4CB7F89D7B6CE127530DE3FCB52EE7E50"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0B1EvidenceMockGateTests.cs",
+      "sha256": "4625B93FDBC07DBA8DF88376CC2339CD238823CC42481CF674A2D47F97564D91"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ProviderResolutionContract.cs",
+      "sha256": "63D629730B931D6F970C25A498533F448DB154F00424D98C9DCB35DD919A29A5"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ProviderResolutionMockGateTests.cs",
+      "sha256": "1442E330B10CB36BC2B4652E6612BE4A8262C19CFDC1CC9C83E98CEE57341FF6"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0HostLifecycleContract.cs",
+      "sha256": "5C4FFE3504107B66626B77745C504CC79523FB68CB08EF6927AEACD393CD1460"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0HostLifecycleMockGateTests.cs",
+      "sha256": "47388FCFA38A0F3C6E7A37E37D5BFB0ADF059DA3E439D45A498F61780CBC762F"
+    }
+  ],
+  "copies": [
+    {
+      "name": "windows-mock.trx",
+      "sha256": "4A4AB89C625D543BB4C6EB481F2FB6F4F9E6CE191A0262FEE946027A2D0B9130",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261118T173225-fedph0-b1-design-r2\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "windows-mock.nuke.txt",
+      "sha256": "C47BB2C8E23539106288BF58402918732A6449008E2AF63AA9DA031ACD6FD490",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-18_17-31-37.log"
+    }
+  ],
+  "currentLayerKey": "layer-1",
+  "coverage": [
+    {
+      "ac": "ac-FourProvidersResolve",
+      "proof": "Both factory paths, four distinct strategies/histories, exact unsupported refusal; correct and wrong mocks",
+      "satisfied": false,
+      "suite": "Phase0ProviderResolutionMockGateTests",
+      "text": "Given keys sqlite,postgresql,sqlserver,dolt, when runtime and design-time factories resolve them, then each selects its own strategy/migration history; unknown key returns unsupported_provider.",
+      "test": "TEST-MCP-234",
+      "fr": "FR-MCP-186",
+      "tr": "TR-MCP-FEDERATION-013"
+    },
+    {
+      "planOutput": "B1",
+      "suite": "Phase0B1EvidenceMockGateTests",
+      "tr": "TR-MCP-FEDERATION-013",
+      "proof": "Independent exact pins, all4 fixture versions, both host inventories, native configuration/ACL/mount facts and frozen expectations; synthetic observations only"
+    },
+    {
+      "planOutput": "B1",
+      "suite": "Phase0HostLifecycleMockGateTests",
+      "tr": "TR-MCP-FEDERATION-013",
+      "proof": "Independent native-host lifecycle observations, process-tree attribution, preservation, graceful stop, three recoveries and owned unregister; synthetic observations only"
+    }
+  ],
+  "reviewedDefinition": true,
+  "interfacesAndDtosDefined": true,
+  "independentMocks": true,
+  "negativeControlsRejected": true,
+  "readyReview": "Planning-to-Ready supported for this definition and these source hashes; no implementation start or Success",
+  "nativeRuntimeProof": false,
+  "dependencyAdoption": false,
+  "operatorAcceptedB1": false,
+  "tasksCompleted": false,
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "pendingBeforeSuccess": [
+    "Pin real downloaded package/executable/image hashes, versions, licenses and origins without changing EF10.0.0 silently",
+    "Measure all4 fixture versions and actual inventory separately on both hosts",
+    "Run same assertions against disposable real provider/native adapters after the group barrier opens",
+    "Prove restricted-account ACL/loopback/lifecycle behavior and retain original data/logs",
+    "Complete applicable final-head gates, B1 acceptance and independent HV"
+  ],
+  "scriptSha256": "3EA62306ABB5CD4E0CF020047668FED3560B46A79584A3CF39F306CDEF1DBB4B"
+}

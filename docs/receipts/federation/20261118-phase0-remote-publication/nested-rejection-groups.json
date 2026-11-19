@@ -1,0 +1,1402 @@
+[
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", checkpoint: \"Restarted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Attempted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", checkpoint: \"Attempted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", checkpoint: \"Attempted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", checkpoint: \"Attempted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", checkpoint: \"Restarted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", label: \"First\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", checkpoint: \"Attempted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Attempted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", label: \"First\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Restarted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Attempted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", checkpoint: \"Attempted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Restarted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", checkpoint: \"Attempted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", label: \"First\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", checkpoint: \"Restarted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Attempted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", checkpoint: \"Restarted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", checkpoint: \"Restarted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", checkpoint: \"Restarted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", checkpoint: \"Restarted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Restarted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", checkpoint: \"Attempted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", label: \"First\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", checkpoint: \"Restarted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", checkpoint: \"Attempted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Restarted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", checkpoint: \"Attempted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Attempted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", checkpoint: \"Restarted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Attempted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", checkpoint: \"Restarted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Restarted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", checkpoint: \"Restarted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", checkpoint: \"Restarted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Attempted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", checkpoint: \"Attempted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"DropReply\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"None\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", checkpoint: \"Attempted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Restarted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Restarted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"None\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterReceipt\", checkpoint: \"Restarted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"BeforeRef\", label: \"Recover\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Attempted\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"None\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"BeforeRef\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"None\", checkpoint: \"Conflict\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Reopened\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Retried\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterReceipt\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"BeforeRef\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", label: \"Restart1\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"DropReply\", label: \"Retry\", negativeControls: 18)",
+    "rejections": 18,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"DropReply\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterRef\", label: \"Conflict\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"AfterRef\", checkpoint: \"Uploaded\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", label: \"Restart2\", negativeControls: 6)",
+    "rejections": 6,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"AfterReceipt\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: True, hubDirty: True, point: \"AfterRef\", checkpoint: \"Before\", negativeControls: 48)",
+    "rejections": 48,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongResponsesAndRestartsAreRejected(sourceDirty: True, hubDirty: False, point: \"AfterRef\", label: \"First\", negativeControls: 7)",
+    "rejections": 7,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: False, point: \"BeforeRef\", checkpoint: \"Recovered\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  },
+  {
+    "name": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.WrongDurableStatesAreRejected(sourceDirty: False, hubDirty: True, point: \"DropReply\", checkpoint: \"Attempted\", negativeControls: 61)",
+    "rejections": 61,
+    "outcome": "Passed"
+  }
+]

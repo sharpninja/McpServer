@@ -1,0 +1,132 @@
+{
+  "timestampLocal": "2026-11-18T18:18:56",
+  "host": "PAYTON-LEGION2",
+  "sourceBaseHead": "a1c3cb49b88edc8e9f976a16acda5b7c6ec4beae",
+  "runId": "20261118T162552-fedph0-relational-model-grouped",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0RelationalModelMockGateTests --test-run-id 20261118T162552-fedph0-relational-model-grouped",
+  "total": 425,
+  "passed": 425,
+  "failed": 0,
+  "skipped": 0,
+  "positive": 21,
+  "inventoryChecks": 7,
+  "reportingNegativeCases": 397,
+  "expectedNegativeControls": 102780,
+  "nestedNegativeControls": 102640,
+  "inventoryPins": {
+    "mcp-postgresql": 31140,
+    "mcp-sqlserver": 31140,
+    "mcp-sqlite": 30846,
+    "configuration-sqlite": 4928,
+    "operational-sqlite": 1328,
+    "transaction-sqlite": 2028,
+    "identity-sqlite": 1230
+  },
+  "methods": {
+    "WrongEntityEvidenceIsRejected": 257,
+    "EveryOriginalNestedFaultIsRetained": 7,
+    "CorrectCompleteModelPasses": 21,
+    "WrongModelEvidenceIsRejected": 140
+  },
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+      "lfSha256": "2A4D22954D10B4D2A815658C58489965F66B771373D3FA878294DE4CBC4D0098",
+      "sha256": "2A4D22954D10B4D2A815658C58489965F66B771373D3FA878294DE4CBC4D0098"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RelationalModelContract.cs",
+      "lfSha256": "59253CE285BD8772C56FBC189E4CDBD66327BDD4D179FDF030A25C40492EB8F0",
+      "sha256": "E764C87F5EE8A3FD7563F929DAB1586C4232BBBB76023D7F780C1FCEACE66C3A"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RelationalModelMockGateTests.cs",
+      "lfSha256": "E9AC64F6B80D9834BA863527992F395E3F4D945292AC866F5C1AFAE0488EA9CE",
+      "sha256": "CF930F38A35172C0876F22D4BDFC23125D9A76F3D2DE041D8B23A8BD33419756"
+    }
+  ],
+  "fixturePins": [
+    {
+      "path": "relational-configuration-sqlite-model-r2.json",
+      "lfSha256": "D93708CEA9C959CABE343D39D422F8AB937D64C64B4497AFB5EED3AC1B0BA635",
+      "sha256": "63F2EC70B45A5C483342D6DE21FBE9974EB55517A3715CBCA5D840E6C621C0EB"
+    },
+    {
+      "path": "relational-identity-sqlite-model-r2.json",
+      "lfSha256": "79FC2D6B3F5A9B3F606D1C1FE4FDC98BF1D25A6D59EB9BE5A450FA1208FE24EA",
+      "sha256": "15D1408FCE2BA3C99A502E24DC2684DE0212B69FE42C25A9DFE8508F0124B78B"
+    },
+    {
+      "path": "relational-mcp-postgresql-model-r2.json",
+      "lfSha256": "F53ACFDA6D9C6382BD0F7C3CFC5EAE2358C3E817EC9BBACD22A9E3F6B02059C2",
+      "sha256": "EEF01521F6FA7027893F77843B96FC9D46A7FFBBF9FCCEE313969274C0EC0290"
+    },
+    {
+      "path": "relational-mcp-sqlite-model-r2.json",
+      "lfSha256": "1AB40F02B1A18271443870253C61BC1116AE6F5334F6D46E1B265E38B205B51B",
+      "sha256": "73F8A250E6C5E4493AA8EFF05BA618006158AA2EEC4BDBB026B6DF0E398D80D3"
+    },
+    {
+      "path": "relational-mcp-sqlserver-model-r2.json",
+      "lfSha256": "1DBD1AC14EAA96F113DBCFBAD8392042A5BFDB4C1AFD505229A5A16209D8B229",
+      "sha256": "DF4F9B88F45572DB14C130CF2527DB3657EC19C765B852B8BD8FE464996DE298"
+    },
+    {
+      "path": "relational-operational-sqlite-model-r2.json",
+      "lfSha256": "5B3B9FF25D1486C768E907910827231B1E19E73D3B169C6BAC485FF557650B2A",
+      "sha256": "AA8855004424F6F3C3C308422EDFF2D07CFD696DFA6D16572D41BE571D91E0FB"
+    },
+    {
+      "path": "relational-transaction-sqlite-model-r2.json",
+      "lfSha256": "15E6E6D659A6452540EAE72ABC27A1D061DA5DBD0BEAF7F23EC42CE340C5B6A2",
+      "sha256": "B40C2A58DC95331A0D5FDAFACB819FCECC89185024E55DC65718C87966579DDA"
+    }
+  ],
+  "copies": [
+    {
+      "name": "windows-mock.nuke.txt",
+      "sha256": "9BFF93D0A2318FA8471882564929A543A4D39D9CDF846E5B9600C9FADE38353B",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-18_16-25-55.log"
+    },
+    {
+      "name": "windows-console.txt",
+      "sha256": "A1BA072A4D363171C51B7635C11B56910CC32087BE29CABDA66D3602C89B2E10",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/20261118T162552-fedph0-relational-model-grouped.nuke.log"
+    }
+  ],
+  "rawTrx": {
+    "bytes": 703715,
+    "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261118T162552-fedph0-relational-model-grouped\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx",
+    "retained": true,
+    "sha256": "E95A57CC9E89D57C9C5FB07AC8214003290C43CF6BB9215F0B4B70D1148F8E83"
+  },
+  "tasks": [
+    "TASK-FEDPH0-002",
+    "TASK-FEDPH0-004",
+    "TASK-FEDPH0-005"
+  ],
+  "trace": {
+    "test": "TEST-MCP-234",
+    "tr": "TR-MCP-FEDERATION-013",
+    "fr": "FR-MCP-186",
+    "criteria": [
+      "ac-DoltBaselineAndUpgrade",
+      "ac-OriginalProviderMigrationsUnchanged"
+    ],
+    "coverage": "Supporting complete original-provider metadata assertions only; no whole criterion satisfaction"
+  },
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "nativeRuntimeProof": false,
+  "operatorAccepted": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false,
+  "scriptSha256": "93D4711176DA76161B93A6D02904C4724C5ADBC7184090005B2058559D2C7287",
+  "compressedTrx": {
+    "bytes": 87797,
+    "path": "windows-mock.trx.gz",
+    "decompressedSha256": "E95A57CC9E89D57C9C5FB07AC8214003290C43CF6BB9215F0B4B70D1148F8E83",
+    "sha256": "F1E20AC6885F9775819EEAE66F73E8C3E9EA4FD7977C93222AA2E39EC70DDFCA"
+  }
+}

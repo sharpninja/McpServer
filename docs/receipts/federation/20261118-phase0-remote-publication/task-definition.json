@@ -1,0 +1,28 @@
+{
+  "dependsOn": [
+    "TASK-FEDPH0-001"
+  ],
+  "title": "Dolt remote authorization and guarded publication proof",
+  "note": "TaskStatus=Planning; Stage=DesignAndMock; ImplementationBarrier=Closed; Partial authorization mock evidence: docs/receipts/federation/20261117-phase0-authorization/mock-gate.json and linux-mock.json; Windows and Linux 275 passed/0 failed/0 skipped (260 negative controls). Source 06cfd917; evidence 1144ce04. Raw remote bypass/project isolation assertions only; real remote push/recovery/token-relay and B5 evidence remain pending.",
+  "technicalRequirements": [
+    "TR-MCP-FEDERATION-012"
+  ],
+  "functionalRequirements": [
+    "FR-MCP-185"
+  ],
+  "priority": "high",
+  "section": "Federation",
+  "done": false,
+  "implementationTasks": [],
+  "description": [
+    "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH0-001 (groupOrdinal 3).",
+    "Task status: Planning. Eligibility: canStart=false, reasons=ImplementationBarrierClosed, DependencyIncomplete, incompleteDependencyCount=1. Design and mock-green work may proceed now; Planning to Ready requires that evidence (architecture 3.5.11).",
+    "Depends on (typed Task/Group targets): TASK-FEDPH0-001.",
+    "FR/AC coverage: FR-MCP-185: RawRemoteCannotBypassPublicationPolicy.",
+    "TR constraints: TR-MCP-FEDERATION-012. TEST: TEST-MCP-233. Classes: DoltRemoteAuthorizationTests.",
+    "Work: Prove clean and dirty remote pushes, lost responses, authenticated project isolation, inability to bypass guarded publication through raw remote requests, canonical-ref advancement and remote recovery under process death.",
+    "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15."
+  ],
+  "id": "TASK-FEDPH0-003",
+  "technicalDetails": []
+}

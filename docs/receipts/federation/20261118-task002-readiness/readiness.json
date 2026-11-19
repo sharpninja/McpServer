@@ -1,0 +1,772 @@
+{
+  "timestampLocal": "2026-11-18T19:30:50",
+  "task": "TASK-FEDPH0-002",
+  "group": "GRP-FEDPH0-001",
+  "stage": "DesignAndMockReadiness",
+  "author": {
+    "agent": "Codex",
+    "sessionId": "Codex-20261116T174245Z-plugin-session",
+    "requestId": "req-20261119T010931Z-prompt-a8fa"
+  },
+  "definitionFingerprint": "EE066E096842A41B7C4470D4B885569F5771FB213D8985D8A29351A377D201E6",
+  "fingerprintRule": "Ordered id/title/descriptions/dependencies/FR/TR; excludes note and derived Task status/eligibility description only",
+  "sourceBaseHead": "a1c3cb49b88edc8e9f976a16acda5b7c6ec4beae",
+  "host": "PAYTON-LEGION2",
+  "plan": {
+    "path": "docs/plans/2026-11-10-federation-dolt-bdpv4.md",
+    "sha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72",
+    "lfSha256": "FA3C7F71C1046DF17CA678EB43185F82BA0AA173A85E6F071828C7C6B8163F72"
+  },
+  "design": {
+    "path": "docs/plans/2026-11-17-federation-phase0-contract-design.md",
+    "sha256": "974E22F80142726AB240B63083B3DCE49C1279FD15BA2D4440D516872483D6E4",
+    "lfSha256": "38E35528E865483429AF8A9EC4DEF56E05E673775F281FA7E08573E1EF272E8F"
+  },
+  "runId": "20261118T192500-fedph0-task002-design-closure",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0StorageBoundaryMockGateTests,Phase0RelationalModelMockGateTests,Phase0QueryTransactionMockGateTests,Phase0RelationalWriteMockGateTests,Phase0OriginalMigrationMockGateTests,Phase0DoltFullModelMockGateTests --test-run-id 20261118T192500-fedph0-task002-design-closure",
+  "counts": {
+    "auxiliaryInventoryChecks": 7,
+    "positiveReportingCases": 71,
+    "skipped": 0,
+    "originalRelationalNestedRejections": 102780,
+    "total": 4631,
+    "fullDoltEntityGroups": 142,
+    "fullDoltEntityRejections": 55629,
+    "fullDoltOtherRejections": 375,
+    "failed": 0,
+    "negativeReportingCases": 4553,
+    "passed": 4631
+  },
+  "suites": [
+    {
+      "suite": "Phase0StorageBoundaryMockGateTests",
+      "total": 606,
+      "passed": 606,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "Phase0RelationalModelMockGateTests",
+      "total": 425,
+      "passed": 425,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "Phase0QueryTransactionMockGateTests",
+      "total": 589,
+      "passed": 589,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "Phase0RelationalWriteMockGateTests",
+      "total": 1364,
+      "passed": 1364,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "Phase0OriginalMigrationMockGateTests",
+      "total": 1103,
+      "passed": 1103,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "Phase0DoltFullModelMockGateTests",
+      "total": 544,
+      "passed": 544,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+      "sha256": "616E1CE53086DD08A04A69AABD958EA583578376EFB06940894A30413C28A173",
+      "lfSha256": "616E1CE53086DD08A04A69AABD958EA583578376EFB06940894A30413C28A173"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0StorageBoundaryContract.cs",
+      "sha256": "7F0C0556BBF48640FDA1C8D995C491DA94BA797EF6552266C5C17F7BAEDF593E",
+      "lfSha256": "C8CC85C4121F519BA8535E5B93DB750AE912B14F499F5A7857B5D121B17BA271"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0StorageBoundaryMockGateTests.cs",
+      "sha256": "C7F798867BA5E46940E2DCF82A2C57C50EDC32B22DA71A63B8FEBED70519A1F7",
+      "lfSha256": "3E8BDBA1F5D9D8E82F76C07817CD4A89CCE921A435DB227D31D450EB31D455E0"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RelationalModelContract.cs",
+      "sha256": "E764C87F5EE8A3FD7563F929DAB1586C4232BBBB76023D7F780C1FCEACE66C3A",
+      "lfSha256": "59253CE285BD8772C56FBC189E4CDBD66327BDD4D179FDF030A25C40492EB8F0"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RelationalModelMockGateTests.cs",
+      "sha256": "CF930F38A35172C0876F22D4BDFC23125D9A76F3D2DE041D8B23A8BD33419756",
+      "lfSha256": "E9AC64F6B80D9834BA863527992F395E3F4D945292AC866F5C1AFAE0488EA9CE"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0QueryTransactionContract.cs",
+      "sha256": "A889C1B5D3BEFBBB612E1BF90F1CA413813A7866661483ACA74FE17C2313B1B9",
+      "lfSha256": "6B43F6C07A9358955C6D2AA4A80EDD6C125408E4E669D598C6975F04372EBF22"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0QueryTransactionMockGateTests.cs",
+      "sha256": "A1E6C3D53BCCE3A2DE5AFA30C8BCC3D5AF3882C3676B84674484C8FDD6179E0C",
+      "lfSha256": "9122604E90B5ED746C2674CDC6C4448A2C842ED0E7DDAEEA8DD6872CE0DD9360"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RelationalWriteContract.cs",
+      "sha256": "C1455DB9E197D3AC5E959FA8BD0B8C7BC0F90977DBC7183384AF46F2D11EAE8F",
+      "lfSha256": "FD86F9FCFE62C9FE894F23A7BF36D43F43EB07D74ED5F2058B8D654F9BE845D7"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RelationalWriteMockGateTests.cs",
+      "sha256": "2C9D244C7A926635B2914B9DB409159118CE34F3EC089A2D4B3D899F35E5D755",
+      "lfSha256": "FA70962F42B9A655F234C9DDF3BCCB468D71E78979E9E2625CFC158554034D7D"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0OriginalMigrationContract.cs",
+      "sha256": "D035414FFE039648E6CCFC891FD3F5EA2C0A08FF4DD7243E96AA3DD835695579",
+      "lfSha256": "620A1D062A7F70DA0749D6BA3E53F64B539FBA483FCF426648577F6957D58740"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0OriginalMigrationMockGateTests.cs",
+      "sha256": "29F722600628651FC7A44148587D155E9A09D0AD469D3633A67C7BFE30969813",
+      "lfSha256": "389E443983489D5A62A62CE94EF8E076404B5FF834512F464345722949E81A61"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0DoltFullModelContract.cs",
+      "sha256": "58397565EAC72B14DF9DD70B72248C44A11E6E2B76E50F8EB4F37DA6751833E9",
+      "lfSha256": "392BFF99AE6F217C187BD79E22B8947EA5AF780B8A56D9EE78DE651A5B116B2F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0DoltFullModelMockGateTests.cs",
+      "sha256": "858C181CE15595A9DBC7A36E235BE2C249880ED1E6D22D9241F1D72CE817EE7E",
+      "lfSha256": "0EA10E9EF8BB11A6332AFD34A3417A5BDCEC1AFFD15C5F74F772AFFD6457ED37"
+    }
+  ],
+  "fixtureHashes": [
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/desired-dolt-standalone-schema.json",
+      "sha256": "BE2CBBB5BC55A5905885E8FC53C24AA1FF3B02D5E43129F7495BB7779FF5DBE4",
+      "lfSha256": "CBB94211E69057F6B8717283DCFC142BB3F2050356FDB5B762065D29EBEBC2C7"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/original-provider-migration-baseline.json",
+      "sha256": "B0B6A6BF1D07EADABF0CD982A683138F60759DE7A7EBFBBAEF874D207DA14EBA",
+      "lfSha256": "7272ED9541B60DF2A493BCC688E9F44D07BE1DC2BB963298E4C48B13F2AE7891"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/relational-configuration-sqlite-model-r2.json",
+      "sha256": "63F2EC70B45A5C483342D6DE21FBE9974EB55517A3715CBCA5D840E6C621C0EB",
+      "lfSha256": "D93708CEA9C959CABE343D39D422F8AB937D64C64B4497AFB5EED3AC1B0BA635"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/relational-identity-sqlite-model-r2.json",
+      "sha256": "15D1408FCE2BA3C99A502E24DC2684DE0212B69FE42C25A9DFE8508F0124B78B",
+      "lfSha256": "79FC2D6B3F5A9B3F606D1C1FE4FDC98BF1D25A6D59EB9BE5A450FA1208FE24EA"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/relational-mcp-postgresql-model-r2.json",
+      "sha256": "EEF01521F6FA7027893F77843B96FC9D46A7FFBBF9FCCEE313969274C0EC0290",
+      "lfSha256": "F53ACFDA6D9C6382BD0F7C3CFC5EAE2358C3E817EC9BBACD22A9E3F6B02059C2"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/relational-mcp-sqlite-model-r2.json",
+      "sha256": "73F8A250E6C5E4493AA8EFF05BA618006158AA2EEC4BDBB026B6DF0E398D80D3",
+      "lfSha256": "1AB40F02B1A18271443870253C61BC1116AE6F5334F6D46E1B265E38B205B51B"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/relational-mcp-sqlserver-model-r2.json",
+      "sha256": "DF4F9B88F45572DB14C130CF2527DB3657EC19C765B852B8BD8FE464996DE298",
+      "lfSha256": "1DBD1AC14EAA96F113DBCFBAD8392042A5BFDB4C1AFD505229A5A16209D8B229"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/relational-operational-sqlite-model-r2.json",
+      "sha256": "AA8855004424F6F3C3C308422EDFF2D07CFD696DFA6D16572D41BE571D91E0FB",
+      "lfSha256": "5B3B9FF25D1486C768E907910827231B1E19E73D3B169C6BAC485FF557650B2A"
+    },
+    {
+      "path": "docs/receipts/federation/20261117-phase0-source-catalog/relational-transaction-sqlite-model-r2.json",
+      "sha256": "B40C2A58DC95331A0D5FDAFACB819FCECC89185024E55DC65718C87966579DDA",
+      "lfSha256": "15E6E6D659A6452540EAE72ABC27A1D061DA5DBD0BEAF7F23EC42CE340C5B6A2"
+    }
+  ],
+  "originalSourceReview": {
+    "catalogSha256": "88DA9E41116F88DEDA13A9675BA2B073AD63B41D0E65BD371B72FE9CCAD7CF05",
+    "files": [
+      {
+        "sha256": "27B726782CC9336B40E61A1C085A5F353E723E6C1C27433F61DDE574C8BE4E76",
+        "path": "src/QBrainAi.Storage/DateTimeOffsetToUtcDateTimeConverter.cs"
+      },
+      {
+        "sha256": "21793E57DA92A4AA3626415CF4537E91CD1041117A53E6E6AFAFEB97AA9C9F9D",
+        "path": "src/QBrainAi.Storage/GlobalUsings.cs"
+      },
+      {
+        "sha256": "2AB490ED05F25B545B7BF0BFFC8876C773E1F4728D1E565F76C1D4494761BB2C",
+        "path": "src/QBrainAi.Storage/ISyncStatusStore.cs"
+      },
+      {
+        "sha256": "32259348F87A6504C37536C419AC0AD73E283B9DC0EB15BCFF20D3F061EFB9EF",
+        "path": "src/QBrainAi.Storage/McpDbContext.cs"
+      },
+      {
+        "sha256": "65BA51B11290C8478A3D3D0D0BF20F68C5661F5295B84CC09640AFCB917EE86B",
+        "path": "src/QBrainAi.Storage/McpDbContextFactory.cs"
+      },
+      {
+        "sha256": "468F9F021688BE1AEB14EBADE996B4F63F241651F06D2028C9E3DE608BC1CC8A",
+        "path": "src/QBrainAi.Storage/ServiceCollectionExtensions.cs"
+      },
+      {
+        "sha256": "605BFBE7CEF81ECD95B712ECE9A74E95FF04FEEA0547652DFBC847A9A8A005D0",
+        "path": "src/QBrainAi.Storage/SessionLogSchemaGuard.cs"
+      },
+      {
+        "sha256": "053668A13965399C6E1CCD17CCFC566F71F75773D798576DE68F9E93CF809B4B",
+        "path": "src/QBrainAi.Storage/SqliteBoundedConnectionOpener.cs"
+      },
+      {
+        "sha256": "2FCACD47F7CFAE917C293D7514DBCB216E9F3C3A8CFBBD70F525B346C37CBCB5",
+        "path": "src/QBrainAi.Storage/SqliteOperationInterrupt.cs"
+      },
+      {
+        "sha256": "EAF7CF11D9DC4FFAD00E827B40558D0AC0A51D678F21A050DB6FA184A2F61D08",
+        "path": "src/QBrainAi.Storage/StorageAuditJsonContext.cs"
+      },
+      {
+        "sha256": "DE927EEBA7CCFCB3F8264A185B6EF981F5C81E8E6C5C5AAE01252A292069B95B",
+        "path": "src/QBrainAi.Storage/StorageCommandBudget.cs"
+      },
+      {
+        "sha256": "A8A7E9A31869BA404B7478217521B0BEAA74BFA9F73D40F18DC599F517DDC0C6",
+        "path": "src/QBrainAi.Storage/SyncStatusStore.cs"
+      },
+      {
+        "sha256": "B759BEBA14E7369ECCD1A884C6BB66C6C5971856303A6EBB350027055E25B608",
+        "path": "src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs"
+      },
+      {
+        "sha256": "3D8C24B2187A6D2BB291E8ED43B3F0DCC6656C63B0F953C1A9CA57E307329F30",
+        "path": "src/QBrainAi.Storage/WorkspaceContainedFileSystem.cs"
+      },
+      {
+        "sha256": "4327FCFBE1AC93C6A989B1E8FFD0BB9077E0F3E2FA936F4A028C5FC9C6F4109D",
+        "path": "src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs"
+      },
+      {
+        "sha256": "8FB29B78B7E641CBA20043BFE1D1991388ADF5BE521BB5F3137AD30650B0ACB0",
+        "path": "src/QBrainAi.Storage/WorkspaceContainedFileSystem.Landlock.cs"
+      },
+      {
+        "sha256": "E72D01528202C98AABD9D73A23E4CAEA76B170682595F19FF57474ADA4905906",
+        "path": "src/QBrainAi.Storage/WorkspaceIdentity.cs"
+      },
+      {
+        "sha256": "DD8EE20686AFCE0BBEB861A96AB7701AED7D8902D73DA11BF8E4D7FB5B98004B",
+        "path": "src/QBrainAi.Storage/WorkspaceKeyConversion.cs"
+      },
+      {
+        "sha256": "75DF853C317D24AEFAC17CB5E0A7195C8BC4E8C7341CE637F6FCD80F5A5A64B9",
+        "path": "src/QBrainAi.Storage/Database/IMcpDatabaseProviderStrategy.cs"
+      },
+      {
+        "sha256": "804573DC4FC5D849C655FFD4F1B98C961CFC3812A96A48D513C4DF653192F7F4",
+        "path": "src/QBrainAi.Storage/Database/McpDatabaseEncryptionCoordinator.cs"
+      },
+      {
+        "sha256": "F06741FD859909E611B0B109FBB631EC8DA0B47B76676D67AEA9AF35A2C7FAC9",
+        "path": "src/QBrainAi.Storage/Database/McpDatabaseEncryptionOptions.cs"
+      },
+      {
+        "sha256": "CC4FBFFEA8B119B1C08CD5B34DA0989F5721F13D89D3E8319821FE8121B19123",
+        "path": "src/QBrainAi.Storage/Database/McpDatabaseMigrationCoordinator.cs"
+      },
+      {
+        "sha256": "7E2098CDBC3587769958B7B30B296EC41B0A1C78D1C1A7D35EF533AB839C250B",
+        "path": "src/QBrainAi.Storage/Database/McpDatabaseProviderFactory.cs"
+      },
+      {
+        "sha256": "77D5D4B01A0BF577AD031D0B467FD2AE50A3F21DB21584DC034358A265FBE7C3",
+        "path": "src/QBrainAi.Storage/Database/McpDatabaseProviderKind.cs"
+      },
+      {
+        "sha256": "D8B43CB519E9382917EE451F2DAFAA3D47B4899A87C1D186AE17F67B83FC2DA9",
+        "path": "src/QBrainAi.Storage/Database/McpDatabaseProviderOptions.cs"
+      },
+      {
+        "sha256": "9E7A6DE5E57B321E9C03CB2B5D5EA55096558D2E44286C0046C8A967D2AC447F",
+        "path": "src/QBrainAi.Storage/Database/McpDatabaseRuntimeOptions.cs"
+      },
+      {
+        "sha256": "04CD0AB6936F3A56D5A693D73EC7712C530DE936061420F3D4B5EF44CEFD2DD1",
+        "path": "src/QBrainAi.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs"
+      },
+      {
+        "sha256": "ACE975D9DDF667232BA4E668F9B2F761707555DCE36F3368640E0349252461B7",
+        "path": "src/QBrainAi.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs"
+      },
+      {
+        "sha256": "AE1EEE956FEA0EDAB33EF0E535C25C4EF19DDF03258306B3080CEBDAE1D0FABA",
+        "path": "src/QBrainAi.Storage/Database/SqliteSessionLogHeaderDdl.cs"
+      },
+      {
+        "sha256": "1120DD2F8DB866994D12C39C9D39E79E3C1C0678CD9CDB9C1936FADA457695B4",
+        "path": "src/QBrainAi.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs"
+      },
+      {
+        "sha256": "57412CB118DBB9CFA4F886F48A977DF6F661735D5E723BE2E6B0CF169C5551EB",
+        "path": "src/QBrainAi.Storage/Database/WorkspacePathRekeyGuard.cs"
+      },
+      {
+        "sha256": "D2930C2B9D8783BC1D4A18C8BE6ECD89C1D05B88B04975902B0B339635EE8510",
+        "path": "src/QBrainAi.Storage/Entities/ActorEntity.cs"
+      },
+      {
+        "sha256": "212F2B9E1558A0009C61A98D329EB690ED5CF3766D67ED5DA3747E9B10DF2048",
+        "path": "src/QBrainAi.Storage/Entities/AgentDefinitionEntity.cs"
+      },
+      {
+        "sha256": "9149BE7EFFC92FCD876EED7A2041D75C9DF094B59A33BFAC32260AB4B46E5017",
+        "path": "src/QBrainAi.Storage/Entities/AgentDefinitionModelEntity.cs"
+      },
+      {
+        "sha256": "524C306504497BF25F7AD62ABC47CA5B916027D6A96C7B5DD39B066ED65AF6D7",
+        "path": "src/QBrainAi.Storage/Entities/AgentEventLogEntity.cs"
+      },
+      {
+        "sha256": "1E1D613568F08CC7061D970FF9B84415FB7EE7470A9C161555C4187D6634E3FF",
+        "path": "src/QBrainAi.Storage/Entities/AgentWorkspaceEntity.cs"
+      },
+      {
+        "sha256": "3648C8BB9A225FDF638517CC327AA611FAAD23697F633D5CC54271155A8A6677",
+        "path": "src/QBrainAi.Storage/Entities/AgentWorkspaceListItemEntity.cs"
+      },
+      {
+        "sha256": "768C967332B092A7280641F7D909542B7CA6355FBCD1B8A63DEF6F78DF93B8AA",
+        "path": "src/QBrainAi.Storage/Entities/BrainSlotDefinitionEntity.cs"
+      },
+      {
+        "sha256": "0DDBE3ACBF42159135969770CB17173CBAE1F93F36DC9E9D740FC1C54AA79ADD",
+        "path": "src/QBrainAi.Storage/Entities/BrainSlotInvocationEntity.cs"
+      },
+      {
+        "sha256": "9F64502666F2F06BA0C487BFFC1DBABEF232D4A39090E174B2117CE29ADE4A41",
+        "path": "src/QBrainAi.Storage/Entities/ContextChunkEntity.cs"
+      },
+      {
+        "sha256": "736DB14DA0A3A5E160D14AB7B529A48960AD5708475256CC7C106AF1AC85754E",
+        "path": "src/QBrainAi.Storage/Entities/ContextDocumentEntity.cs"
+      },
+      {
+        "sha256": "EAF2D745903C29F9D3219E234AF11470EC288D265A6FC1BE2E890F2A2F6638E5",
+        "path": "src/QBrainAi.Storage/Entities/DataAuditLogEntity.cs"
+      },
+      {
+        "sha256": "498DF30AAB2873A45FACDCB6AD2A7DA25B7971A3360166527B54167853A2403D",
+        "path": "src/QBrainAi.Storage/Entities/FederationConflictEntity.cs"
+      },
+      {
+        "sha256": "82A8531FC1A4DD9CD539B17A021386DD285AE9465CB0CBFEBF2D3740D7AF7768",
+        "path": "src/QBrainAi.Storage/Entities/FederationOperationEntity.cs"
+      },
+      {
+        "sha256": "405B1ACA7537BDDFF2ADCFF8029FED09910082E8115ED6A8CF0EBD7C8CF9F9DF",
+        "path": "src/QBrainAi.Storage/Entities/FederationOutboxEntity.cs"
+      },
+      {
+        "sha256": "F39382466F7FDCA10B9F56C6F556AA45FF4933AE00317BBAFCC5B30C7E6CC9A7",
+        "path": "src/QBrainAi.Storage/Entities/FederationProxyEntity.cs"
+      },
+      {
+        "sha256": "780360E32C82C2DA8F837DEEFE15C81DC61D88506368443A5DA94345FE248F09",
+        "path": "src/QBrainAi.Storage/Entities/FederationWorkspaceEntity.cs"
+      },
+      {
+        "sha256": "4A255A56EA9F386C5BD84742381C0AC315E3365D621AE38D40926898F0903E62",
+        "path": "src/QBrainAi.Storage/Entities/GraphEntityEntity.cs"
+      },
+      {
+        "sha256": "2132A4619F37C5EBFA3F77531A42ADF37CE7D26F7BC8594AEC1A45D8BF71572F",
+        "path": "src/QBrainAi.Storage/Entities/GraphRelationshipEntity.cs"
+      },
+      {
+        "sha256": "10F808A616ED41864EDE7AA79316F9E1C2085F0B63DE6EE4CD4D9002CB79ADB9",
+        "path": "src/QBrainAi.Storage/Entities/HandoffDiagnosticEntity.cs"
+      },
+      {
+        "sha256": "B2113D05F17C32361758C2169F339ABE6575ECB1B702BAA70F609004C22EA2B8",
+        "path": "src/QBrainAi.Storage/Entities/HandoffIngestionRunEntity.cs"
+      },
+      {
+        "sha256": "F0FD602F24B8CB3DB26CF637332ADF16CA4F6BEA0245BF2CD01D9CD3472F9049",
+        "path": "src/QBrainAi.Storage/Entities/HostileReviewArtifactLinkEntity.cs"
+      },
+      {
+        "sha256": "ACC3F99FBCC1C1E6AD2398D44AA3A4DB71D3F1A536EAC3D6580357432AE5692C",
+        "path": "src/QBrainAi.Storage/Entities/HostileReviewDiagnosticEntity.cs"
+      },
+      {
+        "sha256": "995A0CC1249B5091FA772E5FA1EE6AC98A1F0BB62A5B1D692401F951BA022480",
+        "path": "src/QBrainAi.Storage/Entities/HostileReviewExecutionEntity.cs"
+      },
+      {
+        "sha256": "CDF1734CC5A5256877FDED64067CD7EC7E3BFD522D1AF840ECFE859FA05BDBD1",
+        "path": "src/QBrainAi.Storage/Entities/HostileReviewFindingEntity.cs"
+      },
+      {
+        "sha256": "D02C0E363760FEDA6D84A11281E7EC91FEBE387E1B64ABD274924B4E52AD4A68",
+        "path": "src/QBrainAi.Storage/Entities/HostileReviewRequestEntity.cs"
+      },
+      {
+        "sha256": "B632CF334AC35BDF8D0E532303CB28F92BAF62795561711A801DC7058B0DE438",
+        "path": "src/QBrainAi.Storage/Entities/MemoryEdgeEntity.cs"
+      },
+      {
+        "sha256": "07785760394A21D364A032D2B9ABC9B6A6EC27C7A79A07F90065B7CECE20C947",
+        "path": "src/QBrainAi.Storage/Entities/MemoryEntity.cs"
+      },
+      {
+        "sha256": "A965ACE53A2C814804096ABC0FB099579BAA47863FA45EB32E1BD5CF706CD0BA",
+        "path": "src/QBrainAi.Storage/Entities/MemoryIndexEntity.cs"
+      },
+      {
+        "sha256": "E1C7DD9E49A26E2E849FCACE81F5711E1982F2065E65603E3892A8EE22EB65D3",
+        "path": "src/QBrainAi.Storage/Entities/MemoryVersionEntity.cs"
+      },
+      {
+        "sha256": "887F9D5FA95F4C3C7C35C53778B58C50D38842F791531F4F0DD2EF30B7A87FCF",
+        "path": "src/QBrainAi.Storage/Entities/ProductEntity.cs"
+      },
+      {
+        "sha256": "8DE7CADD89E5842752CB0E30513748C41EB98E4052D5A602CEA9DCA3C0919B47",
+        "path": "src/QBrainAi.Storage/Entities/ProductWorkspaceMembershipEntity.cs"
+      },
+      {
+        "sha256": "81D05B957BF537AF620C7B54A16C126E7F077666CBC8D2BFA47EA2F9B1165C1A",
+        "path": "src/QBrainAi.Storage/Entities/RequirementAcceptanceCriterionEntity.cs"
+      },
+      {
+        "sha256": "1570C0820F298743CD9FE11F5A930FA1A364DAB638255DF6063A241F8E5EA72C",
+        "path": "src/QBrainAi.Storage/Entities/RequirementEntity.cs"
+      },
+      {
+        "sha256": "B986F871485B40A79AF197EC76F2524A8FFF415EF81C384832C5967B97EC1D02",
+        "path": "src/QBrainAi.Storage/Entities/RequirementScopeLayerEntity.cs"
+      },
+      {
+        "sha256": "1902952236A2F89788D6CDB4E8BF3649AA28020A3BA5F24A59F7C10D8197EDD0",
+        "path": "src/QBrainAi.Storage/Entities/RequirementsRecoveryRunEntity.cs"
+      },
+      {
+        "sha256": "5099DFB3C84E800E8B09FDE9E353F4E024193B126E615E835D7C321775FC639A",
+        "path": "src/QBrainAi.Storage/Entities/RequirementTraceabilityLinkEntity.cs"
+      },
+      {
+        "sha256": "3D45109179E2E6B0C85EE8C58438E9EDC642A89E32F7E8234DB007764BA76905",
+        "path": "src/QBrainAi.Storage/Entities/SessionLogActionEntity.cs"
+      },
+      {
+        "sha256": "619DC91465F86AB6534F87DD6165121D2D9E1A4EE80F6EAE694287943DEA3CAE",
+        "path": "src/QBrainAi.Storage/Entities/SessionLogCommitEntity.cs"
+      },
+      {
+        "sha256": "46E675283E3AFF8C6AE6E8D22A1CA3AEEF27B6513CA73CC6B3CC81BBBF971CD9",
+        "path": "src/QBrainAi.Storage/Entities/SessionLogCommitFileEntity.cs"
+      },
+      {
+        "sha256": "3C4062EA57CAA3CA664E22CE214AEAF31268A9DCA89C5240D5FB102098FB0333",
+        "path": "src/QBrainAi.Storage/Entities/SessionLogEntity.cs"
+      },
+      {
+        "sha256": "49DCEEDB400A65B64F23DA0CA3CCD516E15B3FDD6F2A165D997B54D6EB197A32",
+        "path": "src/QBrainAi.Storage/Entities/SessionLogProcessingDialogEntity.cs"
+      },
+      {
+        "sha256": "011AF9235B18BD7FC8B3D147D3884BE6B1FBFE47087762065AEEEAC37B2EA9B7",
+        "path": "src/QBrainAi.Storage/Entities/SessionLogTagEntity.cs"
+      },
+      {
+        "sha256": "5CE464DBDE4C4236CEBBD58D4E78538BC135BBFE00F109DDB7EE05215C3CC157",
+        "path": "src/QBrainAi.Storage/Entities/SessionLogTurnContextEntity.cs"
+      },
+      {
+        "sha256": "ED688A926135222A8F41B3E83D3ABD3778D3293FCEE1A3CB47ABF06C5430D27F",
+        "path": "src/QBrainAi.Storage/Entities/SessionLogTurnEntity.cs"
+      },
+      {
+        "sha256": "233885D2D59285E5F20C3E14C056BC117E6DAD8A6C332E5FD470FD112807B706",
+        "path": "src/QBrainAi.Storage/Entities/SessionLogTurnStringListEntity.cs"
+      },
+      {
+        "sha256": "98B353B1ADDD0BD2F6590B6576E0872757A937041BD0353634CADDAAA977EB5C",
+        "path": "src/QBrainAi.Storage/Entities/SessionLogTurnTagEntity.cs"
+      },
+      {
+        "sha256": "7AAC72CF1CB01CBA88E25A9C606FE7C1E5F313C49F3E3CF4807F10EC51D80121",
+        "path": "src/QBrainAi.Storage/Entities/TodoAuditHistoryEntity.cs"
+      },
+      {
+        "sha256": "4E5F58643D457546F51BFC55182301C4A131178011531B64FFD491BED624B931",
+        "path": "src/QBrainAi.Storage/Entities/TodoCompletedGroupEntity.cs"
+      },
+      {
+        "sha256": "7E7D7EFEE5CBAE11F0E8032B3F9755F45829FF888557F98453F915DF765D5235",
+        "path": "src/QBrainAi.Storage/Entities/TodoCompletedItemEntity.cs"
+      },
+      {
+        "sha256": "901085BB21DA424CEE99E27413233E0ADE101F2BCB19B3561A44EEBA204FEFDC",
+        "path": "src/QBrainAi.Storage/Entities/TodoDocumentMetadataEntity.cs"
+      },
+      {
+        "sha256": "62FDD99B4606A346B1880688F829EFC1AACBE01BDE5500B4133E4280E0862B36",
+        "path": "src/QBrainAi.Storage/Entities/TodoDocumentNoteEntity.cs"
+      },
+      {
+        "sha256": "D0210606530D79380713FC368DB6A73AC5B0027D0A880249FD26811122ED20CB",
+        "path": "src/QBrainAi.Storage/Entities/TodoItemEntity.cs"
+      },
+      {
+        "sha256": "698304EC858E1D9ED03BA233A77EA6F5E242BD2D90D15EB4B6D1CB86780BDAF4",
+        "path": "src/QBrainAi.Storage/Entities/TodoItemListItemEntity.cs"
+      },
+      {
+        "sha256": "62AB6B9D4B5E68F10925C75CADB4194EEA7C626ECF846133B33A3E92DDFCE30D",
+        "path": "src/QBrainAi.Storage/Entities/TodoItemTaskEntity.cs"
+      },
+      {
+        "sha256": "7E52D4E54172A0AF9857CD30E34694AFE4851EE326167354AB80643BE9317706",
+        "path": "src/QBrainAi.Storage/Entities/TodoRequirementLinkEntity.cs"
+      },
+      {
+        "sha256": "A93608E84492AABCAA2BA2BE8361870674ADDE1BF6E23FC128936353CCF7270D",
+        "path": "src/QBrainAi.Storage/Entities/ToolBucketEntity.cs"
+      },
+      {
+        "sha256": "8C95C8F3633508A872AF66C46DF2BA75C36D734A46D0F8C0648BC70715B5AE6C",
+        "path": "src/QBrainAi.Storage/Entities/ToolDefinitionEntity.cs"
+      },
+      {
+        "sha256": "5EE576D5B358EE9CB08F26383404C5D33C2FE99C3441B6FA1DC200204FBA463F",
+        "path": "src/QBrainAi.Storage/Entities/ToolDefinitionTagEntity.cs"
+      },
+      {
+        "sha256": "97BBD96495FE2CBA2B4B1E286366D0220C0CC6D2EC1BE3726A2E5E3ED798F2F0",
+        "path": "src/QBrainAi.Storage/Entities/TriageGroupEntity.cs"
+      },
+      {
+        "sha256": "361D03FE15DDE9885827E4103ED5A621156A4A616E432EF4C913C7FA4C2CC2DB",
+        "path": "src/QBrainAi.Storage/Entities/TriageReportEntity.cs"
+      },
+      {
+        "sha256": "26E75DF99ACC7EB70D7399D512B523DC259E82BB74C79A99F404B9AA5710CA25",
+        "path": "src/QBrainAi.Storage/Entities/TriageReportListItemEntity.cs"
+      },
+      {
+        "sha256": "1FF6ACDB5C43AB7B3A9D3DCE491278B86DF6D47EE64CE00B535C595BAE5DA48E",
+        "path": "src/QBrainAi.Storage/Entities/TriageResearchRunEntity.cs"
+      },
+      {
+        "sha256": "81A1EADDDED84B57AACB2B00B5C7BA5721B3B0632667173169E60CFE0C3AB4D2",
+        "path": "src/QBrainAi.Storage/Entities/UseCaseActorEntity.cs"
+      },
+      {
+        "sha256": "0AD1BEA671AC90CF08483F7D58BDE0654FBF1E6A182FE52B8D577E6326E5237C",
+        "path": "src/QBrainAi.Storage/Entities/UseCaseEntity.cs"
+      },
+      {
+        "sha256": "35EBB5C4040001FE721A081F255844028BF0A69B1172B308AE92DB33F8E8E3B0",
+        "path": "src/QBrainAi.Storage/Entities/UseCaseExtensionPointEntity.cs"
+      },
+      {
+        "sha256": "34F313712C76B9D5EBA31EBCFC06599628F53D58E16236A6D51629CD76ED0956",
+        "path": "src/QBrainAi.Storage/Entities/UseCaseFlowEntity.cs"
+      },
+      {
+        "sha256": "396D832677D8511CE8AA4C7CE334F8E5DC77370FCEE7C17B1E7DDC3B1EA29659",
+        "path": "src/QBrainAi.Storage/Entities/UseCaseFrLinkEntity.cs"
+      },
+      {
+        "sha256": "47DE9314755F0C3634CBBCDAE57E7C0474ECE07E207386A90B51C3CA0BC87BF2",
+        "path": "src/QBrainAi.Storage/Entities/UseCaseSpecialRequirementEntity.cs"
+      },
+      {
+        "sha256": "E997087864C133B604F48F2714C9F4487F01836C6475A10AC8CFC067B02FB09D",
+        "path": "src/QBrainAi.Storage/Entities/UseCaseStepEntity.cs"
+      },
+      {
+        "sha256": "B6ADEDAD43FC8625FBDFE53CA669E9E069860E94842CE27AE7A37DE1799C91FD",
+        "path": "src/QBrainAi.Storage/Entities/WorkspaceBannedItemEntity.cs"
+      },
+      {
+        "sha256": "AE8B198160FE79040767964DC2E45C04717591C8E99D2CDDBF5C7E6F30E56FF7",
+        "path": "src/QBrainAi.Storage/Entities/WorkspaceEntity.cs"
+      },
+      {
+        "sha256": "266E7EA900BD270C2FA9D8AFA038845DA849F5DBFAF32E6F1560E5B0EA106B78",
+        "path": "src/QBrainAi.Storage/Indexing/Chunker.cs"
+      },
+      {
+        "sha256": "B1DE6D1F2CE0F0D4D5B2C1F1CE93E6736DCA11DD340D0E6256481C252FB02B29",
+        "path": "src/QBrainAi.Storage/Indexing/EmbeddingOptions.cs"
+      },
+      {
+        "sha256": "69659BAED8A62C6F0EC8529F1E84AA8405BA718A03406C483BD50DB4E25DB0C4",
+        "path": "src/QBrainAi.Storage/Indexing/EmbeddingService.cs"
+      },
+      {
+        "sha256": "9674F150979EF620B9064B0EDD09FE52FE6CFD7278C9DF1AC7581557E8BE4E80",
+        "path": "src/QBrainAi.Storage/Indexing/IEmbeddingService.cs"
+      },
+      {
+        "sha256": "79366BA9C984C14E49C4B77FA2946BBE87BBDB28565F0C2F011EC20BBDFCE08C",
+        "path": "src/QBrainAi.Storage/Indexing/IVectorIndexService.cs"
+      },
+      {
+        "sha256": "C1944F94E3AA3BEA6894E0126DABD1E0BBA5036E04D3C53A042701BC2489B092",
+        "path": "src/QBrainAi.Storage/Indexing/VectorIndexJsonContext.cs"
+      },
+      {
+        "sha256": "A9FBE88499BE6C1F82B9E6645CC5014FE793FF57A8C0558BD6F348CECDC7A422",
+        "path": "src/QBrainAi.Storage/Indexing/VectorIndexOptions.cs"
+      },
+      {
+        "sha256": "BE3DF5FD9A6F82AA43031582986EF57CF71C791D61A79DB93E38AD6A1CA33BAF",
+        "path": "src/QBrainAi.Storage/Indexing/VectorIndexService.cs"
+      },
+      {
+        "sha256": "3A96CA535918C168C08080F15F27FA021DA35CE05A898638D81270DEB7F4F052",
+        "path": "src/QBrainAi.Storage/Indexing/VectorIndexStartupService.cs"
+      },
+      {
+        "sha256": "68C3A2C8081D59AC5185BC214AE03C032A763AB0A4A919AE5F47E229F15D0CB1",
+        "path": "src/QBrainAi.Storage/Ingestion/SyncRunResult.cs"
+      },
+      {
+        "sha256": "3EDD342FB7A4630B85A9FD21A860DBBD9CDBA71826A0CA9CECEAFE397C6F785C",
+        "path": "src/QBrainAi.Storage/Models/ContextChunk.cs"
+      },
+      {
+        "sha256": "71FB7AA8D1E880A720B84769C5659341BF2C6D25CFF6F26430E0A2056721C37C",
+        "path": "src/QBrainAi.Storage/Services/WorkspaceContext.cs"
+      }
+    ]
+  },
+  "coverage": [
+    {
+      "fr": "FR-MCP-175",
+      "tr": "TR-MCP-FEDERATION-002",
+      "test": "TEST-MCP-223",
+      "ac": "ac-SaveDoesNotPublish",
+      "text": "Given main=C0 and remote=C0, when SaveChanges persists T1.title=draft, then main and remote stay C0 and no publication intent is emitted.",
+      "suites": [
+        "StorageBoundary",
+        "QueryTransaction"
+      ],
+      "satisfied": false,
+      "proof": "Complete independently mocked assertion seam; native execution remains pending"
+    },
+    {
+      "fr": "FR-MCP-177",
+      "tr": "TR-MCP-FEDERATION-004",
+      "test": "TEST-MCP-225",
+      "ac": "ac-PooledConnectionDoesNotLeakBranch",
+      "text": "Given main T1.title=main and feature/search T1.title=feature, when alternating pooled reads run100 times, then each returns only its selected value.",
+      "suites": [
+        "StorageBoundary"
+      ],
+      "satisfied": false,
+      "proof": "Complete independently mocked assertion seam; native execution remains pending"
+    },
+    {
+      "fr": "FR-MCP-186",
+      "tr": "TR-MCP-FEDERATION-013",
+      "test": "TEST-MCP-234",
+      "ac": "ac-DoltBaselineAndUpgrade",
+      "text": "Given empty standalone Dolt then baseline schema1, when baseline and additive schema2 apply, then CRUD succeeds, data remains intact and repeated apply makes no further changes.",
+      "suites": [
+        "StorageBoundary",
+        "RelationalModel",
+        "QueryTransaction",
+        "RelationalWrite",
+        "DoltFullModel"
+      ],
+      "satisfied": false,
+      "proof": "Complete independently mocked assertion seam; native execution remains pending"
+    },
+    {
+      "fr": "FR-MCP-186",
+      "tr": "TR-MCP-FEDERATION-013",
+      "test": "TEST-MCP-234",
+      "ac": "ac-OriginalProviderMigrationsUnchanged",
+      "text": "Given recorded hashes of the three original migration chains, when Dolt support is added, then those hashes match and all three real-provider upgrade fixtures pass.",
+      "suites": [
+        "RelationalModel",
+        "OriginalMigration"
+      ],
+      "satisfied": false,
+      "proof": "Complete independently mocked assertion seam; native execution remains pending"
+    }
+  ],
+  "currentLayerKey": "layer-1",
+  "copies": [
+    {
+      "name": "windows-mock.nuke.txt",
+      "sha256": "CBEC3E9C329471F8C9C696AFB01FDCBCBE4A1EE6E6A3D91F86BE9E481AC59A4E",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-18_19-24-55.log"
+    },
+    {
+      "name": "verified-compile.txt",
+      "sha256": "E29461A2ECC38D0822B3385CF4A5DA2743FDE12560270EF7AEE4ED38B3ED9504",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/last-build.log"
+    },
+    {
+      "name": "Export-DesiredDoltSchema.ps1",
+      "sha256": "7506C10D85E1CA8C39434AA689F8AB35DC07C7226C95A85CCFCC06A8DAD23254",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/Export-FederationDesiredDoltSchema.ps1"
+    },
+    {
+      "name": "Export-OriginalMigrationBaseline.ps1",
+      "sha256": "8D23DDC66D79D4B6E14045BF86D323F63E39A96F42C32C427CFCE65980F5AC79",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/Export-FederationOriginalMigrationBaseline.ps1"
+    },
+    {
+      "name": "Save-Task002Readiness.ps1",
+      "sha256": "FD846F12C13CA2C153DD8CB37F0C38DE9B4B6882A5C35BF52ACBE8C326CBBED6",
+      "source": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\Save-FederationTask002Readiness.ps1"
+    }
+  ],
+  "rawTrx": {
+    "bytes": 7589418,
+    "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261118T192500-fedph0-task002-design-closure\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx",
+    "retained": true,
+    "sha256": "3F1851761C5D6F24F634E8910BB5E50425DC0BD65A3E3C5D10D2A54CBD569826"
+  },
+  "reviewedDefinition": true,
+  "interfacesAndDtosDefined": true,
+  "independentMocks": true,
+  "negativeControlsRejected": true,
+  "readyReview": "Planning-to-Ready supported for exact current definition/source pins; native feasibility and Success are separate",
+  "nativeRuntimeProof": false,
+  "operatorAcceptedBOutputs": false,
+  "tasksCompleted": false,
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "pendingBeforeSuccess": [
+    "Open group barrier only after every implementation member has current definition design/mock proof",
+    "After Task001 Success, bind same cases to real candidate provider and disposable stores on native Windows and LAB Linux",
+    "Prove all full-model mappings, actual physical constraints, typed values, queries, concurrency, transaction/history boundaries and branch isolation",
+    "Prove unchanged original chains and all3 real-provider upgrades",
+    "Retain separate host runtime/B-output acceptance, final-head full gates and independent overall/per-task HV"
+  ],
+  "compressedTrx": {
+    "bytes": 947753,
+    "path": "windows-mock.trx.gz",
+    "decompressedSha256": "3F1851761C5D6F24F634E8910BB5E50425DC0BD65A3E3C5D10D2A54CBD569826",
+    "sha256": "62F197ADD6100DCF63AADA7C80933DCC7B012CFD1D1C0861B264438AC1E50871"
+  }
+}

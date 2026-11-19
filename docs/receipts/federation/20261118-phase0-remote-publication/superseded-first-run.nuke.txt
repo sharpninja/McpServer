@@ -1,0 +1,381 @@
+**********************
+PowerShell transcript start
+Start time: 20261118194850
+Username: PAYTON-LEGION2\kingd
+RunAs User: PAYTON-LEGION2\kingd
+Configuration Name: 
+Machine: PAYTON-LEGION2 (Microsoft Windows NT 10.0.26300.0)
+Host Application: C:\Program Files\WindowsApps\OpenAI.CodexPrimaryRuntime.v26-1112-611-0_26.1112.611.0_x64__3k8sg7r9htsxt\dependencies\native\powershell\pwsh.dll -NoExit -Command chcp 65001 | Out-Null; [Console]::InputEncoding = [System.Text.Encoding]::UTF8; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $global:PowerShellMCPProxyPid = 5424; $global:PowerShellMCPAgentId = 'default'; Import-Module PowerShell.MCP -Force; Import-Module PSReadLine; Write-Host 'AI session connected.' -ForegroundColor Green; Write-Host ''
+Process ID: 38588
+PSVersion: 7.6.9
+PSEdition: Core
+GitCommitId: 7.6.9
+OS: Microsoft Windows 10.0.26300
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is F:/GitHub/McpServer/.mcpServer/codex/20261118T194850-fedph0-remote-publication-mock.nuke.txt
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+​
+​
+╬═══════════════
+║ TestGroups
+╬══════
+​
+19:48:53 [INF] Test group filter for QBrainAi.Support.Mcp.Tests: Platform!=Linux&(FullyQualifiedName~.Phase0RemotePublicationMockGateTests.)
+19:48:53 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --filter Platform!=Linux&(FullyQualifiedName~.Phase0RemotePublicationMockGateTests.) --verbosity minimal --results-directory F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\TestResults\20261118T194850-fedph0-remote-publication-mock\groups\QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx
+19:48:54 [DBG]   Determining projects to restore...
+19:48:55 [DBG]   All projects are up-to-date for restore.
+19:48:57 [DBG]   QBrainAi.ProcessTree.TestHelper -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.ProcessTree.TestHelper\bin\Debug\net10.0\QBrainAi.ProcessTree.TestHelper.dll
+19:48:57 [DBG]   QBrainAi.SessionLog.Transcripts -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.SessionLog.Transcripts\bin\Debug\net10.0\QBrainAi.SessionLog.Transcripts.dll
+19:48:57 [DBG]   QBrainAi.TransactionSecurity -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.TransactionSecurity\bin\Debug\net10.0\QBrainAi.TransactionSecurity.dll
+19:48:57 [DBG]   QBrainAi.Client -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Client\bin\Debug\net10.0\QBrainAi.Client.dll
+19:48:57 [DBG]   QBrainAi.Cqrs -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Cqrs\bin\Debug\net10.0\QBrainAi.Cqrs.dll
+19:48:57 [DBG]   QBrainAi.Common.AgentCli -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Common.AgentCli\bin\Debug\net10.0\QBrainAi.Common.AgentCli.dll
+19:48:57 [DBG]   QBrainAi.ServiceDefaults -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.ServiceDefaults\bin\Debug\net10.0\QBrainAi.ServiceDefaults.dll
+19:48:57 [DBG]   QBrainAi.Cqrs.Mvvm -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Cqrs.Mvvm\bin\Debug\net10.0\QBrainAi.Cqrs.Mvvm.dll
+19:48:57 [DBG]   QBrainAi.Repl.Core -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Repl.Core\bin\Debug\net10.0\QBrainAi.Repl.Core.dll
+19:48:57 [DBG]   QBrainAi.Storage -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage\bin\Debug\net10.0\QBrainAi.Storage.dll
+19:48:58 [DBG]   QBrainAi.McpAgent -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.McpAgent\bin\Debug\net10.0\QBrainAi.McpAgent.dll
+19:48:58 [DBG]   QBrainAi.Storage.SqlServerMigrations -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage.SqlServerMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqlServerMigrations.dll
+19:48:58 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage.PostgreSqlMigrations\bin\Debug\net10.0\QBrainAi.Storage.PostgreSqlMigrations.dll
+19:48:58 [DBG]   QBrainAi.Storage.SqliteMigrations -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage.SqliteMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqliteMigrations.dll
+19:48:59 [DBG]   QBrainAi.Services -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Services\bin\Debug\net10.0\QBrainAi.Services.dll
+19:48:59 [DBG]   QBrainAi.GraphRag -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.GraphRag\bin\Debug\net10.0\QBrainAi.GraphRag.dll
+19:49:00 [DBG]   QBrainAi.Support.Mcp -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Support.Mcp\bin\Debug\net10.0\QBrainAi.Support.Mcp.dll
+19:49:01 [DBG]   QBrainAi.Support.Mcp.Tests -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll
+19:49:01 [DBG] Test run for F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+19:49:01 [DBG] A total of 1 test files matched the specified pattern.
+19:49:09 [ERR] [xUnit.net 00:00:06.92]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "AfterReceipt") [FAIL]
+19:49:09 [ERR] [xUnit.net 00:00:06.93]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "None") [FAIL]
+19:49:09 [ERR] [xUnit.net 00:00:06.93]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "None") [FAIL]
+19:49:09 [ERR] [xUnit.net 00:00:06.93]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "BeforeRef") [FAIL]
+19:49:09 [ERR] [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "BeforeRef") [FAIL]
+19:49:09 [ERR] [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "DropReply") [FAIL]
+19:49:09 [ERR] [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "DropReply") [FAIL]
+19:49:09 [ERR] [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "BeforeRef") [FAIL]
+19:49:09 [ERR] [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "AfterRef") [FAIL]
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "AfterReceipt") [60 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "None") [1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "None") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "BeforeRef") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "BeforeRef") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [ERR] [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "AfterReceipt") [FAIL]
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [ERR] [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "None") [FAIL]
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [ERR] [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "AfterRef") [FAIL]
+19:49:09 [DBG] Expected: "First"
+19:49:09 [ERR] [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "AfterReceipt") [FAIL]
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [ERR] [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "DropReply") [FAIL]
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [ERR] [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "AfterRef") [FAIL]
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [ERR] [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "BeforeRef") [FAIL]
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [ERR] [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "AfterReceipt") [FAIL]
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [ERR] [xUnit.net 00:00:06.96]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "None") [FAIL]
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "DropReply") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "DropReply") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "BeforeRef") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "AfterRef") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "AfterReceipt") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "None") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "AfterRef") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "AfterReceipt") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "DropReply") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [ERR] [xUnit.net 00:00:06.96]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "DropReply") [FAIL]
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [ERR] [xUnit.net 00:00:06.96]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "AfterRef") [FAIL]
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "AfterRef") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "BeforeRef") [1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "AfterReceipt") [2 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "None") [1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "DropReply") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "AfterRef") [< 1 ms]
+19:49:09 [DBG]   Error Message:
+19:49:09 [DBG]    Assert.Equal() Failure: Collections differ at index 3
+19:49:09 [DBG]            ↓ (pos 0)
+19:49:09 [DBG] Expected: "First"
+19:49:09 [DBG] Actual:   "Uploaded"
+19:49:09 [DBG]            ↑ (pos 0)
+19:49:09 [DBG]   Stack Trace:
+19:49:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Boolean sourceDirty, Boolean hubDirty, String point) in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0RemotePublicationMockGateTests.cs:line 51
+19:49:09 [DBG]    at InvokeStub_Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(Object, Span`1)
+19:49:09 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+19:49:12 [DBG] Results File: F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\TestResults\20261118T194850-fedph0-remote-publication-mock\groups\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx
+19:49:12 [DBG]
+19:49:12 [DBG] Failed!  - Failed:    20, Passed:   301, Skipped:     0, Total:   321, Duration: 3 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+19:49:13 [ERR] Test group project QBrainAi.Support.Mcp.Tests failed.
+Nuke.Common.Tooling.ProcessException: Process 'dotnet.exe' exited with code 1.
+   > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --filter Platform!=Linux&(FullyQualifiedName~.Phase0RemotePublicationMockGateTests.) --verbosity minimal --results-directory F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\TestResults\20261118T194850-fedph0-remote-publication-mock\groups\QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx
+   @ F:\GitHub\McpServer\.worktrees\federation-phase0-20261117
+Error output:
+   [xUnit.net 00:00:06.92]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "AfterReceipt") [FAIL]
+   [xUnit.net 00:00:06.93]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "None") [FAIL]
+   [xUnit.net 00:00:06.93]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "None") [FAIL]
+   [xUnit.net 00:00:06.93]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "BeforeRef") [FAIL]
+   [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "BeforeRef") [FAIL]
+   [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "DropReply") [FAIL]
+   [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "DropReply") [FAIL]
+   [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "BeforeRef") [FAIL]
+   [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "AfterRef") [FAIL]
+   [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "AfterReceipt") [FAIL]
+   [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "None") [FAIL]
+   [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "AfterRef") [FAIL]
+   [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "AfterReceipt") [FAIL]
+   [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "DropReply") [FAIL]
+   [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "AfterRef") [FAIL]
+   [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "BeforeRef") [FAIL]
+   [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "AfterReceipt") [FAIL]
+   [xUnit.net 00:00:06.96]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "None") [FAIL]
+   [xUnit.net 00:00:06.96]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "DropReply") [FAIL]
+   [xUnit.net 00:00:06.96]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "AfterRef") [FAIL]
+
+   at Nuke.Common.Tooling.ProcessExtensions.AssertZeroExitCode(IProcess process) in /_/source/Nuke.Tooling/ProcessExtensions.cs:line 38
+   at Nuke.Common.Tooling.ToolTasks.<>c.<GetExitHandler>b__4_0(ToolOptions _, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 27
+   at Nuke.Common.Tooling.ToolTasks.<>c__DisplayClass8_0.<GetExitHandlerInternal>b__3(ToolOptions o, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 22
+   at Nuke.Common.Tooling.ToolTasks.Run[T](T options) in /_/source/Nuke.Tooling/ToolTasks.Run.cs:line 36
+   at Nuke.Common.Tools.DotNet.DotNetTasks.DotNetTest(Configure`1 configurator) in /_/source/Nuke.Common/Tools/DotNet/DotNet.Generated.cs:line 34
+   at Build.<get_TestGroups>b__173_1() in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\build\Build.TestGroups.cs:line 66
+19:49:13 [ERR] Target TestGroups has thrown an exception
+System.InvalidOperationException: Test group projects failed: QBrainAi.Support.Mcp.Tests
+   at Build.<get_TestGroups>b__173_1() in F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\build\Build.TestGroups.cs:line 88
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[ERR] TestGroups: [xUnit.net 00:00:06.92]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "AfterReceipt") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.93]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "None") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.93]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "None") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.93]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "BeforeRef") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "BeforeRef") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "DropReply") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "DropReply") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "BeforeRef") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.94]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "AfterRef") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "AfterReceipt") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "None") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: False, point: "AfterRef") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "AfterReceipt") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "DropReply") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "AfterRef") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: False, point: "BeforeRef") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.95]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "AfterReceipt") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.96]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "None") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.96]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: False, hubDirty: True, point: "DropReply") [FAIL]
+[ERR] TestGroups: [xUnit.net 00:00:06.96]     QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemotePublicationMockGateTests.CorrectPublicationAndRecoveryPass(sourceDirty: True, hubDirty: True, point: "AfterRef") [FAIL]
+[ERR] TestGroups: Test group project QBrainAi.Support.Mcp.Tests failed.
+[ERR] TestGroups: Target TestGroups has thrown an exception
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+TestGroups         Failed          0:19   // InvalidOperationException: Test group projects failed: QBrainAi.Support.Mcp.Tests
+───────────────────────────────────────
+Total                              0:19
+═══════════════════════════════════════
+​
+Build failed on 11/18/2026 7:49:13 PM. (╯°□°）╯︵ ┻━┻
+**********************
+PowerShell transcript end
+End time: 20261118194913
+**********************

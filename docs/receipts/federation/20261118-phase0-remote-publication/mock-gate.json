@@ -1,0 +1,113 @@
+{
+  "timestampLocal": "2026-11-18T19:52:38",
+  "author": {
+    "agent": "Codex",
+    "sessionId": "Codex-20261116T174245Z-plugin-session",
+    "requestId": "req-20261119T010931Z-prompt-a8fa"
+  },
+  "task": "TASK-FEDPH0-003",
+  "group": "GRP-FEDPH0-001",
+  "stage": "PartialDesignAndMock",
+  "host": "PAYTON-LEGION2",
+  "sourceBaseHead": "a1c3cb49b88edc8e9f976a16acda5b7c6ec4beae",
+  "runId": "20261118T195010-fedph0-remote-publication-mock-r2",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0RemotePublicationMockGateTests --test-run-id 20261118T195010-fedph0-remote-publication-mock-r2",
+  "counts": {
+    "positiveReportingCases": 40,
+    "skipped": 0,
+    "total": 321,
+    "groupedNegativeReportingCases": 280,
+    "standaloneAliasNegativeCases": 1,
+    "groupedActualRejections": 10316,
+    "failed": 0,
+    "actualNegativeRejections": 10317,
+    "passed": 321
+  },
+  "sources": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemotePublicationContract.cs",
+      "sha256": "E90EAF5324861FB9EAF9D52E44943241757800D07DCF142EEF02615B05826DBB",
+      "lfSha256": "E45EC33CD05555F5328EC34E9D5BFBB4B12900A52001547A1AFDE8A604191CDB"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemotePublicationMockGateTests.cs",
+      "sha256": "CD10030EECE7925582BDBF98028CF5EF9A8EB464A25F5FE6F9D68BBB7D633E12",
+      "lfSha256": "BC43CF6013D0E5321BDAC366D8F7CB77416DB70D2192FA199A05F6FE6B2DD042"
+    },
+    {
+      "path": "docs/plans/2026-11-17-federation-phase0-contract-design.md",
+      "sha256": "9A6B38D659C14CA02C5EF096A0B3397DF51E189B49D539B9ECA36E18AE667D03",
+      "lfSha256": "5208BAB622C0C4F3E8DD4F08139717B884FCA6D85ADDBC9E40A8C79FD7DCB19A"
+    }
+  ],
+  "copies": [
+    {
+      "name": "windows-mock.trx",
+      "sha256": "EEE4763C0F78893536DA1DC3F143FFED4DE8882E9EF73CF2BD591EBEF68438B1",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261118T195010-fedph0-remote-publication-mock-r2\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "windows-mock.nuke.txt",
+      "sha256": "28BE8BE275148A5B516E4361B1BEFBC83B4D77255481EC6272DDBD884C33392F",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/20261118T195010-fedph0-remote-publication-mock-r2.nuke.txt"
+    },
+    {
+      "name": "superseded-first-run.trx",
+      "sha256": "12CEFD410220AB44DCF7FE870231E2E695EEA8E96F2A9C22AE4AADB61FFD006E",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261118T194850-fedph0-remote-publication-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "superseded-first-run.nuke.txt",
+      "sha256": "FD2C8FBA65F1CD089C78FEA71CD8E9D6C1ED189639E12C58E4DCD82C1D95F75C",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/20261118T194850-fedph0-remote-publication-mock.nuke.txt"
+    },
+    {
+      "name": "verified-compile.txt",
+      "sha256": "E49F64D23F925783AD480D5CDEF0A06D374941BA431187DA75BF9C55DCD73F52",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/last-build.log"
+    },
+    {
+      "name": "Save-RemotePublicationEvidence.ps1",
+      "sha256": "6984BE5D1A0E98F4D64FCD817C7FD544A5F332BF41156995A0F02849E41F8BA0",
+      "source": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\Save-FederationRemotePublicationEvidence.ps1"
+    }
+  ],
+  "requirements": [
+    "FR-MCP-185",
+    "FR-MCP-178",
+    "FR-MCP-181",
+    "TR-MCP-FEDERATION-012",
+    "TR-MCP-FEDERATION-005",
+    "TR-MCP-FEDERATION-008",
+    "TEST-MCP-233",
+    "TEST-MCP-226",
+    "TEST-MCP-229"
+  ],
+  "currentLayerKey": "layer-1",
+  "covered": [
+    "Four clean/dirty source and hub combinations",
+    "Ordinary success, reply loss, death before public ref, after ref before receipt, after receipt before reply",
+    "Committed upload isolation, full ancestry and preserved working drafts",
+    "Independent durable intent/receipt bindings and stable exact retry",
+    "Actual restart identity assertions and conflicting-payload denial",
+    "Negative controls and valid ordering/generation-gap/retention variations"
+  ],
+  "firstRun": {
+    "failed": 20,
+    "skipped": 0,
+    "runId": "20261118T194850-fedph0-remote-publication-mock",
+    "passed": 301,
+    "reason": "Expected call list omitted Uploaded read; fixed before passing r2. Source review also corrected the alias-negative fixture to test actual shared-input mutation."
+  },
+  "nativeRuntimeProof": false,
+  "ready": false,
+  "tasksCompleted": false,
+  "operatorAcceptedBOutputs": false,
+  "implementationBarrier": "Closed",
+  "remaining": [
+    "Token injection and object-URL/redirect containment design and mock seam",
+    "Task003 complete-definition readiness review",
+    "Same assertion binding to real disposable remote/gateway/processes on both hosts after all9Ready",
+    "B5 acceptance, final gates and independent HV"
+  ]
+}

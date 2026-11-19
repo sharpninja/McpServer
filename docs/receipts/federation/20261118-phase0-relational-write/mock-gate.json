@@ -1,0 +1,98 @@
+{
+  "timestampLocal": "2026-11-18T18:50:02",
+  "host": "PAYTON-LEGION2",
+  "sourceBaseHead": "a1c3cb49b88edc8e9f976a16acda5b7c6ec4beae",
+  "runId": "20261118T184704-fedph0-relational-write-mock",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0RelationalWriteMockGateTests --test-run-id 20261118T184704-fedph0-relational-write-mock",
+  "total": 1364,
+  "passed": 1364,
+  "failed": 0,
+  "skipped": 0,
+  "positive": 12,
+  "expectedNegativeControls": 1352,
+  "methods": {
+    "CorrectWriteObservationsPass": 12,
+    "WrongWriteObservationIsRejected": 1352
+  },
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+      "lfSha256": "2A4D22954D10B4D2A815658C58489965F66B771373D3FA878294DE4CBC4D0098",
+      "sha256": "2A4D22954D10B4D2A815658C58489965F66B771373D3FA878294DE4CBC4D0098"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0StorageBoundaryContract.cs",
+      "lfSha256": "C8CC85C4121F519BA8535E5B93DB750AE912B14F499F5A7857B5D121B17BA271",
+      "sha256": "7F0C0556BBF48640FDA1C8D995C491DA94BA797EF6552266C5C17F7BAEDF593E"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RelationalWriteContract.cs",
+      "lfSha256": "FD86F9FCFE62C9FE894F23A7BF36D43F43EB07D74ED5F2058B8D654F9BE845D7",
+      "sha256": "C1455DB9E197D3AC5E959FA8BD0B8C7BC0F90977DBC7183384AF46F2D11EAE8F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RelationalWriteMockGateTests.cs",
+      "lfSha256": "FA70962F42B9A655F234C9DDF3BCCB468D71E78979E9E2625CFC158554034D7D",
+      "sha256": "2C9D244C7A926635B2914B9DB409159118CE34F3EC089A2D4B3D899F35E5D755"
+    }
+  ],
+  "copies": [
+    {
+      "name": "windows-mock.nuke.txt",
+      "sha256": "B744664B8130CBB975232C894F74256279B15694165CC0BA2EDA02008EF64A26",
+      "source": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-18_18-47-16.log"
+    },
+    {
+      "name": "initial-compiler-failure.txt",
+      "sha256": "453B43109DA58F01A0B2AA7706040AA7AB663AFD4EEA6A789BD15C25B25A58B3",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/20261118T184251-relational-write-initial-build.log"
+    },
+    {
+      "name": "corrected-compile.txt",
+      "sha256": "9A47A5E5D4D27A334A251F56AFF4398C6DE87CCFBDDF9FEDC0DD02BB182C99E5",
+      "source": "F:/GitHub/McpServer/.mcpServer/codex/last-build.log"
+    }
+  ],
+  "rawTrx": {
+    "bytes": 2272392,
+    "path": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261118T184704-fedph0-relational-write-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx",
+    "retained": true,
+    "sha256": "04BD0D78AC369203AF85AC9344457CE156186E1831373D92E3E3C86EC997A13B"
+  },
+  "tasks": [
+    "TASK-FEDPH0-002"
+  ],
+  "trace": {
+    "test": [
+      "TEST-MCP-234"
+    ],
+    "criteria": [
+      "ac-DoltBaselineAndUpgrade"
+    ],
+    "references": [
+      "https://mysqlconnector.net/api/mysqlconnector/mysqlerrorcodetype/",
+      "https://dev.mysql.com/doc/mysql-errors/8.0/en/server-error-reference.html"
+    ],
+    "coverage": "Partial representative relational constraint/concurrency assertions, not whole-criterion satisfaction",
+    "tr": [
+      "TR-MCP-FEDERATION-013"
+    ],
+    "fr": [
+      "FR-MCP-186"
+    ]
+  },
+  "stage": "PartialDesignAndMock",
+  "implementationBarrier": "Closed",
+  "deployHold": true,
+  "nativeRuntimeProof": false,
+  "operatorAccepted": false,
+  "tasksCompleted": false,
+  "phase0ExitAccepted": false,
+  "scriptSha256": "88C3FBBB9539404C0083EF32E863DAA739D945519B48DADE36F4E8A315242777",
+  "compressedTrx": {
+    "bytes": 260250,
+    "path": "windows-mock.trx.gz",
+    "decompressedSha256": "04BD0D78AC369203AF85AC9344457CE156186E1831373D92E3E3C86EC997A13B",
+    "sha256": "A2CA060D9CC37AA243FDD4D29A7238519555183B686D71837D1E7638B9506B4B"
+  }
+}

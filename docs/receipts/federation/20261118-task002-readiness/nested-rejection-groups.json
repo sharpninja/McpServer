@@ -1,0 +1,712 @@
+[
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 10, negativeControls: 459)",
+    "controls": 459,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 22, negativeControls: 380)",
+    "controls": 380,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 59, negativeControls: 853)",
+    "controls": 853,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 0, negativeControls: 311)",
+    "controls": 311,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 70, negativeControls: 624)",
+    "controls": 624,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 27, negativeControls: 327)",
+    "controls": 327,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 43, negativeControls: 540)",
+    "controls": 540,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 63, negativeControls: 396)",
+    "controls": 396,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 48, negativeControls: 376)",
+    "controls": 376,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 7, negativeControls: 474)",
+    "controls": 474,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 13, negativeControls: 260)",
+    "controls": 260,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 39, negativeControls: 695)",
+    "controls": 695,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 60, negativeControls: 261)",
+    "controls": 261,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 29, negativeControls: 354)",
+    "controls": 354,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 41, negativeControls: 295)",
+    "controls": 295,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 15, negativeControls: 372)",
+    "controls": 372,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 17, negativeControls: 515)",
+    "controls": 515,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 25, negativeControls: 194)",
+    "controls": 194,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 40, negativeControls: 286)",
+    "controls": 286,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 45, negativeControls: 218)",
+    "controls": 218,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 9, negativeControls: 376)",
+    "controls": 376,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 44, negativeControls: 257)",
+    "controls": 257,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 16, negativeControls: 299)",
+    "controls": 299,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 67, negativeControls: 347)",
+    "controls": 347,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 28, negativeControls: 316)",
+    "controls": 316,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 4, negativeControls: 619)",
+    "controls": 619,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 55, negativeControls: 286)",
+    "controls": 286,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 52, negativeControls: 256)",
+    "controls": 256,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 40, negativeControls: 390)",
+    "controls": 390,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 28, negativeControls: 225)",
+    "controls": 225,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 15, negativeControls: 510)",
+    "controls": 510,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 55, negativeControls: 412)",
+    "controls": 412,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 69, negativeControls: 295)",
+    "controls": 295,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 5, negativeControls: 261)",
+    "controls": 261,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 65, negativeControls: 355)",
+    "controls": 355,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 43, negativeControls: 735)",
+    "controls": 735,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 27, negativeControls: 235)",
+    "controls": 235,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 6, negativeControls: 493)",
+    "controls": 493,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 32, negativeControls: 576)",
+    "controls": 576,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 30, negativeControls: 318)",
+    "controls": 318,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 64, negativeControls: 240)",
+    "controls": 240,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 3, negativeControls: 355)",
+    "controls": 355,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 32, negativeControls: 402)",
+    "controls": 402,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 46, negativeControls: 446)",
+    "controls": 446,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 23, negativeControls: 329)",
+    "controls": 329,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 38, negativeControls: 312)",
+    "controls": 312,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 16, negativeControls: 413)",
+    "controls": 413,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 53, negativeControls: 343)",
+    "controls": 343,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 2, negativeControls: 312)",
+    "controls": 312,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 35, negativeControls: 223)",
+    "controls": 223,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 54, negativeControls: 269)",
+    "controls": 269,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 58, negativeControls: 571)",
+    "controls": 571,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 67, negativeControls: 257)",
+    "controls": 257,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 50, negativeControls: 235)",
+    "controls": 235,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 12, negativeControls: 733)",
+    "controls": 733,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 64, negativeControls: 324)",
+    "controls": 324,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 4, negativeControls: 442)",
+    "controls": 442,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 33, negativeControls: 297)",
+    "controls": 297,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 49, negativeControls: 344)",
+    "controls": 344,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 20, negativeControls: 278)",
+    "controls": 278,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 47, negativeControls: 320)",
+    "controls": 320,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 21, negativeControls: 333)",
+    "controls": 333,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 45, negativeControls: 292)",
+    "controls": 292,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 3, negativeControls: 455)",
+    "controls": 455,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 62, negativeControls: 316)",
+    "controls": 316,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 26, negativeControls: 734)",
+    "controls": 734,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 8, negativeControls: 289)",
+    "controls": 289,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 66, negativeControls: 363)",
+    "controls": 363,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 50, negativeControls: 314)",
+    "controls": 314,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 30, negativeControls: 223)",
+    "controls": 223,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 51, negativeControls: 487)",
+    "controls": 487,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 48, negativeControls: 274)",
+    "controls": 274,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 34, negativeControls: 441)",
+    "controls": 441,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 57, negativeControls: 307)",
+    "controls": 307,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 9, negativeControls: 285)",
+    "controls": 285,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 17, negativeControls: 382)",
+    "controls": 382,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 56, negativeControls: 338)",
+    "controls": 338,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 14, negativeControls: 268)",
+    "controls": 268,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 31, negativeControls: 311)",
+    "controls": 311,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 60, negativeControls: 349)",
+    "controls": 349,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 52, negativeControls: 351)",
+    "controls": 351,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 58, negativeControls: 415)",
+    "controls": 415,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 24, negativeControls: 412)",
+    "controls": 412,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 33, negativeControls: 404)",
+    "controls": 404,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 2, negativeControls: 240)",
+    "controls": 240,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 59, negativeControls: 599)",
+    "controls": 599,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 65, negativeControls: 261)",
+    "controls": 261,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 14, negativeControls: 392)",
+    "controls": 392,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 57, negativeControls: 238)",
+    "controls": 238,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 20, negativeControls: 390)",
+    "controls": 390,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 13, negativeControls: 339)",
+    "controls": 339,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 62, negativeControls: 240)",
+    "controls": 240,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 70, negativeControls: 434)",
+    "controls": 434,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 18, negativeControls: 291)",
+    "controls": 291,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 10, negativeControls: 650)",
+    "controls": 650,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 5, negativeControls: 343)",
+    "controls": 343,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 56, negativeControls: 468)",
+    "controls": 468,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 42, negativeControls: 315)",
+    "controls": 315,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 69, negativeControls: 212)",
+    "controls": 212,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 61, negativeControls: 627)",
+    "controls": 627,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 36, negativeControls: 291)",
+    "controls": 291,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 37, negativeControls: 419)",
+    "controls": 419,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 19, negativeControls: 985)",
+    "controls": 985,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 34, negativeControls: 329)",
+    "controls": 329,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 0, negativeControls: 223)",
+    "controls": 223,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 19, negativeControls: 650)",
+    "controls": 650,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 63, negativeControls: 556)",
+    "controls": 556,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 42, negativeControls: 235)",
+    "controls": 235,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 6, negativeControls: 669)",
+    "controls": 669,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 12, negativeControls: 524)",
+    "controls": 524,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 35, negativeControls: 339)",
+    "controls": 339,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 26, negativeControls: 530)",
+    "controls": 530,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 1, negativeControls: 447)",
+    "controls": 447,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 29, negativeControls: 269)",
+    "controls": 269,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 68, negativeControls: 327)",
+    "controls": 327,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 53, negativeControls: 252)",
+    "controls": 252,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 22, negativeControls: 552)",
+    "controls": 552,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 38, negativeControls: 240)",
+    "controls": 240,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 24, negativeControls: 611)",
+    "controls": 611,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 51, negativeControls: 706)",
+    "controls": 706,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 21, negativeControls: 235)",
+    "controls": 235,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 11, negativeControls: 513)",
+    "controls": 513,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 31, negativeControls: 430)",
+    "controls": 430,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 18, negativeControls: 411)",
+    "controls": 411,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 54, negativeControls: 368)",
+    "controls": 368,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 36, negativeControls: 399)",
+    "controls": 399,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 46, negativeControls: 334)",
+    "controls": 334,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 47, negativeControls: 235)",
+    "controls": 235,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 37, negativeControls: 303)",
+    "controls": 303,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 66, negativeControls: 486)",
+    "controls": 486,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 39, negativeControls: 999)",
+    "controls": 999,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 23, negativeControls: 483)",
+    "controls": 483,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 25, negativeControls: 281)",
+    "controls": 281,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 8, negativeControls: 382)",
+    "controls": 382,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 44, negativeControls: 341)",
+    "controls": 341,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 7, negativeControls: 689)",
+    "controls": 689,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 1, negativeControls: 318)",
+    "controls": 318,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 61, negativeControls: 461)",
+    "controls": 461,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"logicalModel\", index: 68, negativeControls: 420)",
+    "controls": 420,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 11, negativeControls: 362)",
+    "controls": 362,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 41, negativeControls: 223)",
+    "controls": 223,
+    "outcome": "Passed"
+  },
+  {
+    "case": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0DoltFullModelMockGateTests.EveryWrongEntityFactIsRejected(model: \"physicalSchema\", index: 49, negativeControls: 224)",
+    "controls": 224,
+    "outcome": "Passed"
+  }
+]

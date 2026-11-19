@@ -1,0 +1,52 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+​
+​
+╬═══════════════
+║ TestGroups
+╬══════
+​
+16:25:55 [INF] Test group filter for QBrainAi.Support.Mcp.Tests: Platform!=Linux&(FullyQualifiedName~.Phase0RelationalModelMockGateTests.)
+16:25:56 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --filter Platform!=Linux&(FullyQualifiedName~.Phase0RelationalModelMockGateTests.) --verbosity minimal --results-directory F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\TestResults\20261118T162552-fedph0-relational-model-grouped\groups\QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx
+16:25:56 [DBG]   Determining projects to restore...
+16:25:58 [DBG]   All projects are up-to-date for restore.
+16:26:00 [DBG]   QBrainAi.SessionLog.Transcripts -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.SessionLog.Transcripts\bin\Debug\net10.0\QBrainAi.SessionLog.Transcripts.dll
+16:26:00 [DBG]   QBrainAi.ProcessTree.TestHelper -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.ProcessTree.TestHelper\bin\Debug\net10.0\QBrainAi.ProcessTree.TestHelper.dll
+16:26:00 [DBG]   QBrainAi.Client -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Client\bin\Debug\net10.0\QBrainAi.Client.dll
+16:26:00 [DBG]   QBrainAi.Common.AgentCli -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Common.AgentCli\bin\Debug\net10.0\QBrainAi.Common.AgentCli.dll
+16:26:00 [DBG]   QBrainAi.Cqrs -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Cqrs\bin\Debug\net10.0\QBrainAi.Cqrs.dll
+16:26:00 [DBG]   QBrainAi.TransactionSecurity -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.TransactionSecurity\bin\Debug\net10.0\QBrainAi.TransactionSecurity.dll
+16:26:00 [DBG]   QBrainAi.ServiceDefaults -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.ServiceDefaults\bin\Debug\net10.0\QBrainAi.ServiceDefaults.dll
+16:26:00 [DBG]   QBrainAi.Repl.Core -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Repl.Core\bin\Debug\net10.0\QBrainAi.Repl.Core.dll
+16:26:00 [DBG]   QBrainAi.Cqrs.Mvvm -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Cqrs.Mvvm\bin\Debug\net10.0\QBrainAi.Cqrs.Mvvm.dll
+16:26:00 [DBG]   QBrainAi.Storage -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage\bin\Debug\net10.0\QBrainAi.Storage.dll
+16:26:01 [DBG]   QBrainAi.Storage.SqlServerMigrations -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage.SqlServerMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqlServerMigrations.dll
+16:26:01 [DBG]   QBrainAi.McpAgent -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.McpAgent\bin\Debug\net10.0\QBrainAi.McpAgent.dll
+16:26:01 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage.PostgreSqlMigrations\bin\Debug\net10.0\QBrainAi.Storage.PostgreSqlMigrations.dll
+16:26:01 [DBG]   QBrainAi.Storage.SqliteMigrations -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage.SqliteMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqliteMigrations.dll
+16:26:02 [DBG]   QBrainAi.Services -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Services\bin\Debug\net10.0\QBrainAi.Services.dll
+16:26:02 [DBG]   QBrainAi.GraphRag -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.GraphRag\bin\Debug\net10.0\QBrainAi.GraphRag.dll
+16:26:03 [DBG]   QBrainAi.Support.Mcp -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Support.Mcp\bin\Debug\net10.0\QBrainAi.Support.Mcp.dll
+16:26:04 [DBG]   QBrainAi.Support.Mcp.Tests -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll
+16:26:04 [DBG] Test run for F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+16:26:04 [DBG] A total of 1 test files matched the specified pattern.
+16:26:35 [DBG] Results File: F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\TestResults\20261118T162552-fedph0-relational-model-grouped\groups\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx
+16:26:35 [DBG] 
+16:26:35 [DBG] Passed!  - Failed:     0, Passed:   425, Skipped:     0, Total:   425, Duration: 23 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+TestGroups         Succeeded       0:39
+───────────────────────────────────────
+Total                              0:39
+═══════════════════════════════════════
+​
+Build succeeded on 11/18/2026 4:26:35 PM. ＼（＾ᴗ＾）／

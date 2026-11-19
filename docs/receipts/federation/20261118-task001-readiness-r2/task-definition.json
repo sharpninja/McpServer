@@ -1,0 +1,26 @@
+{
+  "dependsOn": [],
+  "title": "B1: pin Dolt, EF10 MySQL-protocol provider, driver and container images; host inventory",
+  "note": "TaskStatus=Planning; Stage=DesignAndMock; ImplementationBarrier=Closed\n2026-11-18 partial B1 host lifecycle mock checkpoint: corrected source cd92293ba624a2f3a8a6eac1a975cd6e359d0654 passed304/304 on Windows and LAB-OMARCHY (3valid,301expected-negative,0failed/skipped each); all44 Phase0 sources match after LF normalization. Paired exact TRX/Nuke/source receipts: docs/receipts/federation/20261118-phase0-host-lifecycle-r2; includes prior16-failure shared-baseline demonstration and correction. Evidence pushed through a1c3cb49b88edc8e9f976a16acda5b7c6ec4beae. Pending WinSW proposal is not adopted; provider/native host/ACL/lock/lifecycle/SQL runtime proof and B1 acceptance remain unproven. TaskStatus=Planning; Stage=DesignAndMock; ImplementationBarrier=Closed; done=false.",
+  "technicalRequirements": [
+    "TR-MCP-FEDERATION-013"
+  ],
+  "functionalRequirements": [
+    "FR-MCP-186"
+  ],
+  "priority": "high",
+  "section": "Federation",
+  "done": false,
+  "implementationTasks": [],
+  "description": [
+    "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH0-001 (groupOrdinal 1).",
+    "Task status: Planning. Eligibility: canStart=false, reasons=ImplementationBarrierClosed, incompleteDependencyCount=0. Design and mock-green work may proceed now; Planning to Ready requires that evidence (architecture 3.5.11).",
+    "Depends on (typed Task/Group targets): none.",
+    "FR/AC coverage: FR-MCP-186: FourProvidersResolve.",
+    "TR constraints: TR-MCP-FEDERATION-013. TEST: TEST-MCP-234.",
+    "Work: Record exact provider/driver/image versions, digests and licenses, all-four-provider fixture versions, LAB /var/lib/dolt mount and native LEGION hosting inventory (Windows service name, account, executable, start/recovery policy, data ACLs, child-process lifecycle). Read dependency compliance rules first. Prerelease or community-fork EF10 provider is accepted per MEMORY-PREFERENCE-002; report options instead of downgrading. Separate LAB and LEGION evidence rows; initial status unproven.",
+    "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15."
+  ],
+  "id": "TASK-FEDPH0-001",
+  "technicalDetails": []
+}

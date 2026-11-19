@@ -1,0 +1,76 @@
+**********************
+PowerShell transcript start
+Start time: 20261118201618
+Username: PAYTON-LEGION2\kingd
+RunAs User: PAYTON-LEGION2\kingd
+Configuration Name: 
+Machine: PAYTON-LEGION2 (Microsoft Windows NT 10.0.26300.0)
+Host Application: C:\Program Files\WindowsApps\OpenAI.CodexPrimaryRuntime.v26-1112-611-0_26.1112.611.0_x64__3k8sg7r9htsxt\dependencies\native\powershell\pwsh.dll -NoExit -Command chcp 65001 | Out-Null; [Console]::InputEncoding = [System.Text.Encoding]::UTF8; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $global:PowerShellMCPProxyPid = 5424; $global:PowerShellMCPAgentId = 'default'; Import-Module PowerShell.MCP -Force; Import-Module PSReadLine; Write-Host 'AI session connected.' -ForegroundColor Green; Write-Host ''
+Process ID: 38588
+PSVersion: 7.6.9
+PSEdition: Core
+GitCommitId: 7.6.9
+OS: Microsoft Windows 10.0.26300
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is F:/GitHub/McpServer/.mcpServer/codex/20261118T201615-fedph0-remote-transport-mock.nuke.txt
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+​
+​
+╬═══════════════
+║ TestGroups
+╬══════
+​
+20:16:22 [INF] Test group filter for QBrainAi.Support.Mcp.Tests: Platform!=Linux&(FullyQualifiedName~.Phase0RemoteTransportMockGateTests.)
+20:16:22 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --filter Platform!=Linux&(FullyQualifiedName~.Phase0RemoteTransportMockGateTests.) --verbosity minimal --results-directory F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\TestResults\20261118T201615-fedph0-remote-transport-mock\groups\QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx
+20:16:23 [DBG]   Determining projects to restore...
+20:16:24 [DBG]   All projects are up-to-date for restore.
+20:16:26 [DBG]   QBrainAi.ProcessTree.TestHelper -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.ProcessTree.TestHelper\bin\Debug\net10.0\QBrainAi.ProcessTree.TestHelper.dll
+20:16:26 [DBG]   QBrainAi.Client -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Client\bin\Debug\net10.0\QBrainAi.Client.dll
+20:16:26 [DBG]   QBrainAi.SessionLog.Transcripts -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.SessionLog.Transcripts\bin\Debug\net10.0\QBrainAi.SessionLog.Transcripts.dll
+20:16:26 [DBG]   QBrainAi.Common.AgentCli -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Common.AgentCli\bin\Debug\net10.0\QBrainAi.Common.AgentCli.dll
+20:16:26 [DBG]   QBrainAi.TransactionSecurity -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.TransactionSecurity\bin\Debug\net10.0\QBrainAi.TransactionSecurity.dll
+20:16:26 [DBG]   QBrainAi.Cqrs -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Cqrs\bin\Debug\net10.0\QBrainAi.Cqrs.dll
+20:16:26 [DBG]   QBrainAi.ServiceDefaults -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.ServiceDefaults\bin\Debug\net10.0\QBrainAi.ServiceDefaults.dll
+20:16:26 [DBG]   QBrainAi.Repl.Core -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Repl.Core\bin\Debug\net10.0\QBrainAi.Repl.Core.dll
+20:16:26 [DBG]   QBrainAi.Cqrs.Mvvm -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Cqrs.Mvvm\bin\Debug\net10.0\QBrainAi.Cqrs.Mvvm.dll
+20:16:26 [DBG]   QBrainAi.Storage -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage\bin\Debug\net10.0\QBrainAi.Storage.dll
+20:16:27 [DBG]   QBrainAi.Storage.SqlServerMigrations -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage.SqlServerMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqlServerMigrations.dll
+20:16:27 [DBG]   QBrainAi.McpAgent -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.McpAgent\bin\Debug\net10.0\QBrainAi.McpAgent.dll
+20:16:27 [DBG]   QBrainAi.Storage.SqliteMigrations -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage.SqliteMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqliteMigrations.dll
+20:16:27 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Storage.PostgreSqlMigrations\bin\Debug\net10.0\QBrainAi.Storage.PostgreSqlMigrations.dll
+20:16:27 [DBG]   QBrainAi.Services -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Services\bin\Debug\net10.0\QBrainAi.Services.dll
+20:16:28 [DBG]   QBrainAi.GraphRag -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.GraphRag\bin\Debug\net10.0\QBrainAi.GraphRag.dll
+20:16:29 [DBG]   QBrainAi.Support.Mcp -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\src\QBrainAi.Support.Mcp\bin\Debug\net10.0\QBrainAi.Support.Mcp.dll
+20:16:30 [DBG]   QBrainAi.Support.Mcp.Tests -> F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll
+20:16:30 [DBG] Test run for F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+20:16:30 [DBG] A total of 1 test files matched the specified pattern.
+20:16:41 [DBG] Results File: F:\GitHub\McpServer\.worktrees\federation-phase0-20261117\TestResults\20261118T201615-fedph0-remote-transport-mock\groups\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx
+20:16:41 [DBG]
+20:16:41 [DBG] Passed!  - Failed:     0, Passed:  2730, Skipped:     0, Total:  2730, Duration: 906 ms - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+TestGroups         Succeeded       0:19
+───────────────────────────────────────
+Total                              0:19
+═══════════════════════════════════════
+​
+Build succeeded on 11/18/2026 8:16:41 PM. ＼（＾ᴗ＾）／
+**********************
+PowerShell transcript end
+End time: 20261118201641
+**********************

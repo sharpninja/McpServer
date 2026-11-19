@@ -1,0 +1,359 @@
+[
+  {
+    "title": "bidirectional committed-history exchange",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-ThreeWriterCleanConvergence",
+        "text": "Given C0 contains T1.title=old,T1.description=old,T2.priority=low, when A1 changes title=A, B1 changes description=B and H1 changes T2.priority=high, then merges M1(A1,B1), M2(M1,H1) converge all heads to M2 with values A,B,high and all three commits in ancestry."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-HubDraftDoesNotBlockRemote",
+        "text": "Given H has an uncommitted title draft at C0, when A publishes A1, then remote=A1, H remains C0 with its draft, and B can accept A1."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ConcurrentPublishPreservesBothHistories",
+        "text": "Given A1 and B1 descend from C0, when both accept requests expect C0, then one succeeds and the other receives409 head_changed; after merge M1 publishes, both A1 and B1 remain ancestors."
+      }
+    ],
+    "priority": "medium",
+    "scopeStartLayerKey": "layer-1",
+    "workspaceId": "F:/GitHub/McpServer",
+    "id": "FR-MCP-178",
+    "status": "pending",
+    "body": "Exchange committed history bidirectionally through guarded publication, preserving every accepted ancestor and the hub independent working copy."
+  },
+  {
+    "title": "recovery without lost or repeated work",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-LostPushAckDoesNotDuplicateCommit",
+        "text": "Given remote accepted A1 and reply was lost, when request R1 retries, then it returns A1 and the existing receipt; no A2 commit is created."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OldWorkerEpochCannotReportSuccess",
+        "text": "Given worker epoch changes4 to5, when epoch4 reports success, then409 stale_worker_epoch leaves current receipt and desired state unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DirtyBranchDefersApply",
+        "text": "Given B/main=C0 with title=draft, when A1 is fetched, then outcome=waiting_local_work, main stays C0 and title remains draft; at15min status/inbox shows the age warning."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-IncompatibleSchemaDoesNotApply",
+        "text": "Given B supports schema1 and incoming S1 requires schema2, when sync runs, then409 incompatible_schema leaves B's live data/head unchanged and records the required version."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-PluginRecoveryControls",
+        "text": "Given operation R1 published A1 but its local reply was lost, when a plugin resumes, reads status and requests cancellation, then it shows publishedHead=A1 and a durable cancellation outcome for remaining work; it never claims A1 was rolled back or creates a second commit."
+      }
+    ],
+    "priority": "medium",
+    "scopeStartLayerKey": "layer-1",
+    "workspaceId": "F:/GitHub/McpServer",
+    "id": "FR-MCP-181",
+    "status": "pending",
+    "body": "Recover synchronization, receipts and restored hub state without losing local work, inventing success or replaying business effects.\n\nServer: durable operation resume/status/safe cancellation. Plugin: expose resume, status and cancel with completed-versus-pending effects; never claim cancellation reverses published history."
+  },
+  {
+    "title": "scoped authorization and offline behavior",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+        "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ForeignProjectCloneDenied",
+        "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-RevokedNodeCannotPublish",
+        "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OfflineLocalAuthorizationStillApplies",
+        "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-LocalAppUserCannotPush",
+        "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-RevokedCredentialFailsFetchAndPublish",
+        "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-SqlPortUnreachableAcrossLink",
+        "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-UnknownCertificatePinRejected",
+        "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-PluginLeastPrivilegeDenial",
+        "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs."
+      }
+    ],
+    "priority": "medium",
+    "scopeStartLayerKey": "layer-1",
+    "workspaceId": "F:/GitHub/McpServer",
+    "id": "FR-MCP-185",
+    "status": "pending",
+    "body": "Reuse integrated IdentityServer for single-user node ownership, per-node client credentials, project scopes and revocation; preserve authorized offline work.\n\nServer: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization."
+  },
+  {
+    "title": "bidirectional committed-history exchange contract",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-ThreeWriterCleanConvergence",
+        "text": "Given C0 contains T1.title=old,T1.description=old,T2.priority=low, when A1 changes title=A, B1 changes description=B and H1 changes T2.priority=high, then merges M1(A1,B1), M2(M1,H1) converge all heads to M2 with values A,B,high and all three commits in ancestry."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-HubDraftDoesNotBlockRemote",
+        "text": "Given H has an uncommitted title draft at C0, when A publishes A1, then remote=A1, H remains C0 with its draft, and B can accept A1."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ConcurrentPublishPreservesBothHistories",
+        "text": "Given A1 and B1 descend from C0, when both accept requests expect C0, then one succeeds and the other receives409 head_changed; after merge M1 publishes, both A1 and B1 remain ancestors."
+      }
+    ],
+    "priority": "medium",
+    "scopeStartLayerKey": "layer-1",
+    "workspaceId": "F:/GitHub/McpServer",
+    "id": "TR-MCP-FEDERATION-005",
+    "status": "pending",
+    "body": "Node upload authority is limited to its candidate namespace in an isolated upload repository. POST /qbrainai/federation/publication/accept accepts projectId, branch, requestId, candidateHead, expectedPublishedHead and hubEpoch. Gateway validates authorization, ancestry, schema and domain invariants before the sole fenced publisher advances the public ref without force. Token validation occurs at the gateway; native Dolt remotesapi is loopback-only and never trusts a node bearer token directly. Transport/procedure enforcement is a Ph0 proof gate."
+  },
+  {
+    "title": "recovery without lost or repeated work contract",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-LostPushAckDoesNotDuplicateCommit",
+        "text": "Given remote accepted A1 and reply was lost, when request R1 retries, then it returns A1 and the existing receipt; no A2 commit is created."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OldWorkerEpochCannotReportSuccess",
+        "text": "Given worker epoch changes4 to5, when epoch4 reports success, then409 stale_worker_epoch leaves current receipt and desired state unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DirtyBranchDefersApply",
+        "text": "Given B/main=C0 with title=draft, when A1 is fetched, then outcome=waiting_local_work, main stays C0 and title remains draft; at15min status/inbox shows the age warning."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-IncompatibleSchemaDoesNotApply",
+        "text": "Given B supports schema1 and incoming S1 requires schema2, when sync runs, then409 incompatible_schema leaves B's live data/head unchanged and records the required version."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-PluginRecoveryControls",
+        "text": "Given operation R1 published A1 but its local reply was lost, when a plugin resumes, reads status and requests cancellation, then it shows publishedHead=A1 and a durable cancellation outcome for remaining work; it never claims A1 was rolled back or creates a second commit."
+      }
+    ],
+    "priority": "medium",
+    "scopeStartLayerKey": "layer-1",
+    "workspaceId": "F:/GitHub/McpServer",
+    "id": "TR-MCP-FEDERATION-008",
+    "status": "pending",
+    "body": "OperationReceipt binds requestId, node, project, branch, hubEpoch, candidate/result hashes and outcome. Durable refs pin candidates/reviews before receipt completion. Worker claims are fenced by WorkerEpoch; reconnect never trusts stored generation across HubEpoch. Fetch may advance remote-tracking refs, never dirty live refs. Restore first disables ingress, restores compatible data/control/audit checkpoints, creates new epoch, then re-advertises verified heads; node-held missing commits are uploaded and ancestry-validated before normal synchronization resumes.\n\nServer: durable operation resume/status/safe cancellation. Plugin: expose resume, status and cancel with completed-versus-pending effects; never claim cancellation reverses published history.\n\nHubRestoreFromOlderBackup is first owned by Ph5 (epoch/remote/control), extended by Ph6 (integration/review/audit resend), and repeated as isolated real-host acceptance in Ph8. Restore is tested, never assumed from successful backup creation."
+  },
+  {
+    "title": "scoped authorization and offline behavior contract",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+        "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ForeignProjectCloneDenied",
+        "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-RevokedNodeCannotPublish",
+        "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OfflineLocalAuthorizationStillApplies",
+        "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-LocalAppUserCannotPush",
+        "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-RevokedCredentialFailsFetchAndPublish",
+        "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-SqlPortUnreachableAcrossLink",
+        "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-UnknownCertificatePinRejected",
+        "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-PluginLeastPrivilegeDenial",
+        "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs."
+      }
+    ],
+    "priority": "medium",
+    "scopeStartLayerKey": "layer-1",
+    "workspaceId": "F:/GitHub/McpServer",
+    "id": "TR-MCP-FEDERATION-012",
+    "status": "pending",
+    "body": "Reuse existing Duende IdentityServer. Provision client fed.node.{NodeId} per single-user node, bound to ownerSubjectId through authenticated operator enrollment. Client credentials issue short-lived reference access tokens; audience qbrain-federation and scopes fed.project.{ProjectId}.{read|publish|control|audit|enroll}; protected actions additionally require server membership/branch permission. Gateway introspects without positive caching for each new request and rechecks before publication commit; unavailable identity returns503 identity_unavailable. Revoke through IdentityServer: disable client and remove its persisted reference grants. Gateway rejects inactive tokens401 invalid_token; do not invent a revocation ledger. Native remotesapi uses gateway-held credentials over loopback; clients cannot access it directly. Ph0 proves token injection/relay including redirects/object URLs, project isolation and no public-ref bypass.\n\nServer: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization.\n\nPh0 B5 binds the exact restored Duende 7.4 patch and matching source-tag/API references, and proves issuance, introspection, grant removal and revocation against that binary. General/v8 documentation alone cannot close B5."
+  },
+  {
+    "title": "bidirectional committed-history exchange acceptance tests",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-ThreeWriterCleanConvergence",
+        "text": "Given C0 contains T1.title=old,T1.description=old,T2.priority=low, when A1 changes title=A, B1 changes description=B and H1 changes T2.priority=high, then merges M1(A1,B1), M2(M1,H1) converge all heads to M2 with values A,B,high and all three commits in ancestry."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-HubDraftDoesNotBlockRemote",
+        "text": "Given H has an uncommitted title draft at C0, when A publishes A1, then remote=A1, H remains C0 with its draft, and B can accept A1."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ConcurrentPublishPreservesBothHistories",
+        "text": "Given A1 and B1 descend from C0, when both accept requests expect C0, then one succeeds and the other receives409 head_changed; after merge M1 publishes, both A1 and B1 remain ancestors."
+      }
+    ],
+    "priority": "high",
+    "workspaceId": "F:/GitHub/McpServer",
+    "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+    "scopeStartLayerKey": "layer-1",
+    "condition": "Verify FR-MCP-178 and TR-MCP-FEDERATION-005 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+    "id": "TEST-MCP-226",
+    "status": "pending"
+  },
+  {
+    "title": "recovery without lost or repeated work acceptance tests",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-LostPushAckDoesNotDuplicateCommit",
+        "text": "Given remote accepted A1 and reply was lost, when request R1 retries, then it returns A1 and the existing receipt; no A2 commit is created."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OldWorkerEpochCannotReportSuccess",
+        "text": "Given worker epoch changes4 to5, when epoch4 reports success, then409 stale_worker_epoch leaves current receipt and desired state unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-DirtyBranchDefersApply",
+        "text": "Given B/main=C0 with title=draft, when A1 is fetched, then outcome=waiting_local_work, main stays C0 and title remains draft; at15min status/inbox shows the age warning."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-IncompatibleSchemaDoesNotApply",
+        "text": "Given B supports schema1 and incoming S1 requires schema2, when sync runs, then409 incompatible_schema leaves B's live data/head unchanged and records the required version."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-PluginRecoveryControls",
+        "text": "Given operation R1 published A1 but its local reply was lost, when a plugin resumes, reads status and requests cancellation, then it shows publishedHead=A1 and a durable cancellation outcome for remaining work; it never claims A1 was rolled back or creates a second commit."
+      }
+    ],
+    "priority": "high",
+    "workspaceId": "F:/GitHub/McpServer",
+    "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+    "scopeStartLayerKey": "layer-1",
+    "condition": "Verify FR-MCP-181 and TR-MCP-FEDERATION-008 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+    "id": "TEST-MCP-229",
+    "status": "pending"
+  },
+  {
+    "title": "scoped authorization and offline behavior acceptance tests",
+    "acceptanceCriteria": [
+      {
+        "isSatisfied": false,
+        "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+        "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-ForeignProjectCloneDenied",
+        "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-RevokedNodeCannotPublish",
+        "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-OfflineLocalAuthorizationStillApplies",
+        "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-LocalAppUserCannotPush",
+        "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-RevokedCredentialFailsFetchAndPublish",
+        "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-SqlPortUnreachableAcrossLink",
+        "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-UnknownCertificatePinRejected",
+        "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+      },
+      {
+        "isSatisfied": false,
+        "id": "ac-PluginLeastPrivilegeDenial",
+        "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs."
+      }
+    ],
+    "priority": "high",
+    "workspaceId": "F:/GitHub/McpServer",
+    "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+    "scopeStartLayerKey": "layer-1",
+    "condition": "Verify FR-MCP-185 and TR-MCP-FEDERATION-012 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+    "id": "TEST-MCP-233",
+    "status": "pending"
+  }
+]
