@@ -199,6 +199,14 @@
   <ItemGroup>
     <Compile Include="..\QBrainAi.Support.Mcp.Tests\Ingestion\ImportRecoveryIngestionFakes.cs" Link="Shared\Ingestion\ImportRecoveryIngestionFakes.cs" />
   </ItemGroup>
+  <!-- 2026-11-19, TASK-FEDPH0-001 B1; FR-MCP-186 ac-FourProvidersResolve; TR-MCP-FEDERATION-013;
+       TEST-MCP-234: link the already mock-proven B1 inventory and host-lifecycle assertions into the
+       environment-integration assembly so the native adapter executes the same cases without copying or
+       weakening their assertions. -->
+  <ItemGroup>
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0B1EvidenceContract.cs" Link="Shared\Federation\Phase0\Phase0B1EvidenceContract.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0HostLifecycleContract.cs" Link="Shared\Federation\Phase0\Phase0HostLifecycleContract.cs" />
+  </ItemGroup>
   <!-- 2026-11-07, TEST-MCP-USECASE-019-AC005; TR-MCP-NUKE-019 AC-7: the Agent Help fixtures that BugTriage139FifteenthHarnessTests
        reads beside the test assembly, linked from QBrainAi.Support.Mcp.Tests (slice S8), whose unit cases read them too. -->
   <ItemGroup>
