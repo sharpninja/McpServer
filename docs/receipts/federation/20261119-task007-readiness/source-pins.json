@@ -4,7 +4,7 @@
   "branch": "codex/fedph0-task007-20261119",
   "requestId": "req-20261119T154146Z-prompt-9158",
   "parentSessionId": "Codex-20261116T174245Z-plugin-session",
-  "capturedLocal": "2026-11-19T10:04:19",
+  "capturedLocal": "2026-11-19T10:09:16",
   "sessionId": "Codex-20261119T153852Z-plugin-session",
   "files": [
     {
@@ -28,7 +28,7 @@
       "path": "docs/plans/2026-11-17-federation-merge-validation-design.md"
     },
     {
-      "sha256": "CD1D71B94A77DDE9F0374CA04D2750BCD1F24970964A2E1C46A431AF52C7B551",
+      "sha256": "88480A88B7227D3F474E1618D1E26138F62564F9DD7C9484DB39960FC7A257DC",
       "path": "docs/plans/2026-11-19-federation-task007-operations-readiness.md"
     },
     {
@@ -52,7 +52,7 @@
       "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0CandidateRetentionMockGateTests.cs"
     },
     {
-      "sha256": "FE0D9F6FF5BDF1BD87CF53EE62D10437D3D2B00D480C4A258BF6C881FA47C082",
+      "sha256": "2DFD8D5775DB7B5AE8D1B609785E84943C0474100F41982139DA6A7673148D73",
       "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0OperationsReadinessContract.cs"
     },
     {

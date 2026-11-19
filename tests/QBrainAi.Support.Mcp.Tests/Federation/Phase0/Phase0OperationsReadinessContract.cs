@@ -163,4 +163,3 @@ internal static class Phase0OperationsReadinessContract
 
     private static string SampleKey(Phase0ScaleSample sample) => sample.Operation + "/" + sample.Ordinal;
 }
-
