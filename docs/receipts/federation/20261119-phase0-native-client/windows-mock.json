@@ -1,0 +1,39 @@
+{
+  "timestampLocal": "2026-11-19T08:49:35.6799676-06:00",
+  "agent": "Codex",
+  "task": "TASK-FEDPH0-003",
+  "host": "PAYTON-LEGION2",
+  "sourceHead": "4d1b3f3b1870419be99928da65540fc69b6080d4",
+  "sourceDirty": true,
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0NativeClientMockGateTests --test-run-id 20261119T084828-fedph0-native-client-mock",
+  "exitCode": 0,
+  "runId": "20261119T084828-fedph0-native-client-mock",
+  "total": 1344,
+  "passed": 1344,
+  "failed": 0,
+  "skipped": 0,
+  "actualRows": 1344,
+  "correctControls": 57,
+  "negativeControls": 1287,
+  "sourceSha256": "E2E2DAAB7C19E682AAFEC3C4C177C3A0571D4BAF4A876BCAA23A05601DF58E9C",
+  "lfNormalizedSourceSha256": "9538074C4B3BF2E0EAF4D33883C5D0106D413BDE4ED04089A3E8C915A75D7B53",
+  "trxSha256": "09FE00E23F79212C565D1B1328886BFE601782998101CE2A90F7F842D41488E9",
+  "logs": [
+    {
+      "name": "windows-nuke.log",
+      "sha256": "7E16107CB32A5EEA756649A1F0725978089E4E08880A9206492435D78079E5AE"
+    },
+    {
+      "name": "initial-code-verify.log",
+      "sha256": "9BACFB336955A80B6A6C9071063F586948E9C81D6C4E96012722E39F7B7EF7A3"
+    },
+    {
+      "name": "corrected-code-verify.log",
+      "sha256": "722DE15DAC74DE9C3E54918D584D09FDEA7CB83851570CA1B410756713CBEA65"
+    }
+  ],
+  "binding": "Independent scripted native helper/TLS observations only",
+  "taskReady": false,
+  "nativeProof": false,
+  "implementationBarrier": "Closed"
+}

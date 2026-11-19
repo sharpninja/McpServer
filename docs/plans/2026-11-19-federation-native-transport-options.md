@@ -1,6 +1,6 @@
 # Task003 native Dolt client integration: source-backed decision
 
-Author: Codex. Date: 2026-11-19. Status: proposed client route; no dependency adoption or implementation. Task TASK-FEDPH0-003 remains Planning. All-nine implementation barrier remains Closed.
+Author: Codex. Date: 2026-11-19. Status: operator-selected narrow Dolt client patch for disposable Phase0 proof. No patch implementation or installation yet. Task TASK-FEDPH0-003 remains Planning while selected-route design/mock closure is completed. All-nine implementation barrier remains Closed.
 
 Research provider: official GitHub primary-source fallback. No Perplexity MCP or native pplx application is exposed in this session. The discovered pplx name is a SnippetsAliasManager function, without a verified authenticated research-CLI route.
 
@@ -10,7 +10,7 @@ The approved [architecture section 13](2026-11-10-federation-dolt-architecture.m
 
 Trace: FR-MCP-185, TR-MCP-FEDERATION-012 and TEST-MCP-233, especially ac-RawRemoteCannotBypassPublicationPolicy, ac-ForeignProjectCloneDenied and ac-RevokedCredentialFailsFetchAndPublish. TLS and credential-containment work also carries ac-UnknownCertificatePinRejected and FR-MCP-184 ac-ReceiptsAndLogsContainNoCredentials through Task007. No criterion is added or marked satisfied here.
 
-The operator decision requested is whether to use a narrowly patched build of the already-selected Dolt client for the disposable Ph0 proof. This selects a feasibility route; it does not open the group barrier, authorize live deployment, accept B5, or establish native feasibility.
+Operator decision2026-11-19: "Use the narrow Dolt client patch (Recommended)." This selects a narrowly patched build of the already-selected Dolt client for disposable Ph0 proof. Implementation of this route is authorized when task dependencies and the all-nine design/mock barrier permit it. The decision does not open that barrier, authorize live deployment, accept B5 or establish native feasibility.
 
 ## Correction to the preceding design
 
@@ -18,7 +18,7 @@ The live canonical records and current contracts chapter require a protected ref
 
 The pinned upstream helper intentionally preserves ordinary Dolt Authorization while adding Proxy-Authorization. Its tests explicitly demonstrate a bearer value on unary gRPC, streaming metadata and object HTTP. This is an existing upstream credential channel, not evidence that the gateway already accepts it or that end-to-end revocation works. The assertion seam records independently verified credential classes without assuming a header name.
 
-The stock helper's rejection of Authorization is therefore not sufficient reason to fork Dolt. The remaining proposed patch is justified by the separate origin/TLS/PowerShell-launch/diagnostic gaps below. Do not replace reference tokens with Basic passwords or signing-key JWTs merely because those stock gRPC mechanisms exist.
+The stock helper's rejection of Authorization is therefore not sufficient reason to fork Dolt. The selected narrow patch is justified by the separate origin/TLS/PowerShell-launch/diagnostic gaps below. Do not replace reference tokens with Basic passwords or signing-key JWTs merely because those stock gRPC mechanisms exist.
 
 ## Verified source findings
 
@@ -32,20 +32,20 @@ All Dolt findings use candidate source commit 9e4102e303610fc4681de16a9f7bbbc870
 - [Dolt go.mod](https://github.com/dolthub/dolt/blob/9e4102e303610fc4681de16a9f7bbbc870d884a3/go/go.mod) declares Go 1.27.3. This is source metadata, not a measured build identity for an installed Dolt binary.
 - [Go 1.27.3 HTTP client](https://github.com/golang/go/blob/go1.27.3/src/net/http/client.go), particularly makeHeadersCopier, shouldCopyHeaderOnRedirect and defaultCheckRedirect: Proxy-Authorization is sensitive, but the default copying rule permits matching hosts and subdomains without an exact scheme/port comparison. The default redirect callback only limits the number of redirects. A foreign-host redirect can still be followed with credentials removed; that does not meet the existing exact-origin refusal assertion.
 
-Dolt source headers declare Apache-2.0. The retained [Go license](https://github.com/golang/go/blob/go1.27.3/LICENSE) is BSD-3-Clause. Actual distribution licensing, toolchain/build hashes and notices remain B1 evidence obligations if the patched-client route is selected.
+Dolt source headers declare Apache-2.0. The retained [Go license](https://github.com/golang/go/blob/go1.27.3/LICENSE) is BSD-3-Clause. Actual distribution licensing, toolchain/build hashes and notices remain B1 evidence obligations for the selected patched-client route.
 
-## Recommended route: narrow patch to the selected native client
+## Selected route: narrow patch to the selected native client
 
 Preserve Dolt's remotesapi, object hashing, transfer, history, commit, fetch and push algorithms. Preserve the existing helper JSON exchange and its supported Proxy-Authorization channel. Add no custom merge engine, replication algorithm, database engine, alternate identity authority, or reference-token revocation ledger.
 
-The patch proposal has four bounded surfaces:
+The selected patch has four bounded surfaces. The exact opt-in policy, launch and TLS observations are specified in [the selected native-client contract](2026-11-19-federation-native-client-contract.md):
 
 1. In the existing helper/dial-provider HTTP path, add a strict credential-origin mode for the isolated federation client. Validate every advertised object URL before any outbound connection and every redirect before the next outbound request. Require the configured HTTPS scheme, canonical host and effective port, no user info and no fragment. Refuse foreign host, subdomain, changed port, downgrade and user-info targets locally. Preserve the original sealed path/query bytes on permitted requests. Do not restrict all ordinary Dolt remotes globally.
 2. Use a single explicit TLS policy for the protected gRPC and object HTTP channels: approved CA trust, expected SAN/hostname and approved SPKI pins. A mismatch fails before any bearer request. The source exposes a library TLS configuration seam; the selected native CLI path must expose or wire the policy, not assume the library field already makes it configurable. Task007 owns the complete TLS/canary acceptance evidence.
 3. Add a structured helper argument-vector option so native Windows and Linux Dolt can launch pwsh with -NoProfile -NonInteractive -File and an absolute helper script path, then append the existing get operation. Parse an argument array, never a shell command string. No credential is an argument. Keep the executable-only helper form compatible. The helper remains PowerShell; no Bash script, C# credential-tool executable or Python/Node helper is introduced.
 4. Keep helper failure diagnostics safe. Do not embed helper stderr, response values, bearer values or credential-bearing URI input in public errors. Report a stable safe error and exit condition; retain no raw credential dump. Secret-canary negative controls must prove the error path is safe.
 
-These are proposed source changes to Dolt's existing product client, not implementation performed by this document. Their exact source diff, build recipe, notices and platform packages must be retained before use. Installation or distribution of a patched client is not authorized merely by this proposal.
+These are proposed source changes to Dolt's existing product client, not implementation performed by this document. Their exact source diff, build recipe, notices and platform packages must be retained before use. Implementation and disposable use follow the operator selection and all-nine readiness/dependency gates in this document; live deployment remains outside this proof.
 
 ## Credential flow and ownership
 
@@ -81,4 +81,4 @@ No node token or ordinary local application identity gains backend remote admini
 
 No patched client, new native host, credential helper, broker or gateway has been implemented or installed. No native test or two-host feasibility claim is made. Existing transport mocks remain historical assertion evidence only.
 
-Task003 remains Planning with route selection and selected-route design/readiness pending. Other members' readiness, all-nine barrier, dependencies and DEPLOY HOLD are unchanged. The full Task Group 1 objective remains active and incomplete.
+Task003 remains Planning with the narrow-patch route selected and selected-route design/readiness pending. Other members' readiness, all-nine barrier, dependencies and DEPLOY HOLD are unchanged. The full Task Group1 objective remains active and incomplete.

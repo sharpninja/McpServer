@@ -1,0 +1,411 @@
+{
+  "currentLayer": {
+    "workspaceId": "F:/GitHub/McpServer",
+    "createdAtUtc": {
+      "date": "2026-06-28T00:00:00.0000000",
+      "microsecond": 394,
+      "dayOfWeek": "Sunday",
+      "year": 2026,
+      "dateTime": "2026-06-28T06:17:12.0983940",
+      "day": 28,
+      "totalOffsetMinutes": 0,
+      "offset": "00:00:00",
+      "dayOfYear": 179,
+      "timeOfDay": "06:17:12.0983940",
+      "hour": 6,
+      "ticks": 639182242320983940,
+      "nanosecond": 0,
+      "minute": 17,
+      "millisecond": 98,
+      "month": 6,
+      "utcDateTime": "2026-06-28T06:17:12.0983940Z",
+      "second": 12,
+      "localDateTime": "2026-06-28T01:17:12.0983940-05:00",
+      "utcTicks": 639182242320983940
+    },
+    "name": "Layer 1",
+    "order": 1,
+    "key": "layer-1",
+    "updatedAtUtc": {
+      "date": "2026-06-28T00:00:00.0000000",
+      "microsecond": 394,
+      "dayOfWeek": "Sunday",
+      "year": 2026,
+      "dateTime": "2026-06-28T06:17:12.0983940",
+      "day": 28,
+      "totalOffsetMinutes": 0,
+      "offset": "00:00:00",
+      "dayOfYear": 179,
+      "timeOfDay": "06:17:12.0983940",
+      "hour": 6,
+      "ticks": 639182242320983940,
+      "nanosecond": 0,
+      "minute": 17,
+      "millisecond": 98,
+      "month": 6,
+      "utcDateTime": "2026-06-28T06:17:12.0983940Z",
+      "second": 12,
+      "localDateTime": "2026-06-28T01:17:12.0983940-05:00",
+      "utcTicks": 639182242320983940
+    }
+  },
+  "functional": [
+    {
+      "title": "portable data versus host-local state",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-CloneOmitsSecrets",
+          "text": "Given credentials and local machine paths exist in operational storage, when a project is cloned, then none appears in its versioned tables or history."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-AuditReachesHub",
+          "text": "Given A performs an offline TODO edit and creates audit E1, when connectivity returns without a Dolt commit, then hub audit contains exactly E1, A retains E1, and main/remote remain C0."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-AuditRetryIdempotent",
+          "text": "Given E1 was stored but its receipt was lost, when the same batch retries, then exactly one E1 exists and the same hash receipt returns; changed payload under E1 returns409 audit_id_conflict."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-AuditBackfillVerified",
+          "text": "Given source has100 TODO audit and20 generic audit rows, when seed/join audit backfill verifies, then all120 records have matching payload hashes and hub receipts; missing one blocks cutover."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-FullProjectSessionGraphPreserved",
+          "text": "Given an explicitly promoted sanitized session with turns, actions, dialog, commits/files, PlanFile and TodoId, when cloned, then every promoted child and relationship matches the source snapshot; automatic capture still uses the audit channel."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-AcceptedHeadRebuildsBranchIndex",
+          "text": "Given accepted head changes C0 to A1, when the derived index rebuild completes, then queries read A1 values and no C0 cache is served under the A1 key."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-BackgroundWritersDoNotDirtyVersionedBranch",
+          "text": "Given main=C0 is clean, when heartbeat, audit and automatic session capture run, then Dolt working-set fingerprint remains unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SecondAgentLoggingNeedsNoLease",
+          "text": "Given agent1 owns the editing lease, when agent2 logs a session action, then its local audit persists without acquiring or changing agent1's lease."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-CommitPreviewBlocksSecret",
+          "text": "Given a promoted snapshot contains a fixture secret detected by the configured detector, when commit preview runs, then422 secret_detected creates no commit and outputs no secret value."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ReceiptsAndLogsContainNoCredentials",
+          "text": "Given unique fixture canaries are injected through protected secret references, when commands, retries and failures execute on both hosts, then scans of argv, receipts, logs, chat/audit payloads, memory stores, generated files, Git staged blobs/new commits and Dolt working sets/new history find zero canary values. Scanner diagnostics and rejected commit previews also contain zero values; no secret is added to history to test the detector."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "FR-MCP-184",
+      "status": "pending",
+      "body": "Separate versioned project content from operational state while delivering permanent audit to the hub independently of commits and excluding secrets."
+    },
+    {
+      "title": "scoped authorization and offline behavior",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+          "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ForeignProjectCloneDenied",
+          "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedNodeCannotPublish",
+          "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OfflineLocalAuthorizationStillApplies",
+          "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-LocalAppUserCannotPush",
+          "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedCredentialFailsFetchAndPublish",
+          "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SqlPortUnreachableAcrossLink",
+          "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnknownCertificatePinRejected",
+          "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PluginLeastPrivilegeDenial",
+          "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "FR-MCP-185",
+      "status": "pending",
+      "body": "Reuse integrated IdentityServer for single-user node ownership, per-node client credentials, project scopes and revocation; preserve authorized offline work.\n\nServer: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization."
+    }
+  ],
+  "technical": [
+    {
+      "title": "portable data versus host-local state contract",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-CloneOmitsSecrets",
+          "text": "Given credentials and local machine paths exist in operational storage, when a project is cloned, then none appears in its versioned tables or history."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-AuditReachesHub",
+          "text": "Given A performs an offline TODO edit and creates audit E1, when connectivity returns without a Dolt commit, then hub audit contains exactly E1, A retains E1, and main/remote remain C0."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-AuditRetryIdempotent",
+          "text": "Given E1 was stored but its receipt was lost, when the same batch retries, then exactly one E1 exists and the same hash receipt returns; changed payload under E1 returns409 audit_id_conflict."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-AuditBackfillVerified",
+          "text": "Given source has100 TODO audit and20 generic audit rows, when seed/join audit backfill verifies, then all120 records have matching payload hashes and hub receipts; missing one blocks cutover."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-FullProjectSessionGraphPreserved",
+          "text": "Given an explicitly promoted sanitized session with turns, actions, dialog, commits/files, PlanFile and TodoId, when cloned, then every promoted child and relationship matches the source snapshot; automatic capture still uses the audit channel."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-AcceptedHeadRebuildsBranchIndex",
+          "text": "Given accepted head changes C0 to A1, when the derived index rebuild completes, then queries read A1 values and no C0 cache is served under the A1 key."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-BackgroundWritersDoNotDirtyVersionedBranch",
+          "text": "Given main=C0 is clean, when heartbeat, audit and automatic session capture run, then Dolt working-set fingerprint remains unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SecondAgentLoggingNeedsNoLease",
+          "text": "Given agent1 owns the editing lease, when agent2 logs a session action, then its local audit persists without acquiring or changing agent1's lease."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-CommitPreviewBlocksSecret",
+          "text": "Given a promoted snapshot contains a fixture secret detected by the configured detector, when commit preview runs, then422 secret_detected creates no commit and outputs no secret value."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ReceiptsAndLogsContainNoCredentials",
+          "text": "Given unique fixture canaries are injected through protected secret references, when commands, retries and failures execute on both hosts, then scans of argv, receipts, logs, chat/audit payloads, memory stores, generated files, Git staged blobs/new commits and Dolt working sets/new history find zero canary values. Scanner diagnostics and rejected commit previews also contain zero values; no secret is added to history to test the detector."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "TR-MCP-FEDERATION-011",
+      "status": "pending",
+      "body": "Project history excludes secrets and automatic operational audit. This does NOT make audit local-only: every host retains permanent local audit and an append-only outbox delivers sanitized records to the hub unversioned ledger independently of project commits. AuditRecord key=(OriginNodeId,RecordId UUID); fields ProjectId,EntityKind,EntityId,OriginSequence int64,OccurredUtc,Actor,Action,PayloadVersion,PayloadHash,Payload. POST audit/batches validates token/project, inserts atomically by key and returns per-record durable receipts. Same key/hash is already_received; same key/different hash=409 audit_id_conflict. No UPDATE/DELETE permission. Local pruning is forbidden. Migration backfills TODO and generic audit history with counts/hashes and receipts. Credential values are excluded at capture, not silently replicated."
+    },
+    {
+      "title": "scoped authorization and offline behavior contract",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+          "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ForeignProjectCloneDenied",
+          "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedNodeCannotPublish",
+          "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OfflineLocalAuthorizationStillApplies",
+          "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-LocalAppUserCannotPush",
+          "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedCredentialFailsFetchAndPublish",
+          "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SqlPortUnreachableAcrossLink",
+          "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnknownCertificatePinRejected",
+          "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PluginLeastPrivilegeDenial",
+          "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "TR-MCP-FEDERATION-012",
+      "status": "pending",
+      "body": "Reuse existing Duende IdentityServer. Provision client fed.node.{NodeId} per single-user node, bound to ownerSubjectId through authenticated operator enrollment. Client credentials issue short-lived reference access tokens; audience qbrain-federation and scopes fed.project.{ProjectId}.{read|publish|control|audit|enroll}; protected actions additionally require server membership/branch permission. Gateway introspects without positive caching for each new request and rechecks before publication commit; unavailable identity returns503 identity_unavailable. Revoke through IdentityServer: disable client and remove its persisted reference grants. Gateway rejects inactive tokens401 invalid_token; do not invent a revocation ledger. Native remotesapi uses gateway-held credentials over loopback; clients cannot access it directly. Ph0 proves token injection/relay including redirects/object URLs, project isolation and no public-ref bypass.\n\nServer: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization.\n\nPh0 B5 binds the exact restored Duende 7.4 patch and matching source-tag/API references, and proves issuance, introspection, grant removal and revocation against that binary. General/v8 documentation alone cannot close B5."
+    }
+  ],
+  "testing": [
+    {
+      "title": "portable data versus host-local state acceptance tests",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-CloneOmitsSecrets",
+          "text": "Given credentials and local machine paths exist in operational storage, when a project is cloned, then none appears in its versioned tables or history."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-AuditReachesHub",
+          "text": "Given A performs an offline TODO edit and creates audit E1, when connectivity returns without a Dolt commit, then hub audit contains exactly E1, A retains E1, and main/remote remain C0."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-AuditRetryIdempotent",
+          "text": "Given E1 was stored but its receipt was lost, when the same batch retries, then exactly one E1 exists and the same hash receipt returns; changed payload under E1 returns409 audit_id_conflict."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-AuditBackfillVerified",
+          "text": "Given source has100 TODO audit and20 generic audit rows, when seed/join audit backfill verifies, then all120 records have matching payload hashes and hub receipts; missing one blocks cutover."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-FullProjectSessionGraphPreserved",
+          "text": "Given an explicitly promoted sanitized session with turns, actions, dialog, commits/files, PlanFile and TodoId, when cloned, then every promoted child and relationship matches the source snapshot; automatic capture still uses the audit channel."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-AcceptedHeadRebuildsBranchIndex",
+          "text": "Given accepted head changes C0 to A1, when the derived index rebuild completes, then queries read A1 values and no C0 cache is served under the A1 key."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-BackgroundWritersDoNotDirtyVersionedBranch",
+          "text": "Given main=C0 is clean, when heartbeat, audit and automatic session capture run, then Dolt working-set fingerprint remains unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SecondAgentLoggingNeedsNoLease",
+          "text": "Given agent1 owns the editing lease, when agent2 logs a session action, then its local audit persists without acquiring or changing agent1's lease."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-CommitPreviewBlocksSecret",
+          "text": "Given a promoted snapshot contains a fixture secret detected by the configured detector, when commit preview runs, then422 secret_detected creates no commit and outputs no secret value."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ReceiptsAndLogsContainNoCredentials",
+          "text": "Given unique fixture canaries are injected through protected secret references, when commands, retries and failures execute on both hosts, then scans of argv, receipts, logs, chat/audit payloads, memory stores, generated files, Git staged blobs/new commits and Dolt working sets/new history find zero canary values. Scanner diagnostics and rejected commit previews also contain zero values; no secret is added to history to test the detector."
+        }
+      ],
+      "priority": "high",
+      "workspaceId": "F:/GitHub/McpServer",
+      "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+      "scopeStartLayerKey": "layer-1",
+      "condition": "Verify FR-MCP-184 and TR-MCP-FEDERATION-011 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "id": "TEST-MCP-232",
+      "status": "pending"
+    },
+    {
+      "title": "scoped authorization and offline behavior acceptance tests",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+          "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ForeignProjectCloneDenied",
+          "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedNodeCannotPublish",
+          "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OfflineLocalAuthorizationStillApplies",
+          "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-LocalAppUserCannotPush",
+          "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedCredentialFailsFetchAndPublish",
+          "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SqlPortUnreachableAcrossLink",
+          "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnknownCertificatePinRejected",
+          "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PluginLeastPrivilegeDenial",
+          "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs."
+        }
+      ],
+      "priority": "high",
+      "workspaceId": "F:/GitHub/McpServer",
+      "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+      "scopeStartLayerKey": "layer-1",
+      "condition": "Verify FR-MCP-185 and TR-MCP-FEDERATION-012 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "id": "TEST-MCP-233",
+      "status": "pending"
+    }
+  ]
+}
