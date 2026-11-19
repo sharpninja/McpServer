@@ -107,6 +107,6 @@
   "done": false,
   "scriptParserErrors": 0,
   "scriptAnalyzerWarnings": 0,
-  "linuxPair": "Pending source commit and isolated run",
+  "linuxPair": "Paired2733/0/0 at source74bbc8120757467372821a40af998594b2b5c55f; see linux-mock.json and paired-comparison.json",
   "retainedOriginals": true
 }

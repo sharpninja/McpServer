@@ -19,6 +19,7 @@ $ErrorActionPreference = 'Stop'
 $repositoryRoot = '/home/sharpninja/github/McpServer'
 $worktreePath = '/home/sharpninja/github/McpServer/.worktrees/fedph0-task005-20261119'
 $sourceBranch = 'codex/fedph0-task005-20261119'
+Write-Output ('Task005LaneScriptSha256=' + (Get-FileHash -LiteralPath $PSCommandPath -Algorithm SHA256).Hash)
 if (-not $IsLinux) { throw 'This retained lane is Linux-only.' }
 if (-not (Test-Path -LiteralPath "$repositoryRoot/.git")) { throw 'Expected repository root is absent.' }
 if (-not $PSCmdlet.ShouldProcess($worktreePath, "Fetch $sourceBranch, create/verify isolated worktree at $SourceCommit and run Task005 mocks via Nuke ($RunId)")) { return }

@@ -1,0 +1,61 @@
+{
+  "timestampLocal": "2026-11-19T10:19:00",
+  "operation": "workflow.todo.update note only",
+  "before": {
+    "functionalRequirements": [
+      "FR-MCP-185"
+    ],
+    "technicalDetails": [],
+    "title": "B5: identity evidence on restored Duende 7.4 (absorbs MCP-FEDIDENTITY-001 design inputs)",
+    "implementationTasks": [],
+    "technicalRequirements": [
+      "TR-MCP-FEDERATION-012"
+    ],
+    "done": false,
+    "priority": "high",
+    "note": "TaskStatus=Planning; Stage=DesignAndMock; ImplementationBarrier=Closed; Partial authorization mock evidence: docs/receipts/federation/20261117-phase0-authorization/mock-gate.json and linux-mock.json; Windows and Linux 275 passed/0 failed/0 skipped (260 negative controls). Source 06cfd917; evidence 1144ce04. Revocation, SQL-permission and offline-local assertions only; exact restored Duende 7.4 binary issuance/introspection/grant removal, repeated-request caching and identity/provider binding remain pending.\n2026-11-18 supporting B5 metadata checkpoint: retained SQLite relational observations for ASP.NET Identity and proposed Duende configuration/operational contexts with existing pinned binary hashes, table/column/index metadata and same-binary InMemory differences. Files relational-identity-sqlite-model-r2.json, relational-configuration-sqlite-model-r2.json, relational-operational-sqlite-model-r2.json and relational-model-comparison-r1.json under docs/receipts/federation/20261117-phase0-source-catalog; commit92de3750. NoDB open,SQL,migration, issuance/introspection/revocation or actual DI/store durability proof. B5/native identity compatibility and acceptance remain unproven. TaskStatus=Planning; ImplementationBarrier=Closed; done=false.",
+    "section": "Federation",
+    "dependsOn": [],
+    "description": [
+      "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH0-001 (groupOrdinal 5).",
+      "Task status: Planning. Eligibility: canStart=false, reasons=ImplementationBarrierClosed, incompleteDependencyCount=0. Design and mock-green work may proceed now; Planning to Ready requires that evidence (architecture 3.5.11).",
+      "Depends on (typed Task/Group targets): none.",
+      "FR/AC coverage: FR-MCP-185: RevokedNodeCannotPublish, LocalAppUserCannotPush.",
+      "TR constraints: TR-MCP-FEDERATION-012. TEST: TEST-MCP-233.",
+      "Work: Exact restored Duende 7.4 patch and source-tag/API references; issuance/introspection/revocation tests on that package; client-per-node/owner binding, reference tokens and scopes, gateway introspection/revocation, backend-only Dolt credentials, worker-only remote procedures, rotation/revocation. Hosts get user management, nodes are single-user and authenticate to the hub through Identity Server (MCP-FEDIDENTITY-001). Credentials never appear in commands, logs, chat, memory or commits.",
+      "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15. Linked: MCP-FEDIDENTITY-001."
+    ],
+    "id": "TASK-FEDPH0-005"
+  },
+  "after": {
+    "functionalRequirements": [
+      "FR-MCP-185"
+    ],
+    "technicalDetails": [],
+    "title": "B5: identity evidence on restored Duende 7.4 (absorbs MCP-FEDIDENTITY-001 design inputs)",
+    "implementationTasks": [],
+    "technicalRequirements": [
+      "TR-MCP-FEDERATION-012"
+    ],
+    "done": false,
+    "priority": "high",
+    "note": "TaskStatus=Planning; Stage=DesignAndMock; ImplementationBarrier=Closed; Partial authorization mock evidence: docs/receipts/federation/20261117-phase0-authorization/mock-gate.json and linux-mock.json; Windows and Linux 275 passed/0 failed/0 skipped (260 negative controls). Source 06cfd917; evidence 1144ce04. Revocation, SQL-permission and offline-local assertions only; exact restored Duende 7.4 binary issuance/introspection/grant removal, repeated-request caching and identity/provider binding remain pending.\n2026-11-18 supporting B5 metadata checkpoint: retained SQLite relational observations for ASP.NET Identity and proposed Duende configuration/operational contexts with existing pinned binary hashes, table/column/index metadata and same-binary InMemory differences. Files relational-identity-sqlite-model-r2.json, relational-configuration-sqlite-model-r2.json, relational-operational-sqlite-model-r2.json and relational-model-comparison-r1.json under docs/receipts/federation/20261117-phase0-source-catalog; commit92de3750. NoDB open,SQL,migration, issuance/introspection/revocation or actual DI/store durability proof. B5/native identity compatibility and acceptance remain unproven. TaskStatus=Planning; ImplementationBarrier=Closed; done=false.\n2026-11-19 Task005 design/mock candidate: branch codex/fedph0-task005-20261119; tested source74bbc8120757467372821a40af998594b2b5c55f. Complete current-definition supplement in docs/plans/2026-11-17-federation-identity-platform-design.md; new management/admission/worker permission contracts plus canonical platform scope repair. Windows and isolated LAB each2733passed/0failed/0skipped; matching case-name multiset SHA256 D143C41BE232AF80684965BD7B9CB146A0DE807C6B2FFF8BAB49DCCD593E71CC and9normalized source hashes. Full retained evidence docs/receipts/federation/20261119-task005-readiness/{windows-mock.json,linux-mock.json,paired-comparison.json}, raw TRX/logs. Candidate reuses Task003 backend/transport, Task006 owning-gate sourceb7cfbf30302d492c12e8366fccde9b78b1074a6c and Task007 credential/TLS seams; parent must verify integrated complete current definition before Ready. Mocks prove assertions, not native identity/SQL/issuer/provider/header behavior or B5 acceptance. TaskStatus=Planning; Stage=DesignAndMock; ImplementationBarrier=Closed; done=false. Session Codex-20261119T154036Z-plugin-session/request req-20261119T154151Z-prompt-cad2.",
+    "section": "Federation",
+    "dependsOn": [],
+    "description": [
+      "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH0-001 (groupOrdinal 5).",
+      "Task status: Planning. Eligibility: canStart=false, reasons=ImplementationBarrierClosed, incompleteDependencyCount=0. Design and mock-green work may proceed now; Planning to Ready requires that evidence (architecture 3.5.11).",
+      "Depends on (typed Task/Group targets): none.",
+      "FR/AC coverage: FR-MCP-185: RevokedNodeCannotPublish, LocalAppUserCannotPush.",
+      "TR constraints: TR-MCP-FEDERATION-012. TEST: TEST-MCP-233.",
+      "Work: Exact restored Duende 7.4 patch and source-tag/API references; issuance/introspection/revocation tests on that package; client-per-node/owner binding, reference tokens and scopes, gateway introspection/revocation, backend-only Dolt credentials, worker-only remote procedures, rotation/revocation. Hosts get user management, nodes are single-user and authenticate to the hub through Identity Server (MCP-FEDIDENTITY-001). Credentials never appear in commands, logs, chat, memory or commits.",
+      "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15. Linked: MCP-FEDIDENTITY-001."
+    ],
+    "id": "TASK-FEDPH0-005"
+  },
+  "noteExactReadback": true,
+  "doneUnchanged": true,
+  "descriptionUnchanged": true,
+  "groupMutated": false,
+  "implementationBarrier": "Closed"
+}

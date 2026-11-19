@@ -1,0 +1,70 @@
+{
+  "readerSha256": "E253576E134381868A00534F5DA3C355F87F68C64E8ADBADF2A702356D43022E",
+  "host": "LAB-OMARCHY",
+  "sourceCommit": "74bbc8120757467372821a40af998594b2b5c55f",
+  "runId": "fedph0-task005-20261119-linux-r1",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/fedph0-task005-20261119",
+  "powershellVersion": "7.7.0",
+  "timestampLocal": "2026-11-19T10:16:39",
+  "trxPath": "/home/sharpninja/github/McpServer/.worktrees/fedph0-task005-20261119/TestResults/fedph0-task005-20261119-linux-r1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+  "trxSha256": "C7A006C2EC2CA28A8BC32E98D046DCE4CA25F81ED0DEAC5A782F37B57190F358",
+  "total": 2733,
+  "passed": 2733,
+  "failed": 0,
+  "notExecuted": 0,
+  "caseCount": 2733,
+  "orderedCaseNameSha256": "D143C41BE232AF80684965BD7B9CB146A0DE807C6B2FFF8BAB49DCCD593E71CC",
+  "sourceHashes": [
+    {
+      "path": "docs/plans/2026-11-17-federation-identity-platform-design.md",
+      "sha256": "E5226EA1EF211EB4FA79BA29B8E553DF65349A5D8C6C261A27A28596DEA1C666",
+      "canonicalLfSha256": "E5226EA1EF211EB4FA79BA29B8E553DF65349A5D8C6C261A27A28596DEA1C666"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityAdmissionContract.cs",
+      "sha256": "05156F58AC125A212B8A1CFD9E007E8397D9969E975BBB941468C428094457A5",
+      "canonicalLfSha256": "05156F58AC125A212B8A1CFD9E007E8397D9969E975BBB941468C428094457A5"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityAdmissionMockGateTests.cs",
+      "sha256": "8072ED04B70B95BD1619E4317F0C8811962F459F9BB01FE396EFE54A3BF7CAAF",
+      "canonicalLfSha256": "8072ED04B70B95BD1619E4317F0C8811962F459F9BB01FE396EFE54A3BF7CAAF"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityManagementContract.cs",
+      "sha256": "60933990CD666CA7B83E8025E90DA9CAA70BED8BE0E7ADB8067B0BDA89C9E46E",
+      "canonicalLfSha256": "60933990CD666CA7B83E8025E90DA9CAA70BED8BE0E7ADB8067B0BDA89C9E46E"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityManagementMockGateTests.cs",
+      "sha256": "C6339255950DB7F9AC4372C682DB51B032E69CC1289AA10577AC2300D0117ADD",
+      "canonicalLfSha256": "C6339255950DB7F9AC4372C682DB51B032E69CC1289AA10577AC2300D0117ADD"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityPlatformContract.cs",
+      "sha256": "C8508CA8EF7E5D3D48F12F83058D3D7FC2808CC33AAF6D79921F60DC28168CCC",
+      "canonicalLfSha256": "C8508CA8EF7E5D3D48F12F83058D3D7FC2808CC33AAF6D79921F60DC28168CCC"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityPlatformMockGateTests.cs",
+      "sha256": "639A7050375676B263CCAA89AA905ABADC8C79E306DB9247A10091E3CCC00009",
+      "canonicalLfSha256": "639A7050375676B263CCAA89AA905ABADC8C79E306DB9247A10091E3CCC00009"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0WorkerPermissionContract.cs",
+      "sha256": "6D3CCF10FD5160F4DE3C9EEA9B521A156ABA78C5734E037FC52C3743C7D6A828",
+      "canonicalLfSha256": "6D3CCF10FD5160F4DE3C9EEA9B521A156ABA78C5734E037FC52C3743C7D6A828"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0WorkerPermissionMockGateTests.cs",
+      "sha256": "E23D242CC6B3F4A53619D060F3E84C3679E7ECEB418C0C81F6073389103D0848",
+      "canonicalLfSha256": "E23D242CC6B3F4A53619D060F3E84C3679E7ECEB418C0C81F6073389103D0848"
+    }
+  ],
+  "nukeLogPath": "/home/sharpninja/github/McpServer/.worktrees/fedph0-task005-20261119/.nuke/temp/build.2026-11-19_10-12-14.log",
+  "nukeLogSha256": "B8AB018C4924C80AAAEEBE009A570547BC38F12B6556CB1F56448949AAADFC43",
+  "mockOnly": true,
+  "nativeProof": false,
+  "implementationBarrier": "Closed",
+  "done": false
+}
