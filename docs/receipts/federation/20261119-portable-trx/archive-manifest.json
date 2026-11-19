@@ -1,0 +1,348 @@
+{
+  "timestampLocal": "2026-11-19T10:44:54",
+  "scope": "Current Task003/005/007 mock TRX byte portability only; no historical packet rewrite",
+  "baseCommit": "39cec6a7f4edce45ffa8d18c916c676a00d8f5e6",
+  "branch": "codex/fedph0-portable-trx-20261119",
+  "author": {
+    "agent": "Codex",
+    "sessionId": "Codex-20261119T154121Z-plugin-session",
+    "requestId": "req-20261119T164046Z-turn-b9f4",
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "parentSessionId": "Codex-20261116T174245Z-plugin-session",
+    "parentRequestId": "req-20261119T155309Z-prompt-142e"
+  },
+  "evidencePins": [
+    {
+      "taskId": "TASK-FEDPH0-003",
+      "evidenceCommit": "3a926c96",
+      "testedSourceCommit": "f56c3111e1250851f5f462b9f08e8bbbd2bb4b3d",
+      "manifest": "docs/receipts/federation/20261119-task003-readiness/readiness.json"
+    },
+    {
+      "taskId": "TASK-FEDPH0-005",
+      "evidenceCommit": "255502cada08437e562ab772142512560619177f",
+      "testedSourceCommit": "74bbc8120757467372821a40af998594b2b5c55f",
+      "manifest": "docs/receipts/federation/20261119-task005-readiness/paired-comparison.json"
+    },
+    {
+      "taskId": "TASK-FEDPH0-007",
+      "evidenceCommit": "9455bf86c30929475252728da0dd21715b1a5b4e",
+      "sourcePins": "docs/receipts/federation/20261119-task007-readiness/source-pins.json",
+      "manifest": "docs/receipts/federation/20261119-task007-readiness/README.md"
+    }
+  ],
+  "archives": [
+    {
+      "taskId": "TASK-FEDPH0-003",
+      "path": "docs/receipts/federation/20261119-portable-trx/task-fedph0-003-originals.zip",
+      "sha256": "3592C63683E72160085CE14AE2624261F71893CD9A16EDA20C724A5E2BBCEA80",
+      "bytes": 3879524,
+      "entries": [
+        {
+          "taskId": "TASK-FEDPH0-003",
+          "entry": "windows.trx",
+          "originalPath": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/TestResults/20261119T101445-fedph0-task003-definition/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "originalKind": "RetainedNativeHostOriginal",
+          "expectedRawSha256": "64EB287B392078148DCFDCE93ABCB260C886C6B0ED480A275089295EA833A4DE",
+          "originalRawSha256": "64EB287B392078148DCFDCE93ABCB260C886C6B0ED480A275089295EA833A4DE",
+          "originalBytes": 16422083,
+          "decodedUtf8LfTextSha256": "99AC5AF24A88B596A8CE6F4F9C3E55C6EA01185488CF56F16C6D2A05ED040484",
+          "checkedOutPath": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/docs/receipts/federation/20261119-task003-readiness/windows.trx",
+          "checkedOutRawSha256": "64EB287B392078148DCFDCE93ABCB260C886C6B0ED480A275089295EA833A4DE",
+          "checkedOutDecodedUtf8LfTextSha256": "99AC5AF24A88B596A8CE6F4F9C3E55C6EA01185488CF56F16C6D2A05ED040484",
+          "checkedOutDecodedUtf8LfTextEqual": true,
+          "total": 9770,
+          "passed": 9770,
+          "failed": 0,
+          "skipped": 0,
+          "archiveEntryReadbackSha256": "64EB287B392078148DCFDCE93ABCB260C886C6B0ED480A275089295EA833A4DE"
+        },
+        {
+          "taskId": "TASK-FEDPH0-003",
+          "entry": "linux.trx",
+          "originalPath": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/docs/receipts/federation/20261119-task003-readiness/linux.trx",
+          "originalKind": "RetainedLinuxCopyVerifiedAgainstRemoteRawHash",
+          "expectedRawSha256": "D6E427DDB0688C63E5419EE64E069DDBC34ACE92CB262B84A821E95876C5751E",
+          "originalRawSha256": "D6E427DDB0688C63E5419EE64E069DDBC34ACE92CB262B84A821E95876C5751E",
+          "originalBytes": 16705317,
+          "decodedUtf8LfTextSha256": "98DFD27A8157E09500FB743DB12C6EF1FA58623A201C9D62B712E25ADAB252F5",
+          "checkedOutPath": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/docs/receipts/federation/20261119-task003-readiness/linux.trx",
+          "checkedOutRawSha256": "D6E427DDB0688C63E5419EE64E069DDBC34ACE92CB262B84A821E95876C5751E",
+          "checkedOutDecodedUtf8LfTextSha256": "98DFD27A8157E09500FB743DB12C6EF1FA58623A201C9D62B712E25ADAB252F5",
+          "checkedOutDecodedUtf8LfTextEqual": true,
+          "total": 9770,
+          "passed": 9770,
+          "failed": 0,
+          "skipped": 0,
+          "archiveEntryReadbackSha256": "D6E427DDB0688C63E5419EE64E069DDBC34ACE92CB262B84A821E95876C5751E"
+        }
+      ],
+      "entryReadbackVerified": true
+    },
+    {
+      "taskId": "TASK-FEDPH0-005",
+      "path": "docs/receipts/federation/20261119-portable-trx/task-fedph0-005-originals.zip",
+      "sha256": "679A779CDD03AF0353B097E29FEADC47355696596823F84A165624C08698D9B9",
+      "bytes": 990191,
+      "entries": [
+        {
+          "taskId": "TASK-FEDPH0-005",
+          "entry": "windows-platform-management.trx",
+          "originalPath": "F:/GitHub/McpServer/.worktrees/fedph0-task005-20261119/TestResults/fedph0-task005-20261119-management-platform-r1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "originalKind": "RetainedNativeHostOriginal",
+          "expectedRawSha256": "DB16CD2A9C5289D55ACE452A06415E836B6F2E309CB16CBACDCB17958D1FDA0B",
+          "originalRawSha256": "DB16CD2A9C5289D55ACE452A06415E836B6F2E309CB16CBACDCB17958D1FDA0B",
+          "originalBytes": 2159862,
+          "decodedUtf8LfTextSha256": "9CC0B3E8C3A944A524C1D160DD74968A454A19DFEF748B2366BD9F0C49934F8A",
+          "checkedOutPath": "F:/GitHub/McpServer/.worktrees/fedph0-task005-20261119/docs/receipts/federation/20261119-task005-readiness/windows-platform-management.trx",
+          "checkedOutRawSha256": "DB16CD2A9C5289D55ACE452A06415E836B6F2E309CB16CBACDCB17958D1FDA0B",
+          "checkedOutDecodedUtf8LfTextSha256": "9CC0B3E8C3A944A524C1D160DD74968A454A19DFEF748B2366BD9F0C49934F8A",
+          "checkedOutDecodedUtf8LfTextEqual": true,
+          "total": 1305,
+          "passed": 1305,
+          "failed": 0,
+          "skipped": 0,
+          "archiveEntryReadbackSha256": "DB16CD2A9C5289D55ACE452A06415E836B6F2E309CB16CBACDCB17958D1FDA0B"
+        },
+        {
+          "taskId": "TASK-FEDPH0-005",
+          "entry": "windows-worker.trx",
+          "originalPath": "F:/GitHub/McpServer/.worktrees/fedph0-task005-20261119/TestResults/fedph0-task005-20261119-worker-r1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "originalKind": "RetainedNativeHostOriginal",
+          "expectedRawSha256": "D8DCC36DE794019F7AD06EE8CF483F39A3CFD57BD7A0B857D727B9F7DF073A71",
+          "originalRawSha256": "D8DCC36DE794019F7AD06EE8CF483F39A3CFD57BD7A0B857D727B9F7DF073A71",
+          "originalBytes": 587775,
+          "decodedUtf8LfTextSha256": "6D36665D942631A92C55E7499D1317DD8B7BA8FB79D733E6C8B744ADECBC469A",
+          "checkedOutPath": "F:/GitHub/McpServer/.worktrees/fedph0-task005-20261119/docs/receipts/federation/20261119-task005-readiness/windows-worker.trx",
+          "checkedOutRawSha256": "D8DCC36DE794019F7AD06EE8CF483F39A3CFD57BD7A0B857D727B9F7DF073A71",
+          "checkedOutDecodedUtf8LfTextSha256": "6D36665D942631A92C55E7499D1317DD8B7BA8FB79D733E6C8B744ADECBC469A",
+          "checkedOutDecodedUtf8LfTextEqual": true,
+          "total": 348,
+          "passed": 348,
+          "failed": 0,
+          "skipped": 0,
+          "archiveEntryReadbackSha256": "D8DCC36DE794019F7AD06EE8CF483F39A3CFD57BD7A0B857D727B9F7DF073A71"
+        },
+        {
+          "taskId": "TASK-FEDPH0-005",
+          "entry": "windows-admission.trx",
+          "originalPath": "F:/GitHub/McpServer/.worktrees/fedph0-task005-20261119/TestResults/fedph0-task005-20261119-admission-r2/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "originalKind": "RetainedNativeHostOriginal",
+          "expectedRawSha256": "9B8FA456B11A5121B24EBD5E48F0A98BD70D92136CAF2484E644625E047080AC",
+          "originalRawSha256": "9B8FA456B11A5121B24EBD5E48F0A98BD70D92136CAF2484E644625E047080AC",
+          "originalBytes": 1834606,
+          "decodedUtf8LfTextSha256": "212CC7BEF222087990942A68C32D9B0E1F2E3BCC4CA0323E748F00F8A9B03075",
+          "checkedOutPath": "F:/GitHub/McpServer/.worktrees/fedph0-task005-20261119/docs/receipts/federation/20261119-task005-readiness/windows-admission.trx",
+          "checkedOutRawSha256": "9B8FA456B11A5121B24EBD5E48F0A98BD70D92136CAF2484E644625E047080AC",
+          "checkedOutDecodedUtf8LfTextSha256": "212CC7BEF222087990942A68C32D9B0E1F2E3BCC4CA0323E748F00F8A9B03075",
+          "checkedOutDecodedUtf8LfTextEqual": true,
+          "total": 1080,
+          "passed": 1080,
+          "failed": 0,
+          "skipped": 0,
+          "archiveEntryReadbackSha256": "9B8FA456B11A5121B24EBD5E48F0A98BD70D92136CAF2484E644625E047080AC"
+        },
+        {
+          "taskId": "TASK-FEDPH0-005",
+          "entry": "linux.trx",
+          "originalPath": "F:/GitHub/McpServer/.worktrees/fedph0-task005-20261119/docs/receipts/federation/20261119-task005-readiness/linux.trx",
+          "originalKind": "RetainedLinuxCopyVerifiedAgainstRemoteRawHash",
+          "expectedRawSha256": "C7A006C2EC2CA28A8BC32E98D046DCE4CA25F81ED0DEAC5A782F37B57190F358",
+          "originalRawSha256": "C7A006C2EC2CA28A8BC32E98D046DCE4CA25F81ED0DEAC5A782F37B57190F358",
+          "originalBytes": 4630601,
+          "decodedUtf8LfTextSha256": "D2EFD49D6B2C4884CE4691F55C08659D43F57164997193C79FA48C16EEE56EDB",
+          "checkedOutPath": "F:/GitHub/McpServer/.worktrees/fedph0-task005-20261119/docs/receipts/federation/20261119-task005-readiness/linux.trx",
+          "checkedOutRawSha256": "C7A006C2EC2CA28A8BC32E98D046DCE4CA25F81ED0DEAC5A782F37B57190F358",
+          "checkedOutDecodedUtf8LfTextSha256": "D2EFD49D6B2C4884CE4691F55C08659D43F57164997193C79FA48C16EEE56EDB",
+          "checkedOutDecodedUtf8LfTextEqual": true,
+          "total": 2733,
+          "passed": 2733,
+          "failed": 0,
+          "skipped": 0,
+          "archiveEntryReadbackSha256": "C7A006C2EC2CA28A8BC32E98D046DCE4CA25F81ED0DEAC5A782F37B57190F358"
+        }
+      ],
+      "entryReadbackVerified": true
+    },
+    {
+      "taskId": "TASK-FEDPH0-007",
+      "path": "docs/receipts/federation/20261119-portable-trx/task-fedph0-007-originals.zip",
+      "sha256": "694B636834B7576B0558C74C3621DFED592289AD12F56F8D5B46678868E41DBA",
+      "bytes": 700499,
+      "entries": [
+        {
+          "taskId": "TASK-FEDPH0-007",
+          "entry": "windows-definition-mocks.trx",
+          "originalPath": "F:/GitHub/McpServer/.worktrees/fedph0-task007-20261119/TestResults/20261119T100134-fedph0-task007-definition-mocks/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "originalKind": "RetainedNativeHostOriginal",
+          "expectedRawSha256": "DFE1A204DCDC77CD477394BE02D43D2C750D2497B60E239B6FC99D68FB163F98",
+          "originalRawSha256": "DFE1A204DCDC77CD477394BE02D43D2C750D2497B60E239B6FC99D68FB163F98",
+          "originalBytes": 4516756,
+          "decodedUtf8LfTextSha256": "3FBFA025CC6413852E1592D5523121DF539646EE51EC68D339102A393616CC01",
+          "checkedOutPath": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/docs/receipts/federation/20261119-task007-readiness/windows-definition-mocks.trx",
+          "checkedOutRawSha256": "1B903BE4BFA2A11F600869EB6CC4494BCE9CED266AE8A6EE909982C93753053C",
+          "checkedOutDecodedUtf8LfTextSha256": "3FBFA025CC6413852E1592D5523121DF539646EE51EC68D339102A393616CC01",
+          "checkedOutDecodedUtf8LfTextEqual": true,
+          "total": 2726,
+          "passed": 2726,
+          "failed": 0,
+          "skipped": 0,
+          "archiveEntryReadbackSha256": "DFE1A204DCDC77CD477394BE02D43D2C750D2497B60E239B6FC99D68FB163F98"
+        },
+        {
+          "taskId": "TASK-FEDPH0-007",
+          "entry": "windows-operations-mock.trx",
+          "originalPath": "F:/GitHub/McpServer/.worktrees/fedph0-task007-20261119/TestResults/20261119T095955-fedph0-task007-operations-mock/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "originalKind": "RetainedNativeHostOriginal",
+          "expectedRawSha256": "A2839BC1CE34FCD6E304EBFDD549A9B52253CF3120E0CF74127BD2FF593B4A8B",
+          "originalRawSha256": "A2839BC1CE34FCD6E304EBFDD549A9B52253CF3120E0CF74127BD2FF593B4A8B",
+          "originalBytes": 806667,
+          "decodedUtf8LfTextSha256": "3BEF33C77D9BA098A4EEB70E663069046F28A9F66216483138C1E2D02658113E",
+          "checkedOutPath": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/docs/receipts/federation/20261119-task007-readiness/windows-operations-mock.trx",
+          "checkedOutRawSha256": "C4E84040F4106ACA8C5818F1323AE2FE26226E3C6F868B984DEC232C8639BF36",
+          "checkedOutDecodedUtf8LfTextSha256": "3BEF33C77D9BA098A4EEB70E663069046F28A9F66216483138C1E2D02658113E",
+          "checkedOutDecodedUtf8LfTextEqual": true,
+          "total": 488,
+          "passed": 488,
+          "failed": 0,
+          "skipped": 0,
+          "archiveEntryReadbackSha256": "A2839BC1CE34FCD6E304EBFDD549A9B52253CF3120E0CF74127BD2FF593B4A8B"
+        },
+        {
+          "taskId": "TASK-FEDPH0-007",
+          "entry": "windows-operations-final-mock.trx",
+          "originalPath": "F:/GitHub/McpServer/.worktrees/fedph0-task007-20261119/TestResults/20261119T100738-fedph0-task007-final-mock/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "originalKind": "RetainedNativeHostOriginal",
+          "expectedRawSha256": "7004D741D0A4F0172F31C0D693EAFAD3DF53AF2E6A5E6EAA8C88B510FB974F74",
+          "originalRawSha256": "7004D741D0A4F0172F31C0D693EAFAD3DF53AF2E6A5E6EAA8C88B510FB974F74",
+          "originalBytes": 806667,
+          "decodedUtf8LfTextSha256": "0E2C627209BC379F75764FE9C837243D40EDB6A5A5A42F955201CAF588AC2E34",
+          "checkedOutPath": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117/docs/receipts/federation/20261119-task007-readiness/windows-operations-final-mock.trx",
+          "checkedOutRawSha256": "2D8872C21F922B2973AC0647645AA3C276739620FC7ECCCD0D2B55B872D76907",
+          "checkedOutDecodedUtf8LfTextSha256": "0E2C627209BC379F75764FE9C837243D40EDB6A5A5A42F955201CAF588AC2E34",
+          "checkedOutDecodedUtf8LfTextEqual": true,
+          "total": 488,
+          "passed": 488,
+          "failed": 0,
+          "skipped": 0,
+          "archiveEntryReadbackSha256": "7004D741D0A4F0172F31C0D693EAFAD3DF53AF2E6A5E6EAA8C88B510FB974F74"
+        }
+      ],
+      "entryReadbackVerified": true
+    }
+  ],
+  "decodingPolicy": "Text comparison decodes UTF8 (BOM consumed by ReadAllText) and normalizes CRLF to LF; it never substitutes for raw-byte preservation or SHA256 verification.",
+  "gitAttributeObservation": "Existing TRX attributes text:auto/eol:lf can normalize checked-out text; no .gitattributes changes made.",
+  "originalRetention": "Every original and checked-out file remains at its existing path. Linux copied originals are accepted only after matching their manifest remote raw hash.",
+  "helper": {
+    "originalPath": "F:/GitHub/McpServer/.mcpServer/codex/bg-task006-20261119/Preserve-CurrentPhase0Trx.ps1",
+    "sha256": "C190485A5F41239FA0A2A0E31FBDAA2964088C7D6E7C646F6427B48FC6267AE4",
+    "tracked": false,
+    "validation": {
+      "parserErrors": 0,
+      "analyzerWarningsAndErrors": 0,
+      "whatIfCompleted": true
+    }
+  },
+  "newTestRuns": 0,
+  "sourceChanges": false,
+  "taskStateChanges": false,
+  "nativeProof": false,
+  "hvRun": false,
+  "integratedCheckoutObservations": [
+    {
+      "taskId": "TASK-FEDPH0-003",
+      "entry": "windows.trx",
+      "path": "F:/GitHub/McpServer/.worktrees/fedph0-portable-trx-20261119/docs/receipts/federation/20261119-task003-readiness/windows.trx",
+      "rawSha256": "01DEEAD061FA5DF54810CA89974FB09976377339D2FF11BCB1BFB87AEFABD283",
+      "decodedUtf8LfTextSha256": "99AC5AF24A88B596A8CE6F4F9C3E55C6EA01185488CF56F16C6D2A05ED040484",
+      "originalDecodedUtf8LfTextEqual": true,
+      "rawBytesEqualOriginal": false
+    },
+    {
+      "taskId": "TASK-FEDPH0-003",
+      "entry": "linux.trx",
+      "path": "F:/GitHub/McpServer/.worktrees/fedph0-portable-trx-20261119/docs/receipts/federation/20261119-task003-readiness/linux.trx",
+      "rawSha256": "D6E427DDB0688C63E5419EE64E069DDBC34ACE92CB262B84A821E95876C5751E",
+      "decodedUtf8LfTextSha256": "98DFD27A8157E09500FB743DB12C6EF1FA58623A201C9D62B712E25ADAB252F5",
+      "originalDecodedUtf8LfTextEqual": true,
+      "rawBytesEqualOriginal": true
+    },
+    {
+      "taskId": "TASK-FEDPH0-005",
+      "entry": "windows-platform-management.trx",
+      "path": "F:/GitHub/McpServer/.worktrees/fedph0-portable-trx-20261119/docs/receipts/federation/20261119-task005-readiness/windows-platform-management.trx",
+      "rawSha256": "1C11EBE0D7D184D6A20839DC5A97EBCC3CCFFE37F80378151BC7768278A1B2F3",
+      "decodedUtf8LfTextSha256": "9CC0B3E8C3A944A524C1D160DD74968A454A19DFEF748B2366BD9F0C49934F8A",
+      "originalDecodedUtf8LfTextEqual": true,
+      "rawBytesEqualOriginal": false
+    },
+    {
+      "taskId": "TASK-FEDPH0-005",
+      "entry": "windows-worker.trx",
+      "path": "F:/GitHub/McpServer/.worktrees/fedph0-portable-trx-20261119/docs/receipts/federation/20261119-task005-readiness/windows-worker.trx",
+      "rawSha256": "64616D26BE094C32793C0A6622FEE455DB8D7EF0877FA0653154275DF8AD9ADD",
+      "decodedUtf8LfTextSha256": "6D36665D942631A92C55E7499D1317DD8B7BA8FB79D733E6C8B744ADECBC469A",
+      "originalDecodedUtf8LfTextEqual": true,
+      "rawBytesEqualOriginal": false
+    },
+    {
+      "taskId": "TASK-FEDPH0-005",
+      "entry": "windows-admission.trx",
+      "path": "F:/GitHub/McpServer/.worktrees/fedph0-portable-trx-20261119/docs/receipts/federation/20261119-task005-readiness/windows-admission.trx",
+      "rawSha256": "03985FD8C24B8D7908AE049058E940E6179EF2357420A4CDBB763E516D1352D8",
+      "decodedUtf8LfTextSha256": "212CC7BEF222087990942A68C32D9B0E1F2E3BCC4CA0323E748F00F8A9B03075",
+      "originalDecodedUtf8LfTextEqual": true,
+      "rawBytesEqualOriginal": false
+    },
+    {
+      "taskId": "TASK-FEDPH0-005",
+      "entry": "linux.trx",
+      "path": "F:/GitHub/McpServer/.worktrees/fedph0-portable-trx-20261119/docs/receipts/federation/20261119-task005-readiness/linux.trx",
+      "rawSha256": "C7A006C2EC2CA28A8BC32E98D046DCE4CA25F81ED0DEAC5A782F37B57190F358",
+      "decodedUtf8LfTextSha256": "D2EFD49D6B2C4884CE4691F55C08659D43F57164997193C79FA48C16EEE56EDB",
+      "originalDecodedUtf8LfTextEqual": true,
+      "rawBytesEqualOriginal": true
+    },
+    {
+      "taskId": "TASK-FEDPH0-007",
+      "entry": "windows-definition-mocks.trx",
+      "path": "F:/GitHub/McpServer/.worktrees/fedph0-portable-trx-20261119/docs/receipts/federation/20261119-task007-readiness/windows-definition-mocks.trx",
+      "rawSha256": "1B903BE4BFA2A11F600869EB6CC4494BCE9CED266AE8A6EE909982C93753053C",
+      "decodedUtf8LfTextSha256": "3FBFA025CC6413852E1592D5523121DF539646EE51EC68D339102A393616CC01",
+      "originalDecodedUtf8LfTextEqual": true,
+      "rawBytesEqualOriginal": false
+    },
+    {
+      "taskId": "TASK-FEDPH0-007",
+      "entry": "windows-operations-mock.trx",
+      "path": "F:/GitHub/McpServer/.worktrees/fedph0-portable-trx-20261119/docs/receipts/federation/20261119-task007-readiness/windows-operations-mock.trx",
+      "rawSha256": "C4E84040F4106ACA8C5818F1323AE2FE26226E3C6F868B984DEC232C8639BF36",
+      "decodedUtf8LfTextSha256": "3BEF33C77D9BA098A4EEB70E663069046F28A9F66216483138C1E2D02658113E",
+      "originalDecodedUtf8LfTextEqual": true,
+      "rawBytesEqualOriginal": false
+    },
+    {
+      "taskId": "TASK-FEDPH0-007",
+      "entry": "windows-operations-final-mock.trx",
+      "path": "F:/GitHub/McpServer/.worktrees/fedph0-portable-trx-20261119/docs/receipts/federation/20261119-task007-readiness/windows-operations-final-mock.trx",
+      "rawSha256": "2D8872C21F922B2973AC0647645AA3C276739620FC7ECCCD0D2B55B872D76907",
+      "decodedUtf8LfTextSha256": "0E2C627209BC379F75764FE9C837243D40EDB6A5A5A42F955201CAF588AC2E34",
+      "originalDecodedUtf8LfTextEqual": true,
+      "rawBytesEqualOriginal": false
+    }
+  ],
+  "checkoutReadbackHelper": {
+    "originalPath": "F:/GitHub/McpServer/.mcpServer/codex/bg-task006-20261119/Add-PortableTrxCheckoutReadback.ps1",
+    "sha256": "1899196300B670DD9BF63BF8A51F1BA52310A4A4A747CA6487391DDA96552B03",
+    "tracked": false,
+    "validation": {
+      "parserErrors": 0,
+      "analyzerWarningsAndErrors": 0,
+      "whatIfCompleted": true
+    },
+    "originalManifestBackup": "F:/GitHub/McpServer/.mcpServer/codex/bg-task006-20261119/portable-trx-manifest.original.json",
+    "originalManifestSha256": "10AB07DDB04AAA96CCCA00AACF42FF0AA90576DE7B6B26ECD236859826B1B22E"
+  }
+}
