@@ -1,0 +1,34 @@
+{
+  "dependsOn": [
+    "TASK-FEDPH0-002"
+  ],
+  "title": "B6-B9: merge/conflict semantics, schema distribution, migration manifest, write gate",
+  "note": "TaskStatus=Planning; Stage=DesignAndMock; ImplementationBarrier=Closed; Candidate readiness evidence on child branch codex/fedph0-task006-20261119, source b7cfbf30302d492c12e8366fccde9b78b1074a6c. Full current B6-B9 design supplement: docs/plans/2026-11-19-federation-task006-design-mock-binding.md. Paired Windows/Linux supplemental mock gate:13836 passed/0 failed/0 skipped each (64 correct,13771 expected-negative,1 inventory), receipts docs/receipts/federation/20261119-task006-design-mock/paired-mock-gate.yaml and complete paired TRX archive. Source hashes and current live task/effective requirement snapshot retained. Reuses existing merge/review/retention, schema-readiness/evolution, provider migration-safety and four selected safety-boundary contracts; not merely the four AC examples. Parent must integrate branch and reconcile current-definition completeness before any Ready state. Native adapters/real Dolt feasibility, B acceptance, host runtime integration, final both-host full gates and HV remain pending. No product implementation, Ready/Success/done/satisfied or Group state changed. Previous four-case56/0/0 evidence remains docs/receipts/federation/20261117-phase0-safety-boundaries/mock-gate.json and linux-mock.json.",
+  "technicalRequirements": [
+    "TR-MCP-FEDERATION-007",
+    "TR-MCP-FEDERATION-013",
+    "TR-MCP-FEDERATION-014",
+    "TR-MCP-FEDERATION-016"
+  ],
+  "functionalRequirements": [
+    "FR-MCP-180",
+    "FR-MCP-186",
+    "FR-MCP-187",
+    "FR-MCP-189"
+  ],
+  "priority": "high",
+  "section": "Federation",
+  "done": false,
+  "implementationTasks": [],
+  "description": [
+    "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH0-001 (groupOrdinal 6).",
+    "Task status: Planning. Eligibility: canStart=false, reasons=ImplementationBarrierClosed, DependencyIncomplete, incompleteDependencyCount=1. Design and mock-green work may proceed now; Planning to Ready requires that evidence (architecture 3.5.11).",
+    "Depends on (typed Task/Group targets): TASK-FEDPH0-002.",
+    "FR/AC coverage: FR-MCP-180: SameCellConflictNeedsReview; FR-MCP-186: ContractBlockedUntilLocalBranchesAttested; FR-MCP-187: SeedPhaseRejectsJoin; FR-MCP-189: LeaseLostDuringWriteRejected.",
+    "TR constraints: TR-MCP-FEDERATION-007, TR-MCP-FEDERATION-013, TR-MCP-FEDERATION-014, TR-MCP-FEDERATION-016. TEST: TEST-MCP-228, TEST-MCP-234, TEST-MCP-235, TEST-MCP-237.",
+    "Work: B6 real merge/constraint/conflict-transaction semantics, retained review evidence, dolt_allow_commit_conflicts decision, unrelated-history behavior. B7 single-author schema distribution, startup migration exclusion, expand/contract, pre-swap draft disposition, branch attestation, worker protocol negotiation. B8 seed/join/recovery-export manifest, audit backfill, aliases, one common root, legacy-divergence review. B9 single writer ownership, write gate/fence transitions, working-set hash API, requestId trailers, crash reconciliation.",
+    "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15."
+  ],
+  "id": "TASK-FEDPH0-006",
+  "technicalDetails": []
+}

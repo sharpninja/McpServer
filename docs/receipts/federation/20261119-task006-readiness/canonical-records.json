@@ -1,0 +1,749 @@
+{
+  "layer": {
+    "workspaceId": "F:/GitHub/McpServer",
+    "createdAtUtc": {
+      "date": "2026-06-28T00:00:00.0000000",
+      "microsecond": 394,
+      "dayOfWeek": "Sunday",
+      "year": 2026,
+      "dateTime": "2026-06-28T06:17:12.0983940",
+      "day": 28,
+      "totalOffsetMinutes": 0,
+      "offset": "00:00:00",
+      "dayOfYear": 179,
+      "timeOfDay": "06:17:12.0983940",
+      "hour": 6,
+      "ticks": 639182242320983940,
+      "nanosecond": 0,
+      "minute": 17,
+      "millisecond": 98,
+      "month": 6,
+      "utcDateTime": "2026-06-28T06:17:12.0983940Z",
+      "second": 12,
+      "localDateTime": "2026-06-28T01:17:12.0983940-05:00",
+      "utcTicks": 639182242320983940
+    },
+    "name": "Layer 1",
+    "order": 1,
+    "key": "layer-1",
+    "updatedAtUtc": {
+      "date": "2026-06-28T00:00:00.0000000",
+      "microsecond": 394,
+      "dayOfWeek": "Sunday",
+      "year": 2026,
+      "dateTime": "2026-06-28T06:17:12.0983940",
+      "day": 28,
+      "totalOffsetMinutes": 0,
+      "offset": "00:00:00",
+      "dayOfYear": 179,
+      "timeOfDay": "06:17:12.0983940",
+      "hour": 6,
+      "ticks": 639182242320983940,
+      "nanosecond": 0,
+      "minute": 17,
+      "millisecond": 98,
+      "month": 6,
+      "utcDateTime": "2026-06-28T06:17:12.0983940Z",
+      "second": 12,
+      "localDateTime": "2026-06-28T01:17:12.0983940-05:00",
+      "utcTicks": 639182242320983940
+    }
+  },
+  "functional": [
+    {
+      "title": "reviewed conflicts and valid merges",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-SameCellConflictNeedsReview",
+          "text": "Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DeleteUpdateNeedsReview",
+          "text": "Given A1 deletes T1 and B1 edits T1.title, when histories merge, then needs_review retains B1 and the deleted/edited alternatives for review."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-CleanMergeCanFailDomainValidation",
+          "text": "Given separate commits add T1 dependsOn T2 and T2 dependsOn T1, when Dolt merges without cell conflicts, then domain validation records dependency_cycle and leaves the prior valid live head unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-StaleReviewRejected",
+          "text": "Given a resolution preview binds local=B1 and incoming=A1, when incoming advances to A2, then resolve returns409 stale_review with no merge commit."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ReviewAgeVisible",
+          "text": "Given unresolved needs_review at12:00, when the clock reaches12:15, then plugins/status and the operator inbox show warning with ReviewId and age900s; at24h severity is critical, with at most one repeat per hour."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnrelatedPublicationContinues",
+          "text": "Given Atlas/main is blocked by review R1, when Atlas/feature publishes F2 and another project publishes X1, then both succeed while Atlas/main remains unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SafeTodoMergeRules",
+          "text": "Given A changes title and B changes description with no domain violation, when merge runs, then both values survive; competing priority or completion edits produce needs_review instead of choosing a timestamp winner."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "FR-MCP-180",
+      "status": "pending",
+      "body": "Conflicts and invalid merges preserve valid live data, require authorized review and remain visible with ageing while unrelated publication continues."
+    },
+    {
+      "title": "Dolt fourth-provider support and schema migration",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-FourProvidersResolve",
+          "text": "Given keys sqlite,postgresql,sqlserver,dolt, when runtime and design-time factories resolve them, then each selects its own strategy/migration history; unknown key returns unsupported_provider."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DoltBaselineAndUpgrade",
+          "text": "Given empty standalone Dolt then baseline schema1, when baseline and additive schema2 apply, then CRUD succeeds, data remains intact and repeated apply makes no further changes."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OriginalProviderMigrationsUnchanged",
+          "text": "Given recorded hashes of the three original migration chains, when Dolt support is added, then those hashes match and all three real-provider upgrade fixtures pass."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnsupportedSchemaRejected",
+          "text": "Given application supports schema1, when opening schema2 for domain writes, then incompatible_schema is returned before mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-VersionedProjectNotMigratedAtStartup",
+          "text": "Given a versioned project at schema1, when application starts, then no EF migration executes and its Dolt head/schema remain unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OldSchemaUnpublishedCommitMergesAfterUpgrade",
+          "text": "Given B1 is unpublished on schema1 and hub S1 adds schema2 from C0, when preflight/upgrade and merge succeed, then B/main=M1 with both B1 and S1 ancestors and B1 row values preserved."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-FeatureBranchSchemaCatchUp",
+          "text": "Given main accepts S1 but feature still uses schema1, when feature is selected for writes, then it remains closed until its own merge with S1 validates."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DirtyDraftBlocksBinaryUpgrade",
+          "text": "Given any local branch has a draft, when Nuke preflight runs, then409 maintenance_not_ready prevents binary replacement and preserves the draft."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ContractBlockedUntilLocalBranchesAttested",
+          "text": "Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DeploymentPreflightBlocksDirtyOrUnattestedBranch",
+          "text": "Given a ready public main but an unattested local feature, when deployment runs, then no binary/service/schema change occurs; explicit branch attestation is required."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-WindowsWriterLockAndRestart",
+          "text": "Given one Windows worker owns Atlas, when a second process starts or the owner crashes, then concurrent ownership is denied and restart recovers only after the OS releases its lock; committed rows and unpublished heads survive."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RealHostAcceptanceMatrix",
+          "text": "Given isolated disposable Atlas stores on LAB and LEGION and FED-ATLAS-H/A/B fixtures, when Ph8 partitions/reconnects each control, publication/history, audit and identity path and restarts each application/worker, Dolt, gateway, identity and control/audit component at commit/publication/report boundaries, then every matrix row records exact heads/ancestor sets/rows/drafts/refs/epoch and audit receipts matching the workflow outcome, with zero missing provider/migration/recovery rows. Missing any component/path row fails acceptance; unrelated live projects retain their provider mappings and data."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "FR-MCP-186",
+      "status": "pending",
+      "body": "Support Dolt as the fourth provider with dedicated schema migration, controlled schema-history distribution, Windows/Linux lifecycle and original-provider regressions."
+    },
+    {
+      "title": "original-provider-to-Dolt migration tool",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-ThreeSourceProviderRoundTrip",
+          "text": "Given the same fixture in SQLite,PostgreSQL,SQL Server, when seed migration runs, then counts, typed hashes, IDs, nulls, Unicode, decimals, UTC precision and FK relationships match in Dolt."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ResumeAfterBatchCommit",
+          "text": "Given target batch1 committed before a crash but its acknowledgement was lost, when resume runs, then batch1 is recognized by journal and no duplicate rows appear."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ChangedSnapshotRejected",
+          "text": "Given manifest source hash S0, when source is replaced by S1 before resume, then409 migration_source_changed writes no additional target rows."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-FailedVerifyCannotCutover",
+          "text": "Given one row hash differs, when cutover is requested, then409 migration_verification_failed leaves source routing active and writes closed on the target."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SourceRetainedAfterCutover",
+          "text": "Given verified cutover completes, when target receives a new TODO, then source backup remains present, read-only and byte-identical; the new TODO exists only in Dolt until an explicit recovery export."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-MigrationJoinPreservesCommonAncestor",
+          "text": "Given seed C0 is published and join imports J1, when join completes in Ph6, then C0 is an ancestor of J1 and reviewed main M1; no second root is created."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-MigrationJoinDivergentRowRequiresReview",
+          "text": "Given seed T1.title=A and frozen join T1.title=B, when join planning runs, then an explicit keep/take/manual decision is required before J1 even if Dolt would fast-forward."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-JoinCutoverRequiresReviewedMain",
+          "text": "Given J1 is verified but main integration is unresolved, when cutover runs, then409 migration_verification_failed preserves source routing; only verified reviewed M1 permits cutover."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DoltTodoExportPreservesNewWrites",
+          "text": "Given A1 adds TODO T2 after cutover, when export-sqlite targets A1, then the new SQLite DB contains T2 and all TODO children/aliases with matching hashes, while the original source remains unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SeedPhaseRejectsJoin",
+          "text": "Given only Ph3 is implemented, when mode=join is requested, then501 unsupported_capability creates no target commit or routing change."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-FullProjectRecoveryPreservesAllDomains",
+          "text": "Given Atlas has main=A1 with post-cutover TODO T1, requirement R1/mapping, use case U1/actor/flow/step, memory W1, portable setting K1 and promoted session S1/turn/action, plus unpublished feature=F1 and draft T2.title=draft, when export-project freezes both branches and verifies fresh SQLite snapshots plus operational backup, then all IDs/typed values/links/soft deletes match each captured working set, feature still resolves F1, T2 remains draft without a new Dolt commit, audit receipts reconcile, the retained Dolt archive contains A1/F1 ancestry and original SQLite bytes are unchanged. Omit W1 or feature in a negative control: migration_verification_failed prevents routing switch."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "FR-MCP-187",
+      "status": "pending",
+      "body": "Migrate all three original providers using verified seed then reviewed join, permanent identities, audit backfill and a source-retaining all-domain/all-branch project-to-SQLite recovery export."
+    },
+    {
+      "title": "safe shared-host editing and commit ownership",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-CommitCannotCaptureOtherAgentDraft",
+          "text": "Given agent1 owns a draft, when agent2 commits the same branch, then409 branch_busy creates no commit and the draft remains agent1-owned."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ExpiredLeaseFenced",
+          "text": "Given fence4 expires and fence5 is issued, when a fence4 edit arrives, then409 lease_lost persists no row changes."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PreviewChangeRequiresReview",
+          "text": "Given preview fingerprint W1, when the working set becomes W2, then commit with W1 returns409 working_set_changed and requires a fresh preview."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-LeaseLostDuringWriteRejected",
+          "text": "Given a write admitted under fence4, when expiry occurs mid-transaction, then that write finishes under the gate before fence5 takeover; a later fence4 write is rejected."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-CommitRetryReturnsSameHash",
+          "text": "Given request R1 created A1 and reply was lost, when R1 retries after restart, then A1 is returned by its commit trailer and history contains no duplicate commit."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-IncomingMergeCannotRaceAdmittedEdit",
+          "text": "Given an edit holds the branch gate, when the integration worker requests a live head move, then it waits; after the edit finishes, fingerprint revalidation detects the draft and returns waiting_local_work without overwriting it."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PluginEditingOwnership",
+          "text": "Given agent1 owns A/main fence4 with a draft, when agent2 views context and requests editing, then it sees the owner and branch, receives409 branch_busy, and may select a separate feature branch; owner release/takeover requires explicit authorization and preserves the main draft without commit or discard."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "FR-MCP-189",
+      "status": "pending",
+      "body": "Enforce branch edit ownership and fenced live-write serialization so no agent or sync worker captures or overwrites another agent draft.\n\nServer: editing owner, request/release and fenced takeover contracts. Plugin: display editing owner, request/release context and offer another branch without capturing another agent draft."
+    }
+  ],
+  "technical": [
+    {
+      "title": "reviewed conflicts and valid merges contract",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-SameCellConflictNeedsReview",
+          "text": "Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DeleteUpdateNeedsReview",
+          "text": "Given A1 deletes T1 and B1 edits T1.title, when histories merge, then needs_review retains B1 and the deleted/edited alternatives for review."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-CleanMergeCanFailDomainValidation",
+          "text": "Given separate commits add T1 dependsOn T2 and T2 dependsOn T1, when Dolt merges without cell conflicts, then domain validation records dependency_cycle and leaves the prior valid live head unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-StaleReviewRejected",
+          "text": "Given a resolution preview binds local=B1 and incoming=A1, when incoming advances to A2, then resolve returns409 stale_review with no merge commit."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ReviewAgeVisible",
+          "text": "Given unresolved needs_review at12:00, when the clock reaches12:15, then plugins/status and the operator inbox show warning with ReviewId and age900s; at24h severity is critical, with at most one repeat per hour."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnrelatedPublicationContinues",
+          "text": "Given Atlas/main is blocked by review R1, when Atlas/feature publishes F2 and another project publishes X1, then both succeed while Atlas/main remains unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SafeTodoMergeRules",
+          "text": "Given A changes title and B changes description with no domain violation, when merge runs, then both values survive; competing priority or completion edits produce needs_review instead of choosing a timestamp winner."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "TR-MCP-FEDERATION-007",
+      "status": "pending",
+      "body": "Review record key=ReviewId UUID; fields ProjectId,Branch,baseHeads[],localHead,incomingHead,candidateRef,conflictingCells[],validationErrors[],createdUtc,lastNotifiedUtc,resolution,actor. GET conflicts and status expose it. Resolve binds exact heads and returns409 stale_review if changed. Safe TODO policy: identical concurrent values collapse; edits to different cells may merge only if invariants pass; duplicate immutable child IDs deduplicate only when bytes agree. Status, priority, title, description, dependency deletions and same-cell disagreements always require review; no timestamp last-writer-wins. Notify immediately in status and durable operator inbox; warn at15min, escalate at24h, repeat at most hourly; no email/Slack sent implicitly. Same-branch dependent commits wait; unrelated branches/projects continue."
+    },
+    {
+      "title": "Dolt fourth-provider support and schema migration contract",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-FourProvidersResolve",
+          "text": "Given keys sqlite,postgresql,sqlserver,dolt, when runtime and design-time factories resolve them, then each selects its own strategy/migration history; unknown key returns unsupported_provider."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DoltBaselineAndUpgrade",
+          "text": "Given empty standalone Dolt then baseline schema1, when baseline and additive schema2 apply, then CRUD succeeds, data remains intact and repeated apply makes no further changes."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OriginalProviderMigrationsUnchanged",
+          "text": "Given recorded hashes of the three original migration chains, when Dolt support is added, then those hashes match and all three real-provider upgrade fixtures pass."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnsupportedSchemaRejected",
+          "text": "Given application supports schema1, when opening schema2 for domain writes, then incompatible_schema is returned before mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-VersionedProjectNotMigratedAtStartup",
+          "text": "Given a versioned project at schema1, when application starts, then no EF migration executes and its Dolt head/schema remain unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OldSchemaUnpublishedCommitMergesAfterUpgrade",
+          "text": "Given B1 is unpublished on schema1 and hub S1 adds schema2 from C0, when preflight/upgrade and merge succeed, then B/main=M1 with both B1 and S1 ancestors and B1 row values preserved."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-FeatureBranchSchemaCatchUp",
+          "text": "Given main accepts S1 but feature still uses schema1, when feature is selected for writes, then it remains closed until its own merge with S1 validates."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DirtyDraftBlocksBinaryUpgrade",
+          "text": "Given any local branch has a draft, when Nuke preflight runs, then409 maintenance_not_ready prevents binary replacement and preserves the draft."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ContractBlockedUntilLocalBranchesAttested",
+          "text": "Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DeploymentPreflightBlocksDirtyOrUnattestedBranch",
+          "text": "Given a ready public main but an unattested local feature, when deployment runs, then no binary/service/schema change occurs; explicit branch attestation is required."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-WindowsWriterLockAndRestart",
+          "text": "Given one Windows worker owns Atlas, when a second process starts or the owner crashes, then concurrent ownership is denied and restart recovers only after the OS releases its lock; committed rows and unpublished heads survive."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RealHostAcceptanceMatrix",
+          "text": "Given isolated disposable Atlas stores on LAB and LEGION and FED-ATLAS-H/A/B fixtures, when Ph8 partitions/reconnects each control, publication/history, audit and identity path and restarts each application/worker, Dolt, gateway, identity and control/audit component at commit/publication/report boundaries, then every matrix row records exact heads/ancestor sets/rows/drafts/refs/epoch and audit receipts matching the workflow outcome, with zero missing provider/migration/recovery rows. Missing any component/path row fails acceptance; unrelated live projects retain their provider mappings and data."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "TR-MCP-FEDERATION-013",
+      "status": "pending",
+      "body": "Provider key dolt has a dedicated migration assembly; original provider migrations remain unchanged. Versioned project schema migrations are authored only by hub maintenance on maintenance/schema-N and distributed as history. MaintenanceReadiness binds epoch, binary/schema versions, all local branches including unpublished ones, heads, working-set hashes and attestations. Preflight must pass before Nuke swaps binaries; dirty/unattested branch=409 maintenance_not_ready. LAB uses pinned Linux image; LEGION uses checksum-pinned native Windows dolt.exe under a Windows host whose actual service identity, account, ACLs and child-process start/stop/crash cleanup must be evidenced in Ph0 B1/B9; no existing suitable service is assumed, local paths on F: and exclusive Windows file handle/named mutex ownership. All B1-B12 are evidenced on both OSs."
+    },
+    {
+      "title": "original-provider-to-Dolt migration tool contract",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-ThreeSourceProviderRoundTrip",
+          "text": "Given the same fixture in SQLite,PostgreSQL,SQL Server, when seed migration runs, then counts, typed hashes, IDs, nulls, Unicode, decimals, UTC precision and FK relationships match in Dolt."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ResumeAfterBatchCommit",
+          "text": "Given target batch1 committed before a crash but its acknowledgement was lost, when resume runs, then batch1 is recognized by journal and no duplicate rows appear."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ChangedSnapshotRejected",
+          "text": "Given manifest source hash S0, when source is replaced by S1 before resume, then409 migration_source_changed writes no additional target rows."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-FailedVerifyCannotCutover",
+          "text": "Given one row hash differs, when cutover is requested, then409 migration_verification_failed leaves source routing active and writes closed on the target."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SourceRetainedAfterCutover",
+          "text": "Given verified cutover completes, when target receives a new TODO, then source backup remains present, read-only and byte-identical; the new TODO exists only in Dolt until an explicit recovery export."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-MigrationJoinPreservesCommonAncestor",
+          "text": "Given seed C0 is published and join imports J1, when join completes in Ph6, then C0 is an ancestor of J1 and reviewed main M1; no second root is created."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-MigrationJoinDivergentRowRequiresReview",
+          "text": "Given seed T1.title=A and frozen join T1.title=B, when join planning runs, then an explicit keep/take/manual decision is required before J1 even if Dolt would fast-forward."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-JoinCutoverRequiresReviewedMain",
+          "text": "Given J1 is verified but main integration is unresolved, when cutover runs, then409 migration_verification_failed preserves source routing; only verified reviewed M1 permits cutover."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DoltTodoExportPreservesNewWrites",
+          "text": "Given A1 adds TODO T2 after cutover, when export-sqlite targets A1, then the new SQLite DB contains T2 and all TODO children/aliases with matching hashes, while the original source remains unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SeedPhaseRejectsJoin",
+          "text": "Given only Ph3 is implemented, when mode=join is requested, then501 unsupported_capability creates no target commit or routing change."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-FullProjectRecoveryPreservesAllDomains",
+          "text": "Given Atlas has main=A1 with post-cutover TODO T1, requirement R1/mapping, use case U1/actor/flow/step, memory W1, portable setting K1 and promoted session S1/turn/action, plus unpublished feature=F1 and draft T2.title=draft, when export-project freezes both branches and verifies fresh SQLite snapshots plus operational backup, then all IDs/typed values/links/soft deletes match each captured working set, feature still resolves F1, T2 remains draft without a new Dolt commit, audit receipts reconcile, the retained Dolt archive contains A1/F1 ancestry and original SQLite bytes are unchanged. Omit W1 or feature in a negative control: migration_verification_failed prevents routing switch."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "TR-MCP-FEDERATION-014",
+      "status": "pending",
+      "body": "MigrationManifest binds MigrationId, mode, ProjectId, source provider/snapshot hash, schema versions, table counts, typed row hashes, alias decisions, audit backfill and immutable destination commit. Ph3 implements seed, dry-run/resume/verify and Dolt-to-new-SQLite project recovery; join is unavailable until Ph6 review/publication exist. Both lab sources are SQLite; PostgreSQL and SQL Server remain supported fixture sources. Retain originals read-only. Recovery quiesces the owner and captures every branch, including unpublished heads and dirty working sets, without creating history commits. Export one new compatible SQLite DB per branch containing ALL B2-classified versioned domains: TODO child/link/document graphs, requirements/mappings, use-case actors/flows/steps, workspace memories, portable configuration, promoted session graphs and permanent aliases. Preserve IDs, values, timestamps, versions, soft deletes and audit linkage. Manifest binds branch/head/working-set/schema/count/hash evidence; retain immutable Dolt objects/refs to preserve ancestry outside SQLite. export-todos remains a subset, never whole-project rollback acceptance. Missing domain/branch or failed validation blocks routing changes. Operator selects the verified active snapshot; others remain readable recovery artifacts. Capture host-local control/audit/outbox/IdentityServer backups at the same quiescence boundary and verify restore plus hub audit resend. Cutover requires verified receipts, explicit DEPLOY HOLD release and one-node soak before the second host."
+    },
+    {
+      "title": "safe shared-host editing and commit ownership contract",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-CommitCannotCaptureOtherAgentDraft",
+          "text": "Given agent1 owns a draft, when agent2 commits the same branch, then409 branch_busy creates no commit and the draft remains agent1-owned."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ExpiredLeaseFenced",
+          "text": "Given fence4 expires and fence5 is issued, when a fence4 edit arrives, then409 lease_lost persists no row changes."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PreviewChangeRequiresReview",
+          "text": "Given preview fingerprint W1, when the working set becomes W2, then commit with W1 returns409 working_set_changed and requires a fresh preview."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-LeaseLostDuringWriteRejected",
+          "text": "Given a write admitted under fence4, when expiry occurs mid-transaction, then that write finishes under the gate before fence5 takeover; a later fence4 write is rejected."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-CommitRetryReturnsSameHash",
+          "text": "Given request R1 created A1 and reply was lost, when R1 retries after restart, then A1 is returned by its commit trailer and history contains no duplicate commit."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-IncomingMergeCannotRaceAdmittedEdit",
+          "text": "Given an edit holds the branch gate, when the integration worker requests a live head move, then it waits; after the edit finishes, fingerprint revalidation detects the draft and returns waiting_local_work without overwriting it."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PluginEditingOwnership",
+          "text": "Given agent1 owns A/main fence4 with a draft, when agent2 views context and requests editing, then it sees the owner and branch, receives409 branch_busy, and may select a separate feature branch; owner release/takeover requires explicit authorization and preserves the main draft without commit or discard."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "TR-MCP-FEDERATION-016",
+      "status": "pending",
+      "body": "BranchLease key=(ProjectId,Branch), OwnerSessionId, Fence int64, ExpiresUtc and WorkingSetFingerprint. Every live-branch mutation holds the same host-owner write gate across lease validation and transaction/commit. Expiry rejects new admission; an admitted write finishes before takeover. Isolated worker rights cover only non-live integration refs and it invokes owner API for live moves. Dirty takeover needs explicit review. Commit requestId persists in history for idempotency; preview binds exact head/fingerprint.\n\nServer: editing owner, request/release and fenced takeover contracts. Plugin: display editing owner, request/release context and offer another branch without capturing another agent draft."
+    }
+  ],
+  "testing": [
+    {
+      "title": "reviewed conflicts and valid merges acceptance tests",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-SameCellConflictNeedsReview",
+          "text": "Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DeleteUpdateNeedsReview",
+          "text": "Given A1 deletes T1 and B1 edits T1.title, when histories merge, then needs_review retains B1 and the deleted/edited alternatives for review."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-CleanMergeCanFailDomainValidation",
+          "text": "Given separate commits add T1 dependsOn T2 and T2 dependsOn T1, when Dolt merges without cell conflicts, then domain validation records dependency_cycle and leaves the prior valid live head unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-StaleReviewRejected",
+          "text": "Given a resolution preview binds local=B1 and incoming=A1, when incoming advances to A2, then resolve returns409 stale_review with no merge commit."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ReviewAgeVisible",
+          "text": "Given unresolved needs_review at12:00, when the clock reaches12:15, then plugins/status and the operator inbox show warning with ReviewId and age900s; at24h severity is critical, with at most one repeat per hour."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnrelatedPublicationContinues",
+          "text": "Given Atlas/main is blocked by review R1, when Atlas/feature publishes F2 and another project publishes X1, then both succeed while Atlas/main remains unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SafeTodoMergeRules",
+          "text": "Given A changes title and B changes description with no domain violation, when merge runs, then both values survive; competing priority or completion edits produce needs_review instead of choosing a timestamp winner."
+        }
+      ],
+      "priority": "high",
+      "workspaceId": "F:/GitHub/McpServer",
+      "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+      "scopeStartLayerKey": "layer-1",
+      "condition": "Verify FR-MCP-180 and TR-MCP-FEDERATION-007 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "id": "TEST-MCP-228",
+      "status": "pending"
+    },
+    {
+      "title": "Dolt fourth-provider support and schema migration acceptance tests",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-FourProvidersResolve",
+          "text": "Given keys sqlite,postgresql,sqlserver,dolt, when runtime and design-time factories resolve them, then each selects its own strategy/migration history; unknown key returns unsupported_provider."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DoltBaselineAndUpgrade",
+          "text": "Given empty standalone Dolt then baseline schema1, when baseline and additive schema2 apply, then CRUD succeeds, data remains intact and repeated apply makes no further changes."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OriginalProviderMigrationsUnchanged",
+          "text": "Given recorded hashes of the three original migration chains, when Dolt support is added, then those hashes match and all three real-provider upgrade fixtures pass."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnsupportedSchemaRejected",
+          "text": "Given application supports schema1, when opening schema2 for domain writes, then incompatible_schema is returned before mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-VersionedProjectNotMigratedAtStartup",
+          "text": "Given a versioned project at schema1, when application starts, then no EF migration executes and its Dolt head/schema remain unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OldSchemaUnpublishedCommitMergesAfterUpgrade",
+          "text": "Given B1 is unpublished on schema1 and hub S1 adds schema2 from C0, when preflight/upgrade and merge succeed, then B/main=M1 with both B1 and S1 ancestors and B1 row values preserved."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-FeatureBranchSchemaCatchUp",
+          "text": "Given main accepts S1 but feature still uses schema1, when feature is selected for writes, then it remains closed until its own merge with S1 validates."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DirtyDraftBlocksBinaryUpgrade",
+          "text": "Given any local branch has a draft, when Nuke preflight runs, then409 maintenance_not_ready prevents binary replacement and preserves the draft."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ContractBlockedUntilLocalBranchesAttested",
+          "text": "Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DeploymentPreflightBlocksDirtyOrUnattestedBranch",
+          "text": "Given a ready public main but an unattested local feature, when deployment runs, then no binary/service/schema change occurs; explicit branch attestation is required."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-WindowsWriterLockAndRestart",
+          "text": "Given one Windows worker owns Atlas, when a second process starts or the owner crashes, then concurrent ownership is denied and restart recovers only after the OS releases its lock; committed rows and unpublished heads survive."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RealHostAcceptanceMatrix",
+          "text": "Given isolated disposable Atlas stores on LAB and LEGION and FED-ATLAS-H/A/B fixtures, when Ph8 partitions/reconnects each control, publication/history, audit and identity path and restarts each application/worker, Dolt, gateway, identity and control/audit component at commit/publication/report boundaries, then every matrix row records exact heads/ancestor sets/rows/drafts/refs/epoch and audit receipts matching the workflow outcome, with zero missing provider/migration/recovery rows. Missing any component/path row fails acceptance; unrelated live projects retain their provider mappings and data."
+        }
+      ],
+      "priority": "high",
+      "workspaceId": "F:/GitHub/McpServer",
+      "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+      "scopeStartLayerKey": "layer-1",
+      "condition": "Verify FR-MCP-186 and TR-MCP-FEDERATION-013 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "id": "TEST-MCP-234",
+      "status": "pending"
+    },
+    {
+      "title": "original-provider-to-Dolt migration tool acceptance tests",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-ThreeSourceProviderRoundTrip",
+          "text": "Given the same fixture in SQLite,PostgreSQL,SQL Server, when seed migration runs, then counts, typed hashes, IDs, nulls, Unicode, decimals, UTC precision and FK relationships match in Dolt."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ResumeAfterBatchCommit",
+          "text": "Given target batch1 committed before a crash but its acknowledgement was lost, when resume runs, then batch1 is recognized by journal and no duplicate rows appear."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ChangedSnapshotRejected",
+          "text": "Given manifest source hash S0, when source is replaced by S1 before resume, then409 migration_source_changed writes no additional target rows."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-FailedVerifyCannotCutover",
+          "text": "Given one row hash differs, when cutover is requested, then409 migration_verification_failed leaves source routing active and writes closed on the target."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SourceRetainedAfterCutover",
+          "text": "Given verified cutover completes, when target receives a new TODO, then source backup remains present, read-only and byte-identical; the new TODO exists only in Dolt until an explicit recovery export."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-MigrationJoinPreservesCommonAncestor",
+          "text": "Given seed C0 is published and join imports J1, when join completes in Ph6, then C0 is an ancestor of J1 and reviewed main M1; no second root is created."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-MigrationJoinDivergentRowRequiresReview",
+          "text": "Given seed T1.title=A and frozen join T1.title=B, when join planning runs, then an explicit keep/take/manual decision is required before J1 even if Dolt would fast-forward."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-JoinCutoverRequiresReviewedMain",
+          "text": "Given J1 is verified but main integration is unresolved, when cutover runs, then409 migration_verification_failed preserves source routing; only verified reviewed M1 permits cutover."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-DoltTodoExportPreservesNewWrites",
+          "text": "Given A1 adds TODO T2 after cutover, when export-sqlite targets A1, then the new SQLite DB contains T2 and all TODO children/aliases with matching hashes, while the original source remains unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SeedPhaseRejectsJoin",
+          "text": "Given only Ph3 is implemented, when mode=join is requested, then501 unsupported_capability creates no target commit or routing change."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-FullProjectRecoveryPreservesAllDomains",
+          "text": "Given Atlas has main=A1 with post-cutover TODO T1, requirement R1/mapping, use case U1/actor/flow/step, memory W1, portable setting K1 and promoted session S1/turn/action, plus unpublished feature=F1 and draft T2.title=draft, when export-project freezes both branches and verifies fresh SQLite snapshots plus operational backup, then all IDs/typed values/links/soft deletes match each captured working set, feature still resolves F1, T2 remains draft without a new Dolt commit, audit receipts reconcile, the retained Dolt archive contains A1/F1 ancestry and original SQLite bytes are unchanged. Omit W1 or feature in a negative control: migration_verification_failed prevents routing switch."
+        }
+      ],
+      "priority": "high",
+      "workspaceId": "F:/GitHub/McpServer",
+      "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+      "scopeStartLayerKey": "layer-1",
+      "condition": "Verify FR-MCP-187 and TR-MCP-FEDERATION-014 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "id": "TEST-MCP-235",
+      "status": "pending"
+    },
+    {
+      "title": "safe shared-host editing and commit ownership acceptance tests",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-CommitCannotCaptureOtherAgentDraft",
+          "text": "Given agent1 owns a draft, when agent2 commits the same branch, then409 branch_busy creates no commit and the draft remains agent1-owned."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ExpiredLeaseFenced",
+          "text": "Given fence4 expires and fence5 is issued, when a fence4 edit arrives, then409 lease_lost persists no row changes."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PreviewChangeRequiresReview",
+          "text": "Given preview fingerprint W1, when the working set becomes W2, then commit with W1 returns409 working_set_changed and requires a fresh preview."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-LeaseLostDuringWriteRejected",
+          "text": "Given a write admitted under fence4, when expiry occurs mid-transaction, then that write finishes under the gate before fence5 takeover; a later fence4 write is rejected."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-CommitRetryReturnsSameHash",
+          "text": "Given request R1 created A1 and reply was lost, when R1 retries after restart, then A1 is returned by its commit trailer and history contains no duplicate commit."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-IncomingMergeCannotRaceAdmittedEdit",
+          "text": "Given an edit holds the branch gate, when the integration worker requests a live head move, then it waits; after the edit finishes, fingerprint revalidation detects the draft and returns waiting_local_work without overwriting it."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PluginEditingOwnership",
+          "text": "Given agent1 owns A/main fence4 with a draft, when agent2 views context and requests editing, then it sees the owner and branch, receives409 branch_busy, and may select a separate feature branch; owner release/takeover requires explicit authorization and preserves the main draft without commit or discard."
+        }
+      ],
+      "priority": "high",
+      "workspaceId": "F:/GitHub/McpServer",
+      "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+      "scopeStartLayerKey": "layer-1",
+      "condition": "Verify FR-MCP-189 and TR-MCP-FEDERATION-016 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "id": "TEST-MCP-237",
+      "status": "pending"
+    }
+  ]
+}
