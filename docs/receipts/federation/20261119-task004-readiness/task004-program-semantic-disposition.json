@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "taskId": "TASK-FEDPH0-004",
+  "artifactType": "ReadOnlySourceSemanticDisposition",
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "sessionId": "Codex-20261119T162438Z-plugin-session",
+  "requestId": "req-20261119T172457Z-task004-program-review",
+  "parentSessionId": "Codex-20261116T174245Z-plugin-session",
+  "parentRequestId": "req-20261119T171914Z-prompt-0659",
+  "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+  "observedWorktreeHead": "dfea410831e88dc7e963ed5e1d4501f7de13648c",
+  "sourceWorktree": "F:/GitHub/McpServer/.worktrees/fedph0-task007-20261119",
+  "partitionPath": "docs/receipts/federation/20261119-task004-readiness/remaining-consumer-partition.json",
+  "partitionSha256": "0231FABE8027B8D8289F12D6BEFB70E2210B3B48546AEB6923A4ADB10982F39F",
+  "partitionDescription": "One exact Program.cs reassignment from original64OperationalOrExternal candidates; root confirmed no overlap",
+  "reviewedFileCount": 1,
+  "fullSourceReadCount": 1,
+  "sourceHashMismatchCount": 0,
+  "nativeProof": false,
+  "productFilesModified": [],
+  "testsRun": [],
+  "taskStateChanged": false,
+  "isHV": false,
+  "limitations": [
+    "Source classification only; no whole Task004 mock sufficiency/Ready/HV/native/implementation acceptance.",
+    "Provider methods and registered services are not recursively reviewed here; this file proves registration/ordering only.",
+    "No new identity family, protocol or implementation mechanism is invented."
+  ],
+  "findings": [
+    "Numeric parsing itself is PORT operational configuration, but the file is a genuine typed-service/provider/middleware/import/replay composition boundary requiring explicit enrolled identity and legacy-fence design binding.",
+    "Local workspace paths, instance names, API token scope, process/retry/event IDs and private operational/security domains retain their actual semantics; no conversion from suffix appearance."
+  ],
+  "processFriction": {
+    "blockingRuleObserved": false,
+    "operatorJudgment": "Task004 barrier identifying design gaps is UoW functioning; tooling friction is distinct.",
+    "approvalDenials": 0,
+    "stopAfterAudit": true
+  },
+  "sourceHashes": [
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Program.cs",
+      "path": "src/QBrainAi.Support.Mcp/Program.cs",
+      "expectedSha256": "B29FBD5AF2652A3D6F57D672C63C87ED390192950417F79DEC95EAA4A29A317E",
+      "actualSha256": "B29FBD5AF2652A3D6F57D672C63C87ED390192950417F79DEC95EAA4A29A317E",
+      "match": true
+    }
+  ],
+  "entries": [
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Program.cs",
+      "path": "src/QBrainAi.Support.Mcp/Program.cs",
+      "sha256": "B29FBD5AF2652A3D6F57D672C63C87ED390192950417F79DEC95EAA4A29A317E",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-260",
+        "261-520",
+        "521-780",
+        "781-1040",
+        "1041-1266"
+      ],
+      "observation": "PORT int.TryParse185 is network configuration. Other numeric uses are process metadata, retry seconds987/1029, event code1191 and counts. This file is also the application composition root: selects database/provider, binds storage/data paths and options, registers authored services and protected runtime/security domains, then legacy federation decorators/adapters/replay workers, bootstrap/migrations and middleware.",
+      "b4Effect": "Individually classify PORT/semver/process/retry/event/count identifiers as operational, retaining their semantics. Explicit genuine B4 routing/binding seam: enrolled authored TODO/requirements/memory/usecase identity consumers must receive supported canonical/project-origin/capability handling through the planned central/versioned boundary, with explicit legacy replay/import fence and standalone compatibility. Provider/local path/instance selection is not globally stable ProjectId; security/API tokens/session/raw GraphRAG/agent runtime remain their separately classified operational or protected domains. Existing registration alone neither proves native canonical support nor demonstrates broken standalone behavior. No product/native implementation or new mechanism is introduced by this review.",
+      "anchors": [
+        "49-80: existing workspace-rekey and encryption-transition command dispatch",
+        "125-146,183-204: config precedence, instance selection, PORT intparse and database registration",
+        "243-308: local ingestion/index/storage/requirements path projection",
+        "386-428: TODO factory/resolver and requirements typed repository/decorators",
+        "449-508: template/session/memory/context/usecase/product and workspace service registrations",
+        "531-598: runtime/server/token/brain and IdentityServer/OIDC/role policy domains",
+        "600-610: legacy federation registry, adapters, signed envelope and operation-apply DI",
+        "640-699: TODO/session/rawGraphRAG federation decorators",
+        "714-739: legacy replay, migrator, TODO bootstrap and corpus seed workers",
+        "818-832: startup schema/migration/encryption/backfill coordinator",
+        "868-912,1228-1265: local workspace path/token seeding and normalization",
+        "927-932: identity/authentication then workspace resolution, legacy federation middleware, workspace auth and authorization",
+        "987-988,1029-1030,1191: operational retry seconds and event code"
+      ],
+      "classification": "Operational numeric parses plus genuine application identity/provider/replay composition boundary",
+      "nativeProof": false
+    }
+  ]
+}

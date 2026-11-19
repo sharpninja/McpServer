@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "Task004ConsumerSemanticDisposition",
+  "taskId": "TASK-FEDPH0-004",
+  "partition": "ControllerSupplement",
+  "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+  "verifiedUnchangedAt": "dfea410831e88dc7e963ed5e1d4501f7de13648c",
+  "sourceWorktree": "F:/GitHub/McpServer/.worktrees/fedph0-task007-20261119",
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "sessionId": "Codex-20261119T153852Z-plugin-session",
+  "requestId": "req-20261119T171650Z-prompt-b74a",
+  "parentSessionId": "Codex-20261116T174245Z-plugin-session",
+  "parentRequestId": "req-20261119T171310Z-prompt-5c2d",
+  "reviewedFileCount": 1,
+  "fullSourceReadCount": 1,
+  "sourceHashMismatchCount": 0,
+  "entries": [
+    {
+      "candidateId": "src/QBrainAi.Support.Mcp/Controllers/RequirementsController.cs",
+      "path": "src/QBrainAi.Support.Mcp/Controllers/RequirementsController.cs",
+      "sha256": "9D11BE4BC9E09466438FF7AE19965EE95C91125B96A6622AA20FC789DC03EDAA",
+      "sourceCommit": "64f098b2bdd9cdd5c04a4e6eb6bf727eaf85292d",
+      "fullSourceRead": true,
+      "readRanges": [
+        "1-300",
+        "301-600",
+        "601-900",
+        "901-1200",
+        "1201-1500",
+        "1501-1776"
+      ],
+      "observation": "Controller accepts requirement FR/TR/TEST IDs as strings in both qbrainai and legacy mcpserver route namespaces, passes separate kind/layer/criteria/mapping fields to services, and escapes created IDs in Location URIs. RequireBatchId only rejects blank and trims; this full1776line file declares no ID max-length/fixed suffix regex/numeric conversion. ExtractArea is a dormant private helper with no call in this file, not an observed route parser. Effective and AC-copy paths still pass host workspace paths; copy consumes an authored TODO reference and criteria. Batch item kind+ID is explicit. Ingest parses whole documents; authoritative wiki synchronization compares case-insensitive ID dictionaries and deletes existing rows absent from input. Recovery plan/apply/get endpoints/methods are absent here; source-level recovery judgment belongs to separately reviewed service/client consumers. Export paths, ZIP member paths, source metadata, counts and indexes are operational artifacts/content, not generated identities.",
+      "b4Effect": "Versioned boundary must carry immutable project/origin/kind and resolve exact legacy/canonical requirement, criterion, layer, mapping and TODO references through the approved central parser/resolver while preserving existing standalone string routes, legacy alias namespace, URI escaping and null patch behavior. No blanket numeric or string replacement. Future caller use of dormant ExtractArea must use semantic family/area metadata; actual live area/subarea filters delegate to the service. All create/update/delete/batch/repair/ingest entrypoints are real project writers and must bind the existing owner branch gate; authoritative-sync matching must not erase valid canonical/legacy rows merely because a parser omitted or normalized them. Preserve byte-exact body/notes/document/history and operational counts, error indexes, file paths, transaction coordinator receipts and current standalone behavior. Scope layer key grammar and recovery identity compatibility are owned by their reviewed service/client seams, not invented local routes. This is current design obligation mapping only, not proof of native routing/import/recovery or a new public endpoint.",
+      "anchors": [
+        "23-24 canonical and legacy route namespaces",
+        "60-156 layer CRUD/effective fields and host workspace lookup",
+        "159-197 delegated area filters plus dormant ExtractArea declaration",
+        "200-500 string FR/TR/TEST routes, scope/criteria fields and escaped Location IDs",
+        "503-568 kind plus requirement/TODO lookup and verbatim acceptance criteria copy",
+        "588-733 type-specific and mixed batch writers",
+        "736-789 FR/TR/TEST mapping endpoint/list references",
+        "792-907 ingest parser and authoritative versus upsert routing",
+        "909-932 existing operational coordinator/defer rules",
+        "934-1098 exports, file paths, ZIP names and error status, not identity allocation",
+        "1101-1252 batch kind/ID results and typed entry projections",
+        "1255-1390 exact record lookup plus nullable patch/scoped criteria updates",
+        "1393-1410 kind normalization and blank/trim-only ID validation",
+        "1444-1511 local file/root/source format and wiki artifact path handling",
+        "1514-1611 case-insensitive upsert matching",
+        "1614-1767 authoritative functional/technical/testing/mapping delete-if-absent loops",
+        "1770-1775 mapping ID set comparison"
+      ],
+      "classification": "VersionedRequirementRouteAndWriterConsumerWithDormantSplitCandidate",
+      "nativeProof": false
+    }
+  ],
+  "productFilesModified": false,
+  "taskStateChanged": false,
+  "testsRun": false,
+  "isHostileValidation": false,
+  "nativeProof": false,
+  "limitations": [
+    "Read-only source/design judgment only, not runtime binding or requirement satisfaction.",
+    "Dormant helper is explicitly distinguished from live consumers; controller has no local recovery endpoints or ID length constraints.",
+    "Operator stop boundary: finish readiness only and pause when all nine tasks are ready; no native/product/Started work."
+  ]
+}
