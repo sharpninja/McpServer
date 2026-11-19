@@ -1,0 +1,79 @@
+{
+  "timestampLocal": "2026-11-19T08:23:41.2764265-06:00",
+  "host": "PAYTON-LEGION2",
+  "taskId": "TASK-FEDPH0-004",
+  "sessionId": "Codex-20261116T174245Z-plugin-session",
+  "requestId": "req-20261119T141653Z-prompt-21b4",
+  "baseHead": "533e5dbc2ea5bbafc5bdcc588b92288317c41aea",
+  "sourceTreeModified": true,
+  "sourceHash": "F4AF7750A26F2DB7DE04FD9DE7690C119534A8C08ED046C34D591179FF52E060",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0IdentityGrammarMockGateTests --test-run-id 20261119T0825-fedph0-identity-grammar-mock",
+  "exitCode": 0,
+  "total": 9973,
+  "passed": 9973,
+  "failed": 0,
+  "notExecuted": 0,
+  "actualResultRows": 9973,
+  "expectedNegativeControls": 7867,
+  "positiveControls": 2106,
+  "fixtureFamilies": 24,
+  "fixtureTags": 6,
+  "sequenceBoundaries": 5,
+  "requirements": [
+    "FR-MCP-182",
+    "TR-MCP-FEDERATION-009",
+    "TEST-MCP-230"
+  ],
+  "criteriaContext": [
+    "ac-TwoNodesCreateDistinctIds",
+    "ac-LegacyIdsRemainValid"
+  ],
+  "binding": "Test-owned proposal grammar assertions and scripted replies only; no production parser, allocator, native provider or plugin integration.",
+  "taskReady": false,
+  "implementationBarrier": "Closed",
+  "productionChanges": false,
+  "limitations": [
+    "Two open shared-contract dispositions and full consumer inventory remain unresolved.",
+    "Allocator durability, crash/retry and restore behavior are separate from pure grammar.",
+    "Linux execution pending.",
+    "No B4 acceptance, task completion or phase exit claimed."
+  ],
+  "copies": [
+    {
+      "name": "Phase0IdentityGrammarMockGateTests.cs",
+      "sha256": "F4AF7750A26F2DB7DE04FD9DE7690C119534A8C08ED046C34D591179FF52E060",
+      "original": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\tests\\QBrainAi.Support.Mcp.Tests\\Federation\\Phase0\\Phase0IdentityGrammarMockGateTests.cs"
+    },
+    {
+      "name": "windows.trx",
+      "sha256": "12959BF569EC85D1AE6CB5D61D5878513ABEFD4F3134BE6398B72C0D020EFE70",
+      "original": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\TestResults\\20261119T0825-fedph0-identity-grammar-mock\\groups\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "windows-nuke.log",
+      "sha256": "53A8A2865049D946C04E864F0E53DB051D42BE1435C50F50C5643DB456F232DD",
+      "original": "F:\\GitHub\\McpServer\\.worktrees\\federation-phase0-20261117\\.nuke\\temp\\build.2026-11-19_08-21-47.log",
+      "archive": "windows-attachments.zip",
+      "archiveEntry": "windows-nuke.log"
+    }
+  ],
+  "attachments": {
+    "entries": [
+      {
+        "name": "windows-nuke.log",
+        "size": 6601,
+        "sha256": "53A8A2865049D946C04E864F0E53DB051D42BE1435C50F50C5643DB456F232DD"
+      }
+    ],
+    "sha256": "B4B2C1F128B7DF167176280B54D53188229DB55ACD9F615C60A86465D6E49A9E",
+    "archive": "windows-attachments.zip",
+    "reason": "Retain byte-exact native Nuke output, including trailing whitespace; original raw log retained."
+  },
+  "localRunner": {
+    "path": "F:/GitHub/McpServer/.mcpServer/codex/Invoke-FederationPhase0LinuxGrammarMock.ps1",
+    "tracking": "Local receipt helper retained and ignored per .gitignore528-530.",
+    "parserErrors": 0,
+    "sha256": "5B034E95AE83060887111FA5DA1BA4D687FD83DFB331407A4FA11EC98E626289",
+    "analyzerWarningsAndErrors": 0
+  }
+}
