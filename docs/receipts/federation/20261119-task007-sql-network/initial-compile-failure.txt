@@ -1,0 +1,28 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  QBrainAi.Common.AgentCli -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.Common.AgentCli\bin\Debug\net10.0\QBrainAi.Common.AgentCli.dll
+  QBrainAi.ProcessTree.TestHelper -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\tests\QBrainAi.ProcessTree.TestHelper\bin\Debug\net10.0\QBrainAi.ProcessTree.TestHelper.dll
+  QBrainAi.Client -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.Client\bin\Debug\net10.0\QBrainAi.Client.dll
+  QBrainAi.TransactionSecurity -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.TransactionSecurity\bin\Debug\net10.0\QBrainAi.TransactionSecurity.dll
+  QBrainAi.Cqrs -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.Cqrs\bin\Debug\net10.0\QBrainAi.Cqrs.dll
+  QBrainAi.SessionLog.Transcripts -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.SessionLog.Transcripts\bin\Debug\net10.0\QBrainAi.SessionLog.Transcripts.dll
+  QBrainAi.Repl.Core -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.Repl.Core\bin\Debug\net10.0\QBrainAi.Repl.Core.dll
+  QBrainAi.Cqrs.Mvvm -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.Cqrs.Mvvm\bin\Debug\net10.0\QBrainAi.Cqrs.Mvvm.dll
+  QBrainAi.ServiceDefaults -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.ServiceDefaults\bin\Debug\net10.0\QBrainAi.ServiceDefaults.dll
+  QBrainAi.McpAgent -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.McpAgent\bin\Debug\net10.0\QBrainAi.McpAgent.dll
+  QBrainAi.Storage -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.Storage\bin\Debug\net10.0\QBrainAi.Storage.dll
+  QBrainAi.Storage.SqlServerMigrations -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.Storage.SqlServerMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqlServerMigrations.dll
+  QBrainAi.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.Storage.PostgreSqlMigrations\bin\Debug\net10.0\QBrainAi.Storage.PostgreSqlMigrations.dll
+  QBrainAi.Storage.SqliteMigrations -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.Storage.SqliteMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqliteMigrations.dll
+  QBrainAi.Services -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.Services\bin\Debug\net10.0\QBrainAi.Services.dll
+  QBrainAi.GraphRag -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.GraphRag\bin\Debug\net10.0\QBrainAi.GraphRag.dll
+  QBrainAi.Support.Mcp -> F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\src\QBrainAi.Support.Mcp\bin\Debug\net10.0\QBrainAi.Support.Mcp.dll
+F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0SqlNetworkMockGateTests.cs(54,21): error CS0542: 'Probe': member names cannot be the same as their enclosing type [F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\tests\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.csproj]
+
+Build FAILED.
+
+F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\tests\QBrainAi.Support.Mcp.Tests\Federation\Phase0\Phase0SqlNetworkMockGateTests.cs(54,21): error CS0542: 'Probe': member names cannot be the same as their enclosing type [F:\GitHub\McpServer\.worktrees\fedph0-task007-network-20261119\tests\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:08.55
