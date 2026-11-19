@@ -88,5 +88,12 @@
   "taskDone": false,
   "implementationBarrier": "Closed",
   "sessionId": "Codex-20261119T154036Z-plugin-session",
-  "requestId": "req-20261119T154151Z-prompt-cad2"
+  "requestId": "req-20261119T154151Z-prompt-cad2",
+  "retainedLinuxLogArchive": {
+    "path": "linux.nuke.log.zip",
+    "sha256": "4B3B3D6D32D96E0A002AD5E4EBA5643A712415902E11CA51C17BC6811CF9841D",
+    "reason": "Raw Nuke padded output has trailing whitespace; lossless archive preserves exact evidence without source diff whitespace.",
+    "decompressedSha256": "B8AB018C4924C80AAAEEBE009A570547BC38F12B6556CB1F56448949AAADFC43",
+    "originalPlaintextRetainedLocally": true
+  }
 }
