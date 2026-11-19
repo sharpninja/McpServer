@@ -76,7 +76,9 @@ internal interface IPhase0RemoteTransportProbe
 /// <summary>Approved-criterion assertions for all RPC channels, object requests and origin containment.</summary>
 /// <remarks>2026-11-18: TASK-FEDPH0-003; FR-MCP-185 ac-RawRemoteCannotBypassPublicationPolicy,
 /// ac-ForeignProjectCloneDenied/ac-RevokedCredentialFailsFetchAndPublish; TR-MCP-FEDERATION-012; TEST-MCP-233.
-/// Real binding remains pending; stock helper Authorization rejection is not masked by a custom header.</remarks>
+/// Real binding remains pending. 2026-11-19: Correct the native-header interpretation for the same FR/TR/ACs:
+/// upstream supports Proxy-Authorization bearer; the approved records do not mandate a relay header name.
+/// Header support alone establishes neither exact-origin containment nor native feasibility.</remarks>
 internal static class Phase0RemoteTransportContract
 {
     /// <summary>Checks the scenario against independently frozen refs and explicit wire expectations.</summary>
