@@ -1,0 +1,39 @@
+{
+  "timestampLocal": "2026-11-19T09:57:08.7750594-06:00",
+  "host": "PAYTON-LEGION2",
+  "worktree": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117",
+  "headBeforeCommit": "8fab52d42c7d3ac124356b373f35e5ab647a3662",
+  "sourceTreeDirty": true,
+  "runId": "20261119T095320-fedph0-repository-selector",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0RepositorySelectorMockGateTests --test-run-id 20261119T095320-fedph0-repository-selector",
+  "exitCode": 0,
+  "total": 2632,
+  "passed": 2632,
+  "failed": 0,
+  "skipped": 0,
+  "actualRows": 2632,
+  "correctControls": 188,
+  "negativeControls": 2444,
+  "sources": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RepositorySelectorMockGateTests.cs",
+      "lfSha256": "72B70C7162B3502B2DBEB0D7DFC8B02A8E2A78C0BA1019F1CC06D21AED033744",
+      "sha256": "CDF12F98B3616106EF8B9A15F7A97BDBA6A55902FB0A4F7850C2F0B05A94C95E"
+    }
+  ],
+  "trxSha256": "A742AEAB301349927D11D127DF470047BB0DF2E06D330BF26E20D8B10A0010FD",
+  "nukeLogSha256": "518204ED5909A45C33CBEC060995E93753B6358E1B81CDAA22E29966F93FFCD2",
+  "compileLogSha256": "77C253D8A9FB54AB73227835D962A4968D927237541D12630F1B3F08C0FAB062",
+  "logArchiveSha256": "A81823A55D71EAE81AB35E770F5F470FD22E7BAA5E063447EBB2D926F60AA9C3",
+  "receiptScriptSha256": "CC8AC1CCB6B9BB08BF3D2C5C61D5E5E20154D7C930FE224852EF6E91966A5AEB",
+  "trace": [
+    "TASK-FEDPH0-003",
+    "FR-MCP-185",
+    "TR-MCP-FEDERATION-012",
+    "TEST-MCP-233"
+  ],
+  "binding": "Scripted observations, no native gateway",
+  "nativeProof": false,
+  "taskReady": false,
+  "implementationBarrier": "Closed"
+}
