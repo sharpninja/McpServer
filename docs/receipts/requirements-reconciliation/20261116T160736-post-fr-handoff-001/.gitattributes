@@ -1,0 +1,2 @@
+# Preserve original receipt bytes for the recorded SHA256 and length manifests.
+*.json -text
