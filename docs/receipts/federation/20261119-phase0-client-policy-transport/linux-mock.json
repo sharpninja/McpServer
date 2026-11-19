@@ -1,0 +1,48 @@
+{
+  "timestampLocal": "2026-11-19T09:38:07.6259988-06:00",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117",
+  "commit": "0bc4009437dc84b1d99f36a1336f3163c7b24fab",
+  "runId": "20261119T093620-fedph0-client-policy-transport-linux",
+  "exitCode": 0,
+  "total": 6164,
+  "passed": 6164,
+  "failed": 0,
+  "skipped": 0,
+  "actualRows": 6164,
+  "correctControls": 269,
+  "negativeControls": 5895,
+  "sources": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0NativeClientMockGateTests.cs",
+      "sha256": "4082DB8E902627D77FAFD165E78A4258982C0CD21271E045BABF72A85EB617AA",
+      "lfSha256": "4082DB8E902627D77FAFD165E78A4258982C0CD21271E045BABF72A85EB617AA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0NativePolicyLifecycleMockGateTests.cs",
+      "sha256": "15B5AC52EA2E66FCD1EA7D79C7D77940FF8A0F94BA13084E6BEB2E7BB7CE77DD",
+      "lfSha256": "15B5AC52EA2E66FCD1EA7D79C7D77940FF8A0F94BA13084E6BEB2E7BB7CE77DD"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemoteTransportContract.cs",
+      "sha256": "4A63AB6E8855E15E5E494EAE592CAA21854BBE35E1A0E042AAEAD10149DD6BF2",
+      "lfSha256": "4A63AB6E8855E15E5E494EAE592CAA21854BBE35E1A0E042AAEAD10149DD6BF2"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemoteTransportMockGateTests.cs",
+      "sha256": "B0368F41B8B59D34611FD08C47AC80B62692B9C6AE6AF7CD8AB23A56DA571B84",
+      "lfSha256": "B0368F41B8B59D34611FD08C47AC80B62692B9C6AE6AF7CD8AB23A56DA571B84"
+    }
+  ],
+  "trx": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/TestResults/20261119T093620-fedph0-client-policy-transport-linux/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+  "trxSha256": "2B92A4C5C9BCB00A3A884DD91C089384DEF86D509B66C5DF145F91235B5703F2",
+  "nukeLog": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/.nuke/temp/build.2026-11-19_09-36-35.log",
+  "nukeLogSha256": "33CEEB4C31BC5A4C1B25055CC70F0508F29C8DFCD6BA606BA819D376EF043B12",
+  "runnerSha256": "24C5FDE1A343E4C029BE8968240A815EBDAAC513687FBE4275ED26757B6FFEE1",
+  "gitStatus": [],
+  "binding": "Independent scripted client/policy/transport observations only",
+  "nativeProof": false,
+  "taskReady": false,
+  "implementationBarrier": "Closed",
+  "sshExitCode": 0
+}
