@@ -1,0 +1,51 @@
+{
+  "timestampLocal": "2026-11-19T08:31:37.6884237-06:00",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117",
+  "commit": "47c826ac5b5143a0750ddb67677990ee1ee79848",
+  "runId": "20261119T082940-fedph0-identity-grammar-mock",
+  "exitCode": 0,
+  "total": 9973,
+  "passed": 9973,
+  "failed": 0,
+  "notExecuted": 0,
+  "actualResultRows": 9973,
+  "expectedNegativeControls": 7867,
+  "source": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityGrammarMockGateTests.cs",
+  "sourceSha256": "7EDAC6D2331F4A4A37B96AC524B21EBEB131D6CE8B3384CE1A354832CB940AC5",
+  "lfNormalizedSourceSha256": "7EDAC6D2331F4A4A37B96AC524B21EBEB131D6CE8B3384CE1A354832CB940AC5",
+  "trx": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/TestResults/20261119T082940-fedph0-identity-grammar-mock/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+  "trxSha256": "B957C4A5746ECF73B2506D8C1473829E59932E1FE051EF7D98B0AD918C7FB8BD",
+  "nukeLog": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/.nuke/temp/build.2026-11-19_08-30-11.log",
+  "nukeLogSha256": "806B12CC0E9B13BD73E2CFC4FDC85E5C5CC5049DCB25AB725C5E6C092CF8A8BD",
+  "runnerSha256": "5B034E95AE83060887111FA5DA1BA4D687FD83DFB331407A4FA11EC98E626289",
+  "gitStatus": [],
+  "binding": "Scripted proposed grammar mocks only",
+  "productionChanges": false,
+  "taskReady": false,
+  "implementationBarrier": "Closed",
+  "retainedCopies": [
+    {
+      "name": "linux.trx",
+      "sha256": "B957C4A5746ECF73B2506D8C1473829E59932E1FE051EF7D98B0AD918C7FB8BD"
+    },
+    {
+      "name": "linux-attachments.zip",
+      "entrySha256": "806B12CC0E9B13BD73E2CFC4FDC85E5C5CC5049DCB25AB725C5E6C092CF8A8BD",
+      "sha256": "1B708B1FF1D9B9395EE662FCFC6F95D6F8F2C64DFCBFD485120A56CE8037C7DD",
+      "entry": "linux-nuke.log"
+    }
+  ],
+  "windowsLfNormalizedSourceSha256": "7EDAC6D2331F4A4A37B96AC524B21EBEB131D6CE8B3384CE1A354832CB940AC5",
+  "assertionSourcesEqual": true,
+  "requirements": [
+    "FR-MCP-182",
+    "TR-MCP-FEDERATION-009",
+    "TEST-MCP-230"
+  ],
+  "limits": [
+    "Proposed grammar assertions against test-owned scripts only.",
+    "No production parser, allocator, native database or installed-plugin proof.",
+    "Task004 remains Planning; no B4 acceptance or phase exit."
+  ]
+}
