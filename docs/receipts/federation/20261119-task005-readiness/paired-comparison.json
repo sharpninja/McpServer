@@ -95,5 +95,26 @@
     "reason": "Raw Nuke padded output has trailing whitespace; lossless archive preserves exact evidence without source diff whitespace.",
     "decompressedSha256": "B8AB018C4924C80AAAEEBE009A570547BC38F12B6556CB1F56448949AAADFC43",
     "originalPlaintextRetainedLocally": true
+  },
+  "retainedWindowsLogArchive": {
+    "path": "windows.nuke.logs.zip",
+    "sha256": "A24DD9D7F8791DF678A046EE29500847AFC3839F44151189357D02EE02BCB4A9",
+    "contents": [
+      {
+        "entry": "windows-platform-management.trx.nuke.log",
+        "decompressedSha256": "660AEA9BDA02476F70676F03748403116789AB1316E54F0069BC85F80A9A13B8",
+        "originalPlaintextRetained": true
+      },
+      {
+        "entry": "windows-worker.trx.nuke.log",
+        "decompressedSha256": "3E61BC11869075F018F5E6759C4C0704A3D3584A65B941E4628D2B4B7049CCA7",
+        "originalPlaintextRetained": true
+      },
+      {
+        "entry": "windows-admission.trx.nuke.log",
+        "decompressedSha256": "B507BDC4506CF139CAF3E4A30872204D3F3E8FE843AA8930C6B9824190F9C8A2",
+        "originalPlaintextRetained": true
+      }
+    ]
   }
 }
