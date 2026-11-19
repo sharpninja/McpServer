@@ -1,0 +1,292 @@
+{
+  "timestampLocal": "2026-11-19T10:56:50",
+  "taskId": "TASK-FEDPH0-005",
+  "reviewedDefinition": {
+    "dependsOn": [],
+    "title": "B5: identity evidence on restored Duende 7.4 (absorbs MCP-FEDIDENTITY-001 design inputs)",
+    "note": "TaskStatus=Planning; Stage=DesignAndMock; ImplementationBarrier=Closed; Partial authorization mock evidence: docs/receipts/federation/20261117-phase0-authorization/mock-gate.json and linux-mock.json; Windows and Linux 275 passed/0 failed/0 skipped (260 negative controls). Source 06cfd917; evidence 1144ce04. Revocation, SQL-permission and offline-local assertions only; exact restored Duende 7.4 binary issuance/introspection/grant removal, repeated-request caching and identity/provider binding remain pending.\n2026-11-18 supporting B5 metadata checkpoint: retained SQLite relational observations for ASP.NET Identity and proposed Duende configuration/operational contexts with existing pinned binary hashes, table/column/index metadata and same-binary InMemory differences. Files relational-identity-sqlite-model-r2.json, relational-configuration-sqlite-model-r2.json, relational-operational-sqlite-model-r2.json and relational-model-comparison-r1.json under docs/receipts/federation/20261117-phase0-source-catalog; commit92de3750. NoDB open,SQL,migration, issuance/introspection/revocation or actual DI/store durability proof. B5/native identity compatibility and acceptance remain unproven. TaskStatus=Planning; ImplementationBarrier=Closed; done=false.\n2026-11-19 Task005 design/mock candidate: branch codex/fedph0-task005-20261119; tested source74bbc8120757467372821a40af998594b2b5c55f. Complete current-definition supplement in docs/plans/2026-11-17-federation-identity-platform-design.md; new management/admission/worker permission contracts plus canonical platform scope repair. Windows and isolated LAB each2733passed/0failed/0skipped; matching case-name multiset SHA256 D143C41BE232AF80684965BD7B9CB146A0DE807C6B2FFF8BAB49DCCD593E71CC and9normalized source hashes. Full retained evidence docs/receipts/federation/20261119-task005-readiness/{windows-mock.json,linux-mock.json,paired-comparison.json}, raw TRX/logs. Candidate reuses Task003 backend/transport, Task006 owning-gate sourceb7cfbf30302d492c12e8366fccde9b78b1074a6c and Task007 credential/TLS seams; parent must verify integrated complete current definition before Ready. Mocks prove assertions, not native identity/SQL/issuer/provider/header behavior or B5 acceptance. TaskStatus=Planning; Stage=DesignAndMock; ImplementationBarrier=Closed; done=false. Session Codex-20261119T154036Z-plugin-session/request req-20261119T154151Z-prompt-cad2.",
+    "technicalRequirements": [
+      "TR-MCP-FEDERATION-012"
+    ],
+    "functionalRequirements": [
+      "FR-MCP-185"
+    ],
+    "priority": "high",
+    "section": "Federation",
+    "done": false,
+    "implementationTasks": [],
+    "description": [
+      "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH0-001 (groupOrdinal 5).",
+      "Task status: Planning. Eligibility: canStart=false, reasons=ImplementationBarrierClosed, incompleteDependencyCount=0. Design and mock-green work may proceed now; Planning to Ready requires that evidence (architecture 3.5.11).",
+      "Depends on (typed Task/Group targets): none.",
+      "FR/AC coverage: FR-MCP-185: RevokedNodeCannotPublish, LocalAppUserCannotPush.",
+      "TR constraints: TR-MCP-FEDERATION-012. TEST: TEST-MCP-233.",
+      "Work: Exact restored Duende 7.4 patch and source-tag/API references; issuance/introspection/revocation tests on that package; client-per-node/owner binding, reference tokens and scopes, gateway introspection/revocation, backend-only Dolt credentials, worker-only remote procedures, rotation/revocation. Hosts get user management, nodes are single-user and authenticate to the hub through Identity Server (MCP-FEDIDENTITY-001). Credentials never appear in commands, logs, chat, memory or commits.",
+      "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15. Linked: MCP-FEDIDENTITY-001."
+    ],
+    "id": "TASK-FEDPH0-005",
+    "technicalDetails": []
+  },
+  "behaviorDefinitionFields": {
+    "id": "TASK-FEDPH0-005",
+    "title": "B5: identity evidence on restored Duende 7.4 (absorbs MCP-FEDIDENTITY-001 design inputs)",
+    "description": [
+      "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH0-001 (groupOrdinal 5).",
+      "Depends on (typed Task/Group targets): none.",
+      "FR/AC coverage: FR-MCP-185: RevokedNodeCannotPublish, LocalAppUserCannotPush.",
+      "TR constraints: TR-MCP-FEDERATION-012. TEST: TEST-MCP-233.",
+      "Work: Exact restored Duende 7.4 patch and source-tag/API references; issuance/introspection/revocation tests on that package; client-per-node/owner binding, reference tokens and scopes, gateway introspection/revocation, backend-only Dolt credentials, worker-only remote procedures, rotation/revocation. Hosts get user management, nodes are single-user and authenticate to the hub through Identity Server (MCP-FEDIDENTITY-001). Credentials never appear in commands, logs, chat, memory or commits.",
+      "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15. Linked: MCP-FEDIDENTITY-001."
+    ],
+    "dependsOn": [],
+    "functionalRequirements": [
+      "FR-MCP-185"
+    ],
+    "technicalRequirements": [
+      "TR-MCP-FEDERATION-012"
+    ]
+  },
+  "behaviorDefinitionSha256": "6FC8309525D8F7291F9E92A9B512DDE56DEE8D0C3CA2CDCFF7886EA25CA7593D",
+  "definitionPolicy": "Simulated TODO has no deployed WorkTask Version. Fingerprint excludes only state/eligibility metadata and historical note.",
+  "canonicalRecords": [
+    {
+      "title": "scoped authorization and offline behavior",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+          "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ForeignProjectCloneDenied",
+          "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedNodeCannotPublish",
+          "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OfflineLocalAuthorizationStillApplies",
+          "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-LocalAppUserCannotPush",
+          "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedCredentialFailsFetchAndPublish",
+          "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SqlPortUnreachableAcrossLink",
+          "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnknownCertificatePinRejected",
+          "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PluginLeastPrivilegeDenial",
+          "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "FR-MCP-185",
+      "status": "pending",
+      "body": "Reuse integrated IdentityServer for single-user node ownership, per-node client credentials, project scopes and revocation; preserve authorized offline work.\n\nServer: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization."
+    },
+    {
+      "title": "scoped authorization and offline behavior contract",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+          "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ForeignProjectCloneDenied",
+          "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedNodeCannotPublish",
+          "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OfflineLocalAuthorizationStillApplies",
+          "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-LocalAppUserCannotPush",
+          "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedCredentialFailsFetchAndPublish",
+          "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SqlPortUnreachableAcrossLink",
+          "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnknownCertificatePinRejected",
+          "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PluginLeastPrivilegeDenial",
+          "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "TR-MCP-FEDERATION-012",
+      "status": "pending",
+      "body": "Reuse existing Duende IdentityServer. Provision client fed.node.{NodeId} per single-user node, bound to ownerSubjectId through authenticated operator enrollment. Client credentials issue short-lived reference access tokens; audience qbrain-federation and scopes fed.project.{ProjectId}.{read|publish|control|audit|enroll}; protected actions additionally require server membership/branch permission. Gateway introspects without positive caching for each new request and rechecks before publication commit; unavailable identity returns503 identity_unavailable. Revoke through IdentityServer: disable client and remove its persisted reference grants. Gateway rejects inactive tokens401 invalid_token; do not invent a revocation ledger. Native remotesapi uses gateway-held credentials over loopback; clients cannot access it directly. Ph0 proves token injection/relay including redirects/object URLs, project isolation and no public-ref bypass.\n\nServer: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization.\n\nPh0 B5 binds the exact restored Duende 7.4 patch and matching source-tag/API references, and proves issuance, introspection, grant removal and revocation against that binary. General/v8 documentation alone cannot close B5."
+    },
+    {
+      "title": "scoped authorization and offline behavior acceptance tests",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+          "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ForeignProjectCloneDenied",
+          "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedNodeCannotPublish",
+          "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OfflineLocalAuthorizationStillApplies",
+          "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-LocalAppUserCannotPush",
+          "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedCredentialFailsFetchAndPublish",
+          "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SqlPortUnreachableAcrossLink",
+          "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnknownCertificatePinRejected",
+          "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PluginLeastPrivilegeDenial",
+          "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs."
+        }
+      ],
+      "priority": "high",
+      "workspaceId": "F:/GitHub/McpServer",
+      "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+      "scopeStartLayerKey": "layer-1",
+      "condition": "Verify FR-MCP-185 and TR-MCP-FEDERATION-012 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "id": "TEST-MCP-233",
+      "status": "pending"
+    }
+  ],
+  "candidateCommit": "255502cada08437e562ab772142512560619177f",
+  "testedSourceCommit": "74bbc8120757467372821a40af998594b2b5c55f",
+  "pairedReceipt": "docs/receipts/federation/20261119-task005-readiness/paired-comparison.json",
+  "windowsPassed": 2733,
+  "linuxPassed": 2733,
+  "failed": 0,
+  "skipped": 0,
+  "orderedCaseNameSha256": "D143C41BE232AF80684965BD7B9CB146A0DE807C6B2FFF8BAB49DCCD593E71CC",
+  "rawTrxArchive": "docs/receipts/federation/20261119-portable-trx/task-fedph0-005-originals.zip",
+  "rawTrxArchiveSha256": "679A779CDD03AF0353B097E29FEADC47355696596823F84A165624C08698D9B9",
+  "sourcePins": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemoteTransportContract.cs",
+      "lfSha256": "4A63AB6E8855E15E5E494EAE592CAA21854BBE35E1A0E042AAEAD10149DD6BF2"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemoteTransportMockGateTests.cs",
+      "lfSha256": "B0368F41B8B59D34611FD08C47AC80B62692B9C6AE6AF7CD8AB23A56DA571B84"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0Task006SupplementContract.cs",
+      "lfSha256": "1BC8B06C09438510BD2A0304F2D38139552C12849123F512868303F05EF375FA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0Task006SupplementMockGateTests.cs",
+      "lfSha256": "9CF19991880B738A0AB5BCAE7FDFA615EDCB9DA59C0B6016F2431972FCDE63CA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RecoverySecurityContract.cs",
+      "lfSha256": "60E9F403461B05C293A3DA108161037EDF44D4ECCE918D4B966BB021137AB8DA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RecoverySecurityMockGateTests.cs",
+      "lfSha256": "8253BB3871EAE579C00ADAB3F08D442B0112379AFF881BCF15D6BFFE800F5885"
+    }
+  ],
+  "siblingEvidence": [
+    {
+      "evidence": "3a926c96620b922ab44ea8d669e2fae5cff59fb3",
+      "pairedPassed": 9770,
+      "taskId": "TASK-FEDPH0-003",
+      "source": "f56c3111e1250851f5f462b9f08e8bbbd2bb4b3d"
+    },
+    {
+      "evidence": "95392d0a11b1e8e4e71c8d00fa2dd6ab46d0b188",
+      "pairedPassed": 22071,
+      "taskId": "TASK-FEDPH0-006",
+      "source": "39cec6a7f4edce45ffa8d18c916c676a00d8f5e6"
+    },
+    {
+      "reusedClass": "Phase0RecoverySecurityMockGateTests",
+      "evidence": "9455bf86c30929475252728da0dd21715b1a5b4e",
+      "taskId": "TASK-FEDPH0-007",
+      "scope": "Existing credential/TLS assertions only; whole Task007 readiness remains separately adjudicated."
+    }
+  ],
+  "independentReview": {
+    "agent": "Codex",
+    "finiteLocalDesignMockGaps": 0,
+    "sessionId": "Codex-20261119T154121Z-plugin-session",
+    "requestId": "req-20261119T162634Z-turn-0208",
+    "reportedReadback": "completed;9decisions5actions2dialogs,responseExact"
+  },
+  "authorSessionId": "Codex-20261116T174245Z-plugin-session",
+  "authorRequestId": "req-20261119T155309Z-prompt-142e",
+  "recommendation": "Ready eligibility only after evidence commit; done remains false and all-nine implementation barrier stays Closed.",
+  "nativeProof": false,
+  "b5Accepted": false,
+  "taskSuccess": false,
+  "hvRun": false
+}
