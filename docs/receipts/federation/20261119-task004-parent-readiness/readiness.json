@@ -1,0 +1,312 @@
+{
+  "timestampLocal": "2026-11-19T11:52:57.0674344-06:00",
+  "taskId": "TASK-FEDPH0-004",
+  "sourceCommit": "53537aaf25e3ac4425f532ad2c6faff01099c095",
+  "behaviorDefinitionFields": {
+    "id": "TASK-FEDPH0-004",
+    "title": "B2-B4: writer/entity classification, context topology, node-tagged ID grammar",
+    "description": [
+      "ItemKind: Task (simulated WorkTask). Parent TODO (TodoId): PLAN-FEDDOLT-001. Task Group: GRP-FEDPH0-001 (groupOrdinal 4).",
+      "Depends on (typed Task/Group targets): none.",
+      "FR/AC coverage: FR-MCP-184: BackgroundWritersDoNotDirtyVersionedBranch; FR-MCP-182: TwoNodesCreateDistinctIds, LegacyIdsRemainValid.",
+      "TR constraints: TR-MCP-FEDERATION-009, TR-MCP-FEDERATION-011. TEST: TEST-MCP-230, TEST-MCP-232.",
+      "Work: B2 every entity, relationship, interactive/automatic writer and auto-updated column (session capture stays operational). B3 standalone McpDbContext versus Dolt-only project/control context topology, additive migration chains and soft-reference validators. B4 exact two-character node-tag ID grammar per family, legacy compatibility, sort/display, parser/plugin/traceability changes and allocator behavior.",
+      "Source: docs/plans/2026-11-10-federation-dolt-bdpv4.md; amendment section 15."
+    ],
+    "dependsOn": [],
+    "functionalRequirements": [
+      "FR-MCP-184",
+      "FR-MCP-182"
+    ],
+    "technicalRequirements": [
+      "TR-MCP-FEDERATION-009",
+      "TR-MCP-FEDERATION-011"
+    ]
+  },
+  "behaviorDefinitionSha256": "D8625AFFA6068966DA05635C5AE27AE0C6DE45292463355EDDC194DF9C2DAB73",
+  "definitionPolicy": "Simulated TODO has no deployed WorkTask Version. Hash excludes only status/eligibility metadata; exact reviewed snapshot is retained separately.",
+  "windows": {
+    "host": "PAYTON-LEGION2",
+    "runId": "20261119T114452-task004-integrated",
+    "exitCode": 0,
+    "total": 30608,
+    "passed": 30608,
+    "failed": 0,
+    "skipped": 0,
+    "classCounts": [
+      {
+        "class": "Phase0AllocatorSafetyMockGateTests",
+        "count": 375
+      },
+      {
+        "class": "Phase0AutomaticWriterMockGateTests",
+        "count": 5724
+      },
+      {
+        "class": "Phase0IdentityDiagnosticsMockGateTests",
+        "count": 83
+      },
+      {
+        "class": "Phase0IdentityDtoBoundaryMockGateTests",
+        "count": 272
+      },
+      {
+        "class": "Phase0IdentityGrammarMockGateTests",
+        "count": 9973
+      },
+      {
+        "class": "Phase0IdentityIsolationMockGateTests",
+        "count": 270
+      },
+      {
+        "class": "Phase0IdentityLifecycleMockGateTests",
+        "count": 137
+      },
+      {
+        "class": "Phase0IdentityReconciliationMockGateTests",
+        "count": 466
+      },
+      {
+        "class": "Phase0ReferenceManifestMockGateTests",
+        "count": 13308
+      }
+    ],
+    "sources": [
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityIsolationMockGateTests.cs",
+        "sha256": "9F1E581070B16DD70838ED05D8A59C0E0CB3E7816E317E0471784FFD4572DC76",
+        "lfSha256": "F5A3A95683C21EC367AEA4B93B8ADEFBD364BA4A01DD219AF48C17D095F46DF8"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityIsolationContract.cs",
+        "sha256": "EE1B37B7D0C4602EEADBB771C8DDFB5B5B961C69FAFCE3A680E4C3FE8B8E1F01",
+        "lfSha256": "0F6F47012921F5AC46CD1DDF990B337BEF0650C1BBE942A4E37F57E87A921118"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityLifecycleMockGateTests.cs",
+        "sha256": "B2708C64711E7F7CCF89C1BE296F29C8ED1B6BDD351CAC4AB3753A8B5B623FFE",
+        "lfSha256": "FD1BD268C104E1B7E2B8F1B488E60FF9199701260C236F5D174E6D2D34D4ECA2"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityLifecycleContract.cs",
+        "sha256": "BA0E924CC658D1F9FB8B87C2DA028F0E6B7DF1423C17E3AB1A756B278CB2A10A",
+        "lfSha256": "D514F1520DA9B73534487CECDA40C4397C4B2537BCB7FE95149B3095AD1B161D"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityReconciliationMockGateTests.cs",
+        "sha256": "6C64A984B25CA5E0F7319C176A9C142A841BA8634EECE2834904A4EBE8105D3F",
+        "lfSha256": "9E7CCFB579B2671EE168EEAB2F390910E0A9F60DA4ECE52642E1271BB747B37B"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityReconciliationContract.cs",
+        "sha256": "C0E32A47CC252BECB106D846E583DA6DFCDDC81167A5CDF537A88B0F2FC0CCB9",
+        "lfSha256": "5A3EB9F6EBB978D49990848C9A57376850024D768D3149E525823ECE5C8FD11A"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityDiagnosticsMockGateTests.cs",
+        "sha256": "01AECB5761D7F288EF59AF6A7470FDA06F51F86685764D93A70DF35696C4AE40",
+        "lfSha256": "E4254D68B05B132B91883D2F8F693EDAD885018810D98760B0921AD2A875FB41"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityDiagnosticsContract.cs",
+        "sha256": "AB2AC2F005D21E6D2ED456F1CD45D72E37EFE7300F84D3769DAAFD8DB2964ABF",
+        "lfSha256": "92D9D58A55F9ECECF22C566BF89E1D5A7AF0DF8BEEFF3FF85CD6028E031707E5"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityGrammarMockGateTests.cs",
+        "sha256": "F4AF7750A26F2DB7DE04FD9DE7690C119534A8C08ED046C34D591179FF52E060",
+        "lfSha256": "7EDAC6D2331F4A4A37B96AC524B21EBEB131D6CE8B3384CE1A354832CB940AC5"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AutomaticWriterMockGateTests.cs",
+        "sha256": "F5E9A295C0D569686C82BD50AECB9370C6ECA84B44BDB663330EFA55217B9A27",
+        "lfSha256": "1FA2B4F980BCFBE34659B9EDED30E9E0119FAEA7AF4CCB2BB61D2BD8ED83BE5C"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AutomaticWriterContract.cs",
+        "sha256": "2284C951A4D82688A05CC5D0637A8672D9C9CF1E5C6F741AF10D5049E2B30345",
+        "lfSha256": "FEF12A6C96EB420B1469BF6098607B61FD2AE5424F51C90E75BA9FEAFAB2B822"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AllocatorSafetyMockGateTests.cs",
+        "sha256": "36B231EED2103A7480E8A504085A10E905BB231BA3C49F37ECE76829E60DDC42",
+        "lfSha256": "36B231EED2103A7480E8A504085A10E905BB231BA3C49F37ECE76829E60DDC42"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityDtoBoundaryMockGateTests.cs",
+        "sha256": "86E9D604F628D6CD8825AA60D4E063CA0BC70FC1E93B38E388CF3D82F4332807",
+        "lfSha256": "86E9D604F628D6CD8825AA60D4E063CA0BC70FC1E93B38E388CF3D82F4332807"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ReferenceManifestMockGateTests.cs",
+        "sha256": "6FBCB6A33CCD8C761BC1F1D0FCFF526E61B8D38751D4E3ED77F8FA1BA3DA0F7C",
+        "lfSha256": "6FBCB6A33CCD8C761BC1F1D0FCFF526E61B8D38751D4E3ED77F8FA1BA3DA0F7C"
+      }
+    ],
+    "caseNamesSha256": "80231843470D99F6512D0287E09EA7B12951370600985CB6E1DA2787C8802340",
+    "trxSha256": "C3EFFF0C311EFD2FEC1AD800C709F53BFAD7CBDE7FB37491C62C4415EBEF4F63",
+    "nukeLogSha256": "E11DD2891CA39F4E7A6D64737D2F8BC3B11FC32F397A10F6446F38A972EC1445"
+  },
+  "linux": {
+    "kind": "FederationMemberMockReceipt",
+    "timestampLocal": "2026-11-19T11:52:27.5860568-06:00",
+    "host": "LAB-OMARCHY",
+    "worktree": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117",
+    "commit": "53537aaf25e3ac4425f532ad2c6faff01099c095",
+    "runId": "20261119T114819-task004-integrated-linux",
+    "classSelection": "Phase0IdentityIsolationMockGateTests,Phase0IdentityLifecycleMockGateTests,Phase0IdentityReconciliationMockGateTests,Phase0IdentityDiagnosticsMockGateTests,Phase0IdentityGrammarMockGateTests,Phase0AutomaticWriterMockGateTests,Phase0AllocatorSafetyMockGateTests,Phase0IdentityDtoBoundaryMockGateTests,Phase0ReferenceManifestMockGateTests",
+    "exitCode": 0,
+    "total": 30608,
+    "passed": 30608,
+    "failed": 0,
+    "skipped": 0,
+    "actualRows": 30608,
+    "classCounts": [
+      {
+        "class": "Phase0AllocatorSafetyMockGateTests",
+        "count": 375
+      },
+      {
+        "class": "Phase0AutomaticWriterMockGateTests",
+        "count": 5724
+      },
+      {
+        "class": "Phase0IdentityDiagnosticsMockGateTests",
+        "count": 83
+      },
+      {
+        "class": "Phase0IdentityDtoBoundaryMockGateTests",
+        "count": 272
+      },
+      {
+        "class": "Phase0IdentityGrammarMockGateTests",
+        "count": 9973
+      },
+      {
+        "class": "Phase0IdentityIsolationMockGateTests",
+        "count": 270
+      },
+      {
+        "class": "Phase0IdentityLifecycleMockGateTests",
+        "count": 137
+      },
+      {
+        "class": "Phase0IdentityReconciliationMockGateTests",
+        "count": 466
+      },
+      {
+        "class": "Phase0ReferenceManifestMockGateTests",
+        "count": 13308
+      }
+    ],
+    "sources": [
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityIsolationMockGateTests.cs",
+        "sha256": "F5A3A95683C21EC367AEA4B93B8ADEFBD364BA4A01DD219AF48C17D095F46DF8",
+        "lfSha256": "F5A3A95683C21EC367AEA4B93B8ADEFBD364BA4A01DD219AF48C17D095F46DF8"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityIsolationContract.cs",
+        "sha256": "0F6F47012921F5AC46CD1DDF990B337BEF0650C1BBE942A4E37F57E87A921118",
+        "lfSha256": "0F6F47012921F5AC46CD1DDF990B337BEF0650C1BBE942A4E37F57E87A921118"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityLifecycleMockGateTests.cs",
+        "sha256": "FD1BD268C104E1B7E2B8F1B488E60FF9199701260C236F5D174E6D2D34D4ECA2",
+        "lfSha256": "FD1BD268C104E1B7E2B8F1B488E60FF9199701260C236F5D174E6D2D34D4ECA2"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityLifecycleContract.cs",
+        "sha256": "D514F1520DA9B73534487CECDA40C4397C4B2537BCB7FE95149B3095AD1B161D",
+        "lfSha256": "D514F1520DA9B73534487CECDA40C4397C4B2537BCB7FE95149B3095AD1B161D"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityReconciliationMockGateTests.cs",
+        "sha256": "9E7CCFB579B2671EE168EEAB2F390910E0A9F60DA4ECE52642E1271BB747B37B",
+        "lfSha256": "9E7CCFB579B2671EE168EEAB2F390910E0A9F60DA4ECE52642E1271BB747B37B"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityReconciliationContract.cs",
+        "sha256": "5A3EB9F6EBB978D49990848C9A57376850024D768D3149E525823ECE5C8FD11A",
+        "lfSha256": "5A3EB9F6EBB978D49990848C9A57376850024D768D3149E525823ECE5C8FD11A"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityDiagnosticsMockGateTests.cs",
+        "sha256": "E4254D68B05B132B91883D2F8F693EDAD885018810D98760B0921AD2A875FB41",
+        "lfSha256": "E4254D68B05B132B91883D2F8F693EDAD885018810D98760B0921AD2A875FB41"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityDiagnosticsContract.cs",
+        "sha256": "92D9D58A55F9ECECF22C566BF89E1D5A7AF0DF8BEEFF3FF85CD6028E031707E5",
+        "lfSha256": "92D9D58A55F9ECECF22C566BF89E1D5A7AF0DF8BEEFF3FF85CD6028E031707E5"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityGrammarMockGateTests.cs",
+        "sha256": "7EDAC6D2331F4A4A37B96AC524B21EBEB131D6CE8B3384CE1A354832CB940AC5",
+        "lfSha256": "7EDAC6D2331F4A4A37B96AC524B21EBEB131D6CE8B3384CE1A354832CB940AC5"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AutomaticWriterMockGateTests.cs",
+        "sha256": "1FA2B4F980BCFBE34659B9EDED30E9E0119FAEA7AF4CCB2BB61D2BD8ED83BE5C",
+        "lfSha256": "1FA2B4F980BCFBE34659B9EDED30E9E0119FAEA7AF4CCB2BB61D2BD8ED83BE5C"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AutomaticWriterContract.cs",
+        "sha256": "FEF12A6C96EB420B1469BF6098607B61FD2AE5424F51C90E75BA9FEAFAB2B822",
+        "lfSha256": "FEF12A6C96EB420B1469BF6098607B61FD2AE5424F51C90E75BA9FEAFAB2B822"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0AllocatorSafetyMockGateTests.cs",
+        "sha256": "36B231EED2103A7480E8A504085A10E905BB231BA3C49F37ECE76829E60DDC42",
+        "lfSha256": "36B231EED2103A7480E8A504085A10E905BB231BA3C49F37ECE76829E60DDC42"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0IdentityDtoBoundaryMockGateTests.cs",
+        "sha256": "86E9D604F628D6CD8825AA60D4E063CA0BC70FC1E93B38E388CF3D82F4332807",
+        "lfSha256": "86E9D604F628D6CD8825AA60D4E063CA0BC70FC1E93B38E388CF3D82F4332807"
+      },
+      {
+        "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0ReferenceManifestMockGateTests.cs",
+        "sha256": "6FBCB6A33CCD8C761BC1F1D0FCFF526E61B8D38751D4E3ED77F8FA1BA3DA0F7C",
+        "lfSha256": "6FBCB6A33CCD8C761BC1F1D0FCFF526E61B8D38751D4E3ED77F8FA1BA3DA0F7C"
+      }
+    ],
+    "caseNamesSha256": "80231843470D99F6512D0287E09EA7B12951370600985CB6E1DA2787C8802340",
+    "trx": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/TestResults/20261119T114819-task004-integrated-linux/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+    "trxSha256": "166497EFCC1D5842EE008331019568C9D76D79E06E160C1D4947BE692ED43B49",
+    "nukeLog": "/home/sharpninja/github/McpServer/.worktrees/federation-phase0-mock-20261117/.nuke/temp/build.2026-11-19_11-48-44.log",
+    "nukeLogSha256": "0AD5FA53237FCA1665618BB8EE07C554697A46A753DB5AD654168496DE5FBFEC",
+    "runnerSha256": "DE8B8FC4B69CC375B60BAB3B01B028E32931AFDDB9CB10257F8E0E5F1C173CCA",
+    "nativeProof": false,
+    "taskSuccess": false,
+    "implementationBarrier": "Closed"
+  },
+  "sshExitCode": 0,
+  "archive": "paired-trx-and-logs.zip",
+  "archiveSha256": "D74A764AFA48750A9D2F2909D7EDE3007D05C914137BBFEB627A4199D5263379",
+  "archiveEntries": [
+    {
+      "name": "windows.trx",
+      "sha256": "C3EFFF0C311EFD2FEC1AD800C709F53BFAD7CBDE7FB37491C62C4415EBEF4F63"
+    },
+    {
+      "name": "windows-nuke.log",
+      "sha256": "E11DD2891CA39F4E7A6D64737D2F8BC3B11FC32F397A10F6446F38A972EC1445"
+    },
+    {
+      "name": "linux.trx",
+      "sha256": "166497EFCC1D5842EE008331019568C9D76D79E06E160C1D4947BE692ED43B49"
+    },
+    {
+      "name": "linux-nuke.log",
+      "sha256": "0AD5FA53237FCA1665618BB8EE07C554697A46A753DB5AD654168496DE5FBFEC"
+    }
+  ],
+  "authorSessionId": "Codex-20261116T174245Z-plugin-session",
+  "authorRequestId": "req-20261119T171914Z-prompt-0659",
+  "receiptScriptSha256": "E83234C7E917F9EEF6606C9FBF17923CFABC650F6B9A240546FFB7A3EF5CE373",
+  "nativeProof": false,
+  "taskSuccess": false,
+  "implementationBarrier": "Closed",
+  "scope": "Complete current-definition scripted design/mock member gate only"
+}
