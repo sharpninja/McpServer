@@ -1,0 +1,228 @@
+{
+  "layer": {
+    "workspaceId": "F:/GitHub/McpServer",
+    "createdAtUtc": {
+      "date": "2026-06-28T00:00:00.0000000",
+      "microsecond": 394,
+      "dayOfWeek": "Sunday",
+      "year": 2026,
+      "dateTime": "2026-06-28T06:17:12.0983940",
+      "day": 28,
+      "totalOffsetMinutes": 0,
+      "offset": "00:00:00",
+      "dayOfYear": 179,
+      "timeOfDay": "06:17:12.0983940",
+      "hour": 6,
+      "ticks": 639182242320983940,
+      "nanosecond": 0,
+      "minute": 17,
+      "millisecond": 98,
+      "month": 6,
+      "utcDateTime": "2026-06-28T06:17:12.0983940Z",
+      "second": 12,
+      "localDateTime": "2026-06-28T01:17:12.0983940-05:00",
+      "utcTicks": 639182242320983940
+    },
+    "name": "Layer 1",
+    "order": 1,
+    "key": "layer-1",
+    "updatedAtUtc": {
+      "date": "2026-06-28T00:00:00.0000000",
+      "microsecond": 394,
+      "dayOfWeek": "Sunday",
+      "year": 2026,
+      "dateTime": "2026-06-28T06:17:12.0983940",
+      "day": 28,
+      "totalOffsetMinutes": 0,
+      "offset": "00:00:00",
+      "dayOfYear": 179,
+      "timeOfDay": "06:17:12.0983940",
+      "hour": 6,
+      "ticks": 639182242320983940,
+      "nanosecond": 0,
+      "minute": 17,
+      "millisecond": 98,
+      "month": 6,
+      "utcDateTime": "2026-06-28T06:17:12.0983940Z",
+      "second": 12,
+      "localDateTime": "2026-06-28T01:17:12.0983940-05:00",
+      "utcTicks": 639182242320983940
+    }
+  },
+  "technical": [
+    {
+      "title": "scoped authorization and offline behavior contract",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+          "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ForeignProjectCloneDenied",
+          "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedNodeCannotPublish",
+          "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OfflineLocalAuthorizationStillApplies",
+          "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-LocalAppUserCannotPush",
+          "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedCredentialFailsFetchAndPublish",
+          "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SqlPortUnreachableAcrossLink",
+          "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnknownCertificatePinRejected",
+          "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PluginLeastPrivilegeDenial",
+          "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "TR-MCP-FEDERATION-012",
+      "status": "pending",
+      "body": "Reuse existing Duende IdentityServer. Provision client fed.node.{NodeId} per single-user node, bound to ownerSubjectId through authenticated operator enrollment. Client credentials issue short-lived reference access tokens; audience qbrain-federation and scopes fed.project.{ProjectId}.{read|publish|control|audit|enroll}; protected actions additionally require server membership/branch permission. Gateway introspects without positive caching for each new request and rechecks before publication commit; unavailable identity returns503 identity_unavailable. Revoke through IdentityServer: disable client and remove its persisted reference grants. Gateway rejects inactive tokens401 invalid_token; do not invent a revocation ledger. Native remotesapi uses gateway-held credentials over loopback; clients cannot access it directly. Ph0 proves token injection/relay including redirects/object URLs, project isolation and no public-ref bypass.\n\nServer: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization.\n\nPh0 B5 binds the exact restored Duende 7.4 patch and matching source-tag/API references, and proves issuance, introspection, grant removal and revocation against that binary. General/v8 documentation alone cannot close B5."
+    }
+  ],
+  "timestampLocal": "2026-11-19T09:57:08.4429044-06:00",
+  "functional": [
+    {
+      "title": "scoped authorization and offline behavior",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+          "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ForeignProjectCloneDenied",
+          "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedNodeCannotPublish",
+          "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OfflineLocalAuthorizationStillApplies",
+          "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-LocalAppUserCannotPush",
+          "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedCredentialFailsFetchAndPublish",
+          "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SqlPortUnreachableAcrossLink",
+          "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnknownCertificatePinRejected",
+          "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PluginLeastPrivilegeDenial",
+          "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs."
+        }
+      ],
+      "priority": "medium",
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:/GitHub/McpServer",
+      "id": "FR-MCP-185",
+      "status": "pending",
+      "body": "Reuse integrated IdentityServer for single-user node ownership, per-node client credentials, project scopes and revocation; preserve authorized offline work.\n\nServer: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization."
+    }
+  ],
+  "testing": [
+    {
+      "title": "scoped authorization and offline behavior acceptance tests",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-RawRemoteCannotBypassPublicationPolicy",
+          "text": "Given A has a valid Atlas token, when A addresses the private backend across the link, then the connection fails; when a read-only token attempts a public-main mutation, then403 unauthorized_project; when a publish-authorized token bypasses publication.accept through a raw public-ref push, then409 publication_required. In all three cases remote/main remains C0."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-ForeignProjectCloneDenied",
+          "text": "Given token has Atlas.read but no SecretProject scope, when a remote fetch requests SecretProject, then403 unauthorized_project sends zero objects."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedNodeCannotPublish",
+          "text": "Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-OfflineLocalAuthorizationStillApplies",
+          "text": "Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-LocalAppUserCannotPush",
+          "text": "Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-RevokedCredentialFailsFetchAndPublish",
+          "text": "Given IdentityServer revocation completes, when A starts new fetch and publish requests with its old token, then both return401 invalid_token before transfer or ref mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-SqlPortUnreachableAcrossLink",
+          "text": "Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-UnknownCertificatePinRejected",
+          "text": "Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-PluginLeastPrivilegeDenial",
+          "text": "Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs."
+        }
+      ],
+      "priority": "high",
+      "workspaceId": "F:/GitHub/McpServer",
+      "notes": "Revision audit remediation 2026-11-10. Current source and full walkthrough restored; all criteria pending implementation. No new HV claimed.",
+      "scopeStartLayerKey": "layer-1",
+      "condition": "Verify FR-MCP-185 and TR-MCP-FEDERATION-012 using the exact pending Given/When/Then criteria below, including restored plugin obligations where applicable. Current plus prior Byrd gates require zero failures and zero skips.",
+      "id": "TEST-MCP-233",
+      "status": "pending"
+    }
+  ]
+}
