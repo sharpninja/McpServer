@@ -2,6 +2,14 @@ using System.Text.Json;
 
 namespace QBrainAi.Support.Mcp.Tests.Federation.Phase0;
 
+/// <summary>Immutable nonsecret launch inputs configured before observing the native client.</summary>
+/// <param name="Executable">Inventory-verified absolute PowerShell executable.</param>
+/// <param name="ScriptPath">Absolute helper path inside the disposable run root.</param>
+/// <param name="Origin">Configured canonical HTTPS gateway origin.</param><param name="Pipe">Nonsecret broker reference.</param>
+/// <remarks>2026-11-19: TASK-FEDPH0-003; FR-MCP-185; TR-MCP-FEDERATION-012; TEST-MCP-233.
+/// Corrects example-path coupling so real adapters assert actual configured run-specific inputs.</remarks>
+internal sealed record Phase0NativeLaunchSettings(string Executable, string ScriptPath, string Origin, string Pipe);
+
 /// <summary>Actual helper launch and safe public outcomes, excluding its private credential response.</summary>
 /// <param name="Executable">Observed attempted executable.</param><param name="Arguments">Actual ordered argument vector.</param>
 /// <param name="Shell">Whether launch passed through a shell.</param><param name="Input">Observed origin-only stdin.</param>
@@ -34,8 +42,9 @@ internal interface IPhase0NativeClientProbe
     /// <summary>Attempts the selected host/helper fixture with an invocation-private canary.</summary>
     /// <param name="host">Windows or Linux fixture.</param><param name="scenario">Explicit protocol or policy fault.</param>
     /// <param name="canary">In-memory canary, never a test argument or retained credential value.</param>
+    /// <param name="settings">Immutable nonsecret launch inputs supplied before execution.</param>
     /// <returns>Actual launch facts and safe public captures.</returns>
-    Phase0HelperRun? RunHelper(string host, string scenario, string canary);
+    Phase0HelperRun? RunHelper(string host, string scenario, string canary, Phase0NativeLaunchSettings settings);
     /// <summary>Attempts one channel with the specified valid or defective peer fixture.</summary>
     /// <param name="channel">Unary gRPC, stream gRPC or object HTTP.</param><param name="peer">Named peer defect or valid.</param>
     /// <returns>Actual installed trust policy and ordered transmission observations.</returns>
@@ -51,9 +60,14 @@ internal static class Phase0NativeClientContract
     /// <summary>Checks exact direct argv/stdin, safe failures and no credential transmission after helper rejection.</summary>
     /// <param name="probe">Scripted or later real native observer.</param><param name="host">Fixture host.</param>
     /// <param name="scenario">Explicit independent input case.</param><param name="canary">Private canary.</param>
-    internal static void AssertHelper(IPhase0NativeClientProbe probe, string host, string scenario, string canary)
+    /// <param name="settings">Configured run-specific inputs, or deterministic unit-fixture defaults.</param>
+    internal static void AssertHelper(IPhase0NativeClientProbe probe, string host, string scenario, string canary,
+        Phase0NativeLaunchSettings? settings = null)
     {
-        var run = probe.RunHelper(host, scenario, canary);
+        settings ??= new(host == "Windows" ? "C:/Program Files/PowerShell/7/pwsh.exe" : "/usr/bin/pwsh",
+            host == "Windows" ? "C:/Phase0 Run/helper & literal.ps1" : "/tmp/Phase0 Run/helper & literal.ps1",
+            "https://gateway.lab:7443", "fixture-pipe");
+        var run = probe.RunHelper(host, scenario, canary, settings);
         Assert.NotNull(run);
         var policy = scenario.StartsWith("Policy:", StringComparison.Ordinal);
         var success = scenario is "Success" or "SuccessNoExpiry";
@@ -93,16 +107,14 @@ internal static class Phase0NativeClientContract
         }
         else
         {
-            var executable = host == "Windows" ? "C:/Program Files/PowerShell/7/pwsh.exe" : "/usr/bin/pwsh";
-            var script = host == "Windows" ? "C:/Phase0 Run/helper & literal.ps1" : "/tmp/Phase0 Run/helper & literal.ps1";
-            Assert.Equal(executable, run.Executable);
-            Assert.Equal(new[] { "-NoProfile", "-NonInteractive", "-File", script, "get" }, run.Arguments);
+            Assert.Equal(settings.Executable, run.Executable);
+            Assert.Equal(new[] { "-NoProfile", "-NonInteractive", "-File", settings.ScriptPath, "get" }, run.Arguments);
             using var input = JsonDocument.Parse(run.Input);
             Assert.Equal(JsonValueKind.Object, input.RootElement.ValueKind);
             var fields = input.RootElement.EnumerateObject().ToArray();
             Assert.Single(fields); Assert.Equal("uri", fields[0].Name);
-            Assert.Equal("https://gateway.lab:7443", fields[0].Value.GetString());
-            Assert.True(run.Environment.TryGetValue("QBRAIN_PHASE0_TOKEN_PIPE", out var pipe) && !string.IsNullOrWhiteSpace(pipe),
+            Assert.Equal(settings.Origin, fields[0].Value.GetString());
+            Assert.True(run.Environment.TryGetValue("QBRAIN_PHASE0_TOKEN_PIPE", out var pipe) && pipe == settings.Pipe && !string.IsNullOrWhiteSpace(pipe),
                 "Nonsecret broker reference is missing.");
         }
         foreach (var name in new[] { "client_stdout", "client_stderr", "exception_text", "helper_diagnostics" })
@@ -145,7 +157,7 @@ public sealed class Phase0NativeClientMockGateTests
     public static IEnumerable<object[]> TlsCases => new[] { "grpc-unary", "grpc-stream", "object-http" }
         .SelectMany(channel => new[] { "Valid", "UntrustedCa", "WrongSan", "Expired", "UnapprovedPin" }
         .Select(peer => new object[] { channel, peer }));
-    /// <summary>Each TLS observation faultName is separately corrupted.</summary>
+    /// <summary>Each TLS observation field is separately corrupted.</summary>
     public static IEnumerable<object[]> TlsFaults => TlsCases.SelectMany(row => TlsFields.Select(faultName =>
         new object[] { row[0], row[1], faultName }));
 
@@ -158,6 +170,19 @@ public sealed class Phase0NativeClientMockGateTests
         Phase0NativeClientContract.AssertHelper(probe, host, scenario, Guid.NewGuid().ToString("N"));
         Assert.Equal(new[] { $"helper:{host}:{scenario}" }, probe.Calls);
     }
+    /// <summary>Actual run paths, gateway origin and broker reference may vary while exact launch checks remain.</summary>
+    /// <param name="host">Fixture host.</param><param name="scenario">Independent input case.</param>
+    [Theory, MemberData(nameof(Helpers))]
+    public void ValidRunSpecificSettingsPass(string host, string scenario)
+    {
+        var settings = new Phase0NativeLaunchSettings(
+            host == "Windows" ? "C:/Program Files/PowerShell/7/pwsh.exe" : "/usr/bin/pwsh",
+            host == "Windows" ? "F:/GitHub/McpServer/.mcpServer/tmp/run-42/helper & literal.ps1"
+                : "/home/sharpninja/github/McpServer/.mcpServer/tmp/run-42/helper & literal.ps1",
+            "https://another-gateway.lab:7843", "fixture-pipe-run-42");
+        Phase0NativeClientContract.AssertHelper(new ScriptedProbe(), host, scenario, Guid.NewGuid().ToString("N"), settings);
+    }
+
     /// <summary>Wrong launch, protocol outcome, credential or diagnostic facts are rejected safely.</summary>
     /// <param name="host">Fixture host.</param><param name="scenario">Independent case.</param><param name="fault">Single mutation.</param>
     [Theory, MemberData(nameof(HelperFaults))]
@@ -232,7 +257,7 @@ public sealed class Phase0NativeClientMockGateTests
         /// <summary>Whether the selected observation was actually corrupted.</summary>
         internal bool Injected { get; private set; }
         /// <inheritdoc/>
-        public Phase0HelperRun? RunHelper(string host, string scenario, string canary)
+        public Phase0HelperRun? RunHelper(string host, string scenario, string canary, Phase0NativeLaunchSettings settings)
         {
             Calls.Add($"helper:{host}:{scenario}");
             var row = HelperFixtures[scenario]; var launched = row.Attempts == 1;
@@ -242,11 +267,11 @@ public sealed class Phase0NativeClientMockGateTests
                 ["exception_text"] = "", ["helper_diagnostics"] = ""
             };
             var environment = new Dictionary<string, string>(StringComparer.Ordinal);
-            if (launched) environment.Add("QBRAIN_PHASE0_TOKEN_PIPE", "fixture-pipe");
-            Phase0HelperRun run = new(launched ? (host == "Windows" ? "C:/Program Files/PowerShell/7/pwsh.exe" : "/usr/bin/pwsh") : "",
-                launched ? ["-NoProfile", "-NonInteractive", "-File", host == "Windows"
-                    ? "C:/Phase0 Run/helper & literal.ps1" : "/tmp/Phase0 Run/helper & literal.ps1", "get"] : [], false,
-                launched ? "{\"uri\":\"https://gateway.lab:7443\"}" : "", environment, row.Attempts, row.Starts,
+            if (launched) environment.Add("QBRAIN_PHASE0_TOKEN_PIPE", settings.Pipe);
+            Phase0HelperRun run = new(launched ? settings.Executable : "",
+                launched ? ["-NoProfile", "-NonInteractive", "-File", settings.ScriptPath, "get"] : [], false,
+                launched ? JsonSerializer.Serialize(new Dictionary<string, string> { ["uri"] = settings.Origin }) : "",
+                environment, row.Attempts, row.Starts,
                 row.Success ? 0 : 1, row.Code, row.Success ? "Reference" : "None", row.Success ? "Proxy-Authorization" : "",
                 row.Success ? 1 : 0, captures);
             if (fault is null) return run;

@@ -3,7 +3,9 @@ namespace QBrainAi.Support.Mcp.Tests.Federation.Phase0;
 /// <summary>Independent protocol transcripts prove the transport assertions accept and reject relevant behavior.</summary>
 /// <remarks>2026-11-18: TASK-FEDPH0-003; FR-MCP-185 ac-RawRemoteCannotBypassPublicationPolicy,
 /// ac-ForeignProjectCloneDenied/ac-RevokedCredentialFailsFetchAndPublish; TR-MCP-FEDERATION-012; TEST-MCP-233.
-/// Fixtures never call the contract's expectation builder and contain no real credentials or network access.</remarks>
+/// Fixtures never call the contract's expectation builder and contain no real credentials or network access.
+/// 2026-11-19: Same trace IDs: explicit subdomain/fragment refusal, relative GET/PUT redirects307/308,
+/// and uppercase-host/default443 valid observations supplement the retained transport assertion gate.</remarks>
 public sealed class Phase0RemoteTransportMockGateTests
 {
     /// <summary>All twelve RPCs plus object, redirect, retry, revocation and selector-boundary cases.</summary>
@@ -108,6 +110,7 @@ public sealed class Phase0RemoteTransportMockGateTests
             rows.Add("Rpc:" + method, new([new(method)]));
         rows.Add("RangeGet", new([new("GET", Status: 206, Ranged: true)], Downloads: 1));
         rows.Add("TableFileGet", new([new("GET")], Downloads: 1));
+        rows.Add("CanonicalObjectOrigin", new([new("GET")], Downloads: 1));
         rows.Add("RefreshedUrl", new([new("GET")], Downloads: 1));
         rows.Add("ObjectPut", new([new("PUT", Put: true)], Uploads: 1));
         foreach (var status in new[] { 307, 308 })
@@ -115,6 +118,10 @@ public sealed class Phase0RemoteTransportMockGateTests
             rows.Add("Redirect" + status, new([new("GET", Status: status, Ranged: true),
                 new("GET", Status: 206, Ranged: true)], Downloads: 1));
             rows.Add("PutRedirect" + status, new([new("PUT", Status: status, Put: true),
+                new("PUT", Put: true)], Uploads: 1));
+            rows.Add("RelativeRedirect" + status, new([new("GET", Status: status, Ranged: true),
+                new("GET", Status: 206, Ranged: true)], Downloads: 1));
+            rows.Add("RelativePutRedirect" + status, new([new("PUT", Status: status, Put: true),
                 new("PUT", Put: true)], Uploads: 1));
         }
         rows.Add("RangeRetry", new([new("GET", Status: 503, Ranged: true),
@@ -134,9 +141,9 @@ public sealed class Phase0RemoteTransportMockGateTests
         }
         rows.Add("ForeignObject", new([new("GET", Status: 403, Ranged: true,
             Project: "SecretProject", Code: "unauthorized_project", Forward: false)]));
-        foreach (var target in new[] { "OtherHost", "OtherPort", "Downgrade", "UserInfo" })
+        foreach (var target in new[] { "OtherHost", "Subdomain", "OtherPort", "Downgrade", "UserInfo", "Fragment" })
             rows.Add("Object" + target, new([], Refused: true));
-        foreach (var target in new[] { "OtherHost", "Subdomain", "OtherPort", "Downgrade", "UserInfo" })
+        foreach (var target in new[] { "OtherHost", "Subdomain", "OtherPort", "Downgrade", "UserInfo", "Fragment" })
             rows.Add("Redirect" + target, new([new("GET", Status: 307, Ranged: true)], Refused: true));
         return rows;
     }
@@ -222,7 +229,8 @@ public sealed class Phase0RemoteTransportMockGateTests
             {
                 var row = fixture.Steps[i];
                 var hasUrl = row.Ranged || row.Put || row.Method == "GET";
-                var request = new Phase0TransportRequest(i + 1, "https://gateway.fixture.test/", row.Method,
+                var nodeOrigin = scenario == "CanonicalObjectOrigin" ? "HTTPS://GATEWAY.FIXTURE.TEST:443/" : "https://gateway.fixture.test/";
+                var request = new Phase0TransportRequest(i + 1, nodeOrigin, row.Method,
                     row.Project, "Reference", row.Put ? uploadHash : hash, row.Ranged ? "bytes=4-11" : "",
                     hasUrl ? locationHash : "", hasUrl ? locationHash : "");
                 node.Add(request);

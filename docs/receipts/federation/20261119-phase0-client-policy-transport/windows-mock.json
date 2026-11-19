@@ -1,0 +1,113 @@
+{
+  "timestampLocal": "2026-11-19T09:33:07.7373412-06:00",
+  "host": "PAYTON-LEGION2",
+  "worktree": "F:/GitHub/McpServer/.worktrees/federation-phase0-20261117",
+  "headBeforeCommit": "70595d47a2c53a7001e895795a3616d4b8d178e9",
+  "sourceTreeDirty": true,
+  "runId": "20261119T093040-fedph0-client-policy-transport",
+  "command": "./build.ps1 TestGroups --test-groups QBrainAi.Support.Mcp.Tests:Phase0NativeClientMockGateTests,Phase0NativePolicyLifecycleMockGateTests,Phase0RemoteTransportMockGateTests --test-run-id 20261119T093040-fedph0-client-policy-transport",
+  "total": 6164,
+  "passed": 6164,
+  "failed": 0,
+  "skipped": 0,
+  "actualRows": 6164,
+  "correctControls": 269,
+  "negativeControls": 5895,
+  "sources": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0NativeClientMockGateTests.cs",
+      "sha256": "3029A11ED5AD045CD0F268E842982128718198B8AE048D95F68F90E6F7BF340D",
+      "lfSha256": "4082DB8E902627D77FAFD165E78A4258982C0CD21271E045BABF72A85EB617AA"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0NativePolicyLifecycleMockGateTests.cs",
+      "sha256": "A5928CBF76F4CB2D537CF688FBF8D3497F350D1E86D8EA185DCAD04C7334C8CD",
+      "lfSha256": "15B5AC52EA2E66FCD1EA7D79C7D77940FF8A0F94BA13084E6BEB2E7BB7CE77DD"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemoteTransportContract.cs",
+      "sha256": "15846052259AE586916A648BEB23119C20A36AF926D75C90F1C99316BA7A1402",
+      "lfSha256": "4A63AB6E8855E15E5E494EAE592CAA21854BBE35E1A0E042AAEAD10149DD6BF2"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Federation/Phase0/Phase0RemoteTransportMockGateTests.cs",
+      "sha256": "4AC2DD7840128A606E51A398DA5F0A7CF462F8F0B2F5DA734B1211FEA5CA8B22",
+      "lfSha256": "B0368F41B8B59D34611FD08C47AC80B62692B9C6AE6AF7CD8AB23A56DA571B84"
+    }
+  ],
+  "methodCounts": [
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0NativeClientMockGateTests.CorrectHelperPasses",
+      "count": 42
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0NativeClientMockGateTests.CorrectTlsPasses",
+      "count": 15
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0NativeClientMockGateTests.ValidRunSpecificSettingsPass",
+      "count": 42
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0NativeClientMockGateTests.WrongHelperIsRejected",
+      "count": 1092
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0NativeClientMockGateTests.WrongTlsIsRejected",
+      "count": 195
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0NativePolicyLifecycleMockGateTests.CorrectLifecyclePasses",
+      "count": 4
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0NativePolicyLifecycleMockGateTests.CorrectPolicyPasses",
+      "count": 74
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0NativePolicyLifecycleMockGateTests.SharedPolicyBaselineMutationIsRejected",
+      "count": 2
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0NativePolicyLifecycleMockGateTests.WrongLifecycleIsRejected",
+      "count": 72
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0NativePolicyLifecycleMockGateTests.WrongPolicyIsRejected",
+      "count": 1258
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemoteTransportMockGateTests.CorrectTransportTranscriptPasses",
+      "count": 46
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemoteTransportMockGateTests.CorruptTransportTranscriptIsRejected",
+      "count": 3275
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemoteTransportMockGateTests.SharedBaselineMutationIsRejected",
+      "count": 1
+    },
+    {
+      "method": "QBrainAi.Support.Mcp.Tests.Federation.Phase0.Phase0RemoteTransportMockGateTests.ValidIndependentNativeVariationPasses",
+      "count": 46
+    }
+  ],
+  "trxSha256": "921A1379AD758B300C6C38AE4AA39413AB0E15BFE300E914B4A5DC5F2AE55192",
+  "nukeLogSha256": "58E0A99B92D896715A00526C8675957A163D553DF2F2F7B90661A2B673D50AED",
+  "compileLogSha256": "E813C67D021B24937B7BA630DF01B00F62F822E9656FA2CCEC45372806150F6F",
+  "logArchiveSha256": "C8F9EC186B034A3068E46B267C63A13975AF2376455EB90008BDD6B8AEB567A3",
+  "receiptScriptSha256": "7FD0390B0682F1D970B93944201C86CB0A3AA0FF441E5AFFD78979C78F2D5217",
+  "trace": [
+    "TASK-FEDPH0-003",
+    "FR-MCP-185",
+    "TR-MCP-FEDERATION-012",
+    "TEST-MCP-233",
+    "FR-MCP-184",
+    "TEST-MCP-232"
+  ],
+  "binding": "Test-owned scripted observations only",
+  "nativeProof": false,
+  "taskReady": false,
+  "implementationBarrier": "Closed"
+}

@@ -78,7 +78,9 @@ internal interface IPhase0RemoteTransportProbe
 /// ac-ForeignProjectCloneDenied/ac-RevokedCredentialFailsFetchAndPublish; TR-MCP-FEDERATION-012; TEST-MCP-233.
 /// Real binding remains pending. 2026-11-19: Correct the native-header interpretation for the same FR/TR/ACs:
 /// upstream supports Proxy-Authorization bearer; the approved records do not mandate a relay header name.
-/// Header support alone establishes neither exact-origin containment nor native feasibility.</remarks>
+/// Header support alone establishes neither exact-origin containment nor native feasibility.
+/// 2026-11-19: Same FR/TR/ACs: add advertised subdomain/fragment refusal, redirect-fragment refusal,
+/// relative GET/PUT redirects and canonical host/default443 acceptance without weakening sealed-location checks.</remarks>
 internal static class Phase0RemoteTransportContract
 {
     /// <summary>Checks the scenario against independently frozen refs and explicit wire expectations.</summary>
@@ -215,12 +217,12 @@ internal static class Phase0RemoteTransportContract
         return scenario switch
         {
             "RangeGet" => new("GET", ObjectRead: true, Downloads: 1, FinalStatus: 206),
-            "TableFileGet" or "RefreshedUrl" => new("GET", Downloads: 1),
+            "TableFileGet" or "RefreshedUrl" or "CanonicalObjectOrigin" => new("GET", Downloads: 1),
             "ObjectPut" => new("PUT", Upload: true),
-            "Redirect307" => new("GET", Requests: 2, ObjectRead: true, Downloads: 1, RedirectStatus: 307, FinalStatus: 206),
-            "Redirect308" => new("GET", Requests: 2, ObjectRead: true, Downloads: 1, RedirectStatus: 308, FinalStatus: 206),
-            "PutRedirect307" => new("PUT", Requests: 2, Upload: true, RedirectStatus: 307),
-            "PutRedirect308" => new("PUT", Requests: 2, Upload: true, RedirectStatus: 308),
+            "Redirect307" or "RelativeRedirect307" => new("GET", Requests: 2, ObjectRead: true, Downloads: 1, RedirectStatus: 307, FinalStatus: 206),
+            "Redirect308" or "RelativeRedirect308" => new("GET", Requests: 2, ObjectRead: true, Downloads: 1, RedirectStatus: 308, FinalStatus: 206),
+            "PutRedirect307" or "RelativePutRedirect307" => new("PUT", Requests: 2, Upload: true, RedirectStatus: 307),
+            "PutRedirect308" or "RelativePutRedirect308" => new("PUT", Requests: 2, Upload: true, RedirectStatus: 308),
             "RangeRetry" => new("GET", Requests: 2, ObjectRead: true, Downloads: 1, Retry: true, FinalStatus: 206),
             "RevokedNext" => new("GET", Requests: 2, ObjectRead: true, Downloads: 1,
                 DenyAt: 2, Identity: "inactive", FinalStatus: 401, FinalCode: "invalid_token"),
@@ -234,10 +236,10 @@ internal static class Phase0RemoteTransportContract
                 Foreign: true, FinalStatus: 403, FinalCode: "unauthorized_project"),
             "ForeignObject" => new("GET", ObjectRead: true, DenyAt: 1, Foreign: true,
                 FinalStatus: 403, FinalCode: "unauthorized_project"),
-            "ObjectOtherHost" or "ObjectOtherPort" or "ObjectDowngrade" or "ObjectUserInfo" =>
+            "ObjectOtherHost" or "ObjectSubdomain" or "ObjectOtherPort" or "ObjectDowngrade" or "ObjectUserInfo" or "ObjectFragment" =>
                 new("GET", Requests: 0, Refused: true),
             "RedirectOtherHost" or "RedirectSubdomain" or "RedirectOtherPort" or
-                "RedirectDowngrade" or "RedirectUserInfo" =>
+                "RedirectDowngrade" or "RedirectUserInfo" or "RedirectFragment" =>
                 new("GET", ObjectRead: true, RedirectStatus: 307, Refused: true),
             _ => throw new ArgumentOutOfRangeException(nameof(scenario), scenario, "Unknown transport case.")
         };
