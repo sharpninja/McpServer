@@ -439,3 +439,7 @@ navigation:
       - document: ops-workspace-path-rekey
 docfx:
   workflows: []
+footer:
+  template: docs/wiki-footer.md
+requirementGroups:
+  enabled: true

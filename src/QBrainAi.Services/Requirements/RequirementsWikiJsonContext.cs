@@ -11,4 +11,8 @@ internal sealed record RequirementsWikiManifest(
     string Schema,
     string Platform,
     DateTimeOffset GeneratedAtUtc,
-    string[] Documents);
+    string[] Documents,
+    // 2026-11-26, TR-MCP-WIKIEXPORT-001 ac-WikiGroupRoundTrip and ac-WikiFooterRoundTrip:
+    // identify derived pages and inline footer ownership without changing legacy manifests.
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string[]? GroupDocuments = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] bool InlineFooter = false);

@@ -158,6 +158,17 @@ function Add-UserDocumentationSection {
     }
 
     $content = Get-Content -LiteralPath $HomePath -Raw
+    # 2026-11-26, TR-MCP-WIKIEXPORT-001 ac-WikiFooterRoundTrip:
+    # keep the exporter's complete trailing footer after the staged documentation links.
+    $footer = ''
+    $trimmedContent = $content.TrimEnd()
+    $footerBegin = '<!-- mcp-wiki-footer:begin -->'
+    $footerEnd = '<!-- mcp-wiki-footer:end -->'
+    $begin = $trimmedContent.LastIndexOf([string][char]10 + $footerBegin, [StringComparison]::Ordinal)
+    if ($begin -ge 0 -and $trimmedContent.EndsWith([string][char]10 + $footerEnd, [StringComparison]::Ordinal)) {
+        $footer = $trimmedContent.Substring($begin + 1)
+        $content = $trimmedContent.Substring(0, $begin)
+    }
     if ($content -match '(?m)^## User Documentation$') {
         return
     }
@@ -175,6 +186,10 @@ function Add-UserDocumentationSection {
         $lines.Add("- [$($link.Label)]($($link.Url))")
     }
 
+    if ($footer.Length -gt 0) {
+        $lines.Add('')
+        $lines.Add($footer)
+    }
     $newContent = ($lines -join [Environment]::NewLine) + [Environment]::NewLine
     Set-Content -LiteralPath $HomePath -Value $newContent -Encoding utf8NoBOM
 }

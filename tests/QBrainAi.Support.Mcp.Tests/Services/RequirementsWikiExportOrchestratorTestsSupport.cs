@@ -244,4 +244,64 @@ internal static class RequirementsWikiExportOrchestratorTestsSupport
             }
         }
     }
+
+    /// <summary>Creates a database-backed requirements service with an isolated in-memory store.</summary>
+    /// <remarks>2026-11-26, TEST-MCP-WIKIEXPORT-001 ac-WikiGroupRoundTrip: share the existing database fixture between orchestration and real wiki round-trip cases.</remarks>
+    internal sealed class RequirementsDatabaseWikiFixture : IDisposable
+    {
+        private readonly ServiceProvider _provider;
+        private readonly IServiceScope _requestScope;
+        private readonly DefaultHttpContext _httpContext;
+        private readonly SqliteConnection _connection = new("DataSource=:memory:");
+        private readonly string _root = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "mcp-wiki-db-orchestrator-tests-" + Guid.NewGuid().ToString("N"));
+
+        public RequirementsDatabaseWikiFixture()
+        {
+            var services = new ServiceCollection();
+            _connection.Open();
+            services.AddDbContext<McpDbContext>(options => options.UseSqlite(_connection));
+            services.AddScoped<WorkspaceContext>();
+            services.AddHttpContextAccessor();
+            services.AddSingleton<IOptions<RequirementsOptions>>(Microsoft.Extensions.Options.Options.Create(new RequirementsOptions()));
+            services.AddSingleton(NullLogger<RequirementsDatabaseDocumentService>.Instance);
+            _provider = services.BuildServiceProvider();
+            using (var schemaScope = _provider.CreateScope())
+                schemaScope.ServiceProvider.GetRequiredService<McpDbContext>().Database.EnsureCreated();
+
+            _requestScope = _provider.CreateScope();
+            _httpContext = new DefaultHttpContext { RequestServices = _requestScope.ServiceProvider };
+            _provider.GetRequiredService<IHttpContextAccessor>().HttpContext = _httpContext;
+        }
+
+        public string CreateWorkspace(string name)
+        {
+            var path = System.IO.Path.Combine(_root, name);
+            Directory.CreateDirectory(System.IO.Path.Combine(path, "docs", "Project"));
+            return path;
+        }
+
+        public void SetWorkspace(string path)
+        {
+            var context = _requestScope.ServiceProvider.GetRequiredService<WorkspaceContext>();
+            context.WorkspaceName = System.IO.Path.GetFileName(path);
+            context.WorkspacePath = path;
+        }
+
+        public RequirementsDatabaseDocumentService CreateService(IRequirementsWikiExportOrchestrator orchestrator) =>
+            new(
+                _provider.GetRequiredService<IServiceScopeFactory>(),
+                _provider.GetRequiredService<IOptions<RequirementsOptions>>(),
+                NullLogger<RequirementsDatabaseDocumentService>.Instance,
+                _provider.GetRequiredService<IHttpContextAccessor>(),
+                wikiExportOrchestrator: orchestrator);
+
+        public void Dispose()
+        {
+            _requestScope.Dispose();
+            _provider.Dispose();
+            _connection.Dispose();
+            if (Directory.Exists(_root))
+                Directory.Delete(_root, recursive: true);
+        }
+    }
 }

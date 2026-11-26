@@ -2835,12 +2835,19 @@ Requirements wiki export must optionally discover docs/wiki.yaml in the active w
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] When docs/wiki.yaml is absent, GenerateWikiAsync produces the same canonical Home, requirements documents, manifests, GitHub _Sidebar.md and _Footer.md, and Azure .order output as before.
-- [x] When docs/wiki.yaml is present, the documents collection is the complete flattened export list and every navigation document reference must resolve to exactly one declared document.
+- [x] When docs/wiki.yaml is present, the documents collection defines the flattened base export list and every configured navigation document reference resolves to exactly one declared document. Enabled requirement grouping adds derived child pages to the computed platform inventory.
 - [x] Declared documents can use generated requirement sources and workspace-relative Markdown source files, and their target paths are written under each eligible platform output folder.
 - [x] The optional home template renders generatedAtUtc, navigation, and documents tokens; absent home templates fall back to a generated home page derived from the navigation tree.
 - [x] Platform filters control whether declared documents appear in GitHub, Azure, or both, and generated manifests list only files exported for that platform.
 - [x] Invalid docs/wiki.yaml content fails with actionable validation errors before any export file is modified.
 - [x] GitHub sidebar and Azure order files are generated from the complete navigation tree, including nested folder navigation.
+- [ ] An optional workspace Markdown footer template supplies exactly one visible footer per exported content page, including generated, static, DocFX and group pages. GitHub uses its managed footer and the legacy format renders it inline. Sidecars and non-page assets are preserved.
+- [ ] An absent footer setting preserves legacy output. A configured missing, empty, non-Markdown, escaping, or delimiter-conflicting template fails before any export file changes.
+- [ ] Repeated exports produce one footer without changing inputs, publication Home keeps the footer after documentation links, and wiki imports preserve canonical records, acceptance criteria and mappings even when footer text resembles requirement content.
+- [ ] When enabled, deterministic, case-insensitive grouping is based on whole leading ID segments before the first digit-leading segment within each requirement kind. At least two distinct IDs are required. Invalid prefixes and singletons remain on canonical pages.
+- [ ] Each qualifying group has one safe read-only child page per eligible platform, one parent link and a link back. Canonical parent filenames, original member records and existing anchors are retained.
+- [ ] Manifests, navigation, ZIP and cleanup consume the same platform inventory. Collisions fail before writes and repeat exports remove obsolete group pages and links. Absent or disabled grouping preserves the existing layout.
+- [ ] Group pages render full typed member records and criteria with the same mapping context as the parent. Group artifacts never supply imported requirements or affect source selection when canonical inputs and timestamps are unchanged.
 
 ## FR-MCP-WIKIEXPORT-002 Default wiki export configuration during marker generation
 

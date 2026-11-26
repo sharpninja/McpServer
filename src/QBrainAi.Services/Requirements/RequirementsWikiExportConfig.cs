@@ -13,6 +13,14 @@ internal sealed class RequirementsWikiExportConfig
 
     public string? HomeTemplatePath { get; init; }
 
+    /// <summary>Gets the validated workspace Markdown footer content when configured.</summary>
+    /// <remarks>2026-11-26, TR-MCP-WIKIEXPORT-001 ac-WikiFooterCoverage and ac-WikiFooterValidation.</remarks>
+    public string? FooterContent { get; init; }
+
+    /// <summary>Gets whether ID prefix groups are exported as linked wiki pages.</summary>
+    /// <remarks>2026-11-26, TR-MCP-WIKIEXPORT-001 ac-WikiGroupDetection: retains the legacy layout by default.</remarks>
+    public bool RequirementGroupsEnabled { get; init; }
+
     public IReadOnlyList<RequirementsWikiExportDocument> Documents { get; init; } = [];
 
     public IReadOnlyList<RequirementsWikiExportNavigationItem> Navigation { get; init; } = [];
@@ -159,6 +167,21 @@ internal static class RequirementsWikiExportConfigLoader
         ValidateNavigationCoverage(documentMap, navigation, errors);
         var docFxWorkflows = ValidateDocFxWorkflows(file.DocFx?.Workflows ?? [], workspaceRoot, errors);
 
+        string? footerContent = null;
+        if (file.Footer is not null)
+        {
+            const string label = "footer.template";
+            var path = ResolveWorkspaceMarkdownPath(workspaceRoot, file.Footer.Template ?? "", label, errors);
+            if (path is not null && errors.Count == 0)
+            {
+                if (documents.Any(document => string.Equals(document.SourcePath, path, StringComparison.OrdinalIgnoreCase)))
+                    errors.Add($"{label} is a template and cannot also be an exported document.");
+                footerContent = File.ReadAllText(path).Trim();
+                if (footerContent.Length == 0 || RequirementsWikiFooter.ContainsBoundary(footerContent))
+                    errors.Add($"{label} must contain Markdown without reserved footer boundaries.");
+            }
+        }
+
         if (errors.Count > 0)
             throw BuildException(errors);
 
@@ -167,6 +190,8 @@ internal static class RequirementsWikiExportConfigLoader
             ConfigPath = configPath,
             WorkspaceRoot = workspaceRoot,
             HomeTemplatePath = homeTemplatePath,
+            FooterContent = footerContent,
+            RequirementGroupsEnabled = file.RequirementGroups?.Enabled ?? false,
             Documents = documents,
             Navigation = navigation,
             DocFxWorkflows = docFxWorkflows,
@@ -574,10 +599,24 @@ internal static class RequirementsWikiExportConfigLoader
     {
         public string? Schema { get; set; }
         public WikiHome? Home { get; set; }
+        public WikiFooter? Footer { get; set; }
+        public WikiRequirementGroups? RequirementGroups { get; set; }
         [YamlMember(Alias = "docfx")]
         public WikiDocFx? DocFx { get; set; }
         public List<WikiDocument> Documents { get; set; } = [];
         public List<WikiNavigationItem> Navigation { get; set; } = [];
+    }
+
+    /// <summary>Workspace-relative Markdown footer template.</summary>
+    private sealed class WikiFooter
+    {
+        public string? Template { get; set; }
+    }
+
+    /// <summary>Opt-in for derived requirement group pages.</summary>
+    private sealed class WikiRequirementGroups
+    {
+        public bool Enabled { get; set; }
     }
 
     private sealed class WikiHome

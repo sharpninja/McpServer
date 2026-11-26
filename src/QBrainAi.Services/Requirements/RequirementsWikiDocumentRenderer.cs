@@ -59,7 +59,18 @@ internal static class RequirementsWikiDocumentRenderer
 
         var extensions = extensionDocuments ?? [];
         if (config is not null)
-            return RenderConfiguredWikiFiles(config, generatedAtUtc, documents, extensions);
+        {
+            var groups = new Dictionary<string, WikiRequirementGroup[]>(StringComparer.OrdinalIgnoreCase);
+            if (config.RequirementGroupsEnabled)
+            {
+                groups["generated:functional"] = RenderGroups(functional, "FR", entry => entry.Id, RequirementsDocumentRenderer.RenderFunctional);
+                groups["generated:technical"] = RenderGroups(technical, "TR", entry => entry.Id,
+                    entries => RequirementsDocumentRenderer.RenderTechnical(entries, mappings));
+                groups["generated:testing"] = RenderGroups(testing, "TEST", entry => entry.Id, RenderTesting);
+            }
+
+            return RenderConfiguredWikiFiles(config, generatedAtUtc, documents, extensions, groups);
+        }
 
         if (extensions.Count > 0)
             throw new InvalidOperationException("Extension wiki documents require docs/wiki.yaml configuration.");
@@ -74,11 +85,12 @@ internal static class RequirementsWikiDocumentRenderer
         RequirementsWikiExportConfig config,
         DateTimeOffset generatedAtUtc,
         IReadOnlyDictionary<string, string> generatedDocuments,
-        IReadOnlyList<RequirementsRenderedDocument> extensionDocuments)
+        IReadOnlyList<RequirementsRenderedDocument> extensionDocuments,
+        IReadOnlyDictionary<string, WikiRequirementGroup[]> groups)
     {
         var files = new List<RequirementsRenderedDocument>();
-        AddConfiguredPlatform(files, config, AzureFolder, generatedAtUtc, generatedDocuments, extensionDocuments);
-        AddConfiguredPlatform(files, config, GitHubFolder, generatedAtUtc, generatedDocuments, extensionDocuments);
+        AddConfiguredPlatform(files, config, AzureFolder, generatedAtUtc, generatedDocuments, extensionDocuments, groups);
+        AddConfiguredPlatform(files, config, GitHubFolder, generatedAtUtc, generatedDocuments, extensionDocuments, groups);
         return files;
     }
 
@@ -88,7 +100,8 @@ internal static class RequirementsWikiDocumentRenderer
         string platform,
         DateTimeOffset generatedAtUtc,
         IReadOnlyDictionary<string, string> generatedDocuments,
-        IReadOnlyList<RequirementsRenderedDocument> extensionDocuments)
+        IReadOnlyList<RequirementsRenderedDocument> extensionDocuments,
+        IReadOnlyDictionary<string, WikiRequirementGroup[]> groups)
     {
         var platformDocuments = config.Documents
             .Where(document => document.AppliesTo(platform))
@@ -97,31 +110,47 @@ internal static class RequirementsWikiDocumentRenderer
             .Select(static document => document.Id)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         var platformExtensions = GetPlatformExtensionDocuments(extensionDocuments, platform);
+        var groupPages = platformDocuments
+            .Where(document => groups.TryGetValue(document.Source, out var matches) && matches.Length > 0)
+            .ToDictionary(document => document.Id, document => PlanGroupPages(document, groups[document.Source]), StringComparer.OrdinalIgnoreCase);
+        var groupTargets = groupPages.Values.SelectMany(static pages => pages).Select(static page => page.Target).ToArray();
+        var inlineFooter = platform.Equals(AzureFolder, StringComparison.Ordinal) ? config.FooterContent : null;
         var manifestTargets = platformDocuments
             .Select(static document => document.Target)
             .Concat(platformExtensions.Select(document => GetPlatformRelativePath(document.RelativePath, platform)))
-            .ToList();
-        var managedDocuments = GetPlatformManagedDocuments(config, platform, platformDocumentIds);
+            .Concat(groupTargets)
+            .ToArray();
+        var managedDocuments = GetPlatformManagedDocuments(config, platform, platformDocumentIds, groupPages);
         var reservedTargets = manifestTargets
             .Concat(managedDocuments.Select(document => GetPlatformRelativePath(document.RelativePath, platform)))
-            .Prepend(ManifestFileName);
+            .Prepend(ManifestFileName)
+            .ToArray();
         ValidateUniquePlatformTargets(platform, reservedTargets);
+        if (platform.Equals(GitHubFolder, StringComparison.Ordinal))
+            ValidateGroupRoutes(groupTargets, reservedTargets);
 
         files.Add(new(
             $"{platform}/{ManifestFileName}",
-            RenderManifest(platform, generatedAtUtc, manifestTargets),
+            RenderManifest(platform, generatedAtUtc, manifestTargets, groupTargets.Length == 0 ? null : groupTargets, inlineFooter is not null),
             "application/json"));
 
         foreach (var document in platformDocuments)
         {
-            files.Add(new(
-                $"{platform}/{document.Target}",
-                ResolveConfiguredDocumentContent(document, config, generatedAtUtc, generatedDocuments),
-                "text/markdown"));
+            var content = ResolveConfiguredDocumentContent(document, config, generatedAtUtc, generatedDocuments);
+            if (groupPages.TryGetValue(document.Id, out var children))
+            {
+                content = AddGroupLinks(content, children);
+                foreach (var child in children)
+                {
+                    files.Add(ApplyFooter(new($"{platform}/{child.Target}", child.Markdown, "text/markdown"), inlineFooter));
+                }
+            }
+
+            files.Add(ApplyFooter(new($"{platform}/{document.Target}", content, "text/markdown"), inlineFooter));
         }
 
         foreach (var document in platformExtensions)
-            files.Add(document);
+            files.Add(ApplyFooter(document, inlineFooter));
 
         foreach (var document in managedDocuments)
             files.Add(document);
@@ -130,19 +159,20 @@ internal static class RequirementsWikiDocumentRenderer
     private static IReadOnlyList<RequirementsRenderedDocument> GetPlatformManagedDocuments(
         RequirementsWikiExportConfig config,
         string platform,
-        ISet<string> platformDocumentIds)
+        ISet<string> platformDocumentIds,
+        IReadOnlyDictionary<string, WikiGroupPage[]> groupPages)
     {
         if (platform.Equals(AzureFolder, StringComparison.Ordinal))
         {
-            return RenderAzureOrderFiles(config.Navigation, config, platformDocumentIds)
+            return RenderAzureOrderFiles(config.Navigation, config, platformDocumentIds, groupPages)
                 .Select(orderFile => new RequirementsRenderedDocument($"{platform}/{orderFile.RelativePath}", orderFile.Content, "text/plain"))
                 .ToList();
         }
 
         return
         [
-            new RequirementsRenderedDocument($"{platform}/_Sidebar.md", RenderGitHubSidebar(config.Navigation, config, platformDocumentIds), "text/markdown"),
-            new RequirementsRenderedDocument($"{platform}/_Footer.md", "Generated from MCP requirements wiki export.\n", "text/markdown")
+            new RequirementsRenderedDocument($"{platform}/_Sidebar.md", RenderMarkdownNavigation(config.Navigation, config, platformDocumentIds, groupPages), "text/markdown"),
+            new RequirementsRenderedDocument($"{platform}/_Footer.md", (config.FooterContent ?? "Generated from MCP requirements wiki export.") + "\n", "text/markdown")
         ];
     }
 
@@ -204,13 +234,20 @@ internal static class RequirementsWikiDocumentRenderer
         }
     }
 
-    private static string RenderManifest(string platform, DateTimeOffset generatedAtUtc, IEnumerable<string>? documents = null)
+    private static string RenderManifest(
+        string platform,
+        DateTimeOffset generatedAtUtc,
+        IEnumerable<string>? documents = null,
+        string[]? groupDocuments = null,
+        bool inlineFooter = false)
     {
         var manifest = new RequirementsWikiManifest(
             "mcp-requirements-wiki/v1",
             platform,
             generatedAtUtc,
-            documents?.ToArray() ?? s_documentFiles);
+            documents?.ToArray() ?? s_documentFiles,
+            groupDocuments,
+            inlineFooter);
 
         return JsonSerializer.Serialize(manifest, RequirementsWikiJsonContext.Default.RequirementsWikiManifest) + "\n";
     }
@@ -348,19 +385,14 @@ internal static class RequirementsWikiDocumentRenderer
         return sb.ToString();
     }
 
-    private static string RenderGitHubSidebar(
-        IReadOnlyList<RequirementsWikiExportNavigationItem> navigation,
-        RequirementsWikiExportConfig config,
-        ISet<string> platformDocumentIds)
-        => RenderMarkdownNavigation(navigation, config, platformDocumentIds);
-
     private static string RenderMarkdownNavigation(
         IReadOnlyList<RequirementsWikiExportNavigationItem> navigation,
         RequirementsWikiExportConfig config,
-        ISet<string>? platformDocumentIds)
+        ISet<string>? platformDocumentIds,
+        IReadOnlyDictionary<string, WikiGroupPage[]>? groupPages = null)
     {
         var sb = new StringBuilder();
-        AppendMarkdownNavigation(sb, navigation, config, platformDocumentIds, depth: 0);
+        AppendMarkdownNavigation(sb, navigation, config, platformDocumentIds, depth: 0, groupPages);
         return sb.ToString();
     }
 
@@ -369,7 +401,8 @@ internal static class RequirementsWikiDocumentRenderer
         IReadOnlyList<RequirementsWikiExportNavigationItem> navigation,
         RequirementsWikiExportConfig config,
         ISet<string>? platformDocumentIds,
-        int depth)
+        int depth,
+        IReadOnlyDictionary<string, WikiGroupPage[]>? groupPages)
     {
         var indent = new string(' ', depth * 2);
         foreach (var item in navigation)
@@ -386,6 +419,11 @@ internal static class RequirementsWikiDocumentRenderer
                     .Append("](")
                     .Append(ToWikiLink(document.Target))
                     .AppendLine(")");
+                if (groupPages?.TryGetValue(item.Document, out var children) == true)
+                {
+                    foreach (var child in children)
+                        sb.Append(indent).Append("  ").AppendLine(GroupLink(child, fromSidebar: true));
+                }
                 continue;
             }
 
@@ -394,7 +432,7 @@ internal static class RequirementsWikiDocumentRenderer
                 continue;
 
             sb.Append(indent).Append("- ").AppendLine(item.Title);
-            AppendMarkdownNavigation(sb, visibleChildren, config, platformDocumentIds, depth + 1);
+            AppendMarkdownNavigation(sb, visibleChildren, config, platformDocumentIds, depth + 1, groupPages);
         }
     }
 
@@ -420,10 +458,11 @@ internal static class RequirementsWikiDocumentRenderer
     private static IReadOnlyList<RequirementsRenderedDocument> RenderAzureOrderFiles(
         IReadOnlyList<RequirementsWikiExportNavigationItem> navigation,
         RequirementsWikiExportConfig config,
-        ISet<string> platformDocumentIds)
+        ISet<string> platformDocumentIds,
+        IReadOnlyDictionary<string, WikiGroupPage[]> groupPages)
     {
         var files = new List<RequirementsRenderedDocument>();
-        AddAzureOrderFile(files, string.Empty, navigation, config, platformDocumentIds);
+        AddAzureOrderFile(files, string.Empty, navigation, config, platformDocumentIds, groupPages);
         return files;
     }
 
@@ -432,7 +471,8 @@ internal static class RequirementsWikiDocumentRenderer
         string sectionPath,
         IReadOnlyList<RequirementsWikiExportNavigationItem> navigation,
         RequirementsWikiExportConfig config,
-        ISet<string> platformDocumentIds)
+        ISet<string> platformDocumentIds,
+        IReadOnlyDictionary<string, WikiGroupPage[]> groupPages)
     {
         var lines = new List<string>();
         foreach (var item in navigation)
@@ -443,6 +483,8 @@ internal static class RequirementsWikiDocumentRenderer
                     continue;
 
                 lines.Add(Path.GetFileNameWithoutExtension(config.DocumentsById[item.Document].Target));
+                if (groupPages.TryGetValue(item.Document, out var children))
+                    lines.AddRange(children.Select(static child => Path.GetFileNameWithoutExtension(child.Target)));
                 continue;
             }
 
@@ -451,7 +493,7 @@ internal static class RequirementsWikiDocumentRenderer
                 continue;
 
             lines.Add(Path.GetFileName(item.Path));
-            AddAzureOrderFile(files, item.Path, visibleChildren, config, platformDocumentIds);
+            AddAzureOrderFile(files, item.Path, visibleChildren, config, platformDocumentIds, groupPages);
         }
 
         var relativePath = string.IsNullOrWhiteSpace(sectionPath)
@@ -467,6 +509,89 @@ internal static class RequirementsWikiDocumentRenderer
             ? normalized[..^3]
             : normalized;
     }
+
+    /// <summary>Builds deterministic wiki views from the same records and formatters as their parent.</summary>
+    /// <remarks>2026-11-26, TR-MCP-WIKIEXPORT-001 ac-WikiGroupDetection and ac-WikiGroupRoundTrip.</remarks>
+    private static WikiRequirementGroup[] RenderGroups<T>(
+        IEnumerable<T> entries,
+        string kind,
+        Func<T, string> id,
+        Func<IEnumerable<T>, string> render)
+        => entries
+            .Select(entry => (Entry: entry, Key: IdentifyGroup(id(entry), kind)))
+            .Where(static candidate => candidate.Key is not null)
+            .GroupBy(static candidate => candidate.Key!, StringComparer.Ordinal)
+            .Where(group => group.Select(candidate => id(candidate.Entry)).Distinct(StringComparer.OrdinalIgnoreCase).Skip(1).Any())
+            .OrderBy(static group => group.Key, StringComparer.Ordinal)
+            .Select(group => new WikiRequirementGroup(group.Key,
+                render(group.Select(static candidate => candidate.Entry).OrderBy(id, StringComparer.Ordinal))))
+            .ToArray();
+
+    /// <summary>Extracts whole leading ID segments before the first digit-leading segment.</summary>
+    private static string? IdentifyGroup(string id, string kind)
+    {
+        var segments = id.Split('-');
+        if (!segments[0].Equals(kind, StringComparison.OrdinalIgnoreCase) ||
+            segments.Any(static segment => segment.Length == 0 || !segment.All(char.IsAsciiLetterOrDigit)))
+        {
+            return null;
+        }
+
+        var firstNumber = Array.FindIndex(segments, static segment => char.IsAsciiDigit(segment[0]));
+        return firstNumber < 2 ? null : string.Join('-', segments.Take(firstNumber)).ToUpperInvariant();
+    }
+
+    /// <summary>Derives portable sibling paths and back-links for the configured parent.</summary>
+    /// <remarks>2026-11-26, TR-MCP-WIKIEXPORT-001 ac-WikiGroupNavigation and ac-WikiGroupInventory.</remarks>
+    private static WikiGroupPage[] PlanGroupPages(RequirementsWikiExportDocument parent, WikiRequirementGroup[] groups)
+        => groups.Select(group => new WikiGroupPage(
+            group.Key,
+            parent.Target[..^3] + "--" + group.Key + ".md",
+            $"# {group.Key}\n\n[Back to {parent.Title}]({SiblingLink(parent.Target)})\n" +
+            group.Markdown[(group.Markdown.IndexOf('\n', StringComparison.Ordinal) + 1)..])).ToArray();
+
+    /// <summary>Adds a links section before the canonical requirement entries.</summary>
+    private static string AddGroupLinks(string content, IEnumerable<WikiGroupPage> children)
+    {
+        var afterTitle = content.IndexOf('\n', StringComparison.Ordinal) + 1;
+        var links = string.Join('\n', children.Select(static child => GroupLink(child)));
+        return content.Insert(afterTitle, "\n## Requirement groups\n\n" + links + "\n");
+    }
+
+    /// <summary>Links to a group from its sibling parent or the wiki-root sidebar.</summary>
+    /// <remarks>2026-11-26, TR-MCP-WIKIEXPORT-001 ac-WikiGroupNavigation: keep the directory in sidebar links.</remarks>
+    private static string GroupLink(WikiGroupPage page, bool fromSidebar = false)
+    {
+        var route = fromSidebar ? ToWikiLink(page.Target) : SiblingLink(page.Target);
+        return $"- [{page.Key}]({route})";
+    }
+
+    private static string SiblingLink(string target) => Uri.EscapeDataString(Path.GetFileNameWithoutExtension(target));
+
+    /// <summary>Rejects a generated GitHub page slug that another exported Markdown file would shadow.</summary>
+    private static void ValidateGroupRoutes(string[] groupTargets, string[] allTargets)
+    {
+        if (groupTargets.Length == 0)
+            return;
+
+        var groupSlugs = groupTargets.Select(SiblingLink).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var duplicates = allTargets.Where(static target => target.EndsWith(".md", StringComparison.OrdinalIgnoreCase))
+            .Select(SiblingLink).GroupBy(static slug => slug, StringComparer.OrdinalIgnoreCase)
+            .FirstOrDefault(group => groupSlugs.Contains(group.Key) && group.Skip(1).Any());
+        if (duplicates is not null)
+            throw new InvalidOperationException($"Duplicate GitHub wiki group route '{duplicates.Key}'.");
+    }
+
+    /// <summary>Applies the inline footer to content pages while leaving extension assets byte-stable.</summary>
+    /// <remarks>2026-11-26, TR-MCP-WIKIEXPORT-001 ac-WikiFooterCoverage.</remarks>
+    private static RequirementsRenderedDocument ApplyFooter(RequirementsRenderedDocument document, string? footer)
+        => footer is not null && document.RelativePath.EndsWith(".md", StringComparison.OrdinalIgnoreCase)
+            ? document with { Content = RequirementsWikiFooter.Append(document.Content, footer) }
+            : document;
+
+    private sealed record WikiRequirementGroup(string Key, string Markdown);
+
+    private sealed record WikiGroupPage(string Key, string Target, string Markdown);
 
     internal static UTF8Encoding Utf8NoBom => s_utf8NoBom;
 }
@@ -783,10 +908,10 @@ internal static class RequirementsWikiDocumentSelector
         }
 
         var exists = platformDocuments.Count > 0;
-        var manifestGeneratedAt = TryReadManifestGeneratedAt(platformDocuments);
-        var latestModified = platformDocuments.Values
-            .Where(static document => document.LastModifiedUtc is not null)
-            .Select(static document => document.LastModifiedUtc!.Value.ToUniversalTime())
+        var (manifestGeneratedAt, groupDocuments, inlineFooter) = ReadManifest(platformDocuments);
+        var latestModified = platformDocuments
+            .Where(document => !groupDocuments.Contains(document.Key) && document.Value.LastModifiedUtc is not null)
+            .Select(static document => document.Value.LastModifiedUtc!.Value.ToUniversalTime())
             .DefaultIfEmpty()
             .Max();
 
@@ -796,10 +921,10 @@ internal static class RequirementsWikiDocumentSelector
         return new WikiPlatformDocuments(
             platform,
             exists,
-            GetContent(platformDocuments, RequirementsDocumentRenderer.FunctionalFileName),
-            GetContent(platformDocuments, RequirementsDocumentRenderer.TechnicalFileName),
-            GetContent(platformDocuments, RequirementsDocumentRenderer.TestingFileName),
-            GetContent(platformDocuments, RequirementsDocumentRenderer.MappingFileName),
+            GetContent(platformDocuments, RequirementsDocumentRenderer.FunctionalFileName, inlineFooter),
+            GetContent(platformDocuments, RequirementsDocumentRenderer.TechnicalFileName, inlineFooter),
+            GetContent(platformDocuments, RequirementsDocumentRenderer.TestingFileName, inlineFooter),
+            GetContent(platformDocuments, RequirementsDocumentRenderer.MappingFileName, inlineFooter),
             manifestGeneratedAt,
             latestModified == default ? null : latestModified);
     }
@@ -817,25 +942,52 @@ internal static class RequirementsWikiDocumentSelector
             : normalized[(markerIndex + marker.Length)..];
     }
 
-    private static DateTimeOffset? TryReadManifestGeneratedAt(IReadOnlyDictionary<string, RequirementsIngestDocument> documents)
+    /// <summary>Reads export metadata while accepting older manifests without group or footer ownership.</summary>
+    /// <remarks>2026-11-26, TR-MCP-WIKIEXPORT-001 ac-WikiGroupRoundTrip and ac-WikiFooterRoundTrip.</remarks>
+    private static (DateTimeOffset? GeneratedAt, HashSet<string> GroupDocuments, bool InlineFooter) ReadManifest(
+        IReadOnlyDictionary<string, RequirementsIngestDocument> documents)
     {
+        var groupDocuments = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         if (!documents.TryGetValue(RequirementsWikiDocumentRenderer.ManifestFileName, out var manifestDocument))
-            return null;
+            return (null, groupDocuments, false);
 
         var manifestContent = ReadContent(manifestDocument);
         if (string.IsNullOrWhiteSpace(manifestContent))
-            return null;
+            return (null, groupDocuments, false);
 
         using var json = JsonDocument.Parse(manifestContent);
-        return json.RootElement.TryGetProperty("generatedAtUtc", out var generatedAt)
+        var root = json.RootElement;
+        if (root.TryGetProperty("groupDocuments", out var groups) && groups.ValueKind == JsonValueKind.Array)
+        {
+            foreach (var group in groups.EnumerateArray())
+            {
+                if (group.ValueKind == JsonValueKind.String && group.GetString() is { } path &&
+                    path.EndsWith(".md", StringComparison.OrdinalIgnoreCase) &&
+                    Path.GetFileNameWithoutExtension(path).Contains("--", StringComparison.Ordinal))
+                {
+                    groupDocuments.Add(path.Replace('\\', '/'));
+                }
+            }
+        }
+
+        var generated = root.TryGetProperty("generatedAtUtc", out var generatedAt)
             && generatedAt.ValueKind == JsonValueKind.String
             && DateTimeOffset.TryParse(generatedAt.GetString(), out var parsed)
-            ? parsed.ToUniversalTime()
+            ? (DateTimeOffset?)parsed.ToUniversalTime()
             : null;
+        var inlineFooter = root.TryGetProperty("inlineFooter", out var footer) && footer.ValueKind == JsonValueKind.True;
+        return (generated, groupDocuments, inlineFooter);
     }
 
-    private static string? GetContent(IReadOnlyDictionary<string, RequirementsIngestDocument> documents, string fileName)
-        => documents.TryGetValue(fileName, out var document) ? ReadContent(document) : null;
+    /// <summary>Reads a canonical page, omitting the inline footer when the exporter declared one.</summary>
+    private static string? GetContent(
+        IReadOnlyDictionary<string, RequirementsIngestDocument> documents,
+        string fileName,
+        bool inlineFooter)
+    {
+        var content = documents.TryGetValue(fileName, out var document) ? ReadContent(document) : null;
+        return inlineFooter ? RequirementsWikiFooter.Remove(content) : content;
+    }
 
     private static string? ReadContent(RequirementsIngestDocument document)
     {

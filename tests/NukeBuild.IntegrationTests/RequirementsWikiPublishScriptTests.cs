@@ -2,6 +2,7 @@ namespace NukeBuild.IntegrationTests;
 
 using System.Diagnostics;
 using System.IO.Compression;
+using System.Runtime.CompilerServices;
 using System.Text;
 using NukeBuild.Tests;
 
@@ -81,6 +82,9 @@ public sealed class RequirementsWikiPublishScriptTests
             Assert.Contains("https://dev.azure.com/McpServer/McpServer/_git/McpServer?path=/docs/USER-GUIDE.md&version=GBmain", home);
             Assert.Contains("https://dev.azure.com/McpServer/McpServer/_git/McpServer?path=/docs/REPL-USER-GUIDE.md&version=GBmain", home);
             Assert.Contains("https://dev.azure.com/McpServer/McpServer/_git/McpServer?path=/docs/context/federation.md&version=GBmain", home);
+            Assert.True(home.IndexOf("## User Documentation", StringComparison.Ordinal) <
+                home.IndexOf("<!-- mcp-wiki-footer:begin -->", StringComparison.Ordinal));
+            Assert.EndsWith("<!-- mcp-wiki-footer:end -->", home.TrimEnd(), StringComparison.Ordinal);
         }
         finally
         {
@@ -101,7 +105,8 @@ public sealed class RequirementsWikiPublishScriptTests
         using var archive = ZipFile.Open(zipPath, ZipArchiveMode.Create);
         AddEntry(archive, "github/Home.md", "# Requirements\n\n- [Functional Requirements](Functional-Requirements)\n");
         AddEntry(archive, "github/Functional-Requirements.md", "# Functional Requirements\n");
-        AddEntry(archive, "azure/Home.md", "# Requirements\n\n- [Technical Requirements](Technical-Requirements)\n");
+        AddEntry(archive, "azure/Home.md", "# Requirements\n\n- [Technical Requirements](Technical-Requirements)\n\n" +
+            "<!-- mcp-wiki-footer:begin -->\nShared fixture footer.\n<!-- mcp-wiki-footer:end -->\n");
         AddEntry(archive, "azure/Technical-Requirements.md", "# Technical Requirements\n");
         return zipPath;
     }
@@ -117,7 +122,8 @@ public sealed class RequirementsWikiPublishScriptTests
     private static async Task<ProcessResult> RunScriptAsync(params string[] arguments)
     {
         var scriptPath = FindRepositoryFile("scripts", "Publish-RequirementsWiki.ps1");
-        var psi = new ProcessStartInfo("pwsh.exe")
+        // 2026-11-26, TEST-MCP-WIKIEXPORT-001 ac-WikiFooterRoundTrip: use the native shell on both hosts.
+        var psi = new ProcessStartInfo(OperatingSystem.IsWindows() ? "pwsh.exe" : "pwsh")
         {
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -137,18 +143,18 @@ public sealed class RequirementsWikiPublishScriptTests
         return new ProcessResult(result.ExitCode, result.Stdout, result.Stderr);
     }
 
-    private static string FindRepositoryFile(params string[] segments)
+    private static string FindRepositoryFile(string directoryName, string fileName, [CallerFilePath] string sourcePath = "")
     {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
+        // 2026-11-26, TEST-MCP-WIKIEXPORT-001 ac-WikiFooterRoundTrip: support isolated build artifacts.
+        var segments = new[] { directoryName, fileName };
+        foreach (var basePath in new[] { AppContext.BaseDirectory, Path.GetDirectoryName(sourcePath) ?? Directory.GetCurrentDirectory() })
         {
-            var candidate = Path.Combine(new[] { directory.FullName }.Concat(segments).ToArray());
-            if (File.Exists(candidate))
+            for (var directory = new DirectoryInfo(basePath); directory is not null; directory = directory.Parent)
             {
-                return candidate;
+                var candidate = Path.Combine(new[] { directory.FullName }.Concat(segments).ToArray());
+                if (File.Exists(candidate))
+                    return candidate;
             }
-
-            directory = directory.Parent;
         }
 
         throw new FileNotFoundException($"Could not find repository file '{Path.Combine(segments)}'.");
