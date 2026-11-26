@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
@@ -104,6 +105,39 @@ public sealed class DefaultKeyRegistrationTests : IClassFixture<CustomWebApplica
         var after = await FindWorkspaceAsync(existingPath, ct);
         Assert.NotNull(after);
         Assert.Equal(existing.Name, after.Name);
+    }
+
+    /// <summary>Confirms key issuance and both registrations over a real loopback socket.</summary>
+    [Fact]
+    public async Task IssuedKey_RegistersBothAliasesOverKestrelLoopback()
+    {
+        await using var factory = new CustomWebApplicationFactory();
+        factory.UseKestrel(options => options.Listen(IPAddress.Loopback, 0));
+        using var client = factory.CreateClient();
+        var ct = TestContext.Current.CancellationToken;
+        Assert.True(client.BaseAddress!.IsLoopback);
+
+        using var issued = await client.GetAsync(new Uri("/api-key", UriKind.Relative), ct);
+        Assert.Equal(HttpStatusCode.OK, issued.StatusCode);
+        using var json = JsonDocument.Parse(await issued.Content.ReadAsStringAsync(ct));
+        var key = json.RootElement.GetProperty("apiKey").GetString();
+        Assert.False(string.IsNullOrWhiteSpace(key));
+
+        await using var scope = factory.Services.CreateAsyncScope();
+        var store = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
+        foreach (var endpoint in new[] { "/qbrainai/workspace", "/mcpserver/workspace" })
+        {
+            var path = Path.Combine(factory.WorkspacePath, $"director-socket-{Guid.NewGuid():N}");
+            using var request = new HttpRequestMessage(HttpMethod.Post, new Uri(endpoint, UriKind.Relative))
+            {
+                Content = JsonContent.Create(new { workspacePath = path, name = "director-loopback" })
+            };
+            request.Headers.Add("X-Api-Key", key!);
+            using var response = await client.SendAsync(request, ct);
+            var workspace = await store.GetAsync(path, ct);
+            DefaultKeyRegistrationContract.Verify(HttpStatusCode.Created, true,
+                new(response.StatusCode, workspace is not null, File.Exists(MarkerPath(path))));
+        }
     }
 
     /// <summary>Obtains the actual ephemeral key without exposing it to test output.</summary>
