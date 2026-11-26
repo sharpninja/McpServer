@@ -123,11 +123,11 @@ public sealed class RequirementsWikiPublishScriptTests
     {
         var scriptPath = FindRepositoryFile("scripts", "Publish-RequirementsWiki.ps1");
         // 2026-11-26, TEST-MCP-WIKIEXPORT-001 ac-WikiFooterRoundTrip: use the native shell on both hosts.
-        var psi = new ProcessStartInfo(OperatingSystem.IsWindows() ? "pwsh.exe" : "pwsh")
-        {
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        };
+        var psi = OperatingSystem.IsWindows()
+            ? new ProcessStartInfo("pwsh.exe")
+            : new ProcessStartInfo("pwsh");
+        psi.RedirectStandardOutput = true;
+        psi.RedirectStandardError = true;
 
         psi.ArgumentList.Add("-NoLogo");
         psi.ArgumentList.Add("-NoProfile");
