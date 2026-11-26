@@ -172,7 +172,7 @@ internal static class RequirementsWikiDocumentRenderer
         return
         [
             new RequirementsRenderedDocument($"{platform}/_Sidebar.md", RenderMarkdownNavigation(config.Navigation, config, platformDocumentIds, groupPages), "text/markdown"),
-            new RequirementsRenderedDocument($"{platform}/_Footer.md", (config.FooterContent ?? "Generated from MCP requirements wiki export.") + "\n", "text/markdown")
+            new RequirementsRenderedDocument($"{platform}/_Footer.md", (config.FooterContent ?? RequirementsWikiFooter.DefaultContent) + "\n", "text/markdown")
         ];
     }
 
@@ -230,7 +230,7 @@ internal static class RequirementsWikiDocumentRenderer
         else
         {
             files.Add(new($"{platform}/_Sidebar.md", RenderGitHubSidebar(), "text/markdown"));
-            files.Add(new($"{platform}/_Footer.md", "Generated from MCP requirements wiki export.\n", "text/markdown"));
+            files.Add(new($"{platform}/_Footer.md", RequirementsWikiFooter.DefaultContent + "\n", "text/markdown"));
         }
     }
 

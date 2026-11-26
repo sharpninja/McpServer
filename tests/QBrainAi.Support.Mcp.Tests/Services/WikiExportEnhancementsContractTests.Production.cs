@@ -8,6 +8,18 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 
 public sealed partial class WikiExportEnhancementsContractTests
 {
+    /// <summary>Checks the default attribution in configured and legacy exports without a custom template.</summary>
+    /// <remarks>2026-11-26, TEST-MCP-WIKIEXPORT-001 ac-WikiFooterCoverage.</remarks>
+    [Fact]
+    public void ProductionDefaultFooterCreditsQBrainAndLinksToItsRepository()
+    {
+        var legacy = RequirementsWikiDocumentRenderer.RenderWikiFiles([], [], [], [],
+            new DateTimeOffset(2026, 11, 26, 0, 0, 0, TimeSpan.Zero));
+        CheckDefaultFooter(Assert.Single(legacy, static file => file.RelativePath == "github/_Footer.md").Content);
+        var configured = RenderFixture([], [], [], enabled: false, footer: null);
+        CheckDefaultFooter(configured["github/_Footer.md"]);
+    }
+
     /// <summary>Runs the mock-validated group assertions against the shared renderer for both platform variants.</summary>
     /// <remarks>2026-11-26, TEST-MCP-WIKIEXPORT-001 ac-WikiGroupDetection, ac-WikiGroupNavigation,
     /// ac-WikiGroupInventory, ac-WikiGroupRoundTrip, and ac-WikiFooterCoverage.</remarks>
@@ -74,7 +86,7 @@ public sealed partial class WikiExportEnhancementsContractTests
     }
 
     private static Dictionary<string, string> RenderFixture(
-        FrEntry[] functional, TrEntry[] technical, TestEntry[] testing, bool enabled, string footer = Footer, string? parentTarget = null)
+        FrEntry[] functional, TrEntry[] technical, TestEntry[] testing, bool enabled, string? footer = Footer, string? parentTarget = null)
     {
         string[] ids = ["home", "functional", "technical", "testing"];
         string[] titles = ["Home", "Functional Requirements", "Technical Requirements", "Testing Requirements"];
