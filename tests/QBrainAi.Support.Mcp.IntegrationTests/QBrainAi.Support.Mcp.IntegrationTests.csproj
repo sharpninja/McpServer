@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\EphemeralPostgresFixture.cs" Link="Storage\EphemeralPostgresFixture.cs" />
+    <!-- FR-MCP-009 / TR-MCP-WS-004, 2026-11-26: real HTTP results use the mock-proven observations. -->
+    <Compile Include="../QBrainAi.Support.Mcp.Tests/Middleware/DefaultKeyRegistrationContract.cs" Link="Shared/DefaultKeyRegistrationContract.cs" />
     <!-- TR-MCP-NUKE-016 AC-001: the one QuadBrain Ollama model rule InstallOllama also uses (hostile validation finding R9-F5). -->
     <Compile Include="..\..\build\QuadBrainOllamaModel.cs" Link="Shared\QuadBrainOllamaModel.cs" />
   </ItemGroup>
