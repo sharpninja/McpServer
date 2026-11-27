@@ -30,7 +30,12 @@
 # 4. Sequence the work. Give every phase a canonical phaseId. In v0.8 use
 #    exactly one sliceRef with kind todo (exact TODO ID) or task-group
 #    (canonical group UUID). A native group must resolve in the current
-#    workspace under metadata.umbrellaTodoId. Do not create a mirror TODO.
+#    workspace under metadata.umbrellaTodoId. If native Task Groups are
+#    unavailable, use ordinary TODO-backed slices: reuse verified slice TODOs
+#    or propose missing ones in the planning ledger. Legacy checklist rows
+#    are not IDs. An authorized write step may provision them through the
+#    supported TODO create tool, then bind only the read-back IDs. Leave an
+#    unbound draft explicitly blocked; do not use fake IDs or mirror groups.
 #    Choose one inline defaultSlice or a nonempty sliceRefs list resolving to
 #    delivery.slices, never both in one phase. Omit delivery.slices when all
 #    phases use the inline form. Use the same typed identity for artifact edges

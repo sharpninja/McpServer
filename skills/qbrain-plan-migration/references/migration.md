@@ -27,6 +27,8 @@ Use one companion ledger (for example, the plan basename followed by `.migration
 | Checklists, test outputs, HV scores, and release claims | Distinguish planned checks, reported history, and verified evidence. Link historic receipts in the ledger; only current matching receipts may support a gate. Require both passing fake-suite and wrong-fake rejection receipts before production; bind identical cases, inputs and assertions to the real implementation after code. Deployed checks never count toward mock-first coverage. |
 | Deployment, migration, rollback and handoff | Populate transition only when release is in scope. Preserve an implementation-only boundary if that is what was authorized. |
 
+If the source has only umbrella checklist rows or native lookup is unavailable, follow [TODO-backed provisioning](todo-provisioning.md). Preserve unresolved edges and identity-free phase charters in the ledger; report a blocked draft rather than modifying the schema to fit missing identities.
+
 ## Before handing off
 
 1. Use a YAML parser that rejects duplicate keys and a Draft 2020-12 JSON Schema validator for the parsed data. The schema root accepts draft nulls. Use `#/$defs/approvalCandidate` to check populated planning data and `#/$defs/executionCandidate` to check for an approval reference; passing either does not verify approval.
