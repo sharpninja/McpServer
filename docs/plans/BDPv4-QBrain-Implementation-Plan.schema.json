@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:byrd-dev-process:qbrain:implementation-plan:0.7",
-  "title": "BDPv4 + QBrain Implementation Plan, v0.7",
+  "$id": "urn:byrd-dev-process:qbrain:implementation-plan:0.8",
+  "title": "BDPv4 + QBrain Implementation Plan, v0.7 and v0.8",
   "description": "Validates the data from a single YAML document parsed as a JSON-compatible mapping. Default validation accepts the blank draft template, including placeholders and nulls. Use #/$defs/approvalCandidate for filled planning data and #/$defs/executionCandidate when an approval reference is required. The YAML agent header remains comments. The canonical plan uses an external QBrain tracking reference; a generated copy may embed a read-only tracking snapshot and receipt index.",
-  "$comment": "Reject duplicate YAML mapping keys before validation. Independently verify canonical ID uniqueness by field, version lineage, reference resolution, phase/slice membership, artifact producer cardinality and readiness order, DAG cycles, QBrain parity, C4/SVG/storyboard files, test coverage, and current approval and HV receipts. Structural validation is not plan readiness or execution authorization. A semantic validator must resolve receipt IDs, verify scope and freshness against authoritative records and derive aggregate milestones. An embedded snapshot is not an approval candidate. Resolve phase membership and effective slice IDs across both forms; reject unused explicit slices and duplicated IDs, and verify identical gates and evidence for inline defaults.",
+  "$comment": "Reject duplicate YAML mapping keys before validation. Independently verify canonical ID uniqueness by field, version lineage, reference resolution, phase/slice membership, artifact producer cardinality and readiness order, DAG cycles, QBrain parity, C4/SVG/storyboard files, test coverage, and current approval and HV receipts. Structural validation is not plan readiness or execution authorization. A semantic validator must resolve receipt IDs, verify scope and freshness against authoritative records and derive aggregate milestones. An embedded snapshot is not an approval candidate. Resolve phase membership and effective slice IDs across both forms; reject unused explicit slices and duplicated IDs, and verify identical gates and evidence for inline defaults. Validate legacy v0.7 shape in place and normalize legacy IDs only in memory. For v0.8 verify typed group UUIDs against the actual workspace and umbrella TODO, and reject duplicate definitions across inline and explicit phases. Do not infer live group eligibility or completion from this schema.",
   "$ref": "#/$defs/plan",
   "$defs": {
     "nonEmptyText": {
@@ -111,6 +111,14 @@
         },
         "defaultSlice": {
           "$ref": "#/$defs/slice"
+        },
+        "sliceRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sliceRef"
+          },
+          "minItems": 1,
+          "uniqueItems": true
         }
       },
       "required": [
@@ -127,8 +135,17 @@
             "defaultSlice"
           ],
           "not": {
-            "required": [
-              "sliceTodoIds"
+            "anyOf": [
+              {
+                "required": [
+                  "sliceTodoIds"
+                ]
+              },
+              {
+                "required": [
+                  "sliceRefs"
+                ]
+              }
             ]
           }
         },
@@ -137,13 +154,41 @@
             "sliceTodoIds"
           ],
           "not": {
-            "required": [
-              "defaultSlice"
+            "anyOf": [
+              {
+                "required": [
+                  "defaultSlice"
+                ]
+              },
+              {
+                "required": [
+                  "sliceRefs"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "required": [
+            "sliceRefs"
+          ],
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "defaultSlice"
+                ]
+              },
+              {
+                "required": [
+                  "sliceTodoIds"
+                ]
+              }
             ]
           }
         }
       ],
-      "description": "Choose an inline default slice or reference a nonempty list of separately declared slice TODOs, not both."
+      "description": "Choose an inline default slice or a nonempty version-appropriate list of explicit slice references, not both."
     },
     "acceptanceTrace": {
       "type": "object",
@@ -251,10 +296,12 @@
           },
           "uniqueItems": true,
           "minItems": 1
+        },
+        "sliceRef": {
+          "$ref": "#/$defs/sliceRef"
         }
       },
       "required": [
-        "todoId",
         "ownerRef",
         "behaviorBoundary",
         "requirementRefs",
@@ -264,7 +311,29 @@
         "acceptanceTrace",
         "gateIds"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": [
+            "todoId"
+          ],
+          "not": {
+            "required": [
+              "sliceRef"
+            ]
+          }
+        },
+        {
+          "required": [
+            "sliceRef"
+          ],
+          "not": {
+            "required": [
+              "todoId"
+            ]
+          }
+        }
+      ]
     },
     "artifact": {
       "type": "object",
@@ -361,16 +430,40 @@
         },
         "purpose": {
           "$ref": "#/$defs/nullableText"
+        },
+        "sliceRef": {
+          "$ref": "#/$defs/sliceRef"
         }
       },
       "required": [
-        "sliceTodoId",
         "artifactVersionId",
         "relationship",
         "gateId",
         "purpose"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": [
+            "sliceTodoId"
+          ],
+          "not": {
+            "required": [
+              "sliceRef"
+            ]
+          }
+        },
+        {
+          "required": [
+            "sliceRef"
+          ],
+          "not": {
+            "required": [
+              "sliceTodoId"
+            ]
+          }
+        }
+      ]
     },
     "artifactMap": {
       "type": "object",
@@ -909,35 +1002,91 @@
             },
             "impact": {
               "$ref": "#/$defs/nonEmptyText"
+            },
+            "sliceRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/sliceRef"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
             "phaseId",
-            "sliceTodoIds",
             "artifacts",
             "versions",
             "edges",
             "impact"
           ],
-          "additionalProperties": false
+          "additionalProperties": false,
+          "oneOf": [
+            {
+              "required": [
+                "sliceTodoIds"
+              ],
+              "not": {
+                "required": [
+                  "sliceRefs"
+                ]
+              }
+            },
+            {
+              "required": [
+                "sliceRefs"
+              ],
+              "not": {
+                "required": [
+                  "sliceTodoIds"
+                ]
+              }
+            }
+          ]
+        },
+        "sliceRef": {
+          "$ref": "#/$defs/sliceRef"
         }
       },
       "required": [
         "qualifiedCriterion",
         "testRequirement",
-        "sliceTodo",
         "behavior",
         "unitBoundary",
         "evidenceSequence",
         "separateIntegration"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": [
+            "sliceTodo"
+          ],
+          "not": {
+            "required": [
+              "sliceRef"
+            ]
+          }
+        },
+        {
+          "required": [
+            "sliceRef"
+          ],
+          "not": {
+            "required": [
+              "sliceTodo"
+            ]
+          }
+        }
+      ]
     },
     "plan": {
       "type": "object",
       "properties": {
         "schemaVersion": {
-          "const": "0.7"
+          "enum": [
+            "0.7",
+            "0.8"
+          ]
         },
         "kind": {
           "const": "BdpImplementationPlan"
@@ -1345,8 +1494,17 @@
                 "properties": {
                   "phases": {
                     "contains": {
-                      "required": [
-                        "sliceTodoIds"
+                      "anyOf": [
+                        {
+                          "required": [
+                            "sliceTodoIds"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "sliceRefs"
+                          ]
+                        }
                       ]
                     }
                   }
@@ -1718,6 +1876,9 @@
               },
               "minItems": 1,
               "uniqueItems": true
+            },
+            "taskWorkflow": {
+              "$ref": "#/$defs/taskWorkflow"
             }
           },
           "required": [
@@ -1940,6 +2101,302 @@
       ],
       "additionalProperties": false,
       "allOf": [
+        {
+          "if": {
+            "properties": {
+              "schemaVersion": {
+                "const": "0.7"
+              }
+            },
+            "required": [
+              "schemaVersion"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "phases": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "defaultSlice": {
+                          "not": {
+                            "required": [
+                              "sliceRef"
+                            ]
+                          }
+                        }
+                      },
+                      "not": {
+                        "required": [
+                          "sliceRefs"
+                        ]
+                      }
+                    }
+                  },
+                  "slices": {
+                    "type": "array",
+                    "items": {
+                      "not": {
+                        "required": [
+                          "sliceRef"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "artifactDependencies": {
+                "type": "object",
+                "properties": {
+                  "edges": {
+                    "type": "array",
+                    "items": {
+                      "not": {
+                        "required": [
+                          "sliceRef"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "receiptTracking": {
+                "type": "object",
+                "properties": {
+                  "records": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "scope": {
+                          "not": {
+                            "required": [
+                              "sliceRef"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "completionTracking": {
+                "type": "object",
+                "properties": {
+                  "snapshot": {
+                    "if": {
+                      "type": "object"
+                    },
+                    "then": {
+                      "type": "object",
+                      "properties": {
+                        "records": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "scope": {
+                                "not": {
+                                  "required": [
+                                    "sliceRef"
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "type": "object",
+                "properties": {
+                  "artifactDependency": {
+                    "type": "object",
+                    "properties": {
+                      "edges": {
+                        "type": "array",
+                        "items": {
+                          "not": {
+                            "required": [
+                              "sliceRef"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "not": {
+                      "required": [
+                        "sliceRefs"
+                      ]
+                    }
+                  }
+                },
+                "not": {
+                  "required": [
+                    "sliceRef"
+                  ]
+                }
+              },
+              "qbrain": {
+                "type": "object",
+                "not": {
+                  "required": [
+                    "taskWorkflow"
+                  ]
+                }
+              }
+            }
+          },
+          "else": {
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "phases": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "defaultSlice": {
+                          "not": {
+                            "required": [
+                              "todoId"
+                            ]
+                          }
+                        }
+                      },
+                      "not": {
+                        "required": [
+                          "sliceTodoIds"
+                        ]
+                      }
+                    }
+                  },
+                  "slices": {
+                    "type": "array",
+                    "items": {
+                      "not": {
+                        "required": [
+                          "todoId"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "artifactDependencies": {
+                "type": "object",
+                "properties": {
+                  "edges": {
+                    "type": "array",
+                    "items": {
+                      "not": {
+                        "required": [
+                          "sliceTodoId"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "receiptTracking": {
+                "type": "object",
+                "properties": {
+                  "records": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "scope": {
+                          "not": {
+                            "required": [
+                              "sliceTodoId"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "completionTracking": {
+                "type": "object",
+                "properties": {
+                  "snapshot": {
+                    "if": {
+                      "type": "object"
+                    },
+                    "then": {
+                      "type": "object",
+                      "properties": {
+                        "records": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "scope": {
+                                "not": {
+                                  "required": [
+                                    "sliceTodoId"
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "type": "object",
+                "properties": {
+                  "artifactDependency": {
+                    "type": "object",
+                    "properties": {
+                      "edges": {
+                        "type": "array",
+                        "items": {
+                          "not": {
+                            "required": [
+                              "sliceTodoId"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "not": {
+                      "required": [
+                        "sliceTodoIds"
+                      ]
+                    }
+                  }
+                },
+                "not": {
+                  "required": [
+                    "sliceTodo"
+                  ]
+                }
+              },
+              "qbrain": {
+                "type": "object",
+                "required": [
+                  "taskWorkflow"
+                ]
+              }
+            }
+          }
+        },
         {
           "if": {
             "type": "object",
@@ -3000,13 +3457,37 @@
             },
             "sliceTodoId": {
               "$ref": "#/$defs/todoId"
+            },
+            "sliceRef": {
+              "$ref": "#/$defs/sliceRef"
             }
           },
           "required": [
-            "kind",
-            "sliceTodoId"
+            "kind"
           ],
-          "additionalProperties": false
+          "additionalProperties": false,
+          "oneOf": [
+            {
+              "required": [
+                "sliceTodoId"
+              ],
+              "not": {
+                "required": [
+                  "sliceRef"
+                ]
+              }
+            },
+            {
+              "required": [
+                "sliceRef"
+              ],
+              "not": {
+                "required": [
+                  "sliceTodoId"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -3487,6 +3968,87 @@
         "indexRef",
         "records",
         "rules"
+      ],
+      "additionalProperties": false
+    },
+    "sliceRef": {
+      "description": "Exactly one authoritative slice identity: a legacy TODO or a native Task Group belonging to the umbrella TODO.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "todo"
+            },
+            "todoId": {
+              "$ref": "#/$defs/todoId"
+            }
+          },
+          "required": [
+            "kind",
+            "todoId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "task-group"
+            },
+            "taskGroupId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "not": {
+                "const": "00000000-0000-0000-0000-000000000000"
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "taskGroupId"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "taskWorkflow": {
+      "type": "object",
+      "properties": {
+        "architectureRef": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "implementationBarrier": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyText"
+          }
+        },
+        "groupCompletionHv": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyText"
+          }
+        },
+        "parallelDispatch": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyText"
+          }
+        }
+      },
+      "required": [
+        "architectureRef",
+        "implementationBarrier",
+        "groupCompletionHv",
+        "parallelDispatch"
       ],
       "additionalProperties": false
     }
