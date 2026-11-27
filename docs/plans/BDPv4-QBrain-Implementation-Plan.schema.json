@@ -3,7 +3,7 @@
   "$id": "urn:byrd-dev-process:qbrain:implementation-plan:0.8",
   "title": "BDPv4 + QBrain Implementation Plan, v0.7 and v0.8",
   "description": "Validates the data from a single YAML document parsed as a JSON-compatible mapping. Default validation accepts the blank draft template, including placeholders and nulls. Use #/$defs/approvalCandidate for filled planning data and #/$defs/executionCandidate when an approval reference is required. The YAML agent header remains comments. The canonical plan uses an external QBrain tracking reference; a generated copy may embed a read-only tracking snapshot and receipt index.",
-  "$comment": "Reject duplicate YAML mapping keys before validation. Independently verify canonical ID uniqueness by field, version lineage, reference resolution, phase/slice membership, artifact producer cardinality and readiness order, DAG cycles, QBrain parity, C4/SVG/storyboard files, test coverage, and current approval and HV receipts. Structural validation is not plan readiness or execution authorization. A semantic validator must resolve receipt IDs, verify scope and freshness against authoritative records and derive aggregate milestones. An embedded snapshot is not an approval candidate. Resolve phase membership and effective slice IDs across both forms; reject unused explicit slices and duplicated IDs, and verify identical gates and evidence for inline defaults. Validate legacy v0.7 shape in place and normalize legacy IDs only in memory. For v0.8 verify typed group UUIDs against the actual workspace and umbrella TODO, and reject duplicate definitions across inline and explicit phases. Do not infer live group eligibility or completion from this schema.",
+  "$comment": "Reject duplicate YAML mapping keys before validation. Independently verify canonical ID uniqueness by field, version lineage, reference resolution, phase/slice membership, artifact producer cardinality and readiness order, DAG cycles, QBrain parity, C4/SVG/storyboard files, test coverage, and current approval and HV receipts. Structural validation is not plan readiness or execution authorization. A semantic validator must resolve receipt IDs, verify scope and freshness against authoritative records and derive aggregate milestones. An embedded snapshot is not an approval candidate. Resolve phase membership and effective slice IDs across both forms; reject unused explicit slices and duplicated IDs, and verify identical gates and evidence for inline defaults. Validate legacy v0.7 shape in place and normalize legacy IDs only in memory. For v0.8 verify typed group UUIDs against the actual workspace and umbrella TODO, and reject duplicate definitions across inline and explicit phases. Do not infer live group eligibility or completion from this schema. For v0.8, the execution-entry gate follows mocks-validated and precedes implementation-exit. Verify mixed-slice artifact publication and native group completion/HV as distinct facts before execution, and verify every native group at phase exit. JSON Schema does not validate live state or authorize an early handoff.",
   "$ref": "#/$defs/plan",
   "$defs": {
     "nonEmptyText": {
@@ -1704,31 +1704,6 @@
                 "type": "object",
                 "properties": {
                   "id": {
-                    "const": "implementation-exit"
-                  },
-                  "kind": {
-                    "const": "stage-exit"
-                  },
-                  "requires": {
-                    "contains": {
-                      "const": "mocks-validated"
-                    },
-                    "minContains": 1
-                  }
-                },
-                "required": [
-                  "id",
-                  "kind",
-                  "requires"
-                ]
-              },
-              "minContains": 1
-            },
-            {
-              "contains": {
-                "type": "object",
-                "properties": {
-                  "id": {
                     "const": "phase-exit"
                   },
                   "kind": {
@@ -2252,6 +2227,32 @@
                     "taskWorkflow"
                   ]
                 }
+              },
+              "gates": {
+                "type": "array",
+                "contains": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "const": "implementation-exit"
+                    },
+                    "kind": {
+                      "const": "stage-exit"
+                    },
+                    "requires": {
+                      "contains": {
+                        "const": "mocks-validated"
+                      },
+                      "minContains": 1
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "kind",
+                    "requires"
+                  ]
+                },
+                "minContains": 1
               }
             }
           },
@@ -2392,6 +2393,65 @@
                 "type": "object",
                 "required": [
                   "taskWorkflow"
+                ]
+              },
+              "gates": {
+                "type": "array",
+                "allOf": [
+                  {
+                    "contains": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "const": "execution-entry"
+                        },
+                        "kind": {
+                          "const": "entry"
+                        },
+                        "requires": {
+                          "contains": {
+                            "const": "mocks-validated"
+                          },
+                          "minContains": 1
+                        },
+                        "level": {
+                          "const": "slice"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "kind",
+                        "requires",
+                        "level"
+                      ]
+                    },
+                    "minContains": 1
+                  },
+                  {
+                    "contains": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "const": "implementation-exit"
+                        },
+                        "kind": {
+                          "const": "stage-exit"
+                        },
+                        "requires": {
+                          "contains": {
+                            "const": "execution-entry"
+                          },
+                          "minContains": 1
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "kind",
+                        "requires"
+                      ]
+                    },
+                    "minContains": 1
+                  }
                 ]
               }
             }

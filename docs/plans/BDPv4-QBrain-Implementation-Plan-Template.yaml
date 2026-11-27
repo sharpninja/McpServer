@@ -53,11 +53,21 @@
 #    a test-owned fake plus a wrong-fake negative control rejected by the same
 #    assertions. Retain both receipts; reuse the same cases against the real
 #    implementation. For native Task Groups:
-#    - Design and mock-test members in parallel while Planning. No member may
-#      start implementation until every member has current reviewed design,
-#      all applicable mocks and negative controls are verified, and its own
-#      Task/Group prerequisites are complete. Verification-only Tasks need
-#      reviewed pass criteria and inputs, not a mock suite.
+#    - At slice-entry verify only inputs needed for design and mocks. Design
+#      and mock-test members in parallel while Planning when those inputs are
+#      available, even with unfinished execution predecessors. At execution-entry
+#      verify implementation inputs and execution prerequisites; for native
+#      Tasks do this at Ready -> Started, with every member's current design
+#      and applicable mock evidence. Verification-only Tasks need reviewed
+#      pass criteria and inputs, not a mock suite.
+#    - A TODO-backed consumer of a native group's output cannot implement until
+#      execution-entry verifies both the exact artifact version and that group
+#      is Completed with current final HV AGREE. Derive the producer from the
+#      artifact edge; do not put its UUID in the legacy TODO dependency list.
+#      A pending-group early handoff requires a scoped, expiring human approval
+#      and current evidence; it cannot override failed HV, native prerequisites,
+#      or phase exit. At phase-exit verify every native group is Completed with
+#      its current final HV, in addition to the separate phase review.
 #    - Let members pass their own gates and reach Success before the last HV
 #      Task. It must depend on every other member and independently inspect
 #      their exact evidence, requiring AGREE at 98/98 or the higher configured
@@ -241,6 +251,7 @@ delivery:
         gateIds:
           - "slice-entry"
           - "mocks-validated"
+          - "execution-entry"
           - "implementation-exit"
       exitGateIds:
         - "phase-exit"
@@ -270,7 +281,7 @@ artifactDependencies:
     - sliceRef: { kind: todo, todoId: "AREA-SLICE-001" }
       artifactVersionId: "<registered version ID>"
       relationship: "consumes" # consumes | produces
-      gateId: "slice-entry" # consumes: valid before this gate; produces: available after this gate passes
+      gateId: "slice-entry" # Use slice-entry for design/mock inputs, execution-entry for implementation inputs.
       purpose: null
   rules:
     - "Give every plan artifact one canonical artifactId. Register relevant requirements snapshots, architecture, design, code, tests, packages and evidence when they are plan artifacts; do not register unrelated repository files."
@@ -278,7 +289,9 @@ artifactDependencies:
     - "Resolve IDs and gate applicability. Every slice-output version has exactly one producer; any number of slices can consume that version. Baseline versions have no slice producer."
     - "To update an artifact, consume the prior version and produce a distinct version with supersedesVersionId. A reference to an old version never silently moves to a replacement."
     - "Treat producer gate to consumer gate as the precedence edge. Verify availability before use; reject missing sources, cycles, impossible ordering, or consumption before the producer gate passes. If a gate produces a candidate consumed within that same gate for validation, it is that gate’s local work, not an input marked available beforehand."
-    - "Check correspondence with QBrain TODO or Task Group prerequisites for cross-slice ordering. Do not keep a separate task-to-task edge list here."
+    - "Map each input to the earliest gate that actually uses it. Verify design/mock inputs at slice-entry or before use during mocks; do not move a required pre-code input to execution-entry to evade the check."
+    - "For required slice outputs, derive the producer from the registered version and its unique produces edge. When that producer is a native group and its consumer a legacy TODO, enforce both artifact evidence and native group completion at execution-entry, even if the artifact was available earlier for design."
+    - "Check correspondence with QBrain TODO or Task Group prerequisites for cross-slice ordering. Legacy TODO dependency lists cannot represent a group UUID. Apply the derived cross-kind gate and verify its receipts; do not create mirror TODOs or a separate task graph."
     - "On change, follow reverse consumers and affected outputs transitively. Record impacted slices, gates and receipts; revalidate affected work and preserve unrelated valid evidence."
 
 gates:
@@ -342,9 +355,9 @@ gates:
     checkRefs: []
     evidenceRef: null
     pass:
-      - "Verify workspace identity, applicable revisions and QBrain TODO or Task Group predecessors."
-      - "Verify each mapped input when due. A planned output is not available to consumers until its producer gate passes with evidence for that version."
-      - "Resolve intended behavior, unit test scope and owners before proceeding."
+      - "Verify workspace identity, applicable revisions, design and mock inputs due at this gate, intended behavior, unit test scope and ownership."
+      - "Allow Planning, design and mock work when its required inputs are available, even if execution-only TODO, Task or Group prerequisites are unfinished."
+      - "If a design or mock input itself is missing or its required producer gate is not evidenced for the exact version, block only the affected work until that input is valid."
   - id: "mocks-validated"
     level: "slice"
     kind: "stage-exit"
@@ -357,10 +370,21 @@ gates:
       - "Supply deliberately incorrect responses or interactions. The same assertions must reject the wrong fake for the intended reason, not a setup error. Capture that negative control without making the passing mock suite fail."
       - "Preserve separately identifiable mock-run and negative-control receipts, including suite, command, scope, counts and rejection, bound to the current contract, inputs, harness and relevant baseline."
       - "Never mock away the behavior under assertion or substitute deployed checks for unit evidence."
+  - id: "execution-entry"
+    level: "slice"
+    kind: "entry"
+    requires: ["mocks-validated"]
+    checkRefs: []
+    evidenceRef: null
+    pass:
+      - "Before implementation, verify current pre-code evidence, the exact inputs due for execution and applicable completed execution prerequisites. For native Tasks, recheck the group design/mock barrier and native prerequisites at Ready -> Started."
+      - "For a TODO-backed consumer, resolve each required native producer through the consumed version and its produces edge. Verify both the exact artifact version and revision/digest in its producer receipt and the same group's Completed state with its current final independent HV AGREE at the applicable 98/98-or-higher floor. Neither artifact publication nor member or slice Success alone is sufficient."
+      - "If group HV is only pending, allow early TODO-backed execution only under a current, explicit, human-approved exception for the exact producer group, consumer TODO, artifact revision and permitted limited actions. Otherwise block on pending, failed, stale, missing or unverified group evidence."
+      - "Before any early handoff, record the exception and verify its approval, owner, allowed actions, evidence and expiry. Stop affected work and invalidate dependent evidence on failed HV, scope or input change, or expiry. No exception overrides native QBrain prerequisites or waives phase completion."
   - id: "implementation-exit"
     level: "slice"
     kind: "stage-exit"
-    requires: ["mocks-validated"]
+    requires: ["execution-entry"]
     checkRefs: []
     evidenceRef: null
     pass:
@@ -374,7 +398,9 @@ gates:
     checkRefs: []
     evidenceRef: null
     pass:
-      - "All effective slices in this phase have passed their exits, including the inline default when used. Check the combined deliverables against the phase objective, risk and scope; the phase review stays separate."
+      - "All effective slices in this phase have passed their exits, including the inline default when used."
+      - "Every native group in the phase is verified Completed with a current passing receipt from its final independent group HV Task. Early handoff cannot satisfy or waive this check."
+      - "Check the combined deliverables against the phase objective, risk and scope; complete the independent phase review separately."
   - id: "validation-exit"
     level: "phase"
     kind: "stage-exit"
@@ -465,13 +491,13 @@ qbrain:
   taskWorkflow:
     architectureRef: "https://github.com/sharpninja/McpServer/blob/ea337d4994040ad14f6c7428164fdc685cdfec51/docs/architecture/Task-Workflow-Architecture.md#3511-groupimplementationbarrierpolicy"
     implementationBarrier:
-      - "Design and mock-test work may proceed in parallel while members are Planning, including in later groups. This design work is not a Started attempt."
+      - "Design and mock-test work may proceed in parallel while members are Planning, including in later groups once the required design/mock inputs are available. Execution prerequisites do not gate that work. This work is not a Started attempt."
       - "Start no implementation until every member has current, reviewed design evidence and all applicable contract mock suites and negative controls are verified. Verification-only tasks need reviewed pass criteria and evidence inputs, not a mock run."
-      - "Before starting any member, also verify that its explicit Task and Group prerequisites are complete. Record current definition versions and evidence references in QBrain."
+      - "Recheck explicit Task and Group execution prerequisites at Ready -> Started, after the design/mock barrier. Record current definition versions and evidence references in QBrain."
     groupCompletionHv:
       - "Require exactly one final HV Task, last by group ordinal, with explicit dependencies on every other member. Those members may independently satisfy their acceptance gates and reach Success before the final HV Task starts. Do not make them wait for that verdict."
       - "Use a reviewer from a different agent and model family than every member-attempt author, per the governing contract. Review the exact member evidence; require independent AGREE with both accuracy/correctness and completeness at least 98 (or the configured higher floor). Preserve the independent request, response and verdict receipts."
-      - "A group is Completed only after its final HV Task reaches Success. A failed verdict blocks dependent work; use audited correction Tasks for frozen successful work. Retain separate slice, stage and phase reviews at their declared scopes."
+      - "A group is Completed only after its final HV Task reaches Success. A failed verdict blocks dependent work; use audited correction Tasks for frozen successful work. Apply execution-entry to TODO-backed consumers of native output and require verified native group completion at phase-exit; retain separate slice, stage and phase reviews."
     parallelDispatch:
       - "Dispatch only independently runnable Task Groups with satisfied prerequisites. Keep at most one Started Task per Group and one active assignment per Group. A plan setting cannot change that sequencing contract."
       - "Before dispatch, assign one integration owner for each shared project file, package pin or generated build file. Separate concurrent worktrees, output paths and disposable fixtures; check combined disk needs. Run at most one Nuke invocation per worktree."
@@ -481,7 +507,9 @@ risks: []
 openDecisions: []
 exceptions: []
 # Use owning records or include an owner, affected scope, resolution and evidence
-# reference. Exceptions additionally carry approval, limits and expiry.
+# reference. Exceptions additionally carry approval, limits and expiry. For
+# early mixed-slice handoffs, include producer group UUID, consumer TODO ID,
+# artifact revision/digest, execution-entry, and explicitly permitted actions.
 
 transition:
   # Fill only if release is in scope. Keep checks separate from the unit gate.
@@ -583,12 +611,17 @@ example:
         artifactVersionId: "EXPORT-CONTRACT-V2"
         relationship: "produces"
         gateId: "implementation-exit"
-        purpose: "Make the verified revised contract available."
+        purpose: "Publish the verified V2 artifact; publication does not imply final group HV or authorize the TODO consumer to implement."
+      - sliceRef: { kind: todo, todoId: "EXPORT-VALIDATION-001" }
+        artifactVersionId: "EXPORT-CONTRACT-V1"
+        relationship: "consumes"
+        gateId: "slice-entry"
+        purpose: "Plan and mock against the approved baseline for unchanged cases. Cases that require V2 wait for that input and must be checked again against V2 before implementation."
       - sliceRef: { kind: todo, todoId: "EXPORT-VALIDATION-001" }
         artifactVersionId: "EXPORT-CONTRACT-V2"
         relationship: "consumes"
-        gateId: "slice-entry"
-        purpose: "Validate behavior against the revised contract."
+        gateId: "execution-entry"
+        purpose: "Implement against the exact V2 artifact only after verifying its publication receipt and the producing group's Completed state and final 98/98-or-higher HV AGREE. No early handoff is assumed."
     impact: "If the contract version changes, review the consumer and any outputs that depend on it."
 
 references:
