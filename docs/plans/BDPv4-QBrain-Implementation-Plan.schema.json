@@ -1,0 +1,3409 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:byrd-dev-process:qbrain:implementation-plan:0.6",
+  "title": "BDPv4 + QBrain Implementation Plan, v0.6",
+  "description": "Validates the data from a single YAML document parsed as a JSON-compatible mapping. Default validation accepts the blank draft template, including placeholders and nulls. Use #/$defs/approvalCandidate for filled planning data and #/$defs/executionCandidate when an approval reference is required. The YAML agent header remains comments. The canonical plan uses an external QBrain tracking reference; a generated copy may embed a read-only tracking snapshot and receipt index.",
+  "$comment": "Reject duplicate YAML mapping keys before validation. Independently verify canonical ID uniqueness by field, version lineage, reference resolution, phase/slice membership, artifact producer cardinality and readiness order, DAG cycles, QBrain parity, C4/SVG/storyboard files, test coverage, and current approval and HV receipts. Structural validation is not plan readiness or execution authorization. A semantic validator must resolve receipt IDs, verify scope and freshness against authoritative records and derive aggregate milestones. An embedded snapshot is not an approval candidate.",
+  "$ref": "#/$defs/plan",
+  "$defs": {
+    "nonEmptyText": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nullableText": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "textList": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "canonicalRef": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/+\\-]*$"
+    },
+    "phaseId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-[0-9]{3}$"
+    },
+    "todoId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-[0-9]{3}$"
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^ISSUE-[0-9]+$"
+        }
+      ]
+    },
+    "artifactId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/+\\-]*$",
+      "description": "Stable canonical ID from the owning workspace, not a file path or a version. Prefer ART-<AREA>-<NAME>-<NNN> for new IDs."
+    },
+    "gateId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "artifactVersionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?:[0-9a-fA-F]{40}|[0-9a-fA-F]{64})$"
+    },
+    "digestOrRevision": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+    },
+    "phase": {
+      "type": "object",
+      "properties": {
+        "phaseId": {
+          "$ref": "#/$defs/phaseId"
+        },
+        "title": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "objective": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "riskRetired": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "sliceTodoIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/todoId"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "exitGateIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gateId"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      },
+      "required": [
+        "phaseId",
+        "title",
+        "objective",
+        "riskRetired",
+        "sliceTodoIds",
+        "exitGateIds"
+      ],
+      "additionalProperties": false
+    },
+    "acceptanceTrace": {
+      "type": "object",
+      "properties": {
+        "requirementId": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "criterionId": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "testRequirementIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/canonicalRef"
+          },
+          "uniqueItems": true
+        },
+        "unitTestRefs": {
+          "$ref": "#/$defs/textList"
+        },
+        "separateValidationRefs": {
+          "$ref": "#/$defs/textList"
+        }
+      },
+      "required": [
+        "requirementId",
+        "criterionId",
+        "testRequirementIds",
+        "unitTestRefs",
+        "separateValidationRefs"
+      ],
+      "additionalProperties": false
+    },
+    "slice": {
+      "type": "object",
+      "properties": {
+        "todoId": {
+          "$ref": "#/$defs/todoId"
+        },
+        "ownerRef": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "behaviorBoundary": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "requirementRefs": {
+          "type": "object",
+          "properties": {
+            "functional": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/canonicalRef"
+              },
+              "uniqueItems": true
+            },
+            "technical": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/canonicalRef"
+              },
+              "uniqueItems": true
+            },
+            "testing": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/canonicalRef"
+              },
+              "uniqueItems": true
+            },
+            "useCases": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/canonicalRef"
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "functional",
+            "technical",
+            "testing",
+            "useCases"
+          ],
+          "additionalProperties": false
+        },
+        "architectureRefs": {
+          "$ref": "#/$defs/textList"
+        },
+        "c4ElementRefs": {
+          "$ref": "#/$defs/textList"
+        },
+        "uiTraceRefs": {
+          "$ref": "#/$defs/textList"
+        },
+        "acceptanceTrace": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/acceptanceTrace"
+          }
+        },
+        "gateIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gateId"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      },
+      "required": [
+        "todoId",
+        "ownerRef",
+        "behaviorBoundary",
+        "requirementRefs",
+        "architectureRefs",
+        "c4ElementRefs",
+        "uiTraceRefs",
+        "acceptanceTrace",
+        "gateIds"
+      ],
+      "additionalProperties": false
+    },
+    "artifact": {
+      "type": "object",
+      "properties": {
+        "artifactId": {
+          "$ref": "#/$defs/artifactId"
+        },
+        "kind": {
+          "enum": [
+            "requirements",
+            "architecture",
+            "c4-model",
+            "use-case",
+            "wireframe",
+            "storyboard",
+            "code",
+            "test",
+            "package",
+            "evidence",
+            "other",
+            "<requirements | architecture | c4-model | use-case | wireframe | storyboard | code | test | package | other>"
+          ]
+        },
+        "ownerRef": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "required": [
+        "artifactId",
+        "kind",
+        "ownerRef"
+      ],
+      "additionalProperties": false
+    },
+    "artifactVersion": {
+      "type": "object",
+      "properties": {
+        "artifactVersionId": {
+          "$ref": "#/$defs/artifactVersionId"
+        },
+        "artifactId": {
+          "$ref": "#/$defs/artifactId"
+        },
+        "sourceRef": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "sourceKind": {
+          "enum": [
+            "baseline",
+            "slice-output"
+          ]
+        },
+        "baselineRevisionOrDigest": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "supersedesVersionId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/artifactVersionId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "artifactVersionId",
+        "artifactId",
+        "sourceRef",
+        "sourceKind",
+        "baselineRevisionOrDigest",
+        "supersedesVersionId"
+      ],
+      "additionalProperties": false
+    },
+    "edge": {
+      "type": "object",
+      "properties": {
+        "sliceTodoId": {
+          "$ref": "#/$defs/todoId"
+        },
+        "artifactVersionId": {
+          "$ref": "#/$defs/artifactVersionId"
+        },
+        "relationship": {
+          "enum": [
+            "consumes",
+            "produces"
+          ]
+        },
+        "gateId": {
+          "$ref": "#/$defs/gateId"
+        },
+        "purpose": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "required": [
+        "sliceTodoId",
+        "artifactVersionId",
+        "relationship",
+        "gateId",
+        "purpose"
+      ],
+      "additionalProperties": false
+    },
+    "artifactMap": {
+      "type": "object",
+      "properties": {
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact"
+          },
+          "uniqueItems": true
+        },
+        "versions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifactVersion"
+          },
+          "uniqueItems": true
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/edge"
+          },
+          "uniqueItems": true
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyText"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "artifacts",
+        "versions",
+        "edges",
+        "rules"
+      ],
+      "additionalProperties": false
+    },
+    "gate": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/gateId"
+        },
+        "level": {
+          "enum": [
+            "plan",
+            "phase",
+            "slice",
+            "release"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "stage-exit",
+            "approval",
+            "entry"
+          ]
+        },
+        "appliesWhen": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gateId"
+          },
+          "uniqueItems": true
+        },
+        "requiresWhen": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "gateId": {
+                "$ref": "#/$defs/gateId"
+              },
+              "when": {
+                "$ref": "#/$defs/nonEmptyText"
+              }
+            },
+            "required": [
+              "gateId",
+              "when"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "checkRefs": {
+          "$ref": "#/$defs/textList"
+        },
+        "evidenceRef": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "pass": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyText"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "level",
+        "kind",
+        "requires",
+        "checkRefs",
+        "evidenceRef",
+        "pass"
+      ],
+      "additionalProperties": false
+    },
+    "reviewPolicy": {
+      "type": "object",
+      "properties": {
+        "requiredAt": {
+          "const": "every-applicable-stage-exit"
+        },
+        "reviewerMustBeIndependentOfImplementer": {
+          "const": true
+        },
+        "additionalPolicyRefs": {
+          "$ref": "#/$defs/textList"
+        },
+        "reviewerConfigurationRef": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "receiptFormat": {
+          "const": "jsonl"
+        },
+        "exitGate": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "const": "AGREE"
+            },
+            "scoreScaleMaximum": {
+              "const": 100
+            },
+            "accuracyMinimum": {
+              "type": "number",
+              "minimum": 98,
+              "maximum": 100
+            },
+            "completenessMinimum": {
+              "type": "number",
+              "minimum": 98,
+              "maximum": 100
+            },
+            "failCountMaximum": {
+              "const": 0
+            },
+            "unknownCountMaximum": {
+              "const": 0
+            },
+            "missingRequiredClaimsMaximum": {
+              "const": 0
+            }
+          },
+          "required": [
+            "verdict",
+            "scoreScaleMaximum",
+            "accuracyMinimum",
+            "completenessMinimum",
+            "failCountMaximum",
+            "unknownCountMaximum",
+            "missingRequiredClaimsMaximum"
+          ],
+          "additionalProperties": false
+        },
+        "reviewAgainst": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "applicationRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyText"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "requiredAt",
+        "reviewerMustBeIndependentOfImplementer",
+        "additionalPolicyRefs",
+        "reviewerConfigurationRef",
+        "receiptFormat",
+        "exitGate",
+        "reviewAgainst",
+        "applicationRules"
+      ],
+      "additionalProperties": false
+    },
+    "decisionOrRisk": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "summary": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "ownerRef": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "affectedScopeRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonEmptyText"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "resolutionRef": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "evidenceRef": {
+              "$ref": "#/$defs/nullableText"
+            }
+          },
+          "required": [
+            "id",
+            "summary",
+            "ownerRef",
+            "affectedScopeRefs",
+            "resolutionRef",
+            "evidenceRef"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "exception": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "summary": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "ownerRef": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "affectedScopeRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonEmptyText"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "approvalRef": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "limits": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "expiresAt": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "evidenceRef": {
+              "$ref": "#/$defs/nullableText"
+            }
+          },
+          "required": [
+            "id",
+            "summary",
+            "ownerRef",
+            "affectedScopeRefs",
+            "approvalRef",
+            "limits",
+            "expiresAt",
+            "evidenceRef"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "sourceBaseline": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "commitSha": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "buildConfigurationRef": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "unitTestConfigurationRef": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "required": [
+        "repository",
+        "commitSha",
+        "buildConfigurationRef",
+        "unitTestConfigurationRef"
+      ],
+      "additionalProperties": false
+    },
+    "uiDesign": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "useCases": {
+          "type": "object",
+          "properties": {
+            "catalogRef": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "ids": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/canonicalRef"
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "catalogRef",
+            "ids"
+          ],
+          "additionalProperties": false
+        },
+        "wireframes": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "const": "SVG"
+            },
+            "assetRefs": {
+              "$ref": "#/$defs/textList"
+            }
+          },
+          "required": [
+            "format",
+            "assetRefs"
+          ],
+          "additionalProperties": false
+        },
+        "storyboards": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "const": "AssetReview _manifest.md"
+            },
+            "manifestRef": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "storyboardIds": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/canonicalRef"
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "format",
+            "manifestRef",
+            "storyboardIds"
+          ],
+          "additionalProperties": false
+        },
+        "traceabilityRef": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "required": [
+        "revision",
+        "useCases",
+        "wireframes",
+        "storyboards",
+        "traceabilityRef"
+      ],
+      "additionalProperties": false
+    },
+    "c4Model": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "const": "Structurizr DSL"
+        },
+        "workspaceDslRef": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "modelRevision": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "toolVersion": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "viewKeys": {
+          "type": "object",
+          "properties": {
+            "systemContext": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/canonicalRef"
+              },
+              "uniqueItems": true
+            },
+            "container": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/canonicalRef"
+              },
+              "uniqueItems": true
+            },
+            "component": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/canonicalRef"
+              },
+              "uniqueItems": true
+            },
+            "supplemental": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/canonicalRef"
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "systemContext",
+            "container",
+            "component",
+            "supplemental"
+          ],
+          "additionalProperties": false
+        },
+        "renderedViewRefs": {
+          "$ref": "#/$defs/textList"
+        },
+        "coverageMappingRef": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "required": [
+        "tool",
+        "workspaceDslRef",
+        "modelRevision",
+        "toolVersion",
+        "viewKeys",
+        "renderedViewRefs",
+        "coverageMappingRef"
+      ],
+      "additionalProperties": false
+    },
+    "example": {
+      "type": "object",
+      "properties": {
+        "qualifiedCriterion": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "testRequirement": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "sliceTodo": {
+          "$ref": "#/$defs/todoId"
+        },
+        "behavior": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "unitBoundary": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "evidenceSequence": {
+          "$ref": "#/$defs/textList"
+        },
+        "separateIntegration": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "artifactDependency": {
+          "type": "object",
+          "properties": {
+            "phaseId": {
+              "$ref": "#/$defs/phaseId"
+            },
+            "sliceTodoIds": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/todoId"
+              },
+              "uniqueItems": true,
+              "minItems": 1
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/artifact"
+              }
+            },
+            "versions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/artifactVersion"
+              }
+            },
+            "edges": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/edge"
+              }
+            },
+            "impact": {
+              "$ref": "#/$defs/nonEmptyText"
+            }
+          },
+          "required": [
+            "phaseId",
+            "sliceTodoIds",
+            "artifacts",
+            "versions",
+            "edges",
+            "impact"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "qualifiedCriterion",
+        "testRequirement",
+        "sliceTodo",
+        "behavior",
+        "unitBoundary",
+        "evidenceSequence",
+        "separateIntegration"
+      ],
+      "additionalProperties": false
+    },
+    "plan": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "0.6"
+        },
+        "kind": {
+          "const": "BdpImplementationPlan"
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "planId": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^PLAN(?:-[A-Z0-9]+)+-[0-9]{3}$"
+            },
+            "title": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "revision": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "workspaceId": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "planFile": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^docs/plans/[^/]+\\.ya?ml$"
+            },
+            "umbrellaTodoId": {
+              "$ref": "#/$defs/todoId"
+            }
+          },
+          "required": [
+            "planId",
+            "title",
+            "revision",
+            "workspaceId",
+            "planFile",
+            "umbrellaTodoId"
+          ],
+          "additionalProperties": false
+        },
+        "intent": {
+          "type": "object",
+          "properties": {
+            "problem": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "measurableOutcome": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "viability": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "value": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "intendedUsers": {
+              "$ref": "#/$defs/textList"
+            },
+            "inScope": {
+              "$ref": "#/$defs/textList"
+            },
+            "outOfScope": {
+              "$ref": "#/$defs/textList"
+            },
+            "changedExistingBehavior": {
+              "$ref": "#/$defs/textList"
+            },
+            "compatibilityConstraints": {
+              "$ref": "#/$defs/textList"
+            },
+            "externalDependencies": {
+              "$ref": "#/$defs/textList"
+            },
+            "uiImpact": {
+              "enum": [
+                null,
+                "changes-ui",
+                "none"
+              ]
+            },
+            "uiImpactRationaleRef": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "shipBoundary": {
+              "enum": [
+                "implementation",
+                "validation",
+                "release"
+              ]
+            }
+          },
+          "required": [
+            "problem",
+            "measurableOutcome",
+            "viability",
+            "value",
+            "intendedUsers",
+            "inScope",
+            "outOfScope",
+            "changedExistingBehavior",
+            "compatibilityConstraints",
+            "externalDependencies",
+            "uiImpact",
+            "uiImpactRationaleRef",
+            "shipBoundary"
+          ],
+          "additionalProperties": false
+        },
+        "roles": {
+          "type": "object",
+          "properties": {
+            "accountableHuman": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "implementationOwner": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "validationOwner": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "independentReviewer": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "releaseOwner": {
+              "$ref": "#/$defs/nullableText"
+            }
+          },
+          "required": [
+            "accountableHuman",
+            "implementationOwner",
+            "validationOwner",
+            "independentReviewer",
+            "releaseOwner"
+          ],
+          "additionalProperties": false
+        },
+        "authority": {
+          "type": "object",
+          "properties": {
+            "bdp": {
+              "type": "object",
+              "properties": {
+                "version": {
+                  "const": "4"
+                },
+                "sourceUri": {
+                  "$ref": "#/$defs/nonEmptyText"
+                },
+                "expectedBlobSha": {
+                  "$ref": "#/$defs/sha"
+                }
+              },
+              "required": [
+                "version",
+                "sourceUri",
+                "expectedBlobSha"
+              ],
+              "additionalProperties": false
+            },
+            "workspacePolicyRefs": {
+              "$ref": "#/$defs/textList"
+            },
+            "tailoringDecisionRefs": {
+              "$ref": "#/$defs/textList"
+            },
+            "requirementBaseline": {
+              "type": "object",
+              "properties": {
+                "catalogRef": {
+                  "$ref": "#/$defs/nullableText"
+                },
+                "revision": {
+                  "$ref": "#/$defs/nullableText"
+                },
+                "snapshotRef": {
+                  "$ref": "#/$defs/nullableText"
+                },
+                "snapshotDigest": {
+                  "$ref": "#/$defs/nullableText"
+                },
+                "scope": {
+                  "type": "object",
+                  "properties": {
+                    "functionalRequirementIds": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/canonicalRef"
+                      },
+                      "uniqueItems": true
+                    },
+                    "technicalRequirementIds": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/canonicalRef"
+                      },
+                      "uniqueItems": true
+                    },
+                    "testRequirementIds": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/canonicalRef"
+                      },
+                      "uniqueItems": true
+                    },
+                    "useCaseIds": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/canonicalRef"
+                      },
+                      "uniqueItems": true
+                    }
+                  },
+                  "required": [
+                    "functionalRequirementIds",
+                    "technicalRequirementIds",
+                    "testRequirementIds",
+                    "useCaseIds"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "catalogRef",
+                "revision",
+                "snapshotRef",
+                "snapshotDigest",
+                "scope"
+              ],
+              "additionalProperties": false
+            },
+            "architectureBaseline": {
+              "type": "object",
+              "properties": {
+                "revision": {
+                  "$ref": "#/$defs/nullableText"
+                },
+                "documentRefs": {
+                  "$ref": "#/$defs/textList"
+                },
+                "adrRefs": {
+                  "$ref": "#/$defs/textList"
+                },
+                "publicContractRefs": {
+                  "$ref": "#/$defs/textList"
+                }
+              },
+              "required": [
+                "revision",
+                "documentRefs",
+                "adrRefs",
+                "publicContractRefs"
+              ],
+              "additionalProperties": false
+            },
+            "uiDesign": {
+              "$ref": "#/$defs/uiDesign"
+            },
+            "c4Model": {
+              "$ref": "#/$defs/c4Model"
+            },
+            "sourceBaselines": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/sourceBaseline"
+              },
+              "minItems": 1
+            },
+            "approval": {
+              "type": "object",
+              "properties": {
+                "required": {
+                  "const": true
+                },
+                "recordRef": {
+                  "$ref": "#/$defs/nullableText"
+                }
+              },
+              "required": [
+                "required",
+                "recordRef"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "bdp",
+            "workspacePolicyRefs",
+            "tailoringDecisionRefs",
+            "requirementBaseline",
+            "architectureBaseline",
+            "uiDesign",
+            "c4Model",
+            "sourceBaselines",
+            "approval"
+          ],
+          "additionalProperties": false
+        },
+        "ownership": {
+          "type": "object",
+          "properties": {
+            "plan": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "requirements": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "architecture": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "uiDesign": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "qbrainTodos": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "artifactDependencies": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "qbrainSessionLogs": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "versionedArtifacts": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "projections": {
+              "$ref": "#/$defs/nonEmptyText"
+            }
+          },
+          "required": [
+            "plan",
+            "requirements",
+            "architecture",
+            "uiDesign",
+            "qbrainTodos",
+            "artifactDependencies",
+            "qbrainSessionLogs",
+            "versionedArtifacts",
+            "projections"
+          ],
+          "additionalProperties": false
+        },
+        "identity": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "artifactId": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "artifactVersionId": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "phaseId": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "sliceId": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonEmptyText"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "scope",
+            "artifactId",
+            "artifactVersionId",
+            "phaseId",
+            "sliceId",
+            "rules"
+          ],
+          "additionalProperties": false
+        },
+        "delivery": {
+          "type": "object",
+          "properties": {
+            "phases": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/phase"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "slices": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/slice"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "phases",
+            "slices"
+          ],
+          "additionalProperties": false
+        },
+        "artifactDependencies": {
+          "$ref": "#/$defs/artifactMap"
+        },
+        "gates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gate"
+          },
+          "uniqueItems": true,
+          "allOf": [
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "c4-model-exit"
+                  },
+                  "kind": {
+                    "const": "stage-exit"
+                  }
+                },
+                "required": [
+                  "id",
+                  "kind"
+                ]
+              },
+              "minContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "ui-artifacts-exit"
+                  },
+                  "kind": {
+                    "const": "stage-exit"
+                  },
+                  "appliesWhen": {
+                    "const": "intent.uiImpact == changes-ui"
+                  }
+                },
+                "required": [
+                  "id",
+                  "kind",
+                  "appliesWhen"
+                ]
+              },
+              "minContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "plan-ready"
+                  },
+                  "kind": {
+                    "const": "stage-exit"
+                  },
+                  "requires": {
+                    "contains": {
+                      "const": "c4-model-exit"
+                    },
+                    "minContains": 1
+                  },
+                  "requiresWhen": {
+                    "contains": {
+                      "type": "object",
+                      "properties": {
+                        "gateId": {
+                          "const": "ui-artifacts-exit"
+                        },
+                        "when": {
+                          "const": "intent.uiImpact == changes-ui"
+                        }
+                      },
+                      "required": [
+                        "gateId",
+                        "when"
+                      ]
+                    },
+                    "minContains": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "kind",
+                  "requires",
+                  "requiresWhen"
+                ]
+              },
+              "minContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "authorized-to-start"
+                  },
+                  "kind": {
+                    "const": "approval"
+                  },
+                  "requires": {
+                    "contains": {
+                      "const": "plan-ready"
+                    },
+                    "minContains": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "kind",
+                  "requires"
+                ]
+              },
+              "minContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "slice-entry"
+                  },
+                  "kind": {
+                    "const": "entry"
+                  },
+                  "requires": {
+                    "contains": {
+                      "const": "authorized-to-start"
+                    },
+                    "minContains": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "kind",
+                  "requires"
+                ]
+              },
+              "minContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "mocks-validated"
+                  },
+                  "kind": {
+                    "const": "stage-exit"
+                  },
+                  "requires": {
+                    "contains": {
+                      "const": "slice-entry"
+                    },
+                    "minContains": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "kind",
+                  "requires"
+                ]
+              },
+              "minContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "implementation-exit"
+                  },
+                  "kind": {
+                    "const": "stage-exit"
+                  },
+                  "requires": {
+                    "contains": {
+                      "const": "mocks-validated"
+                    },
+                    "minContains": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "kind",
+                  "requires"
+                ]
+              },
+              "minContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "phase-exit"
+                  },
+                  "kind": {
+                    "const": "stage-exit"
+                  },
+                  "requires": {
+                    "contains": {
+                      "const": "implementation-exit"
+                    },
+                    "minContains": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "kind",
+                  "requires"
+                ]
+              },
+              "minContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "validation-exit"
+                  },
+                  "kind": {
+                    "const": "stage-exit"
+                  },
+                  "requires": {
+                    "contains": {
+                      "const": "phase-exit"
+                    },
+                    "minContains": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "kind",
+                  "requires"
+                ]
+              },
+              "minContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "release-exit"
+                  },
+                  "kind": {
+                    "const": "stage-exit"
+                  },
+                  "requires": {
+                    "contains": {
+                      "const": "validation-exit"
+                    },
+                    "minContains": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "kind",
+                  "requires"
+                ]
+              },
+              "minContains": 1
+            }
+          ]
+        },
+        "reviewPolicy": {
+          "$ref": "#/$defs/reviewPolicy"
+        },
+        "evidence": {
+          "type": "object",
+          "properties": {
+            "requiredReceiptFields": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonEmptyText"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "whenApplicableReceiptFields": {
+              "$ref": "#/$defs/textList"
+            },
+            "freshnessRules": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonEmptyText"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "confidentiality": {
+              "$ref": "#/$defs/nonEmptyText"
+            }
+          },
+          "required": [
+            "requiredReceiptFields",
+            "whenApplicableReceiptFields",
+            "freshnessRules",
+            "confidentiality"
+          ],
+          "additionalProperties": false
+        },
+        "qbrain": {
+          "type": "object",
+          "properties": {
+            "bootstrap": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "trustFailure": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "persistence": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "enforcement": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "firstTurnBinding": {
+              "type": "object",
+              "properties": {
+                "planFile": {
+                  "$ref": "#/$defs/nonEmptyText"
+                },
+                "todoId": {
+                  "$ref": "#/$defs/nonEmptyText"
+                }
+              },
+              "required": [
+                "planFile",
+                "todoId"
+              ],
+              "additionalProperties": false
+            },
+            "resume": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonEmptyText"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "bootstrap",
+            "trustFailure",
+            "persistence",
+            "enforcement",
+            "firstTurnBinding",
+            "resume"
+          ],
+          "additionalProperties": false
+        },
+        "risks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/decisionOrRisk"
+          }
+        },
+        "openDecisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/decisionOrRisk"
+          }
+        },
+        "exceptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/exception"
+          }
+        },
+        "transition": {
+          "type": "object",
+          "properties": {
+            "artifactRef": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "migrationRef": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "rollbackRef": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "goNoGoRef": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "operationalHandoffRef": {
+              "$ref": "#/$defs/nullableText"
+            },
+            "environmentReadinessRefs": {
+              "$ref": "#/$defs/textList"
+            },
+            "postDeployVerificationRefs": {
+              "$ref": "#/$defs/textList"
+            }
+          },
+          "required": [
+            "artifactRef",
+            "migrationRef",
+            "rollbackRef",
+            "goNoGoRef",
+            "operationalHandoffRef",
+            "environmentReadinessRefs",
+            "postDeployVerificationRefs"
+          ],
+          "additionalProperties": false
+        },
+        "changeControl": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyText"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "completion": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyText"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "architectureTailoring": {
+          "type": "object",
+          "properties": {
+            "qbrainCqrs": {
+              "type": "object",
+              "properties": {
+                "appliesWhen": {
+                  "$ref": "#/$defs/nonEmptyText"
+                },
+                "rule": {
+                  "$ref": "#/$defs/nonEmptyText"
+                },
+                "detail": {
+                  "$ref": "#/$defs/nonEmptyText"
+                }
+              },
+              "required": [
+                "appliesWhen",
+                "rule",
+                "detail"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "qbrainCqrs"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "$ref": "#/$defs/example"
+        },
+        "references": {
+          "type": "object",
+          "properties": {
+            "qbrainWorkspacePolicy": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "qbrainTodoSchema": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "qbrainSessionLogSchema": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "qbrainArchitecturePrecedent": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "qbrainPlanPrecedent": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "c4Model": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "structurizrDsl": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "structurizrValidate": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "rupPlanning": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "projectManagementPlan16326": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "lifeCycleDocuments15289": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "lifeCycleProcesses12207": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "assetReviewStoryboardFormat": {
+              "type": "object",
+              "properties": {
+                "uri": {
+                  "$ref": "#/$defs/nonEmptyText"
+                },
+                "readmeBlobSha": {
+                  "$ref": "#/$defs/sha"
+                }
+              },
+              "required": [
+                "uri",
+                "readmeBlobSha"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "qbrainWorkspacePolicy",
+            "qbrainTodoSchema",
+            "qbrainSessionLogSchema",
+            "qbrainArchitecturePrecedent",
+            "qbrainPlanPrecedent",
+            "c4Model",
+            "structurizrDsl",
+            "structurizrValidate",
+            "rupPlanning",
+            "projectManagementPlan16326",
+            "lifeCycleDocuments15289",
+            "lifeCycleProcesses12207",
+            "assetReviewStoryboardFormat"
+          ],
+          "additionalProperties": false
+        },
+        "completionTracking": {
+          "$ref": "#/$defs/completionTracking"
+        },
+        "receiptTracking": {
+          "$ref": "#/$defs/receiptTracking"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "kind",
+        "metadata",
+        "intent",
+        "roles",
+        "authority",
+        "ownership",
+        "identity",
+        "delivery",
+        "artifactDependencies",
+        "gates",
+        "reviewPolicy",
+        "evidence",
+        "qbrain",
+        "risks",
+        "openDecisions",
+        "exceptions",
+        "transition",
+        "changeControl",
+        "completion",
+        "architectureTailoring",
+        "references",
+        "completionTracking",
+        "receiptTracking"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "receiptTracking": {
+                "type": "object",
+                "properties": {
+                  "records": {
+                    "type": "array",
+                    "minItems": 1
+                  }
+                },
+                "required": [
+                  "records"
+                ]
+              }
+            },
+            "required": [
+              "receiptTracking"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "completionTracking": {
+                "type": "object",
+                "properties": {
+                  "snapshot": {
+                    "$ref": "#/$defs/completionSnapshot"
+                  }
+                },
+                "required": [
+                  "snapshot"
+                ]
+              }
+            },
+            "required": [
+              "completionTracking"
+            ]
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "completionTracking": {
+                "type": "object",
+                "properties": {
+                  "snapshot": {
+                    "$ref": "#/$defs/completionSnapshot"
+                  }
+                },
+                "required": [
+                  "snapshot"
+                ]
+              },
+              "intent": {
+                "type": "object",
+                "properties": {
+                  "shipBoundary": {
+                    "enum": [
+                      "implementation",
+                      "validation"
+                    ]
+                  }
+                },
+                "required": [
+                  "shipBoundary"
+                ]
+              }
+            },
+            "required": [
+              "completionTracking",
+              "intent"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "completionTracking": {
+                "type": "object",
+                "properties": {
+                  "snapshot": {
+                    "type": "object",
+                    "properties": {
+                      "milestones": {
+                        "type": "object",
+                        "properties": {
+                          "release": {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "enum": [
+                                  "not-in-scope"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "status"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "release"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "milestones"
+                    ]
+                  }
+                },
+                "required": [
+                  "snapshot"
+                ]
+              }
+            },
+            "required": [
+              "completionTracking"
+            ]
+          }
+        }
+      ]
+    },
+    "approvalCandidate": {
+      "description": "Populated plan shape before human approval. Passing this subschema does not establish readiness or a passed HV review.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/plan"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "metadata": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                },
+                "revision": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                },
+                "workspaceId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                }
+              }
+            }
+          },
+          "required": [
+            "metadata"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "intent": {
+              "type": "object",
+              "properties": {
+                "problem": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                },
+                "measurableOutcome": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                },
+                "viability": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                },
+                "value": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                },
+                "inScope": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "intendedUsers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "uiImpact": {
+                  "enum": [
+                    "changes-ui",
+                    "none"
+                  ]
+                }
+              }
+            }
+          },
+          "required": [
+            "intent"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "roles": {
+              "type": "object",
+              "properties": {
+                "accountableHuman": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                },
+                "implementationOwner": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                },
+                "independentReviewer": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                }
+              }
+            }
+          },
+          "required": [
+            "roles"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "authority": {
+              "type": "object",
+              "properties": {
+                "requirementBaseline": {
+                  "type": "object",
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "catalogRef": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                        },
+                        "revision": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                        }
+                      },
+                      "required": [
+                        "catalogRef",
+                        "revision"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "snapshotRef": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                        },
+                        "snapshotDigest": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                        }
+                      },
+                      "required": [
+                        "snapshotRef",
+                        "snapshotDigest"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "requirementBaseline"
+              ]
+            }
+          },
+          "required": [
+            "authority"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "authority": {
+              "type": "object",
+              "properties": {
+                "architectureBaseline": {
+                  "type": "object",
+                  "properties": {
+                    "revision": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                    },
+                    "documentRefs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "minItems": 1,
+                      "uniqueItems": true
+                    }
+                  }
+                }
+              },
+              "required": [
+                "architectureBaseline"
+              ]
+            }
+          },
+          "required": [
+            "authority"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "authority": {
+              "type": "object",
+              "properties": {
+                "c4Model": {
+                  "type": "object",
+                  "properties": {
+                    "workspaceDslRef": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                    },
+                    "modelRevision": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                    },
+                    "toolVersion": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                    },
+                    "coverageMappingRef": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                    },
+                    "viewKeys": {
+                      "type": "object",
+                      "properties": {
+                        "systemContext": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/$defs/canonicalRef"
+                          },
+                          "uniqueItems": true,
+                          "minItems": 1
+                        },
+                        "container": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/$defs/canonicalRef"
+                          },
+                          "uniqueItems": true,
+                          "minItems": 1
+                        }
+                      }
+                    },
+                    "renderedViewRefs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "minItems": 1,
+                      "uniqueItems": true
+                    }
+                  }
+                }
+              },
+              "required": [
+                "c4Model"
+              ]
+            }
+          },
+          "required": [
+            "authority"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "authority": {
+              "type": "object",
+              "properties": {
+                "sourceBaselines": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "repository": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "commitSha": {
+                        "$ref": "#/$defs/sha"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "sourceBaselines"
+              ]
+            }
+          },
+          "required": [
+            "authority"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "delivery": {
+              "type": "object",
+              "properties": {
+                "phases": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "objective": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "phases"
+              ]
+            }
+          },
+          "required": [
+            "delivery"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "delivery": {
+              "type": "object",
+              "properties": {
+                "slices": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ownerRef": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "behaviorBoundary": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "acceptanceTrace": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "requirementId": {
+                              "type": "string",
+                              "minLength": 1,
+                              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/+\\-]*$"
+                            },
+                            "criterionId": {
+                              "type": "string",
+                              "minLength": 1,
+                              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/+\\-]*$"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "slices"
+              ]
+            }
+          },
+          "required": [
+            "delivery"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "artifactDependencies": {
+              "type": "object",
+              "properties": {
+                "artifacts": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "not": {
+                          "pattern": "^<"
+                        }
+                      },
+                      "ownerRef": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "artifacts"
+              ]
+            }
+          },
+          "required": [
+            "artifactDependencies"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "artifactDependencies": {
+              "type": "object",
+              "properties": {
+                "versions": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "artifactVersionId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "sourceRef": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "supersedesVersionId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "if": {
+                      "type": "object",
+                      "properties": {
+                        "sourceKind": {
+                          "const": "baseline"
+                        }
+                      },
+                      "required": [
+                        "sourceKind"
+                      ]
+                    },
+                    "then": {
+                      "type": "object",
+                      "properties": {
+                        "baselineRevisionOrDigest": {
+                          "$ref": "#/$defs/digestOrRevision"
+                        }
+                      },
+                      "required": [
+                        "baselineRevisionOrDigest"
+                      ]
+                    }
+                  }
+                }
+              },
+              "required": [
+                "versions"
+              ]
+            }
+          },
+          "required": [
+            "artifactDependencies"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "artifactDependencies": {
+              "type": "object",
+              "properties": {
+                "edges": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "artifactVersionId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "purpose": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "edges"
+              ]
+            }
+          },
+          "required": [
+            "artifactDependencies"
+          ]
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "intent": {
+                "type": "object",
+                "properties": {
+                  "uiImpact": {
+                    "const": "changes-ui"
+                  }
+                },
+                "required": [
+                  "uiImpact"
+                ]
+              }
+            },
+            "required": [
+              "intent"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "authority": {
+                "type": "object",
+                "properties": {
+                  "uiDesign": {
+                    "type": "object",
+                    "properties": {
+                      "revision": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "traceabilityRef": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "useCases": {
+                        "type": "object",
+                        "properties": {
+                          "catalogRef": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                          },
+                          "ids": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/$defs/canonicalRef"
+                            },
+                            "uniqueItems": true,
+                            "minItems": 1
+                          }
+                        }
+                      },
+                      "wireframes": {
+                        "type": "object",
+                        "properties": {
+                          "assetRefs": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "minLength": 1,
+                              "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                            },
+                            "minItems": 1,
+                            "uniqueItems": true
+                          }
+                        }
+                      },
+                      "storyboards": {
+                        "type": "object",
+                        "properties": {
+                          "manifestRef": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                          },
+                          "storyboardIds": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/$defs/canonicalRef"
+                            },
+                            "uniqueItems": true,
+                            "minItems": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "uiDesign"
+                ]
+              }
+            },
+            "required": [
+              "authority"
+            ]
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "intent": {
+                "type": "object",
+                "properties": {
+                  "uiImpact": {
+                    "const": "none"
+                  }
+                },
+                "required": [
+                  "uiImpact"
+                ]
+              }
+            },
+            "required": [
+              "intent"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "intent": {
+                "type": "object",
+                "properties": {
+                  "uiImpactRationaleRef": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                  }
+                },
+                "required": [
+                  "uiImpactRationaleRef"
+                ]
+              }
+            },
+            "required": [
+              "intent"
+            ]
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "intent": {
+                "type": "object",
+                "properties": {
+                  "shipBoundary": {
+                    "const": "release"
+                  }
+                },
+                "required": [
+                  "shipBoundary"
+                ]
+              }
+            },
+            "required": [
+              "intent"
+            ]
+          },
+          "then": {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "roles": {
+                    "type": "object",
+                    "properties": {
+                      "releaseOwner": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      }
+                    },
+                    "required": [
+                      "releaseOwner"
+                    ]
+                  }
+                },
+                "required": [
+                  "roles"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "transition": {
+                    "type": "object",
+                    "properties": {
+                      "artifactRef": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "rollbackRef": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "goNoGoRef": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "operationalHandoffRef": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "environmentReadinessRefs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                        },
+                        "minItems": 1,
+                        "uniqueItems": true
+                      },
+                      "postDeployVerificationRefs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                        },
+                        "minItems": 1,
+                        "uniqueItems": true
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "transition"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "completionTracking": {
+              "type": "object",
+              "properties": {
+                "snapshot": {
+                  "const": null
+                }
+              },
+              "required": [
+                "snapshot"
+              ]
+            },
+            "receiptTracking": {
+              "type": "object",
+              "properties": {
+                "records": {
+                  "type": "array",
+                  "maxItems": 0
+                }
+              },
+              "required": [
+                "records"
+              ]
+            }
+          },
+          "required": [
+            "completionTracking",
+            "receiptTracking"
+          ]
+        }
+      ]
+    },
+    "executionCandidate": {
+      "description": "Populated plan with an approval reference. The actual approval, scope, receipts and QBrain state must be verified separately.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/approvalCandidate"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "authority": {
+              "type": "object",
+              "properties": {
+                "approval": {
+                  "type": "object",
+                  "properties": {
+                    "recordRef": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                    }
+                  },
+                  "required": [
+                    "recordRef"
+                  ]
+                }
+              },
+              "required": [
+                "approval"
+              ]
+            }
+          },
+          "required": [
+            "authority"
+          ]
+        }
+      ]
+    },
+    "utcStamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]+)?Z$",
+      "format": "date-time"
+    },
+    "receiptId": {
+      "$ref": "#/$defs/canonicalRef"
+    },
+    "trackingScope": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "plan"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "phase"
+            },
+            "phaseId": {
+              "$ref": "#/$defs/phaseId"
+            }
+          },
+          "required": [
+            "kind",
+            "phaseId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "slice"
+            },
+            "sliceTodoId": {
+              "$ref": "#/$defs/todoId"
+            }
+          },
+          "required": [
+            "kind",
+            "sliceTodoId"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "receiptArtifactVersion": {
+      "type": "object",
+      "properties": {
+        "artifactId": {
+          "$ref": "#/$defs/artifactId"
+        },
+        "artifactVersionId": {
+          "$ref": "#/$defs/artifactVersionId"
+        }
+      },
+      "required": [
+        "artifactId",
+        "artifactVersionId"
+      ],
+      "additionalProperties": false
+    },
+    "receiptIndexRecord": {
+      "type": "object",
+      "properties": {
+        "receiptId": {
+          "$ref": "#/$defs/receiptId"
+        },
+        "kind": {
+          "enum": [
+            "check",
+            "hostile-validation",
+            "approval",
+            "release",
+            "other"
+          ]
+        },
+        "scope": {
+          "$ref": "#/$defs/trackingScope"
+        },
+        "gateId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/gateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "planRevisionRef": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "sourceKind": {
+          "enum": [
+            "qbrain-session-log",
+            "versioned-evidence"
+          ]
+        },
+        "sourceRef": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "recordedAtUtc": {
+          "$ref": "#/$defs/utcStamp"
+        },
+        "outcome": {
+          "enum": [
+            "pass",
+            "fail",
+            "informational"
+          ]
+        },
+        "freshness": {
+          "enum": [
+            "current",
+            "stale",
+            "unverified"
+          ]
+        },
+        "artifactVersions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/receiptArtifactVersion"
+          },
+          "uniqueItems": true
+        },
+        "replacesReceiptId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/receiptId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "receiptId",
+        "kind",
+        "scope",
+        "gateId",
+        "planRevisionRef",
+        "sourceKind",
+        "sourceRef",
+        "recordedAtUtc",
+        "outcome",
+        "freshness"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "check",
+                  "hostile-validation",
+                  "approval",
+                  "release"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "gateId": {
+                "$ref": "#/$defs/gateId"
+              }
+            },
+            "required": [
+              "gateId"
+            ]
+          }
+        }
+      ]
+    },
+    "completionRecord": {
+      "type": "object",
+      "properties": {
+        "scope": {
+          "$ref": "#/$defs/trackingScope"
+        },
+        "gateId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/gateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "in-progress",
+            "blocked",
+            "failed",
+            "verified",
+            "not-applicable",
+            "stale"
+          ]
+        },
+        "sourceRef": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "verifiedAtUtc": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/utcStamp"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receiptIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/receiptId"
+          },
+          "uniqueItems": true
+        },
+        "reason": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "blockerRefs": {
+          "$ref": "#/$defs/textList"
+        }
+      },
+      "required": [
+        "scope",
+        "gateId",
+        "status",
+        "sourceRef",
+        "verifiedAtUtc",
+        "receiptIds",
+        "reason",
+        "blockerRefs"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "verified"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "receiptIds": {
+                "type": "array",
+                "minItems": 1
+              },
+              "verifiedAtUtc": {
+                "$ref": "#/$defs/utcStamp"
+              },
+              "blockerRefs": {
+                "type": "array",
+                "maxItems": 0
+              }
+            },
+            "required": [
+              "receiptIds",
+              "verifiedAtUtc",
+              "blockerRefs"
+            ]
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "blocked",
+                  "failed",
+                  "not-applicable",
+                  "stale"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "reason": {
+                "$ref": "#/$defs/nonEmptyText"
+              }
+            },
+            "required": [
+              "reason"
+            ]
+          }
+        }
+      ]
+    },
+    "milestoneStatus": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "in-progress",
+            "blocked",
+            "verified",
+            "not-in-scope",
+            "stale"
+          ]
+        },
+        "receiptIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/receiptId"
+          },
+          "uniqueItems": true
+        },
+        "reason": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "required": [
+        "status",
+        "receiptIds",
+        "reason"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "verified"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "receiptIds": {
+                "type": "array",
+                "minItems": 1
+              }
+            },
+            "required": [
+              "receiptIds"
+            ]
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "blocked",
+                  "not-in-scope",
+                  "stale"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "reason": {
+                "$ref": "#/$defs/nonEmptyText"
+              }
+            },
+            "required": [
+              "reason"
+            ]
+          }
+        }
+      ]
+    },
+    "completionSnapshot": {
+      "type": "object",
+      "properties": {
+        "asOfUtc": {
+          "$ref": "#/$defs/utcStamp"
+        },
+        "planRevisionRef": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyText"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "milestones": {
+          "type": "object",
+          "properties": {
+            "implementation": {
+              "$ref": "#/$defs/milestoneStatus"
+            },
+            "validation": {
+              "$ref": "#/$defs/milestoneStatus"
+            },
+            "release": {
+              "$ref": "#/$defs/milestoneStatus"
+            }
+          },
+          "required": [
+            "implementation",
+            "validation",
+            "release"
+          ],
+          "additionalProperties": false
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/completionRecord"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "asOfUtc",
+        "planRevisionRef",
+        "sourceRefs",
+        "milestones",
+        "records"
+      ],
+      "additionalProperties": false
+    },
+    "completionTracking": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "const": "qbrain"
+        },
+        "recordQueryRef": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "snapshot": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/completionSnapshot"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyText"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      },
+      "required": [
+        "authority",
+        "recordQueryRef",
+        "snapshot",
+        "rules"
+      ],
+      "additionalProperties": false
+    },
+    "receiptTracking": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "const": "qbrain-and-versioned-evidence"
+        },
+        "indexRef": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/receiptIndexRecord"
+          },
+          "uniqueItems": true
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyText"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      },
+      "required": [
+        "authority",
+        "indexRef",
+        "records",
+        "rules"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

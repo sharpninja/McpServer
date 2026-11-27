@@ -1,0 +1,556 @@
+# yaml-language-server: $schema=./BDPv4-QBrain-Implementation-Plan.schema.json
+# Keep the schema JSON next to this YAML file, or update the relative path when moving it.
+
+# AGENT PROMPT: POPULATE THIS BDPv4 + QBRAIN IMPLEMENTATION PLAN
+#
+# Act as the planning agent for the user's exact request in the intended QBrain
+# workspace. Produce a populated implementation plan, not production code or a
+# release. Copy this template to its planFile path; keep this header and the
+# schema. Replace example values and placeholder rows. Never treat the
+# illustrative example as project scope or evidence.
+#
+# 1. Establish authority. Use the supported QBrain workspace bootstrap. Read
+#    the exact user request and decisions, applicable BDPv4 and workspace
+#    policy, current requirements, approved architecture, and relevant source
+#    and test baselines. Resolve references at immutable revisions or record a
+#    verifiable snapshot. Search results and chat summaries are leads only.
+#    If trust or a required source is missing, record the blocker; do not
+#    guess or claim a durable QBrain update.
+# 2. Define the outcome. Record the problem, users, measurable result, scope,
+#    exclusions, changed behavior, constraints, and accountable roles. Set the
+#    ship boundary and explicitly assess UI impact. Put unresolved decisions
+#    in openDecisions with owner and impact; never invent IDs, evidence,
+#    approvals, or design decisions to get past a gate.
+# 3. Link the design. Reference the versioned Structurizr DSL, required C4
+#    views, validation command and evidence. For new or changed UI, reference
+#    the use cases, SVG wireframes, and AssetReview storyboard manifest, and
+#    trace each affected flow and branch to its frames, SVGs, FR/AC, and
+#    slice. For no UI impact, record why. Propose missing artifacts in their
+#    owning sources only within the authorized planning scope.
+# 4. Sequence the work. Give every phase a canonical phaseId. Use the real
+#    QBrain TODO ID as the canonical slice ID; do not assign a second ID. Keep
+#    live task state and TODO dependencies in QBrain. Register each artifact once
+#    under its canonical artifactId, then link its versions to the slices that
+#    consume or produce them. Record gate timing and prior versions. Link FR/TR/TEST/UC
+#    and qualified AC IDs to checks and architecture; do not duplicate their
+#    text. If authorized to write QBrain records, bind turns to planFile and
+#    the actual todoId and verify durable persistence. Otherwise mark missing
+#    records as pending rather than minting IDs.
+# 5. Set the gates and evidence. Specify checks, scopes, commands, owners,
+#    and evidence locations. Keep pre-code mock-first TDD and full unit
+#    regression separate from integration, human validation, and deployment.
+#    Every applicable stage exit requires its own current independent HV:
+#    AGREE, accuracy >= 98 and completeness >= 98, with no FAIL, UNKNOWN or
+#    missing required claims. Keep approval and HV distinct. Do not record a
+#    pass for future work, stale evidence, or an unrun review.
+#    Link authoritative completion records and receipts. Populate live
+#    tracking only in a generated snapshot, not in the plan revision.
+# 6. Verify and hand off. Parse the YAML, check references and dependency
+#    cycles, reconcile coverage and gate applicability, and save the draft.
+#    Verify artifact availability before use. When an artifact changes, derive
+#    the affected slices and receipts from the map; do not maintain a second list.
+#    Run the applicable planning checks and independent reviews when
+#    authorized and available. Report the plan path and revision, verified
+#    evidence, and blockers. Request human approval of the exact revision
+#    after plan readiness passes. Do not implement under an unapproved plan.
+#
+# END AGENT PROMPT
+#
+# Copy this file to docs/plans/PLAN-<AREA>-<NNN>.yaml and replace the placeholders.
+# Drafts may contain nulls and empty lists. Resolve applicable fields before approval.
+# This is a proposed BDPv4 plan format, not a native QBrain import or API payload.
+---
+schemaVersion: "0.6"
+kind: BdpImplementationPlan
+
+metadata:
+  planId: "PLAN-AREA-001"
+  title: "<measurable outcome>"
+  revision: "<plan revision>"
+  workspaceId: "<QBrain workspace ID>"
+  planFile: "docs/plans/PLAN-AREA-001.yaml"
+  umbrellaTodoId: "PLAN-AREA-001"
+
+intent:
+  problem: null
+  intendedUsers: []
+  measurableOutcome: null
+  viability: null
+  value: null
+  inScope: []
+  outOfScope: []
+  changedExistingBehavior: []
+  compatibilityConstraints: []
+  externalDependencies: []
+  # Set to "changes-ui" for any new or changed user-facing interface, flow,
+  # or state. Set to "none" only with a recorded reason. Null blocks plan-ready.
+  uiImpact: null
+  uiImpactRationaleRef: null
+  # implementation | validation | release. Does not waive applicable gates.
+  shipBoundary: "implementation"
+
+roles:
+  accountableHuman: null
+  implementationOwner: null
+  validationOwner: null
+  independentReviewer: null
+  releaseOwner: null
+
+authority:
+  bdp:
+    version: "4"
+    sourceUri: "https://github.com/sharpninja/McpServer/blob/develop/docs/Development-Process-draft-v4.md"
+    expectedBlobSha: "655cd6fee0f8c341ba54e7a5c09d72b76eeb9b46"
+  workspacePolicyRefs: []
+  tailoringDecisionRefs: []
+  requirementBaseline:
+    catalogRef: null
+    # Use the revision, or a snapshot reference and digest when revisions are unavailable.
+    revision: null
+    snapshotRef: null
+    snapshotDigest: null
+    scope:
+      functionalRequirementIds: []
+      technicalRequirementIds: []
+      testRequirementIds: []
+      useCaseIds: []
+  architectureBaseline:
+    revision: null
+    documentRefs: []
+    adrRefs: []
+    publicContractRefs: []
+  uiDesign:
+    # Required for changes-ui. Reuse versioned artifacts where they still apply.
+    revision: null
+    useCases:
+      catalogRef: null
+      ids: []
+    wireframes:
+      format: "SVG"
+      assetRefs: []
+    storyboards:
+      format: "AssetReview _manifest.md"
+      manifestRef: null
+      storyboardIds: []
+    # One mapping: use case / step and branch -> storyboard / frame -> SVG,
+    # with links to owning FR/AC and affected slice. Do not duplicate text.
+    traceabilityRef: null
+  c4Model:
+    tool: "Structurizr DSL"
+    workspaceDslRef: null
+    modelRevision: null
+    toolVersion: null
+    viewKeys:
+      systemContext: []
+      container: []
+      component: []
+      supplemental: []
+    renderedViewRefs: []
+    coverageMappingRef: null
+  sourceBaselines:
+    - repository: null
+      commitSha: null
+      buildConfigurationRef: null
+      unitTestConfigurationRef: null
+  approval:
+    # The external record captures approver, immutable plan revision, scope and turn.
+    # Do not embed this file's own commit/hash in its contents.
+    required: true
+    recordRef: null
+
+ownership:
+  plan: "Sequences delivery and assigns scope and gates. References requirements and architecture."
+  requirements: "Own FR, TR, TEST, use cases and acceptance criteria."
+  architecture: "Owns design decisions, interfaces, models, contracts and diagrams."
+  uiDesign: "Versioned SVG assets and the AssetReview manifest own UI layout and frame transitions. The use-case catalog owns behavior; connect them by ID."
+  qbrainTodos: "Own task IDs, priority, task-to-task dependencies, remaining work and live status."
+  artifactDependencies: "Owns the plan’s artifact-to-slice input and output links; artifact content and QBrain task order remain with their existing owners."
+  qbrainSessionLogs: "Own turn identity, decisions, actions, blockers and links to evidence."
+  versionedArtifacts: "Own immutable evidence artifacts and source version history."
+  projections: "Read-only views. Never edit generated TODO YAML."
+
+identity:
+  scope: "Workspace-qualified: use metadata.workspaceId with the canonical ID in cross-workspace references."
+  artifactId: "Required, unique and stable for the logical artifact. Reuse its authoritative ID if one exists; otherwise allocate ART-<AREA>-<NAME>-<NNN> in the owning workspace. Never derive identity from filename or revision."
+  artifactVersionId: "Required, unique within this plan, and bound to exactly one canonical artifactId. Pin dependency edges to this version ID."
+  phaseId: "Required, unique in the owning workspace and stable across revisions. For a new phase allocate PHASE-<AREA>-<NNN>; keep display name and order separate."
+  sliceId: "Use delivery.slices[].todoId, the exact canonical QBrain TODO ID. The template does not define a second field or identifier."
+  rules:
+    - "Reuse established IDs across plans. Keep IDs when artifacts or phases are renamed, moved, reordered or revised; never recycle retired IDs."
+    - "One registry record owns each logical identity. Reject duplicate definitions, placeholder or unresolved IDs at plan readiness; references may repeat."
+
+delivery:
+  # Declare delivery order here; individual TODO dependency edges stay in QBrain.
+  phases:
+    - phaseId: "PHASE-AREA-001"
+      title: null
+      objective: null
+      riskRetired: null
+      sliceTodoIds:
+        - "AREA-SLICE-001"
+      exitGateIds:
+        - "phase-exit"
+  slices:
+    - todoId: "AREA-SLICE-001"
+      ownerRef: null
+      behaviorBoundary: null
+      requirementRefs:
+        functional: []
+        technical: []
+        testing: []
+        useCases: []
+      architectureRefs: []
+      c4ElementRefs: []
+      uiTraceRefs: []
+      acceptanceTrace:
+        - requirementId: "<owning requirement ID>"
+          criterionId: "<AC ID in that requirement>"
+          testRequirementIds: []
+          unitTestRefs: []
+          separateValidationRefs: []
+      gateIds:
+        - "slice-entry"
+        - "mocks-validated"
+        - "implementation-exit"
+  # Phase 0 is optional. Add it only when the project calls for an audited
+  # readiness or bootstrap phase. Do not make deployment its default criterion.
+
+artifactDependencies:
+  # Register each logical artifact once. Versions and edges reference its ID.
+  # Generate per-slice inputs/outputs and reverse consumer views from this map.
+  artifacts:
+    - artifactId: "ART-AREA-NAME-001"
+      kind: "<requirements | architecture | c4-model | use-case | wireframe | storyboard | code | test | package | other>"
+      ownerRef: null
+  versions:
+    - artifactVersionId: "<stable plan-local version ID>"
+      artifactId: "ART-AREA-NAME-001"
+      # Reference an owning record, not a duplicate spec. Pin baseline inputs
+      # to an immutable revision or digest. Planned outputs get a verified
+      # revision in their receipt, not an invented value in the approved plan.
+      sourceRef: null
+      sourceKind: "baseline" # baseline | slice-output
+      baselineRevisionOrDigest: null
+      supersedesVersionId: null # for revisions of the same logical artifact
+  edges:
+    - sliceTodoId: "AREA-SLICE-001"
+      artifactVersionId: "<registered version ID>"
+      relationship: "consumes" # consumes | produces
+      gateId: "slice-entry" # consumes: valid before this gate; produces: available after this gate passes
+      purpose: null
+  rules:
+    - "Give every plan artifact one canonical artifactId. Register relevant requirements snapshots, architecture, design, code, tests, packages and evidence when they are plan artifacts; do not register unrelated repository files."
+    - "Map every material slice input and output, including reused artifacts. Every version resolves to its one canonical artifact, and supersession can only connect versions of that same artifact."
+    - "Resolve IDs and gate applicability. Every slice-output version has exactly one producer; any number of slices can consume that version. Baseline versions have no slice producer."
+    - "To update an artifact, consume the prior version and produce a distinct version with supersedesVersionId. A reference to an old version never silently moves to a replacement."
+    - "Treat producer gate to consumer gate as the precedence edge. Verify availability before use; reject missing sources, cycles, impossible ordering, or consumption before the producer gate passes. If a gate produces a candidate consumed within that same gate for validation, it is that gate’s local work, not an input marked available beforehand."
+    - "Check correspondence with QBrain TODO prerequisites for cross-slice ordering. Do not keep a separate task-to-task edge list here."
+    - "On change, follow reverse consumers and affected outputs transitively. Record impacted slices, gates and receipts; revalidate affected work and preserve unrelated valid evidence."
+
+gates:
+  # Stage exits inherit the single required HV rule below, including added stages.
+  - id: "c4-model-exit"
+    level: "plan"
+    kind: "stage-exit"
+    requires: []
+    checkRefs: []
+    evidenceRef: null
+    pass:
+      - "Create or update the versioned Structurizr DSL model before plan approval. Reference the authoritative model; do not redraw it in the plan."
+      - "Provide explicitly keyed System Context and Container views for systems in scope, and Component views for affected containers whose internals change."
+      - "Record why a deeper view is not applicable where relevant. Add dynamic, deployment, or code views when needed; this gate never requires a deployed artifact."
+      - "Trace impacted FR/TR and slices to stable model element identifiers or view keys. Review boundaries, responsibilities, dependencies and consistency with approved requirements and design decisions."
+      - "Run Structurizr validate on the exact workspace DSL using the recorded tool version (validate -workspace <workspace.dsl>). Attach its output and review the rendered required views from that revision."
+  - id: "ui-artifacts-exit"
+    level: "plan"
+    kind: "stage-exit"
+    appliesWhen: "intent.uiImpact == changes-ui"
+    requires: []
+    checkRefs: []
+    evidenceRef: null
+    pass:
+      - "Resolve versioned use-case IDs for the new or changed flows. Cover actors, goals, preconditions, main path, applicable alternatives and failures, and outcomes. Link owning FR and AC IDs."
+      - "Provide renderable SVG wireframes for each affected screen and relevant state. Reuse the same SVG paths across flows where layout and state match."
+      - "Author explicit AssetReview sequences in _manifest.md using Sequence: or Storyboard: headings, with stable storyboard IDs, stable frame IDs for traceable steps, and manifest-relative SVG paths. Use listed order for simple sequences; use Next, labeled Branch, and labeled Loop where the workflow calls for them."
+      - "Verify each referenced SVG exists and renders. Open the manifest in AssetReview; walk each required path, branch, and loop exit in review or simulation. No missing frames, invalid targets, or unreachable frames; AssetReview silently skips missing paths in simple sequences, so check existence separately."
+      - "Trace use-case steps and branch outcomes to stable storyboard/frame IDs, their wireframes, and the affected slice. Every in-scope UI flow and relevant state is accounted for. Record the reviewed revisions and path-walk results."
+  - id: "plan-ready"
+    level: "plan"
+    kind: "stage-exit"
+    requires: ["c4-model-exit"]
+    requiresWhen:
+      - gateId: "ui-artifacts-exit"
+        when: "intent.uiImpact == changes-ui"
+    checkRefs: []
+    evidenceRef: null
+    pass:
+      - "Confirm the human problem, scope, ownership, risks, and viability/value."
+      - "Resolve UI applicability explicitly. No UI work is exempt by omission; for no UI impact, record the reason."
+      - "Resolve contradictory requirements and architecture in their owning artifacts."
+      - "Resolve all scope, contract, slice, acceptance trace and gate references."
+      - "Verify canonical identity and uniqueness for artifacts, phases and slices. Check phase membership, resolve every slice reference to exactly one QBrain TODO, and reject aliases, placeholders and undefined IDs."
+      - "Validate the artifact-to-slice mapping: outputs have an owner, required inputs become available before use, and no dependency contradicts the QBrain work order."
+      - "Confirm QBrain TODO dependencies are resolvable and acyclic."
+      - "Complete self-review and review the assembled plan against the modeled architecture before requesting human approval."
+  - id: "authorized-to-start"
+    level: "plan"
+    kind: "approval"
+    requires: ["plan-ready"]
+    checkRefs: []
+    evidenceRef: null
+    pass:
+      - "The accountable human approved this immutable plan revision and scope."
+      - "No implementation under this plan begins without that approval."
+  - id: "slice-entry"
+    level: "slice"
+    kind: "entry"
+    requires: ["authorized-to-start"]
+    checkRefs: []
+    evidenceRef: null
+    pass:
+      - "Verify workspace identity, applicable revisions and QBrain TODO predecessors."
+      - "Verify each mapped input when due. A planned output is not available to consumers until its producer gate passes with evidence for that version."
+      - "Resolve intended behavior, unit test scope and owners before proceeding."
+  - id: "mocks-validated"
+    level: "slice"
+    kind: "stage-exit"
+    requires: ["slice-entry"]
+    checkRefs: []
+    evidenceRef: null
+    pass:
+      - "Map every in-scope implementation AC to unit-test evidence."
+      - "Validate tests with mocks or test doubles before writing corresponding production behavior."
+      - "Show Red against the real unimplemented behavior for the intended reason."
+      - "Never mock away the behavior under assertion or substitute deployed checks for unit evidence."
+  - id: "implementation-exit"
+    level: "slice"
+    kind: "stage-exit"
+    requires: ["mocks-validated"]
+    checkRefs: []
+    evidenceRef: null
+    pass:
+      - "Make the real subject Green and Refactor; then run the required current and prior unit suites."
+      - "In the QBrain workspace, required scope must show zero failures and zero skips."
+      - "A missing execution or a weakened test cannot satisfy the gate."
+  - id: "phase-exit"
+    level: "phase"
+    kind: "stage-exit"
+    requires: ["implementation-exit"]
+    checkRefs: []
+    evidenceRef: null
+    pass:
+      - "All required slices in this phase have passed their exits. Check the combined deliverables against the phase objective and its declared risk and scope."
+  - id: "validation-exit"
+    level: "phase"
+    kind: "stage-exit"
+    requires: ["phase-exit"]
+    checkRefs: []
+    evidenceRef: null
+    pass:
+      - "All applicable slice gates have passed; run planned integration and human checks separately from unit coverage."
+      - "Verify validation results against the exact applicable requirements, acceptance criteria, and candidate revision."
+  - id: "release-exit"
+    level: "release"
+    kind: "stage-exit"
+    appliesWhen: "The ship boundary is release."
+    requires: ["validation-exit"]
+    checkRefs: []
+    evidenceRef: null
+    pass:
+      - "Verify the package, environment, rollout, rollback, go/no-go and handoff evidence."
+      - "Record release separately from implementation and validation; never backfill unit evidence with deployment results."
+
+reviewPolicy:
+  # Template policy, not an assertion that BDPv4 itself prescribes this score.
+  requiredAt: "every-applicable-stage-exit"
+  reviewerMustBeIndependentOfImplementer: true
+  additionalPolicyRefs: []
+  reviewerConfigurationRef: null
+  receiptFormat: "jsonl"
+  exitGate:
+    verdict: "AGREE"
+    scoreScaleMaximum: 100
+    accuracyMinimum: 98
+    completenessMinimum: 98
+    failCountMaximum: 0
+    unknownCountMaximum: 0
+    missingRequiredClaimsMaximum: 0
+  reviewAgainst: "Exact applicable request, policy, requirements, ACs, stage output and evidence; not a summary alone."
+  applicationRules:
+    - "Every declared stage and phase exit, including Phase 0 or other added stages, uses this rule. A phase-wide exit needs review of that phase as a whole, not just a set of slice receipts."
+    - "Run independent HV after the stage's underlying checks pass and before advancing. Human approval and entry checks are separate decisions, not substitutes for stage HV."
+    - "Store a stage-scoped receipt tied to the exact candidate and evidence. Do not reuse another stage's receipt as proof."
+    - "If the verdict, either score, claim coverage, or evidence fails the gate, record findings, correct the work, and rerun HV. No progression without a current passing receipt."
+    - "The pre-code mock stage must earn its own HV pass without requiring final or deployed artifacts. A release stage not in scope is not an exit to validate."
+
+evidence:
+  requiredReceiptFields:
+    - "workspaceId"
+    - "planId"
+    - "planRevision"
+    - "todoId"
+    - "turnRef"
+    - "gateId"
+    - "policyAndRequirementRevisions"
+    - "relevantSourceCommitsOrArtifactDigests"
+    - "checkOrCommand"
+    - "executedScope"
+    - "resultAndCounts"
+    - "timestampUtc"
+    - "outputRef"
+  whenApplicableReceiptFields:
+    - "canonicalPhaseId"
+    - "artifactIdAndVersionIdPairs"
+    - "reviewerIdentityModelAndEffort"
+    - "exactReviewRequestRef"
+    - "claimOutcomes"
+    - "reviewScoresAndVerdict"
+  freshnessRules:
+    - "Evaluate each gate against its relevant inputs, not merely the newest commit."
+    - "Preserve the pre-code mock receipt across expected production changes. Rerun it if its requirements, contract or harness change."
+    - "Final regression and review evidence must cover the actual final candidate."
+    - "Missing, stale, mismatched or inconclusive evidence blocks the affected gate; preserve unaffected slices."
+  confidentiality: "Keep secrets out of plan, evidence and published projections."
+
+qbrain:
+  bootstrap: "Use the trusted workspace bootstrap and supported helpers or REPL."
+  trustFailure: "Use BDPv4 local fallback for safe context work. Do not claim durable state or advance a QBrain-controlled gate."
+  firstTurnBinding:
+    planFile: "Resolve from metadata.planFile."
+    todoId: "Use the actual active slice TODO ID, or the umbrella TODO for plan-level work."
+  persistence: "Append evidence, decisions and blockers to the active turn when they occur. Verify durable acknowledgement or read back the exact record."
+  resume:
+    - "Load exact approved plan, policy, requirements and architecture revisions."
+    - "Resolve the active TODO, predecessors, turn and last valid gate receipt."
+    - "Continue from the next unfinished step, not the last chat summary."
+  enforcement: "Use this contract procedurally until a validator is verified on the deployed workspace. This file adds no QBrain endpoint."
+
+risks: []
+openDecisions: []
+exceptions: []
+# Use owning records or include an owner, affected scope, resolution and evidence
+# reference. Exceptions additionally carry approval, limits and expiry.
+
+transition:
+  # Fill only if release is in scope. Keep checks separate from the unit gate.
+  artifactRef: null
+  environmentReadinessRefs: []
+  migrationRef: null
+  rollbackRef: null
+  goNoGoRef: null
+  postDeployVerificationRefs: []
+  operationalHandoffRef: null
+
+changeControl:
+  - "Change requirements and architecture in their authoritative records."
+  - "Update the Structurizr model when architecture changes; regenerate affected views and rerun the affected gates and HV."
+  - "When UI scope, flow or layout changes, update affected use-case, wireframe and storyboard sources and rerun the UI artifacts gate and affected downstream gates."
+  - "Use artifactDependencies to identify direct and transitive impacts before changing an approved reference; invalidate only evidence tied to affected inputs."
+  - "Get renewed approval for material baseline or scope changes."
+  - "Preserve superseded receipts for audit, never as current proof."
+
+completionTracking:
+  # Live state stays in QBrain. A generated copy may embed a read-only snapshot;
+  # the plan of record keeps snapshot null. Do not approve the generated copy.
+  authority: "qbrain"
+  recordQueryRef: null
+  snapshot: null
+  # Snapshot: asOfUtc, planRevisionRef, sourceRefs, milestones, records.
+  # Records are scoped to the plan, phaseId or sliceTodoId, and optionally gateId.
+  # Milestones separately track implementation, validation and release.
+  rules:
+    - "Derive progress from QBrain TODOs and verified gate outcomes. Include snapshot time and exact plan revision; never write back from a projection."
+    - "A verified completion needs current matching receipt IDs. A blocked or failed record identifies the blocker, and a not-applicable result gives its rationale."
+    - "Do not infer phase or plan completion from a checklist. Verify constituent slices, applicable gates and required independent HV; track release separately."
+    - "Mark affected claims stale when relevant inputs change. Preserve historic receipts; do not carry a verified result to a new baseline by default."
+
+receiptTracking:
+  # The index links to original receipts; it does not copy logs, scores or output.
+  authority: "qbrain-and-versioned-evidence"
+  indexRef: null
+  records: []
+  # Populate records only in a generated copy with a completion snapshot.
+  # Each record has receiptId, kind, scope, gateId, planRevisionRef, sourceKind,
+  # sourceRef, recordedAtUtc, outcome, freshness and artifact versions as applicable.
+  rules:
+    - "Reuse the authoritative receipt ID, or allocate a stable workspace-qualified reference if the source has no ID. Never fabricate a missing receipt."
+    - "Resolve each referenced receipt to its original QBrain turn or immutable evidence record. Verify scope, relevant revisions, artifacts, outcome and freshness."
+    - "Keep failed, stale, and superseded receipts for audit, but only current matching passes support verified completion. Check independent AGREE and both scores at every applicable stage exit."
+    - "Do not store report bodies or secrets in the plan. Verify the receipt payload against evidence.requiredReceiptFields and any applicable review fields."
+
+completion:
+  - "All required slices and applicable gates passed on their valid baselines."
+  - "Only exclude unresolved scope with recorded approval."
+  - "Do not mark the umbrella TODO done while required slices or gates are open."
+  - "Report implementation verified, validation verified and released separately."
+
+architectureTailoring:
+  qbrainCqrs:
+    appliesWhen: "The approved architecture uses QBrain CQRS."
+    rule: "One application unit of work maps to one command/query and handler. A delivery slice may group multiple units."
+    detail: "Link to versioned request, response, error and endpoint contracts, and required activity/sequence diagrams. Define shared rules once."
+
+example:
+  # Illustrative only; do not import these IDs or treat them as workspace evidence.
+  qualifiedCriterion: "FR-EXPORT-001 / AC-002"
+  testRequirement: "TEST-EXPORT-004"
+  sliceTodo: "EXPORT-VALIDATION-001"
+  behavior: "Reject invalid input before invoking storage."
+  unitBoundary: "Assert real handler validation; double the storage dependency."
+  evidenceSequence: ["mock receipt and stage HV", "final unit regression receipt and stage HV"]
+  separateIntegration: "Verify against actual storage in the integration suite."
+  artifactDependency:
+    phaseId: "PHASE-EXPORT-001"
+    sliceTodoIds: ["EXPORT-CONTRACT-001", "EXPORT-VALIDATION-001"]
+    artifacts:
+      - artifactId: "ART-EXPORT-CONTRACT-001"
+        kind: "architecture"
+        ownerRef: "<architecture owner>"
+    versions:
+      - artifactVersionId: "EXPORT-CONTRACT-V1"
+        artifactId: "ART-EXPORT-CONTRACT-001"
+        sourceRef: "docs/architecture/export-contract.md"
+        sourceKind: "baseline"
+        baselineRevisionOrDigest: "<approved V1 revision>"
+        supersedesVersionId: null
+      - artifactVersionId: "EXPORT-CONTRACT-V2"
+        artifactId: "ART-EXPORT-CONTRACT-001"
+        sourceRef: "docs/architecture/export-contract.md"
+        sourceKind: "slice-output"
+        baselineRevisionOrDigest: null
+        supersedesVersionId: "EXPORT-CONTRACT-V1"
+    edges:
+      - sliceTodoId: "EXPORT-CONTRACT-001"
+        artifactVersionId: "EXPORT-CONTRACT-V1"
+        relationship: "consumes"
+        gateId: "slice-entry"
+        purpose: "Use the approved contract as the revision baseline."
+      - sliceTodoId: "EXPORT-CONTRACT-001"
+        artifactVersionId: "EXPORT-CONTRACT-V2"
+        relationship: "produces"
+        gateId: "implementation-exit"
+        purpose: "Make the verified revised contract available."
+      - sliceTodoId: "EXPORT-VALIDATION-001"
+        artifactVersionId: "EXPORT-CONTRACT-V2"
+        relationship: "consumes"
+        gateId: "slice-entry"
+        purpose: "Validate behavior against the revised contract."
+    impact: "If the contract version changes, review the consumer and any outputs that depend on it."
+
+references:
+  qbrainWorkspacePolicy: "https://github.com/sharpninja/McpServer/blob/main/AGENTS.md"
+  qbrainTodoSchema: "https://github.com/sharpninja/McpServer/blob/main/docs/context/todo-schema.md"
+  qbrainSessionLogSchema: "https://github.com/sharpninja/McpServer/blob/main/docs/context/session-log-schema.md"
+  qbrainArchitecturePrecedent: "https://github.com/sharpninja/McpServer/blob/main/docs/architecture/SessionTurn-Review-AgentContext-Architecture.md"
+  qbrainPlanPrecedent: "https://github.com/sharpninja/McpServer/blob/main/docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md"
+  # Informational crosswalk only. No conformance claim.
+  assetReviewStoryboardFormat:
+    uri: "https://github.com/sharpninja/AssetReview/blob/main/README.md#storyboard-sequences"
+    readmeBlobSha: "75ef6a606f2ca9ad162dab96fd858842933a1f22"
+  c4Model: "https://c4model.com/diagrams"
+  structurizrDsl: "https://docs.structurizr.com/dsl/language"
+  structurizrValidate: "https://docs.structurizr.com/validate"
+  rupPlanning: "https://public.dhe.ibm.com/software/rational/web/whitepapers/2003/tp151.pdf"
+  projectManagementPlan16326: "https://standards.ieee.org/ieee/16326/6769/"
+  lifeCycleDocuments15289: "https://www.iso.org/standard/74909.html"
+  lifeCycleProcesses12207: "https://www.iso.org/standard/90219.html"
