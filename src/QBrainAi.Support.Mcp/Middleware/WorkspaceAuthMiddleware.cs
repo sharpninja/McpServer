@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json;
 using QBrainAi.Support.Mcp;
 using QBrainAi.Support.Mcp.Options;
@@ -19,7 +20,7 @@ namespace QBrainAi.Support.Mcp.Middleware;
 ///     no fallthrough to API-key auth occurs.</description></item>
 ///   <item><description><strong>API key</strong> — for agents that cannot perform OIDC.
 ///     Full-access keys (from marker files) grant unrestricted access. Default keys
-///     (from <c>GET /api-key</c>) grant read-only access only.</description></item>
+///     (from <c>GET /api-key</c>) grant read access and restricted loopback workspace registration.</description></item>
 /// </list>
 /// Routes outside the product API (health, swagger, MCP transport, <c>/api-key</c>) pass through unprotected.
 /// </summary>
@@ -141,7 +142,7 @@ public sealed class WorkspaceAuthMiddleware
         // ── API key path (agents only) ────────────────────────────────────────
         // FR-MCP-MEMORY-001: a cleared or unresolved workspace context is the server default workspace.
         // Null and empty paths both authenticate with the configured default (Mcp:RepoRoot) full key.
-        // Default (anonymous) keys stay read-only; this does not grant them write access.
+        // A default key has a narrower grant than the corresponding full key.
         var workspacePath = workspaceContext.WorkspacePath;
         if (string.IsNullOrWhiteSpace(workspacePath))
             workspacePath = configuration["Mcp:RepoRoot"];
@@ -157,11 +158,14 @@ public sealed class WorkspaceAuthMiddleware
                 return;
             }
 
-            // Default (anonymous) token — read-only only.
+            // FR-MCP-009 / TR-MCP-WS-004 (2026-11-26): default keys retain reads and
+            // may register an ordinary workspace only on the verified loopback header path.
             if (tokenService.ValidateDefaultToken(workspacePath, provided))
             {
                 context.Items[IsDefaultKeyItem] = true;
-                if (IsReadOnlyRequest(context))
+                if (IsReadOnlyRequest(context) ||
+                    (IsLocalDefaultKeyRegistration(context) &&
+                        await HasRestrictedRegistrationBodyAsync(context).ConfigureAwait(false)))
                 {
                     await _next(context).ConfigureAwait(false);
                     return;
@@ -171,7 +175,7 @@ public sealed class WorkspaceAuthMiddleware
                 context.Response.ContentType = "application/json";
                 var forbiddenBody = new
                 {
-                    error = "Default API key grants read-only access only. " +
+                    error = "Default API key permits reads and local registration with workspacePath, name, and isEnabled. " +
                             "Use the full workspace API key from the AGENTS-README-FIRST.yaml marker file or a valid JWT Bearer token for write operations."
                 };
                 await context.Response.WriteAsync(
@@ -210,6 +214,70 @@ public sealed class WorkspaceAuthMiddleware
         _logger.LogWarning("[WS-Auth] {Method} {Path} | Unresolved workspace / unknown API key (initialized) → 401",
             method, path);
         await WriteUnauthorizedAsync(context).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Identifies the additional default-key grant on the registration endpoint.
+    /// </summary>
+    /// <remarks>2026-11-26: FR-MCP-009 / TR-MCP-WS-004. Require a single key header,
+    /// an actual loopback peer, and the exact registration route under either prefix.</remarks>
+    private static bool IsLocalDefaultKeyRegistration(HttpContext context)
+    {
+        if (!HttpMethods.IsPost(context.Request.Method) ||
+            !ProductApiPaths.EqualsProductPath(context.Request.Path.Value ?? string.Empty, "workspace") ||
+            !context.Request.Headers.TryGetValue(HeaderName, out var headers) ||
+            headers.Count != 1 ||
+            string.IsNullOrEmpty(headers[0]))
+        {
+            return false;
+        }
+
+        var peer = context.Connection.RemoteIpAddress;
+        return peer is not null && IPAddress.IsLoopback(peer.IsIPv4MappedToIPv6 ? peer.MapToIPv4() : peer);
+    }
+
+    /// <summary>
+    /// Verifies that only ordinary registration fields were supplied before MVC binds the request.
+    /// </summary>
+    /// <remarks>2026-11-26: FR-MCP-009 / TR-MCP-WS-004. Check field presence so false
+    /// and null administrative options cannot bypass the grant. Replay the original body
+    /// to the existing endpoint for model binding and workspace initialization.</remarks>
+    private static async Task<bool> HasRestrictedRegistrationBodyAsync(HttpContext context)
+    {
+        var request = context.Request;
+        if (!request.HasJsonContentType())
+            return false;
+
+        request.EnableBuffering();
+        var body = request.Body;
+        var position = body.Position;
+        try
+        {
+            using var json = await JsonDocument.ParseAsync(body, cancellationToken: context.RequestAborted)
+                .ConfigureAwait(false);
+            if (json.RootElement.ValueKind != JsonValueKind.Object)
+                return false;
+
+            foreach (var property in json.RootElement.EnumerateObject())
+            {
+                if (!string.Equals(property.Name, "workspacePath", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(property.Name, "name", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(property.Name, "isEnabled", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+        finally
+        {
+            body.Position = position;
+        }
     }
 
     private static async Task WriteUnauthorizedAsync(HttpContext context)
